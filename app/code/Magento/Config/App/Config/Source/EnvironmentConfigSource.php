@@ -13,6 +13,8 @@ use Magento\Framework\Stdlib\ArrayManager;
 
 /**
  * Class for retrieving configurations from environment variables.
+ *
+ * @api
  */
 class EnvironmentConfigSource implements ConfigSourceInterface
 {

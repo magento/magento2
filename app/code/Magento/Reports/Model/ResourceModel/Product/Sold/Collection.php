@@ -15,6 +15,7 @@ use Magento\Framework\DB\Select;
 
 /**
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @api
  */
 class Collection extends \Magento\Reports\Model\ResourceModel\Order\Collection
 {

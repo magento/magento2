@@ -63,7 +63,7 @@ class LowestPriceOptionsProvider implements LowestPriceOptionsProviderInterface
             );
 
             $this->linkedProductMap[$product->getId()] = $this->collectionFactory->create()
-                ->addAttributeToSelect(['price', 'special_price'])
+                ->addAttributeToSelect(['price', 'special_price', 'special_from_date', 'special_to_date'])
                 ->addIdFilter($productIds)
                 ->getItems();
         }

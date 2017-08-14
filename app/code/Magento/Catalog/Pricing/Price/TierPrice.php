@@ -18,7 +18,7 @@ use Magento\Framework\Pricing\Price\BasePriceProviderInterface;
 use Magento\Framework\Pricing\PriceInfoInterface;
 
 /**
- * Tire prices model
+ * @api
  */
 class TierPrice extends AbstractPrice implements TierPriceInterface, BasePriceProviderInterface
 {

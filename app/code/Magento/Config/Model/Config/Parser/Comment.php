@@ -18,6 +18,7 @@ use Magento\Framework\Filesystem;
  *
  * It is used to parse config paths from
  * comment section in provided configuration file.
+ * @api
  */
 class Comment implements CommentParserInterface
 {

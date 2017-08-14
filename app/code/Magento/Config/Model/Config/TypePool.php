@@ -12,6 +12,7 @@ use Magento\Config\Model\Config\Export\ExcludeList;
  *
  * Used when you need to know if the configuration path belongs to a certain type.
  * Participates in the mechanism for creating the configuration dump file.
+ * @api
  */
 class TypePool
 {

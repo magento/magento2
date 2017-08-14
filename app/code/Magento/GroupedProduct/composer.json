@@ -14,7 +14,6 @@
         "magento/module-media-storage": "100.2.*",
         "magento/module-msrp": "100.2.*",
         "magento/module-quote": "100.2.*",
-        "magento/module-indexer": "100.2.*",
         "magento/framework": "100.2.*",
         "magento/module-ui": "100.2.*"
     },

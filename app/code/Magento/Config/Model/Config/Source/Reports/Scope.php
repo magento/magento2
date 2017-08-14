@@ -11,6 +11,9 @@
  */
 namespace Magento\Config\Model\Config\Source\Reports;
 
+/**
+ * @api
+ */
 class Scope implements \Magento\Framework\Option\ArrayInterface
 {
     /**

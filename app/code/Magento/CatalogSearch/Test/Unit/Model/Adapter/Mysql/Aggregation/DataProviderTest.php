@@ -11,7 +11,6 @@ use Magento\Eav\Model\Config;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\App\ScopeResolverInterface;
-use Magento\Indexer\Model\ResourceModel\FrontendResource;
 use Magento\Framework\DB\Select;
 use Magento\Store\Model\Store;
 use Magento\Framework\Search\Request\BucketInterface;
@@ -54,22 +53,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $frontendResourceMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $frontendResourceStockMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     private $adapterMock;
-
-    /**
-     * @var \Magento\Indexer\Model\Indexer\StateFactory|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stateFactoryMock;
 
     protected function setUp()
     {
@@ -77,23 +61,14 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         $this->resourceConnectionMock = $this->getMock(ResourceConnection::class, [], [], '', false);
         $this->scopeResolverMock = $this->getMock(ScopeResolverInterface::class);
         $this->sessionMock = $this->getMock(Session::class, [], [], '', false);
-        $this->frontendResourceMock = $this->getMock(FrontendResource::class, [], [], '', false);
-        $this->frontendResourceStockMock = $this->getMock(FrontendResource::class, [], [], '', false);
         $this->adapterMock = $this->getMock(AdapterInterface::class);
         $this->resourceConnectionMock->expects($this->once())->method('getConnection')->willReturn($this->adapterMock);
-        $this->stateFactoryMock = $this->getMockBuilder(\Magento\Indexer\Model\Indexer\StateFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
 
         $this->model = new DataProvider(
             $this->eavConfigMock,
             $this->resourceConnectionMock,
             $this->scopeResolverMock,
-            $this->sessionMock,
-            $this->frontendResourceMock,
-            $this->stateFactoryMock,
-            $this->frontendResourceStockMock
+            $this->sessionMock
         );
     }
 
@@ -123,9 +98,6 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         $this->adapterMock->expects($this->once())->method('select')->willReturn($selectMock);
         $tableMock = $this->getMock(Table::class);
 
-        // verify that frontend indexer table is used
-        $this->frontendResourceMock->expects($this->once())->method('getMainTable');
-
         $this->model->getDataSet($bucketMock, ['scope' => $dimensionMock], $tableMock);
     }
 
@@ -133,15 +105,6 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
     {
         $storeId = 1;
         $attributeCode = 'my_decimal';
-        $stateMock = $this->getMock(\Magento\Indexer\Model\Indexer\State::class, [], [], '', false);
-        $this->stateFactoryMock->expects($this->once())->method('create')->willReturn($stateMock);
-        $stateMock->expects($this->once())
-            ->method('loadByIndexer')
-            ->with(\Magento\Catalog\Model\Indexer\Product\Eav\Processor::INDEXER_ID)
-            ->willReturnSelf();
-        // verify that frontend indexer table is used
-        $stateMock->expects($this->once())->method('getTableSuffix')->willReturn('_replica');
-
         $scopeMock = $this->getMock(Store::class, [], [], '', false);
         $scopeMock->expects($this->any())->method('getId')->willReturn($storeId);
         $dimensionMock = $this->getMock(Dimension::class, [], [], '', false);

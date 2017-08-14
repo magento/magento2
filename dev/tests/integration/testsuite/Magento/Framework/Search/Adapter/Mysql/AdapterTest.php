@@ -28,7 +28,7 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\Search\Request\Builder
      */
-    private $requestBuilder;
+    protected $requestBuilder;
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -94,7 +94,7 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     /**
      * @return \Magento\Framework\Search\Response\QueryResponse
      */
-    private function executeQuery()
+    protected function executeQuery()
     {
         /** @var \Magento\Framework\Search\RequestInterface $queryRequest */
         $queryRequest = $this->requestBuilder->create();

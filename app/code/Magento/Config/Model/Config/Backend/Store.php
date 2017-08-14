@@ -9,6 +9,9 @@
  */
 namespace Magento\Config\Model\Config\Backend;
 
+/**
+ * @api
+ */
 class Store extends \Magento\Framework\App\Config\Value
 {
     /**

@@ -10,6 +10,7 @@ use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
 
 /**
  * Date grid column filter
+ * @api
  */
 class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilter
 {

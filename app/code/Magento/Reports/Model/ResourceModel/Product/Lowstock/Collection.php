@@ -13,6 +13,7 @@ namespace Magento\Reports\Model\ResourceModel\Product\Lowstock;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class Collection extends \Magento\Reports\Model\ResourceModel\Product\Collection
 {

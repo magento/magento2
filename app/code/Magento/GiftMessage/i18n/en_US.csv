@@ -22,7 +22,7 @@ OK,OK
 "Gift Options","Gift Options"
 "Gift Message","Gift Message"
 "Do you have any gift items in your order?","Do you have any gift items in your order?"
-"Add gift options","Add gift options"
+"Add Gift Options","Add Gift Options"
 "Gift Options for the Entire Order","Gift Options for the Entire Order"
 "Leave this box blank if you don\'t want to leave a gift message for the entire order.","Leave this box blank if you don\'t want to leave a gift message for the entire order."
 "Gift Options for Individual Items","Gift Options for Individual Items"
@@ -30,14 +30,14 @@ OK,OK
 "Leave a box blank if you don\'t want to add a gift message for that item.","Leave a box blank if you don\'t want to add a gift message for that item."
 "Add Gift Options for the Entire Order","Add Gift Options for the Entire Order"
 "You can leave this box blank if you don\'t want to add a gift message for this address.","You can leave this box blank if you don\'t want to add a gift message for this address."
-"Add gift options for Individual Items","Add gift options for Individual Items"
+"Add Gift Options for Individual Items","Add Gift Options for Individual Items"
 "You can leave this box blank if you don\'t want to add a gift message for the item.","You can leave this box blank if you don\'t want to add a gift message for the item."
 "Gift Message (optional)","Gift Message (optional)"
 To:,To:
 From:,From:
 Message:,Message:
 Update,Update
-"Gift options","Gift options"
+"Gift Options","Gift Options"
 Edit,Edit
 Delete,Delete
 "Allow Gift Messages on Order Level","Allow Gift Messages on Order Level"

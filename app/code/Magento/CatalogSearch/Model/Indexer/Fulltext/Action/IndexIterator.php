@@ -12,6 +12,7 @@ namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Action;
  * @SuppressWarnings(PHPMD.NPathComplexity)
  * @deprecated No more used
  * @see \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full
+ * @api
  */
 class IndexIterator implements \Iterator
 {

@@ -13,6 +13,8 @@ use Magento\Framework\ObjectManagerInterface;
  * Contains a list of commands to be loaded on application bootstrap.
  *
  * {@inheritdoc}
+ *
+ * @api
  */
 class CommandList implements CommandListInterface
 {

@@ -15,6 +15,7 @@ use Magento\MediaStorage\Model\File\Uploader;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+ * @api
  */
 class File extends \Magento\Framework\App\Config\Value
 {

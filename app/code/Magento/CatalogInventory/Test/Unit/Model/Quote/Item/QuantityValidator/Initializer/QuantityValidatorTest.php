@@ -201,6 +201,10 @@ class QuantityValidatorTest extends \PHPUnit_Framework_TestCase
             ->method('getStockStatus')
             ->willReturn($this->stockStatusMock);
 
+        $this->stockStatusMock
+            ->method('getStockStatus')
+            ->willReturn(0);
+
         $this->quoteItemMock->expects($this->once())
             ->method('addErrorInfo')
             ->with(

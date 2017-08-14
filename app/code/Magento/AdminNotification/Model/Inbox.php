@@ -29,7 +29,7 @@ use Magento\AdminNotification\Model\InboxInterface;
  * @method int getIsRemove()
  * @method \Magento\AdminNotification\Model\Inbox setIsRemove(int $value)
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Inbox extends \Magento\Framework\Model\AbstractModel implements NotifierInterface, InboxInterface
 {

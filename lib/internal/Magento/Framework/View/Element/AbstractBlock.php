@@ -8,10 +8,11 @@ namespace Magento\Framework\View\Element;
 use Magento\Framework\DataObject\IdentityInterface;
 
 /**
- * Base Content Block class
+ * Base class for all blocks.
  *
- * For block generation you must define Data source class, data source class method,
- * parameters array and block template
+ * Avoid inheriting from this class. Will be deprecated.
+ *
+ * Marked as public API because it is actively used now.
  *
  * @api
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)

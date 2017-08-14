@@ -13,6 +13,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 
 /**
+ * @api
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @codeCoverageIgnore
@@ -942,6 +943,7 @@ class EavSetup
      * @param mixed $value
      * @param int $sortOrder
      * @return $this
+     * @throws LocalizedException
      */
     private function _updateAttribute($entityTypeId, $id, $field, $value = null, $sortOrder = null)
     {
@@ -972,11 +974,15 @@ class EavSetup
                 return $this;
             }
         }
+        $attributeId = $this->getAttributeId($entityTypeId, $id);
+        if (false === $attributeId) {
+            throw new LocalizedException(__('Attribute with ID: "%1" does not exist', $id));
+        }
 
         $this->setup->updateTableRow(
             'eav_attribute',
             'attribute_id',
-            $this->getAttributeId($entityTypeId, $id),
+            $attributeId,
             $field,
             $value,
             'entity_type_id',
@@ -994,6 +1000,7 @@ class EavSetup
      * @param string|array $field
      * @param mixed $value
      * @return $this
+     * @throws LocalizedException
      */
     private function _updateAttributeAdditionalData($entityTypeId, $id, $field, $value = null)
     {
@@ -1021,6 +1028,11 @@ class EavSetup
             if (!isset($attributeFields[$field])) {
                 return $this;
             }
+        }
+      
+        $attributeId = $this->getAttributeId($entityTypeId, $id);
+        if (false === $attributeId) {
+            throw new LocalizedException(__('Attribute with ID: "%1" does not exist', $id));
         }
         $this->setup->updateTableRow(
             $this->setup->getTable($additionalTable),

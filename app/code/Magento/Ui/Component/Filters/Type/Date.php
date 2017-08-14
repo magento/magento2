@@ -8,7 +8,7 @@ namespace Magento\Ui\Component\Filters\Type;
 use Magento\Ui\Component\Form\Element\DataType\Date as DataTypeDate;
 
 /**
- * Class Date
+ * @api
  */
 class Date extends AbstractFilter
 {

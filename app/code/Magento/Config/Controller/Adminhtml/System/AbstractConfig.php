@@ -10,6 +10,7 @@ use Magento\Config\Controller\Adminhtml\System\ConfigSectionChecker;
 
 /**
  * System Configuration Abstract Controller
+ * @api
  */
 abstract class AbstractConfig extends \Magento\Backend\App\AbstractAction
 {

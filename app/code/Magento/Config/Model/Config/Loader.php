@@ -13,6 +13,7 @@ namespace Magento\Config\Model\Config;
  * Class which can read config by paths
  *
  * @package Magento\Config\Model\Config
+ * @api
  */
 class Loader
 {

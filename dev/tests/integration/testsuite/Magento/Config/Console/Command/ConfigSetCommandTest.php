@@ -492,7 +492,7 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
                     $output->expects($this->once())
                         ->method('writeln')
                         ->with(
-                            '<error>Invalid value. Value must be a URL or one of placeholders: {{base_url}}</error>'
+                            '<error>Invalid Base URL. Value must be a URL or one of placeholders: {{base_url}}</error>'
                         );
                 },
                 'web/unsecure/base_url',

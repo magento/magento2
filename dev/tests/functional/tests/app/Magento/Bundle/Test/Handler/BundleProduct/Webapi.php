@@ -62,6 +62,7 @@ class Webapi extends SimpleProductWebapi implements BundleProductInterface
                     'title' => $bundleOption['title'],
                     'type' => $bundleOption['type'],
                     'required' => $bundleOption['required'],
+                    'position' => isset($bundleOption['position']) ? (int)$bundleOption['position'] : $key,
                     'product_links' => $this->prepareLinksInfo($bundleSelections, $key)
                 ];
             }
@@ -100,6 +101,7 @@ class Webapi extends SimpleProductWebapi implements BundleProductInterface
                 'can_change_quantity' => isset($productLink['data']['user_defined'])
                     ? $productLink['data']['user_defined']
                     : 0,
+                'position' => $linkKey,
             ];
         }
 

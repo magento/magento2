@@ -237,6 +237,12 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
         $conditions->collectValidatedAttributes($collection);
         $this->sqlBuilder->attachConditionToCollection($collection, $conditions);
 
+        /**
+         * Prevent retrieval of duplicate records. This may occur when multiselect product attribute matches
+         * several allowed values from condition simultaneously
+         */
+        $collection->distinct(true);
+
         return $collection;
     }
 

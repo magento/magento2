@@ -13,6 +13,7 @@ namespace Magento\Reports\Controller\Adminhtml\Report;
 
 /**
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @api
  */
 abstract class Sales extends AbstractReport
 {

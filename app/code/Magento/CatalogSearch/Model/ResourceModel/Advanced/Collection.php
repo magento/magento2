@@ -21,6 +21,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFact
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {
@@ -84,11 +85,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param SearchResultFactory|null $searchResultFactory
      * @param ProductLimitationFactory|null $productLimitationFactory
      * @param MetadataPool|null $metadataPool
-     * @param \Magento\Indexer\Model\ResourceModel\FrontendResource|null $indexerFrontendResource
-     * @param \Magento\Indexer\Model\ResourceModel\FrontendResource|null $categoryProductIndexerFrontend
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @SuppressWarnings(Magento.TypeDuplication)
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -116,9 +114,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         SearchResultFactory $searchResultFactory = null,
         ProductLimitationFactory $productLimitationFactory = null,
-        MetadataPool $metadataPool = null,
-        \Magento\Indexer\Model\ResourceModel\FrontendResource $indexerFrontendResource = null,
-        \Magento\Indexer\Model\ResourceModel\FrontendResource $categoryProductIndexerFrontend = null
+        MetadataPool $metadataPool = null
     ) {
         $this->requestBuilder = $requestBuilder;
         $this->searchEngine = $searchEngine;
@@ -149,9 +145,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $groupManagement,
             $connection,
             $productLimitationFactory,
-            $metadataPool,
-            $indexerFrontendResource,
-            $categoryProductIndexerFrontend
+            $metadataPool
         );
     }
 

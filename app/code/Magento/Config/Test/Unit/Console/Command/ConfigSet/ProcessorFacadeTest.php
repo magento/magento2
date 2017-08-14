@@ -15,6 +15,8 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\ConfigurationMismatchException;
+use Magento\Deploy\Model\DeploymentConfig\Hash;
+use Magento\Config\App\Config\Type\System;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 
 /**
@@ -50,6 +52,11 @@ class ProcessorFacadeTest extends \PHPUnit_Framework_TestCase
     private $processorMock;
 
     /**
+     * @var Hash|Mock
+     */
+    private $hashMock;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -69,10 +76,15 @@ class ProcessorFacadeTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->processorMock);
 
+        $this->hashMock = $this->getMockBuilder(Hash::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->model = new ProcessorFacade(
             $this->scopeValidatorMock,
             $this->pathValidatorMock,
-            $this->configSetProcessorFactoryMock
+            $this->configSetProcessorFactoryMock,
+            $this->hashMock
         );
     }
 
@@ -91,6 +103,9 @@ class ProcessorFacadeTest extends \PHPUnit_Framework_TestCase
         $this->processorMock->expects($this->once())
             ->method('process')
             ->with('test/test/test', 'test', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null);
+        $this->hashMock->expects($this->once())
+            ->method('regenerate')
+            ->with(System::CONFIG_TYPE);
 
         $this->assertSame(
             'Value was saved.',

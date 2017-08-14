@@ -18,6 +18,7 @@ use Magento\Framework\DataObject;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @api
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {

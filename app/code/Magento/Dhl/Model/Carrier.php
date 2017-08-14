@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Dhl\Model;
 
 use Magento\Catalog\Model\Product\Type;
@@ -424,7 +422,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
 
         $shippingWeight = $request->getPackageWeight();
 
-        $requestObject->setValue(round($request->getPackageValue(), 2))
+        $requestObject->setValue(sprintf('%.2f', $request->getPackageValue()))
             ->setValueWithDiscount($request->getPackageValueWithDiscount())
             ->setCustomsValue($request->getPackageCustomsValue())
             ->setDestStreet($this->string->substr(str_replace("\n", '', $request->getDestStreet()), 0, 35))
@@ -672,13 +670,13 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
 
         if ($configWeightUnit != $countryWeightUnit) {
             $weight = $this->_carrierHelper->convertMeasureWeight(
-                round($weight, 3),
+                sprintf('%.3f', $weight),
                 $configWeightUnit,
                 $countryWeightUnit
             );
         }
 
-        return round($weight, 3);
+        return sprintf('%.3f', $weight);
     }
 
     /**
@@ -808,7 +806,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
                         $nodePiece = $nodePieces->addChild('Piece', '', '');
                         $nodePiece->addChild('PieceID', $numberOfPieces);
                         $this->_addDimension($nodePiece);
-                        $nodePiece->addChild('Weight', $sumWeight);
+                        $nodePiece->addChild('Weight', sprintf('%.3f', $sumWeight));
                         break;
                     } else {
                         unset($items[$key]);
@@ -817,7 +815,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
                         $nodePiece = $nodePieces->addChild('Piece', '', '');
                         $nodePiece->addChild('PieceID', $numberOfPieces);
                         $this->_addDimension($nodePiece);
-                        $nodePiece->addChild('Weight', $sumWeight);
+                        $nodePiece->addChild('Weight', sprintf('%.3f', $sumWeight));
                         $sumWeight = 0;
                         break;
                     }
@@ -828,7 +826,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
                 $nodePiece = $nodePieces->addChild('Piece', '', '');
                 $nodePiece->addChild('PieceID', $numberOfPieces);
                 $this->_addDimension($nodePiece);
-                $nodePiece->addChild('Weight', $sumWeight);
+                $nodePiece->addChild('Weight', sprintf('%.3f', $sumWeight));
             }
         } else {
             $nodePiece = $nodePieces->addChild('Piece', '', '');
@@ -872,13 +870,13 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
 
         if ($configDimensionUnit != $countryDimensionUnit) {
             $dimension = $this->_carrierHelper->convertMeasureDimension(
-                round($dimension, 3),
+                sprintf('%.3f', $dimension),
                 $configDimensionUnit,
                 $countryDimensionUnit
             );
         }
 
-        return round($dimension, 3);
+        return sprintf('%.3f', $dimension);
     }
 
     /**
@@ -1616,7 +1614,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
             }
             $nodePiece->addChild('PieceID', ++$i);
             $nodePiece->addChild('PackageType', $packageType);
-            $nodePiece->addChild('Weight', round($package['params']['weight'], 1));
+            $nodePiece->addChild('Weight', sprintf('%.1f', $package['params']['weight']));
             $params = $package['params'];
             if ($params['width'] && $params['length'] && $params['height']) {
                 if (!$originRegion) {
@@ -1637,7 +1635,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         }
 
         if (!$originRegion) {
-            $nodeShipmentDetails->addChild('Weight', round($rawRequest->getPackageWeight(), 1));
+            $nodeShipmentDetails->addChild('Weight', sprintf('%.1f', $rawRequest->getPackageWeight()));
             $nodeShipmentDetails->addChild('WeightUnit', substr($this->_getWeightUnit(), 0, 1));
             $nodeShipmentDetails->addChild('GlobalProductCode', $rawRequest->getShippingMethod());
             $nodeShipmentDetails->addChild('LocalProductCode', $rawRequest->getShippingMethod());

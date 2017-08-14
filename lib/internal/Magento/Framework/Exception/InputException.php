@@ -49,13 +49,14 @@ class InputException extends AbstractAggregateException
      *
      * @param \Magento\Framework\Phrase $phrase
      * @param \Exception $cause
+     * @param int $code
      */
-    public function __construct(Phrase $phrase = null, \Exception $cause = null)
+    public function __construct(Phrase $phrase = null, \Exception $cause = null, $code = 0)
     {
         if ($phrase === null) {
             $phrase = new Phrase('One or more input exceptions have occurred.');
         }
-        parent::__construct($phrase, $cause);
+        parent::__construct($phrase, $cause, $code);
     }
 
     /**

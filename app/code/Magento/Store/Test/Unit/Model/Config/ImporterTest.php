@@ -76,9 +76,6 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
         $this->resourceMock = $this->getMockBuilder(Website::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->processorFactoryMock->expects($this->any())
-            ->method('create')
-            ->willReturn($this->processorMock);
 
         $this->model = new Importer(
             $this->dataDifferenceCalculatorMock,
@@ -97,9 +94,30 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
             ScopeInterface::SCOPE_WEBSITES => ['websites'],
         ];
 
+        $createProcessorMock = clone $this->processorMock;
+        $deleteProcessorMock = clone $this->processorMock;
+        $updateProcessorMock = clone $this->processorMock;
+
+        $this->processorFactoryMock->expects($this->exactly(3))
+            ->method('create')
+            ->withConsecutive(
+                [Importer\Processor\ProcessorFactory::TYPE_CREATE],
+                [Importer\Processor\ProcessorFactory::TYPE_DELETE],
+                [Importer\Processor\ProcessorFactory::TYPE_UPDATE]
+            )->willReturnOnConsecutiveCalls(
+                $createProcessorMock,
+                $deleteProcessorMock,
+                $updateProcessorMock
+            );
         $this->resourceMock->expects($this->once())
             ->method('beginTransaction');
-        $this->processorMock->expects($this->exactly(3))
+        $createProcessorMock->expects($this->once())
+            ->method('run')
+            ->with($data);
+        $deleteProcessorMock->expects($this->once())
+            ->method('run')
+            ->with($data);
+        $updateProcessorMock->expects($this->once())
             ->method('run')
             ->with($data);
         $this->resourceMock->expects($this->once())
@@ -133,6 +151,9 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
      */
     public function testImportWithException()
     {
+        $this->processorFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturn($this->processorMock);
         $this->resourceMock->expects($this->once())
             ->method('beginTransaction');
         $this->processorMock->expects($this->any())

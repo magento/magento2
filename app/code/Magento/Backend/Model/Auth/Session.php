@@ -11,6 +11,7 @@ use Magento\Framework\Stdlib\CookieManagerInterface;
 /**
  * Backend Auth session model
  *
+ * @api
  * @method \Magento\User\Model\User|null getUser()
  * @method \Magento\Backend\Model\Auth\Session setUser(\Magento\User\Model\User $value)
  * @method \Magento\Framework\Acl|null getAcl()
@@ -20,6 +21,7 @@ use Magento\Framework\Stdlib\CookieManagerInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @todo implement solution that keeps is_first_visit flag in session during redirects
+ * @api
  */
 class Session extends \Magento\Framework\Session\SessionManager implements \Magento\Backend\Model\Auth\StorageInterface
 {

@@ -10,7 +10,6 @@ use Magento\CatalogSearch\Model\Adapter\Mysql\Dynamic\DataProvider;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Search\Dynamic\IntervalFactory;
-use Magento\Indexer\Model\ResourceModel\FrontendResource;
 use Magento\Framework\DB\Select;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
@@ -41,11 +40,6 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
     private $resourceConnectionMock;
 
     /**
-     * @var FrontendResource|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $frontendResourceMock;
-
-    /**
      * @var Range|\PHPUnit_Framework_MockObject_MockObject
      */
     private $rangeMock;
@@ -74,7 +68,6 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
     {
         $this->resourceConnectionMock = $this->getMock(ResourceConnection::class, [], [], '', false);
         $this->sessionMock = $this->getMock(Session::class, [], [], '', false);
-        $this->frontendResourceMock = $this->getMock(FrontendResource::class, [], [], '', false);
         $this->adapterMock = $this->getMock(AdapterInterface::class);
         $this->resourceConnectionMock->expects($this->once())->method('getConnection')->willReturn($this->adapterMock);
         $this->rangeMock = $this->getMock(Range::class, [], [], '', false);
@@ -88,7 +81,6 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             $this->sessionMock,
             $this->mysqlDataProviderMock,
             $this->intervalFactoryMock,
-            $this->frontendResourceMock,
             $this->storeManagerMock
         );
     }
@@ -104,9 +96,6 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
 
         $entityStorageMock = $this->getMock(EntityStorage::class, [], [], '', false);
         $entityStorageMock->expects($this->any())->method('getSource')->willReturn($tableMock);
-
-        // verify that frontend indexer table is used
-        $this->frontendResourceMock->expects($this->once())->method('getMainTable');
 
         $storeMock = $this->getMock(\Magento\Store\Api\Data\StoreInterface::class, [], [], '', false);
         $storeMock->expects($this->once())->method('getWebsiteId')->willReturn(42);

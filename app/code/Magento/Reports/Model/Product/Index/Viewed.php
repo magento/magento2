@@ -19,6 +19,7 @@ namespace Magento\Reports\Model\Product\Index;
  * @method \Magento\Reports\Model\Product\Index\Viewed setAddedAt(string $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Viewed extends \Magento\Reports\Model\Product\Index\AbstractIndex
 {
