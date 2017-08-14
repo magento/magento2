@@ -25,7 +25,6 @@ class CommandManagerPool implements CommandManagerPoolInterface
     /**
      * @param TMapFactory $tmapFactory
      * @param array $executors
-     * @since 100.1.0
      */
     public function __construct(
         TMapFactory $tmapFactory,

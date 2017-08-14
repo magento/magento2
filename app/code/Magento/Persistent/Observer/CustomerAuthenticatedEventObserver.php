@@ -8,10 +8,6 @@ namespace Magento\Persistent\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
-/**
- * Class \Magento\Persistent\Observer\CustomerAuthenticatedEventObserver
- *
- */
 class CustomerAuthenticatedEventObserver implements ObserverInterface
 {
     /**

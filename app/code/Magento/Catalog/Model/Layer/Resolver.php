@@ -6,10 +6,6 @@
  */
 namespace Magento\Catalog\Model\Layer;
 
-/**
- * Class \Magento\Catalog\Model\Layer\Resolver
- *
- */
 class Resolver
 {
     const CATALOG_LAYER_CATEGORY = 'category';

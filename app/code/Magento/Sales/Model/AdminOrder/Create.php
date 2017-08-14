@@ -18,6 +18,7 @@ use Magento\Quote\Model\Quote\Item;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\Model\Cart\CartInterface
 {
@@ -1568,7 +1569,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         $this->getQuote()->getShippingAddress()->setCollectShippingRates(true);
 
         if (empty($code)) {
-            $this->getQuote()->getShippingAddress()->setFreeShipping(null);
+            $this->getQuote()->getShippingAddress()->setFreeShipping(0);
         }
         $this->getQuote()->setCouponCode($code);
         $this->setRecollect(true);

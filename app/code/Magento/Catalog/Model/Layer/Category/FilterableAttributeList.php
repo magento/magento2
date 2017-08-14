@@ -9,10 +9,6 @@ namespace Magento\Catalog\Model\Layer\Category;
 
 use Magento\Catalog\Model\Layer\FilterableAttributeListInterface;
 
-/**
- * Class \Magento\Catalog\Model\Layer\Category\FilterableAttributeList
- *
- */
 class FilterableAttributeList implements FilterableAttributeListInterface
 {
     /**

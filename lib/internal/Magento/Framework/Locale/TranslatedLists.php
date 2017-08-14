@@ -11,10 +11,6 @@ use Magento\Framework\Locale\Bundle\DataBundle;
 use Magento\Framework\Locale\Bundle\LanguageBundle;
 use Magento\Framework\Locale\Bundle\RegionBundle;
 
-/**
- * Class \Magento\Framework\Locale\TranslatedLists
- *
- */
 class TranslatedLists implements ListsInterface
 {
     /**

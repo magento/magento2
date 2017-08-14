@@ -5,10 +5,6 @@
  */
 namespace Magento\Backend\Block\Widget\Grid\Column\Renderer\Options;
 
-/**
- * Class \Magento\Backend\Block\Widget\Grid\Column\Renderer\Options\Extended
- *
- */
 class Extended extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Options
 {
     /**

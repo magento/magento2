@@ -11,10 +11,6 @@ use Magento\Framework\ObjectManager\ConfigLoaderInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Serialize\Serializer\Serialize;
 
-/**
- * Class \Magento\Framework\App\ObjectManager\ConfigLoader\Compiled
- *
- */
 class Compiled implements ConfigLoaderInterface
 {
     /**

@@ -5,10 +5,6 @@
  */
 namespace Magento\Sales\Model\Order\Email\Container;
 
-/**
- * Class \Magento\Sales\Model\Order\Email\Container\Template
- *
- */
 class Template
 {
     /**

@@ -11,10 +11,6 @@
  */
 namespace Magento\CatalogInventory\Model\Config\Backend;
 
-/**
- * Class \Magento\CatalogInventory\Model\Config\Backend\Backorders
- *
- */
 class Backorders extends AbstractValue
 {
     /**

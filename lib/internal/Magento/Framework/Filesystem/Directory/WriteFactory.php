@@ -7,10 +7,6 @@ namespace Magento\Framework\Filesystem\Directory;
 
 use Magento\Framework\Filesystem\DriverPool;
 
-/**
- * Class \Magento\Framework\Filesystem\Directory\WriteFactory
- *
- */
 class WriteFactory
 {
     /**

@@ -6,10 +6,6 @@
  */
 namespace Magento\Marketplace\Controller\Adminhtml\Partners;
 
-/**
- * Class \Magento\Marketplace\Controller\Adminhtml\Partners\Index
- *
- */
 class Index extends \Magento\Marketplace\Controller\Adminhtml\Partners
 {
     /**

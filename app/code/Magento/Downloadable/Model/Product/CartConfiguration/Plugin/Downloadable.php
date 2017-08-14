@@ -7,10 +7,6 @@
  */
 namespace Magento\Downloadable\Model\Product\CartConfiguration\Plugin;
 
-/**
- * Class \Magento\Downloadable\Model\Product\CartConfiguration\Plugin\Downloadable
- *
- */
 class Downloadable
 {
     /**

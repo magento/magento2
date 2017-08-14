@@ -7,10 +7,6 @@
  */
 namespace Magento\Framework\DataObject\Copy\Config;
 
-/**
- * Class \Magento\Framework\DataObject\Copy\Config\Reader
- *
- */
 class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {
     /**

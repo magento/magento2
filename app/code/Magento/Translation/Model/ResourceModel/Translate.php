@@ -10,10 +10,6 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Config;
 use Magento\Translation\App\Config\Type\Translation;
 
-/**
- * Class \Magento\Translation\Model\ResourceModel\Translate
- *
- */
 class Translate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implements
     \Magento\Framework\Translate\ResourceInterface
 {

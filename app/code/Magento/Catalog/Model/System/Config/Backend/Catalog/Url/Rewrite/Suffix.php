@@ -24,6 +24,7 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Suffix extends \Magento\Framework\App\Config\Value
 {

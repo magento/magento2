@@ -5,10 +5,6 @@
  */
 namespace Magento\Framework\DataObject\Copy;
 
-/**
- * Class \Magento\Framework\DataObject\Copy\Config
- *
- */
 class Config
 {
     /**

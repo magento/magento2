@@ -11,10 +11,6 @@ use Magento\Composer\MagentoComposerApplication;
 use Magento\Composer\RequireUpdateDryRunCommand;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-/**
- * Class \Magento\Framework\Composer\MagentoComposerApplicationFactory
- *
- */
 class MagentoComposerApplicationFactory
 {
 

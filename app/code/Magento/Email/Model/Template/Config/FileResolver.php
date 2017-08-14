@@ -11,10 +11,6 @@ use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\DirSearch;
 use Magento\Framework\Config\FileIteratorFactory;
 
-/**
- * Class \Magento\Email\Model\Template\Config\FileResolver
- *
- */
 class FileResolver implements \Magento\Framework\Config\FileResolverInterface
 {
     /**

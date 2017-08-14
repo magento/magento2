@@ -26,49 +26,49 @@ class ProductUrlRewriteGenerator
     const ENTITY_TYPE = 'product';
 
     /**
-     * @deprecated 100.2.0
+     * @deprecated 100.1.4
      * @var \Magento\CatalogUrlRewrite\Service\V1\StoreViewService
      */
     protected $storeViewService;
 
     /**
      * @var \Magento\Catalog\Model\Product
-     * @deprecated 100.2.0
+     * @deprecated 100.1.4
      */
     protected $product;
 
     /**
-     * @deprecated 100.2.0
+     * @deprecated 100.1.4
      * @var \Magento\CatalogUrlRewrite\Model\Product\CurrentUrlRewritesRegenerator
      */
     protected $currentUrlRewritesRegenerator;
 
     /**
-     * @deprecated 100.2.0
+     * @deprecated 100.1.4
      * @var \Magento\CatalogUrlRewrite\Model\Product\CategoriesUrlRewriteGenerator
      */
     protected $categoriesUrlRewriteGenerator;
 
     /**
-     * @deprecated 100.2.0
+     * @deprecated 100.1.4
      * @var \Magento\CatalogUrlRewrite\Model\Product\CanonicalUrlRewriteGenerator
      */
     protected $canonicalUrlRewriteGenerator;
 
     /**
-     * @deprecated 100.2.0
+     * @deprecated 100.1.4
      * @var \Magento\CatalogUrlRewrite\Model\ObjectRegistryFactory
      */
     protected $objectRegistryFactory;
 
     /**
-     * @deprecated 100.2.0
+     * @deprecated 100.1.4
      * @var \Magento\CatalogUrlRewrite\Model\ObjectRegistry
      */
     protected $productCategories;
 
     /**
-     * @deprecated 100.2.0
+     * @deprecated 100.1.4
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
@@ -105,7 +105,7 @@ class ProductUrlRewriteGenerator
     /**
      * Retrieve Delegator for generation rewrites in different scopes
      *
-     * @deprecated 100.2.0
+     * @deprecated 100.1.4
      * @return ProductScopeRewriteGenerator|mixed
      */
     private function getProductScopeRewriteGenerator()
@@ -147,7 +147,7 @@ class ProductUrlRewriteGenerator
     /**
      * Check is global scope
      *
-     * @deprecated 100.2.0
+     * @deprecated 100.1.4
      * @param int|null $storeId
      * @return bool
      */
@@ -159,7 +159,7 @@ class ProductUrlRewriteGenerator
     /**
      * Generate list of urls for global scope
      *
-     * @deprecated 100.2.0
+     * @deprecated 100.1.4
      * @param \Magento\Framework\Data\Collection $productCategories
      * @param \Magento\Catalog\Model\Product|null $product
      * @param int|null $rootCategoryId
@@ -177,7 +177,7 @@ class ProductUrlRewriteGenerator
     /**
      * Generate list of urls for specific store view
      *
-     * @deprecated 100.2.0
+     * @deprecated 100.1.4
      * @param int $storeId
      * @param \Magento\Framework\Data\Collection $productCategories
      * @param Product|null $product
@@ -195,7 +195,7 @@ class ProductUrlRewriteGenerator
     }
 
     /**
-     * @deprecated 100.2.0
+     * @deprecated 100.1.4
      * @param \Magento\Catalog\Model\Category $category
      * @param int $storeId
      * @return bool

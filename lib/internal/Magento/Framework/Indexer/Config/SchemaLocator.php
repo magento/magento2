@@ -7,10 +7,6 @@ namespace Magento\Framework\Indexer\Config;
 
 use Magento\Framework\Config\SchemaLocatorInterface;
 
-/**
- * Class \Magento\Framework\Indexer\Config\SchemaLocator
- *
- */
 class SchemaLocator implements SchemaLocatorInterface
 {
     /**

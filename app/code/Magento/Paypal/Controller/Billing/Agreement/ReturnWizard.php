@@ -8,10 +8,6 @@ namespace Magento\Paypal\Controller\Billing\Agreement;
 
 use Magento\Framework\Controller\ResultFactory;
 
-/**
- * Class \Magento\Paypal\Controller\Billing\Agreement\ReturnWizard
- *
- */
 class ReturnWizard extends \Magento\Paypal\Controller\Billing\Agreement
 {
     /**

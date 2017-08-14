@@ -9,6 +9,7 @@ namespace Magento\Bundle\Api;
 /**
  * Interface for Management of ProductLink
  * @api
+ * @since 100.0.2
  */
 interface ProductLinkManagementInterface
 {

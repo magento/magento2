@@ -5,10 +5,6 @@
  */
 namespace Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct;
 
-/**
- * Class \Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct\Columns
- *
- */
 class Columns extends \Magento\Ui\Component\Listing\Columns
 {
     /**

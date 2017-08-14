@@ -13,10 +13,6 @@
  */
 namespace Magento\Newsletter\Model\ResourceModel\Grid;
 
-/**
- * Class \Magento\Newsletter\Model\ResourceModel\Grid\Collection
- *
- */
 class Collection extends \Magento\Newsletter\Model\ResourceModel\Problem\Collection
 {
     /**

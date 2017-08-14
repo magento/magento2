@@ -84,7 +84,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
     /**
      * Filter category data
      *
-     * @deprecated 101.1.0
+     * @deprecated 101.0.8
      * @param array $rawData
      * @return array
      */

@@ -14,10 +14,6 @@ use Magento\Framework\Pricing\Render\PriceBox;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Tax\Model\Calculation as TaxCalculation;
 
-/**
- * Class \Magento\Catalog\Block\Category\Plugin\PriceBoxTags
- *
- */
 class PriceBoxTags
 {
     /**

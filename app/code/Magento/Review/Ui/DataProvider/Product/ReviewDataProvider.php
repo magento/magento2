@@ -41,7 +41,6 @@ class ReviewDataProvider extends AbstractDataProvider
      * @param RequestInterface $request
      * @param array $meta
      * @param array $data
-     * @since 100.1.0
      */
     public function __construct(
         $name,

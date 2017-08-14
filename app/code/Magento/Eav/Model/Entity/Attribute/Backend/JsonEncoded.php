@@ -24,7 +24,6 @@ class JsonEncoded extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBa
      * ArrayBackend constructor.
      *
      * @param Json $jsonSerializer
-     * @since 100.2.0
      */
     public function __construct(Json $jsonSerializer)
     {

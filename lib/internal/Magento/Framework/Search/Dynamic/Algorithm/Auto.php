@@ -11,10 +11,6 @@ use Magento\Framework\Search\Dynamic\DataProviderInterface;
 use Magento\Framework\Search\Dynamic\EntityStorage;
 use Magento\Framework\Search\Request\BucketInterface;
 
-/**
- * Class \Magento\Framework\Search\Dynamic\Algorithm\Auto
- *
- */
 class Auto implements AlgorithmInterface
 {
     /**

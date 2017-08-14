@@ -11,10 +11,6 @@ use Magento\Framework\App\Response\Http\FileFactory;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-/**
- * Class \Magento\Search\Controller\Adminhtml\Term\ExportSearchExcel
- *
- */
 class ExportSearchExcel extends TermController
 {
     /**

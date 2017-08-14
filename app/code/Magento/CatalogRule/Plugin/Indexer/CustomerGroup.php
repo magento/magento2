@@ -8,10 +8,6 @@ namespace Magento\CatalogRule\Plugin\Indexer;
 use Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor;
 use Magento\Customer\Model\Group;
 
-/**
- * Class \Magento\CatalogRule\Plugin\Indexer\CustomerGroup
- *
- */
 class CustomerGroup
 {
     /**

@@ -11,10 +11,6 @@ use Magento\Payment\Helper\Formatter;
 use Magento\Sales\Api\Data\TransactionInterface;
 use Magento\Sales\Model\Order\Payment;
 
-/**
- * Class \Magento\Braintree\Gateway\Request\RefundDataBuilder
- *
- */
 class RefundDataBuilder implements BuilderInterface
 {
     use Formatter;

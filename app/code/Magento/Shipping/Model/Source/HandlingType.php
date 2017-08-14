@@ -5,10 +5,6 @@
  */
 namespace Magento\Shipping\Model\Source;
 
-/**
- * Class \Magento\Shipping\Model\Source\HandlingType
- *
- */
 class HandlingType implements \Magento\Framework\Option\ArrayInterface
 {
     /**

@@ -35,7 +35,6 @@ class TierPrice extends AbstractModifier
     /**
      * @param ProductPriceOptionsInterface $productPriceOptions
      * @param ArrayManager $arrayManager
-     * @since 101.1.0
      */
     public function __construct(
         ProductPriceOptionsInterface $productPriceOptions,

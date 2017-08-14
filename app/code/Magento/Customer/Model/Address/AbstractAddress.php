@@ -32,6 +32,7 @@ use Magento\Framework\Model\AbstractExtensibleModel;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api
+ * @since 100.0.2
  */
 class AbstractAddress extends AbstractExtensibleModel implements AddressModelInterface
 {

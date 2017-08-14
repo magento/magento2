@@ -6,10 +6,6 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\View\Giftmessage;
 
-/**
- * Class \Magento\Sales\Controller\Adminhtml\Order\View\Giftmessage\Save
- *
- */
 class Save extends \Magento\Sales\Controller\Adminhtml\Order\View\Giftmessage
 {
     /**

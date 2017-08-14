@@ -6,10 +6,6 @@
 
 namespace Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock;
 
-/**
- * Class \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\QueryProcessorComposite
- *
- */
 class QueryProcessorComposite implements QueryProcessorInterface
 {
     /**

@@ -21,6 +21,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection as Produ
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Link extends \Magento\Framework\Model\AbstractModel
 {

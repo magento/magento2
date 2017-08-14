@@ -6,10 +6,6 @@
  */
 namespace Magento\Cms\Controller\Adminhtml\Block;
 
-/**
- * Class \Magento\Cms\Controller\Adminhtml\Block\Delete
- *
- */
 class Delete extends \Magento\Cms\Controller\Adminhtml\Block
 {
     /**

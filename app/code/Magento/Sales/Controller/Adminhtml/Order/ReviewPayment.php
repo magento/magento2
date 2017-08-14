@@ -7,10 +7,6 @@ namespace Magento\Sales\Controller\Adminhtml\Order;
 
 use Magento\Backend\App\Action;
 
-/**
- * Class \Magento\Sales\Controller\Adminhtml\Order\ReviewPayment
- *
- */
 class ReviewPayment extends \Magento\Sales\Controller\Adminhtml\Order
 {
     /**

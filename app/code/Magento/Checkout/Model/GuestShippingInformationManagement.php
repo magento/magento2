@@ -5,10 +5,6 @@
  */
 namespace Magento\Checkout\Model;
 
-/**
- * Class \Magento\Checkout\Model\GuestShippingInformationManagement
- *
- */
 class GuestShippingInformationManagement implements \Magento\Checkout\Api\GuestShippingInformationManagementInterface
 {
     /**

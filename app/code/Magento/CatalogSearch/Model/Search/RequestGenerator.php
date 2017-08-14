@@ -15,6 +15,7 @@ use Magento\Framework\Search\Request\QueryInterface;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class RequestGenerator
 {

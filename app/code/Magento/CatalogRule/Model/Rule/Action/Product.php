@@ -5,10 +5,6 @@
  */
 namespace Magento\CatalogRule\Model\Rule\Action;
 
-/**
- * Class \Magento\CatalogRule\Model\Rule\Action\Product
- *
- */
 class Product extends \Magento\Rule\Model\Action\AbstractAction
 {
     /**

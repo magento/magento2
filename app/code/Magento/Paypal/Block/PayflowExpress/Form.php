@@ -7,10 +7,6 @@ namespace Magento\Paypal\Block\PayflowExpress;
 
 use Magento\Paypal\Model\Config;
 
-/**
- * Class \Magento\Paypal\Block\PayflowExpress\Form
- *
- */
 class Form extends \Magento\Paypal\Block\Express\Form
 {
     /**

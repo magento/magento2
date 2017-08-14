@@ -5,10 +5,6 @@
  */
 namespace Magento\Framework\TestFramework\Unit\Module;
 
-/**
- * Class \Magento\Framework\TestFramework\Unit\Module\Config
- *
- */
 class Config
 {
     /**
