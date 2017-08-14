@@ -8,10 +8,6 @@ namespace Magento\Newsletter\Controller\Manage;
 
 use Magento\Customer\Api\CustomerRepositoryInterface as CustomerRepository;
 
-/**
- * Class \Magento\Newsletter\Controller\Manage\Save
- *
- */
 class Save extends \Magento\Newsletter\Controller\Manage
 {
     /**

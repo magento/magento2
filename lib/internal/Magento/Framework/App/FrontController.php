@@ -7,10 +7,6 @@
  */
 namespace Magento\Framework\App;
 
-/**
- * Class \Magento\Framework\App\FrontController
- *
- */
 class FrontController implements FrontControllerInterface
 {
     /**

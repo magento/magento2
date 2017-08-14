@@ -6,10 +6,6 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
-/**
- * Class \Magento\Catalog\Controller\Adminhtml\Product\Categories
- *
- */
 class Categories extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**

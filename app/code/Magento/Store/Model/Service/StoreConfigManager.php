@@ -5,10 +5,6 @@
  */
 namespace Magento\Store\Model\Service;
 
-/**
- * Class \Magento\Store\Model\Service\StoreConfigManager
- *
- */
 class StoreConfigManager implements \Magento\Store\Api\StoreConfigManagerInterface
 {
     /**

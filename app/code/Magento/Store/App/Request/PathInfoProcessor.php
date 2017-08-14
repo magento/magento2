@@ -7,10 +7,6 @@ namespace Magento\Store\App\Request;
 
 use Magento\Framework\Exception\NoSuchEntityException;
 
-/**
- * Class \Magento\Store\App\Request\PathInfoProcessor
- *
- */
 class PathInfoProcessor implements \Magento\Framework\App\Request\PathInfoProcessorInterface
 {
     /**

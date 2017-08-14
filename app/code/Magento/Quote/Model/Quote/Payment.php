@@ -32,6 +32,7 @@ use Magento\Quote\Api\Data\PaymentInterface;
  * @method string getCcSsIssue()
  * @method \Magento\Quote\Model\Quote\Payment setCcSsIssue(string $value)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Payment extends \Magento\Payment\Model\Info implements PaymentInterface
 {

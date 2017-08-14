@@ -14,10 +14,6 @@ use Magento\Framework\Indexer\IndexStructureInterface;
 use Magento\Framework\Indexer\StructureFactory;
 use Magento\Framework\Indexer\SaveHandlerFactory;
 
-/**
- * Class \Magento\Theme\Model\Indexer\Design\Config
- *
- */
 class Config implements ActionInterface
 {
     /**

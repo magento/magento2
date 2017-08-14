@@ -33,7 +33,6 @@ class InitialSnapshotConfigSource implements ConfigSourceInterface
     /**
      * @param FlagManager $flagManager The factory of Flag instances
      * @param DataObjectFactory $dataObjectFactory The factory of DataObject instances
-     * @since 100.2.0
      */
     public function __construct(FlagManager $flagManager, DataObjectFactory $dataObjectFactory)
     {

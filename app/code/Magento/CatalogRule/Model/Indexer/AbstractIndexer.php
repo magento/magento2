@@ -10,10 +10,6 @@ use Magento\Framework\Indexer\ActionInterface as IndexerActionInterface;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Indexer\CacheContext;
 
-/**
- * Class \Magento\CatalogRule\Model\Indexer\AbstractIndexer
- *
- */
 abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInterface, IdentityInterface
 {
     /**

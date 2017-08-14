@@ -6,10 +6,6 @@
  */
 namespace Magento\Paypal\Controller\Express;
 
-/**
- * Class \Magento\Paypal\Controller\Express\Start
- *
- */
 class Start extends \Magento\Paypal\Controller\Express\AbstractExpress\Start
 {
     /**

@@ -7,10 +7,6 @@ namespace Magento\GroupedImportExport\Model\Export;
 
 use Magento\CatalogImportExport\Model\Export\RowCustomizerInterface;
 
-/**
- * Class \Magento\GroupedImportExport\Model\Export\RowCustomizer
- *
- */
 class RowCustomizer implements RowCustomizerInterface
 {
     /**

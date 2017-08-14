@@ -12,10 +12,6 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Controller\Adminhtml\Product\Builder as CatalogProductBuilder;
 use Magento\Framework\App\RequestInterface;
 
-/**
- * Class \Magento\ConfigurableProduct\Controller\Adminhtml\Product\Builder\Plugin
- *
- */
 class Plugin
 {
     /**

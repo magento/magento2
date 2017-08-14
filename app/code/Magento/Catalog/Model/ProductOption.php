@@ -8,10 +8,6 @@ namespace Magento\Catalog\Model;
 use Magento\Catalog\Api\Data\ProductOptionInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
 
-/**
- * Class \Magento\Catalog\Model\ProductOption
- *
- */
 class ProductOption extends AbstractExtensibleModel implements ProductOptionInterface
 {
     /**

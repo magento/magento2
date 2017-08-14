@@ -8,10 +8,6 @@ namespace Magento\Persistent\Controller\Index;
 use Magento\Persistent\Controller\Index;
 use Magento\Framework\Controller\ResultFactory;
 
-/**
- * Class \Magento\Persistent\Controller\Index\UnsetCookie
- *
- */
 class UnsetCookie extends Index
 {
     /**

@@ -8,10 +8,6 @@ namespace Magento\Tax\Controller\Adminhtml\Rule;
 
 use Magento\Framework\Controller\ResultFactory;
 
-/**
- * Class \Magento\Tax\Controller\Adminhtml\Rule\NewAction
- *
- */
 class NewAction extends \Magento\Tax\Controller\Adminhtml\Rule
 {
     /**

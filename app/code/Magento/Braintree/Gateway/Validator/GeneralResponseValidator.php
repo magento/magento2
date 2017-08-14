@@ -11,10 +11,6 @@ use Magento\Payment\Gateway\Validator\AbstractValidator;
 use Magento\Braintree\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
 
-/**
- * Class \Magento\Braintree\Gateway\Validator\GeneralResponseValidator
- *
- */
 class GeneralResponseValidator extends AbstractValidator
 {
     /**

@@ -11,10 +11,6 @@ use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\Filesystem;
 
-/**
- * Class \Magento\Framework\Module\Dir
- *
- */
 class Dir
 {
     /**#@+

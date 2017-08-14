@@ -44,7 +44,6 @@ class ConfigSetProcessorFactory
     /**
      * @param ObjectManagerInterface $objectManager
      * @param array $processors
-     * @since 100.2.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,

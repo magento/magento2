@@ -11,6 +11,7 @@ use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
  * Sitemap resource catalog collection model
  *
  * @api
+ * @since 100.0.2
  */
 class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

@@ -11,10 +11,6 @@
  */
 namespace Magento\Tax\Model\ResourceModel\Report;
 
-/**
- * Class \Magento\Tax\Model\ResourceModel\Report\Collection
- *
- */
 class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\AbstractCollection
 {
     /**

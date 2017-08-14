@@ -11,6 +11,7 @@ use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Link extends \Magento\Catalog\Model\ResourceModel\Product\Link
 {
@@ -28,7 +29,6 @@ class Link extends \Magento\Catalog\Model\ResourceModel\Product\Link
      * @param Relation $catalogProductRelation
      * @param MetadataPool $metadataPool
      * @param string|null $connectionName
-     * @since 100.1.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,

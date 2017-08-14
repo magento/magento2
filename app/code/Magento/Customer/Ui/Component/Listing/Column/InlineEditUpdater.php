@@ -7,10 +7,6 @@ namespace Magento\Customer\Ui\Component\Listing\Column;
 
 use Magento\Framework\View\Element\UiComponentInterface;
 
-/**
- * Class \Magento\Customer\Ui\Component\Listing\Column\InlineEditUpdater
- *
- */
 class InlineEditUpdater
 {
     /**

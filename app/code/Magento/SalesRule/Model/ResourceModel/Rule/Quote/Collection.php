@@ -7,10 +7,6 @@
  */
 namespace Magento\SalesRule\Model\ResourceModel\Rule\Quote;
 
-/**
- * Class \Magento\SalesRule\Model\ResourceModel\Rule\Quote\Collection
- *
- */
 class Collection extends \Magento\SalesRule\Model\ResourceModel\Rule\Collection
 {
     /**

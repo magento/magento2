@@ -5,10 +5,6 @@
  */
 namespace Magento\Shipping\Model;
 
-/**
- * Class \Magento\Shipping\Model\Observer
- *
- */
 class Observer
 {
     /**

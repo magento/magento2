@@ -7,10 +7,6 @@ namespace Magento\Setup\Module\Di\Code\Scanner;
 
 use Magento\Framework\ObjectManager\Code\Generator\Proxy as ProxyGenerator;
 
-/**
- * Class \Magento\Setup\Module\Di\Code\Scanner\XmlScanner
- *
- */
 class XmlScanner implements ScannerInterface
 {
     /**

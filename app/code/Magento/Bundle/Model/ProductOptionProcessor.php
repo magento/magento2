@@ -13,10 +13,6 @@ use Magento\Catalog\Model\ProductOptionProcessorInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\Factory as DataObjectFactory;
 
-/**
- * Class \Magento\Bundle\Model\ProductOptionProcessor
- *
- */
 class ProductOptionProcessor implements ProductOptionProcessorInterface
 {
     /**

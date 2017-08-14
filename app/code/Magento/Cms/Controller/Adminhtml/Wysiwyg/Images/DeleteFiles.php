@@ -8,10 +8,6 @@ namespace Magento\Cms\Controller\Adminhtml\Wysiwyg\Images;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-/**
- * Class \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\DeleteFiles
- *
- */
 class DeleteFiles extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
 {
     /**

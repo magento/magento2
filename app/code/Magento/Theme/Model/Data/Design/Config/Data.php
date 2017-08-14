@@ -9,10 +9,6 @@ use Magento\Framework\Api\AbstractExtensibleObject;
 use Magento\Theme\Api\Data\DesignConfigDataInterface;
 use Magento\Theme\Api\Data\DesignConfigDataExtensionInterface;
 
-/**
- * Class \Magento\Theme\Model\Data\Design\Config\Data
- *
- */
 class Data extends AbstractExtensibleObject implements DesignConfigDataInterface
 {
     /**

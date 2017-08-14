@@ -101,6 +101,7 @@ use Magento\Sales\Model\Status;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\CartInterface
 {

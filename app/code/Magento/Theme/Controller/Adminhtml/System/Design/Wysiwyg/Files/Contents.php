@@ -6,10 +6,6 @@
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files;
 
-/**
- * Class \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files\Contents
- *
- */
 class Contents extends \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files
 {
     /**

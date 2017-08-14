@@ -7,10 +7,6 @@
  */
 namespace Magento\Framework;
 
-/**
- * Class \Magento\Framework\Util
- *
- */
 class Util
 {
     /**

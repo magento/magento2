@@ -7,10 +7,6 @@ namespace Magento\Framework\DB\Helper\Mysql;
 
 use Magento\Framework\App\ResourceConnection;
 
-/**
- * Class \Magento\Framework\DB\Helper\Mysql\Fulltext
- *
- */
 class Fulltext
 {
     /**
@@ -55,7 +51,7 @@ class Fulltext
     {
         $this->connection = $resource->getConnection();
     }
-    
+
     /**
      * Method for FULLTEXT search in Mysql, will generated MATCH ($columns) AGAINST ('$expression' $mode)
      *

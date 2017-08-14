@@ -11,10 +11,6 @@
  */
 namespace Magento\Captcha\Model\Config\Form;
 
-/**
- * Class \Magento\Captcha\Model\Config\Form\Frontend
- *
- */
 class Frontend extends \Magento\Captcha\Model\Config\Form\AbstractForm
 {
     /**

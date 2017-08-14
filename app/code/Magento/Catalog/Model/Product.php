@@ -35,6 +35,7 @@ use Magento\Framework\Pricing\SaleableInterface;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Product extends \Magento\Catalog\Model\AbstractModel implements
     IdentityInterface,
@@ -501,7 +502,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Get collection instance
      *
      * @return object
-     * @deprecated because collections should be used directly via factory
+     * @deprecated 101.1.0 because collections should be used directly via factory
      */
     public function getResourceCollection()
     {

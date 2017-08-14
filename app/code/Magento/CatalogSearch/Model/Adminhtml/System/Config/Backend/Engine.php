@@ -8,6 +8,7 @@ namespace Magento\CatalogSearch\Model\Adminhtml\System\Config\Backend;
 /**
  * @author      Magento Core Team <core@magentocommerce.com>
  * @api
+ * @since 100.0.2
  */
 class Engine extends \Magento\Framework\App\Config\Value
 {

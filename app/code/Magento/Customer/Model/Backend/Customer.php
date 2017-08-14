@@ -5,10 +5,6 @@
  */
 namespace Magento\Customer\Model\Backend;
 
-/**
- * Class \Magento\Customer\Model\Backend\Customer
- *
- */
 class Customer extends \Magento\Customer\Model\Customer
 {
     /**

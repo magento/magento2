@@ -7,10 +7,6 @@ namespace Magento\Framework\Indexer\Config;
 
 use Magento\Framework\Config\ConverterInterface;
 
-/**
- * Class \Magento\Framework\Indexer\Config\Converter
- *
- */
 class Converter implements ConverterInterface
 {
     /**

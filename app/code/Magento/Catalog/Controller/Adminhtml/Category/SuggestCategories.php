@@ -6,10 +6,6 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category;
 
-/**
- * Class \Magento\Catalog\Controller\Adminhtml\Category\SuggestCategories
- *
- */
 class SuggestCategories extends \Magento\Catalog\Controller\Adminhtml\Category
 {
     /**

@@ -9,10 +9,6 @@ namespace Magento\Catalog\Block\Product\ReviewRenderer;
 
 use Magento\Catalog\Block\Product\ReviewRendererInterface;
 
-/**
- * Class \Magento\Catalog\Block\Product\ReviewRenderer\DefaultProvider
- *
- */
 class DefaultProvider implements ReviewRendererInterface
 {
     /**

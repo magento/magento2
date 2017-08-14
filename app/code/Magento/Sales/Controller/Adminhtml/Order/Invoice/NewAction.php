@@ -11,10 +11,6 @@ use Magento\Framework\Registry;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Sales\Model\Service\InvoiceService;
 
-/**
- * Class \Magento\Sales\Controller\Adminhtml\Order\Invoice\NewAction
- *
- */
 class NewAction extends \Magento\Backend\App\Action
 {
     /**

@@ -7,10 +7,6 @@ namespace Magento\Framework\Code\Validator;
 
 use Magento\Framework\Code\ValidatorInterface;
 
-/**
- * Class \Magento\Framework\Code\Validator\ConstructorArgumentTypes
- *
- */
 class ConstructorArgumentTypes implements ValidatorInterface
 {
     /**

@@ -10,10 +10,6 @@ namespace Magento\Email\Model\Template\Config;
 use Magento\Framework\Config\FileResolverInterface;
 use Magento\Framework\Config\ValidationStateInterface;
 
-/**
- * Class \Magento\Email\Model\Template\Config\Reader
- *
- */
 class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {
     /**

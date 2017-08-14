@@ -7,10 +7,6 @@ namespace Magento\Sales\Observer\Backend;
 
 use Magento\Framework\Event\ObserverInterface;
 
-/**
- * Class \Magento\Sales\Observer\Backend\CatalogPriceRule
- *
- */
 class CatalogPriceRule implements ObserverInterface
 {
     /**

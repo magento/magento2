@@ -15,6 +15,7 @@ use Magento\Payment\Model\MethodInterface;
  * Class AbstractDataAssignObserver
  * @package Magento\Payment\Observer
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractDataAssignObserver implements ObserverInterface
 {

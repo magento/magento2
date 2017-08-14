@@ -6,10 +6,6 @@
 
 namespace Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate;
 
-/**
- * Class \Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\LocationDirectory
- *
- */
 class LocationDirectory
 {
     /**

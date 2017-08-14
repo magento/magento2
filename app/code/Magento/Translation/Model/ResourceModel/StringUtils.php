@@ -5,10 +5,6 @@
  */
 namespace Magento\Translation\Model\ResourceModel;
 
-/**
- * Class \Magento\Translation\Model\ResourceModel\StringUtils
- *
- */
 class StringUtils extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**

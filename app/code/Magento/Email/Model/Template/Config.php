@@ -10,10 +10,6 @@ namespace Magento\Email\Model\Template;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\View\Design\Theme\ThemePackageList;
 
-/**
- * Class \Magento\Email\Model\Template\Config
- *
- */
 class Config implements \Magento\Framework\Mail\Template\ConfigInterface
 {
     /**

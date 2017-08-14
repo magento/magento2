@@ -6,10 +6,6 @@
 
 namespace Magento\ConfigurableProduct\Pricing\Price;
 
-/**
- * Class \Magento\ConfigurableProduct\Pricing\Price\FinalPrice
- *
- */
 class FinalPrice extends \Magento\Catalog\Pricing\Price\FinalPrice
 {
     /**

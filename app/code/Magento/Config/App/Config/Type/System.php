@@ -91,7 +91,6 @@ class System implements ConfigTypeInterface
      * @param int $cachingNestedLevel
      * @param string $configType
      * @param Reader $reader
-     * @since 100.1.2
      */
     public function __construct(
         \Magento\Framework\App\Config\ConfigSourceInterface $source,

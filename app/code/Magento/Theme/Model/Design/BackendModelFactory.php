@@ -11,10 +11,6 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Theme\Model\Design\Config\MetadataProvider;
 use Magento\Theme\Model\ResourceModel\Design\Config\CollectionFactory;
 
-/**
- * Class \Magento\Theme\Model\Design\BackendModelFactory
- *
- */
 class BackendModelFactory extends ValueFactory
 {
     /**
