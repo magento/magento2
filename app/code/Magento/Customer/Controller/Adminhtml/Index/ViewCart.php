@@ -5,10 +5,6 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
-/**
- * Class \Magento\Customer\Controller\Adminhtml\Index\ViewCart
- *
- */
 class ViewCart extends \Magento\Customer\Controller\Adminhtml\Index
 {
     /**

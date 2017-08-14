@@ -5,10 +5,6 @@
  */
 namespace Magento\Quote\Model\Product\Plugin;
 
-/**
- * Class \Magento\Quote\Model\Product\Plugin\UpdateQuoteItems
- *
- */
 class UpdateQuoteItems
 {
     /**

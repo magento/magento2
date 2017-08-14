@@ -5,10 +5,6 @@
  */
 namespace Magento\Tax\Model\System\Config\Source\Tax;
 
-/**
- * Class \Magento\Tax\Model\System\Config\Source\Tax\Country
- *
- */
 class Country extends \Magento\Directory\Model\Config\Source\Country
 {
     /**

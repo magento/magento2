@@ -16,6 +16,7 @@ use Magento\Downloadable\Model\ResourceModel\Link as Resource;
  * @method Link setProductId(int $value)
  *
  * @api
+ * @since 100.0.2
  */
 class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements ComponentInterface, LinkInterface
 {

@@ -6,10 +6,6 @@
  */
 namespace Magento\Checkout\Controller\Cart;
 
-/**
- * Class \Magento\Checkout\Controller\Cart\Addgroup
- *
- */
 class Addgroup extends \Magento\Checkout\Controller\Cart
 {
     /**

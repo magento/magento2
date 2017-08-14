@@ -5,10 +5,6 @@
  */
 namespace Magento\Ui\Model\Export;
 
-/**
- * Class \Magento\Ui\Model\Export\SearchResultIterator
- *
- */
 class SearchResultIterator implements \Iterator
 {
     /**

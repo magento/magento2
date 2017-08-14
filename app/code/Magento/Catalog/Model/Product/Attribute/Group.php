@@ -8,10 +8,6 @@ namespace Magento\Catalog\Model\Product\Attribute;
 
 use Magento\Framework\Api\AttributeValueFactory;
 
-/**
- * Class \Magento\Catalog\Model\Product\Attribute\Group
- *
- */
 class Group extends \Magento\Eav\Model\Entity\Attribute\Group
 {
     /**

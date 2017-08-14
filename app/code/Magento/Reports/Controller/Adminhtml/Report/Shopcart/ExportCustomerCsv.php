@@ -8,10 +8,6 @@ namespace Magento\Reports\Controller\Adminhtml\Report\Shopcart;
 
 use Magento\Framework\App\ResponseInterface;
 
-/**
- * Class \Magento\Reports\Controller\Adminhtml\Report\Shopcart\ExportCustomerCsv
- *
- */
 class ExportCustomerCsv extends \Magento\Reports\Controller\Adminhtml\Report\Shopcart
 {
     /**

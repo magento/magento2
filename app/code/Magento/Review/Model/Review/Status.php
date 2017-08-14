@@ -12,10 +12,6 @@
  */
 namespace Magento\Review\Model\Review;
 
-/**
- * Class \Magento\Review\Model\Review\Status
- *
- */
 class Status extends \Magento\Framework\Model\AbstractModel
 {
     /**

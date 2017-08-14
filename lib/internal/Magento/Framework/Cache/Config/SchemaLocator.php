@@ -7,10 +7,6 @@
  */
 namespace Magento\Framework\Cache\Config;
 
-/**
- * Class \Magento\Framework\Cache\Config\SchemaLocator
- *
- */
 class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {
     /**

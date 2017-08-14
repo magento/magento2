@@ -13,6 +13,7 @@ use Magento\Catalog\Api\Data\ProductAttributeInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @since 100.0.2
  */
 class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
 {

@@ -5,10 +5,6 @@
  */
 namespace Magento\Quote\Observer\Frontend\Quote\Address;
 
-/**
- * Class \Magento\Quote\Observer\Frontend\Quote\Address\VatValidator
- *
- */
 class VatValidator
 {
     /**

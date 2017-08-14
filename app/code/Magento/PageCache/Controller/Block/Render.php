@@ -6,10 +6,6 @@
  */
 namespace Magento\PageCache\Controller\Block;
 
-/**
- * Class \Magento\PageCache\Controller\Block\Render
- *
- */
 class Render extends \Magento\PageCache\Controller\Block
 {
     /**

@@ -5,10 +5,6 @@
  */
 namespace Magento\Developer\Model\Di;
 
-/**
- * Class \Magento\Developer\Model\Di\Information
- *
- */
 class Information
 {
     /**

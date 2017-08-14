@@ -6,10 +6,6 @@
  */
 namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
 
-/**
- * Class \Magento\Shipping\Controller\Adminhtml\Order\Shipment\Start
- *
- */
 class Start extends \Magento\Backend\App\Action
 {
     /**

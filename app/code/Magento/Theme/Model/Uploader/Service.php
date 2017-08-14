@@ -11,10 +11,6 @@ use Magento\Framework\Convert\DataSize;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\DirectoryList;
 
-/**
- * Class \Magento\Theme\Model\Uploader\Service
- *
- */
 class Service
 {
     /**

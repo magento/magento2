@@ -13,10 +13,6 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Widget\Chooser;
 
 use Magento\Backend\Block\Template;
 
-/**
- * Class \Magento\Catalog\Block\Adminhtml\Product\Widget\Chooser\Container
- *
- */
 class Container extends Template
 {
     /**

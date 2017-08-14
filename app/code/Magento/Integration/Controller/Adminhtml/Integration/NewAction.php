@@ -6,10 +6,6 @@
  */
 namespace Magento\Integration\Controller\Adminhtml\Integration;
 
-/**
- * Class \Magento\Integration\Controller\Adminhtml\Integration\NewAction
- *
- */
 class NewAction extends \Magento\Integration\Controller\Adminhtml\Integration
 {
     /**

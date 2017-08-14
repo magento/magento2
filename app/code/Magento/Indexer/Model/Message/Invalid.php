@@ -6,10 +6,6 @@
 
 namespace Magento\Indexer\Model\Message;
 
-/**
- * Class \Magento\Indexer\Model\Message\Invalid
- *
- */
 class Invalid implements \Magento\Framework\Notification\MessageInterface
 {
     /**

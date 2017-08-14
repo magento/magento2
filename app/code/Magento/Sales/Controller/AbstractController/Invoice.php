@@ -6,10 +6,6 @@
  */
 namespace Magento\Sales\Controller\AbstractController;
 
-/**
- * Class \Magento\Sales\Controller\AbstractController\Invoice
- *
- */
 abstract class Invoice extends \Magento\Sales\Controller\AbstractController\View
 {
 }

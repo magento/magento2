@@ -5,10 +5,6 @@
  */
 namespace Magento\Framework\Setup\SampleData;
 
-/**
- * Class \Magento\Framework\Setup\SampleData\Executor
- *
- */
 class Executor
 {
     /**

@@ -8,10 +8,6 @@ namespace Magento\Framework\Validator;
 
 use Magento\Framework\Cache\FrontendInterface;
 
-/**
- * Class \Magento\Framework\Validator\Factory
- *
- */
 class Factory
 {
     /** cache key */

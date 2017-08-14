@@ -5,10 +5,6 @@
  */
 namespace Magento\Catalog\Model\Product\AttributeSet;
 
-/**
- * Class \Magento\Catalog\Model\Product\AttributeSet\Options
- *
- */
 class Options implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**

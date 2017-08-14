@@ -7,6 +7,7 @@ namespace Magento\Catalog\Ui\Component\Listing\Attribute;
 
 /**
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractRepository implements RepositoryInterface
 {

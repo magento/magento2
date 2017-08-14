@@ -12,10 +12,6 @@ use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Customer\Ui\Component\Listing\Column\InlineEditUpdater;
 use Magento\Customer\Api\CustomerMetadataInterface;
 
-/**
- * Class \Magento\Customer\Ui\Component\Listing\Columns
- *
- */
 class Columns extends \Magento\Ui\Component\Listing\Columns
 {
     /**

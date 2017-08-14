@@ -9,10 +9,6 @@ use Magento\Catalog\Model\Category;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
 use Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider;
 
-/**
- * Class \Magento\CatalogUrlRewrite\Model\Category\Plugin\Category\Move
- *
- */
 class Move
 {
     /**

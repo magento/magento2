@@ -5,10 +5,6 @@
  */
 namespace Magento\Quote\Model\Product;
 
-/**
- * Class \Magento\Quote\Model\Product\QuoteItemsCleaner
- *
- */
 class QuoteItemsCleaner implements \Magento\Quote\Model\Product\QuoteItemsCleanerInterface
 {
     /**

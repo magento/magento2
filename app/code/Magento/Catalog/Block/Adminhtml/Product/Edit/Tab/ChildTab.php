@@ -9,10 +9,6 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab;
 
-/**
- * Class \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\ChildTab
- *
- */
 class ChildTab extends \Magento\Backend\Block\Template
 {
     /**

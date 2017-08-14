@@ -13,10 +13,6 @@ use Magento\Framework\App\Area;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\State;
 
-/**
- * Class \Magento\Customer\Model\Plugin\CustomerNotification
- *
- */
 class CustomerNotification
 {
     /**

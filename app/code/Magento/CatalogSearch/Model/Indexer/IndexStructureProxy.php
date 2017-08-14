@@ -7,10 +7,6 @@ namespace Magento\CatalogSearch\Model\Indexer;
 
 use Magento\Framework\Indexer\IndexStructureInterface;
 
-/**
- * Class \Magento\CatalogSearch\Model\Indexer\IndexStructureProxy
- *
- */
 class IndexStructureProxy implements IndexStructureInterface
 {
     /**

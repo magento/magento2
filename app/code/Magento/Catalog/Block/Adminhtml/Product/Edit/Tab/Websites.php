@@ -11,10 +11,6 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab;
 
-/**
- * Class \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Websites
- *
- */
 class Websites extends \Magento\Backend\Block\Store\Switcher
 {
     /**

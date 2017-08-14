@@ -6,10 +6,6 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\Group;
 
-/**
- * Class \Magento\Customer\Controller\Adminhtml\Group\Edit
- *
- */
 class Edit extends \Magento\Customer\Controller\Adminhtml\Group
 {
     /**

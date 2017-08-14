@@ -9,10 +9,6 @@ use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
 use Magento\Catalog\Pricing\Price\ConfiguredPriceInterface;
 use Magento\Catalog\Pricing\Price\FinalPrice;
 
-/**
- * Class \Magento\Wishlist\Pricing\ConfiguredPrice\Downloadable
- *
- */
 class Downloadable extends FinalPrice implements ConfiguredPriceInterface
 {
     /**

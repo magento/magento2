@@ -12,10 +12,6 @@
  */
 namespace Magento\Framework\ObjectManager;
 
-/**
- * Class \Magento\Framework\ObjectManager\ObjectManager
- *
- */
 class ObjectManager implements \Magento\Framework\ObjectManagerInterface
 {
     /**

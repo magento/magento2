@@ -10,10 +10,6 @@ namespace Magento\Shipping\Model;
 
 use Magento\Sales\Model\Order\Shipment;
 
-/**
- * Class \Magento\Shipping\Model\Info
- *
- */
 class Info extends \Magento\Framework\DataObject
 {
     /**

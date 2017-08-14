@@ -9,10 +9,6 @@
  */
 namespace Magento\Theme\Model\Theme;
 
-/**
- * Class \Magento\Theme\Model\Theme\SingleFile
- *
- */
 class SingleFile
 {
     /**

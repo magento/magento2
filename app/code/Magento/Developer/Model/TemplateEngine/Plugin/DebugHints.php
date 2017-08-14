@@ -15,10 +15,6 @@ use Magento\Framework\View\TemplateEngineInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
-/**
- * Class \Magento\Developer\Model\TemplateEngine\Plugin\DebugHints
- *
- */
 class DebugHints
 {
     /**

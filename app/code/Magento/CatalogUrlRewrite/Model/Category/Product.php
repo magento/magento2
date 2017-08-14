@@ -7,10 +7,6 @@ namespace Magento\CatalogUrlRewrite\Model\Category;
 
 use Magento\Framework\Model\AbstractModel;
 
-/**
- * Class \Magento\CatalogUrlRewrite\Model\Category\Product
- *
- */
 class Product extends AbstractModel
 {
     /**

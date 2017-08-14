@@ -5,10 +5,6 @@
  */
 namespace Magento\Backend\Block\Widget\Grid\Column\Renderer\Radio;
 
-/**
- * Class \Magento\Backend\Block\Widget\Grid\Column\Renderer\Radio\Extended
- *
- */
 class Extended extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Radio
 {
     /**

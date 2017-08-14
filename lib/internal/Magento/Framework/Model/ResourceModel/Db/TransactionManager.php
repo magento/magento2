@@ -8,10 +8,6 @@ namespace Magento\Framework\Model\ResourceModel\Db;
 
 use Magento\Framework\DB\Adapter\AdapterInterface as Connection;
 
-/**
- * Class \Magento\Framework\Model\ResourceModel\Db\TransactionManager
- *
- */
 class TransactionManager implements TransactionManagerInterface
 {
     /**
