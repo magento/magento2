@@ -177,7 +177,6 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $result);
     }
 
-
     public function testTryScheduleWithConversionToAdminStoreTime()
     {
         $scheduledAt = '2011-12-13 14:15:16';
