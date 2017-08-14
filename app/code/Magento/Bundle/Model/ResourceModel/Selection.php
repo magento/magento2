@@ -15,6 +15,7 @@ use Magento\Framework\Model\ResourceModel\Db\Context;
  * Bundle Selection Resource Model
  *
  * @api
+ * @since 100.0.2
  */
 class Selection extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -36,7 +37,6 @@ class Selection extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param MetadataPool $metadataPool
      * @param null|string $connectionName
      * @param EntityManager|null $entityManager
-     * @since 100.1.0
      */
     public function __construct(
         Context $context,

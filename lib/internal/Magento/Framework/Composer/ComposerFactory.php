@@ -8,10 +8,6 @@ namespace Magento\Framework\Composer;
 use Composer\IO\BufferIO;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-/**
- * Class \Magento\Framework\Composer\ComposerFactory
- *
- */
 class ComposerFactory
 {
     /**

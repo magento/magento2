@@ -13,10 +13,6 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attributes;
 
 use Magento\Backend\Block\Widget\Button;
 
-/**
- * Class \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attributes\Create
- *
- */
 class Create extends Button
 {
     /**

@@ -9,10 +9,6 @@
  */
 namespace Magento\Framework\Validator;
 
-/**
- * Class \Magento\Framework\Validator\ConstraintFactory
- *
- */
 class ConstraintFactory
 {
     /**

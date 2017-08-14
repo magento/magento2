@@ -8,10 +8,6 @@
 
 namespace Magento\AdminNotification\Block\Grid\Renderer;
 
-/**
- * Class \Magento\AdminNotification\Block\Grid\Renderer\Actions
- *
- */
 class Actions extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**

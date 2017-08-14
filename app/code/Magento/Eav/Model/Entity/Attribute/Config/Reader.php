@@ -7,10 +7,6 @@
  */
 namespace Magento\Eav\Model\Entity\Attribute\Config;
 
-/**
- * Class \Magento\Eav\Model\Entity\Attribute\Config\Reader
- *
- */
 class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {
     /**

@@ -7,10 +7,6 @@
  */
 namespace Magento\Newsletter\Block\Subscribe\Grid\Options;
 
-/**
- * Class \Magento\Newsletter\Block\Subscribe\Grid\Options\StoreOptionHash
- *
- */
 class StoreOptionHash implements \Magento\Framework\Option\ArrayInterface
 {
     /**

@@ -5,10 +5,6 @@
  */
 namespace Magento\Downloadable\Model\Product\CopyConstructor;
 
-/**
- * Class \Magento\Downloadable\Model\Product\CopyConstructor\Downloadable
- *
- */
 class Downloadable implements \Magento\Catalog\Model\Product\CopyConstructorInterface
 {
     /**

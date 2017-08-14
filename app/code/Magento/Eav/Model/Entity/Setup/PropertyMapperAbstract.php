@@ -7,10 +7,6 @@
  */
 namespace Magento\Eav\Model\Entity\Setup;
 
-/**
- * Class \Magento\Eav\Model\Entity\Setup\PropertyMapperAbstract
- *
- */
 abstract class PropertyMapperAbstract implements PropertyMapperInterface
 {
     /**

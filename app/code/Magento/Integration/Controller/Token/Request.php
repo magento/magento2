@@ -6,10 +6,6 @@
  */
 namespace Magento\Integration\Controller\Token;
 
-/**
- * Class \Magento\Integration\Controller\Token\Request
- *
- */
 class Request extends \Magento\Framework\App\Action\Action
 {
     /**

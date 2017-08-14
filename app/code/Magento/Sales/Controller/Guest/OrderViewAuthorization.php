@@ -8,10 +8,6 @@ namespace Magento\Sales\Controller\Guest;
 
 use Magento\Sales\Controller\AbstractController\OrderViewAuthorizationInterface;
 
-/**
- * Class \Magento\Sales\Controller\Guest\OrderViewAuthorization
- *
- */
 class OrderViewAuthorization implements OrderViewAuthorizationInterface
 {
     /**

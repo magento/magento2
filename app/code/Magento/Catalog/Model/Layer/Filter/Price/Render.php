@@ -10,10 +10,6 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Store\Model\ScopeInterface;
 
-/**
- * Class \Magento\Catalog\Model\Layer\Filter\Price\Render
- *
- */
 class Render
 {
     const XML_PATH_ONE_PRICE_INTERVAL = 'catalog/layered_navigation/one_price_interval';

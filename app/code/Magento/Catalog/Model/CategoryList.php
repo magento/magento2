@@ -15,10 +15,6 @@ use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 
-/**
- * Class \Magento\Catalog\Model\CategoryList
- *
- */
 class CategoryList implements CategoryListInterface
 {
     /**

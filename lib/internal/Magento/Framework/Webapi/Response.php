@@ -7,10 +7,6 @@
  */
 namespace Magento\Framework\Webapi;
 
-/**
- * Class \Magento\Framework\Webapi\Response
- *
- */
 class Response extends \Magento\Framework\HTTP\PhpEnvironment\Response implements
     \Magento\Framework\App\Response\HttpInterface
 {

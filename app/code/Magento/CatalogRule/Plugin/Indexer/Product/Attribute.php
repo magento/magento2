@@ -12,10 +12,6 @@ use Magento\CatalogRule\Model\Rule\Condition\Combine;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Rule\Model\Condition\Product\AbstractProduct;
 
-/**
- * Class \Magento\CatalogRule\Plugin\Indexer\Product\Attribute
- *
- */
 class Attribute
 {
     /**

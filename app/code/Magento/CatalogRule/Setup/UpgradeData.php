@@ -15,10 +15,6 @@ use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\CatalogRule\Api\Data\RuleInterface;
 
-/**
- * Class \Magento\CatalogRule\Setup\UpgradeData
- *
- */
 class UpgradeData implements UpgradeDataInterface
 {
     /**

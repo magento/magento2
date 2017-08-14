@@ -16,6 +16,7 @@ use Magento\Framework\View\Element\AbstractBlock;
  *
  * @api
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @since 100.0.2
  */
 class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements \Magento\Framework\DataObject\IdentityInterface
 {

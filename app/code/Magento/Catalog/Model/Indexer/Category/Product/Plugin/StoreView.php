@@ -5,10 +5,6 @@
  */
 namespace Magento\Catalog\Model\Indexer\Category\Product\Plugin;
 
-/**
- * Class \Magento\Catalog\Model\Indexer\Category\Product\Plugin\StoreView
- *
- */
 class StoreView extends StoreGroup
 {
     /**

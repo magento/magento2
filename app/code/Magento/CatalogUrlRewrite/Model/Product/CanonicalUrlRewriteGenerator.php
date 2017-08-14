@@ -11,10 +11,6 @@ use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 
-/**
- * Class \Magento\CatalogUrlRewrite\Model\Product\CanonicalUrlRewriteGenerator
- *
- */
 class CanonicalUrlRewriteGenerator
 {
     /**

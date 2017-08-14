@@ -7,6 +7,7 @@ namespace Magento\Eav\Model\Entity\Attribute\Source;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Boolean extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 {

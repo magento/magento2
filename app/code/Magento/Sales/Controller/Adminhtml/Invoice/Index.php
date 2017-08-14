@@ -6,10 +6,6 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Invoice;
 
-/**
- * Class \Magento\Sales\Controller\Adminhtml\Invoice\Index
- *
- */
 class Index extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\Index
 {
 }

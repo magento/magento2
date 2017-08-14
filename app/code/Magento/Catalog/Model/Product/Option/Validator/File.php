@@ -8,10 +8,6 @@ namespace Magento\Catalog\Model\Product\Option\Validator;
 
 use Magento\Catalog\Model\Product\Option;
 
-/**
- * Class \Magento\Catalog\Model\Product\Option\Validator\File
- *
- */
 class File extends DefaultValidator
 {
     /**

@@ -6,10 +6,6 @@
  */
 namespace Magento\Customer\Controller\Address;
 
-/**
- * Class \Magento\Customer\Controller\Address\Edit
- *
- */
 class Edit extends \Magento\Customer\Controller\Address
 {
     /**

@@ -5,10 +5,6 @@
  */
 namespace Magento\Framework\Oauth\Helper;
 
-/**
- * Class \Magento\Framework\Oauth\Helper\Oauth
- *
- */
 class Oauth
 {
     /**

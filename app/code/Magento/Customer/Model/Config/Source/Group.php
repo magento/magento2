@@ -9,10 +9,6 @@ use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Customer\Model\Customer\Attribute\Source\GroupSourceLoggedInOnlyInterface;
 use Magento\Framework\App\ObjectManager;
 
-/**
- * Class \Magento\Customer\Model\Config\Source\Group
- *
- */
 class Group implements \Magento\Framework\Option\ArrayInterface
 {
     /**

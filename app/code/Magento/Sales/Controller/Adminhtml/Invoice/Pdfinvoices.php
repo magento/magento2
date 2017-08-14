@@ -6,10 +6,6 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Invoice;
 
-/**
- * Class \Magento\Sales\Controller\Adminhtml\Invoice\Pdfinvoices
- *
- */
 class Pdfinvoices extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\Pdfinvoices
 {
 }

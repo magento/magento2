@@ -6,10 +6,6 @@
  */
 namespace Magento\User\Controller\Adminhtml\Auth;
 
-/**
- * Class \Magento\User\Controller\Adminhtml\Auth\ResetPasswordPost
- *
- */
 class ResetPasswordPost extends \Magento\User\Controller\Adminhtml\Auth
 {
     /**

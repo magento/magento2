@@ -10,10 +10,6 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputArgument;
 
-/**
- * Class \Magento\Setup\Model\Cron\JobSetCache
- *
- */
 class JobSetCache extends AbstractJob
 {
     /**

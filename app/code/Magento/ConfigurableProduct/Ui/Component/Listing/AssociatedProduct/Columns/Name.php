@@ -9,10 +9,6 @@ use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
-/**
- * Class \Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct\Columns\Name
- *
- */
 class Name extends \Magento\Ui\Component\Listing\Columns\Column
 {
     /**

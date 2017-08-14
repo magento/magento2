@@ -12,6 +12,7 @@ namespace Magento\Bundle\Model;
  * @method int getParentId()
  * @method null|\Magento\Catalog\Model\Product[] getSelections()
  * @method Option setParentId(int $value)
+ * @since 100.0.2
  */
 class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Bundle\Api\Data\OptionInterface

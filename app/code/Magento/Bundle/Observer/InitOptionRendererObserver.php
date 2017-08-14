@@ -7,10 +7,6 @@ namespace Magento\Bundle\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
-/**
- * Class \Magento\Bundle\Observer\InitOptionRendererObserver
- *
- */
 class InitOptionRendererObserver implements ObserverInterface
 {
     /**

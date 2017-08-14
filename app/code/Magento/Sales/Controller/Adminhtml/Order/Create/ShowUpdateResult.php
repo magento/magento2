@@ -10,10 +10,6 @@ use Magento\Backend\Model\View\Result\ForwardFactory;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\Controller\Result\RawFactory;
 
-/**
- * Class \Magento\Sales\Controller\Adminhtml\Order\Create\ShowUpdateResult
- *
- */
 class ShowUpdateResult extends \Magento\Sales\Controller\Adminhtml\Order\Create
 {
     /**

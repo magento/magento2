@@ -30,7 +30,6 @@ class ScheduleDesignUpdate extends AbstractModifier
 
     /**
      * @param ArrayManager $arrayManager
-     * @since 101.0.0
      */
     public function __construct(ArrayManager $arrayManager)
     {

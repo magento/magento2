@@ -7,10 +7,6 @@
  */
 namespace Magento\Customer\Model\Address\Config;
 
-/**
- * Class \Magento\Customer\Model\Address\Config\Converter
- *
- */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**

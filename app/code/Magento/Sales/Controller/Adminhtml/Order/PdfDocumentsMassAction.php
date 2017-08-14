@@ -8,10 +8,6 @@ namespace Magento\Sales\Controller\Adminhtml\Order;
 
 use Magento\Framework\Controller\ResultFactory;
 
-/**
- * Class \Magento\Sales\Controller\Adminhtml\Order\PdfDocumentsMassAction
- *
- */
 abstract class PdfDocumentsMassAction extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
     /**

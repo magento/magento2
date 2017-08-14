@@ -5,10 +5,6 @@
  */
 namespace Magento\Catalog\Controller\Index;
 
-/**
- * Class \Magento\Catalog\Controller\Index\Index
- *
- */
 class Index extends \Magento\Framework\App\Action\Action
 {
     /**

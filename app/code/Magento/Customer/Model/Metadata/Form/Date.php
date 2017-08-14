@@ -9,10 +9,6 @@ namespace Magento\Customer\Model\Metadata\Form;
 
 use Magento\Framework\Api\ArrayObjectSearch;
 
-/**
- * Class \Magento\Customer\Model\Metadata\Form\Date
- *
- */
 class Date extends AbstractData
 {
     /**

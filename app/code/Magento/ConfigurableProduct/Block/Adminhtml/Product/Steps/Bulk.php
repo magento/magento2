@@ -17,6 +17,7 @@ use Magento\Framework\View\Element\Template\Context;
  * Adminhtml block for fieldset of configurable product
  *
  * @api
+ * @since 100.0.2
  */
 class Bulk extends \Magento\Ui\Block\Component\StepsWizard\StepAbstract
 {

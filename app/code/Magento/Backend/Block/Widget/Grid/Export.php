@@ -12,6 +12,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  * @api
  * @deprecated 100.2.0 in favour of UI component implementation
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\Block\Widget\Grid\ExportInterface
 {

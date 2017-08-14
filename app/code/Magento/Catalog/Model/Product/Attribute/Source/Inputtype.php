@@ -11,10 +11,6 @@
  */
 namespace Magento\Catalog\Model\Product\Attribute\Source;
 
-/**
- * Class \Magento\Catalog\Model\Product\Attribute\Source\Inputtype
- *
- */
 class Inputtype extends \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype
 {
     /**

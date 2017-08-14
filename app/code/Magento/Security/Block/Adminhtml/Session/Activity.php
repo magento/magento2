@@ -44,7 +44,6 @@ class Activity extends \Magento\Backend\Block\Template
      * @param ConfigInterface $securityConfig
      * @param \Magento\Security\Model\AdminSessionsManager $sessionsManager
      * @param RemoteAddress $remoteAddress
-     * @since 100.1.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,

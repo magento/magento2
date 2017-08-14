@@ -49,7 +49,6 @@ class AttributeSet extends AbstractModifier
      * @param LocatorInterface $locator
      * @param CollectionFactory $attributeSetCollectionFactory
      * @param UrlInterface $urlBuilder
-     * @since 101.0.0
      */
     public function __construct(
         LocatorInterface $locator,

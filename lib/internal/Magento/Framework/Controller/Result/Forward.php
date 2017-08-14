@@ -10,10 +10,6 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Response\HttpInterface as HttpResponseInterface;
 use Magento\Framework\Controller\AbstractResult;
 
-/**
- * Class \Magento\Framework\Controller\Result\Forward
- *
- */
 class Forward extends AbstractResult
 {
     /**

@@ -14,10 +14,6 @@ use Magento\Framework\Interception\Config\Config as InterceptionConfig;
 use Magento\Setup\Module\Di\Code\Reader\Type;
 use Magento\Framework\ObjectManager\InterceptableValidator;
 
-/**
- * Class \Magento\Setup\Module\Di\Code\Generator\InterceptionConfigurationBuilder
- *
- */
 class InterceptionConfigurationBuilder
 {
     /**

@@ -29,7 +29,6 @@ class Payment extends Template
      * @param Context $context
      * @param ConfigProviderInterface $config
      * @param array $data
-     * @since 100.1.0
      */
     public function __construct(
         Context $context,

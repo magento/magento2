@@ -10,10 +10,6 @@ use Magento\Catalog\Helper\Product\Composite;
 use Magento\Backend\Model\Session;
 use Magento\Backend\App\Action\Context;
 
-/**
- * Class \Magento\Catalog\Controller\Adminhtml\Product\ShowUpdateResult
- *
- */
 class ShowUpdateResult extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**

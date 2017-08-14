@@ -13,10 +13,6 @@ namespace Magento\Catalog\Block\Adminhtml;
 
 use Magento\Backend\Block\Widget\Form\Generic;
 
-/**
- * Class \Magento\Catalog\Block\Adminhtml\Form
- *
- */
 class Form extends Generic
 {
     /**

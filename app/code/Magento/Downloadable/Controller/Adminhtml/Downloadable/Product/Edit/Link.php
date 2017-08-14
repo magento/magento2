@@ -8,10 +8,6 @@ namespace Magento\Downloadable\Controller\Adminhtml\Downloadable\Product\Edit;
 
 use Magento\Downloadable\Helper\Download as DownloadHelper;
 
-/**
- * Class \Magento\Downloadable\Controller\Adminhtml\Downloadable\Product\Edit\Link
- *
- */
 class Link extends \Magento\Catalog\Controller\Adminhtml\Product\Edit
 {
     /**
