@@ -5,6 +5,10 @@
  */
 namespace Magento\Shipping\Model\Tracking\Result;
 
+/**
+ * Class \Magento\Shipping\Model\Tracking\Result\Error
+ *
+ */
 class Error extends \Magento\Shipping\Model\Tracking\Result\AbstractResult
 {
     /**

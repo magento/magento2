@@ -5,6 +5,10 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Creditmemo;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Order\Creditmemo\Email
+ *
+ */
 class Email extends \Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo\Email
 {
 }

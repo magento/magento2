@@ -5,6 +5,10 @@
  */
 namespace Magento\UrlRewrite\Helper;
 
+/**
+ * Class \Magento\UrlRewrite\Helper\UrlRewrite
+ *
+ */
 class UrlRewrite extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**

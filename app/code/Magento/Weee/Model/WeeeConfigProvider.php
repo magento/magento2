@@ -10,6 +10,10 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Weee\Helper\Data as WeeeHelper;
 use Magento\Weee\Model\Tax as WeeeDisplayConfig;
 
+/**
+ * Class \Magento\Weee\Model\WeeeConfigProvider
+ *
+ */
 class WeeeConfigProvider implements ConfigProviderInterface
 {
     /**

@@ -8,7 +8,7 @@ namespace Magento\SendFriend\Test\Unit\Block;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class SendTest extends \PHPUnit_Framework_TestCase
+class SendTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\SendFriend\Block\Send

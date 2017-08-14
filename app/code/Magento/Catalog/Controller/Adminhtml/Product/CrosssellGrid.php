@@ -6,6 +6,10 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
+/**
+ * Class \Magento\Catalog\Controller\Adminhtml\Product\CrosssellGrid
+ *
+ */
 class CrosssellGrid extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**

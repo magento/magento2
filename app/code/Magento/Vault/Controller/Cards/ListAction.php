@@ -11,6 +11,10 @@ use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Vault\Controller\CardsManagement;
 
+/**
+ * Class \Magento\Vault\Controller\Cards\ListAction
+ *
+ */
 class ListAction extends CardsManagement
 {
     /**

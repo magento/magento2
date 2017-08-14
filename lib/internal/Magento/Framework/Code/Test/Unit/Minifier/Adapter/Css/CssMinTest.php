@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Code\Test\Unit\Minifier\Adapter\Css;
 
-class CssMinTest extends \PHPUnit_Framework_TestCase
+class CssMinTest extends \PHPUnit\Framework\TestCase
 {
     public function testMinify()
     {

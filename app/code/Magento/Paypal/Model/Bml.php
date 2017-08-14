@@ -6,6 +6,10 @@
 
 namespace Magento\Paypal\Model;
 
+/**
+ * Class \Magento\Paypal\Model\Bml
+ *
+ */
 class Bml extends Express
 {
     /**

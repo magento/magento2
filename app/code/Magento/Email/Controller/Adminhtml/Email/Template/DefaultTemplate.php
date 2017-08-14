@@ -6,6 +6,10 @@
  */
 namespace Magento\Email\Controller\Adminhtml\Email\Template;
 
+/**
+ * Class \Magento\Email\Controller\Adminhtml\Email\Template\DefaultTemplate
+ *
+ */
 class DefaultTemplate extends \Magento\Email\Controller\Adminhtml\Email\Template
 {
     /**

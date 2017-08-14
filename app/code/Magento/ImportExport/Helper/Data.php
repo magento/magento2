@@ -24,9 +24,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**#@-*/
 
-    /**
-     * @var \Magento\Framework\File\Size
-     */
+    /**#@-*/
     protected $_fileSize;
 
     /**

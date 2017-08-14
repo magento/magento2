@@ -13,8 +13,6 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 /**
  * Crontab schedule model
  *
- * @method \Magento\Cron\Model\ResourceModel\Schedule _getResource()
- * @method \Magento\Cron\Model\ResourceModel\Schedule getResource()
  * @method string getJobCode()
  * @method \Magento\Cron\Model\Schedule setJobCode(string $value)
  * @method string getStatus()

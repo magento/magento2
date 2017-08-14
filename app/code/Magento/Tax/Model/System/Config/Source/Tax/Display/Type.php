@@ -11,6 +11,10 @@
  */
 namespace Magento\Tax\Model\System\Config\Source\Tax\Display;
 
+/**
+ * Class \Magento\Tax\Model\System\Config\Source\Tax\Display\Type
+ *
+ */
 class Type implements \Magento\Framework\Option\ArrayInterface
 {
     /**

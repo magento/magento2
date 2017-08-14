@@ -8,6 +8,10 @@ namespace Magento\ImportExport\Controller\Adminhtml\Import;
 use Magento\ImportExport\Controller\Adminhtml\ImportResult as ImportResultController;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\ImportExport\Controller\Adminhtml\Import\Start
+ *
+ */
 class Start extends ImportResultController
 {
     /**

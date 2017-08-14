@@ -6,6 +6,10 @@
 
 namespace Magento\Catalog\Model\ProductLink\CollectionProvider;
 
+/**
+ * Class \Magento\Catalog\Model\ProductLink\CollectionProvider\Upsell
+ *
+ */
 class Upsell implements \Magento\Catalog\Model\ProductLink\CollectionProviderInterface
 {
     /**

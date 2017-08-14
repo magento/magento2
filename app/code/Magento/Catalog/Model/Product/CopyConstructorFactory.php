@@ -5,6 +5,10 @@
  */
 namespace Magento\Catalog\Model\Product;
 
+/**
+ * Class \Magento\Catalog\Model\Product\CopyConstructorFactory
+ *
+ */
 class CopyConstructorFactory
 {
     /**

@@ -13,7 +13,7 @@ use Magento\Ui\Component\MassAction\Filter;
 use Magento\Ui\Model\Export\MetadataProvider;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class MetadataProviderTest extends \PHPUnit_Framework_TestCase
+class MetadataProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var MetadataProvider

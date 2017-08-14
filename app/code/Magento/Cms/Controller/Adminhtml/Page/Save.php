@@ -11,6 +11,10 @@ use Magento\Cms\Model\Page;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Exception\LocalizedException;
 
+/**
+ * Class \Magento\Cms\Controller\Adminhtml\Page\Save
+ *
+ */
 class Save extends \Magento\Backend\App\Action
 {
     /**

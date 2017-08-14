@@ -9,7 +9,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Api\Search\SearchResult;
 use Magento\Framework\Api\Search\DocumentInterface;
 
-class SearchResultTest extends \PHPUnit_Framework_TestCase
+class SearchResultTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SearchResult
@@ -31,8 +31,8 @@ class SearchResultTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $document1 = $this->getMock(DocumentInterface::class);
-        $document2 = $this->getMock(DocumentInterface::class);
+        $document1 = $this->createMock(DocumentInterface::class);
+        $document2 = $this->createMock(DocumentInterface::class);
 
         $this->items = [ $document1,  $document2];
         $document1->expects($this->any())

@@ -8,6 +8,10 @@ namespace Magento\Theme\Model\Theme;
 use Magento\Framework\Composer\Remove;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Class \Magento\Theme\Model\Theme\ThemeUninstaller
+ *
+ */
 class ThemeUninstaller
 {
     /**

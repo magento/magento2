@@ -5,6 +5,10 @@
  */
 namespace Magento\CatalogUrlRewrite\Model;
 
+/**
+ * Class \Magento\CatalogUrlRewrite\Model\ObjectRegistry
+ *
+ */
 class ObjectRegistry
 {
     /**

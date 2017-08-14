@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\Sitemap\Model;
 
 use Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot;
@@ -14,14 +11,10 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\UrlInterface;
 use Magento\Robots\Model\Config\Value;
-use Magento\Sitemap\Model\ItemResolver\ItemResolverInterface;
+use Magento\Sitemap\Model\ItemProvider\ItemProviderInterface;
 use Magento\Sitemap\Model\ResourceModel\Sitemap as SitemapResource;
 
 /**
- * Sitemap model
- *
- * @method SitemapResource _getResource()
- * @method SitemapResource getResource()
  * @method string getSitemapType()
  * @method \Magento\Sitemap\Model\Sitemap setSitemapType(string $value)
  * @method string getSitemapFilename()
@@ -35,6 +28,7 @@ use Magento\Sitemap\Model\ResourceModel\Sitemap as SitemapResource;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @codingStandardsIgnoreFile
  */
 class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\DataObject\IdentityInterface
 {
@@ -158,15 +152,16 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      * Model cache tag for clear cache in after save and after delete
      *
      * @var string
+     * @since 100.2.0
      */
     protected $_cacheTag = true;
 
     /**
      * Item resolver
      *
-     * @var ItemResolverInterface
+     * @var ItemProviderInterface
      */
-    private $itemResolver;
+    private $itemProvider;
 
     /**
      * Sitemap config reader
@@ -201,7 +196,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      * @param DocumentRoot|null $documentRoot
-     * @param ItemResolverInterface|null $itemResolver
+     * @param ItemProviderInterface|null $itemProvider
      * @param SitemapConfigReaderInterface|null $configReader
      * @param \Magento\Sitemap\Model\SitemapItemInterfaceFactory|null $sitemapItemFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -223,7 +218,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
         \Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot $documentRoot = null,
-        ItemResolverInterface $itemResolver = null,
+        ItemProviderInterface $itemProvider = null,
         SitemapConfigReaderInterface $configReader = null,
         \Magento\Sitemap\Model\SitemapItemInterfaceFactory $sitemapItemFactory = null
     ) {
@@ -238,13 +233,12 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
         $this->_storeManager = $storeManager;
         $this->_request = $request;
         $this->dateTime = $dateTime;
-        $this->itemResolver = $itemResolver ?: ObjectManager::getInstance()->get(ItemResolverInterface::class);
+        $this->itemProvider = $itemProvider ?: ObjectManager::getInstance()->get(ItemProviderInterface::class);
         $this->configReader = $configReader ?: ObjectManager::getInstance()->get(SitemapConfigReaderInterface::class);
         $this->sitemapItemFactory = $sitemapItemFactory ?: ObjectManager::getInstance()->get(
             \Magento\Sitemap\Model\SitemapItemInterfaceFactory::class
         );
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
-
     }
 
     /**
@@ -277,8 +271,8 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      *
      * @param DataObject $sitemapItem
      * @return $this
-     * @deprecated
-     * @see ItemResolverInterface
+     * @deprecated 100.2.0
+     * @see ItemProviderInterface
      */
     public function addSitemapItem(DataObject $sitemapItem)
     {
@@ -291,8 +285,8 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      * Collect all sitemap items
      *
      * @return void
-     * @deprecated
-     * @see ItemResolverInterface
+     * @deprecated 100.2.0
+     * @see ItemProviderInterface
      */
     public function collectSitemapItems()
     {
@@ -332,7 +326,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      */
     protected function _initSitemapItems()
     {
-        $sitemapItems = $this->itemResolver->getItems($this->getStoreId());
+        $sitemapItems = $this->itemProvider->getItems($this->getStoreId());
         $mappedItems = $this->mapToSitemapItem();
         $this->_sitemapItems = array_merge($sitemapItems, $mappedItems);
 
@@ -837,6 +831,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      * Get unique page cache identities
      *
      * @return array
+     * @since 100.2.0
      */
     public function getIdentities()
     {

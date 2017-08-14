@@ -11,8 +11,6 @@ use Magento\Sales\Model\AbstractModel;
 
 /**
  * @api
- * @method \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item _getResource()
- * @method \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item getResource()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */

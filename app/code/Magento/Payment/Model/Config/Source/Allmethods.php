@@ -5,6 +5,10 @@
  */
 namespace Magento\Payment\Model\Config\Source;
 
+/**
+ * Class \Magento\Payment\Model\Config\Source\Allmethods
+ *
+ */
 class Allmethods implements \Magento\Framework\Option\ArrayInterface
 {
     /**

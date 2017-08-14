@@ -19,6 +19,10 @@
  */
 namespace Magento\Review\Block\Adminhtml;
 
+/**
+ * Class \Magento\Review\Block\Adminhtml\Grid
+ *
+ */
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**

@@ -5,6 +5,10 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Order\VoidPayment
+ *
+ */
 class VoidPayment extends \Magento\Sales\Controller\Adminhtml\Order
 {
     /**

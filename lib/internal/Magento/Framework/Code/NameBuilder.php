@@ -7,6 +7,10 @@
  */
 namespace Magento\Framework\Code;
 
+/**
+ * Class \Magento\Framework\Code\NameBuilder
+ *
+ */
 class NameBuilder
 {
     /**

@@ -8,6 +8,10 @@ namespace Magento\OfflineShipping\Model\Carrier\Flatrate;
 
 use Magento\Quote\Model\Quote\Address\RateRequest;
 
+/**
+ * Class \Magento\OfflineShipping\Model\Carrier\Flatrate\ItemPriceCalculator
+ *
+ */
 class ItemPriceCalculator
 {
     /**

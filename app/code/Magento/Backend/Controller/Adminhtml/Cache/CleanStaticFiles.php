@@ -8,6 +8,10 @@ namespace Magento\Backend\Controller\Adminhtml\Cache;
 
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Backend\Controller\Adminhtml\Cache\CleanStaticFiles
+ *
+ */
 class CleanStaticFiles extends \Magento\Backend\Controller\Adminhtml\Cache
 {
     /**

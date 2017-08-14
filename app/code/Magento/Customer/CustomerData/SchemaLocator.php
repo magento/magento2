@@ -7,6 +7,10 @@ namespace Magento\Customer\CustomerData;
 
 use Magento\Framework\Module\Dir;
 
+/**
+ * Class \Magento\Customer\CustomerData\SchemaLocator
+ *
+ */
 class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {
     /**

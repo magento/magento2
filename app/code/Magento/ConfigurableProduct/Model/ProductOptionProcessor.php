@@ -12,6 +12,10 @@ use Magento\ConfigurableProduct\Model\Quote\Item\ConfigurableItemOptionValueFact
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\Factory as DataObjectFactory;
 
+/**
+ * Class \Magento\ConfigurableProduct\Model\ProductOptionProcessor
+ *
+ */
 class ProductOptionProcessor implements ProductOptionProcessorInterface
 {
     /**

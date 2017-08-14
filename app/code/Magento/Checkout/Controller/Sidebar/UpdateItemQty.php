@@ -13,6 +13,10 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Json\Helper\Data;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Class \Magento\Checkout\Controller\Sidebar\UpdateItemQty
+ *
+ */
 class UpdateItemQty extends Action
 {
     /**

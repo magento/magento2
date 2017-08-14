@@ -9,13 +9,13 @@ namespace Magento\Braintree\Test\Unit\Gateway\Config;
 use Magento\Braintree\Gateway\Config\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Class ConfigTest
  */
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     const METHOD_CODE = 'braintree';
 
@@ -36,8 +36,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->scopeConfigMock = $this->getMock(ScopeConfigInterface::class);
-        $this->serializerMock = $this->getMock(Json::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->serializerMock = $this->createMock(Json::class);
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
@@ -189,6 +189,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         foreach ($countryData as $countryId => $types) {
             $result = $this->model->getCountryAvailableCardTypes($countryId);
             static::assertEquals($types, $result);
+        }
+
+        if (empty($countryData)) {
+            static::assertEquals($data, "");
         }
     }
 

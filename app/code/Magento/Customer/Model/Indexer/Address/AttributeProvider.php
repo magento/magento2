@@ -9,6 +9,10 @@ use Magento\Customer\Model\ResourceModel\Address\Attribute\Collection;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute;
 
+/**
+ * Class \Magento\Customer\Model\Indexer\Address\AttributeProvider
+ *
+ */
 class AttributeProvider extends \Magento\Customer\Model\Indexer\AttributeProvider
 {
     /**

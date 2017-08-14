@@ -8,6 +8,10 @@ namespace Magento\Vault\Model;
 use Magento\Customer\Model\Session;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 
+/**
+ * Class \Magento\Vault\Model\CustomerTokenManagement
+ *
+ */
 class CustomerTokenManagement
 {
     /**

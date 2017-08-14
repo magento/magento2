@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Indexer\Test\Unit;
 
-class IndexTableRowSizeEstimatorTest extends \PHPUnit_Framework_TestCase
+class IndexTableRowSizeEstimatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test for estimateRowSize method

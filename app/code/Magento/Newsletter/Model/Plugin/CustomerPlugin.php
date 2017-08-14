@@ -9,6 +9,10 @@ use Magento\Customer\Api\CustomerRepositoryInterface as CustomerRepository;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Newsletter\Model\SubscriberFactory;
 
+/**
+ * Class \Magento\Newsletter\Model\Plugin\CustomerPlugin
+ *
+ */
 class CustomerPlugin
 {
     /**

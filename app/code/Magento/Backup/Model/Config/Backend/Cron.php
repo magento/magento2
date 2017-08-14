@@ -21,10 +21,14 @@ class Cron extends \Magento\Framework\App\Config\Value
 
     const XML_PATH_BACKUP_FREQUENCY = 'groups/backup/fields/frequency/value';
 
-    /** @var \Magento\Framework\App\Config\ValueFactory */
+    /**
+     * @var \Magento\Framework\App\Config\ValueFactory
+     */
     protected $_configValueFactory;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $_runModelPath = '';
 
     /**

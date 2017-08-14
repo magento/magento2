@@ -6,6 +6,10 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category;
 
+/**
+ * Class \Magento\Catalog\Controller\Adminhtml\Category\Move
+ *
+ */
 class Move extends \Magento\Catalog\Controller\Adminhtml\Category
 {
     /**

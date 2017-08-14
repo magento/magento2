@@ -11,6 +11,10 @@
  */
 namespace Magento\Customer\Model\ResourceModel\Address\Attribute\Source;
 
+/**
+ * Class \Magento\Customer\Model\ResourceModel\Address\Attribute\Source\Region
+ *
+ */
 class Region extends \Magento\Eav\Model\Entity\Attribute\Source\Table
 {
     /**
