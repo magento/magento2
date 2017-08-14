@@ -6,10 +6,6 @@
  */
 namespace Magento\Reports\Controller\Adminhtml\Report\Review;
 
-/**
- * Class \Magento\Reports\Controller\Adminhtml\Report\Review\Customer
- *
- */
 class Customer extends \Magento\Reports\Controller\Adminhtml\Report\Review
 {
     /**

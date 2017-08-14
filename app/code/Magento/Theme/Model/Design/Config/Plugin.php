@@ -11,10 +11,6 @@ use Magento\Theme\Model\DesignConfigRepository;
 use Magento\Theme\Api\Data\DesignConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 
-/**
- * Class \Magento\Theme\Model\Design\Config\Plugin
- *
- */
 class Plugin
 {
     /**

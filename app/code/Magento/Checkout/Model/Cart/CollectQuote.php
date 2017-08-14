@@ -5,10 +5,6 @@
  */
 namespace Magento\Checkout\Model\Cart;
 
-/**
- * Class \Magento\Checkout\Model\Cart\CollectQuote
- *
- */
 class CollectQuote
 {
     /**

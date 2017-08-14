@@ -9,6 +9,7 @@ namespace Magento\Widget\Block\Adminhtml\Widget;
  * WYSIWYG widget options form
  *
  * @api
+ * @since 100.0.2
  */
 class Options extends \Magento\Backend\Block\Widget\Form\Generic
 {

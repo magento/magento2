@@ -34,7 +34,6 @@ class Component extends Template
     /**
      * @inheritdoc
      * @param ResolverInterface $localeResolver
-     * @since 100.1.0
      */
     public function __construct(
         Context $context,

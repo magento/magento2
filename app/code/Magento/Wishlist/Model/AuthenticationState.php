@@ -6,10 +6,6 @@
  */
 namespace Magento\Wishlist\Model;
 
-/**
- * Class \Magento\Wishlist\Model\AuthenticationState
- *
- */
 class AuthenticationState implements AuthenticationStateInterface
 {
     /**

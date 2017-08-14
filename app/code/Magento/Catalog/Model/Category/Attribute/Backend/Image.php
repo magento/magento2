@@ -9,6 +9,7 @@ namespace Magento\Catalog\Model\Category\Attribute\Backend;
  * Catalog category image attribute backend model
  *
  * @api
+ * @since 100.0.2
  */
 class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
@@ -87,7 +88,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      *
      * @param \Magento\Framework\DataObject $object
      * @return $this
-     * @since 101.1.0
+     * @since 101.0.8
      */
     public function beforeSave($object)
     {

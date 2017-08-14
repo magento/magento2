@@ -10,10 +10,6 @@ use Magento\Cms\Api\BlockRepositoryInterface as BlockRepository;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Cms\Api\Data\BlockInterface;
 
-/**
- * Class \Magento\Cms\Controller\Adminhtml\Block\InlineEdit
- *
- */
 class InlineEdit extends \Magento\Backend\App\Action
 {
     /**

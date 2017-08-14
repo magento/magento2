@@ -10,10 +10,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Tax\Controller\RegistryConstants;
 use Magento\Framework\Controller\ResultFactory;
 
-/**
- * Class \Magento\Tax\Controller\Adminhtml\Rate\Edit
- *
- */
 class Edit extends \Magento\Tax\Controller\Adminhtml\Rate
 {
     /**

@@ -5,10 +5,6 @@
  */
 namespace Magento\Framework\Image\Adapter;
 
-/**
- * Class \Magento\Framework\Image\Adapter\Config
- *
- */
 class Config implements \Magento\Framework\Image\Adapter\ConfigInterface
 {
     const XML_PATH_IMAGE_ADAPTER = 'dev/image/default_adapter';

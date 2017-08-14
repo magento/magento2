@@ -11,6 +11,7 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Websites extends \Magento\Ui\Component\Listing\Columns\Column
 {

@@ -7,10 +7,6 @@
  */
 namespace Magento\Framework\App\Config;
 
-/**
- * Class \Magento\Framework\App\Config\BaseFactory
- *
- */
 class BaseFactory
 {
     /**

@@ -5,10 +5,6 @@
  */
 namespace Magento\CatalogRule\Model\ResourceModel\Rule\Product\Price;
 
-/**
- * Class \Magento\CatalogRule\Model\ResourceModel\Rule\Product\Price\Collection
- *
- */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**

@@ -5,10 +5,6 @@
  */
 namespace Magento\Framework\ObjectManager\Factory\Dynamic;
 
-/**
- * Class \Magento\Framework\ObjectManager\Factory\Dynamic\Developer
- *
- */
 class Developer extends \Magento\Framework\ObjectManager\Factory\AbstractFactory
 {
     /**

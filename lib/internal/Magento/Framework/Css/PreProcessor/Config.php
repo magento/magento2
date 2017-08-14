@@ -7,10 +7,6 @@ namespace Magento\Framework\Css\PreProcessor;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-/**
- * Class \Magento\Framework\Css\PreProcessor\Config
- *
- */
 class Config
 {
     /**

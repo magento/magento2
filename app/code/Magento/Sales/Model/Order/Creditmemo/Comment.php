@@ -11,6 +11,7 @@ use Magento\Sales\Model\AbstractModel;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Comment extends AbstractModel implements CreditmemoCommentInterface
 {

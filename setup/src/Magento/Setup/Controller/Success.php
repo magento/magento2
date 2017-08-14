@@ -10,10 +10,6 @@ use Magento\Setup\Model\ObjectManagerProvider;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
-/**
- * Class \Magento\Setup\Controller\Success
- *
- */
 class Success extends AbstractActionController
 {
     /**

@@ -8,10 +8,6 @@
 
 namespace Magento\Catalog\Model\Indexer\Product\Flat\Plugin;
 
-/**
- * Class \Magento\Catalog\Model\Indexer\Product\Flat\Plugin\Store
- *
- */
 class Store
 {
     /**

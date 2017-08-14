@@ -7,10 +7,6 @@ namespace Magento\Weee\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
-/**
- * Class \Magento\Weee\Observer\SetWeeeRendererInFormObserver
- *
- */
 class SetWeeeRendererInFormObserver implements ObserverInterface
 {
     /**

@@ -12,10 +12,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Response\Http\FileFactory;
 use Magento\Backend\Model\View\Result\ForwardFactory;
 
-/**
- * Class \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShipment\PrintAction
- *
- */
 abstract class PrintAction extends \Magento\Backend\App\Action
 {
     /**

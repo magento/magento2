@@ -51,7 +51,6 @@ class Value extends ConfigValue implements IdentityInterface
      * @param AbstractResource|null $resource
      * @param AbstractDb|null $resourceCollection
      * @param array $data
-     * @since 100.2.0
      */
     public function __construct(
         Context $context,

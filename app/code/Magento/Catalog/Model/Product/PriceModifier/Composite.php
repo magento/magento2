@@ -12,10 +12,6 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\PriceModifierInterface;
 use Magento\Framework\ObjectManagerInterface;
 
-/**
- * Class \Magento\Catalog\Model\Product\PriceModifier\Composite
- *
- */
 class Composite implements PriceModifierInterface
 {
     /**

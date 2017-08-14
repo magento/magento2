@@ -28,6 +28,7 @@ use Magento\Catalog\Model\Config as CatalogConfig;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @codingStandardsIgnoreFile
+ * @since 100.0.2
  */
 class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 {
@@ -592,7 +593,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
     /**
      * @var array
-     * @deprecated 100.2.0
+     * @deprecated 100.1.5
      * @since 100.0.3
      */
     protected $productUrlKeys = [];

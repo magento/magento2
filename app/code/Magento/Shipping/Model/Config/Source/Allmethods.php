@@ -5,10 +5,6 @@
  */
 namespace Magento\Shipping\Model\Config\Source;
 
-/**
- * Class \Magento\Shipping\Model\Config\Source\Allmethods
- *
- */
 class Allmethods implements \Magento\Framework\Option\ArrayInterface
 {
     /**

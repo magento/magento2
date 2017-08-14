@@ -11,10 +11,6 @@
  */
 namespace Magento\Newsletter\Model\Queue\Options;
 
-/**
- * Class \Magento\Newsletter\Model\Queue\Options\Status
- *
- */
 class Status implements \Magento\Framework\Option\ArrayInterface
 {
     /**

@@ -8,10 +8,6 @@ namespace Magento\ProductVideo\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
-/**
- * Class \Magento\ProductVideo\Observer\ChangeTemplateObserver
- *
- */
 class ChangeTemplateObserver implements ObserverInterface
 {
     /**

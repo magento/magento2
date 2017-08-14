@@ -10,10 +10,6 @@ use Magento\Catalog\Model\CategoryFactory as CategoryModelFactory;
 use Magento\Catalog\Model\Layer;
 use Magento\Framework\Registry;
 
-/**
- * Class \Magento\Catalog\Model\Layer\Filter\DataProvider\Category
- *
- */
 class Category
 {
     /**

@@ -8,10 +8,6 @@ namespace Magento\Payment\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
-/**
- * Class \Magento\Payment\Observer\UpdateOrderStatusForPaymentMethodsObserver
- *
- */
 class UpdateOrderStatusForPaymentMethodsObserver implements ObserverInterface
 {
     /**

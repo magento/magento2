@@ -16,6 +16,7 @@ use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
 {

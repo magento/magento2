@@ -6,10 +6,6 @@
  */
 namespace Magento\Paypal\Controller\Express;
 
-/**
- * Class \Magento\Paypal\Controller\Express\ReturnAction
- *
- */
 class ReturnAction extends \Magento\Paypal\Controller\Express\AbstractExpress\ReturnAction
 {
     /**

@@ -9,10 +9,6 @@ namespace Magento\Paypal\Block\Bml;
 use Magento\Paypal\Block\Express;
 use Magento\Paypal\Model\Config;
 
-/**
- * Class \Magento\Paypal\Block\Bml\Form
- *
- */
 class Form extends Express\Form
 {
     /**

@@ -9,10 +9,6 @@
  */
 namespace Magento\Paypal\Block\Adminhtml\System\Config\Payflowlink;
 
-/**
- * Class \Magento\Paypal\Block\Adminhtml\System\Config\Payflowlink\Advanced
- *
- */
 class Advanced extends \Magento\Paypal\Block\Adminhtml\System\Config\Payflowlink\Info
 {
     /**

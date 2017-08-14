@@ -9,6 +9,7 @@ namespace Magento\Config\Model\Config\Structure\Element;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
 {

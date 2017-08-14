@@ -8,6 +8,7 @@ namespace Magento\UrlRewrite\Model;
 /**
  * Url Persist Interface
  * @api
+ * @since 100.0.2
  */
 interface UrlPersistInterface
 {

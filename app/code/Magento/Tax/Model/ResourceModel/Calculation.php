@@ -9,10 +9,6 @@
  */
 namespace Magento\Tax\Model\ResourceModel;
 
-/**
- * Class \Magento\Tax\Model\ResourceModel\Calculation
- *
- */
 class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**

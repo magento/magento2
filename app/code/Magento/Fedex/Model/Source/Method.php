@@ -11,10 +11,6 @@
  */
 namespace Magento\Fedex\Model\Source;
 
-/**
- * Class \Magento\Fedex\Model\Source\Method
- *
- */
 class Method extends \Magento\Fedex\Model\Source\Generic
 {
     /**

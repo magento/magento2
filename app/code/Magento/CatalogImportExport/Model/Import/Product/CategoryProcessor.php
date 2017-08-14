@@ -9,6 +9,7 @@ namespace Magento\CatalogImportExport\Model\Import\Product;
  * Class CategoryProcessor
  *
  * @api
+ * @since 100.0.2
  */
 class CategoryProcessor
 {

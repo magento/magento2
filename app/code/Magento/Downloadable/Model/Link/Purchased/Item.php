@@ -42,6 +42,7 @@ use Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item as Resource;
  * @method Item setUpdatedAt($value)
  *
  * @api
+ * @since 100.0.2
  */
 class Item extends \Magento\Framework\Model\AbstractModel
 {

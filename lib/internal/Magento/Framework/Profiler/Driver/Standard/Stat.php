@@ -9,10 +9,6 @@ namespace Magento\Framework\Profiler\Driver\Standard;
 
 use Magento\Framework\Profiler;
 
-/**
- * Class \Magento\Framework\Profiler\Driver\Standard\Stat
- *
- */
 class Stat
 {
     /**

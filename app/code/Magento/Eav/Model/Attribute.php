@@ -19,6 +19,7 @@ use Magento\Store\Model\Website;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Attribute extends \Magento\Eav\Model\Entity\Attribute
 {

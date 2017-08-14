@@ -9,10 +9,6 @@ namespace Magento\Framework\Search\Adapter\Mysql\Query;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Request\QueryInterface as RequestQueryInterface;
 
-/**
- * Class \Magento\Framework\Search\Adapter\Mysql\Query\QueryContainer
- *
- */
 class QueryContainer
 {
     const DERIVED_QUERY_PREFIX = 'derived_';

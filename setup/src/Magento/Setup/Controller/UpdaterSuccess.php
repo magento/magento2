@@ -9,10 +9,6 @@ use Magento\Framework\App\MaintenanceMode;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
-/**
- * Class \Magento\Setup\Controller\UpdaterSuccess
- *
- */
 class UpdaterSuccess extends AbstractActionController
 {
     /**

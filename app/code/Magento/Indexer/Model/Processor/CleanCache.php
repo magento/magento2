@@ -7,10 +7,6 @@ namespace Magento\Indexer\Model\Processor;
 
 use \Magento\Framework\App\CacheInterface;
 
-/**
- * Class \Magento\Indexer\Model\Processor\CleanCache
- *
- */
 class CleanCache
 {
     /**

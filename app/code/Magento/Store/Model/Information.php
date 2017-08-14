@@ -15,6 +15,7 @@ use Magento\Store\Model\Address\Renderer;
  * Store information class used to retrieve and format store information as set in store config
  *
  * @api
+ * @since 100.0.2
  */
 class Information
 {

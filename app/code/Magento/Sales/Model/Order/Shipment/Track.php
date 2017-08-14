@@ -14,6 +14,7 @@ use Magento\Sales\Model\AbstractModel;
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Track extends AbstractModel implements ShipmentTrackInterface
 {

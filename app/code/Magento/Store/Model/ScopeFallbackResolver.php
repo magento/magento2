@@ -8,10 +8,6 @@ namespace Magento\Store\Model;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ScopeFallbackResolverInterface;
 
-/**
- * Class \Magento\Store\Model\ScopeFallbackResolver
- *
- */
 class ScopeFallbackResolver implements ScopeFallbackResolverInterface
 {
     /**

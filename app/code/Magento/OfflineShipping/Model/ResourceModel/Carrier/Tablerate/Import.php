@@ -16,10 +16,6 @@ use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV\RowExcepti
 use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV\RowParser;
 use Magento\Store\Model\StoreManagerInterface;
 
-/**
- * Class \Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\Import
- *
- */
 class Import
 {
     /**

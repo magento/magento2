@@ -7,10 +7,6 @@
  */
 namespace Magento\Store\Model\ResourceModel\Config\Collection;
 
-/**
- * Class \Magento\Store\Model\ResourceModel\Config\Collection\Scoped
- *
- */
 class Scoped extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**

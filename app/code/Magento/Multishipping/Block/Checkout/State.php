@@ -11,10 +11,6 @@
  */
 namespace Magento\Multishipping\Block\Checkout;
 
-/**
- * Class \Magento\Multishipping\Block\Checkout\State
- *
- */
 class State extends \Magento\Framework\View\Element\Template
 {
     /**

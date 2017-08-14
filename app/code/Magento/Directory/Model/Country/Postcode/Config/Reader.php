@@ -5,10 +5,6 @@
  */
 namespace Magento\Directory\Model\Country\Postcode\Config;
 
-/**
- * Class \Magento\Directory\Model\Country\Postcode\Config\Reader
- *
- */
 class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {
     /**

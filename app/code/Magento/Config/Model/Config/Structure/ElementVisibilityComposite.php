@@ -28,7 +28,6 @@ class ElementVisibilityComposite implements ElementVisibilityInterface
      * under its own conditions.
      * @throws ConfigurationMismatchException It is thrown if some object from list $visibility
      * implements the wrong interface.
-     * @since 100.2.0
      */
     public function __construct(array $visibility = [])
     {

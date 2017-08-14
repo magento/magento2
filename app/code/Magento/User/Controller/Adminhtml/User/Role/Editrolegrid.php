@@ -8,10 +8,6 @@ namespace Magento\User\Controller\Adminhtml\User\Role;
 
 use Magento\Framework\Controller\ResultFactory;
 
-/**
- * Class \Magento\User\Controller\Adminhtml\User\Role\Editrolegrid
- *
- */
 class Editrolegrid extends \Magento\User\Controller\Adminhtml\User\Role
 {
     /**

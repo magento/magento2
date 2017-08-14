@@ -6,10 +6,6 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Datafeeds;
 
-/**
- * Class \Magento\Catalog\Controller\Adminhtml\Product\Datafeeds\Index
- *
- */
 class Index extends \Magento\Backend\App\Action
 {
     /**

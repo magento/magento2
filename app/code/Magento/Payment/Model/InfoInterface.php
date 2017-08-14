@@ -9,6 +9,7 @@ namespace Magento\Payment\Model;
 /**
  * Interface InfoInterface
  * @api
+ * @since 100.0.2
  */
 interface InfoInterface
 {

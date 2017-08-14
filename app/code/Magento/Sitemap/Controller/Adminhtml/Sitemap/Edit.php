@@ -6,10 +6,6 @@
  */
 namespace Magento\Sitemap\Controller\Adminhtml\Sitemap;
 
-/**
- * Class \Magento\Sitemap\Controller\Adminhtml\Sitemap\Edit
- *
- */
 class Edit extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
 {
     /**

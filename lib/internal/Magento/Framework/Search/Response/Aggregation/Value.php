@@ -7,10 +7,6 @@ namespace Magento\Framework\Search\Response\Aggregation;
 
 use Magento\Framework\Api\Search\AggregationValueInterface;
 
-/**
- * Class \Magento\Framework\Search\Response\Aggregation\Value
- *
- */
 class Value implements AggregationValueInterface
 {
     /**

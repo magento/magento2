@@ -45,7 +45,6 @@ class ConcealInProductionConfigList implements ElementVisibilityInterface
     /**
      * @param State $state The object that has information about the state of the system
      * @param array $configs The list of form element paths with concrete visibility status.
-     * @since 100.2.0
      */
     public function __construct(State $state, array $configs = [])
     {

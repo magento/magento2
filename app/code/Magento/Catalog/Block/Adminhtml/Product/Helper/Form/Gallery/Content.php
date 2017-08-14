@@ -18,10 +18,6 @@ use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\FileSystemException;
 
-/**
- * Class \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery\Content
- *
- */
 class Content extends \Magento\Backend\Block\Widget
 {
     /**

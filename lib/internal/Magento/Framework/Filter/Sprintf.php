@@ -5,10 +5,6 @@
  */
 namespace Magento\Framework\Filter;
 
-/**
- * Class \Magento\Framework\Filter\Sprintf
- *
- */
 class Sprintf implements \Zend_Filter_Interface
 {
     /**

@@ -18,6 +18,7 @@ use Magento\Framework\DataObject\IdentityInterface;
  * @method string getRatingCode()
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Rating extends \Magento\Framework\Model\AbstractModel implements IdentityInterface
 {

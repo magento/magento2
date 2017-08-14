@@ -5,10 +5,6 @@
  */
 namespace Magento\Framework\Indexer\Table;
 
-/**
- * Class \Magento\Framework\Indexer\Table\Strategy
- *
- */
 class Strategy implements StrategyInterface
 {
     /**

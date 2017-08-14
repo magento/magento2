@@ -11,10 +11,6 @@
  */
 namespace Magento\Tax\Block\Adminhtml\Rate\Toolbar;
 
-/**
- * Class \Magento\Tax\Block\Adminhtml\Rate\Toolbar\Save
- *
- */
 class Save extends \Magento\Backend\Block\Template implements \Magento\Backend\Block\Widget\ContainerInterface
 {
     /**

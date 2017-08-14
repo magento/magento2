@@ -9,10 +9,6 @@ namespace Magento\Sales\Controller\AbstractController;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 
-/**
- * Class \Magento\Sales\Controller\AbstractController\PrintShipment
- *
- */
 abstract class PrintShipment extends \Magento\Framework\App\Action\Action
 {
     /**
