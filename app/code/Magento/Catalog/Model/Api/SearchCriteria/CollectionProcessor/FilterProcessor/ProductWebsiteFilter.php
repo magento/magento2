@@ -10,6 +10,10 @@ use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor\CustomFilterInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
 
+/**
+ * Class \Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor\ProductWebsiteFilter
+ *
+ */
 class ProductWebsiteFilter implements CustomFilterInterface
 {
     /**

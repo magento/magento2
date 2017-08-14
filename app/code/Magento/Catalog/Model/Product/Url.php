@@ -39,7 +39,9 @@ class Url extends \Magento\Framework\DataObject
      */
     protected $sidResolver;
 
-    /** @var UrlFinderInterface */
+    /**
+     * @var \Magento\UrlRewrite\Model\UrlFinderInterface
+     */
     protected $urlFinder;
 
     /**

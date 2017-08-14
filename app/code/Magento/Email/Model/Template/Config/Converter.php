@@ -7,6 +7,10 @@
  */
 namespace Magento\Email\Model\Template\Config;
 
+/**
+ * Class \Magento\Email\Model\Template\Config\Converter
+ *
+ */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**

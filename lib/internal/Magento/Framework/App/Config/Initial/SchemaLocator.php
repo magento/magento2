@@ -9,6 +9,10 @@ namespace Magento\Framework\App\Config\Initial;
 
 use Magento\Framework\Module\Dir;
 
+/**
+ * Class \Magento\Framework\App\Config\Initial\SchemaLocator
+ *
+ */
 class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {
     /**

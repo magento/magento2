@@ -188,8 +188,8 @@ abstract class AbstractReport extends \Magento\Framework\Model\ResourceModel\Db\
      * @param string $table
      * @param string $column
      * @param string $whereColumn
-     * @param null|string|\DateTime $from
-     * @param null|string|\DateTime $to
+     * @param null|string|\DateTimeInterface $from
+     * @param null|string|\DateTimeInterface $to
      * @param [][] $additionalWhere
      * @param string $alias
      * @return \Magento\Framework\DB\Select
@@ -440,12 +440,12 @@ abstract class AbstractReport extends \Magento\Framework\Model\ResourceModel\Db\
         $tzTransitions = [];
         try {
             if (!empty($from)) {
-                $from = $from instanceof \DateTime
+                $from = $from instanceof \DateTimeInterface
                     ? $from->getTimestamp()
                     : (new \DateTime($from))->getTimestamp();
             }
 
-            $to = $to instanceof \DateTime
+            $to = $to instanceof \DateTimeInterface
                 ? $to
                 : new \DateTime($to);
             $nextPeriod = $this->getConnection()->formatDate(

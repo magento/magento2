@@ -6,9 +6,9 @@
 
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Product\Cache\Tag;
 
-use \Magento\ConfigurableProduct\Model\Product\Cache\Tag\Configurable;
+use Magento\ConfigurableProduct\Model\Product\Cache\Tag\Configurable;
 
-class ConfigurableTest extends \PHPUnit_Framework_TestCase
+class ConfigurableTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
@@ -23,12 +23,8 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->typeResource = $this->getMock(
-            \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable::class,
-            [],
-            [],
-            '',
-            false
+        $this->typeResource = $this->createMock(
+            \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable::class
         );
 
         $this->model = new Configurable($this->typeResource);
@@ -36,19 +32,19 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
     public function testGetWithScalar()
     {
-        $this->setExpectedException(\InvalidArgumentException::class, 'Provided argument is not an object');
+        $this->expectException(\InvalidArgumentException::class, 'Provided argument is not an object');
         $this->model->getTags('scalar');
     }
 
     public function testGetTagsWithObject()
     {
-        $this->setExpectedException(\InvalidArgumentException::class, 'Provided argument must be a product');
-        $this->model->getTags(new \StdClass);
+        $this->expectException(\InvalidArgumentException::class, 'Provided argument must be a product');
+        $this->model->getTags(new \StdClass());
     }
 
     public function testGetTagsWithVariation()
     {
-        $product = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $product = $this->createMock(\Magento\Catalog\Model\Product::class);
 
         $identities = ['id1', 'id2'];
 

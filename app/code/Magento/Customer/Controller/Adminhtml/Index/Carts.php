@@ -5,6 +5,10 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
+/**
+ * Class \Magento\Customer\Controller\Adminhtml\Index\Carts
+ *
+ */
 class Carts extends \Magento\Customer\Controller\Adminhtml\Index
 {
     /**

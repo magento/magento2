@@ -6,6 +6,10 @@
  */
 namespace Magento\Translation\Controller\Ajax;
 
+/**
+ * Class \Magento\Translation\Controller\Ajax\Index
+ *
+ */
 class Index extends \Magento\Framework\App\Action\Action
 {
     /**

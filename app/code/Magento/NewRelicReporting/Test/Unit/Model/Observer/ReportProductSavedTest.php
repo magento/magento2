@@ -10,7 +10,7 @@ use Magento\NewRelicReporting\Model\Observer\ReportProductSaved;
 /**
  * Class ReportProductSavedTest
  */
-class ReportProductSavedTest extends \PHPUnit_Framework_TestCase
+class ReportProductSavedTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ReportProductSaved

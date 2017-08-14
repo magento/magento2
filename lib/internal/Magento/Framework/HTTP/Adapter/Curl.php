@@ -11,6 +11,10 @@
  */
 namespace Magento\Framework\HTTP\Adapter;
 
+/**
+ * Class \Magento\Framework\HTTP\Adapter\Curl
+ *
+ */
 class Curl implements \Zend_Http_Client_Adapter_Interface
 {
     /**

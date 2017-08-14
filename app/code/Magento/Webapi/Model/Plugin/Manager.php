@@ -59,7 +59,7 @@ class Manager
      *
      * @return string[]
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @deprecated
+     * @deprecated 100.1.0
      */
     public function afterProcessIntegrationConfig(
         ConfigBasedIntegrationManager $subject,

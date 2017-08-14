@@ -11,6 +11,10 @@
  */
 namespace Magento\Newsletter\Block\Adminhtml\Template\Grid\Renderer;
 
+/**
+ * Class \Magento\Newsletter\Block\Adminhtml\Template\Grid\Renderer\Action
+ *
+ */
 class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Action
 {
     /**

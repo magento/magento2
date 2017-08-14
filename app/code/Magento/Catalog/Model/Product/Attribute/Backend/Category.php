@@ -11,6 +11,10 @@
  */
 namespace Magento\Catalog\Model\Product\Attribute\Backend;
 
+/**
+ * Class \Magento\Catalog\Model\Product\Attribute\Backend\Category
+ *
+ */
 class Category extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
     /**

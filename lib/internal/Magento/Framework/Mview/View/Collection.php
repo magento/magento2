@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\Mview\View;
 
+/**
+ * Class \Magento\Framework\Mview\View\Collection
+ *
+ */
 class Collection extends \Magento\Framework\Data\Collection implements CollectionInterface
 {
     /**

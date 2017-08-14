@@ -137,7 +137,7 @@ class Form extends Cc
     /**
      * Get payment data helper instance
      * @return Data
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getPaymentDataHelper()
     {

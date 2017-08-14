@@ -9,6 +9,10 @@ namespace Magento\Framework\Profiler\Driver\Standard;
 
 use Magento\Framework\Profiler;
 
+/**
+ * Class \Magento\Framework\Profiler\Driver\Standard\Stat
+ *
+ */
 class Stat
 {
     /**
@@ -25,11 +29,7 @@ class Stat
     const EMALLOC_START = 'emalloc_start';
     /**#@-*/
 
-    /**
-     * Array of timers statistics data
-     *
-     * @var array
-     */
+    /**#@-*/
     protected $_timers = [];
 
     /**

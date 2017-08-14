@@ -10,10 +10,10 @@
 ?>
 <script>
 require([
-    "jquery",
+    'jquery',
     'Magento_Ui/js/modal/alert',
     "jquery/ui",
-    "jquery/editableMultiselect/js/jquery.multiselect",
+    'mage/multiselect',
     "mage/mage",
     'Magento_Ui/js/modal/modal'
 ], function($, alert){
@@ -71,9 +71,7 @@ require([
         this.edit = function() {
             var listItem = $(this).closest('.mselect-list-item');
             var that = listItem.children('.mselect-edit');
-            var index = listItem.index(),
-                select = that.closest('.mselect-list').prevAll('.multiselect:first'),
-                id = select.find('option').eq(index).attr('value'),
+            var id = listItem.find('input[type="checkbox"]').attr('value'),
                 item;
 
             $('body').trigger('processStart');
@@ -116,11 +114,14 @@ require([
                 toggleAddButton:false,
                 addText: '<?= /* @escapeNotVerified */ __('Add New Tax Rate') ?>',
                 parse: null,
+                nextPageUrl: '<?php echo $block->escapeHtml($block->getTaxRatesPageUrl())?>',
+                selectedValues: this.settings.selected_values,
                 mselectInputSubmitCallback: function (value, options) {
                     var select = $('#tax_rate');
-                    select.append('<option value="" selected="selected">' + value + '</option>');
+                        select.append('<option value="" selected="selected">' + value + '</option>');
                     var mselectItemHtml = $(options.item.replace(/%value%|%label%/gi, value)
-                        .replace(/%mselectDisabledClass%|%iseditable%|%isremovable%/gi, '')
+                        .replace(/%mselectCheckedClass%|%mselectDisabledClass%|%iseditable%|%isremovable%/gi, '')
+                        .replace(/%checked%|%disabled%/gi, '')
                         .replace(/%mselectListItemClass%/gi, options.mselectListItemClass))
                         .find('[type=checkbox]')
                         .attr('checked', true)
@@ -153,7 +154,7 @@ require([
                 options['mselectInputSubmitCallback'] = null;
             }
 
-            taxRate.multiselect(options);
+            taxRate.multiselect2(options);
 
             taxRateField.find('.mselect-button-add').off('click');
 
@@ -165,14 +166,14 @@ require([
                         }
 
                         var that = $(this),
-                                index = that.parent().index(),
-                                select = that.closest('.mselect-list').prev();
+                            select = that.closest('.mselect-list').prev(),
+                            rateValue = that.parent().find('input[type="checkbox"]').val();
 
                         $('body').trigger('processStart');
                         var ajaxOptions = {
                             type: 'POST',
                             data: {
-                                tax_calculation_rate_id: select.find('option').eq(index).val(),
+                                tax_calculation_rate_id: rateValue,
                                 form_key: $('input[name="form_key"]').val()
                             },
                             dataType: 'json',
@@ -181,7 +182,12 @@ require([
                                 $('body').trigger('processStop');
                                 if (result.success) {
                                     that.parent().remove();
-                                    select.find('option').eq(index).remove();
+                                    select.find('option').each(function() {
+                                        if (this.value === rateValue) {
+                                            $(this).remove();
+                                        }
+                                    });
+                                    select.trigger('change.hiddenSelect');
                                 } else {
                                     if (result.error_message)
                                         alert({
@@ -252,16 +258,15 @@ require([
                                     itemRate.code = result.code;
                                     if (itemRate.tax_calculation_rate_id) {
                                         itemRate.itemElement.find('span').html(itemRate.code);
-                                        var index = itemRate.itemElement.parent().index();
-                                        itemRate.itemElement.closest('.mselect-list').prev().find('option').eq(index)
-                                            .html(itemRate.code)
-                                            .val(itemRate.tax_calculation_rate_id);
                                     } else {
                                         itemRate.tax_calculation_rate_id = result.tax_calculation_rate_id;
                                         taxRateField.find('.mselect-input').val(itemRate.code);
                                         taxRateField.find('.mselect-save').trigger('mousedown');
                                         taxRateField.find('option[value=""]:last')
                                             .val(itemRate.tax_calculation_rate_id);
+                                        taxRateField.find('input[type="checkbox"][value="' + itemRate.code + '"]')
+                                            .val(itemRate.tax_calculation_rate_id);
+                                        taxRateField.find('select').trigger('change.hiddenSelect');
                                     }
                                     taxRateForm.dialogRates('closeModal');
                                 } else {

@@ -5,6 +5,10 @@
  */
 namespace Magento\Tax\Model\Config\Source;
 
+/**
+ * Class \Magento\Tax\Model\Config\Source\Catalog
+ *
+ */
 class Catalog implements \Magento\Framework\Option\ArrayInterface
 {
     /**

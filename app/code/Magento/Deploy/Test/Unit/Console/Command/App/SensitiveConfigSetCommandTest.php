@@ -18,7 +18,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SensitiveConfigSetCommandTest extends \PHPUnit_Framework_TestCase
+class SensitiveConfigSetCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SensitiveConfigSetFacade|MockObject
@@ -77,11 +77,6 @@ class SensitiveConfigSetCommandTest extends \PHPUnit_Framework_TestCase
             ->method('hasChanges')
             ->willReturn(false);
         $this->emulatedAreaProcessorMock->expects($this->once())
-            ->method('process')
-            ->willReturnCallback(function ($function) {
-                return $function();
-            });
-        $this->facadeMock->expects($this->once())
             ->method('process');
         $this->hashMock->expects($this->once())
             ->method('regenerate')

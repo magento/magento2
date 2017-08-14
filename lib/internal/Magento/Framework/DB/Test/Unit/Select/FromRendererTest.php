@@ -11,7 +11,7 @@ use Magento\Framework\DB\Select;
 /**
  * Class FromRendererTest
  */
-class FromRendererTest extends \PHPUnit_Framework_TestCase
+class FromRendererTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\DB\Select\FromRenderer
@@ -36,14 +36,9 @@ class FromRendererTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->quoteMock = $this->getMock(
-            \Magento\Framework\DB\Platform\Quote::class,
-            ['quoteTableAs', 'quoteIdentifier'],
-            [],
-            '',
-            false
-        );
-        $this->selectMock = $this->getMock(\Magento\Framework\DB\Select::class, ['getPart'], [], '', false);
+        $this->quoteMock =
+            $this->createPartialMock(\Magento\Framework\DB\Platform\Quote::class, ['quoteTableAs', 'quoteIdentifier']);
+        $this->selectMock = $this->createPartialMock(\Magento\Framework\DB\Select::class, ['getPart']);
         $this->model = $objectManager->getObject(
             \Magento\Framework\DB\Select\FromRenderer::class,
             ['quote' => $this->quoteMock]

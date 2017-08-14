@@ -5,9 +5,15 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product\Price\Plugin;
 
+/**
+ * Class \Magento\Catalog\Model\Indexer\Product\Price\Plugin\AbstractPlugin
+ *
+ */
 abstract class AbstractPlugin
 {
-    /** @var \Magento\Framework\Indexer\IndexerRegistry */
+    /**
+     * @var \Magento\Framework\Indexer\IndexerRegistry
+     */
     protected $indexerRegistry;
 
     /**

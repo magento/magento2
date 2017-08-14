@@ -8,6 +8,10 @@ namespace Magento\Wishlist\Controller\Shared;
 
 use Magento\Wishlist\Controller\WishlistProviderInterface;
 
+/**
+ * Class \Magento\Wishlist\Controller\Shared\WishlistProvider
+ *
+ */
 class WishlistProvider implements WishlistProviderInterface
 {
     /**

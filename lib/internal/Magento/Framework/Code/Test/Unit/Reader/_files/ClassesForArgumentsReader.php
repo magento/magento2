@@ -51,7 +51,7 @@ class ClassWithAllArgumentTypes
     /**
      * @param stdClass $stdClassObject
      * @param ClassWithoutConstruct $withoutConstructorClassObject
-     * @param $someVariable
+     * @param mixed $someVariable
      * @param string $const
      * @param int $optionalNumValue
      * @param string $optionalStringValue

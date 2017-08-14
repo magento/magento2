@@ -9,6 +9,7 @@ namespace Magento\Catalog\Api;
 /**
  * Interface which provides product renders information for products
  * @api
+ * @since 101.1.0
  */
 interface ProductRenderListInterface
 {
@@ -21,6 +22,7 @@ interface ProductRenderListInterface
      * @param int $storeId
      * @param string $currencyCode
      * @return \Magento\Catalog\Api\Data\ProductRenderSearchResultsInterface
+     * @since 101.1.0
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria, $storeId, $currencyCode);
 }

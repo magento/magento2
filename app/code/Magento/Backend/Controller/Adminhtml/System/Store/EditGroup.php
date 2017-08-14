@@ -6,6 +6,10 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Store;
 
+/**
+ * Class \Magento\Backend\Controller\Adminhtml\System\Store\EditGroup
+ *
+ */
 class EditGroup extends \Magento\Backend\Controller\Adminhtml\System\Store
 {
     /**

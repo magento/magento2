@@ -5,6 +5,10 @@
  */
 namespace Magento\Tax\Model\Config\Price;
 
+/**
+ * Class \Magento\Tax\Model\Config\Price\IncludePrice
+ *
+ */
 class IncludePrice extends \Magento\Framework\App\Config\Value
 {
     /**

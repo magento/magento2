@@ -11,6 +11,10 @@
  */
 namespace Magento\Newsletter\Block\Adminhtml\Subscriber\Grid\Filter;
 
+/**
+ * Class \Magento\Newsletter\Block\Adminhtml\Subscriber\Grid\Filter\Checkbox
+ *
+ */
 class Checkbox extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilter
 {
     /**

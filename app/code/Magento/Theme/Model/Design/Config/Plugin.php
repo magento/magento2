@@ -11,12 +11,20 @@ use Magento\Theme\Model\DesignConfigRepository;
 use Magento\Theme\Api\Data\DesignConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * Class \Magento\Theme\Model\Design\Config\Plugin
+ *
+ */
 class Plugin
 {
-    /** @var EventManager */
+    /**
+     * @var \Magento\Framework\Event\ManagerInterface
+     */
     protected $eventManager;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface */
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
     protected $storeManager;
 
     /**

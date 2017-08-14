@@ -5,6 +5,10 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Order\Creditmemos
+ *
+ */
 class Creditmemos extends \Magento\Sales\Controller\Adminhtml\Order
 {
     /**

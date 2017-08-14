@@ -31,7 +31,7 @@ class SampleDataDeployCommand extends Command
 
     /**
      * @var \Symfony\Component\Console\Input\ArrayInputFactory
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private $arrayInputFactory;
 

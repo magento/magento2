@@ -5,6 +5,10 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product\Price\Plugin;
 
+/**
+ * Class \Magento\Catalog\Model\Indexer\Product\Price\Plugin\Website
+ *
+ */
 class Website
 {
     /**

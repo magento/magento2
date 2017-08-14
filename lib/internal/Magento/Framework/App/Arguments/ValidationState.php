@@ -7,6 +7,10 @@
  */
 namespace Magento\Framework\App\Arguments;
 
+/**
+ * Class \Magento\Framework\App\Arguments\ValidationState
+ *
+ */
 class ValidationState implements \Magento\Framework\Config\ValidationStateInterface
 {
     /**

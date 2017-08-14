@@ -8,7 +8,7 @@ namespace Magento\Framework\DB\Test\Unit\Ddl;
 use Magento\Framework\DB\Ddl\Sequence;
 use Magento\Framework\DB\Ddl\Table;
 
-class SequenceTest extends \PHPUnit_Framework_TestCase
+class SequenceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param array $params

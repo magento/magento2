@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\Api\ExtensionAttribute\Config;
 
+/**
+ * Class \Magento\Framework\Api\ExtensionAttribute\Config\Converter
+ *
+ */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     const RESOURCE_PERMISSIONS = "resourceRefs";
