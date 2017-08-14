@@ -9,6 +9,7 @@ namespace Magento\Eav\Api\Data;
 /**
  * Interface AttributeInterface
  * @api
+ * @since 100.0.2
  */
 interface AttributeInterface extends \Magento\Framework\Api\CustomAttributesDataInterface
 {

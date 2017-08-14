@@ -10,10 +10,6 @@
  */
 namespace Magento\Framework\Parse;
 
-/**
- * Class \Magento\Framework\Parse\Zip
- *
- */
 class Zip
 {
     /**

@@ -8,10 +8,6 @@
 
 namespace Magento\Framework\Indexer;
 
-/**
- * Class \Magento\Framework\Indexer\AbstractProcessor
- *
- */
 abstract class AbstractProcessor
 {
     /**

@@ -9,6 +9,7 @@ namespace Magento\Backend\App;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class DefaultPath implements \Magento\Framework\App\DefaultPathInterface
 {

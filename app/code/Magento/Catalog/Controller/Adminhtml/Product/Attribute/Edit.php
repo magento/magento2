@@ -6,10 +6,6 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 
-/**
- * Class \Magento\Catalog\Controller\Adminhtml\Product\Attribute\Edit
- *
- */
 class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
 {
     /**

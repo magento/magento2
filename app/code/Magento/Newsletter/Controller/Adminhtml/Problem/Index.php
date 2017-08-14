@@ -6,10 +6,6 @@
  */
 namespace Magento\Newsletter\Controller\Adminhtml\Problem;
 
-/**
- * Class \Magento\Newsletter\Controller\Adminhtml\Problem\Index
- *
- */
 class Index extends \Magento\Newsletter\Controller\Adminhtml\Problem
 {
     /**

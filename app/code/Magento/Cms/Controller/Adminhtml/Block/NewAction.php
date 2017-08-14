@@ -6,10 +6,6 @@
  */
 namespace Magento\Cms\Controller\Adminhtml\Block;
 
-/**
- * Class \Magento\Cms\Controller\Adminhtml\Block\NewAction
- *
- */
 class NewAction extends \Magento\Cms\Controller\Adminhtml\Block
 {
     /**

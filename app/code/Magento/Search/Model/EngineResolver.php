@@ -50,7 +50,6 @@ class EngineResolver
      * @param string $path
      * @param string $scopeType
      * @param string $scopeCode
-     * @since 100.1.0
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,

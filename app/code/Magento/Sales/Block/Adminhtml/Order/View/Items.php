@@ -11,6 +11,7 @@ use Magento\Sales\Model\ResourceModel\Order\Item\Collection;
  * Adminhtml order items grid
  *
  * @api
+ * @since 100.0.2
  */
 class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
 {

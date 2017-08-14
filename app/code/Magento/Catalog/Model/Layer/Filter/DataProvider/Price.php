@@ -10,10 +10,6 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Registry;
 use Magento\Store\Model\ScopeInterface;
 
-/**
- * Class \Magento\Catalog\Model\Layer\Filter\DataProvider\Price
- *
- */
 class Price
 {
     /**

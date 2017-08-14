@@ -7,10 +7,6 @@ namespace Magento\CatalogInventory\Model\Indexer;
 
 use Magento\Framework\Indexer\CacheContext;
 
-/**
- * Class \Magento\CatalogInventory\Model\Indexer\Stock
- *
- */
 class Stock implements \Magento\Framework\Indexer\ActionInterface, \Magento\Framework\Mview\ActionInterface
 {
     /**

@@ -13,10 +13,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 
-/**
- * Class \Magento\Quote\Model\Quote\Item\CartItemPersister
- *
- */
 class CartItemPersister
 {
     /**

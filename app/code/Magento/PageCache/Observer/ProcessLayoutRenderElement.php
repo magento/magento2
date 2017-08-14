@@ -11,10 +11,6 @@ use Magento\Framework\Serialize\Serializer\Base64Json;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\View\EntitySpecificHandlesList;
 
-/**
- * Class \Magento\PageCache\Observer\ProcessLayoutRenderElement
- *
- */
 class ProcessLayoutRenderElement implements ObserverInterface
 {
     /**

@@ -9,10 +9,6 @@ namespace Magento\Framework\Profiler\Driver\Standard\Output;
 
 use Magento\Framework\Profiler\Driver\Standard\OutputInterface;
 
-/**
- * Class \Magento\Framework\Profiler\Driver\Standard\Output\Factory
- *
- */
 class Factory
 {
     /**

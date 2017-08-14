@@ -9,10 +9,6 @@ use Magento\Weee\Helper\Data as WeeeHelper;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\App\ObjectManager;
 
-/**
- * Class \Magento\Weee\Model\Total\Invoice\Weee
- *
- */
 class Weee extends \Magento\Sales\Model\Order\Invoice\Total\AbstractTotal
 {
     /**

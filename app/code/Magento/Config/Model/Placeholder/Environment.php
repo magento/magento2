@@ -27,7 +27,6 @@ class Environment implements PlaceholderInterface
 
     /**
      * @param DeploymentConfig $deploymentConfig
-     * @since 100.1.2
      */
     public function __construct(DeploymentConfig $deploymentConfig)
     {

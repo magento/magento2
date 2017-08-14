@@ -7,10 +7,6 @@
  */
 namespace Magento\Webapi\Model\Soap;
 
-/**
- * Class \Magento\Webapi\Model\Soap\ServerFactory
- *
- */
 class ServerFactory
 {
     /**

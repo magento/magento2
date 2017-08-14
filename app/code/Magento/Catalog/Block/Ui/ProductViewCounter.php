@@ -78,7 +78,6 @@ class ProductViewCounter extends Template
      * @param SerializerInterface $serialize
      * @param Url $url
      * @param Registry $registry
-     * @since 101.1.0
      */
     public function __construct(
         Template\Context $context,

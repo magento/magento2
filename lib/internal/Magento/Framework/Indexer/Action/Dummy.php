@@ -8,10 +8,6 @@ namespace Magento\Framework\Indexer\Action;
 use Magento\Framework\Indexer\ActionInterface;
 use Magento\Framework\Mview\ActionInterface as MviewActionInterface;
 
-/**
- * Class \Magento\Framework\Indexer\Action\Dummy
- *
- */
 class Dummy implements ActionInterface, MviewActionInterface
 {
     /**

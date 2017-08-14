@@ -7,10 +7,6 @@
  */
 namespace Magento\Framework\Event\Config;
 
-/**
- * Class \Magento\Framework\Event\Config\Converter
- *
- */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**

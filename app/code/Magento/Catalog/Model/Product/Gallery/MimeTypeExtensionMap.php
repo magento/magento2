@@ -6,10 +6,6 @@
  */
 namespace Magento\Catalog\Model\Product\Gallery;
 
-/**
- * Class \Magento\Catalog\Model\Product\Gallery\MimeTypeExtensionMap
- *
- */
 class MimeTypeExtensionMap
 {
     /**

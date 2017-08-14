@@ -7,10 +7,6 @@
  */
 namespace Magento\Customer\Model\Session;
 
-/**
- * Class \Magento\Customer\Model\Session\Storage
- *
- */
 class Storage extends \Magento\Framework\Session\Storage
 {
     /**

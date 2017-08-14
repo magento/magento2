@@ -10,10 +10,6 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 
-/**
- * Class \Magento\Checkout\Controller\ShippingRates\Index
- *
- */
 class Index extends \Magento\Framework\App\Action\Action
 {
     /**

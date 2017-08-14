@@ -5,10 +5,6 @@
  */
 namespace Magento\Indexer\Model\ResourceModel\Mview\View\State;
 
-/**
- * Class \Magento\Indexer\Model\ResourceModel\Mview\View\State\Collection
- *
- */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection implements
     \Magento\Framework\Mview\View\State\CollectionInterface
 {

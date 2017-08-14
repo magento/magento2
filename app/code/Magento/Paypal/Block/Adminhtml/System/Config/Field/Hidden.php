@@ -9,10 +9,6 @@
  */
 namespace Magento\Paypal\Block\Adminhtml\System\Config\Field;
 
-/**
- * Class \Magento\Paypal\Block\Adminhtml\System\Config\Field\Hidden
- *
- */
 class Hidden extends \Magento\Config\Block\System\Config\Form\Field
 {
     /**

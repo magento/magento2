@@ -13,10 +13,6 @@ use Magento\Framework\App\Config\ValueInterface;
 use Magento\Theme\Model\Data\Design\ConfigFactory;
 use Magento\Theme\Model\Design\BackendModelFactory;
 
-/**
- * Class \Magento\Theme\Model\Design\Config\Storage
- *
- */
 class Storage
 {
     /**

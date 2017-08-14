@@ -42,6 +42,7 @@ use Magento\Framework\Exception\LocalizedException;
  * - the configuration path section/group/field
  *
  * @api
+ * @since 100.0.2
  */
 class Structure implements \Magento\Config\Model\Config\Structure\SearchInterface
 {

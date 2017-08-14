@@ -7,10 +7,6 @@ namespace Magento\Framework\Indexer\Action;
 
 use Magento\Framework\App\ResourceConnection\SourceProviderInterface;
 
-/**
- * Class \Magento\Framework\Indexer\Action\Entity
- *
- */
 class Entity extends Base
 {
     /**

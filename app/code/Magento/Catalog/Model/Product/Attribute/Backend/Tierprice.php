@@ -13,10 +13,6 @@ namespace Magento\Catalog\Model\Product\Attribute\Backend;
 
 use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
 
-/**
- * Class \Magento\Catalog\Model\Product\Attribute\Backend\Tierprice
- *
- */
 class Tierprice extends \Magento\Catalog\Model\Product\Attribute\Backend\GroupPrice\AbstractGroupPrice
 {
     /**

@@ -7,10 +7,6 @@ namespace Magento\Rule\Model;
 
 use Magento\Framework\ObjectManagerInterface;
 
-/**
- * Class \Magento\Rule\Model\ConditionFactory
- *
- */
 class ConditionFactory
 {
     /**

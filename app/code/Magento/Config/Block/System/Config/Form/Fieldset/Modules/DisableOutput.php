@@ -12,6 +12,7 @@ namespace Magento\Config\Block\System\Config\Form\Fieldset\Modules;
  * @method \Magento\Config\Block\System\Config\Form getForm()
  * @deprecated 100.2.0 Magento does not support custom disabling/enabling module output since 2.2.0 version
  * @api
+ * @since 100.0.2
  */
 class DisableOutput extends \Magento\Config\Block\System\Config\Form\Fieldset
 {

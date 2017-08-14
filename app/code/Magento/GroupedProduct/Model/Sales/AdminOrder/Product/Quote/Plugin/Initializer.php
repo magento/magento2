@@ -14,10 +14,6 @@ namespace Magento\GroupedProduct\Model\Sales\AdminOrder\Product\Quote\Plugin;
 
 use Magento\GroupedProduct\Model\Product\Type\Grouped;
 
-/**
- * Class \Magento\GroupedProduct\Model\Sales\AdminOrder\Product\Quote\Plugin\Initializer
- *
- */
 class Initializer
 {
     /**

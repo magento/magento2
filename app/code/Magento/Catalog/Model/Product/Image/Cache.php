@@ -11,10 +11,6 @@ use Magento\Theme\Model\ResourceModel\Theme\Collection as ThemeCollection;
 use Magento\Framework\App\Area;
 use Magento\Framework\View\ConfigInterface;
 
-/**
- * Class \Magento\Catalog\Model\Product\Image\Cache
- *
- */
 class Cache
 {
     /**

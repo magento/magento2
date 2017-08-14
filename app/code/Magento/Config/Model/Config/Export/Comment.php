@@ -40,7 +40,6 @@ class Comment implements CommentInterface
      * @param PlaceholderFactory $placeholderFactory
      * @param DumpConfigSourceInterface $source
      * @param TypePool|null $typePool The checker for config type
-     * @since 100.1.2
      */
     public function __construct(
         PlaceholderFactory $placeholderFactory,

@@ -31,6 +31,7 @@ use Magento\User\Api\Data\UserInterface;
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @api
+ * @since 100.0.2
  */
 class User extends AbstractModel implements StorageInterface, UserInterface
 {

@@ -11,10 +11,6 @@ namespace Magento\Downloadable\Controller\Customer;
 
 use Magento\Framework\App\RequestInterface;
 
-/**
- * Class \Magento\Downloadable\Controller\Customer\Products
- *
- */
 class Products extends \Magento\Framework\App\Action\Action
 {
     /**

@@ -5,10 +5,6 @@
  */
 namespace Magento\Cron\Model\Config\Source;
 
-/**
- * Class \Magento\Cron\Model\Config\Source\Frequency
- *
- */
 class Frequency implements \Magento\Framework\Option\ArrayInterface
 {
     /**

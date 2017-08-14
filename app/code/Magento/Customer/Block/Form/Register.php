@@ -12,6 +12,7 @@ use Magento\Customer\Model\AccountManagement;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Register extends \Magento\Directory\Block\Data
 {

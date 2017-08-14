@@ -16,6 +16,7 @@ use Magento\Payment\Model\Config as PaymentConfig;
  * Credit card configuration model
  *
  * @api
+ * @since 100.0.2
  */
 class CcConfig
 {

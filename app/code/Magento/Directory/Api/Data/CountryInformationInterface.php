@@ -9,6 +9,7 @@ namespace Magento\Directory\Api\Data;
  * Country Information interface.
  *
  * @api
+ * @since 100.0.2
  */
 interface CountryInformationInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {

@@ -9,10 +9,6 @@ use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 
-/**
- * Class \Magento\Catalog\Block\Product\ProductList\Promotion
- *
- */
 class Promotion extends \Magento\Catalog\Block\Product\ListProduct
 {
     /**

@@ -6,10 +6,6 @@
  */
 namespace Magento\Multishipping\Controller\Checkout;
 
-/**
- * Class \Magento\Multishipping\Controller\Checkout\Index
- *
- */
 class Index extends \Magento\Multishipping\Controller\Checkout
 {
     /**

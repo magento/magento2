@@ -9,10 +9,6 @@ namespace Magento\Setup\Module\Di\App\Task\Operation;
 use Magento\Setup\Module\Di\App\Task\OperationInterface;
 use Magento\Setup\Module\Di\Code\Scanner;
 
-/**
- * Class \Magento\Setup\Module\Di\App\Task\Operation\ProxyGenerator
- *
- */
 class ProxyGenerator implements OperationInterface
 {
     /**

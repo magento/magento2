@@ -6,10 +6,6 @@
  */
 namespace Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model;
 
-/**
- * Class \Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model\ConfigurableProductsProvider
- *
- */
 class ConfigurableProductsProvider
 {
     /**

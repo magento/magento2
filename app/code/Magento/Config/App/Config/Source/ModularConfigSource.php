@@ -24,7 +24,6 @@ class ModularConfigSource implements ConfigSourceInterface
 
     /**
      * @param Reader $reader
-     * @since 100.1.2
      */
     public function __construct(Reader $reader)
     {
