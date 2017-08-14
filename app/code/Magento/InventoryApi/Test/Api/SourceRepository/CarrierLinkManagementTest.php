@@ -5,6 +5,7 @@
  */
 namespace Magento\InventoryApi\Test\Api\SourceRepository;
 
+use Magento\Framework\Webapi\Exception;
 use Magento\Framework\Webapi\Rest\Request;
 use Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface;
 use Magento\InventoryApi\Api\Data\SourceInterface;

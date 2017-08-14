@@ -15,12 +15,21 @@
     <preference for="Magento\Inventory\Model\Source\Command\GetInterface" type="Magento\Inventory\Model\Source\Command\Get"/>
     <preference for="Magento\Inventory\Model\Source\Command\GetListInterface" type="Magento\Inventory\Model\Source\Command\GetList"/>
     <preference for="Magento\Inventory\Model\Source\Command\SaveInterface" type="Magento\Inventory\Model\Source\Command\Save"/>
+    <!-- TODO: describe bug -->
+    <preference for="Magento\Inventory\Model\Source\Validator\SourceValidatorInterface" type="Magento\Inventory\Model\Source\Validator\ValidatorChain"/>
     <type name="Magento\Inventory\Model\Source\Validator\ValidatorChain">
         <arguments>
             <argument name="validators" xsi:type="array">
                 <item name="name" xsi:type="object">Magento\Inventory\Model\Source\Validator\NameValidator</item>
                 <item name="postcode" xsi:type="object">Magento\Inventory\Model\Source\Validator\PostcodeValidator</item>
+                <item name="country" xsi:type="object">Magento\Inventory\Model\Source\Validator\CountryValidator</item>
+                <item name="carrier_links" xsi:type="object">Magento\Inventory\Model\Source\Validator\CarrierLinks</item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Inventory\Model\Source\Command\Save">
+        <arguments>
+            <argument name="sourceValidator" xsi:type="object">Magento\Inventory\Model\Source\Validator\ValidatorChain</argument>
         </arguments>
     </type>
     <!-- Source Item -->
@@ -38,11 +47,18 @@
     <preference for="Magento\Inventory\Model\Stock\Command\GetInterface" type="Magento\Inventory\Model\Stock\Command\Get"/>
     <preference for="Magento\Inventory\Model\Stock\Command\GetListInterface" type="Magento\Inventory\Model\Stock\Command\GetList"/>
     <preference for="Magento\Inventory\Model\Stock\Command\SaveInterface" type="Magento\Inventory\Model\Stock\Command\Save"/>
+    <!-- TODO: describe bug -->
+    <preference for="Magento\Inventory\Model\Stock\Validator\StockValidatorInterface" type="Magento\Inventory\Model\Stock\Validator\ValidatorChain"/>
     <type name="Magento\Inventory\Model\Stock\Validator\ValidatorChain">
         <arguments>
             <argument name="validators" xsi:type="array">
                 <item name="name" xsi:type="object">Magento\Inventory\Model\Stock\Validator\NameValidator</item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Inventory\Model\Stock\Command\Save">
+        <arguments>
+            <argument name="stockValidator" xsi:type="object">Magento\Inventory\Model\Stock\Validator\ValidatorChain</argument>
         </arguments>
     </type>
     <!-- StockSourceLink -->

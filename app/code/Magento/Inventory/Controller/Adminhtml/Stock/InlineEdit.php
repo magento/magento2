@@ -69,13 +69,14 @@ class InlineEdit extends Action
                     $this->stockRepository->save($stock);
                 } catch (NoSuchEntityException $e) {
                     $errorMessages[] = __(
-                        '[ID: %1] The Stock does not exist.',
-                        $itemData[StockInterface::STOCK_ID]
+                        '[ID: %value] The Stock does not exist.',
+                        ['value' => $itemData[StockInterface::STOCK_ID]]
                     );
                 } catch (CouldNotSaveException $e) {
-                    $errorMessages[] =
-                        __('[ID: %1] ', $itemData[StockInterface::STOCK_ID])
-                        . $e->getMessage();
+                    $errorMessages[] = __('[ID: %value] %message', [
+                        'value' => $itemData[StockInterface::STOCK_ID],
+                        'message' => $e->getMessage(),
+                    ]);
                 }
             }
         } else {

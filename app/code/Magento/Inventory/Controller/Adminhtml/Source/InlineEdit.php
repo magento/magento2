@@ -69,13 +69,14 @@ class InlineEdit extends Action
                     $this->sourceRepository->save($source);
                 } catch (NoSuchEntityException $e) {
                     $errorMessages[] = __(
-                        '[ID: %1] The Source does not exist.',
-                        $itemData[SourceInterface::SOURCE_ID]
+                        '[ID: %value] The Source does not exist.',
+                        ['value' => $itemData[SourceInterface::SOURCE_ID]]
                     );
                 } catch (CouldNotSaveException $e) {
-                    $errorMessages[] =
-                        __('[ID: %1] ', $itemData[SourceInterface::SOURCE_ID])
-                        . $e->getMessage();
+                    $errorMessages[] = __('[ID: %value] %message', [
+                        'value' => $itemData[SourceInterface::SOURCE_ID],
+                        'message' => $e->getMessage(),
+                    ]);
                 }
             }
         } else {

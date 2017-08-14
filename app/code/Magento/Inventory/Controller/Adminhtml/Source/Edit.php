@@ -56,12 +56,12 @@ class Edit extends Action
                 ->addBreadcrumb(__('Edit Source'), __('Edit Source'));
             $result->getConfig()
                 ->getTitle()
-                ->prepend(__('Edit Source: %1', $source->getName()));
+                ->prepend(__('Edit Source: %name', ['name' => $source->getName()]));
         } catch (NoSuchEntityException $e) {
             /** @var Redirect $result */
             $result = $this->resultRedirectFactory->create();
             $this->messageManager->addErrorMessage(
-                __('Source with id "%1" does not exist.', $sourceId)
+                __('Source with id "%value" does not exist.', ['value' => $sourceId])
             );
             $result->setPath('*/*');
         }

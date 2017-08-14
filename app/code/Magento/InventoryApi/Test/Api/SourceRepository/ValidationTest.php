@@ -83,7 +83,7 @@ class ValidationTest extends WebapiAbstract
                     'rest_message' => '"%field" can not be empty.',
                     'soap_message' => sprintf('object has no \'%s\' property', SourceInterface::NAME),
                     'parameters' => [
-                        SourceInterface::NAME,
+                        'field' => SourceInterface::NAME,
                     ],
                 ],
             ],
@@ -93,7 +93,7 @@ class ValidationTest extends WebapiAbstract
                     'rest_message' => '"%field" can not be empty.',
                     'soap_message' => sprintf('object has no \'%s\' property', SourceInterface::POSTCODE),
                     'parameters' => [
-                        SourceInterface::POSTCODE,
+                        'field' => SourceInterface::POSTCODE,
                     ],
                 ],
             ],

@@ -46,7 +46,7 @@ class GetTest extends WebapiAbstract
             if (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) {
                 $errorData = $this->processRestExceptionResult($e);
                 self::assertEquals($expectedMessage, $errorData['message']);
-                self::assertEquals($notExistingId, $errorData['parameters'][0]);
+                self::assertEquals($notExistingId, $errorData['parameters']['value']);
                 self::assertEquals(Exception::HTTP_NOT_FOUND, $e->getCode());
             } elseif (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
                 $this->assertInstanceOf('SoapFault', $e);

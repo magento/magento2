@@ -53,7 +53,8 @@ class ValidationTest extends WebapiAbstract
         } catch (\Exception $e) {
             if (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) {
                 $errorData = $this->processRestExceptionResult($e);
-                self::assertEquals($expectedErrorData, $errorData);
+                self::assertEquals($expectedErrorData['rest_message'], $errorData['message']);
+                self::assertEquals($expectedErrorData['parameters'], $errorData['parameters']);
                 self::assertEquals(Exception::HTTP_BAD_REQUEST, $e->getCode());
             } elseif (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
                 $this->assertInstanceOf('SoapFault', $e);
@@ -77,11 +78,11 @@ class ValidationTest extends WebapiAbstract
             'without_' . StockInterface::NAME => [
                 StockInterface::NAME,
                 [
-                    'message' => '"%1" can not be empty.',
-                    'parameters' => [
-                        StockInterface::NAME,
-                    ],
+                    'rest_message' => '"%field" can not be empty.',
                     'soap_message' => sprintf('object has no \'%s\' property', StockInterface::NAME),
+                    'parameters' => [
+                        'field' => StockInterface::NAME,
+                    ],
                 ],
             ],
         ];
@@ -149,9 +150,9 @@ class ValidationTest extends WebapiAbstract
                 StockInterface::NAME,
                 null,
                 [
-                    'message' => '"%1" can not be empty.',
+                    'message' => '"%field" can not be empty.',
                     'parameters' => [
-                        1 => StockInterface::NAME,
+                        'field' => StockInterface::NAME,
                     ],
                 ],
             ],
@@ -159,9 +160,9 @@ class ValidationTest extends WebapiAbstract
                 StockInterface::NAME,
                 ' ',
                 [
-                    'message' => '"%1" can not be empty.',
+                    'message' => '"%field" can not be empty.',
                     'parameters' => [
-                        1 => StockInterface::NAME,
+                        'field' => StockInterface::NAME,
                     ],
                 ],
             ],

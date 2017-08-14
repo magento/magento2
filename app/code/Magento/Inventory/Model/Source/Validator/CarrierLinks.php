@@ -41,7 +41,7 @@ class CarrierLinks implements SourceValidatorInterface
                 ]);
             } else if (count($value) && $source->isUseDefaultCarrierConfig()) {
                 $errors[] = __(
-                    'You can\'t configure "%1" because you have chosen Global Shipping configuration.', [
+                    'You can\'t configure "%field" because you have chosen Global Shipping configuration.', [
                     'field' => SourceInterface::CARRIER_LINKS,
                 ]);
             }

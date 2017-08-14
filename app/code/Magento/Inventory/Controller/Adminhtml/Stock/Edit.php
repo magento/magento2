@@ -56,12 +56,12 @@ class Edit extends Action
                 ->addBreadcrumb(__('Edit Stock'), __('Edit Stock'));
             $result->getConfig()
                 ->getTitle()
-                ->prepend(__('Edit Stock: %1', $stock->getName()));
+                ->prepend(__('Edit Stock: %name', ['name' => $stock->getName()]));
         } catch (NoSuchEntityException $e) {
             /** @var Redirect $result */
             $result = $this->resultRedirectFactory->create();
             $this->messageManager->addErrorMessage(
-                __('Stock with id "%1" does not exist.', $stockId)
+                __('Stock with id "%value" does not exist.', ['value' => $stockId])
             );
             $result->setPath('*/*');
         }
