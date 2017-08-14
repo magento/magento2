@@ -7,10 +7,6 @@
  */
 namespace Magento\Framework\App\AreaList;
 
-/**
- * Class \Magento\Framework\App\AreaList\Proxy
- *
- */
 class Proxy extends \Magento\Framework\App\AreaList implements
     \Magento\Framework\ObjectManager\NoninterceptableInterface
 {

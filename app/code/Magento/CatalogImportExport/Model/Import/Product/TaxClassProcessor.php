@@ -8,10 +8,6 @@ namespace Magento\CatalogImportExport\Model\Import\Product;
 use Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType;
 use Magento\Tax\Model\ClassModel;
 
-/**
- * Class \Magento\CatalogImportExport\Model\Import\Product\TaxClassProcessor
- *
- */
 class TaxClassProcessor
 {
     /**

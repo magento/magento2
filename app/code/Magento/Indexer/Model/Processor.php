@@ -10,10 +10,6 @@ use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\Indexer\IndexerInterfaceFactory;
 use Magento\Framework\Indexer\StateInterface;
 
-/**
- * Class \Magento\Indexer\Model\Processor
- *
- */
 class Processor
 {
     /**

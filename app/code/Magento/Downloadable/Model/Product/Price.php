@@ -11,10 +11,6 @@
  */
 namespace Magento\Downloadable\Model\Product;
 
-/**
- * Class \Magento\Downloadable\Model\Product\Price
- *
- */
 class Price extends \Magento\Catalog\Model\Product\Type\Price
 {
     /**

@@ -9,10 +9,6 @@
  */
 namespace Magento\Framework\View\Design\Theme;
 
-/**
- * Class \Magento\Framework\View\Design\Theme\Label
- *
- */
 class Label implements \Magento\Framework\Option\ArrayInterface
 {
     /**

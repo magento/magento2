@@ -9,10 +9,6 @@ namespace Magento\Framework\Phrase\Renderer;
 
 use Magento\Framework\Phrase\RendererInterface;
 
-/**
- * Class \Magento\Framework\Phrase\Renderer\Placeholder
- *
- */
 class Placeholder implements RendererInterface
 {
     /**

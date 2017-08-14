@@ -8,10 +8,6 @@ namespace Magento\Email\Controller\Adminhtml\Email\Template;
 
 use Magento\Framework\App\TemplateTypesInterface;
 
-/**
- * Class \Magento\Email\Controller\Adminhtml\Email\Template\Save
- *
- */
 class Save extends \Magento\Email\Controller\Adminhtml\Email\Template
 {
     /**

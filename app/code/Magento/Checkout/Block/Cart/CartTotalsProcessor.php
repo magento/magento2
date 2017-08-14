@@ -8,10 +8,6 @@ namespace Magento\Checkout\Block\Cart;
 use Magento\Checkout\Model\Layout\AbstractTotalsProcessor;
 use Magento\Checkout\Block\Checkout\LayoutProcessorInterface;
 
-/**
- * Class \Magento\Checkout\Block\Cart\CartTotalsProcessor
- *
- */
 class CartTotalsProcessor extends AbstractTotalsProcessor implements LayoutProcessorInterface
 {
     /**

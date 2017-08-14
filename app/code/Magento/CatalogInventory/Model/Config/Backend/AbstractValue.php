@@ -9,10 +9,6 @@
  */
 namespace Magento\CatalogInventory\Model\Config\Backend;
 
-/**
- * Class \Magento\CatalogInventory\Model\Config\Backend\AbstractValue
- *
- */
 abstract class AbstractValue extends \Magento\Framework\App\Config\Value
 {
     /**

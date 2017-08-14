@@ -6,10 +6,6 @@
 
 namespace Magento\Catalog\Model\Product\Option\Validator;
 
-/**
- * Class \Magento\Catalog\Model\Product\Option\Validator\Pool
- *
- */
 class Pool
 {
     /**

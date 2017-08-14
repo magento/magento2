@@ -11,10 +11,6 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Category\Helper;
 
-/**
- * Class \Magento\Catalog\Block\Adminhtml\Category\Helper\Pricestep
- *
- */
 class Pricestep extends \Magento\Framework\Data\Form\Element\Text
 {
     /**

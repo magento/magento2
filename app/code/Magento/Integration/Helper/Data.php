@@ -7,10 +7,6 @@ namespace Magento\Integration\Helper;
 
 use Magento\Integration\Model\Integration as IntegrationModel;
 
-/**
- * Class \Magento\Integration\Helper\Data
- *
- */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**

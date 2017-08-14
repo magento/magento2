@@ -5,10 +5,6 @@
  */
 namespace Magento\Wishlist\Model\Config\Source;
 
-/**
- * Class \Magento\Wishlist\Model\Config\Source\Summary
- *
- */
 class Summary implements \Magento\Framework\Option\ArrayInterface
 {
     /**

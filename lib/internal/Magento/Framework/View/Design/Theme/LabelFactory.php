@@ -9,10 +9,6 @@
  */
 namespace Magento\Framework\View\Design\Theme;
 
-/**
- * Class \Magento\Framework\View\Design\Theme\LabelFactory
- *
- */
 class LabelFactory
 {
     /**

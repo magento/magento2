@@ -37,7 +37,6 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
      * @param array $meta
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 100.1.0
      */
     public function __construct(
         $name,

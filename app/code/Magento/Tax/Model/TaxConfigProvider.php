@@ -10,10 +10,6 @@ use Magento\Tax\Helper\Data as TaxHelper;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Checkout\Model\Session as CheckoutSession;
 
-/**
- * Class \Magento\Tax\Model\TaxConfigProvider
- *
- */
 class TaxConfigProvider implements ConfigProviderInterface
 {
     /**

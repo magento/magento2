@@ -6,10 +6,6 @@
  */
 namespace Magento\Integration\Controller\Adminhtml\Integration;
 
-/**
- * Class \Magento\Integration\Controller\Adminhtml\Integration\Grid
- *
- */
 class Grid extends \Magento\Integration\Controller\Adminhtml\Integration
 {
     /**

@@ -9,10 +9,6 @@ use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\CatalogInventory\Api\StockStateInterface;
 use Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\QuoteItemQtyList;
 
-/**
- * Class \Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\Option
- *
- */
 class Option
 {
     /**

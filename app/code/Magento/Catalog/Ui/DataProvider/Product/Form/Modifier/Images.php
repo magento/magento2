@@ -34,7 +34,6 @@ class Images extends AbstractModifier
 
     /**
      * @param LocatorInterface $locator
-     * @since 101.0.0
      */
     public function __construct(LocatorInterface $locator)
     {

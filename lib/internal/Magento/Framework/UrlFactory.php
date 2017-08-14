@@ -6,10 +6,6 @@
 
 namespace Magento\Framework;
 
-/**
- * Class \Magento\Framework\UrlFactory
- *
- */
 class UrlFactory
 {
     /**

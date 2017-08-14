@@ -13,10 +13,6 @@ use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Api\PaymentTokenManagementInterface;
 use Magento\Vault\Model\Method\Vault;
 
-/**
- * Class \Magento\Vault\Observer\PaymentTokenAssigner
- *
- */
 class PaymentTokenAssigner extends AbstractDataAssignObserver
 {
     /**

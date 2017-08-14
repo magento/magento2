@@ -12,6 +12,7 @@ namespace Magento\Persistent\Model;
  * @method int getCustomerId()
  * @method Session setCustomerId()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Session extends \Magento\Framework\Model\AbstractModel
 {

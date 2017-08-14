@@ -13,10 +13,6 @@ use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\DB\Logger\LoggerProxy;
 
-/**
- * Class \Magento\Developer\Console\Command\QueryLogDisableCommand
- *
- */
 class QueryLogDisableCommand extends Command
 {
     /**

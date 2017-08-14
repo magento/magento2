@@ -9,10 +9,6 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Indexer\ConfigInterface;
 use Magento\Framework\Indexer\IndexerInterface;
 
-/**
- * Class \Magento\Framework\Mview\View\Collection
- *
- */
 class Collection extends \Magento\Framework\Data\Collection implements CollectionInterface
 {
     /**

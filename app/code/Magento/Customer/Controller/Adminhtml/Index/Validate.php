@@ -8,10 +8,6 @@ namespace Magento\Customer\Controller\Adminhtml\Index;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\Message\Error;
 
-/**
- * Class \Magento\Customer\Controller\Adminhtml\Index\Validate
- *
- */
 class Validate extends \Magento\Customer\Controller\Adminhtml\Index
 {
     /**

@@ -40,7 +40,6 @@ class CreditmemoDocumentFactory
      * @param \Magento\Sales\Api\Data\CreditmemoCommentInterfaceFactory $commentFactory
      * @param \Magento\Framework\EntityManager\HydratorPool $hydratorPool
      * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
-     * @since 100.1.3
      */
     public function __construct(
         \Magento\Sales\Model\Order\CreditmemoFactory $creditmemoFactory,

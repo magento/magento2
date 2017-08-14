@@ -13,10 +13,6 @@ use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\PageCache\Model\VclTemplateLocatorInterface;
 use Magento\PageCache\Exception\UnsupportedVarnishVersion;
 
-/**
- * Class \Magento\PageCache\Model\Varnish\VclTemplateLocator
- *
- */
 class VclTemplateLocator implements VclTemplateLocatorInterface
 {
     /**

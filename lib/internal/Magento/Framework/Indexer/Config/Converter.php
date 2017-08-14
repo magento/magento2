@@ -9,10 +9,6 @@ use Magento\Framework\Config\ConverterInterface;
 use Magento\Framework\Exception\ConfigurationMismatchException;
 use Magento\Framework\Phrase;
 
-/**
- * Class \Magento\Framework\Indexer\Config\Converter
- *
- */
 class Converter implements ConverterInterface
 {
     /**

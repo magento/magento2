@@ -10,10 +10,6 @@ use Magento\Customer\Helper\Address as AddressHelper;
 use Magento\Customer\Model\Session;
 use Magento\Directory\Helper\Data as DirectoryHelper;
 
-/**
- * Class \Magento\Checkout\Block\Checkout\AttributeMerger
- *
- */
 class AttributeMerger
 {
     /**

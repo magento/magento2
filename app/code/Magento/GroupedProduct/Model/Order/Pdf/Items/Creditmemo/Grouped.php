@@ -7,10 +7,6 @@
  */
 namespace Magento\GroupedProduct\Model\Order\Pdf\Items\Creditmemo;
 
-/**
- * Class \Magento\GroupedProduct\Model\Order\Pdf\Items\Creditmemo\Grouped
- *
- */
 class Grouped extends \Magento\Sales\Model\Order\Pdf\Items\Creditmemo\DefaultCreditmemo
 {
     /**

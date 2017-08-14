@@ -49,7 +49,6 @@ class Robots extends AbstractBlock implements IdentityInterface
      * @param SitemapHelper $sitemapHelper
      * @param StoreManagerInterface $storeManager
      * @param array $data
-     * @since 100.2.0
      */
     public function __construct(
         Context $context,

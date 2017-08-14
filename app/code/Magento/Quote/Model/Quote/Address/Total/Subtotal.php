@@ -9,10 +9,6 @@ use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Address\Item as AddressItem;
 use Magento\Quote\Model\Quote\Item;
 
-/**
- * Class \Magento\Quote\Model\Quote\Address\Total\Subtotal
- *
- */
 class Subtotal extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
 {
     /**

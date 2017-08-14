@@ -9,10 +9,6 @@
  */
 namespace Magento\MediaStorage\Model\Config\Source\Storage\Media;
 
-/**
- * Class \Magento\MediaStorage\Model\Config\Source\Storage\Media\Storage
- *
- */
 class Storage implements \Magento\Framework\Option\ArrayInterface
 {
     /**

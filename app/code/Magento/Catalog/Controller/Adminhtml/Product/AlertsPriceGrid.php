@@ -6,10 +6,6 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
-/**
- * Class \Magento\Catalog\Controller\Adminhtml\Product\AlertsPriceGrid
- *
- */
 class AlertsPriceGrid extends AbstractProductGrid
 {
     /**

@@ -46,7 +46,6 @@ class Wysiwyg extends \Magento\Ui\Component\Form\Element\Wysiwyg
      * @param array $config
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 101.0.0
      */
     public function __construct(
         ContextInterface $context,

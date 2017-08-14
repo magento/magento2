@@ -6,10 +6,6 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category;
 
-/**
- * Class \Magento\Catalog\Controller\Adminhtml\Category\Delete
- *
- */
 class Delete extends \Magento\Catalog\Controller\Adminhtml\Category
 {
     /**

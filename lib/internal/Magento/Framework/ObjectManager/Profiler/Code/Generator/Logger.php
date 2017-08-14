@@ -6,10 +6,6 @@
  */
 namespace Magento\Framework\ObjectManager\Profiler\Code\Generator;
 
-/**
- * Class \Magento\Framework\ObjectManager\Profiler\Code\Generator\Logger
- *
- */
 class Logger extends \Magento\Framework\Code\Generator\EntityAbstract
 {
     /**

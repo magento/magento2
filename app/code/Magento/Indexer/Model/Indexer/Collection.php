@@ -7,10 +7,6 @@ namespace Magento\Indexer\Model\Indexer;
 
 use Magento\Framework\Indexer\IndexerInterface;
 
-/**
- * Class \Magento\Indexer\Model\Indexer\Collection
- *
- */
 class Collection extends \Magento\Framework\Data\Collection
 {
     /**

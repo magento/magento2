@@ -6,10 +6,6 @@
 
 namespace Magento\Backend\Controller\Adminhtml\Dashboard;
 
-/**
- * Class \Magento\Backend\Controller\Adminhtml\Dashboard\RefreshStatistics
- *
- */
 class RefreshStatistics extends \Magento\Reports\Controller\Adminhtml\Report\Statistics
 {
     /**

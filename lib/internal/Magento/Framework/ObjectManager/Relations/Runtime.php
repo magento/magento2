@@ -5,10 +5,6 @@
  */
 namespace Magento\Framework\ObjectManager\Relations;
 
-/**
- * Class \Magento\Framework\ObjectManager\Relations\Runtime
- *
- */
 class Runtime implements \Magento\Framework\ObjectManager\RelationsInterface
 {
     /**

@@ -14,10 +14,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 
-/**
- * Class \Magento\CatalogUrlRewrite\Model\Product\AnchorUrlRewriteGenerator
- *
- */
 class AnchorUrlRewriteGenerator
 {
     /**

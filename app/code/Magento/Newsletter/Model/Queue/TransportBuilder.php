@@ -7,10 +7,6 @@ namespace Magento\Newsletter\Model\Queue;
 
 use Magento\Email\Model\AbstractTemplate;
 
-/**
- * Class \Magento\Newsletter\Model\Queue\TransportBuilder
- *
- */
 class TransportBuilder extends \Magento\Framework\Mail\Template\TransportBuilder
 {
     /**

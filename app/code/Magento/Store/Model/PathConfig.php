@@ -5,10 +5,6 @@
  */
 namespace Magento\Store\Model;
 
-/**
- * Class \Magento\Store\Model\PathConfig
- *
- */
 class PathConfig implements \Magento\Framework\App\Router\PathConfigInterface
 {
     /**

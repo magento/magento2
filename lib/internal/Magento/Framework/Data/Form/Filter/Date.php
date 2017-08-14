@@ -13,10 +13,6 @@ namespace Magento\Framework\Data\Form\Filter;
 
 use Magento\Framework\Stdlib\DateTime;
 
-/**
- * Class \Magento\Framework\Data\Form\Filter\Date
- *
- */
 class Date implements \Magento\Framework\Data\Form\Filter\FilterInterface
 {
     /**

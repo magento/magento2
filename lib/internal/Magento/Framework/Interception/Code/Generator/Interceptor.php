@@ -6,10 +6,6 @@
 
 namespace Magento\Framework\Interception\Code\Generator;
 
-/**
- * Class \Magento\Framework\Interception\Code\Generator\Interceptor
- *
- */
 class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
 {
     /**

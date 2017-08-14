@@ -24,7 +24,6 @@ class AdminSessionInfo extends \Magento\Framework\Model\ResourceModel\Db\Abstrac
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param null $connectionName
-     * @since 100.1.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,

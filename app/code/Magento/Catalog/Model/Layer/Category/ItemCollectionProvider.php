@@ -8,10 +8,6 @@ namespace Magento\Catalog\Model\Layer\Category;
 
 use Magento\Catalog\Model\Layer\ItemCollectionProviderInterface;
 
-/**
- * Class \Magento\Catalog\Model\Layer\Category\ItemCollectionProvider
- *
- */
 class ItemCollectionProvider implements ItemCollectionProviderInterface
 {
     /**

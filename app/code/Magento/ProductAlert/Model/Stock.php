@@ -28,6 +28,7 @@ use Magento\ProductAlert\Model\ResourceModel\Stock\Customer\Collection;
  * @author      Magento Core Team <core@magentocommerce.com>
  *
  * @api
+ * @since 100.0.2
  */
 class Stock extends \Magento\Framework\Model\AbstractModel
 {
