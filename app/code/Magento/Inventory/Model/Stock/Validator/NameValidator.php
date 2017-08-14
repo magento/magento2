@@ -34,7 +34,7 @@ class NameValidator implements StockValidatorInterface
         $value = (string)$stock->getName();
 
         if ('' === trim($value)) {
-            $errors[] = __('"%1" can not be empty.', StockInterface::NAME);
+            $errors[] = __('"%field" can not be empty.', ['field' => StockInterface::NAME]);
         } else {
             $errors = [];
         }

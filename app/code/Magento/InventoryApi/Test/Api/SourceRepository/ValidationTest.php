@@ -23,8 +23,9 @@ class ValidationTest extends WebapiAbstract
      * @var array
      */
     private $validData = [
-        SourceInterface::NAME => 'source-name',
+        SourceInterface::NAME => 'source-name-1',
         SourceInterface::POSTCODE => 'source-postcode',
+        SourceInterface::COUNTRY_ID => 'US',
     ];
 
     /**
@@ -54,7 +55,8 @@ class ValidationTest extends WebapiAbstract
         } catch (\Exception $e) {
             if (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) {
                 $errorData = $this->processRestExceptionResult($e);
-                self::assertEquals($expectedErrorData, $errorData);
+                self::assertEquals($expectedErrorData['rest_message'], $errorData['message']);
+                self::assertEquals($expectedErrorData['parameters'], $errorData['parameters']);
                 self::assertEquals(Exception::HTTP_BAD_REQUEST, $e->getCode());
             } elseif (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
                 $this->assertInstanceOf('SoapFault', $e);
@@ -78,21 +80,21 @@ class ValidationTest extends WebapiAbstract
             'without_' . SourceInterface::NAME => [
                 SourceInterface::NAME,
                 [
-                    'message' => '"%1" can not be empty.',
+                    'rest_message' => '"%field" can not be empty.',
+                    'soap_message' => sprintf('object has no \'%s\' property', SourceInterface::NAME),
                     'parameters' => [
                         SourceInterface::NAME,
                     ],
-                    'soap_message' => sprintf('object has no \'%s\' property', SourceInterface::NAME),
                 ],
             ],
             'without_' . SourceInterface::POSTCODE => [
                 SourceInterface::POSTCODE,
                 [
-                    'message' => '"%1" can not be empty.',
+                    'rest_message' => '"%field" can not be empty.',
+                    'soap_message' => sprintf('object has no \'%s\' property', SourceInterface::POSTCODE),
                     'parameters' => [
                         SourceInterface::POSTCODE,
                     ],
-                    'soap_message' => sprintf('object has no \'%s\' property', SourceInterface::POSTCODE),
                 ],
             ],
         ];
@@ -160,9 +162,9 @@ class ValidationTest extends WebapiAbstract
                 SourceInterface::NAME,
                 null,
                 [
-                    'message' => '"%1" can not be empty.',
+                    'message' => '"%field" can not be empty.',
                     'parameters' => [
-                        1 => SourceInterface::NAME,
+                        'field' => SourceInterface::NAME,
                     ],
                 ],
             ],
@@ -170,9 +172,9 @@ class ValidationTest extends WebapiAbstract
                 SourceInterface::NAME,
                 ' ',
                 [
-                    'message' => '"%1" can not be empty.',
+                    'message' => '"%field" can not be empty.',
                     'parameters' => [
-                        1 => SourceInterface::NAME,
+                        'field' => SourceInterface::NAME,
                     ],
                 ],
             ],
@@ -180,9 +182,9 @@ class ValidationTest extends WebapiAbstract
                 SourceInterface::POSTCODE,
                 null,
                 [
-                    'message' => '"%1" can not be empty.',
+                    'message' => '"%field" can not be empty.',
                     'parameters' => [
-                        1 => SourceInterface::POSTCODE,
+                        'field' => SourceInterface::POSTCODE,
                     ],
                 ],
             ],
@@ -190,9 +192,29 @@ class ValidationTest extends WebapiAbstract
                 SourceInterface::POSTCODE,
                 ' ',
                 [
-                    'message' => '"%1" can not be empty.',
+                    'message' => '"%field" can not be empty.',
                     'parameters' => [
-                        1 => SourceInterface::POSTCODE,
+                        'field' => SourceInterface::POSTCODE,
+                    ],
+                ],
+            ],
+            'empty_' . SourceInterface::COUNTRY_ID => [
+                SourceInterface::COUNTRY_ID,
+                null,
+                [
+                    'message' => '"%field" can not be empty.',
+                    'parameters' => [
+                        'field' => SourceInterface::COUNTRY_ID,
+                    ],
+                ],
+            ],
+            'whitespaces_' . SourceInterface::COUNTRY_ID => [
+                SourceInterface::COUNTRY_ID,
+                ' ',
+                [
+                    'message' => '"%field" can not be empty.',
+                    'parameters' => [
+                        'field' => SourceInterface::COUNTRY_ID,
                     ],
                 ],
             ],

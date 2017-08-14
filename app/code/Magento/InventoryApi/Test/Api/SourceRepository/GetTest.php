@@ -36,7 +36,7 @@ class GetTest extends WebapiAbstract
             ],
         ];
 
-        $expectedMessage = 'Source with id "%1" does not exist.';
+        $expectedMessage = 'Source with id "%value" does not exist.';
         try {
             (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST)
                 ? $this->_webApiCall($serviceInfo)
@@ -50,7 +50,7 @@ class GetTest extends WebapiAbstract
                 self::assertEquals(Exception::HTTP_NOT_FOUND, $e->getCode());
             } elseif (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
                 $this->assertInstanceOf('SoapFault', $e);
-                $this->checkSoapFault($e, $expectedMessage, 'env:Sender', [1 => $notExistingId]);
+                $this->checkSoapFault($e, $expectedMessage, 'env:Sender', ['value' => $notExistingId]);
             } else {
                 throw $e;
             }

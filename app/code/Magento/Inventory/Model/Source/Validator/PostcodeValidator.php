@@ -34,7 +34,7 @@ class PostcodeValidator implements SourceValidatorInterface
         $value = (string)$source->getPostcode();
 
         if ('' === trim($value)) {
-            $errors[] = __('"%1" can not be empty.', SourceInterface::POSTCODE);
+            $errors[] = __('"%field" can not be empty.', ['field' => SourceInterface::POSTCODE]);
         } else {
             $errors = [];
         }

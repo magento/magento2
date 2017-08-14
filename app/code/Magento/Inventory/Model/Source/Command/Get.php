@@ -47,7 +47,7 @@ class Get implements GetInterface
         $this->sourceResource->load($source, $sourceId, SourceInterface::SOURCE_ID);
 
         if (null === $source->getSourceId()) {
-            throw new NoSuchEntityException(__('Source with id "%1" does not exist.', $sourceId));
+            throw new NoSuchEntityException(__('Source with id "%value" does not exist.', ['value' => $sourceId]));
         }
         return $source;
     }

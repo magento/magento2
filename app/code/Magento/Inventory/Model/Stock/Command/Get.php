@@ -47,7 +47,7 @@ class Get implements GetInterface
         $this->stockResource->load($stock, $stockId, StockInterface::STOCK_ID);
 
         if (null === $stock->getStockId()) {
-            throw new NoSuchEntityException(__('Stock with id "%1" does not exist.', $stockId));
+            throw new NoSuchEntityException(__('Stock with id "%value" does not exist.', ['value' => $stockId]));
         }
         return $stock;
     }

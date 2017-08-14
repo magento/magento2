@@ -118,9 +118,9 @@ class CarrierLinkManagementTest extends WebapiAbstract
         ];
 
         $expectedErrorData = [
-            'message' => 'You can\'t configure "%1" because you have chosen Global Shipping configuration.',
+            'message' => 'You can\'t configure "%field" because you have chosen Global Shipping configuration.',
             'parameters' => [
-                1 => SourceInterface::CARRIER_LINKS
+                'field' => SourceInterface::CARRIER_LINKS,
             ],
         ];
 

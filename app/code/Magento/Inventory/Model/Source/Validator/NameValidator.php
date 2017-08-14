@@ -34,7 +34,7 @@ class NameValidator implements SourceValidatorInterface
         $value = (string)$source->getName();
 
         if ('' === trim($value)) {
-            $errors[] = __('"%1" can not be empty.', SourceInterface::NAME);
+            $errors[] = __('"%field" can not be empty.', ['field' => SourceInterface::NAME]);
         } else {
             $errors = [];
         }
