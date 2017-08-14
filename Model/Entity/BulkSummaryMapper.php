@@ -11,27 +11,23 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface;
 
 /**
- * @deprecated 2.2.0
- * @since 2.2.0
+ * @deprecated 100.2.0
  */
 class BulkSummaryMapper implements MapperInterface
 {
     /**
      * @var MetadataPool
-     * @since 2.2.0
      */
     private $metadataPool;
 
     /**
      * @var ResourceConnection
-     * @since 2.2.0
      */
     private $resourceConnection;
 
     /**
      * @param MetadataPool $metadataPool
      * @param ResourceConnection $resourceConnection
-     * @since 2.2.0
      */
     public function __construct(
         MetadataPool $metadataPool,
@@ -43,7 +39,6 @@ class BulkSummaryMapper implements MapperInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function entityToDatabase($entityType, $data)
     {
@@ -63,7 +58,6 @@ class BulkSummaryMapper implements MapperInterface
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
-     * @since 2.2.0
      */
     public function databaseToEntity($entityType, $data)
     {

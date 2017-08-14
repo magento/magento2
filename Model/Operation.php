@@ -11,13 +11,11 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
  * Class Operation
- * @since 2.2.0
  */
 class Operation extends DataObject implements OperationInterface, ExtensibleDataInterface
 {
     /**
      * @inheritDoc
-     * @since 2.2.0
      */
     public function getId()
     {
@@ -26,7 +24,6 @@ class Operation extends DataObject implements OperationInterface, ExtensibleData
 
     /**
      * @inheritDoc
-     * @since 2.2.0
      */
     public function setId($id)
     {
@@ -35,7 +32,6 @@ class Operation extends DataObject implements OperationInterface, ExtensibleData
 
     /**
      * @inheritDoc
-     * @since 2.2.0
      */
     public function getBulkUuid()
     {
@@ -44,7 +40,6 @@ class Operation extends DataObject implements OperationInterface, ExtensibleData
 
     /**
      * @inheritDoc
-     * @since 2.2.0
      */
     public function setBulkUuid($bulkId)
     {
@@ -53,7 +48,6 @@ class Operation extends DataObject implements OperationInterface, ExtensibleData
 
     /**
      * @inheritDoc
-     * @since 2.2.0
      */
     public function getTopicName()
     {
@@ -62,7 +56,6 @@ class Operation extends DataObject implements OperationInterface, ExtensibleData
 
     /**
      * @inheritDoc
-     * @since 2.2.0
      */
     public function setTopicName($topic)
     {
@@ -71,7 +64,6 @@ class Operation extends DataObject implements OperationInterface, ExtensibleData
 
     /**
      * @inheritDoc
-     * @since 2.2.0
      */
     public function getSerializedData()
     {
@@ -80,7 +72,6 @@ class Operation extends DataObject implements OperationInterface, ExtensibleData
 
     /**
      * @inheritDoc
-     * @since 2.2.0
      */
     public function setSerializedData($serializedData)
     {
@@ -89,7 +80,6 @@ class Operation extends DataObject implements OperationInterface, ExtensibleData
 
     /**
      * @inheritDoc
-     * @since 2.2.0
      */
     public function getStatus()
     {
@@ -98,7 +88,6 @@ class Operation extends DataObject implements OperationInterface, ExtensibleData
 
     /**
      * @inheritDoc
-     * @since 2.2.0
      */
     public function setStatus($status)
     {
@@ -107,7 +96,6 @@ class Operation extends DataObject implements OperationInterface, ExtensibleData
 
     /**
      * @inheritDoc
-     * @since 2.2.0
      */
     public function getResultMessage()
     {
@@ -116,7 +104,6 @@ class Operation extends DataObject implements OperationInterface, ExtensibleData
 
     /**
      * @inheritDoc
-     * @since 2.2.0
      */
     public function setResultMessage($resultMessage)
     {
@@ -125,7 +112,6 @@ class Operation extends DataObject implements OperationInterface, ExtensibleData
 
     /**
      * @inheritDoc
-     * @since 2.2.0
      */
     public function getErrorCode()
     {
@@ -134,7 +120,6 @@ class Operation extends DataObject implements OperationInterface, ExtensibleData
 
     /**
      * @inheritDoc
-     * @since 2.2.0
      */
     public function setErrorCode($errorCode)
     {
@@ -145,7 +130,6 @@ class Operation extends DataObject implements OperationInterface, ExtensibleData
      * Retrieve existing extension attributes object.
      *
      * @return \Magento\AsynchronousOperations\Api\Data\OperationExtensionInterface|null
-     * @since 2.2.0
      */
     public function getExtensionAttributes()
     {
@@ -157,7 +141,6 @@ class Operation extends DataObject implements OperationInterface, ExtensibleData
      *
      * @param \Magento\AsynchronousOperations\Api\Data\OperationExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.2.0
      */
     public function setExtensionAttributes(
         \Magento\AsynchronousOperations\Api\Data\OperationExtensionInterface $extensionAttributes

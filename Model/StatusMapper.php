@@ -11,7 +11,6 @@ use Magento\Framework\Bulk\BulkSummaryInterface;
 
 /**
  * Class StatusMapper
- * @since 2.2.0
  */
 class StatusMapper
 {
@@ -20,7 +19,6 @@ class StatusMapper
      *
      * @param int $operationStatus
      * @return null|int
-     * @since 2.2.0
      */
     public function operationStatusToBulkSummaryStatus($operationStatus)
     {
@@ -43,7 +41,6 @@ class StatusMapper
      *
      * @param int $bulkStatus
      * @return int|null
-     * @since 2.2.0
      */
     public function bulkSummaryStatusToOperationStatus($bulkStatus)
     {

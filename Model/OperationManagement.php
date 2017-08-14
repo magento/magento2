@@ -11,25 +11,21 @@ use Magento\Framework\EntityManager\EntityManager;
 
 /**
  * Class OperationManagement
- * @since 2.2.0
  */
 class OperationManagement implements \Magento\Framework\Bulk\OperationManagementInterface
 {
     /**
      * @var EntityManager
-     * @since 2.2.0
      */
     private $entityManager;
 
     /**
      * @var OperationInterfaceFactory
-     * @since 2.2.0
      */
     private $operationFactory;
 
     /**
      * @var \Psr\Log\LoggerInterface
-     * @since 2.2.0
      */
     private $logger;
 
@@ -39,7 +35,6 @@ class OperationManagement implements \Magento\Framework\Bulk\OperationManagement
      * @param EntityManager $entityManager
      * @param OperationInterfaceFactory $operationFactory
      * @param \Psr\Log\LoggerInterface $logger
-     * @since 2.2.0
      */
     public function __construct(
         EntityManager $entityManager,
@@ -53,7 +48,6 @@ class OperationManagement implements \Magento\Framework\Bulk\OperationManagement
     
     /**
      * @inheritDoc
-     * @since 2.2.0
      */
     public function changeOperationStatus($operationId, $status, $errorCode = null, $message = null, $data = null)
     {

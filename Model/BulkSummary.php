@@ -11,13 +11,11 @@ use Magento\Framework\DataObject;
 
 /**
  * Class BulkSummary
- * @since 2.2.0
  */
 class BulkSummary extends DataObject implements BulkSummaryInterface, \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**
      * @inheritDoc
-     * @since 2.2.0
      */
     public function getBulkId()
     {
@@ -26,7 +24,6 @@ class BulkSummary extends DataObject implements BulkSummaryInterface, \Magento\F
 
     /**
      * @inheritDoc
-     * @since 2.2.0
      */
     public function setBulkId($bulkUuid)
     {
@@ -35,7 +32,6 @@ class BulkSummary extends DataObject implements BulkSummaryInterface, \Magento\F
 
     /**
      * @inheritDoc
-     * @since 2.2.0
      */
     public function getDescription()
     {
@@ -44,7 +40,6 @@ class BulkSummary extends DataObject implements BulkSummaryInterface, \Magento\F
 
     /**
      * @inheritDoc
-     * @since 2.2.0
      */
     public function setDescription($description)
     {
@@ -53,7 +48,6 @@ class BulkSummary extends DataObject implements BulkSummaryInterface, \Magento\F
 
     /**
      * @inheritDoc
-     * @since 2.2.0
      */
     public function getStartTime()
     {
@@ -62,7 +56,6 @@ class BulkSummary extends DataObject implements BulkSummaryInterface, \Magento\F
 
     /**
      * @inheritDoc
-     * @since 2.2.0
      */
     public function setStartTime($timestamp)
     {
@@ -71,7 +64,6 @@ class BulkSummary extends DataObject implements BulkSummaryInterface, \Magento\F
 
     /**
      * @inheritDoc
-     * @since 2.2.0
      */
     public function getUserId()
     {
@@ -80,7 +72,6 @@ class BulkSummary extends DataObject implements BulkSummaryInterface, \Magento\F
 
     /**
      * @inheritDoc
-     * @since 2.2.0
      */
     public function setUserId($userId)
     {
@@ -89,7 +80,6 @@ class BulkSummary extends DataObject implements BulkSummaryInterface, \Magento\F
 
     /**
      * @inheritDoc
-     * @since 2.2.0
      */
     public function getOperationCount()
     {
@@ -98,7 +88,6 @@ class BulkSummary extends DataObject implements BulkSummaryInterface, \Magento\F
 
     /**
      * @inheritDoc
-     * @since 2.2.0
      */
     public function setOperationCount($operationCount)
     {
@@ -109,7 +98,6 @@ class BulkSummary extends DataObject implements BulkSummaryInterface, \Magento\F
      * Retrieve existing extension attributes object.
      *
      * @return \Magento\AsynchronousOperations\Api\Data\BulkSummaryExtensionInterface|null
-     * @since 2.2.0
      */
     public function getExtensionAttributes()
     {
@@ -121,7 +109,6 @@ class BulkSummary extends DataObject implements BulkSummaryInterface, \Magento\F
      *
      * @param \Magento\AsynchronousOperations\Api\Data\BulkSummaryExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.2.0
      */
     public function setExtensionAttributes(
         \Magento\AsynchronousOperations\Api\Data\BulkSummaryExtensionInterface $extensionAttributes
