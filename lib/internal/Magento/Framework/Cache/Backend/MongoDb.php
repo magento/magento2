@@ -9,10 +9,6 @@
  */
 namespace Magento\Framework\Cache\Backend;
 
-/**
- * Class \Magento\Framework\Cache\Backend\MongoDb
- *
- */
 class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_ExtendedInterface
 {
     /**

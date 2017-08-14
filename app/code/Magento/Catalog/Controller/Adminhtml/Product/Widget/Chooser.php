@@ -6,10 +6,6 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Widget;
 
-/**
- * Class \Magento\Catalog\Controller\Adminhtml\Product\Widget\Chooser
- *
- */
 class Chooser extends \Magento\Backend\App\Action
 {
     /**

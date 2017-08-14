@@ -10,10 +10,6 @@ use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 
-/**
- * Class \Magento\CatalogUrlRewrite\Model\Category\CanonicalUrlRewriteGenerator
- *
- */
 class CanonicalUrlRewriteGenerator
 {
     /**

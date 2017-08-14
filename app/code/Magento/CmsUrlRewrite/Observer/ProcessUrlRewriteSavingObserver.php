@@ -11,10 +11,6 @@ use Magento\Framework\Event\ObserverInterface;
 use Magento\CmsUrlRewrite\Model\CmsPageUrlRewriteGenerator;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
-/**
- * Class \Magento\CmsUrlRewrite\Observer\ProcessUrlRewriteSavingObserver
- *
- */
 class ProcessUrlRewriteSavingObserver implements ObserverInterface
 {
     /**

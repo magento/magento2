@@ -11,10 +11,6 @@ namespace Magento\Setup\Model;
 
 use Magento\ImportExport\Model\Import\AbstractSource;
 
-/**
- * Class \Magento\Setup\Model\Generator
- *
- */
 class Generator extends AbstractSource
 {
     /**

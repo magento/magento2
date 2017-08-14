@@ -15,6 +15,7 @@ use Magento\Sales\Model\AbstractModel;
 /**
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Item extends AbstractModel implements ShipmentItemInterface
 {

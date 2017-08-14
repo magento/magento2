@@ -5,10 +5,6 @@
  */
 namespace Magento\Store\Model\StoreResolver;
 
-/**
- * Class \Magento\Store\Model\StoreResolver\Website
- *
- */
 class Website implements ReaderInterface
 {
     /**

@@ -8,10 +8,6 @@ namespace Magento\Backup\Cron;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Store\Model\ScopeInterface;
 
-/**
- * Class \Magento\Backup\Cron\SystemBackup
- *
- */
 class SystemBackup
 {
     const XML_PATH_BACKUP_ENABLED = 'system/backup/enabled';

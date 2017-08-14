@@ -46,7 +46,6 @@ class System extends AbstractModifier
      * @param LocatorInterface $locator
      * @param UrlInterface $urlBuilder
      * @param array $productUrls
-     * @since 101.0.0
      */
     public function __construct(
         LocatorInterface $locator,

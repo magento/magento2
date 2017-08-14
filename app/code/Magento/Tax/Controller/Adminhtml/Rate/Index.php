@@ -6,10 +6,6 @@
  */
 namespace Magento\Tax\Controller\Adminhtml\Rate;
 
-/**
- * Class \Magento\Tax\Controller\Adminhtml\Rate\Index
- *
- */
 class Index extends \Magento\Tax\Controller\Adminhtml\Rate
 {
     /**

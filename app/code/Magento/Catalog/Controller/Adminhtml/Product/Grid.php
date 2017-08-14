@@ -6,10 +6,6 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
-/**
- * Class \Magento\Catalog\Controller\Adminhtml\Product\Grid
- *
- */
 class Grid extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**

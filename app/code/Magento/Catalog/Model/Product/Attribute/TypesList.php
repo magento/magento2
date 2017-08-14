@@ -6,10 +6,6 @@
  */
 namespace Magento\Catalog\Model\Product\Attribute;
 
-/**
- * Class \Magento\Catalog\Model\Product\Attribute\TypesList
- *
- */
 class TypesList implements \Magento\Catalog\Api\ProductAttributeTypesListInterface
 {
     /**

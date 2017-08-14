@@ -5,10 +5,6 @@
  */
 namespace Magento\Persistent\Model\Plugin;
 
-/**
- * Class \Magento\Persistent\Model\Plugin\CustomerData
- *
- */
 class CustomerData
 {
     /**

@@ -30,7 +30,6 @@ class VaultTokenRenderer extends AbstractTokenRenderer
      * @param Template\Context $context
      * @param Config $config
      * @param array $data
-     * @since 100.1.3
      */
     public function __construct(
         Template\Context $context,

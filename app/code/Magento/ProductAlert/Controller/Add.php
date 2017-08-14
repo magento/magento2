@@ -10,10 +10,6 @@ use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\App\RequestInterface;
 
-/**
- * Class \Magento\ProductAlert\Controller\Add
- *
- */
 abstract class Add extends Action
 {
     /**

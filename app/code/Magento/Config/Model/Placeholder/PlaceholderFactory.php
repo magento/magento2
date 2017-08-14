@@ -32,7 +32,6 @@ class PlaceholderFactory
     /**
      * @param ObjectManagerInterface $objectManager
      * @param array $types
-     * @since 100.1.2
      */
     public function __construct(ObjectManagerInterface $objectManager, array $types = [])
     {

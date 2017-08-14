@@ -8,10 +8,6 @@ namespace Magento\Search\Adapter\Query\Preprocessor;
 use Magento\Framework\Search\Adapter\Preprocessor\PreprocessorInterface;
 use Magento\Search\Api\SynonymAnalyzerInterface;
 
-/**
- * Class \Magento\Search\Adapter\Query\Preprocessor\Synonyms
- *
- */
 class Synonyms implements PreprocessorInterface
 {
     /**

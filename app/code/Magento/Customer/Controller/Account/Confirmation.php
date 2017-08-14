@@ -13,10 +13,6 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Framework\Exception\State\InvalidTransitionException;
 
-/**
- * Class \Magento\Customer\Controller\Account\Confirmation
- *
- */
 class Confirmation extends \Magento\Customer\Controller\AbstractAccount
 {
     /**

@@ -6,10 +6,6 @@
  */
 namespace Magento\AdminNotification\Controller\Adminhtml\System\Message;
 
-/**
- * Class \Magento\AdminNotification\Controller\Adminhtml\System\Message\ListAction
- *
- */
 class ListAction extends \Magento\Backend\App\AbstractAction
 {
     /**

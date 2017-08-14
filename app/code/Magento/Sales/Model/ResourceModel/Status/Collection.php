@@ -7,10 +7,6 @@
  */
 namespace Magento\Sales\Model\ResourceModel\Status;
 
-/**
- * Class \Magento\Sales\Model\ResourceModel\Status\Collection
- *
- */
 class Collection extends \Magento\Sales\Model\ResourceModel\Order\Status\Collection
 {
     /**

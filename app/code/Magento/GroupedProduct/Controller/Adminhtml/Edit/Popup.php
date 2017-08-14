@@ -12,10 +12,6 @@ use Magento\Catalog\Model\ProductFactory;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\Controller\ResultFactory;
 
-/**
- * Class \Magento\GroupedProduct\Controller\Adminhtml\Edit\Popup
- *
- */
 class Popup extends AbstractAction
 {
     /**

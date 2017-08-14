@@ -8,10 +8,6 @@ namespace Magento\Framework\View\Layout\ScheduledStructure;
 use Magento\Framework\View\Layout;
 use Magento\Framework\App\State;
 
-/**
- * Class \Magento\Framework\View\Layout\ScheduledStructure\Helper
- *
- */
 class Helper
 {
     /**#@+

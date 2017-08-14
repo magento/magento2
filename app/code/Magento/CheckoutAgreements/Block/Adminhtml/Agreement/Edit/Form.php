@@ -5,10 +5,6 @@
  */
 namespace Magento\CheckoutAgreements\Block\Adminhtml\Agreement\Edit;
 
-/**
- * Class \Magento\CheckoutAgreements\Block\Adminhtml\Agreement\Edit\Form
- *
- */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**

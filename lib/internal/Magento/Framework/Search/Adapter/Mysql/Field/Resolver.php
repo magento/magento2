@@ -5,10 +5,6 @@
  */
 namespace Magento\Framework\Search\Adapter\Mysql\Field;
 
-/**
- * Class \Magento\Framework\Search\Adapter\Mysql\Field\Resolver
- *
- */
 class Resolver implements ResolverInterface
 {
     /**

@@ -9,10 +9,6 @@
 
 namespace Magento\Newsletter\Controller\Adminhtml\Queue;
 
-/**
- * Class \Magento\Newsletter\Controller\Adminhtml\Queue\Save
- *
- */
 class Save extends \Magento\Newsletter\Controller\Adminhtml\Queue
 {
     /**

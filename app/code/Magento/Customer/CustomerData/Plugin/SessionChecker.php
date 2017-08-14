@@ -9,10 +9,6 @@ use Magento\Framework\Session\SessionManager;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
 
-/**
- * Class \Magento\Customer\CustomerData\Plugin\SessionChecker
- *
- */
 class SessionChecker
 {
     /**

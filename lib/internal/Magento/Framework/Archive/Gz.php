@@ -11,10 +11,6 @@
  */
 namespace Magento\Framework\Archive;
 
-/**
- * Class \Magento\Framework\Archive\Gz
- *
- */
 class Gz extends \Magento\Framework\Archive\AbstractArchive implements \Magento\Framework\Archive\ArchiveInterface
 {
     /**

@@ -53,7 +53,6 @@ class Attributes extends AbstractModifier
      * @param Registry $registry
      * @param AuthorizationInterface $authorization
      * @param LocatorInterface $locator
-     * @since 101.0.0
      */
     public function __construct(
         UrlInterface $urlBuilder,

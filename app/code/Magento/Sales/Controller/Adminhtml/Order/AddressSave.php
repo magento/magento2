@@ -6,10 +6,6 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
-/**
- * Class \Magento\Sales\Controller\Adminhtml\Order\AddressSave
- *
- */
 class AddressSave extends \Magento\Sales\Controller\Adminhtml\Order
 {
     /**

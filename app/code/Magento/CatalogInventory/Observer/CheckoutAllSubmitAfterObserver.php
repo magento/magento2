@@ -9,10 +9,6 @@ namespace Magento\CatalogInventory\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer as EventObserver;
 
-/**
- * Class \Magento\CatalogInventory\Observer\CheckoutAllSubmitAfterObserver
- *
- */
 class CheckoutAllSubmitAfterObserver implements ObserverInterface
 {
     /**

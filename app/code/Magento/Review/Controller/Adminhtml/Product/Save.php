@@ -9,10 +9,6 @@ use Magento\Review\Controller\Adminhtml\Product as ProductController;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
 
-/**
- * Class \Magento\Review\Controller\Adminhtml\Product\Save
- *
- */
 class Save extends ProductController
 {
     /**

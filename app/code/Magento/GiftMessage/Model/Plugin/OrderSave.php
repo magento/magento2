@@ -9,10 +9,6 @@ namespace Magento\GiftMessage\Model\Plugin;
 
 use Magento\Framework\Exception\CouldNotSaveException;
 
-/**
- * Class \Magento\GiftMessage\Model\Plugin\OrderSave
- *
- */
 class OrderSave
 {
     /**

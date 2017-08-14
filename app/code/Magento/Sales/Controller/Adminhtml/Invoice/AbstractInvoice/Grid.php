@@ -6,10 +6,6 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice;
 
-/**
- * Class \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\Grid
- *
- */
 abstract class Grid extends \Magento\Backend\App\Action
 {
     /**

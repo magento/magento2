@@ -10,10 +10,6 @@ use Magento\Catalog\Model\ResourceModel\Attribute;
 use Magento\PageCache\Model\Config;
 use Magento\Framework\App\Cache\TypeListInterface;
 
-/**
- * Class \Magento\Catalog\Plugin\Model\ResourceModel\Attribute\Save
- *
- */
 class Save
 {
     /**

@@ -13,6 +13,7 @@ use Magento\Customer\Model\AccountManagement;
  *
  * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 100.0.2
  */
 class Edit extends \Magento\Customer\Block\Account\Dashboard
 {

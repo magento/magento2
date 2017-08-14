@@ -7,10 +7,6 @@ namespace Magento\CatalogRule\Plugin\Indexer\Product\Save;
 
 use Magento\CatalogRule\Model\Indexer\Product\ProductRuleProcessor;
 
-/**
- * Class \Magento\CatalogRule\Plugin\Indexer\Product\Save\ApplyRules
- *
- */
 class ApplyRules
 {
     /**

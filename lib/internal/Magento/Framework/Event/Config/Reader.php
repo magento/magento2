@@ -7,10 +7,6 @@
  */
 namespace Magento\Framework\Event\Config;
 
-/**
- * Class \Magento\Framework\Event\Config\Reader
- *
- */
 class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {
     /**

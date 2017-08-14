@@ -11,10 +11,6 @@ use Magento\Quote\Model\Quote\Address\Total\Collector;
 use Magento\Quote\Model\Quote\Address\Total\CollectorFactory;
 use Magento\Quote\Model\Quote\Address\Total\CollectorInterface;
 
-/**
- * Class \Magento\Quote\Model\Quote\TotalsCollectorList
- *
- */
 class TotalsCollectorList
 {
 

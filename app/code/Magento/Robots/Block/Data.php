@@ -36,7 +36,6 @@ class Data extends AbstractBlock implements IdentityInterface
      * @param Robots $robots
      * @param StoreResolver $storeResolver
      * @param array $data
-     * @since 100.2.0
      */
     public function __construct(
         Context $context,

@@ -10,10 +10,6 @@
  */
 namespace Magento\Framework\App;
 
-/**
- * Class \Magento\Framework\App\Cache
- *
- */
 class Cache implements CacheInterface
 {
     /**

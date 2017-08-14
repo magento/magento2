@@ -7,10 +7,6 @@ namespace Magento\Braintree\Gateway\Response;
 
 use Magento\Sales\Model\Order\Payment;
 
-/**
- * Class \Magento\Braintree\Gateway\Response\VoidHandler
- *
- */
 class VoidHandler extends TransactionIdHandler
 {
     /**

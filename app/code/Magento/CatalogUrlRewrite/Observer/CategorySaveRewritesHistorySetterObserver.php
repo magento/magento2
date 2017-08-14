@@ -9,10 +9,6 @@ use Magento\Catalog\Model\Category;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 
-/**
- * Class \Magento\CatalogUrlRewrite\Observer\CategorySaveRewritesHistorySetterObserver
- *
- */
 class CategorySaveRewritesHistorySetterObserver implements ObserverInterface
 {
     /**

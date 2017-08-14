@@ -11,10 +11,6 @@
  */
 namespace Magento\Framework\Data\Form\Element;
 
-/**
- * Class \Magento\Framework\Data\Form\Element\Reset
- *
- */
 class Reset extends \Magento\Framework\Data\Form\Element\AbstractElement
 {
     /**

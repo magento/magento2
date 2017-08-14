@@ -10,10 +10,6 @@ namespace Magento\LayeredNavigation\Observer\Grid;
 use Magento\Framework\Module\Manager;
 use Magento\Framework\Event\ObserverInterface;
 
-/**
- * Class \Magento\LayeredNavigation\Observer\Grid\ProductAttributeGridBuildObserver
- *
- */
 class ProductAttributeGridBuildObserver implements ObserverInterface
 {
     /**

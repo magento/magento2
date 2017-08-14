@@ -7,10 +7,6 @@ namespace Magento\Catalog\CustomerData;
 
 use Magento\Customer\CustomerData\SectionSourceInterface;
 
-/**
- * Class \Magento\Catalog\CustomerData\CompareProducts
- *
- */
 class CompareProducts implements SectionSourceInterface
 {
     /**

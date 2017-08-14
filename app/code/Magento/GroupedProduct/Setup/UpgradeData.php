@@ -12,10 +12,6 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\GroupedProduct\Model\ResourceModel\Product\Link;
 
-/**
- * Class \Magento\GroupedProduct\Setup\UpgradeData
- *
- */
 class UpgradeData implements UpgradeDataInterface
 {
     /**

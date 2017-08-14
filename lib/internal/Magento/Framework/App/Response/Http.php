@@ -14,10 +14,6 @@ use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\App\Request\Http as HttpRequest;
 
-/**
- * Class \Magento\Framework\App\Response\Http
- *
- */
 class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
 {
     /** Cookie to store page vary string */
