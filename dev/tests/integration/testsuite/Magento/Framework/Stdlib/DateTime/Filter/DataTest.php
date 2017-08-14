@@ -3,9 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\Stdlib\DateTime\Filter;
-
 
 class DataTest extends \PHPUnit_Framework_TestCase
 {

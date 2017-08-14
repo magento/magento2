@@ -262,7 +262,7 @@
     </type>
     <type name="Magento\Theme\Model\Config\Processor\DesignTheme">
         <arguments>
-            <argument name="themeList" xsi:type="object">Magento\Theme\Model\ResourceModel\Theme\Collection</argument>
+            <argument name="themeList" xsi:type="object">Magento\Theme\Model\ResourceModel\Theme\Collection\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Config\App\Config\Source\DumpConfigSourceAggregated">

@@ -48,6 +48,7 @@ class AjaxLoadRates extends Action
      * Get rates page via AJAX
      *
      * @return Json
+     * @throws \InvalidArgumentException
      */
     public function execute()
     {

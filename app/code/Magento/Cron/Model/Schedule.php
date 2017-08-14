@@ -45,20 +45,28 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
     const STATUS_ERROR = 'error';
 
     /**
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     */
+    private $dateTime;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime|null $dateTime
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime = null
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+        $this->dateTime = $dateTime;
     }
 
     /**
@@ -94,6 +102,8 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
      */
     public function trySchedule()
     {
+        $this->dateTime = $this->dateTime ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Stdlib\DateTime\DateTime::class);
         $time = $this->getScheduledAt();
         $e = $this->getCronExprArr();
 
@@ -101,7 +111,7 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
             return false;
         }
         if (!is_numeric($time)) {
-            $time = strtotime($time);
+            $time = strtotime($time) + $this->dateTime->getGmtOffset();
         }
         $match = $this->matchCronExpression($e[0], strftime('%M', $time))
             && $this->matchCronExpression($e[1], strftime('%H', $time))

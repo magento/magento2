@@ -147,7 +147,9 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
             $setupMock,
             $filesystemMock,
             $migrationData,
-            'app/etc/aliases_to_classes_map.json'
+            'app/etc/aliases_to_classes_map.json',
+            [],
+            $this->getSerializerMock()
         );
 
         $setupModel->appendClassAliasReplace(
@@ -203,7 +205,8 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
             $filesystemMock,
             $migrationData,
             'app/etc/aliases_to_classes_map.json',
-            $this->_getModelDependencies($tableRowsCount, $tableData, $aliasesMap)
+            $this->_getModelDependencies($tableRowsCount, $tableData, $aliasesMap),
+            $this->getSerializerMock()
         );
 
         foreach ($replaceRules as $replaceRule) {
@@ -247,5 +250,24 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
     {
         $mock = $this->getMockBuilder(\Magento\Framework\Filesystem::class)->disableOriginalConstructor()->getMock();
         return $mock;
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Serialize\Serializer\Json
+     * @throws \PHPUnit_Framework_Exception
+     */
+    private function getSerializerMock()
+    {
+        $serializerMock = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
+            ->getMock();
+
+        $serializerMock->expects($this->any())
+            ->method('unserialize')
+            ->willReturnCallback(
+                function ($serializedData) {
+                    return json_decode($serializedData, true);
+                }
+            );
+        return $serializerMock;
     }
 }
