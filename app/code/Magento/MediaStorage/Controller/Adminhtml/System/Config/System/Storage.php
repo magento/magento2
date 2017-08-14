@@ -11,6 +11,10 @@
  */
 namespace Magento\MediaStorage\Controller\Adminhtml\System\Config\System;
 
+/**
+ * Class \Magento\MediaStorage\Controller\Adminhtml\System\Config\System\Storage
+ *
+ */
 abstract class Storage extends \Magento\Backend\App\Action
 {
     /**

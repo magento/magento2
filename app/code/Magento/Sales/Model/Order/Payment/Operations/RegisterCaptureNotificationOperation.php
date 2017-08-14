@@ -10,6 +10,10 @@ use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Order\Payment\Transaction;
 
+/**
+ * Class \Magento\Sales\Model\Order\Payment\Operations\RegisterCaptureNotificationOperation
+ *
+ */
 class RegisterCaptureNotificationOperation extends AbstractOperation
 {
     /**

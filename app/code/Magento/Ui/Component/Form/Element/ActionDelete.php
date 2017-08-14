@@ -6,7 +6,8 @@
 namespace Magento\Ui\Component\Form\Element;
 
 /**
- * Class ActionDelete
+ * @api
+ * @since 100.1.0
  */
 class ActionDelete extends AbstractElement
 {
@@ -14,6 +15,7 @@ class ActionDelete extends AbstractElement
 
     /**
      * {@inheritdoc}
+     * @since 100.1.0
      */
     public function getComponentName()
     {

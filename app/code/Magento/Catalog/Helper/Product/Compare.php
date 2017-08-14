@@ -95,7 +95,9 @@ class Compare extends \Magento\Framework\Url\Helper\Data
      */
     protected $postHelper;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface */
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
     private $_storeManager;
 
     /**

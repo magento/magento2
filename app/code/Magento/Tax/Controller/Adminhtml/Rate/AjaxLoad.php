@@ -4,17 +4,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Tax\Controller\Adminhtml\Rate;
 
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Tax\Controller\Adminhtml\Rate\AjaxLoad
+ *
+ */
 class AjaxLoad extends \Magento\Tax\Controller\Adminhtml\Rate
 {
     /**
      * Json needed for the Ajax Edit Form
      *
-     * @return void
+     * @return \Magento\Framework\Controller\Result\Json
+     * @throws \InvalidArgumentException
      */
     public function execute()
     {
@@ -23,13 +29,13 @@ class AjaxLoad extends \Magento\Tax\Controller\Adminhtml\Rate
             /* @var \Magento\Tax\Api\Data\TaxRateInterface */
             $taxRateDataObject = $this->_taxRateRepository->get($rateId);
             /* @var array */
-            $resultArray= $this->_taxRateConverter->createArrayFromServiceObject($taxRateDataObject, true);
+            $resultArray = $this->_taxRateConverter->createArrayFromServiceObject($taxRateDataObject, true);
 
             $responseContent = [
                 'success' => true,
                 'error_message' => '',
-                'result'=>$resultArray,
-                ];
+                'result' => $resultArray,
+            ];
         } catch (NoSuchEntityException $e) {
             $responseContent = [
                 'success' => false,

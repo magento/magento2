@@ -10,6 +10,10 @@ use Magento\Framework\Exception\MailException;
 use Magento\Framework\Mail\TransportInterface;
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * Class \Magento\Email\Model\Mail\TransportInterfacePlugin
+ *
+ */
 class TransportInterfacePlugin
 {
     /**

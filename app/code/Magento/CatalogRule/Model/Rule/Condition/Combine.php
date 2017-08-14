@@ -9,6 +9,10 @@
  */
 namespace Magento\CatalogRule\Model\Rule\Condition;
 
+/**
+ * Class \Magento\CatalogRule\Model\Rule\Condition\Combine
+ *
+ */
 class Combine extends \Magento\Rule\Model\Condition\Combine
 {
     /**

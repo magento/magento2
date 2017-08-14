@@ -7,6 +7,10 @@ namespace Magento\Dhl\Model;
 
 use Magento\Shipping\Model\Carrier\AbstractCarrierOnline;
 
+/**
+ * Class \Magento\Dhl\Model\AbstractDhl
+ *
+ */
 abstract class AbstractDhl extends AbstractCarrierOnline
 {
     /**

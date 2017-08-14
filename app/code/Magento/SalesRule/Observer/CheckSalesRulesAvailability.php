@@ -5,6 +5,10 @@
  */
 namespace Magento\SalesRule\Observer;
 
+/**
+ * Class \Magento\SalesRule\Observer\CheckSalesRulesAvailability
+ *
+ */
 class CheckSalesRulesAvailability
 {
     /**

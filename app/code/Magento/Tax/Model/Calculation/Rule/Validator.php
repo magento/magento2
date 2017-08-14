@@ -12,6 +12,10 @@ use Magento\Tax\Model\ClassModel as TaxClassModel;
 use Magento\Tax\Model\ClassModelRegistry;
 use Zend_Validate_Exception;
 
+/**
+ * Class \Magento\Tax\Model\Calculation\Rule\Validator
+ *
+ */
 class Validator extends \Magento\Framework\Validator\AbstractValidator
 {
     /**

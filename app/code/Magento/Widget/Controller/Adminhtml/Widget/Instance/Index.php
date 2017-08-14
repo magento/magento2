@@ -6,6 +6,10 @@
  */
 namespace Magento\Widget\Controller\Adminhtml\Widget\Instance;
 
+/**
+ * Class \Magento\Widget\Controller\Adminhtml\Widget\Instance\Index
+ *
+ */
 class Index extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
 {
     /**

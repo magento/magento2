@@ -8,9 +8,9 @@ namespace Magento\Framework\Module\Test\Unit;
 use Magento\Framework\Module\Manager;
 use Magento\Framework\Module\ModuleListInterface;
 use Magento\Framework\Module\Output\ConfigInterface;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use \PHPUnit_Framework_MockObject_MockObject as Mock;
 
-class ManagerTest extends \PHPUnit_Framework_TestCase
+class ManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * XPath in the configuration of a module output flag

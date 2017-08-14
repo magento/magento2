@@ -23,10 +23,10 @@ class Cache
     /**
      * Handler for 'startTest' event
      *
-     * @param \PHPUnit_Framework_TestCase $test
+     * @param \PHPUnit\Framework\TestCase $test
      * @return void
      */
-    public function startTest(\PHPUnit_Framework_TestCase $test)
+    public function startTest(\PHPUnit\Framework\TestCase $test)
     {
         $source = $test->getAnnotations();
         if (isset($source['method']['magentoCache'])) {
@@ -42,10 +42,10 @@ class Cache
     /**
      * Handler for 'endTest' event
      *
-     * @param \PHPUnit_Framework_TestCase $test
+     * @param \PHPUnit\Framework\TestCase $test
      * @return void
      */
-    public function endTest(\PHPUnit_Framework_TestCase $test)
+    public function endTest(\PHPUnit\Framework\TestCase $test)
     {
         if ($this->origValues) {
             $this->setValues($this->origValues, $test);
@@ -57,10 +57,10 @@ class Cache
      * Determines from docblock annotations which cache types to set
      *
      * @param array $annotations
-     * @param \PHPUnit_Framework_TestCase $test
+     * @param \PHPUnit\Framework\TestCase $test
      * @return array
      */
-    private function parseValues($annotations, \PHPUnit_Framework_TestCase $test)
+    private function parseValues($annotations, \PHPUnit\Framework\TestCase $test)
     {
         $result = [];
         $typeList = self::getTypeList();
@@ -86,9 +86,9 @@ class Cache
      * Sets the values of cache types
      *
      * @param array $values
-     * @param \PHPUnit_Framework_TestCase $test
+     * @param \PHPUnit\Framework\TestCase $test
      */
-    private function setValues($values, \PHPUnit_Framework_TestCase $test)
+    private function setValues($values, \PHPUnit\Framework\TestCase $test)
     {
         $typeList = self::getTypeList();
         if (!$this->origValues) {
@@ -121,10 +121,10 @@ class Cache
      * Fails the test with specified error message
      *
      * @param string $message
-     * @param \PHPUnit_Framework_TestCase $test
+     * @param \PHPUnit\Framework\TestCase $test
      * @throws \Exception
      */
-    private static function fail($message, \PHPUnit_Framework_TestCase $test)
+    private static function fail($message, \PHPUnit\Framework\TestCase $test)
     {
         $test->fail("{$message} in the test '{$test->toString()}'");
         throw new \Exception('The above line was supposed to throw an exception.');

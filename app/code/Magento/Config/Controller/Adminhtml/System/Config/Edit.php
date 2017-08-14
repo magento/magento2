@@ -6,6 +6,10 @@
  */
 namespace Magento\Config\Controller\Adminhtml\System\Config;
 
+/**
+ * Class \Magento\Config\Controller\Adminhtml\System\Config\Edit
+ *
+ */
 class Edit extends AbstractScopeConfig
 {
     /**

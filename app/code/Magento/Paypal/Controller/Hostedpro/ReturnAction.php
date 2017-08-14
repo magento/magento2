@@ -6,6 +6,10 @@
  */
 namespace Magento\Paypal\Controller\Hostedpro;
 
+/**
+ * Class \Magento\Paypal\Controller\Hostedpro\ReturnAction
+ *
+ */
 class ReturnAction extends \Magento\Framework\App\Action\Action
 {
     /**

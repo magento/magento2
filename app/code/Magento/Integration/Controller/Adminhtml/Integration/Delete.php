@@ -10,6 +10,10 @@ use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
 use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Integration\Controller\Adminhtml\Integration\Delete
+ *
+ */
 class Delete extends \Magento\Integration\Controller\Adminhtml\Integration
 {
     /**

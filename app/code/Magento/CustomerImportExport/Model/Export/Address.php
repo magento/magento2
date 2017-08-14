@@ -51,11 +51,7 @@ class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
 
     /**#@-*/
 
-    /**
-     * Permanent entity columns
-     *
-     * @var string[]
-     */
+    /**#@-*/
     protected $_permanentAttributes = [self::COLUMN_WEBSITE, self::COLUMN_EMAIL, self::COLUMN_ADDRESS_ID];
 
     /**

@@ -5,7 +5,7 @@
  */
 namespace Magento\Theme\Test\Unit\Block\Adminhtml\Wysiwyg\Files;
 
-class TreeTest extends \PHPUnit_Framework_TestCase
+class TreeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Model\Url|PHPUnit_Framework_MockObject_MockObject
@@ -24,8 +24,8 @@ class TreeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_helperStorage = $this->getMock(\Magento\Theme\Helper\Storage::class, [], [], '', false);
-        $this->_urlBuilder = $this->getMock(\Magento\Backend\Model\Url::class, [], [], '', false);
+        $this->_helperStorage = $this->createMock(\Magento\Theme\Helper\Storage::class);
+        $this->_urlBuilder = $this->createMock(\Magento\Backend\Model\Url::class);
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_filesTree = $objectManagerHelper->getObject(

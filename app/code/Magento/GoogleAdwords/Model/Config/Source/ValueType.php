@@ -7,6 +7,9 @@
  */
 namespace Magento\GoogleAdwords\Model\Config\Source;
 
+/**
+ * @api
+ */
 class ValueType implements \Magento\Framework\Option\ArrayInterface
 {
     /**

@@ -7,6 +7,10 @@ namespace Magento\NewRelicReporting\Model\Apm;
 
 use \Magento\Framework\HTTP\ZendClient;
 
+/**
+ * Class \Magento\NewRelicReporting\Model\Apm\Deployments
+ *
+ */
 class Deployments
 {
     /**

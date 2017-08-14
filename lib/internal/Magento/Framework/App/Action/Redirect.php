@@ -10,6 +10,10 @@ namespace Magento\Framework\App\Action;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 
+/**
+ * Class \Magento\Framework\App\Action\Redirect
+ *
+ */
 class Redirect extends AbstractAction
 {
     /**

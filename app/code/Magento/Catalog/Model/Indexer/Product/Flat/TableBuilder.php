@@ -7,6 +7,10 @@ namespace Magento\Catalog\Model\Indexer\Product\Flat;
 
 use Magento\Catalog\Model\Indexer\Product\Flat\Table\BuilderInterfaceFactory;
 
+/**
+ * Class \Magento\Catalog\Model\Indexer\Product\Flat\TableBuilder
+ *
+ */
 class TableBuilder
 {
     /**
@@ -357,7 +361,7 @@ class TableBuilder
 
     /**
      * @return \Magento\Framework\EntityManager\MetadataPool
-     * @deprecated
+     * @deprecated 101.1.0
      */
     private function getMetadataPool()
     {

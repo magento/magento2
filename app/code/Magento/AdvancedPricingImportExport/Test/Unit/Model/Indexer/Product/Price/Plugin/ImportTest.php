@@ -6,9 +6,9 @@
 
 namespace Magento\AdvancedPricingImportExport\Test\Unit\Model\Indexer\Product\Price\Plugin;
 
-use \Magento\AdvancedPricingImportExport\Model\Indexer\Product\Price\Plugin\Import as Import;
+use Magento\AdvancedPricingImportExport\Model\Indexer\Product\Price\Plugin\Import as Import;
 
-class ImportTest extends \PHPUnit_Framework_TestCase
+class ImportTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Indexer\IndexerInterface |\PHPUnit_Framework_MockObject_MockObject
@@ -33,19 +33,12 @@ class ImportTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->import = $this->getMock(
+        $this->import = $this->createPartialMock(
             \Magento\AdvancedPricingImportExport\Model\Indexer\Product\Price\Plugin\Import::class,
-            ['getPriceIndexer', 'invalidateIndexer'],
-            [],
-            '',
-            false
+            ['getPriceIndexer', 'invalidateIndexer']
         );
-        $this->advancedPricing = $this->getMock(
-            \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::class,
-            [],
-            [],
-            '',
-            false
+        $this->advancedPricing = $this->createMock(
+            \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::class
         );
         $this->import->expects($this->any())->method('getPriceIndexer')->willReturn($this->indexer);
     }

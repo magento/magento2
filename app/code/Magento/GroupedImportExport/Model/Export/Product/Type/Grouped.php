@@ -7,6 +7,10 @@
  */
 namespace Magento\GroupedImportExport\Model\Export\Product\Type;
 
+/**
+ * Class \Magento\GroupedImportExport\Model\Export\Product\Type\Grouped
+ *
+ */
 class Grouped extends \Magento\CatalogImportExport\Model\Export\Product\Type\AbstractType
 {
 }

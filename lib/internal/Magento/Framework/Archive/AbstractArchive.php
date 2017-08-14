@@ -11,6 +11,10 @@
  */
 namespace Magento\Framework\Archive;
 
+/**
+ * Class \Magento\Framework\Archive\AbstractArchive
+ *
+ */
 class AbstractArchive
 {
     /**

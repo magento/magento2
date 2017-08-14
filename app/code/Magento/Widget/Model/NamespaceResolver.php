@@ -5,6 +5,10 @@
  */
 namespace Magento\Widget\Model;
 
+/**
+ * Class \Magento\Widget\Model\NamespaceResolver
+ *
+ */
 class NamespaceResolver
 {
     /**

@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\Mview;
 
+/**
+ * Class \Magento\Framework\Mview\Config
+ *
+ */
 class Config implements ConfigInterface
 {
     /**

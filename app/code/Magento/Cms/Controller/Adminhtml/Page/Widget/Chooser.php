@@ -8,6 +8,10 @@ namespace Magento\Cms\Controller\Adminhtml\Page\Widget;
 
 use Magento\Backend\App\Action;
 
+/**
+ * Class \Magento\Cms\Controller\Adminhtml\Page\Widget\Chooser
+ *
+ */
 class Chooser extends \Magento\Backend\App\Action
 {
     /**

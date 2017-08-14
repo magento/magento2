@@ -8,6 +8,10 @@ namespace Magento\ImportExport\Controller\Adminhtml\History;
 use Magento\ImportExport\Controller\Adminhtml\History as HistoryController;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\ImportExport\Controller\Adminhtml\History\Index
+ *
+ */
 class Index extends HistoryController
 {
     /**

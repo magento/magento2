@@ -6,6 +6,10 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\Cache;
 
+/**
+ * Class \Magento\Backend\Controller\Adminhtml\Cache\Index
+ *
+ */
 class Index extends \Magento\Backend\Controller\Adminhtml\Cache
 {
     /**

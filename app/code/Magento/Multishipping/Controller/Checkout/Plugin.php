@@ -6,6 +6,10 @@
  */
 namespace Magento\Multishipping\Controller\Checkout;
 
+/**
+ * Class \Magento\Multishipping\Controller\Checkout\Plugin
+ *
+ */
 class Plugin
 {
     /**

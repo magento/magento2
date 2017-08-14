@@ -269,6 +269,7 @@ class Config
      * @param string $state
      * @param string $status
      * @return \Magento\Framework\Phrase|string
+     * @since 100.2.0
      */
     public function getStateLabelByStateAndStatus($state, $status)
     {

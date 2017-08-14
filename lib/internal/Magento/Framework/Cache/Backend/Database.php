@@ -32,6 +32,10 @@
  */
 namespace Magento\Framework\Cache\Backend;
 
+/**
+ * Class \Magento\Framework\Cache\Backend\Database
+ *
+ */
 class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_ExtendedInterface
 {
     /**

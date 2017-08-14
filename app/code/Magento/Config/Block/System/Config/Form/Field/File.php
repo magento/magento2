@@ -11,6 +11,10 @@
  */
 namespace Magento\Config\Block\System\Config\Form\Field;
 
+/**
+ * Class \Magento\Config\Block\System\Config\Form\Field\File
+ *
+ */
 class File extends \Magento\Framework\Data\Form\Element\File
 {
     /**

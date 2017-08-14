@@ -11,6 +11,9 @@
  */
 namespace Magento\Backend\Helper;
 
+/**
+ * @api
+ */
 class Js
 {
     /**

@@ -11,9 +11,15 @@ use Magento\Customer\Model\Session;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\App\Action\Context;
 
+/**
+ * Class \Magento\Customer\Controller\Account\CreatePassword
+ *
+ */
 class CreatePassword extends \Magento\Customer\Controller\AbstractAccount
 {
-    /** @var AccountManagementInterface */
+    /**
+     * @var \Magento\Customer\Api\AccountManagementInterface
+     */
     protected $accountManagement;
 
     /**

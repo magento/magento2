@@ -7,6 +7,10 @@ namespace Magento\Weee\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class \Magento\Weee\Observer\UpdateProductOptionsObserver
+ *
+ */
 class UpdateProductOptionsObserver implements ObserverInterface
 {
     /**
@@ -16,7 +20,9 @@ class UpdateProductOptionsObserver implements ObserverInterface
      */
     protected $weeeData = null;
 
-    /** @var \Magento\Framework\Registry */
+    /**
+     * @var \Magento\Framework\Registry
+     */
     protected $registry;
 
     /**

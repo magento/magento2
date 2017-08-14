@@ -6,6 +6,10 @@
  */
 namespace Magento\Checkout\Controller\Onepage;
 
+/**
+ * Class \Magento\Checkout\Controller\Onepage\Success
+ *
+ */
 class Success extends \Magento\Checkout\Controller\Onepage
 {
     /**

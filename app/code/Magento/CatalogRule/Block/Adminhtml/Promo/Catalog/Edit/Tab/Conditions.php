@@ -8,7 +8,12 @@ namespace Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Tab;
 use Magento\Backend\Block\Widget\Form;
 use Magento\Backend\Block\Widget\Form\Generic;
 use Magento\Ui\Component\Layout\Tabs\TabInterface;
+use Magento\Rule\Model\Condition\AbstractCondition;
 
+/**
+ * Class \Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Tab\Conditions
+ *
+ */
 class Conditions extends Generic implements TabInterface
 {
     /**
@@ -146,14 +151,16 @@ class Conditions extends Generic implements TabInterface
         $form = $this->_formFactory->create();
         $form->setHtmlIdPrefix('rule_');
 
+        $conditionsFieldSetId = $model->getConditionsFieldSetId($formName);
+
         $newChildUrl = $this->getUrl(
-            'catalog_rule/promo_catalog/newConditionHtml/form/' . $model->getConditionsFieldSetId($formName),
+            'catalog_rule/promo_catalog/newConditionHtml/form/' . $conditionsFieldSetId,
             ['form_namespace' => $formName]
         );
 
         $renderer = $this->_rendererFieldset->setTemplate('Magento_CatalogRule::promo/fieldset.phtml')
             ->setNewChildUrl($newChildUrl)
-            ->setFieldSetId($model->getConditionsFieldSetId($formName));
+            ->setFieldSetId($conditionsFieldSetId);
 
         $fieldset = $form->addFieldset(
             $fieldsetId,
@@ -175,22 +182,24 @@ class Conditions extends Generic implements TabInterface
             ->setRenderer($this->_conditions);
 
         $form->setValues($model->getData());
-        $this->setConditionFormName($model->getConditions(), $formName);
+        $this->setConditionFormName($model->getConditions(), $formName, $conditionsFieldSetId);
         return $form;
     }
 
     /**
-     * @param \Magento\Rule\Model\Condition\AbstractCondition $conditions
+     * @param AbstractCondition $conditions
      * @param string $formName
+     * @param string $jsFormName
      * @return void
      */
-    private function setConditionFormName(\Magento\Rule\Model\Condition\AbstractCondition $conditions, $formName)
+    private function setConditionFormName(AbstractCondition $conditions, $formName, $jsFormName)
     {
         $conditions->setFormName($formName);
-        $conditions->setJsFormObject($formName);
+        $conditions->setJsFormObject($jsFormName);
+
         if ($conditions->getConditions() && is_array($conditions->getConditions())) {
             foreach ($conditions->getConditions() as $condition) {
-                $this->setConditionFormName($condition, $formName);
+                $this->setConditionFormName($condition, $formName, $jsFormName);
             }
         }
     }
