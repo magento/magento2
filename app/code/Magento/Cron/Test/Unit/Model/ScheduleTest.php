@@ -184,7 +184,7 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
         $cronExprArr = ['*', '*', '*', '*', '*'];
 
         // 1. Create mocks
-        $timezoneConverter = $this->getMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
+        $timezoneConverter = $this->createMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
         $timezoneConverter->expects($this->once())
             ->method('date')
             ->with($scheduledAt)
