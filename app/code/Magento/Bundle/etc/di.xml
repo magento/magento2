@@ -160,6 +160,9 @@
             <argument name="estimators" xsi:type="array">
                 <item name="bundle" xsi:type="object">Magento\Catalog\Model\Indexer\Price\CompositeProductBatchSizeManagement</item>
             </argument>
+            <argument name="batchSizeAdjusters" xsi:type="array">
+                <item name="bundle" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\CompositeProductBatchSizeAdjuster</item>
+            </argument>
         </arguments>
     </type>
     <type name="Magento\Bundle\Model\ResourceModel\Indexer\Price">
