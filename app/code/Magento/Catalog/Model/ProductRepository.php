@@ -641,7 +641,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         }
         unset($this->instances[$product->getSku()]);
         unset($this->instancesById[$product->getId()]);
-        return $this->get($product->getSku());
+        return $this->get($product->getSku(), false, $product->getStoreId());
     }
 
     /**
