@@ -9,6 +9,10 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Module\Setup\ResourceConfig;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
+/**
+ * Class \Magento\Setup\Module\ResourceFactory
+ *
+ */
 class ResourceFactory
 {
     /**

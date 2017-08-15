@@ -8,6 +8,10 @@ namespace Magento\Framework\Search\Adapter\Mysql\Filter;
 use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
 use Magento\Framework\Search\Request\FilterInterface;
 
+/**
+ * Class \Magento\Framework\Search\Adapter\Mysql\Filter\Preprocessor
+ *
+ */
 class Preprocessor implements PreprocessorInterface
 {
     /**

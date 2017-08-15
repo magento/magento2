@@ -10,6 +10,10 @@ use Magento\Paypal\Controller\Payflow;
 use Magento\Paypal\Model\Config;
 use Magento\Sales\Model\Order;
 
+/**
+ * Class \Magento\Paypal\Controller\Payflow\ReturnUrl
+ *
+ */
 class ReturnUrl extends Payflow
 {
     /**

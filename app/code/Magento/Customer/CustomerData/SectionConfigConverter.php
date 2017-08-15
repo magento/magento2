@@ -5,6 +5,10 @@
  */
 namespace Magento\Customer\CustomerData;
 
+/**
+ * Class \Magento\Customer\CustomerData\SectionConfigConverter
+ *
+ */
 class SectionConfigConverter implements \Magento\Framework\Config\ConverterInterface
 {
     /**

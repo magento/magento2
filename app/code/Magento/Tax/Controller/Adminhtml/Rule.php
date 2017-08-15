@@ -14,6 +14,10 @@ namespace Magento\Tax\Controller\Adminhtml;
 use Magento\Backend\App\Action;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Tax\Controller\Adminhtml\Rule
+ *
+ */
 abstract class Rule extends \Magento\Backend\App\Action
 {
     /**
@@ -30,10 +34,14 @@ abstract class Rule extends \Magento\Backend\App\Action
      */
     protected $_coreRegistry = null;
 
-    /** @var \Magento\Tax\Api\TaxRuleRepositoryInterface */
+    /**
+     * @var \Magento\Tax\Api\TaxRuleRepositoryInterface
+     */
     protected $ruleService;
 
-    /** @var \Magento\Tax\Api\Data\TaxRuleInterfaceFactory */
+    /**
+     * @var \Magento\Tax\Api\Data\TaxRuleInterfaceFactory
+     */
     protected $taxRuleDataObjectFactory;
 
     /**

@@ -9,6 +9,10 @@ use Cm\RedisSession\Handler\ConfigInterface;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\App\Request\Http as Request;
 
+/**
+ * Class \Magento\Framework\Session\SaveHandler\Redis\Logger
+ *
+ */
 class Logger implements \Cm\RedisSession\Handler\LoggerInterface
 {
     /**

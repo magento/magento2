@@ -6,6 +6,10 @@
 
 namespace Magento\Framework\Session\Config\Validator;
 
+/**
+ * Class \Magento\Framework\Session\Config\Validator\CookieDomainValidator
+ *
+ */
 class CookieDomainValidator extends \Magento\Framework\Validator\AbstractValidator
 {
     /**

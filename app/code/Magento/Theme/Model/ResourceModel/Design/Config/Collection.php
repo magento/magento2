@@ -14,6 +14,10 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Theme\Model\Design\Config\ValueProcessor;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Class \Magento\Theme\Model\ResourceModel\Design\Config\Collection
+ *
+ */
 class Collection extends ConfigCollection
 {
     /**

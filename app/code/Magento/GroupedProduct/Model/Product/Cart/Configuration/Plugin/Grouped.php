@@ -7,6 +7,10 @@
  */
 namespace Magento\GroupedProduct\Model\Product\Cart\Configuration\Plugin;
 
+/**
+ * Class \Magento\GroupedProduct\Model\Product\Cart\Configuration\Plugin\Grouped
+ *
+ */
 class Grouped
 {
     /**

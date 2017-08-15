@@ -28,10 +28,14 @@ class ConfigOptionsList implements ConfigOptionsListInterface
      */
     private $configGenerator;
 
-    /** @var  DbValidator */
+    /**
+     * @var \Magento\Setup\Validator\DbValidator
+     */
     private $dbValidator;
 
-    /** @var  array */
+    /**
+     * @var array
+     */
     private $validSaveHandlers = [
         ConfigOptionsListConstants::SESSION_SAVE_FILES,
         ConfigOptionsListConstants::SESSION_SAVE_DB,

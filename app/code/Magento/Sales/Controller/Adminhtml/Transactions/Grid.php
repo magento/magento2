@@ -9,6 +9,10 @@ namespace Magento\Sales\Controller\Adminhtml\Transactions;
 use Magento\Backend\App\Action;
 use Magento\Framework\View\Result\Layout;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Transactions\Grid
+ *
+ */
 class Grid extends \Magento\Sales\Controller\Adminhtml\Transactions
 {
     /**

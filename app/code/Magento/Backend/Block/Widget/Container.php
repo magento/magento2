@@ -24,11 +24,7 @@ class Container extends \Magento\Backend\Block\Template implements ContainerInte
 
     /**#@-*/
 
-    /**
-     * So called "container controller" to specify group of blocks participating in some action
-     *
-     * @var string
-     */
+    /**#@-*/
     protected $_controller = 'empty';
 
     /**

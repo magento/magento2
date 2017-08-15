@@ -10,6 +10,10 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 
+/**
+ * Class \Magento\Eav\Model\Entity\Attribute\OptionManagement
+ *
+ */
 class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInterface
 {
     /**

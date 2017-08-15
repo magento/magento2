@@ -12,6 +12,10 @@ namespace Magento\Theme\Model;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\View\Design\ThemeInterface;
 
+/**
+ * Class \Magento\Theme\Model\CopyService
+ *
+ */
 class CopyService
 {
     /**

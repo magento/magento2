@@ -7,7 +7,7 @@ namespace Magento\Quote\Test\Unit\Model\Quote\Validator\MinimumOrderAmount;
 
 use Magento\Framework\Phrase;
 
-class ValidationMessageTest extends \PHPUnit_Framework_TestCase
+class ValidationMessageTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage
@@ -31,9 +31,9 @@ class ValidationMessageTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->scopeConfigMock = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $this->storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->currencyMock = $this->getMock(\Magento\Framework\Locale\CurrencyInterface::class);
+        $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->currencyMock = $this->createMock(\Magento\Framework\Locale\CurrencyInterface::class);
 
         $this->model = new \Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage(
             $this->scopeConfigMock,
@@ -58,11 +58,11 @@ class ValidationMessageTest extends \PHPUnit_Framework_TestCase
             ->with('sales/minimum_order/amount', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
             ->willReturn($minimumAmount);
 
-        $storeMock = $this->getMock(\Magento\Store\Model\Store::class, ['getCurrentCurrencyCode'], [], '', false);
+        $storeMock = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getCurrentCurrencyCode']);
         $storeMock->expects($this->once())->method('getCurrentCurrencyCode')->willReturn($currencyCode);
         $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($storeMock);
 
-        $currencyMock = $this->getMock(\Magento\Framework\Currency::class, [], [], '', false);
+        $currencyMock = $this->createMock(\Magento\Framework\Currency::class);
         $this->currencyMock->expects($this->once())
             ->method('getCurrency')
             ->with($currencyCode)

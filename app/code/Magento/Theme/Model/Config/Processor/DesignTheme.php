@@ -75,7 +75,12 @@ class DesignTheme implements PreProcessorInterface
         if ($this->arrayManager->exists(DesignInterface::XML_PATH_THEME_ID, $configItems)) {
             $themeIdentifier = $this->arrayManager->get(DesignInterface::XML_PATH_THEME_ID, $configItems);
             if (!is_numeric($themeIdentifier)) {
-                $theme = $this->themeList->getThemeByFullPath($themeIdentifier);
+                // workaround for case when db is not available
+                try {
+                    $theme = $this->themeList->getThemeByFullPath($themeIdentifier);
+                } catch (\DomainException $domainException) {
+                    $theme = null;
+                }
             }
 
             if ($theme && $theme->getId()) {

@@ -7,6 +7,10 @@ namespace Magento\Framework\Search\Adapter\Mysql\Filter;
 
 use Magento\Framework\Search\Request\FilterInterface as RequestFilterInterface;
 
+/**
+ * Interface \Magento\Framework\Search\Adapter\Mysql\Filter\BuilderInterface
+ *
+ */
 interface BuilderInterface
 {
     /**

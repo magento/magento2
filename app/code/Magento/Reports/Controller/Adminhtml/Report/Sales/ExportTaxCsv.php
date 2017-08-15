@@ -9,6 +9,10 @@ namespace Magento\Reports\Controller\Adminhtml\Report\Sales;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * Class \Magento\Reports\Controller\Adminhtml\Report\Sales\ExportTaxCsv
+ *
+ */
 class ExportTaxCsv extends \Magento\Reports\Controller\Adminhtml\Report\Sales
 {
     /**

@@ -22,14 +22,9 @@ class Cart
     const AMOUNT_DISCOUNT = 'discount';
 
     const AMOUNT_SUBTOTAL = 'subtotal';
+    /**#@-*/
 
-    /**@@+*/
-
-    /**
-     * Sales model
-     *
-     * @var \Magento\Payment\Model\Cart\SalesModel\SalesModelInterface
-     */
+    /**#@-*/
     protected $_salesModel;
 
     /**

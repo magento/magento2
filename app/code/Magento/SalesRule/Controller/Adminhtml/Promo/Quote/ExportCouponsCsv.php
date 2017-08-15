@@ -8,6 +8,10 @@ namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * Class \Magento\SalesRule\Controller\Adminhtml\Promo\Quote\ExportCouponsCsv
+ *
+ */
 class ExportCouponsCsv extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
 {
     /**

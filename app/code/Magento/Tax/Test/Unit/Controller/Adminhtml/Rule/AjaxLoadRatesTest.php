@@ -20,7 +20,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 /**
  * Test for AjaxLoadTest
  */
-class AjaxLoadRatesTest extends \PHPUnit_Framework_TestCase
+class AjaxLoadRatesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Request | MockObject

@@ -11,6 +11,10 @@ use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\CatalogInventory\Model\Stock\Item as StockItem;
 
+/**
+ * Class \Magento\CatalogInventory\Setup\UpgradeSchema
+ *
+ */
 class UpgradeSchema implements UpgradeSchemaInterface
 {
     /**

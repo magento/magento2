@@ -6,6 +6,10 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Account;
 
+/**
+ * Class \Magento\Backend\Controller\Adminhtml\System\Account\Index
+ *
+ */
 class Index extends \Magento\Backend\Controller\Adminhtml\System\Account
 {
     /**

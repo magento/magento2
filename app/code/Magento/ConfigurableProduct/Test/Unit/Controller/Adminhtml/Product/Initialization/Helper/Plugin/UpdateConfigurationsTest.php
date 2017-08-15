@@ -18,7 +18,7 @@ use Magento\Catalog\Model\Product;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @package Magento\ConfigurableProduct\Test\Unit\Controller\Adminhtml\Product\Initialization\Helper\Plugin
  */
-class UpdateConfigurationsTest extends \PHPUnit_Framework_TestCase
+class UpdateConfigurationsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var UpdateConfigurations

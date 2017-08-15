@@ -1,13 +1,13 @@
 <?php
 /**
- * Google Experiment Code resource model
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GoogleOptimizer\Model\ResourceModel;
 
 /**
+ * Google Experiment Code resource model
+ *
  * @api
  */
 class Code extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb

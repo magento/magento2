@@ -11,6 +11,10 @@ use Magento\Config\Model\Config\Source;
 use Magento\Framework\Module\Manager;
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class \Magento\LayeredNavigation\Observer\Edit\Tab\Front\ProductAttributeFormBuildFrontTabObserver
+ *
+ */
 class ProductAttributeFormBuildFrontTabObserver implements ObserverInterface
 {
     /**

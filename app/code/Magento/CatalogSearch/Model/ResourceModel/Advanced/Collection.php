@@ -185,7 +185,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
                 $searchResult = $this->searchResultFactory->create()->setItems([]);
             } catch (NonExistingRequestNameException $e) {
                 $this->_logger->error($e->getMessage());
-                throw new LocalizedException(__('Sorry, something went wrong. You can find out more in the error log.'));
+                throw new LocalizedException(
+                    __('Sorry, something went wrong. You can find out more in the error log.')
+                );
             }
             $temporaryStorage = $this->temporaryStorageFactory->create();
             $table = $temporaryStorage->storeApiDocuments($searchResult->getItems());

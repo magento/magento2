@@ -5,6 +5,10 @@
  */
 namespace Magento\Tax\Model\Sales\Pdf;
 
+/**
+ * Class \Magento\Tax\Model\Sales\Pdf\Grandtotal
+ *
+ */
 class Grandtotal extends \Magento\Sales\Model\Order\Pdf\Total\DefaultTotal
 {
     /**

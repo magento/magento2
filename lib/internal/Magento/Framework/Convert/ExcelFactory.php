@@ -7,6 +7,10 @@ namespace Magento\Framework\Convert;
 
 use Magento\Framework\ObjectManagerInterface;
 
+/**
+ * Class \Magento\Framework\Convert\ExcelFactory
+ *
+ */
 class ExcelFactory
 {
     /**

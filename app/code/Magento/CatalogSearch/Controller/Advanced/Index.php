@@ -8,6 +8,10 @@ namespace Magento\CatalogSearch\Controller\Advanced;
 
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\CatalogSearch\Controller\Advanced\Index
+ *
+ */
 class Index extends \Magento\Framework\App\Action\Action
 {
     /**

@@ -11,7 +11,7 @@
  */
 namespace Magento\Test\Js\Exemplar;
 
-class JsHintTest extends \PHPUnit_Framework_TestCase
+class JsHintTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\TestFramework\Inspection\JsHint\Command

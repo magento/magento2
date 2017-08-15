@@ -10,6 +10,10 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderInterface;
 use Magento\Framework\Search\Request\BucketInterface as RequestBucketInterface;
 
+/**
+ * Class \Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder\Term
+ *
+ */
 class Term implements BucketInterface
 {
     /**

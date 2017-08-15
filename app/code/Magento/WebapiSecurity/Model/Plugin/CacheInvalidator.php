@@ -5,6 +5,10 @@
  */
 namespace Magento\WebapiSecurity\Model\Plugin;
 
+/**
+ * Class \Magento\WebapiSecurity\Model\Plugin\CacheInvalidator
+ *
+ */
 class CacheInvalidator
 {
     /**

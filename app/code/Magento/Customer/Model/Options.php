@@ -8,6 +8,10 @@ namespace Magento\Customer\Model;
 use Magento\Customer\Helper\Address as AddressHelper;
 use Magento\Framework\Escaper;
 
+/**
+ * Class \Magento\Customer\Model\Options
+ *
+ */
 class Options
 {
     /**

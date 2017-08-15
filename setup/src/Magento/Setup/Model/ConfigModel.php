@@ -12,6 +12,10 @@ use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\Setup\Option\AbstractConfigOption;
 use Magento\Framework\Setup\FilePermissions;
 
+/**
+ * Class \Magento\Setup\Model\ConfigModel
+ *
+ */
 class ConfigModel
 {
     /**

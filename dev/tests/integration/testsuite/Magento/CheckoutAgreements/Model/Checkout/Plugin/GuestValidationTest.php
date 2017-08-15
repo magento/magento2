@@ -8,7 +8,7 @@ namespace Magento\CheckoutAgreements\Model\Checkout\Plugin;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class GuestValidationTest extends \PHPUnit_Framework_TestCase
+class GuestValidationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Checkout\Model\Session
@@ -146,7 +146,6 @@ class GuestValidationTest extends \PHPUnit_Framework_TestCase
                 $e->getMessage()
             );
         }
-
     }
 
     public function dataProvider()

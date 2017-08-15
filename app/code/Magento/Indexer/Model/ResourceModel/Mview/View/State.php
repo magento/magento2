@@ -5,6 +5,10 @@
  */
 namespace Magento\Indexer\Model\ResourceModel\Mview\View;
 
+/**
+ * Class \Magento\Indexer\Model\ResourceModel\Mview\View\State
+ *
+ */
 class State extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
