@@ -204,7 +204,7 @@ class GaTest extends PHPUnit_Framework_TestCase
                 ->getMock();
             $orderItemMock->expects($this->once())->method('getSku')->willReturn('sku' . $i);
             $orderItemMock->expects($this->once())->method('getName')->willReturn('testName' . $i);
-            $orderItemMock->expects($this->once())->method('getBasePrice')->willReturn($i . '.00');
+            $orderItemMock->expects($this->once())->method('getPrice')->willReturn($i . '.00');
             $orderItemMock->expects($this->once())->method('getQtyOrdered')->willReturn($i + 1);
             $orderItems[] = $orderItemMock;
         }
@@ -212,10 +212,10 @@ class GaTest extends PHPUnit_Framework_TestCase
         $orderMock = $this->getMockBuilder(Order::class)->disableOriginalConstructor()->getMock();
         $orderMock->expects($this->once())->method('getIncrementId')->willReturn(100);
         $orderMock->expects($this->once())->method('getAllVisibleItems')->willReturn($orderItems);
-        $orderMock->expects($this->once())->method('getBaseGrandTotal')->willReturn(10);
-        $orderMock->expects($this->once())->method('getBaseTaxAmount')->willReturn(2);
-        $orderMock->expects($this->once())->method('getBaseShippingAmount')->willReturn($orderItemCount);
-        $orderMock->expects($this->once())->method('getBaseCurrencyCode')->willReturn('USD');
+        $orderMock->expects($this->once())->method('getGrandTotal')->willReturn(10);
+        $orderMock->expects($this->once())->method('getTaxAmount')->willReturn(2);
+        $orderMock->expects($this->once())->method('getShippingAmount')->willReturn($orderItemCount);
+        $orderMock->expects($this->once())->method('getOrderCurrencyCode')->willReturn('USD');
         return $orderMock;
     }
 
