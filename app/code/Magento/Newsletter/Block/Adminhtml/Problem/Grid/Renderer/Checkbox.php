@@ -11,6 +11,10 @@
  */
 namespace Magento\Newsletter\Block\Adminhtml\Problem\Grid\Renderer;
 
+/**
+ * Class \Magento\Newsletter\Block\Adminhtml\Problem\Grid\Renderer\Checkbox
+ *
+ */
 class Checkbox extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**

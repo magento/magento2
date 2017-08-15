@@ -29,28 +29,44 @@ class Handler
 {
     const RESULT_NODE_NAME = 'result';
 
-    /** @var SoapRequest */
+    /**
+     * @var \Magento\Framework\Webapi\Request
+     */
     protected $_request;
 
-    /** @var \Magento\Framework\ObjectManagerInterface */
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
     protected $_objectManager;
 
-    /** @var SoapConfig */
+    /**
+     * @var \Magento\Webapi\Model\Soap\Config
+     */
     protected $_apiConfig;
 
-    /** @var Authorization */
+    /**
+     * @var \Magento\Framework\Webapi\Authorization
+     */
     protected $authorization;
 
-    /** @var SimpleDataObjectConverter */
+    /**
+     * @var \Magento\Framework\Api\SimpleDataObjectConverter
+     */
     protected $_dataObjectConverter;
 
-    /** @var ServiceInputProcessor */
+    /**
+     * @var \Magento\Framework\Webapi\ServiceInputProcessor
+     */
     protected $serviceInputProcessor;
 
-    /** @var DataObjectProcessor */
+    /**
+     * @var \Magento\Framework\Reflection\DataObjectProcessor
+     */
     protected $_dataObjectProcessor;
 
-    /** @var MethodsMap */
+    /**
+     * @var \Magento\Framework\Reflection\MethodsMap
+     */
     protected $methodsMapProcessor;
 
     /**

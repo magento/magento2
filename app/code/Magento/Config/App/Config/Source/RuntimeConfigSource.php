@@ -14,6 +14,9 @@ use Magento\Framework\App\Config\Scope\Converter;
 
 /**
  * Class for retrieving runtime configuration from database.
+ *
+ * @api
+ * @since 100.1.2
  */
 class RuntimeConfigSource implements ConfigSourceInterface
 {
@@ -36,6 +39,7 @@ class RuntimeConfigSource implements ConfigSourceInterface
      * @param CollectionFactory $collectionFactory
      * @param ScopeCodeResolver $scopeCodeResolver
      * @param Converter $converter
+     * @since 100.1.2
      */
     public function __construct(
         CollectionFactory $collectionFactory,
@@ -52,6 +56,7 @@ class RuntimeConfigSource implements ConfigSourceInterface
      *
      * @param string $path Format is scope type and scope code separated by slash: e.g. "type/code"
      * @return array
+     * @since 100.1.2
      */
     public function get($path = '')
     {

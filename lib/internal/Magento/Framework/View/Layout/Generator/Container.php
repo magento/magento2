@@ -7,6 +7,10 @@ namespace Magento\Framework\View\Layout\Generator;
 
 use Magento\Framework\View\Layout;
 
+/**
+ * Class \Magento\Framework\View\Layout\Generator\Container
+ *
+ */
 class Container implements Layout\GeneratorInterface
 {
     /**#@+

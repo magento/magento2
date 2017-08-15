@@ -13,6 +13,10 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
 
+/**
+ * Class \Magento\GroupedProduct\Ui\DataProvider\Product\GroupedProductDataProvider
+ *
+ */
 class GroupedProductDataProvider extends ProductDataProvider
 {
     /**

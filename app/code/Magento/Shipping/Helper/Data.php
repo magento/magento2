@@ -11,6 +11,10 @@
  */
 namespace Magento\Shipping\Helper;
 
+/**
+ * Class \Magento\Shipping\Helper\Data
+ *
+ */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**

@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Model\Test\Unit;
 
 use Magento\Framework\Api\AttributeValue;
@@ -14,7 +12,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AbstractExtensibleModelTest extends \PHPUnit_Framework_TestCase
+class AbstractExtensibleModelTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Model\AbstractExtensibleModel
@@ -59,24 +57,16 @@ class AbstractExtensibleModelTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->actionValidatorMock = $this->getMock(
-            \Magento\Framework\Model\ActionValidator\RemoveAction::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->actionValidatorMock = $this->createMock(\Magento\Framework\Model\ActionValidator\RemoveAction::class);
         $this->contextMock = new \Magento\Framework\Model\Context(
-            $this->getMock(\Psr\Log\LoggerInterface::class),
-            $this->getMock(\Magento\Framework\Event\ManagerInterface::class, [], [], '', false),
-            $this->getMock(\Magento\Framework\App\CacheInterface::class, [], [], '', false),
-            $this->getMock(\Magento\Framework\App\State::class, [], [], '', false),
+            $this->createMock(\Psr\Log\LoggerInterface::class),
+            $this->createMock(\Magento\Framework\Event\ManagerInterface::class),
+            $this->createMock(\Magento\Framework\App\CacheInterface::class),
+            $this->createMock(\Magento\Framework\App\State::class),
             $this->actionValidatorMock
         );
-        $this->registryMock = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
-        $this->resourceMock = $this->getMock(
-            \Magento\Framework\Model\ResourceModel\Db\AbstractDb::class,
-            [
+        $this->registryMock = $this->createMock(\Magento\Framework\Registry::class);
+        $this->resourceMock = $this->createPartialMock(\Magento\Framework\Model\ResourceModel\Db\AbstractDb::class, [
                 '_construct',
                 'getConnection',
                 '__wakeup',
@@ -84,11 +74,7 @@ class AbstractExtensibleModelTest extends \PHPUnit_Framework_TestCase
                 'delete',
                 'getIdFieldName',
                 'rollBack'
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
         $this->resourceCollectionMock = $this->getMockBuilder(\Magento\Framework\Data\Collection\AbstractDb::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();

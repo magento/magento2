@@ -6,6 +6,10 @@
  */
 namespace Magento\Cms\Controller\Adminhtml\Block;
 
+/**
+ * Class \Magento\Cms\Controller\Adminhtml\Block\Index
+ *
+ */
 class Index extends \Magento\Cms\Controller\Adminhtml\Block
 {
     /**

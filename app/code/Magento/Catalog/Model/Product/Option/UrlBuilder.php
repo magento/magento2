@@ -5,6 +5,10 @@
  */
 namespace Magento\Catalog\Model\Product\Option;
 
+/**
+ * Class \Magento\Catalog\Model\Product\Option\UrlBuilder
+ *
+ */
 class UrlBuilder
 {
     /**

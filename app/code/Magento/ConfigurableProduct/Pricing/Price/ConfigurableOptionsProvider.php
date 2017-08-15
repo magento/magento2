@@ -13,9 +13,15 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\App\RequestSafetyInterface;
 
+/**
+ * Class \Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsProvider
+ *
+ */
 class ConfigurableOptionsProvider implements ConfigurableOptionsProviderInterface
 {
-    /** @var Configurable */
+    /**
+     * @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable
+     */
     private $configurable;
 
     /**

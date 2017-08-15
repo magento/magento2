@@ -17,7 +17,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
  *
  * @see \Magento\Framework\View\Asset\LockerProcess
  */
-class LockerProcessTest extends \PHPUnit_Framework_TestCase
+class LockerProcessTest extends \PHPUnit\Framework\TestCase
 {
     const LOCK_NAME = 'test-lock';
 

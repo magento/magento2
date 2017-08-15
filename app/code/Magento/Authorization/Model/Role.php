@@ -9,8 +9,6 @@ namespace Magento\Authorization\Model;
  * Admin Role Model
  *
  * @api
- * @method \Magento\Authorization\Model\ResourceModel\Role _getResource()
- * @method \Magento\Authorization\Model\ResourceModel\Role getResource()
  * @method int getParentId()
  * @method \Magento\Authorization\Model\Role setParentId(int $value)
  * @method int getTreeLevel()

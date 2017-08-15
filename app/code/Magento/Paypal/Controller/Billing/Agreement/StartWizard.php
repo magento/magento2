@@ -6,6 +6,10 @@
  */
 namespace Magento\Paypal\Controller\Billing\Agreement;
 
+/**
+ * Class \Magento\Paypal\Controller\Billing\Agreement\StartWizard
+ *
+ */
 class StartWizard extends \Magento\Paypal\Controller\Billing\Agreement
 {
     /**

@@ -8,6 +8,10 @@ namespace Magento\Customer\Model;
 use Magento\Customer\Api\CustomerManagementInterface;
 use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
 
+/**
+ * Class \Magento\Customer\Model\CustomerManagement
+ *
+ */
 class CustomerManagement implements CustomerManagementInterface
 {
     /**

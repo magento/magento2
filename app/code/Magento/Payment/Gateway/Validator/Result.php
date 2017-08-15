@@ -7,6 +7,10 @@ namespace Magento\Payment\Gateway\Validator;
 
 use Magento\Framework\Phrase;
 
+/**
+ * Class \Magento\Payment\Gateway\Validator\Result
+ *
+ */
 class Result implements ResultInterface
 {
     /**

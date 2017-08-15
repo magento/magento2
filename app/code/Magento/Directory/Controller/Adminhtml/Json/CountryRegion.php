@@ -6,6 +6,10 @@
  */
 namespace Magento\Directory\Controller\Adminhtml\Json;
 
+/**
+ * Class \Magento\Directory\Controller\Adminhtml\Json\CountryRegion
+ *
+ */
 class CountryRegion extends \Magento\Backend\App\Action
 {
     /**

@@ -7,6 +7,10 @@ namespace Magento\CheckoutAgreements\Model;
 
 use Magento\CheckoutAgreements\Api\Data\AgreementInterface;
 
+/**
+ * Class \Magento\CheckoutAgreements\Model\Agreement
+ *
+ */
 class Agreement extends \Magento\Framework\Model\AbstractExtensibleModel implements AgreementInterface
 {
     /**

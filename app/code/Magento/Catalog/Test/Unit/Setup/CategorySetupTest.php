@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Setup;
 
-class CategorySetupTest extends \PHPUnit_Framework_TestCase
+class CategorySetupTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Catalog\Setup\CategorySetup */
     protected $unit;

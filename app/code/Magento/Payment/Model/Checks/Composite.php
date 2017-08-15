@@ -16,7 +16,9 @@ use Magento\Quote\Model\Quote;
  */
 class Composite implements SpecificationInterface
 {
-    /** @var SpecificationInterface[]  */
+    /**
+     * @var \Magento\Payment\Model\Checks\SpecificationInterface[]
+     */
     protected $list = [];
 
     /**

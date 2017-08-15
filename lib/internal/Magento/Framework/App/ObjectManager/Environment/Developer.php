@@ -11,14 +11,20 @@ use Magento\Framework\Interception\ObjectManager\ConfigInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Area;
 
+/**
+ * Class \Magento\Framework\App\ObjectManager\Environment\Developer
+ *
+ */
 class Developer extends AbstractEnvironment implements EnvironmentInterface
 {
     /**#@+
      * Mode name
      */
     const MODE = 'developer';
-    protected $mode = self::MODE;
     /**#@- */
+
+    /**#@- */
+    protected $mode = self::MODE;
 
     /**
      * @var ConfigInterface

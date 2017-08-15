@@ -13,6 +13,10 @@
  */
 namespace Magento\Catalog\Model\Layer\Filter;
 
+/**
+ * Class \Magento\Catalog\Model\Layer\Filter\Item
+ *
+ */
 class Item extends \Magento\Framework\DataObject
 {
     /**

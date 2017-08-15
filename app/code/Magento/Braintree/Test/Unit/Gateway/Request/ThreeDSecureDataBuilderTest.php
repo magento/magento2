@@ -15,7 +15,7 @@ use Magento\Braintree\Gateway\Helper\SubjectReader;
 /**
  * Class ThreeDSecureDataBuilderTest
  */
-class ThreeDSecureDataBuilderTest extends \PHPUnit_Framework_TestCase
+class ThreeDSecureDataBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ThreeDSecureDataBuilder

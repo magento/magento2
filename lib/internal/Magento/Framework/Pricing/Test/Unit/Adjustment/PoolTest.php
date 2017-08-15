@@ -7,7 +7,7 @@ namespace Magento\Framework\Pricing\Test\Unit\Adjustment;
 
 use \Magento\Framework\Pricing\Adjustment\Pool;
 
-class PoolTest extends \PHPUnit_Framework_TestCase
+class PoolTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Pricing\Adjustment\Pool

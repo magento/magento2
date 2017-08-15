@@ -5,6 +5,10 @@
  */
 namespace Magento\Indexer\Block\Backend\Grid\Column\Renderer;
 
+/**
+ * Class \Magento\Indexer\Block\Backend\Grid\Column\Renderer\Updated
+ *
+ */
 class Updated extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Datetime
 {
     /**

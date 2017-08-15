@@ -3,12 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Ui\Component\Filters\Type;
 
 use Magento\Ui\Component\Form\Element\DataType\Date as DataTypeDate;
 
 /**
- * Class Date
+ * @api
  */
 class Date extends AbstractFilter
 {
@@ -27,6 +28,7 @@ class Date extends AbstractFilter
      * Date format
      *
      * @var string
+     * @since 100.1.2
      */
     protected static $dateFormat = 'Y-m-d H:i:s';
 
@@ -79,11 +81,29 @@ class Date extends AbstractFilter
 
             if (is_array($value)) {
                 if (isset($value['from'])) {
-                    $this->applyFilterByType('gteq', $this->wrappedComponent->convertDate($value['from']));
+                    $this->applyFilterByType(
+                        'gteq',
+                        $this->wrappedComponent->convertDate(
+                            $value['from'],
+                            0,
+                            0,
+                            0,
+                            !$this->getData('config/skipTimeZoneConversion')
+                        )
+                    );
                 }
 
                 if (isset($value['to'])) {
-                    $this->applyFilterByType('lteq', $this->wrappedComponent->convertDate($value['to'], 23, 59, 59));
+                    $this->applyFilterByType(
+                        'lteq',
+                        $this->wrappedComponent->convertDate(
+                            $value['to'],
+                            23,
+                            59,
+                            59,
+                            !$this->getData('config/skipTimeZoneConversion')
+                        )
+                    );
                 }
             } else {
                 $this->applyFilterByType('eq', $this->wrappedComponent->convertDate($value));

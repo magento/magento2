@@ -8,6 +8,10 @@ namespace Magento\Search\Model\Autocomplete;
 
 use Magento\Framework\ObjectManagerInterface;
 
+/**
+ * Class \Magento\Search\Model\Autocomplete\ItemFactory
+ *
+ */
 class ItemFactory
 {
     /**

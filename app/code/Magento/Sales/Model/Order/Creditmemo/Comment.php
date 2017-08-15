@@ -11,8 +11,6 @@ use Magento\Sales\Model\AbstractModel;
 
 /**
  * @api
- * @method \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Comment _getResource()
- * @method \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Comment getResource()
  */
 class Comment extends AbstractModel implements CreditmemoCommentInterface
 {

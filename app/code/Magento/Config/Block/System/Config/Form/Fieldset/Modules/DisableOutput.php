@@ -10,31 +10,32 @@ namespace Magento\Config\Block\System\Config\Form\Fieldset\Modules;
  * on the store settings page.
  *
  * @method \Magento\Config\Block\System\Config\Form getForm()
- * @deprecated Magento does not support custom disabling/enabling module output since 2.2.0 version
+ * @deprecated 100.2.0 Magento does not support custom disabling/enabling module output since 2.2.0 version
+ * @api
  */
 class DisableOutput extends \Magento\Config\Block\System\Config\Form\Fieldset
 {
     /**
      * @var \Magento\Framework\DataObject
-     * @deprecated Magento does not support custom disabling/enabling module output since 2.2.0 version
+     * @deprecated 100.2.0 Magento does not support custom disabling/enabling module output since 2.2.0 version
      */
     protected $_dummyElement;
 
     /**
      * @var \Magento\Config\Block\System\Config\Form\Field
-     * @deprecated Magento does not support custom disabling/enabling module output since 2.2.0 version
+     * @deprecated 100.2.0 Magento does not support custom disabling/enabling module output since 2.2.0 version
      */
     protected $_fieldRenderer;
 
     /**
      * @var array
-     * @deprecated Magento does not support custom disabling/enabling module output since 2.2.0 version
+     * @deprecated 100.2.0 Magento does not support custom disabling/enabling module output since 2.2.0 version
      */
     protected $_values;
 
     /**
      * @var \Magento\Framework\Module\ModuleListInterface
-     * @deprecated Magento does not support custom disabling/enabling module output since 2.2.0 version
+     * @deprecated 100.2.0 Magento does not support custom disabling/enabling module output since 2.2.0 version
      */
     protected $_moduleList;
 
@@ -58,7 +59,7 @@ class DisableOutput extends \Magento\Config\Block\System\Config\Form\Fieldset
 
     /**
      * {@inheritdoc}
-     * @deprecated Magento does not support custom disabling/enabling module output since 2.2.0 version
+     * @deprecated 100.2.0 Magento does not support custom disabling/enabling module output since 2.2.0 version
      */
     public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
@@ -87,7 +88,7 @@ class DisableOutput extends \Magento\Config\Block\System\Config\Form\Fieldset
     }
 
     /**
-     * @deprecated Magento does not support custom disabling/enabling module output since 2.2.0 version
+     * @deprecated 100.2.0 Magento does not support custom disabling/enabling module output since 2.2.0 version
      * @return \Magento\Framework\DataObject
      */
     protected function _getDummyElement()
@@ -99,7 +100,7 @@ class DisableOutput extends \Magento\Config\Block\System\Config\Form\Fieldset
     }
 
     /**
-     * @deprecated Magento does not support custom disabling/enabling module output since 2.2.0 version
+     * @deprecated 100.2.0 Magento does not support custom disabling/enabling module output since 2.2.0 version
      * @return \Magento\Config\Block\System\Config\Form\Field
      */
     protected function _getFieldRenderer()
@@ -113,7 +114,7 @@ class DisableOutput extends \Magento\Config\Block\System\Config\Form\Fieldset
     }
 
     /**
-     * @deprecated Magento does not support custom disabling/enabling module output since 2.2.0 version
+     * @deprecated 100.2.0 Magento does not support custom disabling/enabling module output since 2.2.0 version
      * @return array
      */
     protected function _getValues()
@@ -130,7 +131,7 @@ class DisableOutput extends \Magento\Config\Block\System\Config\Form\Fieldset
     /**
      * @param \Magento\Framework\Data\Form\Element\Fieldset $fieldset
      * @param string $moduleName
-     * @deprecated Magento does not support custom disabling/enabling module output since 2.2.0 version
+     * @deprecated 100.2.0 Magento does not support custom disabling/enabling module output since 2.2.0 version
      * @return mixed
      */
     protected function _getFieldHtml($fieldset, $moduleName)

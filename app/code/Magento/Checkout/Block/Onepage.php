@@ -115,6 +115,7 @@ class Onepage extends \Magento\Framework\View\Element\Template
 
     /**
      * @return bool|string
+     * @since 100.2.0
      */
     public function getSerializedCheckoutConfig()
     {

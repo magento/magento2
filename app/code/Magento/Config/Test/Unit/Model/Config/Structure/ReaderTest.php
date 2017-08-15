@@ -8,7 +8,7 @@ namespace Magento\Config\Test\Unit\Model\Config\Structure;
 /**
  * Class ReaderTest
  */
-class ReaderTest extends \PHPUnit_Framework_TestCase
+class ReaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Config\Model\Config\Structure\Reader

@@ -7,6 +7,7 @@ namespace Magento\Backend\Model\Menu;
 
 /**
  * Menu iterator
+ * @api
  */
 class Iterator extends \ArrayIterator
 {

@@ -9,6 +9,7 @@ namespace Magento\Backend\Model\Locale;
  * Locale manager model
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Manager
 {
@@ -29,6 +30,7 @@ class Manager
 
     /**
      * @var \Magento\Backend\App\ConfigInterface
+     * @since 100.1.0
      */
     protected $_backendConfig;
 
@@ -73,6 +75,7 @@ class Manager
      * Get general interface locale
      *
      * @return string
+     * @since 100.1.0
      */
     public function getGeneralLocale()
     {

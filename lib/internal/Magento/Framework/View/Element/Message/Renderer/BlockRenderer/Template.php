@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\View\Element\Message\Renderer\BlockRenderer;
 
+/**
+ * Class \Magento\Framework\View\Element\Message\Renderer\BlockRenderer\Template
+ *
+ */
 class Template extends \Magento\Framework\View\Element\Template
 {
     /**

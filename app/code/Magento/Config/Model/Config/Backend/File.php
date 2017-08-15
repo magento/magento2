@@ -15,6 +15,7 @@ use Magento\MediaStorage\Model\File\Uploader;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+ * @api
  */
 class File extends \Magento\Framework\App\Config\Value
 {
@@ -109,6 +110,8 @@ class File extends \Magento\Framework\App\Config\Value
         } else {
             if (is_array($value) && !empty($value['delete'])) {
                 $this->setValue('');
+            } elseif (is_array($value) && !empty($value['value'])) {
+                $this->setValue($value['value']);
             } else {
                 $this->unsValue();
             }
@@ -121,6 +124,7 @@ class File extends \Magento\Framework\App\Config\Value
      * Receiving uploaded file data
      *
      * @return array
+     * @since 100.1.0
      */
     protected function getFileData()
     {
@@ -209,6 +213,7 @@ class File extends \Magento\Framework\App\Config\Value
      *
      * @param string $uploadDir
      * @return string
+     * @since 100.1.0
      */
     protected function getUploadDirPath($uploadDir)
     {

@@ -13,6 +13,8 @@ namespace Magento\Eav\Model\Entity\Increment;
  * - pad_length
  * - pad_char
  * - last_id
+ *
+ * @api
  */
 class NumericValue extends \Magento\Eav\Model\Entity\Increment\AbstractIncrement
 {

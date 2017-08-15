@@ -8,7 +8,7 @@ namespace Magento\Framework\Backup;
 /**
  * Class to work with archives
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 abstract class AbstractBackup implements BackupInterface
 {

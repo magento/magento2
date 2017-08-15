@@ -6,6 +6,10 @@
  */
 namespace Magento\Paypal\Controller\Adminhtml\Billing\Agreement;
 
+/**
+ * Class \Magento\Paypal\Controller\Adminhtml\Billing\Agreement\Delete
+ *
+ */
 class Delete extends \Magento\Paypal\Controller\Adminhtml\Billing\Agreement
 {
     /**

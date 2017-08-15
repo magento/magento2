@@ -5,6 +5,10 @@
  */
 namespace Magento\Quote\Model\Quote\Address;
 
+/**
+ * Class \Magento\Quote\Model\Quote\Address\FreeShipping
+ *
+ */
 class FreeShipping implements \Magento\Quote\Model\Quote\Address\FreeShippingInterface
 {
     /**

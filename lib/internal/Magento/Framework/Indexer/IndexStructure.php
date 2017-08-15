@@ -13,6 +13,10 @@ use Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver;
 use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
 use Magento\Framework\Search\Request\Dimension;
 
+/**
+ * Class \Magento\Framework\Indexer\IndexStructure
+ *
+ */
 class IndexStructure implements IndexStructureInterface
 {
     /**

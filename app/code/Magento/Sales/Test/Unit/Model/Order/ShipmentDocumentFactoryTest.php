@@ -20,7 +20,7 @@ use Magento\Framework\EntityManager\HydratorInterface;
 /**
  * Class ShipmentDocumentFactoryTest
  */
-class ShipmentDocumentFactoryTest extends \PHPUnit_Framework_TestCase
+class ShipmentDocumentFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|ShipmentFactory

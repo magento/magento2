@@ -9,6 +9,10 @@ namespace Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * Class \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files\PreviewImage
+ *
+ */
 class PreviewImage extends \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files
 {
     /**

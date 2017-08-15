@@ -6,6 +6,10 @@
  */
 namespace Magento\Cms\Controller\Adminhtml\Wysiwyg\Images;
 
+/**
+ * Class \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\Index
+ *
+ */
 class Index extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
 {
     /**

@@ -8,6 +8,10 @@ namespace Magento\Customer\Block\Widget;
 
 use Magento\Customer\Api\CustomerMetadataInterface;
 
+/**
+ * Class \Magento\Customer\Block\Widget\AbstractWidget
+ *
+ */
 class AbstractWidget extends \Magento\Framework\View\Element\Template
 {
     /**
