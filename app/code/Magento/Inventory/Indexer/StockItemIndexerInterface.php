@@ -8,6 +8,7 @@ namespace Magento\Inventory\Indexer;
 
 /**
  * Stock item Indexer @todo
+ * @api
  */
 interface StockItemIndexerInterface extends \Magento\Framework\Indexer\ActionInterface
 {
