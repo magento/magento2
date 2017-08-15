@@ -29,7 +29,8 @@ class BatchSizeCalculatorTest extends \PHPUnit\Framework\TestCase
         $this->batchRowsCount = 200;
         $this->model = new \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BatchSizeCalculator(
             ['default' => $this->batchRowsCount],
-            ['default' => $this->estimatorMock]
+            ['default' => $this->estimatorMock],
+            []
         );
     }
 
