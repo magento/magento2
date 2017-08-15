@@ -15,10 +15,6 @@ namespace Magento\Framework\Data\Form\Element;
 
 use Magento\Framework\Escaper;
 
-/**
- * Class \Magento\Framework\Data\Form\Element\Editablemultiselect
- *
- */
 class Editablemultiselect extends \Magento\Framework\Data\Form\Element\Multiselect
 {
     /**

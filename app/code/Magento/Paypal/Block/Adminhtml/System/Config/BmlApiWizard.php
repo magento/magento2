@@ -6,10 +6,6 @@
 
 namespace Magento\Paypal\Block\Adminhtml\System\Config;
 
-/**
- * Class \Magento\Paypal\Block\Adminhtml\System\Config\BmlApiWizard
- *
- */
 class BmlApiWizard extends ApiWizard
 {
     /**

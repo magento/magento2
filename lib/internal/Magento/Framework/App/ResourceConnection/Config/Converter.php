@@ -7,10 +7,6 @@
  */
 namespace Magento\Framework\App\ResourceConnection\Config;
 
-/**
- * Class \Magento\Framework\App\ResourceConnection\Config\Converter
- *
- */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**

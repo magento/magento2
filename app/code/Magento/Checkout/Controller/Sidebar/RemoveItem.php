@@ -5,10 +5,6 @@
  */
 namespace Magento\Checkout\Controller\Sidebar;
 
-/**
- * Class \Magento\Checkout\Controller\Sidebar\RemoveItem
- *
- */
 class RemoveItem extends \Magento\Framework\App\Action\Action
 {
     /**

@@ -9,10 +9,6 @@ use Magento\Catalog\Api\Data\ProductTierPriceInterface;
 use Magento\Catalog\Api\ScopedProductTierPriceManagementInterface;
 use Magento\Store\Model\ScopeInterface;
 
-/**
- * Class \Magento\Catalog\Model\Product\ScopedTierPriceManagement
- *
- */
 class ScopedTierPriceManagement implements ScopedProductTierPriceManagementInterface
 {
     /**

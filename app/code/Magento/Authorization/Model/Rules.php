@@ -20,6 +20,7 @@ namespace Magento\Authorization\Model;
  * @method string getPermission()
  * @method \Magento\Authorization\Model\Rules setPermission(string $value)
  * @api
+ * @since 100.0.2
  */
 class Rules extends \Magento\Framework\Model\AbstractModel
 {

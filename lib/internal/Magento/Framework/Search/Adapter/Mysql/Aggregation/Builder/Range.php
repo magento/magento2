@@ -14,10 +14,6 @@ use Magento\Framework\Search\Request\Aggregation\RangeBucket;
 use Magento\Framework\Search\Request\BucketInterface as RequestBucketInterface;
 use Magento\Framework\Translate\AdapterInterface;
 
-/**
- * Class \Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder\Range
- *
- */
 class Range implements BucketInterface
 {
     const GREATER_THAN = '>=';

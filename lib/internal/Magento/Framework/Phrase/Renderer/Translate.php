@@ -11,10 +11,6 @@ use Magento\Framework\Phrase\RendererInterface;
 use Magento\Framework\TranslateInterface;
 use Psr\Log\LoggerInterface;
 
-/**
- * Class \Magento\Framework\Phrase\Renderer\Translate
- *
- */
 class Translate implements RendererInterface
 {
     /**

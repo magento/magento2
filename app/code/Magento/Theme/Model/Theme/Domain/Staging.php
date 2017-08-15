@@ -9,10 +9,6 @@
  */
 namespace Magento\Theme\Model\Theme\Domain;
 
-/**
- * Class \Magento\Theme\Model\Theme\Domain\Staging
- *
- */
 class Staging implements \Magento\Framework\View\Design\Theme\Domain\StagingInterface
 {
     /**

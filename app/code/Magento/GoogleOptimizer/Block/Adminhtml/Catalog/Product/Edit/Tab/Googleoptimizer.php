@@ -7,10 +7,6 @@
  */
 namespace Magento\GoogleOptimizer\Block\Adminhtml\Catalog\Product\Edit\Tab;
 
-/**
- * Class \Magento\GoogleOptimizer\Block\Adminhtml\Catalog\Product\Edit\Tab\Googleoptimizer
- *
- */
 class Googleoptimizer extends \Magento\GoogleOptimizer\Block\Adminhtml\AbstractTab
 {
     /**

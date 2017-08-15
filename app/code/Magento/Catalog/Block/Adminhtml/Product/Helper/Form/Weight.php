@@ -12,10 +12,6 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form;
 use Magento\Framework\Data\Form;
 use Magento\Catalog\Model\Product\Edit\WeightResolver;
 
-/**
- * Class \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Weight
- *
- */
 class Weight extends \Magento\Framework\Data\Form\Element\Text
 {
     /**

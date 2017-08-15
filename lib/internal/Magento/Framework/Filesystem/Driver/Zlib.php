@@ -7,10 +7,6 @@
  */
 namespace Magento\Framework\Filesystem\Driver;
 
-/**
- * Class \Magento\Framework\Filesystem\Driver\Zlib
- *
- */
 class Zlib extends File
 {
     /**

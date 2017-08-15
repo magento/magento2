@@ -17,6 +17,7 @@ use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
  * CatalogInventory Default Stock Status Indexer Resource Model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @since 100.0.2
  */
 class DefaultStock extends AbstractIndexer implements StockInterface
 {

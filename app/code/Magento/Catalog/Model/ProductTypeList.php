@@ -10,10 +10,6 @@ namespace Magento\Catalog\Model;
 use Magento\Catalog\Api\ProductTypeListInterface;
 use Magento\Catalog\Model\ProductTypes\ConfigInterface;
 
-/**
- * Class \Magento\Catalog\Model\ProductTypeList
- *
- */
 class ProductTypeList implements ProductTypeListInterface
 {
     /**

@@ -7,10 +7,6 @@ namespace Magento\Store\Model\StoreResolver;
 
 use Magento\Store\Model\ScopeInterface;
 
-/**
- * Class \Magento\Store\Model\StoreResolver\ReaderList
- *
- */
 class ReaderList
 {
     /**

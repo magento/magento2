@@ -7,10 +7,6 @@ namespace Magento\Wishlist\Pricing\Render;
 
 use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
 
-/**
- * Class \Magento\Wishlist\Pricing\Render\ConfiguredPriceBox
- *
- */
 class ConfiguredPriceBox extends \Magento\Catalog\Pricing\Render\ConfiguredPriceBox
 {
     /**

@@ -40,6 +40,7 @@ use Magento\Store\Model\StoreManagerInterface;
  * @method \Magento\Search\Model\Query setIsQueryTextShort(bool $value)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @since 100.0.2
  */
 class Query extends AbstractModel implements QueryInterface
 {

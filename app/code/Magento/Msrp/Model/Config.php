@@ -10,10 +10,6 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Escaper;
 
-/**
- * Class \Magento\Msrp\Model\Config
- *
- */
 class Config
 {
     /**#@+

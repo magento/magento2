@@ -9,6 +9,7 @@ namespace Magento\Catalog\Api;
 /**
  * Interface Product links handling interface
  * @api
+ * @since 100.0.2
  */
 interface ProductLinkRepositoryInterface
 {

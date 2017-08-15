@@ -5,10 +5,6 @@
  */
 namespace Magento\Quote\Model\Quote\Address;
 
-/**
- * Class \Magento\Quote\Model\Quote\Address\CustomAttributeList
- *
- */
 class CustomAttributeList implements CustomAttributeListInterface
 {
     /**

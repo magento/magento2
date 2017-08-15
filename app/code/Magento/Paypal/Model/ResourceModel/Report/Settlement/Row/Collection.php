@@ -11,10 +11,6 @@
  */
 namespace Magento\Paypal\Model\ResourceModel\Report\Settlement\Row;
 
-/**
- * Class \Magento\Paypal\Model\ResourceModel\Report\Settlement\Row\Collection
- *
- */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**

@@ -5,10 +5,6 @@
  */
 namespace Magento\CheckoutAgreements\Controller\Adminhtml;
 
-/**
- * Class \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement
- *
- */
 abstract class Agreement extends \Magento\Backend\App\Action
 {
     /**

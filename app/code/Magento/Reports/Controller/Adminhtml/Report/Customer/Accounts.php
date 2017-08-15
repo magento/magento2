@@ -6,10 +6,6 @@
  */
 namespace Magento\Reports\Controller\Adminhtml\Report\Customer;
 
-/**
- * Class \Magento\Reports\Controller\Adminhtml\Report\Customer\Accounts
- *
- */
 class Accounts extends \Magento\Reports\Controller\Adminhtml\Report\Customer
 {
     /**

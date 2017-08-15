@@ -7,10 +7,6 @@ namespace Magento\GiftMessage\Block\Cart\Item\Renderer\Actions;
 
 use Magento\Quote\Model\Quote\Item\AbstractItem;
 
-/**
- * Class \Magento\GiftMessage\Block\Cart\Item\Renderer\Actions\ItemIdProcessor
- *
- */
 class ItemIdProcessor implements LayoutProcessorInterface
 {
     /**

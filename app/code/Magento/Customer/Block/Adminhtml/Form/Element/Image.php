@@ -11,10 +11,6 @@
  */
 namespace Magento\Customer\Block\Adminhtml\Form\Element;
 
-/**
- * Class \Magento\Customer\Block\Adminhtml\Form\Element\Image
- *
- */
 class Image extends \Magento\Customer\Block\Adminhtml\Form\Element\File
 {
     /**

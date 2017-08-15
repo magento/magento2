@@ -6,10 +6,6 @@
  */
 namespace Magento\Config\Controller\Adminhtml\System\Config;
 
-/**
- * Class \Magento\Config\Controller\Adminhtml\System\Config\Index
- *
- */
 class Index extends AbstractScopeConfig
 {
     /**

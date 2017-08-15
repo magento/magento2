@@ -10,10 +10,6 @@ use Magento\Backend\App\Action\Context;
 use Magento\Framework\View\LayoutFactory;
 use Magento\Framework\Controller\Result\RawFactory;
 
-/**
- * Class \Magento\Cms\Controller\Adminhtml\Block\Widget\Chooser
- *
- */
 class Chooser extends \Magento\Backend\App\Action
 {
     /**

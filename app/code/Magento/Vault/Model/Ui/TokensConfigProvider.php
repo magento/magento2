@@ -49,7 +49,6 @@ class TokensConfigProvider implements ConfigProviderInterface
      * @param StoreManagerInterface $storeManager
      * @param CustomerTokenManagement $customerTokenManagement
      * @param TokenUiComponentProviderInterface[] $tokenUiComponentProviders
-     * @since 100.1.0
      */
     public function __construct(
         StoreManagerInterface $storeManager,

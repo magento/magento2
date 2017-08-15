@@ -5,10 +5,6 @@
  */
 namespace Magento\SalesRule\Block\Adminhtml\Promo\Widget;
 
-/**
- * Class \Magento\SalesRule\Block\Adminhtml\Promo\Widget\Chooser
- *
- */
 class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**

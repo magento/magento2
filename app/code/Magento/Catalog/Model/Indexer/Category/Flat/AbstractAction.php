@@ -11,10 +11,6 @@ namespace Magento\Catalog\Model\Indexer\Category\Flat;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\MetadataPool;
 
-/**
- * Class \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
- *
- */
 class AbstractAction
 {
     /**

@@ -5,10 +5,6 @@
  */
 namespace Magento\Framework\Locale;
 
-/**
- * Class \Magento\Framework\Locale\Currency
- *
- */
 class Currency implements \Magento\Framework\Locale\CurrencyInterface
 {
     /**

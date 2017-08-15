@@ -6,10 +6,6 @@
  */
 namespace Magento\Reports\Controller\Adminhtml\Report\Statistics;
 
-/**
- * Class \Magento\Reports\Controller\Adminhtml\Report\Statistics\Index
- *
- */
 class Index extends \Magento\Reports\Controller\Adminhtml\Report\Statistics
 {
     /**

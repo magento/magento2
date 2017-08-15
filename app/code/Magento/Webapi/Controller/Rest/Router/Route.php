@@ -10,10 +10,6 @@ namespace Magento\Webapi\Controller\Rest\Router;
 use Magento\Framework\App\RequestInterface as Request;
 use Magento\Framework\App\RouterInterface;
 
-/**
- * Class \Magento\Webapi\Controller\Rest\Router\Route
- *
- */
 class Route implements RouterInterface
 {
     /**

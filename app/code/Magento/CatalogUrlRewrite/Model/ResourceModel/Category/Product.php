@@ -8,10 +8,6 @@ namespace Magento\CatalogUrlRewrite\Model\ResourceModel\Category;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\UrlRewrite\Model\Storage\DbStorage;
 
-/**
- * Class \Magento\CatalogUrlRewrite\Model\ResourceModel\Category\Product
- *
- */
 class Product extends AbstractDb
 {
     /**

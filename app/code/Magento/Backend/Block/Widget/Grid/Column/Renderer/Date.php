@@ -11,6 +11,7 @@ use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
  * Backend grid item renderer date
  * @api
  * @deprecated 100.2.0 in favour of UI component implementation
+ * @since 100.0.2
  */
 class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {

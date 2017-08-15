@@ -9,10 +9,6 @@ namespace Magento\Sales\Controller\AbstractController;
 use Magento\Framework\App\Action;
 use Magento\Framework\View\Result\PageFactory;
 
-/**
- * Class \Magento\Sales\Controller\AbstractController\View
- *
- */
 abstract class View extends Action\Action
 {
     /**

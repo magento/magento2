@@ -32,7 +32,6 @@ class Save extends Action
     /**
      * @param Context $context
      * @param FileProcessor $fileProcessor
-     * @since 100.1.0
      */
     public function __construct(
         Context $context,

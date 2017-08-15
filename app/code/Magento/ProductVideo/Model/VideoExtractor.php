@@ -7,10 +7,6 @@ namespace Magento\ProductVideo\Model;
 
 use Magento\ProductVideo\Helper\Media;
 
-/**
- * Class \Magento\ProductVideo\Model\VideoExtractor
- *
- */
 class VideoExtractor implements \Magento\Framework\View\Xsd\Media\TypeDataExtractorInterface
 {
     /**

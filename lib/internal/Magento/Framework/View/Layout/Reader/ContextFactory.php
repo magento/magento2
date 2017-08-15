@@ -5,10 +5,6 @@
  */
 namespace Magento\Framework\View\Layout\Reader;
 
-/**
- * Class \Magento\Framework\View\Layout\Reader\ContextFactory
- *
- */
 class ContextFactory
 {
     /**

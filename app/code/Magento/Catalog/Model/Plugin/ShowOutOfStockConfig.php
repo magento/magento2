@@ -5,10 +5,6 @@
  */
 namespace Magento\Catalog\Model\Plugin;
 
-/**
- * Class \Magento\Catalog\Model\Plugin\ShowOutOfStockConfig
- *
- */
 class ShowOutOfStockConfig
 {
     /**

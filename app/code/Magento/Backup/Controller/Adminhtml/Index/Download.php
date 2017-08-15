@@ -8,10 +8,6 @@ namespace Magento\Backup\Controller\Adminhtml\Index;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-/**
- * Class \Magento\Backup\Controller\Adminhtml\Index\Download
- *
- */
 class Download extends \Magento\Backup\Controller\Adminhtml\Index
 {
     /**

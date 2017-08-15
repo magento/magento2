@@ -6,10 +6,6 @@
 
 namespace Magento\NewRelicReporting\Model\ResourceModel;
 
-/**
- * Class \Magento\NewRelicReporting\Model\ResourceModel\Counts
- *
- */
 class Counts extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**

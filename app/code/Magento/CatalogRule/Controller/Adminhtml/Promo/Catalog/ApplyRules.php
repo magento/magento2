@@ -9,10 +9,6 @@ namespace Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog;
 use Magento\CatalogRule\Model\Rule\Job;
 use Magento\Framework\Controller\ResultFactory;
 
-/**
- * Class \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog\ApplyRules
- *
- */
 class ApplyRules extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
 {
     /**

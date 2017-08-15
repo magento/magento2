@@ -9,10 +9,6 @@ namespace Magento\User\Controller\Adminhtml\User;
 use Magento\User\Block\User\Edit\Tab\Main as UserEdit;
 use Magento\Framework\Exception\AuthenticationException;
 
-/**
- * Class \Magento\User\Controller\Adminhtml\User\Delete
- *
- */
 class Delete extends \Magento\User\Controller\Adminhtml\User
 {
     /**

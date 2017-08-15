@@ -11,10 +11,6 @@ use Magento\Customer\Model\Customer;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Indexer\StateInterface;
 
-/**
- * Class \Magento\Customer\Model\Indexer\Attribute\Filter
- *
- */
 class Filter
 {
     /**

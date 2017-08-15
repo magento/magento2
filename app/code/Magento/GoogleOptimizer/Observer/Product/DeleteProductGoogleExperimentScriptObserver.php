@@ -9,10 +9,6 @@ namespace Magento\GoogleOptimizer\Observer\Product;
 
 use Magento\Framework\Event\ObserverInterface;
 
-/**
- * Class \Magento\GoogleOptimizer\Observer\Product\DeleteProductGoogleExperimentScriptObserver
- *
- */
 class DeleteProductGoogleExperimentScriptObserver implements ObserverInterface
 {
     /**

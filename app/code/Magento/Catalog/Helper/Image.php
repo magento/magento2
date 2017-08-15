@@ -12,6 +12,7 @@ use Magento\Framework\App\Helper\AbstractHelper;
  *
  * @api
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @since 100.0.2
  */
 class Image extends AbstractHelper
 {

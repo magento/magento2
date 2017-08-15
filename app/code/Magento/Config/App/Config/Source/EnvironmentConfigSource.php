@@ -36,7 +36,6 @@ class EnvironmentConfigSource implements ConfigSourceInterface
     /**
      * @param ArrayManager $arrayManager
      * @param PlaceholderFactory $placeholderFactory
-     * @since 100.2.0
      */
     public function __construct(
         ArrayManager $arrayManager,
