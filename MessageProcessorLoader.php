@@ -47,7 +47,7 @@ class MessageProcessorLoader
     }
 
     /**
-     * Get first merged message from the list of merged messages.
+     * Get first message from the list of merged messages.
      *
      * @param array $messages
      * @return object|null

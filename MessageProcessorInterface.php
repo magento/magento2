@@ -6,7 +6,7 @@
 namespace Magento\Framework\MessageQueue;
 
 /**
- * Interface for MessageProcessor.
+ * Interface for processing queue messages.
  */
 interface MessageProcessorInterface
 {

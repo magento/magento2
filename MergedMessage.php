@@ -6,7 +6,7 @@
 namespace Magento\Framework\MessageQueue;
 
 /**
- * Provides mapping between merged message adn appropriate original messages ids.
+ * Provides mapping between merged message and appropriate original messages ids.
  */
 class MergedMessage implements MergedMessageInterface
 {
