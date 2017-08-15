@@ -9,7 +9,6 @@ use Magento\Backend\Model\Search\Config\Result\Builder;
 use Magento\Config\Model\Config\Structure;
 use Magento\Config\Model\Config\Structure\Element\AbstractComposite;
 use Magento\Config\Model\Config\Structure\Element\Iterator as ElementIterator;
-use Magento\Config\Model\Config\Structure\ElementInterface;
 
 /**
  * Search Config Model
@@ -47,34 +46,30 @@ class Config extends \Magento\Framework\DataObject
      */
     public function load()
     {
-        if (!$this->hasQuery()) {
-            $this->setResults($this->resultBuilder->getAll());
-            return $this;
-        }
-
         $this->findInStructure($this->configStructure->getTabs(), $this->getQuery());
-
         $this->setResults($this->resultBuilder->getAll());
         return $this;
     }
 
     /**
      * @param ElementIterator $structureElementIterator
-     * @param string $needle
+     * @param string $searchTerm
      * @param string $pathLabel
+     * @return void
+     * @SuppressWarnings(PHPMD.LongVariable)
      */
-    public function findInStructure(ElementIterator $structureElementIterator, $needle, $pathLabel = '')
+    private function findInStructure(ElementIterator $structureElementIterator, $searchTerm, $pathLabel = '')
     {
+        if (empty($searchTerm)) {
+            return;
+        }
         foreach ($structureElementIterator as $structureElement) {
-            if (!($structureElement instanceof ElementInterface)) {
-                continue;
-            }
-            if (stripos((string)$structureElement->getLabel(), $needle) !== false) {
+            if (mb_stripos((string)$structureElement->getLabel(), $searchTerm) !== false) {
                 $this->resultBuilder->add($structureElement, $pathLabel);
             }
-            $elementPathLabel = $pathLabel . '/' . $structureElement->getLabel();
+            $elementPathLabel = $pathLabel . ' / ' . $structureElement->getLabel();
             if ($structureElement instanceof AbstractComposite && $structureElement->hasChildren()) {
-                $this->findInStructure($structureElement->getChildren(), $needle, $elementPathLabel);
+                $this->findInStructure($structureElement->getChildren(), $searchTerm, $elementPathLabel);
             }
         }
     }

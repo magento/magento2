@@ -55,6 +55,7 @@ class Builder
     /**
      * @param AbstractComposite|ElementInterface $structureElement
      * @param string $elementPathLabel
+     * @return void
      */
     public function add(ElementInterface $structureElement, $elementPathLabel)
     {
