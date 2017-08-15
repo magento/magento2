@@ -34,6 +34,23 @@ class Message extends \Zend_Mail implements MessageInterface
     {
         return $this->messageType == self::TYPE_TEXT ? $this->setBodyText($body) : $this->setBodyHtml($body);
     }
+    
+    /**
+     * Set from address
+     *
+     * @param string|array $email
+     * @return $this
+     */
+    public function setFrom($email)
+    {
+        $name = null;
+        if (is_array($email)) {
+            $name = array_keys($email)[0];
+            $name = !is_int($name) ? $name : null;
+            $email = array_values($email)[0];
+        }
+        return parent::setFrom($email, $name);
+    }
 
     /**
      * Set message body
