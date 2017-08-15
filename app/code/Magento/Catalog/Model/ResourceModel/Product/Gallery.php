@@ -195,6 +195,8 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $attributeId
         )->where(
             $mainTableAlias . '.disabled = 0'
+        )->where(
+            'value.value_id IS NOT NULL OR default_value.value_id IS NOT NULL'
         )->order(
             $positionCheckSql . ' ' . \Magento\Framework\DB\Select::SQL_ASC
         );
@@ -216,7 +218,6 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             if (!isset($fileToId[$result[$index]['file']])) {
                 $fileToId[$result[$index]['file']] = $result[$index]['value_id'];
             } elseif ($fileToId[$result[$index]['file']] != $result[$index]['value_id']) {
-                $this->deleteGallery($result[$index]['value_id']);
                 unset($result[$index]);
             }
         }
