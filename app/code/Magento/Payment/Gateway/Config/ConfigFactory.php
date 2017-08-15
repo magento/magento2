@@ -8,10 +8,6 @@ namespace Magento\Payment\Gateway\Config;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Payment\Gateway\ConfigFactoryInterface;
 
-/**
- * Class \Magento\Payment\Gateway\Config\ConfigFactory
- *
- */
 class ConfigFactory implements ConfigFactoryInterface
 {
     /**

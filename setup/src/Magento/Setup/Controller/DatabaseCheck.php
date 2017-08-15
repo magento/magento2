@@ -10,10 +10,6 @@ use Zend\Json\Json;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 
-/**
- * Class \Magento\Setup\Controller\DatabaseCheck
- *
- */
 class DatabaseCheck extends AbstractActionController
 {
     /**

@@ -6,10 +6,6 @@
  */
 namespace Magento\Newsletter\Controller\Adminhtml\Template;
 
-/**
- * Class \Magento\Newsletter\Controller\Adminhtml\Template\Edit
- *
- */
 class Edit extends \Magento\Newsletter\Controller\Adminhtml\Template
 {
     /**

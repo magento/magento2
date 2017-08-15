@@ -5,10 +5,6 @@
  */
 namespace Magento\ConfigurableProduct\Model;
 
-/**
- * Class \Magento\ConfigurableProduct\Model\AttributesList
- *
- */
 class AttributesList implements AttributesListInterface
 {
     /**

@@ -6,10 +6,6 @@
  */
 namespace Magento\Multishipping\Controller\Checkout;
 
-/**
- * Class \Magento\Multishipping\Controller\Checkout\Login
- *
- */
 class Login extends \Magento\Multishipping\Controller\Checkout
 {
     /**

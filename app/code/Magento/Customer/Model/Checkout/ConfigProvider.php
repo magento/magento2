@@ -13,10 +13,6 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Customer\Model\Form;
 use Magento\Store\Model\ScopeInterface;
 
-/**
- * Class \Magento\Customer\Model\Checkout\ConfigProvider
- *
- */
 class ConfigProvider implements ConfigProviderInterface
 {
     /**

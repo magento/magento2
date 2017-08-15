@@ -8,7 +8,7 @@ namespace Magento\Framework\TestFramework\Test\Unit\Autoloader;
 
 use Magento\Framework\TestFramework\Unit\Autoloader\FactoryGenerator;
 
-class FactoryGeneratorTest extends \PHPUnit\Framework\Testcase
+class FactoryGeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var FactoryGenerator

@@ -13,10 +13,6 @@ use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Theme\Model\Data\Design\Config as DesignConfig;
 use Magento\Theme\Model\Design\Config\Storage as ConfigStorage;
 
-/**
- * Class \Magento\Theme\Model\DesignConfigRepository
- *
- */
 class DesignConfigRepository implements DesignConfigRepositoryInterface
 {
     /**

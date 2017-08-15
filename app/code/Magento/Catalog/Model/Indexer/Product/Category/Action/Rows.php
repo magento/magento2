@@ -9,10 +9,6 @@ use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Indexer\CacheContext;
 
-/**
- * Class \Magento\Catalog\Model\Indexer\Product\Category\Action\Rows
- *
- */
 class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractAction
 {
     /**

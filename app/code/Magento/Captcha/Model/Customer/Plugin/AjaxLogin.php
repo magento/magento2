@@ -9,10 +9,6 @@ use Magento\Captcha\Helper\Data as CaptchaHelper;
 use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Framework\Controller\Result\JsonFactory;
 
-/**
- * Class \Magento\Captcha\Model\Customer\Plugin\AjaxLogin
- *
- */
 class AjaxLogin
 {
     /**

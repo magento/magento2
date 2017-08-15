@@ -6,10 +6,6 @@
 
 namespace Magento\SendFriend\Block\Plugin\Catalog\Product;
 
-/**
- * Class \Magento\SendFriend\Block\Plugin\Catalog\Product\View
- *
- */
 class View
 {
     /**

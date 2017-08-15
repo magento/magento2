@@ -9,10 +9,6 @@
  */
 namespace Magento\ImportExport\Model\Import\Entity;
 
-/**
- * Class \Magento\ImportExport\Model\Import\Entity\Factory
- *
- */
 class Factory
 {
     /**

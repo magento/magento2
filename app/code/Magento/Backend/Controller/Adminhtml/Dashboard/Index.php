@@ -6,10 +6,6 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\Dashboard;
 
-/**
- * Class \Magento\Backend\Controller\Adminhtml\Dashboard\Index
- *
- */
 class Index extends \Magento\Backend\Controller\Adminhtml\Dashboard
 {
     /**

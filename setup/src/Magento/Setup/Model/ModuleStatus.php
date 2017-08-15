@@ -11,10 +11,6 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Module\DependencyChecker;
 use Magento\Framework\Module\ModuleList\Loader as ModuleLoader;
 
-/**
- * Class \Magento\Setup\Model\ModuleStatus
- *
- */
 class ModuleStatus
 {
     /**

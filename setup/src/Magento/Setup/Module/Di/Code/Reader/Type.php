@@ -7,10 +7,6 @@
 
 namespace Magento\Setup\Module\Di\Code\Reader;
 
-/**
- * Class \Magento\Setup\Module\Di\Code\Reader\Type
- *
- */
 class Type
 {
     /**

@@ -44,7 +44,6 @@ class CollectionFactory
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param ConfigInterface $securityConfig
      * @param string $instanceName
-     * @since 100.1.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,

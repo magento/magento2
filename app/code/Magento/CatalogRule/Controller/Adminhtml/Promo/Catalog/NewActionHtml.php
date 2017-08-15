@@ -8,10 +8,6 @@ namespace Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog;
 
 use Magento\Rule\Model\Action\AbstractAction;
 
-/**
- * Class \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog\NewActionHtml
- *
- */
 class NewActionHtml extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
 {
     /**

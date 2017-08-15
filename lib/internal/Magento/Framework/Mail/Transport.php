@@ -6,10 +6,6 @@
  */
 namespace Magento\Framework\Mail;
 
-/**
- * Class \Magento\Framework\Mail\Transport
- *
- */
 class Transport extends \Zend_Mail_Transport_Sendmail implements \Magento\Framework\Mail\TransportInterface
 {
     /**
@@ -47,9 +43,7 @@ class Transport extends \Zend_Mail_Transport_Sendmail implements \Magento\Framew
     }
 
     /**
-     * Get message
-     *
-     * @return string
+     * @inheritdoc
      */
     public function getMessage()
     {

@@ -10,10 +10,6 @@ namespace Magento\Framework\Validator;
 
 use Magento\Framework\Validator\Constraint\OptionInterface;
 
-/**
- * Class \Magento\Framework\Validator\Builder
- *
- */
 class Builder
 {
     /**

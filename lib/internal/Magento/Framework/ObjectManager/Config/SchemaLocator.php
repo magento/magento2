@@ -7,10 +7,6 @@
  */
 namespace Magento\Framework\ObjectManager\Config;
 
-/**
- * Class \Magento\Framework\ObjectManager\Config\SchemaLocator
- *
- */
 class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {
     /**

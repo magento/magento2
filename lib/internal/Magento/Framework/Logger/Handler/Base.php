@@ -11,10 +11,6 @@ use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 
-/**
- * Class \Magento\Framework\Logger\Handler\Base
- *
- */
 class Base extends StreamHandler
 {
     /**

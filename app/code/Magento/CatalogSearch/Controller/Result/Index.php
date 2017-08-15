@@ -13,10 +13,6 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Search\Model\QueryFactory;
 
-/**
- * Class \Magento\CatalogSearch\Controller\Result\Index
- *
- */
 class Index extends \Magento\Framework\App\Action\Action
 {
     /**

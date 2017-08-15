@@ -9,10 +9,6 @@ namespace Magento\Sales\Controller\Guest;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 
-/**
- * Class \Magento\Sales\Controller\Guest\PrintInvoice
- *
- */
 class PrintInvoice extends \Magento\Sales\Controller\AbstractController\PrintInvoice
 {
     /**

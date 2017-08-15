@@ -10,10 +10,6 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product;
 
-/**
- * Class \Magento\Catalog\Block\Adminhtml\Product\Price
- *
- */
 class Price extends \Magento\Catalog\Block\Product\Price
 {
     /**

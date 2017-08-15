@@ -11,10 +11,6 @@
  */
 namespace Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Form\Element;
 
-/**
- * Class \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Form\Element\Links
- *
- */
 class Links extends \Magento\Framework\Data\Form\Element\AbstractElement
 {
     /**

@@ -12,6 +12,7 @@ use Magento\Framework\Api\AttributeValueFactory;
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensibleModel
 {
@@ -222,6 +223,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * Get collection instance
      *
      * @return \Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection
+     * @deprecated 101.1.0 because collections should be used directly via factory
      */
     public function getResourceCollection()
     {

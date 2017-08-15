@@ -5,10 +5,6 @@
  */
 namespace Magento\Search\Controller\Adminhtml\Synonyms;
 
-/**
- * Class \Magento\Search\Controller\Adminhtml\Synonyms\Index
- *
- */
 class Index extends \Magento\Backend\App\Action
 {
     /**

@@ -9,10 +9,6 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Select;
 
-/**
- * Class \Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderByTierPrice
- *
- */
 class LinkedProductSelectBuilderByTierPrice implements LinkedProductSelectBuilderInterface
 {
     /**

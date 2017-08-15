@@ -7,10 +7,6 @@
  */
 namespace Magento\Framework\Webapi\Rest\Response\Renderer;
 
-/**
- * Class \Magento\Framework\Webapi\Rest\Response\Renderer\Xml
- *
- */
 class Xml implements \Magento\Framework\Webapi\Rest\Response\RendererInterface
 {
     /**

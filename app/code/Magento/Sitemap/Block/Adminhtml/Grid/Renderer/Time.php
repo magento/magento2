@@ -10,10 +10,6 @@
  */
 namespace Magento\Sitemap\Block\Adminhtml\Grid\Renderer;
 
-/**
- * Class \Magento\Sitemap\Block\Adminhtml\Grid\Renderer\Time
- *
- */
 class Time extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**

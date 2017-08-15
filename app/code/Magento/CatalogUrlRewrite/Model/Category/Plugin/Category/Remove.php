@@ -7,10 +7,6 @@ namespace Magento\CatalogUrlRewrite\Model\Category\Plugin\Category;
 
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
-/**
- * Class \Magento\CatalogUrlRewrite\Model\Category\Plugin\Category\Remove
- *
- */
 class Remove
 {
     /**

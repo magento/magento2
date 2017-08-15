@@ -13,8 +13,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
 /**
  * Subscriber model
  *
- * @method \Magento\Newsletter\Model\ResourceModel\Subscriber _getResource()
- * @method \Magento\Newsletter\Model\ResourceModel\Subscriber getResource()
  * @method int getStoreId()
  * @method $this setStoreId(int $value)
  * @method string getChangeStatusAt()
@@ -34,6 +32,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
  * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  *
  * @api
+ * @since 100.0.2
  */
 class Subscriber extends \Magento\Framework\Model\AbstractModel
 {

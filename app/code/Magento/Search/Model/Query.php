@@ -20,8 +20,6 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * Search query model
  *
- * @method \Magento\Search\Model\ResourceModel\Query _getResource()
- * @method \Magento\Search\Model\ResourceModel\Query getResource()
  * @method \Magento\Search\Model\Query setQueryText(string $value)
  * @method int getNumResults()
  * @method \Magento\Search\Model\Query setNumResults(int $value)
@@ -42,6 +40,7 @@ use Magento\Store\Model\StoreManagerInterface;
  * @method \Magento\Search\Model\Query setIsQueryTextShort(bool $value)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @since 100.0.2
  */
 class Query extends AbstractModel implements QueryInterface
 {

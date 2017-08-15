@@ -15,6 +15,7 @@ use Magento\Framework\View\TemplateEngine\Xhtml\CompilerInterface;
 /**
  * Class Reader
  * @api
+ * @since 100.0.2
  */
 class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {

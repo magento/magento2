@@ -9,10 +9,6 @@ use Magento\Customer\Model\Customer\Attribute\Source\GroupSourceLoggedInOnlyInte
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Framework\App\ObjectManager;
 
-/**
- * Class \Magento\Customer\Model\Config\Source\Group\Multiselect
- *
- */
 class Multiselect implements \Magento\Framework\Option\ArrayInterface
 {
     /**

@@ -12,6 +12,7 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
  * Product Url model
  *
  * @api
+ * @since 100.0.2
  */
 class Url extends \Magento\Framework\DataObject
 {

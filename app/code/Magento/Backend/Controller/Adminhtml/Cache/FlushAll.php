@@ -6,10 +6,6 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\Cache;
 
-/**
- * Class \Magento\Backend\Controller\Adminhtml\Cache\FlushAll
- *
- */
 class FlushAll extends \Magento\Backend\Controller\Adminhtml\Cache
 {
     /**

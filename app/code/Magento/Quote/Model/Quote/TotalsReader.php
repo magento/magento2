@@ -8,10 +8,6 @@ namespace Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address\Total;
 use Magento\Quote\Model\Quote\Address\Total\ReaderInterface;
 
-/**
- * Class \Magento\Quote\Model\Quote\TotalsReader
- *
- */
 class TotalsReader
 {
     /**

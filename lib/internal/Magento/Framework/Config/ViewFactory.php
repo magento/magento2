@@ -8,10 +8,6 @@ namespace Magento\Framework\Config;
 
 use Magento\Framework\ObjectManagerInterface;
 
-/**
- * Class \Magento\Framework\Config\ViewFactory
- *
- */
 class ViewFactory
 {
     /**

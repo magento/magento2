@@ -16,8 +16,6 @@ use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
  * Catalog attribute model
  *
  * @api
- * @method \Magento\Catalog\Model\ResourceModel\Attribute _getResource()
- * @method \Magento\Catalog\Model\ResourceModel\Attribute getResource()
  * @method \Magento\Catalog\Model\ResourceModel\Eav\Attribute getFrontendInputRenderer()
  * @method string setFrontendInputRenderer(string $value)
  * @method int setIsGlobal(int $value)
@@ -31,6 +29,7 @@ use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @since 100.0.2
  */
 class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     \Magento\Catalog\Api\Data\ProductAttributeInterface,

@@ -11,10 +11,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Command\Command;
 use \Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
 
-/**
- * Class \Magento\Setup\Console\Command\InfoAdminUriCommand
- *
- */
 class InfoAdminUriCommand extends Command
 {
     /**

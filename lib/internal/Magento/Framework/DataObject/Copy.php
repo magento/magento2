@@ -9,10 +9,6 @@
  */
 namespace Magento\Framework\DataObject;
 
-/**
- * Class \Magento\Framework\DataObject\Copy
- *
- */
 class Copy
 {
     /**

@@ -11,10 +11,6 @@ use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\StoreCookieManagerInterface;
 
-/**
- * Class \Magento\Store\Model\StoreCookieManager
- *
- */
 class StoreCookieManager implements StoreCookieManagerInterface
 {
     /**

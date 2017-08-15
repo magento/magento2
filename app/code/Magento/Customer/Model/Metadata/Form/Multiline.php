@@ -7,10 +7,6 @@
  */
 namespace Magento\Customer\Model\Metadata\Form;
 
-/**
- * Class \Magento\Customer\Model\Metadata\Form\Multiline
- *
- */
 class Multiline extends Text
 {
     /**

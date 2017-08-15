@@ -10,10 +10,6 @@ use Magento\Authorization\Model\Acl\Role\User as RoleUser;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
 
-/**
- * Class \Magento\Authorization\Model\Acl\Loader\Role
- *
- */
 class Role implements \Magento\Framework\Acl\LoaderInterface
 {
     /**

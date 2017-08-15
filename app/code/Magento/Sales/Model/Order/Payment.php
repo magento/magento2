@@ -22,11 +22,10 @@ use Magento\Sales\Api\CreditmemoManagementInterface as CreditmemoManager;
  * Order payment information
  *
  * @api
- * @method \Magento\Sales\Model\ResourceModel\Order\Payment _getResource()
- * @method \Magento\Sales\Model\ResourceModel\Order\Payment getResource()
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Payment extends Info implements OrderPaymentInterface
 {

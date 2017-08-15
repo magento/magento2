@@ -5,10 +5,6 @@
  */
 namespace Magento\Captcha\Observer;
 
-/**
- * Class \Magento\Captcha\Observer\CaptchaStringResolver
- *
- */
 class CaptchaStringResolver
 {
     /**

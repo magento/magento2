@@ -10,10 +10,6 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 
-/**
- * Class \Magento\ConfigurableProduct\Pricing\Price\ConfigurablePriceResolver
- *
- */
 class ConfigurablePriceResolver implements PriceResolverInterface
 {
     /**

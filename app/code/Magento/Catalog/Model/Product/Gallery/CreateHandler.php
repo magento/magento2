@@ -82,7 +82,6 @@ class CreateHandler implements ExtensionInterface
      * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDb
-     * @since 101.0.0
      */
     public function __construct(
         \Magento\Framework\EntityManager\MetadataPool $metadataPool,
