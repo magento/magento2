@@ -4,12 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Inventory\Model\Indexer;
+namespace Magento\Inventory\Indexer;
 
-use Magento\Inventory\Model\Indexer\StockItem\DataProvider;
-use Magento\Inventory\Model\Indexer\StockItem\DimensionFactory;
-use Magento\Inventory\Model\Indexer\StockItem\IndexHandler;
-use Magento\Inventory\Model\Indexer\StockItem\TemporaryIndexHandler;
+use Magento\Inventory\Indexer\StockItem\DataProvider;
+use Magento\Inventory\Indexer\StockItem\DimensionFactory;
+use Magento\Inventory\Indexer\StockItem\IndexHandler;
+use Magento\Inventory\Indexer\StockItem\TemporaryIndexHandler;
+use Magento\InventoryApi\Api\GetAssignedStocksForSourceInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -50,15 +51,13 @@ class StockItem implements StockItemIndexerInterface
      */
     public function __construct(
         DimensionFactory $dimensionFactory,
-        StoreManagerInterface $storeManager,
+        GetAssignedStocksForSourceInterface $assignedStocksForSource,
         IndexHandler $handler,
         TemporaryIndexHandler $temporaryHandler,
         DataProvider $dataProvider
     ) {
-        $this->storeManager = $storeManager;
         $this->dimensionFactory = $dimensionFactory;
         $this->handler = $handler;
-        $this->temporaryHandler = $temporaryHandler;
         $this->dataProvider = $dataProvider;
     }
 
@@ -67,13 +66,6 @@ class StockItem implements StockItemIndexerInterface
      */
     public function executeFull()
     {
-        $storeIds = array_keys($this->storeManager->getStores());
-
-        foreach ($storeIds as $storeId) {
-            $dimension = [$this->dimensionFactory->create(['name' => 'scope', 'value' => $storeId])];
-            $this->temporaryHandler->cleanIndex($dimension);
-            $this->temporaryHandler->saveIndex($dimension, $this->dataProvider->fetchDocuments([]));
-        }
     }
 
     /**
@@ -89,13 +81,6 @@ class StockItem implements StockItemIndexerInterface
      */
     public function executeList(array $ids)
     {
-        $storeIds = array_keys($this->storeManager->getStores());
-
-        foreach ($storeIds as $storeId) {
-            $dimension = [$this->dimensionFactory->create(['name' => 'scope', 'value' => $storeId])];
-            $this->handler->deleteIndex($dimension, new \ArrayObject($ids));
-            $this->handler->saveIndex($dimension, $this->dataProvider->fetchDocuments($ids));
-        }
     }
 
     /**

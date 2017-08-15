@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Inventory\Model\Indexer\StockItem;
+namespace Magento\Inventory\Indexer\StockItem;
 
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\Framework\App\ResourceConnection;

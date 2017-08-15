@@ -9,8 +9,5 @@
     <indexer id="inventory_stock_item" view_id="inventory_stock_item" class="Magento\Inventory\Model\Indexer\StockItem">
         <title translate="true">StockItem</title>
         <description translate="true">Rebuild msi Stock item index</description>
-
-        <saveHandler class="Magento\Inventory\Model\Indexer\StockItem\IndexHandler" />
-        <structure class="Magento\Inventory\Model\Indexer\StockItem\IndexStructure" />
     </indexer>
 </config>

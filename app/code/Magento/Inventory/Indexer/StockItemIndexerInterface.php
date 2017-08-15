@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Inventory\Model\Indexer;
+namespace Magento\Inventory\Indexer;
 
 /**
  * Stock item Indexer @todo

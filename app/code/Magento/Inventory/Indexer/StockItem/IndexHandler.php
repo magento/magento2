@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Inventory\Model\Indexer\StockItem;
+namespace Magento\Inventory\Indexer\StockItem;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Indexer\IndexStructureInterface;
@@ -13,12 +13,12 @@ use Magento\Framework\Indexer\SaveHandler\IndexerInterface as SaveHandlerIndexer
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\Search\Request\DimensionFactory;
 use Magento\Framework\Search\Request\IndexScopeResolverInterface;
-use Magento\Inventory\Model\Indexer\StockItemIndexerInterface;
+use Magento\Inventory\Indexer\StockItemIndexerInterface;
 
 /**
  * @todo add comment
  */
-class TemporaryIndexHandler implements SaveHandlerIndexerInterface
+class IndexHandler implements SaveHandlerIndexerInterface
 {
 
     /**
@@ -77,8 +77,6 @@ class TemporaryIndexHandler implements SaveHandlerIndexerInterface
         foreach ($this->batch->getItems($documents, $this->batchSize) as $batchDocuments) {
             $this->insertDocuments($batchDocuments, $dimensions);
         }
-
-        $this->switchIndex($dimensions);
     }
 
     /**
@@ -91,7 +89,7 @@ class TemporaryIndexHandler implements SaveHandlerIndexerInterface
     private function insertDocuments(array $documents, array $dimensions)
     {
         $columns = ['sku', 'quantity', 'status', 'stock_id'];
-        $this->resource->getConnection()->insertArray($this->getTempTableName($dimensions), $columns, $documents);
+        $this->resource->getConnection()->insertArray($this->getTableName($dimensions), $columns, $documents);
     }
 
     /**
@@ -101,8 +99,18 @@ class TemporaryIndexHandler implements SaveHandlerIndexerInterface
     {
         foreach ($this->batch->getItems($documents, $this->batchSize) as $batchDocuments) {
             $this->resource->getConnection()
-                ->delete($this->getTempTableName($dimensions), ['stock_id in (?)' => $batchDocuments]);
+                ->delete($this->getTableName($dimensions), ['stock_id in (?)' => $batchDocuments]);
         }
+    }
+
+    /**
+     * @param Dimension[] $dimensions
+     * @return string
+     */
+    private function getTableName($dimensions)
+    {
+        $tableName =  $this->indexScopeResolver->resolve(StockItemIndexerInterface::INDEXER_ID, $dimensions);
+        return $tableName;
     }
 
     /**
@@ -110,8 +118,8 @@ class TemporaryIndexHandler implements SaveHandlerIndexerInterface
      */
     public function cleanIndex($dimensions)
     {
-        $this->indexStructure->delete($this->getTempTableName($dimensions), $dimensions);
-        $this->indexStructure->create($this->getTempTableName($dimensions), [], $dimensions);
+        $this->indexStructure->delete($this->getTableName($dimensions), $dimensions);
+        $this->indexStructure->create($this->getTableName($dimensions), [], $dimensions);
     }
 
     /**
@@ -122,40 +130,5 @@ class TemporaryIndexHandler implements SaveHandlerIndexerInterface
     public function isAvailable()
     {
         return true;
-    }
-
-    /**
-     * @param $dimensions
-     */
-    private function switchIndex($dimensions)
-    {
-        $tableName = $this->getTableName($dimensions);
-        if ($this->resource->getConnection()->isTableExists($tableName)) {
-            $this->resource->getConnection()->dropTable($tableName);
-        }
-
-        $temporalIndexTable = $this->getTempTableName($dimensions);
-        $this->resource->getConnection()->renameTable($temporalIndexTable, $tableName);
-    }
-
-    /**
-     * @param Dimension[] $dimensions
-     * @return string
-     */
-    private function getTempTableName($dimensions)
-    {
-        $tableName = $this->getTableName($dimensions);
-        $tableName .= \Magento\Framework\Indexer\Table\StrategyInterface::TMP_SUFFIX;
-
-        return $tableName;
-    }
-
-    /**
-     * @param Dimension[] $dimensions
-     * @return string
-     */
-    private function getTableName($dimensions)
-    {
-        return $this->indexScopeResolver->resolve(StockItemIndexerInterface::INDEXER_ID, $dimensions);
     }
 }

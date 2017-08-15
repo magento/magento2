@@ -4,10 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Inventory\Model\Indexer\StockItem\Mview;
+namespace Magento\Inventory\Indexer\StockItem\Mview;
 
 use Magento\Framework\Indexer\IndexerInterfaceFactory;
-use Magento\Inventory\Model\Indexer\StockItem;
+use Magento\Inventory\Indexer\StockItem;
 
 /**
  * @todo add description
