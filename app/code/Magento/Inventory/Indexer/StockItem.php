@@ -6,6 +6,8 @@
 
 namespace Magento\Inventory\Indexer;
 
+use Magento\Inventory\Indexer\Scope\IndexSwitcherInterface;
+use Magento\Inventory\Indexer\Scope\ScopeProxy;
 use Magento\Inventory\Indexer\StockItem\DataProvider;
 use Magento\Inventory\Indexer\StockItem\DimensionFactory;
 use Magento\Inventory\Indexer\StockItem\IndexHandler;
@@ -53,8 +55,8 @@ class StockItem implements StockItemIndexerInterface
         DimensionFactory $dimensionFactory,
         GetAssignedStocksForSourceInterface $assignedStocksForSource,
         IndexHandler $handler,
-        TemporaryIndexHandler $temporaryHandler,
-        DataProvider $dataProvider
+        DataProvider $dataProvider,
+        IndexSwitcherInterface $indexSwitcher
     ) {
         $this->dimensionFactory = $dimensionFactory;
         $this->handler = $handler;

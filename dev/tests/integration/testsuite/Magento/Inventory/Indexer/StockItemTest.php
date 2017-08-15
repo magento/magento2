@@ -11,9 +11,8 @@ use Magento\TestFramework\Helper\Bootstrap;
 class StockItemTest extends \PHPUnit\Framework\TestCase
 {
 
-
     /**
-     * @var StockItemIndexerInterface
+     * @var \Magento\Framework\Indexer\IndexerInterface
      */
     private $indexer;
 
@@ -29,7 +28,6 @@ class StockItemTest extends \PHPUnit\Framework\TestCase
         $this->indexer->load(StockItemIndexerInterface::INDEXER_ID);
     }
 
-
     /**
      * @magentoDbIsolation disabled
      * @magentoDataFixture Magento/Inventory/_files/products.php
@@ -39,9 +37,7 @@ class StockItemTest extends \PHPUnit\Framework\TestCase
      public function testExecuteFull()
      {
 
+         // @todo impelment asserts
+         $this->indexer->reindexAll();
      }
-
-
-
-
 }
