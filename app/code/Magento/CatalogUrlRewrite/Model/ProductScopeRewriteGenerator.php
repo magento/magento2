@@ -5,17 +5,18 @@
  */
 namespace Magento\CatalogUrlRewrite\Model;
 
+use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Product;
+use Magento\CatalogUrlRewrite\Model\Product\AnchorUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Model\Product\CanonicalUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Model\Product\CategoriesUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Model\Product\CurrentUrlRewritesRegenerator;
-use Magento\CatalogUrlRewrite\Model\Product\AnchorUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Service\V1\StoreViewService;
+use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\UrlRewrite\Model\MergeDataProviderFactory;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Class ProductScopeRewriteGenerator
@@ -64,6 +65,11 @@ class ProductScopeRewriteGenerator
     private $mergeDataProviderPrototype;
 
     /**
+     * @var CategoryRepositoryInterface
+     */
+    private $categoryRepository;
+
+    /**
      * @param StoreViewService $storeViewService
      * @param StoreManagerInterface $storeManager
      * @param ObjectRegistryFactory $objectRegistryFactory
@@ -72,6 +78,8 @@ class ProductScopeRewriteGenerator
      * @param CurrentUrlRewritesRegenerator $currentUrlRewritesRegenerator
      * @param AnchorUrlRewriteGenerator $anchorUrlRewriteGenerator
      * @param \Magento\UrlRewrite\Model\MergeDataProviderFactory|null $mergeDataProviderFactory
+     * @param CategoryRepositoryInterface|null $categoryRepository
+     * @since 2.2.0
      */
     public function __construct(
         StoreViewService $storeViewService,
@@ -81,7 +89,8 @@ class ProductScopeRewriteGenerator
         CategoriesUrlRewriteGenerator $categoriesUrlRewriteGenerator,
         CurrentUrlRewritesRegenerator $currentUrlRewritesRegenerator,
         AnchorUrlRewriteGenerator $anchorUrlRewriteGenerator,
-        MergeDataProviderFactory $mergeDataProviderFactory = null
+        MergeDataProviderFactory $mergeDataProviderFactory = null,
+        CategoryRepositoryInterface $categoryRepository = null
     ) {
         $this->storeViewService = $storeViewService;
         $this->storeManager = $storeManager;
@@ -94,6 +103,8 @@ class ProductScopeRewriteGenerator
             $mergeDataProviderFactory = ObjectManager::getInstance()->get(MergeDataProviderFactory::class);
         }
         $this->mergeDataProviderPrototype = $mergeDataProviderFactory->create();
+        $this->categoryRepository = $categoryRepository ?:
+            ObjectManager::getInstance()->get(CategoryRepositoryInterface::class);
     }
 
     /**
@@ -150,10 +161,14 @@ class ProductScopeRewriteGenerator
         $mergeDataProvider = clone $this->mergeDataProviderPrototype;
         $categories = [];
         foreach ($productCategories as $category) {
-            if ($this->isCategoryProperForGenerating($category, $storeId)) {
-                $categories[] = $category;
+            if (!$this->isCategoryProperForGenerating($category, $storeId)) {
+                continue;
             }
+
+            // category should be loaded per appropriate store if category's URL key has been changed
+            $categories[] = $this->getCategoryWithOverriddenUrlKey($storeId, $category);
         }
+
         $productCategories = $this->objectRegistryFactory->create(['entities' => $categories]);
 
         $mergeDataProvider->merge(
@@ -198,5 +213,27 @@ class ProductScopeRewriteGenerator
             return $rootCategoryId == $this->storeManager->getStore($storeId)->getRootCategoryId();
         }
         return false;
+    }
+
+    /**
+     * Checks if URL key has been changed for provided category and returns reloaded category,
+     * in other case - returns provided category.
+     *
+     * @param $storeId
+     * @param Category $category
+     * @return Category
+     */
+    private function getCategoryWithOverriddenUrlKey($storeId, Category $category)
+    {
+        $isUrlKeyOverridden = $this->storeViewService->doesEntityHaveOverriddenUrlKeyForStore(
+            $storeId,
+            $category->getEntityId(),
+            Category::ENTITY
+        );
+
+        if (!$isUrlKeyOverridden) {
+            return $category;
+        }
+        return $this->categoryRepository->get($category->getEntityId(), $storeId);
     }
 }
