@@ -30,7 +30,6 @@ class StartConsumerCommand extends Command
 
     /**
      * @var \Magento\Framework\App\State
-     * @since 2.1.0
      */
     private $appState;
 

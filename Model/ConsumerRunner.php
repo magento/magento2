@@ -20,6 +20,7 @@ use Magento\Framework\App\ObjectManager;
  * Where <i>consumerName</i> should be a valid name of consumer registered in some queue.xml
  *
  * @api
+ * @since 100.0.2
  */
 class ConsumerRunner
 {
@@ -30,13 +31,11 @@ class ConsumerRunner
 
     /**
      * @var MaintenanceMode
-     * @since 2.2.0
      */
     private $maintenanceMode;
 
     /**
      * @var integer
-     * @since 2.2.0
      */
     private $maintenanceSleepInterval;
 
