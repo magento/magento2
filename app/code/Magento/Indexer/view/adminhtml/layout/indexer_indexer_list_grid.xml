@@ -13,7 +13,7 @@
                     <argument name="use_ajax" xsi:type="string">0</argument>
                     <argument name="pager_visibility" xsi:type="string">0</argument>
                     <argument name="id" xsi:type="string">gridIndexer</argument>
-                    <argument name="dataSource" xsi:type="object">Magento\Indexer\Model\Indexer\Collection</argument>
+                    <argument name="dataSource" xsi:type="object">Magento\Indexer\Ui\DataProvider\Indexer\DataCollection</argument>
                 </arguments>
                 <block class="Magento\Backend\Block\Widget\Grid\Massaction" name="adminhtml.indexer.grid.grid.massaction" as="grid.massaction">
                     <arguments>
@@ -61,7 +61,7 @@
                     <block class="Magento\Backend\Block\Widget\Grid\Column" as="indexer_mode">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Mode</argument>
-                            <argument name="getter" xsi:type="string">isScheduled</argument>
+                            <argument name="index" xsi:type="string">is_scheduled</argument>
                             <argument name="renderer" xsi:type="string">Magento\Indexer\Block\Backend\Grid\Column\Renderer\Scheduled</argument>
                             <argument name="sortable" xsi:type="string">0</argument>
                             <argument name="column_css_class" xsi:type="string">indexer-mode</argument>
@@ -70,7 +70,7 @@
                     <block class="Magento\Backend\Block\Widget\Grid\Column" as="indexer_status">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Status</argument>
-                            <argument name="getter" xsi:type="string">getStatus</argument>
+                            <argument name="index" xsi:type="string">status</argument>
                             <argument name="renderer" xsi:type="string">Magento\Indexer\Block\Backend\Grid\Column\Renderer\Status</argument>
                             <argument name="sortable" xsi:type="string">0</argument>
                             <argument name="column_css_class" xsi:type="string">indexer-status</argument>
@@ -81,7 +81,6 @@
                             <argument name="header" xsi:type="string" translate="true">Updated</argument>
                             <argument name="index" xsi:type="string">updated</argument>
                             <argument name="type" xsi:type="string">datetime</argument>
-                            <argument name="getter" xsi:type="string">getLatestUpdated</argument>
                             <argument name="renderer" xsi:type="string">Magento\Indexer\Block\Backend\Grid\Column\Renderer\Updated</argument>
                             <argument name="sortable" xsi:type="string">0</argument>
                             <argument name="column_css_class" xsi:type="string">col-date</argument>

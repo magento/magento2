@@ -59,7 +59,6 @@ class Indexer extends \Magento\Framework\DataObject implements IdxInterface
     protected $indexersFactory;
 
     /**
-     * Indexer constructor.
      * @param ConfigInterface $config
      * @param ActionFactory $actionFactory
      * @param StructureFactory $structureFactory
