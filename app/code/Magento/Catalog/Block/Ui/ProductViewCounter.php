@@ -24,6 +24,7 @@ use Magento\Store\Model\StoreManager;
  * by customer on frontend and data to synchornize this tracks with backend
  *
  * @api
+ * @since 101.1.0
  */
 class ProductViewCounter extends Template
 {
@@ -77,6 +78,7 @@ class ProductViewCounter extends Template
      * @param SerializerInterface $serialize
      * @param Url $url
      * @param Registry $registry
+     * @since 101.1.0
      */
     public function __construct(
         Template\Context $context,
@@ -107,6 +109,7 @@ class ProductViewCounter extends Template
      * requests and will be flushed with full page cache
      *
      * @return string {JSON encoded data}
+     * @since 101.1.0
      */
     public function getCurrentProductData()
     {

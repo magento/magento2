@@ -42,9 +42,7 @@ class Information
     const XML_PATH_STORE_INFO_VAT_NUMBER = 'general/store_information/merchant_vat_number';
     /**#@-*/
 
-    /**
-     * @var Renderer
-     */
+    /**#@-*/
     protected $renderer;
 
     /**

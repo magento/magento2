@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Helper;
 
-class ProductTest extends \PHPUnit_Framework_TestCase
+class ProductTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Helper\Product

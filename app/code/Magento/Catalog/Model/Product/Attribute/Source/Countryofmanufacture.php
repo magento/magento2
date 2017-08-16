@@ -14,6 +14,10 @@ namespace Magento\Catalog\Model\Product\Attribute\Source;
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 use Magento\Framework\Data\OptionSourceInterface;
 
+/**
+ * Class \Magento\Catalog\Model\Product\Attribute\Source\Countryofmanufacture
+ *
+ */
 class Countryofmanufacture extends AbstractSource implements OptionSourceInterface
 {
     /**
@@ -82,7 +86,7 @@ class Countryofmanufacture extends AbstractSource implements OptionSourceInterfa
      * Get serializer
      *
      * @return \Magento\Framework\Serialize\SerializerInterface
-     * @deprecated
+     * @deprecated 101.1.0
      */
     private function getSerializer()
     {

@@ -202,6 +202,7 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
 
     /**
      * {@inheritdoc}
+     * @since 100.1.0
      */
     public function read($scope = null)
     {

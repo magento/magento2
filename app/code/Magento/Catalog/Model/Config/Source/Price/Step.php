@@ -8,6 +8,10 @@ namespace Magento\Catalog\Model\Config\Source\Price;
 use Magento\Catalog\Model\Layer\Filter\Dynamic\AlgorithmFactory;
 use Magento\Framework\Option\ArrayInterface;
 
+/**
+ * Class \Magento\Catalog\Model\Config\Source\Price\Step
+ *
+ */
 class Step implements ArrayInterface
 {
     /**

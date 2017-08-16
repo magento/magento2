@@ -16,7 +16,7 @@ use Magento\Eav\Model\EavCustomAttributeTypeLocator\ComplexType as ComplexTypeLo
 /**
  * Unit test class for \Magento\Eav\Model\EavCustomAttributeTypeLocator
  */
-class EavCustomAttributeTypeLocatorTest extends \PHPUnit_Framework_TestCase
+class EavCustomAttributeTypeLocatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var EavCustomAttributeTypeLocator
@@ -30,13 +30,7 @@ class EavCustomAttributeTypeLocatorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->attributeRepository = $this->getMock(
-            \Magento\Eav\Model\AttributeRepository::class,
-            ['get'],
-            [],
-            '',
-            false
-        );
+        $this->attributeRepository = $this->createPartialMock(\Magento\Eav\Model\AttributeRepository::class, ['get']);
     }
 
     /**
@@ -105,25 +99,13 @@ class EavCustomAttributeTypeLocatorTest extends \PHPUnit_Framework_TestCase
             $serviceInterface => [$mediaBackEndModelClass => $mediaAttributeDataInterface]
         ];
 
-        $attribute = $this->getMock(
-            \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
-            ['getBackendModel'],
-            [],
-            '',
-            false
-        );
+        $attribute = $this->createPartialMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class, ['getBackendModel']);
 
         $attribute->expects($this->any())
             ->method('getBackendModel')
             ->willReturn($mediaBackEndModelClass);
 
-        $attributeNoBackendModel = $this->getMock(
-            \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
-            ['getBackendModel', 'getFrontendInput'],
-            [],
-            '',
-            false
-        );
+        $attributeNoBackendModel = $this->createPartialMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class, ['getBackendModel', 'getFrontendInput']);
 
         $attributeNoBackendModel->expects($this->any())
             ->method('getBackendModel')

@@ -7,6 +7,10 @@ namespace Magento\Braintree\Gateway\Response;
 
 use Magento\Sales\Model\Order\Payment;
 
+/**
+ * Class \Magento\Braintree\Gateway\Response\RefundHandler
+ *
+ */
 class RefundHandler extends VoidHandler
 {
     /**

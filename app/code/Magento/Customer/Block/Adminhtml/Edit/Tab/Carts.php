@@ -12,7 +12,9 @@ namespace Magento\Customer\Block\Adminhtml\Edit\Tab;
  */
 class Carts extends \Magento\Backend\Block\Template
 {
-    /** @var \Magento\Customer\Model\Config\Share */
+    /**
+     * @var \Magento\Customer\Model\Config\Share
+     */
     protected $_shareConfig;
 
     /**

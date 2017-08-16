@@ -7,6 +7,10 @@ namespace Magento\Framework\Search\Adapter\Mysql\Query\Builder;
 
 use Magento\Framework\Search\Adapter\Mysql\ScoreBuilder;
 
+/**
+ * Interface \Magento\Framework\Search\Adapter\Mysql\Query\Builder\QueryInterface
+ *
+ */
 interface QueryInterface
 {
     /**

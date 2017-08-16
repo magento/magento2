@@ -12,6 +12,10 @@ namespace Magento\Framework\Data\Helper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Url\Helper\Data as UrlHelper;
 
+/**
+ * Class \Magento\Framework\Data\Helper\PostHelper
+ *
+ */
 class PostHelper extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**

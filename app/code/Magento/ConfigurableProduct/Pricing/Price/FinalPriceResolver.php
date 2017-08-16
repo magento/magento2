@@ -8,6 +8,10 @@ namespace Magento\ConfigurableProduct\Pricing\Price;
 
 use Magento\Catalog\Pricing\Price\FinalPrice as CatalogFinalPrice;
 
+/**
+ * Class \Magento\ConfigurableProduct\Pricing\Price\FinalPriceResolver
+ *
+ */
 class FinalPriceResolver implements PriceResolverInterface
 {
     /**

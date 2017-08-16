@@ -6,6 +6,10 @@
  */
 namespace Magento\Variable\Controller\Adminhtml\System\Variable;
 
+/**
+ * Class \Magento\Variable\Controller\Adminhtml\System\Variable\Delete
+ *
+ */
 class Delete extends \Magento\Variable\Controller\Adminhtml\System\Variable
 {
     /**

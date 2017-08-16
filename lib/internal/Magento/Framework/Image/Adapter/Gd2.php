@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\Image\Adapter;
 
+/**
+ * Class \Magento\Framework\Image\Adapter\Gd2
+ *
+ */
 class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
 {
     /**

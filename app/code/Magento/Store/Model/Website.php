@@ -9,8 +9,6 @@ namespace Magento\Store\Model;
  * Core Website model
  *
  * @api
- * @method \Magento\Store\Model\ResourceModel\Website _getResource()
- * @method \Magento\Store\Model\ResourceModel\Website getResource()
  * @method string getGroupTitle()
  * @method string getStoreTitle()
  * @method int getStoreId()
@@ -575,6 +573,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * Clear configuration cache after creation website
      *
      * @return $this
+     * @since 100.2.0
      */
     public function afterSave()
     {
@@ -672,6 +671,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
 
     /**
      * {@inheritdoc}
+     * @since 100.1.0
      */
     public function getScopeType()
     {
@@ -680,6 +680,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
 
     /**
      * {@inheritdoc}
+     * @since 100.1.0
      */
     public function getScopeTypeName()
     {

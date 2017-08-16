@@ -12,6 +12,10 @@ use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Ui\Component\Listing\Columns\Column;
 
+/**
+ * Class \Magento\Customer\Ui\Component\Listing\Column\Confirmation
+ *
+ */
 class Confirmation extends Column
 {
     /**

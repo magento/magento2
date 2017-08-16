@@ -10,7 +10,7 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionProvider;
 use Magento\Framework\EntityManager\EntityMetadataInterface;
 
-class OptionProviderTest extends \PHPUnit_Framework_TestCase
+class OptionProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var OptionProvider

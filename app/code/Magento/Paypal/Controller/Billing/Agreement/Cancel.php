@@ -6,6 +6,10 @@
  */
 namespace Magento\Paypal\Controller\Billing\Agreement;
 
+/**
+ * Class \Magento\Paypal\Controller\Billing\Agreement\Cancel
+ *
+ */
 class Cancel extends \Magento\Paypal\Controller\Billing\Agreement
 {
     /**

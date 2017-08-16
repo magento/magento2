@@ -11,6 +11,10 @@
  */
 namespace Magento\Framework\Backup\Archive;
 
+/**
+ * Class \Magento\Framework\Backup\Archive\Tar
+ *
+ */
 class Tar extends \Magento\Framework\Archive\Tar
 {
     /**

@@ -5,6 +5,10 @@
  */
 namespace Magento\Sales\Model\Order\Invoice\Total;
 
+/**
+ * Class \Magento\Sales\Model\Order\Invoice\Total\Grand
+ *
+ */
 class Grand extends AbstractTotal
 {
     /**

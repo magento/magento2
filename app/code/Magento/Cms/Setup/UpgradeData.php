@@ -17,6 +17,10 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Widget\Setup\LayoutUpdateConverter;
 
+/**
+ * Class \Magento\Cms\Setup\UpgradeData
+ *
+ */
 class UpgradeData implements UpgradeDataInterface
 {
     /**

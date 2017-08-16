@@ -6,6 +6,10 @@
 
 namespace Magento\Framework\Translate\Inline;
 
+/**
+ * Class \Magento\Framework\Translate\Inline\State
+ *
+ */
 class State implements StateInterface
 {
     /**

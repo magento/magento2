@@ -15,6 +15,10 @@ use Magento\Catalog\Helper\Data;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Store\Model\Store;
 
+/**
+ * Class \Magento\Catalog\Block\Breadcrumbs
+ *
+ */
 class Breadcrumbs extends \Magento\Framework\View\Element\Template
 {
     /**

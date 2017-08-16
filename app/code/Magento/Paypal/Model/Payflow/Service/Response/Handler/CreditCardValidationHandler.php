@@ -9,6 +9,10 @@ use Magento\Framework\DataObject;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Paypal\Model\Info;
 
+/**
+ * Class \Magento\Paypal\Model\Payflow\Service\Response\Handler\CreditCardValidationHandler
+ *
+ */
 class CreditCardValidationHandler implements HandlerInterface
 {
     /**

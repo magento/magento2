@@ -8,6 +8,10 @@
 
 namespace Magento\CatalogImportExport\Model\Indexer\Category\Product\Plugin;
 
+/**
+ * Class \Magento\CatalogImportExport\Model\Indexer\Category\Product\Plugin\Import
+ *
+ */
 class Import
 {
     /**

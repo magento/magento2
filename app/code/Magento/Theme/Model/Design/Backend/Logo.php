@@ -5,6 +5,10 @@
  */
 namespace Magento\Theme\Model\Design\Backend;
 
+/**
+ * Class \Magento\Theme\Model\Design\Backend\Logo
+ *
+ */
 class Logo extends Image
 {
     /**

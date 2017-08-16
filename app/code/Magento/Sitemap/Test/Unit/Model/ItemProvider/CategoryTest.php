@@ -15,7 +15,7 @@ use Magento\Sitemap\Model\ResourceModel\Catalog\CategoryFactory;
 use Magento\Sitemap\Model\SitemapItem;
 use Magento\Sitemap\Model\SitemapItemInterfaceFactory;
 
-class CategoryTest extends \PHPUnit_Framework_TestCase
+class CategoryTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetItemsEmpty()
     {

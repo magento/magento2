@@ -6,6 +6,10 @@
  */
 namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
 
+/**
+ * Class \Magento\SalesRule\Controller\Adminhtml\Promo\Quote\CouponsMassDelete
+ *
+ */
 class CouponsMassDelete extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
 {
     /**

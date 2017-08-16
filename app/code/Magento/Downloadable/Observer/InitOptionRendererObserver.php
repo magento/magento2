@@ -7,6 +7,10 @@ namespace Magento\Downloadable\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class \Magento\Downloadable\Observer\InitOptionRendererObserver
+ *
+ */
 class InitOptionRendererObserver implements ObserverInterface
 {
     /**

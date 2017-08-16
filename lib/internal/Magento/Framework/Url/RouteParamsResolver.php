@@ -154,7 +154,7 @@ class RouteParamsResolver extends \Magento\Framework\DataObject implements Route
      * Get escaper
      *
      * @return \Magento\Framework\Escaper
-     * @deprecated
+     * @deprecated 100.2.0
      */
     private function getEscaper()
     {

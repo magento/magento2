@@ -8,6 +8,10 @@ namespace Magento\Theme\Model\Design\Config;
 use Magento\Framework\App\Config as AppConfig;
 use Magento\Framework\App\ScopeFallbackResolverInterface;
 
+/**
+ * Class \Magento\Theme\Model\Design\Config\ValueChecker
+ *
+ */
 class ValueChecker
 {
     /**

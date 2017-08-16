@@ -9,6 +9,10 @@ namespace Magento\Framework\App\View\Asset\MaterializationStrategy;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\Asset;
 
+/**
+ * Class \Magento\Framework\App\View\Asset\MaterializationStrategy\Factory
+ *
+ */
 class Factory
 {
     /**

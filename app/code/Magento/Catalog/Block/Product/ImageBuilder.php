@@ -7,6 +7,10 @@ namespace Magento\Catalog\Block\Product;
 
 use Magento\Catalog\Helper\ImageFactory as HelperFactory;
 
+/**
+ * Class \Magento\Catalog\Block\Product\ImageBuilder
+ *
+ */
 class ImageBuilder
 {
     /**

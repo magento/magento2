@@ -9,6 +9,10 @@ namespace Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute;
 use Magento\Ui\Component\MassAction\Filter;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 
+/**
+ * Class \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute\Edit
+ *
+ */
 class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute
 {
     /**

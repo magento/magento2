@@ -7,6 +7,10 @@
 
 namespace Magento\Tax\Model\Plugin;
 
+/**
+ * Class \Magento\Tax\Model\Plugin\OrderSave
+ *
+ */
 class OrderSave
 {
     /**

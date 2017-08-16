@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\Cache\Backend;
 
+/**
+ * Class \Magento\Framework\Cache\Backend\Memcached
+ *
+ */
 class Memcached extends \Zend_Cache_Backend_Memcached implements \Zend_Cache_Backend_ExtendedInterface
 {
     /**

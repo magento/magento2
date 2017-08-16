@@ -9,6 +9,10 @@
  */
 namespace Magento\Review\Block\Adminhtml;
 
+/**
+ * Class \Magento\Review\Block\Adminhtml\Main
+ *
+ */
 class Main extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**

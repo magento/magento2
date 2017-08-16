@@ -83,7 +83,7 @@ class Ga extends \Magento\Framework\View\Element\Template
      * @return string
      * @link https://developers.google.com/analytics/devguides/collection/analyticsjs/method-reference#set
      * @link https://developers.google.com/analytics/devguides/collection/analyticsjs/method-reference#gaObjectMethods
-     * @deprecated please use getPageTrackingData method
+     * @deprecated 100.2.0 please use getPageTrackingData method
      */
     public function getPageTrackingCode($accountId)
     {
@@ -104,7 +104,7 @@ class Ga extends \Magento\Framework\View\Element\Template
      * @link https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#transaction
      *
      * @return string|void
-     * @deprecated please use getOrdersTrackingData method
+     * @deprecated 100.2.0 please use getOrdersTrackingData method
      */
     public function getOrdersTrackingCode()
     {
@@ -174,6 +174,7 @@ class Ga extends \Magento\Framework\View\Element\Template
      * Return cookie restriction mode value.
      *
      * @return bool
+     * @since 100.2.0
      */
     public function isCookieRestrictionModeEnabled()
     {
@@ -184,6 +185,7 @@ class Ga extends \Magento\Framework\View\Element\Template
      * Return current website id.
      *
      * @return int
+     * @since 100.2.0
      */
     public function getCurrentWebsiteId()
     {
@@ -198,6 +200,7 @@ class Ga extends \Magento\Framework\View\Element\Template
      *
      * @param string $accountId
      * @return array
+     * @since 100.2.0
      */
     public function getPageTrackingData($accountId)
     {
@@ -216,6 +219,7 @@ class Ga extends \Magento\Framework\View\Element\Template
      * @link https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#transaction
      *
      * @return array
+     * @since 100.2.0
      */
     public function getOrdersTrackingData()
     {

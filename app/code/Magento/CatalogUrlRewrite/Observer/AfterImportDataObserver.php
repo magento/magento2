@@ -36,61 +36,99 @@ class AfterImportDataObserver implements ObserverInterface
      */
     const URL_KEY_ATTRIBUTE_CODE = 'url_key';
 
-    /** @var \Magento\CatalogUrlRewrite\Service\V1\StoreViewService */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Service\V1\StoreViewService
+     */
     protected $storeViewService;
 
-    /** @var \Magento\Catalog\Model\Product */
+    /**
+     * @var \Magento\Catalog\Model\Product
+     */
     protected $product;
 
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $productsWithStores;
 
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $products = [];
 
-    /** @var \Magento\CatalogUrlRewrite\Model\ObjectRegistryFactory */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\ObjectRegistryFactory
+     */
     protected $objectRegistryFactory;
 
-    /** @var \Magento\CatalogUrlRewrite\Model\ObjectRegistry */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\ObjectRegistry
+     */
     protected $productCategories;
 
-    /** @var UrlFinderInterface */
+    /**
+     * @var \Magento\UrlRewrite\Model\UrlFinderInterface
+     */
     protected $urlFinder;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface */
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
     protected $storeManager;
 
-    /** @var UrlPersistInterface */
+    /**
+     * @var \Magento\UrlRewrite\Model\UrlPersistInterface
+     */
     protected $urlPersist;
 
-    /** @var UrlRewriteFactory */
+    /**
+     * @var \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory
+     */
     protected $urlRewriteFactory;
 
-    /** @var \Magento\CatalogImportExport\Model\Import\Product */
+    /**
+     * @var \Magento\CatalogImportExport\Model\Import\Product
+     */
     protected $import;
 
-    /** @var \Magento\Catalog\Model\ProductFactory $catalogProductFactory */
+    /**
+     * @var \Magento\Catalog\Model\ProductFactory
+     */
     protected $catalogProductFactory;
 
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $acceptableCategories;
 
-    /** @var \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator
+     */
     protected $productUrlPathGenerator;
 
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $websitesToStoreIds;
 
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $storesCache = [];
 
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $categoryCache = [];
 
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $websiteCache = [];
 
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $vitalForGenerationFields = [
         'sku',
         'url_key',
@@ -99,7 +137,9 @@ class AfterImportDataObserver implements ObserverInterface
         'visibility',
     ];
 
-    /** @var \Magento\UrlRewrite\Model\MergeDataProvider */
+    /**
+     * @var \Magento\UrlRewrite\Model\MergeDataProvider
+     */
     private $mergeDataProviderPrototype;
 
     /**

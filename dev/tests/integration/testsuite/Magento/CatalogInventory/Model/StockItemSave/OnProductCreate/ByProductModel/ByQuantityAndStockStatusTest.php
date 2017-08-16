@@ -18,7 +18,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * @magentoDbIsolation enabled
  */
-class ByQuantityAndStockStatusTest extends \PHPUnit_Framework_TestCase
+class ByQuantityAndStockStatusTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ProductInterfaceFactory

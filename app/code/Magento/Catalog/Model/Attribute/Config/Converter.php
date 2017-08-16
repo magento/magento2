@@ -7,6 +7,10 @@
  */
 namespace Magento\Catalog\Model\Attribute\Config;
 
+/**
+ * Class \Magento\Catalog\Model\Attribute\Config\Converter
+ *
+ */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**

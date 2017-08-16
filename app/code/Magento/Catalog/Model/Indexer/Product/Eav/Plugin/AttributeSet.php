@@ -10,6 +10,10 @@ use Magento\Catalog\Model\Indexer\Product\Eav\Processor;
 use Magento\Eav\Model\Entity\Attribute\SetFactory;
 use Magento\Framework\App\ObjectManager;
 
+/**
+ * Class \Magento\Catalog\Model\Indexer\Product\Eav\Plugin\AttributeSet
+ *
+ */
 class AttributeSet
 {
     /**

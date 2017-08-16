@@ -10,6 +10,10 @@
  */
 namespace Magento\Sales\Model\Config;
 
+/**
+ * Class \Magento\Sales\Model\Config\Reader
+ *
+ */
 class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {
     /**

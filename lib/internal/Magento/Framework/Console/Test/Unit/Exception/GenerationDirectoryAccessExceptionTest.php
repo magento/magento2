@@ -7,7 +7,7 @@ namespace Magento\Framework\Console\Test\Unit\Exception;
 
 use Magento\Framework\Console\Exception\GenerationDirectoryAccessException;
 
-class GenerationDirectoryAccessExceptionTest extends \PHPUnit_Framework_TestCase
+class GenerationDirectoryAccessExceptionTest extends \PHPUnit\Framework\TestCase
 {
     public function testConstructor()
     {

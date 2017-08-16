@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\Cache\Config;
 
+/**
+ * Class \Magento\Framework\Cache\Config\Converter
+ *
+ */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**

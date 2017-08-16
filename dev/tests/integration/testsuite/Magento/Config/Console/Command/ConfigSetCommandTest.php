@@ -31,7 +31,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @magentoDbIsolation enabled
  */
-class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
+class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerInterface

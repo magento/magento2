@@ -15,8 +15,9 @@ use Magento\Theme\Controller\Result\MessagePlugin;
 
 /**
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class AbstractController extends \PHPUnit_Framework_TestCase
+abstract class AbstractController extends \PHPUnit\Framework\TestCase
 {
     protected $_runCode = '';
 
@@ -139,7 +140,7 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
      *
      * @param string $headerName
      * @param string $valueRegex
-     * @throws \PHPUnit_Framework_AssertionFailedError when header not found
+     * @throws \PHPUnit\Framework\AssertionFailedError when header not found
      */
     public function assertHeaderPcre($headerName, $valueRegex)
     {
@@ -165,9 +166,9 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
      * $this->assertRedirect($this->stringEndsWith($expectedUrlSuffix));
      * $this->assertRedirect($this->stringContains($expectedUrlSubstring));
      *
-     * @param \PHPUnit_Framework_Constraint|null $urlConstraint
+     * @param \PHPUnit\Framework\Constraint\Constraint|null $urlConstraint
      */
-    public function assertRedirect(\PHPUnit_Framework_Constraint $urlConstraint = null)
+    public function assertRedirect(\PHPUnit\Framework\Constraint\Constraint $urlConstraint = null)
     {
         $this->assertTrue($this->getResponse()->isRedirect(), 'Redirect was expected, but none was performed.');
         if ($urlConstraint) {
@@ -189,13 +190,13 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
      * $this->assertSessionMessages($this->equalTo(['Entity has been saved.'],
      * \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS);
      *
-     * @param \PHPUnit_Framework_Constraint $constraint Constraint to compare actual messages against
+     * @param \PHPUnit\Framework\Constraint\Constraint $constraint Constraint to compare actual messages against
      * @param string|null $messageType Message type filter,
      *        one of the constants \Magento\Framework\Message\MessageInterface::*
      * @param string $messageManagerClass Class of the session model that manages messages
      */
     public function assertSessionMessages(
-        \PHPUnit_Framework_Constraint $constraint,
+        \PHPUnit\Framework\Constraint\Constraint $constraint,
         $messageType = null,
         $messageManagerClass = \Magento\Framework\Message\Manager::class
     ) {
