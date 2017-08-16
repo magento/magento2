@@ -82,7 +82,7 @@ class PromoForm extends FormSections
      *
      * @return Template
      */
-    protected function getTemplateBlock()
+    private function getTemplateBlock()
     {
         return $this->blockFactory->create(
             Template::class,
