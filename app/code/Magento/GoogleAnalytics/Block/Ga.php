@@ -120,6 +120,7 @@ class Ga extends \Magento\Framework\View\Element\Template
         $result[] = "ga('require', 'ec', 'ec.js');";
 
         foreach ($collection as $order) {
+            $result[] = "ga('set', 'currencyCode', '" . $order->getOrderCurrencyCode() . "');";
             foreach ($order->getAllVisibleItems() as $item) {
                 $result[] = sprintf(
                     "ga('ec:addProduct', {
@@ -130,7 +131,7 @@ class Ga extends \Magento\Framework\View\Element\Template
                     });",
                     $this->escapeJs($item->getSku()),
                     $this->escapeJs($item->getName()),
-                    $item->getBasePrice(),
+                    $item->getPrice(),
                     $item->getQtyOrdered()
                 );
             }
@@ -145,9 +146,9 @@ class Ga extends \Magento\Framework\View\Element\Template
                 });",
                 $order->getIncrementId(),
                 $this->escapeJs($this->_storeManager->getStore()->getFrontendName()),
-                $order->getBaseGrandTotal(),
-                $order->getBaseTaxAmount(),
-                $order->getBaseShippingAmount()
+                $order->getGrandTotal(),
+                $order->getTaxAmount(),
+                $order->getShippingAmount()
             );
 
             $result[] = "ga('send', 'pageview');";
@@ -236,17 +237,18 @@ class Ga extends \Magento\Framework\View\Element\Template
                 $result['products'][] = [
                     'id' => $this->escapeJs($item->getSku()),
                     'name' =>  $this->escapeJs($item->getName()),
-                    'price' => $item->getBasePrice(),
+                    'price' => $item->getPrice(),
                     'quantity' => $item->getQtyOrdered(),
                 ];
             }
             $result['orders'][] = [
                 'id' =>  $order->getIncrementId(),
                 'affiliation' => $this->escapeJs($this->_storeManager->getStore()->getFrontendName()),
-                'revenue' => $order->getBaseGrandTotal(),
-                'tax' => $order->getBaseTaxAmount(),
-                'shipping' => $order->getBaseShippingAmount(),
+                'revenue' => $order->getGrandTotal(),
+                'tax' => $order->getTaxAmount(),
+                'shipping' => $order->getShippingAmount(),
             ];
+            $result['currency'] = $order->getOrderCurrencyCode();
         }
         return $result;
     }

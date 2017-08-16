@@ -57,6 +57,8 @@ define([
             if (config.ordersTrackingData) {
                 ga('require', 'ec', 'ec.js');
 
+                ga('set', 'currencyCode', config.ordersTrackingData.currency);
+
                 // Collect product data for GA
                 if (config.ordersTrackingData.products) {
                     $.each(config.ordersTrackingData.products, function (index, value) {
