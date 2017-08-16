@@ -21,8 +21,14 @@ class UpdateHandler extends \Magento\Catalog\Model\Product\Gallery\CreateHandler
         $recordsToDelete = [];
         $picturesInOtherStores = [];
 
-        foreach ($this->resourceModel->getProductImages($product, $this->extractStoreIds($product)) as $image) {
-            $picturesInOtherStores[$image['filepath']] = true;
+        $galleryImages = $this->resourceModel->getProductGallery(
+            $product,
+            $this->getAttribute()->getAttributeId(),
+            $this->extractStoreIds($product)
+        );
+        foreach ($galleryImages as $image) {
+            // Same file can share among gallery on store level
+            $picturesInOtherStores[$image['file']] = true;
         }
 
         foreach ($images as &$image) {
@@ -35,7 +41,7 @@ class UpdateHandler extends \Magento\Catalog\Model\Product\Gallery\CreateHandler
                     $recordsToDelete[] = $image['value_id'];
 
                     // only delete physical files if they are not used by any other products
-                    if (!($this->resourceModel->countImageUses($image['file']) > 1) && !isset($picturesInOtherStores[$image['file']])) {
+                    if (!isset($picturesInOtherStores[$image['file']])) {
                         $filesToDelete[] = ltrim($image['file'], '/');
                     }
                 }

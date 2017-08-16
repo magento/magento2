@@ -474,4 +474,33 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         return $this->getConnection()->fetchOne($select);
     }
+
+    /**
+     * Returns product gallery of given attribute in specific stores.
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @param int $attributeId
+     * @param int|array $storeIds
+     *
+     * @return array
+     */
+    public function getProductGallery($product, $attributeId, $storeIds)
+    {
+        if (!is_array($storeIds)) {
+            $storeIds = [$storeIds];
+        }
+
+        $select = $this->createBatchBaseSelect($storeIds, $attributeId);
+
+        $select = $select->where(
+            'entity.' . $this->metadata->getLinkField() .' = ?',
+            $product->getData($this->metadata->getLinkField())
+        );
+
+        $result = $this->getConnection()->fetchAll($select);
+
+        $this->removeDuplicates($result);
+
+        return $result;
+    }
 }
