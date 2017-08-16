@@ -79,7 +79,6 @@ class ProductScopeRewriteGenerator
      * @param AnchorUrlRewriteGenerator $anchorUrlRewriteGenerator
      * @param \Magento\UrlRewrite\Model\MergeDataProviderFactory|null $mergeDataProviderFactory
      * @param CategoryRepositoryInterface|null $categoryRepository
-     * @since 2.2.0
      */
     public function __construct(
         StoreViewService $storeViewService,
