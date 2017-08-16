@@ -6,9 +6,11 @@
 
 namespace Magento\CatalogRule\Test\Block\Adminhtml\Promo\Catalog\Edit;
 
-use \Magento\Ui\Test\Block\Adminhtml\FormSections;
-use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Backend\Test\Block\Template;
+use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Ui\Test\Block\Adminhtml\FormSections;
 
 /**
  * Form for creation of a Catalog Price Rule.
@@ -16,12 +18,12 @@ use Magento\Mtf\Fixture\FixtureInterface;
 class PromoForm extends FormSections
 {
     /**
-     * Magento form loader.
+     * Selector for template block.
      *
      * @var string
      */
-    protected $spinner = '[data-role="spinner"]';
-    
+    private $templateBlockSelector = './ancestor::body';
+
     /**
      * Fill form with tabs.
      *
@@ -72,6 +74,19 @@ class PromoForm extends FormSections
     protected function waitPageToLoad()
     {
         $this->waitForElementVisible($this->header);
-        $this->waitForElementNotVisible($this->spinner);
+        $this->getTemplateBlock()->waitLoader();
+    }
+
+    /**
+     * Get template block.
+     *
+     * @return Template
+     */
+    protected function getTemplateBlock()
+    {
+        return $this->blockFactory->create(
+            Template::class,
+            ['element' => $this->_rootElement->find($this->templateBlockSelector, Locator::SELECTOR_XPATH)]
+        );
     }
 }
