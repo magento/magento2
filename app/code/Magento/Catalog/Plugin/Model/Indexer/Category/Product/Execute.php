@@ -8,6 +8,10 @@ namespace Magento\Catalog\Plugin\Model\Indexer\Category\Product;
 
 use Magento\Catalog\Model\Indexer\Category\Product\AbstractAction;
 
+/**
+ * Class \Magento\Catalog\Plugin\Model\Indexer\Category\Product\Execute
+ *
+ */
 class Execute
 {
     /**

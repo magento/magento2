@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\Shell;
 
+/**
+ * Class \Magento\Framework\Shell\CommandRenderer
+ *
+ */
 class CommandRenderer implements CommandRendererInterface
 {
     /**
@@ -18,7 +22,9 @@ class CommandRenderer implements CommandRendererInterface
     {
         $arguments = array_map('escapeshellarg', $arguments);
         $command = preg_replace('/\s?\||$/', ' 2>&1$0', $command);
-        $command = vsprintf($command, $arguments);
-        return $command;
+        if (empty($arguments)) {
+            return $command;
+        }
+        return vsprintf($command, $arguments);
     }
 }

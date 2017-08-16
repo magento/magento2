@@ -12,6 +12,10 @@ use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 
+/**
+ * Class \Magento\Setup\Model\AdminAccount
+ *
+ */
 class AdminAccount
 {
     /**#@+
@@ -94,10 +98,11 @@ class AdminAccount
      */
     private function saveAdminUser()
     {
+        $passwordHash = $this->generatePassword();
         $adminData = [
             'firstname' => $this->data[self::KEY_FIRST_NAME],
             'lastname'  => $this->data[self::KEY_LAST_NAME],
-            'password'  => $this->generatePassword(),
+            'password'  => $passwordHash,
             'is_active' => 1,
         ];
         $result = $this->connection->fetchRow(
@@ -128,7 +133,28 @@ class AdminAccount
             );
             $adminId = $this->connection->lastInsertId();
         }
+        $this->trackPassword($adminId, $passwordHash);
+
         return $adminId;
+    }
+
+    /**
+     * Remember a password hash for further usage.
+     *
+     * @param int $adminId
+     * @param string $passwordHash
+     * @return void
+     */
+    private function trackPassword($adminId, $passwordHash)
+    {
+        $this->connection->insert(
+            $this->getTableName('admin_passwords'),
+            [
+                'user_id' => $adminId,
+                'password_hash' => $passwordHash,
+                'last_updated' => time()
+            ]
+        );
     }
 
     /**
@@ -246,7 +272,7 @@ class AdminAccount
 
     /**
      * Take table with prefix without loading modules
-     * 
+     *
      * @param string $table
      * @return string
      */

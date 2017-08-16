@@ -7,6 +7,10 @@ namespace Magento\Framework\Shell;
 
 use Magento\Framework\OsInfo;
 
+/**
+ * Class \Magento\Framework\Shell\CommandRendererBackground
+ *
+ */
 class CommandRendererBackground extends CommandRenderer
 {
     /**

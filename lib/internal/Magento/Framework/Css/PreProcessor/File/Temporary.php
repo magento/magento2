@@ -9,6 +9,10 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Css\PreProcessor\Config;
 
+/**
+ * Class \Magento\Framework\Css\PreProcessor\File\Temporary
+ *
+ */
 class Temporary
 {
     /**

@@ -7,6 +7,9 @@
  */
 namespace Magento\Backend\App\Router;
 
+/**
+ * @api
+ */
 class NoRouteHandler implements \Magento\Framework\App\Router\NoRouteHandlerInterface
 {
     /**

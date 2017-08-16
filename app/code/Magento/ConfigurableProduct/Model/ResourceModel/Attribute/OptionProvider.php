@@ -8,6 +8,10 @@ namespace Magento\ConfigurableProduct\Model\ResourceModel\Attribute;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Api\Data\ProductInterface;
 
+/**
+ * Class \Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionProvider
+ *
+ */
 class OptionProvider
 {
     /**

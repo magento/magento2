@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  * Class NotifyStockTest
  * @package Magento\Catalog\Block\Adminhtml\Rss
  */
-class NotifyStockTest extends \PHPUnit_Framework_TestCase
+class NotifyStockTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Block\Adminhtml\Rss\NotifyStock
@@ -66,8 +66,8 @@ class NotifyStockTest extends \PHPUnit_Framework_TestCase
         $this->rssModel = $this->getMockBuilder(\Magento\Catalog\Model\Rss\Product\NotifyStock::class)
             ->setMethods(['getProductsCollection', '__wakeup'])
             ->disableOriginalConstructor()->getMock();
-        $this->rssUrlBuilder = $this->getMock(\Magento\Framework\App\Rss\UrlBuilderInterface::class);
-        $this->urlBuilder = $this->getMock(\Magento\Framework\UrlInterface::class);
+        $this->rssUrlBuilder = $this->createMock(\Magento\Framework\App\Rss\UrlBuilderInterface::class);
+        $this->urlBuilder = $this->createMock(\Magento\Framework\UrlInterface::class);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->block = $this->objectManagerHelper->getObject(
             \Magento\Catalog\Block\Adminhtml\Rss\NotifyStock::class,

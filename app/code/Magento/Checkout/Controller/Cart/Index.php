@@ -7,6 +7,10 @@
 
 namespace Magento\Checkout\Controller\Cart;
 
+/**
+ * Class \Magento\Checkout\Controller\Cart\Index
+ *
+ */
 class Index extends \Magento\Checkout\Controller\Cart
 {
     /**

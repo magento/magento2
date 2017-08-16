@@ -5,6 +5,10 @@
  */
 namespace Magento\Review\Block\Adminhtml\Rating\Edit\Tab;
 
+/**
+ * Class \Magento\Review\Block\Adminhtml\Rating\Edit\Tab\Form
+ *
+ */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**

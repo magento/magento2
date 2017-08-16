@@ -11,6 +11,10 @@
  */
 namespace Magento\OfflineShipping\Model\Plugin\Checkout\Block\Cart;
 
+/**
+ * Class \Magento\OfflineShipping\Model\Plugin\Checkout\Block\Cart\Shipping
+ *
+ */
 class Shipping
 {
     /**

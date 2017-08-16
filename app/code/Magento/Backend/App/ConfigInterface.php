@@ -9,6 +9,7 @@ namespace Magento\Backend\App;
 
 /**
  * Backend config accessor
+ * @api
  */
 interface ConfigInterface
 {
@@ -26,7 +27,7 @@ interface ConfigInterface
     /**
      * Set config value
      *
-     * @deprecated
+     * @deprecated 100.1.2
      * @param string $path
      * @param mixed $value
      * @return void

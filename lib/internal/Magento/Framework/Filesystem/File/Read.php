@@ -8,6 +8,10 @@ namespace Magento\Framework\Filesystem\File;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Exception\FileSystemException;
 
+/**
+ * Class \Magento\Framework\Filesystem\File\Read
+ *
+ */
 class Read implements ReadInterface
 {
     /**

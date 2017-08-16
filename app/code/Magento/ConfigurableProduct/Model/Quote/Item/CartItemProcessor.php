@@ -10,6 +10,10 @@ use Magento\Quote\Api\Data\CartItemInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\App\ObjectManager;
 
+/**
+ * Class \Magento\ConfigurableProduct\Model\Quote\Item\CartItemProcessor
+ *
+ */
 class CartItemProcessor implements CartItemProcessorInterface
 {
     /**

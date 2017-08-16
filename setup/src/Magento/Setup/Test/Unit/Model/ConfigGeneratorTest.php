@@ -8,7 +8,7 @@ namespace Magento\Setup\Test\Unit\Model;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\App\State;
 
-class ConfigGeneratorTest extends \PHPUnit_Framework_TestCase
+class ConfigGeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  \Magento\Framework\App\DeploymentConfig | \PHPUnit_Framework_MockObject_MockObject */
     private $deploymentConfigMock;

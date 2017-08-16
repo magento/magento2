@@ -10,6 +10,10 @@ use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Serialize\Serializer\Serialize;
 use Magento\Framework\Module\Dir\Reader as ModuleReader;
 
+/**
+ * Class \Magento\Framework\App\Router\ActionList
+ *
+ */
 class ActionList
 {
     /**

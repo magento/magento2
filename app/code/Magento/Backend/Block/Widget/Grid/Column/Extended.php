@@ -5,6 +5,10 @@
  */
 namespace Magento\Backend\Block\Widget\Grid\Column;
 
+/**
+ * @api
+ * @deprecated 100.2.0 in favour of UI component implementation
+ */
 class Extended extends \Magento\Backend\Block\Widget\Grid\Column
 {
     /**

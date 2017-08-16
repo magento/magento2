@@ -9,6 +9,10 @@ use Magento\Framework\Event\ObserverInterface;
 use Magento\Catalog\Pricing\Price\BasePrice;
 use Magento\Catalog\Pricing\Price\RegularPrice;
 
+/**
+ * Class \Magento\Tax\Observer\GetPriceConfigurationObserver
+ *
+ */
 class GetPriceConfigurationObserver implements ObserverInterface
 {
     /**
@@ -18,7 +22,9 @@ class GetPriceConfigurationObserver implements ObserverInterface
      */
     protected $taxData;
 
-    /** @var \Magento\Framework\Registry */
+    /**
+     * @var \Magento\Framework\Registry
+     */
     protected $registry;
 
     /**

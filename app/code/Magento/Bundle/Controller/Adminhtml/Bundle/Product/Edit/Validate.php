@@ -6,6 +6,10 @@
  */
 namespace Magento\Bundle\Controller\Adminhtml\Bundle\Product\Edit;
 
+/**
+ * Class \Magento\Bundle\Controller\Adminhtml\Bundle\Product\Edit\Validate
+ *
+ */
 class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Validate
 {
 }

@@ -6,6 +6,10 @@
 
 namespace Magento\CatalogSearch\Model\Search\RequestGenerator;
 
+/**
+ * @api
+ * @since 100.2.0
+ */
 class GeneratorResolver
 {
     /**
@@ -21,6 +25,7 @@ class GeneratorResolver
     /**
      * @param GeneratorInterface $defaultGenerator
      * @param GeneratorInterface[] $generators
+     * @since 100.2.0
      */
     public function __construct(GeneratorInterface $defaultGenerator, array $generators)
     {
@@ -32,6 +37,7 @@ class GeneratorResolver
      * @param string $type
      * @return GeneratorInterface
      * @throws \InvalidArgumentException
+     * @since 100.2.0
      */
     public function getGeneratorForType($type)
     {

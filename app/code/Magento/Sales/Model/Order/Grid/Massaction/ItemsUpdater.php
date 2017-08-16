@@ -5,6 +5,10 @@
  */
 namespace Magento\Sales\Model\Order\Grid\Massaction;
 
+/**
+ * Class \Magento\Sales\Model\Order\Grid\Massaction\ItemsUpdater
+ *
+ */
 class ItemsUpdater implements \Magento\Framework\View\Layout\Argument\UpdaterInterface
 {
     /**

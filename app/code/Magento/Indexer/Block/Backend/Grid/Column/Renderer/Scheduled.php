@@ -5,6 +5,10 @@
  */
 namespace Magento\Indexer\Block\Backend\Grid\Column\Renderer;
 
+/**
+ * Class \Magento\Indexer\Block\Backend\Grid\Column\Renderer\Scheduled
+ *
+ */
 class Scheduled extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**

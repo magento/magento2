@@ -5,7 +5,7 @@
  */
 namespace Magento\Weee\Test\Unit\Observer;
 
-class CustomerLoggedInTest extends \PHPUnit_Framework_TestCase
+class CustomerLoggedInTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Event\Observer

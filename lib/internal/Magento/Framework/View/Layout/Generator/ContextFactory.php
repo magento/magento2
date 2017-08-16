@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\View\Layout\Generator;
 
+/**
+ * Class \Magento\Framework\View\Layout\Generator\ContextFactory
+ *
+ */
 class ContextFactory
 {
     /**

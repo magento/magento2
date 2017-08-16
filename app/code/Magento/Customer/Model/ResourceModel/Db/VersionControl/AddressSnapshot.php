@@ -8,6 +8,10 @@ namespace Magento\Customer\Model\ResourceModel\Db\VersionControl;
 use Magento\Framework\DataObject;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
 
+/**
+ * Class \Magento\Customer\Model\ResourceModel\Db\VersionControl\AddressSnapshot
+ *
+ */
 class AddressSnapshot extends Snapshot
 {
     /**

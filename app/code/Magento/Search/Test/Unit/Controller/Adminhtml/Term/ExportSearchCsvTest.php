@@ -9,7 +9,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-class ExportSearchCsvTest extends \PHPUnit_Framework_TestCase
+class ExportSearchCsvTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\TaxImportExport\Controller\Adminhtml\Rate\ExportPost
@@ -34,20 +34,8 @@ class ExportSearchCsvTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->fileFactoryMock = $this->getMock(
-            \Magento\Framework\App\Response\Http\FileFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->resultFactoryMock = $this->getMock(
-            \Magento\Framework\Controller\ResultFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->fileFactoryMock = $this->createMock(\Magento\Framework\App\Response\Http\FileFactory::class);
+        $this->resultFactoryMock = $this->createMock(\Magento\Framework\Controller\ResultFactory::class);
 
         $this->controller = $this->objectManagerHelper->getObject(
             \Magento\Search\Controller\Adminhtml\Term\ExportSearchCsv::class,
@@ -60,15 +48,9 @@ class ExportSearchCsvTest extends \PHPUnit_Framework_TestCase
 
     public function testExecute()
     {
-        $resultLayoutMock = $this->getMock(\Magento\Framework\View\Result\Layout::class, [], [], '', false);
-        $layoutMock = $this->getMock(\Magento\Framework\View\LayoutInterface::class);
-        $contentMock = $this->getMock(
-            \Magento\Framework\View\Element\AbstractBlock::class,
-            ['getCsvFile'],
-            [],
-            '',
-            false
-        );
+        $resultLayoutMock = $this->createMock(\Magento\Framework\View\Result\Layout::class);
+        $layoutMock = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
+        $contentMock = $this->createPartialMock(\Magento\Framework\View\Element\AbstractBlock::class, ['getCsvFile']);
         $this->resultFactoryMock
             ->expects($this->once())
             ->method('create')

@@ -10,6 +10,10 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class \Magento\ConfigurableProduct\Observer\HideUnsupportedAttributeTypes
+ *
+ */
 class HideUnsupportedAttributeTypes implements ObserverInterface
 {
     /**

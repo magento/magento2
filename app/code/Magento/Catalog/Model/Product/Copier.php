@@ -9,6 +9,10 @@ namespace Magento\Catalog\Model\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 
+/**
+ * Class \Magento\Catalog\Model\Product\Copier
+ *
+ */
 class Copier
 {
     /**
@@ -95,7 +99,7 @@ class Copier
 
     /**
      * @return Option\Repository
-     * @deprecated
+     * @deprecated 101.0.0
      */
     private function getOptionRepository()
     {
@@ -108,7 +112,7 @@ class Copier
 
     /**
      * @return \Magento\Framework\EntityManager\MetadataPool
-     * @deprecated
+     * @deprecated 101.0.0
      */
     private function getMetadataPool()
     {

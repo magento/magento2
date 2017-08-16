@@ -5,6 +5,10 @@
  */
 namespace Magento\Catalog\Model\Product\Initialization\Helper;
 
+/**
+ * Class \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks
+ *
+ */
 class ProductLinks
 {
     /**

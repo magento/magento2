@@ -11,6 +11,10 @@
  */
 namespace Magento\CatalogRule\Model\ResourceModel\Rule\Product;
 
+/**
+ * Class \Magento\CatalogRule\Model\ResourceModel\Rule\Product\Price
+ *
+ */
 class Price extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**

@@ -7,7 +7,7 @@ namespace Magento\Framework\Filter\Test\Unit\Template\Tokenizer;
 
 use \Magento\Framework\Filter\Template\Tokenizer\Parameter;
 
-class ParameterTest extends \PHPUnit_Framework_TestCase
+class ParameterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Filter\Template\Tokenizer\Parameter

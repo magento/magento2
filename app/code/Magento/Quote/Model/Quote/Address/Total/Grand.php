@@ -5,6 +5,10 @@
  */
 namespace Magento\Quote\Model\Quote\Address\Total;
 
+/**
+ * Class \Magento\Quote\Model\Quote\Address\Total\Grand
+ *
+ */
 class Grand extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
 {
     /**

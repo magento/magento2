@@ -5,6 +5,9 @@
  */
 namespace Magento\Config\Model\Config\Structure\Search;
 
+/**
+ * @api
+ */
 class Proxy implements
     \Magento\Config\Model\Config\Structure\SearchInterface,
     \Magento\Framework\ObjectManager\NoninterceptableInterface

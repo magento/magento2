@@ -8,7 +8,7 @@ namespace Magento\Indexer\Test\Unit\Console\Command;
 use Magento\Backend\App\Area\FrontNameResolver;
 use Magento\Framework\App\ObjectManagerFactory;
 
-class AbstractIndexerCommandCommonSetup extends \PHPUnit_Framework_TestCase
+class AbstractIndexerCommandCommonSetup extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\ObjectManager\ConfigLoader
@@ -42,24 +42,12 @@ class AbstractIndexerCommandCommonSetup extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManagerFactory = $this->getMock(
-            \Magento\Framework\App\ObjectManagerFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->objectManagerFactory = $this->createMock(\Magento\Framework\App\ObjectManagerFactory::class);
         $this->objectManager = $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class);
         $this->objectManagerFactory->expects($this->any())->method('create')->willReturn($this->objectManager);
 
-        $this->stateMock = $this->getMock(\Magento\Framework\App\State::class, [], [], '', false);
-        $this->configLoaderMock = $this->getMock(
-            \Magento\Framework\App\ObjectManager\ConfigLoader::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->stateMock = $this->createMock(\Magento\Framework\App\State::class);
+        $this->configLoaderMock = $this->createMock(\Magento\Framework\App\ObjectManager\ConfigLoader::class);
 
         $this->collectionFactory = $this->getMockBuilder(\Magento\Indexer\Model\Indexer\CollectionFactory::class)
             ->disableOriginalConstructor()

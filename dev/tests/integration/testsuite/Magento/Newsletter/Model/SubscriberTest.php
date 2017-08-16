@@ -3,10 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Newsletter\Model;
 
-class SubscriberTest extends \PHPUnit_Framework_TestCase
+use Magento\TestFramework\Mail\Template\TransportBuilderMock;
+
+class SubscriberTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Subscriber
@@ -27,13 +28,14 @@ class SubscriberTest extends \PHPUnit_Framework_TestCase
     public function testEmailConfirmation()
     {
         $this->_model->subscribe('customer_confirm@example.com');
+        /** @var TransportBuilderMock $transportBuilder */
         $transportBuilder = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get(\Magento\TestFramework\Mail\Template\TransportBuilderMock::class);
         // confirmationCode 'ysayquyajua23iq29gxwu2eax2qb6gvy' is taken from fixture
         $this->assertContains(
             '/newsletter/subscriber/confirm/id/' . $this->_model->getSubscriberId()
             . '/code/ysayquyajua23iq29gxwu2eax2qb6gvy',
-            $transportBuilder->getSentMessage()->getBodyHtml()->getRawContent()
+            $transportBuilder->getSentMessage()->getRawMessage()
         );
         $this->assertEquals(Subscriber::STATUS_NOT_ACTIVE, $this->_model->getSubscriberStatus());
     }
