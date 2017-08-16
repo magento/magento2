@@ -15,6 +15,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Indexer\AbstractIndexer;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class DefaultPrice extends AbstractIndexer implements PriceInterface
 {
@@ -265,7 +266,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      * @return \Magento\Framework\DB\Select
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 101.1.0
+     * @since 101.0.8
      */
     protected function getSelect($entityIds = null, $type = null)
     {

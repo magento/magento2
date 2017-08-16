@@ -6,10 +6,6 @@
  */
 namespace Magento\Sales\Controller\Guest;
 
-/**
- * Class \Magento\Sales\Controller\Guest\Reorder
- *
- */
 class Reorder extends \Magento\Sales\Controller\AbstractController\Reorder
 {
     /**

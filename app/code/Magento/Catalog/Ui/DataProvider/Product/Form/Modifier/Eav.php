@@ -208,7 +208,6 @@ class Eav extends AbstractModifier
      * @param array $attributesToDisable
      * @param array $attributesToEliminate
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 101.0.0
      */
     public function __construct(
         LocatorInterface $locator,

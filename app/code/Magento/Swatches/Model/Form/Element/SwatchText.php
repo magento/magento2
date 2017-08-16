@@ -5,10 +5,6 @@
  */
 namespace Magento\Swatches\Model\Form\Element;
 
-/**
- * Class \Magento\Swatches\Model\Form\Element\SwatchText
- *
- */
 class SwatchText extends AbstractSwatch
 {
 }

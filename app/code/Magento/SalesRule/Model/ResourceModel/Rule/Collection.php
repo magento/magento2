@@ -14,6 +14,7 @@ use Magento\Quote\Model\Quote\Address;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\AbstractCollection
 {

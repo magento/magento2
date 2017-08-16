@@ -11,10 +11,6 @@
  */
 namespace Magento\Catalog\Model\Config\Source\Watermark;
 
-/**
- * Class \Magento\Catalog\Model\Config\Source\Watermark\Position
- *
- */
 class Position implements \Magento\Framework\Option\ArrayInterface
 {
     /**

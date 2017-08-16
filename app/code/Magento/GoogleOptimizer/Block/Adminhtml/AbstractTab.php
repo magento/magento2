@@ -7,10 +7,6 @@
  */
 namespace Magento\GoogleOptimizer\Block\Adminhtml;
 
-/**
- * Class \Magento\GoogleOptimizer\Block\Adminhtml\AbstractTab
- *
- */
 abstract class AbstractTab extends \Magento\Backend\Block\Widget\Form implements
     \Magento\Backend\Block\Widget\Tab\TabInterface
 {

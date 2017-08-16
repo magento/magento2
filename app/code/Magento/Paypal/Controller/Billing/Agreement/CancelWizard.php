@@ -6,10 +6,6 @@
  */
 namespace Magento\Paypal\Controller\Billing\Agreement;
 
-/**
- * Class \Magento\Paypal\Controller\Billing\Agreement\CancelWizard
- *
- */
 class CancelWizard extends \Magento\Paypal\Controller\Billing\Agreement
 {
     /**

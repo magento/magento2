@@ -17,6 +17,7 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @codeCoverageIgnore
+ * @since 100.0.2
  */
 class EavSetup
 {

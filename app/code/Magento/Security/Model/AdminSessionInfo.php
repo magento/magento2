@@ -70,7 +70,6 @@ class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
-     * @since 100.1.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,

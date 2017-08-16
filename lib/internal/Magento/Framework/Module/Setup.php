@@ -11,10 +11,6 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\SetupInterface;
 use Magento\Framework\App\ResourceConnection;
 
-/**
- * Class \Magento\Framework\Module\Setup
- *
- */
 class Setup implements SetupInterface
 {
     /**

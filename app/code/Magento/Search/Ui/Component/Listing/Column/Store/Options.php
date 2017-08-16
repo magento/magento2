@@ -8,10 +8,6 @@ namespace Magento\Search\Ui\Component\Listing\Column\Store;
 
 use Magento\Store\Ui\Component\Listing\Column\Store\Options as StoreOptions;
 
-/**
- * Class \Magento\Search\Ui\Component\Listing\Column\Store\Options
- *
- */
 class Options extends StoreOptions
 {
     /**

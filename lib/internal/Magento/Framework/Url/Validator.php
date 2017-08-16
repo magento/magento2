@@ -11,10 +11,6 @@
  */
 namespace Magento\Framework\Url;
 
-/**
- * Class \Magento\Framework\Url\Validator
- *
- */
 class Validator extends \Zend_Validate_Abstract
 {
     /**#@+

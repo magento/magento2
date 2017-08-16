@@ -16,6 +16,7 @@ namespace Magento\Sales\Api;
  * customer account so that the customer can make future purchases. A credit memo usually includes comments that detail
  * why the credit memo amount was credited to the customer.
  * @api
+ * @since 100.0.2
  */
 interface CreditmemoCommentRepositoryInterface
 {

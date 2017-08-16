@@ -5,10 +5,6 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
-/**
- * Class \Magento\Customer\Controller\Adminhtml\Index\NewAction
- *
- */
 class NewAction extends \Magento\Customer\Controller\Adminhtml\Index
 {
     /**

@@ -14,6 +14,7 @@ use Magento\Framework\App\ObjectManager;
  * GoogleAnalytics Page Block
  *
  * @api
+ * @since 100.0.2
  */
 class Ga extends \Magento\Framework\View\Element\Template
 {

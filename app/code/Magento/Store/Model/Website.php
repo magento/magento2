@@ -9,8 +9,6 @@ namespace Magento\Store\Model;
  * Core Website model
  *
  * @api
- * @method \Magento\Store\Model\ResourceModel\Website _getResource()
- * @method \Magento\Store\Model\ResourceModel\Website getResource()
  * @method string getGroupTitle()
  * @method string getStoreTitle()
  * @method int getStoreId()
@@ -23,6 +21,7 @@ namespace Magento\Store\Model;
  * @method \Magento\Store\Model\Website setIsDefault($value)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Website extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Framework\DataObject\IdentityInterface,

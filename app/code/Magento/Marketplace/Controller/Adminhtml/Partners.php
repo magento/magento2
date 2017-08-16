@@ -7,10 +7,6 @@
  */
 namespace Magento\Marketplace\Controller\Adminhtml;
 
-/**
- * Class \Magento\Marketplace\Controller\Adminhtml\Partners
- *
- */
 abstract class Partners extends \Magento\Backend\App\Action
 {
     /**

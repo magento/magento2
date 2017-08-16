@@ -8,10 +8,6 @@ namespace Magento\Search\Model;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Search\Api\Data\SynonymGroupInterface;
 
-/**
- * Class \Magento\Search\Model\SynonymGroup
- *
- */
 class SynonymGroup extends AbstractModel implements SynonymGroupInterface
 {
     /**

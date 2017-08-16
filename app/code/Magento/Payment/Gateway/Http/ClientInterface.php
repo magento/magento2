@@ -11,6 +11,7 @@ use Magento\Payment\Gateway\Response;
  * Interface ClientInterface
  * @package Magento\Payment\Gateway\Http
  * @api
+ * @since 100.0.2
  */
 interface ClientInterface
 {

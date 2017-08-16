@@ -8,10 +8,6 @@ namespace Magento\Framework\App\Cache;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\SerializerInterface;
 
-/**
- * Class \Magento\Framework\App\Cache\TypeList
- *
- */
 class TypeList implements TypeListInterface
 {
     const INVALIDATED_TYPES = 'core_cache_invalidate';

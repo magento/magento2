@@ -27,7 +27,6 @@ use Magento\Store\Model\ScopeInterface;
  * @method Customer setWebsiteId($value)
  * @method int getStoreId() getStoreId()
  * @method string getEmail() getEmail()
- * @method ResourceCustomer _getResource()
  * @method mixed getDisableAutoGroupChange()
  * @method Customer setDisableAutoGroupChange($value)
  * @method Customer setGroupId($value)
@@ -40,6 +39,7 @@ use Magento\Store\Model\ScopeInterface;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Customer extends \Magento\Framework\Model\AbstractModel
 {

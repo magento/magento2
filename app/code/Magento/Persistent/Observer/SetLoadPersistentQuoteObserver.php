@@ -8,10 +8,6 @@ namespace Magento\Persistent\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
-/**
- * Class \Magento\Persistent\Observer\SetLoadPersistentQuoteObserver
- *
- */
 class SetLoadPersistentQuoteObserver implements ObserverInterface
 {
     /**

@@ -9,6 +9,7 @@ namespace Magento\ConfigurableProduct\Block\Adminhtml\Product\Attribute\NewAttri
  * New product attribute created on product edit page
  *
  * @api
+ * @since 100.0.2
  */
 class Created extends \Magento\Backend\Block\Widget
 {

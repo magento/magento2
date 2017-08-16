@@ -10,10 +10,6 @@ use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Quote\Api\Data\CartInterface;
 
-/**
- * Class \Magento\Vault\Model\Method\NullPaymentProvider
- *
- */
 class NullPaymentProvider implements MethodInterface
 {
     /**

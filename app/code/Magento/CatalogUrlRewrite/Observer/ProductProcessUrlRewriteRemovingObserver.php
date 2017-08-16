@@ -10,10 +10,6 @@ use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\Framework\Event\ObserverInterface;
 
-/**
- * Class \Magento\CatalogUrlRewrite\Observer\ProductProcessUrlRewriteRemovingObserver
- *
- */
 class ProductProcessUrlRewriteRemovingObserver implements ObserverInterface
 {
     /**

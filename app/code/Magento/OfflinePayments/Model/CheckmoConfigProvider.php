@@ -9,10 +9,6 @@ use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Framework\Escaper;
 use Magento\Payment\Helper\Data as PaymentHelper;
 
-/**
- * Class \Magento\OfflinePayments\Model\CheckmoConfigProvider
- *
- */
 class CheckmoConfigProvider implements ConfigProviderInterface
 {
     /**

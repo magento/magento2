@@ -7,10 +7,6 @@
  */
 namespace Magento\Catalog\Model\Attribute;
 
-/**
- * Class \Magento\Catalog\Model\Attribute\LockValidatorComposite
- *
- */
 class LockValidatorComposite implements LockValidatorInterface
 {
     /**

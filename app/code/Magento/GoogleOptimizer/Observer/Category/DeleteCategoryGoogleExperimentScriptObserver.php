@@ -9,10 +9,6 @@ namespace Magento\GoogleOptimizer\Observer\Category;
 
 use Magento\Framework\Event\ObserverInterface;
 
-/**
- * Class \Magento\GoogleOptimizer\Observer\Category\DeleteCategoryGoogleExperimentScriptObserver
- *
- */
 class DeleteCategoryGoogleExperimentScriptObserver implements ObserverInterface
 {
     /**

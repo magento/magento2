@@ -6,10 +6,6 @@
  */
 namespace Magento\Reports\Controller\Adminhtml\Report\Product;
 
-/**
- * Class \Magento\Reports\Controller\Adminhtml\Report\Product\Sold
- *
- */
 class Sold extends \Magento\Reports\Controller\Adminhtml\Report\Product
 {
     /**

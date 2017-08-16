@@ -13,6 +13,7 @@ namespace Magento\Config\Model\Config\Backend\Admin;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Custom extends \Magento\Framework\App\Config\Value
 {

@@ -6,10 +6,6 @@
 
 namespace Magento\NewRelicReporting\Model;
 
-/**
- * Class \Magento\NewRelicReporting\Model\Users
- *
- */
 class Users extends \Magento\Framework\Model\AbstractModel
 {
     /**

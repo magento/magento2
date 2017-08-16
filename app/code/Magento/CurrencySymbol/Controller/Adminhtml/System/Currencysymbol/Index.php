@@ -6,10 +6,6 @@
  */
 namespace Magento\CurrencySymbol\Controller\Adminhtml\System\Currencysymbol;
 
-/**
- * Class \Magento\CurrencySymbol\Controller\Adminhtml\System\Currencysymbol\Index
- *
- */
 class Index extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Currencysymbol
 {
     /**

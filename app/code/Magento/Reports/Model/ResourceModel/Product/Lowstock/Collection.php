@@ -16,6 +16,7 @@ use Magento\Framework\Exception\LocalizedException;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @since 100.0.2
  */
 class Collection extends \Magento\Reports\Model\ResourceModel\Product\Collection
 {

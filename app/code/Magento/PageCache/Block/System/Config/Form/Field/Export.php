@@ -9,6 +9,7 @@ namespace Magento\PageCache\Block\System\Config\Form\Field;
  * Class Export
  *
  * @api
+ * @since 100.0.2
  */
 class Export extends \Magento\Config\Block\System\Config\Form\Field
 {

@@ -9,10 +9,6 @@ namespace Magento\Framework\App\Route;
 
 use Magento\Framework\Serialize\SerializerInterface;
 
-/**
- * Class \Magento\Framework\App\Route\Config
- *
- */
 class Config implements ConfigInterface
 {
     /**

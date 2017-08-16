@@ -5,10 +5,6 @@
  */
 namespace Magento\Config\Model\Config\Backend\File;
 
-/**
- * Class \Magento\Config\Model\Config\Backend\File\RequestData
- *
- */
 class RequestData implements \Magento\Config\Model\Config\Backend\File\RequestData\RequestDataInterface
 {
     /**

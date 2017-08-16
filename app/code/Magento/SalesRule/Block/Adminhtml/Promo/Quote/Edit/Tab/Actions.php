@@ -7,10 +7,6 @@ namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab;
 
 use Magento\Framework\App\ObjectManager;
 
-/**
- * Class \Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Actions
- *
- */
 class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
     \Magento\Ui\Component\Layout\Tabs\TabInterface
 {

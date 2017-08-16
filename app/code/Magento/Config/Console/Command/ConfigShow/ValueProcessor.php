@@ -62,7 +62,6 @@ class ValueProcessor
      * @param ValueFactory $valueFactory The factory of object that
      *        implement \Magento\Framework\App\Config\ValueInterface
      * @param JsonSerializer $jsonSerializer The json serializer
-     * @since 100.2.0
      */
     public function __construct(
         ScopeInterface $scope,

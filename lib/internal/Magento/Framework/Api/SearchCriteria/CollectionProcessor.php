@@ -8,10 +8,6 @@ namespace Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
 
-/**
- * Class \Magento\Framework\Api\SearchCriteria\CollectionProcessor
- *
- */
 class CollectionProcessor implements CollectionProcessorInterface
 {
     /**

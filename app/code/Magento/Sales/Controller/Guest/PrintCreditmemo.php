@@ -10,10 +10,6 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Sales\Api\CreditmemoRepositoryInterface;
 
-/**
- * Class \Magento\Sales\Controller\Guest\PrintCreditmemo
- *
- */
 class PrintCreditmemo extends \Magento\Sales\Controller\AbstractController\PrintCreditmemo
 {
     /**

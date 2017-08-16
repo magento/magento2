@@ -8,10 +8,6 @@ namespace Magento\Checkout\Controller\Noroute;
 
 use \Magento\Framework\Exception\NotFoundException;
 
-/**
- * Class \Magento\Checkout\Controller\Noroute\Index
- *
- */
 class Index extends \Magento\Framework\App\Action\Action
 {
     /**

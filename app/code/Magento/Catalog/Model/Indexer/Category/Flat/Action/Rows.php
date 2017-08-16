@@ -8,10 +8,6 @@ namespace Magento\Catalog\Model\Indexer\Category\Flat\Action;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
-/**
- * Class \Magento\Catalog\Model\Indexer\Category\Flat\Action\Rows
- *
- */
 class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
 {
     /**

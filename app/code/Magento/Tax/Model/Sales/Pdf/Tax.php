@@ -5,10 +5,6 @@
  */
 namespace Magento\Tax\Model\Sales\Pdf;
 
-/**
- * Class \Magento\Tax\Model\Sales\Pdf\Tax
- *
- */
 class Tax extends \Magento\Sales\Model\Order\Pdf\Total\DefaultTotal
 {
     /**

@@ -15,10 +15,6 @@
  */
 namespace Magento\Eav\Model\Entity\Increment;
 
-/**
- * Class \Magento\Eav\Model\Entity\Increment\Alphanum
- *
- */
 class Alphanum extends \Magento\Eav\Model\Entity\Increment\AbstractIncrement
 {
     /**

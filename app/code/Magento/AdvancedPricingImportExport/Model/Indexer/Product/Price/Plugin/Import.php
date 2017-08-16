@@ -7,10 +7,6 @@ namespace Magento\AdvancedPricingImportExport\Model\Indexer\Product\Price\Plugin
 
 use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing;
 
-/**
- * Class \Magento\AdvancedPricingImportExport\Model\Indexer\Product\Price\Plugin\Import
- *
- */
 class Import extends \Magento\Catalog\Model\Indexer\Product\Price\Plugin\AbstractPlugin
 {
     /**

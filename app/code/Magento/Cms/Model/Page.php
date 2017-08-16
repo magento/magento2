@@ -17,11 +17,10 @@ use Magento\Cms\Helper\Page as PageHelper;
  * Cms Page Model
  *
  * @api
- * @method ResourceCmsPage _getResource()
- * @method ResourceCmsPage getResource()
  * @method Page setStoreId(array $storeId)
  * @method array getStoreId()
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @since 100.0.2
  */
 class Page extends AbstractModel implements PageInterface, IdentityInterface
 {

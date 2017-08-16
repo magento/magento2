@@ -5,10 +5,6 @@
  */
 namespace Magento\Framework\ObjectManager\Code\Generator;
 
-/**
- * Class \Magento\Framework\ObjectManager\Code\Generator\Factory
- *
- */
 class Factory extends \Magento\Framework\Code\Generator\EntityAbstract
 {
     /**

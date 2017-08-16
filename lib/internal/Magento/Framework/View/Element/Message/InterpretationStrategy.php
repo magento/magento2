@@ -8,10 +8,6 @@ namespace Magento\Framework\View\Element\Message;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\View\Element\Message\Renderer\RenderersPool;
 
-/**
- * Class \Magento\Framework\View\Element\Message\InterpretationStrategy
- *
- */
 class InterpretationStrategy implements InterpretationStrategyInterface
 {
     /**

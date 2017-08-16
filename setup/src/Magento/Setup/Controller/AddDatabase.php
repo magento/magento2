@@ -8,10 +8,6 @@ namespace Magento\Setup\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
-/**
- * Class \Magento\Setup\Controller\AddDatabase
- *
- */
 class AddDatabase extends AbstractActionController
 {
     /**

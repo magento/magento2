@@ -23,7 +23,6 @@ class UrlAlreadyExistsException extends \Magento\Framework\Exception\LocalizedEx
      * @param \Exception $cause
      * @param int $code
      * @param array $urls
-     * @since 100.2.0
      */
     public function __construct(Phrase $phrase = null, \Exception $cause = null, $code = 0, array $urls = [])
     {

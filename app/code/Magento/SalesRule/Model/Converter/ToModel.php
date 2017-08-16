@@ -10,10 +10,6 @@ use Magento\SalesRule\Api\Data\RuleInterface;
 use Magento\SalesRule\Model\Data\Rule as RuleDataModel;
 use Magento\SalesRule\Model\Rule;
 
-/**
- * Class \Magento\SalesRule\Model\Converter\ToModel
- *
- */
 class ToModel
 {
     /**

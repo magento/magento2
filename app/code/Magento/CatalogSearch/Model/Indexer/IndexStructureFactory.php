@@ -51,7 +51,6 @@ class IndexStructureFactory
      * @param ScopeConfigInterface $scopeConfig
      * @param string $configPath
      * @param string[] $structures
-     * @since 100.1.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,

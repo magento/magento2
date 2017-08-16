@@ -6,10 +6,6 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Set;
 
-/**
- * Class \Magento\Catalog\Controller\Adminhtml\Product\Set\Edit
- *
- */
 class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Set
 {
     /**

@@ -9,10 +9,6 @@ namespace Magento\Sales\Model\Order\Pdf\Config;
 
 use Magento\Framework\Module\Dir;
 
-/**
- * Class \Magento\Sales\Model\Order\Pdf\Config\SchemaLocator
- *
- */
 class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {
     /**

@@ -10,10 +10,6 @@ namespace Magento\Framework\Cache;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Psr\Log\LoggerInterface as Logger;
 
-/**
- * Class \Magento\Framework\Cache\InvalidateLogger
- *
- */
 class InvalidateLogger
 {
     /**
