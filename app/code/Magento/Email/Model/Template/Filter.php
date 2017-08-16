@@ -149,9 +149,9 @@ class Filter extends \Magento\Framework\Filter\Template
     protected $urlModel;
 
     /**
-     * @var \Pelago\Emogrifier
+     * @var \Magento\Framework\Css\PreProcessor\Adapter\CssInliner
      */
-    protected $emogrifier;
+    protected $cssInliner;
 
     /**
      * @var \Magento\Email\Model\Source\Variables
@@ -180,7 +180,7 @@ class Filter extends \Magento\Framework\Filter\Template
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Framework\UrlInterface $urlModel
-     * @param \Pelago\Emogrifier $emogrifier
+     * @param \Magento\Framework\Css\PreProcessor\Adapter\CssInliner $cssInliner
      * @param \Magento\Email\Model\Source\Variables $configVariables
      * @param array $variables
      *
@@ -198,7 +198,7 @@ class Filter extends \Magento\Framework\Filter\Template
         \Magento\Framework\View\LayoutFactory $layoutFactory,
         \Magento\Framework\App\State $appState,
         \Magento\Framework\UrlInterface $urlModel,
-        \Pelago\Emogrifier $emogrifier,
+        \Magento\Framework\Css\PreProcessor\Adapter\CssInliner $cssInliner,
         \Magento\Email\Model\Source\Variables $configVariables,
         $variables = []
     ) {
@@ -213,7 +213,7 @@ class Filter extends \Magento\Framework\Filter\Template
         $this->_layoutFactory = $layoutFactory;
         $this->_appState = $appState;
         $this->urlModel = $urlModel;
-        $this->emogrifier = $emogrifier;
+        $this->cssInliner = $cssInliner;
         $this->configVariables = $configVariables;
         parent::__construct($string, $variables);
     }
@@ -975,14 +975,14 @@ class Filter extends \Magento\Framework\Filter\Template
                     );
                 }
 
-                $emogrifier = $this->emogrifier;
-                $emogrifier->setHtml($html);
-                $emogrifier->setCss($cssToInline);
+                $this->cssInliner->setHtml($html);
+
+                $this->cssInliner->setCss($cssToInline);
 
                 // Don't parse inline <style> tags, since existing tag is intentionally for non-inline styles
-                $emogrifier->disableStyleBlocksParsing();
+                $this->cssInliner->disableStyleBlocksParsing();
 
-                $processedHtml = $emogrifier->emogrify();
+                $processedHtml = $this->cssInliner->process();
             } catch (\Exception $e) {
                 if ($this->_appState->getMode() == \Magento\Framework\App\State::MODE_DEVELOPER) {
                     $processedHtml = __('CSS inlining error:') . PHP_EOL . $e->getMessage()
