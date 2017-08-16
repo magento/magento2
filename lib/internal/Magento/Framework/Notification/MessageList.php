@@ -10,6 +10,7 @@ namespace Magento\Framework\Notification;
  * Class for processing the list of system messages
  *
  * Class MessageList
+ * @api
  */
 class MessageList
 {

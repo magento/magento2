@@ -8,6 +8,9 @@ namespace Magento\AdminNotification\Model\System\Message;
 
 use Magento\Store\Model\Store;
 
+/**
+ * @api
+ */
 class Security implements \Magento\Framework\Notification\MessageInterface
 {
     /**

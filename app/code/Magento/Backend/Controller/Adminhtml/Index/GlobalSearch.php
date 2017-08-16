@@ -6,6 +6,9 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\Index;
 
+/**
+ * @api
+ */
 class GlobalSearch extends \Magento\Backend\Controller\Adminhtml\Index
 {
     /**

@@ -11,7 +11,7 @@ use Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilter;
  * Grid column block
  *
  * @api
- * @deprecated
+ * @deprecated in favour of UI component implementation
  */
 class Column extends \Magento\Backend\Block\Widget
 {

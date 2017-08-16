@@ -6,7 +6,7 @@
 namespace Magento\Ui\Component\Form\Element;
 
 /**
- * Class RadioSet
+ * @api
  */
 class RadioSet extends AbstractOptionsField
 {

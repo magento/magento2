@@ -7,6 +7,7 @@ namespace Magento\CatalogSearch\Model\Source;
 
 /**
  * Attribute weight options
+ * @api
  */
 class Weight implements \Magento\Framework\Data\OptionSourceInterface
 {

@@ -17,6 +17,8 @@ use Magento\Framework\Serialize\Serializer\Json as JsonSerializer;
 
 /**
  * Class processes values using backend model which declared in system.xml.
+ *
+ * @api
  */
 class ValueProcessor
 {

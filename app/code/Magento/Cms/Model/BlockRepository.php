@@ -154,25 +154,10 @@ class BlockRepository implements BlockRepositoryInterface
 
         $this->collectionProcessor->process($criteria, $collection);
 
-        $blocks = [];
-        /** @var Block $blockModel */
-        foreach ($collection as $blockModel) {
-            $blockData = $this->dataBlockFactory->create();
-            $this->dataObjectHelper->populateWithArray(
-                $blockData,
-                $blockModel->getData(),
-                \Magento\Cms\Api\Data\BlockInterface::class
-            );
-            $blocks[] = $this->dataObjectProcessor->buildOutputDataArray(
-                $blockData,
-                \Magento\Cms\Api\Data\BlockInterface::class
-            );
-        }
-
         /** @var Data\BlockSearchResultsInterface $searchResults */
         $searchResults = $this->searchResultsFactory->create();
         $searchResults->setSearchCriteria($criteria);
-        $searchResults->setItems($blocks);
+        $searchResults->setItems($collection->getItems());
         $searchResults->setTotalCount($collection->getSize());
         return $searchResults;
     }

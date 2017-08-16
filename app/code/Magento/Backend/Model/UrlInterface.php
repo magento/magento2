@@ -5,6 +5,9 @@
  */
 namespace Magento\Backend\Model;
 
+/**
+ * @api
+ */
 interface UrlInterface extends \Magento\Framework\UrlInterface
 {
     /**

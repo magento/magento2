@@ -21,6 +21,5 @@ class Sample
 
     public function & getReference()
     {
-
     }
 }

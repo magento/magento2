@@ -24,7 +24,7 @@ class TermTest extends \PHPUnit_Framework_TestCase
     public function testGetSearchUrl()
     {
         $query = uniqid();
-        $obj = new \Magento\Framework\DataObject(['name' => $query]);
+        $obj = new \Magento\Framework\DataObject(['query_text' => $query]);
         $this->assertStringEndsWith("/catalogsearch/result/?q={$query}", $this->_block->getSearchUrl($obj));
     }
 }

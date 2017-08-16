@@ -462,6 +462,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         );
         $order = $this->_model->createOrder();
         $this->_verifyCreatedOrder($order, $shippingMethod);
+        $this->getCustomerRegistry()->remove($order->getCustomerId());
         $customer = $this->getCustomerById($order->getCustomerId());
         $address = $this->getAddressById($customer->getDefaultShipping());
         $this->assertEquals(
@@ -764,5 +765,14 @@ class CreateTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Customer\Api\AddressRepositoryInterface $addressRepository */
         return Bootstrap::getObjectManager()->create(\Magento\Customer\Api\AddressRepositoryInterface::class);
+    }
+
+    /**
+     * @return \Magento\Customer\Model\CustomerRegistry
+     */
+    private function getCustomerRegistry()
+    {
+        /** @var \Magento\Customer\Model\CustomerRegistry $addressRepository */
+        return Bootstrap::getObjectManager()->get(\Magento\Customer\Model\CustomerRegistry::class);
     }
 }

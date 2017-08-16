@@ -116,13 +116,12 @@ class UnlockButtonTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                'result' =>
-                    [
-                        'label' => new \Magento\Framework\Phrase('Unlock'),
-                        'class' => 'unlock unlock-customer',
-                        'on_click' => "location.href = 'http://website.com/';",
-                        'sort_order' => 50,
-                    ],
+                'result' => [
+                    'label' => new \Magento\Framework\Phrase('Unlock'),
+                    'class' => 'unlock unlock-customer',
+                    'on_click' => "location.href = 'http://website.com/';",
+                    'sort_order' => 50,
+                ],
                 'expectedValue' => 'true'
             ],
             ['result' => [], 'expectedValue' => false]

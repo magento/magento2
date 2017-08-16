@@ -6,6 +6,9 @@
 
 namespace Magento\Framework\Search\Request;
 
+/**
+ * @api
+ */
 class EmptyRequestDataException extends \InvalidArgumentException
 {
 }

@@ -254,8 +254,7 @@ class PublicCodeTest extends \PHPUnit_Framework_TestCase
                  *  we don't want to fail test, because Zend is considered public by default,
                  *  and we don't care if Zend classes are @api-annotated
                  */
-                if (
-                    !$parameterClass->isInternal()
+                if (!$parameterClass->isInternal()
                     && $this->areClassesFromSameVendor($parameterClass->getName(), $class)
                     && !$this->isPublished($parameterClass)
                 ) {

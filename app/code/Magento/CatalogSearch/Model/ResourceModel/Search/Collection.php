@@ -12,6 +12,7 @@ namespace Magento\CatalogSearch\Model\ResourceModel\Search;
  * Search collection
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection implements \Magento\Search\Model\SearchCollectionInterface
 {

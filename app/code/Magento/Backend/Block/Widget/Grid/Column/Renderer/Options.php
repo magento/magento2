@@ -8,7 +8,8 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 /**
  * Grid column widget for rendering grid cells that contains mapped values
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @deprecated in favour of UI component implementation
  */
 class Options extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
 {

@@ -52,13 +52,6 @@ class ConfigurableProductsFixtureTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->attributePatternMock = $this->getMockBuilder(CollectionFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->attributePatternMock = $this->getMockBuilder(Pattern::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->model = (new ObjectManager($this))->getObject(ConfigurableProductsFixture::class, [
             'fixtureModel' => $this->fixtureModelMock,
             'attributeSetsFixture' => $this->attributeSetsFixtureMock,

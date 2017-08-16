@@ -9,6 +9,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Backup data collection
+ * @api
  */
 class Collection extends \Magento\Framework\Data\Collection\Filesystem
 {

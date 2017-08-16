@@ -5,6 +5,9 @@
  */
 namespace Magento\Config\Model\Config\Source\Date;
 
+/**
+ * @api
+ */
 class Short implements \Magento\Framework\Option\ArrayInterface
 {
     /**

@@ -11,7 +11,6 @@ namespace Magento\Catalog\Model\Layer\Filter;
 /**
  * Layer price filter
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter

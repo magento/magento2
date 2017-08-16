@@ -11,6 +11,7 @@ use Magento\Framework\FlagManager;
 
 /**
  * The source with previously imported configuration.
+ * @api
  */
 class InitialSnapshotConfigSource implements ConfigSourceInterface
 {

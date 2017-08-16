@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Backend\Test\Unit\Block\Widget\Grid;
 
 /**
@@ -324,7 +322,8 @@ class ColumnSetTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals(
-            new \Magento\Framework\DataObject(['test1' => '3', 'test2' => '2']), $this->_block->getTotals()
+            new \Magento\Framework\DataObject(['test1' => '3', 'test2' => '2']),
+            $this->_block->getTotals()
         );
     }
 

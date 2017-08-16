@@ -821,14 +821,10 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                         'is_unique' => '0',
                         'frontend_label' => 'Name',
                         'is_static' => false,
-                        'apply_to' =>
-                            [
-                            ],
+                        'apply_to' => [],
                         'type' => 'varchar',
                         'default_value' => null,
-                        'options' =>
-                            [
-                            ],
+                        'options' => [],
                     ],
                     'sku' => [
                         'id' => '70',
@@ -838,14 +834,10 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                         'is_unique' => '1',
                         'frontend_label' => 'SKU',
                         'is_static' => true,
-                        'apply_to' =>
-                            [
-                            ],
+                        'apply_to' => [],
                         'type' => 'varchar',
                         'default_value' => null,
-                        'options' =>
-                            [
-                            ],
+                        'options' => [],
                     ]
                 ]
             ]

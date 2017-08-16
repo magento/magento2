@@ -27,7 +27,7 @@ use Magento\Framework\Stdlib\ArrayManager;
 
 /**
  * Class AdvancedPricing
- * 
+ *
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
