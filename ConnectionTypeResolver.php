@@ -7,13 +7,11 @@ namespace Magento\Framework\MessageQueue;
 
 /**
  * {@inheritdoc}
- * @since 2.2.0
  */
 class ConnectionTypeResolver
 {
     /**
      * @var ConnectionTypeResolverInterface[]
-     * @since 2.2.0
      */
     private $resolvers;
 
@@ -21,7 +19,6 @@ class ConnectionTypeResolver
      * Initialize dependencies.
      *
      * @param ConnectionTypeResolverInterface[] $resolvers
-     * @since 2.2.0
      */
     public function __construct($resolvers)
     {
@@ -30,7 +27,6 @@ class ConnectionTypeResolver
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getConnectionType($connectionName)
     {

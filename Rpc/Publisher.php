@@ -20,43 +20,36 @@ use Magento\Framework\MessageQueue\Publisher\ConfigInterface as PublisherConfig;
  * A MessageQueue Publisher to handle publishing a message.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 2.1.0
  */
 class Publisher implements PublisherInterface
 {
     /**
      * @var ExchangeRepository
-     * @since 2.1.0
      */
     private $exchangeRepository;
 
     /**
      * @var EnvelopeFactory
-     * @since 2.1.0
      */
     private $envelopeFactory;
 
     /**
      * @var MessageEncoder
-     * @since 2.1.0
      */
     private $messageEncoder;
 
     /**
      * @var MessageValidator
-     * @since 2.1.0
      */
     private $messageValidator;
 
     /**
      * @var ResponseQueueNameBuilder
-     * @since 2.2.0
      */
     private $responseQueueNameBuilder;
 
     /**
      * @var PublisherConfig
-     * @since 2.2.0
      */
     private $publisherConfig;
 
@@ -71,7 +64,6 @@ class Publisher implements PublisherInterface
      * @param MessageValidator $messageValidator
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.1.0
      */
     public function __construct(
         ExchangeRepository $exchangeRepository,
@@ -89,7 +81,6 @@ class Publisher implements PublisherInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function publish($topicName, $data)
     {
@@ -118,8 +109,7 @@ class Publisher implements PublisherInterface
      *
      * @return ResponseQueueNameBuilder
      *
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getResponseQueueNameBuilder()
     {
@@ -135,8 +125,7 @@ class Publisher implements PublisherInterface
      *
      * @return PublisherConfig
      *
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getPublisherConfig()
     {

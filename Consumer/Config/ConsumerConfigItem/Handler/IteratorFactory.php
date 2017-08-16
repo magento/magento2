@@ -7,7 +7,6 @@ namespace Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItem\Hand
 
 /**
  * Factory class for @see Iterator
- * @since 2.2.0
  */
 class IteratorFactory
 {
@@ -15,7 +14,6 @@ class IteratorFactory
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.2.0
      */
     private $objectManager = null;
 
@@ -23,7 +21,6 @@ class IteratorFactory
      * Instance name to create
      *
      * @var string
-     * @since 2.2.0
      */
     private $instanceName = null;
 
@@ -32,7 +29,6 @@ class IteratorFactory
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
-     * @since 2.2.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -47,7 +43,6 @@ class IteratorFactory
      *
      * @param array $data
      * @return Iterator
-     * @since 2.2.0
      */
     public function create(array $data = [])
     {

@@ -7,7 +7,6 @@ namespace Magento\Framework\MessageQueue\Topology\Config;
 
 /**
  * Topology config data validator.
- * @since 2.2.0
  */
 interface ValidatorInterface
 {
@@ -17,7 +16,6 @@ interface ValidatorInterface
      * @param array $configData
      * @throws \LogicException
      * @return void
-     * @since 2.2.0
      */
     public function validate($configData);
 }

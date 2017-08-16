@@ -9,13 +9,11 @@ use Magento\Framework\MessageQueue\Consumer\Config\ValidatorInterface;
 
 /**
  * Consumer config data validator for fields types.
- * @since 2.2.0
  */
 class FieldsTypes implements ValidatorInterface
 {
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function validate($configData)
     {
@@ -31,7 +29,6 @@ class FieldsTypes implements ValidatorInterface
      * @param array $consumerConfig
      * @return void
      * @throws \LogicException
-     * @since 2.2.0
      */
     private function validateConsumerFieldsTypes($consumerName, $consumerConfig)
     {

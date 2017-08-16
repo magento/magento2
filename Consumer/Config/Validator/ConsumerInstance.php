@@ -11,13 +11,11 @@ use Magento\Framework\MessageQueue\ConsumerInterface;
 
 /**
  * Consumer config data validator for consumer instance.
- * @since 2.2.0
  */
 class ConsumerInstance implements ValidatorInterface
 {
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function validate($configData)
     {
@@ -32,7 +30,6 @@ class ConsumerInstance implements ValidatorInterface
      * @param array $consumerConfig
      * @return void
      * @throws \LogicException
-     * @since 2.2.0
      */
     private function validateConsumerInstance($consumerConfig)
     {

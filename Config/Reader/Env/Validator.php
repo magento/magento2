@@ -12,13 +12,11 @@ use Magento\Framework\Reflection\TypeProcessor;
 
 /**
  * Communication configuration validator. Validates data, that have been read from env.php.
- * @since 2.1.0
  */
 class Validator extends ConfigValidator
 {
     /**
      * @var MethodsMap
-     * @since 2.1.0
      */
     private $methodsMap;
 
@@ -27,7 +25,6 @@ class Validator extends ConfigValidator
      *
      * @param TypeProcessor $typeProcessor
      * @param MethodsMap $methodsMap
-     * @since 2.1.0
      */
     public function __construct(
         TypeProcessor $typeProcessor,
@@ -43,7 +40,6 @@ class Validator extends ConfigValidator
      * @param array $configData
      * @param array|null $xmlConfigData
      * @return void
-     * @since 2.1.0
      */
     public function validate($configData, array $xmlConfigData = [])
     {
@@ -91,7 +87,6 @@ class Validator extends ConfigValidator
      * @param array $configData
      * @param array $xmlConfigData
      * @return array
-     * @since 2.1.0
      */
     private function getAvailablePublishers($configData, $xmlConfigData)
     {
@@ -112,7 +107,6 @@ class Validator extends ConfigValidator
      * @param array $configData
      * @param array $xmlConfigData
      * @return array
-     * @since 2.1.0
      */
     private function getAvailableTopics($configData, $xmlConfigData)
     {

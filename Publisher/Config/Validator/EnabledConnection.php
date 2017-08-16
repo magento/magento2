@@ -9,13 +9,11 @@ use Magento\Framework\MessageQueue\Publisher\Config\ValidatorInterface;
 
 /**
  * Publisher config data validator. Validates that publisher has only one enabled connection at the same time
- * @since 2.2.0
  */
 class EnabledConnection implements ValidatorInterface
 {
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function validate($configData)
     {

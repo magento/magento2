@@ -9,28 +9,20 @@ namespace Magento\Framework\MessageQueue;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Phrase;
 
-/**
- * Class \Magento\Framework\MessageQueue\MessageController
- *
- * @since 2.1.0
- */
 class MessageController
 {
     /**
      * @var \Magento\Framework\MessageQueue\LockInterfaceFactory
-     * @since 2.1.0
      */
     private $lockFactory;
 
     /**
      * @var \Magento\Framework\MessageQueue\Lock\ReaderInterface
-     * @since 2.1.0
      */
     private $reader;
 
     /**
      * @var \Magento\Framework\MessageQueue\Lock\WriterInterface
-     * @since 2.1.0
      */
     private $writer;
 
@@ -40,7 +32,6 @@ class MessageController
      * @param \Magento\Framework\MessageQueue\LockInterfaceFactory $lockFactory
      * @param Lock\ReaderInterface $reader
      * @param Lock\WriterInterface $writer
-     * @since 2.1.0
      */
     public function __construct(
         \Magento\Framework\MessageQueue\LockInterfaceFactory $lockFactory,
@@ -60,7 +51,6 @@ class MessageController
      * @return LockInterface
      * @throws MessageLockException
      * @throws NotFoundException
-     * @since 2.1.0
      */
     public function lock(EnvelopeInterface $envelope, $consumerName)
     {

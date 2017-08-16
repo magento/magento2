@@ -7,10 +7,6 @@ namespace Magento\Framework\MessageQueue;
 
 use Magento\Framework\ObjectManagerInterface;
 
-/**
- * Class \Magento\Framework\MessageQueue\MergerFactory
- *
- */
 class MergerFactory
 {
     /**

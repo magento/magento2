@@ -10,7 +10,6 @@ use Magento\Framework\MessageQueue\Topology\Config\QueueConfigItemFactory;
 
 /**
  * Queue config item iterator.
- * @since 2.2.0
  */
 class Iterator implements \Iterator, \ArrayAccess
 {
@@ -18,7 +17,6 @@ class Iterator implements \Iterator, \ArrayAccess
      * Consumer config item.
      *
      * @var QueueConfigItem
-     * @since 2.2.0
      */
     private $object;
 
@@ -26,7 +24,6 @@ class Iterator implements \Iterator, \ArrayAccess
      * Config data.
      *
      * @var array
-     * @since 2.2.0
      */
     private $data;
 
@@ -35,7 +32,6 @@ class Iterator implements \Iterator, \ArrayAccess
      *
      * @param DataMapper $configData
      * @param QueueConfigItemFactory $itemFactory
-     * @since 2.2.0
      */
     public function __construct(DataMapper $configData, QueueConfigItemFactory $itemFactory)
     {
@@ -48,7 +44,6 @@ class Iterator implements \Iterator, \ArrayAccess
      * Get current item.
      *
      * @return QueueConfigItem
-     * @since 2.2.0
      */
     public function current()
     {
@@ -57,7 +52,6 @@ class Iterator implements \Iterator, \ArrayAccess
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function next()
     {
@@ -72,7 +66,6 @@ class Iterator implements \Iterator, \ArrayAccess
      *
      * @param array $data
      * @return void
-     * @since 2.2.0
      */
     private function initObject(array $data)
     {
@@ -81,7 +74,6 @@ class Iterator implements \Iterator, \ArrayAccess
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function key()
     {
@@ -90,7 +82,6 @@ class Iterator implements \Iterator, \ArrayAccess
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function valid()
     {
@@ -99,7 +90,6 @@ class Iterator implements \Iterator, \ArrayAccess
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function rewind()
     {
@@ -111,7 +101,6 @@ class Iterator implements \Iterator, \ArrayAccess
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function offsetExists($offset)
     {
@@ -120,7 +109,6 @@ class Iterator implements \Iterator, \ArrayAccess
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function offsetGet($offset)
     {
@@ -134,7 +122,6 @@ class Iterator implements \Iterator, \ArrayAccess
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function offsetSet($offset, $value)
     {
@@ -143,7 +130,6 @@ class Iterator implements \Iterator, \ArrayAccess
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function offsetUnset($offset)
     {

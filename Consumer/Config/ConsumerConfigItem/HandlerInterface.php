@@ -7,7 +7,6 @@ namespace Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItem;
 
 /**
  * Representation of message queue handler configuration.
- * @since 2.2.0
  */
 interface HandlerInterface
 {
@@ -15,7 +14,6 @@ interface HandlerInterface
      * Get handler type name.
      *
      * @return string
-     * @since 2.2.0
      */
     public function getType();
 
@@ -23,7 +21,6 @@ interface HandlerInterface
      * Get handler method name.
      *
      * @return string
-     * @since 2.2.0
      */
     public function getMethod();
 }

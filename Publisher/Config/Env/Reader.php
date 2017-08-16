@@ -12,19 +12,16 @@ use Magento\Framework\MessageQueue\Config\Reader\Env as MessageQueueEnvReader;
 
 /**
  * Publisher configuration reader. Reads data from env.php.
- * @since 2.2.0
  */
 class Reader implements \Magento\Framework\Config\ReaderInterface
 {
     /**
      * @var \Magento\Framework\MessageQueue\Config\Reader\Env
-     * @since 2.2.0
      */
     private $deploymentConfig;
 
     /**
      * @var MessageQueueConfigData
-     * @since 2.2.0
      */
     private $configData;
 
@@ -32,7 +29,6 @@ class Reader implements \Magento\Framework\Config\ReaderInterface
      * Mapping between default publishers name and connections
      *
      * @var array
-     * @since 2.2.0
      */
     private $publisherNameToConnectionMap;
 
@@ -40,7 +36,6 @@ class Reader implements \Magento\Framework\Config\ReaderInterface
      * @param DeploymentConfig $deploymentConfig
      * @param MessageQueueConfigData $configData
      * @param array $publisherNameToConnectionMap
-     * @since 2.2.0
      */
     public function __construct(
         DeploymentConfig $deploymentConfig,
@@ -57,7 +52,6 @@ class Reader implements \Magento\Framework\Config\ReaderInterface
      *
      * @param string|null $scope
      * @return array
-     * @since 2.2.0
      */
     public function read($scope = null)
     {
@@ -79,7 +73,6 @@ class Reader implements \Magento\Framework\Config\ReaderInterface
      *
      * @param string|null $scope
      * @return array
-     * @since 2.2.0
      */
     private function convertConfigData($scope)
     {

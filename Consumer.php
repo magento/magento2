@@ -39,49 +39,41 @@ class Consumer implements ConsumerInterface
 
     /**
      * @var CallbackInvoker
-     * @since 2.1.0
      */
     private $invoker;
 
     /**
      * @var MessageController
-     * @since 2.1.0
      */
     private $messageController;
 
     /**
      * @var QueueRepository
-     * @since 2.2.0
      */
     private $queueRepository;
 
     /**
      * @var EnvelopeFactory
-     * @since 2.2.0
      */
     private $envelopeFactory;
 
     /**
      * @var MessageValidator
-     * @since 2.2.0
      */
     private $messageValidator;
 
     /**
      * @var ConsumerConfig
-     * @since 2.2.0
      */
     private $consumerConfig;
 
     /**
      * @var CommunicationConfig
-     * @since 2.2.0
      */
     private $communicationConfig;
 
     /**
      * @var LoggerInterface
-     * @since 2.2.0
      */
     private $logger;
 
@@ -165,7 +157,6 @@ class Consumer implements ConsumerInterface
      * @param mixed $result
      * @return string
      * @throws LocalizedException
-     * @since 2.2.0
      */
     private function processSyncResponse($topicName, $result)
     {
@@ -182,7 +173,6 @@ class Consumer implements ConsumerInterface
      *
      * @param EnvelopeInterface $envelope
      * @return void
-     * @since 2.2.0
      */
     private function sendResponse(EnvelopeInterface $envelope)
     {
@@ -250,8 +240,7 @@ class Consumer implements ConsumerInterface
      *
      * @return ConsumerConfig
      *
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getConsumerConfig()
     {
@@ -266,8 +255,7 @@ class Consumer implements ConsumerInterface
      *
      * @return CommunicationConfig
      *
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getCommunicationConfig()
     {
@@ -283,8 +271,7 @@ class Consumer implements ConsumerInterface
      *
      * @return QueueRepository
      *
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getQueueRepository()
     {
@@ -299,8 +286,7 @@ class Consumer implements ConsumerInterface
      *
      * @return MessageController
      *
-     * @deprecated 2.1.0
-     * @since 2.1.0
+     * @deprecated 100.1.0
      */
     private function getMessageController()
     {
@@ -316,8 +302,7 @@ class Consumer implements ConsumerInterface
      *
      * @return MessageValidator
      *
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getMessageValidator()
     {
@@ -333,8 +318,7 @@ class Consumer implements ConsumerInterface
      *
      * @return EnvelopeFactory
      *
-     * @deprecated 2.2.0
-     * @since 2.2.0
+     * @deprecated 100.2.0
      */
     private function getEnvelopeFactory()
     {

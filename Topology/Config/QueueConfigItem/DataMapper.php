@@ -13,7 +13,6 @@ use Magento\Framework\Phrase;
 
 /**
  * Topology queue config data mapper.
- * @since 2.2.0
  */
 class DataMapper
 {
@@ -21,25 +20,21 @@ class DataMapper
      * Config data.
      *
      * @var array
-     * @since 2.2.0
      */
     private $mappedData;
 
     /**
      * @var Data
-     * @since 2.2.0
      */
     private $configData;
 
     /**
      * @var CommunicationConfig
-     * @since 2.2.0
      */
     private $communicationConfig;
 
     /**
      * @var ResponseQueueNameBuilder
-     * @since 2.2.0
      */
     private $queueNameBuilder;
 
@@ -49,7 +44,6 @@ class DataMapper
      * @param Data $configData
      * @param CommunicationConfig $communicationConfig
      * @param ResponseQueueNameBuilder $queueNameBuilder
-     * @since 2.2.0
      */
     public function __construct(
         Data $configData,
@@ -65,7 +59,6 @@ class DataMapper
      * Get mapped config data.
      *
      * @return array
-     * @since 2.2.0
      */
     public function getMappedData()
     {
@@ -91,7 +84,6 @@ class DataMapper
      * @param string $topic
      * @param string $connection
      * @return array
-     * @since 2.2.0
      */
     private function createQueueItems($name, $topic, $connection)
     {
@@ -131,7 +123,6 @@ class DataMapper
      * @param string $topicName
      * @return bool
      * @throws LocalizedException
-     * @since 2.2.0
      */
     private function isSynchronousTopic($topicName)
     {
@@ -149,7 +140,6 @@ class DataMapper
      *
      * @param string $wildcard
      * @return array
-     * @since 2.2.0
      */
     private function matchSynchronousTopics($wildcard)
     {
@@ -175,7 +165,6 @@ class DataMapper
      *
      * @param string $wildcardKey
      * @return string
-     * @since 2.2.0
      */
     private function buildWildcardPattern($wildcardKey)
     {

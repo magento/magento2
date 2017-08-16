@@ -42,10 +42,9 @@ interface ConsumerConfigurationInterface
      * Get consumer type sync|async.
      *
      * @return string
-     * @deprecated 2.2.0
+     * @deprecated 100.2.0
      * @see \Magento\Framework\Communication\ConfigInterface::getTopic
      * @throws \LogicException
-     * @since 2.1.0
      */
     public function getType();
 
@@ -62,7 +61,6 @@ interface ConsumerConfigurationInterface
      * @param string $topicName
      * @return callback[]
      * @throws \LogicException
-     * @since 2.1.0
      */
     public function getHandlers($topicName);
 
@@ -70,20 +68,17 @@ interface ConsumerConfigurationInterface
      * Get topics.
      *
      * @return string[]
-     * @since 2.1.0
      */
     public function getTopicNames();
 
     /**
      * @param string $topicName
      * @return string
-     * @since 2.1.0
      */
     public function getMessageSchemaType($topicName);
 
     /**
      * @return QueueInterface
-     * @since 2.1.0
      */
     public function getQueue();
 }

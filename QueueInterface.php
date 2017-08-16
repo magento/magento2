@@ -50,7 +50,7 @@ interface QueueInterface
      *
      * @param EnvelopeInterface $envelope
      * @return void
-     * @since 2.1.0
+     * @since 100.1.0
      */
     public function push(EnvelopeInterface $envelope);
 }

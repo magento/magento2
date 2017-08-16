@@ -15,8 +15,7 @@ use Magento\Framework\MessageQueue\ConsumerInterface;
 /**
  * Converts MessageQueue config from \DOMDocument to array
  *
- * @deprecated 2.2.0
- * @since 2.1.0
+ * @deprecated 100.2.0
  */
 class TopicConfig implements \Magento\Framework\Config\ConverterInterface
 {
@@ -26,19 +25,16 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
 
     /**
      * @var Validator
-     * @since 2.1.0
      */
     private $xmlValidator;
 
     /**
      * @var MethodsMap
-     * @since 2.1.0
      */
     private $methodsMap;
 
     /**
      * @var CommunicationConfig
-     * @since 2.1.0
      */
     private $communicationConfig;
 
@@ -48,7 +44,6 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
      * @param MethodsMap $methodsMap
      * @param Validator $xmlValidator
      * @param CommunicationConfig $communicationConfig
-     * @since 2.1.0
      */
     public function __construct(
         MethodsMap $methodsMap,
@@ -62,7 +57,6 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
 
     /**
      * {@inheritDoc}
-     * @since 2.1.0
      */
     public function convert($source)
     {
@@ -86,7 +80,6 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
      *
      * @param array $topics
      * @return array
-     * @since 2.1.0
      */
     private function buildTopicsConfiguration($topics)
     {
@@ -120,7 +113,6 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
      *
      * @param array $topics
      * @return array
-     * @since 2.1.0
      */
     private function buildConsumers($topics)
     {
@@ -160,7 +152,6 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
      *
      * @param array $topics
      * @return array
-     * @since 2.1.0
      */
     private function processWildcard($topics)
     {
@@ -193,7 +184,6 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
      *
      * @param array $topics
      * @return array
-     * @since 2.1.0
      */
     private function buildPublishers($topics)
     {
@@ -214,7 +204,6 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
      *
      * @param array $topics
      * @return array
-     * @since 2.1.0
      */
     private function buildBinds($topics)
     {
@@ -238,7 +227,6 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
      *
      * @param array $topics
      * @return array
-     * @since 2.1.0
      */
     private function buildExchangeTopicToQueue($topics)
     {
@@ -259,7 +247,6 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
      *
      * @param \DOMDocument $config
      * @return array
-     * @since 2.1.0
      */
     private function extractTopics($config)
     {
@@ -285,7 +272,6 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
      * @param \DOMElement $brokerNode
      * @param string $topicName
      * @return array
-     * @since 2.1.0
      */
     protected function extractQueuesFromBroker(\DOMElement $brokerNode, $topicName)
     {
@@ -318,7 +304,6 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
      * @param string $attributeName
      * @param mixed $default
      * @return string|null
-     * @since 2.1.0
      */
     protected function getAttributeValue(\DOMNode $node, $attributeName, $default = null)
     {

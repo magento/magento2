@@ -9,7 +9,7 @@ namespace Magento\Framework\MessageQueue\Bulk;
  * Interface for bulk exchange.
  *
  * @api
- * @since 2.2.0
+ * @since 100.2.0
  */
 interface ExchangeInterface
 {
@@ -19,7 +19,7 @@ interface ExchangeInterface
      * @param string $topic
      * @param \Magento\Framework\MessageQueue\EnvelopeInterface[] $envelopes
      * @return mixed
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function enqueue($topic, array $envelopes);
 }

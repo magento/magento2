@@ -8,7 +8,6 @@ namespace Magento\Framework\MessageQueue;
 
 /**
  * Class CallbackInvoker to invoke callbacks for consumer classes
- * @since 2.1.0
  */
 class CallbackInvoker
 {
@@ -19,7 +18,6 @@ class CallbackInvoker
      * @param int $maxNumberOfMessages
      * @param \Closure $callback
      * @return void
-     * @since 2.1.0
      */
     public function invoke(QueueInterface $queue, $maxNumberOfMessages, $callback)
     {

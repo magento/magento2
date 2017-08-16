@@ -11,7 +11,6 @@ use \Magento\Framework\MessageQueue\Publisher\Config\PublisherConfigItem\Iterato
 
 /**
  * Publisher config provides access data declared in etc/queue_publisher.xml
- * @since 2.2.0
  */
 class Config implements ConfigInterface
 {
@@ -19,7 +18,6 @@ class Config implements ConfigInterface
      * Publisher config data iterator.
      *
      * @var Iterator
-     * @since 2.2.0
      */
     private $iterator;
 
@@ -27,7 +25,6 @@ class Config implements ConfigInterface
      * Initialize dependencies.
      *
      * @param Iterator $iterator
-     * @since 2.2.0
      */
     public function __construct(Iterator $iterator)
     {
@@ -36,7 +33,6 @@ class Config implements ConfigInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getPublisher($topic)
     {
@@ -51,7 +47,6 @@ class Config implements ConfigInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function getPublishers()
     {

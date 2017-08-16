@@ -7,7 +7,6 @@ namespace Magento\Framework\MessageQueue\Consumer\Config;
 
 /**
  * Queue consumer config validator interface.
- * @since 2.2.0
  */
 interface ValidatorInterface
 {
@@ -17,7 +16,6 @@ interface ValidatorInterface
      * @param array $configData
      * @return void
      * @throws \LogicException
-     * @since 2.2.0
      */
     public function validate($configData);
 }

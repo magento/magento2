@@ -7,7 +7,6 @@ namespace Magento\Framework\MessageQueue\Publisher\Config;
 
 /**
  * Factory class for @see \Magento\Framework\MessageQueue\Publisher\Config\PublisherConnectionInterface
- * @since 2.2.0
  */
 class PublisherConnectionFactory
 {
@@ -15,7 +14,6 @@ class PublisherConnectionFactory
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
-     * @since 2.2.0
      */
     private $objectManager = null;
 
@@ -23,7 +21,6 @@ class PublisherConnectionFactory
      * Instance name to create
      *
      * @var string
-     * @since 2.2.0
      */
     private $instanceName = null;
 
@@ -32,7 +29,6 @@ class PublisherConnectionFactory
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
-     * @since 2.2.0
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -47,7 +43,6 @@ class PublisherConnectionFactory
      *
      * @param array $data
      * @return \Magento\Framework\MessageQueue\Publisher\Config\PublisherConnection
-     * @since 2.2.0
      */
     public function create(array $data = [])
     {

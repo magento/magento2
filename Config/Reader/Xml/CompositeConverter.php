@@ -11,14 +11,12 @@ use Magento\Framework\Phrase;
 /**
  * Converts MessageQueue config from \DOMDocument to array
  *
- * @deprecated 2.2.0
- * @since 2.1.0
+ * @deprecated 100.2.0
  */
 class CompositeConverter implements ConverterInterface
 {
     /**
      * @var ConverterInterface[]
-     * @since 2.1.0
      */
     private $converters;
 
@@ -26,7 +24,6 @@ class CompositeConverter implements ConverterInterface
      * Initialize dependencies.
      *
      * @param array $converters
-     * @since 2.1.0
      */
     public function __construct(array $converters)
     {
@@ -47,7 +44,6 @@ class CompositeConverter implements ConverterInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.1.0
      */
     public function convert($source)
     {
@@ -63,7 +59,6 @@ class CompositeConverter implements ConverterInterface
      *
      * @param array $converters
      * @return array
-     * @since 2.1.0
      */
     private function sortConverters(array $converters)
     {

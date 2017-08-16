@@ -9,8 +9,7 @@ namespace Magento\Framework\MessageQueue\Config\Reader;
 /**
  * MessageQueue configuration filesystem loader. Loads all publisher configuration from XML file
  *
- * @deprecated 2.2.0
- * @since 2.1.0
+ * @deprecated 100.2.0
  */
 class Xml extends \Magento\Framework\Config\Reader\Filesystem
 {
@@ -18,7 +17,6 @@ class Xml extends \Magento\Framework\Config\Reader\Filesystem
      * List of id attributes for merge
      *
      * @var array
-     * @since 2.1.0
      */
     protected $_idAttributes = [
         '/config/publisher' => 'name',
@@ -38,7 +36,6 @@ class Xml extends \Magento\Framework\Config\Reader\Filesystem
      * @param array $idAttributes
      * @param string $domDocumentClass
      * @param string $defaultScope
-     * @since 2.1.0
      */
     public function __construct(
         \Magento\Framework\Config\FileResolverInterface $fileResolver,
