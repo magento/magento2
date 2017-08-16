@@ -122,6 +122,7 @@ class SetConversionValueObserverTest extends \PHPUnit\Framework\TestCase
     {
         $ordersIds = [1, 2, 3];
         $conversionValue = 0;
+        $conversionValueCurrency = 'USD';
         $this->_helperMock->expects($this->once())->method('isGoogleAdwordsActive')->will($this->returnValue(true));
         $this->_helperMock->expects($this->once())->method('isDynamicConversionValue')->will($this->returnValue(true));
         $this->_eventMock->expects($this->once())->method('getOrderIds')->will($this->returnValue($ordersIds));
@@ -150,6 +151,14 @@ class SetConversionValueObserverTest extends \PHPUnit\Framework\TestCase
         )->with(
             \Magento\GoogleAdwords\Helper\Data::CONVERSION_VALUE_REGISTRY_NAME,
             $conversionValue
+        );
+        $this->_registryMock->expects(
+            $this->once()
+        )->method(
+            'register'
+        )->with(
+            \Magento\GoogleAdwords\Helper\Data::CONVERSION_VALUE_CURRENCY_REGISTRY_NAME,
+            $conversionValueCurrency
         );
 
         $this->assertSame($this->_model, $this->_model->execute($this->_eventObserverMock));

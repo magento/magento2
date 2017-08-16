@@ -60,8 +60,20 @@ class SetConversionValueObserver implements ObserverInterface
         $this->_collection->addFieldToFilter('entity_id', ['in' => $orderIds]);
         $conversionValue = 0;
         /** @var $order \Magento\Sales\Model\Order */
-        foreach ($this->_collection as $order) {
-            $conversionValue += $order->getBaseGrandTotal();
+
+        if($this->_helper->getSendCurrency()) {
+            foreach ($this->_collection as $order) {
+                $conversionValue += $order->getGrandTotal();
+                $conversionCurrency = $order->getOrderCurrencyCode();
+            }
+            $this->_registry->register(
+                \Magento\GoogleAdwords\Helper\Data::CONVERSION_VALUE_CURRENCY_REGISTRY_NAME,
+                $conversionCurrency
+            );
+        } else {
+            foreach ($this->_collection as $order) {
+                $conversionValue += $order->getBaseGrandTotal();
+            }
         }
         $this->_registry->register(
             \Magento\GoogleAdwords\Helper\Data::CONVERSION_VALUE_REGISTRY_NAME,

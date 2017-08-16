@@ -199,6 +199,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
     public function testGetConversionValueDynamic()
     {
         $returnValue = 4.1;
+        $returnValueCurrency = 'USD';
         $this->_scopeConfigMock->expects(
             $this->any()
         )->method(
@@ -217,8 +218,18 @@ class DataTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue($returnValue)
         );
+        $this->_registryMock->expects(
+            $this->once()
+        )->method(
+            'registry'
+        )->with(
+            \Magento\GoogleAdwords\Helper\Data::CONVERSION_VALUE_CURRENCY_REGISTRY_NAME
+        )->will(
+            $this->returnValue($returnValueCurrency)
+        );
 
         $this->assertEquals($returnValue, $this->_helper->getConversionValue());
+        $this->assertEquals($returnValueCurrency, $this->_helper->getConversionValueCurrency());
     }
 
     /**
