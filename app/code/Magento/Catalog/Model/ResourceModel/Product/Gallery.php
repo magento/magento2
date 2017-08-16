@@ -142,7 +142,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * @param int $storeId
+     * @param int|int[] $storeId
      * @param int $attributeId
      * @return \Magento\Framework\DB\Select
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -158,6 +158,12 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         );
 
         $mainTableAlias = $this->getMainTableAlias();
+
+        if (is_array($storeId)) {
+            $storeCondition = $this->getConnection()->quoteInto('value.store_id IN (?)', $storeId);
+        } else {
+            $storeCondition = $this->getConnection()->quoteInto('value.store_id = ?', (int)$storeId);
+        }
 
         $select = $this->getConnection()->select()->from(
             [$mainTableAlias => $this->getMainTable()],
@@ -176,7 +182,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 ' AND ',
                 [
                     $mainTableAlias . '.value_id = value.value_id',
-                    $this->getConnection()->quoteInto('value.store_id = ?', (int)$storeId),
+                    $storeCondition,
                 ]
             ),
             ['label', 'position', 'disabled']
