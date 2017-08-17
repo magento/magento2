@@ -7,10 +7,6 @@
  */
 namespace Magento\Framework\App\Route\Config;
 
-/**
- * Class \Magento\Framework\App\Route\Config\SchemaLocator
- *
- */
 class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {
     /**

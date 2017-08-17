@@ -13,10 +13,6 @@ use Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Store\Model\Store;
 
-/**
- * Class \Magento\CatalogUrlRewrite\Observer\CategoryUrlPathAutogeneratorObserver
- *
- */
 class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
 {
     /**

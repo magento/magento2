@@ -11,10 +11,6 @@ use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\StatusResolver;
 
-/**
- * Class \Magento\Sales\Model\Order\Payment\State\RegisterCaptureNotificationCommand
- *
- */
 class RegisterCaptureNotificationCommand implements CommandInterface
 {
     /**

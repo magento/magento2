@@ -9,10 +9,6 @@ namespace Magento\Multishipping\Controller\Checkout;
 use Magento\Multishipping\Model\Checkout\Type\Multishipping\State;
 use Magento\Framework\App\ResponseInterface;
 
-/**
- * Class \Magento\Multishipping\Controller\Checkout\Shipping
- *
- */
 class Shipping extends \Magento\Multishipping\Controller\Checkout
 {
     /**

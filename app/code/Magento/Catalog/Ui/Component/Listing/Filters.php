@@ -31,7 +31,6 @@ class Filters implements ObserverInterface
     /**
      * @param FilterFactory $filterFactory
      * @param CollectionFactory $attributeCollectionFactory
-     * @since 101.0.0
      */
     public function __construct(
         FilterFactory $filterFactory,

@@ -11,10 +11,6 @@ use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Quote\Model\QuoteIdMaskFactory;
 use Magento\Customer\Model\Session as CustomerSession;
 
-/**
- * Class \Magento\Persistent\Model\Checkout\ConfigProviderPlugin
- *
- */
 class ConfigProviderPlugin
 {
     /**

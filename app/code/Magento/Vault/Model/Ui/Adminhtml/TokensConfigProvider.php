@@ -92,7 +92,6 @@ class TokensConfigProvider
      * @param StoreManagerInterface $storeManager
      * @param DateTimeFactory $dateTimeFactory
      * @param TokenUiComponentProviderInterface[] $tokenUiComponentProviders
-     * @since 100.1.0
      */
     public function __construct(
         SessionManagerInterface $session,

@@ -6,10 +6,6 @@
  */
 namespace Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog;
 
-/**
- * Class \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog\Index
- *
- */
 class Index extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
 {
     /**

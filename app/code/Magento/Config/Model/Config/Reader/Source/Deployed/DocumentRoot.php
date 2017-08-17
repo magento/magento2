@@ -26,7 +26,6 @@ class DocumentRoot
     /**
      * DocumentRoot constructor.
      * @param DeploymentConfig $config
-     * @since 100.2.0
      */
     public function __construct(DeploymentConfig $config)
     {

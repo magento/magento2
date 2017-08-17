@@ -5,10 +5,6 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Creditmemo;
 
-/**
- * Class \Magento\Sales\Controller\Adminhtml\Order\Creditmemo\Pdfcreditmemos
- *
- */
 class Pdfcreditmemos extends \Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo\Pdfcreditmemos
 {
 }

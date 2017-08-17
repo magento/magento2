@@ -9,10 +9,6 @@ namespace Magento\Sales\Controller\Adminhtml\Shipment\AbstractShipment;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 
-/**
- * Class \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShipment\Index
- *
- */
 abstract class Index extends \Magento\Backend\App\Action
 {
     /**

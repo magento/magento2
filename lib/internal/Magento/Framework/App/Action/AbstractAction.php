@@ -10,10 +10,6 @@ namespace Magento\Framework\App\Action;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 
-/**
- * Class \Magento\Framework\App\Action\AbstractAction
- *
- */
 abstract class AbstractAction implements \Magento\Framework\App\ActionInterface
 {
     /**

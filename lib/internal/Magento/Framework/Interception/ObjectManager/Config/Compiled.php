@@ -9,10 +9,6 @@ namespace Magento\Framework\Interception\ObjectManager\Config;
 
 use Magento\Framework\Interception\ObjectManager\ConfigInterface;
 
-/**
- * Class \Magento\Framework\Interception\ObjectManager\Config\Compiled
- *
- */
 class Compiled extends \Magento\Framework\ObjectManager\Config\Compiled implements ConfigInterface
 {
     /**

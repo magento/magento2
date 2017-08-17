@@ -6,10 +6,6 @@
  */
 namespace Magento\Downloadable\Controller\Adminhtml\Downloadable\Product\Edit;
 
-/**
- * Class \Magento\Downloadable\Controller\Adminhtml\Downloadable\Product\Edit\Duplicate
- *
- */
 class Duplicate extends \Magento\Catalog\Controller\Adminhtml\Product\Duplicate
 {
 }

@@ -5,10 +5,6 @@
  */
 namespace Magento\Sales\Model\Order\Admin;
 
-/**
- * Class \Magento\Sales\Model\Order\Admin\Item
- *
- */
 class Item
 {
     /**

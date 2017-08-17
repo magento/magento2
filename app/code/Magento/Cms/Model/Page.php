@@ -20,6 +20,7 @@ use Magento\Cms\Helper\Page as PageHelper;
  * @method Page setStoreId(array $storeId)
  * @method array getStoreId()
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @since 100.0.2
  */
 class Page extends AbstractModel implements PageInterface, IdentityInterface
 {

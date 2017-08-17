@@ -46,7 +46,6 @@ class Factory
      * @param AttributeFactory $attributeFactory
      * @param OptionValueInterfaceFactory $optionValueFactory
      * @param ProductAttributeRepositoryInterface $productAttributeRepository
-     * @since 100.1.0
      */
     public function __construct(
         Configurable $productType,

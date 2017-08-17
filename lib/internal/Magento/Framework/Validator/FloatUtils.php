@@ -7,10 +7,6 @@
  */
 namespace Magento\Framework\Validator;
 
-/**
- * Class \Magento\Framework\Validator\FloatUtils
- *
- */
 class FloatUtils extends \Zend_Validate_Float implements \Magento\Framework\Validator\ValidatorInterface
 {
 }

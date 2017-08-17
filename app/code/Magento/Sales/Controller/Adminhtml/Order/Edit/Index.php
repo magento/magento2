@@ -5,10 +5,6 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Edit;
 
-/**
- * Class \Magento\Sales\Controller\Adminhtml\Order\Edit\Index
- *
- */
 class Index extends \Magento\Sales\Controller\Adminhtml\Order\Create\Index
 {
     /**

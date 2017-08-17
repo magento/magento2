@@ -6,10 +6,6 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
-/**
- * Class \Magento\Catalog\Controller\Adminhtml\Product\Index
- *
- */
 class Index extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**

@@ -10,10 +10,6 @@ use Magento\Framework\Registry;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 
-/**
- * Class \Magento\Sales\Controller\Adminhtml\Order\Status\Edit
- *
- */
 class Edit extends \Magento\Sales\Controller\Adminhtml\Order\Status
 {
     /**

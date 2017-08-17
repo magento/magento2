@@ -5,10 +5,6 @@
  */
 namespace Magento\Framework\Data;
 
-/**
- * Class \Magento\Framework\Data\DataArray
- *
- */
 class DataArray extends \Magento\Framework\DataObject
 {
 }

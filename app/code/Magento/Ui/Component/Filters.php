@@ -13,6 +13,7 @@ use Magento\Ui\Component\Listing\Columns\ColumnInterface;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Filters extends AbstractComponent implements ObserverInterface
 {

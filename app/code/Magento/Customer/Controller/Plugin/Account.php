@@ -12,10 +12,6 @@ use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Action\AbstractAction;
 use Magento\Framework\Controller\ResultInterface;
 
-/**
- * Class \Magento\Customer\Controller\Plugin\Account
- *
- */
 class Account
 {
     /**

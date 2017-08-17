@@ -7,10 +7,6 @@
  */
 namespace Magento\Framework\App\Config;
 
-/**
- * Class \Magento\Framework\App\Config\Data
- *
- */
 class Data implements DataInterface
 {
     /**

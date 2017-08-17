@@ -13,6 +13,7 @@ use Magento\Customer\Model\Context;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Form extends \Magento\Framework\View\Element\Template implements \Magento\Widget\Block\BlockInterface
 {

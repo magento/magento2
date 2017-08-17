@@ -8,10 +8,6 @@ namespace Magento\Backend\Controller\Adminhtml;
 use Magento\Backend\App\Action;
 use Magento\Framework\Exception\LocalizedException;
 
-/**
- * Class \Magento\Backend\Controller\Adminhtml\Cache
- *
- */
 abstract class Cache extends Action
 {
     /**

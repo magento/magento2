@@ -5,10 +5,6 @@
  */
 namespace Magento\Catalog\Model\Indexer\Category\Product\Action;
 
-/**
- * Class \Magento\Catalog\Model\Indexer\Category\Product\Action\Rows
- *
- */
 class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractAction
 {
     /**

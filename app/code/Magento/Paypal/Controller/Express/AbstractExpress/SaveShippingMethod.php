@@ -6,10 +6,6 @@
  */
 namespace Magento\Paypal\Controller\Express\AbstractExpress;
 
-/**
- * Class \Magento\Paypal\Controller\Express\AbstractExpress\SaveShippingMethod
- *
- */
 class SaveShippingMethod extends \Magento\Paypal\Controller\Express\AbstractExpress
 {
     /**

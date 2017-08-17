@@ -10,10 +10,6 @@ namespace Magento\Framework\Webapi\Rest\Request\Deserializer;
 use Magento\Framework\App\State;
 use Magento\Framework\Phrase;
 
-/**
- * Class \Magento\Framework\Webapi\Rest\Request\Deserializer\Xml
- *
- */
 class Xml implements \Magento\Framework\Webapi\Rest\Request\DeserializerInterface
 {
     /**

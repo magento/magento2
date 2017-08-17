@@ -13,10 +13,6 @@ namespace Magento\Framework\DB\Statement\Pdo;
 
 use Magento\Framework\DB\Statement\Parameter;
 
-/**
- * Class \Magento\Framework\DB\Statement\Pdo\Mysql
- *
- */
 class Mysql extends \Zend_Db_Statement_Pdo
 {
     /**

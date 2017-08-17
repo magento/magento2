@@ -7,10 +7,6 @@ namespace Magento\Customer\Controller\Adminhtml\Index;
 
 use Magento\Framework\Controller\ResultFactory;
 
-/**
- * Class \Magento\Customer\Controller\Adminhtml\Index\Delete
- *
- */
 class Delete extends \Magento\Customer\Controller\Adminhtml\Index
 {
     /**

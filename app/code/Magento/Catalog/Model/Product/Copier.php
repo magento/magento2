@@ -9,10 +9,6 @@ namespace Magento\Catalog\Model\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 
-/**
- * Class \Magento\Catalog\Model\Product\Copier
- *
- */
 class Copier
 {
     /**

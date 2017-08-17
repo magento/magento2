@@ -7,10 +7,6 @@
  */
 namespace Magento\ConfigurableProduct\Model\Product\CartConfiguration\Plugin;
 
-/**
- * Class \Magento\ConfigurableProduct\Model\Product\CartConfiguration\Plugin\Configurable
- *
- */
 class Configurable
 {
     /**

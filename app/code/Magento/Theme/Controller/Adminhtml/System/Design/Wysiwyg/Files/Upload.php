@@ -6,10 +6,6 @@
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files;
 
-/**
- * Class \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files\Upload
- *
- */
 class Upload extends \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files
 {
     /**

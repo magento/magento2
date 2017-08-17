@@ -6,10 +6,6 @@
 
 namespace Magento\Framework;
 
-/**
- * Class \Magento\Framework\CurrencyFactory
- *
- */
 class CurrencyFactory
 {
     /**

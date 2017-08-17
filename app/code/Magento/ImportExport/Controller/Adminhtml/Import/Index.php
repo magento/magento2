@@ -8,10 +8,6 @@ namespace Magento\ImportExport\Controller\Adminhtml\Import;
 use Magento\ImportExport\Controller\Adminhtml\Import as ImportController;
 use Magento\Framework\Controller\ResultFactory;
 
-/**
- * Class \Magento\ImportExport\Controller\Adminhtml\Import\Index
- *
- */
 class Index extends ImportController
 {
     /**

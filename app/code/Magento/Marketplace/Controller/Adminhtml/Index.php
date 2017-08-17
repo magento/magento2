@@ -7,10 +7,6 @@
  */
 namespace Magento\Marketplace\Controller\Adminhtml;
 
-/**
- * Class \Magento\Marketplace\Controller\Adminhtml\Index
- *
- */
 abstract class Index extends \Magento\Backend\App\Action
 {
     /**

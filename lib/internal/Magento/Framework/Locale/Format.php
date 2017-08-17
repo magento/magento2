@@ -5,10 +5,6 @@
  */
 namespace Magento\Framework\Locale;
 
-/**
- * Class \Magento\Framework\Locale\Format
- *
- */
 class Format implements \Magento\Framework\Locale\FormatInterface
 {
     /**

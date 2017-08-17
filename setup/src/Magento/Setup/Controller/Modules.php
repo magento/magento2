@@ -11,10 +11,6 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Zend\Json\Json;
 
-/**
- * Class \Magento\Setup\Controller\Modules
- *
- */
 class Modules extends AbstractActionController
 {
     /**

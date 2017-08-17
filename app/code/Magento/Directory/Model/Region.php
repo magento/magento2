@@ -18,6 +18,7 @@ namespace Magento\Directory\Model;
  * @method \Magento\Directory\Model\Region setDefaultName(string $value)
  *
  * @api
+ * @since 100.0.2
  */
 class Region extends \Magento\Framework\Model\AbstractModel
 {

@@ -7,10 +7,6 @@ namespace Magento\Rule\Model\Renderer;
 
 use Magento\Framework\Data\Form\Element\AbstractElement;
 
-/**
- * Class \Magento\Rule\Model\Renderer\Conditions
- *
- */
 class Conditions implements \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
 {
     /**

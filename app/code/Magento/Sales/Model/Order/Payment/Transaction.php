@@ -21,6 +21,7 @@ use Magento\Sales\Model\AbstractModel;
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Transaction extends AbstractModel implements TransactionInterface
 {

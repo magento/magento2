@@ -9,10 +9,6 @@ namespace Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-/**
- * Class \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\PrintAction
- *
- */
 abstract class PrintAction extends \Magento\Backend\App\Action
 {
     /**

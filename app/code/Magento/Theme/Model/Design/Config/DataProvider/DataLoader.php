@@ -9,10 +9,6 @@ use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Theme\Api\DesignConfigRepositoryInterface;
 
-/**
- * Class \Magento\Theme\Model\Design\Config\DataProvider\DataLoader
- *
- */
 class DataLoader
 {
     /**

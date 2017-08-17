@@ -7,10 +7,6 @@ namespace Magento\Framework\View\Xsd\Media;
 
 use Magento\Framework\ObjectManagerInterface;
 
-/**
- * Class \Magento\Framework\View\Xsd\Media\TypeDataExtractorPool
- *
- */
 class TypeDataExtractorPool
 {
     /**

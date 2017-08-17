@@ -6,10 +6,6 @@
  */
 namespace Magento\Newsletter\Controller\Adminhtml\Queue;
 
-/**
- * Class \Magento\Newsletter\Controller\Adminhtml\Queue\Sending
- *
- */
 class Sending extends \Magento\Newsletter\Controller\Adminhtml\Queue
 {
     /**

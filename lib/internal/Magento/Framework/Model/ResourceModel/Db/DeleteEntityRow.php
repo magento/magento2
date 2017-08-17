@@ -8,10 +8,6 @@ namespace Magento\Framework\Model\ResourceModel\Db;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\EntityManager\EntityMetadata;
 
-/**
- * Class \Magento\Framework\Model\ResourceModel\Db\DeleteEntityRow
- *
- */
 class DeleteEntityRow
 {
     /**
