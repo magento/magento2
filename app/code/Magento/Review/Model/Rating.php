@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Model;
@@ -10,8 +10,7 @@ use Magento\Framework\DataObject\IdentityInterface;
 /**
  * Rating model
  *
- * @method \Magento\Review\Model\ResourceModel\Rating getResource()
- * @method \Magento\Review\Model\ResourceModel\Rating _getResource()
+ * @api
  * @method array getRatingCodes()
  * @method \Magento\Review\Model\Rating setRatingCodes(array $value)
  * @method array getStores()

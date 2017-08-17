@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRule\Model\Indexer;
@@ -10,6 +10,10 @@ use Magento\Framework\Indexer\ActionInterface as IndexerActionInterface;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Indexer\CacheContext;
 
+/**
+ * Class \Magento\CatalogRule\Model\Indexer\AbstractIndexer
+ *
+ */
 abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInterface, IdentityInterface
 {
     /**
@@ -139,7 +143,7 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
     /**
      * @return \Magento\Framework\App\CacheInterface|mixed
      *
-     * @deprecated
+     * @deprecated 100.0.7
      */
     private function getCacheManager()
     {
@@ -155,7 +159,7 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
      * Get cache context
      *
      * @return \Magento\Framework\Indexer\CacheContext
-     * @deprecated
+     * @deprecated 100.0.7
      */
     protected function getCacheContext()
     {

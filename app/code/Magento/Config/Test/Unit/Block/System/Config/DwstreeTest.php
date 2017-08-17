@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Block\System\Config;
 
-class DwstreeTest extends \PHPUnit_Framework_TestCase
+class DwstreeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Config\Block\System\Config\Dwstree

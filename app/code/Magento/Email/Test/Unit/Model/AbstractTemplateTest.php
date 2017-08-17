@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,7 +14,7 @@ namespace Magento\Email\Test\Unit\Model;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AbstractTemplateTest extends \PHPUnit_Framework_TestCase
+class AbstractTemplateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\DesignInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -242,6 +242,67 @@ class AbstractTemplateTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException \LogicException
+     */
+    public function testGetProcessedTemplateException() {
+        $filterTemplate = $this->getMockBuilder(\Magento\Email\Model\Template\Filter::class)
+            ->setMethods([
+                'setUseSessionInUrl',
+                'setPlainTemplateMode',
+                'setIsChildTemplate',
+                'setDesignParams',
+                'setVariables',
+                'setStoreId',
+                'filter',
+                'getStoreId',
+                'getInlineCssFiles',
+            ])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $filterTemplate->expects($this->once())
+            ->method('setUseSessionInUrl')
+            ->will($this->returnSelf());
+        $filterTemplate->expects($this->once())
+            ->method('setPlainTemplateMode')
+            ->will($this->returnSelf());
+        $filterTemplate->expects($this->once())
+            ->method('setIsChildTemplate')
+            ->will($this->returnSelf());
+        $filterTemplate->expects($this->once())
+            ->method('setDesignParams')
+            ->will($this->returnSelf());
+        $filterTemplate->expects($this->any())
+            ->method('setStoreId')
+            ->will($this->returnSelf());
+        $filterTemplate->expects($this->any())
+            ->method('getStoreId')
+            ->will($this->returnValue(1));
+
+        $model = $this->getModelMock([
+            'getDesignParams',
+            'applyDesignConfig',
+            'getTemplateText',
+            'isPlain',
+        ]);
+
+        $designParams = [
+            'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
+            'theme' => 'themeId',
+            'locale' => 'localeId',
+        ];
+        $model->expects($this->any())
+            ->method('getDesignParams')
+            ->will($this->returnValue($designParams));
+        $model->setTemplateFilter($filterTemplate);
+        $model->setTemplateType(\Magento\Framework\App\TemplateTypesInterface::TYPE_TEXT);
+
+        $filterTemplate->expects($this->once())
+            ->method('filter')
+            ->will($this->throwException(new \Exception));
+        $model->getProcessedTemplate([]);
+    }
+
+    /**
      * @return array
      */
     public function getProcessedTemplateProvider()
@@ -355,12 +416,12 @@ class AbstractTemplateTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $designMock = $this->getMock(\Magento\Framework\View\DesignInterface::class);
+        $designMock = $this->createMock(\Magento\Framework\View\DesignInterface::class);
         $designMock->expects($this->any())->method('getArea')->willReturn('test_area');
 
-        $storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
+        $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
         $storeMock->expects($this->any())->method('getId')->willReturn(2);
-        $storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $storeManagerMock->expects($this->any())->method('getStore')->willReturn($storeMock);
 
         $model = $this->getMockForAbstractClass(

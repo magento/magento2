@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Test\Unit\Block\Adminhtml\Sales\Order\View\Items;
 
-class RendererTest extends \PHPUnit_Framework_TestCase
+class RendererTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Sales\Model\Order\Item|\PHPUnit_Framework_MockObject_MockObject */
     protected $orderItem;
@@ -13,19 +13,20 @@ class RendererTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Bundle\Block\Adminhtml\Sales\Order\View\Items\Renderer $model */
     protected $model;
 
+    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject $serializer */
+    protected $serializer;
+
     protected function setUp()
     {
-        $this->orderItem = $this->getMock(
+        $this->orderItem = $this->createPartialMock(
             \Magento\Sales\Model\Order\Item::class,
-            ['getProductOptions', '__wakeup', 'getParentItem', 'getOrderItem'],
-            [],
-            '',
-            false
+            ['getProductOptions', '__wakeup', 'getParentItem', 'getOrderItem']
         );
-
+        $this->serializer = $this->createMock(\Magento\Framework\Serialize\Serializer\Json::class);
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(
-            \Magento\Bundle\Block\Adminhtml\Sales\Order\View\Items\Renderer::class
+            \Magento\Bundle\Block\Adminhtml\Sales\Order\View\Items\Renderer::class,
+            ['serializer' => $this->serializer]
         );
     }
 
@@ -56,14 +57,8 @@ class RendererTest extends \PHPUnit_Framework_TestCase
     {
         if ($parentItem) {
             $parentItem =
-                $this->getMock(
-                    \Magento\Sales\Model\Order\Item::class,
-                    ['getProductOptions',
-                    '__wakeup'],
-                    [],
-                    '',
-                    false
-                );
+                $this->createPartialMock(\Magento\Sales\Model\Order\Item::class, ['getProductOptions',
+                    '__wakeup']);
             $parentItem->expects($this->any())->method('getProductOptions')->will($this->returnValue($productOptions));
         } else {
             $this->orderItem->expects($this->any())->method('getProductOptions')
@@ -112,14 +107,8 @@ class RendererTest extends \PHPUnit_Framework_TestCase
     {
         if ($parentItem) {
             $parentItem =
-                $this->getMock(
-                    \Magento\Sales\Model\Order\Item::class,
-                    ['getProductOptions',
-                    '__wakeup'],
-                    [],
-                    '',
-                    false
-                );
+                $this->createPartialMock(\Magento\Sales\Model\Order\Item::class, ['getProductOptions',
+                    '__wakeup']);
             $parentItem->expects($this->any())->method('getProductOptions')->will($this->returnValue($productOptions));
         } else {
             $this->orderItem->expects($this->any())->method('getProductOptions')
@@ -141,20 +130,32 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    /**
-     * @dataProvider getSelectionAttributesDataProvider
-     */
-    public function testGetSelectionAttributes($productOptions, $result)
+    public function testGetSelectionAttributes()
     {
-        $this->orderItem->expects($this->any())->method('getProductOptions')->will($this->returnValue($productOptions));
-        $this->assertSame($result, $this->model->getSelectionAttributes($this->orderItem));
+        $this->orderItem->expects($this->any())->method('getProductOptions')->will($this->returnValue([]));
+        $this->assertNull($this->model->getSelectionAttributes($this->orderItem));
+    }
+
+    public function testGetSelectionAttributesWithBundle()
+    {
+        $bundleAttributes = 'Serialized value';
+        $options = ['bundle_selection_attributes' => $bundleAttributes];
+        $unserializedResult = 'result of "bundle_selection_attributes" unserialization';
+
+        $this->serializer->expects($this->any())
+            ->method('unserialize')
+            ->with($bundleAttributes)
+            ->will($this->returnValue($unserializedResult));
+
+        $this->orderItem->expects($this->any())->method('getProductOptions')->will($this->returnValue($options));
+        $this->assertEquals($unserializedResult, $this->model->getSelectionAttributes($this->orderItem));
     }
 
     public function getSelectionAttributesDataProvider()
     {
         return [
             [[], null],
-            [['bundle_selection_attributes' => 'a:1:{i:0;i:1;}'], [0 => 1]],
+            [['bundle_selection_attributes' => 'serialized string'], [0 => 1]],
         ];
     }
 

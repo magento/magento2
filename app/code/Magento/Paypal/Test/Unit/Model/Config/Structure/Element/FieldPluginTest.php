@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Model\Config\Structure\Element;
@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Framework\App\RequestInterface;
 use Magento\Config\Model\Config\Structure\Element\Field as FieldConfigStructureMock;
 
-class FieldPluginTest extends \PHPUnit_Framework_TestCase
+class FieldPluginTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var FieldConfigStructurePlugin

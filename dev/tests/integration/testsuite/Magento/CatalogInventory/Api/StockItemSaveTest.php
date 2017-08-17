@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Api;
@@ -9,7 +9,7 @@ use Magento\Catalog\Api\Data\ProductExtensionInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 
-class StockItemSaveTest extends \PHPUnit_Framework_TestCase
+class StockItemSaveTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php

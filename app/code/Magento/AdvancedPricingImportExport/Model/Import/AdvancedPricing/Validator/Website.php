@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator;
@@ -9,6 +9,10 @@ use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing;
 use Magento\CatalogImportExport\Model\Import\Product\Validator\AbstractImportValidator;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 
+/**
+ * Class \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator\Website
+ *
+ */
 class Website extends AbstractImportValidator implements RowValidatorInterface
 {
     /**

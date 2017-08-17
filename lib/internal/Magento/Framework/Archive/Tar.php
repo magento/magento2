@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,6 +14,10 @@ namespace Magento\Framework\Archive;
 use Magento\Framework\Archive\Helper\File;
 use Magento\Framework\Filesystem\DriverInterface;
 
+/**
+ * Class \Magento\Framework\Archive\Tar
+ *
+ */
 class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento\Framework\Archive\ArchiveInterface
 {
     /**
@@ -84,7 +88,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
      *
      * @return string
      */
-    final protected static function _getFormatParseHeader()
+    protected static function _getFormatParseHeader()
     {
         return 'a100name/a8mode/a8uid/a8gid/a12size/a12mtime/a8checksum/a1type/a100symlink/a6magic/a2version/' .
             'a32uname/a32gname/a8devmajor/a8devminor/a155prefix/a12closer';

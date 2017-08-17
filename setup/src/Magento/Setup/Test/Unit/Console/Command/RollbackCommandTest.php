@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Console\Command;
@@ -8,7 +8,7 @@ namespace Magento\Setup\Test\Unit\Console\Command;
 use Magento\Setup\Console\Command\RollbackCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class RollbackCommandTest extends \PHPUnit_Framework_TestCase
+class RollbackCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -52,34 +52,22 @@ class RollbackCommandTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->deploymentConfig = $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false);
-        $maintenanceMode = $this->getMock(\Magento\Framework\App\MaintenanceMode::class, [], [], '', false);
+        $this->deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
+        $maintenanceMode = $this->createMock(\Magento\Framework\App\MaintenanceMode::class);
         $this->objectManager = $this->getMockForAbstractClass(
             \Magento\Framework\ObjectManagerInterface::class,
             [],
             '',
             false
         );
-        $objectManagerProvider = $this->getMock(\Magento\Setup\Model\ObjectManagerProvider::class, [], [], '', false);
+        $objectManagerProvider = $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);
         $objectManagerProvider->expects($this->any())->method('get')->willReturn($this->objectManager);
-        $this->backupRollback = $this->getMock(\Magento\Framework\Setup\BackupRollback::class, [], [], '', false);
-        $this->backupRollbackFactory = $this->getMock(
-            \Magento\Framework\Setup\BackupRollbackFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->backupRollback = $this->createMock(\Magento\Framework\Setup\BackupRollback::class);
+        $this->backupRollbackFactory = $this->createMock(\Magento\Framework\Setup\BackupRollbackFactory::class);
         $this->backupRollbackFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->backupRollback);
-        $appState = $this->getMock(
-            \Magento\Framework\App\State::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $appState = $this->createMock(\Magento\Framework\App\State::class);
         $configLoader = $this->getMockForAbstractClass(
             \Magento\Framework\ObjectManager\ConfigLoaderInterface::class,
             [],
@@ -94,8 +82,8 @@ class RollbackCommandTest extends \PHPUnit_Framework_TestCase
                 [\Magento\Framework\App\State::class, $appState],
                 [\Magento\Framework\ObjectManager\ConfigLoaderInterface::class, $configLoader],
             ]));
-        $this->helperSet = $this->getMock(\Symfony\Component\Console\Helper\HelperSet::class, [], [], '', false);
-        $this->question = $this->getMock(\Symfony\Component\Console\Helper\QuestionHelper::class, [], [], '', false);
+        $this->helperSet = $this->createMock(\Symfony\Component\Console\Helper\HelperSet::class);
+        $this->question = $this->createMock(\Symfony\Component\Console\Helper\QuestionHelper::class);
         $this->question
             ->expects($this->any())
             ->method('ask')

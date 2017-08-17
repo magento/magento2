@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Indexer\Test\Unit\Model;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Indexer\Model\Config
@@ -22,13 +22,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->configMock = $this->getMock(
-            \Magento\Indexer\Model\Config\Data::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->configMock = $this->createMock(\Magento\Indexer\Model\Config\Data::class);
 
         $this->model = new \Magento\Indexer\Model\Config(
             $this->configMock

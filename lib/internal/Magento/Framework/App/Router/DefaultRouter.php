@@ -2,7 +2,7 @@
 /**
  * Default application router
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Router;
@@ -12,6 +12,10 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\RouterInterface;
 use Magento\Framework\App\ActionInterface;
 
+/**
+ * Class \Magento\Framework\App\Router\DefaultRouter
+ *
+ */
 class DefaultRouter implements RouterInterface
 {
     /**

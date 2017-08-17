@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\Indexer\Attribute;
@@ -11,15 +11,25 @@ use Magento\Customer\Model\Customer;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Indexer\StateInterface;
 
+/**
+ * Class \Magento\Customer\Model\Indexer\Attribute\Filter
+ *
+ */
 class Filter
 {
-    /** @var Resource */
+    /**
+     * @var resource
+     */
     protected $resource;
 
-    /** @var FlatScopeResolver  */
+    /**
+     * @var \Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver
+     */
     protected $flatScopeResolver;
 
-    /** @var \Magento\Framework\Indexer\IndexerRegistry */
+    /**
+     * @var \Magento\Framework\Indexer\IndexerRegistry
+     */
     protected $indexerRegistry;
 
     /**

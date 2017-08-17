@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Model;
@@ -327,7 +327,7 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
     /**
      * Get MetadataPool instance
      *
-     * @deprecated
+     * @deprecated 100.1.0
      * @return MetadataPool
      */
     private function getMetadataPool()
@@ -342,7 +342,7 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
     /**
      * Get SampleTypeHandler Instance
      *
-     * @deprecated
+     * @deprecated 100.1.0
      * @return SampleHandler
      */
     private function getSampleTypeHandler()

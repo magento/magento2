@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
@@ -14,6 +14,9 @@ use Magento\Ui\Component\Container;
 
 /**
  * Class Attributes
+ *
+ * @api
+ * @since 101.0.0
  */
 class Attributes extends AbstractModifier
 {
@@ -23,21 +26,25 @@ class Attributes extends AbstractModifier
 
     /**
      * @var UrlInterface
+     * @since 101.0.0
      */
     protected $urlBuilder;
 
     /**
      * @var Registry
+     * @since 101.0.0
      */
     protected $registry;
 
     /**
      * @var LocatorInterface
+     * @since 101.0.0
      */
     protected $locator;
 
     /**
      * @var AuthorizationInterface
+     * @since 101.0.0
      */
     protected $authorization;
 
@@ -46,6 +53,7 @@ class Attributes extends AbstractModifier
      * @param Registry $registry
      * @param AuthorizationInterface $authorization
      * @param LocatorInterface $locator
+     * @since 101.0.0
      */
     public function __construct(
         UrlInterface $urlBuilder,
@@ -61,6 +69,7 @@ class Attributes extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 101.0.0
      */
     public function modifyData(array $data)
     {
@@ -82,6 +91,7 @@ class Attributes extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 101.0.0
      */
     public function modifyMeta(array $meta)
     {

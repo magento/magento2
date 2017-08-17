@@ -2,13 +2,17 @@
 /**
  * Plugin for \Magento\Catalog\Model\Product\Attribute\Repository
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Model\Plugin;
 
 use Magento\Catalog\Model\Product\Attribute\Repository;
 
+/**
+ * Class \Magento\CatalogInventory\Model\Plugin\FilterCustomAttribute
+ *
+ */
 class FilterCustomAttribute
 {
     /**
@@ -30,7 +34,7 @@ class FilterCustomAttribute
      * @param Repository $repository
      * @param array $attributes
      * @return \Magento\Eav\Model\AttributeRepository
-     * 
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterGetCustomAttributesMetadata(Repository $repository, array $attributes)

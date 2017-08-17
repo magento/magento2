@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,10 @@ namespace Magento\Framework\Logger;
 
 use Monolog\Logger;
 
+/**
+ * Class \Magento\Framework\Logger\Monolog
+ *
+ */
 class Monolog extends Logger
 {
     /**
@@ -33,7 +37,18 @@ class Monolog extends Logger
      */
     public function addRecord($level, $message, array $context = [])
     {
-        $context['is_exception'] = $message instanceof \Exception;
+        /**
+         * To preserve compatibility with Exception messages.
+         * And support PSR-3 context standard.
+         *
+         * @link http://www.php-fig.org/psr/psr-3/#context PSR-3 context standard
+         */
+        if ($message instanceof \Exception && !isset($context['exception'])) {
+            $context['exception'] = $message;
+        }
+
+        $message = $message instanceof \Exception ? $message->getMessage() : $message;
+
         return parent::addRecord($level, $message, $context);
     }
 }

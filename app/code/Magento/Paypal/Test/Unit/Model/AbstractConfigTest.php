@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Model;
@@ -15,7 +15,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  * Class AbstractConfigTest
  * @package Magento\Paypal\Test\Unit\Model
  */
-class AbstractConfigTest extends \PHPUnit_Framework_TestCase
+class AbstractConfigTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
@@ -290,12 +290,16 @@ class AbstractConfigTest extends \PHPUnit_Framework_TestCase
         $this->config->isMethodActive('method');
     }
 
+    /**
+     * Checks a case, when notation code based on Magento edition.
+     */
     public function testGetBuildNotationCode()
     {
-        $productMetadata = $this->getMock(ProductMetadataInterface::class, [], [], '', false);
-        $productMetadata->expects($this->once())
-            ->method('getEdition')
-            ->will($this->returnValue('SomeEdition'));
+        $productMetadata = $this->getMockBuilder(ProductMetadataInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $productMetadata->method('getEdition')
+            ->willReturn('SomeEdition');
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $objectManagerHelper->setBackwardCompatibleProperty(
@@ -304,6 +308,20 @@ class AbstractConfigTest extends \PHPUnit_Framework_TestCase
             $productMetadata
         );
 
-        $this->assertEquals('Magento_Cart_SomeEdition', $this->config->getBuildNotationCode());
+        self::assertEquals('Magento_Cart_SomeEdition', $this->config->getBuildNotationCode());
+    }
+
+    /**
+     * Checks a case, when notation code should be provided from configuration.
+     */
+    public function testBuildNotationCodeFromConfig()
+    {
+        $notationCode = 'Magento_Cart_EditionFromConfig';
+
+        $this->scopeConfigMock->method('getValue')
+            ->with(self::equalTo('paypal/notation_code'), self::equalTo('stores'))
+            ->willReturn($notationCode);
+
+        self::assertEquals($notationCode, $this->config->getBuildNotationCode());
     }
 }

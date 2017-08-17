@@ -1,10 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Weee\Model\Config\Source;
 
+/**
+ * Class \Magento\Weee\Model\Config\Source\Display
+ *
+ */
 class Display implements \Magento\Framework\Option\ArrayInterface
 {
     /**

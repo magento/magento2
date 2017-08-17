@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Attribute\Source;
@@ -11,6 +11,8 @@ use Magento\Framework\Data\OptionSourceInterface;
 
 /**
  * Product status functionality model
+ *
+ * @api
  */
 class Status extends AbstractSource implements SourceInterface, OptionSourceInterface
 {

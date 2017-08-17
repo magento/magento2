@@ -1,27 +1,27 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Model\Cron;
 
 use Magento\Setup\Model\Cron\JobUpgrade;
 
-class JobUpgradeTest extends \PHPUnit_Framework_TestCase
+class JobUpgradeTest extends \PHPUnit\Framework\TestCase
 {
     public function testExecute()
     {
-        $queue = $this->getMock(\Magento\Setup\Model\Cron\Queue::class, [], [], '', false);
+        $queue = $this->createMock(\Magento\Setup\Model\Cron\Queue::class);
         $queue->expects($this->exactly(2))->method('addJobs');
-        $command = $this->getMock(\Magento\Setup\Console\Command\UpgradeCommand::class, [], [], '', false);
+        $command = $this->createMock(\Magento\Setup\Console\Command\UpgradeCommand::class);
         $command->expects($this->once())->method('run');
-        $status = $this->getMock(\Magento\Setup\Model\Cron\Status::class, [], [], '', false);
+        $status = $this->createMock(\Magento\Setup\Model\Cron\Status::class);
         $output =
             $this->getMockForAbstractClass(\Symfony\Component\Console\Output\OutputInterface::class, [], '', false);
         $objectManager =
             $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class, [], '', false);
         $objectManagerProvider =
-            $this->getMock(\Magento\Setup\Model\ObjectManagerProvider::class, ['get'], [], '', false);
+            $this->createPartialMock(\Magento\Setup\Model\ObjectManagerProvider::class, ['get']);
         $objectManagerProvider->expects($this->once())->method('get')->willReturn($objectManager);
 
         $jobUpgrade = new JobUpgrade(

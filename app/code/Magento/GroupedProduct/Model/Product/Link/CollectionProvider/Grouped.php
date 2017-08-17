@@ -1,11 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\GroupedProduct\Model\Product\Link\CollectionProvider;
 
+/**
+ * Class \Magento\GroupedProduct\Model\Product\Link\CollectionProvider\Grouped
+ *
+ */
 class Grouped implements \Magento\Catalog\Model\ProductLink\CollectionProviderInterface
 {
     /**

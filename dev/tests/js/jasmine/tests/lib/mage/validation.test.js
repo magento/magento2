@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -130,6 +130,57 @@ define([
             expect($.validator.methods['validate-cc-type-select'].call(
                 this, 'UN', null, $('<input id="un-invalid" type="text" value="6289981111111118"/>'))
             ).toEqual(false);
+        });
+    });
+
+    describe('Testing UK Mobile number validation', function () {
+        it('Valid UK Mobile Number', function () {
+            var element = $('<input id="telephone" type="text" value="07400123456" />');
+
+            expect($.validator.methods.mobileUK.call(
+                $.validator.prototype, element.val(), element.get(0)
+            )).toBeTruthy();
+        });
+        it('Invalid UK Mobile Number', function () {
+            var element = $('<input id="telephone" type="text" value="06400123456" />');
+
+            expect($.validator.methods.mobileUK.call(
+                $.validator.prototype, element.val(), element.get(0)
+            )).toBeFalsy();
+        });
+        it('Valid UK Mobile Number (International)', function () {
+            var element = $('<input id="telephone" type="text" value="+447400123456" />');
+
+            expect($.validator.methods.mobileUK.call(
+                $.validator.prototype, element.val(), element.get(0)
+            )).toBeTruthy();
+        });
+        it('Invalid UK Mobile Number', function () {
+            var element = $('<input id="telephone" type="text" value="+446400123456" />');
+
+            expect($.validator.methods.mobileUK.call(
+                $.validator.prototype, element.val(), element.get(0)
+            )).toBeFalsy();
+        });
+    });
+
+    describe('Validation of the password against the user name', function () {
+        it('rejects data, if password is the same as user name', function () {
+            var password = $('<input id="password" type="password" value="EmailPasswordTheSame" />'),
+                email = $('<input id="email" type="email" value="EmailPasswordTheSame" />');
+
+            expect($.validator.methods['password-not-equal-to-user-name'].call(
+                $.validator.prototype, password.val(), null, email.val()
+            )).toEqual(false);
+        });
+
+        it('approves data, if password is different from user name', function () {
+            var password = $('<input id="password" type="password" value="SomePassword" />'),
+                email = $('<input id="email" type="email" value="SomeEmail" />');
+
+            expect($.validator.methods['password-not-equal-to-user-name'].call(
+                $.validator.prototype, password.val(), null, email.val()
+            )).toEqual(true);
         });
     });
 });

@@ -1,11 +1,15 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Controller\Payflow;
 
+/**
+ * Class \Magento\Paypal\Controller\Payflow\CancelPayment
+ *
+ */
 class CancelPayment extends \Magento\Paypal\Controller\Payflow
 {
     /**

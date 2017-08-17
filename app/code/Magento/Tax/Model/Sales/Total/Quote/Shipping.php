@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Model\Sales\Total\Quote;
@@ -8,6 +8,10 @@ namespace Magento\Tax\Model\Sales\Total\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Api\Data\ShippingAssignmentInterface;
 
+/**
+ * Class \Magento\Tax\Model\Sales\Total\Quote\Shipping
+ *
+ */
 class Shipping extends CommonTaxCollector
 {
     /**

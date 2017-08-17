@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model;
@@ -12,6 +12,10 @@ use Magento\Catalog\Model\CustomOptions\CustomOptionFactory;
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\Factory as DataObjectFactory;
 
+/**
+ * Class \Magento\Catalog\Model\ProductOptionProcessor
+ *
+ */
 class ProductOptionProcessor implements ProductOptionProcessorInterface
 {
     /**
@@ -128,7 +132,7 @@ class ProductOptionProcessor implements ProductOptionProcessorInterface
     /**
      * @return \Magento\Catalog\Model\Product\Option\UrlBuilder
      *
-     * @deprecated
+     * @deprecated 101.0.0
      */
     private function getUrlBuilder()
     {

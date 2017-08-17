@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TestFramework\Inspection\JsHint;
 
-class CommandTest extends \PHPUnit_Framework_TestCase
+class CommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\TestFramework\Inspection\JsHint\Command|PHPUnit_Framework_MockObject_MockObject
@@ -14,19 +14,20 @@ class CommandTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_cmd = $this->getMock(
-            \Magento\TestFramework\Inspection\JsHint\Command::class,
-            [
-                '_getHostScript',
-                '_fileExists',
-                '_getJsHintPath',
-                '_executeCommand',
-                'getFileName',
-                '_execShellCmd',
-                '_getJsHintOptions'
-            ],
-            ['mage.js', 'report.xml']
-        );
+        $this->_cmd = $this->getMockBuilder(\Magento\TestFramework\Inspection\JsHint\Command::class)
+            ->setMethods(
+                [
+                    '_getHostScript',
+                    '_fileExists',
+                    '_getJsHintPath',
+                    '_executeCommand',
+                    'getFileName',
+                    '_execShellCmd',
+                    '_getJsHintOptions'
+                ]
+            )
+            ->setConstructorArgs(['mage.js', 'report.xml'])
+            ->getMock();
     }
 
     public function testCanRun()

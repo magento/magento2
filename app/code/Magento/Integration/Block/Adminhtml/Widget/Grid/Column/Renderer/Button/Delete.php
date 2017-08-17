@@ -2,7 +2,7 @@
 /**
  * Render HTML <button> tag with "edit" action for the integration grid.
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Button;
@@ -10,6 +10,10 @@ namespace Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Button
 use Magento\Framework\DataObject;
 use Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Button;
 
+/**
+ * Class \Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Button\Delete
+ *
+ */
 class Delete extends Button
 {
     /**

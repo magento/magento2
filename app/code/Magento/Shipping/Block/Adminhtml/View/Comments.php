@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,9 @@
  */
 namespace Magento\Shipping\Block\Adminhtml\View;
 
+/**
+ * @api
+ */
 class Comments extends \Magento\Backend\Block\Text\ListText
 {
     /**

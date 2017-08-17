@@ -2,7 +2,7 @@
 /**
  * Framework for testing Block_Adminhtml code
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  *
  * Number of fields is necessary because of the number of fields used by multiple layers
@@ -15,62 +15,100 @@ namespace Magento\Framework\TestFramework\Unit\Block;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Adminhtml extends \PHPUnit_Framework_TestCase
+class Adminhtml extends \PHPUnit\Framework\TestCase
 {
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     protected $_designMock;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     protected $_sessionMock;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     protected $_sidResolver;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     protected $_translatorMock;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     protected $_layoutMock;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     protected $_requestMock;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     protected $_messagesMock;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     protected $_urlMock;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     protected $_eventManagerMock;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     protected $_controllerMock;
 
-    /** @var  \Magento\Backend\Block\Template\Context */
+    /**
+     * @var \Magento\Backend\Block\Template\Context
+     */
     protected $_context;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     protected $_loggerMock;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     protected $_filesystemMock;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     protected $_cacheMock;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     protected $_scopeConfigMock;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\StoreManager */
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\StoreManager
+     */
     protected $_storeManagerMock;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Math\Random */
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Math\Random
+     */
     protected $_mathMock;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Data\Form\FormKey */
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Data\Form\FormKey
+     */
     protected $_formKey;
 
+    /**
+     */
     protected function setUp()
     {
         // These mocks are accessed via context

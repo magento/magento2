@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,10 @@ namespace Magento\GroupedProduct\Model\Product\Link\ProductEntity;
 
 use Magento\Catalog\Model\ProductLink\Converter\ConverterInterface;
 
+/**
+ * Class \Magento\GroupedProduct\Model\Product\Link\ProductEntity\Converter
+ *
+ */
 class Converter implements ConverterInterface
 {
     /**

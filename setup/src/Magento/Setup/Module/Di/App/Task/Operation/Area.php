@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Module\Di\App\Task\Operation;
@@ -10,6 +10,10 @@ use Magento\Framework\App;
 use Magento\Setup\Module\Di\Compiler\Config;
 use Magento\Setup\Module\Di\Definition\Collection as DefinitionsCollection;
 
+/**
+ * Class \Magento\Setup\Module\Di\App\Task\Operation\Area
+ *
+ */
 class Area implements OperationInterface
 {
     /**

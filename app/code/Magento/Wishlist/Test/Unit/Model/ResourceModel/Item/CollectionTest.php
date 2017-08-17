@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,7 +13,7 @@ use Magento\Wishlist\Model\ResourceModel\Item\Collection;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     use \Magento\Framework\TestFramework\Unit\Helper\SelectRendererTrait;
 
@@ -54,13 +54,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $connection = $this->getMock(
-            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
-            ['quote', 'select'],
-            [],
-            '',
-            false
-        );
+        $connection = $this->createPartialMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, ['quote', 'select']);
         $select = new \Magento\Framework\DB\Select($connection, $this->getSelectRenderer($this->objectManager));
         $connection
             ->expects($this->any())
@@ -70,12 +64,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('select')
             ->willReturn($select);
-        $resource = $this->getMock(
+        $resource = $this->createPartialMock(
             \Magento\Wishlist\Model\ResourceModel\Item::class,
-            ['getConnection', 'getMainTable', 'getTableName', 'getTable'],
-            [],
-            '',
-            false
+            ['getConnection', 'getMainTable', 'getTableName', 'getTable']
         );
 
         $resource
@@ -95,20 +86,14 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->method('getTable')
             ->will($this->returnValue('testMainTableName'));
 
-        $catalogConfFactory = $this->getMock(
+        $catalogConfFactory = $this->createPartialMock(
             \Magento\Catalog\Model\ResourceModel\ConfigFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
 
-        $catalogConf = $this->getMock(
+        $catalogConf = $this->createPartialMock(
             \Magento\Catalog\Model\ResourceModel\Config::class,
-            ['getEntityTypeId'],
-            [],
-            '',
-            false
+            ['getEntityTypeId']
         );
         $catalogConf
             ->expects($this->once())
@@ -120,12 +105,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($catalogConf));
 
-        $attribute = $this->getMock(
+        $attribute = $this->createPartialMock(
             \Magento\Catalog\Model\Entity\Attribute::class,
-            ['loadByCode', 'getBackendTable', 'getId'],
-            [],
-            '',
-            false
+            ['loadByCode', 'getBackendTable', 'getId']
         );
         $attribute
             ->expects($this->once())
@@ -141,12 +123,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->method('getId')
             ->will($this->returnValue($this->attrId));
 
-        $catalogAttrFactory = $this->getMock(
+        $catalogAttrFactory = $this->createPartialMock(
             \Magento\Catalog\Model\Entity\AttributeFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
 
         $catalogAttrFactory
@@ -154,25 +133,13 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($attribute));
 
-        $store = $this->getMock(
-            \Magento\Store\Model\Store::class,
-            ['getId'],
-            [],
-            '',
-            false
-        );
+        $store = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getId']);
         $store
             ->expects($this->once())
             ->method('getId')
             ->will($this->returnValue($this->storeId));
 
-        $storeManager = $this->getMock(
-            \Magento\Store\Model\StoreManager::class,
-            ['getStore'],
-            [],
-            '',
-            false
-        );
+        $storeManager = $this->createPartialMock(\Magento\Store\Model\StoreManager::class, ['getStore']);
         $storeManager
             ->expects($this->once())
             ->method('getStore')

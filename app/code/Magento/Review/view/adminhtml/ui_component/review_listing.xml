@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,166 +9,145 @@
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
             <item name="provider" xsi:type="string">review_listing.review_listing_data_source</item>
-            <item name="deps" xsi:type="string">review_listing.review_listing_data_source</item>
         </item>
-        <item name="spinner" xsi:type="string">review_columns</item>
     </argument>
-    <dataSource name="review_listing_data_source">
-        <argument name="dataProvider" xsi:type="configurableObject">
-            <argument name="class" xsi:type="string">Magento\Review\Ui\DataProvider\Product\ReviewDataProvider</argument>
-            <argument name="name" xsi:type="string">review_listing_data_source</argument>
-            <argument name="primaryFieldName" xsi:type="string">review_id</argument>
-            <argument name="requestFieldName" xsi:type="string">entity_id</argument>
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
-                    <item name="update_url" xsi:type="url" path="mui/index/render"/>
-                    <item name="storageConfig" xsi:type="array">
-                        <item name="cacheRequests" xsi:type="boolean">false</item>
-                    </item>
-                </item>
-            </argument>
-        </argument>
+    <settings>
+        <spinner>review_columns</spinner>
+        <deps>
+            <dep>review_listing.review_listing_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="review_listing_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <storageConfig>
+                <param name="cacheRequests" xsi:type="boolean">false</param>
+            </storageConfig>
+            <updateUrl path="mui/index/render"/>
+        </settings>
+        <dataProvider class="Magento\Review\Ui\DataProvider\Product\ReviewDataProvider" name="review_listing_data_source">
+            <settings>
+                <requestFieldName>entity_id</requestFieldName>
+                <primaryFieldName>review_id</primaryFieldName>
+            </settings>
+        </dataProvider>
     </dataSource>
     <listingToolbar name="listing_top">
         <filters name="listing_filters">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="statefull" xsi:type="array">
-                        <item name="applied" xsi:type="boolean">false</item>
-                    </item>
                     <item name="params" xsi:type="array">
                         <item name="filters_modifier" xsi:type="array"/>
                     </item>
                 </item>
             </argument>
+            <settings>
+                <statefull>
+                    <property name="applied" xsi:type="boolean">false</property>
+                </statefull>
+            </settings>
         </filters>
         <paging name="listing_paging"/>
     </listingToolbar>
     <columns name="review_columns" class="Magento\Ui\Component\Listing\Columns">
-        <argument name="data" xsi:type="array">
-            <item name="config" xsi:type="array">
-                <item name="childDefaults" xsi:type="array">
-                    <item name="fieldAction" xsi:type="array">
-                        <item name="provider" xsi:type="string">reviewsGrid</item>
-                        <item name="target" xsi:type="string">selectReview</item>
-                        <item name="params" xsi:type="array">
-                            <item name="0" xsi:type="string">${ $.$data.rowIndex }</item>
-                        </item>
+        <settings>
+            <childDefaults>
+                <param name="fieldAction" xsi:type="array">
+                    <item name="provider" xsi:type="string">reviewsGrid</item>
+                    <item name="target" xsi:type="string">selectReview</item>
+                    <item name="params" xsi:type="array">
+                        <item name="0" xsi:type="string">${ $.$data.rowIndex }</item>
                     </item>
-                </item>
-            </item>
-        </argument>
-        <column name="review_id">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">textRange</item>
-                    <item name="sorting" xsi:type="string">asc</item>
-                    <item name="label" xsi:type="string" translate="true">ID</item>
-                    <item name="sortOrder" xsi:type="number">0</item>
-                </item>
-            </argument>
+                </param>
+            </childDefaults>
+        </settings>
+        <column name="review_id" sortOrder="0">
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">ID</label>
+                <sorting>asc</sorting>
+            </settings>
         </column>
-        <column name="review_created_at" class="Magento\Ui\Component\Listing\Columns\Date">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">dateRange</item>
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
-                    <item name="dataType" xsi:type="string">date</item>
-                    <item name="label" xsi:type="string" translate="true">Created</item>
-                    <item name="sortOrder" xsi:type="number">10</item>
-                </item>
-            </argument>
+        <column name="review_created_at" class="Magento\Ui\Component\Listing\Columns\Date" component="Magento_Ui/js/grid/columns/date" sortOrder="10">
+            <settings>
+                <filter>dateRange</filter>
+                <dataType>date</dataType>
+                <label translate="true">Created</label>
+            </settings>
         </column>
-        <column name="status_id" class="Magento\Review\Ui\Component\Listing\Columns\Status">
-            <argument name="data" xsi:type="array">
-                <item name="options" xsi:type="object">Magento\Review\Ui\Component\Listing\Columns\Status</item>
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">select</item>
-                    <item name="dataType" xsi:type="string">select</item>
-                    <item name="label" xsi:type="string" translate="true">Status</item>
-                    <item name="sortOrder" xsi:type="number">20</item>
-                </item>
-            </argument>
+        <column name="status_id" class="Magento\Review\Ui\Component\Listing\Columns\Status" sortOrder="20">
+            <settings>
+                <filter>select</filter>
+                <options class="Magento\Review\Ui\Component\Listing\Columns\Status"/>
+                <dataType>select</dataType>
+                <label translate="true">Status</label>
+            </settings>
         </column>
-        <column name="title">
+        <column name="title" sortOrder="30">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">text</item>
-                    <item name="label" xsi:type="string" translate="true">Title</item>
-                    <item name="sortOrder" xsi:type="number">30</item>
                     <item name="truncate" xsi:type="number">50</item>
                     <item name="nl2br" xsi:type="boolean">true</item>
                     <item name="escape" xsi:type="boolean">true</item>
                 </item>
             </argument>
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Title</label>
+            </settings>
         </column>
-        <column name="nickname">
+        <column name="nickname" sortOrder="40">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">text</item>
-                    <item name="label" xsi:type="string" translate="true">Nickname</item>
-                    <item name="sortOrder" xsi:type="number">40</item>
                     <item name="truncate" xsi:type="number">50</item>
                     <item name="nl2br" xsi:type="boolean">true</item>
                     <item name="escape" xsi:type="boolean">true</item>
                 </item>
             </argument>
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Nickname</label>
+            </settings>
         </column>
-        <column name="detail">
+        <column name="detail" sortOrder="50">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">text</item>
-                    <item name="label" xsi:type="string" translate="true">Review</item>
-                    <item name="sortOrder" xsi:type="number">50</item>
                     <item name="truncate" xsi:type="number">50</item>
                     <item name="nl2br" xsi:type="boolean">true</item>
                     <item name="escape" xsi:type="boolean">true</item>
                 </item>
             </argument>
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Review</label>
+            </settings>
         </column>
-        <column name="visibility" class="Magento\Review\Ui\Component\Listing\Columns\Visibility">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string" translate="true">Visibility</item>
-                    <item name="sortOrder" xsi:type="number">60</item>
-                    <item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
-                </item>
-            </argument>
+        <column name="visibility" class="Magento\Review\Ui\Component\Listing\Columns\Visibility" sortOrder="60">
+            <settings>
+                <label translate="true">Visibility</label>
+                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
+            </settings>
         </column>
-        <column name="type" class="Magento\Review\Ui\Component\Listing\Columns\Type">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string" translate="true">Type</item>
-                    <item name="sortOrder" xsi:type="number">70</item>
-                </item>
-            </argument>
+        <column name="type" class="Magento\Review\Ui\Component\Listing\Columns\Type" sortOrder="70">
+            <settings>
+                <label translate="true">Type</label>
+            </settings>
         </column>
-        <column name="name">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">text</item>
-                    <item name="label" xsi:type="string" translate="true">Product</item>
-                    <item name="sortOrder" xsi:type="number">80</item>
-                </item>
-            </argument>
+        <column name="name" sortOrder="80">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Product</label>
+            </settings>
         </column>
-        <column name="sku">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">text</item>
-                    <item name="label" xsi:type="string" translate="true">SKU</item>
-                    <item name="sortOrder" xsi:type="number">90</item>
-                </item>
-            </argument>
+        <column name="sku" sortOrder="90">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">SKU</label>
+            </settings>
         </column>
-        <actionsColumn name="actions" class="Magento\Review\Ui\Component\Listing\Columns\ReviewActions">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="indexField" xsi:type="string">entity_id</item>
-                    <item name="sortOrder" xsi:type="number">100</item>
-                </item>
-            </argument>
+        <actionsColumn name="actions" class="Magento\Review\Ui\Component\Listing\Columns\ReviewActions" sortOrder="100">
+            <settings>
+                <indexField>entity_id</indexField>
+            </settings>
         </actionsColumn>
     </columns>
 </listing>

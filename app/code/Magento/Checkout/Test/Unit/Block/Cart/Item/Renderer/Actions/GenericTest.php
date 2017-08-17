@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Test\Unit\Block\Cart\Item\Renderer\Actions;
@@ -9,7 +9,7 @@ use Magento\Catalog\Model\Product;
 use Magento\Checkout\Block\Cart\Item\Renderer\Actions\Generic;
 use Magento\Quote\Model\Quote\Item;
 
-class GenericTest extends \PHPUnit_Framework_TestCase
+class GenericTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Generic

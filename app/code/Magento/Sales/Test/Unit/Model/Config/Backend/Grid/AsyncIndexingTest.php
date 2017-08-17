@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Config\Backend\Grid;
@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
  * Unit test of backend model for global configuration value
  * 'dev/grid/async_indexing'.
  */
-class AsyncIndexingTest extends \PHPUnit_Framework_TestCase
+class AsyncIndexingTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\Config\Backend\Grid\AsyncIndexing
@@ -37,11 +37,11 @@ class AsyncIndexingTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->config = $this->getMock(\Magento\Framework\App\Config::class, [], [], '', false);
+        $this->config = $this->createMock(\Magento\Framework\App\Config::class);
 
-        $this->eventManager = $this->getMock(\Magento\Framework\Event\Manager::class, [], [], '', false);
+        $this->eventManager = $this->createMock(\Magento\Framework\Event\Manager::class);
 
-        $this->context = $this->getMock(\Magento\Framework\Model\Context::class, ['getEventDispatcher'], [], '', false);
+        $this->context = $this->createPartialMock(\Magento\Framework\Model\Context::class, ['getEventDispatcher']);
         $this->context->expects($this->any())->method('getEventDispatcher')->willReturn($this->eventManager);
 
         $this->object = $objectManager->getObject(
@@ -57,7 +57,7 @@ class AsyncIndexingTest extends \PHPUnit_Framework_TestCase
      * @param int $value
      * @param int $oldValue
      * @param string $eventName
-     * @dataProvider testAfterSaveDataProvider
+     * @dataProvider afterSaveDataProvider
      * @return void
      */
     public function testAfterSave($value, $oldValue, $eventName)
@@ -75,13 +75,14 @@ class AsyncIndexingTest extends \PHPUnit_Framework_TestCase
             $this->eventManager->expects($this->once())->method('dispatch')->with($eventName);
         }
 
-        $this->object->afterSave();
+        $object = $this->object->afterSave();
+        $this->assertEquals($this->object, $object);
     }
 
     /**
      * @return array
      */
-    public function testAfterSaveDataProvider()
+    public function afterSaveDataProvider()
     {
         return [
             [0, 0, null],

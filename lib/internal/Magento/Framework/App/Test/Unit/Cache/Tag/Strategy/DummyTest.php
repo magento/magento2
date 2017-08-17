@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Framework\App\Test\Unit\Cache\Tag\Strategy;
 
 use \Magento\Framework\App\Cache\Tag\Strategy\Dummy;
 
-class DummyTest extends \PHPUnit_Framework_TestCase
+class DummyTest extends \PHPUnit\Framework\TestCase
 {
 
     private $model;
@@ -20,7 +20,7 @@ class DummyTest extends \PHPUnit_Framework_TestCase
 
     public function testGetTagsWithScalar()
     {
-        $this->setExpectedException(\InvalidArgumentException::class, 'Provided argument is not an object');
+        $this->expectException(\InvalidArgumentException::class, 'Provided argument is not an object');
         $this->model->getTags('scalar');
     }
 

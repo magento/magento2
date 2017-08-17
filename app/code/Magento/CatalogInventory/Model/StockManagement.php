@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Model;
@@ -102,7 +102,7 @@ class StockManagement implements StockManagementInterface
             if (!$stockItem->hasAdminArea()
                 && !$this->stockState->checkQty($productId, $orderedQty, $stockItem->getWebsiteId())
             ) {
-                $this->getResource()->commit();
+                $this->getResource()->rollBack();
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __('Not all of your products are available in the requested quantity.')
                 );
@@ -180,7 +180,7 @@ class StockManagement implements StockManagementInterface
     }
 
     /**
-     * @return Stock
+     * @return ResourceStock
      */
     protected function getResource()
     {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,10 @@
  */
 namespace Magento\Cron\Model\Config\Backend;
 
+/**
+ * Class \Magento\Cron\Model\Config\Backend\Sitemap
+ *
+ */
 class Sitemap extends \Magento\Framework\App\Config\Value
 {
     /**

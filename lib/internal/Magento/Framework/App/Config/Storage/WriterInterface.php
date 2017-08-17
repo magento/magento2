@@ -2,13 +2,17 @@
 /**
  * Application config storage writer interface
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Config\Storage;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
+/**
+ * Interface \Magento\Framework\App\Config\Storage\WriterInterface
+ *
+ */
 interface WriterInterface
 {
     /**

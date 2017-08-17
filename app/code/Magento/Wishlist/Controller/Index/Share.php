@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Controller\Index;
@@ -8,6 +8,10 @@ namespace Magento\Wishlist\Controller\Index;
 use Magento\Framework\App\Action;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Wishlist\Controller\Index\Share
+ *
+ */
 class Share extends \Magento\Wishlist\Controller\AbstractIndex
 {
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model;
@@ -15,6 +15,10 @@ use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 
+/**
+ * Class \Magento\Catalog\Model\CategoryList
+ *
+ */
 class CategoryList implements CategoryListInterface
 {
     /**
@@ -90,7 +94,7 @@ class CategoryList implements CategoryListInterface
     /**
      * Retrieve collection processor
      *
-     * @deprecated
+     * @deprecated 101.1.0
      * @return CollectionProcessorInterface
      */
     private function getCollectionProcessor()

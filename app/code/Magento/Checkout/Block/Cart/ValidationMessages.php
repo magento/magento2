@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Block\Cart;
@@ -10,13 +10,19 @@ use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
 
 /**
  * Shopping cart validation messages block
+ *
+ * @api
  */
 class ValidationMessages extends \Magento\Framework\View\Element\Messages
 {
-    /** @var \Magento\Checkout\Helper\Cart */
+    /**
+     * @var \Magento\Checkout\Helper\Cart
+     */
     protected $cartHelper;
 
-    /** @var \Magento\Framework\Locale\CurrencyInterface */
+    /**
+     * @var \Magento\Framework\Locale\CurrencyInterface
+     */
     protected $currency;
 
     /**
@@ -84,7 +90,7 @@ class ValidationMessages extends \Magento\Framework\View\Element\Messages
 
     /**
      * @return \Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getMinimumAmountErrorMessage()
     {

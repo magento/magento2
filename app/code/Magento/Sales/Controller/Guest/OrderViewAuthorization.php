@@ -1,13 +1,17 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Guest;
 
 use Magento\Sales\Controller\AbstractController\OrderViewAuthorizationInterface;
 
+/**
+ * Class \Magento\Sales\Controller\Guest\OrderViewAuthorization
+ *
+ */
 class OrderViewAuthorization implements OrderViewAuthorizationInterface
 {
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,10 @@
  */
 namespace Magento\Framework\Cache\Backend;
 
+/**
+ * Class \Magento\Framework\Cache\Backend\MongoDb
+ *
+ */
 class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_ExtendedInterface
 {
     /**
@@ -24,12 +28,9 @@ class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extende
     const COMPARISON_MODE_NOT_MATCHING_TAG = \Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG;
 
     const COMPARISON_MODE_MATCHING_ANY_TAG = \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG;
-
     /**#@-*/
 
-    /**
-     * @var \MongoCollection|null
-     */
+    /**#@-*/
     protected $_collection = null;
 
     /**
@@ -38,14 +39,10 @@ class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extende
      * @var array
      */
     protected $_options = [
-        /** MongoDB connection string */
-        'connection_string' => 'mongodb://localhost:27017',
-        /** MongoDB connection options */
-        'mongo_options' => [],
-        /** Name of a database to be used for cache storage */
-        'db' => '',
-        /** Name of a collection to be used for cache storage */
-        'collection' => 'cache',
+        'connection_string' => 'mongodb://localhost:27017', // MongoDB connection string
+        'mongo_options' => [], // MongoDB connection options
+        'db' => '', // Name of a database to be used for cache storage
+        'collection' => 'cache', // Name of a collection to be used for cache storage
     ];
 
     /**

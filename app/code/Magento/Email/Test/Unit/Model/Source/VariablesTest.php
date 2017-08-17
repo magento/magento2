@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Test\Unit\Model\Source;
@@ -10,7 +10,7 @@ use Magento\Store\Model\Store;
 /**
  * Unit test for Magento\Email\Model\Source\Variables
  */
-class VariablesTest extends \PHPUnit_Framework_TestCase
+class VariablesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Variables model

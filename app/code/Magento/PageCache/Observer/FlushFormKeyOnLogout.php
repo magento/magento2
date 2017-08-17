@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\PageCache\Observer;
@@ -8,6 +8,10 @@ namespace Magento\PageCache\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\App\PageCache\FormKey;
 
+/**
+ * Class \Magento\PageCache\Observer\FlushFormKeyOnLogout
+ *
+ */
 class FlushFormKeyOnLogout implements ObserverInterface
 {
     /**

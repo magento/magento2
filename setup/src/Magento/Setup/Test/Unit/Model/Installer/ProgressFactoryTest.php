@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Setup\Test\Unit\Model\Installer;
 
 use \Magento\Setup\Model\Installer\ProgressFactory;
 
-class ProgressFactoryTest extends \PHPUnit_Framework_TestCase
+class ProgressFactoryTest extends \PHPUnit\Framework\TestCase
 {
     public function testCreateFromLog()
     {
@@ -20,7 +20,7 @@ class ProgressFactoryTest extends \PHPUnit_Framework_TestCase
             '[Progress: 3 / 5] Installing C...',
             'Output from C...',
         ];
-        $logger = $this->getMock(\Magento\Setup\Model\WebLogger::class, [], [], '', false);
+        $logger = $this->createMock(\Magento\Setup\Model\WebLogger::class);
         $logger->expects($this->once())->method('get')->will($this->returnValue($contents));
 
         $progressFactory = new ProgressFactory();

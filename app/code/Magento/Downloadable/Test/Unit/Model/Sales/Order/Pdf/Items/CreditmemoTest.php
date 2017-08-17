@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Test\Unit\Model\Sales\Order\Pdf\Items;
@@ -8,89 +8,41 @@ namespace Magento\Downloadable\Test\Unit\Model\Sales\Order\Pdf\Items;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CreditmemoTest extends \PHPUnit_Framework_TestCase
+class CreditmemoTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Downloadable\Model\Sales\Order\Pdf\Items\Creditmemo
      */
-    protected $_model;
+    private $model;
 
     /**
      * @var \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_order;
+    private $order;
 
     /**
      * @var \Magento\Sales\Model\Order\Pdf\AbstractPdf|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_pdf;
+    private $pdf;
 
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $arguments = [
-            'productFactory' => $this->getMock(\Magento\Catalog\Model\ProductFactory::class, [], [], '', false),
-            'orderItemCollectionFactory' => $this->getMock(
-                \Magento\Sales\Model\ResourceModel\Order\Item\CollectionFactory::class,
-                [],
-                [],
-                '',
-                false
-            ),
-            'serviceOrderFactory' => $this->getMock(
-                \Magento\Sales\Model\Service\OrderFactory::class,
-                [],
-                [],
-                '',
-                false
-            ),
-            'currencyFactory' => $this->getMock(
-                \Magento\Directory\Model\CurrencyFactory::class,
-                [],
-                [],
-                '',
-                false
-            ),
-            'orderHistoryFactory' => $this->getMock(
-                \Magento\Sales\Model\Order\Status\HistoryFactory::class,
-                [],
-                [],
-                '',
-                false
-            ),
-            'orderTaxCollectionFactory' => $this->getMock(
-                \Magento\Tax\Model\ResourceModel\Sales\Order\Tax\CollectionFactory::class,
-                [],
-                [],
-                '',
-                false
-            ),
-        ];
-        $orderConstructorArgs = $objectManager->getConstructArguments(\Magento\Sales\Model\Order::class, $arguments);
-        $this->_order = $this->getMock(\Magento\Sales\Model\Order::class, ['formatPriceTxt'], $orderConstructorArgs);
-        $this->_order->expects(
-            $this->any()
-        )->method(
-            'formatPriceTxt'
-        )->will(
-            $this->returnCallback([$this, 'formatPrice'])
-        );
+        $this->order = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->order->expects($this->any())
+            ->method('formatPriceTxt')
+            ->will($this->returnCallback([$this, 'formatPrice']));
 
-        $this->_pdf = $this->getMock(
+        $this->pdf = $this->createPartialMock(
             \Magento\Sales\Model\Order\Pdf\AbstractPdf::class,
-            ['drawLineBlocks', 'getPdf'],
-            [],
-            '',
-            false,
-            false
+            ['drawLineBlocks', 'getPdf']
         );
 
-        $filterManager = $this->getMock(
+        $filterManager = $this->createPartialMock(
             \Magento\Framework\Filter\FilterManager::class,
-            ['stripTags'],
-            [],
-            '',
-            false
+            ['stripTags']
         );
         $filterManager->expects($this->any())->method('stripTags')->will($this->returnArgument(0));
 
@@ -99,22 +51,21 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
             ['string' => new \Magento\Framework\Stdlib\StringUtils(), 'filterManager' => $filterManager]
         );
 
-        $this->_model = $this->getMock(
-            \Magento\Downloadable\Model\Sales\Order\Pdf\Items\Creditmemo::class,
-            ['getLinks', 'getLinksTitle'],
-            $modelConstructorArgs
-        );
+        $this->model = $this->getMockBuilder(\Magento\Downloadable\Model\Sales\Order\Pdf\Items\Creditmemo::class)
+            ->setMethods(['getLinks', 'getLinksTitle'])
+            ->setConstructorArgs($modelConstructorArgs)
+            ->getMock();
 
-        $this->_model->setOrder($this->_order);
-        $this->_model->setPdf($this->_pdf);
-        $this->_model->setPage(new \Zend_Pdf_Page('a4'));
+        $this->model->setOrder($this->order);
+        $this->model->setPdf($this->pdf);
+        $this->model->setPage(new \Zend_Pdf_Page('a4'));
     }
 
     protected function tearDown()
     {
-        $this->_model = null;
-        $this->_order = null;
-        $this->_pdf = null;
+        $this->model = null;
+        $this->order = null;
+        $this->pdf = null;
     }
 
     /**
@@ -153,7 +104,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $this->_model->setItem(
+        $this->model->setItem(
             new \Magento\Framework\DataObject(
                 [
                     'name' => 'Downloadable Documentation',
@@ -173,8 +124,8 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
                 ]
             )
         );
-        $this->_model->expects($this->any())->method('getLinksTitle')->will($this->returnValue('Download Links'));
-        $this->_model->expects(
+        $this->model->expects($this->any())->method('getLinksTitle')->will($this->returnValue('Download Links'));
+        $this->model->expects(
             $this->any()
         )->method(
             'getLinks'
@@ -187,7 +138,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
                 )
             )
         );
-        $this->_pdf->expects(
+        $this->pdf->expects(
             $this->once()
         )->method(
             'drawLineBlocks'
@@ -199,8 +150,8 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($expectedPdfPage)
         );
 
-        $this->assertNotSame($expectedPdfPage, $this->_model->getPage());
-        $this->assertNull($this->_model->draw());
-        $this->assertSame($expectedPdfPage, $this->_model->getPage());
+        $this->assertNotSame($expectedPdfPage, $this->model->getPage());
+        $this->assertNull($this->model->draw());
+        $this->assertSame($expectedPdfPage, $this->model->getPage());
     }
 }

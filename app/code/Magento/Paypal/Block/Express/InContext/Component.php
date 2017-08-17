@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Block\Express\InContext;
@@ -13,6 +13,9 @@ use Magento\Framework\View\Element\Template\Context;
 
 /**
  * Class Component
+ *
+ * @api
+ * @since 100.1.0
  */
 class Component extends Template
 {
@@ -31,6 +34,7 @@ class Component extends Template
     /**
      * @inheritdoc
      * @param ResolverInterface $localeResolver
+     * @since 100.1.0
      */
     public function __construct(
         Context $context,
@@ -47,6 +51,7 @@ class Component extends Template
 
     /**
      * @inheritdoc
+     * @since 100.1.0
      */
     protected function _toHtml()
     {
@@ -67,6 +72,7 @@ class Component extends Template
 
     /**
      * @return string
+     * @since 100.1.0
      */
     public function getEnvironment()
     {
@@ -75,6 +81,7 @@ class Component extends Template
 
     /**
      * @return string
+     * @since 100.1.0
      */
     public function getLocale()
     {
@@ -83,6 +90,7 @@ class Component extends Template
 
     /**
      * @return string
+     * @since 100.1.0
      */
     public function getMerchantId()
     {
@@ -91,6 +99,7 @@ class Component extends Template
 
     /**
      * @return bool
+     * @since 100.1.0
      */
     public function isButtonContext()
     {

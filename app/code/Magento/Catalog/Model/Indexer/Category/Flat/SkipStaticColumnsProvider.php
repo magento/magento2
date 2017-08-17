@@ -1,11 +1,17 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Model\Indexer\Category\Flat;
 
+/**
+ * Static columns provider
+ *
+ * @api
+ * @since 101.0.0
+ */
 class SkipStaticColumnsProvider
 {
     /**
@@ -16,6 +22,7 @@ class SkipStaticColumnsProvider
     /**
      * SkipStaticColumnsProvider constructor.
      * @param array $skipStaticColumns
+     * @since 101.0.0
      */
     public function __construct($skipStaticColumns = [])
     {
@@ -24,6 +31,7 @@ class SkipStaticColumnsProvider
 
     /**
      * @return array
+     * @since 101.0.0
      */
     public function get()
     {

@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\Backend\Block\Widget\Grid;
 
 /**
  * Grid widget massaction default block
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @deprecated 100.2.0 in favour of UI component implementation
  */
-namespace Magento\Backend\Block\Widget\Grid;
-
 class Massaction extends \Magento\Backend\Block\Widget\Grid\Massaction\AbstractMassaction
 {
 }

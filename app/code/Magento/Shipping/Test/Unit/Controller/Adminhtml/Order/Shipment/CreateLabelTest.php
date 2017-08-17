@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Shipping\Test\Unit\Controller\Adminhtml\Order\Shipment;
@@ -8,7 +8,7 @@ namespace Magento\Shipping\Test\Unit\Controller\Adminhtml\Order\Shipment;
 /**
  * Class CreateLabelTest
  */
-class CreateLabelTest extends \PHPUnit_Framework_TestCase
+class CreateLabelTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader|\PHPUnit_Framework_MockObject_MockObject
@@ -52,56 +52,35 @@ class CreateLabelTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->shipmentLoaderMock = $this->getMock(
+        $this->shipmentLoaderMock = $this->createPartialMock(
             \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader::class,
-            ['setOrderId', 'setShipmentId', 'setShipment', 'setTracking', 'load', '__wakeup'],
-            [],
-            '',
-            false
+            ['setOrderId', 'setShipmentId', 'setShipment', 'setTracking', 'load', '__wakeup']
         );
-        $this->shipmentMock = $this->getMock(
+        $this->shipmentMock = $this->createPartialMock(
             \Magento\Sales\Model\Order\Shipment::class,
-            ['__wakeup', 'save'],
-            [],
-            '',
-            false
+            ['__wakeup', 'save']
         );
-        $this->requestMock = $this->getMock(
+        $this->requestMock = $this->createPartialMock(
             \Magento\Framework\App\Request\Http::class,
-            ['getParam', '__wakeup'],
-            [],
-            '',
-            false
+            ['getParam', '__wakeup']
         );
-        $this->responseMock = $this->getMock(
+        $this->responseMock = $this->createPartialMock(
             \Magento\Framework\App\Response\Http::class,
-            ['representJson', '__wakeup'],
-            [],
-            '',
-            false
+            ['representJson', '__wakeup']
         );
-        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
-        $this->messageManagerMock = $this->getMock(
+        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->messageManagerMock = $this->createPartialMock(
             \Magento\Framework\Message\Manager::class,
-            ['addSuccess', 'addError', '__wakeup'],
-            [],
-            '',
-            false
+            ['addSuccess', 'addError', '__wakeup']
         );
-        $this->labelGenerator = $this->getMock(
+        $this->labelGenerator = $this->createPartialMock(
             \Magento\Shipping\Model\Shipping\LabelGenerator::class,
-            ['create', '__wakeup'],
-            [],
-            '',
-            false
+            ['create', '__wakeup']
         );
 
-        $contextMock = $this->getMock(
+        $contextMock = $this->createPartialMock(
             \Magento\Backend\App\Action\Context::class,
-            ['getRequest', 'getResponse', 'getMessageManager', 'getActionFlag', 'getObjectManager', '__wakeup'],
-            [],
-            '',
-            false
+            ['getRequest', 'getResponse', 'getMessageManager', 'getActionFlag', 'getObjectManager', '__wakeup']
         );
 
         $this->loadShipment();
@@ -200,7 +179,7 @@ class CreateLabelTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteSaveException()
     {
-        $logerMock = $this->getMock(\Psr\Log\LoggerInterface::class);
+        $logerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
 
         $this->shipmentLoaderMock->expects($this->once())
             ->method('load')

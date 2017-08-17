@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,7 +13,7 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RouterTest extends \PHPUnit_Framework_TestCase
+class RouterTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\UrlRewrite\Controller\Router */
     protected $router;
@@ -41,16 +41,16 @@ class RouterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->actionFactory = $this->getMock(\Magento\Framework\App\ActionFactory::class, [], [], '', false);
-        $this->url = $this->getMock(\Magento\Framework\UrlInterface::class);
-        $this->storeManager = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->response = $this->getMock(
+        $this->actionFactory = $this->createMock(\Magento\Framework\App\ActionFactory::class);
+        $this->url = $this->createMock(\Magento\Framework\UrlInterface::class);
+        $this->storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->response = $this->createPartialMock(
             \Magento\Framework\App\ResponseInterface::class,
             ['setRedirect', 'sendResponse']
         );
         $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()->getMock();
-        $this->urlFinder = $this->getMock(\Magento\UrlRewrite\Model\UrlFinderInterface::class);
+        $this->urlFinder = $this->createMock(\Magento\UrlRewrite\Model\UrlFinderInterface::class);
         $this->store = $this->getMockBuilder(
             \Magento\Store\Model\Store::class
         )->disableOriginalConstructor()->getMock();

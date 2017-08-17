@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Test\Unit\Controller\Adminhtml\Email\Template;
@@ -20,7 +20,7 @@ use Magento\Framework\View\Result\Page;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PreviewTest extends \PHPUnit_Framework_TestCase
+class PreviewTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Preview

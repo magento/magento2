@@ -1,13 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CacheInvalidate\Model;
 
 use Magento\Framework\Cache\InvalidateLogger;
-use Magento\Framework\App\DeploymentConfig;
 
+/**
+ * Class \Magento\CacheInvalidate\Model\PurgeCache
+ *
+ */
 class PurgeCache
 {
     const HEADER_X_MAGENTO_TAGS_PATTERN = 'X-Magento-Tags-Pattern';
@@ -58,6 +61,7 @@ class PurgeCache
         $headers = [self::HEADER_X_MAGENTO_TAGS_PATTERN => $tagsPattern];
         $socketAdapter->setOptions(['timeout' => 10]);
         foreach ($servers as $server) {
+            $headers['Host'] = $server->getHost();
             try {
                 $socketAdapter->connect($server->getHost(), $server->getPort());
                 $socketAdapter->write(
@@ -66,6 +70,7 @@ class PurgeCache
                     '1.1',
                     $headers
                 );
+                $socketAdapter->read();
                 $socketAdapter->close();
             } catch (\Exception $e) {
                 $this->logger->critical($e->getMessage(), compact('server', 'tagsPattern'));

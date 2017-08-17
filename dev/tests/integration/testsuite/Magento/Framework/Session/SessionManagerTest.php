@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 // @codingStandardsIgnoreStart
@@ -37,7 +37,7 @@ namespace Magento\Framework\Session {
     /**
      * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
      */
-    class SessionManagerTest extends \PHPUnit_Framework_TestCase
+    class SessionManagerTest extends \PHPUnit\Framework\TestCase
     {
         /**
          * @var \Magento\Framework\Session\SessionManagerInterface
@@ -85,6 +85,12 @@ namespace Magento\Framework\Session {
                     $this->objectManager->get(\Magento\Framework\Session\StorageInterface::class)
                 ]
             );
+        }
+
+        protected function tearDown()
+        {
+            global $mockPHPFunctions;
+            $mockPHPFunctions = false;
         }
 
         public function testSessionNameFromIni()

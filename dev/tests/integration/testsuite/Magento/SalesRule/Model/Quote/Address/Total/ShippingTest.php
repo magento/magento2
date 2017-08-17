@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\SalesRule\Model\Quote\Address\Total;
 
-class ShippingTest extends \PHPUnit_Framework_TestCase
+class ShippingTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Quote\Api\GuestCartManagementInterface
@@ -31,8 +31,9 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/SalesRule/_files/rule_free_shipping_by_product_weight.php
-     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDataFixture Magento/Quote/_files/is_salable_product.php
      */
     public function testRuleByProductWeightWithFreeShipping()
     {
@@ -42,12 +43,12 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(count($methods) > 0);
         $this->assertEquals('flatrate', $methods[0]->getMethodCode());
         $this->assertEquals(0, $methods[0]->getAmount());
-
     }
 
     /**
+     * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/SalesRule/_files/rule_free_shipping_by_product_weight.php
-     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDataFixture Magento/Quote/_files/is_salable_product.php
      */
     public function testRuleByProductWeightWithoutFreeShipping()
     {
@@ -57,7 +58,6 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(count($methods) > 0);
         $this->assertEquals('flatrate', $methods[0]->getMethodCode());
         $this->assertEquals(25, $methods[0]->getAmount());
-
     }
 
     /**
@@ -96,7 +96,7 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
         $cartItem = $cartItemFactory->create();
         $cartItem->setQuoteId($cartId);
         $cartItem->setQty($itemQty);
-        $cartItem->setSku('simple');
+        $cartItem->setSku('simple-99');
         $cartItem->setProductType(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE);
 
         $this->itemRepository->save($cartItem);

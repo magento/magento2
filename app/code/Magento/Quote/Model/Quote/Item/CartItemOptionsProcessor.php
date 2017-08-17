@@ -1,12 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model\Quote\Item;
 
 use Magento\Quote\Api\Data\CartItemInterface;
 
+/**
+ * Class \Magento\Quote\Model\Quote\Item\CartItemOptionsProcessor
+ *
+ */
 class CartItemOptionsProcessor
 {
     /**
@@ -53,7 +57,7 @@ class CartItemOptionsProcessor
             }
             if ($params instanceof \Magento\Framework\DataObject) {
                 $buyRequestUpdate->addData($params->getData());
-            } else if (is_numeric($params)) {
+            } elseif (is_numeric($params)) {
                 $buyRequestUpdate->setData('qty', $params);
             }
             return $buyRequestUpdate;

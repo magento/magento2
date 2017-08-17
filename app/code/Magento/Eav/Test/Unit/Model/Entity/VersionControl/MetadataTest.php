@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Test\Unit\Model\Entity\VersionControl;
@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * Test for version control metadata model.
  */
-class MetadataTest extends \PHPUnit_Framework_TestCase
+class MetadataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Eav\Model\Entity\VersionControl\Metadata
@@ -36,12 +36,9 @@ class MetadataTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->model = $this->getMock(
+        $this->model = $this->createPartialMock(
             \Magento\Framework\Model\AbstractModel::class,
-            ['getResource', 'getAttributes'],
-            [],
-            '',
-            false
+            ['getResource', 'getAttributes']
         );
 
         $this->resource = $this->getMockForAbstractClass(

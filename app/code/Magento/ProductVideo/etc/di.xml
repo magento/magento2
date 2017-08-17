@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -45,5 +45,12 @@
     </type>
     <type name="Magento\Catalog\Model\ResourceModel\Product\Gallery">
         <plugin name="external_video_media_resource_backend" type="Magento\ProductVideo\Model\Plugin\ExternalVideoResourceBackend" />
+    </type>
+    <type name="Magento\Config\Model\Config\TypePool">
+        <arguments>
+            <argument name="sensitive" xsi:type="array">
+                <item name="catalog/product_video/youtube_api_key" xsi:type="string">1</item>
+            </argument>
+        </arguments>
     </type>
 </config>

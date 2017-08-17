@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Creditmemo;
@@ -10,7 +10,7 @@ use Magento\Sales\Model\Order\Creditmemo;
 /**
  * Unit test for refund operation.
  */
-class RefundOperationTest extends \PHPUnit_Framework_TestCase
+class RefundOperationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\Order\Creditmemo\RefundOperation
@@ -50,7 +50,7 @@ class RefundOperationTest extends \PHPUnit_Framework_TestCase
 
         $this->creditmemoMock = $this->getMockBuilder(\Magento\Sales\Api\Data\CreditmemoInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getBaseCost', 'setDoTransaction'])
+            ->setMethods(['getBaseCost', 'setDoTransaction', 'getPaymentRefundDisallowed'])
             ->getMockForAbstractClass();
 
         $this->paymentMock = $this->getMockBuilder(\Magento\Framework\Pricing\PriceCurrencyInterface::class)

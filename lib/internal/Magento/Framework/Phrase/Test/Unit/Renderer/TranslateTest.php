@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Phrase\Test\Unit\Renderer;
 
-class TranslateTest extends \PHPUnit_Framework_TestCase
+class TranslateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Translate|\PHPUnit_Framework_MockObject_MockObject
@@ -24,7 +24,7 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_translator = $this->getMock(\Magento\Framework\TranslateInterface::class, [], [], '', false);
+        $this->_translator = $this->createMock(\Magento\Framework\TranslateInterface::class);
         $this->loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
             ->getMock();
 
@@ -91,7 +91,7 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
             ->method('getData')
             ->willThrowException($exception);
 
-        $this->setExpectedException('Exception', $message);
+        $this->expectException('Exception', $message);
         $this->_renderer->render(['text'], []);
     }
 }

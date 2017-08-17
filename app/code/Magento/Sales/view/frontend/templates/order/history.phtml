@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,45 +8,45 @@
 
 ?>
 <?php $_orders = $block->getOrders(); ?>
-<?php echo $block->getChildHtml('info');?>
+<?= $block->getChildHtml('info') ?>
 <?php if ($_orders && count($_orders)): ?>
     <div class="table-wrapper orders-history">
         <table class="data table table-order-items history" id="my-orders-table">
-            <caption class="table-caption"><?php /* @escapeNotVerified */ echo __('Orders') ?></caption>
+            <caption class="table-caption"><?= /* @escapeNotVerified */ __('Orders') ?></caption>
             <thead>
                 <tr>
-                    <th scope="col" class="col id"><?php /* @escapeNotVerified */ echo __('Order #') ?></th>
-                    <th scope="col" class="col date"><?php /* @escapeNotVerified */ echo __('Date') ?></th>
-                    <?php /* @noEscape */ echo $block->getChildHtml('extra.column.header');?>
-                    <th scope="col" class="col shipping"><?php /* @escapeNotVerified */ echo __('Ship To') ?></th>
-                    <th scope="col" class="col total"><?php /* @escapeNotVerified */ echo __('Order Total') ?></th>
-                    <th scope="col" class="col status"><?php /* @escapeNotVerified */ echo __('Status') ?></th>
-                    <th scope="col" class="col actions"><?php /* @escapeNotVerified */ echo __('Action') ?></th>
+                    <th scope="col" class="col id"><?= /* @escapeNotVerified */ __('Order #') ?></th>
+                    <th scope="col" class="col date"><?= /* @escapeNotVerified */ __('Date') ?></th>
+                    <?= /* @noEscape */ $block->getChildHtml('extra.column.header') ?>
+                    <th scope="col" class="col shipping"><?= /* @escapeNotVerified */ __('Ship To') ?></th>
+                    <th scope="col" class="col total"><?= /* @escapeNotVerified */ __('Order Total') ?></th>
+                    <th scope="col" class="col status"><?= /* @escapeNotVerified */ __('Status') ?></th>
+                    <th scope="col" class="col actions"><?= /* @escapeNotVerified */ __('Action') ?></th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($_orders as $_order): ?>
                     <tr>
-                        <td data-th="<?php echo $block->escapeHtml(__('Order #')) ?>" class="col id"><?php /* @escapeNotVerified */ echo $_order->getRealOrderId() ?></td>
-                        <td data-th="<?php echo $block->escapeHtml(__('Date')) ?>" class="col date"><?php /* @escapeNotVerified */ echo $block->formatDate($_order->getCreatedAt()) ?></td>
+                        <td data-th="<?= $block->escapeHtml(__('Order #')) ?>" class="col id"><?= /* @escapeNotVerified */ $_order->getRealOrderId() ?></td>
+                        <td data-th="<?= $block->escapeHtml(__('Date')) ?>" class="col date"><?= /* @escapeNotVerified */ $block->formatDate($_order->getCreatedAt()) ?></td>
                         <?php $extra = $block->getChildBlock('extra.container'); ?>
                         <?php if ($extra): ?>
                             <?php $extra->setOrder($_order); ?>
-                            <?php /* @noEscape */ echo $extra->getChildHtml() ?>
+                            <?= /* @noEscape */ $extra->getChildHtml() ?>
                         <?php endif; ?>
-                        <td data-th="<?php echo $block->escapeHtml(__('Ship To')) ?>" class="col shipping"><?php echo $_order->getShippingAddress() ? $block->escapeHtml($_order->getShippingAddress()->getName()) : '&nbsp;' ?></td>
-                        <td data-th="<?php echo $block->escapeHtml(__('Order Total')) ?>" class="col total"><?php /* @escapeNotVerified */ echo $_order->formatPrice($_order->getGrandTotal()) ?></td>
-                        <td data-th="<?php echo $block->escapeHtml(__('Status')) ?>" class="col status"><?php /* @escapeNotVerified */ echo $_order->getStatusLabel() ?></td>
-                        <td data-th="<?php echo $block->escapeHtml(__('Actions')) ?>" class="col actions">
-                            <a href="<?php /* @escapeNotVerified */ echo $block->getViewUrl($_order) ?>" class="action view">
-                                <span><?php /* @escapeNotVerified */ echo __('View Order') ?></span>
+                        <td data-th="<?= $block->escapeHtml(__('Ship To')) ?>" class="col shipping"><?= $_order->getShippingAddress() ? $block->escapeHtml($_order->getShippingAddress()->getName()) : '&nbsp;' ?></td>
+                        <td data-th="<?= $block->escapeHtml(__('Order Total')) ?>" class="col total"><?= /* @escapeNotVerified */ $_order->formatPrice($_order->getGrandTotal()) ?></td>
+                        <td data-th="<?= $block->escapeHtml(__('Status')) ?>" class="col status"><?= /* @escapeNotVerified */ $_order->getStatusLabel() ?></td>
+                        <td data-th="<?= $block->escapeHtml(__('Actions')) ?>" class="col actions">
+                            <a href="<?= /* @escapeNotVerified */ $block->getViewUrl($_order) ?>" class="action view">
+                                <span><?= /* @escapeNotVerified */ __('View Order') ?></span>
                             </a>
                             <?php if ($this->helper('Magento\Sales\Helper\Reorder')->canReorder($_order->getEntityId())) : ?>
                                 <a href="#" data-post='<?php /* @escapeNotVerified */ echo
                                 $this->helper(\Magento\Framework\Data\Helper\PostHelper::class)
                                     ->getPostData($block->getReorderUrl($_order))
                                 ?>' class="action order">
-                                    <span><?php /* @escapeNotVerified */ echo __('Reorder') ?></span>
+                                    <span><?= /* @escapeNotVerified */ __('Reorder') ?></span>
                                 </a>
                             <?php endif ?>
                         </td>
@@ -56,8 +56,8 @@
         </table>
     </div>
     <?php if ($block->getPagerHtml()): ?>
-        <div class="order-products-toolbar toolbar bottom"><?php echo $block->getPagerHtml(); ?></div>
+        <div class="order-products-toolbar toolbar bottom"><?= $block->getPagerHtml() ?></div>
     <?php endif ?>
 <?php else: ?>
-    <div class="message info empty"><span><?php /* @escapeNotVerified */ echo __('You have placed no orders.'); ?></span></div>
+    <div class="message info empty"><span><?= /* @escapeNotVerified */ __('You have placed no orders.') ?></span></div>
 <?php endif ?>

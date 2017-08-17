@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\Action\Attribute;
@@ -9,7 +9,7 @@ namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\Action\Attribut
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class EditTest extends \PHPUnit_Framework_TestCase
+class EditTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute\Save */
     private $object;
@@ -80,7 +80,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getParam', 'getParams', 'setParams'])
             ->disableOriginalConstructor()->getMock();
 
-        $objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->setMethods(['isProductsHasSku'])
             ->disableOriginalConstructor()->getMock();

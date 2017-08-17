@@ -1,6 +1,6 @@
 <?php
 /***
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -23,7 +23,7 @@ namespace Magento\Framework\Code\Test\Unit\Generator {
 
     // @codingStandardsIgnoreEnd
 
-    class DefinedClassesTest extends \PHPUnit_Framework_TestCase
+    class DefinedClassesTest extends \PHPUnit\Framework\TestCase
     {
         /** @var bool  */
         public static $definedClassesTestActive = false;
@@ -60,7 +60,7 @@ namespace Magento\Framework\Code\Test\Unit\Generator {
             /**
              * @var AutoloaderInterface | \PHPUnit_Framework_MockObject_MockObject $autoloaderMock
              */
-            $autoloaderMock = $this->getMock(\Magento\Framework\Autoload\AutoloaderInterface::class);
+            $autoloaderMock = $this->createMock(\Magento\Framework\Autoload\AutoloaderInterface::class);
             $autoloaderMock->expects($this->once())->method('findFile')->with($classOnDisc)->willReturn(true);
             AutoloaderRegistry::registerAutoloader($autoloaderMock);
             $this->assertTrue($this->model->isClassLoadable($classOnDisc));

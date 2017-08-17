@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ProductAlert\Controller\Add;
@@ -8,6 +8,10 @@ namespace Magento\ProductAlert\Controller\Add;
 use Magento\ProductAlert\Controller\Add as AddController;
 use Magento\Framework\DataObject;
 
+/**
+ * Class \Magento\ProductAlert\Controller\Add\TestObserver
+ *
+ */
 class TestObserver extends AddController
 {
     /**

@@ -1,13 +1,17 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Search\Controller\Adminhtml\Synonyms;
 
 use Magento\Search\Model\Synonym\MergeConflictException;
 
+/**
+ * Class \Magento\Search\Controller\Adminhtml\Synonyms\Save
+ *
+ */
 class Save extends \Magento\Backend\App\Action
 {
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@
  */
 namespace Magento\Payment\Test\Unit\Block\Info;
 
-class InstructionsTest extends \PHPUnit_Framework_TestCase
+class InstructionsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Payment\Model\Info|\PHPUnit_Framework_MockObject_MockObject
@@ -23,9 +23,9 @@ class InstructionsTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $context = $this->getMock(\Magento\Framework\View\Element\Template\Context::class, [], [], '', false);
+        $context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
         $this->_instructions = new \Magento\Payment\Block\Info\Instructions($context);
-        $this->_info = $this->getMock(\Magento\Payment\Model\Info::class, [], [], '', false);
+        $this->_info = $this->createMock(\Magento\Payment\Model\Info::class);
         $this->_instructions->setData('info', $this->_info);
     }
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Image;
@@ -11,6 +11,10 @@ use Magento\Theme\Model\ResourceModel\Theme\Collection as ThemeCollection;
 use Magento\Framework\App\Area;
 use Magento\Framework\View\ConfigInterface;
 
+/**
+ * Class \Magento\Catalog\Model\Product\Image\Cache
+ *
+ */
 class Cache
 {
     /**

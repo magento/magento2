@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Order;
@@ -12,7 +12,7 @@ use Magento\Sales\Model\Order\StateResolver;
 /**
  * Class StateCheckerTest
  */
-class StateResolverTest extends \PHPUnit_Framework_TestCase
+class StateResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|Order

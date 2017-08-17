@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Test\Unit;
 
-class ShellTest extends \PHPUnit_Framework_TestCase
+class ShellTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Shell\CommandRendererInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -16,14 +14,13 @@ class ShellTest extends \PHPUnit_Framework_TestCase
     protected $commandRenderer;
 
     /**
-     * @var \Zend_Log|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $logger;
 
     protected function setUp()
     {
-        $this->logger = $this->getMockBuilder(\Zend_Log::class)
-            ->setMethods(['log'])
+        $this->logger = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->commandRenderer = new \Magento\Framework\Shell\CommandRenderer();
@@ -54,7 +51,10 @@ class ShellTest extends \PHPUnit_Framework_TestCase
     public function testExecute($command, $commandArgs, $expectedResult)
     {
         $this->_testExecuteCommand(
-            new \Magento\Framework\Shell($this->commandRenderer, $this->logger), $command, $commandArgs, $expectedResult
+            new \Magento\Framework\Shell($this->commandRenderer, $this->logger),
+            $command,
+            $commandArgs,
+            $expectedResult
         );
     }
 
@@ -72,8 +72,8 @@ class ShellTest extends \PHPUnit_Framework_TestCase
         foreach ($expectedLogRecords as $logRecordIndex => $expectedLogMessage) {
             $expectedLogMessage = str_replace('`', $quoteChar, $expectedLogMessage);
             $this->logger->expects($this->at($logRecordIndex))
-                ->method('log')
-                ->with($expectedLogMessage, \Zend_Log::INFO);
+                ->method('info')
+                ->with($expectedLogMessage);
         }
         $this->_testExecuteCommand(
             new \Magento\Framework\Shell($this->commandRenderer, $this->logger),

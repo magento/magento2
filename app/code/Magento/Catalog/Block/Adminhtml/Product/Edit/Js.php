@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,6 +10,10 @@ use Magento\Customer\Helper\Session\CurrentCustomer;
 use Magento\Tax\Api\TaxCalculationInterface;
 use Magento\Tax\Model\TaxClass\Source\Product as ProductTaxClassSource;
 
+/**
+ * Class \Magento\Catalog\Block\Adminhtml\Product\Edit\Js
+ *
+ */
 class Js extends \Magento\Backend\Block\Template
 {
     /**

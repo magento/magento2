@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Controller\Adminhtml\Tax;
@@ -9,6 +9,10 @@ namespace Magento\Tax\Controller\Adminhtml\Tax;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Tax\Controller\Adminhtml\Tax\IgnoreTaxNotification
+ *
+ */
 class IgnoreTaxNotification extends \Magento\Tax\Controller\Adminhtml\Tax
 {
     /**

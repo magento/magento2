@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Model;
@@ -338,7 +338,7 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
     /**
      * Get MetadataPool instance
      *
-     * @deprecated MAGETWO-52273
+     * @deprecated 100.1.0 MAGETWO-52273
      * @return MetadataPool
      */
     private function getMetadataPool()
@@ -353,7 +353,7 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
     /**
      * Get LinkTypeHandler  instance
      *
-     * @deprecated MAGETWO-52273
+     * @deprecated 100.1.0 MAGETWO-52273
      * @return LinkHandler
      */
     private function getLinkTypeHandler()

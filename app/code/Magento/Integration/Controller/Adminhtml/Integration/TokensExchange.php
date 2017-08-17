@@ -1,13 +1,17 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Controller\Adminhtml\Integration;
 
 use Magento\Integration\Model\Integration as IntegrationModel;
 
+/**
+ * Class \Magento\Integration\Controller\Adminhtml\Integration\TokensExchange
+ *
+ */
 class TokensExchange extends \Magento\Integration\Controller\Adminhtml\Integration
 {
     /**

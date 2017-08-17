@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Validator\Test\Unit;
@@ -10,7 +10,7 @@ namespace Magento\Framework\Validator\Test\Unit;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class BuilderTest extends \PHPUnit_Framework_TestCase
+class BuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -341,7 +341,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructorConfigValidation(array $options, $exception, $exceptionMessage)
     {
-        $this->setExpectedException($exception, $exceptionMessage);
+        $this->expectException($exception, $exceptionMessage);
         if (array_key_exists('method', $options)) {
             $options = ['methods' => [$options]];
         }
@@ -362,7 +362,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddConfigurationConfigValidation(array $options, $exception, $exceptionMessage)
     {
-        $this->setExpectedException($exception, $exceptionMessage);
+        $this->expectException($exception, $exceptionMessage);
 
         $constraints = [
             ['alias' => 'alias', 'class' => 'Some\Validator\Class', 'options' => null, 'type' => 'entity'],
@@ -411,7 +411,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateValidatorInvalidInstance()
     {
-        $this->setExpectedException(
+        $this->expectException(
             'InvalidArgumentException',
             'Constraint class "StdClass" must implement \Magento\Framework\Validator\ValidatorInterface'
         );

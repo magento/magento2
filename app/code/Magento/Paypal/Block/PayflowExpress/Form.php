@@ -1,12 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Block\PayflowExpress;
 
 use Magento\Paypal\Model\Config;
 
+/**
+ * Class \Magento\Paypal\Block\PayflowExpress\Form
+ *
+ */
 class Form extends \Magento\Paypal\Block\Express\Form
 {
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@
 ?>
 <?php if ($block->getCanDisplayTotalDue()): ?>
 <tr>
-    <td class="label"><big><strong><?php /* @escapeNotVerified */ echo __('Total Due') ?></strong></big></td>
-    <td class="emph"><big><?php /* @escapeNotVerified */ echo $block->displayPriceAttribute('total_due', true) ?></big></td>
+    <td class="label"><big><strong><?= /* @escapeNotVerified */ __('Total Due') ?></strong></big></td>
+    <td class="emph"><big><?= /* @escapeNotVerified */ $block->displayPriceAttribute('total_due', true) ?></big></td>
 </tr>
 <?php endif; ?>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,10 @@ use Magento\Framework\App\ResourceConnection as AppResource;
 use Magento\Framework\Event\ManagerInterface as EventManager;
 use Magento\Sales\Model\AbstractModel;
 
+/**
+ * Class \Magento\Sales\Model\ResourceModel\Attribute
+ *
+ */
 class Attribute
 {
     /**
@@ -22,6 +26,7 @@ class Attribute
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
      */
     protected $connection;
+
     /**
      * @var \Magento\Framework\Event\ManagerInterface
      */

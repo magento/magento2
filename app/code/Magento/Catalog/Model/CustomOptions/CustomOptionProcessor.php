@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\CustomOptions;
@@ -11,39 +11,64 @@ use Magento\Quote\Model\Quote\Item\CartItemProcessorInterface;
 use Magento\Quote\Api\Data\ProductOptionExtensionFactory;
 use Magento\Quote\Model\Quote\ProductOptionFactory;
 
+/**
+ * Class \Magento\Catalog\Model\CustomOptions\CustomOptionProcessor
+ *
+ */
 class CustomOptionProcessor implements CartItemProcessorInterface
 {
-    /** @var DataObject\Factory  */
+    /**
+     * @var \Magento\Framework\DataObject\Factory
+     */
     protected $objectFactory;
 
-    /** @var \Magento\Quote\Model\Quote\ProductOptionFactory  */
+    /**
+     * @var \Magento\Quote\Model\Quote\ProductOptionFactory
+     */
     protected $productOptionFactory;
 
-    /** @var \Magento\Quote\Api\Data\ProductOptionExtensionFactory  */
+    /**
+     * @var \Magento\Quote\Api\Data\ProductOptionExtensionFactory
+     */
     protected $extensionFactory;
 
-    /** @var CustomOptionFactory  */
+    /**
+     * @var \Magento\Catalog\Model\CustomOptions\CustomOptionFactory
+     */
     protected $customOptionFactory;
 
-    /** @var \Magento\Catalog\Model\Product\Option\UrlBuilder */
+    /**
+     * @var \Magento\Catalog\Model\Product\Option\UrlBuilder
+     */
     private $urlBuilder;
+
+    /**
+     * Serializer interface instance.
+     *
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
 
     /**
      * @param DataObject\Factory $objectFactory
      * @param ProductOptionFactory $productOptionFactory
      * @param ProductOptionExtensionFactory $extensionFactory
      * @param CustomOptionFactory $customOptionFactory
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      */
     public function __construct(
         \Magento\Framework\DataObject\Factory $objectFactory,
         \Magento\Quote\Model\Quote\ProductOptionFactory $productOptionFactory,
         \Magento\Quote\Api\Data\ProductOptionExtensionFactory $extensionFactory,
-        \Magento\Catalog\Model\CustomOptions\CustomOptionFactory $customOptionFactory
+        \Magento\Catalog\Model\CustomOptions\CustomOptionFactory $customOptionFactory,
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->objectFactory = $objectFactory;
         $this->productOptionFactory = $productOptionFactory;
         $this->extensionFactory = $extensionFactory;
         $this->customOptionFactory = $customOptionFactory;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
     }
 
     /**
@@ -99,7 +124,7 @@ class CustomOptionProcessor implements CartItemProcessorInterface
     protected function getOptions(CartItemInterface $cartItem)
     {
         $buyRequest = !empty($cartItem->getOptionByCode('info_buyRequest'))
-            ? unserialize($cartItem->getOptionByCode('info_buyRequest')->getValue())
+            ? $this->serializer->unserialize($cartItem->getOptionByCode('info_buyRequest')->getValue())
             : null;
         return is_array($buyRequest) && isset($buyRequest['options'])
             ? $buyRequest['options']
@@ -169,7 +194,7 @@ class CustomOptionProcessor implements CartItemProcessorInterface
     /**
      * @return \Magento\Catalog\Model\Product\Option\UrlBuilder
      *
-     * @deprecated
+     * @deprecated 101.0.0
      */
     private function getUrlBuilder()
     {

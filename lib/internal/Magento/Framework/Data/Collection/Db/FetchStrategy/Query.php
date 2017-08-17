@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,10 @@ namespace Magento\Framework\Data\Collection\Db\FetchStrategy;
 
 use Magento\Framework\DB\Select;
 
+/**
+ * Class \Magento\Framework\Data\Collection\Db\FetchStrategy\Query
+ *
+ */
 class Query implements \Magento\Framework\Data\Collection\Db\FetchStrategyInterface
 {
     /**

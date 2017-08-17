@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Controller;
@@ -57,9 +57,9 @@ class PayflowTest extends \Magento\TestFramework\TestCase\AbstractController
         // Check P3P header
         $headerConstraints = [];
         foreach ($this->getResponse()->getHeaders() as $header) {
-            $headerConstraints[] = new \PHPUnit_Framework_Constraint_IsEqual($header->getFieldName());
+            $headerConstraints[] = new \PHPUnit\Framework\Constraint\IsEqual($header->getFieldName());
         }
-        $constraint = new \PHPUnit_Framework_Constraint_Or();
+        $constraint = new \PHPUnit\Framework\Constraint\LogicalOr();
         $constraint->setConstraints($headerConstraints);
         $this->assertThat('P3P', $constraint);
     }

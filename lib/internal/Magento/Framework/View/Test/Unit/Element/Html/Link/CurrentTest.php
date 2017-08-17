@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Element\Html\Link;
 
-class CurrentTest extends \PHPUnit_Framework_TestCase
+class CurrentTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -30,9 +30,9 @@ class CurrentTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_urlBuilderMock = $this->getMock(\Magento\Framework\UrlInterface::class);
-        $this->_requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
-        $this->_defaultPathMock = $this->getMock(\Magento\Framework\App\DefaultPathInterface::class);
+        $this->_urlBuilderMock = $this->createMock(\Magento\Framework\UrlInterface::class);
+        $this->_requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
+        $this->_defaultPathMock = $this->createMock(\Magento\Framework\App\DefaultPathInterface::class);
     }
 
     public function testGetUrl()

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,10 @@ namespace Magento\Framework\Controller;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Response\HttpInterface as HttpResponseInterface;
 
+/**
+ * Class \Magento\Framework\Controller\AbstractResult
+ *
+ */
 abstract class AbstractResult implements ResultInterface
 {
     /**

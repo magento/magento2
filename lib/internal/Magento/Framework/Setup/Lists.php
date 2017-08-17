@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,6 +12,10 @@ use Magento\Framework\Locale\Bundle\RegionBundle;
 use Magento\Framework\Locale\ConfigInterface;
 use Magento\Framework\Locale\Resolver;
 
+/**
+ * Class \Magento\Framework\Setup\Lists
+ *
+ */
 class Lists
 {
     /**

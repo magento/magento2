@@ -2,7 +2,7 @@
 /**
  * Scan source code for incorrect or undeclared modules dependencies
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity;
@@ -10,7 +10,7 @@ namespace Magento\Test\Integrity;
 use Magento\Framework\App\Utility\Files;
 use Magento\Setup\Module\Dependency\Circular;
 
-class CircularDependencyTest extends \PHPUnit_Framework_TestCase
+class CircularDependencyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Modules dependencies map

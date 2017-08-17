@@ -1,13 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 /**
  * Eav attribute set model
  *
- * @method \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set getResource()
  * @method int getEntityTypeId()
  * @method \Magento\Eav\Model\Entity\Attribute\Set setEntityTypeId(int $value)
  * @method string getAttributeSetName()
@@ -19,9 +18,9 @@
  */
 namespace Magento\Eav\Model\Entity\Attribute;
 
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Eav\Model\Entity\Type;
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -38,11 +37,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
     const KEY_ENTITY_TYPE_ID = 'entity_type_id';
     /**#@-*/
 
-    /**
-     * Resource instance
-     *
-     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set
-     */
+    /**#@-*/
     protected $_resource;
 
     /**
@@ -373,6 +368,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Get resource instance
      *
      * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+     * @deprecated because resource models should be used directly
      */
     protected function _getResource()
     {
@@ -487,5 +483,6 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
     //@codeCoverageIgnoreEnd
 }

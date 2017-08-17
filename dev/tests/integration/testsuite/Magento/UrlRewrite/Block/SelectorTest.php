@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\UrlRewrite\Block;
@@ -9,7 +9,7 @@ namespace Magento\UrlRewrite\Block;
  * Test for \Magento\UrlRewrite\Block\Selector
  * @magentoAppArea adminhtml
  */
-class SelectorTest extends \PHPUnit_Framework_TestCase
+class SelectorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoAppIsolation enabled

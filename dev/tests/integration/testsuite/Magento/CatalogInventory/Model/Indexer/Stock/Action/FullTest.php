@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Model\Indexer\Stock\Action;
@@ -8,7 +8,7 @@ namespace Magento\CatalogInventory\Model\Indexer\Stock\Action;
 /**
  * Full reindex Test
  */
-class FullTest extends \PHPUnit_Framework_TestCase
+class FullTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogInventory\Model\Indexer\Stock\Processor
@@ -45,7 +45,7 @@ class FullTest extends \PHPUnit_Framework_TestCase
         $productCollection = $layer->getProductCollection();
         $productCollection->joinField(
             'qty',
-            'cataloginventory_stock_status_idx',
+            'cataloginventory_stock_status',
             'qty',
             'product_id=entity_id',
             '{{table}}.stock_id=1',

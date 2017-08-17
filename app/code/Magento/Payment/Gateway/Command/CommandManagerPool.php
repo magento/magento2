@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Gateway\Command;
@@ -13,6 +13,7 @@ use Magento\Framework\ObjectManager\TMapFactory;
  * Class CommandManagerPool
  * @package Magento\Payment\Gateway\Command
  * @api
+ * @since 100.1.0
  */
 class CommandManagerPool implements CommandManagerPoolInterface
 {
@@ -24,6 +25,7 @@ class CommandManagerPool implements CommandManagerPoolInterface
     /**
      * @param TMapFactory $tmapFactory
      * @param array $executors
+     * @since 100.1.0
      */
     public function __construct(
         TMapFactory $tmapFactory,
@@ -43,6 +45,7 @@ class CommandManagerPool implements CommandManagerPoolInterface
      * @param string $paymentProviderCode
      * @return CommandManagerInterface
      * @throws NotFoundException
+     * @since 100.1.0
      */
     public function get($paymentProviderCode)
     {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,7 +13,7 @@ use Magento\Customer\Model\Group;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TierPriceTest extends \PHPUnit_Framework_TestCase
+class TierPriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -50,7 +50,7 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->priceInfo = $this->getMock(\Magento\Framework\Pricing\PriceInfo\Base::class, [], [], '', false);
+        $this->priceInfo = $this->createMock(\Magento\Framework\Pricing\PriceInfo\Base::class);
 
         $this->product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->setMethods(['getPriceInfo', 'hasCustomerGroupId', 'getCustomerGroupId', 'getResource', '__wakeup'])
@@ -61,11 +61,11 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
             ->method('getPriceInfo')
             ->will($this->returnValue($this->priceInfo));
 
-        $this->calculator = $this->getMock(\Magento\Framework\Pricing\Adjustment\Calculator::class, [], [], '', false);
+        $this->calculator = $this->createMock(\Magento\Framework\Pricing\Adjustment\Calculator::class);
         $this->groupManagement = $this
-            ->getMock(\Magento\Customer\Api\GroupManagementInterface::class, [], [], '', false);
+            ->createMock(\Magento\Customer\Api\GroupManagementInterface::class);
 
-        $this->priceCurrencyMock = $this->getMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
+        $this->priceCurrencyMock = $this->createMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
 
         $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectHelper->getObject(
@@ -87,7 +87,7 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
     {
         $this->product->setData(TierPrice::PRICE_CODE, $tierPrices);
 
-        $price = $this->getMock(\Magento\Framework\Pricing\Price\PriceInterface::class);
+        $price = $this->createMock(\Magento\Framework\Pricing\Price\PriceInterface::class);
         $price->expects($this->any())
             ->method('getValue')
             ->will($this->returnValue($basePrice));
@@ -102,13 +102,7 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
 
         $this->priceCurrencyMock->expects($this->never())->method('convertAndRound');
 
-        $group = $this->getMock(
-            \Magento\Customer\Model\Data\Group::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $group = $this->createMock(\Magento\Customer\Model\Data\Group::class);
         $group->expects($this->any())
             ->method('getId')
             ->willReturn(\Magento\Customer\Model\GroupManagement::CUST_GROUP_ALL);
@@ -188,9 +182,17 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetSavePercent($baseAmount, $savePercent)
     {
+        $basePrice = 10.;
         $amount = $this->getMockForAbstractClass(\Magento\Framework\Pricing\Amount\AmountInterface::class);
         $amount->expects($this->once())->method('getBaseAmount')->willReturn($baseAmount);
+        $price = $this->createMock(\Magento\Framework\Pricing\Price\PriceInterface::class);
+        $price->expects($this->any())
+            ->method('getValue')
+            ->will($this->returnValue($basePrice));
 
+        $this->priceInfo->expects($this->any())
+            ->method('getPrice')
+            ->will($this->returnValue($price));
         $this->assertEquals($savePercent, $this->model->getSavePercent($amount));
     }
 
@@ -200,10 +202,8 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
     public function providerForTestGetSavePercent()
     {
         return [
-            'no fraction' => [10.0000, 10],
-            'lower half'  => [10.1234, 10],
-            'half way'    => [10.5000, 11],
-            'upper half'  => [10.6789, 11],
+            'no fraction' => [9.0000, 10],
+            'lower half'  => [9.1234, 9],
         ];
     }
 }

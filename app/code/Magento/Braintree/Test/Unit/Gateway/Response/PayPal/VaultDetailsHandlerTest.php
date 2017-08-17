@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Test\Unit\Gateway\Response\PayPal;
@@ -25,7 +25,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
  * Class VaultDetailsHandlerTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class VaultDetailsHandlerTest extends \PHPUnit_Framework_TestCase
+class VaultDetailsHandlerTest extends \PHPUnit\Framework\TestCase
 {
     private static $transactionId = '1n2suy';
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,7 @@ namespace Magento\Reports\Model\ResourceModel\Product\Index;
 
 /**
  * Reports Product Index Abstract Resource Model
+ * @api
  */
 abstract class AbstractIndex extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

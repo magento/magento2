@@ -1,11 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Indexer\Model\Message;
 
+/**
+ * Class \Magento\Indexer\Model\Message\Invalid
+ *
+ */
 class Invalid implements \Magento\Framework\Notification\MessageInterface
 {
     /**
@@ -48,6 +52,7 @@ class Invalid implements \Magento\Framework\Notification\MessageInterface
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * Retrieve unique message identity
      *
@@ -84,5 +89,6 @@ class Invalid implements \Magento\Framework\Notification\MessageInterface
     {
         return self::SEVERITY_MAJOR;
     }
+
     //@codeCoverageIgnoreEnd
 }

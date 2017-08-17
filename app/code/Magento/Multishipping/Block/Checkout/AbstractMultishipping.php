@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,10 @@
  */
 namespace Magento\Multishipping\Block\Checkout;
 
+/**
+ * Class \Magento\Multishipping\Block\Checkout\AbstractMultishipping
+ *
+ */
 class AbstractMultishipping extends \Magento\Framework\View\Element\Template
 {
     /**

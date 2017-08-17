@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Module\Dependency\Parser;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class CodeTest extends \PHPUnit_Framework_TestCase
+class CodeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Setup\Module\Dependency\Parser\Code

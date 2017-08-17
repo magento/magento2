@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,7 +16,7 @@ use Magento\Framework\Api\ExtensionAttributesInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
-class SaveHandlerTest extends \PHPUnit_Framework_TestCase
+class SaveHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  ResourceModel\Website\Link | \PHPUnit_Framework_MockObject_MockObject */
     private $productWebsiteLink;
@@ -35,8 +35,8 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
         $this->productWebsiteLink = $this->getMockBuilder(Link::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManager = $this->getMock(StoreManagerInterface::class);
-        $this->product = $this->getMock(ProductInterface::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->product = $this->createMock(ProductInterface::class);
         $this->saveHandler = new SaveHandler($this->productWebsiteLink, $this->storeManager);
     }
 
@@ -83,7 +83,7 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
     public function testWithSingleStoreMode()
     {
         $defaultWebsiteId = 1;
-        $store = $this->getMock(StoreInterface::class);
+        $store = $this->createMock(StoreInterface::class);
         $store->expects($this->once())
             ->method('getWebsiteId')
             ->willReturn($defaultWebsiteId);

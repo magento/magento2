@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,6 +14,10 @@ use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 
+/**
+ * Class \Magento\Setup\Module
+ *
+ */
 class Module implements
     BootstrapListenerInterface,
     ConfigProviderInterface
@@ -52,7 +56,8 @@ class Module implements
                 $headers->addHeaderLine('Expires', '1970-01-01');
                 $headers->addHeaderLine('X-Frame-Options: SAMEORIGIN');
                 $headers->addHeaderLine('X-Content-Type-Options: nosniff');
-                $xssHeaderValue = strpos($_SERVER['HTTP_USER_AGENT'], XssProtection::IE_8_USER_AGENT) === false
+                $xssHeaderValue = !empty($_SERVER['HTTP_USER_AGENT'])
+                    && strpos($_SERVER['HTTP_USER_AGENT'], XssProtection::IE_8_USER_AGENT) === false
                     ? XssProtection::HEADER_ENABLED : XssProtection::HEADER_DISABLED;
                 $headers->addHeaderLine('X-XSS-Protection: ' . $xssHeaderValue);
             }

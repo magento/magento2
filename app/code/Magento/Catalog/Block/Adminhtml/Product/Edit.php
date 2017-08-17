@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,6 +12,10 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product;
 
+/**
+ * Class \Magento\Catalog\Block\Adminhtml\Product\Edit
+ *
+ */
 class Edit extends \Magento\Backend\Block\Widget
 {
     /**
@@ -249,6 +253,7 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * @deprecated 101.1.0
      * @return string
      */
     public function getHeader()

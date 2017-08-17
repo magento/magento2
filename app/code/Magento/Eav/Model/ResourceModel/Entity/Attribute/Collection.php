@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\ResourceModel\Entity\Attribute;
@@ -10,6 +10,7 @@ use Magento\Eav\Model\Entity\Type;
 /**
  * EAV attribute resource collection
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
@@ -488,6 +489,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param string $cond
      * @param string $cols
      * @return $this
+     * @since 100.1.0
      */
     public function joinLeft($table, $cond, $cols = '*')
     {

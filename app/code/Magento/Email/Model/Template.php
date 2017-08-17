@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Model;
@@ -10,8 +10,6 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * Template model
  *
- * @method \Magento\Email\Model\ResourceModel\Template _getResource()
- * @method \Magento\Email\Model\ResourceModel\Template getResource()
  * @method string getTemplateCode()
  * @method \Magento\Email\Model\Template setTemplateCode(string $value)
  * @method string getTemplateText()
@@ -34,6 +32,8 @@ use Magento\Store\Model\StoreManagerInterface;
  * @method \Magento\Email\Model\Template setOrigTemplateCode(string $value)
  * @method string getOrigTemplateVariables()
  * @method \Magento\Email\Model\Template setOrigTemplateVariables(string $value)
+ *
+ * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -92,7 +92,12 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
     private $filterFactory;
 
     /**
-     * Initialize dependencies.
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
+
+    /**
+     * Template constructor.
      *
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\View\DesignInterface $design
@@ -108,6 +113,8 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
      * @param \Magento\Framework\UrlInterface $urlModel
      * @param Template\FilterFactory $filterFactory
      * @param array $data
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @throws \RuntimeException
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -125,9 +132,12 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
         \Magento\Framework\Filter\FilterManager $filterManager,
         \Magento\Framework\UrlInterface $urlModel,
         \Magento\Email\Model\Template\FilterFactory $filterFactory,
-        array $data = []
+        array $data = [],
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->filterFactory = $filterFactory;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
         parent::__construct(
             $context,
             $design,
@@ -289,7 +299,7 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
         $variables = [];
         if ($variablesString && is_string($variablesString)) {
             $variablesString = str_replace("\n", '', $variablesString);
-            $variables = \Zend_Json::decode($variablesString);
+            $variables = $this->serializer->unserialize($variablesString);
         }
         return $variables;
     }

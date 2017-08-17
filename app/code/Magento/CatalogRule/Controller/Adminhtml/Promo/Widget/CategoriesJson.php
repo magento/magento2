@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRule\Controller\Adminhtml\Promo\Widget;
@@ -10,6 +10,10 @@ use Magento\Backend\App\Action\Context;
 use Magento\Catalog\Model\Category;
 use Magento\Framework\Registry;
 
+/**
+ * Class \Magento\CatalogRule\Controller\Adminhtml\Promo\Widget\CategoriesJson
+ *
+ */
 class CategoriesJson extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Widget
 {
     /**

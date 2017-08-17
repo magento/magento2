@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,8 +18,6 @@ use Magento\Framework\Filesystem\DirectoryList;
  * Perform fetching reports from remote servers with following saving them to database
  * Prepare report rows for \Magento\Paypal\Model\Report\Settlement\Row model
  *
- * @method \Magento\Paypal\Model\ResourceModel\Report\Settlement _getResource()
- * @method \Magento\Paypal\Model\ResourceModel\Report\Settlement getResource()
  * @method string getReportDate()
  * @method \Magento\Paypal\Model\Report\Settlement setReportDate(string $value)
  * @method string getAccountId()
@@ -165,7 +163,7 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Columns with DateTime data type
-     * 
+     *
      * @var array
      */
     private $dateTimeColumns = ['transaction_initiation_date', 'transaction_completion_date'];
@@ -178,15 +176,21 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
     private $amountColumns = ['gross_transaction_amount', 'fee_amount'];
 
     /**
-    * @param \Magento\Framework\Model\Context $context
-    * @param \Magento\Framework\Registry $registry
-    * @param \Magento\Framework\Filesystem $filesystem
-    * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-    * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-    * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-    * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
-    * @param array $data
-    */
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
+
+    /**
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Filesystem $filesystem
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param array $data
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
@@ -195,12 +199,15 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->_tmpDirectory = $filesystem->getDirectoryWrite(DirectoryList::SYS_TMP);
         $this->_storeManager = $storeManager;
         $this->_scopeConfig = $scopeConfig;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
     }
 
     /**
@@ -305,14 +312,14 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
     public static function createConnection(array $config)
     {
         if (!isset(
-            $config['hostname']
-        ) || !isset(
-            $config['username']
-        ) || !isset(
-            $config['password']
-        ) || !isset(
-            $config['path']
-        )
+                $config['hostname']
+            ) || !isset(
+                $config['username']
+            ) || !isset(
+                $config['password']
+            ) || !isset(
+                $config['path']
+            )
         ) {
             throw new \InvalidArgumentException('Required config elements: hostname, username, password, path');
         }
@@ -424,7 +431,7 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Format date columns in UTC
-     * 
+     *
      * @param string $lineItem
      * @return string
      */
@@ -574,10 +581,10 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
                 $cfg['path'] = self::REPORTS_PATH;
             }
             // avoid duplicates
-            if (in_array(serialize($cfg), $uniques)) {
+            if (in_array($this->serializer->serialize($cfg), $uniques)) {
                 continue;
             }
-            $uniques[] = serialize($cfg);
+            $uniques[] = $this->serializer->serialize($cfg);
             $configs[] = $cfg;
         }
         return $configs;

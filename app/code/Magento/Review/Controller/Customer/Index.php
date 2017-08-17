@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Controller\Customer;
@@ -8,6 +8,10 @@ namespace Magento\Review\Controller\Customer;
 use Magento\Review\Controller\Customer as CustomerController;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Review\Controller\Customer\Index
+ *
+ */
 class Index extends CustomerController
 {
     /**

@@ -1,19 +1,19 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Category\Product\Plugin;
 
+use Magento\Catalog\Model\Indexer\Category\Product;
 use Magento\Catalog\Model\Indexer\Category\Product\Plugin\StoreGroup;
 use Magento\Framework\Indexer\IndexerInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Store\Model\ResourceModel\Group;
 use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\Group as GroupModel;
-use Magento\Catalog\Model\Indexer\Category\Product;
+use Magento\Store\Model\ResourceModel\Group;
 
-class StoreGroupTest extends \PHPUnit_Framework_TestCase
+class StoreGroupTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var GroupModel|\PHPUnit_Framework_MockObject_MockObject
@@ -42,12 +42,9 @@ class StoreGroupTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->groupMock = $this->getMock(
+        $this->groupMock = $this->createPartialMock(
             GroupModel::class,
-            ['dataHasChangedFor', 'isObjectNew', '__wakeup'],
-            [],
-            '',
-            false
+            ['dataHasChangedFor', 'isObjectNew', '__wakeup']
         );
         $this->indexerMock = $this->getMockForAbstractClass(
             IndexerInterface::class,
@@ -58,14 +55,8 @@ class StoreGroupTest extends \PHPUnit_Framework_TestCase
             true,
             ['getId', 'getState', '__wakeup']
         );
-        $this->subject = $this->getMock(Group::class, [], [], '', false);
-        $this->indexerRegistryMock = $this->getMock(
-            IndexerRegistry::class,
-            ['get'],
-            [],
-            '',
-            false
-        );
+        $this->subject = $this->createMock(Group::class);
+        $this->indexerRegistryMock = $this->createPartialMock(IndexerRegistry::class, ['get']);
 
         $this->model = (new ObjectManager($this))
             ->getObject(StoreGroup::class, ['indexerRegistry' => $this->indexerRegistryMock]);

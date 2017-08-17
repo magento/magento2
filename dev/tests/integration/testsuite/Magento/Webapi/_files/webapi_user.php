@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -19,6 +19,6 @@ $model->setFirstname("Web")
     ->setResourceId('Magento_Backend::all')
     ->setPrivileges("")
     ->setAssertId(0)
-    ->setRoleId(1)
+    ->setRoleId(2)
     ->setPermission('allow');
 $model->save();

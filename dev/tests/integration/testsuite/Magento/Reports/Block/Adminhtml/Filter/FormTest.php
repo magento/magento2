@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Block\Adminhtml\Filter;
@@ -9,7 +9,7 @@ namespace Magento\Reports\Block\Adminhtml\Filter;
  * Test class for \Magento\Reports\Block\Adminhtml\Filter\Form
  * @magentoAppArea adminhtml
  */
-class FormTest extends \PHPUnit_Framework_TestCase
+class FormTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoAppIsolation enabled

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -242,6 +242,9 @@ class Quote extends AbstractDb
         }
         $connection = $this->getConnection();
         $subSelect = $connection->select();
+        $conditionCheck = $connection->quoteIdentifier('q.items_count') . " > 0";
+        $conditionTrue = $connection->quoteIdentifier('q.items_count') . ' - 1';
+        $ifSql = "IF (" . $conditionCheck . "," . $conditionTrue . ", 0)";
 
         $subSelect->from(
             false,
@@ -249,7 +252,7 @@ class Quote extends AbstractDb
                 'items_qty' => new \Zend_Db_Expr(
                     $connection->quoteIdentifier('q.items_qty') . ' - ' . $connection->quoteIdentifier('qi.qty')
                 ),
-                'items_count' => new \Zend_Db_Expr($connection->quoteIdentifier('q.items_count') . ' - 1')
+                'items_count' => new \Zend_Db_Expr($ifSql)
             ]
         )->join(
             ['qi' => $this->getTable('quote_item')],

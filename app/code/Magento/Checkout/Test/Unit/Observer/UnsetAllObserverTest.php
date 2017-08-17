@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Test\Unit\Observer;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class UnsetAllObserverTest extends \PHPUnit_Framework_TestCase
+class UnsetAllObserverTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Checkout\Observer\UnsetAllObserver */
     protected $object;
@@ -21,7 +21,7 @@ class UnsetAllObserverTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
-        $this->checkoutSession = $this->getMock(\Magento\Checkout\Model\Session::class, [], [], '', false);
+        $this->checkoutSession = $this->createMock(\Magento\Checkout\Model\Session::class);
         $this->object = $this->objectManager->getObject(
             \Magento\Checkout\Observer\UnsetAllObserver::class,
             ['checkoutSession' => $this->checkoutSession]

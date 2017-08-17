@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Model\Config\Backend;
@@ -8,7 +8,7 @@ namespace Magento\Config\Model\Config\Backend;
 /**
  * @magentoAppArea adminhtml
  */
-class BaseurlTest extends \PHPUnit_Framework_TestCase
+class BaseurlTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param string $path

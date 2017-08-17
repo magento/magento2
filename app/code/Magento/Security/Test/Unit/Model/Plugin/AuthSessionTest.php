@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Security\Test\Unit\Model\Plugin;
@@ -11,7 +11,7 @@ use Magento\Security\Model\SecurityCookie;
 /**
  * Test class for \Magento\Security\Model\Plugin\AuthSession testing
  */
-class AuthSessionTest extends \PHPUnit_Framework_TestCase
+class AuthSessionTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  \Magento\Security\Model\Plugin\AuthSession */
     protected $model;
@@ -52,44 +52,20 @@ class AuthSessionTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->messageManagerMock = $this->getMock(
-            \Magento\Framework\Message\ManagerInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->messageManagerMock = $this->createMock(\Magento\Framework\Message\ManagerInterface::class);
 
-        $this->adminSessionsManagerMock = $this->getMock(
+        $this->adminSessionsManagerMock = $this->createPartialMock(
             \Magento\Security\Model\AdminSessionsManager::class,
-            ['getCurrentSession', 'processProlong', 'getLogoutReasonMessage'],
-            [],
-            '',
-            false
+            ['getCurrentSession', 'processProlong', 'getLogoutReasonMessage']
         );
 
-        $this->securityCookieMock = $this->getMock(
-            SecurityCookie::class,
-            ['setLogoutReasonCookie'],
-            [],
-            '',
-            false
-        );
+        $this->securityCookieMock = $this->createPartialMock(SecurityCookie::class, ['setLogoutReasonCookie']);
 
-        $this->authSessionMock = $this->getMock(
-            \Magento\Backend\Model\Auth\Session::class,
-            ['destroy'],
-            [],
-            '',
-            false
-        );
+        $this->authSessionMock = $this->createPartialMock(\Magento\Backend\Model\Auth\Session::class, ['destroy']);
 
-        $this->currentSessionMock = $this->getMock(
+        $this->currentSessionMock = $this->createPartialMock(
             \Magento\Security\Model\AdminSessionInfo::class,
-            ['isLoggedInStatus', 'getStatus'],
-            [],
-            '',
-            false
+            ['isLoggedInStatus', 'getStatus', 'isActive']
         );
 
         $this->model = $this->objectManager->getObject(

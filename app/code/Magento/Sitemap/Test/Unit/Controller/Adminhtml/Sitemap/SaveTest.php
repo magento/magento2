@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sitemap\Test\Unit\Controller\Adminhtml\Sitemap;
@@ -8,7 +8,7 @@ namespace Magento\Sitemap\Test\Unit\Controller\Adminhtml\Sitemap;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\Controller\ResultFactory;
 
-class SaveTest extends \PHPUnit_Framework_TestCase
+class SaveTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sitemap\Controller\Adminhtml\Sitemap\Save
@@ -121,7 +121,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->with('sitemap_id')
             ->willReturn($siteMapId);
 
-        $validator = $this->getMock($validatorClass, [], [], '', false);
+        $validator = $this->createMock($validatorClass);
         $validator->expects($this->once())
             ->method('setPaths')
             ->with($validPaths)
@@ -134,12 +134,12 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->method('getMessages')
             ->willReturn($messages);
 
-        $helper = $this->getMock($helperClass, [], [], '', false);
+        $helper = $this->createMock($helperClass);
         $helper->expects($this->once())
             ->method('getValidPaths')
             ->willReturn($validPaths);
 
-        $session = $this->getMock($sessionClass, ['setFormData'], [], '', false);
+        $session = $this->createPartialMock($sessionClass, ['setFormData']);
         $session->expects($this->once())
             ->method('setFormData')
             ->with($data)

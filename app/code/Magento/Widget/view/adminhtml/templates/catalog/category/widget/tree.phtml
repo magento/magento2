@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,16 +10,16 @@
 ?>
 
 <?php $_divId = 'tree' . $block->getId() ?>
-<div id="<?php echo $block->escapeHtmlAttr($_divId) ?>" class="tree"></div>
+<div id="<?= $block->escapeHtmlAttr($_divId) ?>" class="tree"></div>
 <script id="ie-deferred-loader" defer="defer" src="//:"></script>
 <script>
 require(['jquery', "prototype", "extjs/ext-tree-checkbox"], function(jQuery){
 
-var tree<?php echo $block->escapeJs($block->getId()) ?>;
+var tree<?= $block->escapeJs($block->getId()) ?>;
 
-var useMassaction = <?php /* @noEscape */ echo $block->getUseMassaction() ? 1 : 0; ?>;
+var useMassaction = <?= /* @noEscape */ $block->getUseMassaction() ? 1 : 0 ?>;
 
-var isAnchorOnly = <?php /* @noEscape */ echo $block->getIsAnchorOnly() ? 1 : 0; ?>;
+var isAnchorOnly = <?= /* @noEscape */ $block->getIsAnchorOnly() ? 1 : 0 ?>;
 
 Ext.tree.TreePanel.Enhanced = function(el, config)
 {
@@ -44,7 +44,7 @@ Ext.extend(Ext.tree.TreePanel.Enhanced, Ext.tree.TreePanel, {
 
         if (firstLoad) {
             <?php if ($block->getNodeClickListener()): ?>
-                this.addListener('click', <?php /* @noEscape */ echo $block->getNodeClickListener() ?>.createDelegate(this));
+                this.addListener('click', <?= /* @noEscape */ $block->getNodeClickListener() ?>.createDelegate(this));
             <?php endif; ?>
         }
 
@@ -57,10 +57,10 @@ Ext.extend(Ext.tree.TreePanel.Enhanced, Ext.tree.TreePanel, {
 
 jQuery(function()
 {
-    var emptyNodeAdded = <?php /* @noEscape */ echo($block->getWithEmptyNode() ? 'false' : 'true') ?>;
+    var emptyNodeAdded = <?= /* @noEscape */ ($block->getWithEmptyNode() ? 'false' : 'true') ?>;
 
     var categoryLoader = new Ext.tree.TreeLoader({
-        dataUrl: '<?php echo $block->escapeUrl($block->getLoadTreeUrl()) ?>'
+        dataUrl: '<?= $block->escapeUrl($block->getLoadTreeUrl()) ?>'
     });
 
     categoryLoader.buildCategoryTree = function(parent, config)
@@ -79,7 +79,7 @@ jQuery(function()
                 // Add empty node to reset category filter
                 if(!emptyNodeAdded) {
                     var empty = Object.clone(_node);
-                    empty.text = '<?php echo $block->escapeJs($block->escapeHtml(__('None'))); ?>';
+                    empty.text = '<?= $block->escapeJs($block->escapeHtml(__('None'))) ?>';
                     empty.children = [];
                     empty.id = 'none';
                     empty.path = '1/none';
@@ -150,37 +150,37 @@ jQuery(function()
     };
 
     categoryLoader.on("beforeload", function(treeLoader, node) {
-        $('<?php echo $block->escapeJs($_divId); ?>').fire('category:beforeLoad', {treeLoader:treeLoader});
+        $('<?= $block->escapeJs($_divId) ?>').fire('category:beforeLoad', {treeLoader:treeLoader});
         treeLoader.baseParams.id = node.attributes.id;
     });
 
-    tree<?php echo $block->escapeJs($block->getId()) ?> = new Ext.tree.TreePanel.Enhanced('<?php echo $block->escapeJs($_divId) ?>', {
+    tree<?= $block->escapeJs($block->getId()) ?> = new Ext.tree.TreePanel.Enhanced('<?= $block->escapeJs($_divId) ?>', {
         animate:          false,
         loader:           categoryLoader,
         enableDD:         false,
         containerScroll:  true,
-        rootVisible:      '<?php echo (bool) $block->getRoot()->getIsVisible() ?>',
+        rootVisible:      '<?= (bool) $block->getRoot()->getIsVisible() ?>',
         useAjax:          true,
-        currentNodeId:    <?php echo (int) $block->getCategoryId() ?>,
+        currentNodeId:    <?= (int) $block->getCategoryId() ?>,
         addNodeTo:        false
     });
 
     if (useMassaction) {
-        tree<?php echo $block->escapeJs($block->getId()) ?>.on('check', function(node) {
-            $('<?php echo $block->escapeJs($_divId); ?>').fire('node:changed', {node:node});
-        }, tree<?php echo $block->escapeJs($block->getId()) ?>);
+        tree<?= $block->escapeJs($block->getId()) ?>.on('check', function(node) {
+            $('<?= $block->escapeJs($_divId) ?>').fire('node:changed', {node:node});
+        }, tree<?= $block->escapeJs($block->getId()) ?>);
     }
 
     // set the root node
     var parameters = {
         text:        'Psw',
         draggable:   false,
-        id:          <?php echo (int) $block->getRoot()->getId() ?>,
-        expanded:    <?php echo (int) $block->getIsWasExpanded() ?>,
-        category_id: <?php echo (int) $block->getCategoryId() ?>
+        id:          <?= (int) $block->getRoot()->getId() ?>,
+        expanded:    <?= (int) $block->getIsWasExpanded() ?>,
+        category_id: <?= (int) $block->getCategoryId() ?>
     };
 
-    tree<?php echo $block->escapeJs($block->getId()) ?>.loadTree({parameters:parameters, data:<?php /* @noEscape */ echo $block->getTreeJson() ?>},true);
+    tree<?= $block->escapeJs($block->getId()) ?>.loadTree({parameters:parameters, data:<?= /* @noEscape */ $block->getTreeJson() ?>},true);
 
 });
 

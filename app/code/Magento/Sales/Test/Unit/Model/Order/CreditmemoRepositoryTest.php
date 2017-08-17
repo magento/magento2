@@ -1,19 +1,19 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Sales\Test\Unit\Model\Order;
 
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
-use \Magento\Sales\Model\Order\CreditmemoRepository;
+use Magento\Sales\Model\Order\CreditmemoRepository;
 
 /**
  * Class CreditmemoRepositoryTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CreditmemoRepositoryTest extends \PHPUnit_Framework_TestCase
+class CreditmemoRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CreditmemoRepository
@@ -34,17 +34,14 @@ class CreditmemoRepositoryTest extends \PHPUnit_Framework_TestCase
      * @var CollectionProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $collectionProcessorMock;
-    
+
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->metadataMock = $this->getMock(\Magento\Sales\Model\ResourceModel\Metadata::class, [], [], '', false);
-        $this->searchResultFactoryMock = $this->getMock(
+        $this->metadataMock = $this->createMock(\Magento\Sales\Model\ResourceModel\Metadata::class);
+        $this->searchResultFactoryMock = $this->createPartialMock(
             \Magento\Sales\Api\Data\CreditmemoSearchResultInterfaceFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
         $this->collectionProcessorMock = $this->getMockBuilder(CollectionProcessorInterface::class)
             ->getMock();
@@ -56,7 +53,7 @@ class CreditmemoRepositoryTest extends \PHPUnit_Framework_TestCase
                 'collectionProcessor' => $this->collectionProcessorMock,
             ]
         );
-        $this->type = $this->getMock(\Magento\Eav\Model\Entity\Type::class, ['fetchNewIncrementId'], [], '', false);
+        $this->type = $this->createPartialMock(\Magento\Eav\Model\Entity\Type::class, ['fetchNewIncrementId']);
     }
 
     public function testGet()

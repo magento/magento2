@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,6 +13,8 @@ use Magento\Store\Model\Address\Renderer;
 
 /**
  * Store information class used to retrieve and format store information as set in store config
+ *
+ * @api
  */
 class Information
 {
@@ -40,9 +42,7 @@ class Information
     const XML_PATH_STORE_INFO_VAT_NUMBER = 'general/store_information/merchant_vat_number';
     /**#@-*/
 
-    /**
-     * @var Renderer
-     */
+    /**#@-*/
     protected $renderer;
 
     /**

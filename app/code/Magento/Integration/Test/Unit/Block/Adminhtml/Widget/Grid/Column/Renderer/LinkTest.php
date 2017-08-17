@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Integration\Test\Unit\Block\Adminhtml\Widget\Grid\Column\Renderer;
 
-class LinkTest extends \PHPUnit_Framework_TestCase
+class LinkTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Block\Context|\PHPUnit_Framework_MockObject_MockObject
@@ -35,16 +35,13 @@ class LinkTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->escaperMock = $this->getMock(\Magento\Framework\Escaper::class, [], [], '', false);
+        $this->escaperMock = $this->createMock(\Magento\Framework\Escaper::class);
         $this->escaperMock->expects($this->any())->method('escapeHtml')->willReturnArgument(0);
-        $this->urlBuilderMock = $this->getMock(\Magento\Framework\UrlInterface::class, [], [], '', false);
+        $this->urlBuilderMock = $this->createMock(\Magento\Framework\UrlInterface::class);
         $this->urlBuilderMock->expects($this->once())->method('getUrl')->willReturn('http://magento.loc/linkurl');
-        $this->contextMock = $this->getMock(
+        $this->contextMock = $this->createPartialMock(
             \Magento\Backend\Block\Context::class,
-            ['getEscaper', 'getUrlBuilder'],
-            [],
-            '',
-            false
+            ['getEscaper', 'getUrlBuilder']
         );
         $this->contextMock->expects($this->any())->method('getEscaper')->will($this->returnValue($this->escaperMock));
         $this->contextMock->expects($this->any())

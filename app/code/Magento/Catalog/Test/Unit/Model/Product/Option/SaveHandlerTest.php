@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ use Magento\Catalog\Model\Product\Option;
 use \Magento\Catalog\Model\Product\Option\Repository;
 use \Magento\Catalog\Model\Product\Option\SaveHandler;
 
-class SaveHandlerTest extends \PHPUnit_Framework_TestCase
+class SaveHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SaveHandler|\PHPUnit_Framework_MockObject_MockObject

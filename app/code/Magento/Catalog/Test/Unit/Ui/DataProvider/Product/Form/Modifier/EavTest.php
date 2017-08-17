@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
@@ -10,6 +10,7 @@ use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav;
 use Magento\Eav\Model\Config;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\EntityManager\EventManager;
+use Magento\Framework\Phrase;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Ui\DataProvider\EavValidationRules;
@@ -260,7 +261,8 @@ class EavTest extends AbstractModifierTest
             ->disableOriginalConstructor()
             ->getMock();
         $this->productAttributeMock = $this->getMockBuilder(ProductAttributeInterface::class)
-            ->getMock();
+            ->setMethods(['getValue'])
+            ->getMockForAbstractClass();
         $this->arrayManagerMock = $this->getMockBuilder(ArrayManager::class)
             ->getMock();
         $this->eavAttributeFactoryMock = $this->getMockBuilder(EavAttributeFactory::class)
@@ -397,7 +399,7 @@ class EavTest extends AbstractModifierTest
         $this->sortOrderBuilderMock->expects($this->once())
             ->method('setAscendingDirection')
             ->willReturnSelf();
-        $dataObjectMock = $this->getMock(\Magento\Framework\Api\AbstractSimpleObject::class, [], [], '', false);
+        $dataObjectMock = $this->createMock(\Magento\Framework\Api\AbstractSimpleObject::class);
         $this->sortOrderBuilderMock->expects($this->once())
             ->method('create')
             ->willReturn($dataObjectMock);
@@ -452,12 +454,13 @@ class EavTest extends AbstractModifierTest
      * @param int $productId
      * @param bool $productRequired
      * @param string $attrValue
+     * @param string $note
      * @param array $expected
      * @covers \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav::isProductExists
      * @covers \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav::setupAttributeMeta
      * @dataProvider setupAttributeMetaDataProvider
      */
-    public function testSetupAttributeMetaDefaultAttribute($productId, $productRequired, $attrValue, $expected)
+    public function testSetupAttributeMetaDefaultAttribute($productId, $productRequired, $attrValue, $note, $expected)
     {
         $configPath =  'arguments/data/config';
         $groupCode = 'product-details';
@@ -483,9 +486,14 @@ class EavTest extends AbstractModifierTest
             ->method('getValue')
             ->willReturn('value');
 
+        $this->productAttributeMock->expects($this->any())
+            ->method('getNote')
+            ->willReturn($note);
+
         $attributeMock = $this->getMockBuilder(AttributeInterface::class)
+            ->setMethods(['getValue'])
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $attributeMock->expects($this->any())
             ->method('getValue')
@@ -527,82 +535,147 @@ class EavTest extends AbstractModifierTest
     public function setupAttributeMetaDataProvider()
     {
         return [
-            'default_null_prod_not_new_and_required' => [
-                'productId' => 1,
-                'productRequired' => true,
-                'attrValue' => 'val',
-                'expected' => [
-                    'dataType' => null,
-                    'formElement' => null,
-                    'visible' => null,
-                    'required' => true,
-                    'notice' => null,
-                    'default' => null,
-                    'label' => null,
-                    'code' => 'code',
-                    'source' => 'product-details',
-                    'scopeLabel' => '',
-                    'globalScope' => false,
-                    'sortOrder' => 0
-                    ],
-                ],
-            'default_null_prod_not_new_and_not_required' => [
-                'productId' => 1,
-                'productRequired' => false,
-                'attrValue' => 'val',
-                'expected' => [
-                    'dataType' => null,
-                    'formElement' => null,
-                    'visible' => null,
-                    'required' => false,
-                    'notice' => null,
-                    'default' => null,
-                    'label' => null,
-                    'code' => 'code',
-                    'source' => 'product-details',
-                    'scopeLabel' => '',
-                    'globalScope' => false,
-                    'sortOrder' => 0
-                    ],
-                ],
-            'default_null_prod_new_and_not_required' => [
-                'productId' => null,
-                'productRequired' => false,
-                'attrValue' => null,
-                'expected' => [
-                    'dataType' => null,
-                    'formElement' => null,
-                    'visible' => null,
-                    'required' => false,
-                    'notice' => null,
-                    'default' => 'required_value',
-                    'label' => null,
-                    'code' => 'code',
-                    'source' => 'product-details',
-                    'scopeLabel' => '',
-                    'globalScope' => false,
-                    'sortOrder' => 0
-                ],
+            'default_null_prod_not_new_and_required' => $this->defaultNullProdNotNewAndRequired(),
+            'default_null_prod_not_new_and_not_required' => $this->defaultNullProdNotNewAndNotRequired(),
+            'default_null_prod_new_and_not_required' => $this->defaultNullProdNewAndNotRequired(),
+            'default_null_prod_new_and_required' => $this->defaultNullProdNewAndRequired(),
+            'default_null_prod_new_and_required_and_filled_notice' =>
+                $this->defaultNullProdNewAndRequiredAndFilledNotice()
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    private function defaultNullProdNotNewAndRequired()
+    {
+        return [
+            'productId'       => 1,
+            'productRequired' => true,
+            'attrValue'       => 'val',
+            'note'            => null,
+            'expected'        => [
+                'dataType'    => null,
+                'formElement' => null,
+                'visible'     => null,
+                'required'    => true,
+                'notice'      => null,
+                'default'     => null,
+                'label'       => null,
+                'code'        => 'code',
+                'source'      => 'product-details',
+                'scopeLabel'  => '',
+                'globalScope' => false,
+                'sortOrder'   => 0
             ],
-            'default_null_prod_new_and_required' => [
-                'productId' => null,
-                'productRequired' => false,
-                'attrValue' => null,
-                'expected' => [
-                    'dataType' => null,
-                    'formElement' => null,
-                    'visible' => null,
-                    'required' => false,
-                    'notice' => null,
-                    'default' => 'required_value',
-                    'label' => null,
-                    'code' => 'code',
-                    'source' => 'product-details',
-                    'scopeLabel' => '',
-                    'globalScope' => false,
-                    'sortOrder' => 0
-                ],
-            ]
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    private function defaultNullProdNotNewAndNotRequired()
+    {
+        return [
+            'productId'       => 1,
+            'productRequired' => false,
+            'attrValue'       => 'val',
+            'note'            => null,
+            'expected'        => [
+                'dataType'    => null,
+                'formElement' => null,
+                'visible'     => null,
+                'required'    => false,
+                'notice'      => null,
+                'default'     => null,
+                'label'       => null,
+                'code'        => 'code',
+                'source'      => 'product-details',
+                'scopeLabel'  => '',
+                'globalScope' => false,
+                'sortOrder'   => 0
+            ],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    private function defaultNullProdNewAndNotRequired()
+    {
+        return [
+            'productId'       => null,
+            'productRequired' => false,
+            'attrValue'       => null,
+            'note'            => null,
+            'expected'        => [
+                'dataType'    => null,
+                'formElement' => null,
+                'visible'     => null,
+                'required'    => false,
+                'notice'      => null,
+                'default'     => 'required_value',
+                'label'       => null,
+                'code'        => 'code',
+                'source'      => 'product-details',
+                'scopeLabel'  => '',
+                'globalScope' => false,
+                'sortOrder'   => 0
+            ],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    private function defaultNullProdNewAndRequired()
+    {
+        return [
+            'productId'       => null,
+            'productRequired' => false,
+            'attrValue'       => null,
+            'note'            => null,
+            'expected'        => [
+                'dataType'    => null,
+                'formElement' => null,
+                'visible'     => null,
+                'required'    => false,
+                'notice'      => null,
+                'default'     => 'required_value',
+                'label'       => null,
+                'code'        => 'code',
+                'source'      => 'product-details',
+                'scopeLabel'  => '',
+                'globalScope' => false,
+                'sortOrder'   => 0
+            ],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    private function defaultNullProdNewAndRequiredAndFilledNotice()
+    {
+        return [
+            'productId'       => null,
+            'productRequired' => false,
+            'attrValue'       => null,
+            'note'            => 'example notice',
+            'expected'        => [
+                'dataType'    => null,
+                'formElement' => null,
+                'visible'     => null,
+                'required'    => false,
+                'notice'      => __('example notice'),
+                'default'     => 'required_value',
+                'label'       => null,
+                'code'        => 'code',
+                'source'      => 'product-details',
+                'scopeLabel'  => '',
+                'globalScope' => false,
+                'sortOrder'   => 0
+            ],
         ];
     }
 }

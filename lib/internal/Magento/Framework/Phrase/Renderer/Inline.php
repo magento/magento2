@@ -2,7 +2,7 @@
 /**
  * Translate Inline Phrase renderer
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Phrase\Renderer;
@@ -12,6 +12,10 @@ use Magento\Framework\TranslateInterface;
 use Magento\Framework\Translate\Inline\ProviderInterface;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Class \Magento\Framework\Phrase\Renderer\Inline
+ *
+ */
 class Inline implements RendererInterface
 {
     /**

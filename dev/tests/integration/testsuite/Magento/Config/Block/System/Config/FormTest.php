@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Block\System\Config;
@@ -11,7 +11,7 @@ use Magento\Framework\App\Cache\State;
  * @magentoAppArea adminhtml
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class FormTest extends \PHPUnit_Framework_TestCase
+class FormTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -111,53 +111,59 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $block->setStubConfigData($this->_configData);
         $block->initFields($fieldset, $this->_group, $this->_section);
 
-        $fieldsetSel = 'fieldset';
         $valueSel = sprintf(
-            'input#%s_%s_%s',
+            '//input[@id="%s_%s_%s"]',
             $this->_section->getId(),
             $this->_group->getId(),
             $this->_field->getId()
         );
-        $valueDisabledSel = sprintf('%s[disabled="disabled"]', $valueSel);
+        $valueDisabledSel = sprintf('%s[@disabled="disabled"]', $valueSel);
         $useDefaultSel = sprintf(
-            'input#%s_%s_%s_inherit.checkbox',
+            '//input[@id="%s_%s_%s_inherit" and contains(@class,"checkbox")]',
             $this->_section->getId(),
             $this->_group->getId(),
             $this->_field->getId()
         );
-        $useDefaultCheckedSel = sprintf('%s[checked="checked"]', $useDefaultSel);
+        $useDefaultCheckedSel = sprintf('%s[@checked="checked"]', $useDefaultSel);
         $fieldsetHtml = $fieldset->getElementHtml();
-
-        $this->assertSelectCount($fieldsetSel, true, $fieldsetHtml, 'Fieldset HTML is invalid');
-        $this->assertSelectCount(
-            $valueSel,
+        $this->assertGreaterThanOrEqual(
+            1,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath('//fieldset', $fieldsetHtml),
+            'Fieldset HTML is invalid'
+        );
+        $this->assertEquals(
             $valueSelCtr,
-            $fieldsetHtml,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath($valueSel, $fieldsetHtml),
             'Field input should appear ' . $valueSelCtr . ' times in fieldset HTML'
         );
-        $this->assertSelectCount(
-            $useDefaultSel,
+        $this->assertEquals(
             $valueSelCtr,
-            $fieldsetHtml,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath($useDefaultSel, $fieldsetHtml),
             '"Use Default" checkbox should appear' . $valueSelCtr . ' times  in fieldset HTML.'
         );
 
         if ($expectedUseDefault) {
-            $this->assertSelectCount(
-                $useDefaultCheckedSel,
-                true,
-                $fieldsetHtml,
+            $this->assertGreaterThanOrEqual(
+                1,
+                \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath($useDefaultCheckedSel, $fieldsetHtml),
                 '"Use Default" checkbox should be checked'
             );
-            $this->assertSelectCount($valueDisabledSel, true, $fieldsetHtml, 'Field input should be disabled');
+            $this->assertGreaterThanOrEqual(
+                1,
+                \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath($valueDisabledSel, $fieldsetHtml),
+                'Field input should be disabled'
+            );
         } else {
-            $this->assertSelectCount(
-                $useDefaultCheckedSel,
-                false,
-                $fieldsetHtml,
+            $this->assertEquals(
+                0,
+                \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath($useDefaultCheckedSel, $fieldsetHtml),
                 '"Use Default" checkbox should not be checked'
             );
-            $this->assertSelectCount($valueDisabledSel, false, $fieldsetHtml, 'Field input should not be disabled');
+            $this->assertEquals(
+                0,
+                \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath($valueDisabledSel, $fieldsetHtml),
+                'Field input should not be disabled'
+            );
         }
     }
 
@@ -208,20 +214,29 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $block->setStubConfigData($this->_configData);
         $block->initFields($fieldset, $this->_group, $this->_section);
 
-        $fieldsetSel = 'fieldset';
         $valueSel = sprintf(
-            'input#%s_%s_%s',
+            '//input[@id="%s_%s_%s"]',
             $this->_section->getId(),
             $this->_group->getId(),
             $this->_field->getId()
         );
         $fieldsetHtml = $fieldset->getElementHtml();
 
-        $this->assertSelectCount($fieldsetSel, true, $fieldsetHtml, 'Fieldset HTML is invalid');
-        $this->assertSelectCount(
-            $valueSel,
+        $this->assertGreaterThanOrEqual(
+            1,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//fieldset',
+                $fieldsetHtml
+            ),
+            'Fieldset HTML is invalid'
+        );
+
+        $this->assertEquals(
             $valueSelCtr,
-            $fieldsetHtml,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                $valueSel,
+                $fieldsetHtml
+            ),
             'Field input should appear ' . $valueSelCtr . ' times in fieldset HTML'
         );
     }

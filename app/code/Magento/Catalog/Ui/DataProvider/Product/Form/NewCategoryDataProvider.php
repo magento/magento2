@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form;
@@ -11,11 +11,15 @@ use Magento\Framework\UrlInterface;
 
 /**
  * DataProvider for new category form
+ *
+ * @api
+ * @since 101.0.0
  */
 class NewCategoryDataProvider extends AbstractDataProvider
 {
     /**
      * @var UrlInterface
+     * @since 101.0.0
      */
     protected $urlBuilder;
 
@@ -27,6 +31,7 @@ class NewCategoryDataProvider extends AbstractDataProvider
      * @param UrlInterface $urlBuilder
      * @param array $meta
      * @param array $data
+     * @since 101.0.0
      */
     public function __construct(
         $name,
@@ -44,6 +49,7 @@ class NewCategoryDataProvider extends AbstractDataProvider
 
     /**
      * {@inheritdoc}
+     * @since 101.0.0
      */
     public function getData()
     {
@@ -66,6 +72,7 @@ class NewCategoryDataProvider extends AbstractDataProvider
 
     /**
      * {@inheritdoc}
+     * @since 101.0.0
      */
     public function getMeta()
     {
@@ -86,6 +93,7 @@ class NewCategoryDataProvider extends AbstractDataProvider
      * Get notice message
      *
      * @return \Magento\Framework\Phrase
+     * @since 101.0.0
      */
     protected function getNotice()
     {

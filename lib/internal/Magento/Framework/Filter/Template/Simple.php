@@ -1,10 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filter\Template;
 
+/**
+ * Class \Magento\Framework\Filter\Template\Simple
+ *
+ */
 class Simple extends \Magento\Framework\DataObject implements \Zend_Filter_Interface
 {
     /**

@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Model\Config\Structure\Mapper;
 
-class ExtendsTest extends \PHPUnit_Framework_TestCase
+class ExtendsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Config\Model\Config\Structure\Mapper\ExtendsMapper
@@ -20,7 +20,7 @@ class ExtendsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider testMapDataProvider
+     * @dataProvider mapDataProvider
      * @param array $sourceData
      * @param array $resultData
      */
@@ -31,7 +31,7 @@ class ExtendsTest extends \PHPUnit_Framework_TestCase
 
     public function testMapWithBadPath()
     {
-        $this->setExpectedException(
+        $this->expectException(
             'InvalidArgumentException',
             'Invalid path in extends attribute of config/system/sections/section1 node'
         );
@@ -44,7 +44,7 @@ class ExtendsTest extends \PHPUnit_Framework_TestCase
         $this->_sut->map($sourceData);
     }
 
-    public function testMapDataProvider()
+    public function mapDataProvider()
     {
         return [
             [[], []],

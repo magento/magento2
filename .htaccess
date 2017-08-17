@@ -222,7 +222,7 @@
         order allow,deny
         deny from all
     </Files>
-    <Files .php_cs>
+    <Files .php_cs.dist>
         order allow,deny
         deny from all
     </Files>

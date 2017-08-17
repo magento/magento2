@@ -1,13 +1,17 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Controller\Adminhtml\Wysiwyg\Images;
 
 use Magento\Backend\App\Action;
 
+/**
+ * Class \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\Thumbnail
+ *
+ */
 class Thumbnail extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
 {
     /**

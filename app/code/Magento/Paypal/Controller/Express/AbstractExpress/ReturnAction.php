@@ -1,13 +1,17 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Controller\Express\AbstractExpress;
 
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Paypal\Controller\Express\AbstractExpress\ReturnAction
+ *
+ */
 class ReturnAction extends \Magento\Paypal\Controller\Express\AbstractExpress
 {
     /**

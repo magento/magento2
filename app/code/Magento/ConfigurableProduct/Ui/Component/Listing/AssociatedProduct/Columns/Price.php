@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct\Columns;
@@ -8,6 +8,10 @@ namespace Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct\Col
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
+/**
+ * Class \Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct\Columns\Price
+ *
+ */
 class Price extends \Magento\Ui\Component\Listing\Columns\Column
 {
     /**

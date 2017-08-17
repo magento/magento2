@@ -2,7 +2,7 @@
 /**
  * ACL Resource Loader
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Acl\Loader;
@@ -12,6 +12,10 @@ use Magento\Framework\Acl\AclResource as AclResource;
 use Magento\Framework\Acl\AclResource\ProviderInterface;
 use Magento\Framework\Acl\AclResourceFactory;
 
+/**
+ * Class \Magento\Framework\Acl\Loader\ResourceLoader
+ *
+ */
 class ResourceLoader implements \Magento\Framework\Acl\LoaderInterface
 {
     /**

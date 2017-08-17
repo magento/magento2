@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Design\Fallback\Rule;
@@ -10,7 +10,7 @@ use Magento\Framework\Component\ComponentRegistrarInterface;
 use \Magento\Framework\View\Design\Fallback\Rule\Module;
 use Magento\Framework\View\Design\Fallback\Rule\RuleInterface;
 
-class ModuleTest extends \PHPUnit_Framework_TestCase
+class ModuleTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var RuleInterface|\PHPUnit_Framework_MockObject_MockObject

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -19,6 +19,13 @@ class AddressModal extends Form
      * @var string
      */
     private $saveButton = '.action-save-address';
+
+    /**
+     * CSS Selector for Cancel button.
+     *
+     * @var string
+     */
+    private $cancelButton = '.action-hide-popup';
 
     /**
      * Selector for field's error message.
@@ -52,6 +59,16 @@ class AddressModal extends Form
     }
 
     /**
+     * Click on 'Cancel' button.
+     *
+     * @return void
+     */
+    public function cancel()
+    {
+        $this->_rootElement->find($this->cancelButton)->click();
+    }
+
+    /**
      * Get Error messages for attributes.
      *
      * @return array
@@ -64,5 +81,21 @@ class AddressModal extends Form
         }
 
         return $result;
+    }
+
+    /**
+     * Fixture mapping.
+     *
+     * @param array|null $fields
+     * @param string|null $parent
+     * @return array
+     */
+    protected function dataMapping(array $fields = null, $parent = null)
+    {
+        if (isset($fields['custom_attribute'])) {
+            $this->placeholders = ['attribute_code' => $fields['custom_attribute']['code']];
+            $this->applyPlaceholders();
+        }
+        return parent::dataMapping($fields, $parent);
     }
 }

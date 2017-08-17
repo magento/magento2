@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\Component\Listing\Columns;
@@ -10,10 +10,15 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Api\Data\ProductInterface;
 
+/**
+ * @api
+ * @since 101.0.0
+ */
 class StatusText extends \Magento\Ui\Component\Listing\Columns\Column
 {
     /**
      * @var \Magento\Catalog\Model\Product\Attribute\Source\Status
+     * @since 101.0.0
      */
     protected $status;
 
@@ -23,6 +28,7 @@ class StatusText extends \Magento\Ui\Component\Listing\Columns\Column
      * @param Status $status
      * @param array $components
      * @param array $data
+     * @since 101.0.0
      */
     public function __construct(
         ContextInterface $context,
@@ -41,6 +47,7 @@ class StatusText extends \Magento\Ui\Component\Listing\Columns\Column
      *
      * @param array $dataSource
      * @return array
+     * @since 101.0.0
      */
     public function prepareDataSource(array $dataSource)
     {

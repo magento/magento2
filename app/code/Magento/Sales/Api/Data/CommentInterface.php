@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Api\Data;
@@ -9,6 +9,7 @@ namespace Magento\Sales\Api\Data;
  * Interface CommentInterface
  *
  * @api
+ * @since 100.1.2
  */
 interface CommentInterface
 {
@@ -26,6 +27,7 @@ interface CommentInterface
      * Gets the comment text.
      *
      * @return string Comment.
+     * @since 100.1.2
      */
     public function getComment();
 
@@ -34,6 +36,7 @@ interface CommentInterface
      *
      * @param string $comment
      * @return $this
+     * @since 100.1.2
      */
     public function setComment($comment);
 
@@ -41,6 +44,7 @@ interface CommentInterface
      * Gets the is-visible-on-storefront flag value for the comment.
      *
      * @return int Is-visible-on-storefront flag value.
+     * @since 100.1.2
      */
     public function getIsVisibleOnFront();
 
@@ -49,6 +53,7 @@ interface CommentInterface
      *
      * @param int $isVisibleOnFront
      * @return $this
+     * @since 100.1.2
      */
     public function setIsVisibleOnFront($isVisibleOnFront);
 }

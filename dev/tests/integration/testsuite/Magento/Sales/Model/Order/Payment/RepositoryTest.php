@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order\Payment;
@@ -15,7 +15,7 @@ use Magento\Framework\Api\SortOrderBuilder;
  * @package Magento\Sales\Model\Order\Payment\
  * @magentoDbIsolation enabled
  */
-class RepositoryTest extends \PHPUnit_Framework_TestCase
+class RepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Repository */
     protected $repository;

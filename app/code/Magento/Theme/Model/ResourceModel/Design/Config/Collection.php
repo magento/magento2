@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model\ResourceModel\Design\Config;
@@ -14,6 +14,10 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Theme\Model\Design\Config\ValueProcessor;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Class \Magento\Theme\Model\ResourceModel\Design\Config\Collection
+ *
+ */
 class Collection extends ConfigCollection
 {
     /**

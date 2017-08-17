@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GiftMessage\Model\Plugin;
@@ -10,6 +10,10 @@ use Magento\GiftMessage\Helper\Message as MessageHelper;
 use Magento\Quote\Model\Quote\Item\ToOrderItem;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
 
+/**
+ * Class \Magento\GiftMessage\Model\Plugin\QuoteItem
+ *
+ */
 class QuoteItem
 {
     /**

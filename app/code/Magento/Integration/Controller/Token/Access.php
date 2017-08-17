@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Controller\Token;
@@ -10,6 +10,10 @@ use Magento\Integration\Model\Integration as IntegrationModel;
 use Magento\Integration\Api\IntegrationServiceInterface as IntegrationService;
 use Magento\Integration\Api\OauthServiceInterface as IntegrationOauthService;
 
+/**
+ * Class \Magento\Integration\Controller\Token\Access
+ *
+ */
 class Access extends \Magento\Framework\App\Action\Action
 {
     /**

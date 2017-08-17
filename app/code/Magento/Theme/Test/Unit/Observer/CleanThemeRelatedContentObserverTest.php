@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Theme\Test\Unit\Observer;
 
-class CleanThemeRelatedContentObserverTest extends \PHPUnit_Framework_TestCase
+class CleanThemeRelatedContentObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Theme\Model\Config\Customization|\PHPUnit_Framework_MockObject_MockObject
@@ -105,7 +105,7 @@ class CleanThemeRelatedContentObserverTest extends \PHPUnit_Framework_TestCase
 
         $this->themeConfig->expects($this->any())->method('isThemeAssignedToStore')->with($themeMock)->willReturn(true);
 
-        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, 'Theme isn\'t deletable.');
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class, 'Theme isn\'t deletable.');
         $this->themeObserver->execute($observerMock);
     }
 

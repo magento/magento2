@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Directory\Test\Unit\Model;
 
 use Magento\Directory\Model\Country;
 
-class CountryTest extends \PHPUnit_Framework_TestCase
+class CountryTest extends \PHPUnit\Framework\TestCase
 {
     protected $country;
 
@@ -19,7 +19,7 @@ class CountryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->localeListsMock = $this->getMock(\Magento\Framework\Locale\ListsInterface::class);
+        $this->localeListsMock = $this->createMock(\Magento\Framework\Locale\ListsInterface::class);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->country = $objectManager->getObject(

@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
@@ -97,7 +97,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
         $productTypeId = $this->getRequest()->getParam('type');
         if ($data) {
             try {
-                $this->unserializeProductData($data);
                 $product = $this->initializationHelper->initialize(
                     $this->productBuilder->build($this->getRequest())
                 );
@@ -120,10 +119,10 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
 
                 $this->copyToStores($data, $productId);
 
-                $this->messageManager->addSuccess(__('You saved the product.'));
+                $this->messageManager->addSuccessMessage(__('You saved the product.'));
                 $this->getDataPersistor()->clear('catalog_product');
                 if ($product->getSku() != $originalSku) {
-                    $this->messageManager->addNotice(
+                    $this->messageManager->addNoticeMessage(
                         __(
                             'SKU for product %1 has been changed to %2.',
                             $this->_objectManager->get(
@@ -142,21 +141,22 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
 
                 if ($redirectBack === 'duplicate') {
                     $newProduct = $this->productCopier->copy($product);
-                    $this->messageManager->addSuccess(__('You duplicated the product.'));
+                    $this->messageManager->addSuccessMessage(__('You duplicated the product.'));
                 }
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
+                $this->messageManager->addExceptionMessage($e);
                 $this->getDataPersistor()->set('catalog_product', $data);
                 $redirectBack = $productId ? true : 'new';
             } catch (\Exception $e) {
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
                 $this->getDataPersistor()->set('catalog_product', $data);
                 $redirectBack = $productId ? true : 'new';
             }
         } else {
             $resultRedirect->setPath('catalog/*/', ['store' => $storeId]);
-            $this->messageManager->addError('No data to save');
+            $this->messageManager->addErrorMessage('No data to save');
             return $resultRedirect;
         }
 
@@ -182,30 +182,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
     }
 
     /**
-     * Unserialize product data for configurable products
-     *
-     * @param array $postData
-     * @return void
-     */
-    private function unserializeProductData($postData)
-    {
-        if (isset($postData["configurable-matrix-serialized"])) {
-            $configurableMatrixSerialized = $postData["configurable-matrix-serialized"];
-            if ($configurableMatrixSerialized != null && !empty($configurableMatrixSerialized)) {
-                $postData["configurable-matrix"] = json_decode($configurableMatrixSerialized, true);
-                unset($postData["configurable-matrix-serialized"]);
-            }
-        }
-        if (isset($postData["associated_product_ids_serialized"])) {
-            $associatedProductIdsSerialized = $postData["associated_product_ids_serialized"];
-            if ($associatedProductIdsSerialized != null && !empty($associatedProductIdsSerialized)) {
-                $postData["associated_product_ids"] = json_decode($associatedProductIdsSerialized, true);
-                unset($postData["associated_product_ids_serialized"]);
-            }
-        }
-    }
-
-    /**
      * Notify customer when image was not deleted in specific case.
      * TODO: temporary workaround must be eliminated in MAGETWO-45306
      *
@@ -226,7 +202,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                 $expectedImagesAmount = count($postData['product']['media_gallery']['images']) - $removedImagesAmount;
                 $product = $this->productRepository->getById($productId);
                 if ($expectedImagesAmount != count($product->getMediaGallery('images'))) {
-                    $this->messageManager->addNotice(
+                    $this->messageManager->addNoticeMessage(
                         __('The image cannot be removed as it has been assigned to the other image role')
                     );
                 }
@@ -278,7 +254,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
 
     /**
      * @return StoreManagerInterface
-     * @deprecated
+     * @deprecated 101.0.0
      */
     private function getStoreManager()
     {
@@ -293,7 +269,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
      * Retrieve data persistor
      *
      * @return DataPersistorInterface|mixed
-     * @deprecated
+     * @deprecated 101.0.0
      */
     protected function getDataPersistor()
     {

@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRule\Model;
 
-class RuleTest extends \PHPUnit_Framework_TestCase
+class RuleTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogRule\Model\Rule
@@ -18,12 +18,9 @@ class RuleTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $resourceMock = $this->getMock(
+        $resourceMock = $this->createPartialMock(
             \Magento\CatalogRule\Model\ResourceModel\Rule::class,
-            ['getIdFieldName', 'getRulesFromProduct'],
-            [],
-            '',
-            false
+            ['getIdFieldName', 'getRulesFromProduct']
         );
         $resourceMock->expects($this->any())->method('getIdFieldName')->will($this->returnValue('id'));
         $resourceMock->expects(

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model\Config;
@@ -10,7 +10,7 @@ use Magento\Email\Model\Template;
 /**
  * Class ValidatorTest to test \Magento\Theme\Model\Design\Config\Validator
  */
-class ValidatorTest extends \PHPUnit_Framework_TestCase
+class ValidatorTest extends \PHPUnit\Framework\TestCase
 {
     const TEMPLATE_CODE = 'email_exception_fixture';
 

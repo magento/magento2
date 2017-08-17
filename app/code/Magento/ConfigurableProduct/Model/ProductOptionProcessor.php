@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Model;
@@ -12,6 +12,10 @@ use Magento\ConfigurableProduct\Model\Quote\Item\ConfigurableItemOptionValueFact
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\Factory as DataObjectFactory;
 
+/**
+ * Class \Magento\ConfigurableProduct\Model\ProductOptionProcessor
+ *
+ */
 class ProductOptionProcessor implements ProductOptionProcessorInterface
 {
     /**

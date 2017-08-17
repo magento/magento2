@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Test\Unit\Model;
 
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\ImportExport\Model\Import;
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 /**
  * Class ImportTest
@@ -107,6 +108,11 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
     protected $_driver;
 
     /**
+     * @var ProcessingErrorAggregatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $errorAggregatorMock;
+
+    /**
      * Set up
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -134,13 +140,24 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
         $this->_entityFactory = $this->getMockBuilder(\Magento\ImportExport\Model\Import\Entity\Factory::class)
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->errorAggregatorMock = $this->getErrorAggregatorObject([
+            'initValidationStrategy',
+            'getErrorsCount',
+        ]);
         $this->_entityAdapter = $this->getMockBuilder(\Magento\ImportExport\Model\Import\Entity\AbstractEntity::class)
             ->disableOriginalConstructor()
-            ->setMethods(['importData', '_saveValidatedBunches', 'getErrorAggregator'])
+            ->setMethods([
+                'importData',
+                '_saveValidatedBunches',
+                'getErrorAggregator',
+                'setSource',
+                'validateData',
+            ])
             ->getMockForAbstractClass();
-        $this->_entityAdapter->method('getErrorAggregator')->willReturn(
-            $this->getErrorAggregatorObject(['initValidationStrategy'])
-        );
+        $this->_entityAdapter->method('getErrorAggregator')
+            ->willReturn($this->errorAggregatorMock);
+
         $this->_entityFactory->method('create')->willReturn($this->_entityAdapter);
 
         $this->_importData = $this->getMockBuilder(\Magento\ImportExport\Model\ResourceModel\Import\Data::class)
@@ -203,6 +220,7 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             ->setMethods([
                 'getDataSourceModel',
                 'setData',
+                'getData',
                 'getProcessedEntitiesCount',
                 'getProcessedRowsCount',
                 'getEntity',
@@ -212,11 +230,13 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             ])
             ->getMock();
         $this->setPropertyValue($this->import, '_varDirectory', $this->_varDirectory);
-
     }
 
     /**
-     * Test importSource()
+     * Test importSource() method
+     *
+     * Check that method executes initialization of error aggregator object with
+     * 'validation strategy' and 'allowed error count' parameters.
      */
     public function testImportSource()
     {
@@ -236,13 +256,9 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             ['entity', $entityTypeCode],
             ['behavior', $behaviour]
         );
-        $phraseClass = \Magento\Framework\Phrase::class;
-        $this->import->expects($this->any())
-                    ->method('addLogComment')
-                    ->with($this->isInstanceOf($phraseClass));
         $this->_entityAdapter->expects($this->any())
                     ->method('importData')
-                    ->will($this->returnSelf());
+                    ->will($this->returnValue(true));
         $this->import->expects($this->any())
                     ->method('_getEntityAdapter')
                     ->will($this->returnValue($this->_entityAdapter));
@@ -270,6 +286,7 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
     /**
      * Test importSource with expected exception
      *
+     * @expectedException \Magento\Framework\Exception\AlreadyExistsException
      */
     public function testImportSourceException()
     {
@@ -291,23 +308,13 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             ['entity', $entityTypeCode],
             ['behavior', $behaviour]
         );
-        $phraseClass = \Magento\Framework\Phrase::class;
-        $this->import->expects($this->any())
-            ->method('addLogComment')
-            ->with($this->isInstanceOf($phraseClass));
+
         $this->_entityAdapter->expects($this->any())
             ->method('importData')
             ->will($this->throwException($exceptionMock));
         $this->import->expects($this->any())
             ->method('_getEntityAdapter')
             ->will($this->returnValue($this->_entityAdapter));
-        $importOnceMethodsReturnNull = [
-            'getBehavior',
-        ];
-
-        foreach ($importOnceMethodsReturnNull as $method) {
-            $this->import->expects($this->once())->method($method)->will($this->returnValue(null));
-        }
 
         $this->import->importSource();
     }
@@ -415,11 +422,55 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
     }
 
     /**
-     * @todo to implement it.
+     * Test validateSource() method
+     *
+     * Check that method executes initialization of error aggregator object with
+     * 'validation strategy' and 'allowed error count' parameters.
      */
     public function testValidateSource()
     {
-        $this->markTestIncomplete('This test has not been implemented yet.');
+        $this->markTestSkipped('Test needs to be refacotred,');
+        $validationStrategy = ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_STOP_ON_ERROR;
+        $allowedErrorCount = 1;
+
+        $this->errorAggregatorMock->expects($this->once())
+            ->method('initValidationStrategy')
+            ->with($validationStrategy, $allowedErrorCount);
+        $this->errorAggregatorMock->expects($this->once())
+            ->method('getErrorsCount')
+            ->willReturn(0);
+
+        $csvMock = $this->getMockBuilder(\Magento\ImportExport\Model\Import\Source\Csv::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->_entityAdapter->expects($this->once())
+            ->method('setSource')
+            ->with($csvMock)
+            ->willReturnSelf();
+        $this->_entityAdapter->expects($this->once())
+            ->method('validateData');
+
+        $this->import->expects($this->any())
+            ->method('_getEntityAdapter')
+            ->willReturn($this->_entityAdapter);
+        $this->import->expects($this->once())
+            ->method('getProcessedRowsCount')
+            ->willReturn(0);
+
+        $this->import->expects($this->any())
+            ->method('getData')
+            ->willReturnMap([
+                [Import::FIELD_NAME_VALIDATION_STRATEGY, null, $validationStrategy],
+                [Import::FIELD_NAME_ALLOWED_ERROR_COUNT, null, $allowedErrorCount],
+            ]);
+
+        $this->assertTrue($this->import->validateSource($csvMock));
+
+        $logTrace = $this->import->getFormatedLogTrace();
+        $this->assertContains('Begin data validation', $logTrace);
+        $this->assertContains('This file does not contain any data', $logTrace);
+        $this->assertContains('Import data validation is complete', $logTrace);
     }
 
     public function testInvalidateIndex()
@@ -780,7 +831,7 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
         $this->_varDirectory
             ->expects($this->never())
             ->method('getRelativePath');
-        $phrase = $this->getMock(\Magento\Framework\Phrase::class, [], [], '', false);
+        $phrase = $this->createMock(\Magento\Framework\Phrase::class);
         $this->_driver
             ->expects($this->any())
             ->method('fileGetContents')

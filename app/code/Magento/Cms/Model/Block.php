@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Model;
@@ -13,8 +13,6 @@ use Magento\Framework\Model\AbstractModel;
 /**
  * CMS block model
  *
- * @method ResourceCmsBlock _getResource()
- * @method ResourceCmsBlock getResource()
  * @method Block setStoreId(array $storeId)
  * @method array getStoreId()
  */
@@ -33,9 +31,7 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
 
     /**#@-*/
 
-    /**
-     * @var string
-     */
+    /**#@-*/
     protected $_cacheTag = self::CACHE_TAG;
 
     /**

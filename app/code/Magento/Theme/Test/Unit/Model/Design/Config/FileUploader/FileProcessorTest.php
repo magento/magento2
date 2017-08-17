@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Model\Design\Config\FileUploader;
@@ -12,7 +12,7 @@ use Magento\Theme\Model\Design\Config\FileUploader\FileProcessor;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class FileProcessorTest extends \PHPUnit_Framework_TestCase
+class FileProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\MediaStorage\Model\File\UploaderFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $uploaderFactory;
@@ -135,11 +135,18 @@ class FileProcessorTest extends \PHPUnit_Framework_TestCase
         $this->uploader->expects($this->once())
             ->method('save')
             ->with('absolute/path/to/tmp/media')
-            ->willReturn(['file' => 'file.jpg', 'size' => '234234']);
+            ->willReturn([
+                'file' => 'file.jpg',
+                'size' => '234234',
+                'type' => 'image/jpg',
+                'name' => 'file.jpg',
+            ]);
         $this->assertEquals(
             [
                 'file' => 'file.jpg',
+                'name' => 'file.jpg',
                 'size' => '234234',
+                'type' => 'image/jpg',
                 'url' => 'http://magento2.com/pub/media/tmp/' . FileProcessor::FILE_DIR . '/file.jpg'
             ],
             $this->fileProcessor->saveToTmp($fieldCode)

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Handler;
@@ -9,6 +9,10 @@ use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\HandlerFa
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\HandlerInterface;
 use Magento\Catalog\Model\Product;
 
+/**
+ * Class \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Handler\Composite
+ *
+ */
 class Composite implements HandlerInterface
 {
     /**

@@ -2,12 +2,12 @@
 /**
  * \Magento\Customer\Model\ResourceModel\Group\Grid\ServiceCollection
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\ResourceModel\Group\Grid;
 
-class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
+class ServiceCollectionTest extends \PHPUnit\Framework\TestCase
 {
     /** @var ServiceCollection */
     protected $collection;

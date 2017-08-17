@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Model;
@@ -10,6 +10,10 @@ use Magento\Tax\Helper\Data as TaxHelper;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Checkout\Model\Session as CheckoutSession;
 
+/**
+ * Class \Magento\Tax\Model\TaxConfigProvider
+ *
+ */
 class TaxConfigProvider implements ConfigProviderInterface
 {
     /**

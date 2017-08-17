@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Test\Unit\Model;
@@ -16,7 +16,7 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\Website;
 
-class ScopeTreeProviderTest extends \PHPUnit_Framework_TestCase
+class ScopeTreeProviderTest extends \PHPUnit\Framework\TestCase
 {
     /** @var ScopeTreeProvider */
     protected $model;

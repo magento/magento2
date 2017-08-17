@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\ImportExport\Test\Unit\Model\Import\Source;
 
-class ZipTest extends \PHPUnit_Framework_TestCase
+class ZipTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Filesystem\Directory\Write|\PHPUnit_Framework_MockObject_MockObject
@@ -89,7 +89,7 @@ class ZipTest extends \PHPUnit_Framework_TestCase
                 [],
                 ]
             );
-        } catch (\PHPUnit_Framework_Error $e) {
+        } catch (\PHPUnit\Framework\Error $e) {
             // Suppress any errors due to no control of Zip object dependency instantiation.
         }
     }

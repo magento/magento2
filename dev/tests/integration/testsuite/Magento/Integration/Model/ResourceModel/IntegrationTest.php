@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Model\ResourceModel;
@@ -8,7 +8,7 @@ namespace Magento\Integration\Model\ResourceModel;
 /**
  * Integration test for \Magento\Integration\Model\ResourceModel\Integration
  */
-class IntegrationTest extends \PHPUnit_Framework_TestCase
+class IntegrationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Integration\Model\Integration

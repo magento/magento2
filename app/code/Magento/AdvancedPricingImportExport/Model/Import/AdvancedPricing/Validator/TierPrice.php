@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator;
@@ -8,6 +8,10 @@ namespace Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Valid
 use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 
+/**
+ * Class \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator\TierPrice
+ *
+ */
 class TierPrice extends \Magento\CatalogImportExport\Model\Import\Product\Validator\AbstractPrice
 {
     /**
@@ -22,7 +26,8 @@ class TierPrice extends \Magento\CatalogImportExport\Model\Import\Product\Valida
         AdvancedPricing::COL_TIER_PRICE_WEBSITE,
         AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP,
         AdvancedPricing::COL_TIER_PRICE_QTY,
-        AdvancedPricing::COL_TIER_PRICE
+        AdvancedPricing::COL_TIER_PRICE,
+        AdvancedPricing::COL_TIER_PRICE_TYPE
     ];
 
     /**
@@ -101,6 +106,7 @@ class TierPrice extends \Magento\CatalogImportExport\Model\Import\Product\Valida
                 || !isset($value[AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP])
                 || !isset($value[AdvancedPricing::COL_TIER_PRICE_QTY])
                 || !isset($value[AdvancedPricing::COL_TIER_PRICE])
+                || !isset($value[AdvancedPricing::COL_TIER_PRICE_TYPE])
                 || $this->hasEmptyColumns($value)
             ) {
                 $this->_addMessages([self::ERROR_TIER_DATA_INCOMPLETE]);

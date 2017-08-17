@@ -1,12 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filesystem\Directory;
 
 use Magento\Framework\Exception\FileSystemException;
 
+/**
+ * Class \Magento\Framework\Filesystem\Directory\Write
+ *
+ */
 class Write extends Read implements WriteInterface
 {
     /**
@@ -106,7 +110,7 @@ class Write extends Read implements WriteInterface
             $targetDirectory->create($this->driver->getParentDirectory($newPath));
         }
         $absolutePath = $this->driver->getAbsolutePath($this->path, $path);
-        $absoluteNewPath = $targetDirectory->driver->getAbsolutePath($this->path, $newPath);
+        $absoluteNewPath = $targetDirectory->getAbsolutePath($newPath);
         return $this->driver->rename($absolutePath, $absoluteNewPath, $targetDirectory->driver);
     }
 

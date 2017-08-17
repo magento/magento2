@@ -1,13 +1,17 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Controller\Adminhtml\Downloadable\Product\Edit;
 
 use Magento\Downloadable\Helper\Download as DownloadHelper;
 
+/**
+ * Class \Magento\Downloadable\Controller\Adminhtml\Downloadable\Product\Edit\Sample
+ *
+ */
 class Sample extends \Magento\Downloadable\Controller\Adminhtml\Downloadable\Product\Edit\Link
 {
     /**

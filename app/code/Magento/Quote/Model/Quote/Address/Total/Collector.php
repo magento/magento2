@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model\Quote\Address\Total;
@@ -69,7 +69,7 @@ class Collector extends \Magento\Sales\Model\Config\Ordered
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Quote\Model\Quote\Address\TotalFactory $totalFactory
-     * @param mixed $sourceData
+     * @param \Magento\Framework\Simplexml\Element|mixed $sourceData
      * @param mixed $store
      * @param SerializerInterface $serializer
      */

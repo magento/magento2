@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\HTTP\PhpEnvironment;
@@ -62,6 +62,11 @@ class RemoteAddress
 
         if (!$this->remoteAddress) {
             return false;
+        }
+
+        if (strpos($this->remoteAddress, ',') !== false) {
+            $ipList = explode(',', $this->remoteAddress);
+            $this->remoteAddress = trim(reset($ipList));
         }
 
         return $ipToLong ? ip2long($this->remoteAddress) : $this->remoteAddress;

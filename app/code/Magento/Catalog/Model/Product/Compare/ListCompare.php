@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Compare;
@@ -10,6 +10,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Compare\Item\Collection;
 /**
  * Product Compare List Model
  *
+ * @api
  * @SuppressWarnings(PHPMD.LongVariable)
  */
 class ListCompare extends \Magento\Framework\DataObject

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Test\Unit\Block\Cart\Item;
@@ -11,7 +11,7 @@ use Magento\Quote\Model\Quote\Item;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RendererTest extends \PHPUnit_Framework_TestCase
+class RendererTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Renderer
@@ -32,7 +32,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->layout = $this->getMock(\Magento\Framework\View\LayoutInterface::class);
+        $this->layout = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
 
         $context = $this->getMockBuilder(\Magento\Framework\View\Element\Template\Context::class)
             ->disableOriginalConstructor()
@@ -69,17 +69,14 @@ class RendererTest extends \PHPUnit_Framework_TestCase
     protected function _initProduct()
     {
         /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $product */
-        $product = $this->getMock(
+        $product = $this->createPartialMock(
             \Magento\Catalog\Model\Product::class,
-            ['getName', '__wakeup', 'getIdentities'],
-            [],
-            '',
-            false
+            ['getName', '__wakeup', 'getIdentities']
         );
         $product->expects($this->any())->method('getName')->will($this->returnValue('Parent Product'));
 
         /** @var Item|\PHPUnit_Framework_MockObject_MockObject $item */
-        $item = $this->getMock(\Magento\Quote\Model\Quote\Item::class, [], [], '', false);
+        $item = $this->createMock(\Magento\Quote\Model\Quote\Item::class);
         $item->expects($this->any())->method('getProduct')->will($this->returnValue($product));
 
         $this->_renderer->setItem($item);

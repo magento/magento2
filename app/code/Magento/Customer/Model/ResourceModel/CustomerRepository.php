@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -145,9 +145,13 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     public function save(\Magento\Customer\Api\Data\CustomerInterface $customer, $passwordHash = null)
     {
         $prevCustomerData = null;
+        $prevCustomerDataArr = null;
         if ($customer->getId()) {
             $prevCustomerData = $this->getById($customer->getId());
+            $prevCustomerDataArr = $prevCustomerData->__toArray();
         }
+        /** @var $customer \Magento\Customer\Model\Data\Customer */
+        $customerArr = $customer->__toArray();
         $customer = $this->imageProcessor->save(
             $customer,
             CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
@@ -185,6 +189,20 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
             $customerModel->setRpToken(null);
             $customerModel->setRpTokenCreatedAt(null);
         }
+        if (!array_key_exists('default_billing', $customerArr) &&
+            null !== $prevCustomerDataArr &&
+            array_key_exists('default_billing', $prevCustomerDataArr)
+        ) {
+            $customerModel->setDefaultBilling($prevCustomerDataArr['default_billing']);
+        }
+
+        if (!array_key_exists('default_shipping', $customerArr) &&
+            null !== $prevCustomerDataArr &&
+            array_key_exists('default_shipping', $prevCustomerDataArr)
+        ) {
+            $customerModel->setDefaultShipping($prevCustomerDataArr['default_shipping']);
+        }
+
         $customerModel->save();
         $this->customerRegistry->push($customerModel);
         $customerId = $customerModel->getId();
@@ -333,7 +351,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     /**
      * Helper function that adds a FilterGroup to the collection.
      *
-     * @deprecated
+     * @deprecated 100.2.0
      * @param \Magento\Framework\Api\Search\FilterGroup $filterGroup
      * @param \Magento\Customer\Model\ResourceModel\Customer\Collection $collection
      * @return void
@@ -356,7 +374,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     /**
      * Retrieve collection processor
      *
-     * @deprecated
+     * @deprecated 100.2.0
      * @return CollectionProcessorInterface
      */
     private function getCollectionProcessor()

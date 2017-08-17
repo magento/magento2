@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Developer\Model\View\Asset\PreProcessor;
@@ -14,7 +14,9 @@ use Magento\Framework\View\Asset\PreProcessor\AlternativeSourceInterface;
 use Magento\Framework\View\Asset\PreProcessorInterface;
 
 /**
- * Class PreprocessorStrategy
+ * Selection of the strategy for assets pre-processing
+ *
+ * @api
  */
 class PreprocessorStrategy implements PreProcessorInterface
 {
@@ -56,7 +58,7 @@ class PreprocessorStrategy implements PreProcessorInterface
     }
 
     /**
-     * Transform content and/or content type for the specified preprocessing chain object
+     * Transform content and/or content type for the specified pre-processing chain object
      *
      * @param PreProcessor\Chain $chain
      * @return void
@@ -76,7 +78,7 @@ class PreprocessorStrategy implements PreProcessorInterface
 
     /**
      * @return State
-     * @deprecated
+     * @deprecated 100.2.0
      */
     private function getState()
     {

@@ -1,10 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Model\Quote;
 
+/**
+ * Class \Magento\SalesRule\Model\Quote\Discount
+ *
+ */
 class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
 {
     /**
@@ -131,6 +135,8 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
             $this->calculator->processShippingAmount($address);
             $total->addTotalAmount($this->getCode(), -$address->getShippingDiscountAmount());
             $total->addBaseTotalAmount($this->getCode(), -$address->getBaseShippingDiscountAmount());
+            $total->setShippingDiscountAmount($address->getShippingDiscountAmount());
+            $total->setBaseShippingDiscountAmount($address->getBaseShippingDiscountAmount());
         }
 
         $this->calculator->prepareDescription($address);

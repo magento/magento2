@@ -1,11 +1,15 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\AdminNotification\Controller\Adminhtml\Notification;
 
+/**
+ * Class \Magento\AdminNotification\Controller\Adminhtml\Notification\Remove
+ *
+ */
 class Remove extends \Magento\AdminNotification\Controller\Adminhtml\Notification
 {
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order\Shipment;
@@ -8,6 +8,10 @@ namespace Magento\Sales\Model\Order\Shipment;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\ShipmentInterface;
 
+/**
+ * Class \Magento\Sales\Model\Order\Shipment\OrderRegistrar
+ *
+ */
 class OrderRegistrar implements \Magento\Sales\Model\Order\Shipment\OrderRegistrarInterface
 {
     /**

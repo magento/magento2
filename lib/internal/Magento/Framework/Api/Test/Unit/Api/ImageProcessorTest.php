@@ -1,17 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Framework\Api\Test\Unit\Api;
 
 /**
  * Unit test class for \Magento\Framework\Api\ImageProcessor
  */
-class ImageProcessorTest extends \PHPUnit_Framework_TestCase
+class ImageProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Api\ImageProcessor
@@ -67,7 +65,8 @@ class ImageProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('getDirectoryWrite')
             ->willReturn($this->directoryWriteMock);
         $this->contentValidatorMock = $this->getMockBuilder(
-            \Magento\Framework\Api\ImageContentValidatorInterface::class)
+            \Magento\Framework\Api\ImageContentValidatorInterface::class
+        )
             ->disableOriginalConstructor()
             ->getMock();
         $this->dataObjectHelperMock = $this->getMockBuilder(\Magento\Framework\Api\DataObjectHelper::class)

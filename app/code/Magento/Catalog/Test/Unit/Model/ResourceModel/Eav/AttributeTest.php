@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Eav;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AttributeTest extends \PHPUnit_Framework_TestCase
+class AttributeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute
@@ -45,35 +45,18 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_processor = $this->getMock(
-            \Magento\Catalog\Model\Indexer\Product\Flat\Processor::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->_processor = $this->createMock(\Magento\Catalog\Model\Indexer\Product\Flat\Processor::class);
 
-        $this->_eavProcessor = $this->getMock(
-            \Magento\Catalog\Model\Indexer\Product\Eav\Processor::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->_eavProcessor = $this->createMock(\Magento\Catalog\Model\Indexer\Product\Eav\Processor::class);
 
-        $eventManagerMock = $this->getMock(\Magento\Framework\Event\ManagerInterface::class, [], [], '', false);
+        $eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
 
-        $cacheInterfaceMock = $this->getMock(\Magento\Framework\App\CacheInterface::class, [], [], '', false);
+        $cacheInterfaceMock = $this->createMock(\Magento\Framework\App\CacheInterface::class);
 
-        $actionValidatorMock = $this->getMock(
-            \Magento\Framework\Model\ActionValidator\RemoveAction::class, [], [], '', false
-        );
+        $actionValidatorMock = $this->createMock(\Magento\Framework\Model\ActionValidator\RemoveAction::class);
         $actionValidatorMock->expects($this->any())->method('isAllowed')->will($this->returnValue(true));
 
-        $this->contextMock = $this->getMock(
-            \Magento\Framework\Model\Context::class,
-            ['getEventDispatcher', 'getCacheManager', 'getActionValidator'], [], '', false
-        );
+        $this->contextMock = $this->createPartialMock(\Magento\Framework\Model\Context::class, ['getEventDispatcher', 'getCacheManager', 'getActionValidator']);
 
         $this->contextMock->expects($this->any())
             ->method('getEventDispatcher')
@@ -84,13 +67,11 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         $this->contextMock->expects($this->any())->method('getActionValidator')
             ->will($this->returnValue($actionValidatorMock));
 
-        $dbAdapterMock = $this->getMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, [], [], '', false);
+        $dbAdapterMock = $this->createMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class);
 
         $dbAdapterMock->expects($this->any())->method('getTransactionLevel')->will($this->returnValue(1));
 
-        $this->resourceMock = $this->getMock(
-            \Magento\Framework\Model\ResourceModel\AbstractResource::class,
-            [
+        $this->resourceMock = $this->createPartialMock(\Magento\Framework\Model\ResourceModel\AbstractResource::class, [
                 '_construct',
                 'getConnection',
                 'getIdFieldName',
@@ -98,11 +79,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
                 'saveInSetIncluding',
                 'isUsedBySuperProducts',
                 'delete'
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
 
         $this->eavConfigMock = $this->getMockBuilder(\Magento\Eav\Model\Config::class)
             ->setMethods(['clear'])
@@ -113,10 +90,6 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             ->method('getConnection')
             ->will($this->returnValue($dbAdapterMock));
 
-        $attributeCacheMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\AttributeCache::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_model = $objectManager->getObject(
             \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
@@ -126,8 +99,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
                     'indexerEavProcessor' => $this->_eavProcessor,
                     'resource' => $this->resourceMock,
                     'data' => ['id' => 1],
-                    'eavConfig' => $this->eavConfigMock,
-                    'attributeCache' => $attributeCacheMock
+                    'eavConfig' => $this->eavConfigMock
                 ]
         );
     }

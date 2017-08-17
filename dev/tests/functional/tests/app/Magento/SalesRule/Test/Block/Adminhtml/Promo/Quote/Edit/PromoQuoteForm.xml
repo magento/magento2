@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -70,7 +70,7 @@
                 <input>select</input>
             </simple_free_shipping>
             <actions_serialized>
-                <selector>#rule_actions_fieldset</selector>
+                <selector>.fieldset[id^="sales_rule_formrule_actions_fieldset_"]</selector>
                 <input>conditions</input>
             </actions_serialized>
         </fields>
@@ -80,4 +80,9 @@
         <selector>[data-index="labels"]</selector>
         <strategy>css selector</strategy>
     </labels>
+    <manage_coupon_code>
+        <class>\Magento\SalesRule\Test\Block\Adminhtml\Promo\Quote\Edit\Section\ManageCouponCode</class>
+        <selector>[id="sales-rule-form-tab-coupons"]</selector>
+        <strategy>css selector</strategy>
+    </manage_coupon_code>
 </sections>

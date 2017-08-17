@@ -1,19 +1,20 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
-* Helper class that simplifies files stream reading and writing
-*/
+ * Helper class that simplifies files stream reading and writing
+ */
 namespace Magento\Framework\Archive\Helper;
 
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Filesystem\DriverInterface;
 
+/**
+ * Class \Magento\Framework\Archive\Helper\File
+ *
+ */
 class File
 {
     /**
@@ -98,7 +99,10 @@ class File
         if ($this->_isInWriteMode) {
             if (!is_writable($this->_fileLocation)) {
                 throw new LocalizedException(
-                    new \Magento\Framework\Phrase('Permission denied to write to %1', [$this->_fileLocation])
+                    new \Magento\Framework\Phrase(
+                        'Permission denied to write to %1',
+                        [$this->_fileLocation]
+                    )
                 );
             }
 
@@ -199,7 +203,9 @@ class File
         $this->_fileHandler = @fopen($this->_filePath, $mode);
 
         if (false === $this->_fileHandler) {
-            throw new LocalizedException(new \Magento\Framework\Phrase('Failed to open file %1', [$this->_filePath]));
+            throw new LocalizedException(
+                new \Magento\Framework\Phrase('Failed to open file %1', [$this->_filePath])
+            );
         }
     }
 
@@ -215,7 +221,9 @@ class File
         $result = @fwrite($this->_fileHandler, $data);
 
         if (false === $result) {
-            throw new LocalizedException(new \Magento\Framework\Phrase('Failed to write data to %1', [$this->_filePath]));
+            throw new LocalizedException(
+                new \Magento\Framework\Phrase('Failed to write data to %1', [$this->_filePath])
+            );
         }
     }
 

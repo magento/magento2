@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Directory\Test\Unit\Model;
 
 use Magento\Directory\Model\PriceCurrency;
 
-class PriceCurrencyTest extends \PHPUnit_Framework_TestCase
+class PriceCurrencyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var PriceCurrency

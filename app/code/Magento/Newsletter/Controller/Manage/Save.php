@@ -1,13 +1,17 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Newsletter\Controller\Manage;
 
 use Magento\Customer\Api\CustomerRepositoryInterface as CustomerRepository;
 
+/**
+ * Class \Magento\Newsletter\Controller\Manage\Save
+ *
+ */
 class Save extends \Magento\Newsletter\Controller\Manage
 {
     /**

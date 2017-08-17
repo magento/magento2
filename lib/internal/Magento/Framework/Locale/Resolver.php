@@ -1,18 +1,23 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Locale;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
+/**
+ * Class \Magento\Framework\Locale\Resolver
+ *
+ */
 class Resolver implements ResolverInterface
 {
     /**
      * Default locale
      */
     const DEFAULT_LOCALE = 'en_US';
+
     /**
      * Default locale code
      *

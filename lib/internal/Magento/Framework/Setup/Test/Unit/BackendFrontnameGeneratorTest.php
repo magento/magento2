@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Setup\Test\Unit;
 
 use Magento\Framework\Setup\BackendFrontnameGenerator;
 
-class BackendFrontnameGeneratorTest extends \PHPUnit_Framework_TestCase
+class BackendFrontnameGeneratorTest extends \PHPUnit\Framework\TestCase
 {
     public function testGenerate()
     {

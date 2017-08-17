@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Controller;
@@ -9,7 +9,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Zend\Stdlib\RequestInterface as Request;
 use Zend\View\Model\JsonModel;
 
-class UrlCheckTest extends \PHPUnit_Framework_TestCase
+class UrlCheckTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var UrlCheck

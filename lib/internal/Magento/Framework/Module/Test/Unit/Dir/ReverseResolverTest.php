@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Module\Test\Unit\Dir;
 
-class ReverseResolverTest extends \PHPUnit_Framework_TestCase
+class ReverseResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Module\Dir\ReverseResolver
@@ -24,8 +24,8 @@ class ReverseResolverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_moduleList = $this->getMock(\Magento\Framework\Module\ModuleListInterface::class);
-        $this->_moduleDirs = $this->getMock(\Magento\Framework\Module\Dir::class, [], [], '', false, false);
+        $this->_moduleList = $this->createMock(\Magento\Framework\Module\ModuleListInterface::class);
+        $this->_moduleDirs = $this->createMock(\Magento\Framework\Module\Dir::class);
         $this->_model = new \Magento\Framework\Module\Dir\ReverseResolver($this->_moduleList, $this->_moduleDirs);
     }
 

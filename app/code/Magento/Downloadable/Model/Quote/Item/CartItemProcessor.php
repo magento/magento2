@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Model\Quote\Item;
@@ -9,6 +9,10 @@ use Magento\Quote\Model\Quote\Item\CartItemProcessorInterface;
 use Magento\Quote\Api\Data\CartItemInterface;
 use Magento\Framework\DataObject\Factory as DataObjectFactory;
 
+/**
+ * Class \Magento\Downloadable\Model\Quote\Item\CartItemProcessor
+ *
+ */
 class CartItemProcessor implements CartItemProcessorInterface
 {
     /**

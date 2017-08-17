@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Setup\Test\Unit\Model;
 
 use \Magento\Setup\Model\ModuleStatus;
 
-class ModuleStatusTest extends \PHPUnit_Framework_TestCase
+class ModuleStatusTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Module\ModuleList\Loader
@@ -37,13 +37,13 @@ class ModuleStatusTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->moduleLoader = $this->getMock(\Magento\Framework\Module\ModuleList\Loader::class, [], [], '', false);
+        $this->moduleLoader = $this->createMock(\Magento\Framework\Module\ModuleList\Loader::class);
         $this->dependencyChecker =
-            $this->getMock(\Magento\Framework\Module\DependencyChecker::class, [], [], '', false);
-        $this->deploymentConfig = $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false);
+            $this->createMock(\Magento\Framework\Module\DependencyChecker::class);
+        $this->deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
         $this->objectManager = $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class);
         $this->objectManagerProvider =
-            $this->getMock(\Magento\Setup\Model\ObjectManagerProvider::class, [], [], '', false);
+            $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);
         $this->objectManagerProvider->expects($this->once())->method('get')->willReturn($this->objectManager);
         $this->objectManager->expects($this->once())->method('get')->willReturn($this->dependencyChecker);
     }

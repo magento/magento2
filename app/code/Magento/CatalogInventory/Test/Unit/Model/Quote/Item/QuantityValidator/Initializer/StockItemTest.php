@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Test\Unit\Model\Quote\Item\QuantityValidator\Initializer;
@@ -10,7 +10,7 @@ use Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\QuoteItemQtyList
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class StockItemTest extends \PHPUnit_Framework_TestCase
+class StockItemTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\StockItem
@@ -67,12 +67,9 @@ class StockItemTest extends \PHPUnit_Framework_TestCase
         $parentItemQty = 3;
         $websiteId = 1;
 
-        $stockItem = $this->getMock(
+        $stockItem = $this->createPartialMock(
             \Magento\CatalogInventory\Model\Stock\Item::class,
-            ['checkQuoteItemQty', 'setProductName', 'setIsChildItem', 'hasIsChildItem', 'unsIsChildItem', '__wakeup'],
-            [],
-            '',
-            false
+            ['checkQuoteItemQty', 'setProductName', 'setIsChildItem', 'hasIsChildItem', 'unsIsChildItem', '__wakeup']
         );
         $quoteItem = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
             ->setMethods(

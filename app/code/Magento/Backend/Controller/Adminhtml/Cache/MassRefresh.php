@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Controller\Adminhtml\Cache;
@@ -9,6 +9,10 @@ namespace Magento\Backend\Controller\Adminhtml\Cache;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Backend\Controller\Adminhtml\Cache\MassRefresh
+ *
+ */
 class MassRefresh extends \Magento\Backend\Controller\Adminhtml\Cache
 {
     /**

@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,10 @@ namespace Magento\Catalog\Model;
 
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 
+/**
+ * Class \Magento\Catalog\Model\CategoryManagement
+ *
+ */
 class CategoryManagement implements \Magento\Catalog\Api\CategoryManagementInterface
 {
     /**

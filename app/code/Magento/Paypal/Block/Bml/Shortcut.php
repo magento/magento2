@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,10 @@ namespace Magento\Paypal\Block\Bml;
 use Magento\Catalog\Block as CatalogBlock;
 use Magento\Paypal\Helper\Shortcut\ValidatorInterface;
 
+/**
+ * Class \Magento\Paypal\Block\Bml\Shortcut
+ *
+ */
 class Shortcut extends \Magento\Framework\View\Element\Template implements CatalogBlock\ShortcutInterface
 {
     /**

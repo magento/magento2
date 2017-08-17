@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,6 +14,10 @@ namespace Magento\GroupedProduct\Model\Sales\AdminOrder\Product\Quote\Plugin;
 
 use Magento\GroupedProduct\Model\Product\Type\Grouped;
 
+/**
+ * Class \Magento\GroupedProduct\Model\Sales\AdminOrder\Product\Quote\Plugin\Initializer
+ *
+ */
 class Initializer
 {
     /**

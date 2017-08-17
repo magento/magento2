@@ -2,7 +2,7 @@
 /**
  * Class constructor validator. Validates call of parent construct
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Code\Validator;
@@ -10,6 +10,10 @@ namespace Magento\Framework\Code\Validator;
 use Magento\Framework\Code\ValidatorInterface;
 use Magento\Framework\Phrase;
 
+/**
+ * Class \Magento\Framework\Code\Validator\ConstructorIntegrity
+ *
+ */
 class ConstructorIntegrity implements ValidatorInterface
 {
     /**

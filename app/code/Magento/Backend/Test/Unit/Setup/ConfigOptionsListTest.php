@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Test\Unit\Setup;
@@ -8,7 +8,7 @@ namespace Magento\Backend\Test\Unit\Setup;
 use Magento\Backend\Setup\ConfigOptionsList;
 use Magento\Framework\Config\File\ConfigFilePool;
 
-class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
+class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ConfigOptionsList
@@ -23,7 +23,7 @@ class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->object = new ConfigOptionsList();
-        $this->deploymentConfig = $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false);
+        $this->deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
     }
 
     public function testGetOptions()

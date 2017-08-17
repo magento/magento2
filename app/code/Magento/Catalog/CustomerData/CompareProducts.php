@@ -1,18 +1,26 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\CustomerData;
 
 use Magento\Customer\CustomerData\SectionSourceInterface;
 
+/**
+ * Class \Magento\Catalog\CustomerData\CompareProducts
+ *
+ */
 class CompareProducts implements SectionSourceInterface
 {
-    /** @var \Magento\Catalog\Helper\Product\Compare */
+    /**
+     * @var \Magento\Catalog\Helper\Product\Compare
+     */
     protected $helper;
 
-    /** @var \Magento\Catalog\Model\Product\Url */
+    /**
+     * @var \Magento\Catalog\Model\Product\Url
+     */
     protected $productUrl;
 
     /**

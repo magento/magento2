@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Helper;
 
-use Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\CatalogInventory\Model\ResourceModel\Stock\StatusFactory;
-use Magento\CatalogInventory\Model\ResourceModel\Stock\Status;
-use Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
+use Magento\CatalogInventory\Model\ResourceModel\Stock\Status;
+use Magento\CatalogInventory\Model\ResourceModel\Stock\StatusFactory;
+use Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class Stock
@@ -82,8 +82,8 @@ class Stock
     public function assignStatusToProduct(Product $product, $status = null)
     {
         if ($status === null) {
-            $websiteId = $this->getStockConfiguration()->getDefaultScopeId();
-            $stockStatus = $this->stockRegistryProvider->getStockStatus($product->getId(), $websiteId);
+            $scopeId = $this->getStockConfiguration()->getDefaultScopeId();
+            $stockStatus = $this->stockRegistryProvider->getStockStatus($product->getId(), $scopeId);
             $status = $stockStatus->getStockStatus();
         }
         $product->setIsSalable($status);
@@ -93,15 +93,15 @@ class Stock
      * Add stock status information to products
      *
      * @param AbstractCollection $productCollection
-     * @deprecated Use Stock::addIsInStockFilterToCollection instead
+     * @deprecated 100.1.0 Use Stock::addIsInStockFilterToCollection instead
      * @return void
      */
     public function addStockStatusToProducts(AbstractCollection $productCollection)
     {
-        $websiteId = $this->getStockConfiguration()->getDefaultScopeId();
+        $scopeId = $this->getStockConfiguration()->getDefaultScopeId();
         foreach ($productCollection as $product) {
             $productId = $product->getId();
-            $stockStatus = $this->stockRegistryProvider->getStockStatus($productId, $websiteId);
+            $stockStatus = $this->stockRegistryProvider->getStockStatus($productId, $scopeId);
             $status = $stockStatus->getStockStatus();
             $product->setIsSalable($status);
         }
@@ -156,7 +156,7 @@ class Stock
             $resource = $this->getStockStatusResource();
             $resource->addStockDataToCollection(
                 $collection,
-                !$isShowOutOfStock && $collection->getFlag('require_stock_items')
+                !$isShowOutOfStock || $collection->getFlag('require_stock_items')
             );
             $collection->setFlag($stockFlag, true);
         }
@@ -176,7 +176,7 @@ class Stock
     /**
      * @return StockConfigurationInterface
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getStockConfiguration()
     {

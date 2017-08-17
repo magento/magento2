@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
@@ -9,6 +9,9 @@ use Magento\Framework\Stdlib\ArrayManager;
 
 /**
  * Class ScheduleDesignUpdateMetaProvider customizes Schedule Design Update panel
+ *
+ * @api
+ * @since 101.0.0
  */
 class ScheduleDesignUpdate extends AbstractModifier
 {
@@ -21,11 +24,13 @@ class ScheduleDesignUpdate extends AbstractModifier
 
     /**
      * @var ArrayManager
+     * @since 101.0.0
      */
     protected $arrayManager;
 
     /**
      * @param ArrayManager $arrayManager
+     * @since 101.0.0
      */
     public function __construct(ArrayManager $arrayManager)
     {
@@ -34,6 +39,7 @@ class ScheduleDesignUpdate extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 101.0.0
      */
     public function modifyMeta(array $meta)
     {
@@ -43,6 +49,7 @@ class ScheduleDesignUpdate extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 101.0.0
      */
     public function modifyData(array $data)
     {
@@ -54,11 +61,11 @@ class ScheduleDesignUpdate extends AbstractModifier
      *
      * @param array $meta
      * @return array
+     * @since 101.0.0
      */
     protected function customizeDateRangeField(array $meta)
     {
-        if (
-            $this->getGroupCodeByField($meta, self::CODE_CUSTOM_DESIGN_FROM)
+        if ($this->getGroupCodeByField($meta, self::CODE_CUSTOM_DESIGN_FROM)
             !== $this->getGroupCodeByField($meta, self::CODE_CUSTOM_DESIGN_TO)
         ) {
             return $meta;

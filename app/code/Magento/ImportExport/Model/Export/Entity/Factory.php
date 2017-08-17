@@ -1,16 +1,18 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 /**
  * Export entity factory
  */
 namespace Magento\ImportExport\Model\Export\Entity;
 
+/**
+ * Class \Magento\ImportExport\Model\Export\Entity\Factory
+ *
+ */
 class Factory
 {
     /**
@@ -30,7 +32,7 @@ class Factory
 
     /**
      * @param string $className
-     * @return \Magento\ImportExport\Model\Export\Entity\AbstractEntity|\Magento\ImportExport\Model\Export\AbstractEntity
+     * @return AbstractEntity|\Magento\ImportExport\Model\Export\AbstractEntity
      * @throws \InvalidArgumentException
      */
     public function create($className)

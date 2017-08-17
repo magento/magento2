@@ -1,13 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework;
 
+/**
+ * Class \Magento\Framework\UrlFactory
+ *
+ */
 class UrlFactory
 {
     /**
@@ -24,8 +26,10 @@ class UrlFactory
      * @param ObjectManagerInterface $objectManager
      * @param string $instanceName
      */
-    public function __construct(ObjectManagerInterface $objectManager, $instanceName = UrlInterface::class)
-    {
+    public function __construct(
+        ObjectManagerInterface $objectManager,
+        $instanceName = UrlInterface::class
+    ) {
         $this->_objectManager = $objectManager;
         $this->_instanceName = $instanceName;
     }

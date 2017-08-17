@@ -1,10 +1,19 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Translation\Model\ResourceModel;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\Config;
+use Magento\Translation\App\Config\Type\Translation;
+
+/**
+ * Class \Magento\Translation\Model\ResourceModel\Translate
+ *
+ */
 class Translate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implements
     \Magento\Framework\Translate\ResourceInterface
 {
@@ -17,6 +26,16 @@ class Translate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb imp
      * @var null|string
      */
     protected $scope;
+
+    /**
+     * @var Config
+     */
+    private $appConfig;
+
+    /**
+     * @var DeploymentConfig
+     */
+    private $deployedConfig;
 
     /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
@@ -57,21 +76,25 @@ class Translate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb imp
         if ($storeId === null) {
             $storeId = $this->getStoreId();
         }
+        $locale = (string) $locale;
 
+        $data = $this->getAppConfig()->get(
+            Translation::CONFIG_TYPE,
+            $locale . '/' . $this->getStoreCode($storeId),
+            []
+        );
         $connection = $this->getConnection();
-        if (!$connection) {
-            return [];
+        if ($connection) {
+            $select = $connection->select()
+                ->from($this->getMainTable(), ['string', 'translate'])
+                ->where('store_id IN (0 , :store_id)')
+                ->where('locale = :locale')
+                ->order('store_id');
+            $bind = [':locale' => $locale, ':store_id' => $storeId];
+            $dbData = $connection->fetchPairs($select, $bind);
+            $data = array_replace($data, $dbData);
         }
-
-        $select = $connection->select()
-            ->from($this->getMainTable(), ['string', 'translate'])
-            ->where('store_id IN (0 , :store_id)')
-            ->where('locale = :locale')
-            ->order('store_id');
-
-        $bind = [':locale' => (string)$locale, ':store_id' => $storeId];
-
-        return $connection->fetchPairs($select, $bind);
+        return $data;
     }
 
     /**
@@ -116,6 +139,19 @@ class Translate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb imp
     }
 
     /**
+     * Get connection
+     *
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface|false
+     */
+    public function getConnection()
+    {
+        if (!$this->getDeployedConfig()->isDbAvailable()) {
+            return false;
+        }
+        return parent::getConnection();
+    }
+
+    /**
      * Retrieve current store identifier
      *
      * @return int
@@ -123,5 +159,40 @@ class Translate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb imp
     protected function getStoreId()
     {
         return $this->scopeResolver->getScope($this->scope)->getId();
+    }
+
+    /**
+     * Retrieve store code by store id
+     *
+     * @param int $storeId
+     * @return string
+     */
+    private function getStoreCode($storeId)
+    {
+        return $this->scopeResolver->getScope($storeId)->getCode();
+    }
+
+    /**
+     * @deprecated 100.1.2
+     * @return DeploymentConfig
+     */
+    private function getDeployedConfig()
+    {
+        if ($this->deployedConfig === null) {
+            $this->deployedConfig = ObjectManager::getInstance()->get(DeploymentConfig::class);
+        }
+        return $this->deployedConfig;
+    }
+
+    /**
+     * @deprecated 100.1.2
+     * @return Config
+     */
+    private function getAppConfig()
+    {
+        if ($this->appConfig === null) {
+            $this->appConfig = ObjectManager::getInstance()->get(Config::class);
+        }
+        return $this->appConfig;
     }
 }

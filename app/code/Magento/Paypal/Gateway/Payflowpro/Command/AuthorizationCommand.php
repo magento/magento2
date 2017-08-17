@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Gateway\Payflowpro\Command;
@@ -14,6 +14,10 @@ use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Payment\Helper\Formatter;
 use Magento\Paypal\Model\Payflow\Transparent;
 
+/**
+ * Class \Magento\Paypal\Gateway\Payflowpro\Command\AuthorizationCommand
+ *
+ */
 class AuthorizationCommand implements CommandInterface
 {
     use Formatter;
@@ -79,6 +83,5 @@ class AuthorizationCommand implements CommandInterface
         $this->payflowFacade->setTransStatus($payment, $response);
 
         return $this;
-
     }
 }

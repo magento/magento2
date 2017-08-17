@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model;
@@ -15,16 +15,12 @@ use Magento\Search\Model\QueryFactory;
 /**
  * Catalog advanced search model
  *
- * @method \Magento\CatalogSearch\Model\ResourceModel\Fulltext _getResource()
- * @method \Magento\CatalogSearch\Model\ResourceModel\Fulltext getResource()
  * @method int getProductId()
  * @method \Magento\CatalogSearch\Model\Fulltext setProductId(int $value)
  * @method int getStoreId()
  * @method \Magento\CatalogSearch\Model\Fulltext setStoreId(int $value)
  * @method string getDataIndex()
  * @method \Magento\CatalogSearch\Model\Fulltext setDataIndex(string $value)
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Fulltext extends \Magento\Framework\Model\AbstractModel
 {

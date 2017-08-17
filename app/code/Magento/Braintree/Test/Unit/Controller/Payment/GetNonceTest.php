@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Test\Unit\Controller\Payment;
@@ -22,7 +22,7 @@ use Psr\Log\LoggerInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class GetNonceTest extends \PHPUnit_Framework_TestCase
+class GetNonceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var GetNonce
@@ -87,7 +87,7 @@ class GetNonceTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getCustomerId'])
             ->getMock();
 
-        $this->logger = $this->getMock(LoggerInterface::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
 
         $context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()

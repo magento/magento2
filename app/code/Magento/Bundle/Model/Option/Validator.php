@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Model\Option;
@@ -9,6 +9,10 @@ use Magento\Framework\Validator\NotEmpty;
 use Magento\Framework\Validator\NotEmptyFactory;
 use Zend_Validate_Exception;
 
+/**
+ * Class \Magento\Bundle\Model\Option\Validator
+ *
+ */
 class Validator extends \Magento\Framework\Validator\AbstractValidator
 {
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Newsletter\Model;
@@ -8,8 +8,6 @@ namespace Magento\Newsletter\Model;
 /**
  * Template model
  *
- * @method \Magento\Newsletter\Model\ResourceModel\Template _getResource()
- * @method \Magento\Newsletter\Model\ResourceModel\Template getResource()
  * @method string getTemplateCode()
  * @method \Magento\Newsletter\Model\Template setTemplateCode(string $value)
  * @method \Magento\Newsletter\Model\Template setTemplateText(string $value)
@@ -33,13 +31,16 @@ namespace Magento\Newsletter\Model;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @api
  */
 class Template extends \Magento\Email\Model\AbstractTemplate
 {
     /**
      * Mail object
      *
-     * @var \Zend_Mail
+     * @deprecated Unused property
+     *
      */
     protected $_mail;
 

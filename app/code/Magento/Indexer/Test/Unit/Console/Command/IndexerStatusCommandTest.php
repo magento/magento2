@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Indexer\Test\Unit\Console\Command;
@@ -20,26 +20,26 @@ class IndexerStatusCommandTest extends AbstractIndexerCommandCommonSetup
     public function testExecuteAll()
     {
         $this->configureAdminArea();
-        $collection = $this->getMock(\Magento\Indexer\Model\Indexer\Collection::class, [], [], '', false);
-        $indexerOne = $this->getMock(\Magento\Indexer\Model\Indexer::class, [], [], '', false);
+        $collection = $this->createMock(\Magento\Indexer\Model\Indexer\Collection::class);
+        $indexerOne = $this->createMock(\Magento\Indexer\Model\Indexer::class);
         $indexerOne->expects($this->once())->method('getTitle')->willReturn('Title_indexerOne');
         $indexerOne
             ->expects($this->once())
             ->method('getStatus')
             ->willReturn(\Magento\Framework\Indexer\StateInterface::STATUS_VALID);
-        $indexerTwo = $this->getMock(\Magento\Indexer\Model\Indexer::class, [], [], '', false);
+        $indexerTwo = $this->createMock(\Magento\Indexer\Model\Indexer::class);
         $indexerTwo->expects($this->once())->method('getTitle')->willReturn('Title_indexerTwo');
         $indexerTwo
             ->expects($this->once())
             ->method('getStatus')
             ->willReturn(\Magento\Framework\Indexer\StateInterface::STATUS_INVALID);
-        $indexerThree = $this->getMock(\Magento\Indexer\Model\Indexer::class, [], [], '', false);
+        $indexerThree = $this->createMock(\Magento\Indexer\Model\Indexer::class);
         $indexerThree->expects($this->once())->method('getTitle')->willReturn('Title_indexerThree');
         $indexerThree
             ->expects($this->once())
             ->method('getStatus')
             ->willReturn(\Magento\Framework\Indexer\StateInterface::STATUS_WORKING);
-        $indexerFour = $this->getMock(\Magento\Indexer\Model\Indexer::class, [], [], '', false);
+        $indexerFour = $this->createMock(\Magento\Indexer\Model\Indexer::class);
         $indexerFour->expects($this->once())->method('getTitle')->willReturn('Title_indexerFour');
         $collection
             ->expects($this->once())

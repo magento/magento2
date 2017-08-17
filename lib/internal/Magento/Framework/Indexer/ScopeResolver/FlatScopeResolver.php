@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,9 +9,14 @@ namespace Magento\Framework\Indexer\ScopeResolver;
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\Search\Request\IndexScopeResolverInterface;
 
+/**
+ * Class \Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver
+ *
+ */
 class FlatScopeResolver implements IndexScopeResolverInterface
 {
     const SUFFIX_FLAT = '_flat';
+
     /**
      * @var IndexScopeResolver
      */

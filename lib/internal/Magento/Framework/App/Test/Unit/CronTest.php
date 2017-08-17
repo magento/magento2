@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit;
@@ -8,7 +8,7 @@ namespace Magento\Framework\App\Test\Unit;
 use Magento\Framework\App\Area;
 use \Magento\Framework\App\Cron;
 
-class CronTest extends \PHPUnit_Framework_TestCase
+class CronTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\Cron
@@ -42,22 +42,46 @@ class CronTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_stateMock = $this->getMock(\Magento\Framework\App\State::class, [], [], '', false);
-        $this->_request = $this->getMock(\Magento\Framework\App\Console\Request::class, [], [], '', false);
-        $this->_responseMock = $this->getMock(\Magento\Framework\App\Console\Response::class, [], [], '', false);
+        $this->_stateMock = $this->createMock(\Magento\Framework\App\State::class);
+        $this->_request = $this->createMock(\Magento\Framework\App\Console\Request::class);
+        $this->_responseMock = $this->createMock(\Magento\Framework\App\Console\Response::class);
         $this->objectManager = $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class);
-        $this->_model = new Cron($this->_stateMock, $this->_request, $this->_responseMock, $this->objectManager);
+        $this->_model = new Cron(
+            $this->_stateMock,
+            $this->_request,
+            $this->_responseMock,
+            $this->objectManager,
+            [],
+            $this->prepareAreaListMock()
+        );
+    }
+
+    protected function prepareAreaListMock()
+    {
+        $areaMock = $this->createMock(\Magento\Framework\App\Area::class);
+        $areaMock->expects($this->once())
+            ->method('load')
+            ->with(Area::PART_TRANSLATE);
+
+        $areaListMock = $this->createMock(\Magento\Framework\App\AreaList::class);
+        $areaListMock->expects($this->any())
+            ->method('getArea')
+            ->with(Area::AREA_CRONTAB)
+            ->willReturn($areaMock);
+
+        return $areaListMock;
     }
 
     public function testLaunchDispatchesCronEvent()
     {
         $configLoader = $this->getMockForAbstractClass(\Magento\Framework\ObjectManager\ConfigLoaderInterface::class);
-        $eventManagerMock = $this->getMock(\Magento\Framework\Event\ManagerInterface::class);
+        $eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
+
         $this->objectManager->expects($this->any())
             ->method('get')
             ->will($this->returnValueMap([
                 [\Magento\Framework\ObjectManager\ConfigLoaderInterface::class, $configLoader],
-                [\Magento\Framework\Event\ManagerInterface::class, $eventManagerMock],
+                [\Magento\Framework\Event\ManagerInterface::class, $eventManagerMock]
             ]));
         $crontabConfig = ['config'];
         $configLoader->expects($this->once())

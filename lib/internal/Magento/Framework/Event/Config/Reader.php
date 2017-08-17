@@ -2,11 +2,15 @@
 /**
  * Event observers configuration filesystem loader. Loads event observers configuration from XML files, split by scopes
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Event\Config;
 
+/**
+ * Class \Magento\Framework\Event\Config\Reader
+ *
+ */
 class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {
     /**

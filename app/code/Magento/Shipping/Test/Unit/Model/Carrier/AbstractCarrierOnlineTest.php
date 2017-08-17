@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Shipping\Test\Unit\Model\Carrier;
@@ -10,7 +10,7 @@ use \Magento\Shipping\Model\Carrier\AbstractCarrierOnline;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class AbstractCarrierOnlineTest extends \PHPUnit_Framework_TestCase
+class AbstractCarrierOnlineTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test identification number of product
@@ -36,14 +36,8 @@ class AbstractCarrierOnlineTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stockRegistry = $this->getMock(
-            \Magento\CatalogInventory\Model\StockRegistry::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->stockItemData = $this->getMock(\Magento\CatalogInventory\Model\Stock\Item::class, [], [], '', false);
+        $this->stockRegistry = $this->createMock(\Magento\CatalogInventory\Model\StockRegistry::class);
+        $this->stockItemData = $this->createMock(\Magento\CatalogInventory\Model\Stock\Item::class);
 
         $this->stockRegistry->expects($this->any())->method('getStockItem')
             ->with($this->productId, 10)
@@ -76,7 +70,7 @@ class AbstractCarrierOnlineTest extends \PHPUnit_Framework_TestCase
             return isset($configData[$key]) ? $configData[$key] : 0;
         }));
 
-        $product = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $product = $this->createMock(\Magento\Catalog\Model\Product::class);
         $product->expects($this->any())->method('getId')->will($this->returnValue($this->productId));
 
         $item = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
@@ -85,7 +79,7 @@ class AbstractCarrierOnlineTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $item->expects($this->any())->method('getProduct')->will($this->returnValue($product));
 
-        $store = $this->getMock(\Magento\Store\Model\Store::class, ['getWebsiteId'], [], '', false);
+        $store = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getWebsiteId']);
         $store->expects($this->any())
             ->method('getWebsiteId')
             ->will($this->returnValue(10));

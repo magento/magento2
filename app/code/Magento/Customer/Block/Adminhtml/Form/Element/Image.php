@@ -1,9 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 
 /**
  * Customer Widget Form Image File Element Block
@@ -12,6 +11,10 @@
  */
 namespace Magento\Customer\Block\Adminhtml\Form\Element;
 
+/**
+ * Class \Magento\Customer\Block\Adminhtml\Form\Element\Image
+ *
+ */
 class Image extends \Magento\Customer\Block\Adminhtml\Form\Element\File
 {
     /**

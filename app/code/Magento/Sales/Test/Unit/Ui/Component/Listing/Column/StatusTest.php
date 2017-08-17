@@ -1,17 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Ui\Component\Listing\Column;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Sales\Ui\Component\Listing\Column\Status;
 
 /**
  * Class StatusTest
  */
-class StatusTest extends \PHPUnit_Framework_TestCase
+class StatusTest extends \PHPUnit\Framework\TestCase
 {
     public function testPrepareDataSource()
     {
@@ -26,23 +25,14 @@ class StatusTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         ];
-        $collection = $this->getMock(
-            \Magento\Sales\Model\ResourceModel\Order\Status\Collection::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $collection = $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Status\Collection::class);
         $collection->expects($this->once())
             ->method('toOptionHash')
             ->willReturn($itemMapping);
 
-        $collectionFactoryMock = $this->getMock(
+        $collectionFactoryMock = $this->createPartialMock(
             \Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
         $collectionFactoryMock->expects($this->once())
             ->method('create')
@@ -54,7 +44,7 @@ class StatusTest extends \PHPUnit_Framework_TestCase
         $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $contextMock->expects($this->any())->method('getProcessor')->willReturn($processor);
+        $contextMock->expects($this->never())->method('getProcessor')->willReturn($processor);
         $model = $objectManager->getObject(
             \Magento\Sales\Ui\Component\Listing\Column\Status::class,
             ['collectionFactory' => $collectionFactoryMock, 'context' => $contextMock]

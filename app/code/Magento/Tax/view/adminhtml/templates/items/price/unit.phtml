@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,21 +16,21 @@ $_item = $block->getItem();
 <?php if ($this->helper('Magento\Tax\Helper\Data')->displaySalesBothPrices() || $this->helper('Magento\Tax\Helper\Data')->displaySalesPriceExclTax()): ?>
     <div class="price-excl-tax">
         <?php if ($this->helper('Magento\Tax\Helper\Data')->displaySalesBothPrices()): ?>
-            <span class="label"><?php /* @escapeNotVerified */ echo __('Excl. Tax'); ?>:</span>
+            <span class="label"><?= /* @escapeNotVerified */ __('Excl. Tax') ?>:</span>
         <?php endif; ?>
 
-        <?php /* @escapeNotVerified */ echo $block->displayPrices($_item->getBasePrice(), $_item->getPrice()) ?>
+        <?= /* @escapeNotVerified */ $block->displayPrices($_item->getBasePrice(), $_item->getPrice()) ?>
     </div>
 <?php endif; ?>
 <?php if ($this->helper('Magento\Tax\Helper\Data')->displaySalesBothPrices() || $this->helper('Magento\Tax\Helper\Data')->displaySalesPriceInclTax()): ?>
     <div class="price-incl-tax">
         <?php if ($this->helper('Magento\Tax\Helper\Data')->displaySalesBothPrices()): ?>
-            <span class="label"><?php /* @escapeNotVerified */ echo __('Incl. Tax'); ?>:</span>
+            <span class="label"><?= /* @escapeNotVerified */ __('Incl. Tax') ?>:</span>
         <?php endif; ?>
         <?php $_incl = $this->helper('Magento\Checkout\Helper\Data')->getPriceInclTax($_item); ?>
         <?php $_baseIncl = $this->helper('Magento\Checkout\Helper\Data')->getBasePriceInclTax($_item); ?>
 
-        <?php /* @escapeNotVerified */ echo $block->displayPrices($_baseIncl, $_incl) ?>
+        <?= /* @escapeNotVerified */ $block->displayPrices($_baseIncl, $_incl) ?>
 
     </div>
 <?php endif; ?>

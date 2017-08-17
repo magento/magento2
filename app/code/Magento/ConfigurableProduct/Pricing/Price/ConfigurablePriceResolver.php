@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,20 +10,26 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 
+/**
+ * Class \Magento\ConfigurableProduct\Pricing\Price\ConfigurablePriceResolver
+ *
+ */
 class ConfigurablePriceResolver implements PriceResolverInterface
 {
-    /** @var PriceResolverInterface */
+    /**
+     * @var \Magento\ConfigurableProduct\Pricing\Price\PriceResolverInterface
+     */
     protected $priceResolver;
 
     /**
      * @var PriceCurrencyInterface
-     * @deprecated
+     * @deprecated 100.1.1
      */
     protected $priceCurrency;
 
     /**
      * @var Configurable
-     * @deprecated
+     * @deprecated 100.1.1
      */
     protected $configurable;
 
@@ -63,11 +69,6 @@ class ConfigurablePriceResolver implements PriceResolverInterface
         foreach ($this->lowestPriceOptionsProvider->getProducts($product) as $subProduct) {
             $productPrice = $this->priceResolver->resolvePrice($subProduct);
             $price = $price ? min($price, $productPrice) : $productPrice;
-        }
-        if ($price === null) {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                __('Configurable product "%1" does not have sub-products', $product->getSku())
-            );
         }
 
         return (float)$price;

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Session;
@@ -10,7 +10,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * @magentoAppIsolation enabled
  */
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\Session\Config */
     protected $_model;
@@ -35,7 +35,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         if ($sessionManager->isSessionExists()) {
             $sessionManager->writeClose();
         }
-        $this->deploymentConfigMock = $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false);
+        $this->deploymentConfigMock = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
 
         $this->deploymentConfigMock->expects($this->at(0))
             ->method('get')
@@ -171,7 +171,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testWrongMethodCall()
     {
-        $this->setExpectedException(
+        $this->expectException(
             '\BadMethodCallException',
             'Method "methodThatNotExist" does not exist in Magento\Framework\Session\Config'
         );

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@ namespace Magento\Setup\Test\Unit\Controller;
 use \Magento\Setup\Controller\Maintenance;
 use \Magento\Setup\Controller\ResponseTypeInterface;
 
-class MaintenanceTest extends \PHPUnit_Framework_TestCase
+class MaintenanceTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
@@ -26,14 +26,14 @@ class MaintenanceTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->maintenanceMode = $this->getMock(\Magento\Framework\App\MaintenanceMode::class, [], [], '', false);
+        $this->maintenanceMode = $this->createMock(\Magento\Framework\App\MaintenanceMode::class);
         $this->controller = new Maintenance($this->maintenanceMode);
 
-        $request = $this->getMock(\Zend\Http\PhpEnvironment\Request::class, [], [], '', false);
-        $response = $this->getMock(\Zend\Http\PhpEnvironment\Response::class, [], [], '', false);
-        $routeMatch = $this->getMock(\Zend\Mvc\Router\RouteMatch::class, [], [], '', false);
+        $request = $this->createMock(\Zend\Http\PhpEnvironment\Request::class);
+        $response = $this->createMock(\Zend\Http\PhpEnvironment\Response::class);
+        $routeMatch = $this->createMock(\Zend\Mvc\Router\RouteMatch::class);
 
-        $mvcEvent = $this->getMock(\Zend\Mvc\MvcEvent::class, [], [], '', false);
+        $mvcEvent = $this->createMock(\Zend\Mvc\MvcEvent::class);
         $mvcEvent->expects($this->any())->method('setRequest')->with($request)->willReturn($mvcEvent);
         $mvcEvent->expects($this->any())->method('setResponse')->with($response)->willReturn($mvcEvent);
         $mvcEvent->expects($this->any())->method('setTarget')->with($this->controller)->willReturn($mvcEvent);

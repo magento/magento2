@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Model\ResourceModel;
@@ -8,7 +8,7 @@ namespace Magento\Review\Model\ResourceModel;
 /**
  * Class RatingTest
  */
-class RatingTest extends \PHPUnit_Framework_TestCase
+class RatingTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var int
@@ -77,7 +77,7 @@ class RatingTest extends \PHPUnit_Framework_TestCase
      */
     public function testRatingSaveWithError()
     {
-        $this->setExpectedException('Exception', 'Rolled back transaction has not been completed correctly');
+        $this->expectException('Exception', 'Rolled back transaction has not been completed correctly');
         $rating = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Review\Model\Rating::class
         );

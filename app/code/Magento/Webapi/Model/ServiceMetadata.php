@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Model;
 
-use Magento\Webapi\Model\Config\Converter;
-use Magento\Webapi\Model\Cache\Type\Webapi as WebApiCache;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Webapi\Model\Cache\Type\Webapi as WebApiCache;
+use Magento\Webapi\Model\Config\Converter;
 
 /**
  * Service Metadata Model
@@ -44,11 +44,7 @@ class ServiceMetadata
 
     /**#@-*/
 
-    /**
-     * API services
-     *
-     * @var array
-     */
+    /**#@-*/
     protected $services;
 
     /**
@@ -63,7 +59,9 @@ class ServiceMetadata
      */
     protected $cache;
 
-    /** @var \Magento\Webapi\Model\Config */
+    /**
+     * @var \Magento\Webapi\Model\Config
+     */
     protected $config;
 
     /**
@@ -306,7 +304,6 @@ class ServiceMetadata
                 $routes[$serviceName][self::KEY_ROUTES][$url][$method][self::KEY_ROUTE_METHOD] = $methodName;
                 $routes[$serviceName][self::KEY_ROUTES][$url][$method][self::KEY_ROUTE_PARAMS]
                     = $data[Converter::KEY_DATA_PARAMETERS];
-
             }
         }
         return $routes;

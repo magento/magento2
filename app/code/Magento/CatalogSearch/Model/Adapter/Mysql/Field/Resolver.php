@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Adapter\Mysql\Field;
@@ -10,12 +10,17 @@ use Magento\Framework\Search\Adapter\Mysql\Field\FieldFactory;
 use Magento\Framework\Search\Adapter\Mysql\Field\FieldInterface;
 use Magento\Framework\Search\Adapter\Mysql\Field\ResolverInterface;
 
+/**
+ * Class \Magento\CatalogSearch\Model\Adapter\Mysql\Field\Resolver
+ *
+ */
 class Resolver implements ResolverInterface
 {
     /**
      * @var AttributeCollection
      */
     private $attributeCollection;
+
     /**
      * @var FieldFactory
      */
@@ -39,6 +44,7 @@ class Resolver implements ResolverInterface
     public function resolve(array $fields)
     {
         $resolvedFields = [];
+        $this->attributeCollection->addFieldToFilter('attribute_code', ['in' => $fields]);
         foreach ($fields as $field) {
             if ('*' === $field) {
                 $resolvedFields = [

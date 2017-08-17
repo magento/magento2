@@ -1,12 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Model\Design\Backend;
 
 use Magento\Theme\Model\Design\Backend\Logo as DesignLogo;
 
+/**
+ * Class \Magento\Email\Model\Design\Backend\Logo
+ *
+ */
 class Logo extends DesignLogo
 {
     /**

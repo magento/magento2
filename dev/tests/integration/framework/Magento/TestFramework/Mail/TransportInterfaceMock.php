@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,5 +16,15 @@ class TransportInterfaceMock implements \Magento\Framework\Mail\TransportInterfa
     public function sendMessage()
     {
         return;
+    }
+
+    /**
+     * Get message
+     *
+     * @return string
+     */
+    public function getMessage()
+    {
+        return '';
     }
 }

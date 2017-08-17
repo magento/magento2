@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Test\Unit\Model\Quote;
@@ -16,7 +16,7 @@ use \Magento\Quote\Model\Quote\Payment;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class PaymentTest extends \PHPUnit_Framework_TestCase
+class PaymentTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Payment
@@ -33,6 +33,11 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
      */
     private $eventManager;
 
+    /**
+     * @var \Magento\Framework\Serialize\JsonValidator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $jsonValidatorMock;
+
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
@@ -40,13 +45,30 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             SpecificationFactory::class
         )->disableOriginalConstructor()
             ->getMock();
-        $this->eventManager = $this->getMock(ManagerInterface::class);
+        $this->eventManager = $this->createMock(ManagerInterface::class);
+        $serializer = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
+            ->setMethods(['unserialize'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $serializer->expects($this->any())
+            ->method('unserialize')
+            ->willReturnCallback(
+                function ($value) {
+                    return json_decode($value, true);
+                }
+            );
+
+        $this->jsonValidatorMock = $this->getMockBuilder(\Magento\Framework\Serialize\JsonValidator::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->model = $objectManager->getObject(
             Payment::class,
             [
                 'methodSpecificationFactory' => $this->specificationFactory,
-                'eventDispatcher' => $this->eventManager
+                'eventDispatcher' => $this->eventManager,
+                'serializer' => $serializer,
+                'jsonValidator' => $this->jsonValidatorMock
             ]
         );
     }
@@ -91,7 +113,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $quoteId = 1;
         $storeId = 1;
 
-        $paymentMethod = $this->getMock(MethodInterface::class);
+        $paymentMethod = $this->createMock(MethodInterface::class);
         $quote = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -142,6 +164,54 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ->method('validate');
 
         $this->model->importData($data);
+    }
+
+    /**
+     * @param mixed $expected
+     * @param mixed $additionalData
+     * @param int $isValidCalledNum
+     * @param int|null $isValid
+     * @dataProvider getAdditionalDataDataProvider
+     */
+    public function testGetAdditionalData($expected, $additionalData, $isValidCalledNum, $isValid = null)
+    {
+        $this->jsonValidatorMock->expects($this->exactly($isValidCalledNum))
+            ->method('isValid')
+            ->with($additionalData)
+            ->willReturn($isValid);
+        $this->model->setData(Payment::KEY_ADDITIONAL_DATA, $additionalData);
+        $this->assertSame($expected, $this->model->getAdditionalData());
+    }
+
+    /**
+     * @return array
+     */
+    public function getAdditionalDataDataProvider()
+    {
+        return [
+            [
+                ['field1' => 'value1', 'field2' => 'value2'],
+                ['field1' => 'value1', 'field2' => 'value2'],
+                0
+            ],
+            [
+                ['field1' => 'value1', 'field2' => 'value2'],
+                '{"field1":"value1","field2":"value2"}',
+                1,
+                true
+            ],
+            [
+                null,
+                '{"field1":field2":"value2"}',
+                1,
+                false
+            ],
+            [
+                null,
+                123,
+                0
+            ],
+        ];
     }
 
     /**

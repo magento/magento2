@@ -1,14 +1,14 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model\Config\Source\Group;
 
 use Magento\Customer\Model\Customer\Attribute\Source\GroupSourceLoggedInOnlyInterface;
 
-class MultiselectTest extends \PHPUnit_Framework_TestCase
+class MultiselectTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Customer\Model\Config\Source\Group\Multiselect
@@ -32,8 +32,8 @@ class MultiselectTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->groupServiceMock = $this->getMock(\Magento\Customer\Api\GroupManagementInterface::class);
-        $this->converterMock = $this->getMock(\Magento\Framework\Convert\DataObject::class, [], [], '', false);
+        $this->groupServiceMock = $this->createMock(\Magento\Customer\Api\GroupManagementInterface::class);
+        $this->converterMock = $this->createMock(\Magento\Framework\Convert\DataObject::class);
         $this->groupSourceLoggedInOnly = $this->getMockBuilder(GroupSourceLoggedInOnlyInterface::class)->getMock();
         $this->model = new \Magento\Customer\Model\Config\Source\Group\Multiselect(
             $this->groupServiceMock,

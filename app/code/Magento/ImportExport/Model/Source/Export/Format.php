@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Model\Source\Export;
@@ -8,7 +8,7 @@ namespace Magento\ImportExport\Model\Source\Export;
 /**
  * Source model of export file formats
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Format implements \Magento\Framework\Option\ArrayInterface
 {

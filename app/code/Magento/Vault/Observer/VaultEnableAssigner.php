@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Vault\Observer;
@@ -10,6 +10,10 @@ use Magento\Payment\Observer\AbstractDataAssignObserver;
 use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Vault\Model\Ui\VaultConfigProvider;
 
+/**
+ * Class \Magento\Vault\Observer\VaultEnableAssigner
+ *
+ */
 class VaultEnableAssigner extends AbstractDataAssignObserver
 {
     /**

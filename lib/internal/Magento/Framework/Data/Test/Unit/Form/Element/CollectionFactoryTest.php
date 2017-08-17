@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@
  */
 namespace Magento\Framework\Data\Test\Unit\Form\Element;
 
-class CollectionFactoryTest extends \PHPUnit_Framework_TestCase
+class CollectionFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -23,14 +23,9 @@ class CollectionFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $objectManagerMock = $this->getMock(
-            \Magento\Framework\ObjectManager\ObjectManager::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $collectionMock = $this->getMock(\Magento\Framework\Data\Form\Element\Collection::class, [], [], '', false);
+        $objectManagerMock =
+            $this->createPartialMock(\Magento\Framework\ObjectManager\ObjectManager::class, ['create']);
+        $collectionMock = $this->createMock(\Magento\Framework\Data\Form\Element\Collection::class);
         $objectManagerMock->expects($this->once())->method('create')->will($this->returnValue($collectionMock));
         $this->_model = new \Magento\Framework\Data\Form\Element\CollectionFactory($objectManagerMock);
     }

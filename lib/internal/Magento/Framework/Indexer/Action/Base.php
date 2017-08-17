@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Indexer\Action;
@@ -37,11 +37,13 @@ class Base implements ActionInterface
 
     /**
      * @var AdapterInterface
+     * @deprecated 100.2.0
      */
     protected $connection;
 
     /**
      * @var SourceProviderInterface[]
+     * @deprecated 100.2.0
      */
     protected $sources;
 
@@ -52,6 +54,7 @@ class Base implements ActionInterface
 
     /**
      * @var HandlerInterface[]
+     * @deprecated 100.2.0
      */
     protected $handlers;
 
@@ -62,6 +65,7 @@ class Base implements ActionInterface
 
     /**
      * @var array
+     * @deprecated 100.2.0
      */
     protected $columnTypesMap = [
         'varchar'    => ['type' => Table::TYPE_TEXT, 'size' => 255],
@@ -71,11 +75,13 @@ class Base implements ActionInterface
 
     /**
      * @var array
+     * @deprecated 100.2.0
      */
     protected $filterColumns;
 
     /**
      * @var array
+     * @deprecated 100.2.0
      */
     protected $searchColumns;
 
@@ -96,6 +102,7 @@ class Base implements ActionInterface
 
     /**
      * @var String
+     * @deprecated 100.2.0
      */
     protected $string;
 
@@ -106,11 +113,13 @@ class Base implements ActionInterface
 
     /**
      * @var array
+     * @deprecated 100.2.0
      */
     protected $filterable = [];
 
     /**
      * @var array
+     * @deprecated 100.2.0
      */
     protected $searchable = [];
 
@@ -272,6 +281,7 @@ class Base implements ActionInterface
     protected function createResultCollection()
     {
         $select = $this->getPrimaryResource()->getSelect();
+        $select->reset(\Magento\Framework\DB\Select::COLUMNS);
         $select->columns($this->getPrimaryResource()->getIdFieldName());
         foreach ($this->data['fieldsets'] as $fieldset) {
             if (isset($fieldset['references'])) {
@@ -342,6 +352,8 @@ class Base implements ActionInterface
      *
      * @param array $field
      * @return void
+     *
+     * @deprecated 100.2.0
      */
     protected function saveFieldByType($field)
     {

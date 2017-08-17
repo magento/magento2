@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Gallery;
@@ -14,7 +14,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  *
  * @magentoDataFixture Magento/Catalog/_files/product_with_image.php
  */
-class ReadHandlerTest extends \PHPUnit_Framework_TestCase
+class ReadHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\TestFramework\ObjectManager

@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Observer\Frontend;
 
-use \Magento\Sales\Observer\Frontend\RestoreCustomerGroupId;
+use Magento\Sales\Observer\Frontend\RestoreCustomerGroupId;
 
 /**
  * Tests Magento\Sales\Observer\Frontend\RestoreCustomerGroupIdTest
  */
-class RestoreCustomerGroupIdTest extends \PHPUnit_Framework_TestCase
+class RestoreCustomerGroupIdTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Customer\Helper\Address|\PHPUnit_Framework_MockObject_MockObject
@@ -24,7 +24,7 @@ class RestoreCustomerGroupIdTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->customerAddressHelperMock = $this->getMock(\Magento\Customer\Helper\Address::class, [], [], '', false);
+        $this->customerAddressHelperMock = $this->createMock(\Magento\Customer\Helper\Address::class);
         $this->quote = new RestoreCustomerGroupId($this->customerAddressHelperMock);
     }
 
@@ -34,31 +34,28 @@ class RestoreCustomerGroupIdTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecute($configAddressType)
     {
-        $eventMock = $this->getMock(
-            \Magento\Framework\Event::class,
-            ['getShippingAssignment', 'getQuote'],
-            [],
-            '',
-            false
-        );
-        $observer = $this->getMock(\Magento\Framework\Event\Observer::class, ['getEvent'], [], '', false);
+        $eventMock = $this->createPartialMock(\Magento\Framework\Event::class, ['getShippingAssignment', 'getQuote']);
+        $observer = $this->createPartialMock(\Magento\Framework\Event\Observer::class, ['getEvent']);
         $observer->expects($this->exactly(2))->method('getEvent')->willReturn($eventMock);
 
-        $shippingAssignmentMock = $this->getMock(\Magento\Quote\Api\Data\ShippingAssignmentInterface::class);
-        $quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
+        $shippingAssignmentMock = $this->createMock(\Magento\Quote\Api\Data\ShippingAssignmentInterface::class);
+        $quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
 
         $eventMock->expects($this->once())->method('getShippingAssignment')->willReturn($shippingAssignmentMock);
         $eventMock->expects($this->once())->method('getQuote')->willReturn($quoteMock);
 
-        $shippingMock = $this->getMock(\Magento\Quote\Api\Data\ShippingInterface::class);
+        $shippingMock = $this->createMock(\Magento\Quote\Api\Data\ShippingInterface::class);
         $shippingAssignmentMock->expects($this->once())->method('getShipping')->willReturn($shippingMock);
 
-        $quoteAddress = $this->getMock(
+        $quoteAddress = $this->createPartialMock(
             \Magento\Quote\Model\Quote\Address::class,
-            ['getPrevQuoteCustomerGroupId', 'unsPrevQuoteCustomerGroupId', 'hasPrevQuoteCustomerGroupId'],
-            [],
-            '',
-            false
+            [
+                'getPrevQuoteCustomerGroupId',
+                'unsPrevQuoteCustomerGroupId',
+                'hasPrevQuoteCustomerGroupId',
+                'setCustomerGroupId',
+                'getQuote'
+            ]
         );
         $shippingMock->expects($this->once())->method('getAddress')->willReturn($quoteAddress);
 

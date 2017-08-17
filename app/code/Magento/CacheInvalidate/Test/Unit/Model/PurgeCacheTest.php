@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CacheInvalidate\Test\Unit\Model;
 
-use \Zend\Uri\UriFactory;
+use Zend\Uri\UriFactory;
 
-class PurgeCacheTest extends \PHPUnit_Framework_TestCase
+class PurgeCacheTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\CacheInvalidate\Model\PurgeCache */
     protected $model;
@@ -23,8 +23,8 @@ class PurgeCacheTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $socketFactoryMock = $this->getMock(\Magento\CacheInvalidate\Model\SocketFactory::class, [], [], '', false);
-        $this->socketAdapterMock = $this->getMock(\Zend\Http\Client\Adapter\Socket::class, [], [], '', false);
+        $socketFactoryMock = $this->createMock(\Magento\CacheInvalidate\Model\SocketFactory::class);
+        $this->socketAdapterMock = $this->createMock(\Zend\Http\Client\Adapter\Socket::class);
         $this->socketAdapterMock->expects($this->once())
             ->method('setOptions')
             ->with(['timeout' => 10]);
@@ -32,8 +32,8 @@ class PurgeCacheTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->socketAdapterMock);
 
-        $this->loggerMock = $this->getMock(\Magento\Framework\Cache\InvalidateLogger::class, [], [], '', false);
-        $this->cacheServer = $this->getMock(\Magento\PageCache\Model\Cache\Server::class, [], [], '', false);
+        $this->loggerMock = $this->createMock(\Magento\Framework\Cache\InvalidateLogger::class);
+        $this->cacheServer = $this->createMock(\Magento\PageCache\Model\Cache\Server::class);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(
@@ -70,7 +70,9 @@ class PurgeCacheTest extends \PHPUnit_Framework_TestCase
                 ->with($uri->getHost(), $uri->getPort());
             $this->socketAdapterMock->expects($this->at($i++))
                 ->method('write')
-                ->with('PURGE', $uri, '1.1', ['X-Magento-Tags-Pattern' => 'tags']);
+                ->with('PURGE', $uri, '1.1', ['X-Magento-Tags-Pattern' => 'tags', 'Host' => $uri->getHost()]);
+            $this->socketAdapterMock->expects($this->at($i++))
+                ->method('read');
             $i++;
         }
         $this->socketAdapterMock->expects($this->exactly(count($uris)))
@@ -86,7 +88,7 @@ class PurgeCacheTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                [['host' => '127.0.0.1', 'port' => 8080],]
+                [['host' => '127.0.0.1', 'port' => 8080]]
             ],
             [
                 [

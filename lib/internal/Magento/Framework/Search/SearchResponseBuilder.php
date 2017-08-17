@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search;
@@ -9,11 +9,15 @@ use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\Search\DocumentFactory;
 use Magento\Framework\Api\Search\SearchResultFactory;
 
+/**
+ * Class \Magento\Framework\Search\SearchResponseBuilder
+ *
+ */
 class SearchResponseBuilder
 {
     /**
      * @var DocumentFactory
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private $documentFactory;
 

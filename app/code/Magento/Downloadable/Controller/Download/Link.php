@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Controller\Download;
@@ -10,6 +10,10 @@ use Magento\Downloadable\Helper\Download as DownloadHelper;
 use Magento\Downloadable\Model\Link\Purchased\Item as PurchasedLink;
 use Magento\Framework\App\ResponseInterface;
 
+/**
+ * Class \Magento\Downloadable\Controller\Download\Link
+ *
+ */
 class Link extends \Magento\Downloadable\Controller\Download
 {
     /**

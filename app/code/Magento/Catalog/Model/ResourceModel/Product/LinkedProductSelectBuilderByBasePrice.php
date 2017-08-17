@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product;
@@ -11,6 +11,10 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Select;
 use Magento\Store\Model\Store;
 
+/**
+ * Class \Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderByBasePrice
+ *
+ */
 class LinkedProductSelectBuilderByBasePrice implements LinkedProductSelectBuilderInterface
 {
     /**
@@ -98,15 +102,15 @@ class LinkedProductSelectBuilderByBasePrice implements LinkedProductSelectBuilde
             ->limit(1);
         $priceSelect = $this->baseSelectProcessor->process($priceSelect);
 
-        $priceSelectDefault = clone $priceSelect;
-        $priceSelectDefault->where('t.store_id = ?', Store::DEFAULT_STORE_ID);
-        $select[] = $priceSelectDefault;
-
         if (!$this->catalogHelper->isPriceGlobal()) {
-            $priceSelect->where('t.store_id = ?', $this->storeManager->getStore()->getId());
-            $select[] = $priceSelect;
+            $priceSelectStore = clone $priceSelect;
+            $priceSelectStore->where('t.store_id = ?', $this->storeManager->getStore()->getId());
+            $selects[] = $priceSelectStore;
         }
 
-        return $select;
+        $priceSelect->where('t.store_id = ?', Store::DEFAULT_STORE_ID);
+        $selects[] = $priceSelect;
+
+        return $selects;
     }
 }

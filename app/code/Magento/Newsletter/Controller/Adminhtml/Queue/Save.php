@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,10 @@
 
 namespace Magento\Newsletter\Controller\Adminhtml\Queue;
 
+/**
+ * Class \Magento\Newsletter\Controller\Adminhtml\Queue\Save
+ *
+ */
 class Save extends \Magento\Newsletter\Controller\Adminhtml\Queue
 {
     /**

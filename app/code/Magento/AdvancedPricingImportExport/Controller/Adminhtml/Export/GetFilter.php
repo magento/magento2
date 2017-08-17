@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\AdvancedPricingImportExport\Controller\Adminhtml\Export;
@@ -10,6 +10,10 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\AdvancedPricingImportExport\Model\Export\AdvancedPricing as ExportAdvancedPricing;
 use Magento\Catalog\Model\Product as CatalogProduct;
 
+/**
+ * Class \Magento\AdvancedPricingImportExport\Controller\Adminhtml\Export\GetFilter
+ *
+ */
 class GetFilter extends ExportController
 {
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product;
@@ -20,7 +20,7 @@ use Magento\Framework\App\Request\Http;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class BuilderTest extends \PHPUnit_Framework_TestCase
+class BuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager
@@ -75,13 +75,13 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
-        $this->loggerMock = $this->getMock(LoggerInterface::class);
-        $this->productFactoryMock = $this->getMock(ProductFactory::class, ['create'], [], '', false);
-        $this->registryMock = $this->getMock(Registry::class, [], [], '', false);
-        $this->wysiwygConfigMock = $this->getMock(WysiwygConfig::class, ['setStoreId'], [], '', false);
-        $this->requestMock = $this->getMock(Http::class, [], [], '', false);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->productFactoryMock = $this->createPartialMock(ProductFactory::class, ['create']);
+        $this->registryMock = $this->createMock(Registry::class);
+        $this->wysiwygConfigMock = $this->createPartialMock(WysiwygConfig::class, ['setStoreId']);
+        $this->requestMock = $this->createMock(Http::class);
         $methods = ['setStoreId', 'setData', 'load', '__wakeup', 'setAttributeSetId', 'setTypeId'];
-        $this->productMock = $this->getMock(\Magento\Catalog\Model\Product::class, $methods, [], '', false);
+        $this->productMock = $this->createPartialMock(\Magento\Catalog\Model\Product::class, $methods);
         $this->storeFactoryMock = $this->getMockBuilder(StoreFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()

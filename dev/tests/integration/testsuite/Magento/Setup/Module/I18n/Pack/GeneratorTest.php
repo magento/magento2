@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Module\I18n\Pack;
@@ -8,7 +8,7 @@ namespace Magento\Setup\Module\I18n\Pack;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Setup\Module\I18n\ServiceLocator;
 
-class GeneratorTest extends \PHPUnit_Framework_TestCase
+class GeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string

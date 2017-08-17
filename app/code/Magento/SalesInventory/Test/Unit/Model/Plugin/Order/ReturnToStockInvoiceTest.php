@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesInventory\Test\Unit\Model\Plugin\Order;
@@ -10,7 +10,7 @@ namespace Magento\SalesInventory\Test\Unit\Model\Plugin\Order;
  * Class ReturnToStockInvoiceTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ReturnToStockInvoiceTest extends \PHPUnit_Framework_TestCase
+class ReturnToStockInvoiceTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  \Magento\SalesInventory\Model\Plugin\Order\ReturnToStockInvoice */
     private $returnTOStock;
@@ -95,7 +95,7 @@ class ReturnToStockInvoiceTest extends \PHPUnit_Framework_TestCase
             \Magento\Sales\Api\Data\CreditmemoCreationArgumentsExtensionInterface::class
         )->disableOriginalConstructor()
             ->setMethods(['getReturnToStockItems'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->orderMock = $this->getMockBuilder(\Magento\Sales\Api\Data\OrderInterface::class)
             ->disableOriginalConstructor()
             ->getMock();

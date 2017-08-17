@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Widget\Test\Unit\Controller\Adminhtml\Widget\Instance;
 
-class CategoriesTest extends \PHPUnit_Framework_TestCase
+class CategoriesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -55,19 +55,16 @@ class CategoriesTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->request = $this->getMock(\Magento\Framework\App\RequestInterface::class, [], [], '', false);
-        $this->mathRandom = $this->getMock(\Magento\Framework\Math\Random::class, [], [], '', false);
-        $this->chooser = $this->getMock(
+        $this->request = $this->createMock(\Magento\Framework\App\RequestInterface::class);
+        $this->mathRandom = $this->createMock(\Magento\Framework\Math\Random::class);
+        $this->chooser = $this->createPartialMock(
             $this->blockClass,
-            ['setUseMassaction', 'setId', 'setIsAnchorOnly', 'setSelectedCategories', 'toHtml'],
-            [],
-            '',
-            false
+            ['setUseMassaction', 'setId', 'setIsAnchorOnly', 'setSelectedCategories', 'toHtml']
         );
-        $this->layout = $this->getMock(\Magento\Framework\View\Layout::class, [], [], '', false);
-        $this->resultRaw = $this->getMock(\Magento\Framework\Controller\Result\Raw::class, [], [], '', false);
-        $this->resultFactory = $this->getMock(\Magento\Framework\Controller\ResultFactory::class, [], [], '', false);
-        $this->context = $this->getMock(\Magento\Backend\App\Action\Context::class, [], [], '', false);
+        $this->layout = $this->createMock(\Magento\Framework\View\Layout::class);
+        $this->resultRaw = $this->createMock(\Magento\Framework\Controller\Result\Raw::class);
+        $this->resultFactory = $this->createMock(\Magento\Framework\Controller\ResultFactory::class);
+        $this->context = $this->createMock(\Magento\Backend\App\Action\Context::class);
     }
 
     public function testExecute()

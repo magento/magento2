@@ -1,42 +1,42 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Test\Unit\Model\Import;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Model\Import\Config\Reader|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_readerMock;
+    protected $readerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_configScopeMock;
+    protected $cacheMock;
+
+    /**
+     * @var \Magento\Framework\Serialize\SerializerInterface
+     */
+    private $serializerMock;
 
     /**
      * @var string
      */
-    protected $_cacheId = 'some_id';
+    protected $cacheId = 'some_id';
 
     /**
      * @var \Magento\ImportExport\Model\Import\Config
      */
-    protected $_model;
+    protected $model;
 
     protected function setUp()
     {
-        $this->_readerMock = $this->getMock(
-            \Magento\ImportExport\Model\Import\Config\Reader::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->_configScopeMock = $this->getMock(\Magento\Framework\Config\CacheInterface::class);
+        $this->readerMock = $this->createMock(\Magento\ImportExport\Model\Import\Config\Reader::class);
+        $this->cacheMock = $this->createMock(\Magento\Framework\Config\CacheInterface::class);
+        $this->serializerMock = $this->createMock(\Magento\Framework\Serialize\SerializerInterface::class);
     }
 
     /**
@@ -46,22 +46,23 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetEntities($value, $expected)
     {
-        $this->_configScopeMock->expects(
+        $this->cacheMock->expects(
             $this->any()
         )->method(
             'load'
         )->with(
-            $this->_cacheId
+            $this->cacheId
         )->will(
             $this->returnValue(false)
         );
-        $this->_readerMock->expects($this->any())->method('read')->will($this->returnValue($value));
-        $this->_model = new \Magento\ImportExport\Model\Import\Config(
-            $this->_readerMock,
-            $this->_configScopeMock,
-            $this->_cacheId
+        $this->readerMock->expects($this->any())->method('read')->will($this->returnValue($value));
+        $this->model = new \Magento\ImportExport\Model\Import\Config(
+            $this->readerMock,
+            $this->cacheMock,
+            $this->cacheId,
+            $this->serializerMock
         );
-        $this->assertEquals($expected, $this->_model->getEntities('entities'));
+        $this->assertEquals($expected, $this->model->getEntities('entities'));
     }
 
     public function getEntitiesDataProvider()
@@ -80,22 +81,23 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetEntityTypes($configData, $entity, $expectedResult)
     {
-        $this->_configScopeMock->expects(
+        $this->cacheMock->expects(
             $this->any()
         )->method(
             'load'
         )->with(
-            $this->_cacheId
+            $this->cacheId
         )->will(
             $this->returnValue(false)
         );
-        $this->_readerMock->expects($this->any())->method('read')->will($this->returnValue($configData));
-        $this->_model = new \Magento\ImportExport\Model\Import\Config(
-            $this->_readerMock,
-            $this->_configScopeMock,
-            $this->_cacheId
+        $this->readerMock->expects($this->any())->method('read')->will($this->returnValue($configData));
+        $this->model = new \Magento\ImportExport\Model\Import\Config(
+            $this->readerMock,
+            $this->cacheMock,
+            $this->cacheId,
+            $this->serializerMock
         );
-        $this->assertEquals($expectedResult, $this->_model->getEntityTypes($entity));
+        $this->assertEquals($expectedResult, $this->model->getEntityTypes($entity));
     }
 
     public function getEntityTypesDataProvider()

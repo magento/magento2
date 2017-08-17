@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Model\Url\Plugin;
 
 use \Magento\Theme\Model\Url\Plugin\Signature;
 
-class SignatureTest extends \PHPUnit_Framework_TestCase
+class SignatureTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Signature
@@ -26,14 +26,8 @@ class SignatureTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->config = $this->getMock(\Magento\Framework\View\Url\ConfigInterface::class);
-        $this->deploymentVersion = $this->getMock(
-            \Magento\Framework\App\View\Deployment\Version::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->config = $this->createMock(\Magento\Framework\View\Url\ConfigInterface::class);
+        $this->deploymentVersion = $this->createMock(\Magento\Framework\App\View\Deployment\Version::class);
         $this->object = new Signature($this->config, $this->deploymentVersion);
     }
 

@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cookie\Test\Unit\Controller\Index;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class NoCookiesTest extends \PHPUnit_Framework_TestCase
+class NoCookiesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Cookie\Controller\Index\NoCookies
@@ -55,7 +55,7 @@ class NoCookiesTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->redirectResponseMock = $this->getMockBuilder(\Magento\Framework\App\Response\RedirectInterface::class)
             ->getMock();
-        $this->viewMock = $this->getMock(\Magento\Framework\App\ViewInterface::class);
+        $this->viewMock = $this->createMock(\Magento\Framework\App\ViewInterface::class);
 
         $this->controller = $objectManager->getObject(
             \Magento\Cookie\Controller\Index\NoCookies::class,

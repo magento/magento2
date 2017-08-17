@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\Customer;
@@ -9,27 +9,30 @@ use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Model\Address;
 use Magento\Customer\Model\Attribute;
+use Magento\Customer\Model\Customer;
 use Magento\Customer\Model\FileProcessor;
 use Magento\Customer\Model\FileProcessorFactory;
 use Magento\Customer\Model\ResourceModel\Address\Attribute\Source\CountryWithWebsites;
+use Magento\Customer\Model\ResourceModel\Customer\Collection;
+use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory as CustomerCollectionFactory;
 use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Eav\Model\Entity\Type;
-use Magento\Customer\Model\Address;
-use Magento\Customer\Model\Customer;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Session\SessionManagerInterface;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool;
 use Magento\Ui\Component\Form\Field;
 use Magento\Ui\DataProvider\EavValidationRules;
-use Magento\Customer\Model\ResourceModel\Customer\Collection;
-use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory as CustomerCollectionFactory;
-use Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool;
 
 /**
  * Class DataProvider
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @api
  */
 class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 {
@@ -101,6 +104,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 
     /**
      * @var SessionManagerInterface
+     * @since 100.1.0
      */
     protected $session;
 
@@ -120,6 +124,18 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     ];
 
     /**
+     * @var ContextInterface
+     */
+    private $context;
+
+    /**
+     * Allow to manage attributes, even they are hidden on storefront
+     *
+     * @var bool
+     */
+    private $allowToShowHiddenAttributes;
+
+    /**
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
@@ -128,8 +144,10 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param Config $eavConfig
      * @param FilterPool $filterPool
      * @param FileProcessorFactory $fileProcessorFactory
+     * @param ContextInterface $context
      * @param array $meta
      * @param array $data
+     * @param bool $allowToShowHiddenAttributes
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -142,7 +160,9 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         FilterPool $filterPool,
         FileProcessorFactory $fileProcessorFactory = null,
         array $meta = [],
-        array $data = []
+        array $data = [],
+        ContextInterface $context = null,
+        $allowToShowHiddenAttributes = true
     ) {
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
         $this->eavValidationRules = $eavValidationRules;
@@ -151,6 +171,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $this->eavConfig = $eavConfig;
         $this->filterPool = $filterPool;
         $this->fileProcessorFactory = $fileProcessorFactory ?: $this->getFileProcessorFactory();
+        $this->context = $context ?: ObjectManager::getInstance()->get(ContextInterface::class);
+        $this->allowToShowHiddenAttributes = $allowToShowHiddenAttributes;
         $this->meta['customer']['children'] = $this->getAttributesMeta(
             $this->eavConfig->getEntityType('customer')
         );
@@ -164,7 +186,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      *
      * @return SessionManagerInterface
      *
-     * @deprecated
+     * @deprecated 100.1.3
+     * @since 100.1.0
      */
     protected function getSession()
     {
@@ -271,23 +294,18 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         ) {
             $stat = $fileProcessor->getStat($file);
             $viewUrl = $fileProcessor->getViewUrl($file, $attribute->getFrontendInput());
-        }
 
-        $fileName = $file;
-        if (strrpos($fileName, '/') !== false) {
-            $fileName = substr($fileName, strrpos($fileName, '/') + 1);
-        }
-
-        if (!empty($file)) {
             return [
                 [
                     'file' => $file,
                     'size' => isset($stat) ? $stat['size'] : 0,
                     'url' => isset($viewUrl) ? $viewUrl : '',
-                    'name' => $fileName,
+                    'name' => basename($file),
+                    'type' => $fileProcessor->getMimeType($file),
                 ],
             ];
         }
+
         return [];
     }
 
@@ -332,7 +350,9 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             if (!empty($rules)) {
                 $meta[$code]['arguments']['data']['config']['validation'] = $rules;
             }
+
             $meta[$code]['arguments']['data']['config']['componentType'] = Field::NAME;
+            $meta[$code]['arguments']['data']['config']['visible'] = $this->canShowAttribute($attribute);
 
             $this->overrideFileUploaderMetadata($entityType, $attribute, $meta[$code]['arguments']['data']['config']);
         }
@@ -342,9 +362,50 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     }
 
     /**
+     * Check whether the specific attribute can be shown in form: customer registration, customer edit, etc...
+     *
+     * @param Attribute $customerAttribute
+     * @return bool
+     */
+    private function canShowAttributeInForm(AbstractAttribute $customerAttribute)
+    {
+        $isRegistration = $this->context->getRequestParam($this->getRequestFieldName()) === null;
+
+        if ($customerAttribute->getEntityType()->getEntityTypeCode() === 'customer') {
+            return is_array($customerAttribute->getUsedInForms()) &&
+                (
+                    (in_array('customer_account_create', $customerAttribute->getUsedInForms()) && $isRegistration) ||
+                    (in_array('customer_account_edit', $customerAttribute->getUsedInForms()) && !$isRegistration)
+                );
+        } else {
+            return is_array($customerAttribute->getUsedInForms()) &&
+                in_array('customer_address_edit', $customerAttribute->getUsedInForms());
+        }
+    }
+
+    /**
+     * Detect can we show attribute on specific form or not
+     *
+     * @param Attribute $customerAttribute
+     * @return bool
+     */
+    private function canShowAttribute(AbstractAttribute $customerAttribute)
+    {
+        $userDefined = (bool) $customerAttribute->getIsUserDefined();
+        if (!$userDefined) {
+            return $customerAttribute->getIsVisible();
+        }
+
+        $canShowOnForm = $this->canShowAttributeInForm($customerAttribute);
+
+        return ($this->allowToShowHiddenAttributes && $canShowOnForm) ||
+            (!$this->allowToShowHiddenAttributes && $canShowOnForm && $customerAttribute->getIsVisible());
+    }
+
+    /**
      * Retrieve Country With Websites Source
      *
-     * @deprecated
+     * @deprecated 100.2.0
      * @return CountryWithWebsites
      */
     private function getCountryWithWebsiteSource()
@@ -359,7 +420,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     /**
      * Retrieve Customer Config Share
      *
-     * @deprecated
+     * @deprecated 100.1.3
      * @return \Magento\Customer\Model\Config\Share
      */
     private function getShareConfig()
@@ -531,7 +592,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      *
      * @return FileProcessorFactory
      *
-     * @deprecated
+     * @deprecated 100.1.3
      */
     private function getFileProcessorFactory()
     {

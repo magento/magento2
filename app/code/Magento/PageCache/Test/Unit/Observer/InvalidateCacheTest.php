@@ -1,12 +1,12 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\PageCache\Test\Unit\Observer;
 
-class InvalidateCacheTest extends \PHPUnit_Framework_TestCase
+class InvalidateCacheTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\PageCache\Observer\InvalidateCache */
     protected $_model;
@@ -27,16 +27,10 @@ class InvalidateCacheTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_configMock = $this->getMock(
-            \Magento\PageCache\Model\Config::class,
-            ['getType', 'isEnabled'],
-            [],
-            '',
-            false
-        );
-        $this->_typeListMock = $this->getMock(\Magento\Framework\App\Cache\TypeList::class, [], [], '', false);
+        $this->_configMock = $this->createPartialMock(\Magento\PageCache\Model\Config::class, ['getType', 'isEnabled']);
+        $this->_typeListMock = $this->createMock(\Magento\Framework\App\Cache\TypeList::class);
 
-        $this->observerMock = $this->getMock(\Magento\Framework\Event\Observer::class);
+        $this->observerMock = $this->createMock(\Magento\Framework\Event\Observer::class);
 
         $this->_model = new \Magento\PageCache\Observer\InvalidateCache(
             $this->_configMock,

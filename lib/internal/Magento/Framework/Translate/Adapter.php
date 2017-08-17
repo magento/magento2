@@ -1,16 +1,18 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 /**
  * Magento translate adapter
  */
 namespace Magento\Framework\Translate;
 
+/**
+ * Class \Magento\Framework\Translate\Adapter
+ *
+ */
 class Adapter extends AbstractAdapter
 {
     /**
@@ -31,6 +33,7 @@ class Adapter extends AbstractAdapter
         }
     }
 
+    // @codingStandardsIgnoreStart
     /**
      * Translate message string.
      *
@@ -47,4 +50,5 @@ class Adapter extends AbstractAdapter
         }
         return $string;
     }
+    // @codingStandardsIgnoreEnd
 }

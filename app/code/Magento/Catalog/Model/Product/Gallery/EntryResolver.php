@@ -2,13 +2,17 @@
 /**
  * Product Media Gallery Entry Resolver
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Gallery;
 
 use Magento\Catalog\Model\Product;
 
+/**
+ * Class \Magento\Catalog\Model\Product\Gallery\EntryResolver
+ *
+ */
 class EntryResolver
 {
     /**

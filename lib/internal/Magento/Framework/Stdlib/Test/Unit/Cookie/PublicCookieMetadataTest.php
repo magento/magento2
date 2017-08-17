@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,7 +14,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
  * Test PublicCookieMetadata
  *
  */
-class PublicCookieMetadataTest extends \PHPUnit_Framework_TestCase
+class PublicCookieMetadataTest extends \PHPUnit\Framework\TestCase
 {
     /** @var PublicCookieMetadata */
     private $publicCookieMetadata;
@@ -33,7 +33,6 @@ class PublicCookieMetadataTest extends \PHPUnit_Framework_TestCase
      * @param StringUtils $expectedValue
      * @dataProvider getMethodData
      */
-
     public function testGetters($setMethodName, $getMethodName, $expectedValue)
     {
         $this->publicCookieMetadata->$setMethodName($expectedValue);

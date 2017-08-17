@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\NewRelicReporting\Test\Unit\Model\Apm;
@@ -11,7 +11,7 @@ use \Magento\Framework\HTTP\ZendClient;
 /**
  * Class DeploymentsTest
  */
-class DeploymentsTest extends \PHPUnit_Framework_TestCase
+class DeploymentsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\NewRelicReporting\Model\Apm\Deployments

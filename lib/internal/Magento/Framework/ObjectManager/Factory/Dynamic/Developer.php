@@ -1,19 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\ObjectManager\Factory\Dynamic;
 
+/**
+ * Class \Magento\Framework\ObjectManager\Factory\Dynamic\Developer
+ *
+ */
 class Developer extends \Magento\Framework\ObjectManager\Factory\AbstractFactory
 {
-    /**
-     * Object creation stack
-     *
-     * @var array
-     */
-    protected $creationStack = [];
-
     /**
      * Resolve constructor arguments
      *
@@ -28,33 +25,17 @@ class Developer extends \Magento\Framework\ObjectManager\Factory\AbstractFactory
      */
     protected function _resolveArguments($requestedType, array $parameters, array $arguments = [])
     {
-        $resolvedArguments = [];
-        $arguments = count($arguments)
-            ? array_replace($this->config->getArguments($requestedType), $arguments)
-            : $this->config->getArguments($requestedType);
-        foreach ($parameters as $parameter) {
-            list($paramName, $paramType, $paramRequired, $paramDefault) = $parameter;
-            $argument = null;
-            if (!empty($arguments) && (isset($arguments[$paramName]) || array_key_exists($paramName, $arguments))) {
-                $argument = $arguments[$paramName];
-            } elseif ($paramRequired) {
-                if ($paramType) {
-                    $argument = ['instance' => $paramType];
-                } else {
-                    $this->creationStack = [];
-                    throw new \BadMethodCallException(
-                        'Missing required argument $' . $paramName . ' of ' . $requestedType . '.'
-                    );
-                }
+        // Get default arguments from config, merge with supplied arguments
+        $defaultArguments = $this->config->getArguments($requestedType);
+        if (is_array($defaultArguments)) {
+            if (count($arguments)) {
+                $arguments = array_replace($defaultArguments, $arguments);
             } else {
-                $argument = $paramDefault;
+                $arguments = $defaultArguments;
             }
-
-            $this->resolveArgument($argument, $paramType, $paramDefault, $paramName, $requestedType);
-
-            $resolvedArguments[] = $argument;
         }
-        return $resolvedArguments;
+
+        return $this->resolveArgumentsInRuntime($requestedType, $parameters, $arguments);
     }
 
     /**

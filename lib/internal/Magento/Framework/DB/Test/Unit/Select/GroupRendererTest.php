@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ use Magento\Framework\DB\Select;
 /**
  * Class GroupRendererTest
  */
-class GroupRendererTest extends \PHPUnit_Framework_TestCase
+class GroupRendererTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\DB\Select\GroupRenderer
@@ -36,14 +36,8 @@ class GroupRendererTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->quoteMock = $this->getMock(
-            \Magento\Framework\DB\Platform\Quote::class,
-            ['quoteIdentifier'],
-            [],
-            '',
-            false
-        );
-        $this->selectMock = $this->getMock(\Magento\Framework\DB\Select::class, ['getPart'], [], '', false);
+        $this->quoteMock = $this->createPartialMock(\Magento\Framework\DB\Platform\Quote::class, ['quoteIdentifier']);
+        $this->selectMock = $this->createPartialMock(\Magento\Framework\DB\Select::class, ['getPart']);
         $this->model = $objectManager->getObject(
             \Magento\Framework\DB\Select\GroupRenderer::class,
             ['quote' => $this->quoteMock]

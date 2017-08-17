@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Service;
@@ -10,7 +10,7 @@ namespace Magento\Sales\Test\Unit\Model\Service;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class OrderServiceTest extends \PHPUnit_Framework_TestCase
+class OrderServiceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\Service\OrderService

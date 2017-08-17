@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CustomerImportExport\Model\Import;
@@ -10,6 +10,9 @@ use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorI
 
 /**
  * Import entity abstract customer model
+ *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entity\AbstractEav
@@ -27,7 +30,6 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
     const COLUMN_DEFAULT_BILLING = 'default_billing';
 
     const COLUMN_DEFAULT_SHIPPING = 'default_shipping';
-
 
     /**#@-*/
 
@@ -48,13 +50,7 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
 
     /**#@-*/
 
-    /**
-     * Array of attribute codes which will be ignored in validation and import procedures.
-     * For example, when entity attribute has own validation and import procedures
-     * or just to deny this attribute processing.
-     *
-     * @var string[]
-     */
+    /**#@-*/
     protected $_ignoredAttributes = ['website_id', 'store_id',
         self::COLUMN_DEFAULT_BILLING, self::COLUMN_DEFAULT_SHIPPING];
 
@@ -233,7 +229,7 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
             $email = strtolower($rowData[static::COLUMN_EMAIL]);
             $website = $rowData[static::COLUMN_WEBSITE];
 
-            if (!\Zend_Validate::is($email, 'EmailAddress')) {
+            if (!\Zend_Validate::is($email, \Magento\Framework\Validator\EmailAddress::class)) {
                 $this->addRowError(static::ERROR_INVALID_EMAIL, $rowNumber, static::COLUMN_EMAIL);
             } elseif (!isset($this->_websiteCodeToId[$website])) {
                 $this->addRowError(static::ERROR_INVALID_WEBSITE, $rowNumber, static::COLUMN_WEBSITE);

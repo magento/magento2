@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Tax\Test\Unit\Observer;
 
 use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class UpdateProductOptionsObserverTest extends \PHPUnit_Framework_TestCase
+class UpdateProductOptionsObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Tests the methods that rely on the ScopeConfigInterface object to provide their return values
@@ -28,15 +28,15 @@ class UpdateProductOptionsObserverTest extends \PHPUnit_Framework_TestCase
         $frameworkObject= new \Magento\Framework\DataObject();
         $frameworkObject->setAdditionalOptions([]);
 
-        $product=$this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $product=$this->createMock(\Magento\Catalog\Model\Product::class);
 
-        $registry=$this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
+        $registry=$this->createMock(\Magento\Framework\Registry::class);
         $registry->expects($this->any())
             ->method('registry')
             ->with('current_product')
             ->will($this->returnValue($product));
 
-        $taxData=$this->getMock(\Magento\Tax\Helper\Data::class, [], [], '', false);
+        $taxData=$this->createMock(\Magento\Tax\Helper\Data::class);
         $taxData->expects($this->any())
             ->method('getCalculationAlgorithm')
             ->will($this->returnValue('TOTAL_BASE_CALCULATION'));
@@ -53,12 +53,12 @@ class UpdateProductOptionsObserverTest extends \PHPUnit_Framework_TestCase
             ->method('displayPriceExcludingTax')
             ->will($this->returnValue($displayPriceExcludingTax));
 
-        $eventObject=$this->getMock(\Magento\Framework\Event::class, ['getResponseObject'], [], '', false);
+        $eventObject=$this->createPartialMock(\Magento\Framework\Event::class, ['getResponseObject']);
         $eventObject->expects($this->any())
             ->method('getResponseObject')
             ->will($this->returnValue($frameworkObject));
 
-        $observerObject=$this->getMock(\Magento\Framework\Event\Observer::class, [], [], '', false);
+        $observerObject=$this->createMock(\Magento\Framework\Event\Observer::class);
 
         $observerObject->expects($this->any())
             ->method('getEvent')

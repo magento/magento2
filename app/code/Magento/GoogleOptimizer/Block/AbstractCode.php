@@ -2,11 +2,15 @@
 /**
  * Google Optimizer Scripts Block
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GoogleOptimizer\Block;
 
+/**
+ * Class \Magento\GoogleOptimizer\Block\AbstractCode
+ *
+ */
 abstract class AbstractCode extends \Magento\Framework\View\Element\Template
 {
     /**

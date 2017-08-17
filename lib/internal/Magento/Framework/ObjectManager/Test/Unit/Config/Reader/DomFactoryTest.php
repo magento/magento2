@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Framework\ObjectManager\Test\Unit\Config\Reader;
 
 use \Magento\Framework\ObjectManager\Config\Reader\DomFactory;
 
-class DomFactoryTest extends \PHPUnit_Framework_TestCase
+class DomFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DomFactory
@@ -27,14 +27,9 @@ class DomFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_object = $this->getMock(\Magento\Framework\ObjectManager\Config\Reader\Dom::class, [], [], '', false);
-        $this->_objectManager = $this->getMock(
-            \Magento\Framework\ObjectManager\ObjectManager::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
+        $this->_object = $this->createMock(\Magento\Framework\ObjectManager\Config\Reader\Dom::class);
+        $this->_objectManager =
+            $this->createPartialMock(\Magento\Framework\ObjectManager\ObjectManager::class, ['create']);
         $this->_factory = new DomFactory($this->_objectManager);
     }
 

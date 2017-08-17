@@ -2,7 +2,7 @@
 /**
  * Renders HTML anchor or nothing depending on isVisible().
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer;
@@ -10,9 +10,15 @@ namespace Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer;
 use Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer;
 use Magento\Framework\DataObject;
 
+/**
+ * Class \Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Link
+ *
+ */
 class Link extends AbstractRenderer
 {
-    /** @var \Magento\Framework\DataObject */
+    /**
+     * @var \Magento\Framework\DataObject
+     */
     protected $_row;
 
     /**

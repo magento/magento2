@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Invoice\Validation;
@@ -10,7 +10,7 @@ use Magento\Sales\Api\Data\OrderInterface;
 /**
  * Class CanRefundTest
  */
-class CanRefundTest extends \PHPUnit_Framework_TestCase
+class CanRefundTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\Order\Invoice|\PHPUnit_Framework_MockObject_MockObject

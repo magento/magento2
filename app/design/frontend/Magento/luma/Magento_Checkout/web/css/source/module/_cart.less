@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2016 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -63,10 +63,6 @@
 
             .field {
                 margin: 0 0 16px;
-
-                &.note {
-                    display: none;
-                }
             }
 
             .actions-toolbar {
@@ -149,6 +145,12 @@
         }
 
         &:extend(.abs-adjustment-incl-excl-tax all);
+
+        .action {
+            &.multicheckout {
+                color: @color-blue2;
+            }
+        }
     }
 
     //  Totals block
@@ -337,6 +339,22 @@
                 margin-top: @indent__base;
             }
         }
+    }
+
+    //  Products pager
+    .cart-products-toolbar {
+        .toolbar-amount {
+            left: inherit;
+            margin: @indent__m 0 15px;
+            padding: 0;
+            position: relative;
+            text-align: center;
+            top: inherit;
+        }
+    }
+
+    .cart-products-toolbar-top {
+        border-bottom: @border-width__base solid @border-color__base;
     }
 
     //  Discount
@@ -614,6 +632,47 @@
                     white-space: normal;
                     width: 99%;
                 }
+            }
+        }
+    }
+
+    //  Products pager
+    .cart-products-toolbar {
+        margin: 2px 0 0;
+
+        .toolbar-amount {
+            line-height: 30px;
+            margin: 0;
+        }
+
+        .pages {
+            float: right;
+
+            .item {
+                &:last-child {
+                    margin-right: 0;
+                }
+            }
+        }
+    }
+
+    .cart.table-wrapper {
+        .cart-products-toolbar {
+            + .cart {
+                thead {
+                    tr {
+                        th.col {
+                            padding-bottom: @indent__s;
+                            padding-top: @indent__s;
+                        }
+                    }
+                }
+            }
+        }
+
+        .cart {
+            + .cart-products-toolbar {
+                margin-top: @indent__m;
             }
         }
     }

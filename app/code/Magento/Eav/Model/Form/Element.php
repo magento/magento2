@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\Form;
@@ -10,7 +10,7 @@ use Magento\Framework\Exception\LocalizedException;
 /**
  * Eav Form Element Model
  *
- * @method \Magento\Eav\Model\ResourceModel\Form\Element getResource()
+ * @api
  * @method int getTypeId()
  * @method \Magento\Eav\Model\Form\Element setTypeId(int $value)
  * @method int getFieldsetId()
@@ -19,8 +19,6 @@ use Magento\Framework\Exception\LocalizedException;
  * @method \Magento\Eav\Model\Form\Element setAttributeId(int $value)
  * @method int getSortOrder()
  * @method \Magento\Eav\Model\Form\Element setSortOrder(int $value)
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Element extends \Magento\Framework\Model\AbstractModel
 {
@@ -66,28 +64,6 @@ class Element extends \Magento\Framework\Model\AbstractModel
     protected function _construct()
     {
         $this->_init(\Magento\Eav\Model\ResourceModel\Form\Element::class);
-    }
-
-    /**
-     * Retrieve resource instance wrapper
-     *
-     * @return \Magento\Eav\Model\ResourceModel\Form\Element
-     * @codeCoverageIgnore
-     */
-    protected function _getResource()
-    {
-        return parent::_getResource();
-    }
-
-    /**
-     * Retrieve resource collection instance wrapper
-     *
-     * @return \Magento\Eav\Model\ResourceModel\Form\Element\Collection
-     * @codeCoverageIgnore
-     */
-    public function getCollection()
-    {
-        return parent::getCollection();
     }
 
     /**

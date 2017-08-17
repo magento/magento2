@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Order;
@@ -10,6 +10,10 @@ use Magento\Sales\Controller\OrderInterface;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 
+/**
+ * Class \Magento\Sales\Controller\Order\History
+ *
+ */
 class History extends \Magento\Framework\App\Action\Action implements OrderInterface
 {
     /**

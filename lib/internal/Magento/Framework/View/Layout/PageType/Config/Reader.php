@@ -2,11 +2,15 @@
 /**
  * Page layout config reader
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Layout\PageType\Config;
 
+/**
+ * Class \Magento\Framework\View\Layout\PageType\Config\Reader
+ *
+ */
 class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {
     /**

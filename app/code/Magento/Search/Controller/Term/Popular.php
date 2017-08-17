@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Search\Controller\Term;
@@ -12,6 +12,10 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Search\Controller\Term\Popular
+ *
+ */
 class Popular extends Action
 {
     /**

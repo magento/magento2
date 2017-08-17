@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,8 +13,8 @@ if ($block->isLoggedIn()) {
     $dataPostParam = sprintf(" data-post='%s'", $block->getPostParams());
 }
 ?>
-<li class="authorization-link" data-label="<?php echo $block->escapeHtmlAttr(__('or')); ?>">
-    <a <?php /* @noEscape */ echo $block->getLinkAttributes(); ?><?php /* @noEscape */ echo $dataPostParam; ?>>
-        <?php echo $block->escapeHtml($block->getLabel()); ?>
+<li class="authorization-link" data-label="<?= $block->escapeHtmlAttr(__('or')) ?>">
+    <a <?= /* @noEscape */ $block->getLinkAttributes() ?><?= /* @noEscape */ $dataPostParam ?>>
+        <?= $block->escapeHtml($block->getLabel()) ?>
     </a>
 </li>

@@ -1,13 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Mtf\Util\Command;
 
 use Magento\Mtf\Util\Protocol\CurlInterface;
-use Magento\Mtf\ObjectManager;
 use Magento\Mtf\Util\Protocol\CurlTransport;
 
 /**
@@ -28,7 +27,6 @@ class Cli
     private $transport;
 
     /**
-     * @constructor
      * @param CurlTransport $transport
      */
     public function __construct(CurlTransport $transport)
@@ -43,7 +41,7 @@ class Cli
      * @param array $options [optional]
      * @return void
      */
-    protected function execute($command, $options = [])
+    public function execute($command, $options = [])
     {
         $curl = $this->transport;
         $curl->write($this->prepareUrl($command, $options), [], CurlInterface::GET);
@@ -55,12 +53,12 @@ class Cli
      * Prepare url.
      *
      * @param string $command
-     * @param array $options
+     * @param array $options [optional]
      * @return string
      */
-    private function prepareUrl($command, array $options)
+    private function prepareUrl($command, $options = [])
     {
         $command .= ' ' . implode(' ', $options);
-        return $_ENV['app_frontend_url'] . Cli::URL . '?command=' . urlencode($command);
+        return $_ENV['app_frontend_url'] . self::URL . '?command=' . urlencode($command);
     }
 }

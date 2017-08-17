@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,6 +21,20 @@ use Magento\Mtf\Fixture\InjectableFixture;
  */
 class Bundle extends Block
 {
+    /**
+     * Assigned product name.
+     *
+     * @var string
+     */
+    protected $assignedProductName = '.product-name';
+
+    /**
+     * Assigned product price.
+     *
+     * @var string
+     */
+    protected $assignedProductPrice = '.bundle-options-wrapper .price';
+
     /**
      * Selector for single option block
      *
@@ -71,6 +85,20 @@ class Bundle extends Block
     protected $bundleOptionBlock = './/div[label[span[contains(text(), "%s")]]]';
 
     /**
+     *  Product fixture.
+     *
+     * @var FixtureInterface
+     */
+    private $product;
+
+    /**
+     * Option index.
+     *
+     * @var null|int
+     */
+    protected $optionIndex;
+
+    /**
      * Fill bundle option on frontend add click "Add to cart" button
      *
      * @param BundleProduct $product
@@ -93,33 +121,45 @@ class Bundle extends Block
     public function getOptions(FixtureInterface $product)
     {
         /** @var BundleProduct  $product */
+        $this->product = $product;
         $bundleSelections = $product->getBundleSelections();
         $bundleOptions = isset($bundleSelections['bundle_options']) ? $bundleSelections['bundle_options'] : [];
 
         $listFormOptions = $this->getListOptions();
         $formOptions = [];
 
-        foreach ($bundleOptions as $option) {
+        foreach ($bundleOptions as $index => $option) {
             $title = $option['title'];
             if (!isset($listFormOptions[$title])) {
                 throw new \Exception("Can't find option: \"{$title}\"");
             }
+            $this->optionIndex = $index;
 
             /** @var SimpleElement $optionElement */
             $optionElement = $listFormOptions[$title];
-            $getTypeData = 'get' . $this->optionNameConvert($option['type']) . 'Data';
+            $getTypeData = 'get' . $this->optionNameConvert($option['frontend_type']) . 'Data';
 
             $optionData = $this->$getTypeData($optionElement);
             $optionData['title'] = $title;
-            $optionData['type'] = $option['type'];
+            $optionData['type'] = $option['frontend_type'];
             $optionData['is_require'] = $optionElement->find($this->required, Locator::SELECTOR_XPATH)->isVisible()
                 ? 'Yes'
                 : 'No';
 
             $formOptions[] = $optionData;
         }
-
         return $formOptions;
+    }
+
+    /**
+     * Check if bundle option is visible.
+     *
+     * @param string $optionTitle
+     * @return bool
+     */
+    public function isOptionVisible($optionTitle)
+    {
+        return isset($this->getListOptions()[$optionTitle]);
     }
 
     /**
@@ -151,6 +191,9 @@ class Bundle extends Block
      */
     protected function getDropdownData(SimpleElement $option)
     {
+        if ($this->isOneProductInStock($this->product)) {
+            return ['options' => $this->getFlatTextData()];
+        }
         $select = $option->find($this->selectOption, Locator::SELECTOR_XPATH, 'select');
         // Skip "Choose option ..."(option #1)
         return $this->getSelectOptionsData($select, 2);
@@ -263,13 +306,16 @@ class Bundle extends Block
     {
         foreach ($bundleOptions as $option) {
             $selector = sprintf($this->bundleOptionBlock, $option['title']);
-            /** @var Option $optionBlock */
-            $optionBlock = $this->blockFactory->create(
-                'Magento\Bundle\Test\Block\Catalog\Product\View\Type\Option\\'
-                . $this->optionNameConvert($option['type']),
-                ['element' => $this->_rootElement->find($selector, Locator::SELECTOR_XPATH)]
-            );
-            $optionBlock->fillOption($option['value']);
+            $useDefault = isset($option['use_default']) && strtolower($option['use_default']) == 'true' ? true : false;
+            if (!$useDefault) {
+                /** @var Option $optionBlock */
+                $optionBlock = $this->blockFactory->create(
+                    'Magento\Bundle\Test\Block\Catalog\Product\View\Type\Option\\'
+                    . $this->optionNameConvert($option['frontend_type']),
+                    ['element' => $this->_rootElement->find($selector, Locator::SELECTOR_XPATH)]
+                );
+                $optionBlock->fillOption($option['value']);
+            }
         }
     }
 
@@ -283,5 +329,44 @@ class Bundle extends Block
     {
         $trimmedOptionType = preg_replace('/[^a-zA-Z]/', '', $optionType);
         return ucfirst(strtolower($trimmedOptionType));
+    }
+
+    /**
+     * Check count products with 'In Stock' status.
+     *
+     * @param BundleProduct $products
+     * @return bool
+     */
+    private function isOneProductInStock(BundleProduct $products)
+    {
+        $result = [];
+        $products = $products->getBundleSelections()['products'][$this->optionIndex];
+        foreach ($products as $product) {
+            $status = $product->getData()['quantity_and_stock_status']['is_in_stock'];
+            if ($status == 'In Stock') {
+                $result[] = $product;
+            }
+        }
+        if (count($result) == 1) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Return list options.
+     *
+     * @return array
+     */
+    private function getFlatTextData()
+    {
+        $productPrice = $this->_rootElement->find($this->assignedProductPrice)->getText();
+        $productPrice = preg_replace("/[^0-9.,]/", '', $productPrice);
+        $productName = $this->_rootElement->find($this->assignedProductName)->getText();
+        $options[$productName] = [
+            'title' => $productName,
+            'price' => number_format($productPrice, 2)
+        ];
+        return $options;
     }
 }

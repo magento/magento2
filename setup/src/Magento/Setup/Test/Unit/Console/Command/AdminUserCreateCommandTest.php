@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Console\Command;
@@ -11,7 +11,7 @@ use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 use Magento\User\Model\UserValidationRules;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class AdminUserCreateCommandTest extends \PHPUnit_Framework_TestCase
+class AdminUserCreateCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\InstallerFactory
@@ -25,7 +25,7 @@ class AdminUserCreateCommandTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->installerFactoryMock = $this->getMock(\Magento\Setup\Model\InstallerFactory::class, [], [], '', false);
+        $this->installerFactoryMock = $this->createMock(\Magento\Setup\Model\InstallerFactory::class);
         $this->command = new AdminUserCreateCommand($this->installerFactoryMock, new UserValidationRules());
     }
 
@@ -47,7 +47,7 @@ class AdminUserCreateCommandTest extends \PHPUnit_Framework_TestCase
             InitParamListener::BOOTSTRAP_PARAM => null,
         ];
         $commandTester = new CommandTester($this->command);
-        $installerMock = $this->getMock(\Magento\Setup\Model\Installer::class, [], [], '', false);
+        $installerMock = $this->createMock(\Magento\Setup\Model\Installer::class);
         $installerMock->expects($this->once())->method('installAdminUser')->with($data);
         $this->installerFactoryMock->expects($this->once())->method('create')->willReturn($installerMock);
         $commandTester->execute($options);

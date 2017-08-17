@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,70 +14,85 @@ $testsBaseDir = dirname(__DIR__);
 $integrationTestsDir = realpath("{$testsBaseDir}/../integration");
 $fixtureBaseDir = $integrationTestsDir . '/testsuite';
 
-setCustomErrorHandler();
+try {
+    setCustomErrorHandler();
 
-$logWriter = new \Zend_Log_Writer_Stream('php://output');
-$logWriter->setFormatter(new \Zend_Log_Formatter_Simple('%message%' . PHP_EOL));
-$logger = new \Zend_Log($logWriter);
+    /* Bootstrap the application */
+    $settings = new \Magento\TestFramework\Bootstrap\Settings($testsBaseDir, get_defined_constants());
 
-$testFrameworkDir = __DIR__;
-require_once  __DIR__ . '/../../integration/framework/deployTestModules.php';
-
-/* Bootstrap the application */
-$settings = new \Magento\TestFramework\Bootstrap\Settings($testsBaseDir, get_defined_constants());
-$shell = new \Magento\Framework\Shell(new \Magento\Framework\Shell\CommandRenderer(), $logger);
-
-$installConfigFile = $settings->getAsConfigFile('TESTS_INSTALL_CONFIG_FILE');
-if (!file_exists($installConfigFile)) {
-    $installConfigFile = $installConfigFile . '.dist';
-}
-$globalConfigFile = $settings->getAsConfigFile('TESTS_GLOBAL_CONFIG_FILE');
-if (!file_exists($installConfigFile)) {
-    $installConfigFile = $installConfigFile . '.dist';
-}
-$dirList = new \Magento\Framework\App\Filesystem\DirectoryList(BP);
-$application =  new \Magento\TestFramework\WebApiApplication(
-    $shell,
-    $dirList->getPath(DirectoryList::VAR_DIR),
-    $installConfigFile,
-    $globalConfigFile,
-    BP . '/app/etc/',
-    $settings->get('TESTS_MAGENTO_MODE'),
-    AutoloaderRegistry::getAutoloader()
-);
-
-if (defined('TESTS_MAGENTO_INSTALLATION') && TESTS_MAGENTO_INSTALLATION === 'enabled') {
-    if (defined('TESTS_CLEANUP') && TESTS_CLEANUP === 'enabled') {
-        $application->cleanup();
+    if ($settings->get('TESTS_EXTRA_VERBOSE_LOG')) {
+        $filesystem = new \Magento\Framework\Filesystem\Driver\File();
+        $exceptionHandler = new \Magento\Framework\Logger\Handler\Exception($filesystem);
+        $loggerHandlers = [
+            'system'    => new \Magento\Framework\Logger\Handler\System($filesystem, $exceptionHandler),
+            'debug'     => new \Magento\Framework\Logger\Handler\Debug($filesystem)
+        ];
+        $shell = new \Magento\Framework\Shell(
+            new \Magento\Framework\Shell\CommandRenderer(),
+            new \Monolog\Logger('main', $loggerHandlers)
+        );
+    } else {
+        $shell = new \Magento\Framework\Shell(new \Magento\Framework\Shell\CommandRenderer());
     }
-    $application->install();
+
+    $testFrameworkDir = __DIR__;
+    require_once __DIR__ . '/../../integration/framework/deployTestModules.php';
+
+    $installConfigFile = $settings->getAsConfigFile('TESTS_INSTALL_CONFIG_FILE');
+    if (!file_exists($installConfigFile)) {
+        $installConfigFile = $installConfigFile . '.dist';
+    }
+    $globalConfigFile = $settings->getAsConfigFile('TESTS_GLOBAL_CONFIG_FILE');
+    if (!file_exists($installConfigFile)) {
+        $installConfigFile = $installConfigFile . '.dist';
+    }
+    $dirList     = new \Magento\Framework\App\Filesystem\DirectoryList(BP);
+    $application = new \Magento\TestFramework\WebApiApplication(
+        $shell,
+        $dirList->getPath(DirectoryList::VAR_DIR),
+        $installConfigFile,
+        $globalConfigFile,
+        BP . '/app/etc/',
+        $settings->get('TESTS_MAGENTO_MODE'),
+        AutoloaderRegistry::getAutoloader()
+    );
+
+    if (defined('TESTS_MAGENTO_INSTALLATION') && TESTS_MAGENTO_INSTALLATION === 'enabled') {
+        if (defined('TESTS_CLEANUP') && TESTS_CLEANUP === 'enabled') {
+            $application->cleanup();
+        }
+        $application->install();
+    }
+
+    $bootstrap = new \Magento\TestFramework\Bootstrap(
+        $settings,
+        new \Magento\TestFramework\Bootstrap\Environment(),
+        new \Magento\TestFramework\Bootstrap\WebapiDocBlock("{$integrationTestsDir}/testsuite"),
+        new \Magento\TestFramework\Bootstrap\Profiler(new \Magento\Framework\Profiler\Driver\Standard()),
+        $shell,
+        $application,
+        new \Magento\TestFramework\Bootstrap\MemoryFactory($shell)
+    );
+    $bootstrap->runBootstrap();
+    $application->initialize();
+
+    \Magento\TestFramework\Helper\Bootstrap::setInstance(new \Magento\TestFramework\Helper\Bootstrap($bootstrap));
+    $dirSearch = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+       ->create(\Magento\Framework\Component\DirSearch::class);
+    $themePackageList = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+       ->create(\Magento\Framework\View\Design\Theme\ThemePackageList::class);
+    \Magento\Framework\App\Utility\Files::setInstance(
+        new \Magento\Framework\App\Utility\Files(
+            new \Magento\Framework\Component\ComponentRegistrar(),
+            $dirSearch,
+            $themePackageList
+        )
+    );
+    unset($bootstrap, $application, $settings, $shell);
+} catch (\Exception $e) {
+    echo $e . PHP_EOL;
+    exit(1);
 }
-
-$bootstrap = new \Magento\TestFramework\Bootstrap(
-    $settings,
-    new \Magento\TestFramework\Bootstrap\Environment(),
-    new \Magento\TestFramework\Bootstrap\WebapiDocBlock("{$integrationTestsDir}/testsuite"),
-    new \Magento\TestFramework\Bootstrap\Profiler(new \Magento\Framework\Profiler\Driver\Standard()),
-    $shell,
-    $application,
-    new \Magento\TestFramework\Bootstrap\MemoryFactory($shell)
-);
-$bootstrap->runBootstrap();
-$application->initialize();
-
-\Magento\TestFramework\Helper\Bootstrap::setInstance(new \Magento\TestFramework\Helper\Bootstrap($bootstrap));
-$dirSearch = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create(\Magento\Framework\Component\DirSearch::class);
-$themePackageList = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create(\Magento\Framework\View\Design\Theme\ThemePackageList::class);
-\Magento\Framework\App\Utility\Files::setInstance(
-    new \Magento\Framework\App\Utility\Files(
-        new \Magento\Framework\Component\ComponentRegistrar(),
-        $dirSearch,
-        $themePackageList
-    )
-);
-unset($bootstrap, $application, $settings, $shell);
 
 /**
  * Set custom error handler
@@ -107,7 +122,7 @@ function setCustomErrorHandler()
 
                 $errName = isset($errorNames[$errNo]) ? $errorNames[$errNo] : "";
 
-                throw new \PHPUnit_Framework_Exception(
+                throw new \PHPUnit\Framework\Exception(
                     sprintf("%s: %s in %s:%s.", $errName, $errStr, $errFile, $errLine),
                     $errNo
                 );

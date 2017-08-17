@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Controller\Transparent;
@@ -19,7 +19,7 @@ use Magento\Paypal\Model\Payflow\Transparent;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RequestSecureTokenTest extends \PHPUnit_Framework_TestCase
+class RequestSecureTokenTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Transparent|\PHPUnit_Framework_MockObject_MockObject

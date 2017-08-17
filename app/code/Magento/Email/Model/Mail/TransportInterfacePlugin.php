@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Model\Mail;
@@ -10,6 +10,10 @@ use Magento\Framework\Exception\MailException;
 use Magento\Framework\Mail\TransportInterface;
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * Class \Magento\Email\Model\Mail\TransportInterfacePlugin
+ *
+ */
 class TransportInterfacePlugin
 {
     /**

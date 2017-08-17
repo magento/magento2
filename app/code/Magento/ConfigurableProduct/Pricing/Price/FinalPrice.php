@@ -1,14 +1,20 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\ConfigurableProduct\Pricing\Price;
 
+/**
+ * Class \Magento\ConfigurableProduct\Pricing\Price\FinalPrice
+ *
+ */
 class FinalPrice extends \Magento\Catalog\Pricing\Price\FinalPrice
 {
-    /** @var PriceResolverInterface */
+    /**
+     * @var \Magento\ConfigurableProduct\Pricing\Price\PriceResolverInterface
+     */
     protected $priceResolver;
 
     /**

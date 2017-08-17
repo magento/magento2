@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -42,7 +42,7 @@
             <constraint name="Magento\Widget\Test\Constraint\AssertWidgetRecentlyViewedProducts" />
         </variation>
         <variation name="CreateWidgetEntityTestVariation4">
-            <data name="tag" xsi:type="string">severity:S1, stable:no</data>
+            <data name="tag" xsi:type="string">severity:S1</data>
             <data name="widget/data/code" xsi:type="string">Recently Compared Products</data>
             <data name="widget/data/theme_id" xsi:type="string">Magento Luma</data>
             <data name="widget/data/title" xsi:type="string">Title_%isolation%</data>

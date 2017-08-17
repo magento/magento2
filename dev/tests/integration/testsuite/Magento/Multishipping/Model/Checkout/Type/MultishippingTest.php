@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Multishipping\Model\Checkout\Type;
@@ -10,7 +10,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * @magentoAppArea frontend
  */
-class MultishippingTest extends \PHPUnit_Framework_TestCase
+class MultishippingTest extends \PHPUnit\Framework\TestCase
 {
     const ADDRESS_TYPE_SHIPPING = 'shipping';
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Rule\Model\Action;
@@ -9,7 +9,9 @@ use Magento\Framework\Data\Form;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 
 /**
- * Quote rule action abstract
+ * Abstract rule action
+ *
+ * @api
  */
 abstract class AbstractAction extends \Magento\Framework\DataObject implements ActionInterface
 {

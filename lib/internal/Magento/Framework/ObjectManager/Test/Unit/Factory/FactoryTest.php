@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\ObjectManager\Test\Unit\Factory;
@@ -10,7 +10,7 @@ use Magento\Framework\ObjectManager\Config\Config;
 use Magento\Framework\ObjectManager\Factory\Dynamic\Developer;
 use Magento\Framework\ObjectManager\ObjectManager;
 
-class FactoryTest extends \PHPUnit_Framework_TestCase
+class FactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var FactoryInterface
@@ -46,13 +46,13 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testResolveArgumentsException()
     {
-        $configMock = $this->getMock(\Magento\Framework\ObjectManager\Config\Config::class, [], [], '', false);
+        $configMock = $this->createMock(\Magento\Framework\ObjectManager\Config\Config::class);
         $configMock->expects($this->once())->method('getArguments')
             ->will($this->returnValue([
                 'firstParam' => 1,
             ]));
 
-        $definitionsMock = $this->getMock(\Magento\Framework\ObjectManager\DefinitionInterface::class);
+        $definitionsMock = $this->createMock(\Magento\Framework\ObjectManager\DefinitionInterface::class);
         $definitionsMock->expects($this->once())->method('getParameters')
             ->will($this->returnValue([[
                 'firstParam', 'string', true, 'default_val',
@@ -110,7 +110,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCircular($startingClass, $terminationClass)
     {
-        $this->setExpectedException(
+        $this->expectException(
             '\LogicException',
             sprintf('Circular dependency: %s depends on %s and vice versa.', $startingClass, $terminationClass)
         );
@@ -133,7 +133,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreateUsingReflection()
     {
         $type = \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Polymorphous::class;
-        $definitions = $this->getMock(\Magento\Framework\ObjectManager\DefinitionInterface::class);
+        $definitions = $this->createMock(\Magento\Framework\ObjectManager\DefinitionInterface::class);
         // should be more than defined in "switch" of create() method
         $definitions->expects($this->once())->method('getParameters')->with($type)->will($this->returnValue([
             ['one', null, false, null],

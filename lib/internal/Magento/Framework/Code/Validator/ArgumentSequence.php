@@ -2,13 +2,17 @@
 /**
  * Class constructor validator. Validates arguments sequence
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Code\Validator;
 
 use Magento\Framework\Code\ValidatorInterface;
 
+/**
+ * Class \Magento\Framework\Code\Validator\ArgumentSequence
+ *
+ */
 class ArgumentSequence implements ValidatorInterface
 {
     const REQUIRED = 'required';

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Model;
@@ -8,8 +8,7 @@ namespace Magento\Store\Model;
 /**
  * Core Website model
  *
- * @method \Magento\Store\Model\ResourceModel\Website _getResource()
- * @method \Magento\Store\Model\ResourceModel\Website getResource()
+ * @api
  * @method string getGroupTitle()
  * @method string getStoreTitle()
  * @method int getStoreId()
@@ -571,6 +570,21 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     }
 
     /**
+     * Clear configuration cache after creation website
+     *
+     * @return $this
+     * @since 100.2.0
+     */
+    public function afterSave()
+    {
+        if ($this->isObjectNew()) {
+            $this->_storeManager->reinitStores();
+        }
+
+        return parent::afterSave();
+    }
+
+    /**
      * Retrieve website base currency code
      *
      * @return string
@@ -652,11 +666,12 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
      */
     public function getIdentities()
     {
-        return [self::CACHE_TAG . '_' . $this->getId()];
+        return [self::CACHE_TAG];
     }
 
     /**
      * {@inheritdoc}
+     * @since 100.1.0
      */
     public function getScopeType()
     {
@@ -665,6 +680,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
 
     /**
      * {@inheritdoc}
+     * @since 100.1.0
      */
     public function getScopeTypeName()
     {

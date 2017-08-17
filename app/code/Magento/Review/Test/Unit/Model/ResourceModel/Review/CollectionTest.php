@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Test\Unit\Model\ResourceModel\Review;
 
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Review\Model\ResourceModel\Review\Collection
@@ -39,9 +39,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $store = $this->getMock(\Magento\Store\Model\Store::class, ['getId'], [], '', false);
+        $store = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getId']);
         $store->expects($this->any())->method('getId')->will($this->returnValue(1));
-        $this->storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->storeManagerMock->expects($this->any())->method('getStore')->will($this->returnValue($store));
         $this->objectManager = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this));
         $this->resourceMock = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\AbstractDb::class)
@@ -76,7 +76,6 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
                 'resource' => $this->resourceMock,
             ]
         );
-
     }
 
     public function testInitSelect()

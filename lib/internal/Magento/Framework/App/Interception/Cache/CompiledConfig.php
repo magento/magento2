@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Interception\Cache;
@@ -9,6 +9,10 @@ use Magento\Framework\Cache\Frontend\Decorator\TagScope;
 use Magento\Framework\Config\CacheInterface;
 use Magento\Framework\App\Cache\Type\FrontendPool;
 
+/**
+ * Class \Magento\Framework\App\Interception\Cache\CompiledConfig
+ *
+ */
 class CompiledConfig extends TagScope implements CacheInterface
 {
     /**

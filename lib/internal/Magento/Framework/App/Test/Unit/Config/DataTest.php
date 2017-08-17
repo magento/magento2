@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit\Config;
 
-class DataTest extends \PHPUnit_Framework_TestCase
+class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\Config\Data
@@ -19,13 +19,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_metaDataProcessor = $this->getMock(
-            \Magento\Framework\App\Config\MetadataProcessor::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->_metaDataProcessor = $this->createMock(\Magento\Framework\App\Config\MetadataProcessor::class);
         $this->_metaDataProcessor->expects($this->any())->method('process')->will($this->returnArgument(0));
         $this->_model = new \Magento\Framework\App\Config\Data($this->_metaDataProcessor, []);
     }

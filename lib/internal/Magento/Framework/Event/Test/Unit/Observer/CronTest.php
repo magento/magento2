@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Event\Test\Unit\Observer;
@@ -10,7 +10,7 @@ use \Magento\Framework\Event\Observer\Cron;
 /**
  * Class CronTest
  */
-class CronTest extends \PHPUnit_Framework_TestCase
+class CronTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Cron
@@ -99,7 +99,7 @@ class CronTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsValidFor($time, $expression, $expectedResult)
     {
-        $eventMock = $this->getMock(\Magento\Framework\Event::class, [], [], '', false);
+        $eventMock = $this->createMock(\Magento\Framework\Event::class);
 
         $this->cron->setCronExpr($expression);
         $this->cron->setNow($time);

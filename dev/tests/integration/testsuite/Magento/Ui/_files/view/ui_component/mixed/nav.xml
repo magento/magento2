@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<nav xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd"
+     name="string"
+     template="string"
+     component="string"
+     class="string"
+     provider="string"
+     sortOrder="0"
+     displayArea="string">
+    <settings>
+
+        <opened>false</opened>
+        <collapsible>false</collapsible>
+
+    </settings>
+</nav>

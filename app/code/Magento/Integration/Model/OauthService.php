@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Model;
@@ -103,7 +103,7 @@ class OauthService implements \Magento\Integration\Api\OauthServiceInterface
      *
      * @return \Magento\Framework\Stdlib\DateTime\DateTime
      *
-     * @deprecated
+     * @deprecated 100.0.6
      */
     private function getDateHelper()
     {

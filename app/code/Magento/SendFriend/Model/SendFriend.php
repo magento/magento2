@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SendFriend\Model;
@@ -10,8 +10,6 @@ use Magento\Framework\Exception\LocalizedException as CoreException;
 /**
  * SendFriend Log
  *
- * @method \Magento\SendFriend\Model\ResourceModel\SendFriend _getResource()
- * @method \Magento\SendFriend\Model\ResourceModel\SendFriend getResource()
  * @method int getIp()
  * @method \Magento\SendFriend\Model\SendFriend setIp(int $value)
  * @method int getTime()
@@ -19,6 +17,8 @@ use Magento\Framework\Exception\LocalizedException as CoreException;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @api
  */
 class SendFriend extends \Magento\Framework\Model\AbstractModel
 {
@@ -235,7 +235,7 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
         }
 
         $email = $this->getSender()->getEmail();
-        if (empty($email) or !\Zend_Validate::is($email, 'EmailAddress')) {
+        if (empty($email) or !\Zend_Validate::is($email, \Magento\Framework\Validator\EmailAddress::class)) {
             $errors[] = __('Invalid Sender Email');
         }
 
@@ -250,7 +250,7 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
 
         // validate recipients email addresses
         foreach ($this->getRecipients()->getEmails() as $email) {
-            if (!\Zend_Validate::is($email, 'EmailAddress')) {
+            if (!\Zend_Validate::is($email, \Magento\Framework\Validator\EmailAddress::class)) {
                 $errors[] = __('Please enter a correct recipient email address.');
                 break;
             }

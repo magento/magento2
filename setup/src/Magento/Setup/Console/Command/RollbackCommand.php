@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Console\Command;
@@ -129,7 +129,6 @@ class RollbackCommand extends AbstractSetupCommand
             }
             $this->doRollback($input, $output);
             $output->writeln('<info>Please set file permission of bin/magento to executable</info>');
-
         } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
             // we must have an exit code higher than zero to indicate something was wrong

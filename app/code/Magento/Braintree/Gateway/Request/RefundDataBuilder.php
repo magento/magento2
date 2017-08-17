@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Gateway\Request;
@@ -11,6 +11,10 @@ use Magento\Payment\Helper\Formatter;
 use Magento\Sales\Api\Data\TransactionInterface;
 use Magento\Sales\Model\Order\Payment;
 
+/**
+ * Class \Magento\Braintree\Gateway\Request\RefundDataBuilder
+ *
+ */
 class RefundDataBuilder implements BuilderInterface
 {
     use Formatter;

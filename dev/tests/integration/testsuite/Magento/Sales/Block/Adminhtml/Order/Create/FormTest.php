@@ -2,7 +2,7 @@
 /**
  * Test class for \Magento\Sales\Block\Adminhtml\Order\Create\Form
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create;
@@ -10,7 +10,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create;
 /**
  * @magentoAppArea adminhtml
  */
-class FormTest extends \PHPUnit_Framework_TestCase
+class FormTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Sales\Block\Adminhtml\Order\Create\Form */
     protected $_orderCreateBlock;

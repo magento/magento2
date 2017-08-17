@@ -2,14 +2,14 @@
 /**
  * \Magento\Persistent\Model\Persistent\Config
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Persistent\Model\Persistent;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Persistent\Model\Persistent\Config

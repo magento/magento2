@@ -1,14 +1,20 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Controller\Index;
 
 use Magento\Framework\App\Action;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Serialize\Serializer\Json;
 
+/**
+ * Class \Magento\Wishlist\Controller\Index\DownloadCustomOption
+ *
+ */
 class DownloadCustomOption extends \Magento\Wishlist\Controller\AbstractIndex
 {
     /**
@@ -17,14 +23,24 @@ class DownloadCustomOption extends \Magento\Wishlist\Controller\AbstractIndex
     protected $_fileResponseFactory;
 
     /**
+     * Json Serializer Instance
+     *
+     * @var Json
+     */
+    private $json;
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileResponseFactory
+     * @param Json|null $json
      */
     public function __construct(
         Action\Context $context,
-        \Magento\Framework\App\Response\Http\FileFactory $fileResponseFactory
+        \Magento\Framework\App\Response\Http\FileFactory $fileResponseFactory,
+        Json $json = null
     ) {
         $this->_fileResponseFactory = $fileResponseFactory;
+        $this->json = $json ?: ObjectManager::getInstance()->get(Json::class);
         parent::__construct($context);
     }
 
@@ -73,7 +89,7 @@ class DownloadCustomOption extends \Magento\Wishlist\Controller\AbstractIndex
         }
 
         try {
-            $info = unserialize($option->getValue());
+            $info = $this->json->unserialize($option->getValue());
             $secretKey = $this->getRequest()->getParam('key');
 
             if ($secretKey == $info['secret_key']) {

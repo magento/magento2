@@ -1,14 +1,22 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-/**
- * Country collection
- */
 namespace Magento\Directory\Model\ResourceModel\Region;
 
+use Magento\Directory\Model\AllowedCountries;
+use Magento\Framework\App\ObjectManager;
+use Magento\Store\Model\ScopeInterface;
+
+/**
+ * Regions collection
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @api
+ */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
@@ -29,6 +37,11 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @var \Magento\Framework\Locale\ResolverInterface
      */
     protected $_localeResolver;
+
+    /**
+     * @var AllowedCountries
+     */
+    private $allowedCountriesReader;
 
     /**
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
@@ -85,6 +98,41 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             'main_table.region_id = rname.region_id AND rname.locale = :region_locale',
             ['name']
         );
+
+        return $this;
+    }
+
+    /**
+     * Return Allowed Countries reader
+     *
+     * @return \Magento\Directory\Model\AllowedCountries
+     * @deprecated 100.2.0
+     */
+    private function getAllowedCountriesReader()
+    {
+        if (!$this->allowedCountriesReader) {
+            $this->allowedCountriesReader = ObjectManager::getInstance()->get(AllowedCountries::class);
+        }
+
+        return $this->allowedCountriesReader;
+    }
+
+    /**
+     * Set allowed countries filter based on the given store.
+     * This is a convenience method for collection filtering based on store configuration settings.
+     *
+     * @param null|int|string|\Magento\Store\Model\Store $store
+     * @return \Magento\Directory\Model\ResourceModel\Region\Collection
+     * @since 100.2.0
+     */
+    public function addAllowedCountriesFilter($store = null)
+    {
+        $allowedCountries = $this->getAllowedCountriesReader()
+            ->getAllowedCountries(ScopeInterface::SCOPE_STORE, $store);
+
+        if (!empty($allowedCountries)) {
+            $this->addFieldToFilter('main_table.country_id', ['in' => $allowedCountries]);
+        }
 
         return $this;
     }
@@ -206,7 +254,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         if (count($options) > 0) {
             array_unshift(
                 $options,
-                ['title' => null, 'value' => null, 'label' => __('Please select a region, state or province.')]
+                ['title' => '', 'value' => '', 'label' => __('Please select a region, state or province.')]
             );
         }
         return $options;

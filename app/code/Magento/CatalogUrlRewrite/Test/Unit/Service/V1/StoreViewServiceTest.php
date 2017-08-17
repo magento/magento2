@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Test\Unit\Service\V1;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class StoreViewServiceTest extends \PHPUnit_Framework_TestCase
+class StoreViewServiceTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\CatalogUrlRewrite\Service\V1\StoreViewService */
     protected $storeViewService;
@@ -26,7 +26,7 @@ class StoreViewServiceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->config = $this->getMock(\Magento\Eav\Model\Config::class, [], [], '', false);
+        $this->config = $this->createMock(\Magento\Eav\Model\Config::class);
         $this->select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
             ->setMethods(['select', 'from', 'where', 'join'])
             ->disableOriginalConstructor()
@@ -34,7 +34,7 @@ class StoreViewServiceTest extends \PHPUnit_Framework_TestCase
         $this->connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->resource = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
+        $this->resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
         $this->resource->expects($this->any())->method('getConnection')->willReturn($this->connection);
 
         $this->storeViewService = (new ObjectManager($this))->getObject(

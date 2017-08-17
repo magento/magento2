@@ -1,17 +1,20 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Model;
 
 use Magento\Framework\App\Bootstrap;
+use Magento\Framework\App\Config;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
+ * Abstract class for testing product export and import scenarios
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
+abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogImportExport\Model\Export\Product
@@ -53,6 +56,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit_Framework_Te
         'custom_design_from',
         'updated_in',
         'tax_class_id',
+        'description'
     ];
 
     protected function setUp()
@@ -64,6 +68,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit_Framework_Te
         $this->productResource = $this->objectManager->create(
             \Magento\Catalog\Model\ResourceModel\Product::class
         );
+        \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType::$commonAttributesCache = [];
     }
 
     protected function tearDown()
@@ -150,7 +155,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit_Framework_Te
 
             $this->assertEquals(
                 $value,
-                $actual[$key],
+                isset($actual[$key]) ? $actual[$key] : null,
                 'Assert value at key - ' . $key . ' failed'
             );
         }

@@ -1,15 +1,18 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Test\Unit\Model\Indexer;
 
-use Magento\CatalogSearch\Model\ResourceModel\Fulltext as FulltextResource;
-use Magento\Framework\Search\Request\Config as SearchRequestConfig;
+use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\Search\Request\DimensionFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class FulltextTest extends \PHPUnit_Framework_TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class FulltextTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogSearch\Model\Indexer\Fulltext
@@ -27,11 +30,6 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
     protected $storeManager;
 
     /**
-     * @var \Magento\Framework\Search\Request\Dimension|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $dimension;
-
-    /**
      * @var \Magento\CatalogSearch\Model\Indexer\IndexerHandler|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $saveHandler;
@@ -47,26 +45,27 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
     protected $searchRequestConfig;
 
     /**
-     *
+     * @var \Magento\Framework\Search\Request\DimensionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
+    private $dimensionFactory;
+
+    /**
+     * @var \Magento\CatalogSearch\Model\Indexer\Scope\IndexSwitcher|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $indexSwitcher;
+
     protected function setUp()
     {
         $this->fullAction = $this->getClassMock(\Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full::class);
-        $fullActionFactory = $this->getMock(
+        $fullActionFactory = $this->createPartialMock(
             \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\FullFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
         $fullActionFactory->expects($this->any())->method('create')->willReturn($this->fullAction);
         $this->saveHandler = $this->getClassMock(\Magento\CatalogSearch\Model\Indexer\IndexerHandler::class);
-        $indexerHandlerFactory = $this->getMock(
+        $indexerHandlerFactory = $this->createPartialMock(
             \Magento\CatalogSearch\Model\Indexer\IndexerHandlerFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
         $indexerHandlerFactory->expects($this->any())->method('create')->willReturn($this->saveHandler);
 
@@ -80,27 +79,29 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
             []
         );
 
-        $this->dimension = $this->getClassMock(\Magento\Framework\Search\Request\Dimension::class);
-        $dimensionFactory = $this->getMock(
-            \Magento\Framework\Search\Request\DimensionFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $dimensionFactory->expects($this->any())->method('create')->willReturn($this->dimension);
+        $this->dimensionFactory = $this->createPartialMock(DimensionFactory::class, ['create']);
 
         $this->fulltextResource = $this->getClassMock(\Magento\CatalogSearch\Model\ResourceModel\Fulltext::class);
         $this->searchRequestConfig = $this->getClassMock(\Magento\Framework\Search\Request\Config::class);
 
-        $this->model = new \Magento\CatalogSearch\Model\Indexer\Fulltext(
-            $fullActionFactory,
-            $indexerHandlerFactory,
-            $this->storeManager,
-            $dimensionFactory,
-            $this->fulltextResource,
-            $this->searchRequestConfig,
-            []
+        $this->indexSwitcher = $this->getMockBuilder(\Magento\CatalogSearch\Model\Indexer\Scope\IndexSwitcher::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['switchIndex'])
+            ->getMock();
+
+        $objectManagerHelper = new ObjectManagerHelper($this);
+        $this->model = $objectManagerHelper->getObject(
+            \Magento\CatalogSearch\Model\Indexer\Fulltext::class,
+            [
+                'fullActionFactory' => $fullActionFactory,
+                'indexerHandlerFactory' => $indexerHandlerFactory,
+                'storeManager' => $this->storeManager,
+                'dimensionFactory' => $this->dimensionFactory,
+                'fulltextResource' => $this->fulltextResource,
+                'searchRequestConfig' => $this->searchRequestConfig,
+                'data' => [],
+                'indexSwitcher' => $this->indexSwitcher,
+            ]
         );
     }
 
@@ -110,7 +111,7 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
      */
     private function getClassMock($className)
     {
-        return $this->getMock($className, [], [], '', false);
+        return $this->createMock($className);
     }
 
     public function testExecute()
@@ -118,6 +119,9 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
         $ids = [1, 2, 3];
         $stores = [0 => 'Store 1', 1 => 'Store 2'];
         $indexData = new \ArrayObject([]);
+        $this->fulltextResource->expects($this->exactly(2))
+            ->method('getRelationsByChild')
+            ->willReturn($ids);
         $this->storeManager->expects($this->once())->method('getStores')->willReturn($stores);
         $this->saveHandler->expects($this->exactly(count($stores)))->method('deleteIndex');
         $this->saveHandler->expects($this->exactly(2))->method('saveIndex');
@@ -131,13 +135,42 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
     public function testExecuteFull()
     {
         $stores = [0 => 'Store 1', 1 => 'Store 2'];
-        $indexData = new \ArrayObject([]);
+        $indexData = new \ArrayObject([new \ArrayObject([]), new \ArrayObject([])]);
         $this->storeManager->expects($this->once())->method('getStores')->willReturn($stores);
-        $this->saveHandler->expects($this->exactly(count($stores)))->method('cleanIndex');
-        $this->saveHandler->expects($this->exactly(2))->method('saveIndex');
+
+        $dimensionScope1 = $this->getMockBuilder(Dimension::class)
+            ->setConstructorArgs(['scope', '1'])
+            ->getMock();
+        $dimensionScope2 = $this->getMockBuilder(Dimension::class)
+            ->setConstructorArgs(['scope', '2'])
+            ->getMock();
+
+        $this->dimensionFactory->expects($this->any())->method('create')->willReturnOnConsecutiveCalls(
+            $dimensionScope1,
+            $dimensionScope2
+        );
+        $this->indexSwitcher->expects($this->exactly(2))->method('switchIndex')
+            ->withConsecutive(
+                [$this->equalTo([$dimensionScope1])],
+                [$this->equalTo([$dimensionScope2])]
+            );
+
+        $this->saveHandler->expects($this->exactly(count($stores)))->method('cleanIndex')
+            ->withConsecutive(
+                [$this->equalTo([$dimensionScope1])],
+                [$this->equalTo([$dimensionScope2])]
+            );
+
+        $this->saveHandler->expects($this->exactly(2))->method('saveIndex')
+            ->withConsecutive(
+                [$this->equalTo([$dimensionScope1]), $this->equalTo($indexData)],
+                [$this->equalTo([$dimensionScope2]), $this->equalTo($indexData)]
+            );
         $this->fullAction->expects($this->exactly(2))
             ->method('rebuildStoreIndex')
-            ->willReturn(new \ArrayObject([$indexData, $indexData]));
+            ->withConsecutive([0], [1])
+            ->willReturn($indexData);
+
         $this->fulltextResource->expects($this->once())->method('resetSearchResults');
         $this->searchRequestConfig->expects($this->once())->method('reset');
 
@@ -149,6 +182,9 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
         $ids = [1, 2, 3];
         $stores = [0 => 'Store 1', 1 => 'Store 2'];
         $indexData = new \ArrayObject([]);
+        $this->fulltextResource->expects($this->exactly(2))
+            ->method('getRelationsByChild')
+            ->willReturn($ids);
         $this->storeManager->expects($this->once())->method('getStores')->willReturn($stores);
         $this->saveHandler->expects($this->exactly(count($stores)))->method('deleteIndex');
         $this->saveHandler->expects($this->exactly(2))->method('saveIndex');
@@ -164,6 +200,9 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
         $id = 1;
         $stores = [0 => 'Store 1', 1 => 'Store 2'];
         $indexData = new \ArrayObject([]);
+        $this->fulltextResource->expects($this->exactly(2))
+            ->method('getRelationsByChild')
+            ->willReturn([$id]);
         $this->storeManager->expects($this->once())->method('getStores')->willReturn($stores);
         $this->saveHandler->expects($this->exactly(count($stores)))->method('deleteIndex');
         $this->saveHandler->expects($this->exactly(2))->method('saveIndex');

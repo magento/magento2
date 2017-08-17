@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Api\Data;
@@ -110,10 +110,10 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Credit card expiration month.
      */
     const CC_EXP_MONTH = 'cc_exp_month';
-    
+
     /**
      * Credit card SS start year.
-     * 
+     *
      * @deprecated unused constant
      */
     const CC_SS_START_YEAR = 'cc_ss_start_year';
@@ -157,10 +157,10 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Credit card debug response serialized.
      */
     const CC_DEBUG_RESPONSE_SERIALIZED = 'cc_debug_response_serialized';
-    
+
     /**
      * Credit card SS start month.
-     * 
+     *
      * @deprecated unused constant
      */
     const CC_SS_START_MONTH = 'cc_ss_start_month';
@@ -212,10 +212,10 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Credit card debug response body.
      */
     const CC_DEBUG_RESPONSE_BODY = 'cc_debug_response_body';
-    
+
     /**
      * Credit card SS issue.
-     * 
+     *
      * @deprecated unused constant
      */
     const CC_SS_ISSUE = 'cc_ss_issue';
@@ -472,7 +472,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Gets the credit card SS issue for the order payment.
      *
      * @return string|null Credit card SS issue.
-     * @deprecated unused
+     * @deprecated 100.1.0 unused
      */
     public function getCcSsIssue();
 
@@ -480,7 +480,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Gets the credit card SS start month for the order payment.
      *
      * @return string|null Credit card SS start month.
-     * @deprecated unused
+     * @deprecated 100.1.0 unused
      */
     public function getCcSsStartMonth();
 
@@ -488,7 +488,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Gets the credit card SS start year for the order payment.
      *
      * @return string|null Credit card SS start year.
-     * @deprecated unused
+     * @deprecated 100.1.0 unused
      */
     public function getCcSsStartYear();
 

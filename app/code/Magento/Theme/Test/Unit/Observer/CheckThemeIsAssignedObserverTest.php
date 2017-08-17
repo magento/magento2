@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Theme\Test\Unit\Observer;
 
-class CheckThemeIsAssignedObserverTest extends \PHPUnit_Framework_TestCase
+class CheckThemeIsAssignedObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Theme\Model\Config\Customization|\PHPUnit_Framework_MockObject_MockObject
@@ -64,6 +64,7 @@ class CheckThemeIsAssignedObserverTest extends \PHPUnit_Framework_TestCase
             ->method('dispatch')
             ->with('assigned_theme_changed', ['theme' => $themeMock]);
 
-        $this->themeObserver->execute($observerMock);
+        $result = $this->themeObserver->execute($observerMock);
+        $this->assertNull($result);
     }
 }

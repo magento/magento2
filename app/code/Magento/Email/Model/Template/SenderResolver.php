@@ -1,10 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Model\Template;
 
+/**
+ * Class \Magento\Email\Model\Template\SenderResolver
+ *
+ */
 class SenderResolver implements \Magento\Framework\Mail\Template\SenderResolverInterface
 {
     /**

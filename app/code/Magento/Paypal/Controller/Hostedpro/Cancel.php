@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Controller\Hostedpro;
@@ -9,6 +9,10 @@ namespace Magento\Paypal\Controller\Hostedpro;
 use Magento\Framework\App\Action\Context;
 use Magento\Paypal\Helper\Checkout;
 
+/**
+ * Class \Magento\Paypal\Controller\Hostedpro\Cancel
+ *
+ */
 class Cancel extends \Magento\Framework\App\Action\Action
 {
     /**

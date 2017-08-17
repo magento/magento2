@@ -1,12 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Rule\Model\Renderer;
 
 use Magento\Framework\Data\Form\Element\AbstractElement;
 
+/**
+ * Class \Magento\Rule\Model\Renderer\Actions
+ *
+ */
 class Actions implements \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
 {
     /**

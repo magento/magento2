@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,20 +9,26 @@ namespace Magento\Framework\Indexer;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
-use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver;
 use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
+use Magento\Framework\Search\Request\Dimension;
 
+/**
+ * Class \Magento\Framework\Indexer\IndexStructure
+ *
+ */
 class IndexStructure implements IndexStructureInterface
 {
     /**
      * @var Resource
      */
     private $resource;
+
     /**
      * @var \Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver
      */
     private $indexScopeResolver;
+
     /**
      * @var FlatScopeResolver
      */

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Newsletter\Test\Unit\Model\Queue;
@@ -8,7 +8,7 @@ namespace Magento\Newsletter\Test\Unit\Model\Queue;
 use Magento\Framework\App\TemplateTypesInterface;
 use Magento\Framework\Mail\MessageInterface;
 
-class TransportBuilderTest extends \PHPUnit_Framework_TestCase
+class TransportBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string
@@ -51,10 +51,10 @@ class TransportBuilderTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->templateFactoryMock = $this->getMock(\Magento\Framework\Mail\Template\FactoryInterface::class);
-        $this->messageMock = $this->getMock(\Magento\Framework\Mail\Message::class);
-        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
-        $this->senderResolverMock = $this->getMock(\Magento\Framework\Mail\Template\SenderResolverInterface::class);
+        $this->templateFactoryMock = $this->createMock(\Magento\Framework\Mail\Template\FactoryInterface::class);
+        $this->messageMock = $this->createMock(\Magento\Framework\Mail\Message::class);
+        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->senderResolverMock = $this->createMock(\Magento\Framework\Mail\Template\SenderResolverInterface::class);
         $this->mailTransportFactoryMock = $this->getMockBuilder(
             \Magento\Framework\Mail\TransportInterfaceFactory::class
         )->disableOriginalConstructor()
@@ -74,17 +74,15 @@ class TransportBuilderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param int $templateType
-     * @param string $messageType
      * @param string $bodyText
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testGetTransport(
         $templateType = TemplateTypesInterface::TYPE_HTML,
-        $messageType = MessageInterface::TYPE_HTML,
         $bodyText = '<h1>Html message</h1>'
     ) {
-        $filter = $this->getMock(\Magento\Email\Model\Template\Filter::class, [], [], '', false);
+        $filter = $this->createMock(\Magento\Email\Model\Template\Filter::class);
         $data = [
             'template_subject' => 'Email Subject',
             'template_text' => $bodyText,
@@ -94,7 +92,7 @@ class TransportBuilderTest extends \PHPUnit_Framework_TestCase
         ];
         $vars = ['reason' => 'Reason', 'customer' => 'Customer'];
         $options = ['area' => 'frontend', 'store' => 1];
-        $template = $this->getMock(\Magento\Email\Model\Template::class, [], [], '', false);
+        $template = $this->createMock(\Magento\Email\Model\Template::class);
         $template->expects($this->once())->method('setVars')->with($this->equalTo($vars))->will($this->returnSelf());
         $template->expects(
             $this->once()
@@ -137,23 +135,14 @@ class TransportBuilderTest extends \PHPUnit_Framework_TestCase
         $this->messageMock->expects(
             $this->once()
         )->method(
-            'setMessageType'
-        )->with(
-            $this->equalTo($messageType)
-        )->will(
-            $this->returnSelf()
-        );
-        $this->messageMock->expects(
-            $this->once()
-        )->method(
-            'setBody'
+            'setBodyHtml'
         )->with(
             $this->equalTo($bodyText)
         )->will(
             $this->returnSelf()
         );
 
-        $transport = $this->getMock(\Magento\Framework\Mail\TransportInterface::class);
+        $transport = $this->createMock(\Magento\Framework\Mail\TransportInterface::class);
 
         $this->mailTransportFactoryMock->expects(
             $this->at(0)

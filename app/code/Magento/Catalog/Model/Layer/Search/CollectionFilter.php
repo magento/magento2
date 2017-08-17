@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Layer\Search;
@@ -11,6 +11,10 @@ use Magento\Catalog\Model\Product\Visibility;
 use Magento\Framework\DB\Select;
 use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * Class \Magento\Catalog\Model\Layer\Search\CollectionFilter
+ *
+ */
 class CollectionFilter implements CollectionFilterInterface
 {
     /**

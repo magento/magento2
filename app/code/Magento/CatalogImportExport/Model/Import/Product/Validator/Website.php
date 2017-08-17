@@ -1,14 +1,17 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Model\Import\Product\Validator;
 
-use Magento\CatalogImportExport\Model\Import\Product\Validator\AbstractImportValidator;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 
+/**
+ * Class \Magento\CatalogImportExport\Model\Import\Product\Validator\Website
+ *
+ */
 class Website extends AbstractImportValidator implements RowValidatorInterface
 {
     /**
@@ -22,14 +25,6 @@ class Website extends AbstractImportValidator implements RowValidatorInterface
     public function __construct(\Magento\CatalogImportExport\Model\Import\Product\StoreResolver $storeResolver)
     {
         $this->storeResolver = $storeResolver;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function init($context)
-    {
-        return parent::init($context);
     }
 
     /**

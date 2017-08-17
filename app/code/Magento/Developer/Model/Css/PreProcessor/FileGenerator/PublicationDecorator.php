@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Developer\Model\Css\PreProcessor\FileGenerator;
@@ -12,14 +12,11 @@ use Magento\Framework\App\State;
 use Magento\Framework\App\View\Asset\Publisher;
 use Magento\Framework\Css\PreProcessor\File\Temporary;
 use Magento\Framework\Css\PreProcessor\FileGenerator\RelatedGenerator;
-use Magento\Framework\Filesystem;
 use Magento\Framework\View\Asset\LocalInterface;
 use Magento\Framework\View\Asset\Repository;
 
 /**
- * Class PublicationDecorator
- *
- * Decorates generator of related assets and publishes them
+ * Decorator for publishing of related assets
  */
 class PublicationDecorator extends RelatedGenerator
 {
@@ -46,7 +43,6 @@ class PublicationDecorator extends RelatedGenerator
     /**
      * Constructor
      *
-     * @param Filesystem $filesystem
      * @param Repository $assetRepository
      * @param Temporary $temporaryFile
      * @param Publisher $assetPublisher
@@ -54,14 +50,13 @@ class PublicationDecorator extends RelatedGenerator
      * @param bool $hasRelatedPublishing
      */
     public function __construct(
-        Filesystem $filesystem,
         Repository $assetRepository,
         Temporary $temporaryFile,
         Publisher $assetPublisher,
         ScopeConfigInterface $scopeConfig,
         $hasRelatedPublishing = false
     ) {
-        parent::__construct($filesystem, $assetRepository, $temporaryFile);
+        parent::__construct($assetRepository, $temporaryFile);
         $this->assetPublisher = $assetPublisher;
         $this->scopeConfig = $scopeConfig;
         $this->hasRelatedPublishing = $hasRelatedPublishing;
@@ -86,7 +81,7 @@ class PublicationDecorator extends RelatedGenerator
 
     /**
      * @return State
-     * @deprecated
+     * @deprecated 100.2.0
      */
     private function getState()
     {

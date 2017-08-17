@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,6 +10,10 @@ namespace Magento\Shipping\Model;
 
 use Magento\Sales\Model\Order\Shipment;
 
+/**
+ * Class \Magento\Shipping\Model\Info
+ *
+ */
 class Info extends \Magento\Framework\DataObject
 {
     /**

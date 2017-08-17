@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Persistent\Model\Checkout;
@@ -11,6 +11,10 @@ use Magento\Persistent\Helper\Data as PersistentHelper;
 use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Quote\Model\AddressAdditionalDataProcessor;
 
+/**
+ * Class \Magento\Persistent\Model\Checkout\AddressDataProcessorPlugin
+ *
+ */
 class AddressDataProcessorPlugin
 {
     /**

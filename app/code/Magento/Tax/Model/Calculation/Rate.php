@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,8 +16,6 @@ use Magento\Tax\Api\Data\TaxRateInterface;
 /**
  * Tax Rate Model
  *
- * @method \Magento\Tax\Model\ResourceModel\Calculation\Rate _getResource()
- * @method \Magento\Tax\Model\ResourceModel\Calculation\Rate getResource()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements TaxRateInterface
@@ -38,11 +36,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
     const KEY_TITLES          = 'titles';
     /**#@-*/
 
-    /**
-     * List of tax titles
-     *
-     * @var array
-     */
+    /**#@-*/
     protected $_titles = null;
 
     /**
@@ -400,6 +394,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
     {
         return $this->getData(self::KEY_ZIP_IS_RANGE);
     }
+
     /**
      * Set country id
      *
@@ -509,6 +504,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
     {
         return $this->setData(self::KEY_TITLES, $titles);
     }
+
     // @codeCoverageIgnoreEnd
 
     /**

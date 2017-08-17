@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Developer\Model\View\Asset\PreProcessor;
@@ -15,6 +15,8 @@ use Magento\Framework\View\Asset\Source;
 
 /**
  * Class FrontendCompilation
+ *
+ * @api
  */
 class FrontendCompilation implements PreProcessorInterface
 {

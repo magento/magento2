@@ -1,6 +1,6 @@
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -22,9 +22,8 @@
             <table class="admin__dynamic-rows admin__control-table" data-role="grid" attr="{'data-index': index}">
                 <thead if="element.columnsHeader">
                     <tr>
-                        <th if="dndConfig.enabled"/>
+                        <th if="dndConfig.enabled" />
                         <th repeat="foreach: labels, item: '$label'"
-                            text="$label().label"
                             css="setClasses($label())"
                             visible="$label().visible"
                             disable="$label().disabled">

@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Test\Unit\Block;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class FormTest extends \PHPUnit_Framework_TestCase
+class FormTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Review\Block\Form */
     protected $object;
@@ -37,10 +37,13 @@ class FormTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\UrlInterface|PHPUnit_Framework_MockObject_MockObject */
     protected $urlBuilder;
 
+    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject */
+    private $serializerMock;
+
     protected function setUp()
     {
-        $this->storeManager = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->requestMock = $this->getMock(\Magento\Framework\App\RequestInterface::class);
+        $this->storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
         $this->reviewDataMock = $this->getMockBuilder(\Magento\Review\Helper\Data::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -50,7 +53,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
             ->willReturn(true);
 
         $this->urlBuilder = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)->getMockForAbstractClass();
-        $this->context = $this->getMock(\Magento\Framework\View\Element\Template\Context::class, [], [], '', false);
+        $this->context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
         $this->context->expects(
             $this->any()
         )->method(
@@ -62,7 +65,9 @@ class FormTest extends \PHPUnit_Framework_TestCase
             ->method('getRequest')
             ->willReturn($this->requestMock);
         $this->context->expects($this->any())->method('getUrlBuilder')->willReturn($this->urlBuilder);
-        $this->productRepository = $this->getMock(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        $this->productRepository = $this->createMock(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+
+        $this->serializerMock = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)->getMock();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->object = $this->objectManagerHelper->getObject(
@@ -71,6 +76,12 @@ class FormTest extends \PHPUnit_Framework_TestCase
                 'context' => $this->context,
                 'reviewData' => $this->reviewDataMock,
                 'productRepository' => $this->productRepository,
+                'data' => [
+                    'jsLayout' => [
+                        'some-layout' => 'layout information'
+                    ]
+                ],
+                'serializer' => $this->serializerMock
             ]
         );
     }
@@ -93,7 +104,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
             ->with('id', false)
             ->willReturn($productId);
 
-        $productMock = $this->getMock(\Magento\Catalog\Api\Data\ProductInterface::class);
+        $productMock = $this->createMock(\Magento\Catalog\Api\Data\ProductInterface::class);
         $this->productRepository->expects($this->once())
             ->method('getById')
             ->with($productId, false, $storeId)
@@ -131,5 +142,16 @@ class FormTest extends \PHPUnit_Framework_TestCase
             [false, 'http://localhost/review/product/post', 3],
             [true, 'https://localhost/review/product/post' ,3],
         ];
+    }
+
+    public function testGetJsLayout()
+    {
+        $jsLayout = [
+            'some-layout' => 'layout information'
+        ];
+
+        $this->serializerMock->expects($this->once())->method('serialize')
+            ->will($this->returnValue(json_encode($jsLayout)));
+        $this->assertEquals('{"some-layout":"layout information"}', $this->object->getJsLayout());
     }
 }

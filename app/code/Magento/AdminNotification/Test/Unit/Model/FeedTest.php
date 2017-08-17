@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\AdminNotification\Test\Unit\Model;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class FeedTest extends \PHPUnit_Framework_TestCase
+class FeedTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\AdminNotification\Model\Feed */
     protected $feed;
@@ -52,34 +52,19 @@ class FeedTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->inboxFactory = $this->getMock(
+        $this->inboxFactory = $this->createPartialMock(
             \Magento\AdminNotification\Model\InboxFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->curlFactory = $this->getMock(
-            \Magento\Framework\HTTP\Adapter\CurlFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
+        $this->curlFactory = $this->createPartialMock(\Magento\Framework\HTTP\Adapter\CurlFactory::class, ['create']);
         $this->curl = $this->getMockBuilder(\Magento\Framework\HTTP\Adapter\Curl::class)
             ->disableOriginalConstructor()->getMock();
-        $this->appState = $this->getMock(\Magento\Framework\App\State::class, ['getInstallDate'], [], '', false);
-        $this->inboxModel = $this->getMock(
-            \Magento\AdminNotification\Model\Inbox::class,
-            [
+        $this->appState = $this->createPartialMock(\Magento\Framework\App\State::class, ['getInstallDate']);
+        $this->inboxModel = $this->createPartialMock(\Magento\AdminNotification\Model\Inbox::class, [
                 '__wakeup',
                 'parse'
-            ],
-            [],
-            '',
-            false
-        );
-        $this->backendConfig = $this->getMock(
+            ]);
+        $this->backendConfig = $this->createPartialMock(
             \Magento\Backend\App\ConfigInterface::class,
             [
                 'getValue',
@@ -87,7 +72,7 @@ class FeedTest extends \PHPUnit_Framework_TestCase
                 'isSetFlag'
             ]
         );
-        $this->cacheManager = $this->getMock(
+        $this->cacheManager = $this->createPartialMock(
             \Magento\Framework\App\CacheInterface::class,
             [
                 'load',
@@ -106,7 +91,7 @@ class FeedTest extends \PHPUnit_Framework_TestCase
         $this->productMetadata = $this->getMockBuilder(\Magento\Framework\App\ProductMetadata::class)
             ->disableOriginalConstructor()->getMock();
 
-        $this->urlBuilder = $this->getMock(\Magento\Framework\UrlInterface::class);
+        $this->urlBuilder = $this->createMock(\Magento\Framework\UrlInterface::class);
 
         $this->feed = $this->objectManagerHelper->getObject(
             \Magento\AdminNotification\Model\Feed::class,

@@ -1,9 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 /* Create attribute */
 /** @var $installer \Magento\Catalog\Setup\CategorySetup */
 $installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
@@ -25,7 +24,7 @@ $attribute->setData(
         'is_searchable' => 0,
         'is_visible_in_advanced_search' => 0,
         'is_comparable' => 0,
-        'is_filterable' => 0,
+        'is_filterable' => 1,
         'is_filterable_in_search' => 0,
         'is_used_for_promo_rules' => 0,
         'is_html_allowed_on_front' => 1,

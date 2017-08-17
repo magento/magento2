@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,6 +13,10 @@ namespace Magento\Eav\Model\ResourceModel\Form\Type;
 
 use Magento\Eav\Model\Entity\Type;
 
+/**
+ * Class \Magento\Eav\Model\ResourceModel\Form\Type\Collection
+ *
+ */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**

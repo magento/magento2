@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRule\Plugin\Indexer\Product;
@@ -12,6 +12,10 @@ use Magento\CatalogRule\Model\Rule\Condition\Combine;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Rule\Model\Condition\Product\AbstractProduct;
 
+/**
+ * Class \Magento\CatalogRule\Plugin\Indexer\Product\Attribute
+ *
+ */
 class Attribute
 {
     /**

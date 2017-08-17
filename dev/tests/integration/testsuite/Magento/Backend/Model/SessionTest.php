@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Model;
@@ -10,14 +10,14 @@ namespace Magento\Backend\Model;
  *
  * @magentoAppArea adminhtml
  */
-class SessionTest extends \PHPUnit_Framework_TestCase
+class SessionTest extends \PHPUnit\Framework\TestCase
 {
     public function testContructor()
     {
         if (array_key_exists('adminhtml', $_SESSION)) {
             unset($_SESSION['adminhtml']);
         }
-        $logger = $this->getMock(\Psr\Log\LoggerInterface::class, [], [], '', false);
+        $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Backend\Model\Session::class,
             [$logger]

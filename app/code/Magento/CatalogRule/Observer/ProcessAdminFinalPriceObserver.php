@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -17,6 +17,10 @@ use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Registry;
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class \Magento\CatalogRule\Observer\ProcessAdminFinalPriceObserver
+ *
+ */
 class ProcessAdminFinalPriceObserver implements ObserverInterface
 {
     /**
@@ -36,7 +40,9 @@ class ProcessAdminFinalPriceObserver implements ObserverInterface
      */
     protected $resourceRuleFactory;
 
-    /** @var RulePricesStorage  */
+    /**
+     * @var \Magento\CatalogRule\Observer\RulePricesStorage
+     */
     protected $rulePricesStorage;
 
     /**

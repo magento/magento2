@@ -3,11 +3,15 @@
  * Router list
  * Used as a container for list of routers
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App;
 
+/**
+ * Class \Magento\Framework\App\RouterList
+ *
+ */
 class RouterList implements RouterListInterface
 {
     /**
@@ -29,7 +33,6 @@ class RouterList implements RouterListInterface
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, array $routerList)
     {
         $this->objectManager = $objectManager;
-        $this->routerList = $routerList;
         $this->routerList = array_filter(
             $routerList,
             function ($item) {

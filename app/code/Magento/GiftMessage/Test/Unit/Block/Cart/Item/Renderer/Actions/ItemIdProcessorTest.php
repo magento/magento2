@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GiftMessage\Test\Unit\Block\Cart\Item\Renderer\Actions;
@@ -8,7 +8,7 @@ namespace Magento\GiftMessage\Test\Unit\Block\Cart\Item\Renderer\Actions;
 use Magento\GiftMessage\Block\Cart\Item\Renderer\Actions\ItemIdProcessor;
 use Magento\Quote\Model\Quote\Item;
 
-class ItemIdProcessorTest extends \PHPUnit_Framework_TestCase
+class ItemIdProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /** @var ItemIdProcessor */
     protected $model;

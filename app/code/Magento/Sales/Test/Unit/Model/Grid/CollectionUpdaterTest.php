@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@
 
 namespace Magento\Sales\Test\Unit\Model\Grid;
 
-class CollectionUpdaterTest extends \PHPUnit_Framework_TestCase
+class CollectionUpdaterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\Grid\CollectionUpdater
@@ -22,7 +22,7 @@ class CollectionUpdaterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->registryMock = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
+        $this->registryMock = $this->createMock(\Magento\Framework\Registry::class);
 
         $this->collectionUpdater = new \Magento\Sales\Model\Grid\CollectionUpdater(
             $this->registryMock
@@ -31,9 +31,7 @@ class CollectionUpdaterTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateIfOrderNotExists()
     {
-        $collectionMock = $this->getMock(
-            \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\Collection::class, [], [], '', false
-        );
+        $collectionMock = $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\Collection::class);
         $this->registryMock
             ->expects($this->once())
             ->method('registry')
@@ -50,10 +48,8 @@ class CollectionUpdaterTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateIfOrderExists()
     {
-        $collectionMock = $this->getMock(
-            \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\Collection::class, [], [], '', false
-        );
-        $orderMock = $this->getMock(\Magento\Sales\Model\Order::class, [], [], '', false);
+        $collectionMock = $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\Collection::class);
+        $orderMock = $this->createMock(\Magento\Sales\Model\Order::class);
         $this->registryMock
             ->expects($this->once())
             ->method('registry')

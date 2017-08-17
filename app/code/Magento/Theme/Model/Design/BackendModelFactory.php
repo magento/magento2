@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model\Design;
@@ -11,6 +11,10 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Theme\Model\Design\Config\MetadataProvider;
 use Magento\Theme\Model\ResourceModel\Design\Config\CollectionFactory;
 
+/**
+ * Class \Magento\Theme\Model\Design\BackendModelFactory
+ *
+ */
 class BackendModelFactory extends ValueFactory
 {
     /**

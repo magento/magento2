@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Search\Model;
@@ -9,7 +9,7 @@ namespace Magento\Search\Model;
  * @magentoDbIsolation disabled
  * @magentoDataFixture Magento/Search/_files/synonym_reader.php
  */
-class SynonymReaderTest extends \PHPUnit_Framework_TestCase
+class SynonymReaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Search\Model\SynonymReader
@@ -47,7 +47,7 @@ class SynonymReaderTest extends \PHPUnit_Framework_TestCase
                 'MONARCH English', [
                 ['synonyms' => 'queen,monarch', 'store_id' => 1, 'website_id' => 0],
                 ['synonyms' => 'british,english', 'store_id' => 1, 'website_id' => 0]
-            ]
+                ]
             ]
         ];
     }

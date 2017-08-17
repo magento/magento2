@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog;
@@ -9,6 +9,10 @@ namespace Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog;
 use Magento\CatalogRule\Model\Rule\Job;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog\ApplyRules
+ *
+ */
 class ApplyRules extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
 {
     /**

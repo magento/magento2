@@ -2,11 +2,15 @@
 /**
  * Magento Authorization component. Can be used to add authorization facility to any application
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework;
 
+/**
+ * Class \Magento\Framework\Authorization
+ *
+ */
 class Authorization implements \Magento\Framework\AuthorizationInterface
 {
     /**

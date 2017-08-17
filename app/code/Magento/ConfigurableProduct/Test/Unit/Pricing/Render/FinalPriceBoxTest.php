@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Pricing\Render;
@@ -11,7 +11,7 @@ use Magento\ConfigurableProduct\Pricing\Price\LowestPriceOptionsProviderInterfac
 use Magento\ConfigurableProduct\Pricing\Render\FinalPriceBox;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
+class FinalPriceBoxTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Element\Template\Context|\PHPUnit_Framework_MockObject_MockObject

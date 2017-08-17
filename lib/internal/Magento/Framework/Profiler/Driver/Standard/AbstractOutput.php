@@ -2,11 +2,15 @@
 /**
  * Abstract class that represents profiler standard driver output
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Profiler\Driver\Standard;
 
+/**
+ * Class \Magento\Framework\Profiler\Driver\Standard\AbstractOutput
+ *
+ */
 abstract class AbstractOutput implements OutputInterface
 {
     /**

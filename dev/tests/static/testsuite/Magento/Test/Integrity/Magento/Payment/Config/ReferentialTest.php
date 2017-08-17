@@ -2,12 +2,12 @@
 /**
  * Validates that payment groups referenced from store configuration matches the groups declared in payment.xml
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity\Magento\Payment\Config;
 
-class ReferentialTest extends \PHPUnit_Framework_TestCase
+class ReferentialTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string[] $usedGroups all payment groups used in store configuration

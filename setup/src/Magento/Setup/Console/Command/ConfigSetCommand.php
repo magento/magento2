@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,6 +13,10 @@ use Magento\Setup\Model\ConfigModel;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Class \Magento\Setup\Console\Command\ConfigSetCommand
+ *
+ */
 class ConfigSetCommand extends AbstractSetupCommand
 {
     /**

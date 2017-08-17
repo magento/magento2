@@ -1,10 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\Config\Backend\CreateAccount;
 
+/**
+ * Class \Magento\Customer\Model\Config\Backend\CreateAccount\DisableAutoGroupAssignDefault
+ *
+ */
 class DisableAutoGroupAssignDefault extends \Magento\Framework\App\Config\Value
 {
     /**

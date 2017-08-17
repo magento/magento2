@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,6 +12,10 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Magento\Setup\Model\InstallerFactory;
 use Magento\Framework\Setup\ConsoleLogger;
 
+/**
+ * Class \Magento\Setup\Console\Command\UninstallCommand
+ *
+ */
 class UninstallCommand extends AbstractSetupCommand
 {
     /**

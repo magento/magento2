@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Entity\Product\Attribute\Design\Options;
@@ -24,7 +24,7 @@ class Container extends \Magento\Eav\Model\Entity\Attribute\Source\Config
         if (sizeof($options) > 0) {
             foreach ($options as $option) {
                 if (isset($option['value']) && $option['value'] == $value) {
-                    return $option['label'];
+                    return __($option['label']);
                 }
             }
         }

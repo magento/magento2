@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Test\Unit\Model\Spi;
@@ -13,7 +13,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class StockStateProviderTest extends \PHPUnit_Framework_TestCase
+class StockStateProviderTest extends \PHPUnit\Framework\TestCase
 {
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
@@ -109,13 +109,7 @@ class StockStateProviderTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->mathDivision = $this->getMock(
-            \Magento\Framework\Math\Division::class,
-            ['getExactDivision'],
-            [],
-            '',
-            false
-        );
+        $this->mathDivision = $this->createPartialMock(\Magento\Framework\Math\Division::class, ['getExactDivision']);
 
         $this->localeFormat = $this->getMockForAbstractClass(
             \Magento\Framework\Locale\FormatInterface::class,
@@ -126,17 +120,14 @@ class StockStateProviderTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->qty);
 
         $this->object = $this->objectManagerHelper->getObject(\Magento\Framework\DataObject::class);
-        $this->objectFactory = $this->getMock(\Magento\Framework\DataObject\Factory::class, ['create'], [], '', false);
+        $this->objectFactory = $this->createPartialMock(\Magento\Framework\DataObject\Factory::class, ['create']);
         $this->objectFactory->expects($this->any())->method('create')->willReturn($this->object);
 
-        $this->product = $this->getMock(
+        $this->product = $this->createPartialMock(
             \Magento\Catalog\Model\Product::class,
-            ['load', 'isComposite', '__wakeup', 'isSaleable'],
-            [],
-            '',
-            false
+            ['load', 'isComposite', '__wakeup', 'isSaleable']
         );
-        $this->productFactory = $this->getMock(\Magento\Catalog\Model\ProductFactory::class, ['create'], [], '', false);
+        $this->productFactory = $this->createPartialMock(\Magento\Catalog\Model\ProductFactory::class, ['create']);
         $this->productFactory->expects($this->any())->method('create')->willReturn($this->product);
 
         $this->stockStateProvider = $this->objectManagerHelper->getObject(

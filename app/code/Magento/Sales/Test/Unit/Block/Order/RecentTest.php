@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Block\Order;
 
-class RecentTest extends \PHPUnit_Framework_TestCase
+class RecentTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Block\Order\Recent
@@ -34,37 +34,15 @@ class RecentTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->context = $this->getMock(
-            \Magento\Framework\View\Element\Template\Context::class,
-            [],
-            [],
-            '',
-            false,
-            false
-        );
-        $this->orderCollectionFactory = $this->getMock(
+        $this->context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
+        $this->orderCollectionFactory = $this->createPartialMock(
             \Magento\Sales\Model\ResourceModel\Order\CollectionFactory::class,
-            ['create'],
-            [],
-            '',
-            false,
-            false
+            ['create']
         );
-        $this->customerSession = $this->getMock(
-            \Magento\Customer\Model\Session::class,
-            ['getCustomerId'],
-            [],
-            '',
-            false,
-            false
-        );
-        $this->orderConfig = $this->getMock(
+        $this->customerSession = $this->createPartialMock(\Magento\Customer\Model\Session::class, ['getCustomerId']);
+        $this->orderConfig = $this->createPartialMock(
             \Magento\Sales\Model\Order\Config::class,
-            ['getVisibleOnFrontStatuses'],
-            [],
-            '',
-            false,
-            false
+            ['getVisibleOnFrontStatuses']
         );
     }
 
@@ -73,7 +51,7 @@ class RecentTest extends \PHPUnit_Framework_TestCase
         $data = [];
         $attribute = ['customer_id', 'status'];
         $customerId = 25;
-        $layout = $this->getMock(\Magento\Framework\View\Layout::class, ['getBlock'], [], '', false, false);
+        $layout = $this->createPartialMock(\Magento\Framework\View\Layout::class, ['getBlock']);
         $this->context->expects($this->once())
             ->method('getLayout')
             ->will($this->returnValue($layout));
@@ -86,21 +64,14 @@ class RecentTest extends \PHPUnit_Framework_TestCase
             ->method('getVisibleOnFrontStatuses')
             ->will($this->returnValue($statuses));
 
-        $orderCollection = $this->getMock(
-            \Magento\Sales\Model\ResourceModel\Order\Collection::class,
-            [
+        $orderCollection = $this->createPartialMock(\Magento\Sales\Model\ResourceModel\Order\Collection::class, [
                 'addAttributeToSelect',
                 'addFieldToFilter',
                 'addAttributeToFilter',
                 'addAttributeToSort',
                 'setPageSize',
                 'load'
-            ],
-            [],
-            '',
-            false,
-            false
-        );
+            ]);
         $this->orderCollectionFactory->expects($this->once())
             ->method('create')
             ->will($this->returnValue($orderCollection));

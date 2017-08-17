@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct\Columns;
@@ -9,6 +9,10 @@ use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
+/**
+ * Class \Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct\Columns\Name
+ *
+ */
 class Name extends \Magento\Ui\Component\Listing\Columns\Column
 {
     /**

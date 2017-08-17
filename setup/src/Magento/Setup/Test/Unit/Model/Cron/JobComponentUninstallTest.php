@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Model\Cron;
@@ -13,7 +13,7 @@ use Magento\Framework\Composer\ComposerInformation;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class JobComponentUninstallTest extends \PHPUnit_Framework_TestCase
+class JobComponentUninstallTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var JobComponentUninstall
@@ -73,30 +73,12 @@ class JobComponentUninstallTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->status = $this->getMock(\Magento\Setup\Model\Cron\Status::class, [], [], '', false);
-        $this->moduleUninstallHelper = $this->getMock(
-            \Magento\Setup\Model\Cron\Helper\ModuleUninstall::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->themeUninstallHelper = $this->getMock(
-            \Magento\Setup\Model\Cron\Helper\ThemeUninstall::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->composerInformation = $this->getMock(
-            \Magento\Framework\Composer\ComposerInformation::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->status = $this->createMock(\Magento\Setup\Model\Cron\Status::class);
+        $this->moduleUninstallHelper = $this->createMock(\Magento\Setup\Model\Cron\Helper\ModuleUninstall::class);
+        $this->themeUninstallHelper = $this->createMock(\Magento\Setup\Model\Cron\Helper\ThemeUninstall::class);
+        $this->composerInformation = $this->createMock(\Magento\Framework\Composer\ComposerInformation::class);
         $this->objectManagerProvider =
-            $this->getMock(\Magento\Setup\Model\ObjectManagerProvider::class, [], [], '', false);
+            $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);
         $this->objectManager = $this->getMockForAbstractClass(
             \Magento\Framework\ObjectManagerInterface::class,
             [],
@@ -104,12 +86,12 @@ class JobComponentUninstallTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $packageInfoFactory = $this->getMock(\Magento\Framework\Module\PackageInfoFactory::class, [], [], '', false);
-        $packageInfo = $this->getMock(\Magento\Framework\Module\PackageInfo::class, [], [], '', false);
+        $packageInfoFactory = $this->createMock(\Magento\Framework\Module\PackageInfoFactory::class);
+        $packageInfo = $this->createMock(\Magento\Framework\Module\PackageInfo::class);
         $packageInfoFactory->expects($this->any())->method('create')->willReturn($packageInfo);
         $this->objectManagerProvider->expects($this->any())->method('get')->willReturn($this->objectManager);
-        $this->updater = $this->getMock(\Magento\Setup\Model\Updater::class, [], [], '', false);
-        $this->quence = $this->getMock(\Magento\Setup\Model\Cron\Queue::class, ['addJobs'], [], '', false);
+        $this->updater = $this->createMock(\Magento\Setup\Model\Updater::class);
+        $this->quence = $this->createPartialMock(\Magento\Setup\Model\Cron\Queue::class, ['addJobs']);
     }
 
     private function setUpUpdater()

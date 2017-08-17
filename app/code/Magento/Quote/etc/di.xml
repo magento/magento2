@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -17,16 +17,16 @@
     <preference for="Magento\Quote\Api\CartItemRepositoryInterface" type="Magento\Quote\Model\Quote\Item\Repository" />
     <preference for="Magento\Quote\Api\CartRepositoryInterface" type="Magento\Quote\Model\QuoteRepository" />
     <preference for="Magento\Quote\Api\Data\CartSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
-    <preference for="Magento\Quote\Api\PaymentMethodManagementInterface" type="\Magento\Quote\Model\PaymentMethodManagement" />
-    <preference for="Magento\Quote\Api\Data\PaymentInterface" type="\Magento\Quote\Model\Quote\Payment" />
+    <preference for="Magento\Quote\Api\PaymentMethodManagementInterface" type="Magento\Quote\Model\PaymentMethodManagement" />
+    <preference for="Magento\Quote\Api\Data\PaymentInterface" type="Magento\Quote\Model\Quote\Payment" />
     <preference for="Magento\Quote\Api\CouponManagementInterface" type="Magento\Quote\Model\CouponManagement" />
     <preference for="Magento\Quote\Api\CartManagementInterface" type="Magento\Quote\Model\QuoteManagement" />
-    <preference for="Magento\Quote\Api\CartTotalRepositoryInterface" type="\Magento\Quote\Model\Cart\CartTotalRepository" />
-    <preference for="Magento\Quote\Api\CartTotalManagementInterface" type="\Magento\Quote\Model\Cart\CartTotalManagement" />
-    <preference for="Magento\Quote\Api\Data\TotalsInterface" type="\Magento\Quote\Model\Cart\Totals" />
-    <preference for="Magento\Quote\Api\Data\TotalSegmentInterface" type="\Magento\Quote\Model\Cart\TotalSegment" />
-    <preference for="Magento\Quote\Api\Data\TotalsItemInterface" type="\Magento\Quote\Model\Cart\Totals\Item" />
-    <preference for="Magento\Quote\Api\Data\CurrencyInterface" type="\Magento\Quote\Model\Cart\Currency" />
+    <preference for="Magento\Quote\Api\CartTotalRepositoryInterface" type="Magento\Quote\Model\Cart\CartTotalRepository" />
+    <preference for="Magento\Quote\Api\CartTotalManagementInterface" type="Magento\Quote\Model\Cart\CartTotalManagement" />
+    <preference for="Magento\Quote\Api\Data\TotalsInterface" type="Magento\Quote\Model\Cart\Totals" />
+    <preference for="Magento\Quote\Api\Data\TotalSegmentInterface" type="Magento\Quote\Model\Cart\TotalSegment" />
+    <preference for="Magento\Quote\Api\Data\TotalsItemInterface" type="Magento\Quote\Model\Cart\Totals\Item" />
+    <preference for="Magento\Quote\Api\Data\CurrencyInterface" type="Magento\Quote\Model\Cart\Currency" />
     <preference for="Magento\Quote\Api\GuestCartManagementInterface" type="Magento\Quote\Model\GuestCart\GuestCartManagement" />
     <preference for="Magento\Quote\Api\GuestCartRepositoryInterface" type="Magento\Quote\Model\GuestCart\GuestCartRepository" />
     <preference for="Magento\Quote\Api\GuestCartItemRepositoryInterface" type="Magento\Quote\Model\GuestCart\GuestCartItemRepository" />
@@ -37,9 +37,9 @@
     <preference for="Magento\Quote\Api\GuestShippingMethodManagementInterface" type="Magento\Quote\Model\GuestCart\GuestShippingMethodManagement" />
     <preference for="Magento\Quote\Api\GuestShipmentEstimationInterface" type="Magento\Quote\Model\GuestCart\GuestShippingMethodManagement" />
     <preference for="Magento\Quote\Api\GuestBillingAddressManagementInterface" type="Magento\Quote\Model\GuestCart\GuestBillingAddressManagement" />
-    <preference for="Magento\Quote\Api\GuestCartTotalManagementInterface" type="\Magento\Quote\Model\GuestCart\GuestCartTotalManagement" />
+    <preference for="Magento\Quote\Api\GuestCartTotalManagementInterface" type="Magento\Quote\Model\GuestCart\GuestCartTotalManagement" />
     <preference for="Magento\Quote\Api\Data\EstimateAddressInterface" type="Magento\Quote\Model\EstimateAddress" />
-    <preference for="Magento\Quote\Api\Data\ProductOptionInterface" type="\Magento\Quote\Model\Quote\ProductOption" />
+    <preference for="Magento\Quote\Api\Data\ProductOptionInterface" type="Magento\Quote\Model\Quote\ProductOption" />
     <type name="Magento\Webapi\Controller\Rest\ParamsOverrider">
         <arguments>
             <argument name="paramOverriders" xsi:type="array">

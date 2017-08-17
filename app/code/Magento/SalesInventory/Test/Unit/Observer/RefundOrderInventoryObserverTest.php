@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesInventory\Test\Unit\Observer;
@@ -13,7 +13,7 @@ use Magento\SalesInventory\Observer\RefundOrderInventoryObserver;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RefundOrderInventoryObserverTest extends \PHPUnit_Framework_TestCase
+class RefundOrderInventoryObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var RefundOrderInventoryObserver
@@ -72,21 +72,12 @@ class RefundOrderInventoryObserverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stockIndexerProcessor = $this->getMock(
+        $this->stockIndexerProcessor = $this->createPartialMock(
             \Magento\CatalogInventory\Model\Indexer\Stock\Processor::class,
-            ['reindexList'],
-            [],
-            '',
-            false
+            ['reindexList']
         );
 
-        $this->stockManagement = $this->getMock(
-            \Magento\CatalogInventory\Model\StockManagement::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->stockManagement = $this->createMock(\Magento\CatalogInventory\Model\StockManagement::class);
 
         $this->stockConfiguration = $this->getMockForAbstractClass(
             \Magento\CatalogInventory\Api\StockConfigurationInterface::class,
@@ -156,9 +147,8 @@ class RefundOrderInventoryObserverTest extends \PHPUnit_Framework_TestCase
     {
         $ids = ['1', '14'];
         $items = [];
-        $isAutoReturnEnabled = true;
 
-        $creditMemo = $this->getMock(\Magento\Sales\Model\Order\Creditmemo::class, [], [], '', false);
+        $creditMemo = $this->createMock(\Magento\Sales\Model\Order\Creditmemo::class);
 
         foreach ($ids as $id) {
             $item = $this->getCreditMemoItem($id);
@@ -168,11 +158,6 @@ class RefundOrderInventoryObserverTest extends \PHPUnit_Framework_TestCase
         $creditMemo->expects($this->once())
             ->method('getItems')
             ->will($this->returnValue($items));
-
-        $this->stockConfiguration->expects($this->any())
-            ->method('isAutoReturnEnabled')
-            ->will($this->returnValue($isAutoReturnEnabled));
-
         $this->event->expects($this->once())
             ->method('getCreditmemo')
             ->will($this->returnValue($creditMemo));
@@ -183,7 +168,7 @@ class RefundOrderInventoryObserverTest extends \PHPUnit_Framework_TestCase
 
         $this->returnProcessorMock->expects($this->once())
             ->method('execute')
-            ->with($creditMemo, $this->orderMock, $ids, $isAutoReturnEnabled);
+            ->with($creditMemo, $this->orderMock, $ids);
 
         $this->observer->execute($this->eventObserver);
     }
@@ -191,12 +176,9 @@ class RefundOrderInventoryObserverTest extends \PHPUnit_Framework_TestCase
     private function getCreditMemoItem($productId)
     {
         $backToStock = true;
-        $item = $this->getMock(
+        $item = $this->createPartialMock(
             \Magento\Sales\Model\Order\Creditmemo\Item::class,
-            ['getOrderItemId', 'getBackToStock', 'getQty', '__wakeup'],
-            [],
-            '',
-            false
+            ['getOrderItemId', 'getBackToStock', 'getQty', '__wakeup']
         );
         $item->expects($this->any())->method('getBackToStock')->willReturn($backToStock);
         $item->expects($this->any())->method('getOrderItemId')->willReturn($productId);

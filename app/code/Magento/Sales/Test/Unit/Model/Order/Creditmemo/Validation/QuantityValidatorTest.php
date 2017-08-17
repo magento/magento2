@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Creditmemo\Validation;
@@ -15,7 +15,7 @@ use Magento\Sales\Model\Order\Creditmemo\Validation\QuantityValidator;
 /**
  * Class QuantityValidatorTest
  */
-class QuantityValidatorTest extends \PHPUnit_Framework_TestCase
+class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var OrderRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject

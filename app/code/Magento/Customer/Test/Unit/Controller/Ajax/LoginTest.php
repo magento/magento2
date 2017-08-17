@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,7 +16,7 @@ use Magento\Framework\Exception\InvalidEmailOrPasswordException;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class LoginTest extends \PHPUnit_Framework_TestCase
+class LoginTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Customer\Controller\Ajax\Login
@@ -77,50 +77,20 @@ class LoginTest extends \PHPUnit_Framework_TestCase
     {
         $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()->getMock();
-        $this->response = $this->getMock(
-            \Magento\Framework\App\ResponseInterface::class,
-            ['setRedirect', 'sendResponse', 'representJson', 'setHttpResponseCode'],
-            [],
-            '',
-            false
-        );
-        $this->customerSession = $this->getMock(
-            \Magento\Customer\Model\Session::class,
-            [
+        $this->response = $this->createPartialMock(\Magento\Framework\App\ResponseInterface::class, ['setRedirect', 'sendResponse', 'representJson', 'setHttpResponseCode']);
+        $this->customerSession = $this->createPartialMock(\Magento\Customer\Model\Session::class, [
                 'isLoggedIn',
                 'getLastCustomerId',
                 'getBeforeAuthUrl',
                 'setBeforeAuthUrl',
                 'setCustomerDataAsLoggedIn',
                 'regenerateId'
-            ],
-            [],
-            '',
-            false
-        );
-        $this->objectManager = $this->getMock(
-            \Magento\Framework\ObjectManager\ObjectManager::class,
-            ['get'],
-            [],
-            '',
-            false
-        );
+            ]);
+        $this->objectManager = $this->createPartialMock(\Magento\Framework\ObjectManager\ObjectManager::class, ['get']);
         $this->customerAccountManagementMock =
-            $this->getMock(
-                \Magento\Customer\Model\AccountManagement::class,
-                ['authenticate'],
-                [],
-                '',
-                false
-            );
+            $this->createPartialMock(\Magento\Customer\Model\AccountManagement::class, ['authenticate']);
 
-        $this->jsonHelperMock = $this->getMock(
-            \Magento\Framework\Json\Helper\Data::class,
-            ['jsonDecode'],
-            [],
-            '',
-            false
-        );
+        $this->jsonHelperMock = $this->createPartialMock(\Magento\Framework\Json\Helper\Data::class, ['jsonDecode']);
 
         $this->resultJson = $this->getMockBuilder(\Magento\Framework\Controller\Result\Json::class)
             ->disableOriginalConstructor()
@@ -141,8 +111,8 @@ class LoginTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->resultRaw);
 
-        $contextMock = $this->getMock(\Magento\Framework\App\Action\Context::class, [], [], '', false);
-        $this->redirectMock = $this->getMock(\Magento\Framework\App\Response\RedirectInterface::class);
+        $contextMock = $this->createMock(\Magento\Framework\App\Action\Context::class);
+        $this->redirectMock = $this->createMock(\Magento\Framework\App\Response\RedirectInterface::class);
         $contextMock->expects($this->atLeastOnce())->method('getRedirect')->willReturn($this->redirectMock);
         $contextMock->expects($this->atLeastOnce())->method('getRequest')->willReturn($this->request);
 
@@ -205,11 +175,11 @@ class LoginTest extends \PHPUnit_Framework_TestCase
 
         $this->customerSession->expects($this->once())->method('regenerateId');
 
-        $redirectMock = $this->getMock(\Magento\Customer\Model\Account\Redirect::class, [], [], '', false);
+        $redirectMock = $this->createMock(\Magento\Customer\Model\Account\Redirect::class);
         $this->object->setAccountRedirect($redirectMock);
         $redirectMock->expects($this->once())->method('getRedirectCookie')->willReturn('some_url1');
 
-        $scopeConfigMock = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $this->object->setScopeConfig($scopeConfigMock);
         $scopeConfigMock->expects($this->once())->method('getValue')
             ->with('customer/startup/redirect_dashboard')

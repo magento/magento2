@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,7 +16,7 @@ use Magento\Framework\TestFramework\Unit\Matcher\MethodInvokedAtIndex;
  * Unit test for \Magento\Integration\Model\Oauth\Nonce
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TokenTest extends \PHPUnit_Framework_TestCase
+class TokenTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Integration\Model\Oauth\Token
@@ -384,7 +384,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
         $this->validatorMock->expects($this->once())->method('isValid')->willReturn(false);
         $this->validatorMock->expects($this->once())->method('getMessages')->willReturn([$exceptionMessage]);
 
-        $this->setExpectedException(\Magento\Framework\Oauth\Exception::class, $exceptionMessage);
+        $this->expectException(\Magento\Framework\Oauth\Exception::class, $exceptionMessage);
 
         $this->tokenModel->validate();
     }
@@ -402,7 +402,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
         $this->validatorKeyLengthMock->expects($this->once())->method('isValid')->willReturn(false);
         $this->validatorKeyLengthMock->expects($this->once())->method('getMessages')->willReturn([$exceptionMessage]);
 
-        $this->setExpectedException(\Magento\Framework\Oauth\Exception::class, $exceptionMessage);
+        $this->expectException(\Magento\Framework\Oauth\Exception::class, $exceptionMessage);
 
         $this->tokenModel->validate();
     }
@@ -429,7 +429,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $this->validatorKeyLengthMock->expects($this->once())->method('getMessages')->willReturn([$exceptionMessage]);
-        $this->setExpectedException(\Magento\Framework\Oauth\Exception::class, $exceptionMessage);
+        $this->expectException(\Magento\Framework\Oauth\Exception::class, $exceptionMessage);
 
         $this->tokenModel->validate();
     }
@@ -459,7 +459,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $this->validatorKeyLengthMock->expects($this->once())->method('getMessages')->willReturn([$exceptionMessage]);
-        $this->setExpectedException(\Magento\Framework\Oauth\Exception::class, $exceptionMessage);
+        $this->expectException(\Magento\Framework\Oauth\Exception::class, $exceptionMessage);
 
         $this->tokenModel->validate();
     }

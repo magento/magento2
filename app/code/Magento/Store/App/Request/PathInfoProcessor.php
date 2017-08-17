@@ -1,12 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\App\Request;
 
 use Magento\Framework\Exception\NoSuchEntityException;
 
+/**
+ * Class \Magento\Store\App\Request\PathInfoProcessor
+ *
+ */
 class PathInfoProcessor implements \Magento\Framework\App\Request\PathInfoProcessorInterface
 {
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\DataProvider\Product;
@@ -15,21 +15,27 @@ use Magento\Framework\DataObject;
 
 /**
  * DataProvider for grid on Import Custom Options modal panel
+ *
+ * @api
+ * @since 101.0.0
  */
 class ProductCustomOptionsDataProvider extends ProductDataProvider
 {
     /**
      * @var RequestInterface
+     * @since 101.0.0
      */
     protected $request;
 
     /**
      * @var ProductOptionRepository
+     * @since 101.0.0
      */
     protected $productOptionRepository;
 
     /**
      * @var ProductOptionValueModel
+     * @since 101.0.0
      */
     protected $productOptionValueModel;
 
@@ -46,6 +52,7 @@ class ProductCustomOptionsDataProvider extends ProductDataProvider
      * @param array $meta
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 101.0.0
      */
     public function __construct(
         $name,
@@ -78,6 +85,7 @@ class ProductCustomOptionsDataProvider extends ProductDataProvider
 
     /**
      * {@inheritdoc}
+     * @since 101.0.0
      */
     public function getData()
     {

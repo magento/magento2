@@ -1,13 +1,17 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Adminhtml\Group;
 
 use Magento\Customer\Controller\RegistryConstants;
 
+/**
+ * Class \Magento\Customer\Controller\Adminhtml\Group\NewAction
+ *
+ */
 class NewAction extends \Magento\Customer\Controller\Adminhtml\Group
 {
     /**

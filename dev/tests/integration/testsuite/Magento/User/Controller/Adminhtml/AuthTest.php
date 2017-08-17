@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\User\Controller\Adminhtml;
@@ -267,10 +267,9 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
      */
     protected function prepareEmailMock($occurrenceNumber, $templateId, $sender)
     {
-        $transportMock = $this->getMock(
-            \Magento\Framework\Mail\TransportInterface::class,
-            ['sendMessage']
-        );
+        $transportMock = $this->getMockBuilder(\Magento\Framework\Mail\TransportInterface::class)
+            ->setMethods(['sendMessage'])
+            ->getMockForAbstractClass();
         $transportMock->expects($this->exactly($occurrenceNumber))
             ->method('sendMessage');
         $transportBuilderMock = $this->getMockBuilder(\Magento\Framework\Mail\Template\TransportBuilder::class)

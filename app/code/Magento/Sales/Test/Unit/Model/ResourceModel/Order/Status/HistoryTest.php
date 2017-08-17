@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\ResourceModel\Order\Status;
@@ -9,7 +9,7 @@ namespace Magento\Sales\Test\Unit\Model\ResourceModel\Order\Status;
  * Class HistoryTest
  * @package Magento\Sales\Model\ResourceModel\Order\Status
  */
-class HistoryTest extends \PHPUnit_Framework_TestCase
+class HistoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\Status\History
@@ -43,33 +43,11 @@ class HistoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->appResourceMock = $this->getMock(
-            \Magento\Framework\App\ResourceConnection::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->connectionMock = $this->getMock(
-            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->validatorMock = $this->getMock(
-            \Magento\Sales\Model\Order\Status\History\Validator::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->entitySnapshotMock = $this->getMock(
-            \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot::class,
-            [],
-            [],
-            '',
-            false
+        $this->appResourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
+        $this->connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class);
+        $this->validatorMock = $this->createMock(\Magento\Sales\Model\Order\Status\History\Validator::class);
+        $this->entitySnapshotMock = $this->createMock(
+            \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot::class
         );
         $this->appResourceMock->expects($this->any())
             ->method('getConnection')
@@ -83,15 +61,11 @@ class HistoryTest extends \PHPUnit_Framework_TestCase
         $this->connectionMock->expects($this->any())
             ->method('lastInsertId');
 
-        $relationProcessorMock = $this->getMock(
-            \Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor::class,
-            [],
-            [],
-            '',
-            false
+        $relationProcessorMock = $this->createMock(
+            \Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor::class
         );
 
-        $contextMock = $this->getMock(\Magento\Framework\Model\ResourceModel\Db\Context::class, [], [], '', false);
+        $contextMock = $this->createMock(\Magento\Framework\Model\ResourceModel\Db\Context::class);
         $contextMock->expects($this->once())->method('getResources')->willReturn($this->appResourceMock);
         $contextMock->expects($this->once())->method('getObjectRelationProcessor')->willReturn($relationProcessorMock);
 
@@ -110,13 +84,7 @@ class HistoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testSave()
     {
-        $historyMock = $this->getMock(
-            \Magento\Sales\Model\Order\Status\History::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $historyMock = $this->createMock(\Magento\Sales\Model\Order\Status\History::class);
         $this->entitySnapshotMock->expects($this->once())->method('isModified')->with($historyMock)->willReturn(true);
         $historyMock->expects($this->any())->method('isSaveAllowed')->will($this->returnValue(true));
         $this->validatorMock->expects($this->once())
@@ -134,13 +102,7 @@ class HistoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidate()
     {
-        $historyMock = $this->getMock(
-            \Magento\Sales\Model\Order\Status\History::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $historyMock = $this->createMock(\Magento\Sales\Model\Order\Status\History::class);
         $this->entitySnapshotMock->expects($this->once())->method('isModified')->with($historyMock)->willReturn(true);
         $historyMock->expects($this->any())->method('isSaveAllowed')->will($this->returnValue(true));
         $this->validatorMock->expects($this->once())

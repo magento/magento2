@@ -1,6 +1,10 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ */
+
+/**
+ * @api
  */
 define([
     'jquery',
@@ -9,7 +13,7 @@ define([
     'Magento_Customer/js/section-config',
     'mage/storage',
     'jquery/jquery-storageapi'
-], function ($, _, ko, sectionConfig, mageStorage) {
+], function ($, _, ko, sectionConfig) {
     'use strict';
 
     var options,
@@ -95,12 +99,13 @@ define([
      */
     ko.extenders.disposableCustomerData = function (target, sectionName) {
         var sectionDataIds, newSectionDataIds = {};
+
         target.subscribe(function () {
             setTimeout(function () {
                 storage.remove(sectionName);
                 sectionDataIds = $.cookieStorage.get('section_data_ids') || {};
                 _.each(sectionDataIds, function (data, name) {
-                    if (name != sectionName) {
+                    if (name != sectionName) { //eslint-disable-line eqeqeq
                         newSectionDataIds[name] = data;
                     }
                 });
@@ -174,6 +179,7 @@ define([
         remove: function (sections) {
             _.each(sections, function (sectionName) {
                 storage.remove(sectionName);
+
                 if (!sectionConfig.isClientSideSection(sectionName)) {
                     storageInvalidation.set(sectionName, true);
                 }
@@ -186,19 +192,33 @@ define([
         /**
          * Customer data initialization
          */
-        init: function() {
+        init: function () {
             var countryData,
-                privateContent = $.cookieStorage.get('private_content_version');
+                privateContentVersion = 'private_content_version',
+                privateContent = $.cookieStorage.get(privateContentVersion),
+                localPrivateContent = $.localStorage.get(privateContentVersion),
+                needVersion = 'need_version',
+                expiredSectionNames = this.getExpiredSectionNames();
 
-            if (_.isEmpty(storage.keys())) {
-                if (!_.isEmpty(privateContent)) {
-                    this.reload([], false);
+            if (privateContent &&
+                !$.cookieStorage.isSet(privateContentVersion) &&
+                !$.localStorage.isSet(privateContentVersion)
+            ) {
+                $.cookieStorage.set(privateContentVersion, needVersion);
+                $.localStorage.set(privateContentVersion, needVersion);
+                this.reload([], false);
+            } else if (localPrivateContent !== privateContent) {
+                if (!$.cookieStorage.isSet(privateContentVersion)) {
+                    privateContent = needVersion;
+                    $.cookieStorage.set(privateContentVersion, privateContent);
                 }
-            } else if (this.needReload()) {
+                $.localStorage.set(privateContentVersion, privateContent);
+                this.reload([], false);
+            } else if (expiredSectionNames.length > 0) {
                 _.each(dataProvider.getFromStorage(storage.keys()), function (sectionData, sectionName) {
                     buffer.notify(sectionName, sectionData);
                 });
-                this.reload(this.getExpiredKeys(), false);
+                this.reload(expiredSectionNames, false);
             } else {
                 _.each(dataProvider.getFromStorage(storage.keys()), function (sectionData, sectionName) {
                     buffer.notify(sectionName, sectionData);
@@ -211,6 +231,7 @@ define([
 
             if (!_.isEmpty(privateContent)) {
                 countryData = this.get('directory-data');
+
                 if (_.isEmpty(countryData())) {
                     customerData.reload(['directory-data'], false);
                 }
@@ -218,57 +239,66 @@ define([
         },
 
         /**
-         * @return {Boolean}
+         * Retrieve the list of sections that has expired since last page reload.
+         *
+         * Sections can expire due to lifetime constraints or due to inconsistent storage information
+         * (validated by cookie data).
+         *
+         * @return {Array}
          */
-        needReload: function () {
-            var cookieSections = $.cookieStorage.get('section_data_ids'),
-                storageVal,
-                name;
+        getExpiredSectionNames: function () {
+            var expiredSectionNames = [],
+                cookieSectionTimestamps = $.cookieStorage.get('section_data_ids') || {},
+                sectionLifetime = options.expirableSectionLifetime * 60,
+                currentTimestamp = Math.floor(Date.now() / 1000),
+                sectionData;
 
-            if (typeof cookieSections != 'object') {
-                return true;
-            }
+            // process sections that can expire due to lifetime constraints
+            _.each(options.expirableSectionNames, function (sectionName) {
+                sectionData = storage.get(sectionName);
 
-            for (name in cookieSections) {
-                if (name !== undefined) {
-                    storageVal = storage.get(name);
-
-                    if (typeof storageVal === 'undefined' ||
-                        typeof storageVal == 'object' && cookieSections[name] > storageVal['data_id']
-                    ) {
-                        return true;
-                    }
+                if (typeof sectionData === 'object' && sectionData['data_id'] + sectionLifetime <= currentTimestamp) {
+                    expiredSectionNames.push(sectionName);
                 }
-            }
+            });
 
-            return false;
+            // process sections that can expire due to storage information inconsistency
+            _.each(cookieSectionTimestamps, function (cookieSectionTimestamp, sectionName) {
+                sectionData = storage.get(sectionName);
+
+                if (typeof sectionData === 'undefined' ||
+                    typeof sectionData === 'object' &&
+                    cookieSectionTimestamp != sectionData['data_id'] //eslint-disable-line
+                ) {
+                    expiredSectionNames.push(sectionName);
+                }
+            });
+
+            return _.uniq(expiredSectionNames);
         },
 
         /**
+         * Check if some sections have to be reloaded.
+         *
+         * @deprecated Use getExpiredSectionNames instead.
+         *
+         * @return {Boolean}
+         */
+        needReload: function () {
+            var expiredSectionNames = this.getExpiredSectionNames();
+
+            return expiredSectionNames.length > 0;
+        },
+
+        /**
+         * Retrieve the list of expired keys.
+         *
+         * @deprecated Use getExpiredSectionNames instead.
          *
          * @return {Array}
          */
         getExpiredKeys: function () {
-            var cookieSections = $.cookieStorage.get('section_data_ids'),
-                storageVal,
-                name,
-                expiredKeys = [];
-
-            if (typeof cookieSections != 'object') {
-                return [];
-            }
-
-            for (name in cookieSections) {
-                storageVal = storage.get(name);
-
-                if (typeof storageVal === 'undefined' ||
-                    typeof storageVal == 'object' && cookieSections[name] !=  storage.get(name)['data_id']
-                ) {
-                    expiredKeys.push(name);
-                }
-            }
-
-            return expiredKeys;
+            return this.getExpiredSectionNames();
         },
 
         /**
@@ -297,6 +327,7 @@ define([
          */
         reload: function (sectionNames, updateSectionId) {
             return dataProvider.getFromServer(sectionNames, updateSectionId).done(function (sections) {
+                $(document).trigger('customer-data-reload', [sectionNames]);
                 buffer.update(sections);
             });
         },
@@ -309,6 +340,7 @@ define([
                 sectionsNamesForInvalidation;
 
             sectionsNamesForInvalidation = _.contains(sectionNames, '*') ? buffer.keys() : sectionNames;
+            $(document).trigger('customer-data-invalidate', [sectionsNamesForInvalidation]);
             buffer.remove(sectionsNamesForInvalidation);
             sectionDataIds = $.cookieStorage.get('section_data_ids') || {};
 
@@ -340,14 +372,14 @@ define([
         var sections,
             redirects;
 
-        if (settings.type.match(/post|put/i)) {
+        if (settings.type.match(/post|put|delete/i)) {
             sections = sectionConfig.getAffectedSections(settings.url);
 
             if (sections) {
                 customerData.invalidate(sections);
                 redirects = ['redirect', 'backUrl'];
 
-                if (_.isObject(xhr.responseJSON) && !_.isEmpty(_.pick(xhr.responseJSON, redirects))) {
+                if (_.isObject(xhr.responseJSON) && !_.isEmpty(_.pick(xhr.responseJSON, redirects))) { //eslint-disable-line
                     return;
                 }
                 customerData.reload(sections, true);
@@ -361,7 +393,7 @@ define([
     $(document).on('submit', function (event) {
         var sections;
 
-        if (event.target.method.match(/post|put/i)) {
+        if (event.target.method.match(/post|put|delete/i)) {
             sections = sectionConfig.getAffectedSections(event.target.action);
 
             if (sections) {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,17 +12,17 @@
 <?php $options = $block->getOptionList(); ?>
 <?php if ($options): ?>
 <div class="tooltip wrapper product-item-tooltip">
-  <span class="action details tooltip toggle"><?php echo $block->escapeHtml(__('See Details')) ?></span>
+  <span class="action details tooltip toggle"><?= $block->escapeHtml(__('See Details')) ?></span>
   <div class="tooltip content">
-      <strong class="subtitle"><?php echo $block->escapeHtml(__('Options Details')); ?></strong>
+      <strong class="subtitle"><?= $block->escapeHtml(__('Options Details')) ?></strong>
       <dl>
           <?php foreach ($options as $option): ?>
-          <dt class="label"><?php echo $block->escapeHtml($option['label']) ?></dt>
+          <dt class="label"><?= $block->escapeHtml($option['label']) ?></dt>
           <dd class="values">
               <?php if (is_array($option['value'])): ?>
-              <?php /* @noEscape */ echo nl2br(implode("\n", $option['value'])) ?>
+              <?= /* @noEscape */ nl2br(implode("\n", $option['value'])) ?>
               <?php else: ?>
-              <?php /* @noEscape */ echo $option['value'] ?>
+              <?= /* @noEscape */ $option['value'] ?>
               <?php endif; ?>
           </dd>
           <?php endforeach; ?>

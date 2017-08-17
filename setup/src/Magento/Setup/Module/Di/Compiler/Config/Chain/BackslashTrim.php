@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,10 @@ namespace Magento\Setup\Module\Di\Compiler\Config\Chain;
 
 use Magento\Setup\Module\Di\Compiler\Config\ModificationInterface;
 
+/**
+ * Class \Magento\Setup\Module\Di\Compiler\Config\Chain\BackslashTrim
+ *
+ */
 class BackslashTrim implements ModificationInterface
 {
     /**
@@ -57,7 +61,7 @@ class BackslashTrim implements ModificationInterface
         }
 
         foreach ($argument as $key => &$value) {
-            if (in_array($key, ['_i_', '_ins_'])) {
+            if (in_array($key, ['_i_', '_ins_'], true)) {
                 $value = ltrim($value, '\\');
                 continue;
             }

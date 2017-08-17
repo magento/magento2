@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Test\Unit\Model\Indexer\Fulltext\Plugin\Store;
@@ -13,7 +13,7 @@ use Magento\Store\Model\ResourceModel\Store as StoreResourceModel;
 use Magento\Store\Model\Store;
 use Magento\CatalogSearch\Model\Indexer\Fulltext as FulltextIndexer;
 
-class ViewTest extends \PHPUnit_Framework_TestCase
+class ViewTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var StoreViewIndexerPlugin

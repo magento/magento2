@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Element\Template\File;
@@ -86,7 +86,7 @@ class Validator
         $this->_isAllowSymlinks = $scopeConfigInterface->getValue(self::XML_PATH_TEMPLATE_ALLOW_SYMLINK, $scope);
         $this->_themesDir = $componentRegistrar->getPaths(ComponentRegistrar::THEME);
         $this->moduleDirs = $componentRegistrar->getPaths(ComponentRegistrar::MODULE);
-        $this->_compiledDir = $this->_filesystem->getDirectoryRead(DirectoryList::TEMPLATE_MINIFICATION_DIR)
+        $this->_compiledDir = $this->_filesystem->getDirectoryRead(DirectoryList::TMP_MATERIALIZATION_DIR)
             ->getAbsolutePath();
     }
 

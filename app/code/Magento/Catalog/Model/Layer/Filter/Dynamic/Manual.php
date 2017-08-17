@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Layer\Filter\Dynamic;
@@ -14,6 +14,10 @@ use Magento\Framework\Registry;
 use Magento\Framework\Search\Dynamic\Algorithm;
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * Class \Magento\Catalog\Model\Layer\Filter\Dynamic\Manual
+ *
+ */
 class Manual implements AlgorithmInterface
 {
     const XML_PATH_RANGE_MAX_INTERVALS = 'catalog/layered_navigation/price_range_max_intervals';

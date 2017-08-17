@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Test\Unit\Model\Indexer;
@@ -11,7 +11,7 @@ use Magento\Framework\Indexer\SaveHandler\IndexerInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\ScopeInterface;
 
-class IndexerHandlerFactoryTest extends \PHPUnit_Framework_TestCase
+class IndexerHandlerFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /** @var IndexerHandlerFactory */
     protected $model;

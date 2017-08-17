@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Test\Unit\Model\ResourceModel\Rule;
@@ -10,7 +10,7 @@ use Magento\SalesRule\Model\ResourceModel\Rule\DateApplier;
 /**
  * Class DateApplierTest
  */
-class DateApplierTest extends \PHPUnit_Framework_TestCase
+class DateApplierTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\SalesRule\Model\ResourceModel\Rule\DateApplier|\PHPUnit_Framework_MockObject_MockObject
@@ -42,7 +42,7 @@ class DateApplierTest extends \PHPUnit_Framework_TestCase
     {
         $className = \Magento\Framework\DB\Select::class;
         /** @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject $select */
-        $select = $this->getMock($className, [], [], '', false);
+        $select = $this->createMock($className);
 
         $select->expects($this->exactly(2))
             ->method('where')

@@ -1,13 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Helper;
 
 use Magento\Framework\App\ObjectManager;
-use Magento\Payment\Model\Method\AbstractMethod;
-use Magento\Paypal\Model\Billing\Agreement\MethodInterface;
+use Magento\Payment\Api\Data\PaymentMethodInterface;
+use Magento\Payment\Api\PaymentMethodListInterface;
+use Magento\Payment\Model\Method\InstanceFactory;
+use Magento\Payment\Model\MethodInterface;
+use Magento\Paypal\Model\Billing\Agreement\MethodInterface as BillingAgreementMethodInterface;
 
 /**
  * Paypal Data helper
@@ -15,7 +18,7 @@ use Magento\Paypal\Model\Billing\Agreement\MethodInterface;
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     const HTML_TRANSACTION_ID =
-        '<a target="_blank" href="https://www.%1$s.paypal.com/cgi-bin/webscr?cmd=_view-a-trans&id=%2$s">%2$s</a>';
+        '<a target="_blank" href="https://www%1$s.paypal.com/cgi-bin/webscr?cmd=_view-a-trans&id=%2$s">%2$s</a>';
 
     /**
      * Cache for shouldAskToCreateBillingAgreement()
@@ -45,12 +48,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     private $configFactory;
 
     /**
-     * @var \Magento\Payment\Api\PaymentMethodListInterface
+     * @var PaymentMethodListInterface
      */
     private $paymentMethodList;
 
     /**
-     * @var \Magento\Payment\Model\Method\InstanceFactory
+     * @var InstanceFactory
      */
     private $paymentMethodInstanceFactory;
 
@@ -100,12 +103,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param null|string|bool|int|\Magento\Store\Model\Store $store
      * @param \Magento\Quote\Model\Quote|null $quote
-     * @return MethodInterface[]
+     * @return BillingAgreementMethodInterface[]
      */
     public function getBillingAgreementMethods($store = null, $quote = null)
     {
         $activeMethods = array_map(
-            function (\Magento\Payment\Api\Data\PaymentMethodInterface $method) {
+            function (PaymentMethodInterface $method) {
                 return $this->getPaymentMethodInstanceFactory()->create($method);
             },
             $this->getPaymentMethodList()->getActiveList($store)
@@ -113,8 +116,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
         $result = array_filter(
             $activeMethods,
-            function (AbstractMethod $method) use ($quote) {
-                return $method->isAvailable($quote) && $method instanceof MethodInterface;
+            function (MethodInterface $method) use ($quote) {
+                return $method instanceof BillingAgreementMethodInterface && $method->isAvailable($quote);
             }
         );
 
@@ -133,7 +136,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         if (in_array($methodCode, $this->methodCodes)) {
             /** @var \Magento\Paypal\Model\Config $config */
             $config = $this->configFactory->create()->setMethod($methodCode);
-            $sandboxFlag = ($config->getValue('sandboxFlag') ? 'sandbox' : '');
+            $sandboxFlag = ($config->getValue('sandboxFlag') ? '.sandbox' : '');
             return sprintf(self::HTML_TRANSACTION_ID, $sandboxFlag, $txnId);
         }
         return $txnId;
@@ -142,14 +145,14 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Get payment method list.
      *
-     * @return \Magento\Payment\Api\PaymentMethodListInterface
-     * @deprecated
+     * @return PaymentMethodListInterface
+     * @deprecated 100.2.0
      */
     private function getPaymentMethodList()
     {
         if ($this->paymentMethodList === null) {
             $this->paymentMethodList = ObjectManager::getInstance()->get(
-                \Magento\Payment\Api\PaymentMethodListInterface::class
+                PaymentMethodListInterface::class
             );
         }
         return $this->paymentMethodList;
@@ -158,14 +161,14 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Get payment method instance factory.
      *
-     * @return \Magento\Payment\Model\Method\InstanceFactory
-     * @deprecated
+     * @return InstanceFactory
+     * @deprecated 100.2.0
      */
     private function getPaymentMethodInstanceFactory()
     {
         if ($this->paymentMethodInstanceFactory === null) {
             $this->paymentMethodInstanceFactory = ObjectManager::getInstance()->get(
-                \Magento\Payment\Model\Method\InstanceFactory::class
+                InstanceFactory::class
             );
         }
         return $this->paymentMethodInstanceFactory;

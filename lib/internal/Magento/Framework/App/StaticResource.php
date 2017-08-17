@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App;
@@ -17,34 +17,54 @@ use Psr\Log\LoggerInterface;
  */
 class StaticResource implements \Magento\Framework\AppInterface
 {
-    /** @var State */
+    /**
+     * @var \Magento\Framework\App\State
+     */
     private $state;
 
-    /** @var \Magento\Framework\App\Response\FileInterface */
+    /**
+     * @var \Magento\Framework\App\Response\FileInterface
+     */
     private $response;
 
-    /** @var Request\Http */
+    /**
+     * @var \Magento\Framework\App\Request\Http
+     */
     private $request;
 
-    /** @var View\Asset\Publisher */
+    /**
+     * @var \Magento\Framework\App\View\Asset\Publisher
+     */
     private $publisher;
 
-    /** @var \Magento\Framework\View\Asset\Repository */
+    /**
+     * @var \Magento\Framework\View\Asset\Repository
+     */
     private $assetRepo;
 
-    /** @var \Magento\Framework\Module\ModuleList */
+    /**
+     * @var \Magento\Framework\Module\ModuleList
+     */
     private $moduleList;
 
-    /** @var \Magento\Framework\ObjectManagerInterface */
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
     private $objectManager;
 
-    /** @var ConfigLoaderInterface */
+    /**
+     * @var \Magento\Framework\ObjectManager\ConfigLoaderInterface
+     */
     private $configLoader;
 
-    /** @var Filesystem */
+    /**
+     * @var \Magento\Framework\Filesystem
+     */
     private $filesystem;
 
-    /** @var LoggerInterface */
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
     private $logger;
 
     /**
@@ -156,7 +176,7 @@ class StaticResource implements \Magento\Framework\AppInterface
     /**
      * Lazyload filesystem driver
      *
-     * @deprecated
+     * @deprecated 100.1.0
      * @return Filesystem
      */
     private function getFilesystem()
@@ -171,7 +191,7 @@ class StaticResource implements \Magento\Framework\AppInterface
      * Retrieves LoggerInterface instance
      *
      * @return LoggerInterface
-     * @deprecated
+     * @deprecated 100.2.0
      */
     private function getLogger()
     {

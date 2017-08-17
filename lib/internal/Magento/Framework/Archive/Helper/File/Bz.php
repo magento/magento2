@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,10 @@
  */
 namespace Magento\Framework\Archive\Helper\File;
 
+/**
+ * Class \Magento\Framework\Archive\Helper\File\Bz
+ *
+ */
 class Bz extends \Magento\Framework\Archive\Helper\File
 {
     /**

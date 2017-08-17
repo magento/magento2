@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\OfflineShipping\Model\Carrier;
@@ -8,6 +8,11 @@ namespace Magento\OfflineShipping\Model\Carrier;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 
+/**
+ * Table rate shipping model
+ *
+ * @api
+ */
 class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
     \Magento\Shipping\Model\Carrier\CarrierInterface
 {
@@ -151,14 +156,14 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
         $request->setPackageQty($oldQty);
 
         if (!empty($rate) && $rate['price'] >= 0) {
-            if ($request->getFreeShipping() === true || $request->getPackageQty() == $freeQty) {
+            if ($request->getPackageQty() == $freeQty) {
                 $shippingPrice = 0;
             } else {
                 $shippingPrice = $this->getFinalPriceWithHandlingFee($rate['price']);
             }
             $method = $this->createShippingMethod($shippingPrice, $rate['cost']);
             $result->append($method);
-        } elseif (empty($rate) && $request->getFreeShipping() === true || $request->getPackageQty() == $freeQty) {
+        } elseif ($request->getPackageQty() == $freeQty) {
 
             /**
              * Promotion rule was applied for the whole cart.

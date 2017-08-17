@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\CatalogRule\Test\Unit\Model\Indexer;
 
 use Magento\CatalogRule\Model\Indexer\AbstractIndexer;
 
-class AbstractIndexerTest extends \PHPUnit_Framework_TestCase
+class AbstractIndexerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogRule\Model\Indexer\IndexBuilder|\PHPUnit_Framework_MockObject_MockObject
@@ -32,8 +32,8 @@ class AbstractIndexerTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_eventManagerMock = $this->getMock(\Magento\Framework\Event\ManagerInterface::class);
-        $this->indexBuilder = $this->getMock(\Magento\CatalogRule\Model\Indexer\IndexBuilder::class, [], [], '', false);
+        $this->_eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
+        $this->indexBuilder = $this->createMock(\Magento\CatalogRule\Model\Indexer\IndexBuilder::class);
 
         $this->indexer = $this->getMockForAbstractClass(
             AbstractIndexer::class,
@@ -42,7 +42,7 @@ class AbstractIndexerTest extends \PHPUnit_Framework_TestCase
                 $this->_eventManagerMock
             ]
         );
-        $cacheMock = $this->getMock(\Magento\Framework\App\CacheInterface::class);
+        $cacheMock = $this->createMock(\Magento\Framework\App\CacheInterface::class);
         $reflection = new \ReflectionClass(AbstractIndexer::class);
         $reflectionProperty = $reflection->getProperty('cacheManager');
         $reflectionProperty->setAccessible(true);

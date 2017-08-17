@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Service;
@@ -11,7 +11,7 @@ use Magento\Sales\Model\Order;
  * Class CreditmemoServiceTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CreditmemoServiceTest extends \PHPUnit_Framework_TestCase
+class CreditmemoServiceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Api\CreditmemoRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -70,27 +70,15 @@ class CreditmemoServiceTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->searchCriteriaBuilderMock = $this->getMock(
+        $this->searchCriteriaBuilderMock = $this->createPartialMock(
             \Magento\Framework\Api\SearchCriteriaBuilder::class,
-            ['create', 'addFilters'],
-            [],
-            '',
-            false
+            ['create', 'addFilters']
         );
-        $this->filterBuilderMock = $this->getMock(
+        $this->filterBuilderMock = $this->createPartialMock(
             \Magento\Framework\Api\FilterBuilder::class,
-            ['setField', 'setValue', 'setConditionType', 'create'],
-            [],
-            '',
-            false
+            ['setField', 'setValue', 'setConditionType', 'create']
         );
-        $this->creditmemoNotifierMock = $this->getMock(
-            \Magento\Sales\Model\Order\CreditmemoNotifier::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->creditmemoNotifierMock = $this->createMock(\Magento\Sales\Model\Order\CreditmemoNotifier::class);
         $this->priceCurrencyMock = $this->getMockBuilder(\Magento\Framework\Pricing\PriceCurrencyInterface::class)
             ->getMockForAbstractClass();
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -126,20 +114,8 @@ class CreditmemoServiceTest extends \PHPUnit_Framework_TestCase
         $id = 25;
         $returnValue = 'return-value';
 
-        $filterMock = $this->getMock(
-            \Magento\Framework\Api\Filter::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $searchCriteriaMock = $this->getMock(
-            \Magento\Framework\Api\SearchCriteria::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $filterMock = $this->createMock(\Magento\Framework\Api\Filter::class);
+        $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
 
         $this->filterBuilderMock->expects($this->once())
             ->method('setField')
@@ -216,13 +192,13 @@ class CreditmemoServiceTest extends \PHPUnit_Framework_TestCase
             ->willReturnArgument(0);
 
         // Set payment adapter dependency
-        $paymentAdapterMock = $this->getMockBuilder(\Magento\Sales\Model\Order\PaymentAdapterInterface::class)
+        $refundAdapterMock = $this->getMockBuilder(\Magento\Sales\Model\Order\RefundAdapterInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->objectManagerHelper->setBackwardCompatibleProperty(
             $this->creditmemoService,
-            'paymentAdapter',
-            $paymentAdapterMock
+            'refundAdapter',
+            $refundAdapterMock
         );
 
         // Set resource dependency
@@ -250,7 +226,7 @@ class CreditmemoServiceTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
         $resourceMock->expects($this->once())->method('getConnection')->with('sales')->willReturn($adapterMock);
         $adapterMock->expects($this->once())->method('beginTransaction');
-        $paymentAdapterMock->expects($this->once())
+        $refundAdapterMock->expects($this->once())
             ->method('refund')
             ->with($creditMemoMock, $orderMock, false)
             ->willReturn($orderMock);

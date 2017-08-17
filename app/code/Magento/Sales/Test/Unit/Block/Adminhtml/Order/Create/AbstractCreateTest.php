@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\Create;
 
 use Magento\Catalog\Pricing\Price\FinalPrice;
 
-class AbstractCreateTest extends \PHPUnit_Framework_TestCase
+class AbstractCreateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate|\PHPUnit_Framework_MockObject_MockObject

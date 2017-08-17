@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Captcha\Test\Unit\Helper\Adminhtml;
 
-class DataTest extends \PHPUnit_Framework_TestCase
+class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Captcha\Helper\Adminhtml\Data | |PHPUnit_Framework_MockObject_MockObject
@@ -33,7 +33,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         );
 
         $filesystemMock = $arguments['filesystem'];
-        $directoryMock = $this->getMock(\Magento\Framework\Filesystem\Directory\Write::class, [], [], '', false);
+        $directoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\Write::class);
 
         $filesystemMock->expects($this->any())->method('getDirectoryWrite')->will($this->returnValue($directoryMock));
         $directoryMock->expects($this->any())->method('getAbsolutePath')->will($this->returnArgument(0));

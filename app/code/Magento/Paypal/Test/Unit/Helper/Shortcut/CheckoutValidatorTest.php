@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Paypal\Test\Unit\Helper\Shortcut;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class CheckoutValidatorTest extends \PHPUnit_Framework_TestCase
+class CheckoutValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Paypal\Helper\Shortcut\CheckoutValidator */
     protected $checkoutValidator;
@@ -27,15 +27,9 @@ class CheckoutValidatorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->sessionMock = $this->getMock(\Magento\Checkout\Model\Session::class, [], [], '', false);
-        $this->paypalShortcutHelperMock = $this->getMock(
-            \Magento\Paypal\Helper\Shortcut\Validator::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->paymentHelperMock = $this->getMock(\Magento\Payment\Helper\Data::class, [], [], '', false);
+        $this->sessionMock = $this->createMock(\Magento\Checkout\Model\Session::class);
+        $this->paypalShortcutHelperMock = $this->createMock(\Magento\Paypal\Helper\Shortcut\Validator::class);
+        $this->paymentHelperMock = $this->createMock(\Magento\Payment\Helper\Data::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->checkoutValidator = $this->objectManagerHelper->getObject(

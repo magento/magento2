@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -14,7 +14,6 @@
     <preference for="Magento\Framework\App\DefaultPathInterface" type="Magento\Backend\App\DefaultPath" />
     <preference for="Magento\Backend\App\ConfigInterface" type="Magento\Backend\App\Config" />
     <preference for="Magento\Framework\App\Response\Http\FileFactory" type="Magento\Backend\App\Response\Http\FileFactory" />
-    <preference for="Magento\Framework\View\Layout\GeneratorPool" type="Magento\Backend\Model\View\Layout\GeneratorPool" />
     <type name="Magento\Framework\Stdlib\DateTime\Timezone">
         <arguments>
             <argument name="scopeType" xsi:type="const">Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT</argument>
@@ -23,7 +22,6 @@
     <type name="Magento\Framework\View\Result\Page">
         <arguments>
             <argument name="layoutReaderPool" xsi:type="object">pageConfigRenderPool</argument>
-            <argument name="generatorPool" xsi:type="object">Magento\Backend\Model\View\Layout\GeneratorPool</argument>
             <argument name="template" xsi:type="string">Magento_Theme::root.phtml</argument>
         </arguments>
     </type>
@@ -140,5 +138,13 @@
     </type>
     <type name="Magento\Backend\Model\Menu\Builder">
         <plugin name="SetupMenuBuilder" type="Magento\Backend\Model\Setup\MenuBuilder" />
+    </type>
+    <type name="Magento\Config\Model\Config\Structure\ConcealInProductionConfigList">
+        <arguments>
+            <argument name="configs" xsi:type="array">
+                <item name="dev" xsi:type="const">Magento\Config\Model\Config\Structure\ElementVisibilityInterface::HIDDEN</item>
+                <item name="general/locale/code" xsi:type="const">Magento\Config\Model\Config\Structure\ElementVisibilityInterface::DISABLED</item>
+            </argument>
+        </arguments>
     </type>
 </config>

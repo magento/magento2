@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@ namespace Magento\RequireJs\Test\Unit\Model;
 use \Magento\RequireJs\Model\FileManager;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-class FileManagerTest extends \PHPUnit_Framework_TestCase
+class FileManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\RequireJs\Config|\PHPUnit_Framework_MockObject_MockObject
@@ -48,13 +48,13 @@ class FileManagerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->configMock = $this->getMock(\Magento\Framework\RequireJs\Config::class, [], [], '', false);
-        $this->fileSystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
-        $this->appState = $this->getMock(\Magento\Framework\App\State::class, [], [], '', false);
-        $this->assetRepoMock = $this->getMock(\Magento\Framework\View\Asset\Repository::class, [], [], '', false);
+        $this->configMock = $this->createMock(\Magento\Framework\RequireJs\Config::class);
+        $this->fileSystem = $this->createMock(\Magento\Framework\Filesystem::class);
+        $this->appState = $this->createMock(\Magento\Framework\App\State::class);
+        $this->assetRepoMock = $this->createMock(\Magento\Framework\View\Asset\Repository::class);
         $this->object = new FileManager($this->configMock, $this->fileSystem, $this->appState, $this->assetRepoMock);
         $this->dir = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\WriteInterface::class);
-        $this->asset = $this->getMock(\Magento\Framework\View\Asset\File::class, [], [], '', false);
+        $this->asset = $this->createMock(\Magento\Framework\View\Asset\File::class);
     }
 
     /**
@@ -126,10 +126,13 @@ class FileManagerTest extends \PHPUnit_Framework_TestCase
     public function testCreateBundleJsPool()
     {
         unset($this->configMock);
-        $dirRead = $this->getMock(\Magento\Framework\Filesystem\Directory\Read::class, [], [], 'libDir', false);
-        $context = $this->getMock(\Magento\Framework\View\Asset\File\FallbackContext::class, [], [], '', false);
-        $assetRepo = $this->getMock(\Magento\Framework\View\Asset\Repository::class, [], [], '', false);
-        $config = $this->getMock(\Magento\Framework\RequireJs\Config::class, [], [], '', false);
+        $dirRead = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\Read::class)
+            ->setMockClassName('libDir')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $context = $this->createMock(\Magento\Framework\View\Asset\File\FallbackContext::class);
+        $assetRepo = $this->createMock(\Magento\Framework\View\Asset\Repository::class);
+        $config = $this->createMock(\Magento\Framework\RequireJs\Config::class);
 
         $config
             ->expects($this->never())

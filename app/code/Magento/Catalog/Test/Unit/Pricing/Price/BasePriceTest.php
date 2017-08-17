@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ namespace Magento\Catalog\Test\Unit\Pricing\Price;
 /**
  * Base price test
  */
-class BasePriceTest extends \PHPUnit_Framework_TestCase
+class BasePriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Pricing\Price\BasePrice|\PHPUnit_Framework_MockObject_MockObject
@@ -59,18 +59,12 @@ class BasePriceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $qty = 1;
-        $this->saleableItemMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
-        $this->priceInfoMock = $this->getMock(\Magento\Framework\Pricing\PriceInfo\Base::class, [], [], '', false);
-        $this->regularPriceMock = $this->getMock(\Magento\Catalog\Pricing\Price\RegularPrice::class, [], [], '', false);
-        $this->tearPriceMock = $this->getMock(\Magento\Catalog\Pricing\Price\TierPrice::class, [], [], '', false);
-        $this->specialPriceMock = $this->getMock(\Magento\Catalog\Pricing\Price\SpecialPrice::class, [], [], '', false);
-        $this->calculatorMock = $this->getMock(
-            \Magento\Framework\Pricing\Adjustment\Calculator::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->saleableItemMock = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $this->priceInfoMock = $this->createMock(\Magento\Framework\Pricing\PriceInfo\Base::class);
+        $this->regularPriceMock = $this->createMock(\Magento\Catalog\Pricing\Price\RegularPrice::class);
+        $this->tearPriceMock = $this->createMock(\Magento\Catalog\Pricing\Price\TierPrice::class);
+        $this->specialPriceMock = $this->createMock(\Magento\Catalog\Pricing\Price\SpecialPrice::class);
+        $this->calculatorMock = $this->createMock(\Magento\Framework\Pricing\Adjustment\Calculator::class);
 
         $this->saleableItemMock->expects($this->once())
             ->method('getPriceInfo')

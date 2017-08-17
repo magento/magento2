@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ProductAlert\Controller\Unsubscribe;
@@ -12,6 +12,10 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
 
+/**
+ * Class \Magento\ProductAlert\Controller\Unsubscribe\Stock
+ *
+ */
 class Stock extends UnsubscribeController
 {
     /**

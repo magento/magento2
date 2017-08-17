@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Controller\Adminhtml\Product;
@@ -10,6 +10,10 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Store\Model\Store;
 use Magento\Framework\Exception\LocalizedException;
 
+/**
+ * Class \Magento\Review\Controller\Adminhtml\Product\Post
+ *
+ */
 class Post extends ProductController
 {
     /**

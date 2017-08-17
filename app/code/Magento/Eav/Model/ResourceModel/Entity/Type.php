@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\ResourceModel\Entity;
@@ -8,10 +8,17 @@ namespace Magento\Eav\Model\ResourceModel\Entity;
 /**
  * EAV entity type resource model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Type extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
+    /**
+     * Additional attribute tables data
+     *
+     * @var array
+     */
+    private $additionalAttributeTables = [];
+
     /**
      * Resource initialization
      *
@@ -44,6 +51,9 @@ class Type extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function getAdditionalAttributeTable($entityTypeId)
     {
+        if (isset($this->additionalAttributeTables[$entityTypeId])) {
+            return $this->additionalAttributeTables[$entityTypeId];
+        }
         $connection = $this->getConnection();
         $bind = ['entity_type_id' => $entityTypeId];
         $select = $connection->select()->from(
@@ -53,6 +63,6 @@ class Type extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             'entity_type_id = :entity_type_id'
         );
 
-        return $connection->fetchOne($select, $bind);
+        return $this->additionalAttributeTables[$entityTypeId] = $connection->fetchOne($select, $bind);
     }
 }

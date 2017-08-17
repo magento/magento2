@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files;
@@ -9,6 +9,10 @@ namespace Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * Class \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files\PreviewImage
+ *
+ */
 class PreviewImage extends \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files
 {
     /**

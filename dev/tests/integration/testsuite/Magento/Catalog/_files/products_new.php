@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,7 +16,7 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setWebsiteIds([1])
     ->setStockData(['qty' => 100, 'is_in_stock' => 1])
     ->setNewsFromDate(date('Y-m-d', strtotime('-2 day')))
-    ->setNewsNewsToDate(date('Y-m-d', strtotime('+2 day')))
+    ->setNewsToDate(date('Y-m-d', strtotime('+2 day')))
     ->setDescription('description')
     ->setShortDescription('short desc')
     ->save();

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Vault\Model\Ui\Adminhtml;
@@ -26,8 +26,11 @@ use Magento\Vault\Model\VaultPaymentInterface;
  * Class ConfigProvider
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @api
+ * @since 100.1.0
  */
-final class TokensConfigProvider
+class TokensConfigProvider
 {
     /**
      * @var PaymentTokenRepositoryInterface
@@ -89,6 +92,7 @@ final class TokensConfigProvider
      * @param StoreManagerInterface $storeManager
      * @param DateTimeFactory $dateTimeFactory
      * @param TokenUiComponentProviderInterface[] $tokenUiComponentProviders
+     * @since 100.1.0
      */
     public function __construct(
         SessionManagerInterface $session,
@@ -111,6 +115,7 @@ final class TokensConfigProvider
     /**
      * @param string $vaultPaymentCode
      * @return TokenUiComponentInterface[]
+     * @since 100.1.0
      */
     public function getTokensComponents($vaultPaymentCode)
     {
@@ -246,7 +251,7 @@ final class TokensConfigProvider
     /**
      * Get payment data helper instance
      * @return Data
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getPaymentDataHelper()
     {
@@ -259,7 +264,7 @@ final class TokensConfigProvider
     /**
      * Returns order repository instance
      * @return OrderRepositoryInterface
-     * @deprecated
+     * @deprecated 100.2.0
      */
     private function getOrderRepository()
     {
@@ -274,7 +279,7 @@ final class TokensConfigProvider
     /**
      * Returns payment token management instance
      * @return PaymentTokenManagementInterface
-     * @deprecated
+     * @deprecated 100.2.0
      */
     private function getPaymentTokenManagement()
     {

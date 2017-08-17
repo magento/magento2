@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,24 +9,15 @@ namespace Magento\ConfigurableProduct\Test\Unit\Plugin\Model\ResourceModel;
 use Magento\Catalog\Model\Product\Type;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
-class ProductTest extends \PHPUnit_Framework_TestCase
+class ProductTest extends \PHPUnit\Framework\TestCase
 {
     public function testBeforeSaveConfigurable()
     {
-        $subject = $this->getMock(\Magento\Catalog\Model\ResourceModel\Product::class, [], [], '', false);
-        $object = $this->getMock(
-            \Magento\Catalog\Model\Product::class,
-            ['getTypeId', 'getTypeInstance'],
-            [],
-            '',
-            false
-        );
-        $type = $this->getMock(
+        $subject = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product::class);
+        $object = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['getTypeId', 'getTypeInstance']);
+        $type = $this->createPartialMock(
             \Magento\ConfigurableProduct\Model\Product\Type\Configurable::class,
-            ['getSetAttributes'],
-            [],
-            '',
-            false
+            ['getSetAttributes']
         );
         $type->expects($this->once())->method('getSetAttributes')->with($object);
 
@@ -42,14 +33,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     public function testBeforeSaveSimple()
     {
-        $subject = $this->getMock(\Magento\Catalog\Model\ResourceModel\Product::class, [], [], '', false);
-        $object = $this->getMock(
-            \Magento\Catalog\Model\Product::class,
-            ['getTypeId', 'getTypeInstance'],
-            [],
-            '',
-            false
-        );
+        $subject = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product::class);
+        $object = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['getTypeId', 'getTypeInstance']);
         $object->expects($this->once())->method('getTypeId')->will($this->returnValue(Type::TYPE_SIMPLE));
         $object->expects($this->never())->method('getTypeInstance');
 

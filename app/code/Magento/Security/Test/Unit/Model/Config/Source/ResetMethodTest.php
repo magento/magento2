@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Security\Test\Unit\Model\Config\Source;
@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * Test class for \Magento\Security\Model\Config\Source\ResetMethod testing
  */
-class ResetMethodTest extends \PHPUnit_Framework_TestCase
+class ResetMethodTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Security\Model\Config\Source\ResetMethod

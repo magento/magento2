@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
@@ -9,6 +9,9 @@ use Magento\Catalog\Model\Locator\LocatorInterface;
 
 /**
  * Class Images customizes Images panel
+ *
+ * @api
+ * @since 101.0.0
  */
 class Images extends AbstractModifier
 {
@@ -25,11 +28,13 @@ class Images extends AbstractModifier
 
     /**
      * @var LocatorInterface
+     * @since 101.0.0
      */
     protected $locator;
 
     /**
      * @param LocatorInterface $locator
+     * @since 101.0.0
      */
     public function __construct(LocatorInterface $locator)
     {
@@ -38,6 +43,7 @@ class Images extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 101.0.0
      */
     public function modifyMeta(array $meta)
     {
@@ -48,14 +54,14 @@ class Images extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 101.0.0
      */
     public function modifyData(array $data)
     {
         /** @var \Magento\Catalog\Api\Data\ProductInterface $product */
         $product = $this->locator->getProduct();
         $modelId = $product->getId();
-        if (
-            isset($data[$modelId][self::DATA_SOURCE_DEFAULT]['media_gallery'])
+        if (isset($data[$modelId][self::DATA_SOURCE_DEFAULT]['media_gallery'])
             && !empty($data[$modelId][self::DATA_SOURCE_DEFAULT]['media_gallery'])
             && !empty($data[$modelId][self::DATA_SOURCE_DEFAULT]['media_gallery']['images'])
         ) {
@@ -64,7 +70,7 @@ class Images extends AbstractModifier
                     $data[$modelId][self::DATA_SOURCE_DEFAULT]['media_gallery']['images'][$index]['label'] = "";
                 }
             }
-        };
+        }
 
         return $data;
     }

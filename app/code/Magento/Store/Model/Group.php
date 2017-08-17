@@ -1,20 +1,18 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 /**
  * Store group model
- *
- * @method \Magento\Store\Model\ResourceModel\Group _getResource()
- * @method \Magento\Store\Model\ResourceModel\Group getResource()
  */
 namespace Magento\Store\Model;
 
 /**
  * Class Group
  *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
@@ -402,6 +400,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * @inheritdoc
+     * @since 100.1.0
      */
     public function afterDelete()
     {
@@ -442,7 +441,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function getIdentities()
     {
-        return [self::CACHE_TAG . '_' . $this->getId()];
+        return [self::CACHE_TAG];
     }
 
     /**
@@ -459,6 +458,24 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     public function setName($name)
     {
         return $this->setData('name', $name);
+    }
+
+    /**
+     * @inheritdoc
+     * @since 100.1.0
+     */
+    public function getCode()
+    {
+        return $this->getData('code');
+    }
+
+    /**
+     * @inheritdoc
+     * @since 100.2.0
+     */
+    public function setCode($code)
+    {
+        return $this->setData('code', $code);
     }
 
     /**
@@ -479,17 +496,8 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * Retrieve scope code
-     *
-     * @return string
-     */
-    public function getCode()
-    {
-        return '';
-    }
-
-    /**
      * {@inheritdoc}
+     * @since 100.1.0
      */
     public function getScopeType()
     {
@@ -498,6 +506,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * {@inheritdoc}
+     * @since 100.1.0
      */
     public function getScopeTypeName()
     {

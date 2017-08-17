@@ -1,15 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Block\Adminhtml\Product\Helper\Form\Gallery;
 
-use Magento\Framework\Filesystem;
 use Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery\Content;
+use Magento\Framework\Filesystem;
 use Magento\Framework\Phrase;
 
-class ContentTest extends \PHPUnit_Framework_TestCase
+class ContentTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
@@ -53,27 +53,15 @@ class ContentTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->fileSystemMock = $this->getMock(
+        $this->fileSystemMock = $this->createPartialMock(
             \Magento\Framework\Filesystem::class,
-            ['stat', 'getDirectoryRead'],
-            [],
-            '',
-            false
+            ['stat', 'getDirectoryRead']
         );
-        $this->readMock = $this->getMock(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
-        $this->galleryMock = $this->getMock(
-            \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->mediaConfigMock = $this->getMock(
+        $this->readMock = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
+        $this->galleryMock = $this->createMock(\Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery::class);
+        $this->mediaConfigMock = $this->createPartialMock(
             \Magento\Catalog\Model\Product\Media\Config::class,
-            ['getMediaUrl', 'getMediaPath'],
-            [],
-            '',
-            false
+            ['getMediaUrl', 'getMediaPath']
         );
         $this->jsonEncoderMock = $this->getMockBuilder(\Magento\Framework\Json\EncoderInterface::class)
             ->disableOriginalConstructor()

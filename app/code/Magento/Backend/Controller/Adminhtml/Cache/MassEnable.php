@@ -1,22 +1,48 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Controller\Adminhtml\Cache;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\App\State;
+use Magento\Framework\App\ObjectManager;
 
+/**
+ * Controller enables some types of cache
+ */
 class MassEnable extends \Magento\Backend\Controller\Adminhtml\Cache
 {
+    /**
+     * @var State
+     */
+    private $state;
+
     /**
      * Mass action for cache enabling
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
+    {
+        if ($this->getState()->getMode() === State::MODE_PRODUCTION) {
+            $this->messageManager->addErrorMessage(__('You can\'t change status of cache type(s) in production mode'));
+        } else {
+            $this->enableCache();
+        }
+
+        return $this->resultFactory->create(ResultFactory::TYPE_REDIRECT)->setPath('adminhtml/*');
+    }
+
+    /**
+     * Enable cache
+     *
+     * @return void
+     */
+    private function enableCache()
     {
         try {
             $types = $this->getRequest()->getParam('types');
@@ -40,9 +66,20 @@ class MassEnable extends \Magento\Backend\Controller\Adminhtml\Cache
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('An error occurred while enabling cache.'));
         }
+    }
 
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
-        return $resultRedirect->setPath('adminhtml/*');
+    /**
+     * Get State Instance
+     *
+     * @return State
+     * @deprecated 100.2.0
+     */
+    private function getState()
+    {
+        if ($this->state === null) {
+            $this->state = ObjectManager::getInstance()->get(State::class);
+        }
+
+        return $this->state;
     }
 }

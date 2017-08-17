@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,10 @@ namespace Magento\Paypal\Block\Adminhtml\System\Config\Field;
 
 use Magento\Paypal\Model\Config\StructurePlugin;
 
+/**
+ * Class \Magento\Paypal\Block\Adminhtml\System\Config\Field\Country
+ *
+ */
 class Country extends \Magento\Config\Block\System\Config\Form\Field
 {
     /**

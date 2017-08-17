@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Model;
@@ -63,7 +63,9 @@ class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
      */
     protected $ruleCollectionFactory;
 
-    /** @var  CollectionProcessorInterface */
+    /**
+     * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
+     */
     private $collectionProcessor;
 
     /**
@@ -183,7 +185,7 @@ class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
      *
      * @param \Magento\Framework\Api\Search\FilterGroup $filterGroup
      * @param Collection $collection
-     * @deprecated
+     * @deprecated 100.2.0
      * @return void
      */
     protected function addFilterGroupToCollection(
@@ -205,7 +207,7 @@ class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
     /**
      * Retrieve collection processor
      *
-     * @deprecated
+     * @deprecated 100.2.0
      * @return CollectionProcessorInterface
      */
     private function getCollectionProcessor()

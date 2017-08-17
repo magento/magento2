@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Security\Block\Adminhtml\Session;
@@ -10,21 +10,27 @@ use Magento\Security\Model\ConfigInterface;
 
 /**
  * Block Session Activity
+ *
+ * @api
+ * @since 100.1.0
  */
 class Activity extends \Magento\Backend\Block\Template
 {
     /**
      * @var ConfigInterface
+     * @since 100.1.0
      */
     protected $securityConfig;
 
     /**
      * @var \Magento\Security\Model\AdminSessionsManager
+     * @since 100.1.0
      */
     protected $sessionsManager;
 
     /**
      * @var \Magento\Security\Model\ResourceModel\AdminSessionInfo\CollectionFactory
+     * @since 100.1.0
      */
     protected $sessionsInfoCollection;
 
@@ -38,6 +44,7 @@ class Activity extends \Magento\Backend\Block\Template
      * @param ConfigInterface $securityConfig
      * @param \Magento\Security\Model\AdminSessionsManager $sessionsManager
      * @param RemoteAddress $remoteAddress
+     * @since 100.1.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -53,6 +60,7 @@ class Activity extends \Magento\Backend\Block\Template
 
     /**
      * @return \Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection
+     * @since 100.1.0
      */
     public function getSessionInfoCollection()
     {
@@ -64,6 +72,7 @@ class Activity extends \Magento\Backend\Block\Template
 
     /**
      * @return bool
+     * @since 100.1.0
      */
     public function areMultipleSessionsActive()
     {
@@ -72,6 +81,7 @@ class Activity extends \Magento\Backend\Block\Template
 
     /**
      * @return string
+     * @since 100.1.0
      */
     public function getRemoteIp()
     {
@@ -83,6 +93,7 @@ class Activity extends \Magento\Backend\Block\Template
      *
      * @param   string $time
      * @return  string
+     * @since 100.1.0
      */
     public function formatDateTime($time)
     {

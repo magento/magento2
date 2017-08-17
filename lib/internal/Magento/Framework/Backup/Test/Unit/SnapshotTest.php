@@ -1,21 +1,20 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Backup\Test\Unit;
 
-class SnapshotTest extends \PHPUnit_Framework_TestCase
+class SnapshotTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetDbBackupFilename()
     {
-        $filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
-        $backupFactory = $this->getMock(\Magento\Framework\Backup\Factory::class, [], [], '', false);
-        $manager = $this->getMock(
-            \Magento\Framework\Backup\Snapshot::class,
-            ['getBackupFilename'],
-            [$filesystem, $backupFactory]
-        );
+        $filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
+        $backupFactory = $this->createMock(\Magento\Framework\Backup\Factory::class);
+        $manager = $this->getMockBuilder(\Magento\Framework\Backup\Snapshot::class)
+            ->setMethods(['getBackupFilename'])
+            ->setConstructorArgs([$filesystem, $backupFactory])
+            ->getMock();
 
         $file = 'var/backup/2.sql';
         $manager->expects($this->once())->method('getBackupFilename')->will($this->returnValue($file));

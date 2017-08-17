@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Test\Unit\Controller\Adminhtml\History;
@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DownloadTest extends \PHPUnit_Framework_TestCase
+class DownloadTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
@@ -72,77 +72,38 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->request = $this->getMock(
-            \Magento\Framework\App\Request\Http::class,
-            ['getParam'],
-            [],
-            '',
-            false
-        );
+        $this->request = $this->createPartialMock(\Magento\Framework\App\Request\Http::class, ['getParam']);
         $this->request->expects($this->any())->method('getParam')->with('filename')->willReturn('filename');
-        $this->reportHelper = $this->getMock(
+        $this->reportHelper = $this->createPartialMock(
             \Magento\ImportExport\Helper\Report::class,
-            ['importFileExists', 'getReportSize', 'getReportOutput'],
-            [],
-            '',
-            false
+            ['importFileExists', 'getReportSize', 'getReportOutput']
         );
         $this->reportHelper->expects($this->any())->method('getReportSize')->willReturn(1);
         $this->reportHelper->expects($this->any())->method('getReportOutput')->willReturn('output');
-        $this->objectManager = $this->getMock(
-            \Magento\Framework\ObjectManager\ObjectManager::class,
-            ['get'],
-            [],
-            '',
-            false
-        );
+        $this->objectManager = $this->createPartialMock(\Magento\Framework\ObjectManager\ObjectManager::class, ['get']);
         $this->objectManager->expects($this->any())
             ->method('get')
             ->with(\Magento\ImportExport\Helper\Report::class)
             ->willReturn($this->reportHelper);
-        $this->context = $this->getMock(
+        $this->context = $this->createPartialMock(
             \Magento\Backend\App\Action\Context::class,
-            ['getRequest', 'getObjectManager', 'getResultRedirectFactory'],
-            [],
-            '',
-            false
+            ['getRequest', 'getObjectManager', 'getResultRedirectFactory']
         );
-        $this->fileFactory = $this->getMock(
+        $this->fileFactory = $this->createPartialMock(
             \Magento\Framework\App\Response\Http\FileFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->resultRaw = $this->getMock(
-            \Magento\Framework\Controller\Result\Raw::class,
-            ['setContents'],
-            [],
-            '',
-            false
-        );
-        $this->resultRawFactory = $this->getMock(
+        $this->resultRaw = $this->createPartialMock(\Magento\Framework\Controller\Result\Raw::class, ['setContents']);
+        $this->resultRawFactory = $this->createPartialMock(
             \Magento\Framework\Controller\Result\RawFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
         $this->resultRawFactory->expects($this->any())->method('create')->willReturn($this->resultRaw);
-        $this->redirect = $this->getMock(
-            \Magento\Backend\Model\View\Result\Redirect::class,
-            ['setPath'],
-            [],
-            '',
-            false
-        );
+        $this->redirect = $this->createPartialMock(\Magento\Backend\Model\View\Result\Redirect::class, ['setPath']);
 
-        $this->resultRedirectFactory = $this->getMock(
+        $this->resultRedirectFactory = $this->createPartialMock(
             \Magento\Framework\Controller\Result\RedirectFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
         $this->resultRedirectFactory->expects($this->any())->method('create')->willReturn($this->redirect);
 
@@ -162,7 +123,6 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
                 'reportHelper' => $this->reportHelper
             ]
         );
-
     }
 
     /**

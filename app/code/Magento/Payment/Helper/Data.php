@@ -1,11 +1,10 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Helper;
 
-use Magento\Payment\Model\Method\Substitution;
 use Magento\Quote\Model\Quote;
 use Magento\Store\Model\Store;
 use Magento\Payment\Block\Form;
@@ -19,6 +18,8 @@ use Magento\Payment\Model\MethodInterface;
 /**
  * Payment module base helper
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @api
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -118,7 +119,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param null|string|bool|int $store
      * @param Quote|null $quote
      * @return AbstractMethod[]
-     * @deprecated
+     * @deprecated 100.1.3
+     * @see \Magento\Payment\Api\PaymentMethodListInterface
      */
     public function getStoreMethods($store = null, $quote = null)
     {

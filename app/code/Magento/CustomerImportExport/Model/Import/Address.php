@@ -1,13 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CustomerImportExport\Model\Import;
 
+use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 /**
+ * Customer address import
+ *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -65,11 +68,7 @@ class Address extends AbstractCustomer
 
     /**#@-*/
 
-    /**
-     * Default addresses column names to appropriate customer attribute code
-     *
-     * @var array
-     */
+    /**#@-*/
     protected static $_defaultAddressAttributeMapping = [
         self::COLUMN_DEFAULT_BILLING => 'default_billing',
         self::COLUMN_DEFAULT_SHIPPING => 'default_shipping',
@@ -489,7 +488,6 @@ class Address extends AbstractCustomer
     {
         $email = strtolower($rowData[self::COLUMN_EMAIL]);
         $customerId = $this->_getCustomerId($email, $rowData[self::COLUMN_WEBSITE]);
-
         // entity table data
         $entityRowNew = [];
         $entityRowUpdate = [];
@@ -497,7 +495,6 @@ class Address extends AbstractCustomer
         $attributes = [];
         // customer default addresses
         $defaults = [];
-
         $newAddress = true;
         // get address id
         if (isset(
@@ -517,7 +514,6 @@ class Address extends AbstractCustomer
             'parent_id' => $customerId,
             'updated_at' => (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT),
         ];
-
         foreach ($this->_attributes as $attributeAlias => $attributeParams) {
             if (array_key_exists($attributeAlias, $rowData)) {
                 if (!strlen($rowData[$attributeAlias])) {
@@ -527,12 +523,20 @@ class Address extends AbstractCustomer
                         continue;
                     }
                 } elseif ($newAddress && !strlen($rowData[$attributeAlias])) {
-
                 } elseif ('select' == $attributeParams['type']) {
                     $value = $attributeParams['options'][strtolower($rowData[$attributeAlias])];
                 } elseif ('datetime' == $attributeParams['type']) {
                     $value = (new \DateTime())->setTimestamp(strtotime($rowData[$attributeAlias]));
                     $value = $value->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
+                } elseif ('multiselect' == $attributeParams['type']) {
+                    $separator = isset($this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR]) ?
+                        $this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR] :
+                        Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR;
+                    $value = str_replace(
+                        $separator,
+                        Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR,
+                        $rowData[$attributeAlias]
+                    );
                 } else {
                     $value = $rowData[$attributeAlias];
                 }
@@ -543,7 +547,6 @@ class Address extends AbstractCustomer
                 }
             }
         }
-
         foreach (self::getDefaultAddressAttributeMapping() as $columnName => $attributeCode) {
             if (!empty($rowData[$columnName])) {
                 /** @var $attribute \Magento\Eav\Model\Entity\Attribute\AbstractAttribute */
@@ -551,7 +554,6 @@ class Address extends AbstractCustomer
                 $defaults[$table][$customerId][$attributeCode] = $addressId;
             }
         }
-
         // let's try to find region ID
         $entityRow['region_id'] = null;
         if (!empty($rowData[self::COLUMN_REGION])) {
@@ -564,7 +566,6 @@ class Address extends AbstractCustomer
                 $entityRow['region_id'] = $regionId;
             }
         }
-
         if ($newAddress) {
             $entityRowNew = $entityRow;
             $entityRowNew['created_at'] =
@@ -599,7 +600,6 @@ class Address extends AbstractCustomer
                 $fields = array_diff(array_keys($row), ['entity_id', 'parent_id', 'created_at']);
                 $this->_connection->insertOnDuplicate($this->_entityTable, $row, $fields);
             }
-
         }
         return $this;
     }
@@ -645,7 +645,6 @@ class Address extends AbstractCustomer
                 );
                 $this->_connection->insertOnDuplicate($tableName, $data, array_keys($defaultsData));
             }
-
         }
         return $this;
     }
@@ -741,7 +740,16 @@ class Address extends AbstractCustomer
                             continue;
                         }
                         if (isset($rowData[$attributeCode]) && strlen($rowData[$attributeCode])) {
-                            $this->isAttributeValid($attributeCode, $attributeParams, $rowData, $rowNumber);
+                            $multiSeparator = isset($this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR]) ?
+                                $this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR] :
+                                Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR;
+                            $this->isAttributeValid(
+                                $attributeCode,
+                                $attributeParams,
+                                $rowData,
+                                $rowNumber,
+                                $multiSeparator
+                            );
                         } elseif ($attributeParams['is_required'] && (!isset(
                             $this->_addresses[$customerId]
                         ) || !in_array(
@@ -753,8 +761,7 @@ class Address extends AbstractCustomer
                         }
                     }
 
-                    if (
-                        isset($rowData[self::COLUMN_POSTCODE])
+                    if (isset($rowData[self::COLUMN_POSTCODE])
                         && isset($rowData[self::COLUMN_COUNTRY_ID])
                         && !$this->postcodeValidator->isValid(
                             $rowData[self::COLUMN_COUNTRY_ID],

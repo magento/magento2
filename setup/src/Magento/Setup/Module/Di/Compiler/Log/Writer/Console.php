@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Module\Di\Compiler\Log\Writer;
@@ -8,6 +8,10 @@ namespace Magento\Setup\Module\Di\Compiler\Log\Writer;
 use Magento\Setup\Module\Di\Compiler\Log\Log;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Class \Magento\Setup\Module\Di\Compiler\Log\Writer\Console
+ *
+ */
 class Console
 {
     /**

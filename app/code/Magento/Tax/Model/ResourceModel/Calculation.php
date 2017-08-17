@@ -1,15 +1,18 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 
 /**
  * Tax Calculation Resource Model
  */
 namespace Magento\Tax\Model\ResourceModel;
 
+/**
+ * Class \Magento\Tax\Model\ResourceModel\Calculation
+ *
+ */
 class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**

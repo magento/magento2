@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,15 +8,14 @@
 
 namespace Magento\Catalog\Model\Product\Option;
 
-use Magento\Framework\Model\AbstractModel;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Option;
+use Magento\Framework\Model\AbstractModel;
 
 /**
  * Catalog product option select type model
  *
- * @method \Magento\Catalog\Model\ResourceModel\Product\Option\Value _getResource()
- * @method \Magento\Catalog\Model\ResourceModel\Product\Option\Value getResource()
+ * @api
  * @method int getOptionId()
  * @method \Magento\Catalog\Model\Product\Option\Value setOptionId(int $value)
  *
@@ -40,9 +39,7 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     const KEY_OPTION_TYPE_ID = 'option_type_id';
     /**#@-*/
 
-    /**
-     * @var array
-     */
+    /**#@-*/
     protected $_values = [];
 
     /**
@@ -172,6 +169,7 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
         $this->_product = $product;
         return $this;
     }
+
     //@codeCoverageIgnoreEnd
 
     /**
@@ -366,6 +364,7 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     {
         return $this->_getData(self::KEY_OPTION_TYPE_ID);
     }
+
     /**
      * Set option title
      *
@@ -431,5 +430,6 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     {
         return $this->setData(self::KEY_OPTION_TYPE_ID, $optionTypeId);
     }
+
     //@codeCoverageIgnoreEnd
 }

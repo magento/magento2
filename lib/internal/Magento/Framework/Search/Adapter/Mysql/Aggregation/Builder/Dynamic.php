@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder;
@@ -12,6 +12,10 @@ use Magento\Framework\Search\Dynamic\EntityStorageFactory;
 use Magento\Framework\Search\Request\Aggregation\DynamicBucket;
 use Magento\Framework\Search\Request\BucketInterface as RequestBucketInterface;
 
+/**
+ * Class \Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder\Dynamic
+ *
+ */
 class Dynamic implements BucketInterface
 {
     /**

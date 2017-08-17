@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Stdlib\Test\Unit\DateTime;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class DateTimeFormatterTest extends \PHPUnit_Framework_TestCase
+class DateTimeFormatterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager
@@ -31,11 +31,10 @@ class DateTimeFormatterTest extends \PHPUnit_Framework_TestCase
         $this->localeResolverMock->expects($this->any())
             ->method('getLocale')
             ->willReturn('fr-FR');
-
     }
 
     /**
-     * @param \IntlCalendar|\DateTime $object
+     * @param \IntlCalendar|\DateTimeInterface $object
      * @param string|int|array|null $format
      * @param string|null $locale
      * @param boolean $useIntlFormatObject

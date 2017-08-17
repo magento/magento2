@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -17,14 +17,14 @@ namespace Magento\Framework\View\Utility;
 class Layout
 {
     /**
-     * @var \PHPUnit_Framework_TestCase
+     * @var \PHPUnit\Framework\TestCase
      */
     protected $_testCase;
 
     /**
-     * @param \PHPUnit_Framework_TestCase $testCase
+     * @param \PHPUnit\Framework\TestCase $testCase
      */
-    public function __construct(\PHPUnit_Framework_TestCase $testCase)
+    public function __construct(\PHPUnit\Framework\TestCase $testCase)
     {
         $this->_testCase = $testCase;
     }
@@ -44,21 +44,22 @@ class Layout
         foreach ((array)$layoutUpdatesFile as $filename) {
             $files[] = $fileFactory->create($filename, 'Magento_View');
         }
-        $fileSource = $this->_testCase->getMockForAbstractClass(\Magento\Framework\View\File\CollectorInterface::class);
+        $fileSource = $this->_testCase
+            ->getMockBuilder(\Magento\Framework\View\File\CollectorInterface::class)->getMockForAbstractClass();
         $fileSource->expects(
-            \PHPUnit_Framework_TestCase::any()
+            \PHPUnit\Framework\TestCase::any()
         )->method(
             'getFiles'
         )->will(
-            \PHPUnit_Framework_TestCase::returnValue($files)
+            \PHPUnit\Framework\TestCase::returnValue($files)
         );
-        $pageLayoutFileSource = $this->_testCase->getMockForAbstractClass(
-            \Magento\Framework\View\File\CollectorInterface::class
-        );
-        $pageLayoutFileSource->expects(\PHPUnit_Framework_TestCase::any())
+        $pageLayoutFileSource = $this->_testCase
+            ->getMockBuilder(\Magento\Framework\View\File\CollectorInterface::class)->getMockForAbstractClass();
+        $pageLayoutFileSource->expects(\PHPUnit\Framework\TestCase::any())
             ->method('getFiles')
             ->willReturn([]);
-        $cache = $this->_testCase->getMockForAbstractClass(\Magento\Framework\Cache\FrontendInterface::class);
+        $cache = $this->_testCase
+            ->getMockBuilder(\Magento\Framework\Cache\FrontendInterface::class)->getMockForAbstractClass();
         return $objectManager->create(
             \Magento\Framework\View\Layout\ProcessorInterface::class,
             ['fileSource' => $fileSource, 'pageLayoutFileSource' => $pageLayoutFileSource, 'cache' => $cache]
@@ -74,15 +75,18 @@ class Layout
      */
     public function getLayoutFromFixture($layoutUpdatesFile, array $args = [])
     {
-        $layout = $this->_testCase->getMock(\Magento\Framework\View\Layout::class, ['getUpdate'], $args);
+        $layout = $this->_testCase->getMockBuilder(\Magento\Framework\View\Layout::class)
+            ->setMethods(['getUpdate'])
+            ->setConstructorArgs($args)
+            ->getMock();
         $layoutUpdate = $this->getLayoutUpdateFromFixture($layoutUpdatesFile);
         $layoutUpdate->asSimplexml();
         $layout->expects(
-            \PHPUnit_Framework_TestCase::any()
+            \PHPUnit\Framework\TestCase::any()
         )->method(
             'getUpdate'
         )->will(
-            \PHPUnit_Framework_TestCase::returnValue($layoutUpdate)
+            \PHPUnit\Framework\TestCase::returnValue($layoutUpdate)
         );
         return $layout;
     }

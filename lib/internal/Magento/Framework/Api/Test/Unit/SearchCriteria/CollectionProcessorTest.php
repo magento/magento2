@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Api\Test\Unit\SearchCriteria;
@@ -10,7 +10,7 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
 
-class CollectionProcessorTest extends \PHPUnit_Framework_TestCase
+class CollectionProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Return model
@@ -64,10 +64,12 @@ class CollectionProcessorTest extends \PHPUnit_Framework_TestCase
     {
         /** @var CollectionProcessorInterface|\PHPUnit_Framework_MockObject_MockObject $customFilterMock */
         $processorOneMock = $this->getMockBuilder(CollectionProcessorInterface::class)
+            ->setMethods(['process'])
             ->getMock();
 
         /** @var \stdClass|\PHPUnit_Framework_MockObject_MockObject $processorTwoMock */
         $processorTwoMock = $this->getMockBuilder(\stdClass::class)
+            ->setMethods(['process'])
             ->getMock();
 
         $processors = [$processorOneMock, $processorTwoMock];

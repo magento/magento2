@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableImportExport\Model;
@@ -18,6 +18,15 @@ class ConfigurableTest extends AbstractProductExportImportTestCase
                 ],
                 [
                     'configurable',
+                ],
+                ['_cache_instance_products', '_cache_instance_configurable_attributes'],
+            ],
+            'configurable-product-12345' => [
+                [
+                    'Magento/ConfigurableProduct/_files/product_configurable_12345.php'
+                ],
+                [
+                    '12345',
                 ],
                 ['_cache_instance_products', '_cache_instance_configurable_attributes'],
             ],

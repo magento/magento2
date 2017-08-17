@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Vault\Controller\Cards;
@@ -11,6 +11,10 @@ use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Vault\Controller\CardsManagement;
 
+/**
+ * Class \Magento\Vault\Controller\Cards\ListAction
+ *
+ */
 class ListAction extends CardsManagement
 {
     /**

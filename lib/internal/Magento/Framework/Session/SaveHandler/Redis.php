@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Session\SaveHandler;
@@ -14,6 +14,10 @@ use Magento\Framework\Phrase;
 use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * Class \Magento\Framework\Session\SaveHandler\Redis
+ *
+ */
 class Redis extends \Cm\RedisSession\Handler
 {
     /**

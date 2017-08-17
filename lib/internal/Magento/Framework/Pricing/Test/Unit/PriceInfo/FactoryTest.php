@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Pricing\Test\Unit\PriceInfo;
@@ -10,7 +10,7 @@ use Magento\Framework\Pricing\PriceInfo\Factory;
 /**
  * Test class for \Magento\Framework\Pricing\PriceInfo\Factory
  */
-class FactoryTest extends \PHPUnit_Framework_TestCase
+class FactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManager\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
@@ -47,20 +47,8 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->objectManagerMock = $this->getMock(
-            \Magento\Framework\ObjectManager\ObjectManager::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->pricesMock = $this->getMock(
-            \Magento\Framework\Pricing\Price\Collection::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManager\ObjectManager::class);
+        $this->pricesMock = $this->createMock(\Magento\Framework\Pricing\Price\Collection::class);
         $this->saleableItemMock = $this->getMockForAbstractClass(
             \Magento\Framework\Pricing\SaleableInterface::class,
             [],

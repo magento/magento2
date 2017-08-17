@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,10 @@ namespace Magento\Theme\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
+/**
+ * Class \Magento\Theme\Model\Config
+ *
+ */
 class Config
 {
     /**

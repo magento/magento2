@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Account;
@@ -12,6 +12,10 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
 
+/**
+ * Class \Magento\Customer\Controller\Account\Logout
+ *
+ */
 class Logout extends \Magento\Customer\Controller\AbstractAccount
 {
     /**
@@ -44,7 +48,7 @@ class Logout extends \Magento\Customer\Controller\AbstractAccount
     /**
      * Retrieve cookie manager
      *
-     * @deprecated
+     * @deprecated 100.1.0
      * @return PhpCookieManager
      */
     private function getCookieManager()
@@ -58,7 +62,7 @@ class Logout extends \Magento\Customer\Controller\AbstractAccount
     /**
      * Retrieve cookie metadata factory
      *
-     * @deprecated
+     * @deprecated 100.1.0
      * @return CookieMetadataFactory
      */
     private function getCookieMetadataFactory()

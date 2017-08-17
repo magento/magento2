@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Persistent\Model;
@@ -8,6 +8,10 @@ namespace Magento\Persistent\Model;
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Persistent\Helper\Data as PersistentHelper;
 
+/**
+ * Class \Magento\Persistent\Model\CheckoutConfigProvider
+ *
+ */
 class CheckoutConfigProvider implements ConfigProviderInterface
 {
     /**

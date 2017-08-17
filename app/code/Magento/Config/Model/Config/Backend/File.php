@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Model\Config\Backend;
@@ -15,6 +15,7 @@ use Magento\MediaStorage\Model\File\Uploader;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+ * @api
  */
 class File extends \Magento\Framework\App\Config\Value
 {
@@ -109,6 +110,8 @@ class File extends \Magento\Framework\App\Config\Value
         } else {
             if (is_array($value) && !empty($value['delete'])) {
                 $this->setValue('');
+            } elseif (is_array($value) && !empty($value['value'])) {
+                $this->setValue($value['value']);
             } else {
                 $this->unsValue();
             }
@@ -121,6 +124,7 @@ class File extends \Magento\Framework\App\Config\Value
      * Receiving uploaded file data
      *
      * @return array
+     * @since 100.1.0
      */
     protected function getFileData()
     {
@@ -188,8 +192,7 @@ class File extends \Magento\Framework\App\Config\Value
 
         if (is_array($fieldConfig['upload_dir'])) {
             $uploadDir = $fieldConfig['upload_dir']['value'];
-            if (
-                array_key_exists('scope_info', $fieldConfig['upload_dir'])
+            if (array_key_exists('scope_info', $fieldConfig['upload_dir'])
                 && $fieldConfig['upload_dir']['scope_info']
             ) {
                 $uploadDir = $this->_appendScopeInfo($uploadDir);
@@ -210,6 +213,7 @@ class File extends \Magento\Framework\App\Config\Value
      *
      * @param string $uploadDir
      * @return string
+     * @since 100.1.0
      */
     protected function getUploadDirPath($uploadDir)
     {

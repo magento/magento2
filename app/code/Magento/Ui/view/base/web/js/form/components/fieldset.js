@@ -1,6 +1,10 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ */
+
+/**
+ * @api
  */
 define([
     'Magento_Ui/js/lib/collapsible',
@@ -18,6 +22,7 @@ define([
             opened: false,
             level: 0,
             visible: true,
+            initializeFieldsetDataByDefault: false,    /* Data in some fieldsets should be initialized before open */
             disabled: false,
             listens: {
                 'opened': 'onVisibilityChange'

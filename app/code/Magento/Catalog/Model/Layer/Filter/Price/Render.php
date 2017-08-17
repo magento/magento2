@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Layer\Filter\Price;
@@ -10,6 +10,10 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * Class \Magento\Catalog\Model\Layer\Filter\Price\Render
+ *
+ */
 class Render
 {
     const XML_PATH_ONE_PRICE_INTERVAL = 'catalog/layered_navigation/one_price_interval';

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ namespace Magento\User\Test\Unit\Block\Role\Grid;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class UserTest extends \PHPUnit_Framework_TestCase
+class UserTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\User\Block\Role\Grid\User */
     protected $model;

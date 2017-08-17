@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\NewRelicReporting\Model;
@@ -13,6 +13,10 @@ use Magento\Customer\Api\CustomerManagementInterface;
 use Magento\Store\Api\WebsiteManagementInterface;
 use Magento\Store\Api\StoreManagementInterface;
 
+/**
+ * Class \Magento\NewRelicReporting\Model\Counter
+ *
+ */
 class Counter
 {
     /**

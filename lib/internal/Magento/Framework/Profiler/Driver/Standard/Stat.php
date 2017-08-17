@@ -2,43 +2,34 @@
 /**
  * Storage for timers statistics
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Profiler\Driver\Standard;
 
 use Magento\Framework\Profiler;
 
+/**
+ * Class \Magento\Framework\Profiler\Driver\Standard\Stat
+ *
+ */
 class Stat
 {
     /**
      * #@+ Timer statistics data keys
      */
     const ID = 'id';
-
     const START = 'start';
-
     const TIME = 'sum';
-
     const COUNT = 'count';
-
     const AVG = 'avg';
-
     const REALMEM = 'realmem';
-
     const REALMEM_START = 'realmem_start';
-
     const EMALLOC = 'emalloc';
-
     const EMALLOC_START = 'emalloc_start';
-
     /**#@-*/
 
-    /**
-     * Array of timers statistics data
-     *
-     * @var array
-     */
+    /**#@-*/
     protected $_timers = [];
 
     /**

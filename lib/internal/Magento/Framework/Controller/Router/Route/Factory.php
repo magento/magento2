@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Controller\Router\Route;
@@ -8,6 +8,10 @@ namespace Magento\Framework\Controller\Router\Route;
 use Magento\Framework\App\RouterInterface;
 use Magento\Framework\ObjectManagerInterface as ObjectManager;
 
+/**
+ * Class \Magento\Framework\Controller\Router\Route\Factory
+ *
+ */
 class Factory
 {
     /**

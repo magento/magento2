@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model;
 
+use Magento\Customer\Model\AccountManagement;
 use Magento\Customer\Model\AuthenticationInterface;
 use Magento\Customer\Model\EmailNotificationInterface;
-use Magento\Customer\Model\AccountManagement;
 use Magento\Framework\App\Area;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
@@ -17,7 +17,7 @@ use Magento\Store\Model\ScopeInterface;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AccountManagementTest extends \PHPUnit_Framework_TestCase
+class AccountManagementTest extends \PHPUnit\Framework\TestCase
 {
     /** @var AccountManagement */
     protected $accountManagement;
@@ -119,63 +119,37 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->customerFactory = $this->getMock(
-            \Magento\Customer\Model\CustomerFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $this->manager = $this->getMock(\Magento\Framework\Event\ManagerInterface::class);
+        $this->customerFactory = $this->createPartialMock(\Magento\Customer\Model\CustomerFactory::class, ['create']);
+        $this->manager = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
         $this->store = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManager = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->random = $this->getMock(\Magento\Framework\Math\Random::class);
-        $this->validator = $this->getMock(\Magento\Customer\Model\Metadata\Validator::class, [], [], '', false);
-        $this->validationResultsInterfaceFactory = $this->getMock(
-            \Magento\Customer\Api\Data\ValidationResultsInterfaceFactory::class,
-            [],
-            [],
-            '',
-            false
+        $this->storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->random = $this->createMock(\Magento\Framework\Math\Random::class);
+        $this->validator = $this->createMock(\Magento\Customer\Model\Metadata\Validator::class);
+        $this->validationResultsInterfaceFactory = $this->createMock(
+            \Magento\Customer\Api\Data\ValidationResultsInterfaceFactory::class
         );
-        $this->addressRepository = $this->getMock(\Magento\Customer\Api\AddressRepositoryInterface::class);
-        $this->customerMetadata = $this->getMock(\Magento\Customer\Api\CustomerMetadataInterface::class);
-        $this->customerRegistry = $this->getMock(\Magento\Customer\Model\CustomerRegistry::class, [], [], '', false);
-        $this->logger = $this->getMock(\Psr\Log\LoggerInterface::class);
-        $this->encryptor = $this->getMock(\Magento\Framework\Encryption\EncryptorInterface::class);
-        $this->share = $this->getMock(\Magento\Customer\Model\Config\Share::class, [], [], '', false);
-        $this->string = $this->getMock(\Magento\Framework\Stdlib\StringUtils::class);
-        $this->customerRepository = $this->getMock(\Magento\Customer\Api\CustomerRepositoryInterface::class);
+        $this->addressRepository = $this->createMock(\Magento\Customer\Api\AddressRepositoryInterface::class);
+        $this->customerMetadata = $this->createMock(\Magento\Customer\Api\CustomerMetadataInterface::class);
+        $this->customerRegistry = $this->createMock(\Magento\Customer\Model\CustomerRegistry::class);
+        $this->logger = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $this->encryptor = $this->createMock(\Magento\Framework\Encryption\EncryptorInterface::class);
+        $this->share = $this->createMock(\Magento\Customer\Model\Config\Share::class);
+        $this->string = $this->createMock(\Magento\Framework\Stdlib\StringUtils::class);
+        $this->customerRepository = $this->createMock(\Magento\Customer\Api\CustomerRepositoryInterface::class);
         $this->scopeConfig = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->transportBuilder = $this->getMock(
-            \Magento\Framework\Mail\Template\TransportBuilder::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->dataObjectProcessor = $this->getMock(
-            \Magento\Framework\Reflection\DataObjectProcessor::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->registry = $this->getMock(\Magento\Framework\Registry::class);
-        $this->customerViewHelper = $this->getMock(\Magento\Customer\Helper\View::class, [], [], '', false);
-        $this->dateTime = $this->getMock(\Magento\Framework\Stdlib\DateTime::class);
-        $this->customer = $this->getMock(\Magento\Customer\Model\Customer::class, [], [], '', false);
-        $this->objectFactory = $this->getMock(\Magento\Framework\DataObjectFactory::class, [], [], '', false);
-        $this->extensibleDataObjectConverter = $this->getMock(
-            \Magento\Framework\Api\ExtensibleDataObjectConverter::class,
-            [],
-            [],
-            '',
-            false
+        $this->transportBuilder = $this->createMock(\Magento\Framework\Mail\Template\TransportBuilder::class);
+        $this->dataObjectProcessor = $this->createMock(\Magento\Framework\Reflection\DataObjectProcessor::class);
+        $this->registry = $this->createMock(\Magento\Framework\Registry::class);
+        $this->customerViewHelper = $this->createMock(\Magento\Customer\Helper\View::class);
+        $this->dateTime = $this->createMock(\Magento\Framework\Stdlib\DateTime::class);
+        $this->customer = $this->createMock(\Magento\Customer\Model\Customer::class);
+        $this->objectFactory = $this->createMock(\Magento\Framework\DataObjectFactory::class);
+        $this->extensibleDataObjectConverter = $this->createMock(
+            \Magento\Framework\Api\ExtensibleDataObjectConverter::class
         );
         $this->authenticationMock = $this->getMockBuilder(AuthenticationInterface::class)
             ->disableOriginalConstructor()
@@ -185,6 +159,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->customerSecure = $this->getMockBuilder(\Magento\Customer\Model\Data\CustomerSecure::class)
+            ->setMethods(['setRpToken', 'addData', 'setRpTokenCreatedAt', 'setData'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -642,6 +617,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             ->method('getUniqueHash')
             ->willReturn($newLinkToken);
         $customerSecure = $this->getMockBuilder(\Magento\Customer\Model\Data\CustomerSecure::class)
+            ->setMethods(['setRpToken', 'setRpTokenCreatedAt', 'getPasswordHash'])
             ->disableOriginalConstructor()
             ->getMock();
         $customerSecure->expects($this->any())
@@ -724,14 +700,14 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             ->willReturn(iconv_strlen($password, 'UTF-8'));
 
         if ($testNumber == 1) {
-            $this->setExpectedException(
+            $this->expectException(
                 \Magento\Framework\Exception\InputException::class,
                 'Please enter a password with at least ' . $minPasswordLength . ' characters.'
             );
         }
 
         if ($testNumber == 2) {
-            $this->setExpectedException(
+            $this->expectException(
                 \Magento\Framework\Exception\InputException::class,
                 'Minimum of different classes of characters in password is ' . $minCharacterSetsNum .
                 '. Classes of characters: Lower Case, Upper Case, Digits, Special Characters.'
@@ -753,7 +729,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             ->with($password)
             ->willReturn(iconv_strlen($password, 'UTF-8'));
 
-        $this->setExpectedException(
+        $this->expectException(
             \Magento\Framework\Exception\InputException::class,
             'Please enter a password with at most 256 characters.'
         );
@@ -1403,7 +1379,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             ->with($email)
             ->willThrowException($exception);
 
-        $this->setExpectedException(
+        $this->expectException(
             \Magento\Framework\Exception\InvalidEmailOrPasswordException::class,
             'Invalid login or password.'
         );

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product;
@@ -9,6 +9,9 @@ use Magento\Store\Model\Store;
 
 /**
  * Catalog product media gallery resource model.
+ *
+ * @api
+ * @since 101.0.0
  */
 class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -24,6 +27,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * @var \Magento\Framework\EntityManager\EntityMetadata
+     * @since 101.0.0
      */
     protected $metadata;
 
@@ -31,6 +35,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param string $connectionName
+     * @since 101.0.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -46,6 +51,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * {@inheritdoc}
+     * @since 101.0.0
      */
     protected function _construct()
     {
@@ -54,6 +60,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * {@inheritdoc}
+     * @since 101.0.0
      */
     public function getConnection()
     {
@@ -68,6 +75,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param array $leftJoinTables
      * @param string $whereCondition
      * @return array
+     * @since 101.0.0
      */
     public function loadDataFromTableByValueId(
         $tableNameAlias,
@@ -86,7 +94,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 [$mainTableAlias => $this->getTable($tableNameAlias)],
                 $cols
             )->where(
-                $mainTableAlias.'.value_id IN(?)',
+                $mainTableAlias . '.value_id IN(?)',
                 $ids
             );
         if (null !== $storeId) {
@@ -107,6 +115,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Catalog\Model\Product $product
      * @param int $attributeId
      * @return array
+     * @since 101.0.0
      */
     public function loadProductGalleryByAttributeId($product, $attributeId)
     {
@@ -129,13 +138,14 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $attributeId
      * @return \Magento\Framework\DB\Select
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 101.0.0
      */
     protected function createBaseLoadSelect($entityId, $storeId, $attributeId)
     {
         $select =  $this->createBatchBaseSelect($storeId, $attributeId);
 
         $select = $select->where(
-            'entity.' . $this->metadata->getLinkField() .' = ?',
+            'entity.' . $this->metadata->getLinkField() . ' = ?',
             $entityId
         );
         return $select;
@@ -146,6 +156,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $attributeId
      * @return \Magento\Framework\DB\Select
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 101.0.1
      */
     public function createBatchBaseSelect($storeId, $attributeId)
     {
@@ -177,6 +188,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 [
                     $mainTableAlias . '.value_id = value.value_id',
                     $this->getConnection()->quoteInto('value.store_id = ?', (int)$storeId),
+                    'value.' . $linkField . ' = entity.' . $linkField,
                 ]
             ),
             ['label', 'position', 'disabled']
@@ -187,6 +199,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 [
                     $mainTableAlias . '.value_id = default_value.value_id',
                     $this->getConnection()->quoteInto('default_value.store_id = ?', Store::DEFAULT_STORE_ID),
+                    'default_value.' . $linkField . ' = entity.' . $linkField,
                 ]
             ),
             ['label_default' => 'label', 'position_default' => 'position', 'disabled_default' => 'disabled']
@@ -207,6 +220,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param array &$result
      * @return $this
+     * @since 101.0.0
      */
     protected function removeDuplicates(&$result)
     {
@@ -228,6 +242,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * @return string
+     * @since 101.0.0
      */
     public function getMainTableAlias()
     {
@@ -238,6 +253,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $valueId
      * @param int $entityId
      * @return int
+     * @since 101.0.0
      */
     public function bindValueToEntity($valueId, $entityId)
     {
@@ -255,6 +271,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param array $data
      * @param array $fields
      * @return int
+     * @since 101.0.0
      */
     public function saveDataRow($table, array $data, array $fields = [])
     {
@@ -267,6 +284,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param array $data
      * @return int
+     * @since 101.0.0
      */
     public function insertGallery($data)
     {
@@ -285,6 +303,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param array|integer $valueId
      * @return $this
+     * @since 101.0.0
      */
     public function deleteGallery($valueId)
     {
@@ -306,6 +325,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param array $data
      * @return $this
+     * @since 101.0.0
      */
     public function insertGalleryValueInStore($data)
     {
@@ -329,6 +349,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $entityId
      * @param int $storeId
      * @return $this
+     * @since 101.0.0
      */
     public function deleteGalleryValueInStore($valueId, $entityId, $storeId)
     {
@@ -357,6 +378,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $originalProductId
      * @param int $newProductId
      * @return array
+     * @since 101.0.0
      */
     public function duplicate($attributeId, $newFiles, $originalProductId, $newProductId)
     {
@@ -420,6 +442,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Catalog\Model\Product $product
      * @param int|array $storeIds
      * @return array
+     * @since 101.0.0
      */
     public function getProductImages($product, $storeIds)
     {
@@ -448,5 +471,23 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         );
 
         return $this->getConnection()->fetchAll($select);
+    }
+
+    /**
+     * Counts uses of this image.
+     *
+     * @param string $image
+     * @return int
+     * @since 101.1.0
+     */
+    public function countImageUses($image)
+    {
+        $select = $this->getConnection()->select()
+            ->from([$this->getMainTableAlias() => $this->getMainTable()])
+            ->where(
+                'value = ?',
+                $image
+            );
+        return count($this->getConnection()->fetchAll($select));
     }
 }

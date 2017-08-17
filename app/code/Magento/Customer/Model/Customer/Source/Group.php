@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\Customer\Source;
@@ -11,6 +11,10 @@ use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 
+/**
+ * Class \Magento\Customer\Model\Customer\Source\Group
+ *
+ */
 class Group implements GroupSourceInterface
 {
     /**
@@ -56,7 +60,7 @@ class Group implements GroupSourceInterface
         $customerGroups = [];
         $customerGroups[] = [
             'label' => __('ALL GROUPS'),
-            'value' => GroupInterface::CUST_GROUP_ALL,
+            'value' => (string)GroupInterface::CUST_GROUP_ALL,
         ];
 
         /** @var GroupSearchResultsInterface $groups */

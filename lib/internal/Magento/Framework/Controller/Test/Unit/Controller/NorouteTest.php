@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Controller\Test\Unit\Controller;
 
-class NorouteTest extends \PHPUnit_Framework_TestCase
+class NorouteTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Controller\Noroute
@@ -30,9 +30,10 @@ class NorouteTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
-        $this->_viewMock = $this->getMock(\Magento\Framework\App\ViewInterface::class);
-        $this->_statusMock = $this->getMock(\Magento\Framework\DataObject::class, ['getLoaded'], [], '', false);
+        $this->_requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
+        $this->_viewMock = $this->createMock(\Magento\Framework\App\ViewInterface::class);
+        $this->_statusMock =
+            $this->createPartialMock(\Magento\Framework\DataObject::class, ['getLoaded', 'getForwarded']);
         $this->_controller = $helper->getObject(
             \Magento\Framework\Controller\Noroute\Index::class,
             ['request' => $this->_requestMock, 'view' => $this->_viewMock]

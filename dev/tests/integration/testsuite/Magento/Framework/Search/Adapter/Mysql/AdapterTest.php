@@ -1,11 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Adapter\Mysql;
 
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\CatalogSearch\Model\ResourceModel\EngineInterface;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection;
+use Magento\Framework\App\Config\MutableScopeConfigInterface;
 use Magento\Search\Model\EngineResolver;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -17,7 +21,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * @magentoDataFixture Magento/Framework/Search/_files/products.php
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AdapterTest extends \PHPUnit_Framework_TestCase
+class AdapterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Search\AdapterInterface
@@ -77,7 +81,7 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
      */
     protected function assertPreConditions()
     {
-        $currentEngine = $this->objectManager->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class)
+        $currentEngine = $this->objectManager->get(MutableScopeConfigInterface::class)
             ->getValue(EngineInterface::CONFIG_ENGINE_PATH, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
         $this->assertEquals($this->searchEngine, $currentEngine);
     }
@@ -120,6 +124,20 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param \Magento\Framework\Search\Response\QueryResponse $queryResponse
+     * @param array $expectedIds
+     */
+    private function assertOrderedProductIds($queryResponse, $expectedIds)
+    {
+        $actualIds = [];
+        foreach ($queryResponse as $document) {
+            /** @var \Magento\Framework\Api\Search\Document $document */
+            $actualIds[] = $document->getId();
+        }
+        $this->assertEquals($expectedIds, $actualIds);
+    }
+
+    /**
      * @magentoConfigFixture current_store catalog/search/engine mysql
      */
     public function testMatchQuery()
@@ -130,6 +148,24 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
         $queryResponse = $this->executeQuery();
 
         $this->assertEquals(1, $queryResponse->count());
+    }
+
+    /**
+     * @magentoDataFixture Magento/Framework/Search/_files/products_multi_option.php
+     * @magentoConfigFixture current_store catalog/search/engine mysql
+     */
+    public function testMatchOrderedQuery()
+    {
+        $expectedIds = [8, 7, 6, 5, 2];
+
+        //Verify that MySql randomized result of equal-weighted results
+        //consistently ordered by entity_id after multiple calls
+        $this->requestBuilder->bind('fulltext_search_query', 'shorts');
+        $this->requestBuilder->setRequestName('one_match');
+        $queryResponse = $this->executeQuery();
+
+        $this->assertEquals(5, $queryResponse->count());
+        $this->assertOrderedProductIds($queryResponse, $expectedIds);
     }
 
     /**
@@ -331,6 +367,10 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
      *
      * @magentoConfigFixture current_store catalog/search/engine mysql
      * @dataProvider advancedSearchDataProvider
+     * @param string $nameQuery
+     * @param string $descriptionQuery
+     * @param array $rangeFilter
+     * @param int $expectedRecordsCount
      */
     public function testSimpleAdvancedSearch(
         $nameQuery,
@@ -370,18 +410,18 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
      */
     public function testCustomFilterableAttribute()
     {
-        /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
-        $attribute = $this->objectManager->get(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
-            ->loadByCode(\Magento\Catalog\Model\Product::ENTITY, 'select_attribute');
-        /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection $selectOptions */
+        /** @var Attribute $attribute */
+        $attribute = $this->objectManager->get(Attribute::class)
+            ->loadByCode(Product::ENTITY, 'select_attribute');
+        /** @var Collection $selectOptions */
         $selectOptions = $this->objectManager
-            ->create(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection::class)
+            ->create(Collection::class)
             ->setAttributeFilter($attribute->getId());
 
-        $attribute->loadByCode(\Magento\Catalog\Model\Product::ENTITY, 'multiselect_attribute');
-        /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection $multiselectOptions */
+        $attribute->loadByCode(Product::ENTITY, 'multiselect_attribute');
+        /** @var Collection $multiselectOptions */
         $multiselectOptions = $this->objectManager
-            ->create(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection::class)
+            ->create(Collection::class)
             ->setAttributeFilter($attribute->getId());
 
         $this->requestBuilder->bind('select_attribute', $selectOptions->getLastItem()->getId());
@@ -390,7 +430,72 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
         $this->requestBuilder->bind('price.to', 100);
         $this->requestBuilder->bind('category_ids', 2);
         $this->requestBuilder->setRequestName('filterable_custom_attributes');
+        $queryResponse = $this->executeQuery();
+        $this->assertEquals(1, $queryResponse->count());
+    }
 
+    /**
+     * Data provider for testFilterByAttributeValues.
+     *
+     * @return array
+     */
+    public function filterByAttributeValuesDataProvider()
+    {
+        return [
+            'quick_search_container' => [
+                'quick_search_container',
+                [
+                    // Make sure search uses "should" cause.
+                    'search_term' => 'Simple Product',
+                ],
+            ],
+            'advanced_search_container' => [
+                'advanced_search_container',
+                [
+                    // Make sure "wildcard" feature works.
+                    'sku' => 'simple_product',
+                ]
+            ],
+            'catalog_view_container' => [
+                'catalog_view_container',
+                [
+                    'category_ids' => 2
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * Test filtering by two attributes.
+     *
+     * @magentoDataFixture Magento/Framework/Search/_files/filterable_attributes.php
+     * @magentoConfigFixture current_store catalog/search/engine mysql
+     * @dataProvider filterByAttributeValuesDataProvider
+     * @param string $requestName
+     * @param array $additionalData
+     * @return void
+     */
+    public function testFilterByAttributeValues($requestName, $additionalData)
+    {
+        /** @var Attribute $attribute */
+        $attribute = $this->objectManager->get(Attribute::class)
+            ->loadByCode(Product::ENTITY, 'select_attribute_1');
+        /** @var Collection $selectOptions1 */
+        $selectOptions1 = $this->objectManager
+            ->create(Collection::class)
+            ->setAttributeFilter($attribute->getId());
+        $attribute->loadByCode(Product::ENTITY, 'select_attribute_2');
+        /** @var Collection $selectOptions2 */
+        $selectOptions2 = $this->objectManager
+            ->create(Collection::class)
+            ->setAttributeFilter($attribute->getId());
+        $this->requestBuilder->bind('select_attribute_1', $selectOptions1->getLastItem()->getId());
+        $this->requestBuilder->bind('select_attribute_2', $selectOptions2->getLastItem()->getId());
+        // Binds for specific containers.
+        foreach ($additionalData as $key => $value) {
+            $this->requestBuilder->bind($key, $value);
+        }
+        $this->requestBuilder->setRequestName($requestName);
         $queryResponse = $this->executeQuery();
         $this->assertEquals(1, $queryResponse->count());
     }
@@ -420,12 +525,12 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
      */
     public function testAdvancedSearchCompositeProductWithOutOfStockOption()
     {
-        /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
-        $attribute = $this->objectManager->get(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
-            ->loadByCode(\Magento\Catalog\Model\Product::ENTITY, 'test_configurable');
-        /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection $selectOptions */
+        /** @var Attribute $attribute */
+        $attribute = $this->objectManager->get(Attribute::class)
+            ->loadByCode(Product::ENTITY, 'test_configurable');
+        /** @var Collection $selectOptions */
         $selectOptions = $this->objectManager
-            ->create(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection::class)
+            ->create(Collection::class)
             ->setAttributeFilter($attribute->getId());
 
         $firstOption = $selectOptions->getFirstItem();
@@ -443,6 +548,103 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
 
         $queryResponse = $this->executeQuery();
         $this->assertEquals(1, $queryResponse->count());
+    }
+
+    /**
+     * @magentoDataFixture Magento/Framework/Search/_files/product_configurable_with_disabled_child.php
+     * @magentoConfigFixture current_store catalog/search/engine mysql
+     */
+    public function testAdvancedSearchCompositeProductWithDisabledChild()
+    {
+        /** @var Attribute $attribute */
+        $attribute = $this->objectManager->get(Attribute::class)
+            ->loadByCode(Product::ENTITY, 'test_configurable');
+        /** @var Collection $selectOptions */
+        $selectOptions = $this->objectManager
+            ->create(Collection::class)
+            ->setAttributeFilter($attribute->getId());
+
+        $firstOption = $selectOptions->getFirstItem();
+        $firstOptionId = $firstOption->getId();
+        $this->requestBuilder->bind('test_configurable', $firstOptionId);
+        $this->requestBuilder->setRequestName('filter_out_of_stock_child');
+
+        $queryResponse = $this->executeQuery();
+        $this->assertEquals(0, $queryResponse->count());
+
+        $secondOption = $selectOptions->getLastItem();
+        $secondOptionId = $secondOption->getId();
+        $this->requestBuilder->bind('test_configurable', $secondOptionId);
+        $this->requestBuilder->setRequestName('filter_out_of_stock_child');
+
+        $queryResponse = $this->executeQuery();
+        $this->assertEquals(0, $queryResponse->count());
+    }
+
+    /**
+     * Test for search weight customization to ensure that search weight works correctly,
+     * and affects search results.
+     *
+     * @magentoDataFixture Magento/Framework/Search/_files/search_weight_products.php
+     * @magentoConfigFixture current_store catalog/search/engine mysql
+     */
+    public function testSearchQueryBoost()
+    {
+        $this->requestBuilder->bind('query', 'antarctica');
+        $this->requestBuilder->setRequestName('search_boost');
+        $queryResponse = $this->executeQuery();
+        $this->assertEquals(2, $queryResponse->count());
+
+        /** @var \Magento\Framework\Api\Search\DocumentInterface $products */
+        $products = iterator_to_array($queryResponse);
+        /*
+         * Products now contain search query in two attributes which are boosted with the same value: 1
+         * The search keyword (antarctica) is mentioned twice only in one of the products.
+         * And, as both attributes have the same search weight and boost, we expect that
+         * the product with doubled keyword should be prioritized by a search engine as a most relevant
+         *  and therefore will be first in the search result.
+         */
+        $firstProduct = reset($products);
+        $this->assertEquals(1222, $firstProduct->getId());
+        $secondProduct = end($products);
+        $this->assertEquals(1221, $secondProduct->getId());
+
+        /** @var \Magento\Catalog\Api\ProductAttributeRepositoryInterface $productAttributeRepository */
+        $productAttributeRepository = $this->objectManager->get(
+            \Magento\Catalog\Api\ProductAttributeRepositoryInterface::class
+        );
+
+        /**
+         * Now we're going to change search weight of one of the attributes to ensure that it will affect
+         * how products are ordered in the search result
+         */
+        /** @var Attribute $attribute */
+        $attribute = $productAttributeRepository->get('name');
+        $attribute->setSearchWeight(20);
+        $productAttributeRepository->save($attribute);
+
+        $this->requestBuilder->bind('query', 'antarctica');
+        $this->requestBuilder->setRequestName('search_boost_name');
+        $queryResponse = $this->executeQuery();
+        $this->assertEquals(2, $queryResponse->count());
+
+        /** @var \Magento\Framework\Api\Search\DocumentInterface $products */
+        $products = iterator_to_array($queryResponse);
+        /*
+         * As for the first case, we have two the same products.
+         * One of them has search keyword mentioned twice in the field which has search weight 1.
+         * However, we've changed the search weight of another attribute
+         *   which has only one mention of the search keyword in another product.
+         *
+         * The case is mostly the same but search weight has been changed and we expect that
+         *   less relevant (with only one mention) but more boosted (search weight = 20) product
+         *   will be prioritized higher than more relevant, but less boosted product.
+         */
+        $firstProduct = reset($products);
+        $this->assertEquals(1221, $firstProduct->getId());
+        //$firstProduct
+        $secondProduct = end($products);
+        $this->assertEquals(1222, $secondProduct->getId());
     }
 
     public function dateDataProvider()

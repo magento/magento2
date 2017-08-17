@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Store\Test\Unit\Model;
 
-class StoreManagerTest extends \PHPUnit_Framework_TestCase
+use Magento\Framework\App\DeploymentConfig;
+
+class StoreManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Store\Model\StoreManager

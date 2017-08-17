@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Model;
@@ -117,10 +117,10 @@ class PageRepository implements PageRepositoryInterface
         try {
             $this->resource->save($page);
         } catch (\Exception $exception) {
-            throw new CouldNotSaveException(__(
-                'Could not save the page: %1',
-                $exception->getMessage()
-            ));
+            throw new CouldNotSaveException(
+                __('Could not save the page: %1', $exception->getMessage()),
+                $exception
+            );
         }
         return $page;
     }
@@ -157,25 +157,10 @@ class PageRepository implements PageRepositoryInterface
 
         $this->collectionProcessor->process($criteria, $collection);
 
-        $pages = [];
-        /** @var Page $pageModel */
-        foreach ($collection as $pageModel) {
-            $pageData = $this->dataPageFactory->create();
-            $this->dataObjectHelper->populateWithArray(
-                $pageData,
-                $pageModel->getData(),
-                \Magento\Cms\Api\Data\PageInterface::class
-            );
-            $pages[] = $this->dataObjectProcessor->buildOutputDataArray(
-                $pageData,
-                \Magento\Cms\Api\Data\PageInterface::class
-            );
-        }
-
         /** @var Data\PageSearchResultsInterface $searchResults */
         $searchResults = $this->searchResultsFactory->create();
         $searchResults->setSearchCriteria($criteria);
-        $searchResults->setItems($pages);
+        $searchResults->setItems($collection->getItems());
         $searchResults->setTotalCount($collection->getSize());
         return $searchResults;
     }
@@ -216,7 +201,7 @@ class PageRepository implements PageRepositoryInterface
     /**
      * Retrieve collection processor
      *
-     * @deprecated
+     * @deprecated 101.1.0
      * @return CollectionProcessorInterface
      */
     private function getCollectionProcessor()

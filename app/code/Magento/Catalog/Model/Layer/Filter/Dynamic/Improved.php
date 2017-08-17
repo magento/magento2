@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Layer\Filter\Dynamic;
@@ -12,6 +12,10 @@ use Magento\Framework\Search\Dynamic\Algorithm;
 use Magento\Framework\Search\Dynamic\IntervalFactory;
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * Class \Magento\Catalog\Model\Layer\Filter\Dynamic\Improved
+ *
+ */
 class Improved implements AlgorithmInterface
 {
     const XML_PATH_INTERVAL_DIVISION_LIMIT = 'catalog/layered_navigation/interval_division_limit';
@@ -35,6 +39,7 @@ class Improved implements AlgorithmInterface
      * @var Render
      */
     private $render;
+
     /**
      * @var IntervalFactory
      */

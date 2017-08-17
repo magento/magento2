@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\NewRelicReporting\Test\Unit\Model\Observer;
@@ -11,7 +11,7 @@ use Magento\NewRelicReporting\Model\Observer\ReportProductSavedToNewRelic;
 /**
  * Class ReportProductSavedToNewRelicTest
  */
-class ReportProductSavedToNewRelicTest extends \PHPUnit_Framework_TestCase
+class ReportProductSavedToNewRelicTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ReportProductSavedToNewRelic

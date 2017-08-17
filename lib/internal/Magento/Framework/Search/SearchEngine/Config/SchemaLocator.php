@@ -1,12 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\SearchEngine\Config;
 
 use Magento\Framework\Config\SchemaLocatorInterface;
 
+/**
+ * Class \Magento\Framework\Search\SearchEngine\Config\SchemaLocator
+ *
+ */
 class SchemaLocator implements SchemaLocatorInterface
 {
     const SEARCH_ENGINE_XSD_PATH = 'urn:magento:framework:Search/etc/search_engine.xsd';

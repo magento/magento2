@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Search\Model;
@@ -8,6 +8,10 @@ namespace Magento\Search\Model;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Search\Api\Data\SynonymGroupInterface;
 
+/**
+ * Class \Magento\Search\Model\SynonymGroup
+ *
+ */
 class SynonymGroup extends AbstractModel implements SynonymGroupInterface
 {
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\View;
@@ -8,6 +8,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\View;
 /**
  * Edit order giftmessage block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Giftmessage extends \Magento\Backend\Block\Widget

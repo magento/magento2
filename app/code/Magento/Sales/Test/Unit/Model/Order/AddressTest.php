@@ -1,19 +1,17 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Sales\Test\Unit\Model\Order;
-
-use \Magento\Sales\Model\Order\Payment;
 
 /**
  * Class PaymentTest
  *
  * @package Magento\Sales\Model\Order
  */
-class AddressTest extends \PHPUnit_Framework_TestCase
+class AddressTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\Order\Address
@@ -37,33 +35,12 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->orderMock = $this->getMock(
-            \Magento\Sales\Model\Order::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->orderMock = $this->getMock(
-            \Magento\Sales\Model\Order::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->regionFactoryMock = $this->getMock(
-            \Magento\Directory\Model\RegionFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->regionMock = $this->getMock(
+        $this->orderMock = $this->createMock(\Magento\Sales\Model\Order::class);
+        $this->orderMock = $this->createMock(\Magento\Sales\Model\Order::class);
+        $this->regionFactoryMock = $this->createMock(\Magento\Directory\Model\RegionFactory::class);
+        $this->regionMock = $this->createPartialMock(
             \Magento\Directory\Model\Region::class,
-            ['load', 'getCountryId', 'getCode'],
-            [],
-            '',
-            false
+            ['load', 'getCountryId', 'getCode']
         );
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->address = $objectManager->getObject(

@@ -1,10 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\WebapiSecurity\Model\Plugin;
 
+/**
+ * Class \Magento\WebapiSecurity\Model\Plugin\CacheInvalidator
+ *
+ */
 class CacheInvalidator
 {
     /**
@@ -24,7 +28,7 @@ class CacheInvalidator
 
     /**
      * Invalidate WebApi cache if needed.
-     * 
+     *
      * @param \Magento\Framework\App\Config\Value $subject
      * @param \Magento\Framework\App\Config\Value $result
      * @return \Magento\Framework\App\Config\Value

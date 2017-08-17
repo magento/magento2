@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@
 
 namespace Magento\PageCache\Test\Unit\Observer;
 
-class FlushCacheByTagsTest extends \PHPUnit_Framework_TestCase
+class FlushCacheByTagsTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\PageCache\Observer\FlushCacheByTags */
     protected $_model;
@@ -32,23 +32,16 @@ class FlushCacheByTagsTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_configMock = $this->getMock(
-            \Magento\PageCache\Model\Config::class,
-            ['getType', 'isEnabled'],
-            [],
-            '',
-            false
-        );
-        $this->_cacheMock = $this->getMock(\Magento\Framework\App\PageCache\Cache::class, ['clean'], [], '', false);
-        $this->fullPageCacheMock = $this->getMock(\Magento\PageCache\Model\Cache\Type::class, ['clean'], [], '', false);
+        $this->_configMock = $this->createPartialMock(\Magento\PageCache\Model\Config::class, ['getType', 'isEnabled']);
+        $this->_cacheMock = $this->createPartialMock(\Magento\Framework\App\PageCache\Cache::class, ['clean']);
+        $this->fullPageCacheMock = $this->createPartialMock(\Magento\PageCache\Model\Cache\Type::class, ['clean']);
 
         $this->_model = new \Magento\PageCache\Observer\FlushCacheByTags(
             $this->_configMock,
             $this->_cacheMock
         );
 
-        $this->tagResolver = $this->getMock(\Magento\Framework\App\Cache\Tag\Resolver::class, [], [], '', false);
-
+        $this->tagResolver = $this->createMock(\Magento\Framework\App\Cache\Tag\Resolver::class);
 
         $helper->setBackwardCompatibleProperty($this->_model, 'tagResolver', $this->tagResolver);
         $reflection = new \ReflectionClass(\Magento\PageCache\Observer\FlushCacheByTags::class);
@@ -66,14 +59,14 @@ class FlushCacheByTagsTest extends \PHPUnit_Framework_TestCase
     public function testExecute($cacheState)
     {
         $this->_configMock->expects($this->any())->method('isEnabled')->will($this->returnValue($cacheState));
-        $observerObject = $this->getMock(\Magento\Framework\Event\Observer::class);
-        $observedObject = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
+        $observerObject = $this->createMock(\Magento\Framework\Event\Observer::class);
+        $observedObject = $this->createMock(\Magento\Store\Model\Store::class);
 
         if ($cacheState) {
             $tags = ['cache_1', 'cache_group'];
             $expectedTags = ['cache_1', 'cache_group'];
 
-            $eventMock = $this->getMock(\Magento\Framework\Event::class, ['getObject'], [], '', false);
+            $eventMock = $this->createPartialMock(\Magento\Framework\Event::class, ['getObject']);
             $eventMock->expects($this->once())->method('getObject')->will($this->returnValue($observedObject));
             $observerObject->expects($this->once())->method('getEvent')->will($this->returnValue($eventMock));
             $this->_configMock->expects($this->once())
@@ -86,7 +79,8 @@ class FlushCacheByTagsTest extends \PHPUnit_Framework_TestCase
                 ->with(\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, $this->equalTo($expectedTags));
         }
 
-        $this->_model->execute($observerObject);
+        $result = $this->_model->execute($observerObject);
+        $this->assertNull($result);
     }
 
     public function flushCacheByTagsDataProvider()
@@ -100,12 +94,12 @@ class FlushCacheByTagsTest extends \PHPUnit_Framework_TestCase
     public function testExecuteWithEmptyTags()
     {
         $this->_configMock->expects($this->any())->method('isEnabled')->will($this->returnValue(true));
-        $observerObject = $this->getMock(\Magento\Framework\Event\Observer::class);
-        $observedObject = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
+        $observerObject = $this->createMock(\Magento\Framework\Event\Observer::class);
+        $observedObject = $this->createMock(\Magento\Store\Model\Store::class);
 
         $tags = [];
 
-        $eventMock = $this->getMock(\Magento\Framework\Event::class, ['getObject'], [], '', false);
+        $eventMock = $this->createPartialMock(\Magento\Framework\Event::class, ['getObject']);
         $eventMock->expects($this->once())->method('getObject')->will($this->returnValue($observedObject));
         $observerObject->expects($this->once())->method('getEvent')->will($this->returnValue($eventMock));
         $this->_configMock->expects(

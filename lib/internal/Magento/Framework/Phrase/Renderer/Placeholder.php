@@ -2,13 +2,17 @@
 /**
  * Placeholder Phrase renderer
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Phrase\Renderer;
 
 use Magento\Framework\Phrase\RendererInterface;
 
+/**
+ * Class \Magento\Framework\Phrase\Renderer\Placeholder
+ *
+ */
 class Placeholder implements RendererInterface
 {
     /**

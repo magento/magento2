@@ -2,11 +2,15 @@
 /**
  * Customer address format configuration filesystem loader.
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\Address\Config;
 
+/**
+ * Class \Magento\Customer\Model\Address\Config\Reader
+ *
+ */
 class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Adminhtml;
@@ -348,7 +348,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
                 'firstname' => 'test firstname',
                 'lastname' => 'test lastname',
             ],
-            'subscription' => 'false'
+            'subscription' => '0'
         ];
         $this->getRequest()->setPostValue($post);
         $this->getRequest()->setParam('id', 1);
@@ -757,15 +757,14 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
      */
     protected function prepareEmailMock($occurrenceNumber, $templateId, $sender, $customerId, $newEmail = null)
     {
-
         $area = \Magento\Framework\App\Area::AREA_FRONTEND;
         $customer = $this->customerRepository->getById($customerId);
         $storeId = $customer->getStoreId();
         $name = $this->customerViewHelper->getCustomerName($customer);
-        $transportMock = $this->getMock(
-            \Magento\Framework\Mail\TransportInterface::class,
-            ['sendMessage']
-        );
+
+        $transportMock = $this->getMockBuilder(\Magento\Framework\Mail\TransportInterface::class)
+            ->setMethods(['sendMessage'])
+            ->getMockForAbstractClass();
         $transportMock->expects($this->exactly($occurrenceNumber))
             ->method('sendMessage');
         $transportBuilderMock = $this->getMockBuilder(\Magento\Framework\Mail\Template\TransportBuilder::class)

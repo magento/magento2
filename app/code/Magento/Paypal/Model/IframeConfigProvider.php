@@ -1,15 +1,18 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
-use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Payment\Helper\Data as PaymentHelper;
 
+/**
+ * Class \Magento\Paypal\Model\IframeConfigProvider
+ *
+ */
 class IframeConfigProvider implements ConfigProviderInterface
 {
     /**
@@ -80,7 +83,7 @@ class IframeConfigProvider implements ConfigProviderInterface
     protected function getFrameActionUrl($code)
     {
         $url = '';
-        switch($code) {
+        switch ($code) {
             case Config::METHOD_PAYFLOWADVANCED:
                 $url = $this->urlBuilder->getUrl('paypal/payflowadvanced/form', ['_secure' => true]);
                 break;

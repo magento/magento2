@@ -1,15 +1,14 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Test\Unit\Model\Cart;
 
-
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class CartTotalManagementTest extends \PHPUnit_Framework_TestCase
+class CartTotalManagementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -39,21 +38,9 @@ class CartTotalManagementTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
-        $this->shippingMock = $this->getMock(\Magento\Quote\Model\ShippingMethodManagement::class, [], [], '', false);
-        $this->paymentMock = $this->getMock(
-            \Magento\Quote\Api\PaymentMethodManagementInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->cartTotalMock = $this->getMock(
-            \Magento\Quote\Api\CartTotalRepositoryInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->shippingMock = $this->createMock(\Magento\Quote\Model\ShippingMethodManagement::class);
+        $this->paymentMock = $this->createMock(\Magento\Quote\Api\PaymentMethodManagementInterface::class);
+        $this->cartTotalMock = $this->createMock(\Magento\Quote\Api\CartTotalRepositoryInterface::class);
         $this->model = $this->objectManager->getObject(
             \Magento\Quote\Model\Cart\CartTotalManagement::class,
             [
@@ -70,7 +57,7 @@ class CartTotalManagementTest extends \PHPUnit_Framework_TestCase
         $shippingCarrierCode = 'careful_carrier';
         $shippingMethodCode = 'drone_delivery';
         $total = 3322.31;
-        $paymentDataMock = $this->getMock(\Magento\Quote\Api\Data\PaymentInterface::class, [], [], '', false);
+        $paymentDataMock = $this->createMock(\Magento\Quote\Api\Data\PaymentInterface::class);
 
         $this->shippingMock->expects($this->once())
             ->method('set')
@@ -92,7 +79,7 @@ class CartTotalManagementTest extends \PHPUnit_Framework_TestCase
     {
         $cartId = 123;
         $total = 3322.31;
-        $paymentDataMock = $this->getMock(\Magento\Quote\Api\Data\PaymentInterface::class, [], [], '', false);
+        $paymentDataMock = $this->createMock(\Magento\Quote\Api\Data\PaymentInterface::class);
 
         $this->shippingMock->expects($this->never())
             ->method('set')

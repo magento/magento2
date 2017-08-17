@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -17,7 +17,7 @@ use Magento\Backend\Block\Widget\Form\Generic;
 /**
  * Class Content
  *
- * @deprecated
+ * @deprecated 101.1.0
  * @see \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav
  */
 class Content extends Generic

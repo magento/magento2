@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@
  */
 ?>
 <span class="widget block block-cms-link-inline">
-    <a <?php /* @noEscape */ echo $block->getLinkAttributes() ?>>
-        <span><?php echo $block->escapeHtml($block->getLabel()) ?></span>
+    <a <?= /* @noEscape */ $block->getLinkAttributes() ?>>
+        <span><?= $block->escapeHtml($block->getLabel()) ?></span>
     </a>
 </span>

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -11,6 +11,17 @@
             <label>OAuth</label>
             <tab>service</tab>
             <resource>Magento_Integration::config_oauth</resource>
+            <group id="access_token_lifetime" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Access Token Expiration</label>
+                <field id="customer" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Customer Token Lifetime (hours)</label>
+                    <comment>We will disable this feature if the value is empty.</comment>
+                </field>
+                <field id="admin" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Admin Token Lifetime (hours)</label>
+                    <comment>We will disable this feature if the value is empty.</comment>
+                </field>
+            </group>
             <group id="cleanup" translate="label" type="text" sortOrder="300" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Cleanup Settings</label>
                 <field id="cleanup_probability" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
@@ -37,6 +48,18 @@
                     <comment>Timeout for OAuth consumer credentials Post request within X seconds.</comment>
                 </field>
             </group>
+            <group id="authentication_lock" translate="label" type="text" sortOrder="400" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Authentication Locks</label>
+                <field id="max_failures_count" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Maximum Login Failures to Lock Out Account</label>
+                    <comment>Maximum Number of authentication failures to lock out account.</comment>
+                </field>
+                <field id="timeout" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Lockout Time (seconds)</label>
+                    <comment>Period of time in seconds after which account will be unlocked.</comment>
+                </field>
+            </group>
+
         </section>
     </system>
 </config>

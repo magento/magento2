@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@ namespace Magento\Setup\Test\Unit\Module;
 use \Magento\Setup\Module\ResourceFactory;
 use \Magento\Setup\Module\ConnectionFactory;
 
-class ResourceFactoryTest extends \PHPUnit_Framework_TestCase
+class ResourceFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ResourceFactory
@@ -34,7 +34,7 @@ class ResourceFactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreate()
     {
         $resource = $this->resourceFactory->create(
-            $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false)
+            $this->createMock(\Magento\Framework\App\DeploymentConfig::class)
         );
         $this->assertInstanceOf(\Magento\Framework\App\ResourceConnection::class, $resource);
     }

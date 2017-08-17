@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Test\Unit\Helper;
@@ -22,7 +22,7 @@ use Magento\Wishlist\Model\Wishlist;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DataTest extends \PHPUnit_Framework_TestCase
+class DataTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  \Magento\Wishlist\Helper\Data */
     protected $model;
@@ -171,12 +171,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $url = 'http://magento2ce/wishlist/index/configure/id/4/product_id/30/';
 
         /** @var \Magento\Wishlist\Model\Item|\PHPUnit_Framework_MockObject_MockObject $wishlistItem */
-        $wishlistItem = $this->getMock(
+        $wishlistItem = $this->createPartialMock(
             \Magento\Wishlist\Model\Item::class,
-            ['getWishlistItemId', 'getProductId'],
-            [],
-            '',
-            false
+            ['getWishlistItemId', 'getProductId']
         );
         $wishlistItem
             ->expects($this->once())

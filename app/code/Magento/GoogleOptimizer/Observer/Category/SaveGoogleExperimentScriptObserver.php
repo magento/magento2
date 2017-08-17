@@ -2,13 +2,17 @@
 /**
  * Google Experiment Category Save observer
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GoogleOptimizer\Observer\Category;
 
 use Magento\Framework\Event\Observer;
 
+/**
+ * Class \Magento\GoogleOptimizer\Observer\Category\SaveGoogleExperimentScriptObserver
+ *
+ */
 class SaveGoogleExperimentScriptObserver extends \Magento\GoogleOptimizer\Observer\AbstractSave
 {
     /**

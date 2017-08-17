@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Ui\Component\Design\Config;
@@ -11,10 +11,17 @@ use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\App\RequestInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * Data Provider for 'design_config_form' and 'design_config_listing' components
+ *
+ * @api
+ * @since 100.1.0
+ */
 class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider
 {
     /**
      * @var StoreManagerInterface
+     * @since 100.1.0
      */
     protected $storeManager;
 
@@ -30,6 +37,7 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
      * @param array $meta
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 100.1.0
      */
     public function __construct(
         $name,
@@ -61,6 +69,7 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
      * Get data
      *
      * @return array
+     * @since 100.1.0
      */
     public function getData()
     {

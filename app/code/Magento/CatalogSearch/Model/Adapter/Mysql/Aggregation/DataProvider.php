@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation;
@@ -16,6 +16,7 @@ use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderInterface;
 use Magento\Framework\Search\Request\BucketInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -104,7 +105,8 @@ class DataProvider implements DataProviderInterface
                 'catalog_product_index_eav' . ($attribute->getBackendType() === 'decimal' ? '_decimal' : '')
             );
             $subSelect = $select;
-            $subSelect->from(['main_table' => $table], ['main_table.value'])
+            $subSelect->from(['main_table' => $table], ['main_table.entity_id', 'main_table.value'])
+                ->distinct()
                 ->joinLeft(
                     ['stock_index' => $this->resource->getTableName('cataloginventory_stock_status')],
                     'main_table.source_id = stock_index.product_id',
@@ -112,8 +114,7 @@ class DataProvider implements DataProviderInterface
                 )
                 ->where('main_table.attribute_id = ?', $attribute->getAttributeId())
                 ->where('main_table.store_id = ? ', $currentScopeId)
-                ->where('stock_index.stock_status = ?', Stock::STOCK_IN_STOCK)
-                ->group(['main_table.entity_id', 'main_table.value']);
+                ->where('stock_index.stock_status = ?', Stock::STOCK_IN_STOCK);
             $parentSelect = $this->getSelect();
             $parentSelect->from(['main_table' => $subSelect], ['main_table.value']);
             $select = $parentSelect;

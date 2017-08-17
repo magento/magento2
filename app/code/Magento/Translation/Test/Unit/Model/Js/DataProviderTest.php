@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Translation\Test\Unit\Model\Js;
@@ -18,7 +18,7 @@ use Magento\Framework\Phrase\Renderer\Translate;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DataProviderTest extends \PHPUnit_Framework_TestCase
+class DataProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DataProvider
@@ -55,16 +55,16 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->appStateMock = $this->getMock(\Magento\Framework\App\State::class, [], [], '', false);
-        $this->configMock = $this->getMock(\Magento\Translation\Model\Js\Config::class, [], [], '', false);
-        $this->filesUtilityMock = $this->getMock(\Magento\Framework\App\Utility\Files::class, [], [], '', false);
-        $fileReadFactory = $this->getMock(\Magento\Framework\Filesystem\File\ReadFactory::class, [], [], '', false);
-        $this->fileReadMock = $this->getMock(\Magento\Framework\Filesystem\File\Read::class, [], [], '', false);
-        $this->translateMock = $this->getMock(\Magento\Framework\Phrase\Renderer\Translate::class, [], [], '', false);
+        $this->appStateMock = $this->createMock(\Magento\Framework\App\State::class);
+        $this->configMock = $this->createMock(\Magento\Translation\Model\Js\Config::class);
+        $this->filesUtilityMock = $this->createMock(\Magento\Framework\App\Utility\Files::class);
+        $fileReadFactory = $this->createMock(\Magento\Framework\Filesystem\File\ReadFactory::class);
+        $this->fileReadMock = $this->createMock(\Magento\Framework\Filesystem\File\Read::class);
+        $this->translateMock = $this->createMock(\Magento\Framework\Phrase\Renderer\Translate::class);
         $fileReadFactory->expects($this->atLeastOnce())
             ->method('create')
             ->willReturn($this->fileReadMock);
-        $dirSearch = $this->getMock(\Magento\Framework\Component\DirSearch::class, [], [], '', false);
+        $dirSearch = $this->createMock(\Magento\Framework\Component\DirSearch::class);
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(
             \Magento\Translation\Model\Js\DataProvider::class,
@@ -76,7 +76,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
                 'dirSearch' => $dirSearch,
                 'filesUtility' => $this->filesUtilityMock,
                 'componentRegistrar' =>
-                    $this->getMock(\Magento\Framework\Component\ComponentRegistrar::class, [], [], '', false)
+                    $this->createMock(\Magento\Framework\Component\ComponentRegistrar::class)
             ]
         );
     }

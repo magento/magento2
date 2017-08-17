@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Ui\DataProvider\Product;
@@ -14,17 +14,22 @@ use Magento\Review\Model\Review;
 /**
  * Class ReviewDataProvider
  *
+ * @api
+ *
  * @method Collection getCollection
+ * @since 100.1.0
  */
 class ReviewDataProvider extends AbstractDataProvider
 {
     /**
      * @var CollectionFactory
+     * @since 100.1.0
      */
     protected $collectionFactory;
 
     /**
      * @var RequestInterface
+     * @since 100.1.0
      */
     protected $request;
 
@@ -36,6 +41,7 @@ class ReviewDataProvider extends AbstractDataProvider
      * @param RequestInterface $request
      * @param array $meta
      * @param array $data
+     * @since 100.1.0
      */
     public function __construct(
         $name,
@@ -54,6 +60,7 @@ class ReviewDataProvider extends AbstractDataProvider
 
     /**
      * {@inheritdoc}
+     * @since 100.1.0
      */
     public function getData()
     {
@@ -74,6 +81,7 @@ class ReviewDataProvider extends AbstractDataProvider
 
     /**
      * {@inheritdoc}
+     * @since 100.1.0
      */
     public function addFilter(\Magento\Framework\Api\Filter $filter)
     {

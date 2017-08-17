@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,10 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\EntityManager\HydratorPool;
 use Magento\Framework\EntityManager\Db\ReadRow;
 
+/**
+ * Class \Magento\Framework\EntityManager\Operation\Read\ReadMain
+ *
+ */
 class ReadMain
 {
     /**

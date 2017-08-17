@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@ namespace Magento\Framework\App\Test\Unit;
 use \Magento\Framework\App\DeploymentConfig;
 use \Magento\Framework\Config\ConfigOptionsListConstants;
 
-class DeploymentConfigTest extends \PHPUnit_Framework_TestCase
+class DeploymentConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var array
@@ -69,7 +69,7 @@ class DeploymentConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->reader = $this->getMock(\Magento\Framework\App\DeploymentConfig\Reader::class, [], [], '', false);
+        $this->reader = $this->createMock(\Magento\Framework\App\DeploymentConfig\Reader::class);
         $this->_deploymentConfig = new \Magento\Framework\App\DeploymentConfig($this->reader, []);
         $this->_deploymentConfigMerged = new \Magento\Framework\App\DeploymentConfig(
             $this->reader,

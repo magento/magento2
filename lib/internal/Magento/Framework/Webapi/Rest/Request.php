@@ -2,7 +2,7 @@
 /**
  * REST API request.
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,10 @@ namespace Magento\Framework\Webapi\Rest;
 use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\Phrase;
 
+/**
+ * Class \Magento\Framework\Webapi\Rest\Request
+ *
+ */
 class Request extends \Magento\Framework\Webapi\Request
 {
     /**#@+
@@ -29,19 +33,29 @@ class Request extends \Magento\Framework\Webapi\Request
 
     const DEFAULT_ACCEPT = '*/*';
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $_serviceName;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $_serviceType;
 
-    /** @var \Magento\Framework\Webapi\Rest\Request\DeserializerInterface */
+    /**
+     * @var \Magento\Framework\Webapi\Rest\Request\DeserializerInterface
+     */
     protected $_deserializer;
 
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $_bodyParams;
 
-    /** @var \Magento\Framework\Webapi\Rest\Request\DeserializerFactory */
+    /**
+     * @var \Magento\Framework\Webapi\Rest\Request\DeserializerFactory
+     */
     protected $_deserializerFactory;
 
     /**
@@ -130,7 +144,6 @@ class Request extends \Magento\Framework\Webapi\Request
             if ($this->getContent()) {
                 $this->_bodyParams = (array)$this->_getDeserializer()->deserialize((string)$this->getContent());
             }
-
         }
         return $this->_bodyParams;
     }
@@ -208,7 +221,7 @@ class Request extends \Magento\Framework\Webapi\Request
      * @param array $urlPathParams url path parameters as array
      * @return array
      *
-     * @deprecated
+     * @deprecated 100.1.0
      * @see \Magento\Webapi\Controller\Rest\ParamsOverrider::overrideRequestBodyIdWithPathParam
      */
     protected function overrideRequestBodyIdWithPathParam($urlPathParams)
@@ -238,7 +251,7 @@ class Request extends \Magento\Framework\Webapi\Request
      * @param string $key
      * @param string $value
      * @return void
-     * @deprecated
+     * @deprecated 100.1.0
      * @see \Magento\Webapi\Controller\Rest\ParamsOverrider::substituteParameters
      */
     protected function substituteParameters(&$requestData, $key, $value)

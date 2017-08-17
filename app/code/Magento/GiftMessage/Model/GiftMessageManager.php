@@ -1,12 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GiftMessage\Model;
 
 use Magento\Framework\Exception\CouldNotSaveException;
 
+/**
+ * Class \Magento\GiftMessage\Model\GiftMessageManager
+ *
+ */
 class GiftMessageManager
 {
     /**

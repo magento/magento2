@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -34,12 +34,14 @@
                 <order_status>processing</order_status>
                 <environment>sandbox</environment>
                 <allowspecific>0</allowspecific>
-                <sdk_url><![CDATA[https://js.braintreegateway.com/js/braintree-2.25.0.min.js]]></sdk_url>
+                <sdk_url><![CDATA[https://js.braintreegateway.com/js/braintree-2.32.0.min.js]]></sdk_url>
                 <public_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <private_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <masked_fields>cvv,number</masked_fields>
                 <privateInfoKeys>avsPostalCodeResponseCode,avsStreetAddressResponseCode,cvvResponseCode,processorAuthorizationCode,processorResponseCode,processorResponseText,liabilityShifted,liabilityShiftPossible,riskDataId,riskDataDecision</privateInfoKeys>
                 <paymentInfoKeys>cc_type,cc_number,avsPostalCodeResponseCode,avsStreetAddressResponseCode,cvvResponseCode,processorAuthorizationCode,processorResponseCode,processorResponseText,liabilityShifted,liabilityShiftPossible,riskDataId,riskDataDecision</paymentInfoKeys>
+                <avs_ems_adapter>Magento\Braintree\Model\AvsEmsCodeMapper</avs_ems_adapter>
+                <cvv_ems_adapter>Magento\Braintree\Model\CvvEmsCodeMapper</cvv_ems_adapter>
             </braintree>
             <braintree_paypal>
                 <model>BraintreePayPalFacade</model>
@@ -64,6 +66,7 @@
                 <can_capture_vault>1</can_capture_vault>
                 <privateInfoKeys>processorResponseCode,processorResponseText,paymentId</privateInfoKeys>
                 <paymentInfoKeys>processorResponseCode,processorResponseText,paymentId,payerEmail</paymentInfoKeys>
+                <supported_locales>en_US,en_GB,en_AU,da_DK,fr_FR,fr_CA,de_DE,zh_HK,it_IT,nl_NL,no_NO,pl_PL,es_ES,sv_SE,tr_TR,pt_BR,ja_JP,id_ID,ko_KR,pt_PT,ru_RU,th_TH,zh_CN,zh_TW</supported_locales>
             </braintree_paypal>
             <braintree_cc_vault>
                 <model>BraintreeCreditCardVaultFacade</model>

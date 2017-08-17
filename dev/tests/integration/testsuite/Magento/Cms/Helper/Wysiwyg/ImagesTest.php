@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Helper\Wysiwyg;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-class ImagesTest extends \PHPUnit_Framework_TestCase
+class ImagesTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetStorageRoot()
     {

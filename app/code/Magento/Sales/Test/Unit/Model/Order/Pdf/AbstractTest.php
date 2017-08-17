@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Pdf;
@@ -8,7 +8,7 @@ namespace Magento\Sales\Test\Unit\Model\Order\Pdf;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AbstractTest extends \PHPUnit_Framework_TestCase
+class AbstractTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test protected method to reduce testing complexity, which would be too high in case of testing a public method
@@ -17,41 +17,31 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     public function testInsertTotals()
     {
         // Setup parameters, that will be passed to the tested model method
-        $page = $this->getMock(\Zend_Pdf_Page::class, [], [], '', false);
+        $page = $this->createMock(\Zend_Pdf_Page::class);
 
         $order = new \StdClass();
-        $source = $this->getMock(\Magento\Sales\Model\Order\Invoice::class, [], [], '', false);
+        $source = $this->createMock(\Magento\Sales\Model\Order\Invoice::class);
         $source->expects($this->any())->method('getOrder')->will($this->returnValue($order));
 
         // Setup most constructor dependencies
-        $paymentData = $this->getMock(\Magento\Payment\Helper\Data::class, [], [], '', false);
-        $addressRenderer = $this->getMock(\Magento\Sales\Model\Order\Address\Renderer::class, [], [], '', false);
-        $string = $this->getMock(\Magento\Framework\Stdlib\StringUtils::class, [], [], '', false);
-        $scopeConfig = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $translate = $this->getMock(\Magento\Framework\Translate\Inline\StateInterface::class, [], [], '', false);
-        $filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
-        $pdfItemsFactory = $this->getMock(\Magento\Sales\Model\Order\Pdf\ItemsFactory::class, [], [], '', false);
-        $localeMock = $this->getMock(
-            \Magento\Framework\Stdlib\DateTime\TimezoneInterface::class,
-            [],
-            [],
-            '',
-            false,
-            false
-        );
+        $paymentData = $this->createMock(\Magento\Payment\Helper\Data::class);
+        $addressRenderer = $this->createMock(\Magento\Sales\Model\Order\Address\Renderer::class);
+        $string = $this->createMock(\Magento\Framework\Stdlib\StringUtils::class);
+        $scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $translate = $this->createMock(\Magento\Framework\Translate\Inline\StateInterface::class);
+        $filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
+        $pdfItemsFactory = $this->createMock(\Magento\Sales\Model\Order\Pdf\ItemsFactory::class);
+        $localeMock = $this->createMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
 
         // Setup config file totals
         $configTotals = ['item1' => [''], 'item2' => ['model' => 'custom_class']];
-        $pdfConfig = $this->getMock(\Magento\Sales\Model\Order\Pdf\Config::class, [], [], '', false);
+        $pdfConfig = $this->createMock(\Magento\Sales\Model\Order\Pdf\Config::class);
         $pdfConfig->expects($this->once())->method('getTotals')->will($this->returnValue($configTotals));
 
         // Setup total factory
-        $total1 = $this->getMock(
+        $total1 = $this->createPartialMock(
             \Magento\Sales\Model\Order\Pdf\Total\DefaultTotal::class,
-            ['setSource', 'setOrder', 'canDisplay', 'getTotalsForDisplay'],
-            [],
-            '',
-            false
+            ['setSource', 'setOrder', 'canDisplay', 'getTotalsForDisplay']
         );
         $total1->expects($this->once())->method('setOrder')->with($order)->will($this->returnSelf());
         $total1->expects($this->once())->method('setSource')->with($source)->will($this->returnSelf());
@@ -60,12 +50,9 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
             ->method('getTotalsForDisplay')
             ->will($this->returnValue([['label' => 'label1', 'font_size' => 1, 'amount' => '$1']]));
 
-        $total2 = $this->getMock(
+        $total2 = $this->createPartialMock(
             \Magento\Sales\Model\Order\Pdf\Total\DefaultTotal::class,
-            ['setSource', 'setOrder', 'canDisplay', 'getTotalsForDisplay'],
-            [],
-            '',
-            false
+            ['setSource', 'setOrder', 'canDisplay', 'getTotalsForDisplay']
         );
         $total2->expects($this->once())->method('setOrder')->with($order)->will($this->returnSelf());
         $total2->expects($this->once())->method('setSource')->with($source)->will($this->returnSelf());
@@ -75,7 +62,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue([['label' => 'label2', 'font_size' => 2, 'amount' => '$2']]));
 
         $valueMap = [[null, [], $total1], ['custom_class', [], $total2]];
-        $pdfTotalFactory = $this->getMock(\Magento\Sales\Model\Order\Pdf\Total\Factory::class, [], [], '', false);
+        $pdfTotalFactory = $this->createMock(\Magento\Sales\Model\Order\Pdf\Total\Factory::class);
         $pdfTotalFactory->expects($this->exactly(2))->method('create')->will($this->returnValueMap($valueMap));
 
         // Test model

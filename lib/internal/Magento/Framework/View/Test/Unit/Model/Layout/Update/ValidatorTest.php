@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Model\Layout\Update;
@@ -8,7 +8,7 @@ namespace Magento\Framework\View\Test\Unit\Model\Layout\Update;
 use Magento\Framework\Phrase;
 use Magento\Framework\View\Model\Layout\Update\Validator;
 
-class ValidatorTest extends \PHPUnit_Framework_TestCase
+class ValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,6 +12,10 @@ use Magento\Tax\Api\TaxRateManagementInterface;
 use Magento\Tax\Api\TaxRateRepositoryInterface;
 use Magento\Tax\Api\TaxRuleRepositoryInterface;
 
+/**
+ * Class \Magento\Tax\Model\TaxRateManagement
+ *
+ */
 class TaxRateManagement implements TaxRateManagementInterface
 {
     /**

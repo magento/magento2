@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,10 @@
  */
 namespace Magento\Customer\Block\Adminhtml\System\Config;
 
+/**
+ * Class \Magento\Customer\Block\Adminhtml\System\Config\Validatevat
+ *
+ */
 class Validatevat extends \Magento\Config\Block\System\Config\Form\Field
 {
     /**

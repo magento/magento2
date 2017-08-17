@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,13 +12,19 @@ use Magento\ImportExport\Model\Import;
 
 /**
  * ImportExport history reports helper
+ *
+ * @api
  */
 class Report extends \Magento\Framework\App\Helper\AbstractHelper
 {
-    /** @var \Magento\Framework\Stdlib\DateTime\Timezone */
+    /**
+     * @var \Magento\Framework\Stdlib\DateTime\Timezone
+     */
     protected $timeZone;
 
-    /** @var \Magento\Framework\Filesystem\Directory\WriteInterface */
+    /**
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
+     */
     protected $varDirectory;
 
     /**

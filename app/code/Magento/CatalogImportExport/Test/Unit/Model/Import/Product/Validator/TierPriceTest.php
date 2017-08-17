@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product\Validator;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class TierPriceTest extends \PHPUnit_Framework_TestCase
+class TierPriceTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\CatalogImportExport\Model\Import\Product\Validator\TierPrice */
     protected $tierPrice;
@@ -27,28 +27,14 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->groupRepositoryInterface = $this->getMock(
-            \Magento\Customer\Model\ResourceModel\GroupRepository::class,
-            [],
-            [],
-            '',
-            false
+        $this->groupRepositoryInterface = $this->createMock(
+            \Magento\Customer\Model\ResourceModel\GroupRepository::class
         );
-        $this->searchCriteriaSearch = $this->getMock(\Magento\Framework\Api\SearchCriteria::class, [], [], '', false);
-        $this->searchCriteriaBuilder = $this->getMock(
-            \Magento\Framework\Api\SearchCriteriaBuilder::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->searchCriteriaSearch = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
+        $this->searchCriteriaBuilder = $this->createMock(\Magento\Framework\Api\SearchCriteriaBuilder::class);
         $this->searchCriteriaBuilder->expects($this->any())->method('create')->willReturn($this->searchCriteriaSearch);
-        $this->storeResolver = $this->getMock(
-            \Magento\CatalogImportExport\Model\Import\Product\StoreResolver::class,
-            [],
-            [],
-            '',
-            false
+        $this->storeResolver = $this->createMock(
+            \Magento\CatalogImportExport\Model\Import\Product\StoreResolver::class
         );
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -64,15 +50,9 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
 
     protected function processInit($groupId)
     {
-        $searchResult = $this->getMock(
-            \Magento\Customer\Api\Data\GroupSearchResultsInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $searchResult = $this->createMock(\Magento\Customer\Api\Data\GroupSearchResultsInterface::class);
         $this->groupRepositoryInterface->expects($this->once())->method('getList')->willReturn($searchResult);
-        $group = $this->getMock(\Magento\Customer\Model\Data\Group::class, [], [], '', false);
+        $group = $this->createMock(\Magento\Customer\Model\Data\Group::class);
         $group->expects($this->once())->method('getId')->willReturn($groupId);
         $searchResult->expects($this->once())->method('getItems')->willReturn([$group]);
         return $this->tierPrice->init(null);

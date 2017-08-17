@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,10 @@
  */
 namespace Magento\Framework\Event\Observer;
 
+/**
+ * Class \Magento\Framework\Event\Observer\Regex
+ *
+ */
 class Regex extends \Magento\Framework\Event\Observer
 {
     /**

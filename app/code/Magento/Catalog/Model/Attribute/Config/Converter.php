@@ -2,11 +2,15 @@
 /**
  * Converter of attributes configuration from \DOMDocument to array
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Attribute\Config;
 
+/**
+ * Class \Magento\Catalog\Model\Attribute\Config\Converter
+ *
+ */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**

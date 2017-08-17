@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,8 +9,6 @@ namespace Magento\Authorization\Model;
 /**
  * Admin Rules Model
  *
- * @method \Magento\Authorization\Model\ResourceModel\Rules _getResource()
- * @method \Magento\Authorization\Model\ResourceModel\Rules getResource()
  * @method int getRoleId()
  * @method \Magento\Authorization\Model\Rules setRoleId(int $value)
  * @method string getResourceId()
@@ -21,6 +19,7 @@ namespace Magento\Authorization\Model;
  * @method \Magento\Authorization\Model\Rules setAssertId(int $value)
  * @method string getPermission()
  * @method \Magento\Authorization\Model\Rules setPermission(string $value)
+ * @api
  */
 class Rules extends \Magento\Framework\Model\AbstractModel
 {
@@ -30,14 +29,14 @@ class Rules extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Authorization\Model\ResourceModel\Rules $resource
-     * @param \Magento\Authorization\Model\ResourceModel\Permissions\Collection $resourceCollection
+     * @param \Magento\Authorization\Model\ResourceModel\Rules\Collection $resourceCollection
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Authorization\Model\ResourceModel\Rules $resource,
-        \Magento\Authorization\Model\ResourceModel\Permissions\Collection $resourceCollection,
+        \Magento\Authorization\Model\ResourceModel\Rules\Collection $resourceCollection,
         array $data = []
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);

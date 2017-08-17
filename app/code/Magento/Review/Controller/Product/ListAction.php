@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Controller\Product;
@@ -10,6 +10,10 @@ use Magento\Review\Model\Review;
 use Magento\Catalog\Model\Product as CatalogProduct;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Review\Controller\Product\ListAction
+ *
+ */
 class ListAction extends ProductController
 {
     /**
@@ -26,9 +30,8 @@ class ListAction extends ProductController
             $resultPage->getConfig()->setPageLayout($product->getPageLayout());
         }
         $urlSafeSku = rawurlencode($product->getSku());
-        $resultPage->addPageLayoutHandles(
-            ['id' => $product->getId(), 'sku' => $urlSafeSku, 'type' => $product->getTypeId()]
-        );
+        $resultPage->addPageLayoutHandles(['id' => $product->getId(), 'sku' => $urlSafeSku]);
+        $resultPage->addPageLayoutHandles(['type' => $product->getTypeId()], null, false);
         $resultPage->addUpdate($product->getCustomLayoutUpdate());
         return $resultPage;
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ProductAlert\Controller;
@@ -10,6 +10,10 @@ use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\App\RequestInterface;
 
+/**
+ * Class \Magento\ProductAlert\Controller\Add
+ *
+ */
 abstract class Add extends Action
 {
     /**

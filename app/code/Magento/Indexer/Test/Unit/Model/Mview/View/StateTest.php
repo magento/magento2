@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Indexer\Test\Unit\Model\Mview\View;
 
-class StateTest extends \PHPUnit_Framework_TestCase
+class StateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Indexer\Model\Mview\View\State
@@ -34,24 +34,14 @@ class StateTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_contextMock = $this->getMock(
-            \Magento\Framework\Model\Context::class,
-            ['getEventDispatcher'],
-            [],
-            '',
-            false
-        );
-        $eventManagerMock = $this->getMock(\Magento\Framework\Event\ManagerInterface::class);
+        $this->_contextMock = $this->createPartialMock(\Magento\Framework\Model\Context::class, ['getEventDispatcher']);
+        $eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
         $this->_contextMock->expects($this->any())->method('getEventDispatcher')->willReturn($eventManagerMock);
-        $this->_registryMock = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
+        $this->_registryMock = $this->createMock(\Magento\Framework\Registry::class);
         $this->_resourceMock =
-            $this->getMock(\Magento\Indexer\Model\ResourceModel\Mview\View\State::class, [], [], '', false);
-        $this->_resourceCollectionMock = $this->getMock(
-            \Magento\Indexer\Model\ResourceModel\Mview\View\State\Collection::class,
-            [],
-            [],
-            '',
-            false
+            $this->createMock(\Magento\Indexer\Model\ResourceModel\Mview\View\State::class);
+        $this->_resourceCollectionMock = $this->createMock(
+            \Magento\Indexer\Model\ResourceModel\Mview\View\State\Collection::class
         );
 
         $this->model = new \Magento\Indexer\Model\Mview\View\State(

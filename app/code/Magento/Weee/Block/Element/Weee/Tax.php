@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,10 @@ namespace Magento\Weee\Block\Element\Weee;
 
 use \Magento\Framework\Currency;
 
+/**
+ * Class \Magento\Weee\Block\Element\Weee\Tax
+ *
+ */
 class Tax extends \Magento\Framework\Data\Form\Element\AbstractElement
 {
 

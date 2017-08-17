@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Block\Adminhtml\Template;
@@ -102,7 +102,7 @@ class Edit extends Widget implements ContainerInterface
     }
 
     /**
-     *{@inheritdoc}
+     * {@inheritdoc}
      */
     public function updateButton($buttonId, $key, $data)
     {
@@ -111,7 +111,7 @@ class Edit extends Widget implements ContainerInterface
     }
 
     /**
-     *{@inheritdoc}
+     * {@inheritdoc}
      */
     public function canRender(\Magento\Backend\Block\Widget\Button\Item $item)
     {
@@ -119,7 +119,7 @@ class Edit extends Widget implements ContainerInterface
     }
 
     /**
-     *{@inheritdoc}
+     * {@inheritdoc}
      */
     public function removeButton($buttonId)
     {
@@ -222,7 +222,7 @@ class Edit extends Widget implements ContainerInterface
     }
 
     /**
-     *{@inheritdoc}
+     * {@inheritdoc}
      */
     public function addButton($buttonId, $data, $level = 0, $sortOrder = 0, $region = 'toolbar')
     {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\User\Controller\Adminhtml\User;
@@ -23,7 +23,7 @@ class Save extends \Magento\User\Controller\Adminhtml\User
      * Get security cookie
      *
      * @return SecurityCookie
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getSecurityCookie()
     {

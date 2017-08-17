@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Category\Product\Plugin;
@@ -11,7 +11,7 @@ use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Store\Model\ResourceModel\Group;
 use Magento\Store\Model\Store;
 
-class StoreViewTest extends \PHPUnit_Framework_TestCase
+class StoreViewTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Store|\PHPUnit_Framework_MockObject_MockObject
@@ -49,21 +49,9 @@ class StoreViewTest extends \PHPUnit_Framework_TestCase
             true,
             ['getId', 'getState', '__wakeup']
         );
-        $this->subject = $this->getMock(Group::class, [], [], '', false);
-        $this->indexerRegistryMock = $this->getMock(
-            IndexerRegistry::class,
-            ['get'],
-            [],
-            '',
-            false
-        );
-        $this->storeMock = $this->getMock(
-            Store::class,
-            ['isObjectNew', 'dataHasChangedFor', '__wakeup'],
-            [],
-            '',
-            false
-        );
+        $this->subject = $this->createMock(Group::class);
+        $this->indexerRegistryMock = $this->createPartialMock(IndexerRegistry::class, ['get']);
+        $this->storeMock = $this->createPartialMock(Store::class, ['isObjectNew', 'dataHasChangedFor', '__wakeup']);
 
         $this->model = new StoreView($this->indexerRegistryMock);
     }

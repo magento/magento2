@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Test\Unit\Gateway\Http\Client;
@@ -14,7 +14,7 @@ use Magento\Payment\Gateway\Http\TransferInterface;
 /**
  * Class ZendTest
  */
-class ZendTest extends \PHPUnit_Framework_TestCase
+class ZendTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Zend */
     protected $model;

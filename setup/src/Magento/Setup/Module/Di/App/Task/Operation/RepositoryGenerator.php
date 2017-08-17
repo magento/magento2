@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,6 +10,10 @@ use Magento\Setup\Module\Di\App\Task\OperationInterface;
 use Magento\Setup\Module\Di\Code\Scanner;
 use Magento\Setup\Module\Di\Code\Reader\ClassesScanner;
 
+/**
+ * Class \Magento\Setup\Module\Di\App\Task\Operation\RepositoryGenerator
+ *
+ */
 class RepositoryGenerator implements OperationInterface
 {
     /**

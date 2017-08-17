@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@
  */
 namespace Magento\Test\Legacy;
 
-class LibraryLocationTest extends \PHPUnit_Framework_TestCase
+class LibraryLocationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Root path of Magento

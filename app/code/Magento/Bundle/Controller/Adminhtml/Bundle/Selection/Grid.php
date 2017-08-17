@@ -1,11 +1,15 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Controller\Adminhtml\Bundle\Selection;
 
+/**
+ * Class \Magento\Bundle\Controller\Adminhtml\Bundle\Selection\Grid
+ *
+ */
 class Grid extends \Magento\Backend\App\Action
 {
     /**

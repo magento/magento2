@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Test\Unit\Observer;
 
-class CatalogAttributeDeleteAfterObserverTest extends \PHPUnit_Framework_TestCase
+class CatalogAttributeDeleteAfterObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\SalesRule\Observer\CatalogAttributeDeleteAfterObserver|\PHPUnit_Framework_MockObject_MockObject
@@ -32,26 +32,19 @@ class CatalogAttributeDeleteAfterObserverTest extends \PHPUnit_Framework_TestCas
 
     protected function initMocks()
     {
-        $this->checkSalesRulesAvailability = $this->getMock(
-            \Magento\SalesRule\Observer\CheckSalesRulesAvailability::class,
-            [],
-            [],
-            '',
-            false
+        $this->checkSalesRulesAvailability = $this->createMock(
+            \Magento\SalesRule\Observer\CheckSalesRulesAvailability::class
         );
     }
 
     public function testCatalogAttributeDeleteAfter()
     {
         $attributeCode = 'attributeCode';
-        $observer = $this->getMock(\Magento\Framework\Event\Observer::class, [], [], '', false);
-        $event = $this->getMock(\Magento\Framework\Event::class, ['getAttribute', '__wakeup'], [], '', false);
-        $attribute = $this->getMock(
+        $observer = $this->createMock(\Magento\Framework\Event\Observer::class);
+        $event = $this->createPartialMock(\Magento\Framework\Event::class, ['getAttribute', '__wakeup']);
+        $attribute = $this->createPartialMock(
             \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
-            ['dataHasChangedFor', 'getIsUsedForPromoRules', 'getAttributeCode', '__wakeup'],
-            [],
-            '',
-            false
+            ['dataHasChangedFor', 'getIsUsedForPromoRules', 'getAttributeCode', '__wakeup']
         );
 
         $observer->expects($this->once())

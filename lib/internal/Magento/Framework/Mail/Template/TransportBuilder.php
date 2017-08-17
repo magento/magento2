@@ -2,18 +2,22 @@
 /**
  * Mail Template Transport Builder
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\Mail\Template;
 
 use Magento\Framework\App\TemplateTypesInterface;
-use Magento\Framework\Mail\Message;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Mail\MessageInterface;
 use Magento\Framework\Mail\TransportInterfaceFactory;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Phrase;
 
+/**
+ * @api
+ */
 class TransportBuilder
 {
     /**
@@ -258,23 +262,30 @@ class TransportBuilder
     }
 
     /**
-     * Prepare message
+     * Prepare message.
      *
      * @return $this
+     * @throws LocalizedException if template type is unknown
      */
     protected function prepareMessage()
     {
         $template = $this->getTemplate();
-        $types = [
-            TemplateTypesInterface::TYPE_TEXT => MessageInterface::TYPE_TEXT,
-            TemplateTypesInterface::TYPE_HTML => MessageInterface::TYPE_HTML,
-        ];
-
         $body = $template->processTemplate();
-        $this->message->setMessageType($types[$template->getType()])
-            ->setBody($body)
-            ->setSubject($template->getSubject());
+        switch ($template->getType()) {
+            case TemplateTypesInterface::TYPE_TEXT:
+                $this->message->setBodyText($body);
+                break;
 
+            case TemplateTypesInterface::TYPE_HTML:
+                $this->message->setBodyHtml($body);
+                break;
+
+            default:
+                throw new LocalizedException(
+                    new Phrase('Unknown template type')
+                );
+        }
+        $this->message->setSubject(html_entity_decode($template->getSubject(), ENT_QUOTES));
         return $this;
     }
 }

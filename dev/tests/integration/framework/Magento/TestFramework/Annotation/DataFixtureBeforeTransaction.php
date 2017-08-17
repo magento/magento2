@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -42,9 +42,9 @@ class DataFixtureBeforeTransaction
     /**
      * Handler for 'startTest' event
      *
-     * @param \PHPUnit_Framework_TestCase $test
+     * @param \PHPUnit\Framework\TestCase $test
      */
-    public function startTest(\PHPUnit_Framework_TestCase $test)
+    public function startTest(\PHPUnit\Framework\TestCase $test)
     {
         if ($this->_getFixtures($test)) {
             $this->_applyFixtures($this->_getFixtures($test));
@@ -54,9 +54,9 @@ class DataFixtureBeforeTransaction
     /**
      * Handler for 'endTest' event
      *
-     * @param \PHPUnit_Framework_TestCase $test
+     * @param \PHPUnit\Framework\TestCase $test
      */
-    public function endTest(\PHPUnit_Framework_TestCase $test)
+    public function endTest(\PHPUnit\Framework\TestCase $test)
     {
         /* Isolate other tests from test-specific fixtures */
         if ($this->_appliedFixtures && $this->_getFixtures($test)) {
@@ -67,12 +67,12 @@ class DataFixtureBeforeTransaction
     /**
      * Retrieve fixtures from annotation
      *
-     * @param \PHPUnit_Framework_TestCase $test
+     * @param \PHPUnit\Framework\TestCase $test
      * @param string $scope
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function _getFixtures(\PHPUnit_Framework_TestCase $test, $scope = null)
+    protected function _getFixtures(\PHPUnit\Framework\TestCase $test, $scope = null)
     {
         if ($scope === null) {
             $annotations = $this->getAnnotations($test);
@@ -100,10 +100,10 @@ class DataFixtureBeforeTransaction
     }
 
     /**
-     * @param \PHPUnit_Framework_TestCase $test
+     * @param \PHPUnit\Framework\TestCase $test
      * @return array
      */
-    private function getAnnotations(\PHPUnit_Framework_TestCase $test)
+    private function getAnnotations(\PHPUnit\Framework\TestCase $test)
     {
         $annotations = $test->getAnnotations();
         return array_replace($annotations['class'], $annotations['method']);
@@ -112,10 +112,10 @@ class DataFixtureBeforeTransaction
     /**
      * Return is explicit set isolation state
      *
-     * @param \PHPUnit_Framework_TestCase $test
+     * @param \PHPUnit\Framework\TestCase $test
      * @return bool|null
      */
-    protected function getDbIsolationState(\PHPUnit_Framework_TestCase $test)
+    protected function getDbIsolationState(\PHPUnit\Framework\TestCase $test)
     {
         $annotations = $this->getAnnotations($test);
         return isset($annotations[DbIsolation::MAGENTO_DB_ISOLATION])

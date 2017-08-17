@@ -1,7 +1,8 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 define([
     'jquery',
     'underscore',
@@ -12,19 +13,25 @@ define([
     'use strict';
 
     $.widget('mage.productAttributes', {
+        /** @inheritdoc */
         _create: function () {
             this._on({
                 'click': '_showPopup'
             });
         },
 
+        /**
+         * @private
+         */
         _initModal: function () {
             var self = this;
 
             this.modal = $('<div id="create_new_attribute"/>').modal({
-                 title: $.mage.__('New Attribute'),
+                title: $.mage.__('New Attribute'),
                 type: 'slide',
                 buttons: [],
+
+                /** @inheritdoc */
                 opened: function () {
                     $(this).parent().addClass('modal-content-new-attribute');
                     self.iframe = $('<iframe id="create_new_attribute_container">').attr({
@@ -35,6 +42,8 @@ define([
                     self._changeIframeSize();
                     $(window).off().on('resize.modal', _.debounce(self._changeIframeSize.bind(self), 400));
                 },
+
+                /** @inheritdoc */
                 closed: function () {
                     var doc = self.iframe.get(0).document;
 
@@ -49,6 +58,10 @@ define([
             });
         },
 
+        /**
+         * @return {Number}
+         * @private
+         */
         _getHeight: function () {
             var modal = this.modal.data('modal').modal,
                 modalHead = modal.find('header'),
@@ -59,10 +72,17 @@ define([
             return modalHeight - modalHeadHeight - modalContentPadding;
         },
 
+        /**
+         * @return {Number}
+         * @private
+         */
         _getWidth: function () {
             return this.modal.width();
         },
 
+        /**
+         * @private
+         */
         _changeIframeSize: function () {
             this.modal.parent().outerHeight(this._getHeight());
             this.iframe.outerHeight(this._getHeight());
@@ -70,6 +90,10 @@ define([
 
         },
 
+        /**
+         * @return {String}
+         * @private
+         */
         _prepareUrl: function () {
             var productSource,
                 attributeSetId = '';
@@ -86,6 +110,9 @@ define([
                 'set=' + attributeSetId;
         },
 
+        /**
+         * @private
+         */
         _showPopup: function () {
             this._initModal();
             this.modal.modal('openModal');

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Interception;
@@ -9,7 +9,7 @@ namespace Magento\Framework\Interception;
  * Class GeneralTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class AbstractPlugin extends \PHPUnit_Framework_TestCase
+abstract class AbstractPlugin extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -46,7 +46,7 @@ abstract class AbstractPlugin extends \PHPUnit_Framework_TestCase
         $config = new \Magento\Framework\Interception\ObjectManager\Config\Developer();
         $factory = new \Magento\Framework\ObjectManager\Factory\Dynamic\Developer($config, null);
 
-        $this->_configReader = $this->getMock(\Magento\Framework\Config\ReaderInterface::class);
+        $this->_configReader = $this->createMock(\Magento\Framework\Config\ReaderInterface::class);
         $this->_configReader->expects(
             $this->any()
         )->method(
@@ -55,10 +55,10 @@ abstract class AbstractPlugin extends \PHPUnit_Framework_TestCase
             $this->returnValue($pluginConfig)
         );
 
-        $areaList = $this->getMock(\Magento\Framework\App\AreaList::class, [], [], '', false);
+        $areaList = $this->createMock(\Magento\Framework\App\AreaList::class);
         $areaList->expects($this->any())->method('getCodes')->will($this->returnValue([]));
         $configScope = new \Magento\Framework\Config\Scope($areaList, 'global');
-        $cache = $this->getMock(\Magento\Framework\Config\CacheInterface::class);
+        $cache = $this->createMock(\Magento\Framework\Config\CacheInterface::class);
         $cache->expects($this->any())->method('load')->will($this->returnValue(false));
         $definitions = new \Magento\Framework\ObjectManager\Definition\Runtime();
         $relations = new \Magento\Framework\ObjectManager\Relations\Runtime();
@@ -71,6 +71,7 @@ abstract class AbstractPlugin extends \PHPUnit_Framework_TestCase
             $definitions
         );
         $interceptionDefinitions = new Definition\Runtime();
+        $json = new \Magento\Framework\Serialize\Serializer\Json();
         $sharedInstances = [
             \Magento\Framework\Config\CacheInterface::class                      => $cache,
             \Magento\Framework\Config\ScopeInterface::class                      => $configScope,
@@ -79,7 +80,8 @@ abstract class AbstractPlugin extends \PHPUnit_Framework_TestCase
             \Magento\Framework\ObjectManager\ConfigInterface::class              => $config,
             \Magento\Framework\Interception\ObjectManager\ConfigInterface::class => $config,
             \Magento\Framework\ObjectManager\DefinitionInterface::class          => $definitions,
-            \Magento\Framework\Interception\DefinitionInterface::class           => $interceptionDefinitions
+            \Magento\Framework\Interception\DefinitionInterface::class           => $interceptionDefinitions,
+            \Magento\Framework\Serialize\SerializerInterface::class              => $json,
         ];
         $this->_objectManager = new \Magento\Framework\ObjectManager\ObjectManager(
             $factory,

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Locator;
@@ -14,7 +14,7 @@ use Magento\Store\Api\Data\StoreInterface;
 /**
  * Class RegistryLocatorTest
  */
-class RegistryLocatorTest extends \PHPUnit_Framework_TestCase
+class RegistryLocatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager

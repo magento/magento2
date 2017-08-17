@@ -1,12 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CheckoutAgreements\Model;
 
 use Magento\CheckoutAgreements\Api\Data\AgreementInterface;
 
+/**
+ * Class \Magento\CheckoutAgreements\Model\Agreement
+ *
+ */
 class Agreement extends \Magento\Framework\Model\AbstractExtensibleModel implements AgreementInterface
 {
     /**
@@ -215,5 +219,6 @@ class Agreement extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
     //@codeCoverageIgnoreEnd
 }

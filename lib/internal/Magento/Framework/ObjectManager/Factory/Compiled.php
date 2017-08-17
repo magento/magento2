@@ -1,11 +1,14 @@
 <?php
 /**
- *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\ObjectManager\Factory;
 
+/**
+ * Class \Magento\Framework\ObjectManager\Factory\Compiled
+ *
+ */
 class Compiled extends AbstractFactory
 {
     /**
@@ -56,34 +59,55 @@ class Compiled extends AbstractFactory
         $args = $this->config->getArguments($requestedType);
         $type = $this->config->getInstanceType($requestedType);
 
-        if (!$args) {
+        if ($args === []) {
+            // Case 1: no arguments required
             return new $type();
-        }
-
-        foreach ($args as $key => &$argument) {
-            if (isset($arguments[$key])) {
-                $argument = $arguments[$key];
-            } elseif (isset($argument['_i_'])) {
-                $argument = $this->get($argument['_i_']);
-            } elseif (isset($argument['_ins_'])) {
-                $argument = $this->create($argument['_ins_']);
-            } elseif (isset($argument['_v_'])) {
-                $argument = $argument['_v_'];
-            } elseif (isset($argument['_vac_'])) {
-                $argument = $argument['_vac_'];
-                $this->parseArray($argument);
-            } elseif (isset($argument['_vn_'])) {
-                $argument = null;
-            } elseif (isset($argument['_a_'])) {
-                if (isset($this->globalArguments[$argument['_a_']])) {
-                    $argument = $this->globalArguments[$argument['_a_']];
-                } else {
-                    $argument = $argument['_d_'];
+        } elseif ($args !== null) {
+            /**
+             * Case 2: arguments retrieved from pre-compiled DI cache
+             *
+             * Argument key meanings:
+             *
+             * _i_: shared instance of a class or interface
+             * _ins_: non-shared instance of a class or interface
+             * _v_: non-array literal value
+             * _vac_: array, may be nested and contain other types of keys listed here (objects, array, nulls, etc)
+             * _vn_: null value
+             * _a_: value to be taken from named environment variable
+             * _d_: default value in case environment variable specified by _a_ does not exist
+             */
+            foreach ($args as $key => &$argument) {
+                if (isset($arguments[$key])) {
+                    $argument = $arguments[$key];
+                } elseif (isset($argument['_i_'])) {
+                    $argument = $this->get($argument['_i_']);
+                } elseif (isset($argument['_ins_'])) {
+                    $argument = $this->create($argument['_ins_']);
+                } elseif (isset($argument['_v_'])) {
+                    $argument = $argument['_v_'];
+                } elseif (isset($argument['_vac_'])) {
+                    $argument = $argument['_vac_'];
+                    $this->parseArray($argument);
+                } elseif (isset($argument['_vn_'])) {
+                    $argument = null;
+                } elseif (isset($argument['_a_'])) {
+                    if (isset($this->globalArguments[$argument['_a_']])) {
+                        $argument = $this->globalArguments[$argument['_a_']];
+                    } else {
+                        $argument = $argument['_d_'];
+                    }
                 }
             }
+            $args = array_values($args);
+        } else {
+            // Case 3: arguments retrieved in runtime
+            $parameters = $this->getDefinitions()->getParameters($type) ?: [];
+            $args = $this->resolveArgumentsInRuntime(
+                $type,
+                $parameters,
+                $arguments
+            );
         }
-
-        $args = array_values($args);
 
         return $this->createObject($type, $args);
     }

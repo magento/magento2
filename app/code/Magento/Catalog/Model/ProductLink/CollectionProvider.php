@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,10 @@ namespace Magento\Catalog\Model\ProductLink;
 use Magento\Catalog\Model\ProductLink\Converter\ConverterPool;
 use Magento\Framework\Exception\NoSuchEntityException;
 
+/**
+ * Class \Magento\Catalog\Model\ProductLink\CollectionProvider
+ *
+ */
 class CollectionProvider
 {
     /**
@@ -48,9 +52,21 @@ class CollectionProvider
         $products = $this->providers[$type]->getLinkedProducts($product);
         $converter = $this->converterPool->getConverter($type);
         $output = [];
+        $sorterItems = [];
         foreach ($products as $item) {
             $output[$item->getId()] = $converter->convert($item);
         }
-        return $output;
+
+        foreach ($output as $item) {
+            $itemPosition = $item['position'];
+            if (!isset($sorterItems[$itemPosition])) {
+                $sorterItems[$itemPosition] = $item;
+            } else {
+                $newPosition = $itemPosition + 1;
+                $sorterItems[$newPosition] = $item;
+            }
+        }
+        ksort($sorterItems);
+        return $sorterItems;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Block\Adminhtml\Design\Config\Edit;
@@ -9,17 +9,25 @@ use Magento\Backend\Block\Widget\Context;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 
+/**
+ * "Back" button data provider
+ *
+ * @api
+ * @since 100.1.0
+ */
 class BackButton implements ButtonProviderInterface
 {
     /**
      * Url Builder
      *
      * @var UrlInterface
+     * @since 100.1.0
      */
     protected $urlBuilder;
 
     /**
      * @param Context $context
+     * @since 100.1.0
      */
     public function __construct(
         Context $context
@@ -28,7 +36,8 @@ class BackButton implements ButtonProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     * @since 100.1.0
      */
     public function getButtonData()
     {
@@ -44,6 +53,7 @@ class BackButton implements ButtonProviderInterface
      * Get URL for back (reset) button
      *
      * @return string
+     * @since 100.1.0
      */
     public function getBackUrl()
     {

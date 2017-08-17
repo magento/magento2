@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order;
@@ -19,6 +19,7 @@ use Magento\Sales\Api\Data\ShipmentCreationArgumentsInterface;
  * Class ShipmentDocumentFactory
  *
  * @api
+ * @since 100.1.2
  */
 class ShipmentDocumentFactory
 {
@@ -43,6 +44,7 @@ class ShipmentDocumentFactory
      * @param ShipmentFactory $shipmentFactory
      * @param HydratorPool $hydratorPool
      * @param TrackFactory $trackFactory
+     * @since 100.1.2
      */
     public function __construct(
         ShipmentFactory $shipmentFactory,
@@ -65,6 +67,7 @@ class ShipmentDocumentFactory
      * @param ShipmentPackageCreationInterface[] $packages
      * @param ShipmentCreationArgumentsInterface|null $arguments
      * @return ShipmentInterface
+     * @since 100.1.2
      */
     public function create(
         OrderInterface $order,

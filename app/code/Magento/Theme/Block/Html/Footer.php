@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Block\Html;
@@ -9,6 +9,8 @@ use Magento\Customer\Model\Context;
 
 /**
  * Html page footer block
+ *
+ * @api
  */
 class Footer extends \Magento\Framework\View\Element\Template implements \Magento\Framework\DataObject\IdentityInterface
 {
@@ -98,6 +100,7 @@ class Footer extends \Magento\Framework\View\Element\Template implements \Magent
      * Retrieve Miscellaneous HTML information
      *
      * @return string
+     * @since 100.1.0
      */
     public function getMiscellaneousHtml()
     {

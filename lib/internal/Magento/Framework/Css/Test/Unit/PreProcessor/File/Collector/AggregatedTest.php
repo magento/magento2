@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Css\Test\Unit\PreProcessor\File\Collector;
@@ -10,7 +10,7 @@ use \Magento\Framework\Css\PreProcessor\File\Collector\Aggregated;
 /**
  * Tests Aggregate
  */
-class AggregatedTest extends \PHPUnit_Framework_TestCase
+class AggregatedTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\File\FileList\Factory|\PHPUnit_Framework_MockObject_MockObject

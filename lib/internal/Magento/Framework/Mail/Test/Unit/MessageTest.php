@@ -1,93 +1,48 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Mail\Test\Unit;
 
-class MessageTest extends \PHPUnit_Framework_TestCase
+class MessageTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Mail\Message
      */
     protected $_messageMock;
 
     protected function setUp()
     {
-        $this->_messageMock = $this->getMock(
+        $this->_messageMock = $this->createPartialMock(
             \Magento\Framework\Mail\Message::class,
-            ['getBodyText', 'getBodyHtml', 'setBodyText', 'setBodyHtml']
+            ['setBody', 'setMessageType']
         );
     }
 
-    /**
-     * @param string $messageType
-     * @param string $method
-     *
-     * @covers \Magento\Framework\Mail\Message::setBody
-     * @covers \Magento\Framework\Mail\Message::setMessageType
-     * @dataProvider setBodyDataProvider
-     */
-    public function testSetBody($messageType, $method)
+    public function testSetBodyHtml()
     {
-        $this->_messageMock->setMessageType($messageType);
+        $this->_messageMock->expects($this->once())
+            ->method('setMessageType')
+            ->with('text/html');
 
         $this->_messageMock->expects($this->once())
-            ->method($method)
+            ->method('setBody')
             ->with('body');
 
-        $this->_messageMock->setBody('body');
+        $this->_messageMock->setBodyHtml('body');
     }
 
-    /**
-     * @return array
-     */
-    public function setBodyDataProvider()
+    public function testSetBodyText()
     {
-        return [
-            [
-                'messageType' => 'text/plain',
-                'method' => 'setBodyText',
-            ],
-            [
-                'messageType' => 'text/html',
-                'method' => 'setBodyHtml'
-            ]
-        ];
-    }
-
-    /**
-     * @param string $messageType
-     * @param string $method
-     *
-     * @covers \Magento\Framework\Mail\Message::getBody
-     * @covers \Magento\Framework\Mail\Message::setMessageType
-     * @dataProvider getBodyDataProvider
-     */
-    public function testGetBody($messageType, $method)
-    {
-        $this->_messageMock->setMessageType($messageType);
+        $this->_messageMock->expects($this->once())
+            ->method('setMessageType')
+            ->with('text/plain');
 
         $this->_messageMock->expects($this->once())
-            ->method($method);
+            ->method('setBody')
+            ->with('body');
 
-        $this->_messageMock->getBody('body');
-    }
-
-    /**
-     * @return array
-     */
-    public function getBodyDataProvider()
-    {
-        return [
-            [
-                'messageType' => 'text/plain',
-                'method' => 'getBodyText',
-            ],
-            [
-                'messageType' => 'text/html',
-                'method' => 'getBodyHtml'
-            ]
-        ];
+        $this->_messageMock->setBodyText('body');
     }
 }

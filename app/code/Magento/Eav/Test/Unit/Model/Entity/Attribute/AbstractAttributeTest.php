@@ -1,13 +1,13 @@
 <?php
-/** 
+/**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Eav\Test\Unit\Model\Entity\Attribute;
- 
-class AbstractAttributeTest extends \PHPUnit_Framework_TestCase
+
+class AbstractAttributeTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetOptionWhenOptionsAreSet()
     {
@@ -95,13 +95,10 @@ class AbstractAttributeTest extends \PHPUnit_Framework_TestCase
 
     public function testConvertToObjects()
     {
-        $attributeOptionMock = $this->getMock(\Magento\Eav\Api\Data\AttributeOptionInterface::class);
-        $dataFactoryMock = $this->getMock(
+        $attributeOptionMock = $this->createMock(\Magento\Eav\Api\Data\AttributeOptionInterface::class);
+        $dataFactoryMock = $this->createPartialMock(
             \Magento\Eav\Api\Data\AttributeOptionInterfaceFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
         $dataObjectHelperMock = $this->getMockBuilder(\Magento\Framework\Api\DataObjectHelper::class)
             ->disableOriginalConstructor()
@@ -144,19 +141,33 @@ class AbstractAttributeTest extends \PHPUnit_Framework_TestCase
 
     public function testGetValidationRulesWhenRuleIsSerialized()
     {
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $rule = 'some value';
-        $model = $objectManagerHelper->getObject(
-            \Magento\Catalog\Model\Entity\Attribute::class,
-            [
-                'data' => [
-                    \Magento\Eav\Api\Data\AttributeInterface::VALIDATE_RULES => serialize($rule)
-                ]
+        $rule = json_encode(['some value']);
+        $expected = ['some value'];
 
-            ]
-        );
+        $modelClassName = \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class;
+        $model = $this->getMockForAbstractClass($modelClassName, [], '', false);
 
-        $this->assertEquals($rule, $model->getValidationRules());
+        $serializerMock = $this->createMock(\Magento\Framework\Serialize\SerializerInterface::class);
+
+        $reflection = new \ReflectionClass($modelClassName);
+        $reflectionProperty = $reflection->getProperty('serializer');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($model, $serializerMock);
+
+        $model->setData(\Magento\Eav\Api\Data\AttributeInterface::VALIDATE_RULES, $rule);
+
+        $serializerMock->method('unserialize')
+            ->with($rule)
+            ->willReturn($expected);
+
+        $this->assertEquals($expected, $model->getValidationRules());
+
+        $data = ['test array'];
+        $model->setData(\Magento\Eav\Api\Data\AttributeInterface::VALIDATE_RULES, $data);
+        $this->assertEquals($data, $model->getValidationRules());
+
+        $model->setData(\Magento\Eav\Api\Data\AttributeInterface::VALIDATE_RULES, null);
+        $this->assertEquals([], $model->getValidationRules());
     }
 
     public function testGetValidationRulesWhenRuleIsEmpty()

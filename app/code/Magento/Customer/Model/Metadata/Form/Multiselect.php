@@ -2,7 +2,7 @@
 /**
  * Form Element Multiselect Data Model
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\Metadata\Form;
@@ -10,6 +10,10 @@ namespace Magento\Customer\Model\Metadata\Form;
 use Magento\Customer\Model\Metadata\ElementFactory;
 use Magento\Framework\App\RequestInterface;
 
+/**
+ * Class \Magento\Customer\Model\Metadata\Form\Multiselect
+ *
+ */
 class Multiselect extends Select
 {
     /**

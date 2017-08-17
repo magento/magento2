@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,7 +10,7 @@ use \Magento\Catalog\Model\Product\ProductList\Toolbar;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class ToolbarTest extends \PHPUnit_Framework_TestCase
+class ToolbarTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Toolbar

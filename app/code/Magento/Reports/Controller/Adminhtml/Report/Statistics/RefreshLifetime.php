@@ -1,12 +1,15 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Controller\Adminhtml\Report\Statistics;
 
-
+/**
+ * Class \Magento\Reports\Controller\Adminhtml\Report\Statistics\RefreshLifetime
+ *
+ */
 class RefreshLifetime extends \Magento\Reports\Controller\Adminhtml\Report\Statistics
 {
     /**

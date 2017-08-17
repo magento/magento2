@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Widget;
@@ -175,7 +175,7 @@ class Dob extends AbstractWidget
     public function getFieldHtml()
     {
         $this->dateElement->setData([
-            'extra_params' => $this->isRequired() ? 'data-validate="{required:true}"' : '',
+            'extra_params' => $this->getHtmlExtraParams(),
             'name' => $this->getHtmlId(),
             'id' => $this->getHtmlId(),
             'class' => $this->getHtmlClass(),
@@ -199,6 +199,26 @@ class Dob extends AbstractWidget
     public function getHtmlId()
     {
         return 'dob';
+    }
+
+    /**
+     * Return data-validate rules
+     *
+     * @return string
+     */
+    public function getHtmlExtraParams()
+    {
+        $extraParams = [
+            "'validate-date-au':true"
+        ];
+
+        if ($this->isRequired()) {
+            $extraParams[] = 'required:true';
+        }
+
+        $extraParams = implode(', ', $extraParams);
+
+        return 'data-validate="{' . $extraParams . '}"';
     }
 
     /**

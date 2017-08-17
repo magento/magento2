@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\ResourceModel;
@@ -125,62 +125,72 @@ class UpdateHandler implements AttributeInterface
                 : null; // @todo verify is it normal to not have attributer_set_id
             $snapshot = $this->readSnapshot->execute($entityType, $entityDataForSnapshot);
             foreach ($this->getAttributes($entityType, $attributeSetId) as $attribute) {
-                if ($attribute->isStatic()) {
+                $code = $attribute->getAttributeCode();
+                $isAllowedValueType = array_key_exists($code, $entityData)
+                    && (is_scalar($entityData[$code]) || $entityData[$code] === null);
+
+                if ($attribute->isStatic() || !$isAllowedValueType) {
                     continue;
                 }
-                /**
-                 * Only scalar values can be stored in generic tables
-                 */
-                if (isset($entityData[$attribute->getAttributeCode()])
-                    && !is_scalar($entityData[$attribute->getAttributeCode()])) {
-                    continue;
-                }
-                if (isset($snapshot[$attribute->getAttributeCode()])
-                    && $snapshot[$attribute->getAttributeCode()] !== false
-                    && (array_key_exists($attribute->getAttributeCode(), $entityData)
-                        && $attribute->isValueEmpty($entityData[$attribute->getAttributeCode()]))
-                ) {
-                    $this->attributePersistor->registerDelete(
-                        $entityType,
-                        $entityData[$metadata->getLinkField()],
-                        $attribute->getAttributeCode()
-                    );
-                }
-                if ((!array_key_exists($attribute->getAttributeCode(), $snapshot)
-                        || $snapshot[$attribute->getAttributeCode()] === false)
-                    && array_key_exists($attribute->getAttributeCode(), $entityData)
-                    && !$attribute->isValueEmpty($entityData[$attribute->getAttributeCode()])
-                ) {
-                    $this->attributePersistor->registerInsert(
-                        $entityType,
-                        $entityData[$metadata->getLinkField()],
-                        $attribute->getAttributeCode(),
-                        $entityData[$attribute->getAttributeCode()]
-                    );
-                }
-                if (array_key_exists($attribute->getAttributeCode(), $snapshot)
-                    && $snapshot[$attribute->getAttributeCode()] !== false
-                    && array_key_exists($attribute->getAttributeCode(), $entityData)
-                    && $snapshot[$attribute->getAttributeCode()] != $entityData[$attribute->getAttributeCode()]
-                    && !$attribute->isValueEmpty($entityData[$attribute->getAttributeCode()])
-                ) {
-                    $this->attributePersistor->registerUpdate(
-                        $entityType,
-                        $entityData[$metadata->getLinkField()],
-                        $attribute->getAttributeCode(),
-                        $entityData[$attribute->getAttributeCode()]
-                    );
+
+                $newValue = $entityData[$code];
+                $isValueEmpty = $attribute->isValueEmpty($newValue);
+                $isAllowedEmptyStringValue = $attribute->isAllowedEmptyTextValue($newValue);
+
+                if (array_key_exists($code, $snapshot)) {
+                    $snapshotValue = $snapshot[$code];
+                    /**
+                     * 'FALSE' value for attributes can't be update or delete
+                     */
+                    if ($snapshotValue === false) {
+                        continue;
+                    }
+
+                    if (!$isValueEmpty || $isAllowedEmptyStringValue) {
+                        /**
+                         * NOT Updated value for attributes not need to update
+                         */
+                        if ($snapshotValue === $newValue) {
+                            continue;
+                        }
+
+                        $this->attributePersistor->registerUpdate(
+                            $entityType,
+                            $entityData[$metadata->getLinkField()],
+                            $code,
+                            $newValue
+                        );
+                    } else {
+                        $this->attributePersistor->registerDelete(
+                            $entityType,
+                            $entityData[$metadata->getLinkField()],
+                            $code
+                        );
+                    }
+                } else {
+                    /**
+                     * Only not empty value of attribute is insertable
+                     */
+                    if (!$isValueEmpty || $isAllowedEmptyStringValue) {
+                        $this->attributePersistor->registerInsert(
+                            $entityType,
+                            $entityData[$metadata->getLinkField()],
+                            $code,
+                            $newValue
+                        );
+                    }
                 }
             }
             $this->attributePersistor->flush($entityType, $context);
         }
+
         return $this->getReadHandler()->execute($entityType, $entityData, $arguments);
     }
 
     /**
      * Get read handler
      *
-     * @deprecated
+     * @deprecated 100.1.0
      *
      * @return ReadHandler
      */
@@ -189,6 +199,7 @@ class UpdateHandler implements AttributeInterface
         if (!$this->readHandler) {
             $this->readHandler = ObjectManager::getInstance()->get(ReadHandler::class);
         }
+
         return $this->readHandler;
     }
 }

@@ -1,13 +1,18 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Page\Config\Generator;
 
 use Magento\Framework\View\Layout;
 use Magento\Framework\View\Page\Config\Structure;
+use Magento\Framework\App\ObjectManager;
 
+/**
+ * Class \Magento\Framework\View\Page\Config\Generator\Head
+ *
+ */
 class Head implements Layout\GeneratorInterface
 {
     /**#@+
@@ -58,13 +63,22 @@ class Head implements Layout\GeneratorInterface
     protected $pageConfig;
 
     /**
+     * @var \Magento\Framework\UrlInterface
+     */
+    private $url;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\View\Page\Config $pageConfig
+     * @param \Magento\Framework\UrlInterface|null $url
      */
-    public function __construct(\Magento\Framework\View\Page\Config $pageConfig)
-    {
+    public function __construct(
+        \Magento\Framework\View\Page\Config $pageConfig,
+        \Magento\Framework\UrlInterface $url = null
+    ) {
         $this->pageConfig = $pageConfig;
+        $this->url = $url ?: ObjectManager::getInstance()->get(\Magento\Framework\UrlInterface::class);
     }
 
     /**
@@ -107,10 +121,15 @@ class Head implements Layout\GeneratorInterface
     {
         foreach ($pageStructure->getAssets() as $name => $data) {
             if (isset($data['src_type']) && in_array($data['src_type'], $this->remoteAssetTypes)) {
+                if ($data['src_type'] === self::SRC_TYPE_CONTROLLER) {
+                    $data['src'] = $this->url->getUrl($data['src']);
+                }
+
                 $this->pageConfig->addRemotePageAsset(
-                    $name,
+                    $data['src'],
                     isset($data['content_type']) ? $data['content_type'] : self::VIRTUAL_CONTENT_TYPE_LINK,
-                    $this->getAssetProperties($data)
+                    $this->getAssetProperties($data),
+                    $name
                 );
             } else {
                 $this->pageConfig->addPageAsset($name, $this->getAssetProperties($data));

@@ -1,12 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRule\Plugin\Indexer;
 
 use Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor;
 
+/**
+ * Class \Magento\CatalogRule\Plugin\Indexer\Website
+ *
+ */
 class Website
 {
     /**

@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 /**
  * Tax Rate Title Model
  *
- * @method \Magento\Tax\Model\ResourceModel\Calculation\Rate\Title _getResource()
- * @method \Magento\Tax\Model\ResourceModel\Calculation\Rate\Title getResource()
  * @method int getTaxCalculationRateId()
  *
  * @author      Magento Core Team <core@magentocommerce.com>
@@ -17,6 +15,10 @@ namespace Magento\Tax\Model\Calculation\Rate;
 
 use Magento\Tax\Api\Data\TaxRateTitleInterface;
 
+/**
+ * Class \Magento\Tax\Model\Calculation\Rate\Title
+ *
+ */
 class Title extends \Magento\Framework\Model\AbstractExtensibleModel implements TaxRateTitleInterface
 {
     /**#@+
@@ -83,6 +85,7 @@ class Title extends \Magento\Framework\Model\AbstractExtensibleModel implements 
     {
         return $this->setData(self::KEY_VALUE_ID, $value);
     }
+
     // @codeCoverageIgnoreEnd
 
     /**

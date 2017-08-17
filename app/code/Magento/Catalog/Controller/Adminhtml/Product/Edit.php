@@ -1,11 +1,15 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
+/**
+ * Class \Magento\Catalog\Controller\Adminhtml\Product\Edit
+ *
+ */
 class Edit extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**
@@ -54,7 +58,7 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product
             $resultRedirect = $this->resultRedirectFactory->create();
             $this->messageManager->addError(__('This product doesn\'t exist.'));
             return $resultRedirect->setPath('catalog/*/');
-        } else if ($productId === 0) {
+        } elseif ($productId === 0) {
             /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
             $resultRedirect = $this->resultRedirectFactory->create();
             $this->messageManager->addError(__('Invalid product id. Should be numeric value greater than 0'));

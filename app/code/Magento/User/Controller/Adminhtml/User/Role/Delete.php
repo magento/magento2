@@ -1,13 +1,17 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\User\Controller\Adminhtml\User\Role;
 
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\User\Controller\Adminhtml\User\Role\Delete
+ *
+ */
 class Delete extends \Magento\User\Controller\Adminhtml\User\Role
 {
     /**

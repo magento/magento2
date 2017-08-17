@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Captcha\Observer;
@@ -8,6 +8,10 @@ namespace Magento\Captcha\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Exception\Plugin\AuthenticationException as PluginAuthenticationException;
 
+/**
+ * Class \Magento\Captcha\Observer\CheckUserLoginBackendObserver
+ *
+ */
 class CheckUserLoginBackendObserver implements ObserverInterface
 {
     /**

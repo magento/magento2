@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,15 +15,15 @@ $_item = $block->getItem();
 
 <?php if ($block->displayPriceExclTax() || $block->displayBothPrices()): ?>
     <?php if ($block->displayBothPrices($block->getStore())): ?>
-        <span class="label"><?php /* @escapeNotVerified */ echo __('Excl. Tax'); ?>:</span>
+        <span class="label"><?= /* @escapeNotVerified */ __('Excl. Tax') ?>:</span>
     <?php endif; ?>
-    <?php /* @escapeNotVerified */ echo $block->formatPrice($_item->getRowTotal()) ?>
+    <?= /* @escapeNotVerified */ $block->formatPrice($_item->getRowTotal()) ?>
 <?php endif; ?>
 
 <?php if ($block->displayPriceInclTax() || $block->displayBothPrices()): ?>
     <?php if ($block->displayBothPrices()): ?>
-        <br /><span class="label"><?php /* @escapeNotVerified */ echo __('Incl. Tax'); ?>:</span>
+        <br /><span class="label"><?= /* @escapeNotVerified */ __('Incl. Tax') ?>:</span>
     <?php endif; ?>
     <?php $_incl = $this->helper('Magento\Checkout\Helper\Data')->getSubtotalInclTax($_item); ?>
-    <?php /* @escapeNotVerified */ echo $block->formatPrice($_incl) ?>
+    <?= /* @escapeNotVerified */ $block->formatPrice($_incl) ?>
 <?php endif; ?>

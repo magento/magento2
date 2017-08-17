@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Gateway\Http;
@@ -10,6 +10,10 @@ use Magento\Payment\Gateway\Http\TransferFactoryInterface;
 use Magento\Payment\Gateway\Http\TransferInterface;
 use Magento\Payment\Gateway\ConfigInterface;
 
+/**
+ * Class \Magento\Braintree\Gateway\Http\TransferFactory
+ *
+ */
 class TransferFactory implements TransferFactoryInterface
 {
     /**

@@ -1,16 +1,19 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Setup\Module\Di\Compiler\Config\Writer;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Setup\Module\Di\Compiler\Config\WriterInterface;
 
+/**
+ * Class \Magento\Setup\Module\Di\Compiler\Config\Writer\Filesystem
+ *
+ */
 class Filesystem implements WriterInterface
 {
     /**
@@ -38,9 +41,11 @@ class Filesystem implements WriterInterface
     public function write($key, array $config)
     {
         $this->initialize();
-
-        $serialized = serialize($config);
-        file_put_contents($this->directoryList->getPath(DirectoryList::DI) . '/' . $key . '.ser', $serialized);
+        $configuration = sprintf('<?php return %s;', var_export($config, true));
+        file_put_contents(
+            $this->directoryList->getPath(DirectoryList::GENERATED_METADATA) . '/' . $key  . '.php',
+            $configuration
+        );
     }
 
     /**
@@ -50,8 +55,8 @@ class Filesystem implements WriterInterface
      */
     private function initialize()
     {
-        if (!file_exists($this->directoryList->getPath(DirectoryList::DI))) {
-            mkdir($this->directoryList->getPath(DirectoryList::DI));
+        if (!file_exists($this->directoryList->getPath(DirectoryList::GENERATED_METADATA))) {
+            mkdir($this->directoryList->getPath(DirectoryList::GENERATED_METADATA));
         }
     }
 }

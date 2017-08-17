@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\Config\Source;
@@ -9,6 +9,10 @@ use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Customer\Model\Customer\Attribute\Source\GroupSourceLoggedInOnlyInterface;
 use Magento\Framework\App\ObjectManager;
 
+/**
+ * Class \Magento\Customer\Model\Config\Source\Group
+ *
+ */
 class Group implements \Magento\Framework\Option\ArrayInterface
 {
     /**
@@ -17,13 +21,13 @@ class Group implements \Magento\Framework\Option\ArrayInterface
     protected $_options;
 
     /**
-     * @deprecated
+     * @deprecated 100.2.0
      * @var GroupManagementInterface
      */
     protected $_groupManagement;
 
     /**
-     * @deprecated
+     * @deprecated 100.2.0
      * @var \Magento\Framework\Convert\DataObject
      */
     protected $_converter;

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Test\Unit\Controller\Index;
@@ -10,7 +10,7 @@ use Magento\Framework\Controller\ResultFactory;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AllcartTest extends \PHPUnit_Framework_TestCase
+class AllcartTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Wishlist\Controller\WishlistProviderInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -59,24 +59,12 @@ class AllcartTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->context = $this->getMock(\Magento\Framework\App\Action\Context::class, [], [], '', false);
-        $this->wishlistProvider = $this->getMock(
-            \Magento\Wishlist\Controller\WishlistProvider::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->itemCarrier = $this->getMock(\Magento\Wishlist\Model\ItemCarrier::class, [], [], '', false);
-        $this->formKeyValidator = $this->getMock(
-            \Magento\Framework\Data\Form\FormKey\Validator::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->request = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
-        $this->response = $this->getMock(\Magento\Framework\App\Response\Http::class, [], [], '', false);
+        $this->context = $this->createMock(\Magento\Framework\App\Action\Context::class);
+        $this->wishlistProvider = $this->createMock(\Magento\Wishlist\Controller\WishlistProvider::class);
+        $this->itemCarrier = $this->createMock(\Magento\Wishlist\Model\ItemCarrier::class);
+        $this->formKeyValidator = $this->createMock(\Magento\Framework\Data\Form\FormKey\Validator::class);
+        $this->request = $this->createMock(\Magento\Framework\App\Request\Http::class);
+        $this->response = $this->createMock(\Magento\Framework\App\Response\Http::class);
         $this->resultFactoryMock = $this->getMockBuilder(\Magento\Framework\Controller\ResultFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -99,13 +87,13 @@ class AllcartTest extends \PHPUnit_Framework_TestCase
 
     protected function prepareContext()
     {
-        $om = $this->getMock(\Magento\Framework\App\ObjectManager::class, [], [], '', false);
-        $eventManager = $this->getMock(\Magento\Framework\Event\Manager::class, null, [], '', false);
-        $url = $this->getMock(\Magento\Framework\Url::class, [], [], '', false);
-        $actionFlag = $this->getMock(\Magento\Framework\App\ActionFlag::class, [], [], '', false);
-        $redirect = $this->getMock(\Magento\Store\App\Response\Redirect::class, [], [], '', false);
-        $view = $this->getMock(\Magento\Framework\App\View::class, [], [], '', false);
-        $messageManager = $this->getMock(\Magento\Framework\Message\Manager::class, [], [], '', false);
+        $om = $this->createMock(\Magento\Framework\App\ObjectManager::class);
+        $eventManager = $this->createMock(\Magento\Framework\Event\Manager::class);
+        $url = $this->createMock(\Magento\Framework\Url::class);
+        $actionFlag = $this->createMock(\Magento\Framework\App\ActionFlag::class);
+        $redirect = $this->createMock(\Magento\Store\App\Response\Redirect::class);
+        $view = $this->createMock(\Magento\Framework\App\View::class);
+        $messageManager = $this->createMock(\Magento\Framework\Message\Manager::class);
 
         $this->context
             ->expects($this->any())
@@ -197,7 +185,7 @@ class AllcartTest extends \PHPUnit_Framework_TestCase
     public function testExecutePassed()
     {
         $url = 'http://redirect-url.com';
-        $wishlist = $this->getMock(\Magento\Wishlist\Model\Wishlist::class, [], [], '', false);
+        $wishlist = $this->createMock(\Magento\Wishlist\Model\Wishlist::class);
         
         $this->formKeyValidator->expects($this->once())
             ->method('validate')

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Model\Payflow\Service\Request;
@@ -14,7 +14,7 @@ use Magento\Paypal\Model\Payflow\Transparent;
 /**
  * Test class for \Magento\Paypal\Model\Payflow\Service\Request\SecureToken
  */
-class SecureTokenTest extends \PHPUnit_Framework_TestCase
+class SecureTokenTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SecureToken
@@ -38,9 +38,9 @@ class SecureTokenTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->url = $this->getMock(\Magento\Framework\UrlInterface::class, [], [], '', false);
-        $this->mathRandom = $this->getMock(\Magento\Framework\Math\Random::class, [], [], '', false);
-        $this->transparent = $this->getMock(\Magento\Paypal\Model\Payflow\Transparent::class, [], [], '', false);
+        $this->url = $this->createMock(\Magento\Framework\UrlInterface::class);
+        $this->mathRandom = $this->createMock(\Magento\Framework\Math\Random::class);
+        $this->transparent = $this->createMock(\Magento\Paypal\Model\Payflow\Transparent::class);
 
         $this->model = new SecureToken(
             $this->url,
@@ -61,7 +61,7 @@ class SecureTokenTest extends \PHPUnit_Framework_TestCase
             ->method('fillCustomerContacts');
         $this->transparent->expects($this->once())
             ->method('getConfig')
-            ->willReturn($this->getMock(\Magento\Paypal\Model\PayflowConfig::class, [], [], '', false));
+            ->willReturn($this->createMock(\Magento\Paypal\Model\PayflowConfig::class));
         $this->transparent->expects($this->once())
             ->method('postRequest')
             ->willReturn(new DataObject());
@@ -73,7 +73,7 @@ class SecureTokenTest extends \PHPUnit_Framework_TestCase
         $this->url->expects($this->exactly(3))
             ->method('getUrl');
 
-        $quote = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
+        $quote = $this->createMock(\Magento\Quote\Model\Quote::class);
 
         $this->model->requestToken($quote);
 

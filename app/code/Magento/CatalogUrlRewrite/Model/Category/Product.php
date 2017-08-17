@@ -1,12 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Model\Category;
 
 use Magento\Framework\Model\AbstractModel;
 
+/**
+ * Class \Magento\CatalogUrlRewrite\Model\Category\Product
+ *
+ */
 class Product extends AbstractModel
 {
     /**

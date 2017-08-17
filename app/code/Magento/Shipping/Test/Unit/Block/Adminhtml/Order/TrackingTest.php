@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Shipping\Test\Unit\Block\Adminhtml\Order;
 
-class TrackingTest extends \PHPUnit_Framework_TestCase
+class TrackingTest extends \PHPUnit\Framework\TestCase
 {
     public function testLookup()
     {
@@ -13,7 +13,7 @@ class TrackingTest extends \PHPUnit_Framework_TestCase
 
         $shipment = new \Magento\Framework\DataObject(['store_id' => 1]);
 
-        $registry = $this->getMock(\Magento\Framework\Registry::class, ['registry'], [], '', false);
+        $registry = $this->createPartialMock(\Magento\Framework\Registry::class, ['registry']);
         $registry->expects(
             $this->once()
         )->method(
@@ -24,12 +24,9 @@ class TrackingTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($shipment)
         );
 
-        $carrier = $this->getMock(
+        $carrier = $this->createPartialMock(
             \Magento\OfflineShipping\Model\Carrier\Freeshipping::class,
-            ['isTrackingAvailable', 'getConfigData'],
-            [],
-            '',
-            false
+            ['isTrackingAvailable', 'getConfigData']
         );
         $carrier->expects($this->once())->method('isTrackingAvailable')->will($this->returnValue(true));
         $carrier->expects(
@@ -42,7 +39,7 @@ class TrackingTest extends \PHPUnit_Framework_TestCase
             $this->returnValue('configdata')
         );
 
-        $config = $this->getMock(\Magento\Shipping\Model\Config::class, ['getAllCarriers'], [], '', false);
+        $config = $this->createPartialMock(\Magento\Shipping\Model\Config::class, ['getAllCarriers']);
         $config->expects(
             $this->once()
         )->method(

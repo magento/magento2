@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Test\Unit\Controller\Store;
@@ -16,7 +16,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * Test class for \Magento\Store\Controller\Store\SwitchAction
  */
-class SwitchActionTest extends \PHPUnit_Framework_TestCase
+class SwitchActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Store\Controller\Store\SwitchAction

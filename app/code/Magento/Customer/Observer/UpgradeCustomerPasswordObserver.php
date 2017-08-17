@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,10 @@ use Magento\Framework\Event\ObserverInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\CustomerRegistry;
 
+/**
+ * Class \Magento\Customer\Observer\UpgradeCustomerPasswordObserver
+ *
+ */
 class UpgradeCustomerPasswordObserver implements ObserverInterface
 {
     /**

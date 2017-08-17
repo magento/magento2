@@ -1,10 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CheckoutAgreements\Model;
 
+/**
+ * Class \Magento\CheckoutAgreements\Model\AgreementModeOptions
+ *
+ */
 class AgreementModeOptions
 {
     const MODE_AUTO = 0;

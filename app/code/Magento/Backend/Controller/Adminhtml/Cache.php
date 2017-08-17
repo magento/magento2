@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Controller\Adminhtml;
@@ -8,6 +8,10 @@ namespace Magento\Backend\Controller\Adminhtml;
 use Magento\Backend\App\Action;
 use Magento\Framework\Exception\LocalizedException;
 
+/**
+ * Class \Magento\Backend\Controller\Adminhtml\Cache
+ *
+ */
 abstract class Cache extends Action
 {
     /**

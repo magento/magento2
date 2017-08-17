@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,10 @@
  */
 namespace Magento\Directory\Block\Adminhtml\Frontend\Currency;
 
+/**
+ * Class \Magento\Directory\Block\Adminhtml\Frontend\Currency\Base
+ *
+ */
 class Base extends \Magento\Config\Block\System\Config\Form\Field
 {
     /**

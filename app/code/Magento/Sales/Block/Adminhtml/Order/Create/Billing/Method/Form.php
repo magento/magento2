@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Billing\Method;
@@ -8,6 +8,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create\Billing\Method;
 /**
  * Adminhtml sales order create payment method form block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Form extends \Magento\Payment\Block\Form\Container
@@ -103,7 +104,7 @@ class Form extends \Magento\Payment\Block\Form\Container
      * Whether switch/solo card type available
      *
      * @return true
-     * @deprecated unused
+     * @deprecated 100.1.0 unused
      */
     public function hasSsCardType()
     {

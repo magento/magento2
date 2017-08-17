@@ -1,13 +1,13 @@
 <?php
 /***
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Variable\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class VariableTest extends \PHPUnit_Framework_TestCase
+class VariableTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  \Magento\Variable\Model\Variable */
     private $model;
@@ -81,7 +81,6 @@ class VariableTest extends \PHPUnit_Framework_TestCase
     {
         $this->model->setCode($code)->setName($name);
         $this->assertEquals($this->validationFailedPhrase, $this->model->validate());
-
     }
 
     /**
@@ -102,7 +101,7 @@ class VariableTest extends \PHPUnit_Framework_TestCase
     public function testGetVariablesOptionArrayNoGroup()
     {
         $origOptions = [
-            ['value' => 'VAL', 'label' => 'LBL',]
+            ['value' => 'VAL', 'label' => 'LBL']
         ];
 
         $transformedOptions = [
@@ -115,11 +114,10 @@ class VariableTest extends \PHPUnit_Framework_TestCase
         $collectionMock->expects($this->any())
             ->method('toOptionArray')
             ->willReturn($origOptions);
-        $mockVariable = $this->getMock(
-            \Magento\Variable\Model\Variable::class,
-            ['getCollection'],
-            $this->objectManager->getConstructArguments(\Magento\Variable\Model\Variable::class)
-        );
+        $mockVariable = $this->getMockBuilder(\Magento\Variable\Model\Variable::class)
+            ->setMethods(['getCollection'])
+            ->setConstructorArgs($this->objectManager->getConstructArguments(\Magento\Variable\Model\Variable::class))
+            ->getMock();
         $mockVariable->expects($this->any())
             ->method('getCollection')
             ->willReturn($collectionMock);
@@ -129,7 +127,7 @@ class VariableTest extends \PHPUnit_Framework_TestCase
     public function testGetVariablesOptionArrayWithGroup()
     {
         $origOptions = [
-            ['value' => 'VAL', 'label' => 'LBL',]
+            ['value' => 'VAL', 'label' => 'LBL']
         ];
 
         $transformedOptions = [
@@ -145,11 +143,10 @@ class VariableTest extends \PHPUnit_Framework_TestCase
         $collectionMock->expects($this->any())
             ->method('toOptionArray')
             ->willReturn($origOptions);
-        $mockVariable = $this->getMock(
-            \Magento\Variable\Model\Variable::class,
-            ['getCollection'],
-            $this->objectManager->getConstructArguments(\Magento\Variable\Model\Variable::class)
-        );
+        $mockVariable = $this->getMockBuilder(\Magento\Variable\Model\Variable::class)
+            ->setMethods(['getCollection'])
+            ->setConstructorArgs($this->objectManager->getConstructArguments(\Magento\Variable\Model\Variable::class))
+            ->getMock();
         $mockVariable->expects($this->any())
             ->method('getCollection')
             ->willReturn($collectionMock);

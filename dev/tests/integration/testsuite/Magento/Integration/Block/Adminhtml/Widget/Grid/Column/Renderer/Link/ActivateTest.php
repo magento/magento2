@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  *
  */
@@ -12,7 +12,7 @@ use Magento\Integration\Model\Integration;
  * @magentoAppArea adminhtml
  * @magentoDataFixture Magento/Integration/_files/integration_all_permissions.php
  */
-class ActivateTest extends \PHPUnit_Framework_TestCase
+class ActivateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Link\Activate

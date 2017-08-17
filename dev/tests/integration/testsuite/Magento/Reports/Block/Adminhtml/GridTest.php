@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Block\Adminhtml;
@@ -9,7 +9,7 @@ namespace Magento\Reports\Block\Adminhtml;
  * Test class for \Magento\Reports\Block\Adminhtml\Grid
  * @magentoAppArea adminhtml
  */
-class GridTest extends \PHPUnit_Framework_TestCase
+class GridTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetDateFormat()
     {

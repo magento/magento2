@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,7 +13,7 @@
  */
 namespace Magento\Test\Db\Adapter;
 
-class TransactionInterfaceTest extends \PHPUnit_Framework_TestCase
+class TransactionInterfaceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param string $class
@@ -81,7 +81,7 @@ class TransactionInterfaceTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getConnectionMock($class)
     {
-        $connection = $this->getMock($class, ['beginTransaction', 'rollback', 'commit'], [], '', false);
+        $connection = $this->createPartialMock($class, ['beginTransaction', 'rollback', 'commit']);
         $this->assertInstanceOf(\Magento\TestFramework\Db\Adapter\TransactionInterface::class, $connection);
         return $connection;
     }

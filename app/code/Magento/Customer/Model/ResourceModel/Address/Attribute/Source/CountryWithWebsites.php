@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,6 +15,10 @@ use Magento\Customer\Model\Config\Share;
 use Magento\Directory\Model\AllowedCountries;
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * Class \Magento\Customer\Model\ResourceModel\Address\Attribute\Source\CountryWithWebsites
+ *
+ */
 class CountryWithWebsites extends \Magento\Eav\Model\Entity\Attribute\Source\Table
 {
     /**

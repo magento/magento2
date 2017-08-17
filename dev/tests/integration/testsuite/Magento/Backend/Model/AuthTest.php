@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Model;
@@ -14,7 +14,7 @@ use Magento\Framework\Exception\AuthenticationException;
  * @magentoAppIsolation enabled
  * @magentoDbIsolation enabled
  */
-class AuthTest extends \PHPUnit_Framework_TestCase
+class AuthTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Model\Auth
@@ -55,7 +55,7 @@ class AuthTest extends \PHPUnit_Framework_TestCase
         // by default \Magento\Backend\Model\Auth\Session class will instantiate as a Authentication Storage
         $this->assertInstanceOf(\Magento\Backend\Model\Auth\Session::class, $this->_model->getAuthStorage());
 
-        $mockStorage = $this->getMock(\Magento\Backend\Model\Auth\StorageInterface::class);
+        $mockStorage = $this->createMock(\Magento\Backend\Model\Auth\StorageInterface::class);
         $this->_model->setAuthStorage($mockStorage);
         $this->assertInstanceOf(\Magento\Backend\Model\Auth\StorageInterface::class, $this->_model->getAuthStorage());
 

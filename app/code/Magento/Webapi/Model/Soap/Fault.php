@@ -2,13 +2,17 @@
 /**
  * Magento-specific SOAP fault.
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Model\Soap;
 
 use Magento\Framework\App\State;
 
+/**
+ * Class \Magento\Webapi\Model\Soap\Fault
+ *
+ */
 class Fault
 {
     const FAULT_REASON_INTERNAL = 'Internal Error.';
@@ -39,7 +43,7 @@ class Fault
     const NODE_DETAIL_WRAPPER = 'GenericFault';
     /**#@-*/
 
-    /** @var string */
+    /**#@-*/
     protected $_soapFaultCode;
 
     /**

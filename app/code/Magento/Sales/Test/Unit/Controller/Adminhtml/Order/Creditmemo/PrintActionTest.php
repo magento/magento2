@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order\Creditmemo;
@@ -9,7 +9,7 @@ namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order\Creditmemo;
  * @covers \Magento\Sales\Controller\Adminhtml\Order\Creditmemo\PrintAction
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PrintActionTest extends \PHPUnit_Framework_TestCase
+class PrintActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Controller\Adminhtml\Order\Creditmemo\PrintAction
@@ -100,13 +100,7 @@ class PrintActionTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->getMock();
-        $this->creditmemoRepositoryMock = $this->getMock(
-            \Magento\Sales\Api\CreditmemoRepositoryInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->creditmemoRepositoryMock = $this->createMock(\Magento\Sales\Api\CreditmemoRepositoryInterface::class);
         $this->creditmemoMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Creditmemo::class)
             ->disableOriginalConstructor()
             ->getMock();

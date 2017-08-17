@@ -1,10 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Model\Indexer\Stock\Plugin;
 
+/**
+ * Class \Magento\CatalogImportExport\Model\Indexer\Stock\Plugin\Import
+ *
+ */
 class Import
 {
     /**

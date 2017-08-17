@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content;
 
 /**
  * Files files block
  *
+ * @api
  * @method
  *  \Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content\Files setStorage(\Magento\Theme\Model\Wysiwyg\Storage $storage)
  * @method \Magento\Theme\Model\Wysiwyg\Storage getStorage()
  */
-namespace Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content;
-
 class Files extends \Magento\Backend\Block\Template
 {
     /**

@@ -2,7 +2,7 @@
 /**
  * Front controller for WebAPI SOAP area.
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Controller;
@@ -28,9 +28,7 @@ class Soap implements \Magento\Framework\App\FrontControllerInterface
 
     /**#@-*/
 
-    /**
-     * @var \Magento\Webapi\Model\Soap\Server
-     */
+    /**#@-*/
     protected $_soapServer;
 
     /**
@@ -132,7 +130,7 @@ class Soap implements \Magento\Framework\App\FrontControllerInterface
                 );
                 $this->_setResponseContentType(self::CONTENT_TYPE_WSDL_REQUEST);
                 $this->_setResponseBody($responseBody);
-            } else if ($this->_isWsdlListRequest()) {
+            } elseif ($this->_isWsdlListRequest()) {
                 $servicesList = [];
                 foreach ($this->_wsdlGenerator->getListOfServices() as $serviceName) {
                     $servicesList[$serviceName]['wsdl_endpoint'] = $this->_soapServer->getEndpointUri()

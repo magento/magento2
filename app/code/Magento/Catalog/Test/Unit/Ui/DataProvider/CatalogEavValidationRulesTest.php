@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider;
@@ -9,7 +9,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Catalog\Ui\DataProvider\CatalogEavValidationRules;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
-class CatalogEavValidationRulesTest extends \PHPUnit_Framework_TestCase
+class CatalogEavValidationRulesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerHelper
@@ -41,7 +41,7 @@ class CatalogEavValidationRulesTest extends \PHPUnit_Framework_TestCase
     public function testBuild($frontendInput, $frontendClass, array $eavConfig, array $expectedResult)
     {
         /** @var \Magento\Catalog\Api\Data\ProductAttributeInterface|MockObject $attribute */
-        $attribute = $this->getMock(\Magento\Catalog\Api\Data\ProductAttributeInterface::class);
+        $attribute = $this->createMock(\Magento\Catalog\Api\Data\ProductAttributeInterface::class);
 
         $attribute->expects($this->once())
             ->method('getFrontendInput')

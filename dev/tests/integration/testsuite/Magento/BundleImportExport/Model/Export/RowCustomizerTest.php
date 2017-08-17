@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\BundleImportExport\Model\Export;
@@ -8,7 +8,7 @@ namespace Magento\BundleImportExport\Model\Export;
 /**
  * @magentoAppArea adminhtml
  */
-class RowCustomizerTest extends \PHPUnit_Framework_TestCase
+class RowCustomizerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\BundleImportExport\Model\Export\RowCustomizer

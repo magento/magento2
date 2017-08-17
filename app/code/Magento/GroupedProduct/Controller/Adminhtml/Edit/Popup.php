@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GroupedProduct\Controller\Adminhtml\Edit;
@@ -12,6 +12,10 @@ use Magento\Catalog\Model\ProductFactory;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\GroupedProduct\Controller\Adminhtml\Edit\Popup
+ *
+ */
 class Popup extends AbstractAction
 {
     /**

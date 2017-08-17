@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Newsletter\Model;
@@ -10,8 +10,6 @@ use Magento\Framework\App\TemplateTypesInterface;
 /**
  * Newsletter queue model.
  *
- * @method \Magento\Newsletter\Model\ResourceModel\Queue _getResource()
- * @method \Magento\Newsletter\Model\ResourceModel\Queue getResource()
  * @method int getTemplateId()
  * @method \Magento\Newsletter\Model\Queue setTemplateId(int $value)
  * @method int getNewsletterType()
@@ -34,6 +32,8 @@ use Magento\Framework\App\TemplateTypesInterface;
  * @method \Magento\Newsletter\Model\Queue setQueueFinishAt(string $value)
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @api
  */
 class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTypesInterface
 {
@@ -236,7 +236,7 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
             )->setTemplateVars(
                 ['subscriber' => $item]
             )->setFrom(
-                ['name' => $this->getNewsletterSenderEmail(), 'email' => $this->getNewsletterSenderName()]
+                ['name' => $this->getNewsletterSenderName(), 'email' => $this->getNewsletterSenderEmail()]
             )->addTo(
                 $item->getSubscriberEmail(),
                 $item->getSubscriberFullName()

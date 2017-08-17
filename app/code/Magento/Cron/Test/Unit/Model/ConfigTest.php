@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cron\Test\Unit\Model;
@@ -8,7 +8,7 @@ namespace Magento\Cron\Test\Unit\Model;
 /**
  * Class \Magento\Cron\Model\Config
  */
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Cron\Model\Config\Data|\PHPUnit_Framework_MockObject_MockObject

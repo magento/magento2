@@ -1,10 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Model\ResourceModel\Oauth;
 
+/**
+ * Class \Magento\Integration\Model\ResourceModel\Oauth\Consumer
+ *
+ */
 class Consumer extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
@@ -45,7 +49,7 @@ class Consumer extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Compute time in seconds since consumer was created.
      *
-     * @deprecated
+     * @deprecated 100.0.6
      *
      * @param int $consumerId - The consumer id
      * @return int - time lapsed in seconds

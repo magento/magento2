@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+namespace Magento\Framework\Cache\Backend\Decorator;
 
 /**
  * Decorator class for compressing data before storing in cache
  *
  * @todo re-implement as a cache frontend decorator similarly to \Magento\Framework\Cache\Frontend\Decorator\*
  */
-namespace Magento\Framework\Cache\Backend\Decorator;
-
 class Compression extends \Magento\Framework\Cache\Backend\Decorator\AbstractDecorator
 {
     /**

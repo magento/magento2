@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Framework\Css\Test\Unit\PreProcessor\Instruction;
 
@@ -15,7 +13,7 @@ use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class MagentoImportTest extends \PHPUnit_Framework_TestCase
+class MagentoImportTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\DesignInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -59,10 +57,10 @@ class MagentoImportTest extends \PHPUnit_Framework_TestCase
         $this->errorHandler = $this->getMockForAbstractClass(
             \Magento\Framework\Css\PreProcessor\ErrorHandlerInterface::class
         );
-        $this->asset = $this->getMock(\Magento\Framework\View\Asset\File::class, [], [], '', false);
+        $this->asset = $this->createMock(\Magento\Framework\View\Asset\File::class);
         $this->asset->expects($this->any())->method('getContentType')->will($this->returnValue('css'));
-        $this->assetRepo = $this->getMock(\Magento\Framework\View\Asset\Repository::class, [], [], '', false);
-        $this->themeProvider = $this->getMock(ThemeProviderInterface::class);
+        $this->assetRepo = $this->createMock(\Magento\Framework\View\Asset\Repository::class);
+        $this->themeProvider = $this->createMock(ThemeProviderInterface::class);
         $this->object = (new ObjectManager($this))->getObject(MagentoImport::class, [
             'design' => $this->design,
             'fileSource' => $this->fileSource,
@@ -84,11 +82,11 @@ class MagentoImportTest extends \PHPUnit_Framework_TestCase
     public function testProcess($originalContent, $foundPath, $resolvedPath, $foundFiles, $expectedContent)
     {
         $chain = new \Magento\Framework\View\Asset\PreProcessor\Chain($this->asset, $originalContent, 'css', 'path');
-        $relatedAsset = $this->getMock(\Magento\Framework\View\Asset\File::class, [], [], '', false);
+        $relatedAsset = $this->createMock(\Magento\Framework\View\Asset\File::class);
         $relatedAsset->expects($this->once())
             ->method('getFilePath')
             ->will($this->returnValue($resolvedPath));
-        $context = $this->getMock(\Magento\Framework\View\Asset\File\FallbackContext::class, [], [], '', false);
+        $context = $this->createMock(\Magento\Framework\View\Asset\File\FallbackContext::class);
         $this->assetRepo->expects($this->once())
             ->method('createRelated')
             ->with($foundPath, $this->asset)
@@ -98,7 +96,7 @@ class MagentoImportTest extends \PHPUnit_Framework_TestCase
         $this->themeProvider->expects($this->once())->method('getThemeByFullPath')->will($this->returnValue($theme));
         $files = [];
         foreach ($foundFiles as $file) {
-            $fileObject = $this->getMock(\Magento\Framework\View\File::class, [], [], '', false);
+            $fileObject = $this->createMock(\Magento\Framework\View\File::class);
             $fileObject->expects($this->any())
                 ->method('getModule')
                 ->will($this->returnValue($file['module']));
@@ -181,7 +179,10 @@ class MagentoImportTest extends \PHPUnit_Framework_TestCase
     public function testProcessException()
     {
         $chain = new \Magento\Framework\View\Asset\PreProcessor\Chain(
-            $this->asset, '//@magento_import "some/file.css";', 'css', 'path'
+            $this->asset,
+            '//@magento_import "some/file.css";',
+            'css',
+            'path'
         );
         $exception = new \LogicException('Error happened');
         $this->assetRepo->expects($this->once())

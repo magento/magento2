@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Model;
 
 /**
  * Provide methods for collecting cart items information of specific sales model entity
+ *
+ * @api
  */
 class Cart
 {
@@ -20,14 +22,9 @@ class Cart
     const AMOUNT_DISCOUNT = 'discount';
 
     const AMOUNT_SUBTOTAL = 'subtotal';
+    /**#@-*/
 
-    /**@@+*/
-
-    /**
-     * Sales model
-     *
-     * @var \Magento\Payment\Model\Cart\SalesModel\SalesModelInterface
-     */
+    /**#@-*/
     protected $_salesModel;
 
     /**

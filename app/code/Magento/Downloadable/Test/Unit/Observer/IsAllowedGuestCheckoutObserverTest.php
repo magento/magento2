@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Test\Unit\Observer;
@@ -14,7 +14,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class IsAllowedGuestCheckoutObserverTest extends \PHPUnit_Framework_TestCase
+class IsAllowedGuestCheckoutObserverTest extends \PHPUnit\Framework\TestCase
 {
     /** @var IsAllowedGuestCheckoutObserver */
     private $isAllowedGuestCheckoutObserver;
@@ -91,12 +91,8 @@ class IsAllowedGuestCheckoutObserverTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsAllowedGuestCheckoutConfigSetToTrue($productType, $isAllowed)
     {
-        $this->resultMock->expects($this->at(0))
-            ->method('setIsAllowed')
-            ->with(true);
-
         if ($isAllowed) {
-            $this->resultMock->expects($this->at(1))
+            $this->resultMock->expects($this->at(0))
                 ->method('setIsAllowed')
                 ->with(false);
         }
@@ -172,10 +168,6 @@ class IsAllowedGuestCheckoutObserverTest extends \PHPUnit_Framework_TestCase
 
     public function testIsAllowedGuestCheckoutConfigSetToFalse()
     {
-        $this->resultMock->expects($this->once())
-            ->method('setIsAllowed')
-            ->with(true);
-
         $this->eventMock->expects($this->once())
             ->method('getStore')
             ->will($this->returnValue($this->storeMock));

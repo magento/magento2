@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Items;
 
-class AbstractTest extends \PHPUnit_Framework_TestCase
+class AbstractTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager  */
     protected $_objectManager;
@@ -17,13 +17,10 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
 
     public function testGetItemRenderer()
     {
-        $renderer = $this->getMock(\Magento\Framework\View\Element\AbstractBlock::class, [], [], '', false);
-        $layout = $this->getMock(
+        $renderer = $this->createMock(\Magento\Framework\View\Element\AbstractBlock::class);
+        $layout = $this->createPartialMock(
             \Magento\Framework\View\Layout::class,
-            ['getChildName', 'getBlock', 'getGroupChildNames', '__wakeup'],
-            [],
-            '',
-            false
+            ['getChildName', 'getBlock', 'getGroupChildNames', '__wakeup']
         );
         $layout->expects(
             $this->at(0)
@@ -65,13 +62,10 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetItemRendererThrowsExceptionForNonexistentRenderer()
     {
-        $renderer = $this->getMock(\StdClass::class);
-        $layout = $this->getMock(
+        $renderer = $this->createMock(\StdClass::class);
+        $layout = $this->createPartialMock(
             \Magento\Framework\View\Layout::class,
-            ['getChildName', 'getBlock', '__wakeup'],
-            [],
-            '',
-            false
+            ['getChildName', 'getBlock', '__wakeup']
         );
         $layout->expects(
             $this->at(0)

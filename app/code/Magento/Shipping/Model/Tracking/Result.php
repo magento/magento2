@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Shipping\Model\Tracking;
@@ -8,6 +8,10 @@ namespace Magento\Shipping\Model\Tracking;
 use Magento\Shipping\Model\Rate\Result as RateResult;
 use Magento\Shipping\Model\Tracking\Result\AbstractResult;
 
+/**
+ * Class \Magento\Shipping\Model\Tracking\Result
+ *
+ */
 class Result
 {
     /**

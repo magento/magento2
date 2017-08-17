@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order\Status;
@@ -12,8 +12,7 @@ use Magento\Sales\Model\AbstractModel;
 /**
  * Order status history comments
  *
- * @method \Magento\Sales\Model\ResourceModel\Order\Status\History _getResource()
- * @method \Magento\Sales\Model\ResourceModel\Order\Status\History getResource()
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class History extends AbstractModel implements OrderStatusHistoryInterface
@@ -328,5 +327,6 @@ class History extends AbstractModel implements OrderStatusHistoryInterface
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
     //@codeCoverageIgnoreEnd
 }

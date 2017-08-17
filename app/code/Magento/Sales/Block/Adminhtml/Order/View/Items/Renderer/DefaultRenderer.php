@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\View\Items\Renderer;
@@ -9,6 +9,8 @@ use Magento\Sales\Model\Order\Item;
 
 /**
  * Adminhtml sales order item renderer
+ *
+ * @api
  */
 class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRenderer
 {
@@ -261,6 +263,7 @@ class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\Defa
      * @param null $field
      * @return string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 100.1.0
      */
     public function getColumnHtml(\Magento\Framework\DataObject $item, $column, $field = null)
     {
@@ -298,6 +301,7 @@ class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\Defa
 
     /**
      * @return array
+     * @since 100.1.0
      */
     public function getColumns()
     {

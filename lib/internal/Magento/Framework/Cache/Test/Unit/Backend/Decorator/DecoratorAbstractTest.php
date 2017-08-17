@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@
  */
 namespace Magento\Framework\Cache\Test\Unit\Backend\Decorator;
 
-class DecoratorAbstractTest extends \PHPUnit_Framework_TestCase
+class DecoratorAbstractTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Zend_Cache_Backend_File
@@ -18,7 +18,7 @@ class DecoratorAbstractTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_mockBackend = $this->getMock(\Zend_Cache_Backend_File::class);
+        $this->_mockBackend = $this->createMock(\Zend_Cache_Backend_File::class);
     }
 
     protected function tearDown()
@@ -67,7 +67,7 @@ class DecoratorAbstractTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'empty' => [[]],
-            'wrong_class' => [['concrete_backend' => $this->getMock(\Test_Class::class)]]
+            'wrong_class' => [['concrete_backend' => $this->getMockBuilder('Test_Class')->getMock()]]
         ];
     }
 

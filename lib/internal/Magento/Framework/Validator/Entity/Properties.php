@@ -2,7 +2,7 @@
 /**
  * Validates properties of entity (\Magento\Framework\DataObject).
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Validator\Entity;
@@ -10,6 +10,10 @@ namespace Magento\Framework\Validator\Entity;
 use Magento\Framework\DataObject;
 use Magento\Framework\Model\AbstractModel;
 
+/**
+ * Class \Magento\Framework\Validator\Entity\Properties
+ *
+ */
 class Properties extends \Magento\Framework\Validator\AbstractValidator
 {
     /**

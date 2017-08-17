@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Shipment\AbstractShipment;
@@ -16,6 +16,10 @@ use Magento\Sales\Model\Order\Pdf\Shipment;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Sales\Model\ResourceModel\Order\Shipment\CollectionFactory;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShipment\Pdfshipments
+ *
+ */
 abstract class Pdfshipments extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
     /**

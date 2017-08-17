@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Test\Unit\Controller\Adminhtml;
 
 use Magento\Framework\Controller\ResultFactory;
 
-abstract class AbstractMassActionTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractMassActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -43,13 +43,7 @@ abstract class AbstractMassActionTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->messageManagerMock = $this->getMock(
-            \Magento\Framework\Message\ManagerInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->messageManagerMock = $this->createMock(\Magento\Framework\Message\ManagerInterface::class);
 
         $this->resultFactoryMock = $this->getMockBuilder(\Magento\Framework\Controller\ResultFactory::class)
             ->disableOriginalConstructor()
@@ -62,7 +56,7 @@ abstract class AbstractMassActionTest extends \PHPUnit_Framework_TestCase
             ->with(ResultFactory::TYPE_REDIRECT, [])
             ->willReturn($this->resultRedirectMock);
 
-        $this->contextMock = $this->getMock(\Magento\Backend\App\Action\Context::class, [], [], '', false);
+        $this->contextMock = $this->createMock(\Magento\Backend\App\Action\Context::class);
 
         $this->filterMock = $this->getMockBuilder(\Magento\Ui\Component\MassAction\Filter::class)
             ->disableOriginalConstructor()

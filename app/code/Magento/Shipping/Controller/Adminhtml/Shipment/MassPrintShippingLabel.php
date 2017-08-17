@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Shipping\Controller\Adminhtml\Shipment;
@@ -17,6 +17,10 @@ use Magento\Framework\App\Response\Http\FileFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Sales\Model\ResourceModel\Order\Shipment\CollectionFactory;
 
+/**
+ * Class \Magento\Shipping\Controller\Adminhtml\Shipment\MassPrintShippingLabel
+ *
+ */
 class MassPrintShippingLabel extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
     /**

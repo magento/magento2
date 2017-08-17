@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Ui\Component\Listing\Column;
@@ -86,7 +86,7 @@ class BlockActions extends Column
                             'label' => __('Delete'),
                             'confirm' => [
                                 'title' => __('Delete %1', $title),
-                                'message' => __('Are you sure you wan\'t to delete a %1 record?', $title)
+                                'message' => __('Are you sure you want to delete a %1 record?', $title)
                             ]
                         ]
                     ];
@@ -100,7 +100,7 @@ class BlockActions extends Column
     /**
      * Get instance of escaper
      * @return Escaper
-     * @deprecated
+     * @deprecated 101.1.0
      */
     private function getEscaper()
     {

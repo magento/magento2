@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Command\Command;
 use \Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
 
+/**
+ * Class \Magento\Setup\Console\Command\InfoAdminUriCommand
+ *
+ */
 class InfoAdminUriCommand extends Command
 {
     /**
@@ -43,9 +47,9 @@ class InfoAdminUriCommand extends Command
         parent::configure();
     }
 
-     /**
-      * {@inheritdoc}
-      */
+    /**
+     * {@inheritdoc}
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln(

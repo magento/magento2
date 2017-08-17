@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Widget\Test\Unit\Block\Adminhtml\Widget\Instance\Edit\Chooser;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-abstract class AbstractContainerTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractContainerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Event\Manager|\PHPUnit_Framework_MockObject_MockObject
@@ -75,12 +75,9 @@ abstract class AbstractContainerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->themeCollectionFactoryMock = $this->getMock(
+        $this->themeCollectionFactoryMock = $this->createPartialMock(
             \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
         $this->themeCollectionMock = $this->getMockBuilder(\Magento\Theme\Model\ResourceModel\Theme\Collection::class)
             ->disableOriginalConstructor()
@@ -90,25 +87,19 @@ abstract class AbstractContainerTest extends \PHPUnit_Framework_TestCase
             \Magento\Theme\Model\Theme::class
         )->disableOriginalConstructor()->getMock();
 
-        $this->layoutProcessorFactoryMock = $this->getMock(
+        $this->layoutProcessorFactoryMock = $this->createPartialMock(
             \Magento\Framework\View\Layout\ProcessorFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
 
         $this->layoutMergeMock = $this->getMockBuilder(\Magento\Framework\View\Model\Layout\Merge::class)
-            ->setMethods(['addPageHandles', 'load', 'getContainers'])
+            ->setMethods(['addPageHandles', 'load', 'getContainers', 'addHandle'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->escaperMock = $this->getMock(
+        $this->escaperMock = $this->createPartialMock(
             \Magento\Framework\Escaper::class,
-            ['escapeHtml', 'escapeHtmlAttr'],
-            [],
-            '',
-            false
+            ['escapeHtml', 'escapeHtmlAttr']
         );
         $this->escaperMock->expects($this->any())->method('escapeHtmlAttr')->willReturnArgument(0);
 

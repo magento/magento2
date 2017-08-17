@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Gateway\Command;
@@ -15,6 +15,7 @@ use Magento\Payment\Model\InfoInterface;
  * Class CommandManager
  * @package Magento\Payment\Gateway\Command
  * @api
+ * @since 100.1.0
  */
 class CommandManager implements CommandManagerInterface
 {
@@ -32,6 +33,7 @@ class CommandManager implements CommandManagerInterface
      * CommandExecutor constructor.
      * @param CommandPoolInterface $commandPool
      * @param PaymentDataObjectFactoryInterface $paymentDataObjectFactory
+     * @since 100.1.0
      */
     public function __construct(
         CommandPoolInterface $commandPool,
@@ -50,6 +52,7 @@ class CommandManager implements CommandManagerInterface
      * @return ResultInterface|null
      * @throws NotFoundException
      * @throws CommandException
+     * @since 100.1.0
      */
     public function executeByCode($commandCode, InfoInterface $payment = null, array $arguments = [])
     {
@@ -71,6 +74,7 @@ class CommandManager implements CommandManagerInterface
      * @param array $arguments
      * @return ResultInterface|null
      * @throws CommandException
+     * @since 100.1.0
      */
     public function execute(CommandInterface $command, InfoInterface $payment = null, array $arguments = [])
     {
@@ -88,6 +92,7 @@ class CommandManager implements CommandManagerInterface
      * @param string $commandCode
      * @return CommandInterface
      * @throws NotFoundException
+     * @since 100.1.0
      */
     public function get($commandCode)
     {

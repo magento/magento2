@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Search\Test\Unit\Helper;
@@ -8,7 +8,7 @@ namespace Magento\Search\Test\Unit\Helper;
 /**
  * Unit test for \Magento\Search\Helper\Data
  */
-class DataTest extends \PHPUnit_Framework_TestCase
+class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Search\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
@@ -45,15 +45,15 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stringMock = $this->getMock(\Magento\Framework\Stdlib\StringUtils::class);
-        $this->scopeConfigMock = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $this->escaperMock = $this->getMock(\Magento\Framework\Escaper::class);
-        $this->storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->stringMock = $this->createMock(\Magento\Framework\Stdlib\StringUtils::class);
+        $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->escaperMock = $this->createMock(\Magento\Framework\Escaper::class);
+        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $this->contextMock = $this->getMock(\Magento\Framework\App\Helper\Context::class, [], [], '', false);
+        $this->contextMock = $this->createMock(\Magento\Framework\App\Helper\Context::class);
         $this->contextMock->expects($this->any())->method('getScopeConfig')->willReturn($this->scopeConfigMock);
         $this->contextMock->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
 

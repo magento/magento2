@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Account;
@@ -22,10 +22,14 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
  */
 class LoginPost extends \Magento\Customer\Controller\AbstractAccount
 {
-    /** @var AccountManagementInterface */
+    /**
+     * @var \Magento\Customer\Api\AccountManagementInterface
+     */
     protected $customerAccountManagement;
 
-    /** @var Validator */
+    /**
+     * @var \Magento\Framework\Data\Form\FormKey\Validator
+     */
     protected $formKeyValidator;
 
     /**
@@ -81,7 +85,7 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
      * Get scope config
      *
      * @return ScopeConfigInterface
-     * @deprecated
+     * @deprecated 100.0.10
      */
     private function getScopeConfig()
     {
@@ -97,7 +101,7 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
     /**
      * Retrieve cookie manager
      *
-     * @deprecated
+     * @deprecated 100.1.0
      * @return \Magento\Framework\Stdlib\Cookie\PhpCookieManager
      */
     private function getCookieManager()
@@ -113,7 +117,7 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
     /**
      * Retrieve cookie metadata factory
      *
-     * @deprecated
+     * @deprecated 100.1.0
      * @return \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
      */
     private function getCookieMetadataFactory()
@@ -171,13 +175,12 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
                     $this->session->setUsername($login['username']);
                 } catch (UserLockedException $e) {
                     $message = __(
-                        'The account is locked. Please wait and try again or contact %1.',
-                        $this->getScopeConfig()->getValue('contact/email/recipient_email')
+                        'You did not sign in correctly or your account is temporarily disabled.'
                     );
                     $this->messageManager->addError($message);
                     $this->session->setUsername($login['username']);
                 } catch (AuthenticationException $e) {
-                    $message = __('Invalid login or password.');
+                    $message = __('You did not sign in correctly or your account is temporarily disabled.');
                     $this->messageManager->addError($message);
                     $this->session->setUsername($login['username']);
                 } catch (LocalizedException $e) {

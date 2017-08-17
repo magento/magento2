@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -46,6 +46,7 @@
                             <argument name="index" xsi:type="string">title</argument>
                             <argument name="sortable" xsi:type="string">0</argument>
                             <argument name="column_css_class" xsi:type="string">indexer-title</argument>
+                            <argument name="translate" xsi:type="boolean">true</argument>
                         </arguments>
                     </block>
                     <block class="Magento\Backend\Block\Widget\Grid\Column" as="indexer_description">
@@ -54,6 +55,7 @@
                             <argument name="index" xsi:type="string">description</argument>
                             <argument name="sortable" xsi:type="string">0</argument>
                             <argument name="column_css_class" xsi:type="string">indexer-description</argument>
+                            <argument name="translate" xsi:type="boolean">true</argument>
                         </arguments>
                     </block>
                     <block class="Magento\Backend\Block\Widget\Grid\Column" as="indexer_mode">

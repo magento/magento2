@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,6 +15,10 @@ use Magento\Integration\Model\ResourceModel\Oauth\Token\CollectionFactory as Tok
 use Magento\Integration\Model\Oauth\Token\RequestThrottler;
 use Magento\Framework\Exception\AuthenticationException;
 
+/**
+ * Class \Magento\Integration\Model\CustomerTokenService
+ *
+ */
 class CustomerTokenService implements \Magento\Integration\Api\CustomerTokenServiceInterface
 {
     /**
@@ -88,7 +92,13 @@ class CustomerTokenService implements \Magento\Integration\Api\CustomerTokenServ
     }
 
     /**
-     * {@inheritdoc}
+     * Revoke token by customer id.
+     *
+     * The function will delete the token from the oauth_token table.
+     *
+     * @param int $customerId
+     * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function revokeCustomerAccessToken($customerId)
     {
@@ -98,7 +108,7 @@ class CustomerTokenService implements \Magento\Integration\Api\CustomerTokenServ
         }
         try {
             foreach ($tokenCollection as $token) {
-                $token->setRevoked(1)->save();
+                $token->delete();
             }
         } catch (\Exception $e) {
             throw new LocalizedException(__('The tokens could not be revoked.'));
@@ -110,7 +120,7 @@ class CustomerTokenService implements \Magento\Integration\Api\CustomerTokenServ
      * Get request throttler instance
      *
      * @return RequestThrottler
-     * @deprecated
+     * @deprecated 100.0.4
      */
     private function getRequestThrottler()
     {

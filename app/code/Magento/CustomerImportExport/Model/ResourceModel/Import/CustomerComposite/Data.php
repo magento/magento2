@@ -1,12 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CustomerImportExport\Model\ResourceModel\Import\CustomerComposite;
 
 use Magento\CustomerImportExport\Model\Import\CustomerComposite;
 
+/**
+ * Class \Magento\CustomerImportExport\Model\ResourceModel\Import\CustomerComposite\Data
+ *
+ */
 class Data extends \Magento\ImportExport\Model\ResourceModel\Import\Data
 {
     /**

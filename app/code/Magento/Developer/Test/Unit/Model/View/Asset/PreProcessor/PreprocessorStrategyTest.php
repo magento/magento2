@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Developer\Test\Unit\Model\View\Asset\PreProcessor;
@@ -20,7 +20,7 @@ use Magento\Framework\View\Asset\PreProcessor\Chain;
  * @see \Magento\Developer\Model\View\Asset\PreProcessor\PreprocessorStrategy
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PreprocessorStrategyTest extends \PHPUnit_Framework_TestCase
+class PreprocessorStrategyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var PreprocessorStrategy

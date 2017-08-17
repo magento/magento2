@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
     <page name="Statistics" area="Adminhtml" mca="reports/report_statistics" module="Magento_Reports">
         <block name="gridBlock" class="Magento\Reports\Test\Block\Adminhtml\Refresh\Statistics\Grid" locator="#gridRefreshStatistics" strategy="css selector"/>
+        <block name="messagesBlock" class="Magento\Backend\Test\Block\Messages" locator="#messages .messages" strategy="css selector"/>
     </page>
 </config>

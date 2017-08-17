@@ -2,7 +2,7 @@
 /**
  * Backend Session configuration object
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Model\Session;
@@ -14,6 +14,7 @@ use Magento\Framework\Session\Config;
 
 /**
  * Magento Backend session configuration
+ * @api
  */
 class AdminConfig extends Config
 {
@@ -110,6 +111,7 @@ class AdminConfig extends Config
      * Set session cookie lifetime to session duration
      *
      * @return $this
+     * @since 100.1.0
      */
     protected function configureCookieLifetime()
     {

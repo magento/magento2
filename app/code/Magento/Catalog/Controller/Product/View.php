@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Product;
@@ -9,6 +9,10 @@ namespace Magento\Catalog\Controller\Product;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 
+/**
+ * Class \Magento\Catalog\Controller\Product\View
+ *
+ */
 class View extends \Magento\Catalog\Controller\Product
 {
     /**

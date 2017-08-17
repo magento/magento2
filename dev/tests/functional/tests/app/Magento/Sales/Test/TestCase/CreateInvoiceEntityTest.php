@@ -1,14 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Sales\Test\TestCase;
 
-use Magento\Sales\Test\Fixture\OrderInjectable;
-use Magento\Mtf\TestCase\Injectable;
-use Magento\Mtf\TestStep\TestStepFactory;
+use Magento\Mtf\TestCase\Scenario;
 
 /**
  * Preconditions:
@@ -27,64 +24,19 @@ use Magento\Mtf\TestStep\TestStepFactory;
  * @group Order_Management
  * @ZephyrId MAGETWO-28209
  */
-class CreateInvoiceEntityTest extends Injectable
+class CreateInvoiceEntityTest extends Scenario
 {
     /* tags */
     const MVP = 'yes';
-    const STABLE = 'no';
     /* end tags */
 
     /**
-     * Factory for Test Steps.
-     *
-     * @var TestStepFactory
-     */
-    protected $stepFactory;
-
-    /**
-     * Prepare data.
-     *
-     * @param TestStepFactory $stepFactory
-     * @return void
-     */
-    public function __prepare(TestStepFactory $stepFactory)
-    {
-        $this->stepFactory = $stepFactory;
-    }
-
-    /**
-     * Create invoice.
-     *
-     * @param OrderInjectable $order
-     * @param array $data
-     * @param string $configData
-     * @return array
-     */
-    public function test(OrderInjectable $order, array $data, $configData)
-    {
-        // Preconditions
-        $this->stepFactory->create(
-            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
-            ['configData' => $configData]
-        )->run();
-        $order->persist();
-
-        // Steps
-        $result = $this->stepFactory->create(
-            \Magento\Sales\Test\TestStep\CreateInvoiceStep::class,
-            ['order' => $order, 'data' => $data]
-        )->run();
-
-        return $result;
-    }
-
-    /**
-     * Log out.
+     * Runs test for invoice creation for order placed with offline payment method.
      *
      * @return void
      */
-    public function tearDown()
+    public function test()
     {
-        $this->stepFactory->create(\Magento\Customer\Test\TestStep\LogoutCustomerOnFrontendStep::class)->run();
+        $this->executeScenario();
     }
 }

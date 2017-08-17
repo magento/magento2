@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model\Billing;
@@ -10,8 +10,7 @@ use Magento\Sales\Model\Order\Payment;
 /**
  * Billing Agreement abstract model
  *
- * @method \Magento\Paypal\Model\ResourceModel\Billing\Agreement _getResource()
- * @method \Magento\Paypal\Model\ResourceModel\Billing\Agreement getResource()
+ * @api
  * @method int getCustomerId()
  * @method \Magento\Paypal\Model\Billing\Agreement setCustomerId(int $value)
  * @method string getMethodCode()

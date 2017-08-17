@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Api;
@@ -8,7 +8,7 @@ namespace Magento\Framework\Api;
 /**
  * Test for \Magento\Framework\Api\AbstractExtensibleObject
  */
-class AbstractExtensibleObjectTest extends \PHPUnit_Framework_TestCase
+class AbstractExtensibleObjectTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\ObjectManagerInterface */
     private $_objectManager;

@@ -2,7 +2,7 @@
 /**
  * Catalog super product attribute resource model
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable;
@@ -11,6 +11,10 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute as Con
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * Class \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute
+ *
+ */
 class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**

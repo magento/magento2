@@ -1,18 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Weee\Test\Unit\Model;
-
-use Magento\Weee\Model\Tax;
 
 /**
  * Class TaxTest
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TaxTest extends \PHPUnit_Framework_TestCase
+class TaxTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Weee\Model\Tax
@@ -97,27 +95,24 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $className = \Magento\Framework\Model\Context::class;
-        $this->context = $this->getMock($className, [], [], '', false);
+        $this->context = $this->createMock($className);
 
         $className = \Magento\Framework\Registry::class;
-        $this->registry = $this->getMock($className, [], [], '', false);
+        $this->registry = $this->createMock($className);
 
         $className = \Magento\Eav\Model\Entity\AttributeFactory::class;
-        $this->attributeFactory = $this->getMock($className, ['create'], [], '', false);
+        $this->attributeFactory = $this->createPartialMock($className, ['create']);
 
         $className = \Magento\Store\Model\StoreManagerInterface::class;
-        $this->storeManager = $this->getMock($className, [], [], '', false);
+        $this->storeManager = $this->createMock($className);
 
         $className = \Magento\Tax\Model\CalculationFactory::class;
-        $this->calculationFactory = $this->getMock($className, ['create'], [], '', false);
+        $this->calculationFactory = $this->createPartialMock($className, ['create']);
 
         $className = \Magento\Customer\Model\Session::class;
-        $this->customerSession = $this->getMock(
+        $this->customerSession = $this->createPartialMock(
             $className,
-            ['getCustomerId', 'getDefaultTaxShippingAddress', 'getDefaultTaxBillingAddress', 'getCustomerTaxClassId'],
-            [],
-            '',
-            false
+            ['getCustomerId', 'getDefaultTaxShippingAddress', 'getDefaultTaxBillingAddress', 'getCustomerTaxClassId']
         );
         $this->customerSession->expects($this->any())->method('getCustomerId')->willReturn(null);
         $this->customerSession->expects($this->any())->method('getDefaultTaxShippingAddress')->willReturn(null);
@@ -125,22 +120,22 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         $this->customerSession->expects($this->any())->method('getCustomerTaxClassId')->willReturn(null);
 
         $className = \Magento\Customer\Api\AccountManagementInterface::class;
-        $this->accountManagement = $this->getMock($className, [], [], '', false);
+        $this->accountManagement = $this->createMock($className);
 
         $className = \Magento\Tax\Helper\Data::class;
-        $this->taxData = $this->getMock($className, [], [], '', false);
+        $this->taxData = $this->createMock($className);
 
         $className = \Magento\Weee\Model\ResourceModel\Tax::class;
-        $this->resource = $this->getMock($className, [], [], '', false);
+        $this->resource = $this->createMock($className);
 
         $className = \Magento\Weee\Model\Config::class;
-        $this->weeeConfig = $this->getMock($className, [], [], '', false);
+        $this->weeeConfig = $this->createMock($className);
 
         $className = \Magento\Framework\Pricing\PriceCurrencyInterface::class;
-        $this->priceCurrency = $this->getMock($className, [], [], '', false);
+        $this->priceCurrency = $this->createMock($className);
 
         $className = \Magento\Framework\Data\Collection\AbstractDb::class;
-        $this->resourceCollection = $this->getMock($className, [], [], '', false);
+        $this->resourceCollection = $this->createMock($className);
 
         $this->model = $this->objectManager->getObject(
             \Magento\Weee\Model\Tax::class,
@@ -169,13 +164,13 @@ class TaxTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetProductWeeeAttributes($weeeTaxCalculationsByEntity, $expectedFptLabel)
     {
-        $product = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
-        $website = $this->getMock(\Magento\Store\Model\Website::class, [], [], '', false);
-        $store = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
-        $group = $this->getMock(\Magento\Store\Model\Group::class, [], [], '', false);
+        $product = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $website = $this->createMock(\Magento\Store\Model\Website::class);
+        $store = $this->createMock(\Magento\Store\Model\Store::class);
+        $group = $this->createMock(\Magento\Store\Model\Group::class);
 
-        $attribute = $this->getMock(\Magento\Eav\Model\Entity\Attribute::class, [], [], '', false);
-        $calculation = $this->getMock(\Magento\Tax\Model\Calculation::class, [], [], '', false);
+        $attribute = $this->createMock(\Magento\Eav\Model\Entity\Attribute::class);
+        $calculation = $this->createMock(\Magento\Tax\Model\Calculation::class);
 
         $obj = new \Magento\Framework\DataObject(['country' => 'US', 'region' => 'TX']);
         $calculation->expects($this->once())
@@ -253,6 +248,58 @@ class TaxTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test getWeeeAmountExclTax method
+     *
+     * @param string $productTypeId
+     * @param string $prodcuctPriceType
+     * @dataProvider getWeeeAmountExclTaxDataProvider
+     */
+    public function testGetWeeeAmountExclTax($productTypeId, $prodcuctPriceType)
+    {
+        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getTypeId', 'getPriceType'])
+            ->getMock();
+        $product->expects($this->any())->method('getTypeId')->willReturn($productTypeId);
+        $product->expects($this->any())->method('getPriceType')->willReturn($prodcuctPriceType);
+        $weeeDataHelper = $this->getMockBuilder(\Magento\Framework\DataObject::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getAmountExclTax'])
+            ->getMock();
+        $weeeDataHelper->expects($this->at(0))->method('getAmountExclTax')->willReturn(10);
+        $weeeDataHelper->expects($this->at(1))->method('getAmountExclTax')->willReturn(30);
+        $tax = $this->getMockBuilder(\Magento\Weee\Model\Tax::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getProductWeeeAttributes'])
+            ->getMock();
+        $tax->expects($this->once())->method('getProductWeeeAttributes')
+            ->willReturn([$weeeDataHelper, $weeeDataHelper]);
+        $this->assertEquals(40, $tax->getWeeeAmountExclTax($product));
+    }
+
+    /**
+     * Test getWeeeAmountExclTax method for dynamic bundle product
+     */
+    public function testGetWeeeAmountExclTaxForDynamicBundleProduct()
+    {
+        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getTypeId', 'getPriceType'])
+            ->getMock();
+        $product->expects($this->once())->method('getTypeId')->willReturn('bundle');
+        $product->expects($this->once())->method('getPriceType')->willReturn(0);
+        $weeeDataHelper = $this->getMockBuilder(\Magento\Framework\DataObject::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $tax = $this->getMockBuilder(\Magento\Weee\Model\Tax::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getProductWeeeAttributes'])
+            ->getMock();
+        $tax->expects($this->once())->method('getProductWeeeAttributes')->willReturn([$weeeDataHelper]);
+        $this->assertEquals(0, $tax->getWeeeAmountExclTax($product));
+    }
+
+    /**
      * @return array
      */
     public function getProductWeeeAttributesDataProvider()
@@ -275,6 +322,24 @@ class TaxTest extends \PHPUnit_Framework_TestCase
                     'attribute_code' => 'fpt_code',
                 ],
                 'expectedFptLabel' => 'fpt_label_frontend'
+            ]
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function getWeeeAmountExclTaxDataProvider()
+    {
+        return [
+            [
+                'bundle', 1
+            ],
+            [
+                'simple', 0
+            ],
+            [
+                'simple', 1
             ]
         ];
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Controller\Adminhtml\Product\Initialization\Helper\Plugin;
@@ -13,7 +13,12 @@ use Magento\ConfigurableProduct\Model\Product\VariationHandler;
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper as ProductInitializationHelper;
 use Magento\Catalog\Model\Product;
 
-class UpdateConfigurationsTest extends \PHPUnit_Framework_TestCase
+/**
+ * Class UpdateConfigurationsTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @package Magento\ConfigurableProduct\Test\Unit\Controller\Adminhtml\Product\Initialization\Helper\Plugin
+ */
+class UpdateConfigurationsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var UpdateConfigurations
@@ -69,10 +74,14 @@ class UpdateConfigurationsTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testAfterInitialize()
+    /**
+     * Prepare configurable matrix
+     *
+     * @return array
+     */
+    private function getConfigurableMatrix()
     {
-        $productMock = $this->getProductMock();
-        $configurableMatrix = [
+        return [
             [
                 'newProduct' => true,
                 'id' => 'product1'
@@ -109,6 +118,12 @@ class UpdateConfigurationsTest extends \PHPUnit_Framework_TestCase
                 'weight' => '5.55',
             ],
         ];
+    }
+
+    public function testAfterInitialize()
+    {
+        $productMock = $this->getProductMock();
+        $configurableMatrix = $this->getConfigurableMatrix();
         $configurations = [
             'product2' => [
                 'status' => 'simple2_status',

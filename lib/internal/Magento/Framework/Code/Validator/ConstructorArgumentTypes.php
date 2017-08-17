@@ -1,12 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Code\Validator;
 
 use Magento\Framework\Code\ValidatorInterface;
 
+/**
+ * Class \Magento\Framework\Code\Validator\ConstructorArgumentTypes
+ *
+ */
 class ConstructorArgumentTypes implements ValidatorInterface
 {
     /**
@@ -43,18 +47,20 @@ class ConstructorArgumentTypes implements ValidatorInterface
     {
         $class = new \ReflectionClass($className);
         $expectedArguments = $this->argumentsReader->getConstructorArguments($class);
-        $actualArguments = $this->sourceArgumentsReader->getConstructorArgumentTypes($class);
+        $actualArguments = array_filter($this->sourceArgumentsReader->getConstructorArgumentTypes($class));
         $expectedArguments = array_map(function ($element) {
             return $element['type'];
         }, $expectedArguments);
-        $result = array_diff($expectedArguments, $actualArguments);
-        if (!empty($result)) {
-            throw new \Magento\Framework\Exception\ValidatorException(
-                new \Magento\Framework\Phrase(
-                    'Invalid constructor argument(s) in %1',
-                    [$className]
-                )
-            );
+
+        foreach ($actualArguments as $argument) {
+            if (!in_array($argument, $expectedArguments)) {
+                throw new \Magento\Framework\Exception\ValidatorException(
+                    new \Magento\Framework\Phrase(
+                        'Invalid constructor argument(s) in %1',
+                        [$className]
+                    )
+                );
+            }
         }
         return true;
     }

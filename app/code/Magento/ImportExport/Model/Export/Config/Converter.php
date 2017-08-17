@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Model\Export\Config;
@@ -8,6 +8,10 @@ namespace Magento\ImportExport\Model\Export\Config;
 use Magento\Framework\Module\Manager;
 use Magento\Framework\App\Utility\Classes;
 
+/**
+ * Class \Magento\ImportExport\Model\Export\Config\Converter
+ *
+ */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**

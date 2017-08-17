@@ -1,11 +1,15 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sitemap\Controller\Adminhtml\Sitemap;
 
+/**
+ * Class \Magento\Sitemap\Controller\Adminhtml\Sitemap\Edit
+ *
+ */
 class Edit extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
 {
     /**

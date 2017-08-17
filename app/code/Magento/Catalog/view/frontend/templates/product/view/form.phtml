@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,25 +16,25 @@
 <?php $_product = $block->getProduct(); ?>
 
 <div class="product-add-form">
-    <form action="<?php /* @escapeNotVerified */ echo $block->getSubmitUrl($_product) ?>" method="post"
+    <form action="<?= /* @escapeNotVerified */ $block->getSubmitUrl($_product) ?>" method="post"
           id="product_addtocart_form"<?php if ($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
-        <input type="hidden" name="product" value="<?php /* @escapeNotVerified */ echo $_product->getId() ?>" />
+        <input type="hidden" name="product" value="<?= /* @escapeNotVerified */ $_product->getId() ?>" />
         <input type="hidden" name="selected_configurable_option" value="" />
         <input type="hidden" name="related_product" id="related-products-field" value="" />
-        <?php echo $block->getBlockHtml('formkey')?>
-        <?php echo $block->getChildHtml('form_top'); ?>
+        <?= $block->getBlockHtml('formkey') ?>
+        <?= $block->getChildHtml('form_top') ?>
         <?php if (!$block->hasOptions()):?>
-            <?php echo $block->getChildHtml('product_info_form_content'); ?>
+            <?= $block->getChildHtml('product_info_form_content') ?>
         <?php else:?>
             <?php if ($_product->isSaleable() && $block->getOptionsContainer() == 'container1'):?>
-                <?php echo $block->getChildChildHtml('options_container') ?>
+                <?= $block->getChildChildHtml('options_container') ?>
             <?php endif;?>
         <?php endif; ?>
 
         <?php if ($_product->isSaleable() && $block->hasOptions() && $block->getOptionsContainer() == 'container2'):?>
-            <?php echo $block->getChildChildHtml('options_container') ?>
+            <?= $block->getChildChildHtml('options_container') ?>
         <?php endif;?>
-        <?php echo $block->getChildHtml('form_bottom'); ?>
+        <?= $block->getChildHtml('form_bottom') ?>
     </form>
 </div>
 <script>
@@ -43,13 +43,13 @@
         'priceBox'
     ], function($){
         var dataPriceBoxSelector = '[data-role=priceBox]',
-            dataProductIdSelector = '[data-product-id=<?php echo $block->escapeHtml($_product->getId())?>]',
+            dataProductIdSelector = '[data-product-id=<?= $block->escapeHtml($_product->getId()) ?>]',
             priceBoxes = $(dataPriceBoxSelector + dataProductIdSelector);
 
         priceBoxes = priceBoxes.filter(function(index, elem){
             return !$(elem).find('.price-from').length;
         });
 
-        priceBoxes.priceBox({'priceConfig': <?php /* @escapeNotVerified */ echo $block->getJsonConfig() ?>});
+        priceBoxes.priceBox({'priceConfig': <?= /* @escapeNotVerified */ $block->getJsonConfig() ?>});
     });
 </script>

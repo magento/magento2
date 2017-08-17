@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GroupedProduct\Block\Stockqty\Type;
@@ -9,6 +9,8 @@ use Magento\Framework\DataObject\IdentityInterface;
 
 /**
  * Product stock qty block for grouped product type
+ *
+ * @api
  */
 class Grouped extends \Magento\CatalogInventory\Block\Stockqty\Composite implements IdentityInterface
 {

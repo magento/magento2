@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /** Creates scope binding and registers in to ko.bindingHandlers object */
@@ -7,8 +7,10 @@ define([
     'ko',
     'uiRegistry',
     'mage/translate',
-    '../template/renderer'
-], function (ko, registry, $t, renderer) {
+    '../template/renderer',
+    'jquery',
+    '../../logger/console-logger'
+], function (ko, registry, $t, renderer, $, consoleLogger) {
     'use strict';
 
     /**
@@ -16,9 +18,11 @@ define([
      * Applies bindings to descendant nodes.
      * @param {HTMLElement} el - element to apply bindings to.
      * @param {ko.bindingContext} bindingContext - instance of ko.bindingContext, passed to binding initially.
+     * @param {Promise} promise - instance of jQuery promise
      * @param {Object} component - component instance to attach to new context
      */
-    function applyComponents(el, bindingContext, component) {
+    function applyComponents(el, bindingContext, promise, component) {
+        promise.resolve();
         component = bindingContext.createChildContext(component);
 
         ko.utils.extend(component, {
@@ -53,9 +57,25 @@ define([
          */
         update: function (el, valueAccessor, allBindings, viewModel, bindingContext) {
             var component = valueAccessor(),
-                apply = applyComponents.bind(this, el, bindingContext);
+                promise = $.Deferred(),
+                apply = applyComponents.bind(this, el, bindingContext, promise),
+                loggerUtils = consoleLogger.utils;
 
             if (typeof component === 'string') {
+                loggerUtils.asyncLog(
+                    promise,
+                    {
+                        data: {
+                            component: component
+                        },
+                        messages: loggerUtils.createMessages(
+                            'requestingComponent',
+                            'requestingComponentIsLoaded',
+                            'requestingComponentIsFailed'
+                        )
+                    }
+                );
+
                 registry.get(component, apply);
             } else if (typeof component === 'function') {
                 component(apply);

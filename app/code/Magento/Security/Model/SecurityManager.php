@@ -1,16 +1,21 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Security\Model;
 
 use Magento\Framework\Exception\SecurityViolationException;
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
+use Magento\Security\Model\SecurityChecker\SecurityCheckerInterface;
 
 /**
- * Security Control Manager Model
+ * Manager for password reset actions
+ *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.1.0
  */
 class SecurityManager
 {
@@ -21,21 +26,25 @@ class SecurityManager
 
     /**
      * @var ConfigInterface
+     * @since 100.1.0
      */
     protected $securityConfig;
 
     /**
      * @var \Magento\Security\Model\PasswordResetRequestEventFactory
+     * @since 100.1.0
      */
     protected $passwordResetRequestEventFactory;
 
     /**
      * @var ResourceModel\PasswordResetRequestEvent\CollectionFactory
+     * @since 100.1.0
      */
     protected $passwordResetRequestEventCollectionFactory;
 
     /**
-     * @var array
+     * @var SecurityCheckerInterface[]
+     * @since 100.1.0
      */
     protected $securityCheckers;
 
@@ -65,6 +74,7 @@ class SecurityManager
      * @param RemoteAddress $remoteAddress
      * @param array $securityCheckers
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 100.1.0
      */
     public function __construct(
         ConfigInterface $securityConfig,
@@ -84,7 +94,7 @@ class SecurityManager
         $this->remoteAddress = $remoteAddress;
 
         foreach ($this->securityCheckers as $checker) {
-            if (!($checker instanceof \Magento\Security\Model\SecurityChecker\SecurityCheckerInterface)) {
+            if (!($checker instanceof SecurityCheckerInterface)) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __('Incorrect Security Checker class. It has to implement SecurityCheckerInterface')
                 );
@@ -100,6 +110,7 @@ class SecurityManager
      * @param int|null $longIp
      * @return $this
      * @throws SecurityViolationException
+     * @since 100.1.0
      */
     public function performSecurityCheck($requestType, $accountReference = null, $longIp = null)
     {
@@ -119,6 +130,7 @@ class SecurityManager
      * Clean expired Admin Sessions
      *
      * @return $this
+     * @since 100.1.0
      */
     public function cleanExpiredRecords()
     {
@@ -136,6 +148,7 @@ class SecurityManager
      * @param string|null $accountReference
      * @param int $longIp
      * @return PasswordResetRequestEvent
+     * @since 100.1.0
      */
     protected function createNewPasswordResetRequestEventRecord($requestType, $accountReference, $longIp)
     {

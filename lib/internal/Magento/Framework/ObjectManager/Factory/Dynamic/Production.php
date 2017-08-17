@@ -1,10 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\ObjectManager\Factory\Dynamic;
 
+/**
+ * Class \Magento\Framework\ObjectManager\Factory\Dynamic\Production
+ *
+ */
 class Production extends \Magento\Framework\ObjectManager\Factory\AbstractFactory
 {
     /**

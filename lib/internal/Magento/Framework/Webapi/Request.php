@@ -2,7 +2,7 @@
 /**
  * Web API request.
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Webapi;
@@ -15,6 +15,10 @@ use Magento\Framework\Stdlib\Cookie\CookieReaderInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\Stdlib\StringUtils;
 
+/**
+ * Class \Magento\Framework\Webapi\Request
+ *
+ */
 class Request extends HttpRequest implements RequestInterface
 {
     /**

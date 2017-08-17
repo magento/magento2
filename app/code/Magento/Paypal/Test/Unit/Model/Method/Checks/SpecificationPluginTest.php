@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Model\Method\Checks;
@@ -14,7 +14,7 @@ use Magento\Quote\Model\Quote;
 use Magento\Paypal\Model\ResourceModel\Billing\Agreement\Collection as BillingAgreementCollection;
 use Magento\Paypal\Model\Billing\Agreement as BillingAgreement;
 
-class SpecificationPluginTest extends \PHPUnit_Framework_TestCase
+class SpecificationPluginTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SpecificationPlugin

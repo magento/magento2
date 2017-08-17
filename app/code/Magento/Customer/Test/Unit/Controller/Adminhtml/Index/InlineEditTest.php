@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Controller\Adminhtml\Index;
@@ -11,7 +11,7 @@ use Magento\Customer\Model\EmailNotificationInterface;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class InlineEditTest extends \PHPUnit_Framework_TestCase
+class InlineEditTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Customer\Controller\Adminhtml\Index\InlineEdit */
     private $controller;
@@ -93,29 +93,23 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             'address',
             false
         );
-        $this->addressMapper = $this->getMock(\Magento\Customer\Model\Address\Mapper::class, [], [], '', false);
-        $this->customerMapper = $this->getMock(\Magento\Customer\Model\Customer\Mapper::class, [], [], '', false);
-        $this->resultJsonFactory = $this->getMock(
+        $this->addressMapper = $this->createMock(\Magento\Customer\Model\Address\Mapper::class);
+        $this->customerMapper = $this->createMock(\Magento\Customer\Model\Customer\Mapper::class);
+        $this->resultJsonFactory = $this->createPartialMock(
             \Magento\Framework\Controller\Result\JsonFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->resultJson = $this->getMock(\Magento\Framework\Controller\Result\Json::class, [], [], '', false);
+        $this->resultJson = $this->createMock(\Magento\Framework\Controller\Result\Json::class);
         $this->customerRepository = $this->getMockForAbstractClass(
             \Magento\Customer\Api\CustomerRepositoryInterface::class,
             [],
             '',
             false
         );
-        $this->dataObjectHelper = $this->getMock(\Magento\Framework\Api\DataObjectHelper::class, [], [], '', false);
-        $this->addressDataFactory = $this->getMock(
+        $this->dataObjectHelper = $this->createMock(\Magento\Framework\Api\DataObjectHelper::class);
+        $this->addressDataFactory = $this->createPartialMock(
             \Magento\Customer\Api\Data\AddressInterfaceFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
         $this->addressRepository = $this->getMockForAbstractClass(
             \Magento\Customer\Api\AddressRepositoryInterface::class,
@@ -123,7 +117,7 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->messageCollection = $this->getMock(\Magento\Framework\Message\Collection::class, [], [], '', false);
+        $this->messageCollection = $this->createMock(\Magento\Framework\Message\Collection::class);
         $this->message = $this->getMockForAbstractClass(
             \Magento\Framework\Message\MessageInterface::class,
             [],

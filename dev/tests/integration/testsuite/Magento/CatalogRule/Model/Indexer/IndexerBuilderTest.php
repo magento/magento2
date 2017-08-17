@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRule\Model\Indexer;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
-class IndexerBuilderTest extends \PHPUnit_Framework_TestCase
+class IndexerBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogRule\Model\Indexer\IndexBuilder
@@ -41,6 +41,27 @@ class IndexerBuilderTest extends \PHPUnit_Framework_TestCase
         );
         $this->resourceRule = Bootstrap::getObjectManager()->get(\Magento\CatalogRule\Model\ResourceModel\Rule::class);
         $this->product = Bootstrap::getObjectManager()->get(\Magento\Catalog\Model\Product::class);
+    }
+
+    protected function tearDown()
+    {
+        /** @var \Magento\Framework\Registry $registry */
+        $registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get(\Magento\Framework\Registry::class);
+
+        $registry->unregister('isSecureArea');
+        $registry->register('isSecureArea', true);
+
+        /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection */
+        $productCollection = Bootstrap::getObjectManager()->get(
+            \Magento\Catalog\Model\ResourceModel\Product\Collection::class
+        );
+        $productCollection->delete();
+
+        $registry->unregister('isSecureArea');
+        $registry->register('isSecureArea', false);
+
+        parent::tearDown();
     }
 
     /**
@@ -91,8 +112,8 @@ class IndexerBuilderTest extends \PHPUnit_Framework_TestCase
     /**
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
-     * @magentoDataFixture Magento/CatalogRule/_files/attribute.php
-     * @magentoDataFixture Magento/CatalogRule/_files/rule_by_attribute.php
+     * @magentoDataFixtureBeforeTransaction Magento/CatalogRule/_files/attribute.php
+     * @magentoDataFixtureBeforeTransaction Magento/CatalogRule/_files/rule_by_attribute.php
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      */
     public function testReindexFull()

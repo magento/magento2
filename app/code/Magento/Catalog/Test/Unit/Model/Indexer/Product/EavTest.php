@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product;
 
-class EavTest extends \PHPUnit_Framework_TestCase
+class EavTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Eav
@@ -58,7 +58,7 @@ class EavTest extends \PHPUnit_Framework_TestCase
             $this->_productEavIndexerFull
         );
 
-        $this->cacheContextMock = $this->getMock(\Magento\Framework\Indexer\CacheContext::class, [], [], '', false);
+        $this->cacheContextMock = $this->createMock(\Magento\Framework\Indexer\CacheContext::class);
 
         $cacheContextProperty = new \ReflectionProperty(
             \Magento\Catalog\Model\Indexer\Product\Eav::class,
@@ -89,7 +89,8 @@ class EavTest extends \PHPUnit_Framework_TestCase
             ->method('execute')
             ->with($ids);
 
-        $this->model->executeList($ids);
+        $result = $this->model->executeList($ids);
+        $this->assertNull($result);
     }
 
     public function testExecuteFull()

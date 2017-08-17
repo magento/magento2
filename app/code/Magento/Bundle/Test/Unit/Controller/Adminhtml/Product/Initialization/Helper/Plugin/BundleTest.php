@@ -2,12 +2,12 @@
 /**
  * Test class for \Magento\Bundle\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Bundle
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Test\Unit\Controller\Adminhtml\Product\Initialization\Helper\Plugin;
 
-class BundleTest extends \PHPUnit_Framework_TestCase
+class BundleTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Bundle\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Bundle
@@ -46,7 +46,7 @@ class BundleTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
+        $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
         $methods = [
             'getCompositeReadonly',
             'setBundleOptionsData',
@@ -57,8 +57,9 @@ class BundleTest extends \PHPUnit_Framework_TestCase
             'setOptions',
             'setCanSaveBundleSelections',
             '__wakeup',
+            'getOptionsReadonly'
         ];
-        $this->productMock = $this->getMock(\Magento\Catalog\Model\Product::class, $methods, [], '', false);
+        $this->productMock = $this->createPartialMock(\Magento\Catalog\Model\Product::class, $methods);
         $optionInterfaceFactory = $this->getMockBuilder(\Magento\Bundle\Api\Data\OptionInterfaceFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -74,12 +75,8 @@ class BundleTest extends \PHPUnit_Framework_TestCase
         $customOptionFactory = $this->getMockBuilder(
             \Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory::class
         )->disableOriginalConstructor()->getMock();
-        $this->subjectMock = $this->getMock(
-            \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper::class,
-            [],
-            [],
-            '',
-            false
+        $this->subjectMock = $this->createMock(
+            \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper::class
         );
         $this->model = new \Magento\Bundle\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Bundle(
             $this->requestMock,

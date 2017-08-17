@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <update handle="reports_report_product_lowstock_grid"/>
     <body>
-        <container name="adminhtml.block.report.product.lowstock.grid.container" label="Export CSV"/>
+        <block class="Magento\Reports\Block\Adminhtml\Product\Lowstock" name="adminhtml.report.grid.container" template="Magento_Backend::widget/grid/container/empty.phtml"/>
     </body>
 </page>

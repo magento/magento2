@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\HTTP\Test\Unit\PhpEnvironment;
@@ -9,7 +9,7 @@ use \Magento\Framework\HTTP\PhpEnvironment\Request;
 
 use Zend\Stdlib\Parameters;
 
-class RequestTest extends \PHPUnit_Framework_TestCase
+class RequestTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Request
@@ -38,9 +38,9 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
-        $this->cookieReader = $this->getMock(\Magento\Framework\Stdlib\Cookie\CookieReaderInterface::class);
-        $this->converter = $this->getMock(\Magento\Framework\Stdlib\StringUtils::class);
+        $this->objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->cookieReader = $this->createMock(\Magento\Framework\Stdlib\Cookie\CookieReaderInterface::class);
+        $this->converter = $this->createMock(\Magento\Framework\Stdlib\StringUtils::class);
         // Stash the $_SERVER array to protect it from modification in test
         $this->serverArray = $_SERVER;
     }

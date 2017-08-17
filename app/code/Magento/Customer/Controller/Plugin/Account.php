@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Plugin;
@@ -12,6 +12,10 @@ use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Action\AbstractAction;
 use Magento\Framework\Controller\ResultInterface;
 
+/**
+ * Class \Magento\Customer\Controller\Plugin\Account
+ *
+ */
 class Account
 {
     /**

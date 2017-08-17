@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,10 @@ namespace Magento\Sales\Controller\Adminhtml\Order;
 
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Order\PdfDocumentsMassAction
+ *
+ */
 abstract class PdfDocumentsMassAction extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
     /**
@@ -38,7 +42,7 @@ abstract class PdfDocumentsMassAction extends \Magento\Sales\Controller\Adminhtm
      * Get Order Collection Factory
      *
      * @return \Magento\Sales\Model\ResourceModel\Order\CollectionFactory
-     * @deprecated
+     * @deprecated 100.1.3
      */
     private function getOrderCollection()
     {

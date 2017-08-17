@@ -1,13 +1,19 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct;
 
+/**
+ * Class \Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct\Columns
+ *
+ */
 class Columns extends \Magento\Ui\Component\Listing\Columns
 {
-    /** @var \Magento\Catalog\Ui\Component\Listing\Attribute\RepositoryInterface */
+    /**
+     * @var \Magento\Catalog\Ui\Component\Listing\Attribute\RepositoryInterface
+     */
     protected $attributeRepository;
 
     /**

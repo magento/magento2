@@ -1,14 +1,18 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework;
 
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Framework\Phrase;
 
-class TranslateCachingTest extends \PHPUnit_Framework_TestCase
+/**
+ * Class TranslateCachingTest
+ * @package Magento\Framework
+ * @magentoAppIsolation enabled
+ */
+class TranslateCachingTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Phrase\RendererInterface

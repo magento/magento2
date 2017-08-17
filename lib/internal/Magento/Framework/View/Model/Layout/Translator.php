@@ -1,12 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Model\Layout;
 
 use Magento\Framework\Simplexml\Element;
 
+/**
+ * Class \Magento\Framework\View\Model\Layout\Translator
+ *
+ */
 class Translator
 {
     /**

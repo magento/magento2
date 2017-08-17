@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model\Config\Backend\CreateAccount;
 
-class DisableAutoGroupAssignDefaultTest extends \PHPUnit_Framework_TestCase
+class DisableAutoGroupAssignDefaultTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Customer\Model\Config\Backend\CreateAccount\DisableAutoGroupAssignDefault

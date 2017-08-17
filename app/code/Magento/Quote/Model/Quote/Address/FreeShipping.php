@@ -1,10 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model\Quote\Address;
 
+/**
+ * Class \Magento\Quote\Model\Quote\Address\FreeShipping
+ *
+ */
 class FreeShipping implements \Magento\Quote\Model\Quote\Address\FreeShippingInterface
 {
     /**

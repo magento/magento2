@@ -1,13 +1,17 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Store;
 
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Backend\Controller\Adminhtml\System\Store\DeleteStorePost
+ *
+ */
 class DeleteStorePost extends \Magento\Backend\Controller\Adminhtml\System\Store
 {
     /**

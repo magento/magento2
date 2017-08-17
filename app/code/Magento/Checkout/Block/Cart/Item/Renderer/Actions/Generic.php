@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Block\Cart\Item\Renderer\Actions;
@@ -8,6 +8,10 @@ namespace Magento\Checkout\Block\Cart\Item\Renderer\Actions;
 use Magento\Framework\View\Element\Template;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
 
+/**
+ * Class \Magento\Checkout\Block\Cart\Item\Renderer\Actions\Generic
+ *
+ */
 class Generic extends Template
 {
     /**

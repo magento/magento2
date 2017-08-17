@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,7 +16,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
+class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /** @var AccountManagementInterface */
     private $accountManagement;
@@ -393,7 +393,7 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
         $customer = $this->customerRepository->get($fixtureCustomerEmail);
         $this->customerRepository->delete($customer);
         /** Ensure that customer was deleted */
-        $this->setExpectedException(
+        $this->expectException(
             \Magento\Framework\Exception\NoSuchEntityException::class,
             'No such entity with email = customer@example.com, websiteId = 1'
         );
@@ -411,7 +411,7 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
         $fixtureCustomerId = 1;
         $this->customerRepository->deleteById($fixtureCustomerId);
         /** Ensure that customer was deleted */
-        $this->setExpectedException(
+        $this->expectException(
             \Magento\Framework\Exception\NoSuchEntityException::class,
             'No such entity with email = customer@example.com, websiteId = 1'
         );
@@ -503,6 +503,44 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
             $defaultShipping,
             $customer->getDefaultShipping(),
             'default_shipping customer attribute did not updated'
+        );
+    }
+
+    /**
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoDbIsolation enabled
+     */
+    public function testUpdateDefaultShippingAndDefaultBillingTest()
+    {
+        $customerId = 1;
+        $customerData = [
+            "id" => 1,
+            "website_id" => 1,
+            "email" => "roni_cost@example.com",
+            "firstname" => "1111",
+            "lastname" => "Boss",
+            "middlename" => null,
+            "gender" => 0
+        ];
+
+        $customerEntity = $this->customerFactory->create(['data' => $customerData]);
+
+        $customer = $this->customerRepository->getById($customerId);
+        $oldDefaultBilling = $customer->getDefaultBilling();
+        $oldDefaultShipping = $customer->getDefaultShipping();
+
+        $savedCustomer = $this->customerRepository->save($customerEntity);
+
+        $this->assertEquals(
+            $savedCustomer->getDefaultBilling(),
+            $oldDefaultBilling,
+            'Default billing shoud not be overridden'
+        );
+
+        $this->assertEquals(
+            $savedCustomer->getDefaultShipping(),
+            $oldDefaultShipping,
+            'Default shipping shoud not be overridden'
         );
     }
 }

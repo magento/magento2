@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Model;
@@ -12,6 +12,10 @@ use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\Factory as DataObjectFactory;
 
+/**
+ * Class \Magento\Downloadable\Model\ProductOptionProcessor
+ *
+ */
 class ProductOptionProcessor implements ProductOptionProcessorInterface
 {
     /**

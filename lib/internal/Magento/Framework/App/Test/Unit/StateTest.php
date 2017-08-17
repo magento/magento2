@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Framework\App\Test\Unit;
 
@@ -12,7 +10,7 @@ use \Magento\Framework\App\Area;
 use \Magento\Framework\App\AreaList;
 use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class StateTest extends \PHPUnit_Framework_TestCase
+class StateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\State
@@ -39,7 +37,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->areaListMock = $this->getMock(AreaList::class, [], [], '', false, false);
+        $this->areaListMock = $this->createMock(AreaList::class);
         $this->areaListMock->expects($this->any())
             ->method('getCodes')
             ->willReturn([Area::AREA_ADMINHTML, Area::AREA_FRONTEND]);
@@ -57,14 +55,14 @@ class StateTest extends \PHPUnit_Framework_TestCase
         $areaCode = Area::AREA_FRONTEND;
         $this->scopeMock->expects($this->once())->method('setCurrentScope')->with($areaCode);
         $this->model->setAreaCode($areaCode);
-        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         $this->model->setAreaCode(Area::AREA_ADMINHTML);
     }
 
     public function testGetAreaCodeException()
     {
         $this->scopeMock->expects($this->never())->method('setCurrentScope');
-        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         $this->model->getAreaCode();
     }
 

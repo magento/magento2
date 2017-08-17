@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Multishipping\Block\Checkout;
@@ -8,6 +8,7 @@ namespace Magento\Multishipping\Block\Checkout;
 /**
  * Multishipping billing information
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Billing extends \Magento\Payment\Block\Form\Container

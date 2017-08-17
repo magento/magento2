@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model;
@@ -17,6 +17,7 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 /**
  * Catalog category
  *
+ * @api
  * @method Category setAffectedProductIds(array $productIds)
  * @method array getAffectedProductIds()
  * @method Category setMovedCategoryId(array $productIds)
@@ -84,11 +85,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     const KEY_CHILDREN_DATA = 'children_data';
     /**#@-*/
 
-    /**
-     * Prefix of model events names
-     *
-     * @var string
-     */
+    /**#@-*/
     protected $_eventPrefix = 'catalog_category';
 
     /**
@@ -116,6 +113,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * URL rewrite model
      *
      * @var \Magento\UrlRewrite\Model\UrlRewrite
+     * @deprecated 101.1.0
      */
     protected $_urlRewrite;
 
@@ -206,13 +204,19 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      */
     protected $flatState;
 
-    /** @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator
+     */
     protected $categoryUrlPathGenerator;
 
-    /** @var UrlFinderInterface */
+    /**
+     * @var \Magento\UrlRewrite\Model\UrlFinderInterface
+     */
     protected $urlFinder;
 
-    /** @var \Magento\Framework\Indexer\IndexerRegistry */
+    /**
+     * @var \Magento\Framework\Indexer\IndexerRegistry
+     */
     protected $indexerRegistry;
 
     /**
@@ -1219,6 +1223,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     {
         return $this->getData(self::KEY_CHILDREN_DATA);
     }
+
     //@codeCoverageIgnoreEnd
 
     /**
@@ -1411,5 +1416,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
     //@codeCoverageIgnoreEnd
 }

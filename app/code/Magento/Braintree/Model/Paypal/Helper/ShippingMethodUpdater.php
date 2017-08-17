@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Model\Paypal\Helper;
 
-use Magento\Quote\Model\Quote;
-use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Braintree\Gateway\Config\PayPal\Config;
+use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Model\Quote;
 
 /**
  * Class ShippingMethodUpdater
@@ -53,10 +53,8 @@ class ShippingMethodUpdater extends AbstractHelper
         }
 
         if (!$quote->getIsVirtual()) {
-
             $shippingAddress = $quote->getShippingAddress();
             if ($shippingMethod !== $shippingAddress->getShippingMethod()) {
-
                 $this->disabledQuoteAddressValidation($quote);
 
                 $shippingAddress->setShippingMethod($shippingMethod);

@@ -2,11 +2,15 @@
 /**
  * Google Optimizer Product Tab
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GoogleOptimizer\Block\Adminhtml\Catalog\Product\Edit\Tab;
 
+/**
+ * Class \Magento\GoogleOptimizer\Block\Adminhtml\Catalog\Product\Edit\Tab\Googleoptimizer
+ *
+ */
 class Googleoptimizer extends \Magento\GoogleOptimizer\Block\Adminhtml\AbstractTab
 {
     /**

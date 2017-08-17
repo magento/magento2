@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Pricing\Test\Unit\Render;
 
-use \Magento\Framework\Pricing\Render\PriceBox;
+use Magento\Framework\Pricing\Render\PriceBox;
 
 /**
  * Test class for \Magento\Framework\Pricing\Render\PriceBox
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PriceBoxTest extends \PHPUnit_Framework_TestCase
+class PriceBoxTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -53,8 +53,8 @@ class PriceBoxTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['createAmountRender'])
             ->getMock();
 
-        $layout = $this->getMock(\Magento\Framework\View\LayoutInterface::class);
-        $eventManager = $this->getMock(\Magento\Framework\Event\ManagerInterface::class);
+        $layout = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
+        $eventManager = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
         $scopeConfigMock = $this->getMockForAbstractClass(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $cacheState = $this->getMockBuilder(\Magento\Framework\App\Cache\StateInterface::class)
             ->getMockForAbstractClass();
@@ -62,6 +62,7 @@ class PriceBoxTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->context = $this->getMockBuilder(\Magento\Framework\View\Element\Template\Context::class)
+            ->setMethods(['getLayout', 'getEventManager', 'getStoreConfig', 'getScopeConfig', 'getCacheState'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->context->expects($this->any())
@@ -80,9 +81,9 @@ class PriceBoxTest extends \PHPUnit_Framework_TestCase
             ->method('getCacheState')
             ->will($this->returnValue($cacheState));
 
-        $this->saleable = $this->getMock(\Magento\Framework\Pricing\SaleableInterface::class);
+        $this->saleable = $this->createMock(\Magento\Framework\Pricing\SaleableInterface::class);
 
-        $this->price = $this->getMock(\Magento\Framework\Pricing\Price\PriceInterface::class);
+        $this->price = $this->createMock(\Magento\Framework\Pricing\Price\PriceInterface::class);
 
         $this->model = $this->objectManager->getObject(
             \Magento\Framework\Pricing\Render\PriceBox::class,
@@ -133,7 +134,7 @@ class PriceBoxTest extends \PHPUnit_Framework_TestCase
                 'data' => ['css_classes' => 'some_css_class'],
                 'price_code' => 'test_price',
                 'css_classes' => 'some_css_class price-test_price'
-        ]];
+            ]];
     }
 
     public function testGetSaleableItem()
@@ -150,9 +151,9 @@ class PriceBoxTest extends \PHPUnit_Framework_TestCase
     {
         $priceCode = 'test_price';
 
-        $price = $this->getMock(\Magento\Framework\Pricing\Price\PriceInterface::class);
+        $price = $this->createMock(\Magento\Framework\Pricing\Price\PriceInterface::class);
 
-        $priceInfo = $this->getMock(\Magento\Framework\Pricing\PriceInfo\Base::class, [], [], '', false);
+        $priceInfo = $this->createMock(\Magento\Framework\Pricing\PriceInfo\Base::class);
         $priceInfo->expects($this->once())
             ->method('getPrice')
             ->with($priceCode)
@@ -167,7 +168,7 @@ class PriceBoxTest extends \PHPUnit_Framework_TestCase
 
     public function testRenderAmount()
     {
-        $amount = $this->getMock(\Magento\Framework\Pricing\Amount\AmountInterface::class);
+        $amount = $this->createMock(\Magento\Framework\Pricing\Amount\AmountInterface::class);
         $arguments = [];
         $resultHtml = 'result_html';
 

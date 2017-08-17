@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Layer;
@@ -12,6 +12,7 @@ use Magento\Framework\DataObject;
 /**
  * Layered navigation state model
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class State extends DataObject

@@ -1,21 +1,26 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\User\Controller\Adminhtml\User\Role;
 
+use Magento\Framework\Controller\ResultFactory;
+
+/**
+ * Class \Magento\User\Controller\Adminhtml\User\Role\Editrolegrid
+ *
+ */
 class Editrolegrid extends \Magento\User\Controller\Adminhtml\User\Role
 {
     /**
      * Action for ajax request from assigned users grid
      *
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
-        $this->_view->loadLayout();
-        $this->_view->renderLayout();
+        return $this->resultFactory->create(ResultFactory::TYPE_PAGE);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -134,7 +134,7 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
     /**
      * @return \Magento\Translation\Model\Inline\CacheManager
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getCacheManger()
     {

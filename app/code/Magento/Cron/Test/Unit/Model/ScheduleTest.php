@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cron\Test\Unit\Model;
@@ -11,7 +11,7 @@ use Magento\Cron\Model\Schedule;
  * Class \Magento\Cron\Test\Unit\Model\ObserverTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ScheduleTest extends \PHPUnit_Framework_TestCase
+class ScheduleTest extends \PHPUnit\Framework\TestCase
 {
     protected $helper;
 
@@ -23,7 +23,7 @@ class ScheduleTest extends \PHPUnit_Framework_TestCase
 
         $this->resourceJobMock = $this->getMockBuilder(\Magento\Cron\Model\ResourceModel\Schedule::class)
             ->disableOriginalConstructor()
-            ->setMethods(['trySetJobStatusAtomic', '__wakeup', 'getIdFieldName'])
+            ->setMethods(['trySetJobUniqueStatusAtomic', '__wakeup', 'getIdFieldName'])
             ->getMockForAbstractClass();
 
         $this->resourceJobMock->expects($this->any())
@@ -336,7 +336,7 @@ class ScheduleTest extends \PHPUnit_Framework_TestCase
         $scheduleId = 1;
 
         $this->resourceJobMock->expects($this->once())
-            ->method('trySetJobStatusAtomic')
+            ->method('trySetJobUniqueStatusAtomic')
             ->with($scheduleId, Schedule::STATUS_RUNNING, Schedule::STATUS_PENDING)
             ->will($this->returnValue(true));
 
@@ -360,7 +360,7 @@ class ScheduleTest extends \PHPUnit_Framework_TestCase
         $scheduleId = 1;
 
         $this->resourceJobMock->expects($this->once())
-            ->method('trySetJobStatusAtomic')
+            ->method('trySetJobUniqueStatusAtomic')
             ->with($scheduleId, Schedule::STATUS_RUNNING, Schedule::STATUS_PENDING)
             ->will($this->returnValue(false));
 

@@ -1,11 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\File;
 
+/**
+ * Class \Magento\Framework\File\Mime
+ *
+ */
 class Mime
 {
     /**
@@ -71,7 +75,7 @@ class Mime
             throw new \InvalidArgumentException("File '$file' doesn't exist");
         }
 
-        $extension = pathinfo($file, PATHINFO_EXTENSION);
+        $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
         if (isset($this->mimeTypes[$extension])) {
             $result = $this->mimeTypes[$extension];
         }

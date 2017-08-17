@@ -1,13 +1,17 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog;
 
 use Magento\Framework\Exception\LocalizedException;
 
+/**
+ * Class \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog\Delete
+ *
+ */
 class Delete extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
 {
     /**

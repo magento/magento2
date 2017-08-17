@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,9 +10,15 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Tax\Model\Calculation\Rule as TaxRuleModel;
 use Magento\Tax\Model\Calculation\RuleFactory as TaxRuleModelFactory;
 
+/**
+ * Class \Magento\Tax\Model\Calculation\TaxRuleRegistry
+ *
+ */
 class TaxRuleRegistry
 {
-    /** @var  TaxRuleModelFactory */
+    /**
+     * @var \Magento\Tax\Model\Calculation\RuleFactory
+     */
     private $taxRuleModelFactory;
 
     /**

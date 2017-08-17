@@ -1,10 +1,17 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Plugin\Model\ResourceModel;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\SerializerInterface;
+
+/**
+ * Class \Magento\Catalog\Plugin\Model\ResourceModel\Config
+ *
+ */
 class Config
 {
     /**#@+
@@ -14,22 +21,32 @@ class Config
     const PRODUCT_LISTING_SORT_BY_ATTRIBUTES_CACHE_ID = 'PRODUCT_LISTING_SORT_BY_ATTRIBUTES';
     /**#@-*/
 
-    /** @var \Magento\Framework\App\CacheInterface */
+    /**#@-*/
     protected $cache;
 
-    /** @var bool|null */
+    /**
+     * @var bool|null
+     */
     protected $isCacheEnabled = null;
+
+    /**
+     * @var SerializerInterface
+     */
+    private $serializer;
 
     /**
      * @param \Magento\Framework\App\CacheInterface $cache
      * @param \Magento\Framework\App\Cache\StateInterface $cacheState
+     * @param SerializerInterface $serializer
      */
     public function __construct(
         \Magento\Framework\App\CacheInterface $cache,
-        \Magento\Framework\App\Cache\StateInterface $cacheState
+        \Magento\Framework\App\Cache\StateInterface $cacheState,
+        SerializerInterface $serializer = null
     ) {
         $this->cache = $cache;
         $this->isCacheEnabled = $cacheState->isEnabled(\Magento\Eav\Model\Cache\Type::TYPE_IDENTIFIER);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
     }
 
     /**
@@ -43,12 +60,12 @@ class Config
     ) {
         $cacheId = self::PRODUCT_LISTING_ATTRIBUTES_CACHE_ID . $config->getEntityTypeId() . '_' . $config->getStoreId();
         if ($this->isCacheEnabled && ($attributes = $this->cache->load($cacheId))) {
-            return unserialize($attributes);
+            return $this->serializer->unserialize($attributes);
         }
         $attributes = $proceed();
         if ($this->isCacheEnabled) {
             $this->cache->save(
-                serialize($attributes),
+                $this->serializer->serialize($attributes),
                 $cacheId,
                 [
                     \Magento\Eav\Model\Cache\Type::CACHE_TAG,
@@ -71,12 +88,12 @@ class Config
         $cacheId = self::PRODUCT_LISTING_SORT_BY_ATTRIBUTES_CACHE_ID . $config->getEntityTypeId() . '_'
             . $config->getStoreId();
         if ($this->isCacheEnabled && ($attributes = $this->cache->load($cacheId))) {
-            return unserialize($attributes);
+            return $this->serializer->unserialize($attributes);
         }
         $attributes = $proceed();
         if ($this->isCacheEnabled) {
             $this->cache->save(
-                serialize($attributes),
+                $this->serializer->serialize($attributes),
                 $cacheId,
                 [
                     \Magento\Eav\Model\Cache\Type::CACHE_TAG,

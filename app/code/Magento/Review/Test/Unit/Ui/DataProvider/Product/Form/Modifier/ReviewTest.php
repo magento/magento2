@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
@@ -31,7 +31,7 @@ class ReviewTest extends AbstractModifierTest
         parent::setUp();
         $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
             ->getMockForAbstractClass();
-        $this->moduleManagerMock = $this->getMock(ModuleManager::class, [], [], '', false);
+        $this->moduleManagerMock = $this->createMock(ModuleManager::class);
     }
 
     /**

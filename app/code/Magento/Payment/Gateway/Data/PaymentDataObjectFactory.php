@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Gateway\Data;
@@ -9,6 +9,10 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Sales\Model\Order\Payment;
 
+/**
+ * Class \Magento\Payment\Gateway\Data\PaymentDataObjectFactory
+ *
+ */
 class PaymentDataObjectFactory implements PaymentDataObjectFactoryInterface
 {
     /**

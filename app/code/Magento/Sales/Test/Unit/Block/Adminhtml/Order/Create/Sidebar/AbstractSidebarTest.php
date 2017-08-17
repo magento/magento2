@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\Create\Sidebar;
 
-class AbstractSidebarTest extends \PHPUnit_Framework_TestCase
+class AbstractSidebarTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar
@@ -20,7 +20,7 @@ class AbstractSidebarTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->itemMock = $this->getMock(\Magento\Framework\DataObject::class, ['getQty'], [], '', false);
+        $this->itemMock = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getQty']);
         $this->abstractSidebar = $helper->getObject(
             \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar::class,
             []
@@ -46,7 +46,7 @@ class AbstractSidebarTest extends \PHPUnit_Framework_TestCase
 
     public function testIsConfigurationRequired()
     {
-        $productTypeMock = $this->getMock(\Magento\Catalog\Model\Product\Type::class, [], [], '', false);
+        $productTypeMock = $this->createMock(\Magento\Catalog\Model\Product\Type::class);
         $this->assertEquals(false, $this->abstractSidebar->isConfigurationRequired($productTypeMock));
     }
 }

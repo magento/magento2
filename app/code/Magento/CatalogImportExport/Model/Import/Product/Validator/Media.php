@@ -1,37 +1,61 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Model\Import\Product\Validator;
 
-use Magento\CatalogImportExport\Model\Import\Product\Validator\AbstractImportValidator;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Url\Validator;
 
+/**
+ * Class \Magento\CatalogImportExport\Model\Import\Product\Validator\Media
+ *
+ */
 class Media extends AbstractImportValidator implements RowValidatorInterface
 {
+    /**
+     * @deprecated As this regexp doesn't give guarantee of correct url validation
+     * @see \Magento\Framework\Url\Validator::isValid()
+     */
     const URL_REGEXP = '|^http(s)?://[a-z0-9-]+(.[a-z0-9-]+)*(:[0-9]+)?(/.*)?$|i';
 
     const PATH_REGEXP = '#^(?!.*[\\/]\.{2}[\\/])(?!\.{2}[\\/])[-\w.\\/]+$#';
 
     const ADDITIONAL_IMAGES = 'additional_images';
 
-    const ADDITIONAL_IMAGES_DELIMITER = ',';
-
-    /** @var array */
-    protected $mediaAttributes = ['image', 'small_image', 'thumbnail'];
+    /**
+     * The url validator. Checks if given url is valid.
+     *
+     * @var Validator
+     */
+    private $validator;
 
     /**
-     * {@inheritdoc}
+     * @param Validator $validator The url validator
      */
-    public function init($context)
+    public function __construct(Validator $validator = null)
     {
-        return parent::init($context);
+        $this->validator = $validator ?: ObjectManager::getInstance()->get(Validator::class);
     }
+
+    /**
+     * @deprecated
+     * @see \Magento\CatalogImportExport\Model\Import\Product::getMultipleValueSeparator()
+     */
+    const ADDITIONAL_IMAGES_DELIMITER = ',';
+
+    /**
+     * @var array
+     */
+    protected $mediaAttributes = ['image', 'small_image', 'thumbnail'];
 
     /**
      * @param string $string
      * @return bool
+     * @deprecated 100.2.0 As this method doesn't give guarantee of correct url validation.
+     * @see \Magento\Framework\Url\Validator::isValid() It provides better url validation.
      */
     protected function checkValidUrl($string)
     {
@@ -69,7 +93,7 @@ class Media extends AbstractImportValidator implements RowValidatorInterface
         $valid = true;
         foreach ($this->mediaAttributes as $attribute) {
             if (isset($value[$attribute]) && strlen($value[$attribute])) {
-                if (!$this->checkPath($value[$attribute]) && !$this->checkValidUrl($value[$attribute])) {
+                if (!$this->checkPath($value[$attribute]) && !$this->validator->isValid($value[$attribute])) {
                     $this->_addMessages(
                         [
                             sprintf(
@@ -83,8 +107,8 @@ class Media extends AbstractImportValidator implements RowValidatorInterface
             }
         }
         if (isset($value[self::ADDITIONAL_IMAGES]) && strlen($value[self::ADDITIONAL_IMAGES])) {
-            foreach (explode(self::ADDITIONAL_IMAGES_DELIMITER, $value[self::ADDITIONAL_IMAGES]) as $image) {
-                if (!$this->checkPath($image) && !$this->checkValidUrl($image)) {
+            foreach (explode($this->context->getMultipleValueSeparator(), $value[self::ADDITIONAL_IMAGES]) as $image) {
+                if (!$this->checkPath($image) && !$this->validator->isValid($image)) {
                     $this->_addMessages(
                         [
                             sprintf(

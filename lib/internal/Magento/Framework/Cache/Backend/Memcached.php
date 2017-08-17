@@ -1,10 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Cache\Backend;
 
+/**
+ * Class \Magento\Framework\Cache\Backend\Memcached
+ *
+ */
 class Memcached extends \Zend_Cache_Backend_Memcached implements \Zend_Cache_Backend_ExtendedInterface
 {
     /**

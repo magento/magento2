@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
@@ -10,6 +10,10 @@ use Magento\Backend\App\Action\Context;
 use Magento\Ui\Component\MassAction\Filter;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Order\MassCancel
+ *
+ */
 class MassCancel extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@
  */
 namespace Magento\Framework\Data\Test\Unit\Form\Element;
 
-class FactoryTest extends \PHPUnit_Framework_TestCase
+class FactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -23,13 +23,8 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManagerMock = $this->getMock(
-            \Magento\Framework\ObjectManager\ObjectManager::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
+        $this->_objectManagerMock =
+            $this->createPartialMock(\Magento\Framework\ObjectManager\ObjectManager::class, ['create']);
         $this->_factory = new \Magento\Framework\Data\Form\Element\Factory($this->_objectManagerMock);
     }
 
@@ -40,7 +35,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreatePositive($type)
     {
         $className = 'Magento\Framework\Data\Form\Element\\' . ucfirst($type);
-        $elementMock = $this->getMock($className, [], [], '', false);
+        $elementMock = $this->createMock($className);
         $this->_objectManagerMock->expects(
             $this->once()
         )->method(
@@ -64,7 +59,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         $config = ['data' => ['attr1' => 'attr1', 'attr2' => 'attr2']];
         $className = 'Magento\Framework\Data\Form\Element\\' . ucfirst($type);
-        $elementMock = $this->getMock($className, [], [], '', false);
+        $elementMock = $this->createMock($className);
         $this->_objectManagerMock->expects(
             $this->once()
         )->method(
@@ -156,7 +151,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateExceptionInvalidArgument($type)
     {
-        $elementMock = $this->getMock($type, [], [], '', false);
+        $elementMock = $this->createMock($type);
         $this->_objectManagerMock->expects(
             $this->once()
         )->method(

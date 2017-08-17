@@ -2,7 +2,7 @@
 /**
  * Test Rest router route.
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Test\Unit\Controller\Rest\Router;
@@ -12,7 +12,7 @@ use \Magento\Webapi\Controller\Rest\Router\Route;
 use Magento\Framework\App\RequestInterface as Request;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class RouteTest extends \PHPUnit_Framework_TestCase
+class RouteTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager

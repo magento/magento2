@@ -1,34 +1,49 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Data\Argument\Interpreter;
 
-class StringUtilsTest extends \PHPUnit_Framework_TestCase
+use Magento\Framework\Phrase\RendererInterface;
+use Magento\Framework\Stdlib\BooleanUtils;
+
+/**
+ * @covers \Magento\Framework\Data\Argument\Interpreter\StringUtils
+ */
+class StringUtilsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Data\Argument\Interpreter\StringUtils
      */
-    protected $_model;
+    private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var BooleanUtils|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_booleanUtils;
+    protected $booleanUtils;
 
+    /**
+     * Prepare subject for test.
+     */
     protected function setUp()
     {
-        $this->_booleanUtils = $this->getMock(\Magento\Framework\Stdlib\BooleanUtils::class);
-        $this->_booleanUtils->expects(
+        $this->booleanUtils = $this->createMock(\Magento\Framework\Stdlib\BooleanUtils::class);
+        $this->booleanUtils->expects(
             $this->any()
         )->method(
             'toBoolean'
         )->will(
             $this->returnValueMap([['true', true], ['false', false]])
         );
-        $this->_model = new StringUtils($this->_booleanUtils);
-        $translateRenderer = $this->getMockForAbstractClass(\Magento\Framework\Phrase\RendererInterface::class);
+
+        $baseStringUtils = new BaseStringUtils($this->booleanUtils);
+        $this->model = new StringUtils($this->booleanUtils, $baseStringUtils);
+        /** @var RendererInterface|\PHPUnit_Framework_MockObject_MockObject $translateRenderer */
+        $translateRenderer = $this->getMockBuilder(RendererInterface::class)
+          ->setMethods(['render'])
+          ->getMockForAbstractClass();
         $translateRenderer->expects($this->any())->method('render')->will(
             $this->returnCallback(
                 function ($input) {
@@ -40,17 +55,24 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Check StringUtils::evaluate can translate incoming $input['value'].
+     *
      * @param array $input
-     * @param bool $expected
+     * @param string $expected
      *
      * @dataProvider evaluateDataProvider
      */
     public function testEvaluate($input, $expected)
     {
-        $actual = $this->_model->evaluate($input);
+        $actual = $this->model->evaluate($input);
         $this->assertSame($expected, (string)$actual);
     }
 
+    /**
+     * Provide test data and expected results for testEvaluate().
+     *
+     * @return array
+     */
     public function evaluateDataProvider()
     {
         return [
@@ -60,11 +82,13 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
                 ['value' => 'some value', 'translate' => 'true'],
                 'some value (translated)',
             ],
-            'translation not required' => [['value' => 'some value', 'translate' => 'false'], 'some value']
+            'translation not required' => [['value' => 'some value', 'translate' => 'false'], 'some value'],
         ];
     }
 
     /**
+     * Check StringUtils::evaluate() throws exception in case $input['value'] is not a string.
+     *
      * @param array $input
      *
      * @dataProvider evaluateExceptionDataProvider
@@ -73,9 +97,14 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
      */
     public function testEvaluateException($input)
     {
-        $this->_model->evaluate($input);
+        $this->model->evaluate($input);
     }
 
+    /**
+     * Provide test data for testEvaluateException.
+     *
+     * @return array
+     */
     public function evaluateExceptionDataProvider()
     {
         return ['not a string' => [['value' => 123]]];

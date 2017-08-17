@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Helper;
@@ -9,6 +9,10 @@ use Magento\Catalog\Model\Category as ModelCategory;
 use Magento\Catalog\Model\Product as ModelProduct;
 use Magento\Framework\Filter\Template;
 
+/**
+ * Class \Magento\Catalog\Helper\Output
+ *
+ */
 class Output extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**

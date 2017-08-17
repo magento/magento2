@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ups\Test\Unit\Model;
@@ -13,7 +13,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CarrierTest extends \PHPUnit_Framework_TestCase
+class CarrierTest extends \PHPUnit\Framework\TestCase
 {
     const FREE_METHOD_NAME = 'free_method';
 
@@ -100,14 +100,14 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
 
         $this->errorFactory->expects($this->any())->method('create')->willReturn($this->error);
 
-        $this->rate = $this->getMock(\Magento\Shipping\Model\Rate\Result::class, ['getError'], [], '', false);
-        $rateFactory = $this->getMock(\Magento\Shipping\Model\Rate\ResultFactory::class, ['create'], [], '', false);
+        $this->rate = $this->createPartialMock(\Magento\Shipping\Model\Rate\Result::class, ['getError']);
+        $rateFactory = $this->createPartialMock(\Magento\Shipping\Model\Rate\ResultFactory::class, ['create']);
 
         $rateFactory->expects($this->any())->method('create')->willReturn($this->rate);
 
         $this->country = $this->getMockBuilder(\Magento\Directory\Model\Country::class)
             ->disableOriginalConstructor()
-            ->setMethods(['load'])
+            ->setMethods(['load', 'getData'])
             ->getMock();
 
         $this->abstractModel = $this->getMockBuilder(\Magento\Framework\Model\AbstractModel::class)

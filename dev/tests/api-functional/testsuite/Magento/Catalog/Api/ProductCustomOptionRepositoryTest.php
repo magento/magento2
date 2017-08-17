@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -211,12 +211,12 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
 
         if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
             if (isset($optionDataPost['title']) && empty($optionDataPost['title'])) {
-                $this->setExpectedException('SoapFault', 'Missed values for option required fields');
+                $this->expectException('SoapFault', 'Missed values for option required fields');
             } else {
-                $this->setExpectedException('SoapFault', 'Invalid option');
+                $this->expectException('SoapFault', 'Invalid option');
             }
         } else {
-            $this->setExpectedException('Exception', '', 400);
+            $this->expectException('Exception', '', 400);
         }
         $this->_webApiCall($serviceInfo, ['option' => $optionDataPost]);
     }
@@ -391,6 +391,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
      */
     public function testUpdateNegative($optionData, $message)
     {
+        $this->_markTestAsRestOnly();
         $productSku = 'simple';
         /** @var ProductRepository $productRepository */
         $productRepository = $this->objectManager->create(ProductRepository::class);
@@ -403,18 +404,9 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
                 'resourcePath' => '/V1/products/options/' . $optionId,
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
-            'soap' => [
-                'service' => self::SERVICE_NAME,
-                'serviceVersion' => 'V1',
-                'operation' => self::SERVICE_NAME . 'Save',
-            ],
         ];
 
-        if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
-            $this->setExpectedException('SoapFault');
-        } else {
-            $this->setExpectedException('Exception', $message, 400);
-        }
+        $this->expectException('Exception', $message, 400);
         $this->_webApiCall($serviceInfo, ['option' => $optionData]);
     }
 

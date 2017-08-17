@@ -1,92 +1,99 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
- */
-
-/**
- * Module statuses manager
  */
 namespace Magento\Framework\Module;
 
+/**
+ * Module status manager.
+ *
+ * Usage:
+ * ```php
+ *  $manager->isEnabled('Vendor_Module');
+ * ```
+ */
 class Manager
 {
     /**
-     * @var Output\ConfigInterface
+     * The checker of output modules.
+     *
+     * @var Output\ConfigInterface the config checker of output modules.
+     * @deprecated 100.2.0 Magento does not support custom disabling/enabling module output since 2.2.0 version.
+     * The property can be removed in a future major release
      */
-    private $_outputConfig;
+    private $outputConfig;
 
     /**
-     * @var ModuleListInterface
+     * The list of all modules.
+     *
+     * @var ModuleListInterface the list of all modules.
      */
-    private $_moduleList;
+    private $moduleList;
 
     /**
-     * @var array
+     * The list of config paths to ignore.
+     *
+     * @var array the list of config paths to ignore.
+     * @deprecated 100.2.0 Magento does not support custom disabling/enabling module output since 2.2.0 version.
+     * The property can be removed in a future major release
      */
-    private $_outputConfigPaths;
+    private $outputConfigPaths;
 
     /**
-     * @param Output\ConfigInterface $outputConfig
-     * @param ModuleListInterface $moduleList
-     * @param array $outputConfigPaths
+     * Constructor.
+     *
+     * @param Output\ConfigInterface $outputConfig the checker of output modules
+     * @param ModuleListInterface $moduleList the list of all modules
+     * @param array $outputConfigPaths the list of config paths to ignore
      */
     public function __construct(
         Output\ConfigInterface $outputConfig,
         ModuleListInterface $moduleList,
         array $outputConfigPaths = []
     ) {
-        $this->_outputConfig = $outputConfig;
-        $this->_moduleList = $moduleList;
-        $this->_outputConfigPaths = $outputConfigPaths;
+        $this->outputConfig = $outputConfig;
+        $this->moduleList = $moduleList;
+        $this->outputConfigPaths = $outputConfigPaths;
     }
 
     /**
-     * Whether a module is enabled in the configuration or not
+     * Checks whether a module is enabled in the configuration or not.
      *
-     * @param string $moduleName Fully-qualified module name
-     * @return boolean
+     * @param string $moduleName the fully-qualified module name
+     *
+     * @return boolean true if module is enabled, false otherwise
      */
     public function isEnabled($moduleName)
     {
-        return $this->_moduleList->has($moduleName);
+        return $this->moduleList->has($moduleName);
     }
 
     /**
-     * Whether a module output is permitted by the configuration or not
+     * Checks whether a module output is permitted by the configuration or not.
      *
-     * @param string $moduleName Fully-qualified module name
+     * @param string $moduleName the fully-qualified module name.
+     *
      * @return boolean
+     * @deprecated 100.2.0 Magento does not support custom disabling/enabling module output since 2.2.0 version
      */
     public function isOutputEnabled($moduleName)
     {
-        if (!$this->isEnabled($moduleName)) {
-            return false;
-        }
-        if (!$this->_isCustomOutputConfigEnabled($moduleName)) {
-            return false;
-        }
-        if ($this->_outputConfig->isEnabled($moduleName)) {
-            return false;
-        }
-        return true;
+        return $this->isEnabled($moduleName);
     }
 
     /**
-     * Whether a configuration switch for a module output permits output or not
+     * Checks whether a configuration switch for a module output permits output.
      *
      * @param string $moduleName Fully-qualified module name
+     *
      * @return boolean
+     * @deprecated 100.2.0 Magento does not support custom disabling/enabling module output since 2.2.0 version.
+     * The method can be removed in a future major release
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _isCustomOutputConfigEnabled($moduleName)
     {
-        if (isset($this->_outputConfigPaths[$moduleName])) {
-            $configPath = $this->_outputConfigPaths[$moduleName];
-            if (defined($configPath)) {
-                $configPath = constant($configPath);
-            }
-            return $this->_outputConfig->isSetFlag($configPath);
-        }
         return true;
     }
 }

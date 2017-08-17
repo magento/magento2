@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,6 +14,10 @@ namespace Magento\Catalog\Model\Product\Attribute\Source;
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 use Magento\Framework\Data\OptionSourceInterface;
 
+/**
+ * Class \Magento\Catalog\Model\Product\Attribute\Source\Countryofmanufacture
+ *
+ */
 class Countryofmanufacture extends AbstractSource implements OptionSourceInterface
 {
     /**
@@ -34,6 +38,11 @@ class Countryofmanufacture extends AbstractSource implements OptionSourceInterfa
      * @var \Magento\Directory\Model\CountryFactory
      */
     protected $_countryFactory;
+
+    /**
+     * @var \Magento\Framework\Serialize\SerializerInterface
+     */
+    private $serializer;
 
     /**
      * Construct
@@ -61,15 +70,30 @@ class Countryofmanufacture extends AbstractSource implements OptionSourceInterfa
     {
         $cacheKey = 'COUNTRYOFMANUFACTURE_SELECT_STORE_' . $this->_storeManager->getStore()->getCode();
         if ($cache = $this->_configCacheType->load($cacheKey)) {
-            $options = unserialize($cache);
+            $options = $this->getSerializer()->unserialize($cache);
         } else {
             /** @var \Magento\Directory\Model\Country $country */
             $country = $this->_countryFactory->create();
             /** @var \Magento\Directory\Model\ResourceModel\Country\Collection $collection */
             $collection = $country->getResourceCollection();
             $options = $collection->load()->toOptionArray();
-            $this->_configCacheType->save(serialize($options), $cacheKey);
+            $this->_configCacheType->save($this->getSerializer()->serialize($options), $cacheKey);
         }
         return $options;
+    }
+
+    /**
+     * Get serializer
+     *
+     * @return \Magento\Framework\Serialize\SerializerInterface
+     * @deprecated 101.1.0
+     */
+    private function getSerializer()
+    {
+        if ($this->serializer === null) {
+            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\Serialize\SerializerInterface::class);
+        }
+        return $this->serializer;
     }
 }

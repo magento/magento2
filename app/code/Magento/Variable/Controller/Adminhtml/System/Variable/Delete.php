@@ -1,11 +1,15 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Variable\Controller\Adminhtml\System\Variable;
 
+/**
+ * Class \Magento\Variable\Controller\Adminhtml\System\Variable\Delete
+ *
+ */
 class Delete extends \Magento\Variable\Controller\Adminhtml\System\Variable
 {
     /**

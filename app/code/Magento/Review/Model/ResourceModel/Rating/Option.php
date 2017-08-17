@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Model\ResourceModel\Rating;
@@ -8,7 +8,7 @@ namespace Magento\Review\Model\ResourceModel\Rating;
 /**
  * Rating option resource model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

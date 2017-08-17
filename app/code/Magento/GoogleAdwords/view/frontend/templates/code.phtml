@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,19 +12,19 @@
 <!-- Google Code for Sale Conversion Page -->
 <script>
     /* <![CDATA[ */
-    var google_conversion_id = <?php /* @escapeNotVerified */ echo $block->getHelper()->getConversionId() ?>;
-    var google_conversion_language = "<?php /* @escapeNotVerified */ echo $block->getHelper()->getConversionLanguage() ?>";
-    var google_conversion_format = "<?php /* @escapeNotVerified */ echo $block->getHelper()->getConversionFormat() ?>";
-    var google_conversion_color = "<?php /* @escapeNotVerified */ echo $block->getHelper()->getConversionColor() ?>";
-    var google_conversion_label = "<?php /* @escapeNotVerified */ echo $block->getHelper()->getConversionLabel() ?>";
-    var google_conversion_value = <?php /* @escapeNotVerified */ echo $block->getHelper()->getConversionValue() ?>;
+    var google_conversion_id = <?= /* @escapeNotVerified */ $block->getHelper()->getConversionId() ?>;
+    var google_conversion_language = "<?= /* @escapeNotVerified */ $block->getHelper()->getConversionLanguage() ?>";
+    var google_conversion_format = "<?= /* @escapeNotVerified */ $block->getHelper()->getConversionFormat() ?>";
+    var google_conversion_color = "<?= /* @escapeNotVerified */ $block->getHelper()->getConversionColor() ?>";
+    var google_conversion_label = "<?= /* @escapeNotVerified */ $block->getHelper()->getConversionLabel() ?>";
+    var google_conversion_value = <?= /* @escapeNotVerified */ $block->getHelper()->getConversionValue() ?>;
     /* ]]> */
 </script>
-<script src="<?php /* @escapeNotVerified */ echo $block->getHelper()->getConversionJsSrc()?>"></script>
+<script src="<?= /* @escapeNotVerified */ $block->getHelper()->getConversionJsSrc() ?>"></script>
 <noscript>
     <div style="display:inline;">
         <img height="1" width="1" style="border-style:none;" alt=""
-             src="<?php /* @escapeNotVerified */ echo $block->getHelper()->getConversionImgSrc() ?>"/>
+             src="<?= /* @escapeNotVerified */ $block->getHelper()->getConversionImgSrc() ?>"/>
     </div>
 </noscript>
 <!-- END Google Code for Sale Conversion Page -->

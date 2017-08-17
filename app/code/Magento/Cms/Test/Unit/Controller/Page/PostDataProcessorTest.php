@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Test\Unit\Controller\Page;
@@ -15,7 +15,7 @@ use Magento\Framework\View\Model\Layout\Update\ValidatorFactory;
  * Class PostDataProcessorTest
  * @package Magento\Cms\Test\Unit\Controller\Page
  */
-class PostDataProcessorTest extends \PHPUnit_Framework_TestCase
+class PostDataProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Date|\PHPUnit_Framework_MockObject_MockObject

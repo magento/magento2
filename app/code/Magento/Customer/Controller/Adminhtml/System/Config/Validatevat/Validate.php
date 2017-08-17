@@ -1,12 +1,16 @@
 <?php
 /**
- * * Copyright © 2016 Magento. All rights reserved.
+ * * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Adminhtml\System\Config\Validatevat;
 
 use Magento\Framework\Controller\Result\JsonFactory;
 
+/**
+ * Class \Magento\Customer\Controller\Adminhtml\System\Config\Validatevat\Validate
+ *
+ */
 class Validate extends \Magento\Customer\Controller\Adminhtml\System\Config\Validatevat
 {
     /**

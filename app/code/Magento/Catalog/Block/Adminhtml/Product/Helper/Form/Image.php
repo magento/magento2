@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,10 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form;
 
+/**
+ * Class \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Image
+ *
+ */
 class Image extends \Magento\Framework\Data\Form\Element\Image
 {
     /**
@@ -21,7 +25,7 @@ class Image extends \Magento\Framework\Data\Form\Element\Image
         $url = false;
         if ($this->getValue()) {
             $url = $this->_urlBuilder->getBaseUrl(
-                \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
+                ['_type' => \Magento\Framework\UrlInterface::URL_TYPE_MEDIA]
             ) . 'catalog/product/' . $this->getValue();
         }
         return $url;

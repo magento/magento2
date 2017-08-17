@@ -2,11 +2,15 @@
 /**
  * Configuration data converter. Converts associative array to tree array
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Config\Scope;
 
+/**
+ * Class \Magento\Framework\App\Config\Scope\Converter
+ *
+ */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**

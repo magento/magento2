@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Module\I18n;
@@ -8,7 +8,7 @@ namespace Magento\Setup\Test\Unit\Module\I18n;
 use Magento\Framework\Component\ComponentRegistrar;
 use \Magento\Setup\Module\I18n\Context;
 
-class ContextTest extends \PHPUnit_Framework_TestCase
+class ContextTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Setup\Module\I18n\Context
@@ -22,13 +22,7 @@ class ContextTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->componentRegistrar = $this->getMock(
-            \Magento\Framework\Component\ComponentRegistrar::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->componentRegistrar = $this->createMock(\Magento\Framework\Component\ComponentRegistrar::class);
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@ namespace Magento\Framework\App\Test\Unit\DeploymentConfig;
 use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-class ReaderTest extends \PHPUnit_Framework_TestCase
+class ReaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -33,12 +33,12 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->dirList = $this->getMock(\Magento\Framework\App\Filesystem\DirectoryList::class, [], [], '', false);
+        $this->dirList = $this->createMock(\Magento\Framework\App\Filesystem\DirectoryList::class);
         $this->dirList->expects($this->any())
             ->method('getPath')
             ->with(DirectoryList::CONFIG)
             ->willReturn(__DIR__ . '/_files');
-        $this->fileDriver = $this->getMock(\Magento\Framework\Filesystem\Driver\File::class, [], [], '', false);
+        $this->fileDriver = $this->createMock(\Magento\Framework\Filesystem\Driver\File::class);
         $this->fileDriver
             ->expects($this->any())
             ->method('isExists')
@@ -51,12 +51,12 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
                 [__DIR__ . '/_files/mergeTwo.php', true],
                 [__DIR__ . '/_files/nonexistent.php', false]
             ]));
-        $this->driverPool = $this->getMock(\Magento\Framework\Filesystem\DriverPool::class, [], [], '', false);
+        $this->driverPool = $this->createMock(\Magento\Framework\Filesystem\DriverPool::class);
         $this->driverPool
             ->expects($this->any())
             ->method('getDriver')
             ->willReturn($this->fileDriver);
-        $this->configFilePool = $this->getMock(\Magento\Framework\Config\File\ConfigFilePool::class, [], [], '', false);
+        $this->configFilePool = $this->createMock(\Magento\Framework\Config\File\ConfigFilePool::class);
         $this->configFilePool
             ->expects($this->any())
             ->method('getPaths')
@@ -100,7 +100,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testCustomLoad($file, $expected)
     {
-        $configFilePool = $this->getMock(\Magento\Framework\Config\File\ConfigFilePool::class, [], [], '', false);
+        $configFilePool = $this->createMock(\Magento\Framework\Config\File\ConfigFilePool::class);
         $configFilePool->expects($this->any())->method('getPaths')->willReturn([$file]);
         $configFilePool->expects($this->any())->method('getPath')->willReturn($file);
         $object = new Reader($this->dirList, $this->driverPool, $configFilePool, $file);
@@ -116,45 +116,5 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             ['custom.php', ['bazKey' => 'baz']],
             ['nonexistent.php', []],
         ];
-    }
-
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Key collision
-     */
-    public function testMerging()
-    {
-        $configFilePool = $this->getMock(\Magento\Framework\Config\File\ConfigFilePool::class, [], [], '', false);
-        $files = [['configKeyOne', 'mergeOne.php'], ['configKeyTwo','mergeTwo.php']];
-        $configFilePool
-            ->expects($this->any())
-            ->method('getPath')
-            ->will($this->returnValueMap($files));
-        $configFilePool
-            ->expects($this->any())
-            ->method('getPaths')
-            ->willReturn(['configKeyOne' => 'mergeOne.php', 'configKeyTwo' => 'mergeTwo.php']);
-        $object = new Reader($this->dirList, $this->driverPool, $configFilePool);
-        $object->load();
-    }
-
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Key collision
-     */
-    public function testMergingWithDuplicateEndValues()
-    {
-        $configFilePool = $this->getMock(\Magento\Framework\Config\File\ConfigFilePool::class, [], [], '', false);
-        $files = [['configKeyOne', 'config.php'], ['configKeyTwo','duplicateConfig.php']];
-        $configFilePool
-            ->expects($this->any())
-            ->method('getPath')
-            ->will($this->returnValueMap($files));
-        $configFilePool
-            ->expects($this->any())
-            ->method('getPaths')
-            ->willReturn(['configKeyOne' => 'config.php', 'configKeyTwo' => 'duplicateConfig.php']);
-        $object = new Reader($this->dirList, $this->driverPool, $configFilePool);
-        $object->load();
     }
 }

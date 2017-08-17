@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,10 @@
  */
 namespace Magento\Tax\Block\Adminhtml\Rate\Title;
 
+/**
+ * Class \Magento\Tax\Block\Adminhtml\Rate\Title\Fieldset
+ *
+ */
 class Fieldset extends \Magento\Framework\Data\Form\Element\Fieldset
 {
     /**

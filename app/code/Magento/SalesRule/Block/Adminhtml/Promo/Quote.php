@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Block\Adminhtml\Promo;
@@ -8,6 +8,7 @@ namespace Magento\SalesRule\Block\Adminhtml\Promo;
 /**
  * Catalog price rules
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Quote extends \Magento\Backend\Block\Widget\Grid\Container

@@ -1,12 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Dhl\Model;
 
 use Magento\Shipping\Model\Carrier\AbstractCarrierOnline;
 
+/**
+ * Class \Magento\Dhl\Model\AbstractDhl
+ *
+ */
 abstract class AbstractDhl extends AbstractCarrierOnline
 {
     /**

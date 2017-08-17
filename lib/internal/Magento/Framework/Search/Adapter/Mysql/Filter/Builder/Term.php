@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Adapter\Mysql\Filter\Builder;
@@ -8,6 +8,10 @@ namespace Magento\Framework\Search\Adapter\Mysql\Filter\Builder;
 use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
 use Magento\Framework\Search\Request\FilterInterface as RequestFilterInterface;
 
+/**
+ * Class \Magento\Framework\Search\Adapter\Mysql\Filter\Builder\Term
+ *
+ */
 class Term implements FilterInterface
 {
     const CONDITION_OPERATOR_EQUALS = '=';

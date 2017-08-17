@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Model\Template;
@@ -10,11 +10,13 @@ use Magento\Framework\App\State;
 use Magento\Framework\App\TemplateTypesInterface;
 use Magento\Framework\Phrase;
 use Magento\Setup\Module\I18n\Locale;
+use Magento\Theme\Block\Html\Footer;
 
 /**
+ * @magentoAppIsolation enabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class FilterTest extends \PHPUnit_Framework_TestCase
+class FilterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Email\Model\Template\Filter
@@ -55,12 +57,12 @@ class FilterTest extends \PHPUnit_Framework_TestCase
      */
     public function testBlockDirective()
     {
-        $class = 'Magento\\\\Theme\\\\Block\\\\Html\\\\Footer';
-        $data = ["{{block class='$class' name='test.block' template='Magento_Theme::html/footer.phtml'}}",
-                'block',
-                " class='$class' name='test.block' template='Magento_Theme::html/footer.phtml'",
-
-            ];
+        $class = Footer::class;
+        $data = [
+            "{{block class='$class' name='test.block' template='Magento_Theme::html/footer.phtml'}}",
+            'block',
+            " class='$class' name='test.block' template='Magento_Theme::html/footer.phtml'",
+        ];
         $html = $this->model->blockDirective($data);
         $this->assertContains('<div class="footer-container">', $html);
     }

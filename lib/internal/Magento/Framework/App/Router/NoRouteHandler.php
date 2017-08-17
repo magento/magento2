@@ -2,11 +2,15 @@
 /**
  * Default no route handler
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Router;
 
+/**
+ * Class \Magento\Framework\App\Router\NoRouteHandler
+ *
+ */
 class NoRouteHandler implements \Magento\Framework\App\Router\NoRouteHandlerInterface
 {
     /**

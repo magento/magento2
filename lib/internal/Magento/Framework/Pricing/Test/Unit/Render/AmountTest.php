@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Pricing\Test\Unit\Render;
@@ -15,7 +15,7 @@ use Magento\Framework\Pricing\Price\PriceInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AmountTest extends \PHPUnit_Framework_TestCase
+class AmountTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Amount
@@ -54,7 +54,7 @@ class AmountTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->priceCurrency = $this->getMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
+        $this->priceCurrency = $this->createMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
         $data = [
             'default' => [
                 'adjustments' => [
@@ -68,23 +68,19 @@ class AmountTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $this->rendererPool = $this->getMock(
-            \Magento\Framework\Pricing\Render\RendererPool::class,
-            [],
-            ['data' => $data],
-            '',
-            false,
-            false
-        );
+        $this->rendererPool = $this->getMockBuilder(\Magento\Framework\Pricing\Render\RendererPool::class)
+            ->setConstructorArgs(['data' => $data])
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->layout = $this->getMock(\Magento\Framework\View\Layout::class, [], [], '', false);
+        $this->layout = $this->createMock(\Magento\Framework\View\Layout::class);
         $this->amount = $this->getMockForAbstractClass(\Magento\Framework\Pricing\Amount\AmountInterface::class);
         $this->saleableItemMock = $this->getMockForAbstractClass(\Magento\Framework\Pricing\SaleableInterface::class);
         $this->priceMock = $this->getMockForAbstractClass(\Magento\Framework\Pricing\Price\PriceInterface::class);
 
-        $eventManager = $this->getMock(\Magento\Framework\Event\Test\Unit\ManagerStub::class, [], [], '', false);
+        $eventManager = $this->createMock(\Magento\Framework\Event\Test\Unit\ManagerStub::class);
         $scopeConfigMock = $this->getMockForAbstractClass(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $context = $this->getMock(\Magento\Framework\View\Element\Template\Context::class, [], [], '', false);
+        $context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
         $context->expects($this->any())
             ->method('getEventManager')
             ->will($this->returnValue($eventManager));

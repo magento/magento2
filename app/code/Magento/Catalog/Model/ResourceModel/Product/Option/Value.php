@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Option;
@@ -426,7 +426,7 @@ class Value extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Get FormatInterface to convert price from string to number format
      *
      * @return \Magento\Framework\Locale\FormatInterface
-     * @deprecated
+     * @deprecated 101.1.0
      */
     private function getLocaleFormatter()
     {

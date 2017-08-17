@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Shipping\Test\Unit\Controller\Adminhtml\Order\Shipment;
@@ -9,7 +9,7 @@ namespace Magento\Shipping\Test\Unit\Controller\Adminhtml\Order\Shipment;
  * Class ViewTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ViewTest extends \PHPUnit_Framework_TestCase
+class ViewTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -83,19 +83,13 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $this->pageTitleMock = $this->getMockBuilder(\Magento\Framework\View\Page\Title::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->shipmentLoaderMock = $this->getMock(
+        $this->shipmentLoaderMock = $this->createPartialMock(
             \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader::class,
-            ['setOrderId', 'setShipmentId', 'setShipment', 'setTracking', 'load'],
-            [],
-            '',
-            false
+            ['setOrderId', 'setShipmentId', 'setShipment', 'setTracking', 'load']
         );
-        $this->shipmentMock = $this->getMock(
+        $this->shipmentMock = $this->createPartialMock(
             \Magento\Sales\Model\Order\Shipment::class,
-            ['getIncrementId', '__wakeup'],
-            [],
-            '',
-            false
+            ['getIncrementId', '__wakeup']
         );
         $this->resultPageFactoryMock = $this->getMockBuilder(\Magento\Framework\View\Result\PageFactory::class)
             ->disableOriginalConstructor()
@@ -112,12 +106,9 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $this->resultForwardMock = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Forward::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->blockMock = $this->getMock(
+        $this->blockMock = $this->createPartialMock(
             \Magento\Shipping\Block\Adminhtml\View::class,
-            ['updateBackButtonUrl'],
-            [],
-            '',
-            false
+            ['updateBackButtonUrl']
         );
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -157,7 +148,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->resultPageMock);
 
-        $layoutMock = $this->getMock(\Magento\Framework\View\Layout::class, ['getBlock', '__wakeup'], [], '', false);
+        $layoutMock = $this->createPartialMock(\Magento\Framework\View\Layout::class, ['getBlock', '__wakeup']);
         $this->resultPageMock->expects($this->once())
             ->method('getLayout')
             ->willReturn($layoutMock);

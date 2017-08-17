@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@ namespace Magento\Widget\Test\Unit\Model\Config;
 use Magento\Framework\Component\ComponentRegistrar;
 use \Magento\Widget\Model\Config\FileResolver;
 
-class FileResolverTest extends \PHPUnit_Framework_TestCase
+class FileResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var FileResolver
@@ -33,9 +33,9 @@ class FileResolverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->moduleReader = $this->getMock(\Magento\Framework\Module\Dir\Reader::class, [], [], '', false);
-        $this->factory = $this->getMock(\Magento\Framework\Config\FileIteratorFactory::class, [], [], '', false);
-        $this->componentDirSearch = $this->getMock(\Magento\Framework\Component\DirSearch::class, [], [], '', false);
+        $this->moduleReader = $this->createMock(\Magento\Framework\Module\Dir\Reader::class);
+        $this->factory = $this->createMock(\Magento\Framework\Config\FileIteratorFactory::class);
+        $this->componentDirSearch = $this->createMock(\Magento\Framework\Component\DirSearch::class);
         $this->object = new FileResolver($this->moduleReader, $this->factory, $this->componentDirSearch);
     }
 

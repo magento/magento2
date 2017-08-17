@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Total\Config;
@@ -8,7 +8,7 @@ namespace Magento\Sales\Test\Unit\Model\Order\Total\Config;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class BaseTest extends \PHPUnit_Framework_TestCase
+class BaseTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Sales\Model\Order\Total\Config\Base */
     private $object;
@@ -30,10 +30,10 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->configCacheType = $this->getMock(\Magento\Framework\App\Cache\Type\Config::class, [], [], '', false);
-        $this->logger = $this->getMock(\Psr\Log\LoggerInterface::class);
-        $this->salesConfig = $this->getMock(\Magento\Sales\Model\Config::class, [], [], '', false);
-        $this->orderTotalFactory = $this->getMock(\Magento\Sales\Model\Order\TotalFactory::class, [], [], '', false);
+        $this->configCacheType = $this->createMock(\Magento\Framework\App\Cache\Type\Config::class);
+        $this->logger = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $this->salesConfig = $this->createMock(\Magento\Sales\Model\Config::class);
+        $this->orderTotalFactory = $this->createMock(\Magento\Sales\Model\Order\TotalFactory::class);
         $this->serializer = $this->getMockForAbstractClass(SerializerInterface::class);
 
         $objectManager = new ObjectManager($this);

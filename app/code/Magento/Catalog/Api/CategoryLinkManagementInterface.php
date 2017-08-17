@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -25,6 +25,7 @@ interface CategoryLinkManagementInterface
      * @param string $productSku
      * @param int[] $categoryIds
      * @return bool
+     * @since 101.0.0
      */
     public function assignProductToCategories($productSku, array $categoryIds);
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -82,6 +82,13 @@
             <data name="product/data/custom_options/dataset" xsi:type="string">drop_down_with_one_option_fixed_price</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Bundle\Test\Constraint\AssertBundleProductPage" />
+        </variation>
+        <variation name="UpdateBundleProductEntityTestVariation6" summary="Verify data overrirding on Store View level" ticketId="MAGETWO-50642">
+            <data name="originalProduct/dataset" xsi:type="string">bundle_fixed_product</data>
+            <data name="store/dataset" xsi:type="string">custom</data>
+            <data name="product/data/bundle_selections/dataset" xsi:type="string">fixed_with_custom_title</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
+            <constraint name="Magento\Bundle\Test\Constraint\AssertBundleOptionTitleOnStorefront" />
         </variation>
     </testCase>
 </config>

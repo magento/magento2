@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,10 @@ use Magento\Quote\Model\Quote\Address\Total\Collector;
 use Magento\Quote\Model\Quote\Address\Total\CollectorFactory;
 use Magento\Quote\Model\Quote\Address\Total\CollectorInterface;
 
+/**
+ * Class \Magento\Quote\Model\Quote\TotalsCollectorList
+ *
+ */
 class TotalsCollectorList
 {
 

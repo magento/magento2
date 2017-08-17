@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Ui\Component\Listing\Columns;
@@ -12,11 +12,15 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
 /**
  * Class Visibility
+ *
+ * @api
+ * @since 100.1.0
  */
 class Visibility extends Column
 {
     /**
      * @var Store
+     * @since 100.1.0
      */
     protected $store;
 
@@ -26,6 +30,7 @@ class Visibility extends Column
      * @param Store $store
      * @param array $components
      * @param array $data
+     * @since 100.1.0
      */
     public function __construct(
         ContextInterface $context,
@@ -40,6 +45,7 @@ class Visibility extends Column
 
     /**
      * {@inheritdoc}
+     * @since 100.1.0
      */
     public function prepareDataSource(array $dataSource)
     {
@@ -63,6 +69,7 @@ class Visibility extends Column
      *
      * @param array $storeIds
      * @return string
+     * @since 100.1.0
      */
     protected function renderVisibilityStructure(array $storeIds)
     {

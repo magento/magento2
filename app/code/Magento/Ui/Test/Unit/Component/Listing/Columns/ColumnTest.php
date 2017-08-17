@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Test\Unit\Component\Listing\Columns;
@@ -15,7 +15,7 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterfac
 /**
  * Class ColumnTest
  */
-class ColumnTest extends \PHPUnit_Framework_TestCase
+class ColumnTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -43,10 +43,6 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
             true,
             []
         );
-        $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->contextMock->expects($this->any())->method('getProcessor')->willReturn($processor);
     }
 
     /**
@@ -56,6 +52,7 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetComponentName()
     {
+        $this->contextMock->expects($this->never())->method('getProcessor');
         $column = $this->objectManager->getObject(
             \Magento\Ui\Component\Listing\Columns\Column::class,
             [
@@ -97,6 +94,10 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
      */
     public function testPrepare()
     {
+        $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->contextMock->expects($this->atLeastOnce())->method('getProcessor')->willReturn($processor);
         $data = [
             'name' => 'test_name',
             'js_config' => ['extends' => 'test_config_extends'],
@@ -104,13 +105,7 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
         ];
 
         /** @var UiComponentFactory|\PHPUnit_Framework_MockObject_MockObject $uiComponentFactoryMock */
-        $uiComponentFactoryMock = $this->getMock(
-            \Magento\Framework\View\Element\UiComponentFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $uiComponentFactoryMock = $this->createMock(\Magento\Framework\View\Element\UiComponentFactory::class);
 
         /** @var UiComponentInterface|\PHPUnit_Framework_MockObject_MockObject $wrappedComponentMock */
         $wrappedComponentMock = $this->getMockForAbstractClass(

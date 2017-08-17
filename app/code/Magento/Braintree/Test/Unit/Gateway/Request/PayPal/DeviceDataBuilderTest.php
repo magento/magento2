@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Test\Unit\Gateway\Request\PayPal;
@@ -14,7 +14,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 /**
  * Class DeviceDataBuilderTest
  */
-class DeviceDataBuilderTest extends \PHPUnit_Framework_TestCase
+class DeviceDataBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SubjectReader|MockObject
@@ -43,9 +43,9 @@ class DeviceDataBuilderTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['readPayment'])
             ->getMock();
 
-        $this->paymentDataObject = $this->getMock(PaymentDataObjectInterface::class);
+        $this->paymentDataObject = $this->createMock(PaymentDataObjectInterface::class);
 
-        $this->paymentInfo = $this->getMock(InfoInterface::class);
+        $this->paymentInfo = $this->createMock(InfoInterface::class);
         
         $this->builder = new DeviceDataBuilder($this->subjectReader);
     }

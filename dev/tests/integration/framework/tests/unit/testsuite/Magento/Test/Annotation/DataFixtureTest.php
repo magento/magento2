@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Annotation;
@@ -10,7 +10,7 @@ namespace Magento\Test\Annotation;
  *
  * @magentoDataFixture sampleFixtureOne
  */
-class DataFixtureTest extends \PHPUnit_Framework_TestCase
+class DataFixtureTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\TestFramework\Annotation\DataFixture|\PHPUnit_Framework_MockObject_MockObject
@@ -19,11 +19,10 @@ class DataFixtureTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_object = $this->getMock(
-            \Magento\TestFramework\Annotation\DataFixture::class,
-            ['_applyOneFixture'],
-            [__DIR__ . '/_files']
-        );
+        $this->_object = $this->getMockBuilder(\Magento\TestFramework\Annotation\DataFixture::class)
+            ->setMethods(['_applyOneFixture'])
+            ->setConstructorArgs([__DIR__ . '/_files'])
+            ->getMock();
     }
 
     public static function sampleFixtureOne()

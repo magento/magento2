@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Test\Unit\Block\Widget\Form;
 
-class ContainerTest extends \PHPUnit_Framework_TestCase
+class ContainerTest extends \PHPUnit\Framework\TestCase
 {
     public function testSetDataObject()
     {
@@ -13,13 +13,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $dataObject = new \Magento\Framework\DataObject();
 
         // _prepateLayout() is blocked, because it is used by block to instantly add 'form' child
-        $block = $this->getMock(
-            \Magento\Backend\Block\Widget\Form\Container::class,
-            ['getChildBlock'],
-            [],
-            '',
-            false
-        );
+        $block = $this->createPartialMock(\Magento\Backend\Block\Widget\Form\Container::class, ['getChildBlock']);
         $block->expects($this->once())->method('getChildBlock')->with('form')->will($this->returnValue($form));
 
         $block->setDataObject($dataObject);

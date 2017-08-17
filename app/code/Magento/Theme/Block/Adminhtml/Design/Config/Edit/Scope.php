@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Block\Adminhtml\Design\Config\Edit;
@@ -10,6 +10,12 @@ use Magento\Backend\Block\Template\Context;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ScopeResolverPool;
 
+/**
+ * Scope information block
+ *
+ * @api
+ * @since 100.1.0
+ */
 class Scope extends Template
 {
     /**
@@ -20,6 +26,7 @@ class Scope extends Template
     /**
      * @param Context $context
      * @param ScopeResolverPool $scopeResolverPool
+     * @since 100.1.0
      */
     public function __construct(
         Context $context,
@@ -33,6 +40,7 @@ class Scope extends Template
      * Retrieve scope title
      *
      * @return string
+     * @since 100.1.0
      */
     public function getScopeTitle()
     {
@@ -49,7 +57,8 @@ class Scope extends Template
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
+     * @since 100.1.0
      */
     public function toHtml()
     {

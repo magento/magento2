@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit;
@@ -9,7 +9,7 @@ use Magento\Framework\App\Shell;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Shell\Response;
 
-class ShellTest extends \PHPUnit_Framework_TestCase
+class ShellTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  \PHPUnit_Framework_MockObject_MockObject | \Psr\Log\LoggerInterface */
     private $loggerMock;
@@ -69,7 +69,7 @@ class ShellTest extends \PHPUnit_Framework_TestCase
         );
         $this->driverMock->expects($this->once())->method('execute')->willReturn($response);
         $this->loggerMock->expects($this->once())->method('error')->with($logEntry);
-        $this->setExpectedException(LocalizedException::class, "Command returned non-zero exit code:\n`$command`");
+        $this->expectException(LocalizedException::class, "Command returned non-zero exit code:\n`$command`");
         $this->model->execute($command, []);
     }
 }

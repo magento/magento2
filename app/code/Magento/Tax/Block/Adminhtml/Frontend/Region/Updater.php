@@ -1,12 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Block\Adminhtml\Frontend\Region;
 
 use Magento\Framework\Data\Form\Element\AbstractElement;
 
+/**
+ * Class \Magento\Tax\Block\Adminhtml\Frontend\Region\Updater
+ *
+ */
 class Updater extends \Magento\Config\Block\System\Config\Form\Field
 {
     /**

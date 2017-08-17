@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 // @codingStandardsIgnoreStart
@@ -12,7 +12,7 @@ use Magento\Framework\Exception\SerializationException;
 /**
  * NameFinder Unit Test
  */
-class NameFinderTest extends \PHPUnit_Framework_TestCase
+class NameFinderTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\Reflection\NameFinder */
     protected $nameFinder;
@@ -37,7 +37,7 @@ class NameFinderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessageRegExp /Property :"InvalidAttribute" does not exist in the provided class: \w+/
+     * @expectedExceptionMessageRegExp /Property "InvalidAttribute" does not have corresponding setter in class (.*?)/
      */
     public function testGetSetterMethodNameInvalidAttribute()
     {
@@ -47,7 +47,7 @@ class NameFinderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessageRegExp /Property :"InvalidAttribute" does not exist in the provided class: \w+/
+     * @expectedExceptionMessageRegExp /Property "ActivE" does not have corresponding setter in class (.*?)/
      */
     public function testGetSetterMethodNameWrongCamelCasedAttribute()
     {

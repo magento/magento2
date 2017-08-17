@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cron\Test\Unit\Console\Command;
@@ -8,13 +8,13 @@ namespace Magento\Cron\Test\Unit\Console\Command;
 use Magento\Cron\Console\Command\CronCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class CronCommandTest extends \PHPUnit_Framework_TestCase
+class CronCommandTest extends \PHPUnit\Framework\TestCase
 {
     public function testExecute()
     {
-        $objectManagerFactory = $this->getMock(\Magento\Framework\App\ObjectManagerFactory::class, [], [], '', false);
-        $objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class, [], [], '', false);
-        $cron = $this->getMock(\Magento\Framework\App\Cron::class, [], [], '', false);
+        $objectManagerFactory = $this->createMock(\Magento\Framework\App\ObjectManagerFactory::class);
+        $objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $cron = $this->createMock(\Magento\Framework\App\Cron::class);
         $objectManager->expects($this->once())->method('create')->willReturn($cron);
         $cron->expects($this->once())->method('launch');
         $objectManagerFactory->expects($this->once())->method('create')->willReturn($objectManager);

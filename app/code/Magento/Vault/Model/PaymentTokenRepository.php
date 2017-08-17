@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Vault\Model;
@@ -52,7 +52,9 @@ class PaymentTokenRepository implements PaymentTokenRepositoryInterface
      */
     protected $collectionFactory;
 
-    /** @var  CollectionProcessorInterface */
+    /**
+     * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
+     */
     private $collectionProcessor;
 
     /**
@@ -85,10 +87,10 @@ class PaymentTokenRepository implements PaymentTokenRepositoryInterface
     /**
      * Lists payment tokens that match specified search criteria.
      *
-     * @param \Magento\Framework\Api\SearchCriteria $searchCriteria The search criteria.
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria The search criteria.
      * @return \Magento\Vault\Api\Data\PaymentTokenSearchResultsInterface Payment token search result interface.
      */
-    public function getList(\Magento\Framework\Api\SearchCriteria $searchCriteria)
+    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
         /** @var \Magento\Vault\Model\ResourceModel\PaymentToken\Collection $collection */
         $collection = $this->collectionFactory->create();
@@ -129,6 +131,7 @@ class PaymentTokenRepository implements PaymentTokenRepositoryInterface
         }
 
         $tokenModel->setIsActive(false);
+        $tokenModel->setIsVisible(false);
         $tokenModel->save();
 
         return true;
@@ -153,7 +156,7 @@ class PaymentTokenRepository implements PaymentTokenRepositoryInterface
      * @param FilterGroup $filterGroup
      * @param Collection $collection
      * @return void
-     * @deprecated
+     * @deprecated 100.3.0
      * @throws \Magento\Framework\Exception\InputException
      */
     protected function addFilterGroupToCollection(FilterGroup $filterGroup, Collection $collection)
@@ -167,7 +170,7 @@ class PaymentTokenRepository implements PaymentTokenRepositoryInterface
     /**
      * Retrieve collection processor
      *
-     * @deprecated
+     * @deprecated 100.3.0
      * @return CollectionProcessorInterface
      */
     private function getCollectionProcessor()

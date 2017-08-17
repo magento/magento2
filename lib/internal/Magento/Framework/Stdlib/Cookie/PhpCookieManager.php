@@ -1,14 +1,17 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\Stdlib\Cookie;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Framework\Phrase;
+use Magento\Framework\HTTP\Header as HttpHeader;
+use Psr\Log\LoggerInterface;
 
 /**
  * CookieManager helps manage the setting, retrieving and deleting of cookies.
@@ -38,9 +41,7 @@ class PhpCookieManager implements CookieManagerInterface
     const KEY_EXPIRE_TIME = 'expiry';
     /**#@-*/
 
-    /**
-     * @var CookieScopeInterface
-     */
+    /**#@-*/
     private $scope;
 
     /**
@@ -49,13 +50,35 @@ class PhpCookieManager implements CookieManagerInterface
     private $reader;
 
     /**
+     * Logger for warning details.
+     *
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * Object that provides access to HTTP headers.
+     *
+     * @var HttpHeader
+     */
+    private $httpHeader;
+
+    /**
      * @param CookieScopeInterface $scope
      * @param CookieReaderInterface $reader
+     * @param LoggerInterface $logger
+     * @param HttpHeader $httpHeader
      */
-    public function __construct(CookieScopeInterface $scope, CookieReaderInterface $reader)
-    {
+    public function __construct(
+        CookieScopeInterface $scope,
+        CookieReaderInterface $reader,
+        LoggerInterface $logger = null,
+        HttpHeader $httpHeader = null
+    ) {
         $this->scope = $scope;
         $this->reader = $reader;
+        $this->logger = $logger ?: ObjectManager::getInstance()->get(LoggerInterface::class);
+        $this->httpHeader = $httpHeader ?: ObjectManager::getInstance()->get(HttpHeader::class);
     }
 
     /**
@@ -182,8 +205,9 @@ class PhpCookieManager implements CookieManagerInterface
         $sizeOfCookie = $this->sizeOfCookie($name, $value);
 
         if ($numCookies > PhpCookieManager::MAX_NUM_COOKIES) {
-            throw new CookieSizeLimitReachedException(
-                new Phrase('Unable to send the cookie. Maximum number of cookies would be exceeded.')
+            $this->logger->warning(
+                new Phrase('Unable to send the cookie. Maximum number of cookies would be exceeded.'),
+                array_merge($_COOKIE, ['user-agent' => $this->httpHeader->getHttpUserAgent()])
             );
         }
 

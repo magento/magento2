@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\User\Helper;
@@ -8,7 +8,7 @@ namespace Magento\User\Helper;
 /**
  * User data helper
  *
- * @author   Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {

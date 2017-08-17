@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Block\Customer\PayPal;
@@ -13,6 +13,9 @@ use Magento\Vault\Block\AbstractTokenRenderer;
 
 /**
  * Class VaultTokenRenderer
+ *
+ * @api
+ * @since 100.1.3
  */
 class VaultTokenRenderer extends AbstractTokenRenderer
 {
@@ -21,6 +24,14 @@ class VaultTokenRenderer extends AbstractTokenRenderer
      */
     private $config;
 
+    /**
+     * Initialize dependencies.
+     *
+     * @param Template\Context $context
+     * @param Config $config
+     * @param array $data
+     * @since 100.1.3
+     */
     public function __construct(
         Template\Context $context,
         Config $config,
@@ -32,6 +43,7 @@ class VaultTokenRenderer extends AbstractTokenRenderer
 
     /**
      * @inheritdoc
+     * @since 100.1.3
      */
     public function getIconUrl()
     {
@@ -40,6 +52,7 @@ class VaultTokenRenderer extends AbstractTokenRenderer
 
     /**
      * @inheritdoc
+     * @since 100.1.3
      */
     public function getIconHeight()
     {
@@ -48,6 +61,7 @@ class VaultTokenRenderer extends AbstractTokenRenderer
 
     /**
      * @inheritdoc
+     * @since 100.1.3
      */
     public function getIconWidth()
     {
@@ -59,6 +73,7 @@ class VaultTokenRenderer extends AbstractTokenRenderer
      *
      * @param PaymentTokenInterface $token
      * @return boolean
+     * @since 100.1.3
      */
     public function canRender(PaymentTokenInterface $token)
     {
@@ -68,6 +83,7 @@ class VaultTokenRenderer extends AbstractTokenRenderer
     /**
      * Get email of PayPal payer
      * @return string
+     * @since 100.1.3
      */
     public function getPayerEmail()
     {

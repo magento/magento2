@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRule\Plugin\Indexer;
@@ -8,6 +8,10 @@ namespace Magento\CatalogRule\Plugin\Indexer;
 use Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor;
 use Magento\ImportExport\Model\Import;
 
+/**
+ * Class \Magento\CatalogRule\Plugin\Indexer\ImportExport
+ *
+ */
 class ImportExport
 {
     /**

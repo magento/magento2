@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Session\SaveHandler;
 
 use Magento\Framework\App\ResourceConnection;
 
-class DbTableTest extends \PHPUnit_Framework_TestCase
+class DbTableTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test session ID

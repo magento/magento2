@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Block;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class SectionConfigTest extends \PHPUnit_Framework_TestCase
+class SectionConfigTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Customer\Block\block */
     protected $block;
@@ -26,9 +26,9 @@ class SectionConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->context = $this->getMock(\Magento\Framework\View\Element\Template\Context::class, [], [], '', false);
-        $this->sectionConfig = $this->getMock(\Magento\Framework\Config\DataInterface::class);
-        $this->encoder = $this->getMock(\Magento\Framework\Json\EncoderInterface::class);
+        $this->context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
+        $this->sectionConfig = $this->createMock(\Magento\Framework\Config\DataInterface::class);
+        $this->encoder = $this->createMock(\Magento\Framework\Json\EncoderInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->block = $this->objectManagerHelper->getObject(

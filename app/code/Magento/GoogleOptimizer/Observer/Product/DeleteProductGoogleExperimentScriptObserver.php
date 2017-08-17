@@ -2,13 +2,17 @@
 /**
  * Google Experiment Product observer
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GoogleOptimizer\Observer\Product;
 
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class \Magento\GoogleOptimizer\Observer\Product\DeleteProductGoogleExperimentScriptObserver
+ *
+ */
 class DeleteProductGoogleExperimentScriptObserver implements ObserverInterface
 {
     /**

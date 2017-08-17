@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -32,6 +32,12 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractController
         $actualLinkCount = substr_count($responseBody, '>Bundle Product Items<');
         $this->assertEquals(1, $actualLinkCount, 'Bundle product options should appear on the page exactly once.');
         $this->assertNotContains('class="options-container-big"', $responseBody);
-        $this->assertSelectCount('#product-options-wrapper', 1, $responseBody);
+        $this->assertEquals(
+            1,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//*[@id="product-options-wrapper"]',
+                $responseBody
+            )
+        );
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,9 +9,14 @@ namespace Magento\Framework\Search\Adapter\Mysql\Query;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Request\QueryInterface as RequestQueryInterface;
 
+/**
+ * Class \Magento\Framework\Search\Adapter\Mysql\Query\QueryContainer
+ *
+ */
 class QueryContainer
 {
     const DERIVED_QUERY_PREFIX = 'derived_';
+
     /**
      * @var array
      */

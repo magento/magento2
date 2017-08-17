@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@
  */
 namespace Magento\Test\Bootstrap;
 
-class DocBlockTest extends \PHPUnit_Framework_TestCase
+class DocBlockTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\TestFramework\Bootstrap\DocBlock
@@ -24,7 +24,7 @@ class DocBlockTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_object = new \Magento\TestFramework\Bootstrap\DocBlock(__DIR__);
-        $this->_application = $this->getMock(\Magento\TestFramework\Application::class, [], [], '', false);
+        $this->_application = $this->createMock(\Magento\TestFramework\Application::class);
     }
 
     protected function tearDown()

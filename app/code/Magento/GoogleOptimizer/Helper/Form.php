@@ -2,7 +2,7 @@
 /**
  * Google Optimizer Form Helper
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GoogleOptimizer\Helper;
@@ -10,6 +10,9 @@ namespace Magento\GoogleOptimizer\Helper;
 use Magento\Framework\Data\Form as DataForm;
 use Magento\GoogleOptimizer\Model\Code as ModelCode;
 
+/**
+ * @api
+ */
 class Form extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**

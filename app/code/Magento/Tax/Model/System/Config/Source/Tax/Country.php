@@ -1,10 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Model\System\Config\Source\Tax;
 
+/**
+ * Class \Magento\Tax\Model\System\Config\Source\Tax\Country
+ *
+ */
 class Country extends \Magento\Directory\Model\Config\Source\Country
 {
     /**

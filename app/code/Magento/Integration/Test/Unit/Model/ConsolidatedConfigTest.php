@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Test\Unit\Model;
@@ -12,7 +12,7 @@ use Magento\Integration\Model\Cache\TypeConsolidated as Type;
 /**
  * Unit test for \Magento\Integration\Model\ConsolidatedConfig
  */
-class ConsolidatedConfigTest extends \PHPUnit_Framework_TestCase
+class ConsolidatedConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Integration config model

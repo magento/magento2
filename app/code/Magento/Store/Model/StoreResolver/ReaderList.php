@@ -1,12 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Model\StoreResolver;
 
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * Class \Magento\Store\Model\StoreResolver\ReaderList
+ *
+ */
 class ReaderList
 {
     /**
@@ -20,6 +24,7 @@ class ReaderList
     protected $resolverMap;
 
     // @codingStandardsIgnoreStart
+
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param array $resolverMap
@@ -35,6 +40,7 @@ class ReaderList
         $this->resolverMap = $resolverMap;
         $this->objectManager = $objectManager;
     }
+
     // @codingStandardsIgnoreEnd
 
     /**

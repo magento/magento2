@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Module\Di\App\Task;
@@ -9,7 +9,7 @@ use Magento\Framework\App;
 use Magento\Setup\Module\Di\App\Task\Operation\Area;
 use Magento\Setup\Module\Di\Compiler\Config;
 
-class AreaTest extends \PHPUnit_Framework_TestCase
+class AreaTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var App\AreaList | \PHPUnit_Framework_MockObject_MockObject

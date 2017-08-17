@@ -1,12 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Indexer\Model\Indexer;
 
 use Magento\Framework\Indexer\StateInterface;
 
+/**
+ * Class \Magento\Indexer\Model\Indexer\State
+ *
+ */
 class State extends \Magento\Framework\Model\AbstractModel implements StateInterface
 {
     /**

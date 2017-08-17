@@ -1,10 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Element\Message;
 
+/**
+ * Class \Magento\Framework\View\Element\Message\MessageConfigurationsPool
+ *
+ */
 class MessageConfigurationsPool
 {
     /**
@@ -24,15 +28,13 @@ class MessageConfigurationsPool
         array_walk(
             $configurationsMap,
             function (array &$configuration) {
-                if (
-                    !isset($configuration['renderer'])
+                if (!isset($configuration['renderer'])
                     || !is_string($configuration['renderer'])
                 ) {
                     throw new \InvalidArgumentException('Renderer should be defined.');
                 }
 
-                if (
-                    isset($configuration['data'])
+                if (isset($configuration['data'])
                     && !is_array($configuration['data'])
                 ) {
                     throw new \InvalidArgumentException('Data should be of array type.');

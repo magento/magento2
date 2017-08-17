@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order\Creditmemo;
@@ -9,6 +9,10 @@ use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order\Creditmemo;
 
+/**
+ * Class \Magento\Sales\Model\Order\Creditmemo\RefundOperation
+ *
+ */
 class RefundOperation
 {
     /**
@@ -114,7 +118,7 @@ class RefundOperation
                 $order->getBaseTotalInvoicedCost() - $creditmemo->getBaseCost()
             );
 
-            $creditmemo->setDoTransaction($online);
+            $creditmemo->setDoTransaction(!$creditmemo->getPaymentRefundDisallowed() && $online);
             $order->getPayment()->refund($creditmemo);
 
             $this->eventManager->dispatch('sales_order_creditmemo_refund', ['creditmemo' => $creditmemo]);

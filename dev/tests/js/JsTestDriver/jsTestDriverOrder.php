@@ -3,7 +3,7 @@
  * Returns an array of Javascript files that should be loaded first by JsTestDriver in the
  * order that they appear in the array when the Javascript unit tests are run.
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  *
  * @return array

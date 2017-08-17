@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Controller\Adminhtml\Product\Reviews;
@@ -10,6 +10,10 @@ use Magento\Backend\App\Action\Context;
 use Magento\Catalog\Controller\Adminhtml\Product\Builder as ProductBuilder;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Review\Controller\Adminhtml\Product\Reviews\Grid
+ *
+ */
 class Grid extends Action
 {
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order\Payment\Operations;
@@ -10,6 +10,10 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Order\Payment\Transaction;
 
+/**
+ * Class \Magento\Sales\Model\Order\Payment\Operations\AuthorizeOperation
+ *
+ */
 class AuthorizeOperation extends AbstractOperation
 {
     /**

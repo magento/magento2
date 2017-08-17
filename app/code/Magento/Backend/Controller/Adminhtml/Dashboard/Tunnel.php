@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Controller\Adminhtml\Dashboard;
@@ -10,6 +10,10 @@ use Magento\Backend\App\Action;
 use Magento\Framework\Controller\Result;
 use Magento\Framework\Encryption\Helper\Security;
 
+/**
+ * Class \Magento\Backend\Controller\Adminhtml\Dashboard\Tunnel
+ *
+ */
 class Tunnel extends \Magento\Backend\Controller\Adminhtml\Dashboard
 {
     /**

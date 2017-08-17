@@ -3,11 +3,15 @@
  * Event manager
  * Used to dispatch global events
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Event;
 
+/**
+ * Class \Magento\Framework\Event\Manager
+ *
+ */
 class Manager implements ManagerInterface
 {
     /**

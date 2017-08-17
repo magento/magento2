@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Transactions;
@@ -10,6 +10,10 @@ use Magento\Backend\App\Action;
 use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Transactions\Fetch
+ *
+ */
 class Fetch extends \Magento\Sales\Controller\Adminhtml\Transactions
 {
     /**
@@ -33,7 +37,10 @@ class Fetch extends \Magento\Sales\Controller\Adminhtml\Transactions
             return $resultRedirect->setPath('sales/*/');
         }
         try {
-            $this->orderPaymentRepository->get($txn->getId())->setOrder($txn->getOrder())->importTransactionInfo($txn);
+            $this->orderPaymentRepository
+                ->get($txn->getPaymentId())
+                ->setOrder($txn->getOrder())
+                ->importTransactionInfo($txn);
             $txn->save();
             $this->messageManager->addSuccess(__('The transaction details have been updated.'));
         } catch (\Magento\Framework\Exception\LocalizedException $e) {

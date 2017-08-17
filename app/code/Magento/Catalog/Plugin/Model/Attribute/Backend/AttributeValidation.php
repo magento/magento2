@@ -1,15 +1,21 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Plugin\Model\Attribute\Backend;
 
 use Magento\Store\Model\Store;
 
+/**
+ * Class \Magento\Catalog\Plugin\Model\Attribute\Backend\AttributeValidation
+ *
+ */
 class AttributeValidation
 {
-    /** @var \Magento\Store\Model\StoreManagerInterface */
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
     private $storeManager;
 
     /**

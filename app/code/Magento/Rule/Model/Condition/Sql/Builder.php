@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,8 +12,6 @@ use Magento\Rule\Model\Condition\Combine;
 
 /**
  * Class SQL Builder
- *
- * @package Magento\Rule\Model\Condition\Sql
  */
 class Builder
 {

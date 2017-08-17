@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order;
@@ -9,7 +9,7 @@ use Magento\Catalog\Api\Data\ProductOptionExtensionFactory;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Catalog\Model\ProductOptionFactory;
 use Magento\Catalog\Model\ProductOptionProcessorInterface;
-use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\Factory as DataObjectFactory;
 use Magento\Framework\Exception\InputException;
@@ -61,7 +61,9 @@ class ItemRepository implements OrderItemRepositoryInterface
      */
     protected $registry = [];
 
-    /** @var  CollectionProcessorInterface */
+    /**
+     * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
+     */
     private $collectionProcessor;
 
     /**
@@ -121,10 +123,10 @@ class ItemRepository implements OrderItemRepositoryInterface
     /**
      * Find entities by criteria
      *
-     * @param SearchCriteria $searchCriteria
+     * @param SearchCriteriaInterface $searchCriteria
      * @return OrderItemInterface[]
      */
-    public function getList(SearchCriteria $searchCriteria)
+    public function getList(SearchCriteriaInterface $searchCriteria)
     {
         /** @var \Magento\Sales\Model\ResourceModel\Order\Item\Collection $searchResult */
         $searchResult = $this->searchResultFactory->create();
@@ -273,7 +275,7 @@ class ItemRepository implements OrderItemRepositoryInterface
     /**
      * Retrieve collection processor
      *
-     * @deprecated
+     * @deprecated 100.2.0
      * @return CollectionProcessorInterface
      */
     private function getCollectionProcessor()

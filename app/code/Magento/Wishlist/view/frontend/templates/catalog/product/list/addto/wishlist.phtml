@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,11 +11,11 @@
 <?php if ($block->getWishlistHelper()->isAllow()): ?>
     <a href="#"
        class="action towishlist"
-       title="<?php echo $block->escapeHtmlAttr(__('Add to Wish List')); ?>"
-       aria-label="<?php echo $block->escapeHtmlAttr(__('Add to Wish List')); ?>"
-       data-post='<?php /* @noEscape */ echo $block->getAddToWishlistParams($block->getProduct()); ?>'
+       title="<?= $block->escapeHtmlAttr(__('Add to Wish List')) ?>"
+       aria-label="<?= $block->escapeHtmlAttr(__('Add to Wish List')) ?>"
+       data-post='<?= /* @noEscape */ $block->getAddToWishlistParams($block->getProduct()) ?>'
        data-action="add-to-wishlist"
        role="button">
-        <span><?php echo $block->escapeHtml(__('Add to Wish List')) ?></span>
+        <span><?= $block->escapeHtml(__('Add to Wish List')) ?></span>
     </a>
 <?php endif; ?>

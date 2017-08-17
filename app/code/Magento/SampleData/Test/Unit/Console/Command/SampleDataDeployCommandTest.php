@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SampleData\Test\Unit\Console\Command;
@@ -20,7 +20,7 @@ use Composer\Console\Application;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SampleDataDeployCommandTest extends \PHPUnit_Framework_TestCase
+class SampleDataDeployCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ReadInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -62,13 +62,13 @@ class SampleDataDeployCommandTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->directoryReadMock = $this->getMock(ReadInterface::class, [], [], '', false);
-        $this->directoryWriteMock = $this->getMock(WriteInterface::class, [], [], '', false);
-        $this->filesystemMock = $this->getMock(Filesystem::class, [], [], '', false);
-        $this->sampleDataDependencyMock = $this->getMock(Dependency::class, [], [], '', false);
-        $this->arrayInputFactoryMock = $this->getMock(ArrayInputFactory::class, [], [], '', false);
-        $this->applicationMock = $this->getMock(Application::class, [], [], '', false);
-        $this->applicationFactoryMock = $this->getMock(ApplicationFactory::class, ['create'], [], '', false);
+        $this->directoryReadMock = $this->createMock(ReadInterface::class);
+        $this->directoryWriteMock = $this->createMock(WriteInterface::class);
+        $this->filesystemMock = $this->createMock(Filesystem::class);
+        $this->sampleDataDependencyMock = $this->createMock(Dependency::class);
+        $this->arrayInputFactoryMock = $this->createMock(ArrayInputFactory::class);
+        $this->applicationMock = $this->createMock(Application::class);
+        $this->applicationFactoryMock = $this->createPartialMock(ApplicationFactory::class, ['create']);
     }
 
     /**

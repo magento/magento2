@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Test\Unit\Block\Widget\Grid\Column\Renderer;
 
 use Magento\Backend\Block\Widget\Grid\Column\Renderer\Radio;
 
-class RadioTest extends \PHPUnit_Framework_TestCase
+class RadioTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Radio
@@ -26,20 +26,14 @@ class RadioTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $context = $this->getMock(\Magento\Backend\Block\Context::class, [], [], '', false);
-        $this->_converter = $this->getMock(
+        $context = $this->createMock(\Magento\Backend\Block\Context::class);
+        $this->_converter = $this->createPartialMock(
             \Magento\Backend\Block\Widget\Grid\Column\Renderer\Options\Converter::class,
-            ['toFlatArray'],
-            [],
-            '',
-            false
+            ['toFlatArray']
         );
-        $this->_column = $this->getMock(
+        $this->_column = $this->createPartialMock(
             \Magento\Backend\Block\Widget\Grid\Column::class,
-            ['getValues', 'getIndex', 'getHtmlName'],
-            [],
-            '',
-            false
+            ['getValues', 'getIndex', 'getHtmlName']
         );
         $this->_object = new \Magento\Backend\Block\Widget\Grid\Column\Renderer\Radio($context, $this->_converter);
         $this->_object->setColumn($this->_column);

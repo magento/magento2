@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Test\Unit\Gateway\Response;
@@ -10,11 +10,11 @@ use Magento\Braintree\Gateway\Response\TransactionIdHandler;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Sales\Model\Order\Payment;
 
-class TransactionIdHandlerTest extends \PHPUnit_Framework_TestCase
+class TransactionIdHandlerTest extends \PHPUnit\Framework\TestCase
 {
     public function testHandle()
     {
-        $paymentDO = $this->getMock(PaymentDataObjectInterface::class);
+        $paymentDO = $this->createMock(PaymentDataObjectInterface::class);
         $paymentInfo = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
             ->getMock();

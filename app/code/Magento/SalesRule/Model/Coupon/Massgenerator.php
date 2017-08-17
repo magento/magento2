@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Model\Coupon;
 
 /**
  * SalesRule Mass Coupon Generator
- *
- * @method \Magento\SalesRule\Model\ResourceModel\Coupon getResource()
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
@@ -171,7 +169,7 @@ class Massgenerator extends \Magento\Framework\Model\AbstractModel implements
             } while ($this->getResource()->exists($code));
 
             $expirationDate = $this->getToDate();
-            if ($expirationDate instanceof \DateTime) {
+            if ($expirationDate instanceof \DateTimeInterface) {
                 $expirationDate = $expirationDate->format('Y-m-d H:i:s');
             }
 

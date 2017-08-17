@@ -1,13 +1,18 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ */
+
+/**
+ * @api
  */
 define([
     'jquery',
     'uiComponent',
     'Magento_Customer/js/customer-data',
+    'underscore',
     'jquery/jquery-storageapi'
-], function ($, Component, customerData) {
+], function ($, Component, customerData, _) {
     'use strict';
 
     return Component.extend({

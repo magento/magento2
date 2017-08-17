@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Helper;
 
-class ProductTest extends \PHPUnit_Framework_TestCase
+class ProductTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Helper\Product
@@ -90,13 +90,13 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     public function testGetThumbnailUrl()
     {
-        $this->assertEmpty(
-            $this->helper->getThumbnailUrl(
-                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-                    \Magento\Catalog\Model\Product::class
-                )
-            )
+        /** @var $product \Magento\Catalog\Model\Product */
+        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Catalog\Model\Product::class
         );
+        $this->assertStringEndsWith('placeholder/thumbnail.jpg', $this->helper->getThumbnailUrl($product));
+        $product->setThumbnail('test_image.png');
+        $this->assertStringEndsWith('/test_image.png', $this->helper->getThumbnailUrl($product));
     }
 
     public function testGetEmailToFriendUrl()

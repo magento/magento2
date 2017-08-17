@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Indexer\Handler;
@@ -8,6 +8,10 @@ namespace Magento\Framework\Indexer\Handler;
 use Magento\Framework\App\ResourceConnection\SourceProviderInterface;
 use Magento\Framework\Indexer\HandlerInterface;
 
+/**
+ * Class \Magento\Framework\Indexer\Handler\DefaultHandler
+ *
+ */
 class DefaultHandler implements HandlerInterface
 {
     /**

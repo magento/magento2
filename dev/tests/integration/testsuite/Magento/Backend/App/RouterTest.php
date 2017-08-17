@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\App;
@@ -9,7 +9,7 @@ namespace Magento\Backend\App;
  * @magentoAppArea adminhtml
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RouterTest extends \PHPUnit_Framework_TestCase
+class RouterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\App\Router
@@ -29,7 +29,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
 
     public function testRouterCanProcessRequestsWithProperPathInfo()
     {
-        $request = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
+        $request = $this->createMock(\Magento\Framework\App\Request\Http::class);
         $request->expects($this->once())->method('getPathInfo')->will($this->returnValue('backend/admin/dashboard'));
 
         $this->assertInstanceOf(\Magento\Backend\Controller\Adminhtml\Dashboard::class, $this->model->match($request));
@@ -68,17 +68,18 @@ class RouterTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $routeConfig = $this->getMock(
-            \Magento\Framework\App\Route\Config::class,
-            ['_getRoutes'],
-            [
-                'reader' => $this->objectManager->get(\Magento\Framework\App\Route\Config\Reader::class),
-                'cache' => $this->objectManager->get(\Magento\Framework\Config\CacheInterface::class),
-                'configScope' => $this->objectManager->get(\Magento\Framework\Config\ScopeInterface::class),
-                'areaList' => $this->objectManager->get(\Magento\Framework\App\AreaList::class),
-                'cacheId' => 'RoutesConfig'
-            ]
-        );
+        $routeConfig = $this->getMockBuilder(\Magento\Framework\App\Route\Config::class)
+            ->setMethods(['_getRoutes'])
+            ->setConstructorArgs(
+                [
+                    'reader' => $this->objectManager->get(\Magento\Framework\App\Route\Config\Reader::class),
+                    'cache' => $this->objectManager->get(\Magento\Framework\Config\CacheInterface::class),
+                    'configScope' => $this->objectManager->get(\Magento\Framework\Config\ScopeInterface::class),
+                    'areaList' => $this->objectManager->get(\Magento\Framework\App\AreaList::class),
+                    'cacheId' => 'RoutesConfig'
+                ]
+            )
+            ->getMock();
 
         $routeConfig->expects($this->any())->method('_getRoutes')->will($this->returnValue($routers));
 

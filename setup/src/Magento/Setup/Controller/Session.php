@@ -1,10 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Controller;
 
+/**
+ * Class \Magento\Setup\Controller\Session
+ *
+ */
 class Session extends \Zend\Mvc\Controller\AbstractActionController
 {
     /**
@@ -31,12 +35,12 @@ class Session extends \Zend\Mvc\Controller\AbstractActionController
 
     /**
      * No index action, return 404 error page
-     * 
+     *
      * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
      */
     public function indexAction()
     {
-        $view = new \Zend\View\Model\ViewModel;
+        $view = new \Zend\View\Model\ViewModel();
         $view->setTemplate('/error/404.phtml');
         $this->getResponse()->setStatusCode(\Zend\Http\Response::STATUS_CODE_404);
         return $view;

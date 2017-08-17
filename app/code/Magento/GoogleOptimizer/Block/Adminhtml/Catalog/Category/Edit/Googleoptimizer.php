@@ -1,11 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\GoogleOptimizer\Block\Adminhtml\Catalog\Category\Edit;
 
+/**
+ * Class \Magento\GoogleOptimizer\Block\Adminhtml\Catalog\Category\Edit\Googleoptimizer
+ *
+ */
 class Googleoptimizer extends \Magento\Backend\Block\Template
 {
     /**

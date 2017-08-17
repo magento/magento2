@@ -3,36 +3,36 @@
  * @category    Magento
  * @package     Magento_CatalogInventory
  * @subpackage  unit_tests
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\CatalogInventory\Test\Unit\Model\Indexer\Stock\Action;
 
-class FullTest extends \PHPUnit_Framework_TestCase
+class FullTest extends \PHPUnit\Framework\TestCase
 {
     public function testExecuteWithAdapterErrorThrowsException()
     {
-        $indexerFactoryMock = $this->getMock(
-            \Magento\CatalogInventory\Model\ResourceModel\Indexer\StockFactory::class,
-            [],
-            [],
-            '',
-            false
+        $indexerFactoryMock = $this->createMock(
+            \Magento\CatalogInventory\Model\ResourceModel\Indexer\StockFactory::class
         );
-        $resourceMock = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
-        $productTypeMock = $this->getMock(\Magento\Catalog\Model\Product\Type::class, [], [], '', false);
-        $connectionMock = $this->getMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
+        $resourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
+        $productTypeMock = $this->createMock(\Magento\Catalog\Model\Product\Type::class);
+        $connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
+
+        $productTypeMock
+            ->method('getTypesByPriority')
+            ->willReturn([]);
 
         $exceptionMessage = 'exception message';
-
-        $connectionMock->expects($this->once())
-            ->method('delete')
-            ->will($this->throwException(new \Exception($exceptionMessage)));
 
         $resourceMock->expects($this->any())
             ->method('getConnection')
             ->will($this->returnValue($connectionMock));
+
+        $resourceMock->expects($this->any())
+            ->method('getTableName')
+            ->will($this->throwException(new \Exception($exceptionMessage)));
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $model = $objectManager->getObject(
@@ -44,7 +44,7 @@ class FullTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, $exceptionMessage);
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class, $exceptionMessage);
 
         $model->execute();
     }

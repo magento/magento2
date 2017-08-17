@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Search\Block\Adminhtml\Dashboard;
 
 /**
  *  Dashboard last search keywords block
+ * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Top extends \Magento\Backend\Block\Dashboard\Grid
@@ -26,7 +27,9 @@ class Top extends \Magento\Backend\Block\Dashboard\Grid
      */
     protected $_moduleManager;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $_template = 'Magento_Backend::dashboard/grid.phtml';
 
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Model\Wysiwyg;
@@ -11,6 +11,8 @@ use Magento\Ui\Component\Wysiwyg\ConfigInterface;
 
 /**
  * Wysiwyg Config for Editor HTML Element
+ *
+ * @api
  */
 class Config extends \Magento\Framework\DataObject implements ConfigInterface
 {
@@ -95,6 +97,7 @@ class Config extends \Magento\Framework\DataObject implements ConfigInterface
 
     /**
      * @var Filesystem
+     * @since 101.0.0
      */
     protected $filesystem;
 

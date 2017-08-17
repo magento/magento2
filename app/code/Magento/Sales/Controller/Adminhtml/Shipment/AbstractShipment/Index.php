@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Shipment\AbstractShipment;
@@ -9,6 +9,10 @@ namespace Magento\Sales\Controller\Adminhtml\Shipment\AbstractShipment;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShipment\Index
+ *
+ */
 abstract class Index extends \Magento\Backend\App\Action
 {
     /**

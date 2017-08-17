@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,12 +9,20 @@ namespace Magento\GiftMessage\Model\Plugin;
 
 use Magento\Framework\Exception\CouldNotSaveException;
 
+/**
+ * Class \Magento\GiftMessage\Model\Plugin\OrderSave
+ *
+ */
 class OrderSave
 {
-    /** @var \Magento\GiftMessage\Api\OrderRepositoryInterface */
+    /**
+     * @var \Magento\GiftMessage\Api\OrderRepositoryInterface
+     */
     protected $giftMessageOrderRepository;
 
-    /** @var \Magento\GiftMessage\Api\OrderItemRepositoryInterface */
+    /**
+     * @var \Magento\GiftMessage\Api\OrderItemRepositoryInterface
+     */
     protected $giftMessageOrderItemRepository;
 
     /**
@@ -61,8 +69,7 @@ class OrderSave
     protected function saveOrderGiftMessage(\Magento\Sales\Api\Data\OrderInterface $order)
     {
         $extensionAttributes = $order->getExtensionAttributes();
-        if (
-            null !== $extensionAttributes &&
+        if (null !== $extensionAttributes &&
             null !== $extensionAttributes->getGiftMessage()
         ) {
             /* @var \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage */
@@ -93,8 +100,7 @@ class OrderSave
             /** @var \Magento\Sales\Api\Data\OrderItemInterface $orderItem */
             foreach ($items as $orderItem) {
                 $extensionAttribute = $orderItem->getExtensionAttributes();
-                if (
-                    null !== $extensionAttribute &&
+                if (null !== $extensionAttribute &&
                     null !== $extensionAttribute->getGiftMessage()
                 ) {
                     /* @var \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage */

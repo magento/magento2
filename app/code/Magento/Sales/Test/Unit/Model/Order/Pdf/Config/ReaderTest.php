@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Pdf\Config;
 
-class ReaderTest extends \PHPUnit_Framework_TestCase
+class ReaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\Order\Pdf\Config\Reader
@@ -34,7 +34,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_fileResolverMock = $this->getMock(\Magento\Framework\Config\FileResolverInterface::class);
+        $this->_fileResolverMock = $this->createMock(\Magento\Framework\Config\FileResolverInterface::class);
         $this->_fileResolverMock->expects(
             $this->once()
         )->method(
@@ -51,15 +51,12 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $this->_converter = $this->getMock(\Magento\Sales\Model\Order\Pdf\Config\Converter::class, ['convert']);
-
-        $moduleReader = $this->getMock(
-            \Magento\Framework\Module\Dir\Reader::class,
-            ['getModuleDir'],
-            [],
-            '',
-            false
+        $this->_converter = $this->createPartialMock(
+            \Magento\Sales\Model\Order\Pdf\Config\Converter::class,
+            ['convert']
         );
+
+        $moduleReader = $this->createPartialMock(\Magento\Framework\Module\Dir\Reader::class, ['getModuleDir']);
 
         $moduleReader->expects(
             $this->once()
@@ -73,7 +70,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_schemaLocator = new \Magento\Sales\Model\Order\Pdf\Config\SchemaLocator($moduleReader);
-        $this->_validationState = $this->getMock(\Magento\Framework\Config\ValidationStateInterface::class);
+        $this->_validationState = $this->createMock(\Magento\Framework\Config\ValidationStateInterface::class);
         $this->_validationState->expects($this->any())
             ->method('isValidationRequired')
             ->willReturn(false);
@@ -93,9 +90,9 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $constraint = function (\DOMDOcument $actual) {
             try {
                 $expected = __DIR__ . '/_files/pdf_merged.xml';
-                \PHPUnit_Framework_Assert::assertXmlStringEqualsXmlFile($expected, $actual->saveXML());
+                \PHPUnit\Framework\Assert::assertXmlStringEqualsXmlFile($expected, $actual->saveXML());
                 return true;
-            } catch (\PHPUnit_Framework_AssertionFailedError $e) {
+            } catch (\PHPUnit\Framework\AssertionFailedError $e) {
                 return false;
             }
         };

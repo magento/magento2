@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Category\Attribute\Backend;
 
 /**
  * Catalog Category Attribute Default and Available Sort By Backend Model
+ *
+ * @api
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
@@ -121,7 +123,6 @@ class Sortby extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
                 } else {
                     $object->setData($attributeCode, $data);
                 }
-
             }
         }
         return $this;

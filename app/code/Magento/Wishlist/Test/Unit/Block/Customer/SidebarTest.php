@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Test\Unit\Block\Customer;
@@ -8,7 +8,7 @@ namespace Magento\Wishlist\Test\Unit\Block\Customer;
 use Magento\Framework\Pricing\Render;
 use Magento\Wishlist\Block\Customer\Sidebar;
 
-class SidebarTest extends \PHPUnit_Framework_TestCase
+class SidebarTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Block\Product\Context|\PHPUnit_Framework_MockObject_MockObject

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Test\Unit\App\Action\Plugin;
@@ -9,7 +9,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Backend\App\AbstractAction;
 use Magento\Framework\App\RequestInterface;
 
-class MassactionKeyTest extends \PHPUnit_Framework_TestCase
+class MassactionKeyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\App\Action\Plugin\MassactionKey
@@ -31,7 +31,7 @@ class MassactionKeyTest extends \PHPUnit_Framework_TestCase
         $this->closureMock = function () {
             return 'Expected';
         };
-        $this->subjectMock = $this->getMock(\Magento\Backend\App\AbstractAction::class, [], [], '', false);
+        $this->subjectMock = $this->createMock(\Magento\Backend\App\AbstractAction::class);
         $this->requestMock = $this->getMockForAbstractClass(
             RequestInterface::class,
             [],

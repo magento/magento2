@@ -1,11 +1,10 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Controller;
 
-use Magento\Framework\Module\ModuleList;
 use Magento\Setup\Controller\ExtensionGrid;
 use Magento\Setup\Model\Grid\Extension;
 use Magento\Setup\Model\PackagesAuth;
@@ -15,7 +14,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 /**
  * Class ExtensionGridTest
  */
-class ExtensionGridTest extends \PHPUnit_Framework_TestCase
+class ExtensionGridTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Extension|MockObject
@@ -84,9 +83,9 @@ class ExtensionGridTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        $this->packagesDataMock = $this->getMock(PackagesData::class, [], [], '', false);
-        $this->packagesAuthMock = $this->getMock(PackagesAuth::class, [], [], '', false);
-        $this->gridExtensionMock = $this->getMock(Extension::class, [], [], '', false);
+        $this->packagesDataMock = $this->createMock(PackagesData::class);
+        $this->packagesAuthMock = $this->createMock(PackagesAuth::class);
+        $this->gridExtensionMock = $this->createMock(Extension::class);
 
         $this->controller = new ExtensionGrid(
             $this->packagesDataMock,
@@ -98,7 +97,7 @@ class ExtensionGridTest extends \PHPUnit_Framework_TestCase
     public function testIndexAction()
     {
         $viewModel = $this->controller->indexAction();
-        $this->assertInstanceOf('Zend\View\Model\ViewModel', $viewModel);
+        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $viewModel);
         $this->assertTrue($viewModel->terminate());
     }
 
@@ -120,7 +119,7 @@ class ExtensionGridTest extends \PHPUnit_Framework_TestCase
              );
 
         $jsonModel = $this->controller->extensionsAction();
-        $this->assertInstanceOf('Zend\View\Model\JsonModel', $jsonModel);
+        $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('success', $variables);
         $this->assertTrue($variables['success']);
@@ -148,7 +147,7 @@ class ExtensionGridTest extends \PHPUnit_Framework_TestCase
             );
 
         $jsonModel = $this->controller->syncAction();
-        $this->assertInstanceOf('Zend\View\Model\JsonModel', $jsonModel);
+        $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('success', $variables);
         $this->assertTrue($variables['success']);

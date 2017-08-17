@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,6 +18,7 @@ use Magento\Framework\Registry;
 
 /**
  * Adminhtml billing agreement related orders tab
+ * @api
  */
 class Orders extends ExtendedGrid implements TabInterface
 {
@@ -104,6 +105,7 @@ class Orders extends ExtendedGrid implements TabInterface
      * Get grid url
      *
      * @return string
+     * @since 100.1.0
      */
     public function getGridUrl()
     {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\PageCache\Test\Unit\Block;
@@ -8,7 +8,7 @@ namespace Magento\PageCache\Test\Unit\Block;
 /**
  * @covers \Magento\PageCache\Block\Javascript
  */
-class JavascriptTest extends \PHPUnit_Framework_TestCase
+class JavascriptTest extends \PHPUnit\Framework\TestCase
 {
     const COOKIE_NAME = 'private_content_version';
 
@@ -47,9 +47,7 @@ class JavascriptTest extends \PHPUnit_Framework_TestCase
         $this->contextMock = $this->getMockBuilder(\Magento\Framework\View\Element\Template\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->requestMock = $this->getMock(
-            \Magento\Framework\App\RequestInterface::class,
-            [
+        $this->requestMock = $this->createPartialMock(\Magento\Framework\App\RequestInterface::class, [
                 'getRouteName',
                 'getControllerName',
                 'getModuleName',
@@ -63,11 +61,7 @@ class JavascriptTest extends \PHPUnit_Framework_TestCase
                 'setActionName',
                 'setRequestUri',
                 'getCookie'
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
         $this->layoutMock = $this->getMockBuilder(\Magento\Framework\View\LayoutInterface::class)
             ->disableOriginalConstructor()
             ->getMock();

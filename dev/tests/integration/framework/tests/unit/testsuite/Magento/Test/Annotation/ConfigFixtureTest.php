@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@
  */
 namespace Magento\Test\Annotation;
 
-class ConfigFixtureTest extends \PHPUnit_Framework_TestCase
+class ConfigFixtureTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\TestFramework\Annotation\ConfigFixture|\PHPUnit_Framework_MockObject_MockObject
@@ -18,7 +18,7 @@ class ConfigFixtureTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_object = $this->getMock(
+        $this->_object = $this->createPartialMock(
             \Magento\TestFramework\Annotation\ConfigFixture::class,
             ['_getConfigValue', '_setConfigValue']
         );

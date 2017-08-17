@@ -2,7 +2,7 @@
 /**
  * Hhvm ini_get/ini_set compatibility test
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  *
  */
@@ -10,7 +10,7 @@ namespace Magento\Test\Integrity;
 
 use Magento\Framework\App\Utility\Files;
 
-class HhvmCompatibilityTest extends \PHPUnit_Framework_TestCase
+class HhvmCompatibilityTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var array
@@ -37,7 +37,14 @@ class HhvmCompatibilityTest extends \PHPUnit_Framework_TestCase
         'display_errors',
         'default_socket_timeout',
         'pcre.recursion_limit',
-        'default_charset'
+        'default_charset',
+
+        /*
+          There is not way to specify calculation/serialization precision in hhvm.
+          Adding to whitelist in order to align precisions in php.
+        */
+        'precision',
+        'serialize_precision',
     ];
 
     public function testAllowedIniGetSetDirectives()

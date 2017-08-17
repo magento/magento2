@@ -1,12 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Search\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
+/**
+ * @api
+ * @since 100.1.0
+ */
 class EngineResolver
 {
     /**
@@ -16,24 +20,28 @@ class EngineResolver
 
     /**
      * @var ScopeConfigInterface
+     * @since 100.1.0
      */
     protected $scopeConfig;
 
     /**
      * Path to catalog search engine
      * @var string
+     * @since 100.1.0
      */
     protected $path;
 
     /**
      * Scope type
      * @var string
+     * @since 100.1.0
      */
     protected $scopeType;
 
     /**
      * Scope code
      * @var null|string
+     * @since 100.1.0
      */
     protected $scopeCode;
 
@@ -42,6 +50,7 @@ class EngineResolver
      * @param string $path
      * @param string $scopeType
      * @param string $scopeCode
+     * @since 100.1.0
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
@@ -58,6 +67,7 @@ class EngineResolver
     /**
      * Current Search Engine
      * @return string
+     * @since 100.1.0
      */
     public function getCurrentSearchEngine()
     {

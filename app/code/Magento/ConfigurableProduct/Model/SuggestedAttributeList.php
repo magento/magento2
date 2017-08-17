@@ -2,11 +2,15 @@
 /**
  * List of suggested attributes
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Model;
 
+/**
+ * Class \Magento\ConfigurableProduct\Model\SuggestedAttributeList
+ *
+ */
 class SuggestedAttributeList
 {
     /**
@@ -20,6 +24,7 @@ class SuggestedAttributeList
      * @var \Magento\Catalog\Model\ResourceModel\Helper
      */
     protected $_resourceHelper;
+
     /**
      * @param ConfigurableAttributeHandler $configurableAttributeHandler
      * @param \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
@@ -31,6 +36,7 @@ class SuggestedAttributeList
         $this->configurableAttributeHandler = $configurableAttributeHandler;
         $this->_resourceHelper = $resourceHelper;
     }
+
     /**
      * Retrieve list of attributes with admin store label containing $labelPart
      *

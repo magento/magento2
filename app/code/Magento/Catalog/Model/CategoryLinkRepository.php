@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,10 @@ namespace Magento\Catalog\Model;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\CouldNotSaveException;
 
+/**
+ * Class \Magento\Catalog\Model\CategoryLinkRepository
+ *
+ */
 class CategoryLinkRepository implements \Magento\Catalog\Api\CategoryLinkRepositoryInterface
 {
     /**

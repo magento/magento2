@@ -2,7 +2,7 @@
 /**
  * High-level interface for email templates data that hides format from the client code
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Model\Template;
@@ -10,6 +10,10 @@ namespace Magento\Email\Model\Template;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\View\Design\Theme\ThemePackageList;
 
+/**
+ * Class \Magento\Email\Model\Template\Config
+ *
+ */
 class Config implements \Magento\Framework\Mail\Template\ConfigInterface
 {
     /**

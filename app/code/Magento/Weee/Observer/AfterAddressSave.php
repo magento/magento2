@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Weee\Observer;
@@ -13,6 +13,10 @@ use Magento\Framework\Module\Manager;
 use Magento\PageCache\Model\Config;
 use Magento\Weee\Helper\Data;
 
+/**
+ * Class \Magento\Weee\Observer\AfterAddressSave
+ *
+ */
 class AfterAddressSave implements ObserverInterface
 {
     /**
@@ -91,6 +95,7 @@ class AfterAddressSave implements ObserverInterface
             }
         }
     }
+
     /**
      * Check whether specified billing address is default for its customer
      *

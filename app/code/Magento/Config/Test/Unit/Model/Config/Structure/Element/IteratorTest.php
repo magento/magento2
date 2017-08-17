@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Model\Config\Structure\Element;
 
-class IteratorTest extends \PHPUnit_Framework_TestCase
+class IteratorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Config\Model\Config\Structure\Element\Iterator
@@ -20,13 +20,7 @@ class IteratorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $elementData = ['group1' => ['id' => 1], 'group2' => ['id' => 2], 'group3' => ['id' => 3]];
-        $this->_flyweightMock = $this->getMock(
-            \Magento\Config\Model\Config\Structure\Element\Group::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->_flyweightMock = $this->createMock(\Magento\Config\Model\Config\Structure\Element\Group::class);
 
         $this->_model = new \Magento\Config\Model\Config\Structure\Element\Iterator($this->_flyweightMock);
         $this->_model->setElements($elementData, 'scope');
@@ -69,13 +63,7 @@ class IteratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsLast($elementId, $result)
     {
-        $elementMock = $this->getMock(
-            \Magento\Config\Model\Config\Structure\Element\Field::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $elementMock = $this->createMock(\Magento\Config\Model\Config\Structure\Element\Field::class);
         $elementMock->expects($this->once())->method('getId')->will($this->returnValue($elementId));
         $this->assertEquals($result, $this->_model->isLast($elementMock));
     }

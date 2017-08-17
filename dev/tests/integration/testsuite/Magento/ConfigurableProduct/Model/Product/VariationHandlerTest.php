@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,7 +14,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * @magentoAppIsolation enabled
  * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
  */
-class VariationHandlerTest extends \PHPUnit_Framework_TestCase
+class VariationHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\ConfigurableProduct\Model\Product\VariationHandler */
     private $_model;

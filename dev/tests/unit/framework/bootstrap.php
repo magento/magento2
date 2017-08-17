@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,8 +21,8 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 /**
-* Set custom error handler
-*/
+ * Set custom error handler
+ */
 function setCustomErrorHandler()
 {
     set_error_handler(
@@ -48,11 +48,11 @@ function setCustomErrorHandler()
 
                 $errName = isset($errorNames[$errNo]) ? $errorNames[$errNo] : "";
 
-                throw new \PHPUnit_Framework_Exception(
+                throw new \PHPUnit\Framework\Exception(
                     sprintf("%s: %s in %s:%s.", $errName, $errStr, $errFile, $errLine),
                     $errNo
                 );
             }
         }
-   );
+    );
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -23,12 +23,12 @@ interface ProductCustomOptionRepositoryInterface
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
      * @param bool $requiredOnly
      * @return \Magento\Catalog\Api\Data\ProductCustomOptionInterface[]
+     * @since 101.0.0
      */
     public function getProductOptions(
         \Magento\Catalog\Api\Data\ProductInterface $product,
         $requiredOnly = false
     );
-
 
     /**
      * Get custom option for a specific product
@@ -53,6 +53,7 @@ interface ProductCustomOptionRepositoryInterface
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
      * @param \Magento\Catalog\Api\Data\ProductInterface $duplicate
      * @return mixed
+     * @since 101.0.0
      */
     public function duplicate(
         \Magento\Catalog\Api\Data\ProductInterface $product,

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\MediaStorage\Model\File\Storage\Database;
@@ -95,6 +95,7 @@ abstract class AbstractDatabase extends \Magento\Framework\Model\AbstractModel
      * Get resource instance
      *
      * @return \Magento\Framework\Model\ResourceModel\AbstractResource
+     * @deprecated because resource models should be used directly
      */
     protected function _getResource()
     {

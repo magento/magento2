@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Controller;
@@ -11,7 +11,7 @@ use Zend\View\Model\JsonModel;
 use Magento\Framework\Validator\Url as UrlValidator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class UrlCheckTest extends \PHPUnit_Framework_TestCase
+class UrlCheckTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param array $requestJson

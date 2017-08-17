@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Model\Link;
@@ -13,6 +13,8 @@ use Magento\Framework\DataObject\Copy;
 
 /**
  * Class Builder
+ * @api
+ * @since 100.1.0
  */
 class Builder
 {
@@ -53,6 +55,7 @@ class Builder
      * @param Copy $objectCopyService
      * @param DataObjectHelper $dataObjectHelper
      * @param LinkFactory $componentFactory
+     * @since 100.1.0
      */
     public function __construct(
         File $downloadableFile,
@@ -69,6 +72,7 @@ class Builder
     /**
      * @param array $data
      * @return $this
+     * @since 100.1.0
      */
     public function setData(array $data)
     {
@@ -80,6 +84,7 @@ class Builder
      * @param \Magento\Downloadable\Api\Data\LinkInterface $link
      * @return \Magento\Downloadable\Api\Data\LinkInterface
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 100.1.0
      */
     public function build(\Magento\Downloadable\Api\Data\LinkInterface $link)
     {

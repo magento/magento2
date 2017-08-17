@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Persistent\Observer;
@@ -9,6 +9,10 @@ use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
 
+/**
+ * Class \Magento\Persistent\Observer\RefreshCustomerData
+ *
+ */
 class RefreshCustomerData implements ObserverInterface
 {
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\View;
@@ -9,11 +9,14 @@ use Magento\Sales\Model\ResourceModel\Order\Item\Collection;
 
 /**
  * Adminhtml order items grid
+ *
+ * @api
  */
 class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
 {
     /**
      * @return array
+     * @since 100.1.0
      */
     public function getColumns()
     {

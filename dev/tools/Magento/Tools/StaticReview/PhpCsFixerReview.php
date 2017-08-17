@@ -25,7 +25,7 @@ class PhpCsFixerReview extends AbstractReview
     /**
      * @param array $options
      */
-    public function __construct($options = ['config-file' => '.php_cs'])
+    public function __construct($options = [])
     {
         $this->options = $options;
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Ui\Component\Listing\Column;
@@ -13,7 +13,7 @@ use Magento\Framework\View\Element\UiComponent\Processor;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Store\Model\ScopeInterface;
 
-class ConfirmationTest extends \PHPUnit_Framework_TestCase
+class ConfirmationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Confirmation
@@ -49,7 +49,7 @@ class ConfirmationTest extends \PHPUnit_Framework_TestCase
         $this->context = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\ContextInterface::class)
             ->getMockForAbstractClass();
 
-        $this->context->expects($this->once())
+        $this->context->expects($this->never())
             ->method('getProcessor')
             ->willReturn($this->processor);
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Observer;
@@ -8,6 +8,10 @@ namespace Magento\SalesRule\Observer;
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class \Magento\SalesRule\Observer\CatalogAttributeDeleteAfterObserver
+ *
+ */
 class CatalogAttributeDeleteAfterObserver implements ObserverInterface
 {
     /**

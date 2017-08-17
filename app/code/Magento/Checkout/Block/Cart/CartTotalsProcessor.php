@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Block\Cart;
@@ -8,6 +8,10 @@ namespace Magento\Checkout\Block\Cart;
 use Magento\Checkout\Model\Layout\AbstractTotalsProcessor;
 use Magento\Checkout\Block\Checkout\LayoutProcessorInterface;
 
+/**
+ * Class \Magento\Checkout\Block\Cart\CartTotalsProcessor
+ *
+ */
 class CartTotalsProcessor extends AbstractTotalsProcessor implements LayoutProcessorInterface
 {
     /**

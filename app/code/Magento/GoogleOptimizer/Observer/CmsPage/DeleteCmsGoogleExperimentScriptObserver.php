@@ -2,13 +2,17 @@
 /**
  * Google Experiment Cms Page Delete observer
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GoogleOptimizer\Observer\CmsPage;
 
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class \Magento\GoogleOptimizer\Observer\CmsPage\DeleteCmsGoogleExperimentScriptObserver
+ *
+ */
 class DeleteCmsGoogleExperimentScriptObserver implements ObserverInterface
 {
     /**

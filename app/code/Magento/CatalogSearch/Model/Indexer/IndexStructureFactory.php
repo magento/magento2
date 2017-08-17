@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Indexer;
@@ -10,12 +10,17 @@ use Magento\Framework\Indexer\IndexStructureInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * @api
+ * @since 100.1.0
+ */
 class IndexStructureFactory
 {
     /**
      * Object Manager instance
      *
      * @var ObjectManagerInterface
+     * @since 100.1.0
      */
     protected $objectManager = null;
 
@@ -23,6 +28,7 @@ class IndexStructureFactory
      * Instance name to create
      *
      * @var string
+     * @since 100.1.0
      */
     protected $structures = null;
 
@@ -45,6 +51,7 @@ class IndexStructureFactory
      * @param ScopeConfigInterface $scopeConfig
      * @param string $configPath
      * @param string[] $structures
+     * @since 100.1.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -63,6 +70,7 @@ class IndexStructureFactory
      *
      * @param array $data
      * @return IndexStructureInterface
+     * @since 100.1.0
      */
     public function create(array $data = [])
     {

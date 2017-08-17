@@ -1,23 +1,23 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Search\Test\Unit\Model\ResourceModel;
 
-class SynonymGroupTest extends \PHPUnit_Framework_TestCase
+class SynonymGroupTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetByScope()
     {
-        $context = $this->getMock(\Magento\Framework\Model\ResourceModel\Db\Context::class, [], [], '', false);
-        $resources = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
+        $context = $this->createMock(\Magento\Framework\Model\ResourceModel\Db\Context::class);
+        $resources = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
         $connection = $this->getMockForAbstractClass(
             \Magento\Framework\DB\Adapter\AdapterInterface::class,
             [],
             '',
             false
         );
-        $select = $this->getMock(\Magento\Framework\DB\Select::class, [], [], '', false);
+        $select = $this->createMock(\Magento\Framework\DB\Select::class);
 
         $connection->expects($this->exactly(2))->method('quoteIdentifier')->willReturn('quoted');
         $connection->expects($this->once())->method('select')->willReturn($select);

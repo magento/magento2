@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Search\Controller\Adminhtml\Term;
@@ -11,6 +11,10 @@ use Magento\Search\Model\QueryFactory;
 use Magento\Search\Controller\Adminhtml\Term as TermController;
 use Magento\Framework\Exception\LocalizedException;
 
+/**
+ * Class \Magento\Search\Controller\Adminhtml\Term\Save
+ *
+ */
 class Save extends TermController
 {
     /**

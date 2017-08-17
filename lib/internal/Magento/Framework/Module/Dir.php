@@ -2,7 +2,7 @@
 /**
  * Encapsulates directories structure of a Magento module
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Module;
@@ -11,6 +11,10 @@ use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\Filesystem;
 
+/**
+ * Class \Magento\Framework\Module\Dir
+ *
+ */
 class Dir
 {
     /**#@+
@@ -22,11 +26,7 @@ class Dir
     const MODULE_CONTROLLER_DIR = 'Controller';
     /**#@-*/
 
-    /**
-     * Module registry
-     *
-     * @var ComponentRegistrarInterface
-     */
+    /**#@-*/
     private $componentRegistrar;
 
     /**

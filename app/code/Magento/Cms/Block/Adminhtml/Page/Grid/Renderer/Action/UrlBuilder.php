@@ -1,12 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Block\Adminhtml\Page\Grid\Renderer\Action;
 
 use Magento\Store\Api\StoreResolverInterface;
 
+/**
+ * Class \Magento\Cms\Block\Adminhtml\Page\Grid\Renderer\Action\UrlBuilder
+ *
+ */
 class UrlBuilder
 {
     /**

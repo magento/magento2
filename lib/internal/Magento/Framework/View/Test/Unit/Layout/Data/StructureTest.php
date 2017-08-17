@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Layout\Data;
@@ -8,7 +8,7 @@ namespace Magento\Framework\View\Test\Unit\Layout\Data;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\App\State;
 
-class StructureTest extends \PHPUnit_Framework_TestCase
+class StructureTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -35,8 +35,8 @@ class StructureTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class);
-        $this->stateMock = $this->getMock(\Magento\Framework\App\State::class, [], [], '', false);
+        $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $this->stateMock = $this->createMock(\Magento\Framework\App\State::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->dataStructure = $this->objectManagerHelper->getObject(

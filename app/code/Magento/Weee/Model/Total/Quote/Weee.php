@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,6 +13,10 @@ use Magento\Quote\Model\Quote\Address\Total\AbstractTotal;
 use Magento\Store\Model\Store;
 use Magento\Tax\Model\Sales\Total\Quote\CommonTaxCollector;
 
+/**
+ * Class \Magento\Weee\Model\Total\Quote\Weee
+ *
+ */
 class Weee extends AbstractTotal
 {
     /**

@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\App\Test\Unit\Action;
 
-class AbstractActionTest extends \PHPUnit_Framework_TestCase
+class AbstractActionTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\App\Action\AbstractAction|\PHPUnit_Framework_MockObject_MockObject */
     protected $action;
@@ -30,7 +30,7 @@ class AbstractActionTest extends \PHPUnit_Framework_TestCase
     {
         $this->request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->disableOriginalConstructor()->getMock();
-        $this->response = $this->getMock(\Magento\Framework\App\ResponseInterface::class, [], [], '', false);
+        $this->response = $this->createMock(\Magento\Framework\App\ResponseInterface::class);
 
         $this->redirect = $this->getMockBuilder(\Magento\Framework\Controller\Result\Redirect::class)
             ->setMethods(['setRefererOrBaseUrl'])

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Test\Unit\Observer;
@@ -8,7 +8,7 @@ namespace Magento\Reports\Test\Unit\Observer;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CustomerLoginObserverTest extends \PHPUnit_Framework_TestCase
+class CustomerLoginObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Reports\Observer\CustomerLoginObserver

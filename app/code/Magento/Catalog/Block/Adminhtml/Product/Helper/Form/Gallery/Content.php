@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,6 +18,10 @@ use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\FileSystemException;
 
+/**
+ * Class \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery\Content
+ *
+ */
 class Content extends \Magento\Backend\Block\Widget
 {
     /**
@@ -242,7 +246,7 @@ class Content extends \Magento\Backend\Block\Widget
 
     /**
      * @return \Magento\Catalog\Helper\Image
-     * @deprecated
+     * @deprecated 101.0.3
      */
     private function getImageHelper()
     {

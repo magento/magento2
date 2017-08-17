@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Module\I18n\Parser;
 
-class AbstractParserTest extends \PHPUnit_Framework_TestCase
+class AbstractParserTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Setup\Module\I18n\Parser\AbstractParser|\PHPUnit_Framework_MockObject_MockObject
@@ -29,11 +29,11 @@ class AbstractParserTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateOptions($options, $message)
     {
-        $this->setExpectedException('InvalidArgumentException', $message);
+        $this->expectException('InvalidArgumentException', $message);
 
         $this->_parserMock->addAdapter(
             'php',
-            $this->getMock(\Magento\Setup\Module\I18n\Parser\AdapterInterface::class)
+            $this->createMock(\Magento\Setup\Module\I18n\Parser\AdapterInterface::class)
         );
         $this->_parserMock->parse($options);
     }

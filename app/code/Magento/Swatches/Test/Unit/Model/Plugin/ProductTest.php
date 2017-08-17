@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Swatches\Test\Unit\Model\Plugin;
@@ -8,7 +8,7 @@ namespace Magento\Swatches\Test\Unit\Model\Plugin;
 /**
  * Class Product for changing image roles list
  */
-class ProductTest extends \PHPUnit_Framework_TestCase
+class ProductTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider dataRoles
@@ -16,8 +16,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     public function testAfterGetMediaAttributes($productType, $hasKey)
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $productMock = $this->getMock(\Magento\Catalog\Model\Product::class, ['getTypeId'], [], '', false);
-        $roleMock = $this->getMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class, [], [], '', false);
+        $productMock = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['getTypeId']);
+        $roleMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class);
 
         $imageRolesArray = [
             'image' => $roleMock,

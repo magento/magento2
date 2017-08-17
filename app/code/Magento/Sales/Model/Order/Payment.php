@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,18 +10,18 @@ namespace Magento\Sales\Model\Order;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\Sales\Model\Order\Payment\Info;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Payment\Info;
 use Magento\Sales\Model\Order\Payment\Transaction;
 use Magento\Sales\Model\Order\Payment\Transaction\ManagerInterface;
+use Magento\Sales\Api\CreditmemoManagementInterface as CreditmemoManager;
 
 /**
  * Order payment information
  *
- * @method \Magento\Sales\Model\ResourceModel\Order\Payment _getResource()
- * @method \Magento\Sales\Model\ResourceModel\Order\Payment getResource()
+ * @api
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -112,6 +112,11 @@ class Payment extends Info implements OrderPaymentInterface
     private $orderStateResolver;
 
     /**
+     * @var CreditmemoManager
+     */
+    private $creditmemoManager = null;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -128,6 +133,7 @@ class Payment extends Info implements OrderPaymentInterface
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param CreditmemoManager $creditmemoManager
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -146,7 +152,8 @@ class Payment extends Info implements OrderPaymentInterface
         OrderRepositoryInterface $orderRepository,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        CreditmemoManager $creditmemoManager = null
     ) {
         $this->priceCurrency = $priceCurrency;
         $this->creditmemoFactory = $creditmemoFactory;
@@ -155,6 +162,7 @@ class Payment extends Info implements OrderPaymentInterface
         $this->transactionBuilder = $transactionBuilder;
         $this->orderPaymentProcessor = $paymentProcessor;
         $this->orderRepository = $orderRepository;
+        $this->creditmemoManager = $creditmemoManager ?: ObjectManager::getInstance()->get(CreditmemoManager::class);
         parent::__construct(
             $context,
             $registry,
@@ -255,6 +263,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns transaction parent
      *
      * @return string
+     * @since 100.1.0
      */
     public function setParentTransactionId($txnId)
     {
@@ -669,7 +678,7 @@ class Payment extends Info implements OrderPaymentInterface
                         throw $e;
                     }
                 }
-            } else if ($gateway->isOffline()) {
+            } elseif ($gateway->isOffline()) {
                 $gateway->setStore(
                     $this->getOrder()->getStoreId()
                 );
@@ -779,7 +788,8 @@ class Payment extends Info implements OrderPaymentInterface
         )->addComment(
             __('The credit memo has been created automatically.')
         );
-        $creditmemo->save();
+
+        $this->creditmemoManager->refund($creditmemo, false);
 
         $this->_updateTotals(
             ['amount_refunded' => $creditmemo->getGrandTotal(), 'base_amount_refunded_online' => $amount]
@@ -1042,10 +1052,18 @@ class Payment extends Info implements OrderPaymentInterface
     }
 
     /**
-     * Order payment either online
-     * Updates transactions hierarchy, if required
-     * Prevents transaction double processing
-     * Updates payment totals, updates order status and adds proper comments
+     * Triggers order payment command.
+     *
+     * This method can be used to support multi warehouse functionality
+     * and notifies payment provider about the fact that order has been created.
+     * 1. Updates order state and status to one of the following:
+     *  - processing, in case is_pending_payment flag is not set to a payment object
+     *  - payment_review, when is_pending_payment flag is set for payment object
+     *  - fraud, when is_fraud_detected flag is set to a payment object
+     * 2. Sets corresponding comment for order and payment objects depending on order state value.
+     * 3. Creates payment "order" transaction with corresponding comments
+     *
+     * For skipping 1,2,3 operations the skip_order_processing flag should be set in a payment object
      *
      * @param float $amount
      * @return $this
@@ -1152,6 +1170,8 @@ class Payment extends Info implements OrderPaymentInterface
         return $builder->build($type);
     }
 
+    /**
+     */
     public function addTransactionCommentsToOrder($transaction, $message)
     {
         $order = $this->getOrder();
@@ -1289,7 +1309,7 @@ class Payment extends Info implements OrderPaymentInterface
      */
     public function isCaptureFinal($amountToCapture)
     {
-        $total = $this->getOrder()->getTotalDue();
+        $total = $this->getOrder()->getBaseTotalDue();
         return $this->formatAmount($total, true) == $this->formatAmount($amountToCapture, true);
     }
 
@@ -1406,7 +1426,7 @@ class Payment extends Info implements OrderPaymentInterface
     }
 
     /**
-     * @deprecated
+     * @deprecated 100.2.0
      * @return OrderStateResolverInterface
      */
     private function getOrderStateResolver()
@@ -1419,6 +1439,7 @@ class Payment extends Info implements OrderPaymentInterface
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * Returns account_status
      *
@@ -1733,7 +1754,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns cc_ss_issue
      *
      * @return string
-     * @deprecated unused
+     * @deprecated 100.1.0 unused
      */
     public function getCcSsIssue()
     {
@@ -1744,7 +1765,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns cc_ss_start_month
      *
      * @return string
-     * @deprecated unused
+     * @deprecated 100.1.0 unused
      */
     public function getCcSsStartMonth()
     {
@@ -1755,7 +1776,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns cc_ss_start_year
      *
      * @return string
-     * @deprecated unused
+     * @deprecated 100.1.0 unused
      */
     public function getCcSsStartYear()
     {
@@ -2120,7 +2141,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
-     * @deprecated unused
+     * @deprecated 100.1.0 unused
      */
     public function setCcSsStartYear($ccSsStartYear)
     {
@@ -2209,7 +2230,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
-     * @deprecated unused
+     * @deprecated 100.1.0 unused
      */
     public function setCcSsStartMonth($ccSsStartMonth)
     {
@@ -2314,7 +2335,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
-     * @deprecated unused
+     * @deprecated 100.1.0 unused
      */
     public function setCcSsIssue($ccSsIssue)
     {

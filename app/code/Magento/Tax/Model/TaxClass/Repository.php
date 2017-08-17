@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -66,7 +66,9 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
      */
     protected $joinProcessor;
 
-    /** @var  CollectionProcessorInterface */
+    /**
+     * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
+     */
     private $collectionProcessor;
 
     /**
@@ -220,7 +222,7 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
      * @param FilterGroup $filterGroup
      * @param TaxClassCollection $collection
      * @return void
-     * @deprecated
+     * @deprecated 100.2.0
      */
     protected function addFilterGroupToCollection(FilterGroup $filterGroup, TaxClassCollection $collection)
     {
@@ -239,7 +241,7 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
     /**
      * Retrieve collection processor
      *
-     * @deprecated
+     * @deprecated 100.2.0
      * @return CollectionProcessorInterface
      */
     private function getCollectionProcessor()

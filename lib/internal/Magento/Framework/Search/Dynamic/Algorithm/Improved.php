@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Dynamic\Algorithm;
@@ -11,6 +11,10 @@ use Magento\Framework\Search\Dynamic\Algorithm;
 use Magento\Framework\Search\Dynamic\DataProviderInterface;
 use Magento\Framework\Search\Request\BucketInterface;
 
+/**
+ * Class \Magento\Framework\Search\Dynamic\Algorithm\Improved
+ *
+ */
 class Improved implements AlgorithmInterface
 {
     /**

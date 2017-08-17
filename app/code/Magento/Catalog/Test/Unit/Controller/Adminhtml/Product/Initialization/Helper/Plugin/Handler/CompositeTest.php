@@ -1,25 +1,21 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Handler;
 
-use \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Handler\Composite;
+use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Handler\Composite;
 
-class CompositeTest extends \PHPUnit_Framework_TestCase
+class CompositeTest extends \PHPUnit\Framework\TestCase
 {
     public function testHandle()
     {
-        $factoryMock = $this->getMock(
-            \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\HandlerFactory::class,
-            [],
-            [],
-            '',
-            false
+        $factoryMock = $this->createMock(
+            \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\HandlerFactory::class
         );
 
-        $constructorMock = $this->getMock(
+        $constructorMock = $this->createMock(
             \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\HandlerInterface::class
         );
 
@@ -33,7 +29,7 @@ class CompositeTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($constructorMock)
         );
 
-        $productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
 
         $constructorMock->expects($this->exactly(2))->method('handle')->with($productMock);
 

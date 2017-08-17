@@ -1,19 +1,25 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Test\Unit\Model\ResourceModel\Fulltext;
 
-use Magento\CatalogSearch\Test\Unit\Model\ResourceModel\BaseCollectionTest;
+use Magento\CatalogSearch\Test\Unit\Model\ResourceModel\BaseCollection;
 use Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CollectionTest extends BaseCollectionTest
+class CollectionTest extends BaseCollection
 {
+    /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    private $objectManager;
+
     /**
      * @var \Magento\Framework\Search\Adapter\Mysql\TemporaryStorage|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -64,22 +70,22 @@ class CollectionTest extends BaseCollectionTest
      */
     protected function setUp()
     {
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->storeManager = $this->getStoreManager();
         $this->universalFactory = $this->getUniversalFactory();
         $this->scopeConfig = $this->getScopeConfig();
         $this->criteriaBuilder = $this->getCriteriaBuilder();
         $this->filterBuilder = $this->getFilterBuilder();
 
-        $this->prepareObjectManager(
-            [
-                [
-                    \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation::class,
-                    $this->getMock(\Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation::class)
-                ],
-            ]
+        $productLimitationMock = $this->createMock(
+            \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation::class
         );
+        $productLimitationFactoryMock = $this->getMockBuilder(ProductLimitationFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $productLimitationFactoryMock->method('create')
+            ->willReturn($productLimitationMock);
 
         $this->temporaryStorage = $this->getMockBuilder(\Magento\Framework\Search\Adapter\Mysql\TemporaryStorage::class)
             ->disableOriginalConstructor()
@@ -92,13 +98,14 @@ class CollectionTest extends BaseCollectionTest
             ->method('create')
             ->willReturn($this->temporaryStorage);
 
-        $this->model = $helper->getObject(
+        $this->model = $this->objectManager->getObject(
             \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection::class,
             [
                 'storeManager' => $this->storeManager,
                 'universalFactory' => $this->universalFactory,
                 'scopeConfig' => $this->scopeConfig,
-                'temporaryStorageFactory' => $temporaryStorageFactory
+                'temporaryStorageFactory' => $temporaryStorageFactory,
+                'productLimitationFactory' => $productLimitationFactoryMock,
             ]
         );
 
@@ -110,6 +117,13 @@ class CollectionTest extends BaseCollectionTest
         $this->model->setFilterBuilder($this->filterBuilder);
     }
 
+    protected function tearDown()
+    {
+        $reflectionProperty = new \ReflectionProperty(\Magento\Framework\App\ObjectManager::class, '_instance');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue(null);
+    }
+
     /**
      * @expectedException \Exception
      * @expectedExceptionCode 333
@@ -117,7 +131,7 @@ class CollectionTest extends BaseCollectionTest
      */
     public function testGetFacetedDataWithException()
     {
-        $criteria = $this->getMock(\Magento\Framework\Api\Search\SearchCriteria::class, [], [], '', false);
+        $criteria = $this->createMock(\Magento\Framework\Api\Search\SearchCriteria::class);
         $this->criteriaBuilder->expects($this->once())->method('create')->willReturn($criteria);
         $criteria->expects($this->once())
             ->method('setRequestName')
@@ -128,7 +142,7 @@ class CollectionTest extends BaseCollectionTest
 
     public function testGetFacetedDataWithEmptyAggregations()
     {
-        $criteria = $this->getMock(\Magento\Framework\Api\Search\SearchCriteria::class, [], [], '', false);
+        $criteria = $this->createMock(\Magento\Framework\Api\Search\SearchCriteria::class);
         $this->criteriaBuilder->expects($this->once())->method('create')->willReturn($criteria);
         $criteria->expects($this->once())
             ->method('setRequestName')
@@ -188,7 +202,7 @@ class CollectionTest extends BaseCollectionTest
      */
     protected function getFilterBuilder()
     {
-        $filterBuilder = $this->getMock(\Magento\Framework\Api\FilterBuilder::class, [], [], '', false);
+        $filterBuilder = $this->createMock(\Magento\Framework\Api\FilterBuilder::class);
         return $filterBuilder;
     }
 
@@ -206,22 +220,6 @@ class CollectionTest extends BaseCollectionTest
                 ->willReturnSelf();
         }
         return $filterBuilder;
-    }
-
-    /**
-     * @param $map
-     */
-    private function prepareObjectManager($map)
-    {
-        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
-        $objectManagerMock->expects($this->any())->method('getInstance')->willReturnSelf();
-        $objectManagerMock->expects($this->any())
-            ->method('get')
-            ->will($this->returnValueMap($map));
-        $reflectionClass = new \ReflectionClass(\Magento\Framework\App\ObjectManager::class);
-        $reflectionProperty = $reflectionClass->getProperty('_instance');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($objectManagerMock);
     }
 
     protected function createFilter()

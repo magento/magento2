@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\Create\Items;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class GridTest extends \PHPUnit_Framework_TestCase
+class GridTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Block\Adminhtml\Order\Create\Items\Grid
@@ -59,7 +59,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $orderCreateMock = $this->getMock(\Magento\Sales\Model\AdminOrder\Create::class, ['__wakeup'], [], '', false);
+        $orderCreateMock = $this->createPartialMock(\Magento\Sales\Model\AdminOrder\Create::class, ['__wakeup']);
         $taxData = $this->getMockBuilder(\Magento\Tax\Helper\Data::class)->disableOriginalConstructor()->getMock();
         $this->priceCurrency = $this->getMockBuilder(
             \Magento\Framework\Pricing\PriceCurrencyInterface::class)->getMock(
@@ -100,21 +100,9 @@ class GridTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getStockItem', '__wakeup'])
             ->getMock();
 
-        $this->stockItemMock = $this->getMock(
-            \Magento\CatalogInventory\Model\Stock\Item::class,
-            ['getIsInStock', '__wakeup'],
-            [],
-            '',
-            false
-        );
+        $this->stockItemMock = $this->createPartialMock(\Magento\CatalogInventory\Model\Stock\Item::class, ['getIsInStock', '__wakeup']);
 
-        $this->stockState = $this->getMock(
-            \Magento\CatalogInventory\Model\StockState::class,
-            ['checkQuoteItemQty', '__wakeup'],
-            [],
-            '',
-            false
-        );
+        $this->stockState = $this->createPartialMock(\Magento\CatalogInventory\Model\StockState::class, ['checkQuoteItemQty', '__wakeup']);
 
         $this->stockRegistry->expects($this->any())
             ->method('getStockItem')
@@ -206,16 +194,13 @@ class GridTest extends \PHPUnit_Framework_TestCase
     {
         $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getTierPrice', '__wakeup'])
+            ->setMethods(['getTierPrice', '__wakeup', 'getStatus'])
             ->getMock();
         $product->expects($this->once())->method('getTierPrice')->will($this->returnValue($tierPrices));
-        $item = $this->getMock(
-            \Magento\Quote\Model\Quote\Item::class,
-            [],
-            ['getProduct', 'getProductType'],
-            '',
-            false
-        );
+        $item = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
+            ->setConstructorArgs(['getProduct', 'getProductType'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $item->expects($this->once())->method('getProduct')->will($this->returnValue($product));
 
         $calledTimes = $tierPrices ? 'once' : 'never';
@@ -230,25 +215,13 @@ class GridTest extends \PHPUnit_Framework_TestCase
     {
         $productId = 8;
         $itemQty = 23;
-        $layoutMock = $this->getMock(\Magento\Framework\View\LayoutInterface::class);
-        $blockMock = $this->getMock(\Magento\Framework\View\Element\AbstractBlock::class, ['getItems'], [], '', false);
+        $layoutMock = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
+        $blockMock = $this->createPartialMock(\Magento\Framework\View\Element\AbstractBlock::class, ['getItems']);
 
-        $itemMock = $this->getMock(
-            \Magento\Quote\Model\Quote\Item::class,
-            ['getProduct', 'setHasError', 'setQty', 'getQty', '__sleep', '__wakeup'],
-            [],
-            '',
-            false
-        );
-        $productMock = $this->getMock(
-            \Magento\Catalog\Model\Product::class,
-            ['getStockItem', 'getID', '__sleep', '__wakeup'],
-            [],
-            '',
-            false
-        );
+        $itemMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Item::class, ['getProduct', 'setHasError', 'setQty', 'getQty', '__sleep', '__wakeup', 'getChildren']);
+        $productMock = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['getStockItem', 'getID', '__sleep', '__wakeup', 'getStatus']);
 
-        $checkMock = $this->getMock(\Magento\Framework\DataObject::class, ['getMessage', 'getHasError'], [], '', false);
+        $checkMock = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getMessage', 'getHasError']);
 
         $layoutMock->expects($this->once())->method('getParentName')->will($this->returnValue('parentBlock'));
         $layoutMock->expects($this->once())->method('getBlock')->with('parentBlock')
@@ -375,20 +348,8 @@ class GridTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetSubtotalWithDiscount($orderData, $displayTotalsIncludeTax, $expected)
     {
-        $quoteAddressMock = $this->getMock(
-            \Magento\Quote\Model\Quote\Address::class,
-            ['getSubtotal', 'getTaxAmount','getDiscountTaxCompensationAmount','getDiscountAmount'],
-            [],
-            '',
-            false
-        );
-        $gridMock = $this->getMock(
-            \Magento\Sales\Block\Adminhtml\Order\Create\Items\Grid::class,
-            ['getQuoteAddress','displayTotalsIncludeTax'],
-            [],
-            '',
-            false
-        );
+        $quoteAddressMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Address::class, ['getSubtotal', 'getTaxAmount','getDiscountTaxCompensationAmount','getDiscountAmount']);
+        $gridMock = $this->createPartialMock(\Magento\Sales\Block\Adminhtml\Order\Create\Items\Grid::class, ['getQuoteAddress','displayTotalsIncludeTax']);
 
         $gridMock->expects($this->any())->method('getQuoteAddress')
             ->will($this->returnValue($quoteAddressMock));
@@ -442,5 +403,4 @@ class GridTest extends \PHPUnit_Framework_TestCase
         ];
         return $result;
     }
-
 }

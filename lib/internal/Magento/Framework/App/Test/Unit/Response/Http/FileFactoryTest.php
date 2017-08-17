@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit\Response\Http;
 
-class FileFactoryTest extends \PHPUnit_Framework_TestCase
+class FileFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -30,13 +30,8 @@ class FileFactoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->fileSystemMock = $this->getMock(
-            \Magento\Framework\Filesystem::class,
-            ['getDirectoryWrite'],
-            [],
-            '',
-            false
-        );
+        $this->fileSystemMock =
+            $this->createPartialMock(\Magento\Framework\Filesystem::class, ['getDirectoryWrite', 'isFile']);
         $this->dirMock = $this->getMockBuilder(
             \Magento\Framework\Filesystem\Directory\Write::class
         )->disableOriginalConstructor()->getMock();
@@ -56,12 +51,9 @@ class FileFactoryTest extends \PHPUnit_Framework_TestCase
         )->withAnyParameters()->will(
             $this->returnValue(0)
         );
-        $this->responseMock = $this->getMock(
+        $this->responseMock = $this->createPartialMock(
             \Magento\Framework\App\Response\Http::class,
-            ['setHeader', 'sendHeaders', 'setHttpResponseCode', 'clearBody', 'setBody', '__wakeup'],
-            [],
-            '',
-            false
+            ['setHeader', 'sendHeaders', 'setHttpResponseCode', 'clearBody', 'setBody', '__wakeup']
         );
     }
 
@@ -238,18 +230,19 @@ class FileFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * Get model mock
      *
-     * @return \Magento\Framework\App\Response\Http\FileFactory | \PHPUnit_Framework_MockObject_MockBuilder
+     * @return \Magento\Framework\App\Response\Http\FileFactory | \PHPUnit\Framework_MockObject_MockBuilder
      */
     private function getModelMock()
     {
-        $modelMock = $this->getMock(
-            \Magento\Framework\App\Response\Http\FileFactory::class,
-            ['callExit'],
-            [
-                'response' => $this->responseMock,
-                'filesystem' => $this->fileSystemMock,
-            ]
-        );
+        $modelMock = $this->getMockBuilder(\Magento\Framework\App\Response\Http\FileFactory::class)
+            ->setMethods(['callExit'])
+            ->setConstructorArgs(
+                [
+                    'response' => $this->responseMock,
+                    'filesystem' => $this->fileSystemMock,
+                ]
+            )
+            ->getMock();
         return $modelMock;
     }
 }

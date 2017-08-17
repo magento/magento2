@@ -1,10 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Indexer\Category\Product\Plugin;
 
+/**
+ * Class \Magento\Catalog\Model\Indexer\Category\Product\Plugin\StoreView
+ *
+ */
 class StoreView extends StoreGroup
 {
     /**

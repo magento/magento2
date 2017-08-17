@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Items;
@@ -14,6 +14,7 @@ use Magento\Quote\Model\Quote\Item;
 
 /**
  * Adminhtml sales order create items grid block
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
@@ -425,6 +426,8 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      *
      * @param Item $item
      * @return string
+     *
+     * @deprecated 100.2.0
      */
     public function getCustomOptions(Item $item)
     {

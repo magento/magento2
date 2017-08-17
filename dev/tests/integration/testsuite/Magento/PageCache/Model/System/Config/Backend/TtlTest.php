@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\PageCache\Model\System\Config\Backend;
 
-class TtlTest extends \PHPUnit_Framework_TestCase
+class TtlTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\PageCache\Model\System\Config\Backend\Ttl
@@ -52,7 +52,7 @@ class TtlTest extends \PHPUnit_Framework_TestCase
      */
     public function testBeforeSaveWithException($value, $path)
     {
-        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         $this->_prepareData($value, $path);
     }
 

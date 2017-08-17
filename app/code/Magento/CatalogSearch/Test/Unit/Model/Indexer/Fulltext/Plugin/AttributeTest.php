@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Test\Unit\Model\Indexer\Fulltext\Plugin;
@@ -8,7 +8,7 @@ namespace Magento\CatalogSearch\Test\Unit\Model\Indexer\Fulltext\Plugin;
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Attribute;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class AttributeTest extends \PHPUnit_Framework_TestCase
+class AttributeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Indexer\IndexerInterface
@@ -48,7 +48,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
-        $this->subjectMock = $this->getMock(\Magento\Catalog\Model\ResourceModel\Attribute::class, [], [], '', false);
+        $this->subjectMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Attribute::class);
         $this->indexerMock = $this->getMockForAbstractClass(
             \Magento\Framework\Indexer\IndexerInterface::class,
             [],
@@ -58,19 +58,13 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             true,
             ['getId', 'getState', '__wakeup']
         );
-        $this->indexerRegistryMock = $this->getMock(
+        $this->indexerRegistryMock = $this->createPartialMock(
             \Magento\Framework\Indexer\IndexerRegistry::class,
-            ['get'],
-            [],
-            '',
-            false
+            ['get']
         );
-        $this->attributeMock = $this->getMock(
+        $this->attributeMock = $this->createPartialMock(
             \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
-            ['dataHasChangedFor', 'isObjectNew', 'getIsSearchable'],
-            [],
-            '',
-            false
+            ['dataHasChangedFor', 'isObjectNew', 'getIsSearchable']
         );
         $this->config =  $this->getMockBuilder(\Magento\Framework\Search\Request\Config::class)
             ->disableOriginalConstructor()

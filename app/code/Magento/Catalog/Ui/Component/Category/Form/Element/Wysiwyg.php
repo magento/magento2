@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\Component\Category\Form\Element;
@@ -16,16 +16,21 @@ use Magento\Framework\View\LayoutInterface;
 
 /**
  * Catalog Wysiwyg
+ *
+ * @api
+ * @since 101.0.0
  */
 class Wysiwyg extends \Magento\Ui\Component\Form\Element\Wysiwyg
 {
     /**
      * @var DataHelper
+     * @since 101.0.0
      */
     protected $backendHelper;
 
     /**
      * @var LayoutInterface
+     * @since 101.0.0
      */
     protected $layout;
 
@@ -41,6 +46,7 @@ class Wysiwyg extends \Magento\Ui\Component\Form\Element\Wysiwyg
      * @param array $config
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @since 101.0.0
      */
     public function __construct(
         ContextInterface $context,

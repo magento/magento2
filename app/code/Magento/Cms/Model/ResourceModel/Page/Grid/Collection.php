@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Model\ResourceModel\Page\Grid;
@@ -28,7 +28,7 @@ class Collection extends PageCollection implements SearchResultInterface
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param mixed|null $mainTable
-     * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $eventPrefix
+     * @param string $eventPrefix
      * @param mixed $eventObject
      * @param mixed $resourceModel
      * @param string $model

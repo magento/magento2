@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Product\Validator;
 
-class PluginTest extends \PHPUnit_Framework_TestCase
+class PluginTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\ConfigurableProduct\Model\Product\Validator\Plugin
@@ -59,46 +59,25 @@ class PluginTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->eventManagerMock = $this->getMock(\Magento\Framework\Event\Manager::class, [], [], '', false);
-        $this->productFactoryMock = $this->getMock(
-            \Magento\Catalog\Model\ProductFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $this->jsonHelperMock = $this->getMock(
-            \Magento\Framework\Json\Helper\Data::class,
-            ['jsonDecode'],
-            [],
-            '',
-            false
-        );
+        $this->eventManagerMock = $this->createMock(\Magento\Framework\Event\Manager::class);
+        $this->productFactoryMock = $this->createPartialMock(\Magento\Catalog\Model\ProductFactory::class, ['create']);
+        $this->jsonHelperMock = $this->createPartialMock(\Magento\Framework\Json\Helper\Data::class, ['jsonDecode']);
         $this->jsonHelperMock->expects($this->any())->method('jsonDecode')->will($this->returnArgument(0));
-        $this->productMock = $this->getMock(
+        $this->productMock = $this->createPartialMock(
             \Magento\Catalog\Model\Product::class,
-            ['getData', 'getAttributes', 'setTypeId'],
-            [],
-            '',
-            false
+            ['getData', 'getAttributes', 'setTypeId']
         );
-        $this->requestMock = $this->getMock(
+        $this->requestMock = $this->createPartialMock(
             \Magento\Framework\App\Request\Http::class,
-            ['getPost', 'getParam', '__wakeup', 'has'],
-            [],
-            '',
-            false
+            ['getPost', 'getParam', '__wakeup', 'has']
         );
-        $this->responseMock = $this->getMock(
+        $this->responseMock = $this->createPartialMock(
             \Magento\Framework\DataObject::class,
-            ['setError', 'setMessage', 'setAttributes'],
-            [],
-            '',
-            false
+            ['setError', 'setMessage', 'setAttributes']
         );
         $this->arguments = [$this->productMock, $this->requestMock, $this->responseMock];
 
-        $this->subjectMock = $this->getMock(\Magento\Catalog\Model\Product\Validator::class, [], [], '', false);
+        $this->subjectMock = $this->createMock(\Magento\Catalog\Model\Product\Validator::class);
         $this->plugin = new \Magento\ConfigurableProduct\Model\Product\Validator\Plugin(
             $this->eventManagerMock,
             $this->productFactoryMock,
@@ -123,11 +102,10 @@ class PluginTest extends \PHPUnit_Framework_TestCase
     {
         $matrix = ['products'];
 
-        $plugin = $this->getMock(
-            \Magento\ConfigurableProduct\Model\Product\Validator\Plugin::class,
-            ['_validateProductVariations'],
-            [$this->eventManagerMock, $this->productFactoryMock, $this->jsonHelperMock]
-        );
+        $plugin = $this->getMockBuilder(\Magento\ConfigurableProduct\Model\Product\Validator\Plugin::class)
+            ->setMethods(['_validateProductVariations'])
+            ->setConstructorArgs([$this->eventManagerMock, $this->productFactoryMock, $this->jsonHelperMock])
+            ->getMock();
 
         $plugin->expects(
             $this->once()
@@ -169,11 +147,10 @@ class PluginTest extends \PHPUnit_Framework_TestCase
     {
         $matrix = ['products'];
 
-        $plugin = $this->getMock(
-            \Magento\ConfigurableProduct\Model\Product\Validator\Plugin::class,
-            ['_validateProductVariations'],
-            [$this->eventManagerMock, $this->productFactoryMock, $this->jsonHelperMock]
-        );
+        $plugin = $this->getMockBuilder(\Magento\ConfigurableProduct\Model\Product\Validator\Plugin::class)
+            ->setMethods(['_validateProductVariations'])
+            ->setConstructorArgs([$this->eventManagerMock, $this->productFactoryMock, $this->jsonHelperMock])
+            ->getMock();
 
         $plugin->expects(
             $this->once()
@@ -341,12 +318,9 @@ class PluginTest extends \PHPUnit_Framework_TestCase
      */
     private function createProduct($index, $id, $isValid = true)
     {
-        $productMock = $this->getMock(
+        $productMock = $this->createPartialMock(
             \Magento\Catalog\Model\Product::class,
-            ['getAttributes', 'addData', 'setAttributeSetId', 'validate'],
-            [],
-            '',
-            false
+            ['getAttributes', 'addData', 'setAttributeSetId', 'validate']
         );
         $this->productFactoryMock->expects($this->at($index))
             ->method('create')

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,7 +16,7 @@ use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorI
 /**
  * Import model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  *
  * @method string getBehavior() getBehavior()
  * @method \Magento\ImportExport\Model\Import setEntity() setEntity(string $value)
@@ -103,11 +103,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
 
     /**#@-*/
 
-    /**
-     * Entity adapter.
-     *
-     * @var \Magento\ImportExport\Model\Import\Entity\AbstractEntity
-     */
+    /**#@-*/
     protected $_entityAdapter;
 
     /**
@@ -221,7 +217,6 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      */
     protected function _getEntityAdapter()
     {
-
         if (!$this->_entityAdapter) {
             $entities = $this->_importConfig->getEntities();
             if (isset($entities[$this->getEntity()])) {
@@ -433,34 +428,16 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
             $this->importHistoryModel->invalidateReport($this);
         }
 
-
         return $result;
     }
 
     /**
      * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function processImport()
     {
-        $errorAggregator = $this->_getEntityAdapter()->getErrorAggregator();
-        $errorAggregator->initValidationStrategy(
-            $this->getData(self::FIELD_NAME_VALIDATION_STRATEGY),
-            $this->getData(self::FIELD_NAME_ALLOWED_ERROR_COUNT)
-        );
-        try {
-            $this->_getEntityAdapter()->importData();
-        } catch (\Exception $e) {
-            $errorAggregator->addError(
-                \Magento\ImportExport\Model\Import\Entity\AbstractEntity::ERROR_CODE_SYSTEM_EXCEPTION,
-                ProcessingError::ERROR_LEVEL_CRITICAL,
-                null,
-                null,
-                null,
-                $e->getMessage()
-            );
-        }
-
-        return !$errorAggregator->hasToBeTerminated();
+        return $this->_getEntityAdapter()->importData();
     }
 
     /**
@@ -562,7 +539,10 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     }
 
     /**
-     * Validates source file and returns validation result.
+     * Validates source file and returns validation result
+     *
+     * Before validate data the method requires to initialize error aggregator (ProcessingErrorAggregatorInterface)
+     * with 'validation strategy' and 'allowed error count' values to allow using this parameters in validation process.
      *
      * @param \Magento\ImportExport\Model\Import\AbstractSource $source
      * @return bool
@@ -570,11 +550,17 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     public function validateSource(\Magento\ImportExport\Model\Import\AbstractSource $source)
     {
         $this->addLogComment(__('Begin data validation'));
+
+        $errorAggregator = $this->getErrorAggregator();
+        $errorAggregator->initValidationStrategy(
+            $this->getData(self::FIELD_NAME_VALIDATION_STRATEGY),
+            $this->getData(self::FIELD_NAME_ALLOWED_ERROR_COUNT)
+        );
+
         try {
             $adapter = $this->_getEntityAdapter()->setSource($source);
-            $errorAggregator = $adapter->validateData();
+            $adapter->validateData();
         } catch (\Exception $e) {
-            $errorAggregator = $this->getErrorAggregator();
             $errorAggregator->addError(
                 \Magento\ImportExport\Model\Import\Entity\AbstractEntity::ERROR_CODE_SYSTEM_EXCEPTION,
                 ProcessingError::ERROR_LEVEL_CRITICAL,
@@ -748,7 +734,6 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
         }
         return $this;
     }
-
 
     /**
      * Get count of created items

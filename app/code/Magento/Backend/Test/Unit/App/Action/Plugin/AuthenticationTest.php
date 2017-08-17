@@ -1,17 +1,17 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Test\Unit\App\Action\Plugin;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Backend\App\Action\Plugin\Authentication;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Class AuthenticationTest
  */
-class AuthenticationTest extends \PHPUnit_Framework_TestCase
+class AuthenticationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Model\Auth | \PHPUnit_Framework_MockObject_MockObject
@@ -25,12 +25,9 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->auth = $this->getMock(
+        $this->auth = $this->createPartialMock(
             \Magento\Backend\Model\Auth::class,
-            ['getUser', 'isLoggedIn', 'getAuthStorage'],
-            [],
-            '',
-            false
+            ['getUser', 'isLoggedIn', 'getAuthStorage']
         );
         $objectManager = new ObjectManager($this);
         $this->plugin = $objectManager->getObject(
@@ -47,10 +44,10 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
 
     public function testAroundDispatchProlongStorage()
     {
-        $subject = $this->getMock(\Magento\Backend\Controller\Adminhtml\Index::class, [], [], '', false);
-        $request = $this->getMock(\Magento\Framework\App\Request\Http::class, ['getActionName'], [], '', false);
-        $user = $this->getMock(\Magento\User\Model\User::class, ['reload', '__wakeup'], [], '', false);
-        $storage = $this->getMock(\Magento\Backend\Model\Auth\Session::class, ['prolong', 'refreshAcl'], [], '', false);
+        $subject = $this->createMock(\Magento\Backend\Controller\Adminhtml\Index::class);
+        $request = $this->createPartialMock(\Magento\Framework\App\Request\Http::class, ['getActionName']);
+        $user = $this->createPartialMock(\Magento\User\Model\User::class, ['reload', '__wakeup']);
+        $storage = $this->createPartialMock(\Magento\Backend\Model\Auth\Session::class, ['prolong', 'refreshAcl']);
 
         $expectedResult = 'expectedResult';
         $action = 'index';
@@ -120,7 +117,7 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
             if ($isIFrameParam) {
                 $getParamCalls = 1;
                 $actionName = 'deniedIframe';
-            } else if ($isAjaxParam) {
+            } elseif ($isAjaxParam) {
                 $getParamCalls = 2;
                 $actionName = 'deniedJson';
             } else {

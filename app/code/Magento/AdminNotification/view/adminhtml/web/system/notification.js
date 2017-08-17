@@ -1,6 +1,10 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ */
+
+/**
+ * @api
  */
 define([
     'jquery',
@@ -15,20 +19,22 @@ define([
             modalClass: 'modal-system-messages',
             systemMessageTemplate:
                 '<% _.each(data.items, function(item) { %>' +
-                    '<li class="message message-warning <% if (item.severity == 1) { %>error<% } else { %>warning<% } %>">' +
+                    '<li class="message message-warning' +
+                        '<% if (item.severity == 1) { %>error<% } else { %>warning<% } %>">' +
                         '<%= item.text %>' +
                     '</li>' +
                 '<% }); %>'
         },
 
-        _create: function() {
+        /** @inheritdoc */
+        _create: function () {
             this.options.title = $('#message-system-all').attr('title');
             this._super();
         },
 
+        /** @inheritdoc */
         openModal: function (severity) {
             var superMethod = $.proxy(this._super, this);
-            //this.modal.options
 
             $.ajax({
                 url: this.options.ajaxUrl,
@@ -56,6 +62,8 @@ define([
 
             return this;
         },
+
+        /** @inheritdoc */
         closeModal: function () {
             this._super();
         }

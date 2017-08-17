@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Msrp\Model;
@@ -8,6 +8,10 @@ namespace Magento\Msrp\Model;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory;
 
+/**
+ * Class \Magento\Msrp\Model\Msrp
+ *
+ */
 class Msrp
 {
     /**

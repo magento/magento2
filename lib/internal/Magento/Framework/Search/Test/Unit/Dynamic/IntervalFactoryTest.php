@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Test\Unit\Dynamic;
@@ -10,7 +10,7 @@ use Magento\Framework\Search\Dynamic\IntervalInterface;
 use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class IntervalFactoryTest extends \PHPUnit_Framework_TestCase
+class IntervalFactoryTest extends \PHPUnit\Framework\TestCase
 {
     const CONFIG_PATH = 'config_path';
     const INTERVAL = 'some_interval';

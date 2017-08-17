@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Stdlib\Cookie;
@@ -21,11 +21,7 @@ class CookieMetadata
     const KEY_DURATION = 'duration';
     /**#@-*/
 
-    /**
-     * Store the metadata in array format to distinguish between null values and no value set.
-     *
-     * @var array
-     */
+    /**#@-*/
     private $metadata;
 
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Authorizenet\Controller\Directpost;
@@ -73,7 +73,8 @@ abstract class Payment extends \Magento\Framework\App\Action\Action
         $helper = $this->dataFactory->create($area);
 
         $params = [];
-        $data = $this->getRequest()->getPostValue();
+        $data = $this->getRequest()->getParams();
+
         /* @var $paymentMethod \Magento\Authorizenet\Model\DirectPost */
         $paymentMethod = $this->_objectManager->create(\Magento\Authorizenet\Model\Directpost::class);
 
@@ -110,9 +111,8 @@ abstract class Payment extends \Magento\Framework\App\Action\Action
             $params['redirect'] = $helper->getRedirectIframeUrl($result);
         }
 
+        //registering parameter for iframe content
         $this->_coreRegistry->register(Iframe::REGISTRY_KEY, $params);
-        $this->_view->addPageLayoutHandles();
-        $this->_view->loadLayout(false)->renderLayout();
     }
 
     /**

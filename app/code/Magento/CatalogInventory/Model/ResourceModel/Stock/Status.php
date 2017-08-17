@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Model\ResourceModel\Stock;
 
 use Magento\CatalogInventory\Model\Stock;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * CatalogInventory Stock Status per website Resource Model
@@ -18,7 +19,7 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Store model manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @deprecated
+     * @deprecated 100.1.0
      */
     protected $_storeManager;
 
@@ -338,7 +339,7 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * @return StockConfigurationInterface
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getStockConfiguration()
     {

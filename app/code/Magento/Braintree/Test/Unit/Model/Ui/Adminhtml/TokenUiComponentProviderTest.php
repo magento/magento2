@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Test\Unit\Model\Ui\Adminhtml;
@@ -15,7 +15,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 /**
  * Class TokenUiComponentProviderTest
  */
-class TokenUiComponentProviderTest extends \PHPUnit_Framework_TestCase
+class TokenUiComponentProviderTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
@@ -40,7 +40,7 @@ class TokenUiComponentProviderTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $this->urlBuilder = $this->getMock(UrlInterface::class);
+        $this->urlBuilder = $this->createMock(UrlInterface::class);
 
         $this->tokenUiComponentProvider = new TokenUiComponentProvider(
             $this->componentFactory,
@@ -69,7 +69,7 @@ class TokenUiComponentProviderTest extends \PHPUnit_Framework_TestCase
             'template' => 'vault.phtml'
         ];
 
-        $paymentToken = $this->getMock(PaymentTokenInterface::class);
+        $paymentToken = $this->createMock(PaymentTokenInterface::class);
         $paymentToken->expects(static::once())
             ->method('getTokenDetails')
             ->willReturn('{"type":"VI","maskedCC":"1111","expirationDate":"12\/2015"}');
@@ -81,7 +81,7 @@ class TokenUiComponentProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getUrl')
             ->willReturn($nonceUrl);
 
-        $tokenComponent = $this->getMock(TokenUiComponentInterface::class);
+        $tokenComponent = $this->createMock(TokenUiComponentInterface::class);
         $tokenComponent->expects(static::once())
             ->method('getConfig')
             ->willReturn($expected);

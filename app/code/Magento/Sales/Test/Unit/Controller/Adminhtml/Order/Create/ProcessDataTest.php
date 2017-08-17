@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order\Create;
 
-use \Magento\Sales\Controller\Adminhtml\Order\Create\ProcessData;
-
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+
+use Magento\Sales\Controller\Adminhtml\Order\Create\ProcessData;
 
 /**
  * Class ProcessDataTest
@@ -16,7 +16,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ProcessDataTest extends \PHPUnit_Framework_TestCase
+class ProcessDataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ProcessData
@@ -66,7 +66,7 @@ class ProcessDataTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
-        $context = $this->getMock(\Magento\Backend\App\Action\Context::class, [], [], '', false);
+        $context = $this->createMock(\Magento\Backend\App\Action\Context::class);
 
         $this->request = $this->getMockForAbstractClass(
             \Magento\Framework\App\RequestInterface::class,
@@ -102,18 +102,18 @@ class ProcessDataTest extends \PHPUnit_Framework_TestCase
         $context->expects($this->any())->method('getResponse')->willReturn($response);
         $context->expects($this->any())->method('getRequest')->willReturn($this->request);
 
-        $this->messageManager = $this->getMock(\Magento\Framework\Message\ManagerInterface::class, [], [], '', false);
+        $this->messageManager = $this->createMock(\Magento\Framework\Message\ManagerInterface::class);
         $context->expects($this->any())->method('getMessageManager')->willReturn($this->messageManager);
 
-        $this->eventManager = $this->getMock(\Magento\Framework\Event\ManagerInterface::class, [], [], '', false);
+        $this->eventManager = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
         $context->expects($this->any())->method('getEventManager')->willReturn($this->eventManager);
 
-        $this->objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $context->expects($this->any())->method('getObjectManager')->willReturn($this->objectManager);
 
-        $this->session = $this->getMock(\Magento\Backend\Model\Session\Quote::class, [], [], '', false);
+        $this->session = $this->createMock(\Magento\Backend\Model\Session\Quote::class);
         $context->expects($this->any())->method('getSession')->willReturn($this->session);
-        $this->escaper = $this->getMock(\Magento\Framework\Escaper::class, ['escapeHtml'], [], '', false);
+        $this->escaper = $this->createPartialMock(\Magento\Framework\Escaper::class, ['escapeHtml']);
 
         $this->resultForward = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Forward::class)
             ->disableOriginalConstructor()
@@ -146,14 +146,11 @@ class ProcessDataTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecute($noDiscount, $couponCode, $errorMessage, $actualCouponCode)
     {
-        $quote = $this->getMock(
+        $quote = $this->createPartialMock(
             \Magento\Quote\Model\Quote::class,
-            ['getCouponCode', 'isVirtual', 'getAllItems'],
-            [],
-            '',
-            false
+            ['getCouponCode', 'isVirtual', 'getAllItems']
         );
-        $create = $this->getMock(\Magento\Sales\Model\AdminOrder\Create::class, [], [], '', false);
+        $create = $this->createMock(\Magento\Sales\Model\AdminOrder\Create::class);
 
         $paramReturnMap = [
             ['customer_id', null, null],
@@ -198,7 +195,7 @@ class ProcessDataTest extends \PHPUnit_Framework_TestCase
         $create->expects($this->once())->method('initRuleData')->willReturnSelf();
         $create->expects($this->any())->method('getQuote')->willReturn($quote);
 
-        $address = $this->getMock(\Magento\Quote\Model\Quote\Address::class, [], [], '', false);
+        $address = $this->createMock(\Magento\Quote\Model\Quote\Address::class);
         $create->expects($this->once())->method('getBillingAddress')->willReturn($address);
 
         $quote->expects($this->any())->method('isVirtual')->willReturn(true);

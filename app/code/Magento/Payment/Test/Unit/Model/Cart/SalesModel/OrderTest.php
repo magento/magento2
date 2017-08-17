@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Test\Unit\Model\Cart\SalesModel;
 
-class OrderTest extends \PHPUnit_Framework_TestCase
+class OrderTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Payment\Model\Cart\SalesModel\Order */
     protected $_model;
@@ -15,7 +15,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_orderMock = $this->getMock(\Magento\Sales\Model\Order::class, [], [], '', false);
+        $this->_orderMock = $this->createMock(\Magento\Sales\Model\Order::class);
         $this->_model = new \Magento\Payment\Model\Cart\SalesModel\Order($this->_orderMock);
     }
 

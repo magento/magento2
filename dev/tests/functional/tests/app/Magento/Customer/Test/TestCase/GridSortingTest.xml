@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Ui\Test\TestCase\GridSortingTest" summary="Grid UI Component Sorting" ticketId="MAGETWO-41328">
         <variation name="CustomerGridSorting">
+            <data name="tag" xsi:type="string">severity:S2</data>
             <data name="tag" xsi:type="string">stable:no</data>
             <data name="description" xsi:type="string">Verify customer page grid sorting</data>
             <data name="columnsForSorting" xsi:type="array">

@@ -2,7 +2,7 @@
 /**
  * test Magento\Customer\Model\Metadata\Form\AbstractData
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model\Metadata\Form;
@@ -10,7 +10,7 @@ namespace Magento\Customer\Test\Unit\Model\Metadata\Form;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AbstractDataTest extends \PHPUnit_Framework_TestCase
+class AbstractDataTest extends \PHPUnit\Framework\TestCase
 {
     const MODEL = 'MODEL';
 
@@ -47,7 +47,7 @@ class AbstractDataTest extends \PHPUnit_Framework_TestCase
             \Magento\Framework\Locale\ResolverInterface::class
         )->disableOriginalConstructor()->getMock();
         $this->_loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)->getMock();
-        $this->_attributeMock = $this->getMock(\Magento\Customer\Api\Data\AttributeMetadataInterface::class);
+        $this->_attributeMock = $this->createMock(\Magento\Customer\Api\Data\AttributeMetadataInterface::class);
         $this->_value = 'VALUE';
         $this->_entityTypeCode = 'ENTITY_TYPE_CODE';
         $this->_isAjax = false;
@@ -343,8 +343,10 @@ class AbstractDataTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue(['ATTR_CODE' => $expectedValue])
         );
-        $requestMockTwo->expects(
-            $this->at(1)
+
+        $requestMockFour = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)->getMock();
+        $requestMockFour->expects(
+            $this->at(0)
         )->method(
             'getParam'
         )->with(
@@ -366,8 +368,8 @@ class AbstractDataTest extends \PHPUnit_Framework_TestCase
         return [
             [$requestMockOne, 'ATTR_CODE', false, false, $expectedValue],
             [$requestMockTwo, 'ATTR_CODE', 'REQUEST_SCOPE', false, $expectedValue],
-            [$requestMockTwo, 'ATTR_CODE', 'REQUEST_SCOPE', false, false],
-            [$requestMockThree, 'ATTR_CODE', 'REQUEST/SCOPE', false, $expectedValue]
+            [$requestMockThree, 'ATTR_CODE', 'REQUEST/SCOPE', false, $expectedValue],
+            [$requestMockFour, 'ATTR_CODE', 'REQUEST_SCOPE', false, false],
         ];
     }
 }

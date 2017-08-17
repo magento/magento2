@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Model\Quote;
@@ -9,6 +9,10 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Quote\Model\Quote\Address\ToOrder as QuoteAddressToOrder;
 use Magento\Quote\Model\Quote\Address as QuoteAddress;
 
+/**
+ * Class \Magento\Tax\Model\Quote\ToOrderConverter
+ *
+ */
 class ToOrderConverter
 {
     /**

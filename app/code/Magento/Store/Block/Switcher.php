@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,6 +12,9 @@ namespace Magento\Store\Block;
 use Magento\Directory\Helper\Data;
 use Magento\Store\Model\Group;
 
+/**
+ * @api
+ */
 class Switcher extends \Magento\Framework\View\Element\Template
 {
     /**
@@ -221,7 +224,7 @@ class Switcher extends \Magento\Framework\View\Element\Template
     {
         $data[\Magento\Store\Api\StoreResolverInterface::PARAM_NAME] = $store->getCode();
         return $this->_postDataHelper->getPostData(
-            $this->getUrl('stores/store/switch'),
+            $store->getCurrentUrl(false),
             $data
         );
     }

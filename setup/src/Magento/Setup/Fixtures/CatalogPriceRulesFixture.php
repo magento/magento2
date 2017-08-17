@@ -1,20 +1,26 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Setup\Fixtures;
 
 /**
- * Class CatalogPriceRulesFixture
+ * Fixture for generating catalog price rules
+ *
+ * Support the following format:
+ * <!-- Number of catalog price rules -->
+ * <catalog_price_rules>{int}</catalog_price_rules>
+ *
+ * @see setup/performance-toolkit/profiles/ce/small.xml
  */
 class CatalogPriceRulesFixture extends Fixture
 {
     /**
      * @var int
      */
-    protected $priority = 80;
+    protected $priority = 90;
 
     /**
      * {@inheritdoc}
@@ -132,7 +138,6 @@ class CatalogPriceRulesFixture extends Fixture
             $model->setUseAutoGeneration($useAutoGeneration);
             $model->save();
         }
-
     }
 
     /**

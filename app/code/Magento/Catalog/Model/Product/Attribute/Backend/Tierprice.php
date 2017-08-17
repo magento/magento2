@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,12 @@
  */
 namespace Magento\Catalog\Model\Product\Attribute\Backend;
 
+use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
+
+/**
+ * Class \Magento\Catalog\Model\Product\Attribute\Backend\Tierprice
+ *
+ */
 class Tierprice extends \Magento\Catalog\Model\Product\Attribute\Backend\GroupPrice\AbstractGroupPrice
 {
     /**
@@ -29,6 +35,7 @@ class Tierprice extends \Magento\Catalog\Model\Product\Attribute\Backend\GroupPr
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
      * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Tierprice $productAttributeTierprice
+     * @param ScopeOverriddenValue|null $scopeOverriddenValue
      */
     public function __construct(
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
@@ -38,7 +45,8 @@ class Tierprice extends \Magento\Catalog\Model\Product\Attribute\Backend\GroupPr
         \Magento\Framework\Locale\FormatInterface $localeFormat,
         \Magento\Catalog\Model\Product\Type $catalogProductType,
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
-        \Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Tierprice $productAttributeTierprice
+        \Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Tierprice $productAttributeTierprice,
+        ScopeOverriddenValue $scopeOverriddenValue = null
     ) {
         $this->_productAttributeBackendTierprice = $productAttributeTierprice;
         parent::__construct(
@@ -48,7 +56,8 @@ class Tierprice extends \Magento\Catalog\Model\Product\Attribute\Backend\GroupPr
             $config,
             $localeFormat,
             $catalogProductType,
-            $groupManagement
+            $groupManagement,
+            $scopeOverriddenValue
         );
     }
 
@@ -155,9 +164,12 @@ class Tierprice extends \Magento\Catalog\Model\Product\Attribute\Backend\GroupPr
     protected function modifyPriceData($object, $data)
     {
         $data = parent::modifyPriceData($object, $data);
+        $price = $object->getPrice();
         foreach ($data as $key => $tierPrice) {
-            if ($this->getPercentage($tierPrice)) {
-                $data[$key]['website_price'] = $object->getPrice() * (1 - $this->getPercentage($tierPrice) / 100);
+            $percentageValue = $this->getPercentage($tierPrice);
+            if ($percentageValue) {
+                $data[$key]['price'] = $price * (1 - $percentageValue / 100);
+                $data[$key]['website_price'] = $data[$key]['price'];
             }
         }
         return $data;

@@ -1,11 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model;
 
-class DesignTest extends \PHPUnit_Framework_TestCase
+use Magento\Backend\Block\Widget\Grid\Serializer;
+use Magento\Framework\Serialize\SerializerInterface;
+
+class DesignTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Theme\Model\Design
@@ -121,7 +124,8 @@ class DesignTest extends \PHPUnit_Framework_TestCase
         )->load(
             $cacheId
         );
-        $cachedDesign = unserialize($cachedDesign);
+        $serializer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(SerializerInterface::class);
+        $cachedDesign = $serializer->unserialize($cachedDesign);
 
         $this->assertInternalType('array', $cachedDesign);
         $this->assertArrayHasKey('design', $cachedDesign);
@@ -139,7 +143,8 @@ class DesignTest extends \PHPUnit_Framework_TestCase
         )->load(
             $cacheId
         );
-        $cachedDesign = unserialize($cachedDesign);
+
+        $cachedDesign = $serializer->unserialize($cachedDesign);
 
         $this->assertTrue(is_array($cachedDesign));
         $this->assertEquals($cachedDesign['design'], $design->getDesign());
@@ -182,7 +187,7 @@ class DesignTest extends \PHPUnit_Framework_TestCase
         $storeId = $store->getId();
 
         /** @var $locale \Magento\Framework\Stdlib\DateTime\TimezoneInterface */
-        $locale = $this->getMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
+        $locale = $this->createMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
         $locale->expects(
             $this->once()
         )->method(

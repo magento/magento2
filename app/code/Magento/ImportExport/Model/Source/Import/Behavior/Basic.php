@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Model\Source\Import\Behavior;
 
 /**
  * Import behavior source model used for defining the behaviour during the import.
+ *
+ * @api
  */
 class Basic extends \Magento\ImportExport\Model\Source\Import\AbstractBehavior
 {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Model;
@@ -11,8 +11,9 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * @magentoDbIsolation enabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TaxCalculationTest extends \PHPUnit_Framework_TestCase
+class TaxCalculationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Object Manager
@@ -2675,7 +2676,7 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
     {
         if ($object instanceof \Magento\Framework\DataObject) {
             $data = $object->getData();
-        } else if (is_object($object)) {
+        } elseif (is_object($object)) {
             $data = (array)$object;
         } else {
             throw new \InvalidArgumentException("Provided argument is not an object.");

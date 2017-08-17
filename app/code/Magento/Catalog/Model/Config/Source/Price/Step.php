@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Config\Source\Price;
@@ -8,6 +8,10 @@ namespace Magento\Catalog\Model\Config\Source\Price;
 use Magento\Catalog\Model\Layer\Filter\Dynamic\AlgorithmFactory;
 use Magento\Framework\Option\ArrayInterface;
 
+/**
+ * Class \Magento\Catalog\Model\Config\Source\Price\Step
+ *
+ */
 class Step implements ArrayInterface
 {
     /**

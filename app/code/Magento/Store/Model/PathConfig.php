@@ -1,17 +1,29 @@
 <?php
 /***
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Model;
 
+/**
+ * Class \Magento\Store\Model\PathConfig
+ *
+ */
 class PathConfig implements \Magento\Framework\App\Router\PathConfigInterface
 {
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface */
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
     private $scopeConfig;
-    /** @var \Magento\Framework\Url\SecurityInfoInterface */
+
+    /**
+     * @var \Magento\Framework\Url\SecurityInfoInterface
+     */
     private $urlSecurityInfo;
-    /** @var StoreManagerInterface */
+
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
     private $storeManager;
 
     /**
@@ -24,7 +36,6 @@ class PathConfig implements \Magento\Framework\App\Router\PathConfigInterface
         \Magento\Framework\Url\SecurityInfoInterface $urlSecurityInfo,
         StoreManagerInterface $storeManager
     ) {
-
         $this->scopeConfig = $scopeConfig;
         $this->urlSecurityInfo = $urlSecurityInfo;
         $this->storeManager = $storeManager;

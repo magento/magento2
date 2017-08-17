@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Model\File;
@@ -15,6 +15,10 @@ use Magento\Downloadable\Model\Sample as SampleConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 
+/**
+ * Class \Magento\Downloadable\Model\File\ContentUploader
+ *
+ */
 class ContentUploader extends Uploader implements \Magento\Downloadable\Api\Data\File\ContentUploaderInterface
 {
     /**

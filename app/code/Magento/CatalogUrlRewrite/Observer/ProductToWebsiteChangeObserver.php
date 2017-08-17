@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Observer;
@@ -14,6 +14,10 @@ use Magento\Store\Model\Store;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
+/**
+ * Class \Magento\CatalogUrlRewrite\Observer\ProductToWebsiteChangeObserver
+ *
+ */
 class ProductToWebsiteChangeObserver implements ObserverInterface
 {
     /**

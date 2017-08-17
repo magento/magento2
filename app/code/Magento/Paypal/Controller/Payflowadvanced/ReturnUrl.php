@@ -1,13 +1,17 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Controller\Payflowadvanced;
 
 use Magento\Paypal\Model\Config;
 
+/**
+ * Class \Magento\Paypal\Controller\Payflowadvanced\ReturnUrl
+ *
+ */
 class ReturnUrl extends \Magento\Paypal\Controller\Payflow\ReturnUrl
 {
     /**

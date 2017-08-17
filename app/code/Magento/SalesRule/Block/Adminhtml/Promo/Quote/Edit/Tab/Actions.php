@@ -1,12 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab;
 
 use Magento\Framework\App\ObjectManager;
 
+/**
+ * Class \Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Actions
+ *
+ */
 class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
     \Magento\Ui\Component\Layout\Tabs\TabInterface
 {
@@ -24,7 +28,7 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
 
     /**
      * @var \Magento\Config\Model\Config\Source\Yesno
-     * @deprecated
+     * @deprecated 100.1.0
      */
     protected $_sourceYesno;
 
@@ -39,7 +43,7 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
     private $ruleFactory;
 
     /**
-     * Initialize dependencies.
+     * Constructor
      *
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
@@ -48,6 +52,7 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
      * @param \Magento\Rule\Block\Actions $ruleActions
      * @param \Magento\Backend\Block\Widget\Form\Renderer\Fieldset $rendererFieldset
      * @param array $data
+     * @param \Magento\SalesRule\Model\RuleFactory|null $ruleFactory
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -56,32 +61,19 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
         \Magento\Config\Model\Config\Source\Yesno $sourceYesno,
         \Magento\Rule\Block\Actions $ruleActions,
         \Magento\Backend\Block\Widget\Form\Renderer\Fieldset $rendererFieldset,
-        array $data = []
+        array $data = [],
+        \Magento\SalesRule\Model\RuleFactory $ruleFactory = null
     ) {
         $this->_rendererFieldset = $rendererFieldset;
         $this->_ruleActions = $ruleActions;
         $this->_sourceYesno = $sourceYesno;
+        $this->ruleFactory = $ruleFactory ?: ObjectManager::getInstance()
+            ->get(\Magento\SalesRule\Model\RuleFactory::class);
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
     /**
-     * The getter function to get the new RuleFactory dependency
-     *
-     * @return \Magento\SalesRule\Model\RuleFactory
-     *
-     * @deprecated
-     */
-    private function getRuleFactory()
-    {
-        if ($this->ruleFactory === null) {
-            $this->ruleFactory = ObjectManager::getInstance()->get(\Magento\SalesRule\Model\RuleFactory::class);
-        }
-        return $this->ruleFactory;
-    }
-
-    /**
      * {@inheritdoc}
-     * @codeCoverageIgnore
      */
     public function getTabClass()
     {
@@ -90,7 +82,6 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
 
     /**
      * {@inheritdoc}
-     * @codeCoverageIgnore
      */
     public function getTabUrl()
     {
@@ -99,7 +90,6 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
 
     /**
      * {@inheritdoc}
-     * @codeCoverageIgnore
      */
     public function isAjaxLoaded()
     {
@@ -108,7 +98,6 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
 
     /**
      * {@inheritdoc}
-     * @codeCoverageIgnore
      */
     public function getTabLabel()
     {
@@ -117,7 +106,6 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
 
     /**
      * {@inheritdoc}
-     * @codeCoverageIgnore
      */
     public function getTabTitle()
     {
@@ -126,7 +114,6 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
 
     /**
      * {@inheritdoc}
-     * @codeCoverageIgnore
      */
     public function canShowTab()
     {
@@ -135,7 +122,6 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
 
     /**
      * {@inheritdoc}
-     * @codeCoverageIgnore
      */
     public function isHidden()
     {
@@ -169,7 +155,7 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
     {
         if (!$model) {
             $id = $this->getRequest()->getParam('id');
-            $model = $this->getRuleFactory()->create();
+            $model = $this->ruleFactory->create();
             $model->load($id);
         }
 

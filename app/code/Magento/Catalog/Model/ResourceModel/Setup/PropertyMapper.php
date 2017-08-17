@@ -2,13 +2,17 @@
 /**
  * Catalog attribute property mapper
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel\Setup;
 
 use Magento\Eav\Model\Entity\Setup\PropertyMapperAbstract;
 
+/**
+ * Class \Magento\Catalog\Model\ResourceModel\Setup\PropertyMapper
+ *
+ */
 class PropertyMapper extends PropertyMapperAbstract
 {
     /**

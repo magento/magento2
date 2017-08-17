@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,10 +8,15 @@ namespace Magento\Quote\Model;
 
 use Magento\Quote\Api\Data\ShippingAssignmentInterface;
 
+/**
+ * Class \Magento\Quote\Model\ShippingAssignment
+ *
+ */
 class ShippingAssignment extends \Magento\Framework\Model\AbstractExtensibleModel implements ShippingAssignmentInterface
 {
     const SHIPPING = 'shipping';
     const ITEMS = 'items';
+
     /**
      * @inheritDoc
      */

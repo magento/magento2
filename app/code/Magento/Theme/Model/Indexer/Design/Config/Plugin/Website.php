@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model\Indexer\Design\Config\Plugin;
@@ -9,6 +9,10 @@ use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Store\Model\Website as StoreWebsite;
 use Magento\Theme\Model\Data\Design\Config;
 
+/**
+ * Class \Magento\Theme\Model\Indexer\Design\Config\Plugin\Website
+ *
+ */
 class Website
 {
     /**

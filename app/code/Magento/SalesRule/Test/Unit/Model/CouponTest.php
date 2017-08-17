@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Test\Unit\Model;
@@ -8,7 +8,7 @@ namespace Magento\SalesRule\Test\Unit\Model;
 /**
  * Class CouponTest
  */
-class CouponTest extends \PHPUnit_Framework_TestCase
+class CouponTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\SalesRule\Model\ResourceModel\Coupon|\PHPUnit_Framework_MockObject_MockObject
@@ -29,28 +29,13 @@ class CouponTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->resourceMock = $this->getMock(
+        $this->resourceMock = $this->createPartialMock(
             \Magento\SalesRule\Model\ResourceModel\Coupon::class,
-            ['loadPrimaryByRule', 'load', '__wakeup', 'getIdFieldName'],
-            [],
-            '',
-            false
+            ['loadPrimaryByRule', 'load', '__wakeup', 'getIdFieldName']
         );
-        $this->eventManager = $this->getMock(
-            \Magento\Framework\Event\Manager::class,
-            ['dispatch'],
-            [],
-            '',
-            false
-        );
+        $this->eventManager = $this->createPartialMock(\Magento\Framework\Event\Manager::class, ['dispatch']);
 
-        $context = $this->getMock(
-            \Magento\Framework\Model\Context::class,
-            ['getEventDispatcher'],
-            [],
-            '',
-            false
-        );
+        $context = $this->createPartialMock(\Magento\Framework\Model\Context::class, ['getEventDispatcher']);
 
         $context->expects($this->once())->method('getEventDispatcher')->will($this->returnValue($this->eventManager));
 
@@ -69,7 +54,7 @@ class CouponTest extends \PHPUnit_Framework_TestCase
     public function testSetRule()
     {
         /** @var \Magento\SalesRule\Model\Rule|\PHPUnit_Framework_MockObject_MockObject $ruleMock */
-        $ruleMock = $this->getMock(\Magento\SalesRule\Model\Rule::class, ['getId', '__wakeup'], [], '', false);
+        $ruleMock = $this->createPartialMock(\Magento\SalesRule\Model\Rule::class, ['getId', '__wakeup']);
         $ruleMock->expects($this->once())->method('getId');
 
         $this->assertEquals($this->couponModel, $this->couponModel->setRule($ruleMock));

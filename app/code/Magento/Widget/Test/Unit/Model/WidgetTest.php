@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Widget\Test\Unit\Model;
@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * Test class for \Magento\Widget\Model\Widget
  */
-class WidgetTest extends \PHPUnit_Framework_TestCase
+class WidgetTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Widget\Model\Config\Data|\PHPUnit_Framework_MockObject_MockObject
@@ -148,7 +148,7 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 
     public function testGetWidgetDeclaration()
     {
-        $mathRandomMock = $this->getMock(\Magento\Framework\Math\Random::class, ['getRandomString'], [], '', false);
+        $mathRandomMock = $this->createPartialMock(\Magento\Framework\Math\Random::class, ['getRandomString']);
         $mathRandomMock->expects($this->any())->method('getRandomString')->willReturn('asdf');
         $reflection = new \ReflectionClass(get_class($this->widget));
         $reflectionProperty = $reflection->getProperty('mathRandom');
@@ -197,7 +197,7 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 
     public function testGetWidgetDeclarationWithZeroValueParam()
     {
-        $mathRandomMock = $this->getMock(\Magento\Framework\Math\Random::class, ['getRandomString'], [], '', false);
+        $mathRandomMock = $this->createPartialMock(\Magento\Framework\Math\Random::class, ['getRandomString']);
         $mathRandomMock->expects($this->any())
             ->method('getRandomString')
             ->willReturn('asdf');

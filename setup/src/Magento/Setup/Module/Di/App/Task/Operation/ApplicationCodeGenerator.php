@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Module\Di\App\Task\Operation;
@@ -12,6 +12,10 @@ use Magento\Setup\Module\Di\Code\Reader\ClassesScanner;
 use Magento\Setup\Module\Di\Code\Scanner\DirectoryScanner;
 use Magento\Setup\Module\Di\Code\Scanner\PhpScanner;
 
+/**
+ * Class \Magento\Setup\Module\Di\App\Task\Operation\ApplicationCodeGenerator
+ *
+ */
 class ApplicationCodeGenerator implements OperationInterface
 {
     /**

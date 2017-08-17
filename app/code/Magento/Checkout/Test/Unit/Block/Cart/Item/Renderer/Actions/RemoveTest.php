@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Test\Unit\Block\Cart\Item\Renderer\Actions;
@@ -9,7 +9,7 @@ use Magento\Checkout\Block\Cart\Item\Renderer\Actions\Remove;
 use Magento\Checkout\Helper\Cart;
 use Magento\Quote\Model\Quote\Item;
 
-class RemoveTest extends \PHPUnit_Framework_TestCase
+class RemoveTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Remove

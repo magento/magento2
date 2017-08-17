@@ -1,12 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Attribute\Source;
 
 use \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
 
+/**
+ * Class \Magento\Catalog\Model\Attribute\Source\Scopes
+ *
+ */
 class Scopes implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**

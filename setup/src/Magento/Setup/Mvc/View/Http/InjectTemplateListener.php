@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,10 @@ namespace Magento\Setup\Mvc\View\Http;
 use Zend\Mvc\MvcEvent;
 use Zend\Mvc\View\Http\InjectTemplateListener as ZendInjectTemplateListener;
 
+/**
+ * Class \Magento\Setup\Mvc\View\Http\InjectTemplateListener
+ *
+ */
 class InjectTemplateListener extends ZendInjectTemplateListener
 {
     /**

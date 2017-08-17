@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,7 +14,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
  * @SuppressWarnings(PHPMD.UnusedPrivateField)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PriceTest extends \PHPUnit_Framework_TestCase
+class PriceTest extends \PHPUnit\Framework\TestCase
 {
     private $itemDataBuilder;
 
@@ -202,6 +202,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
 
     /** @var  \Magento\Eav\Model\Entity\Attribute|MockObject */
     private $attribute;
+
     public function testApply()
     {
         $priceId = '15-50';

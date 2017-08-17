@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Test\Unit\Gateway\Response;
@@ -17,7 +17,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
  *
  * @see \Magento\Braintree\Gateway\Response\RiskDataHandler
  */
-class RiskDataHandlerTest extends \PHPUnit_Framework_TestCase
+class RiskDataHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var RiskDataHandler
@@ -57,7 +57,7 @@ class RiskDataHandlerTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['setAdditionalInformation', 'setIsFraudDetected'])
             ->getMock();
         /** @var PaymentDataObjectInterface|MockObject $paymentDO */
-        $paymentDO = $this->getMock(PaymentDataObjectInterface::class);
+        $paymentDO = $this->createMock(PaymentDataObjectInterface::class);
         $paymentDO->expects(self::once())
             ->method('getPayment')
             ->willReturn($payment);

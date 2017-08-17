@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,6 +14,10 @@ use Magento\Framework\Pricing\Render\PriceBox;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Tax\Model\Calculation as TaxCalculation;
 
+/**
+ * Class \Magento\Catalog\Block\Category\Plugin\PriceBoxTags
+ *
+ */
 class PriceBoxTags
 {
     /**
@@ -121,7 +125,7 @@ class PriceBoxTags
      *
      * @return \Magento\Tax\Model\Calculation
      *
-     * @deprecated
+     * @deprecated 101.0.0
      */
     private function getTaxCalculation()
     {

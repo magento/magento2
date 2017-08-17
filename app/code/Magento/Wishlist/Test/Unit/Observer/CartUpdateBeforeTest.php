@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ use \Magento\Wishlist\Observer\CartUpdateBefore as Observer;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CartUpdateBeforeTest extends \PHPUnit_Framework_TestCase
+class CartUpdateBeforeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Observer

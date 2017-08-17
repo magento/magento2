@@ -1,11 +1,15 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Directory\Controller\Adminhtml\Json;
 
+/**
+ * Class \Magento\Directory\Controller\Adminhtml\Json\CountryRegion
+ *
+ */
 class CountryRegion extends \Magento\Backend\App\Action
 {
     /**

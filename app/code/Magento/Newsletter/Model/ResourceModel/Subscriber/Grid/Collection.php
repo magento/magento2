@@ -2,11 +2,15 @@
 /**
  * Newsletter subscriber grid collection
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Newsletter\Model\ResourceModel\Subscriber\Grid;
 
+/**
+ * Class \Magento\Newsletter\Model\ResourceModel\Subscriber\Grid\Collection
+ *
+ */
 class Collection extends \Magento\Newsletter\Model\ResourceModel\Subscriber\Collection
 {
     /**

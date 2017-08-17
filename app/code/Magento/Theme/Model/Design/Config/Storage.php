@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model\Design\Config;
@@ -13,15 +13,25 @@ use Magento\Framework\App\Config\ValueInterface;
 use Magento\Theme\Model\Data\Design\ConfigFactory;
 use Magento\Theme\Model\Design\BackendModelFactory;
 
+/**
+ * Class \Magento\Theme\Model\Design\Config\Storage
+ *
+ */
 class Storage
 {
-    /** @var TransactionFactory */
+    /**
+     * @var \Magento\Framework\DB\TransactionFactory
+     */
     protected $transactionFactory;
 
-    /** @var BackendModelFactory */
+    /**
+     * @var \Magento\Theme\Model\Design\BackendModelFactory
+     */
     protected $backendModelFactory;
 
-    /** @var ValueChecker */
+    /**
+     * @var \Magento\Theme\Model\Design\Config\ValueChecker
+     */
     protected $valueChecker;
 
     /**

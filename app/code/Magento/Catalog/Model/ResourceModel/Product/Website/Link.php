@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Website;
@@ -9,9 +9,15 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\MetadataPool;
 
+/**
+ * Class \Magento\Catalog\Model\ResourceModel\Product\Website\Link
+ *
+ */
 class Link
 {
-    /** @var  ResourceConnection */
+    /**
+     * @var \Magento\Framework\App\ResourceConnection
+     */
     private $resourceConnection;
 
     /**

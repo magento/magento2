@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,7 +12,7 @@ use \Magento\Framework\App\View\Asset\MaterializationStrategy;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\DriverPool;
 
-class PublisherTest extends \PHPUnit_Framework_TestCase
+class PublisherTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
@@ -51,21 +51,10 @@ class PublisherTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
-        $this->materializationStrategyFactory = $this->getMock(
-            \Magento\Framework\App\View\Asset\MaterializationStrategy\Factory::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->writeFactory = $this->getMock(
-            \Magento\Framework\Filesystem\Directory\WriteFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
+        $this->materializationStrategyFactory =
+            $this->createMock(\Magento\Framework\App\View\Asset\MaterializationStrategy\Factory::class);
+        $this->writeFactory = $this->createMock(\Magento\Framework\Filesystem\Directory\WriteFactory::class);
         $this->object = new Publisher($this->filesystem, $this->materializationStrategyFactory, $this->writeFactory);
 
         $this->sourceDirWrite = $this->getMockForAbstractClass(
@@ -102,13 +91,8 @@ class PublisherTest extends \PHPUnit_Framework_TestCase
             ->method('isExist')
             ->with('some/file.ext')
             ->will($this->returnValue(false));
-        $materializationStrategy = $this->getMock(
-            \Magento\Framework\App\View\Asset\MaterializationStrategy\StrategyInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $materializationStrategy =
+            $this->createMock(\Magento\Framework\App\View\Asset\MaterializationStrategy\StrategyInterface::class);
 
         $this->materializationStrategyFactory->expects($this->once())
             ->method('create')
@@ -129,7 +113,7 @@ class PublisherTest extends \PHPUnit_Framework_TestCase
      */
     protected function getAsset()
     {
-        $asset = $this->getMock(\Magento\Framework\View\Asset\File::class, [], [], '', false);
+        $asset = $this->createMock(\Magento\Framework\View\Asset\File::class);
         $asset->expects($this->any())
             ->method('getPath')
             ->will($this->returnValue('some/file.ext'));

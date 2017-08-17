@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Block\Adminhtml\Import\Edit;
@@ -9,7 +9,7 @@ namespace Magento\ImportExport\Block\Adminhtml\Import\Edit;
  * Tests for block \Magento\ImportExport\Block\Adminhtml\Import\Edit\FormTest
  * @magentoAppArea adminhtml
  */
-class FormTest extends \PHPUnit_Framework_TestCase
+class FormTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * List of expected fieldsets in import edit form

@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,10 @@ namespace Magento\Downloadable\Controller\Customer;
 
 use Magento\Framework\App\RequestInterface;
 
+/**
+ * Class \Magento\Downloadable\Controller\Customer\Products
+ *
+ */
 class Products extends \Magento\Framework\App\Action\Action
 {
     /**

@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -29,6 +29,16 @@
             </field>
         </dataset>
 
+        <dataset name="custom_attribute_set_with_textarea">
+            <field name="attribute_set_name" xsi:type="string">Custom_textarea_attribute_set%isolation%</field>
+            <field name="skeleton_set" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+            <field name="assigned_attributes" xsi:type="array">
+                <item name="dataset" xsi:type="string">attribute_type_textarea</item>
+            </field>
+        </dataset>
+
         <dataset name="custom_attribute_set_with_colors">
             <field name="attribute_set_name" xsi:type="string">Custom_attribute_set_with_colors_%isolation%</field>
             <field name="skeleton_set" xsi:type="array">
@@ -36,6 +46,46 @@
             </field>
             <field name="assigned_attributes" xsi:type="array">
                 <item name="dataset" xsi:type="string">color_for_promo_rules</item>
+            </field>
+        </dataset>
+
+        <dataset name="custom_attribute_set_with_sizes">
+            <field name="attribute_set_name" xsi:type="string">Custom_attribute_set_with_sizes_%isolation%</field>
+            <field name="skeleton_set" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+            <field name="assigned_attributes" xsi:type="array">
+                <item name="dataset" xsi:type="string">sizes_for_promo_rules</item>
+            </field>
+        </dataset>
+
+        <dataset name="custom_attribute_set_search_weight_term_once_weight_1">
+            <field name="attribute_set_name" xsi:type="string">custom_attribute_set_search_weight_term_once_weight_1_%isolation%</field>
+            <field name="skeleton_set" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+            <field name="assigned_attributes" xsi:type="array">
+                <item name="dataset" xsi:type="string">search_weight_term_once_weight_1</item>
+            </field>
+        </dataset>
+
+        <dataset name="custom_attribute_set_search_weight_term_once_weight_5">
+            <field name="attribute_set_name" xsi:type="string">custom_attribute_set_search_weight_term_once_weight_5_%isolation%</field>
+            <field name="skeleton_set" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+            <field name="assigned_attributes" xsi:type="array">
+                <item name="dataset" xsi:type="string">search_weight_term_once_weight_5</item>
+            </field>
+        </dataset>
+
+        <dataset name="custom_attribute_set_search_weight_term_twice_weight_1">
+            <field name="attribute_set_name" xsi:type="string">custom_attribute_set_search_weight_term_twice_weight_1_%isolation%</field>
+            <field name="skeleton_set" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+            <field name="assigned_attributes" xsi:type="array">
+                <item name="dataset" xsi:type="string">search_weight_term_twice_weight_1</item>
             </field>
         </dataset>
     </repository>

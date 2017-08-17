@@ -1,11 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Model\Config;
 
-class LoaderTest extends \PHPUnit_Framework_TestCase
+/**
+ * @package Magento\Config\Test\Unit\Model\Config
+ */
+class LoaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Config\Model\Config\Loader
@@ -24,22 +27,12 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_configValueFactory = $this->getMock(
+        $this->_configValueFactory = $this->createPartialMock(
             \Magento\Framework\App\Config\ValueFactory::class,
-            ['create', 'getCollection'],
-            [],
-            '',
-            false
+            ['create', 'getCollection']
         );
         $this->_model = new \Magento\Config\Model\Config\Loader($this->_configValueFactory);
-
-        $this->_configCollection = $this->getMock(
-            \Magento\Config\Model\ResourceModel\Config\Data\Collection::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->_configCollection = $this->createMock(\Magento\Config\Model\ResourceModel\Config\Data\Collection::class);
         $this->_configCollection->expects(
             $this->once()
         )->method(
@@ -52,7 +45,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
             $this->returnSelf()
         );
 
-        $configDataMock = $this->getMock(\Magento\Framework\App\Config\Value::class, [], [], '', false);
+        $configDataMock = $this->createMock(\Magento\Framework\App\Config\Value::class);
         $this->_configValueFactory->expects(
             $this->once()
         )->method(

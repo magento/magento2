@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Adminhtml\Group;
@@ -10,6 +10,10 @@ use Magento\Customer\Api\Data\GroupInterfaceFactory;
 use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Customer\Api\GroupRepositoryInterface;
 
+/**
+ * Class \Magento\Customer\Controller\Adminhtml\Group\Save
+ *
+ */
 class Save extends \Magento\Customer\Controller\Adminhtml\Group
 {
     /**

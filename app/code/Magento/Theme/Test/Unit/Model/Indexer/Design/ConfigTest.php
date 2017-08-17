@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ namespace Magento\Theme\Test\Unit\Model\Indexer\Design;
 
 use Magento\Theme\Model\Indexer\Design\Config;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Config */
     protected $model;
@@ -78,21 +78,20 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             [
                 'fieldsets' => ['test_fieldset' =>
                     [
-                        'fields' =>
-                            [
-                                'first_field' => [
-                                    'name' => 'firstField',
-                                    'origin' => null,
-                                    'type' => 'filterable',
-                                    'handler' => null,
-                                ],
-                                'second_field' => [
-                                    'name' => 'secondField',
-                                    'origin' => null,
-                                    'type' => 'searchable',
-                                    'handler' => null,
-                                ],
+                        'fields' => [
+                            'first_field' => [
+                                'name' => 'firstField',
+                                'origin' => null,
+                                'type' => 'filterable',
+                                'handler' => null,
                             ],
+                            'second_field' => [
+                                'name' => 'secondField',
+                                'origin' => null,
+                                'type' => 'searchable',
+                                'handler' => null,
+                            ],
+                        ],
                         'provider' => $indexerFieldset,
                     ]
                 ],
@@ -104,6 +103,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteFull()
     {
-        $this->model->executeFull();
+        $result = $this->model->executeFull();
+        $this->assertNull($result);
     }
 }

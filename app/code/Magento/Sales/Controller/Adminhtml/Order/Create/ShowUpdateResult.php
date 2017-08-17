@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Create;
@@ -10,6 +10,10 @@ use Magento\Backend\Model\View\Result\ForwardFactory;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\Controller\Result\RawFactory;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Order\Create\ShowUpdateResult
+ *
+ */
 class ShowUpdateResult extends \Magento\Sales\Controller\Adminhtml\Order\Create
 {
     /**

@@ -1,9 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Catalog\Model\Product\Type;
 
 use Magento\Catalog\Model\Product;
@@ -11,9 +10,12 @@ use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Store\Model\Store;
 use Magento\Catalog\Api\Data\ProductTierPriceExtensionFactory;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Product type price model
+ *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Price
@@ -87,7 +89,8 @@ class Price
     private $tierPriceExtensionFactory;
 
     /**
-     * Price constructor.
+     * Constructor
+     *
      * @param \Magento\CatalogRule\Model\ResourceModel\RuleFactory $ruleFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
@@ -97,7 +100,7 @@ class Price
      * @param GroupManagementInterface $groupManagement
      * @param \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory $tierPriceFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
-     *
+     * @param ProductTierPriceExtensionFactory|null $tierPriceExtensionFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -109,7 +112,8 @@ class Price
         PriceCurrencyInterface $priceCurrency,
         GroupManagementInterface $groupManagement,
         \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory $tierPriceFactory,
-        \Magento\Framework\App\Config\ScopeConfigInterface $config
+        \Magento\Framework\App\Config\ScopeConfigInterface $config,
+        ProductTierPriceExtensionFactory $tierPriceExtensionFactory = null
     ) {
         $this->_ruleFactory = $ruleFactory;
         $this->_storeManager = $storeManager;
@@ -120,6 +124,8 @@ class Price
         $this->_groupManagement = $groupManagement;
         $this->tierPriceFactory = $tierPriceFactory;
         $this->config = $config;
+        $this->tierPriceExtensionFactory = $tierPriceExtensionFactory ?: ObjectManager::getInstance()
+            ->get(ProductTierPriceExtensionFactory::class);
     }
 
     /**
@@ -361,7 +367,7 @@ class Price
         foreach ($tierPrices as $price) {
             /** @var \Magento\Catalog\Api\Data\ProductTierPriceInterface $tierPrice */
             $tierPrice = $this->tierPriceFactory->create()
-                ->setExtensionAttributes($this->getTierPriceExtensionAttributes());
+                ->setExtensionAttributes($this->tierPriceExtensionFactory->create());
             $tierPrice->setCustomerGroupId($price['cust_group']);
             if (array_key_exists('website_price', $price)) {
                 $value = $price['website_price'];
@@ -378,19 +384,6 @@ class Price
             $prices[] = $tierPrice;
         }
         return $prices;
-    }
-
-    /**
-     * @deprecated
-     * @return \Magento\Catalog\Api\Data\ProductTierPriceExtensionInterface
-     */
-    private function getTierPriceExtensionAttributes()
-    {
-        if (!$this->tierPriceExtensionFactory) {
-            $this->tierPriceExtensionFactory = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(ProductTierPriceExtensionFactory::class);
-        }
-        return $this->tierPriceExtensionFactory->create();
     }
 
     /**
@@ -414,11 +407,12 @@ class Price
         $prices = [];
         foreach ($tierPrices as $price) {
             $extensionAttributes = $price->getExtensionAttributes();
-            $websiteId = $extensionAttributes && $extensionAttributes->getWebsiteId()
-                ? $extensionAttributes->getWebsiteId()
-                : $websiteId;
+            $priceWebsiteId = $websiteId;
+            if (isset($extensionAttributes) && is_numeric($extensionAttributes->getWebsiteId())) {
+                $priceWebsiteId = (string)$extensionAttributes->getWebsiteId();
+            }
             $prices[] = [
-                'website_id' => $websiteId,
+                'website_id' => $priceWebsiteId,
                 'cust_group' => $price->getCustomerGroupId(),
                 'website_price' => $price->getValue(),
                 'price' => $price->getValue(),

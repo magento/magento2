@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,6 +13,10 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Toolbar;
 
 use Magento\Framework\View\Element\AbstractBlock;
 
+/**
+ * Class \Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Toolbar\Add
+ *
+ */
 class Add extends \Magento\Backend\Block\Template
 {
     /**

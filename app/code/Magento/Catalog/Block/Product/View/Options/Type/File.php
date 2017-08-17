@@ -1,16 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\Catalog\Block\Product\View\Options\Type;
 
 /**
  * Product options text type block
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
  */
-namespace Magento\Catalog\Block\Product\View\Options\Type;
-
 class File extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
 {
     /**

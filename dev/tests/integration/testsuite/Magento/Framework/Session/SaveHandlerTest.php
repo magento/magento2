@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Session;
@@ -10,7 +10,7 @@ use Magento\Framework\Session\Config\ConfigInterface;
 use Magento\Framework\Session\SaveHandler;
 use Magento\Framework\App\ObjectManager;
 
-class SaveHandlerTest extends \PHPUnit_Framework_TestCase
+class SaveHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /** @var string Original session.save_handler ini config value */
     private $originalSaveHandler;

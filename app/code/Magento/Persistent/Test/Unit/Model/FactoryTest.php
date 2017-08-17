@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Persistent\Test\Unit\Model;
 
-class FactoryTest extends \PHPUnit_Framework_TestCase
+class FactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface|PHPUnit_Framework_MockObject_MockObject
@@ -21,7 +21,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->_objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->_objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_factory = $helper->getObject(
             \Magento\Persistent\Model\Factory::class,
             ['objectManager' => $this->_objectManagerMock]
@@ -32,7 +32,9 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         $className = 'SomeModel';
 
-        $classMock = $this->getMock('SomeModel');
+        $classMock = $this->getMockBuilder('SomeModel')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->_objectManagerMock->expects(
             $this->once()
         )->method(
@@ -52,7 +54,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $className = 'SomeModel';
         $data = ['param1', 'param2'];
 
-        $classMock = $this->getMock('SomeModel');
+        $classMock = $this->createMock('SomeModel');
         $this->_objectManagerMock->expects(
             $this->once()
         )->method(

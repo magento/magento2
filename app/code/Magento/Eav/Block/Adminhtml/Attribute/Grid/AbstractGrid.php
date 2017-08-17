@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Block\Adminhtml\Attribute\Grid;
@@ -8,7 +8,9 @@ namespace Magento\Eav\Block\Adminhtml\Attribute\Grid;
 /**
  * Product attributes grid
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @deprecated 100.2.0
  */
 abstract class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
 {

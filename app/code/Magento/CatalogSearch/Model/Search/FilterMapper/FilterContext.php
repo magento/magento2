@@ -1,11 +1,10 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\CatalogSearch\Model\Search\FilterMapper;
-
 
 use Magento\CatalogSearch\Model\Adapter\Mysql\Filter\AliasResolver;
 use Magento\Eav\Model\Config as EavConfig;
@@ -14,6 +13,7 @@ use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 /**
  * FilterContext represents a Context of the Strategy pattern
  * Its responsibility is to choose appropriate strategy to apply passed filter to the Select
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class FilterContext implements FilterStrategyInterface
 {
@@ -28,19 +28,9 @@ class FilterContext implements FilterStrategyInterface
     private $eavConfig;
 
     /**
-     * @var TermDropdownStrategy
-     */
-    private $termDropdownStrategy;
-
-    /**
      * @var StaticAttributeStrategy
      */
     private $staticAttributeStrategy;
-
-    /**
-     * @var AliasResolver
-     */
-    private $aliasResolver;
 
     /**
      * @param EavConfig $eavConfig
@@ -48,6 +38,7 @@ class FilterContext implements FilterStrategyInterface
      * @param ExclusionStrategy $exclusionStrategy
      * @param TermDropdownStrategy $termDropdownStrategy
      * @param StaticAttributeStrategy $staticAttributeStrategy
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         EavConfig $eavConfig,
@@ -57,9 +48,7 @@ class FilterContext implements FilterStrategyInterface
         StaticAttributeStrategy $staticAttributeStrategy
     ) {
         $this->eavConfig = $eavConfig;
-        $this->aliasResolver = $aliasResolver;
         $this->exclusionStrategy = $exclusionStrategy;
-        $this->termDropdownStrategy = $termDropdownStrategy;
         $this->staticAttributeStrategy = $staticAttributeStrategy;
     }
 
@@ -78,7 +67,7 @@ class FilterContext implements FilterStrategyInterface
                 if ($filter->getType() === \Magento\Framework\Search\Request\FilterInterface::TYPE_TERM
                     && in_array($attribute->getFrontendInput(), ['select', 'multiselect'], true)
                 ) {
-                    $isApplied = $this->termDropdownStrategy->apply($filter, $select);
+                    $isApplied = false;
                 } elseif ($attribute->getBackendType() === AbstractAttribute::TYPE_STATIC) {
                     $isApplied = $this->staticAttributeStrategy->apply($filter, $select);
                 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Indexer;
@@ -8,6 +8,9 @@ namespace Magento\Framework\Indexer;
 use Magento\Framework\Indexer\Handler\DefaultHandler;
 use Magento\Framework\ObjectManagerInterface;
 
+/**
+ * @api Instantiate save handler when implementing custom Indexer\Action
+ */
 class HandlerPool
 {
     /**

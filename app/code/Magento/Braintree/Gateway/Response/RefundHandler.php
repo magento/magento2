@@ -1,12 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Gateway\Response;
 
 use Magento\Sales\Model\Order\Payment;
 
+/**
+ * Class \Magento\Braintree\Gateway\Response\RefundHandler
+ *
+ */
 class RefundHandler extends VoidHandler
 {
     /**

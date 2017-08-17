@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\MediaStorage\Model\File\Storage;
@@ -10,6 +10,10 @@ use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 
+/**
+ * Class \Magento\MediaStorage\Model\File\Storage\Response
+ *
+ */
 class Response extends Http implements
     \Magento\Framework\App\Response\FileInterface,
     \Magento\Framework\App\PageCache\NotCacheableInterface

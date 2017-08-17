@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,6 +10,10 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Tax\Model\Calculation\Rate as TaxRateModel;
 use Magento\Tax\Model\Calculation\RateFactory as TaxRateModelFactory;
 
+/**
+ * Class \Magento\Tax\Model\Calculation\RateRegistry
+ *
+ */
 class RateRegistry
 {
     /**

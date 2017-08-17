@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Search\Adapter\Query\Preprocessor;
@@ -8,6 +8,10 @@ namespace Magento\Search\Adapter\Query\Preprocessor;
 use Magento\Framework\Search\Adapter\Preprocessor\PreprocessorInterface;
 use Magento\Search\Api\SynonymAnalyzerInterface;
 
+/**
+ * Class \Magento\Search\Adapter\Query\Preprocessor\Synonyms
+ *
+ */
 class Synonyms implements PreprocessorInterface
 {
     /**
@@ -17,7 +21,7 @@ class Synonyms implements PreprocessorInterface
 
     /**
      * Constructor
-     * 
+     *
      * @param SynonymAnalyzerInterface $synonymsAnalyzer
      */
     public function __construct(SynonymAnalyzerInterface $synonymsAnalyzer)

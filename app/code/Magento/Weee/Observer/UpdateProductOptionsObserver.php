@@ -1,12 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Weee\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class \Magento\Weee\Observer\UpdateProductOptionsObserver
+ *
+ */
 class UpdateProductOptionsObserver implements ObserverInterface
 {
     /**
@@ -16,7 +20,9 @@ class UpdateProductOptionsObserver implements ObserverInterface
      */
     protected $weeeData = null;
 
-    /** @var \Magento\Framework\Registry */
+    /**
+     * @var \Magento\Framework\Registry
+     */
     protected $registry;
 
     /**
@@ -61,7 +67,6 @@ class UpdateProductOptionsObserver implements ObserverInterface
 
         // if the Weee module is enabled, then only do processing on bundle products
         if ($this->weeeData->isEnabled() && $product->getTypeId() == \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
-
             if ($this->taxData->priceIncludesTax() && $this->taxData->displayPriceExcludingTax()) {
                 // the Tax module might have set up a default, but we will re-decide which calcPrice field to use
                 unset($options['optionTemplate']);

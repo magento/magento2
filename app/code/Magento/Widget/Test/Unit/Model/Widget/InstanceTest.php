@@ -2,7 +2,7 @@
 /**
  * \Magento\Widget\Model\Widget\Instance
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Widget\Test\Unit\Model\Widget;
@@ -10,7 +10,7 @@ namespace Magento\Widget\Test\Unit\Model\Widget;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class InstanceTest extends \PHPUnit_Framework_TestCase
+class InstanceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Widget\Model\Config\Data|PHPUnit_Framework_MockObject_MockObject
@@ -54,19 +54,13 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
         $this->_namespaceResolver = $this->getMockBuilder(
             \Magento\Widget\Model\NamespaceResolver::class
         )->disableOriginalConstructor()->getMock();
-        $this->_cacheTypesListMock = $this->getMock(\Magento\Framework\App\Cache\TypeListInterface::class);
+        $this->_cacheTypesListMock = $this->createMock(\Magento\Framework\App\Cache\TypeListInterface::class);
         $this->_readerMock = $this->getMockBuilder(
             \Magento\Widget\Model\Config\Reader::class
         )->disableOriginalConstructor()->getMock();
 
-        $filesystemMock = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
-        $this->_directoryMock = $this->getMock(
-            \Magento\Framework\Filesystem\Directory\Read::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $filesystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
+        $this->_directoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\Read::class);
         $filesystemMock->expects(
             $this->any()
         )->method(
@@ -89,7 +83,10 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
             ]
         );
         /** @var \Magento\Widget\Model\Widget\Instance _model */
-        $this->_model = $this->getMock(\Magento\Widget\Model\Widget\Instance::class, ['_construct'], $args, '', true);
+        $this->_model = $this->getMockBuilder(\Magento\Widget\Model\Widget\Instance::class)
+            ->setMethods(['_construct'])
+            ->setConstructorArgs($args)
+            ->getMock();
     }
 
     public function testGetWidgetConfigAsArray()

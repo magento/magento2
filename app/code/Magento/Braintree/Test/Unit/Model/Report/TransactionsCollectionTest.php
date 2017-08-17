@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Test\Unit\Model\Report;
@@ -10,14 +10,13 @@ use Magento\Braintree\Model\Report\FilterMapper;
 use Magento\Braintree\Model\Report\TransactionsCollection;
 use Magento\Framework\Api\Search\DocumentInterface;
 use Magento\Framework\Data\Collection\EntityFactoryInterface;
-use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class TransactionsCollectionTest
  *
  * Test for class \Magento\Braintree\Model\Report\TransactionsCollection
  */
-class TransactionsCollectionTest extends \PHPUnit_Framework_TestCase
+class TransactionsCollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var BraintreeAdapter|\PHPUnit_Framework_MockObject_MockObject
@@ -187,7 +186,7 @@ class TransactionsCollectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Add fields to filter
-     * 
+     *
      * @dataProvider addToFilterDataProvider
      */
     public function testAddToFilter($field, $condition, $filterMapperCall, $expectedCondition)
@@ -211,7 +210,7 @@ class TransactionsCollectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * addToFilter DataProvider
-     * 
+     *
      * @return array
      */
     public function addToFilterDataProvider()

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -17,9 +17,7 @@ use Magento\Sales\Model\AbstractModel;
  * Tracks transaction history, allows to build transactions hierarchy
  * By default transactions are saved as closed.
  *
- * @method \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction _getResource()
- * @method \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction getResource()
-
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -814,6 +812,7 @@ class Transaction extends AbstractModel implements TransactionInterface
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * Returns transaction_id
      *
@@ -993,5 +992,6 @@ class Transaction extends AbstractModel implements TransactionInterface
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
     //@codeCoverageIgnoreEnd
 }

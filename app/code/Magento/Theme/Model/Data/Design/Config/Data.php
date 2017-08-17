@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model\Data\Design\Config;
@@ -9,6 +9,10 @@ use Magento\Framework\Api\AbstractExtensibleObject;
 use Magento\Theme\Api\Data\DesignConfigDataInterface;
 use Magento\Theme\Api\Data\DesignConfigDataExtensionInterface;
 
+/**
+ * Class \Magento\Theme\Model\Data\Design\Config\Data
+ *
+ */
 class Data extends AbstractExtensibleObject implements DesignConfigDataInterface
 {
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Type;
@@ -162,6 +162,14 @@ abstract class AbstractType
     protected $productRepository;
 
     /**
+     * Serializer interface instance.
+     *
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     * @since 101.1.0
+     */
+    protected $serializer;
+
+    /**
      * Construct
      *
      * @param \Magento\Catalog\Model\Product\Option $catalogProductOption
@@ -173,6 +181,7 @@ abstract class AbstractType
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Psr\Log\LoggerInterface $logger
      * @param ProductRepositoryInterface $productRepository
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -184,7 +193,8 @@ abstract class AbstractType
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\Registry $coreRegistry,
         \Psr\Log\LoggerInterface $logger,
-        ProductRepositoryInterface $productRepository
+        ProductRepositoryInterface $productRepository,
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->_catalogProductOption = $catalogProductOption;
         $this->_eavConfig = $eavConfig;
@@ -195,6 +205,8 @@ abstract class AbstractType
         $this->_filesystem = $filesystem;
         $this->_logger = $logger;
         $this->productRepository = $productRepository;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
     }
 
     /**
@@ -394,8 +406,7 @@ abstract class AbstractType
         $product->prepareCustomOptions();
         $buyRequest->unsetData('_processing_params');
         // One-time params only
-        $product->addCustomOption('info_buyRequest', serialize($buyRequest->getData()));
-
+        $product->addCustomOption('info_buyRequest', $this->serializer->serialize($buyRequest->getData()));
         if ($options) {
             $optionIds = array_keys($options);
             $product->addCustomOption('option_ids', implode(',', $optionIds));
@@ -566,7 +577,7 @@ abstract class AbstractType
      */
     protected function _prepareOptions(\Magento\Framework\DataObject $buyRequest, $product, $processMode)
     {
-        $transport = new \StdClass();
+        $transport = new \stdClass();
         $transport->options = [];
         $options = null;
         if ($product->getHasOptions()) {
@@ -645,7 +656,7 @@ abstract class AbstractType
         $optionArr = [];
         $info = $product->getCustomOption('info_buyRequest');
         if ($info) {
-            $optionArr['info_buyRequest'] = unserialize($info->getValue());
+            $optionArr['info_buyRequest'] = $this->serializer->unserialize($info->getValue());
         }
 
         $optionIds = $product->getCustomOption('option_ids');
@@ -713,8 +724,7 @@ abstract class AbstractType
     protected function _removeNotApplicableAttributes($product)
     {
         $entityType = $product->getResource()->getEntityType();
-        foreach ($this->_eavConfig->getEntityAttributeCodes($entityType, $product) as $attributeCode) {
-            $attribute = $this->_eavConfig->getAttribute($entityType, $attributeCode);
+        foreach ($this->_eavConfig->getEntityAttributes($entityType, $product) as $attribute) {
             $applyTo = $attribute->getApplyTo();
             if (is_array($applyTo) && count($applyTo) > 0 && !in_array($product->getTypeId(), $applyTo)) {
                 $product->unsetData($attribute->getAttributeCode());
@@ -1091,5 +1101,17 @@ abstract class AbstractType
     public function getAssociatedProducts($product)
     {
         return [];
+    }
+
+    /**
+     * Check if product can be potentially buyed from the category page or some other list
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @return bool
+     * @since 101.1.0
+     */
+    public function isPossibleBuyFromList($product)
+    {
+        return !$this->hasRequiredOptions($product);
     }
 }

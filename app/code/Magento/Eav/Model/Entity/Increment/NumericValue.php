@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\Entity\Increment;
@@ -13,6 +13,8 @@ namespace Magento\Eav\Model\Entity\Increment;
  * - pad_length
  * - pad_char
  * - last_id
+ *
+ * @api
  */
 class NumericValue extends \Magento\Eav\Model\Entity\Increment\AbstractIncrement
 {

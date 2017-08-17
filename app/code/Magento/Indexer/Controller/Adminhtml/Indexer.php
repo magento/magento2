@@ -1,10 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Indexer\Controller\Adminhtml;
 
+/**
+ * Class \Magento\Indexer\Controller\Adminhtml\Indexer
+ *
+ */
 abstract class Indexer extends \Magento\Backend\App\Action
 {
     /**

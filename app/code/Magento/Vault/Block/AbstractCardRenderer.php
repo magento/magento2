@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Vault\Block;
@@ -11,6 +11,7 @@ use Magento\Payment\Model\CcConfigProvider;
 /**
  * Class AbstractCardRenderer
  * @api
+ * @since 100.1.0
  */
 abstract class AbstractCardRenderer extends AbstractTokenRenderer implements CardRendererInterface
 {
@@ -25,6 +26,7 @@ abstract class AbstractCardRenderer extends AbstractTokenRenderer implements Car
      * @param Template\Context $context
      * @param CcConfigProvider $iconsProvider
      * @param array $data
+     * @since 100.1.0
      */
     public function __construct(
         Template\Context $context,
@@ -38,6 +40,7 @@ abstract class AbstractCardRenderer extends AbstractTokenRenderer implements Car
     /**
      * @param string $type
      * @return array
+     * @since 100.1.0
      */
     protected function getIconForType($type)
     {

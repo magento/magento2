@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,10 @@
 
 namespace Magento\PageCache\Test\Unit\Controller\Block;
 
-class EsiTest extends \PHPUnit_Framework_TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class EsiTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
@@ -64,12 +67,17 @@ class EsiTest extends \PHPUnit_Framework_TestCase
         $contextMock->expects($this->any())->method('getResponse')->will($this->returnValue($this->responseMock));
         $contextMock->expects($this->any())->method('getView')->will($this->returnValue($this->viewMock));
 
-        $this->translateInline = $this->getMock(\Magento\Framework\Translate\InlineInterface::class);
+        $this->translateInline = $this->createMock(\Magento\Framework\Translate\InlineInterface::class);
 
         $helperObjectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->action = $helperObjectManager->getObject(
             \Magento\PageCache\Controller\Block\Esi::class,
-            ['context' => $contextMock, 'translateInline' => $this->translateInline]
+            [
+                'context' => $contextMock,
+                'translateInline' => $this->translateInline,
+                'jsonSerializer' => new \Magento\Framework\Serialize\Serializer\Json(),
+                'base64jsonSerializer' => new \Magento\Framework\Serialize\Serializer\Base64Json()
+            ]
         );
     }
 
@@ -83,15 +91,9 @@ class EsiTest extends \PHPUnit_Framework_TestCase
         $block = 'block';
         $handles = ['handle1', 'handle2'];
         $html = 'some-html';
-        $mapData = [['blocks', '', json_encode([$block])], ['handles', '', json_encode($handles)]];
+        $mapData = [['blocks', '', json_encode([$block])], ['handles', '', base64_encode(json_encode($handles))]];
 
-        $blockInstance1 = $this->getMock(
-            $blockClass,
-            ['toHtml'],
-            [],
-            '',
-            false
-        );
+        $blockInstance1 = $this->createPartialMock($blockClass, ['toHtml']);
 
         $blockInstance1->expects($this->once())->method('toHtml')->will($this->returnValue($html));
         $blockInstance1->setTtl(360);

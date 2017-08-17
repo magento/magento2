@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Account;
@@ -9,6 +9,8 @@ use Magento\Customer\Model\AccountManagement;
 
 /**
  * Customer reset password form
+ *
+ * @api
  */
 class Resetpassword extends \Magento\Framework\View\Element\Template
 {
@@ -29,6 +31,7 @@ class Resetpassword extends \Magento\Framework\View\Element\Template
      * Get minimum password length
      *
      * @return string
+     * @since 100.1.0
      */
     public function getMinimumPasswordLength()
     {
@@ -39,6 +42,7 @@ class Resetpassword extends \Magento\Framework\View\Element\Template
      * Get minimum password length
      *
      * @return string
+     * @since 100.1.0
      */
     public function getRequiredCharacterClassesNumber()
     {

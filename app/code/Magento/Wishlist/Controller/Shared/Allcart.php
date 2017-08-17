@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Controller\Shared;
@@ -9,6 +9,10 @@ use Magento\Framework\App\Action\Context;
 use Magento\Wishlist\Model\ItemCarrier;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Wishlist\Controller\Shared\Allcart
+ *
+ */
 class Allcart extends \Magento\Framework\App\Action\Action
 {
     /**

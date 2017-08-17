@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\ResourceModel\Order\Creditmemo;
@@ -8,7 +8,7 @@ namespace Magento\Sales\Test\Unit\Model\ResourceModel\Order\Creditmemo;
 /**
  * Class CommentTest
  */
-class CommentTest extends \PHPUnit_Framework_TestCase
+class CommentTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Comment
@@ -45,40 +45,12 @@ class CommentTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->commentModelMock = $this->getMock(
-            \Magento\Sales\Model\Order\Creditmemo\Comment::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->appResourceMock = $this->getMock(
-            \Magento\Framework\App\ResourceConnection::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->connectionMock = $this->getMock(
-            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->validatorMock = $this->getMock(
-            \Magento\Sales\Model\Order\Creditmemo\Comment\Validator::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->entitySnapshotMock = $this->getMock(
-            \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot::class,
-            [],
-            [],
-            '',
-            false
+        $this->commentModelMock = $this->createMock(\Magento\Sales\Model\Order\Creditmemo\Comment::class);
+        $this->appResourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
+        $this->connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class);
+        $this->validatorMock = $this->createMock(\Magento\Sales\Model\Order\Creditmemo\Comment\Validator::class);
+        $this->entitySnapshotMock = $this->createMock(
+            \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot::class
         );
 
         $this->appResourceMock->expects($this->any())
@@ -94,15 +66,11 @@ class CommentTest extends \PHPUnit_Framework_TestCase
         $this->commentModelMock->expects($this->any())->method('hasDataChanges')->will($this->returnValue(true));
         $this->commentModelMock->expects($this->any())->method('isSaveAllowed')->will($this->returnValue(true));
 
-        $relationProcessorMock = $this->getMock(
-            \Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor::class,
-            [],
-            [],
-            '',
-            false
+        $relationProcessorMock = $this->createMock(
+            \Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor::class
         );
 
-        $contextMock = $this->getMock(\Magento\Framework\Model\ResourceModel\Db\Context::class, [], [], '', false);
+        $contextMock = $this->createMock(\Magento\Framework\Model\ResourceModel\Db\Context::class);
         $contextMock->expects($this->once())->method('getResources')->willReturn($this->appResourceMock);
         $contextMock->expects($this->once())->method('getObjectRelationProcessor')->willReturn($relationProcessorMock);
 

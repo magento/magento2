@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller;
@@ -8,6 +8,10 @@ namespace Magento\Customer\Controller;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 
+/**
+ * Class \Magento\Customer\Controller\Review
+ *
+ */
 class Review extends \Magento\Framework\App\Action\Action
 {
     /**

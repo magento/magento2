@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,6 +12,10 @@ use Magento\Catalog\Pricing\Price\ConfiguredPriceInterface;
 use Magento\Catalog\Pricing\Price\FinalPrice as CatalogFinalPrice;
 use Magento\Framework\Pricing\Amount\AmountInterface;
 
+/**
+ * Class \Magento\GroupedProduct\Pricing\Price\ConfiguredPrice
+ *
+ */
 class ConfiguredPrice extends CatalogFinalPrice implements ConfiguredPriceInterface
 {
     /**

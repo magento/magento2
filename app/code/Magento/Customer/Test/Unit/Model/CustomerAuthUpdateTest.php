@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model;
@@ -10,7 +10,7 @@ use Magento\Customer\Model\CustomerAuthUpdate;
 /**
  * Class CustomerAuthUpdateTest
  */
-class CustomerAuthUpdateTest extends \PHPUnit_Framework_TestCase
+class CustomerAuthUpdateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CustomerAuthUpdate
@@ -40,9 +40,9 @@ class CustomerAuthUpdateTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->customerRegistry =
-            $this->getMock(\Magento\Customer\Model\CustomerRegistry::class, [], [], '', false);
+            $this->createMock(\Magento\Customer\Model\CustomerRegistry::class);
         $this->customerResourceModel =
-            $this->getMock(\Magento\Customer\Model\ResourceModel\Customer::class, [], [], '', false);
+            $this->createMock(\Magento\Customer\Model\ResourceModel\Customer::class);
 
         $this->model = $this->objectManager->getObject(
             \Magento\Customer\Model\CustomerAuthUpdate::class,
@@ -60,21 +60,9 @@ class CustomerAuthUpdateTest extends \PHPUnit_Framework_TestCase
     {
         $customerId = 1;
 
-        $customerSecureMock = $this->getMock(
-            \Magento\Customer\Model\Data\CustomerSecure::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $customerSecureMock = $this->createMock(\Magento\Customer\Model\Data\CustomerSecure::class);
 
-        $dbAdapter = $this->getMock(
-            \Magento\Framework\DB\Adapter\AdapterInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $dbAdapter = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
 
         $this->customerRegistry->expects($this->once())
             ->method('retrieveSecureData')

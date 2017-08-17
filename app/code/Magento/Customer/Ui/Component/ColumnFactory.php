@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Ui\Component;
@@ -9,22 +9,34 @@ use Magento\Customer\Api\Data\AttributeMetadataInterface as AttributeMetadata;
 use Magento\Customer\Ui\Component\Listing\Column\InlineEditUpdater;
 use Magento\Customer\Api\CustomerMetadataInterface;
 
+/**
+ * Class \Magento\Customer\Ui\Component\ColumnFactory
+ *
+ */
 class ColumnFactory
 {
-    /** @var \Magento\Framework\View\Element\UiComponentFactory  */
+    /**
+     * @var \Magento\Framework\View\Element\UiComponentFactory
+     */
     protected $componentFactory;
 
-    /** @var InlineEditUpdater */
+    /**
+     * @var \Magento\Customer\Ui\Component\Listing\Column\InlineEditUpdater
+     */
     protected $inlineEditUpdater;
 
-    /** @var array  */
+    /**
+     * @var array
+     */
     protected $jsComponentMap = [
         'text' => 'Magento_Ui/js/grid/columns/column',
         'select' => 'Magento_Ui/js/grid/columns/select',
         'date' => 'Magento_Ui/js/grid/columns/date',
     ];
 
-    /** @var array  */
+    /**
+     * @var array
+     */
     protected $dataTypeMap = [
         'default' => 'text',
         'text' => 'text',

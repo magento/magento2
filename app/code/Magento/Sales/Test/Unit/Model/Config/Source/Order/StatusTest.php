@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Config\Source\Order;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class StatusTest extends \PHPUnit_Framework_TestCase
+class StatusTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Sales\Model\Config\Source\Order\Status */
     protected $object;
@@ -20,7 +20,7 @@ class StatusTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->config = $this->getMock(\Magento\Sales\Model\Order\Config::class, [], [], '', false);
+        $this->config = $this->createMock(\Magento\Sales\Model\Order\Config::class);
 
         $this->objectManager = new ObjectManager($this);
         $this->object = $this->objectManager->getObject(

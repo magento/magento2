@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Controller\Adminhtml\Design\Config;
@@ -11,7 +11,7 @@ use Magento\Theme\Controller\Adminhtml\Design\Config\Save;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SaveTest extends \PHPUnit_Framework_TestCase
+class SaveTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Theme\Model\DesignConfigRepository|\PHPUnit_Framework_MockObject_MockObject */
     protected $designConfigRepository;
@@ -52,25 +52,10 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->designConfigRepository = $this->getMock(
-            \Magento\Theme\Model\DesignConfigRepository::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->redirectFactory = $this->getMock(
-            \Magento\Backend\Model\View\Result\RedirectFactory::class,
-            [],
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['create']
-        );
-        $this->redirect = $this->getMock(\Magento\Backend\Model\View\Result\Redirect::class, [], [], '', false);
-        $this->configFactory = $this->getMock(\Magento\Theme\Model\Data\Design\ConfigFactory::class, [], [], '', false);
+        $this->designConfigRepository = $this->createMock(\Magento\Theme\Model\DesignConfigRepository::class);
+        $this->redirectFactory = $this->createMock(\Magento\Backend\Model\View\Result\RedirectFactory::class);
+        $this->redirect = $this->createMock(\Magento\Backend\Model\View\Result\Redirect::class);
+        $this->configFactory = $this->createMock(\Magento\Theme\Model\Data\Design\ConfigFactory::class);
         $this->messageManager = $this->getMockForAbstractClass(
             \Magento\Framework\Message\ManagerInterface::class,
             [],
@@ -100,7 +85,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->fileParams = $this->getMock(\Zend\Stdlib\Parameters::class, [], [], '', false);
+        $this->fileParams = $this->createMock(\Zend\Stdlib\Parameters::class);
         $this->dataPersistor = $this->getMockBuilder(\Magento\Framework\App\Request\DataPersistorInterface::class)
             ->getMockForAbstractClass();
         $this->controller = new Save(

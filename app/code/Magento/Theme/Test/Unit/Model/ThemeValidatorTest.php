@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@
  */
 namespace Magento\Theme\Test\Unit\Model;
 
-class ThemeValidatorTest extends \PHPUnit_Framework_TestCase
+class ThemeValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Theme\Model\ThemeValidator
@@ -33,20 +33,11 @@ class ThemeValidatorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->storeManager = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class, [], [], '', false);
-        $this->themeProvider = $this->getMock(
-            \Magento\Framework\View\Design\Theme\ThemeProviderInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->configData = $this->getMock(
+        $this->storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->themeProvider = $this->createMock(\Magento\Framework\View\Design\Theme\ThemeProviderInterface::class);
+        $this->configData = $this->createPartialMock(
             \Magento\Framework\App\Config\Value::class,
-            ['getCollection', 'addFieldToFilter'],
-            [],
-            '',
-            false
+            ['getCollection', 'addFieldToFilter']
         );
         $this->themeValidator = new \Magento\Theme\Model\ThemeValidator(
             $this->storeManager,
@@ -57,7 +48,7 @@ class ThemeValidatorTest extends \PHPUnit_Framework_TestCase
 
     public function testValidateIsThemeInUse()
     {
-        $theme = $this->getMock(\Magento\Theme\Model\Theme::class, [], [], '', false);
+        $theme = $this->createMock(\Magento\Theme\Model\Theme::class);
         $theme->expects($this->once())->method('getId')->willReturn(6);
         $defaultEntity = new \Magento\Framework\DataObject(['value' => 6, 'scope' => 'default', 'scope_id' => 8]);
         $websitesEntity = new \Magento\Framework\DataObject(['value' => 6, 'scope' => 'websites', 'scope_id' => 8]);
@@ -72,9 +63,9 @@ class ThemeValidatorTest extends \PHPUnit_Framework_TestCase
             ->expects($this->at(2))
             ->method('addFieldToFilter')
             ->willReturn([$defaultEntity, $websitesEntity, $storesEntity]);
-        $website = $this->getMock(\Magento\Store\Model\Website::class, ['getName'], [], '', false);
+        $website = $this->createPartialMock(\Magento\Store\Model\Website::class, ['getName']);
         $website->expects($this->once())->method('getName')->willReturn('websiteA');
-        $store = $this->getMock(\Magento\Store\Model\Store::class, ['getName'], [], '', false);
+        $store = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getName']);
         $store->expects($this->once())->method('getName')->willReturn('storeA');
         $this->storeManager->expects($this->once())->method('getWebsite')->willReturn($website);
         $this->storeManager->expects($this->once())->method('getStore')->willReturn($store);

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ namespace Magento\Integration\Test\Unit\Oauth;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class OauthTest extends \PHPUnit_Framework_TestCase
+class OauthTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Integration\Model\Oauth\ConsumerFactory */
     private $_consumerFactory;
@@ -779,7 +779,7 @@ class OauthTest extends \PHPUnit_Framework_TestCase
      */
     public function testMissingParamForBuildAuthorizationHeader($expectedMessage, $request)
     {
-        $this->setExpectedException(
+        $this->expectException(
             \Magento\Framework\Oauth\OauthInputException::class,
             $expectedMessage,
             0

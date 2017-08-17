@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -31,13 +31,9 @@ class SystemPackage
      */
     private $composerInfo;
 
-    /**#@+
-     * Constants for different Magento editions
-     */
     const EDITION_COMMUNITY = 'magento/product-community-edition';
+
     const EDITION_ENTERPRISE = 'magento/product-enterprise-edition';
-    const EDITION_B2B = 'magento/product-b2b-edition';
-    /**#@-*/
 
     /**
      * Constructor
@@ -63,7 +59,6 @@ class SystemPackage
     public function getPackageVersions()
     {
         $currentCE = '0';
-        $currentEE = $currentCE;
 
         $result = [];
         $systemPackages = $this->getInstalledSystemPackages();
@@ -79,10 +74,6 @@ class SystemPackage
                 $currentCE = $systemPackageInfo[InfoCommand::CURRENT_VERSION];
             }
 
-            if ($systemPackageInfo['name'] == static::EDITION_ENTERPRISE) {
-                $currentEE = $systemPackageInfo[InfoCommand::CURRENT_VERSION];
-            }
-
             if (count($versions) > 1) {
                 $versions[0]['name'] .= ' (latest)';
             }
@@ -95,13 +86,6 @@ class SystemPackage
 
         if (!in_array(static::EDITION_ENTERPRISE, $systemPackages)) {
             $result = array_merge($this->getAllowedEnterpriseVersions($currentCE), $result);
-        }
-
-        if (
-            in_array(static::EDITION_ENTERPRISE, $systemPackages)
-            && !in_array(static::EDITION_B2B, $systemPackages)
-        ) {
-            $result = array_merge($this->getAllowedB2BVersions($currentEE), $result);
         }
 
         $result = $this->formatPackages($result);
@@ -139,63 +123,6 @@ class SystemPackage
     }
 
     /**
-     * Retrieve allowed B2B versions
-     *
-     * @param string $currentEE
-     * @return array
-     */
-    public function getAllowedB2BVersions($currentEE)
-    {
-        $result = [];
-        $versions = $this->fetchInfoVersions(static::EDITION_B2B);
-        $versionsPrepared = [];
-        $maxVersion = '';
-
-        if ($versions[InfoCommand::AVAILABLE_VERSIONS]) {
-            $versions = $this->sortVersions($versions);
-            if (isset($versions[InfoCommand::AVAILABLE_VERSIONS][0])) {
-                $maxVersion = $versions[InfoCommand::AVAILABLE_VERSIONS][0];
-            }
-            $versionsPrepared = $this->filterB2bVersions($currentEE, $versions, $maxVersion);
-        }
-
-        if ($versionsPrepared) {
-            $result[] = [
-                'package' => static::EDITION_B2B,
-                'versions' => $versionsPrepared,
-            ];
-        }
-
-        return $result;
-    }
-
-    /**
-     * Fetching of info command response to display all correct versions
-     *
-     * @param string $command
-     * @return array
-     */
-    private function fetchInfoVersions($command)
-    {
-        $versions = (array)$this->infoCommand->run($command);
-
-        $versions[InfoCommand::CURRENT_VERSION] = isset($versions[InfoCommand::CURRENT_VERSION])
-            ? $versions[InfoCommand::CURRENT_VERSION]
-            : null;
-        $versions[InfoCommand::AVAILABLE_VERSIONS] = isset($versions[InfoCommand::AVAILABLE_VERSIONS])
-            ? $versions[InfoCommand::AVAILABLE_VERSIONS]
-            : null;
-        $versions[InfoCommand::AVAILABLE_VERSIONS] = array_unique(
-            array_merge(
-                (array)$versions[InfoCommand::CURRENT_VERSION],
-                (array)$versions[InfoCommand::AVAILABLE_VERSIONS]
-            )
-        );
-
-        return $versions;
-    }
-
-    /**
      * Retrieve package versions
      *
      * @param array $systemPackageInfo
@@ -210,8 +137,6 @@ class SystemPackage
             $editionType .= 'CE';
         } elseif ($systemPackageInfo['name'] == static::EDITION_ENTERPRISE) {
             $editionType .= 'EE';
-        } elseif ($systemPackageInfo['name'] == static::EDITION_B2B) {
-            $editionType .= 'B2B';
         }
 
         foreach ($systemPackageInfo[InfoCommand::NEW_VERSIONS] as $version) {
@@ -230,6 +155,7 @@ class SystemPackage
 
     /**
      * @return array
+     * @throws \Exception
      * @throws \RuntimeException
      */
     public function getInstalledSystemPackages()
@@ -342,37 +268,5 @@ class SystemPackage
             }
         }
         return $eeVersions;
-    }
-
-    /**
-     * Filtering B2B versions
-     *
-     * @param string $currentEE
-     * @param array $b2bVersions
-     * @param string $maxVersion
-     * @return array
-     */
-    public function filterB2bVersions($currentEE, $b2bVersions, $maxVersion)
-    {
-        $b2bVersionsPrepared = [];
-        foreach ($b2bVersions[InfoCommand::AVAILABLE_VERSIONS] as $version) {
-            $requires = $this->composerInfo->getPackageRequirements(static::EDITION_B2B, $version);
-            if (array_key_exists(static::EDITION_ENTERPRISE, $requires)) {
-                /** @var \Composer\Package\Link $eeRequire */
-                $eeRequire = $requires[static::EDITION_ENTERPRISE];
-                if (version_compare(
-                    $eeRequire->getConstraint()->getPrettyString(),
-                    $currentEE,
-                    '>='
-                )) {
-                    $name = 'Version ' . $version . ' B2B';
-                    if ($maxVersion == $version) {
-                        $name .= ' (latest)';
-                    }
-                    $b2bVersionsPrepared[] = ['id' => $version, 'name' => $name, 'current' => false];
-                }
-            }
-        }
-        return $b2bVersionsPrepared;
     }
 }

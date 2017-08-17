@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,10 @@ namespace Magento\Customer\Block\Widget;
 
 use Magento\Customer\Api\CustomerMetadataInterface;
 
+/**
+ * Class \Magento\Customer\Block\Widget\AbstractWidget
+ *
+ */
 class AbstractWidget extends \Magento\Framework\View\Element\Template
 {
     /**

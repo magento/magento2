@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,6 +12,10 @@ use Magento\Framework\Event\ManagerInterface as EventManager;
 use Magento\Sales\Ui\Component\DataProvider\Document;
 use Psr\Log\LoggerInterface as Logger;
 
+/**
+ * Class \Magento\Sales\Model\ResourceModel\Order\Invoice\Grid\Collection
+ *
+ */
 class Collection extends \Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult
 {
     /**

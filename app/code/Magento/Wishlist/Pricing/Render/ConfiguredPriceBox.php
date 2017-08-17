@@ -1,12 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Pricing\Render;
 
 use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
 
+/**
+ * Class \Magento\Wishlist\Pricing\Render\ConfiguredPriceBox
+ *
+ */
 class ConfiguredPriceBox extends \Magento\Catalog\Pricing\Render\ConfiguredPriceBox
 {
     /**

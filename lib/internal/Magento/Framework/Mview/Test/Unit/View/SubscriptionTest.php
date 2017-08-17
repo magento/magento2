@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,7 +10,7 @@ namespace Magento\Framework\Mview\Test\Unit\View;
 
 use \Magento\Framework\Mview\View\Subscription;
 
-class SubscriptionTest extends \PHPUnit_Framework_TestCase
+class SubscriptionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Mysql PDO DB adapter mock
@@ -39,15 +39,8 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->connectionMock = $this->getMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, [], [], '', false);
-        $this->resourceMock = $this->getMock(
-            \Magento\Framework\App\ResourceConnection::class,
-            [],
-            [],
-            '',
-            false,
-            false
-        );
+        $this->connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class);
+        $this->resourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
 
         $this->connectionMock->expects($this->any())
             ->method('quoteIdentifier')
@@ -57,9 +50,7 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
             ->method('getConnection')
             ->willReturn($this->connectionMock);
 
-        $this->triggerFactoryMock = $this->getMock(
-            \Magento\Framework\DB\Ddl\TriggerFactory::class, [], [], '', false, false
-        );
+        $this->triggerFactoryMock = $this->createMock(\Magento\Framework\DB\Ddl\TriggerFactory::class);
         $this->viewCollectionMock = $this->getMockForAbstractClass(
             \Magento\Framework\Mview\View\CollectionInterface::class, [], '', false, false, true, []
         );
@@ -221,7 +212,7 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
 
     public function testRemove()
     {
-        $triggerMock = $this->getMock(\Magento\Framework\DB\Ddl\Trigger::class, [], [], '', false, false);
+        $triggerMock = $this->createMock(\Magento\Framework\DB\Ddl\Trigger::class);
         $triggerMock->expects($this->exactly(3))
             ->method('setName')
             ->will($this->returnSelf());

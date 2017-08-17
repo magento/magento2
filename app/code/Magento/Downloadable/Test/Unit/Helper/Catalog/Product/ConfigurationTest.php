@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ConfigurationTest extends \PHPUnit_Framework_TestCase
+class ConfigurationTest extends \PHPUnit\Framework\TestCase
 {
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
@@ -41,7 +41,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $this->context = $this->getMockBuilder(\Magento\Framework\App\Helper\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->scopeConfig = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $this->productConfig = $this->getMockBuilder(\Magento\Catalog\Helper\Product\Configuration::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -85,12 +85,12 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
 
     public function testGetOptions()
     {
-        $item = $this->getMock(\Magento\Catalog\Model\Product\Configuration\Item\ItemInterface::class);
+        $item = $this->createMock(\Magento\Catalog\Model\Product\Configuration\Item\ItemInterface::class);
         $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->setMethods(['_wakeup', 'getLinksTitle', 'getTypeInstance'])
             ->getMock();
-        $option = $this->getMock(\Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface::class);
+        $option = $this->createMock(\Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface::class);
         $productType = $this->getMockBuilder(\Magento\Downloadable\Model\Product\Type::class)
             ->disableOriginalConstructor()
             ->setMethods(['getLinks'])

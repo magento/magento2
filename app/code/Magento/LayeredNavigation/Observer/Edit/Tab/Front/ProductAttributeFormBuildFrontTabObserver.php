@@ -2,7 +2,7 @@
 /**
  * Product attribute edit form observer
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\LayeredNavigation\Observer\Edit\Tab\Front;
@@ -11,6 +11,10 @@ use Magento\Config\Model\Config\Source;
 use Magento\Framework\Module\Manager;
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class \Magento\LayeredNavigation\Observer\Edit\Tab\Front\ProductAttributeFormBuildFrontTabObserver
+ *
+ */
 class ProductAttributeFormBuildFrontTabObserver implements ObserverInterface
 {
     /**

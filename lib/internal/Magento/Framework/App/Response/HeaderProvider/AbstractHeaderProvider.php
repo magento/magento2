@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,10 +11,14 @@ namespace Magento\Framework\App\Response\HeaderProvider;
  */
 abstract class AbstractHeaderProvider implements \Magento\Framework\App\Response\HeaderProvider\HeaderProviderInterface
 {
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $headerName = '';
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $headerValue = '';
 
     /**

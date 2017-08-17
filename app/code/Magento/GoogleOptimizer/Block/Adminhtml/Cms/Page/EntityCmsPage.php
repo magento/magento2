@@ -1,16 +1,18 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GoogleOptimizer\Block\Adminhtml\Cms\Page;
 
-
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\GoogleOptimizer\Block\Adminhtml\EntityCodeResolverInterface;
 use Magento\GoogleOptimizer\Model\Code as GoogleOptimizerCode;
 
+/**
+ * Class \Magento\GoogleOptimizer\Block\Adminhtml\Cms\Page\EntityCmsPage
+ *
+ */
 class EntityCmsPage extends DataObject
 {
     /**

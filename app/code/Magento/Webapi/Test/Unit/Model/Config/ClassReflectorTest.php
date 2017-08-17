@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Test\Unit\Model\Config;
@@ -8,7 +8,7 @@ namespace Magento\Webapi\Test\Unit\Model\Config;
 /**
  * Test for class reflector.
  */
-class ClassReflectorTest extends \PHPUnit_Framework_TestCase
+class ClassReflectorTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\Reflection\TypeProcessor|\PHPUnit_Framework_MockObject_MockObject */
     protected $_typeProcessor;
@@ -21,12 +21,9 @@ class ClassReflectorTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_typeProcessor = $this->getMock(
+        $this->_typeProcessor = $this->createPartialMock(
             \Magento\Framework\Reflection\TypeProcessor::class,
-            ['process'],
-            [],
-            '',
-            false
+            ['process']
         );
         $this->_typeProcessor->expects(
             $this->any()
@@ -67,8 +64,7 @@ class ClassReflectorTest extends \PHPUnit_Framework_TestCase
     protected function _getSampleReflectionData()
     {
         return [
-            'documentation' =>
-                'Basic random string generator. This line is short description '.
+            'documentation' => 'Basic random string generator. This line is short description ' .
                 'This line is long description. This is still the long description.',
             'interface' => [
                 'in' => [

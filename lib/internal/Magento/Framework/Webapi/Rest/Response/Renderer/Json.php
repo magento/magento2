@@ -2,11 +2,15 @@
 /**
  *  JSON Renderer allows to format array or object as JSON document.
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Webapi\Rest\Response\Renderer;
 
+/**
+ * Class \Magento\Framework\Webapi\Rest\Response\Renderer\Json
+ *
+ */
 class Json implements \Magento\Framework\Webapi\Rest\Response\RendererInterface
 {
     /**
@@ -14,7 +18,9 @@ class Json implements \Magento\Framework\Webapi\Rest\Response\RendererInterface
      */
     const MIME_TYPE = 'application/json';
 
-    /** @var \Magento\Framework\Json\Encoder */
+    /**
+     * @var \Magento\Framework\Json\Encoder
+     */
     protected $encoder;
 
     /**

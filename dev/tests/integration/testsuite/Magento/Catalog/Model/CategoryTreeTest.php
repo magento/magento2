@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model;
@@ -14,7 +14,7 @@ namespace Magento\Catalog\Model;
  * @magentoAppIsolation enabled
  * @magentoDbIsolation enabled
  */
-class CategoryTreeTest extends \PHPUnit_Framework_TestCase
+class CategoryTreeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Category
@@ -125,7 +125,7 @@ class CategoryTreeTest extends \PHPUnit_Framework_TestCase
     public function testGetChildren()
     {
         $this->_model->load(3);
-        $this->assertEquals('4,13', $this->_model->getChildren());
+        $this->assertEquals(array_diff([4, 13], explode(',', $this->_model->getChildren())), []);
     }
 
     public function testGetPathInStore()

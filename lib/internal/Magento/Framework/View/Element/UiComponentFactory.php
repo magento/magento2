@@ -1,10 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Element;
 
+use Magento\Framework\Config\DataInterface;
+use Magento\Framework\Config\DataInterfaceFactory;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
@@ -14,6 +16,7 @@ use Magento\Framework\View\Element\UiComponent\Config\ManagerInterface;
 use Magento\Framework\View\Element\UiComponent\ContextFactory;
 use Magento\Framework\Phrase;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
+use Magento\Framework\View\Element\UiComponent\Factory\ComponentFactoryInterface;
 
 /**
  * Class UiComponentFactory
@@ -31,13 +34,6 @@ class UiComponentFactory extends DataObject
     protected $objectManager;
 
     /**
-     * UI component manager
-     *
-     * @var ManagerInterface
-     */
-    protected $componentManager;
-
-    /**
      * Argument interpreter
      *
      * @var InterpreterInterface
@@ -50,26 +46,57 @@ class UiComponentFactory extends DataObject
     protected $contextFactory;
 
     /**
-     * Constructor
+     * UI component manager
      *
+     * @deprecated 100.2.0
+     * @var ManagerInterface
+     */
+    protected $componentManager;
+
+    /**
+     * @var ComponentFactoryInterface[]
+     */
+    private $componentChildFactories;
+
+    /**
+     * @var DataInterfaceFactory
+     */
+    private $configFactory;
+
+    /**
+     * @var \Magento\Ui\Config\Reader\Definition\Data
+     */
+    private $definitionData;
+
+    /**
      * @param ObjectManagerInterface $objectManager
      * @param ManagerInterface $componentManager
      * @param InterpreterInterface $argumentInterpreter
      * @param ContextFactory $contextFactory
+     * @param DataInterfaceFactory|null $configFactory
      * @param array $data
+     * @param array $componentChildFactories
+     * @param DataInterface|null $definitionData
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
         ManagerInterface $componentManager,
         InterpreterInterface $argumentInterpreter,
         ContextFactory $contextFactory,
-        array $data = []
+        array $data = [],
+        array $componentChildFactories = [],
+        DataInterface $definitionData = null,
+        DataInterfaceFactory $configFactory = null
     ) {
         $this->objectManager = $objectManager;
         $this->componentManager = $componentManager;
         $this->argumentInterpreter = $argumentInterpreter;
         $this->contextFactory = $contextFactory;
+        $this->componentChildFactories = $componentChildFactories;
+        $this->configFactory = $configFactory ?: $this->objectManager->get(DataInterfaceFactory::class);
         parent::__construct($data);
+        $this->definitionData = $definitionData ?:
+            $this->objectManager->get(DataInterface::class);
     }
 
     /**
@@ -78,33 +105,53 @@ class UiComponentFactory extends DataObject
      * @param array $bundleComponents
      * @param ContextInterface $renderContext
      * @param string $identifier
+     * @param array $arguments
      * @return UiComponentInterface
      */
     protected function createChildComponent(
-        array $bundleComponents,
+        array &$bundleComponents,
         ContextInterface $renderContext,
-        $identifier
+        $identifier,
+        array $arguments = []
     ) {
-        list($className, $arguments) = $this->argumentsResolver($identifier, $bundleComponents);
-        if (isset($arguments['data']['disabled']) && (int)$arguments['data']['disabled']) {
+        $componentArguments = &$bundleComponents['arguments'];
+        list($className, $componentArguments) = $this->argumentsResolver($identifier, $bundleComponents);
+        if (isset($componentArguments['data']['disabled']) && (int)$componentArguments['data']['disabled']) {
             return null;
         }
-        $components = [];
-        foreach ($bundleComponents['children'] as $childrenIdentifier => $childrenData) {
-            $children = $this->createChildComponent(
-                $childrenData,
-                $renderContext,
-                $childrenIdentifier
-            );
-            $components[$childrenIdentifier] = $children;
+
+        /**
+         * Add an ability to fill component variables from child factory.
+         */
+        $bundleComponents['components'] = [];
+        $components = &$bundleComponents['components'];
+
+        if (isset($this->componentChildFactories[$className])) {
+            $factory = $this->componentChildFactories[$className];
+
+            /**
+             * Factory return nothing
+             * because factory should put created components in the right place
+             */
+            $factory->create($bundleComponents, $arguments);
+        } else {
+            foreach ($bundleComponents['children'] as $childrenIdentifier => $childrenData) {
+                $children = $this->createChildComponent(
+                    $childrenData,
+                    $renderContext,
+                    $childrenIdentifier,
+                    $arguments
+                );
+                $components[$childrenIdentifier] = $children;
+            }
         }
         $components = array_filter($components);
-        $arguments['components'] = $components;
-        if (!isset($arguments['context'])) {
-            $arguments['context'] = $renderContext;
+        $componentArguments['components'] = $components;
+        if (!isset($componentArguments['context'])) {
+            $componentArguments['context'] = $renderContext;
         }
 
-        return $this->objectManager->create($className, $arguments);
+        return $this->objectManager->create($className, $componentArguments);
     }
 
     /**
@@ -125,6 +172,7 @@ class UiComponentFactory extends DataObject
             $arguments['data'] = [];
         }
 
+        unset($attributes['component']);
         $arguments['data'] = array_merge($arguments['data'], ['name' => $identifier], $attributes);
         return [$className, $arguments];
     }
@@ -142,78 +190,56 @@ class UiComponentFactory extends DataObject
     public function create($identifier, $name = null, array $arguments = [])
     {
         if ($name === null) {
-            $bundleComponents = $this->componentManager->prepareData($identifier)->getData($identifier);
-            if (empty($bundleComponents)) {
-                throw new LocalizedException(new \Magento\Framework\Phrase('You use an empty set.'));
-            }
+            $componentData = $this->configFactory->create(['componentName' => $identifier])->get($identifier);
+            $bundleComponents = [$identifier => $componentData];
+
             list($className, $componentArguments) = $this->argumentsResolver(
                 $identifier,
                 $bundleComponents[$identifier]
             );
             $componentArguments = array_replace_recursive($componentArguments, $arguments);
-            if (isset($componentArguments['config']['class'])) {
-                $className = $componentArguments['config']['class'];
-            }
             if (!isset($componentArguments['context'])) {
                 $componentArguments['context'] = $this->contextFactory->create(
                     ['namespace' => $identifier]
                 );
             }
-
             $reverseMerge = isset($componentArguments['data']['reverseMetadataMerge'])
                 && $componentArguments['data']['reverseMetadataMerge'];
             $bundleComponents = $this->mergeMetadata($identifier, $bundleComponents, $reverseMerge);
-
-            $componentContext = $componentArguments['context'];
-            $components = [];
-            foreach ($bundleComponents[$identifier]['children'] as $childrenIdentifier => $childrenData) {
-                $children = $this->createChildComponent(
-                    $childrenData,
-                    $componentContext,
-                    $childrenIdentifier
-                );
-                $components[$childrenIdentifier] = $children;
-            }
-            $components = array_filter($components);
-            $componentArguments['components'] = $components;
-
-            /** @var \Magento\Framework\View\Element\UiComponentInterface $component */
-            $component = $this->objectManager->create(
-                $className,
-                array_replace_recursive($componentArguments, $arguments)
-            );
-
-            return $component;
+            $children = $bundleComponents[$identifier]['children'];
         } else {
-            $rawComponentData = $this->componentManager->createRawComponentData($name);
+            $rawComponentData = $this->definitionData->get($name);
             list($className, $componentArguments) = $this->argumentsResolver($identifier, $rawComponentData);
-            $processedArguments = array_replace_recursive($componentArguments, $arguments);
-            if (isset($processedArguments['config']['class'])) {
-                $className = $processedArguments['config']['class'];
-            }
-            if (isset($processedArguments['data']['config']['children'])) {
-                $components = [];
-                $bundleChildren = $this->getBundleChildren($processedArguments['data']['config']['children']);
-                foreach ($bundleChildren as $childrenIdentifier => $childrenData) {
-                    $children = $this->createChildComponent(
-                        $childrenData,
-                        $processedArguments['context'],
-                        $childrenIdentifier
-                    );
-                    $components[$childrenIdentifier] = $children;
-                }
-                $components = array_filter($components);
-                $processedArguments['components'] = $components;
-            }
-
-            /** @var \Magento\Framework\View\Element\UiComponentInterface $component */
-            $component = $this->objectManager->create(
-                $className,
-                $processedArguments
-            );
-
-            return $component;
+            $componentArguments = array_replace_recursive($componentArguments, $arguments);
+            $children = isset($componentArguments['data']['config']['children']) ?
+                        $componentArguments['data']['config']['children'] : [];
+            $children = $this->getBundleChildren($children);
         }
+
+        $className = isset($componentArguments['config']['class']) ?
+            $componentArguments['config']['class'] : $className;
+        $components = [];
+
+        foreach ($children as $childrenIdentifier => $childrenData) {
+            $children = $this->createChildComponent(
+                $childrenData,
+                $componentArguments['context'],
+                $childrenIdentifier,
+                $arguments
+            );
+            $components[$childrenIdentifier] = $children;
+        }
+
+        $components = array_filter($components);
+        $componentArguments['components'] = $components;
+
+        /** @var \Magento\Framework\View\Element\UiComponentInterface $component */
+        $component = $this->objectManager->create(
+            $className,
+            $componentArguments
+        );
+
+        return $component;
     }
 
     /**
@@ -222,6 +248,7 @@ class UiComponentFactory extends DataObject
      * @param array $children
      * @return array
      * @throws LocalizedException
+     * @since 100.1.0
      */
     protected function getBundleChildren(array $children = [])
     {
@@ -235,7 +262,11 @@ class UiComponentFactory extends DataObject
                 ));
             }
 
-            $rawComponentData = $this->componentManager->createRawComponentData($config['componentType']);
+            if (!isset($componentArguments['context'])) {
+                throw new LocalizedException(new \Magento\Framework\Phrase('Each UI component should have context.'));
+            }
+
+            $rawComponentData = $this->definitionData->get($config['componentType']);
             list(, $componentArguments) = $this->argumentsResolver($identifier, $rawComponentData);
             $arguments = array_replace_recursive($componentArguments, ['data' => ['config' => $config]]);
             $rawComponentData[ManagerInterface::COMPONENT_ARGUMENTS_KEY] = $arguments;
@@ -260,6 +291,7 @@ class UiComponentFactory extends DataObject
      * @param array $bundleComponents
      * @param bool $reverseMerge
      * @return array
+     * @since 100.1.0
      */
     protected function mergeMetadata($identifier, array $bundleComponents, $reverseMerge = false)
     {
@@ -284,6 +316,7 @@ class UiComponentFactory extends DataObject
      * @param array $data
      * @param bool $reverseMerge
      * @return array
+     * @since 100.1.0
      */
     protected function mergeMetadataElement(array $bundleComponents, $name, array $data, $reverseMerge = false)
     {
@@ -321,6 +354,7 @@ class UiComponentFactory extends DataObject
      * @param bool $reverseMerge
      * @return array
      * @throws LocalizedException
+     * @since 100.1.0
      */
     protected function mergeMetadataItem(array $bundleComponents, array $metadata, $reverseMerge = false)
     {
@@ -344,7 +378,7 @@ class UiComponentFactory extends DataObject
                         [$name]
                     ));
                 }
-                $rawComponentData = $this->componentManager->createRawComponentData(
+                $rawComponentData = $this->definitionData->get(
                     $data['arguments']['data']['config']['componentType']
                 );
                 list(, $componentArguments) = $this->argumentsResolver($name, $rawComponentData);
@@ -373,6 +407,7 @@ class UiComponentFactory extends DataObject
      * @param string $identifier
      * @param array $bundleComponents
      * @return DataProviderInterface|null
+     * @since 100.1.0
      */
     protected function getDataProvider($identifier, array $bundleComponents)
     {

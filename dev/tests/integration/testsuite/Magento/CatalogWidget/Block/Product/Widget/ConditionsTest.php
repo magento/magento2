@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@ namespace Magento\CatalogWidget\Block\Product\Widget;
 /**
  * Class ConditionsTest
  */
-class ConditionsTest extends \PHPUnit_Framework_TestCase
+class ConditionsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogWidget\Block\Product\Widget\Conditions
@@ -17,7 +17,7 @@ class ConditionsTest extends \PHPUnit_Framework_TestCase
     protected $block;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInt
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
 

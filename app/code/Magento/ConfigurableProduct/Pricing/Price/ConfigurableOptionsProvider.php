@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,9 +13,15 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\App\RequestSafetyInterface;
 
+/**
+ * Class \Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsProvider
+ *
+ */
 class ConfigurableOptionsProvider implements ConfigurableOptionsProviderInterface
 {
-    /** @var Configurable */
+    /**
+     * @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable
+     */
     private $configurable;
 
     /**

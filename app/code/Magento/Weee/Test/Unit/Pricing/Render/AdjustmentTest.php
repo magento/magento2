@@ -1,19 +1,19 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Weee\Test\Unit\Pricing\Render;
 
-use \Magento\Weee\Pricing\Render\Adjustment;
+use Magento\Weee\Pricing\Render\Adjustment;
 
 /**
  * Class AdjustmentTest for testing Adjustment class
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AdjustmentTest extends \PHPUnit_Framework_TestCase
+class AdjustmentTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Weee\Pricing\Render\Adjustment
@@ -44,7 +44,10 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->contextMock = $this->getMock(\Magento\Framework\View\Element\Template\Context::class, [], [], '', false);
+        $this->contextMock = $this->createPartialMock(
+            \Magento\Framework\View\Element\Template\Context::class,
+            ['getStoreConfig', 'getEventManager', 'getScopeConfig']
+        );
         $this->priceCurrencyMock = $this->getMockForAbstractClass(
             \Magento\Framework\Pricing\PriceCurrencyInterface::class,
             [],
@@ -54,7 +57,7 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
             true,
             []
         );
-        $this->weeeHelperMock = $this->getMock(\Magento\Weee\Helper\Data::class, [], [], '', false);
+        $this->weeeHelperMock = $this->createMock(\Magento\Weee\Helper\Data::class);
         $eventManagerMock = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();

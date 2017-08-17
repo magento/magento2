@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Controller\Adminhtml\Bookmark;
@@ -53,8 +53,14 @@ class Save extends AbstractAction
 
     /**
      * @var DecoderInterface
+     * @deprecated
      */
     protected $jsonDecoder;
+
+    /**
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
 
     /**
      * @param Context $context
@@ -64,6 +70,8 @@ class Save extends AbstractAction
      * @param BookmarkInterfaceFactory $bookmarkFactory
      * @param UserContextInterface $userContext
      * @param DecoderInterface $jsonDecoder
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @throws \RuntimeException
      */
     public function __construct(
         Context $context,
@@ -72,7 +80,8 @@ class Save extends AbstractAction
         BookmarkManagementInterface $bookmarkManagement,
         BookmarkInterfaceFactory $bookmarkFactory,
         UserContextInterface $userContext,
-        DecoderInterface $jsonDecoder
+        DecoderInterface $jsonDecoder,
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         parent::__construct($context, $factory);
         $this->bookmarkRepository = $bookmarkRepository;
@@ -80,12 +89,16 @@ class Save extends AbstractAction
         $this->bookmarkFactory = $bookmarkFactory;
         $this->userContext = $userContext;
         $this->jsonDecoder = $jsonDecoder;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
     }
 
     /**
      * Action for AJAX request
      *
      * @return void
+     * @throws \InvalidArgumentException
+     * @throws \LogicException
      */
     public function execute()
     {
@@ -94,9 +107,9 @@ class Save extends AbstractAction
         if (!$jsonData) {
             throw new \InvalidArgumentException('Invalid parameter "data"');
         }
-        $data = $this->jsonDecoder->decode($jsonData);
+        $data = $this->serializer->unserialize($jsonData);
         $action = key($data);
-        switch($action) {
+        switch ($action) {
             case self::ACTIVE_IDENTIFIER:
                 $this->updateCurrentBookmark($data[$action]);
                 break;

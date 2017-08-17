@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Model\Resolver;
@@ -10,6 +10,10 @@ use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\Exception\State\InitException;
 use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * Class \Magento\Store\Model\Resolver\Group
+ *
+ */
 class Group implements ScopeResolverInterface
 {
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model;
@@ -8,6 +8,10 @@ namespace Magento\Catalog\Model;
 use Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter;
 use Magento\Catalog\Helper\Image;
 
+/**
+ * Class \Magento\Catalog\Model\ImageExtractor
+ *
+ */
 class ImageExtractor implements \Magento\Framework\View\Xsd\Media\TypeDataExtractorInterface
 {
     /**

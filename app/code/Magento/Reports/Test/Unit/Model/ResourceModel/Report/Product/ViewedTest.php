@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,7 +13,7 @@ use Magento\Reports\Model\ResourceModel\Report\Product\Viewed;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ViewedTest extends \PHPUnit_Framework_TestCase
+class ViewedTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Reports\Model\ResourceModel\Report\Product\Viewed

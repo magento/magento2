@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,13 +9,13 @@
 /** @var $block \Magento\Cms\Block\Adminhtml\Wysiwyg\Images\Content\Uploader */
 ?>
 
-<div id="<?php echo $block->getHtmlId() ?>" class="uploader">
+<div id="<?= $block->getHtmlId() ?>" class="uploader">
     <span class="fileinput-button form-buttons">
-        <span><?php echo $block->escapeHtml(__('Browse Files...')) ?></span>
-        <input class="fileupload" type="file" name="<?php echo $block->escapeHtmlAttr($block->getConfig()->getFileField()) ?>" data-url="<?php echo $block->escapeUrl($block->getConfig()->getUrl()) ?>" multiple>
+        <span><?= $block->escapeHtml(__('Browse Files...')) ?></span>
+        <input class="fileupload" type="file" name="<?= $block->escapeHtmlAttr($block->getConfig()->getFileField()) ?>" data-url="<?= $block->escapeUrl($block->getConfig()->getUrl()) ?>" multiple>
     </span>
     <div class="clear"></div>
-    <script type="text/x-magento-template" id="<?php echo $block->getHtmlId() ?>-template">
+    <script type="text/x-magento-template" id="<?= $block->getHtmlId() ?>-template">
         <div id="<%- data.id %>" class="file-row">
             <span class="file-info"><%- data.name %> (<%- data.size %>)</span>
             <div class="progressbar-container">
@@ -32,7 +32,7 @@ require([
     'domReady!',
     'mage/translate'
 ], function ($, mageTemplate) {
-    $('#<?php echo $block->getHtmlId() ?> .fileupload').fileupload({
+    $('#<?= $block->getHtmlId() ?> .fileupload').fileupload({
         dataType: 'json',
         formData: {
             isAjax: 'true',
@@ -40,9 +40,9 @@ require([
         },
         sequentialUploads: true,
         acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
-        maxFileSize: <?php  echo $block->escapeJs($block->getFileSizeService()->getMaxFileSize()) ?>,
+        maxFileSize: <?= $block->escapeJs($block->getFileSizeService()->getMaxFileSize()) ?>,
         add: function (e, data) {
-            var progressTmpl = mageTemplate('#<?php echo $block->getHtmlId(); ?>-template'),
+            var progressTmpl = mageTemplate('#<?= $block->getHtmlId() ?>-template'),
                 fileSize,
                 tmpl;
 
@@ -61,7 +61,7 @@ require([
                     }
                 });
 
-                $(tmpl).data('image', data).appendTo('#<?php echo $block->getHtmlId() ?>');
+                $(tmpl).data('image', data).appendTo('#<?= $block->getHtmlId() ?>');
             });
 
             $(this).fileupload('process', data).done(function () {
@@ -94,15 +94,15 @@ require([
         }
     });
 
-    $('#<?php echo $block->getHtmlId() ?> .fileupload').fileupload('option', {
+    $('#<?= $block->getHtmlId() ?> .fileupload').fileupload('option', {
         process: [{
             action: 'load',
             fileTypes: /^image\/(gif|jpeg|png)$/,
-            maxFileSize: <?php echo (int) $block->getFileSizeService()->getMaxFileSize() ?> * 10
+            maxFileSize: <?= (int) $block->getFileSizeService()->getMaxFileSize() ?> * 10
         }, {
             action: 'resize',
-            maxWidth: <?php echo (float) \Magento\Framework\File\Uploader::MAX_IMAGE_WIDTH ?> ,
-            maxHeight: <?php echo (float) \Magento\Framework\File\Uploader::MAX_IMAGE_HEIGHT ?>
+            maxWidth: <?= (float) \Magento\Framework\File\Uploader::MAX_IMAGE_WIDTH ?> ,
+            maxHeight: <?= (float) \Magento\Framework\File\Uploader::MAX_IMAGE_HEIGHT ?>
         }, {
             action: 'save'
         }]

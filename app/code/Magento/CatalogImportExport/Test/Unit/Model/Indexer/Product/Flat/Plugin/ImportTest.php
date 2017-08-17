@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Test\Unit\Model\Indexer\Product\Flat\Plugin;
 
-class ImportTest extends \PHPUnit_Framework_TestCase
+class ImportTest extends \PHPUnit\Framework\TestCase
 {
     public function testAfterImportSource()
     {
@@ -13,15 +13,12 @@ class ImportTest extends \PHPUnit_Framework_TestCase
          * @var \Magento\Catalog\Model\Indexer\Product\Flat\Processor|
          *      \PHPUnit_Framework_MockObject_MockObject $processorMock
          */
-        $processorMock = $this->getMock(
+        $processorMock = $this->createPartialMock(
             \Magento\Catalog\Model\Indexer\Product\Flat\Processor::class,
-            ['markIndexerAsInvalid'],
-            [],
-            '',
-            false
+            ['markIndexerAsInvalid']
         );
 
-        $subjectMock = $this->getMock(\Magento\ImportExport\Model\Import::class, [], [], '', false);
+        $subjectMock = $this->createMock(\Magento\ImportExport\Model\Import::class);
         $processorMock->expects($this->once())->method('markIndexerAsInvalid');
 
         $someData = [1, 2, 3];

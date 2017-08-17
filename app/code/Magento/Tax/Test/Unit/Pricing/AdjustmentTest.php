@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,7 +10,7 @@ use \Magento\Tax\Pricing\Adjustment;
 
 use Magento\Framework\Pricing\SaleableInterface;
 
-class AdjustmentTest extends \PHPUnit_Framework_TestCase
+class AdjustmentTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Adjustment
@@ -34,8 +34,8 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->taxHelper = $this->getMock(\Magento\Tax\Helper\Data::class, [], [], '', false);
-        $this->catalogHelper = $this->getMock(\Magento\Catalog\Helper\Data::class, [], [], '', false);
+        $this->taxHelper = $this->createMock(\Magento\Tax\Helper\Data::class);
+        $this->catalogHelper = $this->createMock(\Magento\Catalog\Helper\Data::class);
         $this->adjustment = new Adjustment($this->taxHelper, $this->catalogHelper, $this->sortOrder);
     }
 

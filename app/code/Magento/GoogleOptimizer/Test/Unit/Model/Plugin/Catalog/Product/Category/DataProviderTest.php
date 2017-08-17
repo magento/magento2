@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GoogleOptimizer\Test\Unit\Model\Plugin\Catalog\Product\Category;
 
-class DataProviderTest extends \PHPUnit_Framework_TestCase
+class DataProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\GoogleOptimizer\Model\Plugin\Catalog\Product\Category\DataProvider
@@ -28,12 +28,8 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         $this->helper = $this->getMockBuilder(\Magento\GoogleOptimizer\Helper\Data::class)
             ->setMethods(['isGoogleExperimentActive'])
             ->disableOriginalConstructor()->getMock();
-        $this->subject = $this->getMock(
-            \Magento\Catalog\Ui\DataProvider\Product\Form\NewCategoryDataProvider::class,
-            [],
-            [],
-            '',
-            false
+        $this->subject = $this->createMock(
+            \Magento\Catalog\Ui\DataProvider\Product\Form\NewCategoryDataProvider::class
         );
         $this->plugin = $objectManager->getObject(
             \Magento\GoogleOptimizer\Model\Plugin\Catalog\Product\Category\DataProvider::class,

@@ -1,11 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Paypal\Controller\Payflowbml;
 
+/**
+ * Class \Magento\Paypal\Controller\Payflowbml\Start
+ *
+ */
 class Start extends \Magento\Framework\App\Action\Action
 {
     /**

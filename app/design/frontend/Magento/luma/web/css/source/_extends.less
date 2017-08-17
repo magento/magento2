@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2016 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -301,7 +301,7 @@
         @_icon-font-size: 12px,
         @_icon-font-line-height: 15px,
         @_icon-font-text-hide: true,
-        @_icon-font-color: @color-gray60,
+        @_icon-font-color: @color-gray46,
         @_icon-font-color-hover: @color-gray-darken4,
         @_icon-font-color-active: @color-gray60
         );
@@ -1524,9 +1524,17 @@
 
 & when (@media-common = true) {
     .abs-block-items-counter {
-        .lib-css(color, @primary__color__lighter);
+        .lib-css(color, @block-items__counter__color);
         .lib-font-size(12px);
         white-space: nowrap;
+
+        &:before {
+            content: '(';
+        }
+
+        &:after {
+            content: ')';
+        }
     }
 }
 

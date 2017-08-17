@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Model\Import\Entity;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\ImportExport\Model\Import\AbstractSource;
 use Magento\ImportExport\Model\Import as ImportExport;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
@@ -13,6 +15,9 @@ use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorI
 
 /**
  * Import entity abstract model
+ *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -41,6 +46,9 @@ abstract class AbstractEntity
     const ERROR_CODE_COLUMNS_NUMBER = 'wrongColumnsNumber';
     const ERROR_CODE_CATEGORY_NOT_VALID = 'categoryNotValid';
 
+    /**
+     * @var array
+     */
     protected $errorMessageTemplates = [
         self::ERROR_CODE_SYSTEM_EXCEPTION => 'General system exception happened',
         self::ERROR_CODE_COLUMN_NOT_FOUND => 'We can\'t find required columns: %s.',
@@ -243,8 +251,16 @@ abstract class AbstractEntity
      * Product metadata pool
      *
      * @var \Magento\Framework\EntityManager\MetadataPool
+     * @since 100.1.0
      */
     protected $metadataPool;
+
+    /**
+     * Json Serializer Instance
+     *
+     * @var Json
+     */
+    private $serializer;
 
     /**
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
@@ -382,7 +398,7 @@ abstract class AbstractEntity
                 $this->_dataSourceModel->saveBunch($this->getEntityTypeCode(), $this->getBehavior(), $bunchRows);
 
                 $bunchRows = $nextRowBackup;
-                $currentDataSize = strlen(serialize($bunchRows));
+                $currentDataSize = strlen($this->getSerializer()->serialize($bunchRows));
                 $startNewBunch = false;
                 $nextRowBackup = [];
             }
@@ -417,6 +433,22 @@ abstract class AbstractEntity
             }
         }
         return $this;
+    }
+
+    /**
+     * Get Serializer instance
+     *
+     * Workaround. Only way to implement dependency and not to break inherited child classes
+     *
+     * @return Json
+     * @deprecated 100.2.0
+     */
+    private function getSerializer()
+    {
+        if (null === $this->serializer) {
+            $this->serializer = ObjectManager::getInstance()->get(Json::class);
+        }
+        return $this->serializer;
     }
 
     /**
@@ -841,6 +873,7 @@ abstract class AbstractEntity
      * Get product metadata pool
      *
      * @return \Magento\Framework\EntityManager\MetadataPool
+     * @since 100.1.0
      */
     protected function getMetadataPool()
     {

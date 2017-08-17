@@ -1,11 +1,15 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
+/**
+ * Class \Magento\Catalog\Controller\Adminhtml\Product\GridOnly
+ *
+ */
 class GridOnly extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**
@@ -34,6 +38,7 @@ class GridOnly extends \Magento\Catalog\Controller\Adminhtml\Product
         $this->resultRawFactory = $resultRawFactory;
         $this->layoutFactory = $layoutFactory;
     }
+
     /**
      * Get specified tab grid
      *

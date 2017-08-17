@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Persistent\Test\Unit\Observer;
 
 use Magento\Persistent\Observer\RefreshCustomerData;
 
-class RefreshCustomerDataTest extends \PHPUnit_Framework_TestCase
+class RefreshCustomerDataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var RefreshCustomerData
@@ -60,7 +60,7 @@ class RefreshCustomerDataTest extends \PHPUnit_Framework_TestCase
      */
     public function testBeforeStart($result, $callCount)
     {
-        $observerMock = $this->getMock(\Magento\Framework\Event\Observer::class, [], [], '', false);
+        $observerMock = $this->createMock(\Magento\Framework\Event\Observer::class);
         $frontendSessionCookieName = 'mage-cache-sessid';
         $this->cookieManager->expects($this->once())
             ->method('getCookie')

@@ -1,17 +1,17 @@
 <?php
 /**
- * Magento validator config factory
- *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Framework\Validator;
 
 use Magento\Framework\Cache\FrontendInterface;
 
+/**
+ * Class \Magento\Framework\Validator\Factory
+ *
+ */
 class Factory
 {
     /** cache key */
@@ -45,6 +45,16 @@ class Factory
     private $cache;
 
     /**
+     * @var \Magento\Framework\Serialize\SerializerInterface
+     */
+    private $serializer;
+
+    /**
+     * @var \Magento\Framework\Config\FileIteratorFactory
+     */
+    private $fileIteratorFactory;
+
+    /**
      * Initialize dependencies
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
@@ -63,6 +73,8 @@ class Factory
 
     /**
      * Init cached list of validation files
+     *
+     * @return void
      */
     protected function _initializeConfigList()
     {
@@ -70,9 +82,13 @@ class Factory
             $this->_configFiles = $this->cache->load(self::CACHE_KEY);
             if (!$this->_configFiles) {
                 $this->_configFiles = $this->moduleReader->getConfigurationFiles('validation.xml');
-                $this->cache->save(serialize($this->_configFiles), self::CACHE_KEY);
+                $this->cache->save(
+                    $this->getSerializer()->serialize($this->_configFiles->toArray()),
+                    self::CACHE_KEY
+                );
             } else {
-                $this->_configFiles = unserialize($this->_configFiles);
+                $filesArray = $this->getSerializer()->unserialize($this->_configFiles);
+                $this->_configFiles = $this->getFileIteratorFactory()->create(array_keys($filesArray));
             }
         }
     }
@@ -110,7 +126,9 @@ class Factory
         $this->_initializeConfigList();
         $this->_initializeDefaultTranslator();
         return $this->_objectManager->create(
-            \Magento\Framework\Validator\Config::class, ['configFiles' => $this->_configFiles]);
+            \Magento\Framework\Validator\Config::class,
+            ['configFiles' => $this->_configFiles]
+        );
     }
 
     /**
@@ -139,5 +157,37 @@ class Factory
     {
         $this->_initializeDefaultTranslator();
         return $this->getValidatorConfig()->createValidator($entityName, $groupName, $builderConfig);
+    }
+
+    /**
+     * Get serializer
+     *
+     * @return \Magento\Framework\Serialize\SerializerInterface
+     * @deprecated 100.2.0
+     */
+    private function getSerializer()
+    {
+        if ($this->serializer === null) {
+            $this->serializer = $this->_objectManager->get(
+                \Magento\Framework\Serialize\SerializerInterface::class
+            );
+        }
+        return $this->serializer;
+    }
+
+    /**
+     * Get file iterator factory
+     *
+     * @return \Magento\Framework\Config\FileIteratorFactory
+     * @deprecated 100.2.0
+     */
+    private function getFileIteratorFactory()
+    {
+        if ($this->fileIteratorFactory === null) {
+            $this->fileIteratorFactory = $this->_objectManager->get(
+                \Magento\Framework\Config\FileIteratorFactory::class
+            );
+        }
+        return $this->fileIteratorFactory;
     }
 }

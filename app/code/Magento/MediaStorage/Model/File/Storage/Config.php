@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\MediaStorage\Model\File\Storage;
@@ -10,6 +10,10 @@ use Magento\Framework\Filesystem\Directory\WriteInterface as DirectoryWrite;
 use Magento\Framework\Filesystem\File\Write;
 use Magento\Framework\Exception\FileSystemException;
 
+/**
+ * Class \Magento\MediaStorage\Model\File\Storage\Config
+ *
+ */
 class Config
 {
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Search\Test\Unit\Model;
@@ -8,7 +8,7 @@ namespace Magento\Search\Test\Unit\Model;
 use Magento\Search\Model\EngineResolver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
-class EngineResolverTest extends \PHPUnit_Framework_TestCase
+class EngineResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Search\Model\EngineResolver

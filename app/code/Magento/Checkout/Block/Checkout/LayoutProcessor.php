@@ -1,13 +1,17 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Block\Checkout;
 
 use Magento\Checkout\Helper\Data;
 use Magento\Framework\App\ObjectManager;
+use Magento\Store\Api\StoreResolverInterface;
 
+/**
+ * Class LayoutProcessor
+ */
 class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcessorInterface
 {
     /**
@@ -36,6 +40,16 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
     private $checkoutDataHelper;
 
     /**
+     * @var StoreResolverInterface
+     */
+    private $storeResolver;
+
+    /**
+     * @var \Magento\Shipping\Model\Config
+     */
+    private $shippingConfig;
+
+    /**
      * @param \Magento\Customer\Model\AttributeMetadataDataProvider $attributeMetadataDataProvider
      * @param \Magento\Ui\Component\Form\AttributeMapper $attributeMapper
      * @param AttributeMerger $merger
@@ -51,7 +65,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
     }
 
     /**
-     * @deprecated
+     * @deprecated 100.0.11
      * @return \Magento\Customer\Model\Options
      */
     private function getOptions()
@@ -137,8 +151,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
         $elements = $this->convertElementsToSelect($elements, $attributesToConvert);
         // The following code is a workaround for custom address attributes
         if (isset($jsLayout['components']['checkout']['children']['steps']['children']['billing-step']['children']
-            ['payment']['children']
-        )) {
+            ['payment']['children'])) {
             $jsLayout['components']['checkout']['children']['steps']['children']['billing-step']['children']
             ['payment']['children'] = $this->processPaymentChildrenComponents(
                 $jsLayout['components']['checkout']['children']['steps']['children']['billing-step']['children']
@@ -146,10 +159,18 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
                 $elements
             );
         }
+        if (isset($jsLayout['components']['checkout']['children']['steps']['children']['shipping-step']['children']
+            ['step-config']['children']['shipping-rates-validation']['children'])) {
+            $jsLayout['components']['checkout']['children']['steps']['children']['shipping-step']['children']
+            ['step-config']['children']['shipping-rates-validation']['children'] =
+                $this->processShippingChildrenComponents(
+                    $jsLayout['components']['checkout']['children']['steps']['children']['shipping-step']['children']
+                    ['step-config']['children']['shipping-rates-validation']['children']
+                );
+        }
 
         if (isset($jsLayout['components']['checkout']['children']['steps']['children']['shipping-step']
-            ['children']['shippingAddress']['children']['shipping-address-fieldset']['children']
-        )) {
+            ['children']['shippingAddress']['children']['shipping-address-fieldset']['children'])) {
             $fields = $jsLayout['components']['checkout']['children']['steps']['children']['shipping-step']
             ['children']['shippingAddress']['children']['shipping-address-fieldset']['children'];
             $jsLayout['components']['checkout']['children']['steps']['children']['shipping-step']
@@ -161,6 +182,26 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
             );
         }
         return $jsLayout;
+    }
+
+    /**
+     * Process shipping configuration to exclude inactive carriers.
+     *
+     * @param array $shippingRatesLayout
+     * @return array
+     */
+    private function processShippingChildrenComponents($shippingRatesLayout)
+    {
+        $activeCarriers = $this->getShippingConfig()->getActiveCarriers(
+            $this->getStoreResolver()->getCurrentStoreId()
+        );
+        foreach (array_keys($shippingRatesLayout) as $carrierName) {
+            $carrierKey = str_replace('-rates-validation', '', $carrierName);
+            if (!array_key_exists($carrierKey, $activeCarriers)) {
+                unset($shippingRatesLayout[$carrierName]);
+            }
+        }
+        return $shippingRatesLayout;
     }
 
     /**
@@ -304,7 +345,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
      * Get checkout data helper instance
      *
      * @return Data
-     * @deprecated
+     * @deprecated 100.1.4
      */
     private function getCheckoutDataHelper()
     {
@@ -313,5 +354,35 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
         }
 
         return $this->checkoutDataHelper;
+    }
+
+    /**
+     * Retrieve Shipping Configuration.
+     *
+     * @return \Magento\Shipping\Model\Config
+     * @deprecated 100.2.0
+     */
+    private function getShippingConfig()
+    {
+        if (!$this->shippingConfig) {
+            $this->shippingConfig = ObjectManager::getInstance()->get(\Magento\Shipping\Model\Config::class);
+        }
+
+        return $this->shippingConfig;
+    }
+
+    /**
+     * Get store resolver.
+     *
+     * @return StoreResolverInterface
+     * @deprecated 100.2.0
+     */
+    private function getStoreResolver()
+    {
+        if (!$this->storeResolver) {
+            $this->storeResolver = ObjectManager::getInstance()->get(StoreResolverInterface::class);
+        }
+
+        return $this->storeResolver;
     }
 }

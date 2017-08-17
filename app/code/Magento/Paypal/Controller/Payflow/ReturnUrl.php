@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Controller\Payflow;
@@ -10,6 +10,10 @@ use Magento\Paypal\Controller\Payflow;
 use Magento\Paypal\Model\Config;
 use Magento\Sales\Model\Order;
 
+/**
+ * Class \Magento\Paypal\Controller\Payflow\ReturnUrl
+ *
+ */
 class ReturnUrl extends Payflow
 {
     /**
@@ -18,6 +22,7 @@ class ReturnUrl extends Payflow
     protected $allowedOrderStates = [
         Order::STATE_PROCESSING,
         Order::STATE_COMPLETE,
+        Order::STATE_PAYMENT_REVIEW
     ];
 
     /**

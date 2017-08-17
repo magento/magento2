@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Authorizenet\Test\Unit\Helper;
 
-class DataTest extends \PHPUnit_Framework_TestCase
+class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Last 4 digit of cc
@@ -50,15 +50,15 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetTransactionMessage($type, $amount, $exception, $additionalMessage, $expected)
     {
-        $currency = $this->getMock(\Magento\Directory\Model\Currency::class, ['formatTxt', '__wakeup'], [], '', false);
+        $currency = $this->createPartialMock(\Magento\Directory\Model\Currency::class, ['formatTxt', '__wakeup']);
         $currency->expects($this->any())
             ->method('formatTxt')
             ->will($this->returnValue($amount));
-        $order = $this->getMock(\Magento\Sales\Model\Order::class, ['getBaseCurrency', '__wakeup'], [], '', false);
+        $order = $this->createPartialMock(\Magento\Sales\Model\Order::class, ['getBaseCurrency', '__wakeup']);
         $order->expects($this->any())
             ->method('getBaseCurrency')
             ->will($this->returnValue($currency));
-        $payment = $this->getMock(\Magento\Payment\Model\Info::class, ['getOrder', '__wakeup'], [], '', false);
+        $payment = $this->createPartialMock(\Magento\Payment\Model\Info::class, ['getOrder', '__wakeup']);
         $payment->expects($this->any())
             ->method('getOrder')
             ->will($this->returnValue($order));

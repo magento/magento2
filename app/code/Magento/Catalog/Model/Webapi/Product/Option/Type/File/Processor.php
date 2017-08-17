@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Webapi\Product\Option\Type\File;
@@ -10,15 +10,25 @@ use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\Api\ImageProcessor;
 use Magento\Framework\Filesystem;
 
+/**
+ * Class \Magento\Catalog\Model\Webapi\Product\Option\Type\File\Processor
+ *
+ */
 class Processor
 {
-    /** @var Filesystem */
+    /**
+     * @var \Magento\Framework\Filesystem
+     */
     protected $filesystem;
 
-    /** @var ImageProcessor  */
+    /**
+     * @var \Magento\Framework\Api\ImageProcessor
+     */
     protected $imageProcessor;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $destinationFolder = 'custom_options/quote';
 
     /**

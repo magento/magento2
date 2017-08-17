@@ -2,7 +2,7 @@
 /**
  * Product Attribute Group mapper plugin. Adds Configurable product information
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Model\Entity\Product\Attribute\Group\AttributeMapper;
@@ -10,6 +10,10 @@ namespace Magento\ConfigurableProduct\Model\Entity\Product\Attribute\Group\Attri
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\AttributeFactory;
 use Magento\Framework\Registry;
 
+/**
+ * Class \Magento\ConfigurableProduct\Model\Entity\Product\Attribute\Group\AttributeMapper\Plugin
+ *
+ */
 class Plugin
 {
     /**

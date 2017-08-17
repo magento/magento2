@@ -3,14 +3,14 @@
  * Abstract class that helps in writing tests that validate config xml files
  * are valid both individually and when merged.
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TestFramework\TestCase;
 
 use Magento\Framework\Component\ComponentRegistrar;
 
-abstract class AbstractConfigFiles extends \PHPUnit_Framework_TestCase
+abstract class AbstractConfigFiles extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string
@@ -79,13 +79,7 @@ abstract class AbstractConfigFiles extends \PHPUnit_Framework_TestCase
         if ($skip) {
             $this->markTestSkipped('There are no xml files in the system for this test.');
         }
-        $validationStateMock = $this->getMock(
-            \Magento\Framework\Config\ValidationStateInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $validationStateMock = $this->createMock(\Magento\Framework\Config\ValidationStateInterface::class);
         $validationStateMock->method('isValidationRequired')
             ->willReturn(false);
         $domConfig = new \Magento\Framework\Config\Dom($file, $validationStateMock);

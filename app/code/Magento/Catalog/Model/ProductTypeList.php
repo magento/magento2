@@ -2,7 +2,7 @@
 /**
  * Product type provider
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model;
@@ -10,6 +10,10 @@ namespace Magento\Catalog\Model;
 use Magento\Catalog\Api\ProductTypeListInterface;
 use Magento\Catalog\Model\ProductTypes\ConfigInterface;
 
+/**
+ * Class \Magento\Catalog\Model\ProductTypeList
+ *
+ */
 class ProductTypeList implements ProductTypeListInterface
 {
     /**

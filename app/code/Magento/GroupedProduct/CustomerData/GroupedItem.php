@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GroupedProduct\CustomerData;
@@ -8,6 +8,10 @@ namespace Magento\GroupedProduct\CustomerData;
 use Magento\Catalog\Model\Config\Source\Product\Thumbnail as ThumbnailSource;
 use Magento\Checkout\CustomerData\DefaultItem;
 
+/**
+ * Class \Magento\GroupedProduct\CustomerData\GroupedItem
+ *
+ */
 class GroupedItem extends DefaultItem
 {
     /**

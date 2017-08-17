@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,35 +13,35 @@ $item = $block->getItem();
 $product = $item->getProduct();
 ?>
 <?php foreach ($block->getChildNames() as $childName): ?>
-    <?php /* @noEscape */ echo $block->getLayout()->renderElement($childName, false); ?>
+    <?= /* @noEscape */ $block->getLayout()->renderElement($childName, false) ?>
 <?php endforeach;?>
 <div class="box-tocart">
     <fieldset class="fieldset">
     <?php if ($item->canHaveQty() && $product->isVisibleInSiteVisibility()): ?>
         <div class="field qty">
-            <label class="label" for="qty[<?php echo $block->escapeHtmlAttr($item->getId()) ?>]"><span><?php echo $block->escapeHtml(__('Qty')) ?></span></label>
+            <label class="label" for="qty[<?= $block->escapeHtmlAttr($item->getId()) ?>]"><span><?= $block->escapeHtml(__('Qty')) ?></span></label>
             <div class="control">
-                <input type="number" data-role="qty" id="qty[<?php echo $block->escapeHtmlAttr($item->getId()) ?>]" class="input-text qty" data-validate="{'required-number':true,'validate-greater-than-zero':true}"
-               name="qty[<?php echo $block->escapeHtmlAttr($item->getId()) ?>]" value="<?php /* @noEscape */ echo (int)($block->getAddToCartQty($item) * 1) ?>">
+                <input type="number" data-role="qty" id="qty[<?= $block->escapeHtmlAttr($item->getId()) ?>]" class="input-text qty" data-validate="{'required-number':true,'validate-greater-than-zero':true}"
+               name="qty[<?= $block->escapeHtmlAttr($item->getId()) ?>]" value="<?= /* @noEscape */ (int)($block->getAddToCartQty($item) * 1) ?>">
             </div>
         </div>
     <?php endif; ?>
     <?php if ($product->isSaleable()): ?>
     <div class="product-item-actions">
         <div class="actions-primary">
-            <button type="button" data-role="tocart" data-post='<?php /* @noEscape */ echo $block->getItemAddToCartParams($item)?>' title="<?php echo $block->escapeHtmlAttr(__('Add to Cart')) ?>" data-item-id="<?php echo $block->escapeHtmlAttr($item->getId())?>" class="action tocart primary">
-                <span><?php echo $block->escapeHtml(__('Add to Cart')) ?></span>
+            <button type="button" data-role="tocart" data-post='<?= /* @noEscape */ $block->getItemAddToCartParams($item) ?>' title="<?= $block->escapeHtmlAttr(__('Add to Cart')) ?>" data-item-id="<?= $block->escapeHtmlAttr($item->getId()) ?>" class="action tocart primary">
+                <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
             </button>
         </div>
     </div>
     <?php else: ?>
         <?php if ($product->getIsSalable()): ?>
-            <p class="available stock" title="<?php echo $block->escapeHtmlAttr(__('Availability')) ?>">
-                <span><?php echo $block->escapeHtml(__('In stock')) ?></span>
+            <p class="available stock" title="<?= $block->escapeHtmlAttr(__('Availability')) ?>">
+                <span><?= $block->escapeHtml(__('In stock')) ?></span>
             </p>
         <?php else: ?>
-            <p class="unavailable stock" title="<?php echo $block->escapeHtmlAttr(__('Availability')) ?>">
-                <span><?php echo $block->escapeHtml(__('Out of stock')) ?></span>
+            <p class="unavailable stock" title="<?= $block->escapeHtmlAttr(__('Availability')) ?>">
+                <span><?= $block->escapeHtml(__('Out of stock')) ?></span>
             </p>
         <?php endif; ?>
     <?php endif; ?>

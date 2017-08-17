@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Test\Unit\Model\Product\TypeHandler;
@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * Test for \Magento\Downloadable\Model\Product\TypeHandler\Link
  */
-class LinkTest extends \PHPUnit_Framework_TestCase
+class LinkTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -52,7 +52,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         $this->metadataPoolMock = $this->getMockBuilder(\Magento\Framework\EntityManager\MetadataPool::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->metadataMock = $this->getMock(\Magento\Framework\EntityManager\EntityMetadata::class, [], [], '', false);
+        $this->metadataMock = $this->createMock(\Magento\Framework\EntityManager\EntityMetadata::class);
         $this->metadataMock->expects($this->any())->method('getLinkField')->willReturn('id');
         $this->metadataPoolMock->expects($this->any())->method('getMetadata')->willReturn($this->metadataMock);
         $this->target = $objectManagerHelper->getObject(
@@ -289,7 +289,8 @@ class LinkTest extends \PHPUnit_Framework_TestCase
                     'getStore',
                     'getWebsiteIds',
                     'getLinksPurchasedSeparately',
-                    'setIsCustomOptionChanged'
+                    'setIsCustomOptionChanged',
+                    'getData'
                 ]
             )
             ->getMock();

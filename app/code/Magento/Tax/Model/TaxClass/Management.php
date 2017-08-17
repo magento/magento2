@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,6 +12,10 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Tax\Api\Data\TaxClassKeyInterface;
 use Magento\Tax\Model\ClassModel;
 
+/**
+ * Class \Magento\Tax\Model\TaxClass\Management
+ *
+ */
 class Management implements \Magento\Tax\Api\TaxClassManagementInterface
 {
     /**

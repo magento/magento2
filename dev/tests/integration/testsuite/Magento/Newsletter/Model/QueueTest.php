@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Newsletter\Model;
 
 use Magento\Store\Model\ScopeInterface;
 
-class QueueTest extends \PHPUnit_Framework_TestCase
+class QueueTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoDataFixture Magento/Newsletter/_files/queue.php
@@ -32,15 +32,14 @@ class QueueTest extends \PHPUnit_Framework_TestCase
         /** @var $filter \Magento\Newsletter\Model\Template\Filter */
         $filter = $objectManager->get(\Magento\Newsletter\Model\Template\Filter::class);
 
-        $transport = $this->getMock(\Magento\Framework\Mail\TransportInterface::class);
+        $transport = $this->getMockBuilder(\Magento\Framework\Mail\TransportInterface::class)
+            ->setMethods(['sendMessage'])
+            ->getMockForAbstractClass();
         $transport->expects($this->exactly(2))->method('sendMessage')->will($this->returnSelf());
 
-        $builder = $this->getMock(
+        $builder = $this->createPartialMock(
             \Magento\Newsletter\Model\Queue\TransportBuilder::class,
-            ['getTransport', 'setFrom', 'addTo'],
-            [],
-            '',
-            false
+            ['getTransport', 'setFrom', 'addTo']
         );
         $builder->expects($this->exactly(2))->method('getTransport')->will($this->returnValue($transport));
         $builder->expects($this->exactly(2))->method('setFrom')->will($this->returnSelf());
@@ -69,17 +68,16 @@ class QueueTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        $transport = $this->getMock(\Magento\Framework\Mail\TransportInterface::class);
+        $transport = $this->getMockBuilder(\Magento\Framework\Mail\TransportInterface::class)
+            ->setMethods(['sendMessage'])
+            ->getMockForAbstractClass();
         $transport->expects($this->any())
             ->method('sendMessage')
             ->willThrowException(new \Magento\Framework\Exception\MailException(__($errorMsg)));
 
-        $builder = $this->getMock(
+        $builder = $this->createPartialMock(
             \Magento\Newsletter\Model\Queue\TransportBuilder::class,
-            ['getTransport', 'setFrom', 'addTo', 'setTemplateOptions', 'setTemplateVars'],
-            [],
-            '',
-            false
+            ['getTransport', 'setFrom', 'addTo', 'setTemplateOptions', 'setTemplateVars']
         );
         $builder->expects($this->any())->method('getTransport')->will($this->returnValue($transport));
         $builder->expects($this->any())->method('setTemplateOptions')->will($this->returnSelf());

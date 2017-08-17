@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,6 +15,10 @@ use Magento\Catalog\Helper\Data;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Store\Model\Store;
 
+/**
+ * Class \Magento\Catalog\Block\Breadcrumbs
+ *
+ */
 class Breadcrumbs extends \Magento\Framework\View\Element\Template
 {
     /**

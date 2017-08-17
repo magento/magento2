@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,9 @@ namespace Magento\CatalogInventory\Block\Adminhtml\Form\Field;
 
 use Magento\Framework\Data\Form;
 
+/**
+ * @api
+ */
 class Stock extends \Magento\Framework\Data\Form\Element\Select
 {
     const QUANTITY_FIELD_HTML_ID = 'qty';

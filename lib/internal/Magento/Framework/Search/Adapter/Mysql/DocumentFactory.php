@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Adapter\Mysql;
@@ -13,6 +13,7 @@ use Magento\Framework\Api\Search\DocumentInterface;
 
 /**
  * Document Factory
+ * @api
  */
 class DocumentFactory
 {
@@ -20,7 +21,7 @@ class DocumentFactory
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
-     * @deprecated
+     * @deprecated 100.1.0
      */
     protected $objectManager;
 

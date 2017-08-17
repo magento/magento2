@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\TestFramework\Test\Unit\Unit\Matcher;
 
 use Magento\Framework\TestFramework\Unit\Matcher\MethodInvokedAtIndex;
 
-class MethodInvokedAtIndexTest extends \PHPUnit_Framework_TestCase
+class MethodInvokedAtIndexTest extends \PHPUnit\Framework\TestCase
 {
     public function testMatches()
     {
@@ -15,6 +15,7 @@ class MethodInvokedAtIndexTest extends \PHPUnit_Framework_TestCase
             'ClassName',
             'ValidMethodName',
             [],
+            'void',
             new \StdClass()
         );
         $matcher = new \Magento\Framework\TestFramework\Unit\Matcher\MethodInvokedAtIndex(0);

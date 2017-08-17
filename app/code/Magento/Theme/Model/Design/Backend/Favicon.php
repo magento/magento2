@@ -1,12 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model\Design\Backend;
 
 use Magento\Framework\Filesystem;
 
+/**
+ * Class \Magento\Theme\Model\Design\Backend\Favicon
+ *
+ */
 class Favicon extends Image
 {
     /**
@@ -43,6 +47,6 @@ class Favicon extends Image
      */
     public function getAllowedExtensions()
     {
-        return ['ico', 'png', 'gif', 'jpg', 'jpeg', 'apng', 'svg'];
+        return ['ico', 'png', 'gif', 'jpg', 'jpeg', 'apng'];
     }
 }

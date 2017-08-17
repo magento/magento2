@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Order;
 
+use Magento\Sales\Api\CreditmemoManagementInterface;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Order\Payment\Transaction;
 
@@ -15,7 +17,7 @@ use Magento\Sales\Model\Order\Payment\Transaction;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
-class PaymentTest extends \PHPUnit_Framework_TestCase
+class PaymentTest extends \PHPUnit\Framework\TestCase
 {
     const TRANSACTION_ID = 'ewr34fM49V0';
 
@@ -114,6 +116,11 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     protected $orderRepository;
 
     /**
+     * @var CreditmemoManagementInterface
+     */
+    private $creditmemoManagerMock;
+
+    /**
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.TooManyFields)
@@ -150,14 +157,8 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['get', 'getByTransactionType', 'getByTransactionId'])
             ->getMock();
-        $this->paymentProcessor = $this->getMock(
-            \Magento\Sales\Model\Order\Payment\Processor::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->orderRepository = $this->getMock(\Magento\Sales\Model\OrderRepository::class, ['get'], [], '', false);
+        $this->paymentProcessor = $this->createMock(\Magento\Sales\Model\Order\Payment\Processor::class);
+        $this->orderRepository = $this->createPartialMock(\Magento\Sales\Model\OrderRepository::class, ['get']);
 
         $this->priceCurrencyMock->expects($this->any())
             ->method('format')
@@ -237,61 +238,51 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
                     'getCustomerNote',
                     'prepareInvoice',
                     'getPaymentsCollection',
+                    'setIsCustomerNotified'
                 ]
             )
             ->getMock();
 
-        $this->transactionCollectionFactory = $this->getMock(
-            \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\CollectionFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+        $this->transactionCollectionFactory = $this->getMockBuilder(
+            \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\CollectionFactory::class
+        )
+            ->setMethods(['create'])
+            ->getMock();
+        $this->creditmemoFactoryMock = $this->createMock(\Magento\Sales\Model\Order\CreditmemoFactory::class);
+        $this->transactionManagerMock = $this->createMock(
+            \Magento\Sales\Model\Order\Payment\Transaction\Manager::class
         );
-        $this->creditmemoFactoryMock = $this->getMock(
-            \Magento\Sales\Model\Order\CreditmemoFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->transactionManagerMock = $this->getMock(
-            \Magento\Sales\Model\Order\Payment\Transaction\Manager::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->transactionBuilderMock = $this->getMock(
-            \Magento\Sales\Model\Order\Payment\Transaction\Builder::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->creditMemoMock = $this->getMock(
-            \Magento\Sales\Model\Order\Creditmemo::class,
-            [
-                'setPaymentRefundDisallowed',
-                'getItemsCollection',
-                'getItems',
-                'setAutomaticallyCreated',
-                'register',
-                'addComment',
-                'save',
-                'getGrandTotal',
-                'getBaseGrandTotal',
-                'getDoTransaction',
-                'getInvoice',
-                'getOrder'
-            ],
-            [],
-            '',
-            false
+        $this->transactionBuilderMock = $this->createMock(
+            \Magento\Sales\Model\Order\Payment\Transaction\Builder::class
         );
         $this->orderStateResolverMock = $this->getMockBuilder(Order\OrderStateResolverInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
+        $this->creditMemoMock = $this->getMockBuilder(Creditmemo::class)
+            ->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'setPaymentRefundDisallowed',
+                    'getItemsCollection',
+                    'getItems',
+                    'setAutomaticallyCreated',
+                    'register',
+                    'addComment',
+                    'save',
+                    'getGrandTotal',
+                    'getBaseGrandTotal',
+                    'getDoTransaction',
+                    'getInvoice',
+                    'getOrder',
+                    'getPaymentRefundDisallowed'
+                ]
+            )
+            ->getMock();
+
+        $this->creditmemoManagerMock = $this->getMockBuilder(CreditmemoManagementInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
         $this->payment = $this->initPayment();
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $helper->setBackwardCompatibleProperty($this->payment, 'orderStateResolver', $this->orderStateResolverMock);
@@ -1177,7 +1168,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $this->payment->setId($paymentId);
         $this->payment->setParentTransactionId($parentTransactionId);
 
-        $transaction = $this->getMock(\Magento\Sales\Model\Order\Payment\Transaction::class, [], [], '', false);
+        $transaction = $this->createMock(\Magento\Sales\Model\Order\Payment\Transaction::class);
         $transaction->expects($this->once())
             ->method('getIsClosed')
             ->willReturn(false);
@@ -1198,7 +1189,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $this->paymentMethodMock->expects($this->once())
             ->method('canCapture')
             ->willReturn(true);
-        $transaction = $this->getMock(\Magento\Sales\Model\Order\Payment\Transaction::class, [], [], '', false);
+        $transaction = $this->createMock(\Magento\Sales\Model\Order\Payment\Transaction::class);
         $this->transactionManagerMock->expects($this->once())
             ->method('getAuthorizationTransaction')
             ->with($parentTransactionId, $paymentId)
@@ -1311,13 +1302,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $this->payment->setParentTransactionId($this->transactionId);
         $this->payment->setId($paymentId);
         $this->orderMock->setId($orderId);
-        $transaction = $this->getMock(
-            \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $transaction = $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Payment\Transaction::class);
         $newTransactionId = $this->transactionId . '-' . Transaction::TYPE_REFUND;
         $this->transactionRepositoryMock->expects($this->once())
             ->method('getByTransactionId')
@@ -1362,15 +1347,17 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $this->creditMemoMock->expects($this->once())->method('setPaymentRefundDisallowed')->willReturnSelf();
         $this->creditMemoMock->expects($this->once())->method('setAutomaticallyCreated')->willReturnSelf();
         $this->creditMemoMock->expects($this->once())->method('addComment')->willReturnSelf();
-        $this->creditMemoMock->expects($this->once())->method('save')->willReturnSelf();
+
+        $this->creditmemoManagerMock->expects($this->once())
+            ->method('refund')
+            ->with($this->creditMemoMock, false)
+            ->willReturn($this->creditMemoMock);
+
         $this->orderMock->expects($this->once())->method('getBaseCurrency')->willReturn($this->currencyMock);
 
-        $parentTransaction = $this->getMock(
+        $parentTransaction = $this->createPartialMock(
             \Magento\Sales\Model\Order\Payment\Transaction::class,
-            ['setOrderId', 'setPaymentId', 'loadByTxnId', 'getId', 'getTxnId', 'setTxnId', 'getTxnType'],
-            [],
-            '',
-            false
+            ['setOrderId', 'setPaymentId', 'loadByTxnId', 'getId', 'getTxnId', 'setTxnId', 'getTxnType']
         );
         $newTransactionId = $this->transactionId . '-' . Transaction::TYPE_REFUND;
         $this->transactionRepositoryMock->expects($this->once())
@@ -1420,12 +1407,9 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $this->payment->setParentTransactionId($this->transactionId);
         $this->mockInvoice($this->transactionId, 1);
         $this->orderMock->expects($this->once())->method('getBaseCurrency')->willReturn($this->currencyMock);
-        $parentTransaction = $this->getMock(
+        $parentTransaction = $this->createPartialMock(
             \Magento\Sales\Model\Order\Payment\Transaction::class,
-            ['setOrderId', 'setPaymentId', 'loadByTxnId', 'getId', 'getTxnId', 'getTxnType'],
-            [],
-            '',
-            false
+            ['setOrderId', 'setPaymentId', 'loadByTxnId', 'getId', 'getTxnId', 'getTxnType']
         );
         //generate new transaction and check if not exists
         $this->transactionRepositoryMock->expects($this->once())
@@ -1548,7 +1532,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $partialAmount = 12.00;
 
         $this->orderMock->expects(static::exactly(2))
-            ->method('getTotalDue')
+            ->method('getBaseTotalDue')
             ->willReturn($amount);
 
         static::assertFalse($this->payment->isCaptureFinal($partialAmount));
@@ -1581,7 +1565,8 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
                 'transactionManager' => $this->transactionManagerMock,
                 'transactionBuilder' => $this->transactionBuilderMock,
                 'paymentProcessor' => $this->paymentProcessor,
-                'orderRepository' => $this->orderRepository
+                'orderRepository' => $this->orderRepository,
+                'creditmemoManager' => $this->creditmemoManagerMock
             ]
         );
     }
@@ -1641,9 +1626,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
 
     protected function getTransactionMock($transactionId)
     {
-        $transaction = $this->getMock(
-            \Magento\Sales\Model\Order\Payment\Transaction::class,
-            [
+        $transaction = $this->createPartialMock(\Magento\Sales\Model\Order\Payment\Transaction::class, [
                 'getId',
                 'setOrderId',
                 'setPaymentId',
@@ -1655,11 +1638,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
                 'getTxnId',
                 'getHtmlTxnId',
                 'getTxnType'
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
         $transaction->expects($this->any())->method('getId')->willReturn($transactionId);
         $transaction->expects($this->any())->method('getTxnId')->willReturn($transactionId);
         $transaction->expects($this->any())->method('getHtmlTxnId')->willReturn($transactionId);

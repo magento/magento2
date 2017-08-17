@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Vault\Test\Unit\Model;
@@ -11,7 +11,7 @@ use Magento\Vault\Model\CustomerTokenManagement;
 use Magento\Vault\Model\PaymentTokenManagement;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
-class CustomerTokenManagementTest extends \PHPUnit_Framework_TestCase
+class CustomerTokenManagementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var PaymentTokenManagement|MockObject
@@ -70,7 +70,7 @@ class CustomerTokenManagementTest extends \PHPUnit_Framework_TestCase
     public function testGetCustomerSessionTokens()
     {
         $customerId = 1;
-        $token = $this->getMock(PaymentTokenInterface::class);
+        $token = $this->createMock(PaymentTokenInterface::class);
         $expectation = [$token];
 
         $this->customerSession->expects(static::once())

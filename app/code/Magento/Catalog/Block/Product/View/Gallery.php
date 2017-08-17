@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,11 +11,20 @@
  */
 namespace Magento\Catalog\Block\Product\View;
 
-use Magento\Framework\Data\Collection;
-use Magento\Framework\Json\EncoderInterface;
+use Magento\Catalog\Block\Product\Context;
 use Magento\Catalog\Helper\Image;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Gallery\ImagesConfigFactoryInterface;
+use Magento\Framework\Data\Collection;
+use Magento\Framework\DataObject;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Json\EncoderInterface;
+use Magento\Framework\Stdlib\ArrayUtils;
 
-class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
+/**
+ * @api
+ */
+class Gallery extends AbstractView
 {
     /**
      * @var \Magento\Framework\Config\View
@@ -23,24 +32,41 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
     protected $configView;
 
     /**
-     * @var \Magento\Framework\Json\EncoderInterface
+     * @var EncoderInterface
      */
     protected $jsonEncoder;
 
     /**
-     * @param \Magento\Catalog\Block\Product\Context $context
-     * @param \Magento\Framework\Stdlib\ArrayUtils $arrayUtils
+     * @var array
+     */
+    private $galleryImagesConfig;
+
+    /**
+     * @var ImagesConfigFactoryInterface
+     */
+    private $galleryImagesConfigFactory;
+
+    /**
+     * @param Context $context
+     * @param ArrayUtils $arrayUtils
      * @param EncoderInterface $jsonEncoder
      * @param array $data
+     * @param ImagesConfigFactoryInterface $imagesConfigFactory
+     * @param array $galleryImagesConfig
      */
     public function __construct(
-        \Magento\Catalog\Block\Product\Context $context,
-        \Magento\Framework\Stdlib\ArrayUtils $arrayUtils,
+        Context $context,
+        ArrayUtils $arrayUtils,
         EncoderInterface $jsonEncoder,
-        array $data = []
+        array $data = [],
+        ImagesConfigFactoryInterface $imagesConfigFactory = null,
+        array $galleryImagesConfig = []
     ) {
-        $this->jsonEncoder = $jsonEncoder;
         parent::__construct($context, $arrayUtils, $data);
+        $this->jsonEncoder = $jsonEncoder;
+        $this->galleryImagesConfigFactory = $imagesConfigFactory ?: ObjectManager::getInstance()
+            ->get(ImagesConfigFactoryInterface::class);
+        $this->galleryImagesConfig = $galleryImagesConfig;
     }
 
     /**
@@ -52,27 +78,17 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
     {
         $product = $this->getProduct();
         $images = $product->getMediaGalleryImages();
-        if ($images instanceof \Magento\Framework\Data\Collection) {
-            foreach ($images as $image) {
-                /* @var \Magento\Framework\DataObject $image */
+        if (!$images instanceof \Magento\Framework\Data\Collection) {
+            return $images;
+        }
+
+        foreach ($images as $image) {
+            $galleryImagesConfig = $this->getGalleryImagesConfig()->getItems();
+            foreach ($galleryImagesConfig as $imageConfig) {
                 $image->setData(
-                    'small_image_url',
-                    $this->_imageHelper->init($product, 'product_page_image_small')
-                        ->setImageFile($image->getFile())
-                        ->getUrl()
-                );
-                $image->setData(
-                    'medium_image_url',
-                    $this->_imageHelper->init($product, 'product_page_image_medium')
-                        ->constrainOnly(true)->keepAspectRatio(true)->keepFrame(false)
-                        ->setImageFile($image->getFile())
-                        ->getUrl()
-                );
-                $image->setData(
-                    'large_image_url',
-                    $this->_imageHelper->init($product, 'product_page_image_large')
-                        ->constrainOnly(true)->keepAspectRatio(true)->keepFrame(false)
-                        ->setImageFile($image->getFile())
+                    $imageConfig->getData('data_object_key'),
+                    $this->_imageHelper->init($product, $imageConfig['image_id'])
+                        ->setImageFile($image->getData('file'))
                         ->getUrl()
                 );
             }
@@ -109,24 +125,36 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
     public function getGalleryImagesJson()
     {
         $imagesItems = [];
+        /** @var DataObject $image */
         foreach ($this->getGalleryImages() as $image) {
-            $imagesItems[] = [
+            $imageItem = new DataObject([
                 'thumb' => $image->getData('small_image_url'),
                 'img' => $image->getData('medium_image_url'),
                 'full' => $image->getData('large_image_url'),
-                'caption' => $image->getLabel(),
-                'position' => $image->getPosition(),
-                'isMain' => $this->isMainImage($image),
-            ];
+                'caption'  => $image->getData('label'),
+                'position' => $image->getData('position'),
+                'isMain'   => $this->isMainImage($image),
+                'type' => str_replace('external-', '', $image->getMediaType()),
+                'videoUrl' => $image->getVideoUrl(),
+            ]);
+            foreach ($this->getGalleryImagesConfig()->getItems() as $imageConfig) {
+                $imageItem->setData(
+                    $imageConfig->getData('json_object_key'),
+                    $image->getData($imageConfig->getData('data_object_key'))
+                );
+            }
+            $imagesItems[] = $imageItem->toArray();
         }
         if (empty($imagesItems)) {
             $imagesItems[] = [
-                'thumb' => $this->getImage($this->getProduct(), 'product_thumbnail_image')->getImageUrl(),
-                'img' => $this->getImage($this->getProduct(), 'product_base_image')->getImageUrl(),
-                'full' => $this->getImage($this->getProduct(), 'product_page_image_large')->getImageUrl(),
+                'thumb' => $this->_imageHelper->getDefaultPlaceholderUrl('thumbnail'),
+                'img' => $this->_imageHelper->getDefaultPlaceholderUrl('image'),
+                'full' => $this->_imageHelper->getDefaultPlaceholderUrl('image'),
                 'caption' => '',
                 'position' => '0',
                 'isMain' => true,
+                'type' => 'image',
+                'videoUrl' => null,
             ];
         }
         return json_encode($imagesItems);
@@ -183,5 +211,18 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
             $this->configView = $this->_viewConfig->getViewConfig();
         }
         return $this->configView;
+    }
+
+    /**
+     * @return Collection
+     */
+    private function getGalleryImagesConfig()
+    {
+        if (false === $this->hasData('gallery_images_config')) {
+            $galleryImageConfig = $this->galleryImagesConfigFactory->create($this->galleryImagesConfig);
+            $this->setData('gallery_images_config', $galleryImageConfig);
+        }
+
+        return $this->getData('gallery_images_config');
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Model\Import\Product\Type;
@@ -8,9 +8,12 @@ namespace Magento\CatalogImportExport\Model\Import\Product\Type;
 use Magento\Framework\App\ResourceConnection;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 use Magento\CatalogImportExport\Model\Import\Product;
+use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Import entity abstract product type model
+ *
+ * @api
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -131,6 +134,7 @@ abstract class AbstractType
      * Product metadata pool
      *
      * @var \Magento\Framework\EntityManager\MetadataPool
+     * @since 100.1.0
      */
     protected $metadataPool;
 
@@ -142,22 +146,27 @@ abstract class AbstractType
     private $productEntityLinkField;
 
     /**
+     * AbstractType constructor
+     *
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac
      * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac
-     * @param \Magento\Framework\App\ResourceConnection $resource
+     * @param ResourceConnection $resource
      * @param array $params
+     * @param MetadataPool|null $metadataPool
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac,
         \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac,
         \Magento\Framework\App\ResourceConnection $resource,
-        array $params
+        array $params,
+        MetadataPool $metadataPool = null
     ) {
         $this->_attrSetColFac = $attrSetColFac;
         $this->_prodAttrColFac = $prodAttrColFac;
         $this->_resource = $resource;
-        $this->_connection = $resource->getConnection();
+        $this->connection = $resource->getConnection();
+        $this->metadataPool = $metadataPool ?: $this->getMetadataPool();
         if ($this->isSuitable()) {
             if (!isset($params[0])
                 || !isset($params[1])
@@ -246,8 +255,8 @@ abstract class AbstractType
     {
         // temporary storage for attributes' parameters to avoid double querying inside the loop
         $entityId = $this->_entityModel->getEntityTypeId();
-        $entityAttributes = $this->_connection->fetchAll(
-            $this->_connection->select()->from(
+        $entityAttributes = $this->connection->fetchAll(
+            $this->connection->select()->from(
                 ['attr' => $this->_resource->getTableName('eav_entity_attribute')],
                 ['attr.attribute_id']
             )->joinLeft(
@@ -255,7 +264,7 @@ abstract class AbstractType
                 'set.attribute_set_id = attr.attribute_set_id',
                 ['set.attribute_set_name']
             )->where(
-                $this->_connection->quoteInto('attr.entity_type_id IN (?)', $entityId)
+                $this->connection->quoteInto('attr.entity_type_id IN (?)', $entityId)
             )
         );
         $absentKeys = [];
@@ -545,6 +554,7 @@ abstract class AbstractType
      * Get product metadata pool
      *
      * @return \Magento\Framework\EntityManager\MetadataPool
+     * @since 100.1.0
      */
     protected function getMetadataPool()
     {
@@ -559,11 +569,12 @@ abstract class AbstractType
      * Get product entity link field
      *
      * @return string
+     * @since 100.1.0
      */
     protected function getProductEntityLinkField()
     {
         if (!$this->productEntityLinkField) {
-            $this->productEntityLinkField = $this->getMetadataPool()
+            $this->productEntityLinkField = $this->metadataPool
                 ->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
                 ->getLinkField();
         }
@@ -572,6 +583,7 @@ abstract class AbstractType
 
     /**
      * Clean cached values
+     * @since 100.2.0
      */
     public function __destruct()
     {

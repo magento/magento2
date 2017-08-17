@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Product;
 
-class CatalogPriceTest extends \PHPUnit_Framework_TestCase
+class CatalogPriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Product\CatalogPrice
@@ -29,15 +29,11 @@ class CatalogPriceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->priceFactoryMock = $this->getMock(
-            \Magento\Catalog\Model\Product\CatalogPriceFactory::class,
-            [],
-            [],
-            '',
-            false
+        $this->priceFactoryMock = $this->createMock(\Magento\Catalog\Model\Product\CatalogPriceFactory::class);
+        $this->productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $this->catalogPriceInterfaceMock = $this->createMock(
+            \Magento\Catalog\Model\Product\CatalogPriceInterface::class
         );
-        $this->productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
-        $this->catalogPriceInterfaceMock = $this->getMock(\Magento\Catalog\Model\Product\CatalogPriceInterface::class);
         $this->model = new \Magento\Catalog\Model\Product\CatalogPrice(
             $this->priceFactoryMock,
             ['custom_product_type' => 'CustomProduct/Model/CatalogPrice']

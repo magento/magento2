@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml;
@@ -69,28 +69,36 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
         $this->dispatch('backend/catalog/product');
         $body = $this->getResponse()->getBody();
 
-        $this->assertSelectCount(
-            '#add_new_product',
+        $this->assertEquals(
             1,
-            $body,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//*[@id="add_new_product"]',
+                $body
+            ),
             '"Add Product" button container should be present on Manage Products page, if the limit is not  reached'
         );
-        $this->assertSelectCount(
-            '#add_new_product-button',
+        $this->assertEquals(
             1,
-            $body,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//*[@id="add_new_product-button"]',
+                $body
+            ),
             '"Add Product" button should be present on Manage Products page, if the limit is not reached'
         );
-        $this->assertSelectCount(
-            '#add_new_product-button.disabled',
+        $this->assertEquals(
             0,
-            $body,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//*[@id="add_new_product-button" and contains(@class,"disabled")]',
+                $body
+            ),
             '"Add Product" button should be enabled on Manage Products page, if the limit is not reached'
         );
-        $this->assertSelectCount(
-            '#add_new_product .action-toggle',
+        $this->assertEquals(
             1,
-            $body,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//*[@id="add_new_product"]/*[contains(@class,"action-toggle")]',
+                $body
+            ),
             '"Add Product" button split should be present on Manage Products page, if the limit is not reached'
         );
     }
@@ -105,17 +113,30 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
         $this->dispatch('backend/catalog/product/edit/id/' . $product->getEntityId());
         $body = $this->getResponse()->getBody();
 
-        $this->assertSelectCount('#save-button', 1, $body, '"Save" button isn\'t present on Edit Product page');
-        $this->assertSelectCount(
-            '#save_and_new',
+        $this->assertEquals(
             1,
-            $body,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//*[@id="save-button"]',
+                $body
+            ),
+            '"Save" button isn\'t present on Edit Product page'
+        );
+
+        $this->assertEquals(
+            1,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//*[@id="save_and_new"]',
+                $body
+            ),
             '"Save & New" button isn\'t present on Edit Product page'
         );
-        $this->assertSelectCount(
-            '#save_and_duplicate',
+
+        $this->assertEquals(
             1,
-            $body,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//*[@id="save_and_duplicate"]',
+                $body
+            ),
             '"Save & Duplicate" button isn\'t present on Edit Product page'
         );
     }

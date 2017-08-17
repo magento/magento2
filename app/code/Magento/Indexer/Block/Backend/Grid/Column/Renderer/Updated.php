@@ -1,10 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Indexer\Block\Backend\Grid\Column\Renderer;
 
+/**
+ * Class \Magento\Indexer\Block\Backend\Grid\Column\Renderer\Updated
+ *
+ */
 class Updated extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Datetime
 {
     /**

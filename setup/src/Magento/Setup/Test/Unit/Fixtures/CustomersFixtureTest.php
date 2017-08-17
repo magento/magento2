@@ -1,14 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Setup\Test\Unit\Fixtures;
 
-use \Magento\Setup\Fixtures\CustomersFixture;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Setup\Fixtures\CustomersFixture;
 
-class CustomersFixtureTest extends \PHPUnit_Framework_TestCase
+class CustomersFixtureTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Fixtures\FixtureModel
@@ -16,91 +17,100 @@ class CustomersFixtureTest extends \PHPUnit_Framework_TestCase
     private $fixtureModelMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\FixtureGenerator\CustomerGenerator
+     */
+    private $customerGeneratorMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Customer\CustomerDataGeneratorFactory
+     */
+    private $customerDataGeneratorFactoryMock;
+
+    /**
      * @var \Magento\Setup\Fixtures\CustomersFixture
      */
     private $model;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $collectionFactoryMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $collectionMock;
+
     public function setUp()
     {
-        $this->fixtureModelMock = $this->getMock(\Magento\Setup\Fixtures\FixtureModel::class, [], [], '', false);
+        $this->fixtureModelMock = $this->createMock(\Magento\Setup\Fixtures\FixtureModel::class);
 
-        $this->model = new CustomersFixture($this->fixtureModelMock);
+        $this->customerGeneratorMock =
+            $this->createMock(\Magento\Setup\Model\FixtureGenerator\CustomerGenerator::class);
+
+        $this->customerDataGeneratorFactoryMock =
+            $this->createMock(\Magento\Setup\Model\Customer\CustomerDataGeneratorFactory::class);
+
+        $this->collectionFactoryMock =
+            $this->createPartialMock(
+                \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory::class,
+                ['create']
+            );
+
+        $this->collectionMock = $this->createMock(\Magento\Customer\Model\ResourceModel\Customer\Collection::class);
+
+        $this->model = (new ObjectManager($this))->getObject(CustomersFixture::class, [
+            'fixtureModel' => $this->fixtureModelMock,
+            'customerGenerator' => $this->customerGeneratorMock,
+            'customerDataGeneratorFactory' => $this->customerDataGeneratorFactoryMock,
+            'collectionFactory' => $this->collectionFactoryMock
+        ]);
     }
 
     public function testExecute()
     {
-        $importMock = $this->getMock(\Magento\ImportExport\Model\Import::class, [], [], '', false);
+        $entitiesInDB = 20;
+        $this->collectionFactoryMock->expects($this->once())->method('create')->willReturn($this->collectionMock);
+        $this->collectionMock->expects($this->once())->method('getSize')->willReturn($entitiesInDB);
 
-        $storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
-        $storeMock->expects($this->once())
-            ->method('getCode')
-            ->will($this->returnValue('store_code'));
-
-        $websiteMock = $this->getMock(\Magento\Store\Model\Website::class, [], [], '', false);
-        $websiteMock->expects($this->once())
-            ->method('getCode')
-            ->will($this->returnValue('website_code'));
-
-        $storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManager::class, [], [], '', false);
-        $storeManagerMock->expects($this->once())
-            ->method('getDefaultStoreView')
-            ->will($this->returnValue($storeMock));
-        $storeManagerMock->expects($this->once())
-            ->method('getWebsites')
-            ->will($this->returnValue([$websiteMock]));
-
-        $valueMap = [
-            [
-                \Magento\ImportExport\Model\Import::class,
-                [
-                    'data' => [
-                        'entity' => 'customer_composite',
-                        'behavior' => 'append',
-                        'validation_strategy' => 'validation-stop-on-errors'
-                    ]
-                ],
-                $importMock
-            ],
-            [\Magento\Store\Model\StoreManager::class, [], $storeManagerMock]
+        $customersNumber = 100500;
+        $customerConfig = [
+            'some-key' => 'some value'
         ];
 
-        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManager\ObjectManager::class, [], [], '', false);
-        $objectManagerMock->expects($this->exactly(2))
-            ->method('create')
-            ->will($this->returnValueMap($valueMap));
-
-        $this->fixtureModelMock
-            ->expects($this->once())
-            ->method('getValue')
-            ->will($this->returnValue(1));
         $this->fixtureModelMock
             ->expects($this->exactly(2))
-            ->method('getObjectManager')
-            ->will($this->returnValue($objectManagerMock));
+            ->method('getValue')
+            ->will($this->onConsecutiveCalls($customersNumber, $customerConfig));
+
+        $customerDataGeneratorMock = $this->createMock(\Magento\Setup\Model\Customer\CustomerDataGenerator::class);
+
+        $this->customerDataGeneratorFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->with($customerConfig)
+            ->willReturn($customerDataGeneratorMock);
+
+        $this->customerGeneratorMock
+            ->expects($this->once())
+            ->method('generate')
+            ->with(
+                $customersNumber - $entitiesInDB,
+                $this->arrayHasKey('customer_data')
+            );
 
         $this->model->execute();
     }
 
-    public function testNoFixtureConfigValue()
+    public function testDoNoExecuteIfCustomersAlreadyGenerated()
     {
-        $importMock = $this->getMock(\Magento\ImportExport\Model\Import::class, [], [], '', false);
-        $importMock->expects($this->never())->method('validateSource');
-        $importMock->expects($this->never())->method('importSource');
-
-        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManager\ObjectManager::class, [], [], '', false);
-        $objectManagerMock->expects($this->never())
-            ->method('create')
-            ->with($this->equalTo(\Magento\ImportExport\Model\Import::class))
-            ->willReturn($importMock);
-
-        $this->fixtureModelMock
-            ->expects($this->never())
-            ->method('getObjectManager')
-            ->will($this->returnValue($objectManagerMock));
+        $this->collectionFactoryMock->expects($this->once())->method('create')->willReturn($this->collectionMock);
+        $this->collectionMock->expects($this->once())->method('getSize')->willReturn(20);
         $this->fixtureModelMock
             ->expects($this->once())
             ->method('getValue')
-            ->willReturn(false);
+            ->willReturn(20);
+        $this->customerDataGeneratorFactoryMock->expects($this->never())->method('create');
 
         $this->model->execute();
     }
@@ -112,8 +122,11 @@ class CustomersFixtureTest extends \PHPUnit_Framework_TestCase
 
     public function testIntroduceParamLabels()
     {
-        $this->assertSame([
-            'customers' => 'Customers'
-        ], $this->model->introduceParamLabels());
+        $this->assertSame(
+            [
+                'customers' => 'Customers'
+            ],
+            $this->model->introduceParamLabels()
+        );
     }
 }

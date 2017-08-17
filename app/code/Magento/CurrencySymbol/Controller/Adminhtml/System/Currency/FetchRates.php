@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CurrencySymbol\Controller\Adminhtml\System\Currency;
@@ -9,6 +9,10 @@ namespace Magento\CurrencySymbol\Controller\Adminhtml\System\Currency;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\CurrencySymbol\Controller\Adminhtml\System\Currency\FetchRates
+ *
+ */
 class FetchRates extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Currency
 {
     /**

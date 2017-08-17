@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\DB\Adapter;
@@ -10,7 +10,7 @@ use Magento\Framework\DB\Ddl\Table;
 /**
  * Magento Database Adapter Interface
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 interface AdapterInterface
 {
@@ -35,6 +35,9 @@ interface AdapterInterface
     const INSERT_ON_DUPLICATE = 1;
 
     const INSERT_IGNORE = 2;
+    
+    /** Strategy for updating data in table. See https://dev.mysql.com/doc/refman/5.7/en/replace.html */
+    const REPLACE = 4;
 
     const ISO_DATE_FORMAT = 'yyyy-MM-dd';
 
@@ -464,7 +467,7 @@ interface AdapterInterface
      *      array('value1', 'value2')
      *
      * @param   string $table
-     * @param   array $columns  the data array column map
+     * @param   string[] $columns  the data array column map
      * @param   array $data
      * @return  int
      */
@@ -667,7 +670,7 @@ interface AdapterInterface
     /**
      * Format Date to internal database date format
      *
-     * @param int|string|\DateTime $date
+     * @param int|string|\DateTimeInterface $date
      * @param boolean $includeTime
      * @return \Zend_Db_Expr
      */
@@ -928,7 +931,6 @@ interface AdapterInterface
      */
     public function getTableName($tableName);
 
-
     /**
      * Build a trigger name based on table name and trigger details
      *
@@ -1121,6 +1123,7 @@ interface AdapterInterface
      * @param string $tableName
      * @param string|null $schemaName
      * @return string|bool
+     * @since 100.1.0
      */
     public function getAutoIncrementField($tableName, $schemaName = null);
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Api;
@@ -43,7 +43,7 @@ class RuleRepositoryTest extends WebapiAbstract
             'website_ids' => [1],
             'customer_group_ids' => [0, 1, 3],
             'uses_per_customer' => 2,
-            'is_active' => 1,
+            'is_active' => true,
             'condition' => [
                 'condition_type' => \Magento\SalesRule\Model\Rule\Condition\Combine::class,
                 'conditions' => [
@@ -99,11 +99,13 @@ class RuleRepositoryTest extends WebapiAbstract
         $this->assertArrayHasKey('rule_id', $result);
         $this->assertEquals($ruleId, $result['rule_id']);
         unset($result['rule_id']);
+        unset($result['extension_attributes']);
         $this->assertEquals($inputData, $result);
 
         //test getList
         $result = $this->verifyGetList($ruleId);
         unset($result['rule_id']);
+        unset($result['extension_attributes']);
         $this->assertEquals($inputData, $result);
 
         //test update
@@ -112,11 +114,13 @@ class RuleRepositoryTest extends WebapiAbstract
         $inputData['discount_amount'] = 30;
         $result = $this->updateRule($ruleId, $inputData);
         unset($result['rule_id']);
+        unset($result['extension_attributes']);
         $this->assertEquals($inputData, $result);
 
         //test get
         $result = $this->getRule($ruleId);
         unset($result['rule_id']);
+        unset($result['extension_attributes']);
         $this->assertEquals($inputData, $result);
 
         //test delete

@@ -1,12 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Observer\Frontend\Quote\Address;
 
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class \Magento\Quote\Observer\Frontend\Quote\Address\CollectTotalsObserver
+ *
+ */
 class CollectTotalsObserver implements ObserverInterface
 {
     /**
@@ -54,6 +58,8 @@ class CollectTotalsObserver implements ObserverInterface
      * @param VatValidator $vatValidator
      * @param \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerDataFactory
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
+     * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
+     * @param \Magento\Customer\Model\Session $customerSession
      */
     public function __construct(
         \Magento\Customer\Helper\Address $customerAddressHelper,
@@ -78,6 +84,7 @@ class CollectTotalsObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
@@ -11,12 +11,17 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\DB\Helper as DbHelper;
 use Magento\Catalog\Model\Category as CategoryModel;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\Stdlib\ArrayManager;
 
 /**
  * Data provider for categories field of product page
+ *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 101.0.0
  */
 class Categories extends AbstractModifier
 {
@@ -28,32 +33,38 @@ class Categories extends AbstractModifier
 
     /**
      * @var CategoryCollectionFactory
+     * @since 101.0.0
      */
     protected $categoryCollectionFactory;
 
     /**
      * @var DbHelper
+     * @since 101.0.0
      */
     protected $dbHelper;
 
     /**
      * @var array
-     * @deprecated
+     * @deprecated 101.0.3
+     * @since 101.0.0
      */
     protected $categoriesTrees = [];
 
     /**
      * @var LocatorInterface
+     * @since 101.0.0
      */
     protected $locator;
 
     /**
      * @var UrlInterface
+     * @since 101.0.0
      */
     protected $urlBuilder;
 
     /**
      * @var ArrayManager
+     * @since 101.0.0
      */
     protected $arrayManager;
 
@@ -63,31 +74,40 @@ class Categories extends AbstractModifier
     private $cacheManager;
 
     /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * @param LocatorInterface $locator
      * @param CategoryCollectionFactory $categoryCollectionFactory
      * @param DbHelper $dbHelper
      * @param UrlInterface $urlBuilder
      * @param ArrayManager $arrayManager
+     * @param SerializerInterface $serializer
+     * @since 101.0.0
      */
     public function __construct(
         LocatorInterface $locator,
         CategoryCollectionFactory $categoryCollectionFactory,
         DbHelper $dbHelper,
         UrlInterface $urlBuilder,
-        ArrayManager $arrayManager
+        ArrayManager $arrayManager,
+        SerializerInterface $serializer = null
     ) {
         $this->locator = $locator;
         $this->categoryCollectionFactory = $categoryCollectionFactory;
         $this->dbHelper = $dbHelper;
         $this->urlBuilder = $urlBuilder;
         $this->arrayManager = $arrayManager;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
     }
 
     /**
      * Retrieve cache interface
      *
      * @return CacheInterface
-     * @deprecated
+     * @deprecated 101.0.3
      */
     private function getCacheManager()
     {
@@ -100,6 +120,7 @@ class Categories extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 101.0.0
      */
     public function modifyMeta(array $meta)
     {
@@ -111,6 +132,7 @@ class Categories extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 101.0.0
      */
     public function modifyData(array $data)
     {
@@ -122,6 +144,7 @@ class Categories extends AbstractModifier
      *
      * @param array $meta
      * @return array
+     * @since 101.0.0
      */
     protected function createNewCategoryModal(array $meta)
     {
@@ -180,6 +203,7 @@ class Categories extends AbstractModifier
      *
      * @param array $meta
      * @return array
+     * @since 101.0.0
      */
     protected function customizeCategoriesField(array $meta)
     {
@@ -281,12 +305,13 @@ class Categories extends AbstractModifier
      *
      * @param string|null $filter
      * @return array
+     * @since 101.0.0
      */
     protected function getCategoriesTree($filter = null)
     {
         $categoryTree = $this->getCacheManager()->load(self::CATEGORY_TREE_ID . '_' . $filter);
         if ($categoryTree) {
-            return unserialize($categoryTree);
+            return $this->serializer->unserialize($categoryTree);
         }
 
         $storeId = $this->locator->getStore()->getId();
@@ -338,9 +363,9 @@ class Categories extends AbstractModifier
             $categoryById[$category->getId()]['label'] = $category->getName();
             $categoryById[$category->getParentId()]['optgroup'][] = &$categoryById[$category->getId()];
         }
-        
+
         $this->getCacheManager()->save(
-            serialize($categoryById[CategoryModel::TREE_ROOT_ID]['optgroup']),
+            $this->serializer->serialize($categoryById[CategoryModel::TREE_ROOT_ID]['optgroup']),
             self::CATEGORY_TREE_ID . '_' . $filter,
             [
                 \Magento\Catalog\Model\Category::CACHE_TAG,

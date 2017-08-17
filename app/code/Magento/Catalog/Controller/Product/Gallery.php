@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Product;
@@ -10,6 +10,10 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\Result;
 use Magento\Framework\View\Result\PageFactory;
 
+/**
+ * Class \Magento\Catalog\Controller\Product\Gallery
+ *
+ */
 class Gallery extends \Magento\Catalog\Controller\Product
 {
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,6 +14,7 @@ use Magento\Customer\Block\Account\SortLinkInterface;
 /**
  * Class Link
  *
+ * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Link extends \Magento\Framework\View\Element\Html\Link implements SortLinkInterface
@@ -73,6 +74,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements SortLink
 
     /**
      * {@inheritdoc}
+     * @since 100.2.0
      */
     public function getSortOrder()
     {

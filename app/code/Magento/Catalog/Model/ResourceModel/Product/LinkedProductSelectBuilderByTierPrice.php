@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product;
@@ -9,6 +9,10 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Select;
 
+/**
+ * Class \Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderByTierPrice
+ *
+ */
 class LinkedProductSelectBuilderByTierPrice implements LinkedProductSelectBuilderInterface
 {
     /**
@@ -100,15 +104,15 @@ class LinkedProductSelectBuilderByTierPrice implements LinkedProductSelectBuilde
             ->limit(1);
         $priceSelect = $this->baseSelectProcessor->process($priceSelect);
 
-        $priceSelectDefault = clone $priceSelect;
-        $priceSelectDefault->where('t.website_id = ?', self::DEFAULT_WEBSITE_ID);
-        $select[] = $priceSelectDefault;
-
         if (!$this->catalogHelper->isPriceGlobal()) {
-            $priceSelect->where('t.website_id = ?', $this->storeManager->getStore()->getWebsiteId());
-            $select[] = $priceSelect;
+            $priceSelectStore = clone $priceSelect;
+            $priceSelectStore->where('t.website_id = ?', $this->storeManager->getStore()->getWebsiteId());
+            $selects[] = $priceSelectStore;
         }
 
-        return $select;
+        $priceSelect->where('t.website_id = ?', self::DEFAULT_WEBSITE_ID);
+        $selects[] = $priceSelect;
+
+        return $selects;
     }
 }

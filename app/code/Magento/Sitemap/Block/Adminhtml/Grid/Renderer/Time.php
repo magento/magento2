@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,6 +10,10 @@
  */
 namespace Magento\Sitemap\Block\Adminhtml\Grid\Renderer;
 
+/**
+ * Class \Magento\Sitemap\Block\Adminhtml\Grid\Renderer\Time
+ *
+ */
 class Time extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**

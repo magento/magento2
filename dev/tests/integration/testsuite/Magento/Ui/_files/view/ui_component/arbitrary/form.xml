@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details. 
+ */
+-->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="layout" xsi:type="array">
+            <item name="type" xsi:type="string">string</item>
+            <item name="navContainerName" xsi:type="string">string</item>
+        </item>
+        <item name="config" xsi:type="array">
+            <item name="selectorPrefix" xsi:type="string">string</item>
+            <item name="messagesClass" xsi:type="string">string</item>
+            <item name="errorClass" xsi:type="string">string</item>
+            <item name="ajaxSaveType" xsi:type="string">string</item>
+            <item name="namespace" xsi:type="string">string</item>
+            <item name="ajaxSave" xsi:type="boolean">false</item>
+            <item name="reloadItem" xsi:type="string">string</item>
+            <item name="provider" xsi:type="string">string</item>
+            <item name="component" xsi:type="string">string</item>
+            <item name="template" xsi:type="string">string</item>
+            <item name="sortOrder" xsi:type="number">0</item>
+            <item name="displayArea" xsi:type="string">string</item>
+            <item name="storageConfig" xsi:type="array">
+                <item name="provider" xsi:type="string">string</item>
+                <item name="namespace" xsi:type="string">string</item>
+                <item name="path" xsi:type="url" path="string">
+                    <param name="string">string</param>
+                </item>
+            </item>
+            <item name="statefull" xsi:type="array">
+                <item name="anySimpleType" xsi:type="boolean">true</item>
+            </item>
+            <item name="imports" xsi:type="array">
+                <item name="string" xsi:type="string">string</item>
+            </item>
+            <item name="exports" xsi:type="array">
+                <item name="string" xsi:type="string">string</item>
+            </item>
+            <item name="links" xsi:type="array">
+                <item name="string" xsi:type="string">string</item>
+            </item>
+            <item name="listens" xsi:type="array">
+                <item name="string" xsi:type="string">string</item>
+            </item>
+            <item name="ns" xsi:type="string">string</item>
+            <item name="componentType" xsi:type="string">string</item>
+            <item name="dataScope" xsi:type="string">string</item>
+        </item>
+        <item name="buttons" xsi:type="array">
+            <item name="string" xsi:type="array">
+                <item name="label" xsi:type="string" translate="false">string</item>
+                <item name="class" xsi:type="string">string</item>
+                <item name="url" xsi:type="url" path="string">
+                    <param name="string">string</param>
+                </item>
+                <item name="name" xsi:type="string">string</item>
+            </item>
+            <item name="string1" xsi:type="array">
+                <item name="label" xsi:type="string" translate="false">string</item>
+                <item name="class" xsi:type="string">string</item>
+                <item name="url" xsi:type="url" path="string">
+                    <param name="string">string</param>
+                </item>
+                <item name="name" xsi:type="string">string1</item>
+            </item>
+        </item>
+        <item name="spinner" xsi:type="string">string</item>
+        <item name="js_config" xsi:type="array">
+            <item name="deps" xsi:type="array">
+                <item name="0" xsi:type="string">string</item>
+            </item>
+        </item>
+    </argument>
+</form>

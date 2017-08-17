@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Block\Transparent;
 
 /**
  * Class Info. Payment Information block used for transparent redirect feature
- * @package Magento\Payment\Block\Transparent
+ *
+ * @api
  */
 class Info extends \Magento\Framework\View\Element\Template
 {

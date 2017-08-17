@@ -1,27 +1,29 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework;
 
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Helper\CacheCleaner;
 
 /**
+ * @magentoAppIsolation enabled
  * @magentoCache all disabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TranslateTest extends \PHPUnit_Framework_TestCase
+class TranslateTest extends \PHPUnit\Framework\TestCase
 {
+    /** @var \Magento\Framework\Translate */
+    private $translate;
+
     protected function setUp()
     {
         /** @var \Magento\Framework\View\FileSystem $viewFileSystem */
-        $viewFileSystem = $this->getMock(
+        $viewFileSystem = $this->createPartialMock(
             \Magento\Framework\View\FileSystem::class,
-            ['getLocaleFileName', 'getDesignTheme'],
-            [],
-            '',
-            false
+            ['getLocaleFileName', 'getDesignTheme']
         );
 
         $viewFileSystem->expects($this->any())
@@ -31,11 +33,12 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
             );
 
         /** @var \Magento\Framework\View\Design\ThemeInterface $theme */
-        $theme = $this->getMock(\Magento\Framework\View\Design\ThemeInterface::class, []);
+        $theme = $this->createMock(\Magento\Framework\View\Design\ThemeInterface::class);
         $theme->expects($this->any())->method('getId')->will($this->returnValue(10));
 
         $viewFileSystem->expects($this->any())->method('getDesignTheme')->will($this->returnValue($theme));
 
+        /** @var \Magento\TestFramework\ObjectManager $objectManager */
         $objectManager = Bootstrap::getObjectManager();
         $objectManager->addSharedInstance($viewFileSystem, \Magento\Framework\View\FileSystem::class);
 
@@ -53,37 +56,50 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
         );
 
         /** @var \Magento\Theme\Model\View\Design $designModel */
-        $designModel = $this->getMock(
-            \Magento\Theme\Model\View\Design::class,
-            ['getDesignTheme'],
-            [
-                $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class),
-                $objectManager->get(\Magento\Framework\View\Design\Theme\FlyweightFactory::class),
-                $objectManager->get(\Magento\Framework\App\Config\ScopeConfigInterface::class),
-                $objectManager->get(\Magento\Theme\Model\ThemeFactory::class),
-                $objectManager->get(\Magento\Framework\ObjectManagerInterface::class),
-                $objectManager->get(\Magento\Framework\App\State::class),
-                ['frontend' => 'Test/default']
-            ]
-        );
+        $designModel = $this->getMockBuilder(\Magento\Theme\Model\View\Design::class)
+            ->setMethods(['getDesignTheme'])
+            ->setConstructorArgs(
+                [
+                    $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class),
+                    $objectManager->get(\Magento\Framework\View\Design\Theme\FlyweightFactory::class),
+                    $objectManager->get(\Magento\Framework\App\Config\ScopeConfigInterface::class),
+                    $objectManager->get(\Magento\Theme\Model\ThemeFactory::class),
+                    $objectManager->get(\Magento\Framework\ObjectManagerInterface::class),
+                    $objectManager->get(\Magento\Framework\App\State::class),
+                    ['frontend' => 'Test/default']
+                ]
+            )
+            ->getMock();
 
         $designModel->expects($this->any())->method('getDesignTheme')->will($this->returnValue($theme));
 
         $objectManager->addSharedInstance($designModel, \Magento\Theme\Model\View\Design\Proxy::class);
 
-        $model = $objectManager->create(\Magento\Framework\Translate::class);
-        $objectManager->addSharedInstance($model, \Magento\Framework\Translate::class);
+        $this->translate = $objectManager->create(\Magento\Framework\Translate::class);
+        $objectManager->addSharedInstance($this->translate, \Magento\Framework\Translate::class);
         $objectManager->removeSharedInstance(\Magento\Framework\Phrase\Renderer\Composite::class);
         $objectManager->removeSharedInstance(\Magento\Framework\Phrase\Renderer\Translate::class);
-        \Magento\Framework\Phrase::setRenderer($objectManager->get(\Magento\Framework\Phrase\RendererInterface::class));
-        $model->loadData(\Magento\Framework\App\Area::AREA_FRONTEND);
+        \Magento\Framework\Phrase::setRenderer(
+            $objectManager->get(\Magento\Framework\Phrase\RendererInterface::class)
+        );
+    }
+
+    public function testLoadData()
+    {
+        $data = $this->translate->loadData(null, true)->getData();
+        CacheCleaner::cleanAll();
+        $this->translate->loadData()->getData();
+        $dataCached = $this->translate->loadData()->getData();
+        $this->assertEquals($data, $dataCached);
     }
 
     /**
+     * @magentoCache all disabled
      * @dataProvider translateDataProvider
      */
     public function testTranslate($inputText, $expectedTranslation)
     {
+        $this->translate->loadData(\Magento\Framework\App\Area::AREA_FRONTEND);
         $actualTranslation = new \Magento\Framework\Phrase($inputText);
         $this->assertEquals($expectedTranslation, $actualTranslation);
     }

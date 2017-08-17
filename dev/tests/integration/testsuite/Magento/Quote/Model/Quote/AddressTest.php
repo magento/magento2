@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model\Quote;
@@ -11,7 +11,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * @magentoDataFixture Magento/Sales/_files/quote_with_customer.php
  * @magentoDataFixture Magento/Customer/_files/customer_two_addresses.php
  */
-class AddressTest extends \PHPUnit_Framework_TestCase
+class AddressTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Quote\Model\Quote $quote */
     protected $_quote;
@@ -284,5 +284,29 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($customerId, $this->_address->getCustomerId());
         $this->assertEquals($this->_quote->getId(), $this->_address->getQuoteId());
         $this->assertEquals($customerAddressId, $this->_address->getCustomerAddressId());
+    }
+
+    /**
+     * Tests
+     *
+     * @covers \Magento\Quote\Model\Quote\Address::setAppliedTaxes()
+     * @covers \Magento\Quote\Model\Quote\Address::getAppliedTaxes()
+     * @dataProvider dataProvider
+     * @param $taxes
+     * @param $expected
+     */
+    public function testAppliedTaxes($taxes, $expected)
+    {
+        $this->_address->setAppliedTaxes($taxes);
+
+        $this->assertSame($expected, $this->_address->getAppliedTaxes());
+    }
+
+    public function dataProvider()
+    {
+        return [
+            ['test', 'test'],
+            [[123, true], [123, true]]
+        ];
     }
 }

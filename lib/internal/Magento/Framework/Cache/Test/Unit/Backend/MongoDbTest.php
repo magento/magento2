@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Cache\Test\Unit\Backend;
 
-class MongoDbTest extends \PHPUnit_Framework_TestCase
+class MongoDbTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Cache\Backend\MongoDb|null
@@ -19,20 +19,10 @@ class MongoDbTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_collection = $this->getMock(
-            \MongoCollection::class,
-            ['find', 'findOne', 'distinct', 'save', 'update', 'remove', 'drop'],
-            [],
-            '',
-            false
-        );
-        $this->_model = $this->getMock(
-            \Magento\Framework\Cache\Backend\MongoDb::class,
-            ['_getCollection'],
-            [],
-            '',
-            false
-        );
+        $this->_collection = $this->getMockBuilder('MongoCollection')
+            ->setMethods(['find', 'findOne', 'distinct', 'save', 'update', 'remove', 'drop'])
+            ->getMock();
+        $this->_model = $this->createPartialMock(\Magento\Framework\Cache\Backend\MongoDb::class, ['_getCollection']);
         $this->_model->expects($this->any())->method('_getCollection')->will($this->returnValue($this->_collection));
     }
 

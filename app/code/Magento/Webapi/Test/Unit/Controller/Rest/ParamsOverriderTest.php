@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ use \Magento\Authorization\Model\UserContextInterface;
 /**
  * Test Magento\Webapi\Controller\Rest\ParamsOverrider
  */
-class ParamsOverriderTest extends \PHPUnit_Framework_TestCase
+class ParamsOverriderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param array $requestData Data from the request

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Model\Checks;
@@ -8,9 +8,17 @@ namespace Magento\Payment\Model\Checks;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Quote\Model\Quote;
 
+/**
+ * Combines several checks with logic "AND" operation.
+ * Use this class to register own specifications.
+ *
+ * @api
+ */
 class Composite implements SpecificationInterface
 {
-    /** @var SpecificationInterface[]  */
+    /**
+     * @var \Magento\Payment\Model\Checks\SpecificationInterface[]
+     */
     protected $list = [];
 
     /**

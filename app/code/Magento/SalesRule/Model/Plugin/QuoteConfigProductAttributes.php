@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Model\Plugin;
@@ -9,6 +9,10 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Model\Session;
 use Magento\SalesRule\Model\ResourceModel\Rule as RuleResource;
 
+/**
+ * Class \Magento\SalesRule\Model\Plugin\QuoteConfigProductAttributes
+ *
+ */
 class QuoteConfigProductAttributes
 {
     /**

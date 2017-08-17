@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -87,11 +87,7 @@ class CommonTaxCollector extends AbstractTotal
     const KEY_TAX_DETAILS_APPLIED_TAXES = 'applied_taxes';
     /**#@-*/
 
-    /**
-     * Tax configuration object
-     *
-     * @var \Magento\Tax\Model\Config
-     */
+    /**#@-*/
     protected $_config;
 
     /**
@@ -535,6 +531,7 @@ class CommonTaxCollector extends AbstractTotal
         $total->setSubtotalInclTax($subtotalInclTax);
         $total->setBaseSubtotalTotalInclTax($baseSubtotalInclTax);
         $total->setBaseSubtotalInclTax($baseSubtotalInclTax);
+        $shippingAssignment->getShipping()->getAddress()->setBaseSubtotalTotalInclTax($baseSubtotalInclTax);;
 
         return $this;
     }

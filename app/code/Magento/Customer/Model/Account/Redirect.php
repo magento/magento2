@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\Account;
@@ -9,6 +9,7 @@ use Magento\Customer\Model\Session;
 use Magento\Customer\Model\Url as CustomerUrl;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Url\HostChecker;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -53,6 +54,7 @@ class Redirect
     protected $customerUrl;
 
     /**
+     * @deprecated 100.2.0
      * @var UrlInterface
      */
     protected $url;
@@ -68,6 +70,11 @@ class Redirect
     protected $cookieManager;
 
     /**
+     * @var HostChecker
+     */
+    private $hostChecker;
+
+    /**
      * @param RequestInterface $request
      * @param Session $customerSession
      * @param ScopeConfigInterface $scopeConfig
@@ -76,6 +83,7 @@ class Redirect
      * @param DecoderInterface $urlDecoder
      * @param CustomerUrl $customerUrl
      * @param ResultFactory $resultFactory
+     * @param HostChecker|null $hostChecker
      */
     public function __construct(
         RequestInterface $request,
@@ -85,7 +93,8 @@ class Redirect
         UrlInterface $url,
         DecoderInterface $urlDecoder,
         CustomerUrl $customerUrl,
-        ResultFactory $resultFactory
+        ResultFactory $resultFactory,
+        HostChecker $hostChecker = null
     ) {
         $this->request = $request;
         $this->session = $customerSession;
@@ -95,6 +104,7 @@ class Redirect
         $this->urlDecoder = $urlDecoder;
         $this->customerUrl = $customerUrl;
         $this->resultFactory = $resultFactory;
+        $this->hostChecker = $hostChecker ?: ObjectManager::getInstance()->get(HostChecker::class);
     }
 
     /**
@@ -196,7 +206,7 @@ class Redirect
             $referer = $this->request->getParam(CustomerUrl::REFERER_QUERY_PARAM_NAME);
             if ($referer) {
                 $referer = $this->urlDecoder->decode($referer);
-                if ($this->url->isOwnOriginUrl()) {
+                if ($this->hostChecker->isOwnOrigin($referer)) {
                     $this->applyRedirect($referer);
                 }
             }
@@ -219,7 +229,7 @@ class Redirect
     /**
      * Get Cookie manager. For release backward compatibility.
      *
-     * @deprecated
+     * @deprecated 100.0.10
      * @return CookieManagerInterface
      */
     protected function getCookieManager()
@@ -233,7 +243,7 @@ class Redirect
     /**
      * Set cookie manager. For unit tests.
      *
-     * @deprecated
+     * @deprecated 100.0.10
      * @param object $value
      * @return void
      */

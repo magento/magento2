@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\Component\Listing;
@@ -10,21 +10,28 @@ use Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory;
 use Magento\Framework\View\Element\UiComponent\ObserverInterface;
 use Magento\Framework\View\Element\UiComponentInterface;
 
+/**
+ * @api
+ * @since 101.0.0
+ */
 class Filters implements ObserverInterface
 {
     /**
      * @var FilterFactory
+     * @since 101.0.0
      */
     protected $filterFactory;
 
     /**
      * @var CollectionFactory
+     * @since 101.0.0
      */
     protected $attributeCollectionFactory;
 
     /**
      * @param FilterFactory $filterFactory
      * @param CollectionFactory $attributeCollectionFactory
+     * @since 101.0.0
      */
     public function __construct(
         FilterFactory $filterFactory,
@@ -36,6 +43,7 @@ class Filters implements ObserverInterface
 
     /**
      * {@inheritdoc}
+     * @since 101.0.0
      */
     public function update(UiComponentInterface $component)
     {
@@ -56,6 +64,7 @@ class Filters implements ObserverInterface
     /**
      * @param array $attributeCodes
      * @return mixed
+     * @since 101.0.0
      */
     protected function getAttributes($attributeCodes)
     {

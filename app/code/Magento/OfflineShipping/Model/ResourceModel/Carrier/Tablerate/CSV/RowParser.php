@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,10 @@ namespace Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV;
 use Magento\Framework\Phrase;
 use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\LocationDirectory;
 
+/**
+ * Class \Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV\RowParser
+ *
+ */
 class RowParser
 {
     /**

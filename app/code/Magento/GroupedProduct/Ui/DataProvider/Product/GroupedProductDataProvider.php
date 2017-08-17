@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GroupedProduct\Ui\DataProvider\Product;
@@ -13,6 +13,10 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
 
+/**
+ * Class \Magento\GroupedProduct\Ui\DataProvider\Product\GroupedProductDataProvider
+ *
+ */
 class GroupedProductDataProvider extends ProductDataProvider
 {
     /**

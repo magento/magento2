@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\PageCache\Observer;
@@ -9,12 +9,16 @@ namespace Magento\PageCache\Observer;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class \Magento\PageCache\Observer\FlushAllCache
+ *
+ */
 class FlushAllCache implements ObserverInterface
 {
     /**
      * @var \Magento\Framework\App\PageCache\Cache
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     protected $_cache;
 

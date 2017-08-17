@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@
  */
 namespace Magento\Config\Test\Unit\Block\System\Config\Form\Field;
 
-class RegexceptionsTest extends \PHPUnit_Framework_TestCase
+class RegexceptionsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var array
@@ -128,7 +128,7 @@ class RegexceptionsTest extends \PHPUnit_Framework_TestCase
 
         $this->object->addColumn($wrongColumnName, $this->cellParameters);
 
-        $this->setExpectedException('\Exception', 'Wrong column name specified.');
+        $this->expectException('\Exception', 'Wrong column name specified.');
 
         $this->object->renderCellTemplate($columnName);
     }

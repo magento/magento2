@@ -1,18 +1,20 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Directory\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * Class CountryHandler
+ * Provider of allowed countries based on configuration settings
+ *
+ * @api
+ * @since 100.1.2
  */
 class AllowedCountries
 {
@@ -32,6 +34,7 @@ class AllowedCountries
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @return void
+     * @since 100.1.2
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
@@ -47,6 +50,7 @@ class AllowedCountries
      * @param string | null $scopeCode
      * @param string $scope
      * @return array
+     * @since 100.1.2
      */
     public function getAllowedCountries(
         $scope = ScopeInterface::SCOPE_WEBSITE,
@@ -104,6 +108,7 @@ class AllowedCountries
      *
      * @param array $allowedCountries
      * @return array
+     * @since 100.1.2
      */
     public function makeCountriesUnique(array $allowedCountries)
     {
@@ -116,6 +121,7 @@ class AllowedCountries
      * @param string $scope
      * @param int $scopeCode
      * @return array
+     * @since 100.1.2
      */
     public function getCountriesFromConfig($scope, $scopeCode)
     {

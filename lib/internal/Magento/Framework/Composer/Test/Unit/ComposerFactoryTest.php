@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Composer\Test\Unit;
@@ -11,7 +11,7 @@ use Magento\Framework\Composer\ComposerJsonFinder;
 use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class ComposerFactoryTest extends \PHPUnit_Framework_TestCase
+class ComposerFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /** @var string Test COMPOSER_HOME environment variable value */
     private $testComposerHome = __DIR__ . '/_files/composer_home';

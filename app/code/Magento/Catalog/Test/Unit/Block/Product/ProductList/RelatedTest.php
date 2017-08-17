@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Block\Product\ProductList;
 
-class RelatedTest extends \PHPUnit_Framework_TestCase
+class RelatedTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Block\Product\ProductList\Related
@@ -26,7 +26,7 @@ class RelatedTest extends \PHPUnit_Framework_TestCase
     public function testGetIdentities()
     {
         $productTag = ['compare_item_1'];
-        $product = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $product = $this->createMock(\Magento\Catalog\Model\Product::class);
         $product->expects($this->once())->method('getIdentities')->will($this->returnValue($productTag));
 
         $itemsCollection = new \ReflectionProperty(
@@ -51,12 +51,9 @@ class RelatedTest extends \PHPUnit_Framework_TestCase
      */
     public function testCanItemsAddToCart($isComposite, $isSaleable, $hasRequiredOptions, $canItemsAddToCart)
     {
-        $product = $this->getMock(
+        $product = $this->createPartialMock(
             \Magento\Catalog\Model\Product::class,
-            ['isComposite', 'isSaleable', 'getRequiredOptions'],
-            [],
-            '',
-            false
+            ['isComposite', 'isSaleable', 'getRequiredOptions']
         );
         $product->expects($this->any())->method('isComposite')->willReturn($isComposite);
         $product->expects($this->any())->method('isSaleable')->willReturn($isSaleable);

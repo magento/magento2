@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Adapter\Mysql\Aggregation;
@@ -8,12 +8,17 @@ namespace Magento\Framework\Search\Adapter\Mysql\Aggregation;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Dynamic\IntervalInterface;
 
+/**
+ * Class \Magento\Framework\Search\Adapter\Mysql\Aggregation\Interval
+ *
+ */
 class Interval implements IntervalInterface
 {
     /**
      * Minimal possible value
      */
     const DELTA = 0.005;
+
     /**
      * @var Select
      */

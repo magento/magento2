@@ -2,7 +2,7 @@
 /**
  * Standard profiler driver that uses outputs for displaying profiling results.
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Profiler\Driver;
@@ -12,6 +12,10 @@ use Magento\Framework\Profiler\Driver\Standard\OutputInterface;
 use Magento\Framework\Profiler\Driver\Standard\Stat;
 use Magento\Framework\Profiler\DriverInterface;
 
+/**
+ * Class \Magento\Framework\Profiler\Driver\Standard
+ *
+ */
 class Standard implements DriverInterface
 {
     /**

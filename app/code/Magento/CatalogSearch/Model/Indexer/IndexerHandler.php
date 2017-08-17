@@ -1,20 +1,21 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Indexer;
 
 use Magento\Eav\Model\Config;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Indexer\SaveHandler\IndexerInterface;
 use Magento\Framework\Indexer\IndexStructureInterface;
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\Search\Request\IndexScopeResolverInterface;
 use Magento\Framework\Indexer\SaveHandler\Batch;
-use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
 
+/**
+ * @api
+ */
 class IndexerHandler implements IndexerInterface
 {
     /**
@@ -62,7 +63,7 @@ class IndexerHandler implements IndexerInterface
      * @param ResourceConnection $resource
      * @param Config $eavConfig
      * @param Batch $batch
-     * @param \Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver $indexScopeResolver
+     * @param IndexScopeResolverInterface $indexScopeResolver
      * @param array $data
      * @param int $batchSize
      */
@@ -71,7 +72,7 @@ class IndexerHandler implements IndexerInterface
         ResourceConnection $resource,
         Config $eavConfig,
         Batch $batch,
-        IndexScopeResolver $indexScopeResolver,
+        IndexScopeResolverInterface $indexScopeResolver,
         array $data,
         $batchSize = 100
     ) {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,7 +10,7 @@ use Magento\Setup\Console\Command\MaintenanceEnableCommand;
 use Magento\Setup\Validator\IpValidator;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class MaintenanceEnableCommandTest extends \PHPUnit_Framework_TestCase
+class MaintenanceEnableCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\MaintenanceMode|\PHPUnit_Framework_MockObject_MockObject
@@ -29,8 +29,8 @@ class MaintenanceEnableCommandTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->maintenanceMode = $this->getMock(\Magento\Framework\App\MaintenanceMode::class, [], [], '', false);
-        $this->ipValidator = $this->getMock(\Magento\Setup\Validator\IpValidator::class, [], [], '', false);
+        $this->maintenanceMode = $this->createMock(\Magento\Framework\App\MaintenanceMode::class);
+        $this->ipValidator = $this->createMock(\Magento\Setup\Validator\IpValidator::class);
         $this->command = new MaintenanceEnableCommand($this->maintenanceMode, $this->ipValidator);
     }
 
@@ -51,7 +51,6 @@ class MaintenanceEnableCommandTest extends \PHPUnit_Framework_TestCase
         $tester = new CommandTester($this->command);
         $tester->execute($input);
         $this->assertEquals($expectedMessage, $tester->getDisplay());
-
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Directory\Model\Currency\Import;
@@ -10,20 +10,13 @@ namespace Magento\Directory\Model\Currency\Import;
  */
 class YahooFinance extends \Magento\Directory\Model\Currency\Import\AbstractImport
 {
-    /**
-     * Currency converter url string
-     *
-     * @var string
-     */
+    // @codingStandardsIgnoreStart
+
     // @codingStandardsIgnoreStart
     private $currencyConverterUrl = 'http://query.yahooapis.com/v1/public/yql?format=json&q={{YQL_STRING}}&env=store://datatables.org/alltableswithkeys';
     // @codingStandardsIgnoreEnd
 
-    /**
-     * Config path for service timeout
-     *
-     * @var string
-     */
+    // @codingStandardsIgnoreEnd
     private $timeoutConfigPath = 'currency/yahoofinance/timeout';
 
     /**

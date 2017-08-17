@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Indexer\Model\Source;
@@ -10,6 +10,10 @@ use Magento\Framework\Api\SearchResults;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\ObjectManagerInterface;
 
+/**
+ * Class \Magento\Indexer\Model\Source\ServiceSource
+ *
+ */
 class ServiceSource implements DataInterface
 {
     /**

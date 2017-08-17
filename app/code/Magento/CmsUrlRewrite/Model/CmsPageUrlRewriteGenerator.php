@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CmsUrlRewrite\Model;
@@ -8,6 +8,10 @@ namespace Magento\CmsUrlRewrite\Model;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 
+/**
+ * Class \Magento\CmsUrlRewrite\Model\CmsPageUrlRewriteGenerator
+ *
+ */
 class CmsPageUrlRewriteGenerator
 {
     /**
@@ -15,10 +19,14 @@ class CmsPageUrlRewriteGenerator
      */
     const ENTITY_TYPE = 'cms-page';
 
-    /** @var \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory */
+    /**
+     * @var \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory
+     */
     protected $urlRewriteFactory;
 
-    /** @var \Magento\CmsUrlRewrite\Model\CmsPageUrlPathGenerator */
+    /**
+     * @var \Magento\CmsUrlRewrite\Model\CmsPageUrlPathGenerator
+     */
     protected $cmsPageUrlPathGenerator;
 
     /**

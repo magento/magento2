@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Test\Unit\Helper;
 
-class ExpressRedirectTest extends \PHPUnit_Framework_TestCase
+class ExpressRedirectTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -42,7 +42,7 @@ class ExpressRedirectTest extends \PHPUnit_Framework_TestCase
             ['set']
         )->getMock();
 
-        $this->_objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->_objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
 
         $this->_customerSession = $this->getMockBuilder(
             \Magento\Customer\Model\Session::class

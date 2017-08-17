@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -11,7 +11,7 @@
         <referenceContainer name="admin.scope.col.wrap" htmlClass="admin__old" /> <!-- ToDo UI: remove this wrapper with old styles removal. The class name "admin__old" is for tests only, we shouldn't use it in any way -->
 
         <referenceContainer name="content">
-            <block class="Magento\Sales\Block\Adminhtml\Transactions\Detail" name="sales_transactions.detail" template="transactions/detail.phtml">
+            <block class="Magento\Sales\Block\Adminhtml\Transactions\Detail" name="sales_transactions.detail" template="Magento_Sales::transactions/detail.phtml">
                 <block class="Magento\Sales\Block\Adminhtml\Transactions\Detail\Grid" name="sales_transactions.detail.grid" as="detail_grid"/>
                 <block class="Magento\Sales\Block\Adminhtml\Transactions" name="sales_transactions.grid.container" as="child_grid"/>
             </block>

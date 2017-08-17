@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Code;
@@ -8,6 +8,10 @@ namespace Magento\Framework\Code;
 use Magento\Framework\Code\Generator\DefinedClasses;
 use Magento\Framework\Code\Generator\EntityAbstract;
 
+/**
+ * Class \Magento\Framework\Code\Generator
+ *
+ */
 class Generator
 {
     const GENERATION_SUCCESS = 'success';
@@ -112,7 +116,7 @@ class Generator
             $this->tryToLoadSourceClass($className, $generator);
             if (!($file = $generator->generate())) {
                 $errors = $generator->getErrors();
-                throw new \RuntimeException(implode(' ', $errors));
+                throw new \RuntimeException(implode(' ', $errors) . ' in [' . $className . ']');
             }
             if (!$this->definedClasses->isClassLoadableFromMemory($className)) {
                 $this->_ioObject->includeFile($file);
@@ -199,7 +203,7 @@ class Generator
     {
         if (!$resultEntityType || !$sourceClassName) {
             return self::GENERATION_ERROR;
-        } else if ($this->definedClasses->isClassLoadableFromDisc($resultClass)) {
+        } elseif ($this->definedClasses->isClassLoadableFromDisc($resultClass)) {
             $generatedFileName = $this->_ioObject->generateResultFileName($resultClass);
             /**
              * Must handle two edge cases: a competing process has generated the class and written it to disc already,
@@ -211,7 +215,7 @@ class Generator
                 $this->_ioObject->includeFile($generatedFileName);
             }
             return self::GENERATION_SKIP;
-        } else if (!isset($this->_generatedEntities[$resultEntityType])) {
+        } elseif (!isset($this->_generatedEntities[$resultEntityType])) {
             throw new \InvalidArgumentException('Unknown generation entity.');
         }
         return false;

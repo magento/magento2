@@ -1,10 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml;
 
+/**
+ * Class \Magento\Sales\Block\Adminhtml\Totals
+ *
+ */
 class Totals extends \Magento\Sales\Block\Order\Totals
 {
     /**

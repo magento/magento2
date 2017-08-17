@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,11 +8,15 @@
 
 namespace Magento\Catalog\Model\Indexer\Category\Product;
 
+use Magento\Framework\DB\Query\Generator as QueryGenerator;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Class AbstractAction
+ *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractAction
@@ -94,28 +98,39 @@ abstract class AbstractAction
 
     /**
      * @var MetadataPool
+     * @since 101.0.0
      */
     protected $metadataPool;
 
     /**
      * @var string
+     * @since 101.0.0
      */
     protected $tempTreeIndexTableName;
+
+    /**
+     * @var QueryGenerator
+     */
+    private $queryGenerator;
 
     /**
      * @param ResourceConnection $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Config $config
+     * @param QueryGenerator $queryGenerator
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Model\Config $config
+        \Magento\Catalog\Model\Config $config,
+        QueryGenerator $queryGenerator = null
     ) {
         $this->resource = $resource;
         $this->connection = $resource->getConnection();
         $this->storeManager = $storeManager;
         $this->config = $config;
+        $this->queryGenerator = $queryGenerator ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(QueryGenerator::class);
     }
 
     /**
@@ -154,6 +169,9 @@ abstract class AbstractAction
 
     /**
      * Return main index table name
+     *
+     * This table should be used on frontend(clients)
+     * The name is switched between 'catalog_category_product_index' and 'catalog_category_product_index_replica'
      *
      * @return string
      */
@@ -309,15 +327,26 @@ abstract class AbstractAction
      * @param int $range
      * @return \Magento\Framework\DB\Select[]
      */
-    protected function prepareSelectsByRange(\Magento\Framework\DB\Select $select, $field, $range = self::RANGE_CATEGORY_STEP)
-    {
-        return $this->isRangingNeeded() ? $this->connection->selectsByRange(
-            $field,
-            $select,
-            $range
-        ) : [
-            $select
-        ];
+    protected function prepareSelectsByRange(
+        \Magento\Framework\DB\Select $select,
+        $field,
+        $range = self::RANGE_CATEGORY_STEP
+    ) {
+        if ($this->isRangingNeeded()) {
+            $iterator = $this->queryGenerator->generate(
+                $field,
+                $select,
+                $range,
+                \Magento\Framework\DB\Query\BatchIteratorInterface::NON_UNIQUE_FIELD_ITERATOR
+            );
+
+            $queries = [];
+            foreach ($iterator as $query) {
+                $queries[] = $query;
+            }
+            return $queries;
+        }
+        return [$select];
     }
 
     /**
@@ -394,6 +423,10 @@ abstract class AbstractAction
             ['ccp' => $this->getTable('catalog_category_product')],
             'ccp.category_id = cc2.child_id',
             []
+        )->joinLeft(
+            ['ccp2' => $this->getTable('catalog_category_product')],
+            'ccp2.category_id = cc2.parent_id AND ccp.product_id = ccp2.product_id',
+            []
         )->joinInner(
             ['cpe' => $this->getTable('catalog_product_entity')],
             'ccp.product_id = cpe.entity_id',
@@ -456,7 +489,7 @@ abstract class AbstractAction
             [
                 'category_id' => 'cc.entity_id',
                 'product_id' => 'ccp.product_id',
-                'position' => new \Zend_Db_Expr('ccp.position + 10000'),
+                'position' => new \Zend_Db_Expr($this->connection->getIfNullSql('ccp2.position', 'ccp.position + 10000')),
                 'is_parent' => new \Zend_Db_Expr('0'),
                 'store_id' => new \Zend_Db_Expr($store->getId()),
                 'visibility' => new \Zend_Db_Expr($this->connection->getIfNullSql('cpvs.value', 'cpvd.value')),
@@ -469,6 +502,7 @@ abstract class AbstractAction
      * Temp table name is NOT shared between action instances and each action has it's own temp tree index
      *
      * @return string
+     * @since 101.0.0
      */
     protected function getTemporaryTreeIndexTableName()
     {
@@ -487,6 +521,7 @@ abstract class AbstractAction
      * Returns the name of the temporary table to use in queries.
      *
      * @return string
+     * @since 101.0.0
      */
     protected function makeTempCategoryTreeIndex()
     {
@@ -526,6 +561,7 @@ abstract class AbstractAction
      * Populate the temporary category tree index table
      *
      * @param string $temporaryName
+     * @since 101.0.0
      */
     protected function fillTempCategoryTreeIndex($temporaryName)
     {

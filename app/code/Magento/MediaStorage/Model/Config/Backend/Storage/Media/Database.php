@@ -1,10 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\MediaStorage\Model\Config\Backend\Storage\Media;
 
+/**
+ * Class \Magento\MediaStorage\Model\Config\Backend\Storage\Media\Database
+ *
+ */
 class Database extends \Magento\Framework\App\Config\Value
 {
     /**

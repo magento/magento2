@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Product;
@@ -21,7 +21,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SaveHandlerTest extends \PHPUnit_Framework_TestCase
+class SaveHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var OptionRepository|MockObject
@@ -220,12 +220,12 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * Mock for options save
      *
-     * @param MockObject $attribute
+     * @param \PHPUnit_Framework_MockObject_MockObject $attribute
      * @param $sku
      * @param $id
      * @return void
      */
-    private function processSaveOptions(MockObject $attribute, $sku, $id)
+    private function processSaveOptions(\PHPUnit_Framework_MockObject_MockObject $attribute, $sku, $id)
     {
         $attribute->expects(static::once())
             ->method('setId')

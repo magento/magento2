@@ -2,7 +2,7 @@
 /**
  * Factory for Acl resource
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Setup;
@@ -10,6 +10,10 @@ namespace Magento\Framework\Setup;
 use Magento\Framework\ObjectManagerInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Class \Magento\Framework\Setup\BackupRollbackFactory
+ *
+ */
 class BackupRollbackFactory
 {
     /**

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 define(
@@ -14,6 +14,7 @@ define(
         'uiRegistry',
         'Magento_Checkout/js/model/quote',
         'Magento_Checkout/js/model/checkout-data-resolver',
+        'Magento_Checkout/js/model/shipping-service',
         'mage/validation'
     ],
     function (
@@ -26,7 +27,8 @@ define(
         shippingRatesValidator,
         registry,
         quote,
-        checkoutDataResolver
+        checkoutDataResolver,
+        shippingService
     ) {
         'use strict';
 
@@ -41,8 +43,14 @@ define(
              */
             initialize: function () {
                 this._super();
+
+                // Prevent shipping methods showing none available whilst we resolve
+                shippingService.isLoading(true);
+
                 registry.async('checkoutProvider')(function (checkoutProvider) {
                     var address, estimatedAddress;
+
+                    shippingService.isLoading(false);
 
                     checkoutDataResolver.resolveEstimationAddress();
                     address = quote.isVirtual() ? quote.billingAddress() : quote.shippingAddress();
@@ -50,9 +58,13 @@ define(
                     if (address) {
                         estimatedAddress = address.isEditable() ?
                             addressConverter.quoteAddressToFormAddressData(address) :
-                            addressConverter.quoteAddressToFormAddressData(
-                                addressConverter.addressToEstimationAddress(address)
-                            );
+                            {
+                                // only the following fields must be used by estimation form data provider
+                                'country_id': address.countryId,
+                                region: address.region,
+                                'region_id': address.regionId,
+                                postcode: address.postcode
+                            };
                         checkoutProvider.set(
                             'shippingAddress',
                             $.extend({}, checkoutProvider.get('shippingAddress'), estimatedAddress)

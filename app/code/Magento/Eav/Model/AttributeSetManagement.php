@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model;
@@ -11,6 +11,10 @@ use Magento\Eav\Api\Data\AttributeSetInterface;
 use Magento\Eav\Model\Config as EavConfig;
 use Magento\Framework\Exception\InputException;
 
+/**
+ * Class \Magento\Eav\Model\AttributeSetManagement
+ *
+ */
 class AttributeSetManagement implements AttributeSetManagementInterface
 {
     /**

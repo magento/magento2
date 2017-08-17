@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Test\Unit\Block\Customer\Wishlist\Item;
 
 use Magento\Wishlist\Block\Customer\Wishlist\Item\Options;
 
-class OptionsTest extends \PHPUnit_Framework_TestCase
+class OptionsTest extends \PHPUnit\Framework\TestCase
 {
     const TEST_PRODUCT_TYPE = 'testProductType';
     const TEST_HELPER_CLASS_NAME = 'testHelperClass';

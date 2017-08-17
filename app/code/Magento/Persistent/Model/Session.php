@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Persistent\Model;
@@ -8,6 +8,7 @@ namespace Magento\Persistent\Model;
 /**
  * Persistent Session Model
  *
+ * @api
  * @method int getCustomerId()
  * @method Session setCustomerId()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -400,7 +401,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      * Get request object
      *
      * @return \Magento\Framework\App\Request\Http
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getRequest()
     {
@@ -415,6 +416,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      * Set `updated_at` to be always changed
      *
      * @return $this
+     * @since 100.1.0
      */
     public function save()
     {

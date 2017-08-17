@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,6 +14,8 @@ use Magento\Framework\Pricing\PriceInfoInterface;
 /**
  * Class AbstractPrice
  * Should be the base for creating any Price type class
+ *
+ * @api
  */
 abstract class AbstractPrice implements PriceInterface
 {
@@ -23,7 +25,7 @@ abstract class AbstractPrice implements PriceInterface
     const PRICE_CODE = 'abstract_price';
 
     /**
-     * @var AmountInterface
+     * @var AmountInterface[]
      */
     protected $amount;
 

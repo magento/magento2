@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Image\Test\Unit\Adapter;
@@ -8,7 +8,7 @@ namespace Magento\Framework\Image\Test\Unit\Adapter;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class ImageMagickTest extends \PHPUnit_Framework_TestCase
+class ImageMagickTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject |\Magento\Framework\Filesystem
@@ -37,13 +37,7 @@ class ImageMagickTest extends \PHPUnit_Framework_TestCase
         $this->writeMock = $this->getMockBuilder(
             \Magento\Framework\Filesystem\Directory\WriteInterface::class
         )->getMock();
-        $this->filesystemMock = $this->getMock(
-            \Magento\Framework\Filesystem::class,
-            ['getDirectoryWrite'],
-            [],
-            '',
-            false
-        );
+        $this->filesystemMock = $this->createPartialMock(\Magento\Framework\Filesystem::class, ['getDirectoryWrite']);
         $this->filesystemMock
             ->expects($this->once())
             ->method('getDirectoryWrite')
@@ -64,7 +58,7 @@ class ImageMagickTest extends \PHPUnit_Framework_TestCase
      */
     public function testWatermark($imagePath, $expectedMessage)
     {
-        $this->setExpectedException('LogicException', $expectedMessage);
+        $this->expectException('LogicException', $expectedMessage);
         $this->imageMagic->watermark($imagePath);
     }
 

@@ -2,11 +2,15 @@
 /**
  * DB expression converter
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\DB;
 
+/**
+ * Class \Magento\Framework\DB\ExpressionConverter
+ *
+ */
 class ExpressionConverter
 {
     /**

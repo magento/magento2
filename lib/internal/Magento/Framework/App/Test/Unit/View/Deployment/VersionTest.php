@@ -1,17 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit\View\Deployment;
 
 use Magento\Framework\App\View\Deployment\Version;
-use Magento\Framework\Exception\FileSystemException;
 
 /**
  * Class VersionTest
  */
-class VersionTest extends \PHPUnit_Framework_TestCase
+class VersionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Version
@@ -36,24 +35,13 @@ class VersionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->appStateMock = $this->getMock(\Magento\Framework\App\State::class, [], [], '', false);
-        $this->versionStorageMock = $this->getMock(
+        $this->appStateMock = $this->createMock(\Magento\Framework\App\State::class);
+        $this->versionStorageMock = $this->createMock(
             \Magento\Framework\App\View\Deployment\Version\StorageInterface::class
         );
-        $this->loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class);
+        $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
         $this->object = new Version($this->appStateMock, $this->versionStorageMock);
         $objectManager->setBackwardCompatibleProperty($this->object, 'logger', $this->loggerMock);
-    }
-
-    public function testGetValueDeveloperMode()
-    {
-        $this->appStateMock
-            ->expects($this->once())
-            ->method('getMode')
-            ->will($this->returnValue(\Magento\Framework\App\State::MODE_DEVELOPER));
-        $this->versionStorageMock->expects($this->never())->method($this->anything());
-        $this->assertInternalType('integer', $this->object->getValue());
-        $this->object->getValue(); // Ensure computation occurs only once and result is cached in memory
     }
 
     /**
@@ -81,106 +69,46 @@ class VersionTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    /**
-     * $param bool $isUnexpectedValueExceptionThrown
-     * $param bool $isFileSystemExceptionThrown
-     * @dataProvider getValueDefaultModeDataProvider
-     */
-    public function testGetValueDefaultMode(
-        $isUnexpectedValueExceptionThrown,
-        $isFileSystemExceptionThrown = null
-    ) {
-        $versionType = 'integer';
-        $this->appStateMock
-            ->expects($this->once())
-            ->method('getMode')
-            ->willReturn(\Magento\Framework\App\State::MODE_DEFAULT);
-        if ($isUnexpectedValueExceptionThrown) {
-            $storageException = new \UnexpectedValueException('Does not exist in the storage');
-            $this->versionStorageMock
-                ->expects($this->once())
-                ->method('load')
-                ->will($this->throwException($storageException));
-            $this->versionStorageMock->expects($this->once())
-                ->method('save')
-                ->with($this->isType($versionType));
-            if ($isFileSystemExceptionThrown) {
-                $fileSystemException = new FileSystemException(
-                    new \Magento\Framework\Phrase('Can not load static content version')
-                );
-                $this->versionStorageMock
-                    ->expects($this->once())
-                    ->method('save')
-                    ->will($this->throwException($fileSystemException));
-                $this->loggerMock->expects($this->once())
-                    ->method('critical')
-                    ->with('Can not save static content version.');
-            } else {
-                $this->loggerMock->expects($this->never())
-                    ->method('critical');
-            }
-        } else {
-            $this->versionStorageMock
-                ->expects($this->once())
-                ->method('load')
-                ->willReturn(1475779229);
-            $this->loggerMock->expects($this->never())
-                ->method('critical');
-        }
-        $this->assertInternalType($versionType, $this->object->getValue());
+    public function testGetValueInNonProductionMode()
+    {
+        $version = 123123123123;
+        $this->versionStorageMock->expects($this->once())
+            ->method('load')
+            ->willReturn($version);
+
+        $this->assertEquals($version, $this->object->getValue());
         $this->object->getValue();
     }
 
     /**
-     * @return array
+     * @expectedException \UnexpectedValueException
      */
-    public function getValueDefaultModeDataProvider()
+    public function testGetValueWithProductionModeAndException()
     {
-        return [
-            [false],
-            [true, false],
-            [true, true]
-        ];
-    }
-
-    /**
-     * @param bool $isUnexpectedValueExceptionThrown
-     * @dataProvider getValueProductionModeDataProvider
-     */
-    public function testGetValueProductionMode(
-        $isUnexpectedValueExceptionThrown
-    ) {
-        $this->appStateMock
-            ->expects($this->once())
+        $this->versionStorageMock->expects($this->once())
+            ->method('load')
+            ->willReturn(false);
+        $this->appStateMock->expects($this->once())
             ->method('getMode')
             ->willReturn(\Magento\Framework\App\State::MODE_PRODUCTION);
-        if ($isUnexpectedValueExceptionThrown) {
-            $storageException = new \UnexpectedValueException('Does not exist in the storage');
-            $this->versionStorageMock
-                ->expects($this->once())
-                ->method('load')
-                ->will($this->throwException($storageException));
-            $this->loggerMock->expects($this->once())
-                ->method('critical')
-                ->with('Can not load static content version.');
-        } else {
-            $this->versionStorageMock
-                ->expects($this->once())
-                ->method('load')
-                ->willReturn(1475779229);
-        }
-        $this->assertInternalType('integer', $this->object->getValue());
+        $this->loggerMock->expects($this->once())
+            ->method('critical')
+            ->with('Can not load static content version.');
+
         $this->object->getValue();
     }
 
-    /**
-     * @return array
-     */
-    public function getValueProductionModeDataProvider()
+    public function testGetValueWithProductionMode()
     {
-        return [
-            [false],
-            [true],
-        ];
+        $this->versionStorageMock->expects($this->once())
+            ->method('load')
+            ->willReturn(false);
+        $this->appStateMock->expects($this->once())
+            ->method('getMode')
+            ->willReturn(\Magento\Framework\App\State::MODE_DEFAULT);
+        $this->versionStorageMock->expects($this->once())
+            ->method('save');
+
+        $this->assertNotNull($this->object->getValue());
     }
 }

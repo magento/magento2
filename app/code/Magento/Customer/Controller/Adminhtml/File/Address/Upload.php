@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Adminhtml\File\Address;
@@ -14,6 +14,10 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Class \Magento\Customer\Controller\Adminhtml\File\Address\Upload
+ *
+ */
 class Upload extends Action
 {
     /**
@@ -114,7 +118,7 @@ class Upload extends Action
      */
     private function convertFilesArray()
     {
-        foreach($_FILES['address'] as $itemKey => $item) {
+        foreach ($_FILES['address'] as $itemKey => $item) {
             foreach ($item as $value) {
                 if (is_array($value)) {
                     $_FILES['address'][$itemKey] = [

@@ -1,19 +1,20 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Deploy\Model;
 
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Framework\Config\File\ConfigFilePool;
-use Magento\Framework\App\State;
 use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\MaintenanceMode;
+use Magento\Framework\App\State;
+use Magento\Framework\Config\File\ConfigFilePool;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * A class to manage Magento modes
@@ -75,13 +76,23 @@ class Mode
     /**
      * Enable production mode
      *
+     * @throws LocalizedException
      * @return void
      */
     public function enableProductionMode()
     {
         $this->enableMaintenanceMode($this->output);
-        $this->filesystem->regenerateStatic($this->output);
-        $this->setStoreMode(State::MODE_PRODUCTION);
+        $previousMode = $this->getMode();
+        try {
+            // We have to turn on production mode before generation.
+            // We need this to enable generation of the "min" files.
+            $this->setStoreMode(State::MODE_PRODUCTION);
+            $this->filesystem->regenerateStatic($this->output);
+        } catch (LocalizedException $e) {
+            // We have to return store mode to previous state in case of error.
+            $this->setStoreMode($previousMode);
+            throw $e;
+        }
         $this->disableMaintenanceMode($this->output);
     }
 
@@ -105,8 +116,8 @@ class Mode
         $this->filesystem->cleanupFilesystem(
             [
                 DirectoryList::CACHE,
-                DirectoryList::GENERATION,
-                DirectoryList::DI,
+                DirectoryList::GENERATED_CODE,
+                DirectoryList::GENERATED_METADATA,
                 DirectoryList::TMP_MATERIALIZATION_DIR,
                 DirectoryList::STATIC_VIEW,
             ]
@@ -122,7 +133,7 @@ class Mode
      */
     public function getMode()
     {
-        $env = $this->reader->load(ConfigFilePool::APP_ENV);
+        $env = $this->reader->load();
         return isset($env[State::PARAM_MODE]) ? $env[State::PARAM_MODE] : null;
     }
 

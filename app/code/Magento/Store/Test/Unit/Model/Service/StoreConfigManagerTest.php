@@ -2,7 +2,7 @@
 /**
  * Test class for \Magento\Store\Model\Store\Service\StoreConfigManager
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,7 +13,7 @@ use Magento\Store\Model\ScopeInterface;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class StoreConfigManagerTest extends \PHPUnit_Framework_TestCase
+class StoreConfigManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Store\Model\Service\StoreConfigManager
@@ -46,7 +46,7 @@ class StoreConfigManagerTest extends \PHPUnit_Framework_TestCase
         )->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->scopeConfigMock = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
 
         $this->model = new \Magento\Store\Model\Service\StoreConfigManager(
             $this->storeCollectionFactoryMock,

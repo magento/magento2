@@ -1,14 +1,18 @@
 <?php
 /**
  * ObjectManager config with interception processing
- * 
- * Copyright © 2016 Magento. All rights reserved.
+ *
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Interception\ObjectManager\Config;
 
 use Magento\Framework\Interception\ObjectManager\ConfigInterface;
 
+/**
+ * Class \Magento\Framework\Interception\ObjectManager\Config\Compiled
+ *
+ */
 class Compiled extends \Magento\Framework\ObjectManager\Config\Compiled implements ConfigInterface
 {
     /**

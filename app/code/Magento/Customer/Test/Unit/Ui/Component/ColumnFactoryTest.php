@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Ui\Component;
 
 use Magento\Customer\Ui\Component\ColumnFactory;
 
-class ColumnFactoryTest extends \PHPUnit_Framework_TestCase
+class ColumnFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Customer\Api\Data\OptionInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $attributeOption;
@@ -38,12 +38,9 @@ class ColumnFactoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->componentFactory = $this->getMock(
+        $this->componentFactory = $this->createPartialMock(
             \Magento\Framework\View\Element\UiComponentFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
         $this->attributeMetadata = $this->getMockForAbstractClass(
             \Magento\Customer\Api\Data\AttributeMetadataInterface::class,

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Eav\Plugin;
@@ -12,7 +12,7 @@ use Magento\Catalog\Model\Indexer\Product\Eav\Processor;
 use Magento\Catalog\Model\Indexer\Product\Eav\Plugin\AttributeSet;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class AttributeSetTest extends \PHPUnit_Framework_TestCase
+class AttributeSetTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager
@@ -51,17 +51,17 @@ class AttributeSetTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->filterMock = $this->getMock(IndexableAttributeFilter::class, [], [], '', false);
-        $this->subjectMock = $this->getMock(EavAttributeSet::class, [], [], '', false);
-        $this->eavProcessorMock = $this->getMock(Processor::class, [], [], '', false);
-        $this->setFactoryMock = $this->getMock(SetFactory::class, ['create'], [], '', false);
+        $this->filterMock = $this->createMock(IndexableAttributeFilter::class);
+        $this->subjectMock = $this->createMock(EavAttributeSet::class);
+        $this->eavProcessorMock = $this->createMock(Processor::class);
+        $this->setFactoryMock = $this->createPartialMock(SetFactory::class, ['create']);
         $this->objectManager = new ObjectManager($this);
     }
 
     public function testBeforeSave()
     {
         $setId = 1;
-        $this->originalSetMock = $this->getMock(EavAttributeSet::class, [], [], '', false);
+        $this->originalSetMock = $this->createMock(EavAttributeSet::class);
         $this->originalSetMock->expects($this->once())->method('initFromSkeleton')->with($setId);
 
         $this->setFactoryMock->expects($this->once())->method('create')->willReturn($this->originalSetMock);
@@ -70,7 +70,7 @@ class AttributeSetTest extends \PHPUnit_Framework_TestCase
             [
                 'indexerEavProcessor' => $this->eavProcessorMock,
                 'filter' => $this->filterMock,
-                'setFactory' => $this->setFactoryMock
+                'attributeSetFactory' => $this->setFactoryMock
             ]
         );
 

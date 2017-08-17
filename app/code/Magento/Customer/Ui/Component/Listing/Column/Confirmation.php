@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Ui\Component\Listing\Column;
@@ -12,6 +12,10 @@ use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Ui\Component\Listing\Columns\Column;
 
+/**
+ * Class \Magento\Customer\Ui\Component\Listing\Column\Confirmation
+ *
+ */
 class Confirmation extends Column
 {
     /**

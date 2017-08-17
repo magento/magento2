@@ -1,12 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRule\Model\Indexer\Rule;
 
 use Magento\CatalogRule\Model\Indexer\AbstractIndexer;
 
+/**
+ * Class \Magento\CatalogRule\Model\Indexer\Rule\RuleProductIndexer
+ *
+ */
 class RuleProductIndexer extends AbstractIndexer
 {
     /**

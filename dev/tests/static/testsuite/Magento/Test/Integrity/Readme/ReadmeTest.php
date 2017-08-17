@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ namespace Magento\Test\Integrity\Readme;
 
 use Magento\Framework\App\Utility\Files;
 
-class ReadmeTest extends \PHPUnit_Framework_TestCase
+class ReadmeTest extends \PHPUnit\Framework\TestCase
 {
     const README_FILENAME = 'README.md';
 

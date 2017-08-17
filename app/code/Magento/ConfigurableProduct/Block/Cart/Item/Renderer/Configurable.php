@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Block\Cart\Item\Renderer;
@@ -11,6 +11,8 @@ use Magento\Framework\DataObject\IdentityInterface;
 
 /**
  * Shopping cart item render block for configurable products.
+ *
+ * @api
  */
 class Configurable extends Renderer implements IdentityInterface
 {
@@ -22,7 +24,7 @@ class Configurable extends Renderer implements IdentityInterface
     /**
      * Get item configurable child product
      *
-     * @return \Magento\Catalog\Model\Product
+     * @return \Magento\Catalog\Model\Product|null
      */
     public function getChildProduct()
     {
@@ -64,8 +66,9 @@ class Configurable extends Renderer implements IdentityInterface
         if ($this->_scopeConfig->getValue(
             self::CONFIG_THUMBNAIL_SOURCE,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        ) == ThumbnailSource::OPTION_USE_PARENT_IMAGE ||
-            !($this->getChildProduct()->getThumbnail() && $this->getChildProduct()->getThumbnail() != 'no_selection')
+        ) == ThumbnailSource::OPTION_USE_PARENT_IMAGE
+          || !($this->getChildProduct()
+          && $this->getChildProduct()->getThumbnail() && $this->getChildProduct()->getThumbnail() != 'no_selection')
         ) {
             $product = $this->getProduct();
         } else {

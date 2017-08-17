@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
@@ -18,7 +18,7 @@ use Magento\Catalog\Ui\AllowedProductTypes;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CompositeTest extends \PHPUnit_Framework_TestCase
+class CompositeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerHelper
@@ -61,7 +61,7 @@ class CompositeTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->productMock = $this->getMockBuilder(ProductInterface::class)
             ->getMockForAbstractClass();
-        $this->allowedProductTypesMock = $this->getMock(AllowedProductTypes::class, [], [], '', false);
+        $this->allowedProductTypesMock = $this->createMock(AllowedProductTypes::class);
 
         $this->productLocatorMock->expects(static::any())
             ->method('getProduct')

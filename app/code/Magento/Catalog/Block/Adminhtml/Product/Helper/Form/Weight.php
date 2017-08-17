@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,6 +12,10 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form;
 use Magento\Framework\Data\Form;
 use Magento\Catalog\Model\Product\Edit\WeightResolver;
 
+/**
+ * Class \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Weight
+ *
+ */
 class Weight extends \Magento\Framework\Data\Form\Element\Text
 {
     /**
@@ -26,7 +30,9 @@ class Weight extends \Magento\Framework\Data\Form\Element\Text
      */
     protected $localeFormat;
 
-    /** @var \Magento\Directory\Helper\Data */
+    /**
+     * @var \Magento\Directory\Helper\Data
+     */
     protected $directoryHelper;
 
     /**

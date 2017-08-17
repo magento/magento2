@@ -1,13 +1,17 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Setup\SampleData;
 
-use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
 
+/**
+ * Class \Magento\Framework\Setup\SampleData\State
+ *
+ */
 class State implements StateInterface
 {
     /**
@@ -123,7 +127,6 @@ class State implements StateInterface
             $stream = $directoryWrite->openFile($fileName, $mode);
         }
         return $stream;
-
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,8 +15,9 @@ use Magento\Theme\Controller\Result\MessagePlugin;
 
 /**
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class AbstractController extends \PHPUnit_Framework_TestCase
+abstract class AbstractController extends \PHPUnit\Framework\TestCase
 {
     protected $_runCode = '';
 
@@ -25,12 +26,12 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
     protected $_runOptions = [];
 
     /**
-     * @var \Magento\TestFramework\Request
+     * @var \Magento\Framework\App\RequestInterface
      */
     protected $_request;
 
     /**
-     * @var \Magento\TestFramework\Response
+     * @var \Magento\Framework\App\ResponseInterface
      */
     protected $_response;
 
@@ -102,7 +103,7 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
     /**
      * Request getter
      *
-     * @return \Magento\TestFramework\Request
+     * @return \Magento\Framework\App\RequestInterface
      */
     public function getRequest()
     {
@@ -115,7 +116,7 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
     /**
      * Response getter
      *
-     * @return \Magento\TestFramework\Response
+     * @return \Magento\Framework\App\ResponseInterface
      */
     public function getResponse()
     {
@@ -139,7 +140,7 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
      *
      * @param string $headerName
      * @param string $valueRegex
-     * @throws \PHPUnit_Framework_AssertionFailedError when header not found
+     * @throws \PHPUnit\Framework\AssertionFailedError when header not found
      */
     public function assertHeaderPcre($headerName, $valueRegex)
     {
@@ -165,9 +166,9 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
      * $this->assertRedirect($this->stringEndsWith($expectedUrlSuffix));
      * $this->assertRedirect($this->stringContains($expectedUrlSubstring));
      *
-     * @param \PHPUnit_Framework_Constraint|null $urlConstraint
+     * @param \PHPUnit\Framework\Constraint\Constraint|null $urlConstraint
      */
-    public function assertRedirect(\PHPUnit_Framework_Constraint $urlConstraint = null)
+    public function assertRedirect(\PHPUnit\Framework\Constraint\Constraint $urlConstraint = null)
     {
         $this->assertTrue($this->getResponse()->isRedirect(), 'Redirect was expected, but none was performed.');
         if ($urlConstraint) {
@@ -189,13 +190,13 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
      * $this->assertSessionMessages($this->equalTo(['Entity has been saved.'],
      * \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS);
      *
-     * @param \PHPUnit_Framework_Constraint $constraint Constraint to compare actual messages against
+     * @param \PHPUnit\Framework\Constraint\Constraint $constraint Constraint to compare actual messages against
      * @param string|null $messageType Message type filter,
      *        one of the constants \Magento\Framework\Message\MessageInterface::*
      * @param string $messageManagerClass Class of the session model that manages messages
      */
     public function assertSessionMessages(
-        \PHPUnit_Framework_Constraint $constraint,
+        \PHPUnit\Framework\Constraint\Constraint $constraint,
         $messageType = null,
         $messageManagerClass = \Magento\Framework\Message\Manager::class
     ) {
@@ -268,14 +269,21 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
     {
         /** @var $cookieManager CookieManagerInterface */
         $cookieManager = $this->_objectManager->get(CookieManagerInterface::class);
+
+        /** @var $jsonSerializer \Magento\Framework\Serialize\Serializer\Json */
+        $jsonSerializer = $this->_objectManager->get(\Magento\Framework\Serialize\Serializer\Json::class);
         try {
-            $messages = \Zend_Json::decode(
-                $cookieManager->getCookie(MessagePlugin::MESSAGES_COOKIES_NAME, \Zend_Json::encode([]))
+            $messages = $jsonSerializer->unserialize(
+                $cookieManager->getCookie(
+                    MessagePlugin::MESSAGES_COOKIES_NAME,
+                    $jsonSerializer->serialize([])
+                )
             );
+
             if (!is_array($messages)) {
                 $messages = [];
             }
-        } catch (\Zend_Json_Exception $e) {
+        } catch (\InvalidArgumentException $e) {
             $messages = [];
         }
 

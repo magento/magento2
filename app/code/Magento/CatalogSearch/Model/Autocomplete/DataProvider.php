@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,10 @@ use Magento\Search\Model\QueryFactory;
 use Magento\Search\Model\Autocomplete\DataProviderInterface;
 use Magento\Search\Model\Autocomplete\ItemFactory;
 
+/**
+ * Class \Magento\CatalogSearch\Model\Autocomplete\DataProvider
+ *
+ */
 class DataProvider implements DataProviderInterface
 {
     /**

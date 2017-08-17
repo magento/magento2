@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -16,7 +16,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm" />
         </variation>
         <variation name="CreateCategoryEntityTestVariation2_RootCategory_AllFields">
-            <data name="tag" xsi:type="string">to_maintain:yes</data>
+            <data name="issue" xsi:type="string">MAGETWO-60635: [CE][Categories] Design update dates are incorrect after save</data>
             <data name="description" xsi:type="string">Create root category with all fields</data>
             <data name="addCategory" xsi:type="string">addRootCategory</data>
             <data name="category/data/is_active" xsi:type="string">Yes</data>
@@ -57,7 +57,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryPage" />
         </variation>
         <variation name="CreateCategoryEntityTestVariation4_Subcategory_AllFields">
-            <data name="tag" xsi:type="string">to_maintain:yes</data>
+            <data name="issue" xsi:type="string">MAGETWO-60635: [CE][Categories] Design update dates are incorrect after save</data>
             <data name="description" xsi:type="string">Create not anchor subcategory specifying all fields</data>
             <data name="addCategory" xsi:type="string">addSubcategory</data>
             <data name="category/data/parent_id/dataset" xsi:type="string">default_category</data>
@@ -86,13 +86,15 @@
             <data name="category/data/apply_design_to_products" xsi:type="string">Yes</data>
             <data name="category/data/schedule_update_from" xsi:type="string">01/10/2014</data>
             <data name="category/data/schedule_update_to" xsi:type="string">12/31/2024</data>
+            <data name="filterByPath" xsi:type="string">request_path</data>
+            <data name="redirectType" xsi:type="string">No</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteCategoryInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryPage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForAssignedProducts" />
         </variation>
         <variation name="CreateCategoryEntityTestVariation5_Anchor_MostOfFields">
-            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="description" xsi:type="string">Create anchor subcategory with all fields</data>
             <data name="addCategory" xsi:type="string">addSubcategory</data>
             <data name="category/data/parent_id/dataset" xsi:type="string">default_category</data>
@@ -142,7 +144,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryPage" />
         </variation>
         <variation name="CreateCategoryEntityTestVariation8_WithProducts" summary="Assign Products at the Category Level" ticketId="MAGETWO-16351">
-            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test</data>
+            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test, stable:no</data>
             <data name="addCategory" xsi:type="string">addSubcategory</data>
             <data name="category/data/parent_id/dataset" xsi:type="string">default_category</data>
             <data name="category/data/is_active" xsi:type="string">Yes</data>
@@ -152,11 +154,10 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForAssignedProducts" />
         </variation>
-        <variation name="CreateCategoryEntityTestVariation9_ThreeNesting">
-            <data name="tag" xsi:type="string">test_type:extended_acceptance_test, to_maintain:yes</data>
-            <data name="description" xsi:type="string">Create category with three nesting</data>
+        <variation name="CreateCategoryEntityTestVariation9_FiveNesting" summary="Create category with five nesting" ticketId="MAGETWO-48379">
+            <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
             <data name="addCategory" xsi:type="string">addSubcategory</data>
-            <data name="category/data/parent_id/dataset" xsi:type="string">two_nested_categories</data>
+            <data name="category/data/parent_id/dataset" xsi:type="string">five_nested_categories</data>
             <data name="category/data/is_active" xsi:type="string">Yes</data>
             <data name="category/data/name" xsi:type="string">Category%isolation%</data>
             <data name="category/data/description" xsi:type="string">Category Required</data>
@@ -164,6 +165,15 @@
             <data name="category/data/available_product_listing_config" xsi:type="string">Yes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryBreadcrumbs" />
+        </variation>
+        <variation name="CreateCategoryEntityTestVariation10_InCustomRootCategory" summary="Create category in the custom root category that is used for custom website" ticketId="MAGETWO-12938">
+            <data name="addCategory" xsi:type="string">addSubcategory</data>
+            <data name="category/data/parent_id/dataset" xsi:type="string">root_category</data>
+            <data name="category/data/is_active" xsi:type="string">Yes</data>
+            <data name="category/data/include_in_menu" xsi:type="string">Yes</data>
+            <data name="category/data/name" xsi:type="string">Subcategory%isolation%</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryOnCustomWebsite" />
         </variation>
     </testCase>
 </config>

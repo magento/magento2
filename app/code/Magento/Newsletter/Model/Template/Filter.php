@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,10 @@
  */
 namespace Magento\Newsletter\Model\Template;
 
+/**
+ * Class \Magento\Newsletter\Model\Template\Filter
+ *
+ */
 class Filter extends \Magento\Widget\Model\Template\FilterEmulate
 {
     /**

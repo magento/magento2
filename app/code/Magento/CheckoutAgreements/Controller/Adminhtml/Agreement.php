@@ -1,10 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CheckoutAgreements\Controller\Adminhtml;
 
+/**
+ * Class \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement
+ *
+ */
 abstract class Agreement extends \Magento\Backend\App\Action
 {
     /**

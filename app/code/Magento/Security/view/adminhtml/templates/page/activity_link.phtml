@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,12 +11,12 @@
  */
 ?>
 <a class="link-account-activity"
-    href="<?php echo $block->escapeUrl($block->getUrl('security/session/activity')) ?>"
+    href="<?= $block->escapeUrl($block->getUrl('security/session/activity')) ?>"
     id="footer_account_activity"
     target="_blank"
     data-mage-init='{"popupWindow": {
-        "windowURL": "<?php echo $block->escapeJs($block->escapeUrl($block->getUrl('security/session/activity'))) ?>",
+        "windowURL": "<?= $block->escapeJs($block->escapeUrl($block->getUrl('security/session/activity'))) ?>",
         "windowName": "session-activity",
         "width": 600, "height": 600, "top": 50, "left": 50, "resizable": 1, "scrollbars": 1}}'>
-    <?php echo $block->escapeHtml(__('Account Activity')) ?>
+    <?= $block->escapeHtml(__('Account Activity')) ?>
 </a> |

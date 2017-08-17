@@ -2,7 +2,7 @@
 /**
  * Loads email template configuration from multiple XML files by merging them together
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Model\Template\Config;
@@ -10,6 +10,10 @@ namespace Magento\Email\Model\Template\Config;
 use Magento\Framework\Config\FileResolverInterface;
 use Magento\Framework\Config\ValidationStateInterface;
 
+/**
+ * Class \Magento\Email\Model\Template\Config\Reader
+ *
+ */
 class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {
     /**

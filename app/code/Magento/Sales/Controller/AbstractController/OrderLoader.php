@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\AbstractController;
@@ -11,6 +11,10 @@ use Magento\Framework\Registry;
 use Magento\Framework\Controller\Result\ForwardFactory;
 use Magento\Framework\Controller\Result\RedirectFactory;
 
+/**
+ * Class \Magento\Sales\Controller\AbstractController\OrderLoader
+ *
+ */
 class OrderLoader implements OrderLoaderInterface
 {
     /**

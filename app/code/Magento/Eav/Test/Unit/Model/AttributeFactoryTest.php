@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Test\Unit\Model;
 
-class AttributeFactoryTest extends \PHPUnit_Framework_TestCase
+class AttributeFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Eav\Model\AttributeFactory
@@ -25,7 +25,7 @@ class AttributeFactoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         /** @var $objectManagerMock \Magento\Framework\ObjectManagerInterface */
-        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $objectManagerMock->expects(
             $this->any()
         )->method(

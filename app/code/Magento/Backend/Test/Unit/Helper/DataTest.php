@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Test\Unit\Helper;
 
-class DataTest extends \PHPUnit_Framework_TestCase
+class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Helper\Data
@@ -19,22 +19,16 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_frontResolverMock = $this->getMock(
-            \Magento\Backend\App\Area\FrontNameResolver::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->_frontResolverMock = $this->createMock(\Magento\Backend\App\Area\FrontNameResolver::class);
         $this->_helper = new \Magento\Backend\Helper\Data(
-            $this->getMock(\Magento\Framework\App\Helper\Context::class, [], [], '', false, false),
-            $this->getMock(\Magento\Framework\App\Route\Config::class, [], [], '', false),
-            $this->getMock(\Magento\Framework\Locale\ResolverInterface::class),
-            $this->getMock(\Magento\Backend\Model\Url::class, [], [], '', false),
-            $this->getMock(\Magento\Backend\Model\Auth::class, [], [], '', false),
+            $this->createMock(\Magento\Framework\App\Helper\Context::class),
+            $this->createMock(\Magento\Framework\App\Route\Config::class),
+            $this->createMock(\Magento\Framework\Locale\ResolverInterface::class),
+            $this->createMock(\Magento\Backend\Model\Url::class),
+            $this->createMock(\Magento\Backend\Model\Auth::class),
             $this->_frontResolverMock,
-            $this->getMock(\Magento\Framework\Math\Random::class, [], [], '', false),
-            $this->getMock(\Magento\Framework\App\RequestInterface::class)
+            $this->createMock(\Magento\Framework\Math\Random::class),
+            $this->createMock(\Magento\Framework\App\RequestInterface::class)
         );
     }
 

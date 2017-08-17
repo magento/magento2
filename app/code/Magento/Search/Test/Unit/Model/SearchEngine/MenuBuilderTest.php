@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Search\Test\Unit\Model\SearchEngine;
@@ -14,7 +14,7 @@ use Magento\Search\Model\EngineResolver;
  * Class MenuBuilderTest. A unit test class to test functionality of
  * Magento\Search\Model\SearchEngine\MenuBuilder class
  */
-class MenuBuilderTest extends \PHPUnit_Framework_TestCase
+class MenuBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -28,14 +28,8 @@ class MenuBuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->searchFeatureConfig = $this->getMock(
-            \Magento\Search\Model\SearchEngine\Config::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->engineResolver = $this->getMock(\Magento\Search\Model\EngineResolver::class, [], [], '', false);
+        $this->searchFeatureConfig = $this->createMock(\Magento\Search\Model\SearchEngine\Config::class);
+        $this->engineResolver = $this->createMock(\Magento\Search\Model\EngineResolver::class);
     }
 
     public function testAfterGetResult()
@@ -47,11 +41,11 @@ class MenuBuilderTest extends \PHPUnit_Framework_TestCase
             ->with('synonyms', 'mysql')
             ->willReturn(false);
         /** @var \Magento\Backend\Model\Menu $menu */
-        $menu = $this->getMock(\Magento\Backend\Model\Menu::class, [], [], '', false);
+        $menu = $this->createMock(\Magento\Backend\Model\Menu::class);
         $menu->expects($this->once())->method('remove')->willReturn(true);
 
         /** @var \Magento\Backend\Model\Menu\Builder $menuBuilder */
-        $menuBuilder = $this->getMock(\Magento\Backend\Model\Menu\Builder::class, [], [], '', false);
+        $menuBuilder = $this->createMock(\Magento\Backend\Model\Menu\Builder::class);
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         /** @var \Magento\Search\Model\SearchEngine\MenuBuilder $searchMenuBuilder */
         $searchMenuBuilder = $objectManager->getObject(

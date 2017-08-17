@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,6 +15,10 @@ use Magento\Backend\Block\Widget\Grid;
 use Magento\Backend\Block\Widget\Grid\Column;
 use Magento\Backend\Block\Widget\Grid\Extended;
 
+/**
+ * Class \Magento\Catalog\Block\Adminhtml\Category\Tab\Product
+ *
+ */
 class Product extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -39,7 +39,7 @@ class InvalidateTokenTest extends \Magento\TestFramework\TestCase\AbstractBacken
         $this->getRequest()->setParam('user_id', $adminUserId);
         $this->dispatch('backend/admin/user/invalidateToken');
         $token = $tokenModel->loadByAdminId($adminUserId);
-        $this->assertEquals(1, $token->getRevoked());
+        $this->assertEquals(null, $token->getId());
     }
 
     /**

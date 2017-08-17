@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,9 +10,14 @@
  */
 namespace Magento\Config\Model\Config\Backend\Currency;
 
+/**
+ * @api
+ */
 class Base extends AbstractCurrency
 {
-    /** @var \Magento\Directory\Model\CurrencyFactory */
+    /**
+     * @var \Magento\Directory\Model\CurrencyFactory
+     */
     private $currencyFactory;
 
     /**

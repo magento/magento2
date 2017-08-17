@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model;
@@ -11,7 +11,10 @@ use Psr\Log\LoggerInterface as Logger;
 use Magento\Quote\Api\BillingAddressManagementInterface;
 use Magento\Framework\App\ObjectManager;
 
-/** Quote billing address write service object. */
+/**
+ * Quote billing address write service object.
+ *
+ */
 class BillingAddressManagement implements BillingAddressManagementInterface
 {
     /**
@@ -97,7 +100,7 @@ class BillingAddressManagement implements BillingAddressManagementInterface
 
     /**
      * @return \Magento\Quote\Model\ShippingAddressAssignment
-     * @deprecated
+     * @deprecated 100.2.0
      */
     private function getShippingAddressAssignment()
     {

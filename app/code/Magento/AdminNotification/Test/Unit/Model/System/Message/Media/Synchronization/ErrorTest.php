@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\AdminNotification\Test\Unit\Model\System\Message\Media\Synchronization;
 
-class ErrorTest extends \PHPUnit_Framework_TestCase
+class ErrorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -24,9 +24,12 @@ class ErrorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_syncFlagMock = $this->getMock(\Magento\MediaStorage\Model\File\Storage\Flag::class, [], [], '', false);
+        $this->_syncFlagMock = $this->createPartialMock(
+            \Magento\MediaStorage\Model\File\Storage\Flag::class,
+            ['setState', 'save', 'getFlagData']
+        );
 
-        $this->_fileStorage = $this->getMock(\Magento\MediaStorage\Model\File\Storage\Flag::class, [], [], '', false);
+        $this->_fileStorage = $this->createMock(\Magento\MediaStorage\Model\File\Storage\Flag::class);
         $this->_fileStorage->expects($this->any())->method('loadSelf')->will($this->returnValue($this->_syncFlagMock));
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);

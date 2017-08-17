@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Captcha\Model\Customer\Plugin;
@@ -9,6 +9,10 @@ use Magento\Captcha\Helper\Data as CaptchaHelper;
 use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Framework\Controller\Result\JsonFactory;
 
+/**
+ * Class \Magento\Captcha\Model\Customer\Plugin\AjaxLogin
+ *
+ */
 class AjaxLogin
 {
     /**
@@ -27,6 +31,11 @@ class AjaxLogin
     protected $resultJsonFactory;
 
     /**
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    protected $serializer;
+
+    /**
      * @var array
      */
     protected $formIds;
@@ -36,16 +45,21 @@ class AjaxLogin
      * @param SessionManagerInterface $sessionManager
      * @param JsonFactory $resultJsonFactory
      * @param array $formIds
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @throws \RuntimeException
      */
     public function __construct(
         CaptchaHelper $helper,
         SessionManagerInterface $sessionManager,
         JsonFactory $resultJsonFactory,
-        array $formIds
+        array $formIds,
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->helper = $helper;
         $this->sessionManager = $sessionManager;
         $this->resultJsonFactory = $resultJsonFactory;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
         $this->formIds = $formIds;
     }
 
@@ -53,7 +67,6 @@ class AjaxLogin
      * @param \Magento\Customer\Controller\Ajax\Login $subject
      * @param \Closure $proceed
      * @return $this
-     * @throws \Zend_Json_Exception
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
@@ -70,7 +83,7 @@ class AjaxLogin
         $loginParams = [];
         $content = $request->getContent();
         if ($content) {
-            $loginParams = \Zend_Json::decode($content);
+            $loginParams = $this->serializer->unserialize($content);
         }
         $username = isset($loginParams['username']) ? $loginParams['username'] : null;
         $captchaString = isset($loginParams[$captchaInputName]) ? $loginParams[$captchaInputName] : null;

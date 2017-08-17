@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@ namespace Magento\Framework\Validator\Test\Unit\Entity;
 /**
  * Test for \Magento\Framework\Validator\Entity\Properties
  */
-class PropertiesTest extends \PHPUnit_Framework_TestCase
+class PropertiesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\DataObject
@@ -18,12 +18,9 @@ class PropertiesTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_object = $this->getMock(
+        $this->_object = $this->createPartialMock(
             \Magento\Framework\Model\AbstractModel::class,
-            ['hasDataChanges', 'getData', 'getOrigData'],
-            [],
-            '',
-            false
+            ['hasDataChanges', 'getData', 'getOrigData']
         );
     }
 

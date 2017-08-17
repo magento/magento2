@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Model\Link;
@@ -10,6 +10,10 @@ use Magento\Downloadable\Model\File\ContentValidator as FileContentValidator;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Url\Validator as UrlValidator;
 
+/**
+ * Class \Magento\Downloadable\Model\Link\ContentValidator
+ *
+ */
 class ContentValidator
 {
     /**

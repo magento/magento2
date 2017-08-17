@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\Entity;
 
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * EAV Entity attribute model
  *
+ * @api
  * @method \Magento\Eav\Model\Entity\Attribute setOption($value)
  * @method \Magento\Eav\Api\Data\AttributeExtensionInterface getExtensionAttributes()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -21,9 +21,12 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
     \Magento\Framework\DataObject\IdentityInterface
 {
     /**
-     * Attribute code max length
+     * Attribute code max length.
+     *
+     * The value is defined as 60 because in the flat mode attribute code will be transformed into column name.
+     * MySQL allows only 64 symbols in column name.
      */
-    const ATTRIBUTE_CODE_MAX_LENGTH = 30;
+    const ATTRIBUTE_CODE_MAX_LENGTH = 60;
 
     /**
      * Cache tag
@@ -36,11 +39,6 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      * @var string
      */
     protected $_eventPrefix = 'eav_entity_attribute';
-
-    /**
-     * @var AttributeCache
-     */
-    private $attributeCache;
 
     /**
      * Parameter name in event
@@ -304,30 +302,16 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
     public function afterSave()
     {
         $this->_getResource()->saveInSetIncluding($this);
-        $this->getAttributeCache()->clear();
         return parent::afterSave();
     }
 
     /**
      * @return $this
+     * @since 100.0.7
      */
     public function afterDelete()
     {
-        $this->getAttributeCache()->clear();
         return parent::afterDelete();
-    }
-
-    /**
-     * Attribute cache
-     *
-     * @return AttributeCache
-     */
-    private function getAttributeCache()
-    {
-        if (!$this->attributeCache) {
-            $this->attributeCache = ObjectManager::getInstance()->get(AttributeCache::class);
-        }
-        return $this->attributeCache;
     }
 
     /**
@@ -495,6 +479,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
 
     /**
      * @inheritdoc
+     * @since 100.0.7
      */
     public function __sleep()
     {
@@ -507,6 +492,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
 
     /**
      * @inheritdoc
+     * @since 100.0.7
      */
     public function __wakeup()
     {

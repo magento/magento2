@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Block\Adminhtml\Integration\Edit\Tab;
@@ -11,6 +11,7 @@ use Magento\Integration\Model\Integration as IntegrationModel;
 /**
  * Main Integration info edit form
  *
+ * @api
  */
 class Info extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {

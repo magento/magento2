@@ -1,22 +1,23 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\User\Model;
 
 use Magento\Backend\App\Area\FrontNameResolver;
 use Magento\Backend\Model\Auth\Credential\StorageInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Exception\AuthenticationException;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Store\Model\Store;
 use Magento\User\Api\Data\UserInterface;
 
 /**
  * Admin user model
  *
- * @method \Magento\User\Model\ResourceModel\User _getResource()
- * @method \Magento\User\Model\ResourceModel\User getResource()
+ * @api
  * @method string getLogdate()
  * @method \Magento\User\Model\User setLogdate(string $value)
  * @method int getLognum()
@@ -29,6 +30,7 @@ use Magento\User\Api\Data\UserInterface;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @api
  */
 class User extends AbstractModel implements StorageInterface, UserInterface
 {
@@ -114,6 +116,11 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     protected $validationRules;
 
     /**
+     * @var Json
+     */
+    private $serializer;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\User\Helper\Data $userData
@@ -123,10 +130,11 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * @param \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param UserValidationRules $validationRules
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param Json $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -142,7 +150,8 @@ class User extends AbstractModel implements StorageInterface, UserInterface
         UserValidationRules $validationRules,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        Json $serializer = null
     ) {
         $this->_encryptor = $encryptor;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
@@ -153,6 +162,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
         $this->_transportBuilder = $transportBuilder;
         $this->_storeManager = $storeManager;
         $this->validationRules = $validationRules;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
     }
 
     /**
@@ -194,6 +204,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     {
         parent::__wakeup();
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $this->serializer = $objectManager->get(Json::class);
         $this->_eventManager = $objectManager->get(\Magento\Framework\Event\ManagerInterface::class);
         $this->_userData = $objectManager->get(\Magento\User\Helper\Data::class);
         $this->_config = $objectManager->get(\Magento\Backend\App\ConfigInterface::class);
@@ -213,7 +224,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     public function beforeSave()
     {
         $data = [
-            'extra' => serialize($this->getExtra()),
+            'extra' => $this->serializer->serialize($this->getExtra()),
         ];
 
         if ($this->_willSavePassword()) {
@@ -286,6 +297,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * New password is compared to at least 4 previous passwords to prevent setting them again
      *
      * @return bool|string[]
+     * @since 100.0.3
      */
     protected function validatePasswordChange()
     {
@@ -327,7 +339,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     public function saveExtra($data)
     {
         if (is_array($data)) {
-            $data = serialize($data);
+            $data = $this->serializer->serialize($data);
         }
         $this->_getResource()->saveExtra($this, $data);
         return $this;
@@ -406,7 +418,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * Send email to when password is resetting
      *
      * @return $this
-     * @deprecated
+     * @deprecated 100.1.0
      */
     public function sendPasswordResetNotificationEmail()
     {
@@ -418,6 +430,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * Check changes and send notification emails
      *
      * @return $this
+     * @since 100.1.0
      */
     public function sendNotificationEmailsIfRequired()
     {
@@ -437,6 +450,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * Create changes description string
      *
      * @return string
+     * @since 100.1.0
      */
     protected function createChangesDescriptionString()
     {
@@ -465,6 +479,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * @param string $changes
      * @param string $email
      * @return $this
+     * @since 100.1.0
      */
     protected function sendUserNotificationEmail($changes, $email = null)
     {
@@ -864,6 +879,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * @return $this
      * @throws \Magento\Framework\Exception\State\UserLockedException
      * @throws \Magento\Framework\Exception\AuthenticationException
+     * @since 100.1.0
      */
     public function performIdentityCheck($passwordString)
     {

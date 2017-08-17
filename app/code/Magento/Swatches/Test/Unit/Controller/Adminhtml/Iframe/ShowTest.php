@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Swatches\Test\Unit\Controller\Adminhtml\Iframe;
@@ -12,7 +12,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ShowTest extends \PHPUnit_Framework_TestCase
+class ShowTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Backend\App\Action\Context */
     protected $contextMock;
@@ -49,38 +49,26 @@ class ShowTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->contextMock = $this->getMock(\Magento\Backend\App\Action\Context::class, [], [], '', false);
-        $observerMock = $this->getMock(\Magento\Framework\Event\Manager::class, [], [], '', false);
-        $this->responseMock = $this->getMock(\Magento\Framework\App\Response\Http::class, ['setBody'], [], '', false);
+        $this->contextMock = $this->createMock(\Magento\Backend\App\Action\Context::class);
+        $observerMock = $this->createMock(\Magento\Framework\Event\Manager::class);
+        $this->responseMock = $this->createPartialMock(\Magento\Framework\App\Response\Http::class, ['setBody']);
         $this->contextMock->expects($this->once())->method('getEventManager')->willReturn($observerMock);
         $this->contextMock->expects($this->once())->method('getResponse')->willReturn($this->responseMock);
-        $this->swatchHelperMock = $this->getMock(\Magento\Swatches\Helper\Media::class, [], [], '', false);
-        $this->adapterFactoryMock = $this->getMock(
+        $this->swatchHelperMock = $this->createMock(\Magento\Swatches\Helper\Media::class);
+        $this->adapterFactoryMock = $this->createPartialMock(
             \Magento\Framework\Image\AdapterFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->configMock = $this->getMock(\Magento\Catalog\Model\Product\Media\Config::class, [], [], '', false);
-        $this->filesystemMock = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
-        $this->uploaderFactoryMock = $this->getMock(
+        $this->configMock = $this->createMock(\Magento\Catalog\Model\Product\Media\Config::class);
+        $this->filesystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
+        $this->uploaderFactoryMock = $this->createPartialMock(
             \Magento\MediaStorage\Model\File\UploaderFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
 
-        $this->uploaderMock = $this->getMock(\Magento\MediaStorage\Model\File\Uploader::class, [], [], '', false);
-        $this->adapterMock = $this->getMock(\Magento\Framework\Image\Adapter\AdapterInterface::class);
-        $this->mediaDirectoryMock = $this->getMock(
-            \Magento\Framework\Filesystem\Directory\Read::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->uploaderMock = $this->createMock(\Magento\MediaStorage\Model\File\Uploader::class);
+        $this->adapterMock = $this->createMock(\Magento\Framework\Image\Adapter\AdapterInterface::class);
+        $this->mediaDirectoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\Read::class);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -95,7 +83,6 @@ class ShowTest extends \PHPUnit_Framework_TestCase
                 'uploaderFactory' => $this->uploaderFactoryMock,
             ]
         );
-
     }
 
     public function testExecuteException()
@@ -103,7 +90,7 @@ class ShowTest extends \PHPUnit_Framework_TestCase
         $this->uploaderFactoryMock
             ->expects($this->once())
             ->method('create')
-            ->will($this->throwException(new \Exception));
+            ->will($this->throwException(new \Exception()));
         $this->controller->execute();
     }
 

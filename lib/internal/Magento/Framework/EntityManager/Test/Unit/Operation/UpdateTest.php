@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\EntityManager\Test\Unit\Operation;
@@ -15,7 +15,7 @@ use Magento\Framework\EntityManager\Operation\Update;
 use Magento\Framework\EntityManager\Operation\Update\UpdateMain;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class UpdateTest extends \PHPUnit_Framework_TestCase
+class UpdateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var MetadataPool|\PHPUnit_Framework_MockObject_MockObject
@@ -61,10 +61,10 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
      */
     public function testDuplicateExceptionProcessingOnExecute()
     {
-        $metadata = $this->getMock(EntityMetadataInterface::class);
+        $metadata = $this->createMock(EntityMetadataInterface::class);
         $this->metadataPool->expects($this->any())->method('getMetadata')->willReturn($metadata);
 
-        $connection = $this->getMock(AdapterInterface::class);
+        $connection = $this->createMock(AdapterInterface::class);
         $connection->expects($this->once())->method('rollback');
         $this->resourceConnection->expects($this->any())->method('getConnectionByName')->willReturn($connection);
 

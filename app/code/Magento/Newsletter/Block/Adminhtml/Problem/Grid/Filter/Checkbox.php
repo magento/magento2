@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,10 @@
  */
 namespace Magento\Newsletter\Block\Adminhtml\Problem\Grid\Filter;
 
+/**
+ * Class \Magento\Newsletter\Block\Adminhtml\Problem\Grid\Filter\Checkbox
+ *
+ */
 class Checkbox extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilter
 {
     /**

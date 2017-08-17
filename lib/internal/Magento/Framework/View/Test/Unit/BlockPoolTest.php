@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,7 +13,7 @@ use \Magento\Framework\View\BlockPool;
 /**
  * Test for view BlockPool model
  */
-class BlockPoolTest extends \PHPUnit_Framework_TestCase
+class BlockPoolTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var BlockPool
@@ -41,7 +41,7 @@ class BlockPoolTest extends \PHPUnit_Framework_TestCase
         $blockClass = \Magento\Framework\View\Test\Unit\BlockPoolTestBlock::class;
         $arguments = ['key' => 'value'];
 
-        $block = $this->getMock(\Magento\Framework\View\Test\Unit\BlockPoolTestBlock::class);
+        $block = $this->createMock(\Magento\Framework\View\Test\Unit\BlockPoolTestBlock::class);
 
         $this->blockFactory->expects($this->atLeastOnce())
             ->method('createBlock')

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Framework\App\Test\Unit;
 
 use \Magento\Framework\App\ErrorHandler;
 
-class ErrorHandlerTest extends \PHPUnit_Framework_TestCase
+class ErrorHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\ErrorHandler
@@ -54,7 +54,7 @@ class ErrorHandlerTest extends \PHPUnit_Framework_TestCase
         $errorLine = 'test_error_line';
 
         $exceptedExceptionMessage = sprintf('%s: %s in %s on line %s', $errorPhrase, $errorStr, $errorFile, $errorLine);
-        $this->setExpectedException('Exception', $exceptedExceptionMessage);
+        $this->expectException('Exception', $exceptedExceptionMessage);
 
         $this->object->handler($errorNo, $errorStr, $errorFile, $errorLine);
     }

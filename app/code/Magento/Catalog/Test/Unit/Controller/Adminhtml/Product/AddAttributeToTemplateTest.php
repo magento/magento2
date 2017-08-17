@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product;
@@ -25,7 +25,7 @@ use Magento\Framework\Controller\Result\Json;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AddAttributeToTemplateTest extends \PHPUnit_Framework_TestCase
+class AddAttributeToTemplateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager
@@ -128,7 +128,7 @@ class AddAttributeToTemplateTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
         $this->searchCriteriaBuilderMock = $this->getMockBuilder(SearchCriteriaBuilder::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addFilter', 'create', 'setPageSize'])
+            ->setMethods(['addFilter', 'create', 'setPageSize', 'addSortOrder'])
             ->getMockForAbstractClass();
         $this->searchCriteriaMock = $this->getMockBuilder(SearchCriteria::class)
             ->disableOriginalConstructor()

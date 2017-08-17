@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,13 +11,13 @@
 <?php if ($block->isWishListAllowed()) : ?>
     <a href="#"
        class="action towishlist"
-       data-post='<?php /* @noEscape */ echo $block->getWishlistParams(); ?>'
-       data-action="add-to-wishlist"><span><?php echo $block->escapeHtml(__('Add to Wish List')) ?></span></a>
+       data-post='<?= /* @noEscape */ $block->getWishlistParams() ?>'
+       data-action="add-to-wishlist"><span><?= $block->escapeHtml(__('Add to Wish List')) ?></span></a>
 <?php endif; ?>
 <script type="text/x-magento-init">
     {
         "body": {
-            "addToWishlist": <?php /* @noEscape */ echo $block->getWishlistOptionsJson() ?>
+            "addToWishlist": <?= /* @noEscape */ $block->getWishlistOptionsJson() ?>
         }
     }
 </script>

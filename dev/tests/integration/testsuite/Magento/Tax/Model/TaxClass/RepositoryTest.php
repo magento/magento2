@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Model\TaxClass;
@@ -11,7 +11,7 @@ use Magento\Tax\Api\TaxClassManagementInterface;
 use Magento\Tax\Model\ClassModel as TaxClassModel;
 use Magento\TestFramework\Helper\Bootstrap;
 
-class RepositoryTest extends \PHPUnit_Framework_TestCase
+class RepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Repository
@@ -160,7 +160,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->taxClassRepository->deleteById($taxClassId));
 
         // Verify if the tax class is deleted
-        $this->setExpectedException(
+        $this->expectException(
             \Magento\Framework\Exception\NoSuchEntityException::class,
             "No such entity with class_id = $taxClassId"
         );

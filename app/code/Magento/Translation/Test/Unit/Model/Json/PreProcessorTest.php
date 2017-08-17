@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Translation\Test\Unit\Model\Json;
@@ -9,7 +9,7 @@ use Magento\Translation\Model\Js\Config;
 use Magento\Translation\Model\Js\DataProvider;
 use Magento\Translation\Model\Json\PreProcessor;
 
-class PreProcessorTest extends \PHPUnit_Framework_TestCase
+class PreProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var PreProcessor
@@ -38,9 +38,9 @@ class PreProcessorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->configMock = $this->getMock(\Magento\Translation\Model\Js\Config::class, [], [], '', false);
-        $this->dataProviderMock = $this->getMock(\Magento\Translation\Model\Js\DataProvider::class, [], [], '', false);
-        $this->areaListMock = $this->getMock(\Magento\Framework\App\AreaList::class, [], [], '', false);
+        $this->configMock = $this->createMock(\Magento\Translation\Model\Js\Config::class);
+        $this->dataProviderMock = $this->createMock(\Magento\Translation\Model\Js\DataProvider::class);
+        $this->areaListMock = $this->createMock(\Magento\Framework\App\AreaList::class);
         $this->translateMock = $this->getMockForAbstractClass(\Magento\Framework\TranslateInterface::class);
         $this->model = new PreProcessor(
             $this->configMock,
@@ -52,15 +52,15 @@ class PreProcessorTest extends \PHPUnit_Framework_TestCase
 
     public function testGetData()
     {
-        $chain = $this->getMock(\Magento\Framework\View\Asset\PreProcessor\Chain::class, [], [], '', false);
-        $asset = $this->getMock(\Magento\Framework\View\Asset\File::class, [], [], '', false);
-        $context = $this->getMock(\Magento\Framework\View\Asset\File\FallbackContext::class, [], [], '', false);
+        $chain = $this->createMock(\Magento\Framework\View\Asset\PreProcessor\Chain::class);
+        $asset = $this->createMock(\Magento\Framework\View\Asset\File::class);
+        $context = $this->createMock(\Magento\Framework\View\Asset\File\FallbackContext::class);
         $fileName = 'js-translation.json';
         $targetPath = 'path/js-translation.json';
         $themePath = '*/*';
         $dictionary = ['hello' => 'bonjour'];
         $areaCode = 'adminhtml';
-        $area = $this->getMock(\Magento\Framework\App\Area::class, [], [], '', false);
+        $area = $this->createMock(\Magento\Framework\App\Area::class);
 
         $chain->expects($this->once())
             ->method('getTargetAssetPath')

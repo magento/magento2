@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\User\Model;
@@ -12,6 +12,8 @@ use Magento\Framework\Validator\StringLength;
 
 /**
  * Class for adding validation rules to an Admin user
+ *
+ * @api
  */
 class UserValidationRules
 {

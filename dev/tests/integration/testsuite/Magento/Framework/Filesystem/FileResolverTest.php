@@ -2,14 +2,14 @@
 /**
  * Integration test for \Magento\Framework\Filesystem\FileResolver
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filesystem;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
-class FileResolverTest extends \PHPUnit_Framework_TestCase
+class FileResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Path to add to include path

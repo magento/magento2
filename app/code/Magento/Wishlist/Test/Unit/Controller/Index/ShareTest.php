@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Wishlist\Test\Unit\Controller\Index;
 
 use Magento\Framework\Controller\ResultFactory;
 
-class ShareTest extends \PHPUnit_Framework_TestCase
+class ShareTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Wishlist\Controller\Index\Share
@@ -32,15 +32,9 @@ class ShareTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->customerSessionMock = $this->getMock(\Magento\Customer\Model\Session::class, [], [], '', false);
-        $this->contextMock = $this->getMock(\Magento\Framework\App\Action\Context::class, [], [], '', false);
-        $this->resultFactoryMock = $this->getMock(
-            \Magento\Framework\Controller\ResultFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->customerSessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
+        $this->contextMock = $this->createMock(\Magento\Framework\App\Action\Context::class);
+        $this->resultFactoryMock = $this->createMock(\Magento\Framework\Controller\ResultFactory::class);
 
         $this->contextMock->expects($this->any())->method('getResultFactory')->willReturn($this->resultFactoryMock);
 
@@ -52,7 +46,7 @@ class ShareTest extends \PHPUnit_Framework_TestCase
 
     public function testExecute()
     {
-        $resultMock = $this->getMock(\Magento\Framework\Controller\ResultInterface::class, [], [], '', false);
+        $resultMock = $this->createMock(\Magento\Framework\Controller\ResultInterface::class);
 
         $this->customerSessionMock->expects($this->once())->method('authenticate')
             ->willReturn(true);

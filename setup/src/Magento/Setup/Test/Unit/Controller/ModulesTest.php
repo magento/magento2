@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Setup\Test\Unit\Controller;
 
 use \Magento\Setup\Controller\Modules;
 
-class ModulesTest extends \PHPUnit_Framework_TestCase
+class ModulesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\ObjectManagerInterface
@@ -38,10 +38,10 @@ class ModulesTest extends \PHPUnit_Framework_TestCase
         /** @var
          * $objectManagerProvider \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\ObjectManagerProvider
          */
-        $objectManagerProvider = $this->getMock(\Magento\Setup\Model\ObjectManagerProvider::class, [], [], '', false);
+        $objectManagerProvider = $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);
         $objectManagerProvider->expects($this->once())->method('get')->willReturn($this->objectManager);
-        $this->modules = $this->getMock(\Magento\Setup\Model\ModuleStatus::class, [], [], '', false);
-        $this->status = $this->getMock(\Magento\Framework\Module\Status::class, [], [], '', false);
+        $this->modules = $this->createMock(\Magento\Setup\Model\ModuleStatus::class);
+        $this->status = $this->createMock(\Magento\Framework\Module\Status::class);
         $this->objectManager->expects($this->once())->method('create')->will($this->returnValue($this->status));
         $this->controller = new Modules($this->modules, $objectManagerProvider);
     }

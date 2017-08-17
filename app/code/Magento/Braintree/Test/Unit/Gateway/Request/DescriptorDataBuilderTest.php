@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Test\Unit\Gateway\Request;
@@ -12,7 +12,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 /**
  * Class DescriptorDataBuilderTest
  */
-class DescriptorDataBuilderTest extends \PHPUnit_Framework_TestCase
+class DescriptorDataBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Config|MockObject

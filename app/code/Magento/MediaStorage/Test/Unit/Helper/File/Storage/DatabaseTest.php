@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\MediaStorage\Test\Unit\Helper\File\Storage;
@@ -8,7 +8,7 @@ namespace Magento\MediaStorage\Test\Unit\Helper\File\Storage;
 use Magento\MediaStorage\Helper\File\Storage\Database;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-class DatabaseTest extends \PHPUnit_Framework_TestCase
+class DatabaseTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager

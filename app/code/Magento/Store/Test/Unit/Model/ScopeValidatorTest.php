@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Test\Unit\Model;
@@ -10,7 +10,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Phrase;
 use Magento\Store\Model\ScopeValidator;
 
-class ScopeValidatorTest extends \PHPUnit_Framework_TestCase
+class ScopeValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ScopeValidator

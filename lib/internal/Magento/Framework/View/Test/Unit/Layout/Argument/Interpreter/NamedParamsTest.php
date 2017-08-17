@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Layout\Argument\Interpreter;
 
 use \Magento\Framework\View\Layout\Argument\Interpreter\NamedParams;
 
-class NamedParamsTest extends \PHPUnit_Framework_TestCase
+class NamedParamsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Data\Argument\InterpreterInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -62,7 +62,7 @@ class NamedParamsTest extends \PHPUnit_Framework_TestCase
      */
     public function testEvaluateWrongParam($input, $expectedExceptionMessage)
     {
-        $this->setExpectedException('\InvalidArgumentException', $expectedExceptionMessage);
+        $this->expectException('\InvalidArgumentException', $expectedExceptionMessage);
         $this->_model->evaluate($input);
     }
 

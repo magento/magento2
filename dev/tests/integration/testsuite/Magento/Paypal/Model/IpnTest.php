@@ -1,14 +1,19 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model;
 
+use Magento\Paypal\Model\IpnFactory;
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Creditmemo;
+
 /**
  * @magentoAppArea frontend
  */
-class IpnTest extends \PHPUnit_Framework_TestCase
+class IpnTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -31,6 +36,126 @@ class IpnTest extends \PHPUnit_Framework_TestCase
     public function testProcessIpnRequestExpressCurrency($currencyCode)
     {
         $this->_processIpnRequestCurrency($currencyCode);
+    }
+
+    /**
+     * Refund full order amount by Paypal Express IPN message service.
+     *
+     * @magentoDataFixture Magento/Paypal/_files/order_express_with_invoice_and_shipping.php
+     * @magentoConfigFixture current_store payment/paypal_express/active 1
+     * @magentoConfigFixture current_store paypal/general/merchant_country US
+     */
+    public function testProcessIpnRequestFullRefund()
+    {
+        $ipnData = require __DIR__ . '/../_files/ipn_refund.php';
+        $ipnFactory = $this->_objectManager->create(IpnFactory::class);
+        $ipnModel = $ipnFactory->create(
+            [
+                'data' => $ipnData,
+                'curlFactory' => $this->_createMockedHttpAdapter()
+            ]
+        );
+
+        $ipnModel->processIpnRequest();
+
+        $order = $this->_objectManager->create(Order::class);
+        $order->loadByIncrementId('100000001');
+
+        $creditmemoItems = $order->getCreditmemosCollection()->getItems();
+        $creditmemo = current($creditmemoItems);
+
+        $this->assertEquals(Order::STATE_CLOSED, $order->getState()) ;
+        $this->assertEquals(1, count($creditmemoItems));
+        $this->assertEquals(Creditmemo::STATE_REFUNDED, $creditmemo->getState());
+        $this->assertEquals(10, $order->getSubtotalRefunded());
+        $this->assertEquals(10, $order->getBaseSubtotalRefunded());
+        $this->assertEquals(20, $order->getShippingRefunded());
+        $this->assertEquals(20, $order->getBaseShippingRefunded());
+        $this->assertEquals(30, $order->getTotalRefunded());
+        $this->assertEquals(30, $order->getBaseTotalRefunded());
+        $this->assertEquals(30, $order->getTotalOnlineRefunded());
+        $this->assertEmpty($order->getTotalOfflineRefunded());
+    }
+
+    /**
+     * Partial refund of order amount by Paypal Express IPN message service.
+     *
+     * @magentoDataFixture Magento/Paypal/_files/order_express_with_invoice_and_shipping.php
+     * @magentoConfigFixture current_store payment/paypal_express/active 1
+     * @magentoConfigFixture current_store paypal/general/merchant_country US
+     */
+    public function testProcessIpnRequestPartialRefund()
+    {
+        $ipnData = require __DIR__ . '/../_files/ipn_refund.php';
+
+        $refundAmount = -15;
+        $ipnData['mc_gross'] = $refundAmount;
+
+        $ipnFactory = $this->_objectManager->create(IpnFactory::class);
+        $ipnModel = $ipnFactory->create(
+            [
+                'data' => $ipnData,
+                'curlFactory' => $this->_createMockedHttpAdapter()
+            ]
+        );
+
+        $ipnModel->processIpnRequest();
+
+        $order = $this->_objectManager->create(Order::class);
+        $order->loadByIncrementId('100000001');
+
+        $creditmemoItems = $order->getCreditmemosCollection()->getItems();
+        $comments = $order->load($order->getId())->getAllStatusHistory();
+        $commentData = reset($comments);
+        $commentOrigin = sprintf(
+            'IPN "Refunded". Refund issued by merchant. Registered notification about refunded amount of $%d.00. '.
+            'Transaction ID: "%s". Credit Memo has not been created. Please create offline Credit Memo.',
+            abs($refundAmount),
+            $ipnData['txn_id']
+        );
+
+        $this->assertEquals(Order::STATE_PROCESSING, $order->getState()) ;
+        $this->assertEmpty(count($creditmemoItems));
+        $this->assertEquals(1, count($comments));
+        $this->assertEquals($commentOrigin, $commentData->getComment());
+    }
+
+    /**
+     * Refund rest of order amount by Paypal Express IPN message service.
+     *
+     * @magentoDataFixture Magento/Paypal/_files/order_express_with_invoice_and_creditmemo.php
+     * @magentoConfigFixture current_store payment/paypal_express/active 1
+     * @magentoConfigFixture current_store paypal/general/merchant_country US
+     */
+    public function testProcessIpnRequestRestRefund()
+    {
+        $ipnData = require __DIR__ . '/../_files/ipn_refund.php';
+
+        $ipnFactory = $this->_objectManager->create(IpnFactory::class);
+        $ipnModel = $ipnFactory->create(
+            [
+                'data' => $ipnData,
+                'curlFactory' => $this->_createMockedHttpAdapter()
+            ]
+        );
+
+        $ipnModel->processIpnRequest();
+
+        $order = $this->_objectManager->create(Order::class);
+        $order->loadByIncrementId('100000001');
+
+        $creditmemoItems = $order->getCreditmemosCollection()->getItems();
+
+        $this->assertEquals(Order::STATE_CLOSED, $order->getState()) ;
+        $this->assertEquals(2, count($creditmemoItems));
+        $this->assertEquals(10, $order->getSubtotalRefunded());
+        $this->assertEquals(10, $order->getBaseSubtotalRefunded());
+        $this->assertEquals(20, $order->getShippingRefunded());
+        $this->assertEquals(20, $order->getBaseShippingRefunded());
+        $this->assertEquals(30, $order->getTotalRefunded());
+        $this->assertEquals(30, $order->getBaseTotalRefunded());
+        $this->assertEquals(30, $order->getTotalOnlineRefunded());
+        $this->assertEmpty($order->getTotalOfflineRefunded());
     }
 
     /**
@@ -89,8 +214,8 @@ class IpnTest extends \PHPUnit_Framework_TestCase
      */
     protected function _createMockedHttpAdapter()
     {
-        $factory = $this->getMock(\Magento\Framework\HTTP\Adapter\CurlFactory::class, ['create'], [], '', false);
-        $adapter = $this->getMock(\Magento\Framework\HTTP\Adapter\Curl::class, ['read', 'write'], [], '', false);
+        $factory = $this->createPartialMock(\Magento\Framework\HTTP\Adapter\CurlFactory::class, ['create']);
+        $adapter = $this->createPartialMock(\Magento\Framework\HTTP\Adapter\Curl::class, ['read', 'write']);
 
         $adapter->expects($this->once())->method('read')->with()->will($this->returnValue("\nVERIFIED"));
 

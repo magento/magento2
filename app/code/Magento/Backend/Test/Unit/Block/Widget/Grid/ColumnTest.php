@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@
  */
 namespace Magento\Backend\Test\Unit\Block\Widget\Grid;
 
-class ColumnTest extends \PHPUnit_Framework_TestCase
+class ColumnTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Block\Widget\Grid\Column
@@ -28,19 +28,15 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_layoutMock = $this->getMock(\Magento\Framework\View\Layout::class, [], [], '', false, false);
-        $this->_blockMock = $this->getMock(
+        $this->_layoutMock = $this->createMock(\Magento\Framework\View\Layout::class);
+        $this->_blockMock = $this->createPartialMock(
             \Magento\Framework\View\Element\Template::class,
-            ['setColumn', 'getHtml'],
-            [],
-            '',
-            false,
-            false
+            ['setColumn', 'getHtml']
         );
 
         $arguments = [
             'layout' => $this->_layoutMock,
-            'urlBuilder' => $this->getMock(\Magento\Backend\Model\Url::class, [], [], '', false),
+            'urlBuilder' => $this->createMock(\Magento\Backend\Model\Url::class),
         ];
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_block = $objectManagerHelper->getObject(\Magento\Backend\Block\Widget\Grid\Column::class, $arguments);
@@ -370,7 +366,7 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
     {
         $arguments = [
             'layout' => $this->_layoutMock,
-            'urlBuilder' => $this->getMock(\Magento\Backend\Model\Url::class, [], [], '', false),
+            'urlBuilder' => $this->createMock(\Magento\Backend\Model\Url::class),
             'data' => $groupedData,
         ];
 

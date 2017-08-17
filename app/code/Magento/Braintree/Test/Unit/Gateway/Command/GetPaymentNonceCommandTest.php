@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Test\Unit\Gateway\Command;
@@ -21,7 +21,7 @@ use Magento\Vault\Model\PaymentTokenManagement;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class GetPaymentNonceCommandTest extends \PHPUnit_Framework_TestCase
+class GetPaymentNonceCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var GetPaymentNonceCommand

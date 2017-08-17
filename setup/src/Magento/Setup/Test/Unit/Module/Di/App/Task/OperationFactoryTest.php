@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,10 +8,10 @@
 
 namespace Magento\Setup\Test\Unit\Module\Di\App\Task;
 
-use Magento\Setup\Module\Di\App\Task\OperationFactory;
 use Magento\Setup\Module\Di\App\Task\OperationException;
+use Magento\Setup\Module\Di\App\Task\OperationFactory;
 
-class OperationFactoryTest extends \PHPUnit_Framework_TestCase
+class OperationFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var OperationFactory
@@ -28,7 +28,7 @@ class OperationFactoryTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->setMethods([])
             ->getMock();
-        $objectManagerProviderMock = $this->getMock(\Magento\Setup\Model\ObjectManagerProvider::class, [], [], '', false);
+        $objectManagerProviderMock = $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);
         $objectManagerProviderMock->expects($this->once())->method('get')->willReturn($this->objectManagerMock);
         $this->factory = new OperationFactory(
             $objectManagerProviderMock
@@ -56,7 +56,7 @@ class OperationFactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreateException()
     {
         $notRegisteredOperation = 'coffee';
-        $this->setExpectedException(
+        $this->expectException(
             \Magento\Setup\Module\Di\App\Task\OperationException::class,
             sprintf('Unrecognized operation "%s"', $notRegisteredOperation),
             OperationException::UNAVAILABLE_OPERATION
@@ -75,5 +75,4 @@ class OperationFactoryTest extends \PHPUnit_Framework_TestCase
             [OperationFactory::INTERCEPTION_CACHE, 1, \Magento\Setup\Module\Di\App\Task\Operation\InterceptionCache::class],
         ];
     }
-
 }

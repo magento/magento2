@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Variable\Model;
@@ -8,14 +8,12 @@ namespace Magento\Variable\Model;
 /**
  * Custom variable model
  *
- * @method \Magento\Variable\Model\ResourceModel\Variable _getResource()
- * @method \Magento\Variable\Model\ResourceModel\Variable getResource()
  * @method string getCode()
  * @method \Magento\Variable\Model\Variable setCode(string $value)
  * @method string getName()
  * @method \Magento\Variable\Model\Variable setName(string $value)
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Variable extends \Magento\Framework\Model\AbstractModel
 {

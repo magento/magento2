@@ -2,7 +2,7 @@
 /**
  * Base router
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Router;
@@ -106,7 +106,9 @@ class Base implements \Magento\Framework\App\RouterInterface
      */
     protected $actionList;
 
-    /** @var PathConfigInterface */
+    /**
+     * @var \Magento\Framework\App\Router\PathConfigInterface
+     */
     protected $pathConfig;
 
     /**
@@ -116,7 +118,6 @@ class Base implements \Magento\Framework\App\RouterInterface
      * @param \Magento\Framework\App\ResponseFactory $responseFactory
      * @param \Magento\Framework\App\Route\ConfigInterface $routeConfig
      * @param \Magento\Framework\UrlInterface $url
-     * @param string $routerId
      * @param \Magento\Framework\Code\NameBuilder $nameBuilder
      * @param \Magento\Framework\App\Router\PathConfigInterface $pathConfig
      *
@@ -131,7 +132,6 @@ class Base implements \Magento\Framework\App\RouterInterface
         \Magento\Framework\App\ResponseFactory $responseFactory,
         \Magento\Framework\App\Route\ConfigInterface $routeConfig,
         \Magento\Framework\UrlInterface $url,
-        $routerId,
         \Magento\Framework\Code\NameBuilder $nameBuilder,
         \Magento\Framework\App\Router\PathConfigInterface $pathConfig
     ) {
@@ -327,7 +327,7 @@ class Base implements \Magento\Framework\App\RouterInterface
      */
     public function getActionClassName($module, $actionPath)
     {
-        $prefix = $this->pathPrefix ? 'Controller\\' . $this->pathPrefix  : 'Controller';
+        $prefix = $this->pathPrefix ? 'Controller\\' . $this->pathPrefix : 'Controller';
         return $this->nameBuilder->buildClassName([$module, $prefix, $actionPath]);
     }
 

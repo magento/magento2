@@ -1,14 +1,17 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model\Indexer\Design\Config;
 
-
 use Magento\Framework\Indexer\FieldsetInterface;
 use Magento\Theme\Model\Design\Config\MetadataProviderInterface;
 
+/**
+ * Class \Magento\Theme\Model\Indexer\Design\Config\FieldsProvider
+ *
+ */
 class FieldsProvider implements FieldsetInterface
 {
     /**

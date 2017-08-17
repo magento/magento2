@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Model\Rest;
@@ -34,10 +34,12 @@ class Config
     const KEY_PARAMETERS = 'parameters';
     /*#@-*/
 
-    /** @var ModelConfig */
+    /*#@-*/
     protected $_config;
 
-    /** @var \Magento\Framework\Controller\Router\Route\Factory */
+    /**
+     * @var \Magento\Framework\Controller\Router\Route\Factory
+     */
     protected $_routeFactory;
 
     /**

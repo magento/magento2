@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,10 @@
  */
 namespace Magento\Directory\Model;
 
+/**
+ * Class \Magento\Directory\Model\Observer
+ *
+ */
 class Observer
 {
     const CRON_STRING_PATH = 'crontab/default/jobs/currency_rates_update/schedule/cron_expr';
@@ -126,9 +130,14 @@ class Observer
             }
         }
 
+        $errorRecipient = $this->_scopeConfig->getValue(
+            self::XML_PATH_ERROR_RECIPIENT,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
         if (sizeof($importWarnings) == 0) {
             $this->_currencyFactory->create()->saveRates($rates);
-        } else {
+        } elseif ($errorRecipient) {
+            //if $errorRecipient is not set, there is no sense send email to nobody
             $this->inlineTranslation->suspend();
 
             $this->_transportBuilder->setTemplateIdentifier(
@@ -148,12 +157,7 @@ class Observer
                     self::XML_PATH_ERROR_IDENTITY,
                     \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                 )
-            )->addTo(
-                $this->_scopeConfig->getValue(
-                    self::XML_PATH_ERROR_RECIPIENT,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-                )
-            );
+            )->addTo($errorRecipient);
             $transport = $this->_transportBuilder->getTransport();
             $transport->sendMessage();
 

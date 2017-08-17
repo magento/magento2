@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Swatches\Plugin\Catalog;
@@ -8,6 +8,10 @@ namespace Magento\Swatches\Plugin\Catalog;
 use \Magento\Framework\App\Cache\Type\Block;
 use \Magento\Framework\App\Cache\Type\Collection;
 
+/**
+ * Class \Magento\Swatches\Plugin\Catalog\CacheInvalidate
+ *
+ */
 class CacheInvalidate
 {
     /**

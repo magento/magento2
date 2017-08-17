@@ -1,16 +1,20 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRule\Model;
 
 use Magento\CatalogRule\Api\Data;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
-use \Magento\Framework\Exception\ValidatorException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\ValidatorException;
 
+/**
+ * Class \Magento\CatalogRule\Model\CatalogRuleRepository
+ *
+ */
 class CatalogRuleRepository implements \Magento\CatalogRule\Api\CatalogRuleRepositoryInterface
 {
     /**
@@ -54,8 +58,7 @@ class CatalogRuleRepository implements \Magento\CatalogRule\Api\CatalogRuleRepos
             unset($this->rules[$rule->getId()]);
         } catch (ValidatorException $e) {
             throw new CouldNotSaveException(__($e->getMessage()));
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             throw new CouldNotSaveException(__('Unable to save rule %1', $rule->getRuleId()));
         }
         return $rule;

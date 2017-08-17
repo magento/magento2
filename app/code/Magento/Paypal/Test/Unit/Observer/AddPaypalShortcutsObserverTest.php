@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Observer;
@@ -22,7 +22,7 @@ use Magento\Paypal\Observer\AddPaypalShortcutsObserver;
  * @see \Magento\Paypal\Observer\AddPaypalShortcutsObserver
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AddPaypalShortcutsObserverTest extends \PHPUnit_Framework_TestCase
+class AddPaypalShortcutsObserverTest extends \PHPUnit\Framework\TestCase
 {
     const PAYMENT_CODE = 'code';
 

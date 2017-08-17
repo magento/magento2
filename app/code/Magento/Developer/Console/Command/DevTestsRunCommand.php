@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Developer\Console\Command;
@@ -86,7 +86,7 @@ class DevTestsRunCommand extends Command
             list($dir, $options) = $this->commands[$key];
             $dirName = realpath(BP . '/dev/tests/' . $dir);
             chdir($dirName);
-            $command = 'php '. BP . '/' . $vendorDir . '/phpunit/phpunit/phpunit ' . $options;
+            $command = PHP_BINARY . ' ' . BP . '/' . $vendorDir . '/phpunit/phpunit/phpunit ' . $options;
             $message = $dirName . '> ' . $command;
             $output->writeln(['', str_pad("---- {$message} ", 70, '-'), '']);
             passthru($command, $returnVal);

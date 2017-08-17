@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Items;
@@ -14,7 +14,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AbstractItemsTest extends \PHPUnit_Framework_TestCase
+class AbstractItemsTest extends \PHPUnit\Framework\TestCase
 {
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
@@ -35,12 +35,9 @@ class AbstractItemsTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getStockItem', '__wakeup'])
             ->getMock();
 
-        $this->stockItemMock = $this->getMock(
+        $this->stockItemMock = $this->createPartialMock(
             \Magento\CatalogInventory\Model\Stock\Item::class,
-            ['getManageStock', '__wakeup'],
-            [],
-            '',
-            false
+            ['getManageStock', '__wakeup']
         );
 
         $this->stockRegistry->expects($this->any())
@@ -50,12 +47,9 @@ class AbstractItemsTest extends \PHPUnit_Framework_TestCase
 
     public function testGetItemRenderer()
     {
-        $layout = $this->getMock(
+        $layout = $this->createPartialMock(
             \Magento\Framework\View\Layout::class,
-            ['getChildName', 'getBlock', 'getGroupChildNames'],
-            [],
-            '',
-            false
+            ['getChildName', 'getBlock', 'getGroupChildNames']
         );
         $layout->expects($this->any())
             ->method('getChildName')
@@ -90,13 +84,10 @@ class AbstractItemsTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetItemRendererThrowsExceptionForNonexistentRenderer()
     {
-        $renderer = $this->getMock(\StdClass::class);
-        $layout = $this->getMock(
+        $renderer = $this->createMock(\StdClass::class);
+        $layout = $this->createPartialMock(
             \Magento\Framework\View\Layout::class,
-            ['getChildName', 'getBlock', '__wakeup'],
-            [],
-            '',
-            false
+            ['getChildName', 'getBlock', '__wakeup']
         );
         $layout->expects($this->at(0))
             ->method('getChildName')
@@ -131,12 +122,9 @@ class AbstractItemsTest extends \PHPUnit_Framework_TestCase
     {
         $productId = isset($itemConfig['product_id']) ? $itemConfig['product_id'] : null;
         $manageStock = isset($itemConfig['manage_stock']) ? $itemConfig['manage_stock'] : null;
-        $item = $this->getMock(
+        $item = $this->createPartialMock(
             \Magento\Sales\Model\Order\Creditmemo\Item::class,
-            ['hasCanReturnToStock', 'getOrderItem', 'setCanReturnToStock', 'getCanReturnToStock', '__wakeup'],
-            [],
-            '',
-            false
+            ['hasCanReturnToStock', 'getOrderItem', 'setCanReturnToStock', 'getCanReturnToStock', '__wakeup']
         );
         $dependencies = $this->prepareServiceMockDependency(
             $item,
@@ -175,15 +163,12 @@ class AbstractItemsTest extends \PHPUnit_Framework_TestCase
             ->method('hasCanReturnToStock')
             ->will($this->returnValue($itemConfig['has_can_return_to_stock']));
         if (!$itemConfig['has_can_return_to_stock']) {
-            $orderItem = $this->getMock(
+            $orderItem = $this->createPartialMock(
                 \Magento\Sales\Model\Order\Item::class,
-                ['getProductId', '__wakeup', 'getStore'],
-                [],
-                '',
-                false
+                ['getProductId', '__wakeup', 'getStore']
             );
 
-            $store = $this->getMock(\Magento\Store\Model\Store::class, ['getWebsiteId'], [], '', false);
+            $store = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getWebsiteId']);
             $store->expects($this->once())
                 ->method('getWebsiteId')
                 ->will($this->returnValue(10));

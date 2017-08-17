@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Test\Unit\Block\Widget\Grid;
 
-class SerializerTest extends \PHPUnit_Framework_TestCase
+class SerializerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\LayoutInterface
@@ -23,12 +23,9 @@ class SerializerTest extends \PHPUnit_Framework_TestCase
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $grid = $this->getMock(
+        $grid = $this->createPartialMock(
             \Magento\Catalog\Block\Adminhtml\Product\Widget\Chooser::class,
-            ['getSelectedProducts'],
-            [],
-            '',
-            false
+            ['getSelectedProducts']
         );
         $grid->expects($this->once())->method('getSelectedProducts')->will($this->returnValue(['product1']));
         $arguments = [

@@ -1,15 +1,19 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Weee\Model;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Weee\Helper\Data as WeeeHelper;
 use Magento\Weee\Model\Tax as WeeeDisplayConfig;
-use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * Class \Magento\Weee\Model\WeeeConfigProvider
+ *
+ */
 class WeeeConfigProvider implements ConfigProviderInterface
 {
     /**
@@ -85,7 +89,6 @@ class WeeeConfigProvider implements ConfigProviderInterface
         }
         return true;
     }
-
 
     /**
      * Whether to display final price that include Weee amounts

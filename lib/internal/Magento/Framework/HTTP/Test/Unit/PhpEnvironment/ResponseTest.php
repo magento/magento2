@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\HTTP\Test\Unit\PhpEnvironment;
 
 use \Magento\Framework\HTTP\PhpEnvironment\Response;
 
-class ResponseTest extends \PHPUnit_Framework_TestCase
+class ResponseTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\HTTP\PhpEnvironment\Response */
     protected $response;
@@ -17,11 +17,11 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->response = $this->getMock(
+        $this->response = $this->createPartialMock(
             \Magento\Framework\HTTP\PhpEnvironment\Response::class,
             ['getHeaders', 'send', 'clearHeader']
         );
-        $this->headers = $this->getMock(
+        $this->headers = $this->createPartialMock(
             \Zend\Http\Headers::class,
             ['has', 'get', 'current', 'removeHeader']
         );
@@ -110,7 +110,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
 
     public function testClearHeaderIfHeaderExistsAndWasFound()
     {
-        $response = $this->response = $this->getMock(
+        $response = $this->response = $this->createPartialMock(
             \Magento\Framework\HTTP\PhpEnvironment\Response::class,
             ['getHeaders', 'send']
         );
@@ -145,7 +145,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
 
     public function testClearHeaderAndHeaderNotExists()
     {
-        $response = $this->response = $this->getMock(
+        $response = $this->response = $this->createPartialMock(
             \Magento\Framework\HTTP\PhpEnvironment\Response::class,
             ['getHeaders', 'send']
         );
@@ -179,7 +179,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessageRegExp Invalid HTTP response code
+     * @expectedExceptionMessageRegExp /Invalid HTTP response code/
      */
     public function testHttpResponseCodeWithException()
     {
@@ -194,12 +194,9 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     public function testSetRedirect()
     {
         /** @var \Magento\Framework\App\Response\Http $response */
-        $response = $this->getMock(
+        $response = $this->createPartialMock(
             \Magento\Framework\HTTP\PhpEnvironment\Response::class,
-            ['setHeader', 'setHttpResponseCode', 'sendHeaders'],
-            [],
-            '',
-            false
+            ['setHeader', 'setHttpResponseCode', 'sendHeaders']
         );
         $response
             ->expects($this->once())

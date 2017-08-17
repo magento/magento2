@@ -1,10 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\Component\Listing\Attribute;
 
+/**
+ * @api
+ */
 abstract class AbstractRepository implements RepositoryInterface
 {
     /**
@@ -12,7 +15,9 @@ abstract class AbstractRepository implements RepositoryInterface
      */
     protected $attributes;
 
-    /** @var \Magento\Framework\Api\SearchCriteriaBuilder */
+    /**
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder
+     */
     protected $searchCriteriaBuilder;
 
     /**

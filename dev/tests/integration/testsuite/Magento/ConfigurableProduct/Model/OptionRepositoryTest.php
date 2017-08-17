@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Model;
 
-class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
+class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Pricing\ConfiguredPrice;
@@ -9,6 +9,10 @@ use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
 use Magento\Catalog\Pricing\Price\ConfiguredPriceInterface;
 use Magento\Catalog\Pricing\Price\FinalPrice;
 
+/**
+ * Class \Magento\Wishlist\Pricing\ConfiguredPrice\ConfigurableProduct
+ *
+ */
 class ConfigurableProduct extends FinalPrice implements ConfiguredPriceInterface
 {
     /**

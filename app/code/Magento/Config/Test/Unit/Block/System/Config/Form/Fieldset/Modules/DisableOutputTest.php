@@ -1,14 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Block\System\Config\Form\Fieldset\Modules;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @deprecated because \Magento\Config\Block\System\Config\Form\Fieldset\Modules\DisableOutput is deprecated
  */
-class DisableOutputTest extends \PHPUnit_Framework_TestCase
+class DisableOutputTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Config\Block\System\Config\Form\Fieldset\Modules\DisableOutput
@@ -130,7 +131,9 @@ class DisableOutputTest extends \PHPUnit_Framework_TestCase
         $factoryColl = $this->getMockBuilder(\Magento\Framework\Data\Form\Element\CollectionFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $formMock = $this->getMock(\Magento\Framework\Data\Form\AbstractForm::class, [], [$factory, $factoryColl]);
+        $formMock = $this->getMockBuilder(\Magento\Framework\Data\Form\AbstractForm::class)
+            ->setConstructorArgs([$factory, $factoryColl])
+            ->getMock();
 
         $context = $this->objectManager->getObject(
             \Magento\Backend\Block\Context::class,

@@ -1,21 +1,21 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Security\Test\Unit\Model;
 
+use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Security\Model\ConfigInterface;
-use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 use Magento\Security\Model\SecurityManager;
 
 /**
  * Test class for \Magento\Security\Model\SecurityManager testing
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SecurityManagerTest extends \PHPUnit_Framework_TestCase
+class SecurityManagerTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  \Magento\Security\Model\SecurityManager */
     protected $model;
@@ -65,45 +65,27 @@ class SecurityManagerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->passwordResetRequestEventCollectionFactoryMock = $this->getMock(
+        $this->passwordResetRequestEventCollectionFactoryMock = $this->createPartialMock(
             \Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\CollectionFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
 
-        $this->passwordResetRequestEventCollectionMock = $this->getMock(
+        $this->passwordResetRequestEventCollectionMock = $this->createPartialMock(
             \Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\Collection::class,
-            ['deleteRecordsOlderThen'],
-            [],
-            '',
-            false
+            ['deleteRecordsOlderThen']
         );
 
-        $this->passwordResetRequestEventFactoryMock = $this->getMock(
+        $this->passwordResetRequestEventFactoryMock = $this->createPartialMock(
             \Magento\Security\Model\PasswordResetRequestEventFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
 
-        $this->passwordResetRequestEventMock = $this->getMock(
+        $this->passwordResetRequestEventMock = $this->createPartialMock(
             \Magento\Security\Model\PasswordResetRequestEvent::class,
-            ['setRequestType', 'setAccountReference', 'setIp', 'save'],
-            [],
-            '',
-            false
+            ['setRequestType', 'setAccountReference', 'setIp', 'save']
         );
 
-        $securityChecker = $this->getMock(
-            \Magento\Security\Model\SecurityChecker\SecurityCheckerInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $securityChecker = $this->createMock(\Magento\Security\Model\SecurityChecker\SecurityCheckerInterface::class);
 
         $this->eventManagerMock = $this->getMockForAbstractClass(
             \Magento\Framework\Event\ManagerInterface::class,
@@ -142,15 +124,9 @@ class SecurityManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructorException()
     {
-        $securityChecker = $this->getMock(
-            \Magento\Framework\Message\ManagerInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $securityChecker = $this->createMock(\Magento\Framework\Message\ManagerInterface::class);
 
-        $this->setExpectedException(
+        $this->expectException(
             \Magento\Framework\Exception\LocalizedException::class,
             __('Incorrect Security Checker class. It has to implement SecurityCheckerInterface')
         );

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
@@ -8,6 +8,10 @@ namespace Magento\Customer\Controller\Adminhtml\Index;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\SecurityViolationException;
 
+/**
+ * Class \Magento\Customer\Controller\Adminhtml\Index\ResetPassword
+ *
+ */
 class ResetPassword extends \Magento\Customer\Controller\Adminhtml\Index
 {
     /**

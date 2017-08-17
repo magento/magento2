@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model\Metadata;
 
 use Magento\Customer\Model\Metadata\ElementFactory;
 
-class ElementFactoryTest extends \PHPUnit_Framework_TestCase
+class ElementFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\ObjectManagerInterface | \PHPUnit_Framework_MockObject_MockObject */
     private $_objectManager;
@@ -23,14 +23,8 @@ class ElementFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
-        $this->_attributeMetadata = $this->getMock(
-            \Magento\Customer\Model\Data\AttributeMetadata::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->_objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->_attributeMetadata = $this->createMock(\Magento\Customer\Model\Data\AttributeMetadata::class);
         $this->_elementFactory = new ElementFactory($this->_objectManager, new \Magento\Framework\Stdlib\StringUtils());
     }
 
@@ -45,7 +39,7 @@ class ElementFactoryTest extends \PHPUnit_Framework_TestCase
             $this->returnValue(\Magento\Customer\Model\Attribute\Data\Postcode::class)
         );
 
-        $dataModel = $this->getMock(\Magento\Customer\Model\Metadata\Form\Text::class, [], [], '', false);
+        $dataModel = $this->createMock(\Magento\Customer\Model\Metadata\Form\Text::class);
         $this->_objectManager->expects($this->once())->method('create')->will($this->returnValue($dataModel));
 
         $actual = $this->_elementFactory->create($this->_attributeMetadata, '95131', $this->_entityTypeCode);
@@ -63,7 +57,7 @@ class ElementFactoryTest extends \PHPUnit_Framework_TestCase
             $this->returnValue('text')
         );
 
-        $dataModel = $this->getMock(\Magento\Customer\Model\Metadata\Form\Text::class, [], [], '', false);
+        $dataModel = $this->createMock(\Magento\Customer\Model\Metadata\Form\Text::class);
         $params = [
             'entityTypeCode' => $this->_entityTypeCode,
             'value' => 'Some Text',

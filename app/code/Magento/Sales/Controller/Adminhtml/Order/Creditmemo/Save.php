@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Creditmemo;
@@ -9,6 +9,10 @@ use Magento\Backend\App\Action;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Email\Sender\CreditmemoSender;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Order\Creditmemo\Save
+ *
+ */
 class Save extends \Magento\Backend\App\Action
 {
     /**

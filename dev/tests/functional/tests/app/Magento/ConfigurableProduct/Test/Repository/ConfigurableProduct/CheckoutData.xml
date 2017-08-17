@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -154,6 +154,22 @@
             </field>
         </dataset>
 
+        <dataset name="configurable_two_new_options_with_tier_price">
+            <field name="options" xsi:type="array">
+                <item name="configurable_options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">attribute_key_0</item>
+                        <item name="value" xsi:type="string">option_key_1</item>
+                    </item>
+                </item>
+            </field>
+            <field name="cartItem" xsi:type="array">
+                <item name="price" xsi:type="string">9</item>
+                <item name="qty" xsi:type="string">1</item>
+                <item name="subtotal" xsi:type="string">9</item>
+            </field>
+        </dataset>
+
         <dataset name="configurable_two_options_with_assigned_product">
             <field name="options" xsi:type="array">
                 <item name="configurable_options" xsi:type="array">
@@ -185,6 +201,42 @@
             </field>
         </dataset>
 
+        <dataset name="configurable_the_first_option">
+            <field name="options" xsi:type="array">
+                <item name="configurable_options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">attribute_key_0</item>
+                        <item name="value" xsi:type="string">option_key_0</item>
+                    </item>
+                </item>
+            </field>
+            <field name="qty" xsi:type="string">1</field>
+        </dataset>
+
+        <dataset name="configurable_the_second_option">
+            <field name="options" xsi:type="array">
+                <item name="configurable_options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">attribute_key_0</item>
+                        <item name="value" xsi:type="string">option_key_1</item>
+                    </item>
+                </item>
+            </field>
+            <field name="qty" xsi:type="string">1</field>
+        </dataset>
+
+        <dataset name="configurable_the_third_option">
+            <field name="options" xsi:type="array">
+                <item name="configurable_options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">attribute_key_0</item>
+                        <item name="value" xsi:type="string">option_key_2</item>
+                    </item>
+                </item>
+            </field>
+            <field name="qty" xsi:type="string">1</field>
+        </dataset>
+
         <dataset name="configurable_two_options_with_fixed_price">
             <field name="options" xsi:type="array">
                 <item name="configurable_options" xsi:type="array">
@@ -209,6 +261,209 @@
             <field name="qty" xsi:type="string">1</field>
             <field name="cartItem" xsi:type="array">
                 <item name="price" xsi:type="string">11</item>
+            </field>
+        </dataset>
+
+        <dataset name="configurable_two_options_with_fixed_price_1">
+            <field name="options" xsi:type="array">
+                <item name="configurable_options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">attribute_key_0</item>
+                        <item name="value" xsi:type="string">option_key_1</item>
+                    </item>
+                </item>
+            </field>
+            <field name="cartItem" xsi:type="array">
+                <item name="price" xsi:type="string">9</item>
+                <item name="qty" xsi:type="string">1</item>
+                <item name="subtotal" xsi:type="string">9</item>
+            </field>
+        </dataset>
+
+        <dataset name="product_1_and_option_1">
+            <field name="options" xsi:type="array">
+                <item name="configurable_options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">attribute_key_0</item>
+                        <item name="value" xsi:type="string">option_key_0</item>
+                    </item>
+                </item>
+                <item name="custom_options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">attribute_key_0</item>
+                        <item name="value" xsi:type="string">option_key_0</item>
+                    </item>
+                </item>
+            </field>
+            <field name="cartItem" xsi:type="array">
+                <item name="price" xsi:type="string">9</item>
+                <item name="qty" xsi:type="string">1</item>
+                <item name="subtotal" xsi:type="string">9</item>
+            </field>
+        </dataset>
+
+        <dataset name="product_1_and_option_2">
+            <field name="options" xsi:type="array">
+                <item name="configurable_options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">attribute_key_0</item>
+                        <item name="value" xsi:type="string">option_key_0</item>
+                    </item>
+                </item>
+                <item name="custom_options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">attribute_key_0</item>
+                        <item name="value" xsi:type="string">option_key_1</item>
+                    </item>
+                </item>
+            </field>
+            <field name="cartItem" xsi:type="array">
+                <item name="price" xsi:type="string">9</item>
+                <item name="qty" xsi:type="string">1</item>
+                <item name="subtotal" xsi:type="string">9</item>
+            </field>
+        </dataset>
+
+        <dataset name="product_2_and_option_1">
+            <field name="options" xsi:type="array">
+                <item name="configurable_options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">attribute_key_0</item>
+                        <item name="value" xsi:type="string">option_key_1</item>
+                    </item>
+                </item>
+                <item name="custom_options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">attribute_key_0</item>
+                        <item name="value" xsi:type="string">option_key_0</item>
+                    </item>
+                </item>
+            </field>
+            <field name="cartItem" xsi:type="array">
+                <item name="price" xsi:type="string">9</item>
+                <item name="qty" xsi:type="string">1</item>
+                <item name="subtotal" xsi:type="string">9</item>
+            </field>
+        </dataset>
+
+        <dataset name="product_2_and_option_2">
+            <field name="options" xsi:type="array">
+                <item name="configurable_options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">attribute_key_0</item>
+                        <item name="value" xsi:type="string">option_key_1</item>
+                    </item>
+                </item>
+                <item name="custom_options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">attribute_key_0</item>
+                        <item name="value" xsi:type="string">option_key_1</item>
+                    </item>
+                </item>
+            </field>
+            <field name="cartItem" xsi:type="array">
+                <item name="price" xsi:type="string">9</item>
+                <item name="qty" xsi:type="string">1</item>
+                <item name="subtotal" xsi:type="string">9</item>
+            </field>
+        </dataset>
+
+        <dataset name="configurable_option_1_and_custom_option_2">
+            <field name="options" xsi:type="array">
+                <item name="configurable_options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">attribute_key_0</item>
+                        <item name="value" xsi:type="string">option_key_1</item>
+                    </item>
+                </item>
+                <item name="custom_options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">attribute_key_0</item>
+                        <item name="value" xsi:type="string">option_key_1</item>
+                    </item>
+                </item>
+            </field>
+            <field name="cartItem" xsi:type="array">
+                <item name="qty" xsi:type="string">1</item>
+            </field>
+        </dataset>
+
+        <dataset name="configurable_option_2_and_custom_option_1">
+            <field name="options" xsi:type="array">
+                <item name="configurable_options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">attribute_key_0</item>
+                        <item name="value" xsi:type="string">option_key_0</item>
+                    </item>
+                </item>
+                <item name="custom_options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">attribute_key_0</item>
+                        <item name="value" xsi:type="string">option_key_0</item>
+                    </item>
+                </item>
+            </field>
+            <field name="cartItem" xsi:type="array">
+                <item name="qty" xsi:type="string">1</item>
+            </field>
+        </dataset>
+
+        <dataset name="configurable_option_2_and_custom_option_2">
+            <field name="options" xsi:type="array">
+                <item name="configurable_options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">attribute_key_0</item>
+                        <item name="value" xsi:type="string">option_key_0</item>
+                    </item>
+                </item>
+                <item name="custom_options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">attribute_key_0</item>
+                        <item name="value" xsi:type="string">option_key_1</item>
+                    </item>
+                </item>
+            </field>
+            <field name="cartItem" xsi:type="array">
+                <item name="qty" xsi:type="string">1</item>
+            </field>
+        </dataset>
+
+        <dataset name="configurable_option_3_and_custom_option_2">
+            <field name="options" xsi:type="array">
+                <item name="configurable_options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">attribute_key_0</item>
+                        <item name="value" xsi:type="string">option_key_2</item>
+                    </item>
+                </item>
+                <item name="custom_options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">attribute_key_0</item>
+                        <item name="value" xsi:type="string">option_key_1</item>
+                    </item>
+                </item>
+            </field>
+            <field name="cartItem" xsi:type="array">
+                <item name="price" xsi:type="string">32</item>
+                <item name="qty" xsi:type="string">1</item>
+                <item name="subtotal" xsi:type="string">32</item>
+            </field>
+        </dataset>
+
+        <dataset name="configurable_low_stock">
+            <field name="options" xsi:type="array">
+                <item name="configurable_options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">attribute_key_0</item>
+                        <item name="value" xsi:type="string">option_key_0</item>
+                    </item>
+                </item>
+            </field>
+            <field name="qty" xsi:type="string">1</field>
+            <field name="cartItem" xsi:type="array">
+                <item name="price" xsi:type="string">15</item>
+                <item name="qty" xsi:type="string">1</item>
+                <item name="subtotal" xsi:type="string">15</item>
             </field>
         </dataset>
     </repository>

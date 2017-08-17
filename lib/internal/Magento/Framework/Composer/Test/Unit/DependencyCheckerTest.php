@@ -1,24 +1,19 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Composer\Test\Unit;
 
 use Magento\Framework\Composer\DependencyChecker;
 
-class DependencyCheckerTest extends \PHPUnit_Framework_TestCase
+class DependencyCheckerTest extends \PHPUnit\Framework\TestCase
 {
     public function testCheckDependencies()
     {
-        $composerApp = $this->getMock(
-            \Composer\Console\Application::class,
-            ['setAutoExit', 'resetComposer', 'run'],
-            [],
-            '',
-            false
-        );
-        $directoryList = $this->getMock(\Magento\Framework\App\Filesystem\DirectoryList::class, [], [], '', false);
+        $composerApp =
+            $this->createPartialMock(\Composer\Console\Application::class, ['setAutoExit', 'resetComposer', 'run']);
+        $directoryList = $this->createMock(\Magento\Framework\App\Filesystem\DirectoryList::class);
         $directoryList->expects($this->exactly(2))->method('getRoot');
         $composerApp->expects($this->once())->method('setAutoExit')->with(false);
 
@@ -52,14 +47,9 @@ class DependencyCheckerTest extends \PHPUnit_Framework_TestCase
 
     public function testCheckDependenciesExcludeSelf()
     {
-        $composerApp = $this->getMock(
-            \Composer\Console\Application::class,
-            ['setAutoExit', 'resetComposer', 'run'],
-            [],
-            '',
-            false
-        );
-        $directoryList = $this->getMock(\Magento\Framework\App\Filesystem\DirectoryList::class, [], [], '', false);
+        $composerApp =
+            $this->createPartialMock(\Composer\Console\Application::class, ['setAutoExit', 'resetComposer', 'run']);
+        $directoryList = $this->createMock(\Magento\Framework\App\Filesystem\DirectoryList::class);
         $directoryList->expects($this->exactly(3))->method('getRoot');
         $composerApp->expects($this->once())->method('setAutoExit')->with(false);
 

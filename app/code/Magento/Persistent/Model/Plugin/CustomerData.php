@@ -1,10 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Persistent\Model\Plugin;
 
+/**
+ * Class \Magento\Persistent\Model\Plugin\CustomerData
+ *
+ */
 class CustomerData
 {
     /**
@@ -59,8 +63,7 @@ class CustomerData
         \Closure $proceed
     ) {
         /** unset customer first name  */
-        if (
-            !$this->customerSession->isLoggedIn()
+        if (!$this->customerSession->isLoggedIn()
             && $this->persistentData->isEnabled()
             && $this->persistentSession->isPersistent()
         ) {

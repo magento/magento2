@@ -2,12 +2,12 @@
 /**
  * \Magento\Wishlist\Block\Item\Configure
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Test\Unit\Block\Item;
 
-class ConfigureTest extends \PHPUnit_Framework_TestCase
+class ConfigureTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Wishlist\Block\Item\Configure
@@ -93,33 +93,18 @@ class ConfigureTest extends \PHPUnit_Framework_TestCase
 
     public function testSetLayout()
     {
-        $layoutMock = $this->getMock(
-            \Magento\Framework\View\LayoutInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $layoutMock = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
 
-        $blockMock = $this->getMock(
+        $blockMock = $this->createPartialMock(
             \Magento\Framework\View\Element\AbstractBlock::class,
-            ['setCustomAddToCartUrl'],
-            [],
-            '',
-            false
+            ['setCustomAddToCartUrl']
         );
         $layoutMock->expects($this->once())
             ->method('getBlock')
             ->with('product.info')
             ->will($this->returnValue($blockMock));
 
-        $itemMock = $this->getMock(
-            \Magento\Wishlist\Model\Item::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $itemMock = $this->createMock(\Magento\Wishlist\Model\Item::class);
 
         $this->registryMock->expects($this->exactly(2))
             ->method('registry')
@@ -141,20 +126,11 @@ class ConfigureTest extends \PHPUnit_Framework_TestCase
 
     public function testSetLayoutWithNoItem()
     {
-        $layoutMock = $this->getMock(
-            \Magento\Framework\View\LayoutInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $layoutMock = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
 
-        $blockMock = $this->getMock(
+        $blockMock = $this->createPartialMock(
             \Magento\Framework\View\Element\AbstractBlock::class,
-            ['setCustomAddToCartUrl'],
-            [],
-            '',
-            false
+            ['setCustomAddToCartUrl']
         );
         $layoutMock->expects($this->once())
             ->method('getBlock')
@@ -178,13 +154,7 @@ class ConfigureTest extends \PHPUnit_Framework_TestCase
 
     public function testSetLayoutWithNoBlockAndItem()
     {
-        $layoutMock = $this->getMock(
-            \Magento\Framework\View\LayoutInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $layoutMock = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
 
         $layoutMock->expects($this->once())
             ->method('getBlock')

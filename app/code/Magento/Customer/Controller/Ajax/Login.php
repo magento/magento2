@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -88,7 +88,7 @@ class Login extends \Magento\Framework\App\Action\Action
      * Get account redirect.
      * For release backward compatibility.
      *
-     * @deprecated
+     * @deprecated 100.0.10
      * @return AccountRedirect
      */
     protected function getAccountRedirect()
@@ -102,7 +102,7 @@ class Login extends \Magento\Framework\App\Action\Action
     /**
      * Account redirect setter for unit tests.
      *
-     * @deprecated
+     * @deprecated 100.0.10
      * @param AccountRedirect $value
      * @return void
      */
@@ -112,7 +112,7 @@ class Login extends \Magento\Framework\App\Action\Action
     }
 
     /**
-     * @deprecated
+     * @deprecated 100.0.10
      * @return ScopeConfigInterface
      */
     protected function getScopeConfig()
@@ -124,7 +124,7 @@ class Login extends \Magento\Framework\App\Action\Action
     }
 
     /**
-     * @deprecated
+     * @deprecated 100.0.10
      * @param ScopeConfigInterface $value
      * @return void
      */

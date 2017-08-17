@@ -1,10 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model\Quote\Validator\MinimumOrderAmount;
 
+/**
+ * Class \Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage
+ *
+ */
 class ValidationMessage
 {
     /**
@@ -38,7 +42,9 @@ class ValidationMessage
     }
 
     /**
-     * @return \Magento\Framework\Phrase|mixed
+     * Get validation message.
+     *
+     * @return \Magento\Framework\Phrase
      * @throws \Zend_Currency_Exception
      */
     public function getMessage()
@@ -56,6 +62,9 @@ class ValidationMessage
                 )
             );
             $message = __('Minimum order amount is %1', $minimumAmount);
+        } else {
+            //Added in order to address the issue: https://github.com/magento/magento2/issues/8287
+            $message = __($message);
         }
 
         return $message;

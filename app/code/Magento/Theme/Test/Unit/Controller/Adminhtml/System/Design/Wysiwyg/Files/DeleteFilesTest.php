@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\Wysiwyg\Files;
 
-class DeleteFilesTest extends \PHPUnit_Framework_TestCase
+class DeleteFilesTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files */
     protected $controller;
@@ -24,9 +24,9 @@ class DeleteFilesTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
-        $this->storage = $this->getMock(\Magento\Theme\Model\Wysiwyg\Storage::class, [], [], '', false);
-        $this->response = $this->getMock(\Magento\Framework\App\Response\Http::class, [], [], '', false);
+        $this->objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->storage = $this->createMock(\Magento\Theme\Model\Wysiwyg\Storage::class);
+        $this->response = $this->createMock(\Magento\Framework\App\Response\Http::class);
         $this->request = $this->getMockForAbstractClass(
             \Magento\Framework\App\RequestInterface::class,
             [],
@@ -54,7 +54,7 @@ class DeleteFilesTest extends \PHPUnit_Framework_TestCase
             ->method('isPost')
             ->willReturn(false);
 
-        $jsonData = $this->getMock(\Magento\Framework\Json\Helper\Data::class, [], [], '', false);
+        $jsonData = $this->createMock(\Magento\Framework\Json\Helper\Data::class);
         $jsonData->expects($this->once())
             ->method('jsonEncode')
             ->with(['error' => true, 'message' => 'Wrong request'])
@@ -82,7 +82,7 @@ class DeleteFilesTest extends \PHPUnit_Framework_TestCase
             ->with('files')
             ->willReturn('{"files":"file"}');
 
-        $jsonData = $this->getMock(\Magento\Framework\Json\Helper\Data::class, [], [], '', false);
+        $jsonData = $this->createMock(\Magento\Framework\Json\Helper\Data::class);
         $jsonData->expects($this->once())
             ->method('jsonDecode')
             ->with('{"files":"file"}')

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model;
@@ -62,9 +62,7 @@ class EmailNotification implements EmailNotificationInterface
 
     /**#@-*/
 
-    /**
-     * @var CustomerRegistry
-     */
+    /**#@-*/
     private $customerRegistry;
 
     /**
@@ -245,7 +243,6 @@ class EmailNotification implements EmailNotificationInterface
         if ($email === null) {
             $email = $customer->getEmail();
         }
-
         $transport = $this->transportBuilder->setTemplateIdentifier($templateId)
             ->setTemplateOptions(['area' => 'frontend', 'store' => $storeId])
             ->setTemplateVars($templateParams)

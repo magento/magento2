@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -37,18 +37,19 @@ class AddProductsToCartFromCustomerWishlistOnFrontendTest extends AbstractWishli
      * @param Customer $customer
      * @param string $products
      * @param int $qty
+     * @param bool $toUpdate
      * @return array
      */
-    public function test(Customer $customer, $products, $qty)
+    public function test(Customer $customer, $products, $qty, $toUpdate = true, $toConfigure = false)
     {
         // Preconditions
         $customer->persist();
         $this->loginCustomer($customer);
         $products = $this->createProducts($products);
-        $this->addToWishlist($products);
+        $this->addToWishlist($products, $toConfigure);
 
         // Steps
-        $this->addToCart($products, $qty);
+        $this->addToCart($products, $qty, $toUpdate);
 
         // Prepare data for asserts
         $cart = $this->createCart($products);
@@ -61,9 +62,10 @@ class AddProductsToCartFromCustomerWishlistOnFrontendTest extends AbstractWishli
      *
      * @param array $products
      * @param int $qty
+     * @param bool $toUpdate
      * @return void
      */
-    protected function addToCart(array $products, $qty)
+    protected function addToCart(array $products, $qty, $toUpdate)
     {
         $productBlock = $this->wishlistIndex->getWishlistBlock()->getProductItemsBlock();
         foreach ($products as $product) {
@@ -71,7 +73,9 @@ class AddProductsToCartFromCustomerWishlistOnFrontendTest extends AbstractWishli
             $this->cmsIndex->getCmsPageBlock()->waitPageInit();
             if ($qty != '-') {
                 $productBlock->getItemProduct($product)->fillProduct(['qty' => $qty]);
-                $this->wishlistIndex->getWishlistBlock()->clickUpdateWishlist();
+                if ($toUpdate) {
+                    $this->wishlistIndex->getWishlistBlock()->clickUpdateWishlist();
+                }
             }
             $productBlock->getItemProduct($product)->clickAddToCart();
             $this->cmsIndex->getCmsPageBlock()->waitPageInit();

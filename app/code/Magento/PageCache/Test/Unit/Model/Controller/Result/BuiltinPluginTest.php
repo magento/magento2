@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\PageCache\Test\Unit\Model\Controller\Result;
@@ -19,7 +19,7 @@ use Magento\PageCache\Model\Cache\Type as CacheType;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class BuiltinPluginTest extends \PHPUnit_Framework_TestCase
+class BuiltinPluginTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var BuiltinPlugin

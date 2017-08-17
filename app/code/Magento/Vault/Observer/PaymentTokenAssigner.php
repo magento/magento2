@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Vault\Observer;
@@ -13,6 +13,10 @@ use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Api\PaymentTokenManagementInterface;
 use Magento\Vault\Model\Method\Vault;
 
+/**
+ * Class \Magento\Vault\Observer\PaymentTokenAssigner
+ *
+ */
 class PaymentTokenAssigner extends AbstractDataAssignObserver
 {
     /**

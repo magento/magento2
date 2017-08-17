@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Setup;
@@ -11,6 +11,10 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Indexer\IndexerInterfaceFactory;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 
+/**
+ * Class \Magento\CatalogSearch\Setup\InstallData
+ *
+ */
 class InstallData implements InstallDataInterface
 {
     /**

@@ -1,10 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\ObjectManager;
 
+/**
+ * Interface \Magento\Framework\ObjectManager\ConfigInterface
+ *
+ */
 interface ConfigInterface
 {
     /**
@@ -29,7 +33,7 @@ interface ConfigInterface
      * Retrieve list of arguments per type
      *
      * @param string $type
-     * @return array
+     * @return array|null
      */
     public function getArguments($type);
 

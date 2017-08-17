@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Model;
@@ -17,7 +17,7 @@ use Magento\Quote\Api\Data\PaymentInterface;
  * Class ExpressTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ExpressTest extends \PHPUnit_Framework_TestCase
+class ExpressTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var array
@@ -72,12 +72,9 @@ class ExpressTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_checkoutSession = $this->getMock(
+        $this->_checkoutSession = $this->createPartialMock(
             \Magento\Checkout\Model\Session::class,
-            ['getPaypalTransactionData', 'setPaypalTransactionData'],
-            [],
-            '',
-            false
+            ['getPaypalTransactionData', 'setPaypalTransactionData']
         );
         $this->transactionBuilder = $this->getMockForAbstractClass(
             \Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface::class,
@@ -86,19 +83,13 @@ class ExpressTest extends \PHPUnit_Framework_TestCase
             false,
             false
         );
-        $this->_nvp = $this->getMock(
+        $this->_nvp = $this->createPartialMock(
             \Magento\Paypal\Model\Api\Nvp::class,
-            ['setProcessableErrors', 'setAmount', 'setCurrencyCode', 'setTransactionId', 'callDoAuthorization'],
-            [],
-            '',
-            false
+            ['setProcessableErrors', 'setAmount', 'setCurrencyCode', 'setTransactionId', 'callDoAuthorization']
         );
-        $this->_pro = $this->getMock(
+        $this->_pro = $this->createPartialMock(
             \Magento\Paypal\Model\Pro::class,
-            ['setMethod', 'getApi', 'importPaymentInfo', 'resetApi'],
-            [],
-            '',
-            false
+            ['setMethod', 'getApi', 'importPaymentInfo', 'resetApi']
         );
         $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->setMethods(['dispatch'])
@@ -135,27 +126,18 @@ class ExpressTest extends \PHPUnit_Framework_TestCase
         );
         $this->_checkoutSession->expects($this->once())->method('setPaypalTransactionData')->with([]);
 
-        $currency = $this->getMock(\Magento\Directory\Model\Currency::class, ['__wakeup', 'formatTxt'], [], '', false);
-        $paymentModel = $this->getMock(
-            \Magento\Sales\Model\Order\Payment::class,
-            [
+        $currency = $this->createPartialMock(\Magento\Directory\Model\Currency::class, ['__wakeup', 'formatTxt']);
+        $paymentModel = $this->createPartialMock(\Magento\Sales\Model\Order\Payment::class, [
                 '__wakeup',
                 'getBaseCurrency',
                 'getOrder',
                 'getIsTransactionPending',
                 'addStatusHistoryComment',
                 'addTransactionCommentsToOrder'
-            ],
-            [],
-            '',
-            false
-        );
-        $order = $this->getMock(
+            ]);
+        $order = $this->createPartialMock(
             \Magento\Sales\Model\Order::class,
-            ['setState', 'getBaseCurrency', 'getBaseCurrencyCode', 'setStatus'],
-            [],
-            '',
-            false
+            ['setState', 'getBaseCurrency', 'getBaseCurrencyCode', 'setStatus']
         );
         $paymentModel->expects($this->any())->method('getOrder')->willReturn($order);
         $order->expects($this->any())->method('getBaseCurrency')->willReturn($currency);
@@ -199,7 +181,7 @@ class ExpressTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $paymentInfo = $this->getMock(InfoInterface::class);
+        $paymentInfo = $this->createMock(InfoInterface::class);
         $this->_model->setInfoInstance($paymentInfo);
 
         $this->parentAssignDataExpectation($data);

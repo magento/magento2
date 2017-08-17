@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model\Theme;
@@ -8,6 +8,10 @@ namespace Magento\Theme\Model\Theme;
 use Magento\Framework\Composer\Remove;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Class \Magento\Theme\Model\Theme\ThemeUninstaller
+ *
+ */
 class ThemeUninstaller
 {
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Controller\Adminhtml\History;
@@ -8,6 +8,10 @@ namespace Magento\ImportExport\Controller\Adminhtml\History;
 use Magento\ImportExport\Controller\Adminhtml\History as HistoryController;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\ImportExport\Controller\Adminhtml\History\Index
+ *
+ */
 class Index extends HistoryController
 {
     /**

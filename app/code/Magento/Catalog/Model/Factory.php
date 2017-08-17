@@ -1,16 +1,18 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 /**
  * Model factory
  */
 namespace Magento\Catalog\Model;
 
+/**
+ * Class \Magento\Catalog\Model\Factory
+ *
+ */
 class Factory
 {
     /**

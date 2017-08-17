@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@
  */
 namespace Magento\ImportExport\Model\Import\Entity;
 
-class EavAbstractTest extends \PHPUnit_Framework_TestCase
+class EavAbstractTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Model object which used for tests

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Authorizenet\Observer;
@@ -8,6 +8,10 @@ namespace Magento\Authorizenet\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Sales\Model\Order;
 
+/**
+ * Class \Magento\Authorizenet\Observer\UpdateAllEditIncrementsObserver
+ *
+ */
 class UpdateAllEditIncrementsObserver implements ObserverInterface
 {
     /**

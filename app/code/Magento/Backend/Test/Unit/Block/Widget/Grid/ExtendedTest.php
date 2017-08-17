@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@
  */
 namespace Magento\Backend\Test\Unit\Block\Widget\Grid;
 
-class ExtendedTest extends \PHPUnit_Framework_TestCase
+class ExtendedTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -23,15 +23,15 @@ class ExtendedTest extends \PHPUnit_Framework_TestCase
 
     public function testPrepareLoadedCollection()
     {
-        $request = $this->getMock(\Magento\Framework\App\Request\Http::class, ['has'], [], '', false);
+        $request = $this->createPartialMock(\Magento\Framework\App\Request\Http::class, ['has']);
         $request->expects($this->any())->method('has')->will($this->returnValue(null));
 
-        $columnSet = $this->getMock(\Magento\Backend\Block\Widget\Grid\ColumnSet::class, [], [], '', false);
-        $layout = $this->getMock(\Magento\Framework\View\Layout::class, [], [], '', false);
+        $columnSet = $this->createMock(\Magento\Backend\Block\Widget\Grid\ColumnSet::class);
+        $layout = $this->createMock(\Magento\Framework\View\Layout::class);
         $layout->expects($this->any())->method('getChildName')->will($this->returnValue('grid.columnSet'));
         $layout->expects($this->any())->method('getBlock')->will($this->returnValue($columnSet));
 
-        $collection = $this->getMock(\Magento\Framework\Data\Collection::class, [], [], '', false);
+        $collection = $this->createMock(\Magento\Framework\Data\Collection::class);
         $collection->expects($this->atLeastOnce())->method('isLoaded')->will($this->returnValue(true));
         $collection->expects($this->atLeastOnce())->method('clear');
         $collection->expects($this->atLeastOnce())->method('load');

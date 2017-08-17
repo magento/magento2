@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo;
@@ -9,6 +9,10 @@ use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Sales\Api\CreditmemoRepositoryInterface;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo\PrintAction
+ *
+ */
 class PrintAction extends \Magento\Backend\App\Action
 {
     /**

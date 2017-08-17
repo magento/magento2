@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Model\Source;
@@ -8,7 +8,9 @@ namespace Magento\Payment\Model\Source;
 /**
  * Automatic invoice create source model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * Inheritance of this class allowed as is a part of legacy implementation.
+ *
+ * @api
  */
 class Invoice implements \Magento\Framework\Option\ArrayInterface
 {

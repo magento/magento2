@@ -1,16 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Framework\Config\Test\Unit\Composer;
 
 use \Magento\Framework\Config\Composer\Package;
 
-class PackageTest extends \PHPUnit_Framework_TestCase
+class PackageTest extends \PHPUnit\Framework\TestCase
 {
     const SAMPLE_DATA =
         '{"foo":"1","bar":"2","baz":["3","4"],"nested":{"one":"5","two":"6",

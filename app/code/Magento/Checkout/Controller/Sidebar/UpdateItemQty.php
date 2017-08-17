@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Controller\Sidebar;
@@ -13,6 +13,10 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Json\Helper\Data;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Class \Magento\Checkout\Controller\Sidebar\UpdateItemQty
+ *
+ */
 class UpdateItemQty extends Action
 {
     /**

@@ -2,20 +2,30 @@
 /**
  * Product initialzation helper
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin;
 
+/**
+ * Class \Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin\UpdateConfigurations
+ *
+ */
 class UpdateConfigurations
 {
-    /** @var \Magento\Catalog\Api\ProductRepositoryInterface  */
+    /**
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     */
     protected $productRepository;
 
-    /** @var \Magento\Framework\App\RequestInterface */
+    /**
+     * @var \Magento\Framework\App\RequestInterface
+     */
     protected $request;
 
-    /** @var \Magento\ConfigurableProduct\Model\Product\VariationHandler */
+    /**
+     * @var \Magento\ConfigurableProduct\Model\Product\VariationHandler
+     */
     protected $variationHandler;
 
     /**

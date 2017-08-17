@@ -1,19 +1,20 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\User\Test\Unit\Model;
 
-use Magento\User\Model\UserValidationRules;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Test class for \Magento\User\Model\User testing
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
-class UserTest extends \PHPUnit_Framework_TestCase
+class UserTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\User\Model\User */
     protected $model;
@@ -59,6 +60,11 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
     /** @var \Magento\Authorization\Model\RoleFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $roleFactoryMock;
+
+    /**
+     * @var Json|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializer;
 
     /**
      * Set required values
@@ -128,6 +134,8 @@ class UserTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['validateHash'])
             ->getMockForAbstractClass();
 
+        $this->serializer = $this->createPartialMock(Json::class, ['serialize', 'unserialize']);
+
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManagerHelper->getObject(
             \Magento\User\Model\User::class,
@@ -143,7 +151,8 @@ class UserTest extends \PHPUnit_Framework_TestCase
                 'storeManager' => $this->storeManagerMock,
                 'validationRules' => $this->validationRulesMock,
                 'config' => $this->configMock,
-                'encryptor' => $this->encryptorMock
+                'encryptor' => $this->encryptorMock,
+                'serializer' => $this->serializer
             ]
         );
     }
@@ -341,7 +350,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
             ->with($password, $this->model->getPassword())
             ->willReturn(true);
         $this->model->setIsActive(false);
-        $this->setExpectedException(
+        $this->expectException(
             \Magento\Framework\Exception\AuthenticationException::class,
             'You did not sign in correctly or your account is temporarily disabled.'
         );
@@ -361,7 +370,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
             ->willReturn(true);
         $this->model->setIsActive(true);
         $this->resourceMock->expects($this->once())->method('hasAssigned2Role')->willReturn(false);
-        $this->setExpectedException(
+        $this->expectException(
             \Magento\Framework\Exception\AuthenticationException::class,
             'You need more permissions to access this.'
         );
@@ -450,7 +459,15 @@ class UserTest extends \PHPUnit_Framework_TestCase
     public function testSaveExtra()
     {
         $data = [1, 2, 3];
-        $this->resourceMock->expects($this->once())->method('saveExtra')->with($this->model, serialize($data));
+        $this->resourceMock->expects($this->once())
+            ->method('saveExtra')
+            ->with($this->model, json_encode($data));
+
+        $this->serializer->expects($this->once())
+            ->method('serialize')
+            ->with($data)
+            ->will($this->returnValue(json_encode($data)));
+
         $this->assertInstanceOf(\Magento\User\Model\User::class, $this->model->saveExtra($data));
     }
 
@@ -764,14 +781,14 @@ class UserTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
 
         if ($lockExpires) {
-            $this->setExpectedException(
+            $this->expectException(
                 \Magento\Framework\Exception\State\UserLockedException::class,
                 __('Your account is temporarily disabled.')
             );
         }
 
         if (!$verifyIdentityResult) {
-            $this->setExpectedException(
+            $this->expectException(
                 \Magento\Framework\Exception\AuthenticationException::class,
                 __('You have entered an invalid password for current user.')
             );
