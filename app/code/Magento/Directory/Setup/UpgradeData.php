@@ -11,6 +11,10 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Directory\Helper\Data;
 
+/**
+ * Upgrade Data script for Directory module.
+ * @codeCoverageIgnore
+ */
 class UpgradeData implements UpgradeDataInterface
 {
     /**
