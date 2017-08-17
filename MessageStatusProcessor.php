@@ -15,6 +15,7 @@ class MessageStatusProcessor
      *
      * @param QueueInterface $queue
      * @param array $messages
+     * @return void
      */
     public function acknowledgeMessages(QueueInterface $queue, array $messages)
     {
@@ -28,6 +29,7 @@ class MessageStatusProcessor
      *
      * @param QueueInterface $queue
      * @param array $messages
+     * @return void
      */
     public function rejectMessages(QueueInterface $queue, array $messages)
     {

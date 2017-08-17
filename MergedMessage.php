@@ -21,7 +21,7 @@ class MergedMessage implements MergedMessageInterface
     private $originalMessagesIds;
 
     /**
-     * @param $mergedMessage
+     * @param object $mergedMessage
      * @param array $originalMessagesIds
      */
     public function __construct($mergedMessage, array $originalMessagesIds)
