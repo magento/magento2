@@ -45,9 +45,9 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
     const STATUS_ERROR = 'error';
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
      */
-    private $dateTime;
+    private $timeZone;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -55,7 +55,7 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime|null $dateTime
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface|null $timeZone
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -63,10 +63,10 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime = null
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timeZone = null
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
-        $this->dateTime = $dateTime;
+        $this->timeZone = $timeZone;
     }
 
     /**
@@ -102,16 +102,21 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
      */
     public function trySchedule()
     {
-        $this->dateTime = $this->dateTime ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Stdlib\DateTime\DateTime::class);
-        $time = $this->getScheduledAt();
+        $time = $this->getDateTime()->formatDateTime(
+            $this->getScheduledAt(),
+            \IntlDateFormatter::NONE,
+            \IntlDateFormatter::NONE,
+            null,
+            null,
+            'yyyy-MM-dd HH:mm:ss'
+        );
         $e = $this->getCronExprArr();
 
         if (!$e || !$time) {
             return false;
         }
         if (!is_numeric($time)) {
-            $time = strtotime($time) + $this->dateTime->getGmtOffset();
+            $time = strtotime($time);
         }
         $match = $this->matchCronExpression($e[0], strftime('%M', $time))
             && $this->matchCronExpression($e[1], strftime('%H', $time))
@@ -250,5 +255,16 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
             return true;
         }
         return false;
+    }
+
+    /**
+     * @deprecated
+     * @return \Magento\Framework\Stdlib\DateTime\TimezoneInterface
+     */
+    private function getDateTime()
+    {
+        $this->timeZone = $this->timeZone ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
+        return $this->timeZone;
     }
 }
