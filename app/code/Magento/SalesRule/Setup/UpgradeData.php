@@ -144,32 +144,21 @@ class UpgradeData implements UpgradeDataInterface
      */
     public function fillSalesRuleProductAttributeTable()
     {
-        $ruleCollection = $this->getRuleColletion();
+        /** @var ResourceModelRule\Collection $ruleCollection */
+        $ruleCollection = $this->ruleColletionFactory->create();
         /** @var ModelRule $rule */
         foreach ($ruleCollection as $rule) {
             // Save product attributes used in rule
-            $ruleProductAttributes = array_merge(
-                $this->resourceModelRule->getProductAttributes(
-                    $this->serializer->serialize($rule->getConditions()->asArray())
-                ),
-                $this->resourceModelRule->getProductAttributes(
-                    $this->serializer->serialize($rule->getActions()->asArray())
-                )
-            );
-            if (count($ruleProductAttributes)) {
+            $conditions = $rule->getConditions()->asArray();
+            $actions = $rule->getActions()->asArray();
+            $serializedConditions = $this->serializer->serialize($conditions);
+            $serializedActions = $this->serializer->serialize($actions);
+            $conditionAttributes = $this->resourceModelRule->getProductAttributes($serializedConditions);
+            $actionAttributes = $this->resourceModelRule->getProductAttributes($serializedActions);
+            $ruleProductAttributes = array_merge($conditionAttributes, $actionAttributes);
+            if ($ruleProductAttributes) {
                 $this->resourceModelRule->setActualProductAttributes($rule, $ruleProductAttributes);
             }
         }
-    }
-
-    /**
-     * Get sales rule collection.
-     *
-     * @deprecated
-     * @return ResourceModelRule\Collection
-     */
-    private function getRuleColletion()
-    {
-        return $this->ruleColletionFactory->create();
     }
 }
