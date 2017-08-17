@@ -38,7 +38,7 @@ class UpgradeData implements \Magento\Framework\Setup\UpgradeDataInterface
     /**
      * Serializer.
      *
-     * @var \Magento\Framework\Serialize\Serializer\Json
+     * @var \Magento\Framework\Serialize\SerializerInterface
      */
     private $serializer;
 
@@ -53,7 +53,7 @@ class UpgradeData implements \Magento\Framework\Setup\UpgradeDataInterface
      * @param \Magento\Framework\DB\AggregatedFieldDataConverter $aggregatedFieldConverter
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param \Magento\SalesRule\Model\ResourceModel\Rule $resourceModelRule
-     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
+     * @param \Magento\Framework\Serialize\SerializerInterface $serializer
      * @param \Magento\Framework\App\State $state
      * @param \Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory $ruleColletionFactory
      */
@@ -61,7 +61,7 @@ class UpgradeData implements \Magento\Framework\Setup\UpgradeDataInterface
         \Magento\Framework\DB\AggregatedFieldDataConverter $aggregatedFieldConverter,
         \Magento\Framework\EntityManager\MetadataPool $metadataPool,
         \Magento\SalesRule\Model\ResourceModel\Rule $resourceModelRule,
-        \Magento\Framework\Serialize\Serializer\Json $serializer,
+        \Magento\Framework\Serialize\SerializerInterface $serializer,
         \Magento\Framework\App\State $state,
         \Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory $ruleColletionFactory
     ) {
@@ -77,7 +77,7 @@ class UpgradeData implements \Magento\Framework\Setup\UpgradeDataInterface
      * @inheritdoc
      */
     public function upgrade(
-        \Magento\Framework\Setup\ModuleDataSetupInterface $setup,
+        \Magento\Framework\Setup\ModuleDataSetupInterface $setup, 
         \Magento\Framework\Setup\ModuleContextInterface $context
     ) {
         $setup->startSetup();
