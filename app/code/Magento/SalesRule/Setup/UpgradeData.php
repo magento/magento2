@@ -17,8 +17,6 @@ use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\SalesRule\Api\Data\RuleInterface;
-use Magento\SalesRule\Model\ResourceModel\Rule as ResourceModelRule;
-use Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory as RuleCollectionFactory;
 use Magento\SalesRule\Model\Rule as ModelRule;
 
 /**
@@ -39,7 +37,7 @@ class UpgradeData implements UpgradeDataInterface
     /**
      * Resource Model of sales rule.
      *
-     * @var ResourceModelRule;
+     * @var \Magento\SalesRule\Model\ResourceModel\Rule;
      */
     private $resourceModelRule;
 
@@ -60,25 +58,25 @@ class UpgradeData implements UpgradeDataInterface
     /**
      * Rule Collection Factory.
      *
-     * @var RuleColletionFactory
+     * @var \Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory
      */
     private $ruleColletionFactory;
 
     /**
      * @param AggregatedFieldDataConverter $aggregatedFieldConverter
      * @param MetadataPool $metadataPool
-     * @param ResourceModelRule $resourceModelRule
+     * @param \Magento\SalesRule\Model\ResourceModel\Rule $resourceModelRule
      * @param Json $serializer
      * @param State $state
-     * @param RuleCollectionFactory $ruleColletionFactory
+     * @param \Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory $ruleColletionFactory
      */
     public function __construct(
         AggregatedFieldDataConverter $aggregatedFieldConverter,
         MetadataPool $metadataPool,
-        ResourceModelRule $resourceModelRule,
+        \Magento\SalesRule\Model\ResourceModel\Rule $resourceModelRule,
         Json $serializer,
         State $state,
-        RuleCollectionFactory $ruleColletionFactory
+        \Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory $ruleColletionFactory
     ) {
         $this->aggregatedFieldConverter = $aggregatedFieldConverter;
         $this->metadataPool = $metadataPool;
