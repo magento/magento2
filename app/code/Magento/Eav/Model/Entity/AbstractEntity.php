@@ -601,7 +601,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      */
     private function getAttributesByScope($suffix)
     {
-        return (isset($this->attributesByScope[$suffix]) && !empty($this->attributesByScope[$suffix]))
+        return !empty($this->attributesByScope[$suffix])
             ? $this->attributesByScope[$suffix]
             : $this->getAttributesByCode();
     }
