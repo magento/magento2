@@ -44,21 +44,34 @@ class LoginAfterJSMinificationTest extends Injectable
      * @param Dashboard $adminDashboardPage
      * @return void
      */
-    public function __inject(Dashboard $adminDashboardPage, TestStepFactory $stepFactory)
-    {
+    public function __inject(
+        Dashboard $adminDashboardPage,
+        TestStepFactory $stepFactory
+    ) {
         $this->adminDashboardPage = $adminDashboardPage;
         $this->stepFactory = $stepFactory;
     }
 
-    public function test(DeployMode $cli, $configData = null)
-    {
+    /**
+     * Admin login test after JS minification is turned on in production mode
+     * @param DeployMode $cli
+     * @param null $configData
+     * @return void
+     */
+    public function test(
+        DeployMode $cli,
+        $configData = null
+    ) {
+        $this->configData = $configData;
+
        //Pre-conditions
         $cli->setDeployModeToDeveloper();
-        $this->configData = $configData;
         $this->objectManager->create(
             \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => $this->configData]
         )->run();
+
+        // Steps
         $cli->setDeployModeToProduction();
         $this->adminDashboardPage->open();
     }
