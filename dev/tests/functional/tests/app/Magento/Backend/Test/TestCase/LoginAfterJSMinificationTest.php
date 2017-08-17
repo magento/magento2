@@ -62,7 +62,4 @@ class LoginAfterJSMinificationTest extends Injectable
         $cli->setDeployModeToProduction();
         $this->adminDashboardPage->open();
     }
-
-
-
 }
