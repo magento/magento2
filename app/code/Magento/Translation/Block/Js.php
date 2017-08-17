@@ -70,6 +70,8 @@ class Js extends Template
     }
 
     /**
+     * Gets current version of the translation file.
+     *
      * @return string
      */
     public function getTranslationFileVersion()

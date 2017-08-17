@@ -5,37 +5,41 @@
  */
 namespace Magento\Translation\Model\Inline;
 
+use Magento\Framework\Translate\ResourceInterface;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\Serialize\Serializer\Json;
+
 /**
  * Prepares content of inline translations file.
  */
 class File
 {
     /**
-     * @var \Magento\Framework\Translate\ResourceInterface
+     * @var ResourceInterface
      */
     private $translateResource;
 
     /**
-     * @var \Magento\Framework\Locale\ResolverInterface
+     * @var ResolverInterface
      */
     private $localeResolver;
 
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json
+     * @var Json
      */
     private $jsonSerializer;
 
     /**
      * Initialize dependencies
      *
-     * @param \Magento\Framework\Translate\ResourceInterface $translateResource
-     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
-     * @param \Magento\Framework\Serialize\Serializer\Json $jsonSerializer
+     * @param ResourceInterface $translateResource
+     * @param ResolverInterface $localeResolver
+     * @param Json $jsonSerializer
      */
     public function __construct(
-        \Magento\Framework\Translate\ResourceInterface $translateResource,
-        \Magento\Framework\Locale\ResolverInterface $localeResolver,
-        \Magento\Framework\Serialize\Serializer\Json $jsonSerializer
+        ResourceInterface $translateResource,
+        ResolverInterface $localeResolver,
+        Json $jsonSerializer
     ) {
         $this->translateResource = $translateResource;
         $this->localeResolver = $localeResolver;

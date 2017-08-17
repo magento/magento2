@@ -122,6 +122,8 @@ class FileManager
     }
 
     /**
+     * Calculate translation file version hash.
+     *
      * @return string
      */
     public function getTranslationFileVersion()
