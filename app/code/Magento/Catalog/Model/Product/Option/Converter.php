@@ -7,6 +7,10 @@
 
 namespace Magento\Catalog\Model\Product\Option;
 
+/**
+ * Class \Magento\Catalog\Model\Product\Option\Converter
+ *
+ */
 class Converter
 {
     /**

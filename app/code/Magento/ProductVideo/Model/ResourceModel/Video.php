@@ -5,6 +5,10 @@
  */
 namespace Magento\ProductVideo\Model\ResourceModel;
 
+/**
+ * Class \Magento\ProductVideo\Model\ResourceModel\Video
+ *
+ */
 class Video extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**

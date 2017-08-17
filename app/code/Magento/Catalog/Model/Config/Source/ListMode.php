@@ -5,6 +5,10 @@
  */
 namespace Magento\Catalog\Model\Config\Source;
 
+/**
+ * Class \Magento\Catalog\Model\Config\Source\ListMode
+ *
+ */
 class ListMode implements \Magento\Framework\Option\ArrayInterface
 {
     /**

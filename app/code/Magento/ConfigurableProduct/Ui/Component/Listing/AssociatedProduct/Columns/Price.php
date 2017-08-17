@@ -8,6 +8,10 @@ namespace Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct\Col
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
+/**
+ * Class \Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct\Columns\Price
+ *
+ */
 class Price extends \Magento\Ui\Component\Listing\Columns\Column
 {
     /**

@@ -5,6 +5,10 @@
  */
 namespace Magento\Tax\Model\Calculation;
 
+/**
+ * Class \Magento\Tax\Model\Calculation\TotalBaseCalculator
+ *
+ */
 class TotalBaseCalculator extends AbstractAggregateCalculator
 {
     /**

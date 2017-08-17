@@ -7,6 +7,10 @@ namespace Magento\Checkout\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class \Magento\Checkout\Observer\UnsetAllObserver
+ *
+ */
 class UnsetAllObserver implements ObserverInterface
 {
     /**

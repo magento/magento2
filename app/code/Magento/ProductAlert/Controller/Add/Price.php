@@ -15,6 +15,10 @@ use Magento\Framework\App\Action\Action;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
 
+/**
+ * Class \Magento\ProductAlert\Controller\Add\Price
+ *
+ */
 class Price extends AddController
 {
     /**

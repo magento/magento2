@@ -5,6 +5,10 @@
  */
 namespace Magento\CatalogImportExport\Model\Indexer\Product\Eav\Plugin;
 
+/**
+ * Class \Magento\CatalogImportExport\Model\Indexer\Product\Eav\Plugin\Import
+ *
+ */
 class Import
 {
     /**

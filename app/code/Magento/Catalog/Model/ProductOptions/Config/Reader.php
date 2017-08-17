@@ -5,6 +5,10 @@
  */
 namespace Magento\Catalog\Model\ProductOptions\Config;
 
+/**
+ * Class \Magento\Catalog\Model\ProductOptions\Config\Reader
+ *
+ */
 class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {
     /**

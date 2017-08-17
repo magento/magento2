@@ -72,7 +72,7 @@ class Export extends \Magento\Config\Block\System\Config\Form\Field
      * to avoid saving empty field
      *
      * @return string
-     * @deprecated
+     * @deprecated 100.1.0
      */
     public function getTtlValue()
     {

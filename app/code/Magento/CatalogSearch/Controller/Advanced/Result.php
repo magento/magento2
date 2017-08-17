@@ -11,6 +11,10 @@ use Magento\CatalogSearch\Model\Advanced as ModelAdvanced;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\UrlFactory;
 
+/**
+ * Class \Magento\CatalogSearch\Controller\Advanced\Result
+ *
+ */
 class Result extends \Magento\Framework\App\Action\Action
 {
     /**

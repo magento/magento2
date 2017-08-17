@@ -7,6 +7,10 @@ namespace Magento\Indexer\Model\Indexer;
 
 use Magento\Framework\Indexer\StateInterface;
 
+/**
+ * Class \Magento\Indexer\Model\Indexer\State
+ *
+ */
 class State extends \Magento\Framework\Model\AbstractModel implements StateInterface
 {
     /**
@@ -119,27 +123,6 @@ class State extends \Magento\Framework\Model\AbstractModel implements StateInter
     public function setStatus($status)
     {
         return parent::setStatus($status);
-    }
-
-    /**
-     * Get suffix for indexer table.
-     *
-     * @return string
-     */
-    public function getTableSuffix()
-    {
-        return $this->getData('table_suffix');
-    }
-
-    /**
-     * Get suffix for indexer table.
-     *
-     * @param string $tableSuffix
-     * @return $this
-     */
-    public function setTableSuffix($tableSuffix)
-    {
-        return $this->setData('table_suffix', $tableSuffix);
     }
 
     /**

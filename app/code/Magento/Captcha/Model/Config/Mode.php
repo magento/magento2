@@ -11,6 +11,10 @@
  */
 namespace Magento\Captcha\Model\Config;
 
+/**
+ * Class \Magento\Captcha\Model\Config\Mode
+ *
+ */
 class Mode implements \Magento\Framework\Option\ArrayInterface
 {
     /**

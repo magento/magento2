@@ -28,7 +28,9 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      */
     protected $_helperPool;
 
-    /** @var \Magento\Customer\Helper\Session\CurrentCustomer */
+    /**
+     * @var \Magento\Customer\Helper\Session\CurrentCustomer
+     */
     protected $currentCustomer;
 
     /**

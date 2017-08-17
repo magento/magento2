@@ -10,6 +10,10 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
+/**
+ * Class \Magento\Setup\Controller\WebConfiguration
+ *
+ */
 class WebConfiguration extends AbstractActionController
 {
     /**

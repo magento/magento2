@@ -14,6 +14,10 @@ use Magento\Framework\DB\Select\QueryModifierFactory;
 use Magento\Framework\DB\Select\InQueryModifier;
 use Magento\Framework\DB\Query\Generator;
 
+/**
+ * Class \Magento\Wishlist\Setup\UpgradeData
+ *
+ */
 class UpgradeData implements UpgradeDataInterface
 {
     /**

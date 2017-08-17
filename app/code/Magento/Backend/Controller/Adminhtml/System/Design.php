@@ -7,6 +7,10 @@ namespace Magento\Backend\Controller\Adminhtml\System;
 
 use Magento\Backend\App\Action;
 
+/**
+ * Class \Magento\Backend\Controller\Adminhtml\System\Design
+ *
+ */
 abstract class Design extends Action
 {
     /**

@@ -9,6 +9,10 @@ namespace Magento\Framework\Code\Validator;
 
 use Magento\Framework\Code\ValidatorInterface;
 
+/**
+ * Class \Magento\Framework\Code\Validator\ArgumentSequence
+ *
+ */
 class ArgumentSequence implements ValidatorInterface
 {
     const REQUIRED = 'required';

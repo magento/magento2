@@ -8,6 +8,10 @@ namespace Magento\Framework\Setup\SampleData;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 
+/**
+ * Class \Magento\Framework\Setup\SampleData\State
+ *
+ */
 class State implements StateInterface
 {
     /**

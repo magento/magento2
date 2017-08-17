@@ -5,7 +5,7 @@
  */
 namespace Magento\Setup\Test\Unit\Model\Description\Mixin\Helper;
 
-class WordWrapperTest extends \PHPUnit_Framework_TestCase
+class WordWrapperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Setup\Model\Description\Mixin\Helper\WordWrapper

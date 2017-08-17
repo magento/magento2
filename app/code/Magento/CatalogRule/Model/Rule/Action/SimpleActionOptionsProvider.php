@@ -5,6 +5,10 @@
  */
 namespace Magento\CatalogRule\Model\Rule\Action;
 
+/**
+ * Class \Magento\CatalogRule\Model\Rule\Action\SimpleActionOptionsProvider
+ *
+ */
 class SimpleActionOptionsProvider implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**

@@ -303,4 +303,27 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
     {
         return $this->addressRenderer->format($address, 'html');
     }
+
+    /**
+     * @inheritdoc
+     * @since 100.2.0
+     */
+    public function getChildHtml($alias = '', $useCache = true)
+    {
+        $layout = $this->getLayout();
+
+        if ($alias || !$layout) {
+            return parent::getChildHtml($alias, $useCache);
+        }
+
+        $childNames = $layout->getChildNames($this->getNameInLayout());
+        $outputChildNames = array_diff($childNames, ['extra_customer_info']);
+
+        $out = '';
+        foreach ($outputChildNames as $childName) {
+            $out .= $layout->renderElement($childName, $useCache);
+        }
+
+        return $out;
+    }
 }

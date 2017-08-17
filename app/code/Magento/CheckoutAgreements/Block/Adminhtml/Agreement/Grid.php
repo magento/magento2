@@ -5,6 +5,10 @@
  */
 namespace Magento\CheckoutAgreements\Block\Adminhtml\Agreement;
 
+/**
+ * Class \Magento\CheckoutAgreements\Block\Adminhtml\Agreement\Grid
+ *
+ */
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**

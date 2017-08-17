@@ -9,7 +9,7 @@ namespace Magento\Framework\App\Test\Unit\Language;
 use Magento\Framework\App\Language\Dictionary;
 use Magento\Framework\Filesystem\DriverPool;
 
-class DictionaryTest extends \PHPUnit_Framework_TestCase
+class DictionaryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\Language\Dictionary
@@ -33,20 +33,8 @@ class DictionaryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->readFactory = $this->getMock(
-            \Magento\Framework\Filesystem\Directory\ReadFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->componentRegistrar = $this->getMock(
-            \Magento\Framework\Component\ComponentRegistrar::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->readFactory = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadFactory::class);
+        $this->componentRegistrar = $this->createMock(\Magento\Framework\Component\ComponentRegistrar::class);
         $this->configFactory = $this->getMockBuilder(\Magento\Framework\App\Language\ConfigFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
@@ -83,7 +71,7 @@ class DictionaryTest extends \PHPUnit_Framework_TestCase
 
         $this->readFactory->expects($this->any())->method("create")->willReturn($readMock);
 
-        $languageConfig = $this->getMock(\Magento\Framework\App\Language\Config::class, [], [], '', false);
+        $languageConfig = $this->createMock(\Magento\Framework\App\Language\Config::class);
         $languageConfig->expects($this->any())->method('getCode')->will($this->returnValue('en_US'));
         $languageConfig->expects($this->any())->method('getVendor')->will($this->returnValue('foo'));
         $languageConfig->expects($this->any())->method('getPackage')->will($this->returnValue('en_us'));

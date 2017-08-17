@@ -50,6 +50,7 @@
             <constraint name="Magento\CatalogImportExport\Test\Constraint\AssertProductsInGrid" />
         </variation>
         <variation name="ImportProductVariation3" ticketId="MAGETWO-47720" summary="Import Simple Product with custom options with Replace Behavior">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="import/data/entity" xsi:type="string">Products</data>
             <data name="import/data/behavior" xsi:type="string">Replace</data>
             <data name="import/data/validation_strategy" xsi:type="string">Stop on Error</data>
@@ -63,6 +64,7 @@
             <constraint name="Magento\CatalogImportExport\Test\Constraint\AssertProductsOnStorefront" />
             <constraint name="Magento\CatalogImportExport\Test\Constraint\AssertImportedProducts" />
             <constraint name="Magento\CatalogImportExport\Test\Constraint\AssertProductsInGrid" />
+            <data name="issue" xsi:type="string">MAGETWO-71397: Magento\CatalogImportExport\Test\TestCase\ImportProductsTest fails randomly</data>
         </variation>
     </testCase>
 </config>

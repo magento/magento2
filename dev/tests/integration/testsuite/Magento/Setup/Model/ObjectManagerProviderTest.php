@@ -8,7 +8,7 @@ namespace Magento\Setup\Model;
 
 use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 
-class ObjectManagerProviderTest extends \PHPUnit_Framework_TestCase
+class ObjectManagerProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerProvider

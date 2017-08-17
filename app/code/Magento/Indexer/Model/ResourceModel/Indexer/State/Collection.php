@@ -5,6 +5,10 @@
  */
 namespace Magento\Indexer\Model\ResourceModel\Indexer\State;
 
+/**
+ * Class \Magento\Indexer\Model\ResourceModel\Indexer\State\Collection
+ *
+ */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**

@@ -8,7 +8,7 @@ namespace Magento\Setup\Test\Unit\Module\Di\Compiler\Config;
 
 use \Magento\Setup\Module\Di\Compiler\Config\ModificationChain;
 
-class ModificationChainTest extends \PHPUnit_Framework_TestCase
+class ModificationChainTest extends \PHPUnit\Framework\TestCase
 {
     public function testConstructor()
     {
@@ -25,7 +25,7 @@ class ModificationChainTest extends \PHPUnit_Framework_TestCase
 
     public function testConstructorException()
     {
-        $this->setExpectedException('InvalidArgumentException', 'Wrong modifier provided');
+        $this->expectException('InvalidArgumentException', 'Wrong modifier provided');
         $modificationsList = [];
         $modificationsList[] = $this->getMockBuilder(
             \Magento\Setup\Module\Di\Compiler\Config\ModificationInterface::class

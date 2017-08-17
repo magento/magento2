@@ -5,6 +5,10 @@
  */
 namespace Magento\Catalog\Model\Config\Source;
 
+/**
+ * Class \Magento\Catalog\Model\Config\Source\TimeFormat
+ *
+ */
 class TimeFormat implements \Magento\Framework\Option\ArrayInterface
 {
     /**

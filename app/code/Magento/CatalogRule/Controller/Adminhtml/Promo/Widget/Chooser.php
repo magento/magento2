@@ -6,6 +6,10 @@
  */
 namespace Magento\CatalogRule\Controller\Adminhtml\Promo\Widget;
 
+/**
+ * Class \Magento\CatalogRule\Controller\Adminhtml\Promo\Widget\Chooser
+ *
+ */
 class Chooser extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Widget
 {
     /**

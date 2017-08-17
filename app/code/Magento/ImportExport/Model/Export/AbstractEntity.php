@@ -32,11 +32,7 @@ abstract class AbstractEntity
 
     /**#@-*/
 
-    /**
-     * Store manager
-     *
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
+    /**#@-*/
     protected $_storeManager;
 
     /**

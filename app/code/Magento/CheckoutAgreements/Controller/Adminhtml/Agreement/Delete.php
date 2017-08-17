@@ -6,6 +6,10 @@
  */
 namespace Magento\CheckoutAgreements\Controller\Adminhtml\Agreement;
 
+/**
+ * Class \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement\Delete
+ *
+ */
 class Delete extends \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement
 {
     /**

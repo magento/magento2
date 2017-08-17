@@ -10,6 +10,9 @@
 
 namespace Magento\Config\Model\Config\Backend;
 
+/**
+ * @api
+ */
 class Encrypted extends \Magento\Framework\App\Config\Value implements
     \Magento\Framework\App\Config\Data\ProcessorInterface
 {

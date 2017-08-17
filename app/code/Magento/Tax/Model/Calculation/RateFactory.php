@@ -11,6 +11,10 @@
  */
 namespace Magento\Tax\Model\Calculation;
 
+/**
+ * Class \Magento\Tax\Model\Calculation\RateFactory
+ *
+ */
 class RateFactory
 {
     /**

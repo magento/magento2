@@ -134,7 +134,7 @@ class Config
      *
      * @return \Magento\Framework\App\State
      *
-     * @deprecated
+     * @deprecated 100.0.7
      */
     private function getAreaResolver()
     {

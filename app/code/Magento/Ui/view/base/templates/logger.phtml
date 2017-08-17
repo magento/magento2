@@ -9,7 +9,7 @@
 <?php if ($block->isLoggingEnabled()): ?>
     <script>
         window.onerror = function(msg, url, line) {
-            var key = "<?php /* @escapeNotVerified */ echo $block->getSessionStorageKey(); ?>";
+            var key = "<?= /* @escapeNotVerified */ $block->getSessionStorageKey() ?>";
             var errors = {};
             if (sessionStorage.getItem(key)) {
                 errors = JSON.parse(sessionStorage.getItem(key));

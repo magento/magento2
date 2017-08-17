@@ -7,6 +7,10 @@ namespace Magento\Indexer\Model\Processor;
 
 use \Magento\Framework\App\CacheInterface;
 
+/**
+ * Class \Magento\Indexer\Model\Processor\CleanCache
+ *
+ */
 class CleanCache
 {
     /**
@@ -70,7 +74,7 @@ class CleanCache
      * Get cache interface
      *
      * @return \Magento\Framework\App\CacheInterface
-     * @deprecated
+     * @deprecated 100.1.1
      */
     private function getCache()
     {

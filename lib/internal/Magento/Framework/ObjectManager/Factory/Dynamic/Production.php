@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\ObjectManager\Factory\Dynamic;
 
+/**
+ * Class \Magento\Framework\ObjectManager\Factory\Dynamic\Production
+ *
+ */
 class Production extends \Magento\Framework\ObjectManager\Factory\AbstractFactory
 {
     /**

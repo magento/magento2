@@ -5,6 +5,9 @@
  */
 namespace Magento\Config\Model\Config\Structure\Element;
 
+/**
+ * @api
+ */
 abstract class AbstractComposite extends \Magento\Config\Model\Config\Structure\AbstractElement
 {
     /**

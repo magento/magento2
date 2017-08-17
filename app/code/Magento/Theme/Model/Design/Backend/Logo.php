@@ -5,6 +5,10 @@
  */
 namespace Magento\Theme\Model\Design\Backend;
 
+/**
+ * Class \Magento\Theme\Model\Design\Backend\Logo
+ *
+ */
 class Logo extends Image
 {
     /**
@@ -41,6 +45,6 @@ class Logo extends Image
      */
     public function getAllowedExtensions()
     {
-        return ['jpg', 'jpeg', 'gif', 'png', 'svg'];
+        return ['jpg', 'jpeg', 'gif', 'png'];
     }
 }

@@ -8,7 +8,7 @@ namespace Magento\CustomerImportExport\Model\Import;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
-class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
+class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
 {
     /**#@+
      * Attributes used in test assertions

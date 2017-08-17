@@ -6,6 +6,10 @@
  */
 namespace Magento\Framework\Search\Request\Aggregation;
 
+/**
+ * Class \Magento\Framework\Search\Request\Aggregation\Status
+ *
+ */
 class Status implements StatusInterface
 {
     /**

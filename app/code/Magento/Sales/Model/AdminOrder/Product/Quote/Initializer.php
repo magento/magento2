@@ -12,6 +12,10 @@
  */
 namespace Magento\Sales\Model\AdminOrder\Product\Quote;
 
+/**
+ * Class \Magento\Sales\Model\AdminOrder\Product\Quote\Initializer
+ *
+ */
 class Initializer
 {
     /**

@@ -5,6 +5,10 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Button;
 
+/**
+ * Class \Magento\Catalog\Block\Adminhtml\Product\Attribute\Button\SaveInNewAttributeSet
+ *
+ */
 class SaveInNewAttributeSet extends Generic
 {
     /**

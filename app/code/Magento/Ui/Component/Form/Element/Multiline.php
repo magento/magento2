@@ -11,7 +11,7 @@ use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
 /**
- * Class Multiline
+ * @api
  */
 class Multiline extends AbstractElement
 {

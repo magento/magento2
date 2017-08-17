@@ -6,6 +6,10 @@
 
 namespace Magento\ConfigurableProduct\Ui\DataProvider;
 
+/**
+ * Class \Magento\ConfigurableProduct\Ui\DataProvider\Attributes
+ *
+ */
 class Attributes extends \Magento\Ui\DataProvider\AbstractDataProvider
 {
     /**

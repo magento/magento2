@@ -7,6 +7,10 @@ namespace Magento\CatalogInventory\Model\Indexer;
 
 use Magento\Framework\Indexer\CacheContext;
 
+/**
+ * Class \Magento\CatalogInventory\Model\Indexer\Stock
+ *
+ */
 class Stock implements \Magento\Framework\Indexer\ActionInterface, \Magento\Framework\Mview\ActionInterface
 {
     /**
@@ -101,7 +105,7 @@ class Stock implements \Magento\Framework\Indexer\ActionInterface, \Magento\Fram
      * Get cache context
      *
      * @return \Magento\Framework\Indexer\CacheContext
-     * @deprecated
+     * @deprecated 100.0.7
      */
     protected function getCacheContext()
     {

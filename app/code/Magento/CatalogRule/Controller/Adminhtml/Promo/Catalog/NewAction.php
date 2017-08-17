@@ -6,6 +6,10 @@
  */
 namespace Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog;
 
+/**
+ * Class \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog\NewAction
+ *
+ */
 class NewAction extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
 {
     /**
