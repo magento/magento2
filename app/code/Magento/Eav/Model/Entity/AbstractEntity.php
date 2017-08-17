@@ -14,6 +14,7 @@ use Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend;
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 use Magento\Framework\App\Config\Element;
 use Magento\Framework\App\ResourceConnection\Config;
+use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
@@ -203,6 +204,13 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * @var ObjectRelationProcessor
      */
     protected $objectRelationProcessor;
+
+    /**
+     * Attributes stored by scope (store id and attribute set id).
+     *
+     * @var array
+     */
+    private $attributesByScope;
 
     /**
      * @param Context $context
@@ -451,14 +459,19 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Adding attribute to entity
      *
      * @param AbstractAttribute $attribute
+     * @param string|null $suffix
      * @return $this
      */
-    public function addAttribute(AbstractAttribute $attribute)
+    public function addAttribute(AbstractAttribute $attribute, $suffix = null)
     {
         $attribute->setEntity($this);
         $attributeCode = $attribute->getAttributeCode();
 
         $this->_attributesByCode[$attributeCode] = $attribute;
+
+        if ($suffix !== null) {
+            $this->attributesByScope[$suffix][$attributeCode] = $attribute;
+        }
 
         if ($attribute->isStatic()) {
             $this->_staticAttributes[$attributeCode] = $attribute;
@@ -573,6 +586,31 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     }
 
     /**
+     * Get attributes by scope
+     *
+     * @return array
+     */
+    private function getAttributesByScope($suffix)
+    {
+        return (isset($this->attributesByScope[$suffix]) && !empty($this->attributesByScope[$suffix]))
+            ? $this->attributesByScope[$suffix]
+            : $this->getAttributesByCode();
+    }
+
+    /**
+     * Get attributes cache suffix.
+     *
+     * @param DataObject $object
+     * @return string
+     */
+    private function getAttributesCacheSuffix(DataObject $object)
+    {
+        $attributeSetId = $object->getAttributeSetId() ?: 0;
+        $storeId = $object->getStoreId() ?: 0;
+        return $storeId . '-' . $attributeSetId;
+    }
+
+    /**
      * Walk through the attributes and run method with optional arguments
      *
      * Returns array with results for each attribute
@@ -607,7 +645,8 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
                 break;
         }
         $results = [];
-        foreach ($this->getAttributesByCode() as $attrCode => $attribute) {
+        $suffix = $this->getAttributesCacheSuffix($args[0]);
+        foreach ($this->getAttributesByScope($suffix) as $attrCode => $attribute) {
             if (isset($args[0]) && is_object($args[0]) && !$this->_isApplicableAttribute($args[0], $attribute)) {
                 continue;
             }

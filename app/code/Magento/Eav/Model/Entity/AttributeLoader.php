@@ -70,7 +70,7 @@ class AttributeLoader implements AttributeLoaderInterface
         $attributes = $this->cache->getAttributes($typeCode, $suffix);
         if ($attributes) {
             foreach ($attributes as $attribute) {
-                $resource->addAttribute($attribute);
+                $resource->addAttribute($attribute, $suffix);
             }
             return $resource;
         }
