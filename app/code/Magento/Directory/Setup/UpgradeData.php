@@ -13,7 +13,6 @@ use Magento\Directory\Helper\Data;
 
 /**
  * Upgrade Data script for Directory module.
- * @codeCoverageIgnore
  */
 class UpgradeData implements UpgradeDataInterface
 {
