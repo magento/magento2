@@ -6,31 +6,18 @@
 
 namespace Magento\SalesRule\Setup;
 
-use Magento\Backend\App\Area\FrontNameResolver;
-use Magento\Framework\App\State;
-use Magento\Framework\DB\AggregatedFieldDataConverter;
-use Magento\Framework\DB\DataConverter\SerializedToJson;
-use Magento\Framework\DB\FieldToConvert;
-use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Framework\Setup\ModuleContextInterface;
-use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Framework\Setup\UpgradeDataInterface;
-use Magento\SalesRule\Api\Data\RuleInterface;
-use Magento\SalesRule\Model\Rule as ModelRule;
-
 /**
  * Class \Magento\SalesRule\Setup\UpgradeData
  */
-class UpgradeData implements UpgradeDataInterface
+class UpgradeData implements \Magento\Framework\Setup\UpgradeDataInterface
 {
     /**
-     * @var MetadataPool
+     * @var \Magento\Framework\EntityManager\MetadataPool
      */
     private $metadataPool;
 
     /**
-     * @var AggregatedFieldDataConverter
+     * @var \Magento\Framework\DB\AggregatedFieldDataConverter
      */
     private $aggregatedFieldConverter;
 
@@ -44,14 +31,14 @@ class UpgradeData implements UpgradeDataInterface
     /**
      * App state.
      *
-     * @var State
+     * @var \Magento\Framework\App\State
      */
     private $state;
 
     /**
      * Serializer.
      *
-     * @var Json
+     * @var \Magento\Framework\Serialize\Serializer\Json
      */
     private $serializer;
 
@@ -63,19 +50,19 @@ class UpgradeData implements UpgradeDataInterface
     private $ruleColletionFactory;
 
     /**
-     * @param AggregatedFieldDataConverter $aggregatedFieldConverter
-     * @param MetadataPool $metadataPool
+     * @param \Magento\Framework\DB\AggregatedFieldDataConverter $aggregatedFieldConverter
+     * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param \Magento\SalesRule\Model\ResourceModel\Rule $resourceModelRule
-     * @param Json $serializer
-     * @param State $state
+     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
+     * @param \Magento\Framework\App\State $state
      * @param \Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory $ruleColletionFactory
      */
     public function __construct(
-        AggregatedFieldDataConverter $aggregatedFieldConverter,
-        MetadataPool $metadataPool,
+        \Magento\Framework\DB\AggregatedFieldDataConverter $aggregatedFieldConverter,
+        \Magento\Framework\EntityManager\MetadataPool $metadataPool,
         \Magento\SalesRule\Model\ResourceModel\Rule $resourceModelRule,
-        Json $serializer,
-        State $state,
+        \Magento\Framework\Serialize\Serializer\Json $serializer,
+        \Magento\Framework\App\State $state,
         \Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory $ruleColletionFactory
     ) {
         $this->aggregatedFieldConverter = $aggregatedFieldConverter;
@@ -89,15 +76,17 @@ class UpgradeData implements UpgradeDataInterface
     /**
      * @inheritdoc
      */
-    public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
-    {
+    public function upgrade(
+        \Magento\Framework\Setup\ModuleDataSetupInterface $setup,
+        \Magento\Framework\Setup\ModuleContextInterface $context
+    ) {
         $setup->startSetup();
         if (version_compare($context->getVersion(), '2.0.2', '<')) {
             $this->convertSerializedDataToJson($setup);
         }
         if (version_compare($context->getVersion(), '2.0.3', '<')) {
             $this->state->emulateAreaCode(
-                FrontNameResolver::AREA_CODE,
+                \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE,
                 [$this, 'fillSalesRuleProductAttributeTable'],
                 [$setup]
             );
@@ -109,23 +98,22 @@ class UpgradeData implements UpgradeDataInterface
     /**
      * Convert metadata from serialized to JSON format:
      *
-     * @param ModuleDataSetupInterface $setup
-     *
+     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $setup     *
      * @return void
      */
     public function convertSerializedDataToJson($setup)
     {
-        $metadata = $this->metadataPool->getMetadata(RuleInterface::class);
+        $metadata = $this->metadataPool->getMetadata(\Magento\SalesRule\Api\Data\RuleInterface::class);
         $this->aggregatedFieldConverter->convert(
             [
-                new FieldToConvert(
-                    SerializedToJson::class,
+                new \Magento\Framework\DB\FieldToConvert(
+                    \Magento\Framework\DB\DataConverter\SerializedToJson::class,
                     $setup->getTable('salesrule'),
                     $metadata->getLinkField(),
                     'conditions_serialized'
                 ),
-                new FieldToConvert(
-                    SerializedToJson::class,
+                new \Magento\Framework\DB\FieldToConvert(
+                    \Magento\Framework\DB\DataConverter\SerializedToJson::class,
                     $setup->getTable('salesrule'),
                     $metadata->getLinkField(),
                     'actions_serialized'
@@ -142,9 +130,9 @@ class UpgradeData implements UpgradeDataInterface
      */
     public function fillSalesRuleProductAttributeTable()
     {
-        /** @var ResourceModelRule\Collection $ruleCollection */
+        /** @var \Magento\SalesRule\Model\ResourceModel\Rule\Collection $ruleCollection */
         $ruleCollection = $this->ruleColletionFactory->create();
-        /** @var ModelRule $rule */
+        /** @var \Magento\SalesRule\Model\Rule $rule */
         foreach ($ruleCollection as $rule) {
             // Save product attributes used in rule
             $conditions = $rule->getConditions()->asArray();
