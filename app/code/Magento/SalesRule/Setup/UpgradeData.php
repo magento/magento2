@@ -3,17 +3,27 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\SalesRule\Setup;
 
+use Magento\Backend\App\Area\FrontNameResolver;
+use Magento\Framework\App\State;
 use Magento\Framework\DB\AggregatedFieldDataConverter;
 use Magento\Framework\DB\DataConverter\SerializedToJson;
 use Magento\Framework\DB\FieldToConvert;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\SalesRule\Api\Data\RuleInterface;
+use Magento\SalesRule\Model\ResourceModel\Rule as ResourceModelRule;
+use Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory as RuleCollectionFactory;
+use Magento\SalesRule\Model\Rule as ModelRule;
 
+/**
+ * Class \Magento\SalesRule\Setup\UpgradeData
+ */
 class UpgradeData implements UpgradeDataInterface
 {
     /**
@@ -27,17 +37,55 @@ class UpgradeData implements UpgradeDataInterface
     private $aggregatedFieldConverter;
 
     /**
-     * UpgradeData constructor.
+     * Resource Model of sales rule.
      *
+     * @var ResourceModelRule;
+     */
+    private $resourceModelRule;
+
+    /**
+     * App state.
+     *
+     * @var State
+     */
+    private $state;
+
+    /**
+     * Serializer.
+     *
+     * @var Json
+     */
+    private $serializer;
+
+    /**
+     * Rule Collection Factory.
+     *
+     * @var RuleColletionFactory
+     */
+    private $ruleColletionFactory;
+
+    /**
      * @param AggregatedFieldDataConverter $aggregatedFieldConverter
      * @param MetadataPool $metadataPool
+     * @param ResourceModelRule $resourceModelRule
+     * @param Json $serializer
+     * @param State $state
+     * @param RuleCollectionFactory $ruleColletionFactory
      */
     public function __construct(
         AggregatedFieldDataConverter $aggregatedFieldConverter,
-        MetadataPool $metadataPool
+        MetadataPool $metadataPool,
+        ResourceModelRule $resourceModelRule,
+        Json $serializer,
+        State $state,
+        RuleCollectionFactory $ruleColletionFactory
     ) {
         $this->aggregatedFieldConverter = $aggregatedFieldConverter;
         $this->metadataPool = $metadataPool;
+        $this->resourceModelRule = $resourceModelRule;
+        $this->serializer = $serializer;
+        $this->state = $state;
+        $this->ruleColletionFactory = $ruleColletionFactory;
     }
 
     /**
@@ -46,11 +94,17 @@ class UpgradeData implements UpgradeDataInterface
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
         $setup->startSetup();
-
         if (version_compare($context->getVersion(), '2.0.2', '<')) {
             $this->convertSerializedDataToJson($setup);
         }
-
+        if (version_compare($context->getVersion(), '2.0.3', '<')) {
+            $this->state->emulateAreaCode(
+                FrontNameResolver::AREA_CODE,
+                [$this, 'fillSalesRuleProductAttributeTable'],
+                [$setup]
+            );
+            $this->fillSalesRuleProductAttributeTable();
+        }
         $setup->endSetup();
     }
 
@@ -81,5 +135,41 @@ class UpgradeData implements UpgradeDataInterface
             ],
             $setup->getConnection()
         );
+    }
+
+    /**
+     * Fills blank table salesrule_product_attribute with data.
+     *
+     * @return void
+     */
+    public function fillSalesRuleProductAttributeTable()
+    {
+        $ruleCollection = $this->getRuleColletion();
+        /** @var ModelRule $rule */
+        foreach ($ruleCollection as $rule) {
+            // Save product attributes used in rule
+            $ruleProductAttributes = array_merge(
+                $this->resourceModelRule->getProductAttributes(
+                    $this->serializer->serialize($rule->getConditions()->asArray())
+                ),
+                $this->resourceModelRule->getProductAttributes(
+                    $this->serializer->serialize($rule->getActions()->asArray())
+                )
+            );
+            if (count($ruleProductAttributes)) {
+                $this->resourceModelRule->setActualProductAttributes($rule, $ruleProductAttributes);
+            }
+        }
+    }
+
+    /**
+     * Get sales rule collection.
+     *
+     * @deprecated
+     * @return ResourceModelRule\Collection
+     */
+    private function getRuleColletion()
+    {
+        return $this->ruleColletionFactory->create();
     }
 }
