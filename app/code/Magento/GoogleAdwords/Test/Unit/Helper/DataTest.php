@@ -171,7 +171,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ['getConversionColor', \Magento\GoogleAdwords\Helper\Data::XML_PATH_CONVERSION_COLOR, 'ffffff'],
             ['getConversionLabel', \Magento\GoogleAdwords\Helper\Data::XML_PATH_CONVERSION_LABEL, 'Label'],
             ['getConversionValueType', \Magento\GoogleAdwords\Helper\Data::XML_PATH_CONVERSION_VALUE_TYPE, '1'],
-            ['getConversionValueConstant', \Magento\GoogleAdwords\Helper\Data::XML_PATH_CONVERSION_VALUE, '0']
+            ['getConversionValueConstant', \Magento\GoogleAdwords\Helper\Data::XML_PATH_CONVERSION_VALUE, '0'],
+            ['hasSendCurrency', \Magento\GoogleAdwords\Helper\Data::XML_PATH_SEND_CURRENCY, '1']
         ];
     }
 

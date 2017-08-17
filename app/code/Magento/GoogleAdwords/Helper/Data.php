@@ -277,7 +277,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @return boolean
      */
-    public function getSendCurrency() {
+    public function hasSendCurrency()
+    {
         return $this->scopeConfig->isSetFlag(
             self::XML_PATH_SEND_CURRENCY,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
@@ -291,9 +292,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getConversionValueCurrency()
     {
-        if ($this->getSendCurrency()) {
+        if ($this->hasSendCurrency()) {
             return (string) $this->_registry->registry(self::CONVERSION_VALUE_CURRENCY_REGISTRY_NAME);
-        } 
+        }
         return false;
     }
 }
