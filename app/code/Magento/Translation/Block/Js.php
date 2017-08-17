@@ -68,4 +68,14 @@ class Js extends Template
     {
         return $this->fileManager->getTranslationFilePath();
     }
+
+    /**
+     * Gets current version of the translation file.
+     *
+     * @return string
+     */
+    public function getTranslationFileVersion()
+    {
+        return $this->fileManager->getTranslationFileVersion();
+    }
 }
