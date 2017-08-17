@@ -115,10 +115,11 @@ class Bundle extends Block
      * Get product options
      *
      * @param FixtureInterface $product
+     * @param bool $showSelected
      * @return array
      * @throws \Exception
      */
-    public function getOptions(FixtureInterface $product)
+    public function getOptions(FixtureInterface $product, bool $showSelected = false)
     {
         /** @var BundleProduct  $product */
         $this->product = $product;
@@ -139,7 +140,9 @@ class Bundle extends Block
             $optionElement = $listFormOptions[$title];
             $getTypeData = 'get' . $this->optionNameConvert($option['frontend_type']) . 'Data';
 
-            $optionData = $this->$getTypeData($optionElement);
+            $optionData = $showSelected
+                ? $this->$getTypeData($optionElement, $showSelected)
+                : $this->$getTypeData($optionElement);
             $optionData['title'] = $title;
             $optionData['type'] = $option['frontend_type'];
             $optionData['is_require'] = $optionElement->find($this->required, Locator::SELECTOR_XPATH)->isVisible()
@@ -203,12 +206,13 @@ class Bundle extends Block
      * Get data of "Multiple select" option
      *
      * @param SimpleElement $option
+     * @param bool $showSelected
      * @return array
      */
-    protected function getMultipleselectData(SimpleElement $option)
+    protected function getMultipleselectData(SimpleElement $option, bool $showSelected = false)
     {
         $multiselect = $option->find($this->selectOption, Locator::SELECTOR_XPATH, 'multiselect');
-        $data = $this->getSelectOptionsData($multiselect, 1);
+        $data = $this->getSelectOptionsData($multiselect, 1, $showSelected);
 
         foreach ($data['options'] as $key => $option) {
             $option['title'] = trim(preg_replace('/^[\d]+ x/', '', $option['title']));
@@ -261,16 +265,24 @@ class Bundle extends Block
      *
      * @param SimpleElement $element
      * @param int $firstOption
+     * @param bool $showSelected
      * @return array
      */
-    protected function getSelectOptionsData(SimpleElement $element, $firstOption = 1)
+    protected function getSelectOptionsData(SimpleElement $element, $firstOption = 1, bool $showSelected = false)
     {
         $listOptions = [];
 
         $count = $firstOption;
         $selectOption = $element->find(sprintf($this->option, $count), Locator::SELECTOR_XPATH);
         while ($selectOption->isVisible()) {
-            $listOptions[] = $this->parseOptionText($selectOption->getText());
+            if ($showSelected) {
+                $listOptions[] = $this->parseOptionText(
+                    $selectOption->getText(),
+                    $selectOption->getAttribute('selected')
+                );
+            } else {
+                $listOptions[] = $this->parseOptionText($selectOption->getText());
+            }
             ++$count;
             $selectOption = $element->find(sprintf($this->option, $count), Locator::SELECTOR_XPATH);
         }
@@ -279,21 +291,26 @@ class Bundle extends Block
     }
 
     /**
-     * Parse option text to title and price
+     * Parse option text to title, price and optionally add selected attribute value.
      *
      * @param string $optionText
+     * @param string|null $selected
      * @return array
      */
-    protected function parseOptionText($optionText)
+    protected function parseOptionText($optionText, $selected = null)
     {
         preg_match('`^(.*?)\+ ?\$(\d.*?)$`sim', $optionText, $match);
         $optionPrice = isset($match[2]) ? str_replace(',', '', $match[2]) : 0;
         $optionTitle = isset($match[1]) ? trim($match[1]) : $optionText;
-
-        return [
+        $option = [
             'title' => $optionTitle,
             'price' => $optionPrice
         ];
+        if ($selected) {
+            $option['selected'] = true;
+        }
+
+        return $option;
     }
 
     /**

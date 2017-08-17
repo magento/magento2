@@ -12,7 +12,7 @@
 $product = $block->getProduct();
 $helper = $this->helper('Magento\Catalog\Helper\Output');
 ?>
-<?php $options = $block->decorateArray($block->getOptions()); ?>
+<?php $options = $block->decorateArray($block->getOptions($product->getConfigureMode())); ?>
 <?php if ($product->isSaleable()):?>
     <?php if (count($options)): ?>
 <script type="text/x-magento-init">
