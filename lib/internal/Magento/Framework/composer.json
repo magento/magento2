@@ -36,7 +36,8 @@
         "zendframework/zend-mvc": "~2.6.3",
         "zendframework/zend-stdlib": "^2.7.7",
         "zendframework/zend-uri": "^2.5.1",
-        "zendframework/zend-validator": "^2.6.0"
+        "zendframework/zend-validator": "^2.6.0",
+        "darsyn/ip": "^3.3"
     },
     "suggest": {
         "ext-imagick": "Use Image Magick >=3.0.0 as an optional alternative image processing library"
