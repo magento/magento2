@@ -5,6 +5,10 @@
  */
 namespace Magento\Catalog\Model\Product\CopyConstructor;
 
+/**
+ * Class \Magento\Catalog\Model\Product\CopyConstructor\Related
+ *
+ */
 class Related implements \Magento\Catalog\Model\Product\CopyConstructorInterface
 {
     /**

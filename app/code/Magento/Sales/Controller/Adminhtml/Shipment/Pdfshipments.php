@@ -6,6 +6,10 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Shipment;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Shipment\Pdfshipments
+ *
+ */
 class Pdfshipments extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShipment\Pdfshipments
 {
 }

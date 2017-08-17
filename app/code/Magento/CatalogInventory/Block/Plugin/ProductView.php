@@ -7,6 +7,10 @@ namespace Magento\CatalogInventory\Block\Plugin;
 
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 
+/**
+ * Class \Magento\CatalogInventory\Block\Plugin\ProductView
+ *
+ */
 class ProductView
 {
     /**

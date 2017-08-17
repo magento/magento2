@@ -9,6 +9,10 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Sales\Model\Order\Payment;
 
+/**
+ * Class \Magento\Payment\Gateway\Data\PaymentDataObjectFactory
+ *
+ */
 class PaymentDataObjectFactory implements PaymentDataObjectFactoryInterface
 {
     /**

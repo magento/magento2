@@ -6,6 +6,10 @@
 
 namespace Magento\Framework\Session\Config\Validator;
 
+/**
+ * Class \Magento\Framework\Session\Config\Validator\CookieLifetimeValidator
+ *
+ */
 class CookieLifetimeValidator extends \Magento\Framework\Validator\AbstractValidator
 {
     /**

@@ -72,6 +72,7 @@ class Fieldset extends \Magento\Backend\Block\AbstractBlock implements
     /**
      * @param AbstractElement $element
      * @return string
+     * @since 100.1.0
      */
     protected function _getChildrenElementsHtml(AbstractElement $element)
     {

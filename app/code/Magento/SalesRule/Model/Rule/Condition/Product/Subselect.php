@@ -5,6 +5,10 @@
  */
 namespace Magento\SalesRule\Model\Rule\Condition\Product;
 
+/**
+ * Class \Magento\SalesRule\Model\Rule\Condition\Product\Subselect
+ *
+ */
 class Subselect extends \Magento\SalesRule\Model\Rule\Condition\Product\Combine
 {
     /**

@@ -10,6 +10,10 @@ use Magento\Backend\App\Action\Context;
 use Magento\Framework\Registry;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Search\Controller\Adminhtml\Term\Edit
+ *
+ */
 class Edit extends TermController
 {
     /**

@@ -94,8 +94,8 @@ class Term extends Template
                     continue;
                 }
                 $term->setRatio(($term->getPopularity() - $this->_minPopularity) / $range);
-                $temp[$term->getName()] = $term;
-                $termKeys[] = $term->getName();
+                $temp[$term->getQueryText()] = $term;
+                $termKeys[] = $term->getQueryText();
             }
             natcasesort($termKeys);
 
@@ -127,7 +127,7 @@ class Term extends Template
          * url encoding will be done in Url.php http_build_query
          * so no need to explicitly called urlencode for the text
          */
-        $url->setQueryParam('q', $obj->getName());
+        $url->setQueryParam('q', $obj->getQueryText());
         return $url->getUrl('catalogsearch/result');
     }
 

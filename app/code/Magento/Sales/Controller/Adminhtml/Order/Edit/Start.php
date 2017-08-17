@@ -5,6 +5,10 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Edit;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Order\Edit\Start
+ *
+ */
 class Start extends \Magento\Sales\Controller\Adminhtml\Order\Create\Start
 {
     /**

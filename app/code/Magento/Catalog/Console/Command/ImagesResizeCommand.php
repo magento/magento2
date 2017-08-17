@@ -5,6 +5,10 @@
  */
 namespace Magento\Catalog\Console\Command;
 
+/**
+ * Class \Magento\Catalog\Console\Command\ImagesResizeCommand
+ *
+ */
 class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
 {
     /**

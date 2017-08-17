@@ -6,6 +6,10 @@
  */
 namespace Magento\Sales\Controller\Guest;
 
+/**
+ * Class \Magento\Sales\Controller\Guest\Form
+ *
+ */
 class Form extends \Magento\Framework\App\Action\Action
 {
     /**

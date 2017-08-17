@@ -1,13 +1,11 @@
 <?php
 /**
- * Test Webapi Json Deserializer Request Rest Controller.
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Webapi\Test\Unit\Rest\Request\Deserializer;
 
-class JsonTest extends \PHPUnit_Framework_TestCase
+class JsonTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $_helperFactoryMock;
@@ -31,12 +29,8 @@ class JsonTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['decode'])
             ->getMock();
-        $this->_appStateMock = $this->getMock(
-            \Magento\Framework\App\State::class,
-            [],
-            [],
-            '',
-            false
+        $this->_appStateMock = $this->createMock(
+            \Magento\Framework\App\State::class
         );
         $this->serializerMock = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
             ->getMock();
@@ -59,7 +53,7 @@ class JsonTest extends \PHPUnit_Framework_TestCase
 
     public function testDeserializerInvalidArgumentException()
     {
-        $this->setExpectedException('InvalidArgumentException', '"boolean" data type is invalid. String is expected.');
+        $this->expectException('InvalidArgumentException', '"boolean" data type is invalid. String is expected.');
         $this->_jsonDeserializer->deserialize(false);
     }
 

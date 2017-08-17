@@ -10,7 +10,7 @@ use Magento\CustomerImportExport\Model\Export\Customer;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CustomerTest extends \PHPUnit_Framework_TestCase
+class CustomerTest extends \PHPUnit\Framework\TestCase
 {
     /**#@+
      * Test attribute code
@@ -56,7 +56,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $storeManager = $this->getMock(\Magento\Store\Model\StoreManager::class, [], [], '', false);
+        $storeManager = $this->createMock(\Magento\Store\Model\StoreManager::class);
 
         $storeManager->expects(
             $this->any()
@@ -75,19 +75,13 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_model = new \Magento\CustomerImportExport\Model\Export\Customer(
-            $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class),
+            $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class),
             $storeManager,
-            $this->getMock(\Magento\ImportExport\Model\Export\Factory::class, [], [], '', false),
-            $this->getMock(
-                \Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory::class,
-                [],
-                [],
-                '',
-                false
-            ),
-            $this->getMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class, [], [], '', false),
-            $this->getMock(\Magento\Eav\Model\Config::class, [], [], '', false),
-            $this->getMock(\Magento\Customer\Model\ResourceModel\Customer\CollectionFactory::class, [], [], '', false),
+            $this->createMock(\Magento\ImportExport\Model\Export\Factory::class),
+            $this->createMock(\Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory::class),
+            $this->createMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class),
+            $this->createMock(\Magento\Eav\Model\Config::class),
+            $this->createMock(\Magento\Customer\Model\ResourceModel\Customer\CollectionFactory::class),
             $this->_getModelDependencies()
         );
     }
@@ -104,16 +98,16 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getModelDependencies()
     {
-        $translator = $this->getMock(\stdClass::class);
+        $translator = $this->createMock(\stdClass::class);
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $attributeCollection = new \Magento\Framework\Data\Collection(
-            $this->getMock(\Magento\Framework\Data\Collection\EntityFactory::class, [], [], '', false)
+            $this->createMock(\Magento\Framework\Data\Collection\EntityFactory::class)
         );
         foreach ($this->_attributes as $attributeData) {
             $arguments = $objectManagerHelper->getConstructArguments(
                 \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
-                ['eavTypeFactory' => $this->getMock(\Magento\Eav\Model\Entity\TypeFactory::class, [], [], '', false)]
+                ['eavTypeFactory' => $this->createMock(\Magento\Eav\Model\Entity\TypeFactory::class)]
             );
             $arguments['data'] = $attributeData;
             $attribute = $this->getMockForAbstractClass(

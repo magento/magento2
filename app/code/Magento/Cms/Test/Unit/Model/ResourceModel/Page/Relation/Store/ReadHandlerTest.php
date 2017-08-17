@@ -9,7 +9,7 @@ use Magento\Cms\Model\ResourceModel\Page;
 use Magento\Cms\Model\ResourceModel\Page\Relation\Store\ReadHandler;
 use Magento\Framework\EntityManager\MetadataPool;
 
-class ReadHandlerTest extends \PHPUnit_Framework_TestCase
+class ReadHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ReadHandler

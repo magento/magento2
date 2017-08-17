@@ -8,6 +8,10 @@ namespace Magento\Bundle\Model;
 
 use Magento\Framework\Exception\InputException;
 
+/**
+ * Class \Magento\Bundle\Model\OptionManagement
+ *
+ */
 class OptionManagement implements \Magento\Bundle\Api\ProductOptionManagementInterface
 {
     /**

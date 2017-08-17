@@ -8,6 +8,10 @@ namespace Magento\Paypal\Model;
 
 use Magento\Framework\Exception\RemoteServiceUnavailableException;
 
+/**
+ * Class \Magento\Paypal\Model\AbstractIpn
+ *
+ */
 class AbstractIpn
 {
     /**

@@ -15,7 +15,9 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
      */
     const DEFAULT_COLUMNS_MAX_ORDER = 100;
 
-    /** @var \Magento\Catalog\Ui\Component\Listing\Attribute\RepositoryInterface */
+    /**
+     * @var \Magento\Catalog\Ui\Component\Listing\Attribute\RepositoryInterface
+     */
     protected $attributeRepository;
 
     /**

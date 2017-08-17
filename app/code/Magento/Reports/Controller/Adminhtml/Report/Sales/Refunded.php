@@ -8,6 +8,10 @@ namespace Magento\Reports\Controller\Adminhtml\Report\Sales;
 
 use Magento\Reports\Model\Flag;
 
+/**
+ * Class \Magento\Reports\Controller\Adminhtml\Report\Sales\Refunded
+ *
+ */
 class Refunded extends \Magento\Reports\Controller\Adminhtml\Report\Sales
 {
     /**

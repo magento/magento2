@@ -8,7 +8,7 @@ namespace Magento\Persistent\Test\Unit\Observer;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PreventExpressCheckoutObserverTest extends \PHPUnit_Framework_TestCase
+class PreventExpressCheckoutObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Persistent\Observer\PreventExpressCheckoutObserver

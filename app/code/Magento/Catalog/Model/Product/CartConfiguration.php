@@ -9,6 +9,10 @@
  */
 namespace Magento\Catalog\Model\Product;
 
+/**
+ * Class \Magento\Catalog\Model\Product\CartConfiguration
+ *
+ */
 class CartConfiguration
 {
     /**

@@ -35,6 +35,7 @@ class Sidebar extends \Magento\Wishlist\Block\AbstractBlock
      * @param string $renderZone
      * @param array $arguments
      * @return string
+     * @since 100.1.0
      */
     public function getProductPriceHtml(
         Product $product,

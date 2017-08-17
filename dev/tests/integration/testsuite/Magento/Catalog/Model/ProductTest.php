@@ -18,7 +18,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  * @magentoAppIsolation enabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ProductTest extends \PHPUnit_Framework_TestCase
+class ProductTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface

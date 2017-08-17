@@ -17,19 +17,29 @@ use Magento\Tax\Model\Rate\Provider as RateProvider;
  */
 class Source implements \Magento\Framework\Data\OptionSourceInterface
 {
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $options;
 
-    /** @var TaxRateRepositoryInterface */
+    /**
+     * @var \Magento\Tax\Api\TaxRateRepositoryInterface
+     */
     protected $taxRateRepository;
 
-    /** @var SearchCriteriaBuilder */
+    /**
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder
+     */
     protected $searchCriteriaBuilder;
 
-    /** @var Converter */
+    /**
+     * @var \Magento\Framework\Convert\DataObject
+     */
     protected $converter;
 
-    /** @var RateProvider */
+    /**
+     * @var \Magento\Tax\Model\Rate\Provider
+     */
     protected $rateProvider;
 
     /**

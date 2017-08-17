@@ -5,6 +5,10 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Order\Hold
+ *
+ */
 class Hold extends \Magento\Sales\Controller\Adminhtml\Order
 {
     /**

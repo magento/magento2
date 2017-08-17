@@ -10,6 +10,10 @@ use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\Search\Request\Builder;
 
+/**
+ * Class \Magento\Framework\Search\Search
+ *
+ */
 class Search implements SearchInterface
 {
     /**

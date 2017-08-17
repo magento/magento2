@@ -8,6 +8,10 @@
  */
 namespace Magento\Framework\App\Config;
 
+/**
+ * Class \Magento\Framework\App\Config\Base
+ *
+ */
 class Base extends \Magento\Framework\Simplexml\Config
 {
     /**

@@ -38,7 +38,7 @@ class TemporaryStorage
      *
      * @param \Magento\Framework\Api\Search\DocumentInterface[] $documents
      * @return Table
-     * @deprecated
+     * @deprecated 100.1.0
      */
     public function storeDocuments($documents)
     {
@@ -50,6 +50,7 @@ class TemporaryStorage
      *
      * @param \Magento\Framework\Api\Search\DocumentInterface[] $documents
      * @return Table
+     * @since 100.1.0
      */
     public function storeApiDocuments($documents)
     {

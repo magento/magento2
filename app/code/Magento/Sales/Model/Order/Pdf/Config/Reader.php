@@ -7,6 +7,10 @@
  */
 namespace Magento\Sales\Model\Order\Pdf\Config;
 
+/**
+ * Class \Magento\Sales\Model\Order\Pdf\Config\Reader
+ *
+ */
 class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {
     /**

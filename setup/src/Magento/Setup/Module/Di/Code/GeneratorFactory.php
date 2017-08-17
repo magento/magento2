@@ -7,6 +7,10 @@ namespace Magento\Setup\Module\Di\Code;
 
 use Magento\Framework\ObjectManagerInterface;
 
+/**
+ * Class \Magento\Setup\Module\Di\Code\GeneratorFactory
+ *
+ */
 class GeneratorFactory
 {
     /**

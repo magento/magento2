@@ -9,7 +9,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Robots\Model\Robots;
 use Magento\Store\Model\ScopeInterface;
 
-class RobotsTest extends \PHPUnit_Framework_TestCase
+class RobotsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject

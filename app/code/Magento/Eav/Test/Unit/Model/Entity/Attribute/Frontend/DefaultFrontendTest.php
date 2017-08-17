@@ -14,7 +14,7 @@ use Magento\Framework\App\CacheInterface;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 
-class DefaultFrontendTest extends \PHPUnit_Framework_TestCase
+class DefaultFrontendTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DefaultFrontend

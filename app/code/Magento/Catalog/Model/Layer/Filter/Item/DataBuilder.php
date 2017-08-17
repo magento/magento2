@@ -9,6 +9,10 @@
  */
 namespace Magento\Catalog\Model\Layer\Filter\Item;
 
+/**
+ * Class \Magento\Catalog\Model\Layer\Filter\Item\DataBuilder
+ *
+ */
 class DataBuilder
 {
     /**

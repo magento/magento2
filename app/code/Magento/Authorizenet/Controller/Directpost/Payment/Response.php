@@ -6,6 +6,10 @@
  */
 namespace Magento\Authorizenet\Controller\Directpost\Payment;
 
+/**
+ * Class \Magento\Authorizenet\Controller\Directpost\Payment\Response
+ *
+ */
 class Response extends \Magento\Authorizenet\Controller\Directpost\Payment
 {
     /**

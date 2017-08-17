@@ -6,6 +6,10 @@
  */
 namespace Magento\CheckoutAgreements\Controller\Adminhtml\Agreement;
 
+/**
+ * Class \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement\Index
+ *
+ */
 class Index extends \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement
 {
     /**

@@ -3,11 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-/**
- * Sitemap data helper
- *
- */
 namespace Magento\Sitemap\Helper;
 
 use Magento\Sitemap\Model\ItemProvider\CategoryConfigReader;

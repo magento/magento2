@@ -8,6 +8,10 @@ namespace Magento\Catalog\Model\Indexer\Category\Flat\Plugin;
 use Magento\Indexer\Model\Config\Data;
 use Magento\Catalog\Model\Indexer\Category\Flat\State;
 
+/**
+ * Class \Magento\Catalog\Model\Indexer\Category\Flat\Plugin\IndexerConfigData
+ *
+ */
 class IndexerConfigData
 {
     /**

@@ -8,9 +8,15 @@ namespace Magento\Framework\Message;
 
 use Magento\Framework\Exception\RuntimeException;
 
+/**
+ * Class \Magento\Framework\Message\ExceptionMessageFactory
+ *
+ */
 class ExceptionMessageFactory implements ExceptionMessageFactoryInterface
 {
-    /** @var Factory */
+    /**
+     * @var \Magento\Framework\Message\Factory
+     */
     private $messageFactory;
 
     /**

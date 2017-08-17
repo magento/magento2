@@ -7,6 +7,10 @@
  */
 namespace Magento\Framework\Translate\Inline;
 
+/**
+ * Class \Magento\Framework\Translate\Inline\ParserFactory
+ *
+ */
 class ParserFactory
 {
     /**
