@@ -456,22 +456,31 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     }
 
     /**
+     * Adding attribute to entity by scope.
+     *
+     * @param AbstractAttribute $attribute
+     * @param string $suffix
+     * @return $this
+     */
+    public function addAttributeByScope(AbstractAttribute $attribute, $suffix)
+    {
+        $attributeCode = $attribute->getAttributeCode();
+        $this->attributesByScope[$suffix][$attributeCode] = $attribute;
+        return $this->addAttribute($attribute);
+    }
+
+    /**
      * Adding attribute to entity
      *
      * @param AbstractAttribute $attribute
-     * @param string|null $suffix
      * @return $this
      */
-    public function addAttribute(AbstractAttribute $attribute, $suffix = null)
+    public function addAttribute(AbstractAttribute $attribute)
     {
         $attribute->setEntity($this);
         $attributeCode = $attribute->getAttributeCode();
 
         $this->_attributesByCode[$attributeCode] = $attribute;
-
-        if ($suffix !== null) {
-            $this->attributesByScope[$suffix][$attributeCode] = $attribute;
-        }
 
         if ($attribute->isStatic()) {
             $this->_staticAttributes[$attributeCode] = $attribute;
