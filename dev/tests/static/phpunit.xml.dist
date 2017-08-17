@@ -17,9 +17,6 @@
         <testsuite name="Less Static Code Analysis">
             <file>testsuite/Magento/Test/Less/LiveCodeTest.php</file>
         </testsuite>
-        <testsuite name="Javascript Static Code Analysis">
-            <file>testsuite/Magento/Test/Js/LiveCodeTest.php</file>
-        </testsuite>
         <testsuite name="PHP Coding Standard Verification">
             <file>testsuite/Magento/Test/Php/LiveCodeTest.php</file>
         </testsuite>
@@ -32,8 +29,6 @@
     </testsuites>
     <php>
         <ini name="date.timezone" value="America/Los_Angeles"/>
-        <!-- TESTS_JSHINT_PATH specify the path to wsh.js on Windows and jshint-rhino.js on Linux -->
-        <const name="TESTS_JSHINT_PATH" value=""/>
         <!-- TESTS_COMPOSER_PATH - specify the path to composer binary, if a relative reference cannot be resolved -->
         <!--<const name="TESTS_COMPOSER_PATH" value="/usr/local/bin/composer"/>-->
     </php>
