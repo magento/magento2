@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Newsletter\Test\TestCase\UpdateQueueStartDateTest" summary="Update Queue Date Start" ticketId="MAGETWO-71653">
+        <variation name="UpdateQueueStartDateTestVariation1">
+            <data name="newsletter/dataset" xsi:type="string">default</data>
+            <data name="date" xsi:type="string">Aug 17, 2017 2:50:30 PM</data>
+            <constraint name="Magento\Newsletter\Test\Constraint\AssertNewsletterQueueDateStart" />
+        </variation>
+    </testCase>
+</config>
