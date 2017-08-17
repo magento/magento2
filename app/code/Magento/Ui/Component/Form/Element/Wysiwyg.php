@@ -13,7 +13,8 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Ui\Component\Wysiwyg\ConfigInterface;
 
 /**
- * Class Input
+ * @api
+ * @since 100.1.0
  */
 class Wysiwyg extends AbstractElement
 {
@@ -21,11 +22,13 @@ class Wysiwyg extends AbstractElement
 
     /**
      * @var Form
+     * @since 100.1.0
      */
     protected $form;
 
     /**
      * @var Editor
+     * @since 100.1.0
      */
     protected $editor;
 
@@ -36,6 +39,7 @@ class Wysiwyg extends AbstractElement
      * @param array $components
      * @param array $data
      * @param array $config
+     * @since 100.1.0
      */
     public function __construct(
         ContextInterface $context,
@@ -67,6 +71,7 @@ class Wysiwyg extends AbstractElement
      * Get component name
      *
      * @return string
+     * @since 100.1.0
      */
     public function getComponentName()
     {

@@ -5,6 +5,10 @@
  */
 namespace Magento\Shipping\Block\Adminhtml\Order\Packaging;
 
+/**
+ * Class \Magento\Shipping\Block\Adminhtml\Order\Packaging\Grid
+ *
+ */
 class Grid extends \Magento\Backend\Block\Template
 {
     /**

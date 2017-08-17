@@ -5,6 +5,10 @@
  */
 namespace Magento\Directory\Model\Country\Postcode\Config;
 
+/**
+ * Class \Magento\Directory\Model\Country\Postcode\Config\Converter
+ *
+ */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**

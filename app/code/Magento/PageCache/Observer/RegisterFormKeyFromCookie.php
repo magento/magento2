@@ -8,6 +8,10 @@ namespace Magento\PageCache\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class \Magento\PageCache\Observer\RegisterFormKeyFromCookie
+ *
+ */
 class RegisterFormKeyFromCookie implements ObserverInterface
 {
     /**
@@ -84,7 +88,10 @@ class RegisterFormKeyFromCookie implements ObserverInterface
             ->createPublicCookieMetadata();
         $cookieMetadata->setDomain($this->sessionConfig->getCookieDomain());
         $cookieMetadata->setPath($this->sessionConfig->getCookiePath());
-        $cookieMetadata->setDuration($this->sessionConfig->getCookieLifetime());
+        $lifetime = $this->sessionConfig->getCookieLifetime();
+        if ($lifetime !== 0) {
+            $cookieMetadata->setDuration($lifetime);
+        }
 
         $this->cookieFormKey->set(
             $formKey,

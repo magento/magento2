@@ -9,6 +9,10 @@ namespace Magento\Framework\Profiler\Driver;
 
 use Magento\Framework\Profiler\DriverInterface;
 
+/**
+ * Class \Magento\Framework\Profiler\Driver\Factory
+ *
+ */
 class Factory
 {
     /**

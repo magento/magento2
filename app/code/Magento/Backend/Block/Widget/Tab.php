@@ -8,6 +8,9 @@ namespace Magento\Backend\Block\Widget;
 
 use Magento\Backend\Block\Widget\Tab\TabInterface;
 
+/**
+ * @api
+ */
 class Tab extends \Magento\Backend\Block\Template implements TabInterface
 {
     /**

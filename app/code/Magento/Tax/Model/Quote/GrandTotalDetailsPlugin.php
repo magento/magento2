@@ -9,6 +9,10 @@ use Magento\Quote\Api\Data\TotalSegmentExtensionFactory;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\App\ObjectManager;
 
+/**
+ * Class \Magento\Tax\Model\Quote\GrandTotalDetailsPlugin
+ *
+ */
 class GrandTotalDetailsPlugin
 {
     /**

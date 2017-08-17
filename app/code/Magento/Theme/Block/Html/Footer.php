@@ -100,6 +100,7 @@ class Footer extends \Magento\Framework\View\Element\Template implements \Magent
      * Retrieve Miscellaneous HTML information
      *
      * @return string
+     * @since 100.1.0
      */
     public function getMiscellaneousHtml()
     {

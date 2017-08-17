@@ -9,6 +9,10 @@ use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 
+/**
+ * Class \Magento\Framework\Setup\SampleData\FixtureManager
+ *
+ */
 class FixtureManager
 {
     /**

@@ -6,6 +6,10 @@
  */
 namespace Magento\Search\Controller\Adminhtml\Synonyms;
 
+/**
+ * Class \Magento\Search\Controller\Adminhtml\Synonyms\Edit
+ *
+ */
 class Edit extends \Magento\Backend\App\Action
 {
     /**

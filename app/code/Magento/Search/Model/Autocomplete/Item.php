@@ -6,6 +6,10 @@
 
 namespace Magento\Search\Model\Autocomplete;
 
+/**
+ * Class \Magento\Search\Model\Autocomplete\Item
+ *
+ */
 class Item extends \Magento\Framework\DataObject implements ItemInterface
 {
     /**

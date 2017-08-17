@@ -11,6 +11,10 @@ use Magento\Catalog\Controller\Adminhtml\Product;
 use Magento\Framework\Controller\Result;
 use Magento\Framework\View\Result\LayoutFactory;
 
+/**
+ * Class \Magento\Catalog\Controller\Adminhtml\Product\AlertsStockGrid
+ *
+ */
 class AlertsStockGrid extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**

@@ -33,7 +33,7 @@ define([
         saveShippingInformation: function () {
             var payload;
 
-            if (!quote.billingAddress()) {
+            if (!quote.billingAddress() && quote.shippingAddress().canUseForBilling()) {
                 selectBillingAddressAction(quote.shippingAddress());
             }
 

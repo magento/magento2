@@ -6,6 +6,10 @@
  */
 namespace Magento\Paypal\Controller\Express;
 
+/**
+ * Class \Magento\Paypal\Controller\Express\UpdateShippingMethods
+ *
+ */
 class UpdateShippingMethods extends \Magento\Paypal\Controller\Express\AbstractExpress\UpdateShippingMethods
 {
     /**

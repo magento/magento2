@@ -9,6 +9,10 @@ use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order\Creditmemo;
 
+/**
+ * Class \Magento\Sales\Model\Order\Creditmemo\RefundOperation
+ *
+ */
 class RefundOperation
 {
     /**

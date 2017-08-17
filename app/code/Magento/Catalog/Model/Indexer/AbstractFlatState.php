@@ -32,7 +32,9 @@ abstract class AbstractFlatState
      */
     protected $isAvailable;
 
-    /** @var \Magento\Framework\Indexer\IndexerRegistry */
+    /**
+     * @var \Magento\Framework\Indexer\IndexerRegistry
+     */
     protected $indexerRegistry;
 
     /**

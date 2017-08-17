@@ -5,6 +5,10 @@
  */
 namespace Magento\Customer\Model\Address;
 
+/**
+ * Class \Magento\Customer\Model\Address\CustomAttributeList
+ *
+ */
 class CustomAttributeList implements CustomAttributeListInterface
 {
     /**

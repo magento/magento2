@@ -10,6 +10,10 @@ namespace Magento\Captcha\Controller\Refresh;
 
 use Magento\Framework\App\Action\Context;
 
+/**
+ * Class \Magento\Captcha\Controller\Refresh\Index
+ *
+ */
 class Index extends \Magento\Framework\App\Action\Action
 {
     /**

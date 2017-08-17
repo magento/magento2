@@ -5,6 +5,9 @@
  */
 namespace Magento\Eav\Model\Entity;
 
+/**
+ * @api
+ */
 interface EntityInterface
 {
 }

@@ -5,7 +5,7 @@
  */
 namespace Magento\CatalogImportExport\Test\Unit\Model\Indexer\Product\Price\Plugin;
 
-class ImportTest extends \PHPUnit_Framework_TestCase
+class ImportTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -31,19 +31,13 @@ class ImportTest extends \PHPUnit_Framework_TestCase
     {
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->_indexerMock = $this->getMock(
+        $this->_indexerMock = $this->createPartialMock(
             \Magento\Indexer\Model\Indexer::class,
-            ['getId', 'invalidate', 'getPriceIndexer', 'isScheduled'],
-            [],
-            '',
-            false
+            ['getId', 'invalidate', 'getPriceIndexer', 'isScheduled']
         );
-        $this->indexerRegistryMock = $this->getMock(
+        $this->indexerRegistryMock = $this->createPartialMock(
             \Magento\Framework\Indexer\IndexerRegistry::class,
-            ['get'],
-            [],
-            '',
-            false
+            ['get']
         );
 
         $this->_model = $this->_objectManager->getObject(
@@ -66,7 +60,7 @@ class ImportTest extends \PHPUnit_Framework_TestCase
             ->method('isScheduled')
             ->will($this->returnValue(false));
 
-        $importMock = $this->getMock(\Magento\ImportExport\Model\Import::class, [], [], '', false);
+        $importMock = $this->createMock(\Magento\ImportExport\Model\Import::class);
         $this->assertEquals('return_value', $this->_model->afterImportSource($importMock, 'return_value'));
     }
 }

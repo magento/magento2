@@ -9,6 +9,10 @@ namespace Magento\Framework\Code\Validator;
 
 use Magento\Framework\Code\ValidatorInterface;
 
+/**
+ * Class \Magento\Framework\Code\Validator\TypeDuplication
+ *
+ */
 class TypeDuplication implements ValidatorInterface
 {
     /**
@@ -24,11 +28,20 @@ class TypeDuplication implements ValidatorInterface
     protected $_argumentsReader;
 
     /**
-     * @param \Magento\Framework\Code\Reader\ArgumentsReader $argumentsReader
+     * @var \Magento\Framework\Code\Reader\ScalarTypesProvider
      */
-    public function __construct(\Magento\Framework\Code\Reader\ArgumentsReader $argumentsReader = null)
-    {
+    private $scalarTypesProvider;
+
+    /**
+     * @param \Magento\Framework\Code\Reader\ArgumentsReader|null $argumentsReader
+     * @param \Magento\Framework\Code\Reader\ScalarTypesProvider|null $scalarTypesProvider
+     */
+    public function __construct(
+        \Magento\Framework\Code\Reader\ArgumentsReader $argumentsReader = null,
+        \Magento\Framework\Code\Reader\ScalarTypesProvider $scalarTypesProvider = null
+    ) {
         $this->_argumentsReader = $argumentsReader ?: new \Magento\Framework\Code\Reader\ArgumentsReader();
+        $this->scalarTypesProvider = $scalarTypesProvider ?: new \Magento\Framework\Code\Reader\ScalarTypesProvider();
     }
 
     /**
@@ -88,7 +101,7 @@ class TypeDuplication implements ValidatorInterface
         $output = [];
         foreach ($arguments as $argument) {
             $type = $argument['type'];
-            if (!$type || $type == 'array') {
+            if (!$type || in_array($type, $this->scalarTypesProvider->getTypes())) {
                 continue;
             }
             $reflection = new \ReflectionClass($type);

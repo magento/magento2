@@ -6,6 +6,10 @@
  */
 namespace Magento\Cms\Controller\Adminhtml\Page;
 
+/**
+ * Class \Magento\Cms\Controller\Adminhtml\Page\PostDataProcessor
+ *
+ */
 class PostDataProcessor
 {
     /**

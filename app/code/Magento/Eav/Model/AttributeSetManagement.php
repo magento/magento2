@@ -11,6 +11,10 @@ use Magento\Eav\Api\Data\AttributeSetInterface;
 use Magento\Eav\Model\Config as EavConfig;
 use Magento\Framework\Exception\InputException;
 
+/**
+ * Class \Magento\Eav\Model\AttributeSetManagement
+ *
+ */
 class AttributeSetManagement implements AttributeSetManagementInterface
 {
     /**

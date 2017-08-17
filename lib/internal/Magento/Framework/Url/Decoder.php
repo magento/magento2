@@ -7,6 +7,10 @@ namespace Magento\Framework\Url;
 
 use Magento\Framework\UrlInterface;
 
+/**
+ * Class \Magento\Framework\Url\Decoder
+ *
+ */
 class Decoder implements DecoderInterface
 {
     /**

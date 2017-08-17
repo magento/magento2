@@ -9,6 +9,10 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\GoogleOptimizer\Model\Code as GoogleOptimizerCode;
 
+/**
+ * Class \Magento\GoogleOptimizer\Block\Adminhtml\Cms\Page\EntityCmsPage
+ *
+ */
 class EntityCmsPage extends DataObject
 {
     /**

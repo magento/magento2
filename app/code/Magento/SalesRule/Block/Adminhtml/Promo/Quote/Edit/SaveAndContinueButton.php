@@ -8,6 +8,10 @@ namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit;
 
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 
+/**
+ * Class \Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\SaveAndContinueButton
+ *
+ */
 class SaveAndContinueButton extends GenericButton implements ButtonProviderInterface
 {
     /**

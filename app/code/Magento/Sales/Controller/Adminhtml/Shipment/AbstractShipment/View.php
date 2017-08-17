@@ -9,6 +9,10 @@ namespace Magento\Sales\Controller\Adminhtml\Shipment\AbstractShipment;
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\View\Result\ForwardFactory;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShipment\View
+ *
+ */
 abstract class View extends \Magento\Backend\App\Action
 {
     /**

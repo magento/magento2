@@ -8,6 +8,10 @@ namespace Magento\Catalog\Model\Product\Attribute;
 
 use Magento\Framework\Exception\InputException;
 
+/**
+ * Class \Magento\Catalog\Model\Product\Attribute\OptionManagement
+ *
+ */
 class OptionManagement implements \Magento\Catalog\Api\ProductAttributeOptionManagementInterface
 {
     /**

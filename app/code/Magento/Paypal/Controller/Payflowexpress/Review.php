@@ -6,6 +6,10 @@
  */
 namespace Magento\Paypal\Controller\Payflowexpress;
 
+/**
+ * Class \Magento\Paypal\Controller\Payflowexpress\Review
+ *
+ */
 class Review extends \Magento\Paypal\Controller\Express\AbstractExpress\Review
 {
     /**

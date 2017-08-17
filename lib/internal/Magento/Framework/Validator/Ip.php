@@ -7,6 +7,10 @@
  */
 namespace Magento\Framework\Validator;
 
+/**
+ * Class \Magento\Framework\Validator\Ip
+ *
+ */
 class Ip extends \Zend_Validate_Ip implements \Magento\Framework\Validator\ValidatorInterface
 {
 }

@@ -10,6 +10,10 @@ use Magento\Backend\App\Action\Context;
 use Magento\Ui\Component\MassAction\Filter;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Order\MassUnhold
+ *
+ */
 class MassUnhold extends AbstractMassAction
 {
     /**

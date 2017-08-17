@@ -47,13 +47,12 @@ class CreateWidgetEntityTest extends AbstractCreateWidgetEntityTest
     {
         // Preconditions
         $this->caches = $caches;
-        $this->adjustCacheSettings();
-
         // Steps
         $this->widgetInstanceIndex->open();
         $this->widgetInstanceIndex->getPageActionsBlock()->addNew();
         $this->widgetInstanceNew->getWidgetForm()->fill($widget);
         $this->widgetInstanceEdit->getPageActionsBlock()->save();
+        $this->adjustCacheSettings();
     }
 
     /**

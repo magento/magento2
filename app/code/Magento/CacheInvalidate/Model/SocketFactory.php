@@ -5,6 +5,10 @@
  */
 namespace Magento\CacheInvalidate\Model;
 
+/**
+ * Class \Magento\CacheInvalidate\Model\SocketFactory
+ *
+ */
 class SocketFactory
 {
     /**

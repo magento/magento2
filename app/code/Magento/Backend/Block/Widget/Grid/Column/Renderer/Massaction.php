@@ -8,7 +8,8 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 /**
  * Grid widget column renderer massaction
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @deprecated 100.2.0 in favour of UI component implementation
  */
 class Massaction extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Checkbox
 {

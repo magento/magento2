@@ -1,0 +1,33 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<if args="hasPriceRange($row())">
+    <div class="price-from">
+        <with args="getPriceByCode('minimal_price')">
+            <render args="getBody()" />
+        </with>
+        <with args="getPriceByCode('minimal_regular_price')">
+            <render args="getBody()" />
+        </with>
+    </div>
+    <div class="price-to">
+        <with args="getPriceByCode('max_price')">
+            <render args="getBody()" />
+        </with>
+        <with args="getPriceByCode('max_regular_price')">
+            <render args="getBody()" />
+        </with>
+    </div>
+</if>
+
+<ifnot args="hasPriceRange($row())">
+    <with args="getPriceByCode('minimal_price')">
+        <render args="getBody()" />
+    </with>
+    <with args="getPriceByCode('minimal_regular_price')">
+        <render args="getBody()" />
+    </with>
+</ifnot>

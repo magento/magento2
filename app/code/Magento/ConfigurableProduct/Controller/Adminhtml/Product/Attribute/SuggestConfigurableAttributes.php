@@ -9,6 +9,10 @@ namespace Magento\ConfigurableProduct\Controller\Adminhtml\Product\Attribute;
 use Magento\Backend\App\Action;
 use Magento\ConfigurableProduct\Model\SuggestedAttributeList;
 
+/**
+ * Class \Magento\ConfigurableProduct\Controller\Adminhtml\Product\Attribute\SuggestConfigurableAttributes
+ *
+ */
 class SuggestConfigurableAttributes extends Action
 {
     /**
