@@ -18,7 +18,7 @@
     var google_conversion_color = "<?= /* @escapeNotVerified */ $block->getHelper()->getConversionColor() ?>";
     var google_conversion_label = "<?= /* @escapeNotVerified */ $block->getHelper()->getConversionLabel() ?>";
     var google_conversion_value = <?= /* @escapeNotVerified */ $block->getHelper()->getConversionValue() ?>;
-    <?php if($block->getHelper()->hasSendCurrency() && $block->getHelper()->getConversionValueCurrency()): ?>
+    <?php if($block->getHelper()->hasSendConversionValueCurrency() && $block->getHelper()->getConversionValueCurrency()): ?>
     var google_conversion_currency = "<?= /* @escapeNotVerified */ $block->getHelper()->getConversionValueCurrency() ?>";
     <?php endif; ?>
     /* ]]> */

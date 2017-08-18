@@ -64,6 +64,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     const XML_PATH_CONVERSION_VALUE = 'google/adwords/conversion_value';
 
+    /**
+     * Google Adwords send order conversion value currency when using dynamic value
+     */
     const XML_PATH_SEND_CURRENCY = 'google/adwords/send_currency';
 
     /**#@-*/
@@ -277,7 +280,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @return boolean
      */
-    public function hasSendCurrency()
+    public function hasSendConversionValueCurrency()
     {
         return $this->scopeConfig->isSetFlag(
             self::XML_PATH_SEND_CURRENCY,
@@ -288,11 +291,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Get Google AdWords conversion value currency
      *
-     * @return float
+     * @return string|false
      */
     public function getConversionValueCurrency()
     {
-        if ($this->hasSendCurrency()) {
+        if ($this->hasSendConversionValueCurrency()) {
             return (string) $this->_registry->registry(self::CONVERSION_VALUE_CURRENCY_REGISTRY_NAME);
         }
         return false;

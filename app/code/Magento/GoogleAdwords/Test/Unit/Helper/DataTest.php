@@ -196,11 +196,11 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($returnValue, $this->_helper->{$method}());
     }
 
-    public function testHasSendCurrency()
+    public function testHasSendConversionValueCurrency()
     {
         $this->_scopeConfigMock->expects($this->once())->method('isSetFlag')->willReturn(true);
 
-        $this->assertTrue($this->_helper->hasSendCurrency());
+        $this->assertTrue($this->_helper->hasSendConversionValueCurrency());
     }
 
     public function testGetConversionValueDynamic()
