@@ -6,11 +6,13 @@
 
 // @codingStandardsIgnoreStart
 namespace {
+
     $mockTranslateSetCookie = false;
 }
 
-namespace Magento\Framework\Stdlib\Test\Unit\Cookie
-{
+namespace Magento\Framework\Stdlib\Test\Unit\Cookie {
+
+    use Magento\Framework\App\Config\ScopeConfigInterface;
     use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
     use Magento\Framework\Exception\InputException;
     use Magento\Framework\Stdlib\Cookie\FailureToSendException;
@@ -18,6 +20,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
     use Magento\Framework\Phrase;
     use Magento\Framework\HTTP\Header as HttpHeader;
     use Psr\Log\LoggerInterface;
+    use Magento\Store\Model\ScopeInterface;
     // @codingStandardsIgnoreEnd
 
     /**
@@ -115,6 +118,11 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
          */
         protected $cookieArray;
 
+        /**
+         * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+         */
+        private $scopeConfigMock;
+
         protected function setUp()
         {
             require_once __DIR__ . '/_files/setcookie_mock.php';
@@ -133,13 +141,25 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
             $this->httpHeaderMock = $this->getMockBuilder(HttpHeader::class)
                 ->disableOriginalConstructor()
                 ->getMock();
+
+            $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config::class)
+                ->disableOriginalConstructor()
+                ->setMethods(['getValue'])
+                ->getMock();
+
+            $this->scopeConfigMock->expects($this->any())
+                ->method('getValue')
+                ->with('web/cookie/cookie_max', ScopeInterface::SCOPE_WEBSITE)
+                ->willReturn(self::MAX_NUM_COOKIES);
+
             $this->cookieManager = $this->objectManager->getObject(
                 \Magento\Framework\Stdlib\Cookie\PhpCookieManager::class,
                 [
                     'scope' => $this->scopeMock,
                     'reader' => $this->readerMock,
                     'logger' => $this->loggerMock,
-                    'httpHeader' => $this->httpHeaderMock
+                    'httpHeader' => $this->httpHeaderMock,
+                    'scopeConfig' => $this->scopeConfigMock,
                 ]
             );
 
@@ -185,7 +205,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
                     'metadata' => [
                         'domain' => 'magento.url',
                         'path' => '/backend',
-                    ]
+                    ],
                 ]
             );
 
@@ -253,7 +273,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
                 ->getObject(
                     \Magento\Framework\Stdlib\Cookie\SensitiveCookieMetadata::class,
                     [
-                        'request' => $this->requestMock
+                        'request' => $this->requestMock,
                     ]
                 );
             $this->scopeMock->expects($this->once())
@@ -278,7 +298,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
         {
             return [
                 [self::SENSITIVE_COOKIE_NAME_NO_METADATA_HTTPS, true],
-                [self::SENSITIVE_COOKIE_NAME_NO_METADATA_NOT_HTTPS, false]
+                [self::SENSITIVE_COOKIE_NAME_NO_METADATA_NOT_HTTPS, false],
             ];
         }
 
@@ -572,6 +592,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
             } else {
                 self::fail('Non-tested case in mock setcookie()');
             }
+
             return true;
         }
 

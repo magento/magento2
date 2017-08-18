@@ -7,9 +7,11 @@
 namespace Magento\Framework\Stdlib\Cookie;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Framework\Phrase;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\HTTP\Header as HttpHeader;
 use Psr\Log\LoggerInterface;
 
@@ -20,26 +22,32 @@ use Psr\Log\LoggerInterface;
  * sensitive data so that extra protection can be added to the contents of the cookie as well as how the browser
  * stores the cookie.
  *
+ * RFC 2109 - Page 15
+ * http://www.ietf.org/rfc/rfc6265.txt
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PhpCookieManager implements CookieManagerInterface
 {
-    /**#@+
-     * Constants for Cookie manager.
-     * RFC 2109 - Page 15
-     * http://www.ietf.org/rfc/rfc6265.txt
+    /**
+     * Max cookie size
      */
-    const MAX_NUM_COOKIES = 50;
     const MAX_COOKIE_SIZE = 4096;
-    const EXPIRE_NOW_TIME = 1;
-    const EXPIRE_AT_END_OF_SESSION_TIME = 0;
-    /**#@-*/
 
-    /**#@+
+    /**
+     * Expire now time
+     */
+    const EXPIRE_NOW_TIME = 1;
+
+    /**
+     * Expire at the end of session
+     */
+    const EXPIRE_AT_END_OF_SESSION_TIME = 0;
+
+    /**
      * Constant for metadata array key
      */
     const KEY_EXPIRE_TIME = 'expiry';
-    /**#@-*/
 
     /**#@-*/
     private $scope;
@@ -48,6 +56,10 @@ class PhpCookieManager implements CookieManagerInterface
      * @var CookieReaderInterface
      */
     private $reader;
+    /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
 
     /**
      * Logger for warning details.
@@ -68,17 +80,20 @@ class PhpCookieManager implements CookieManagerInterface
      * @param CookieReaderInterface $reader
      * @param LoggerInterface $logger
      * @param HttpHeader $httpHeader
+     * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         CookieScopeInterface $scope,
         CookieReaderInterface $reader,
         LoggerInterface $logger = null,
-        HttpHeader $httpHeader = null
+        HttpHeader $httpHeader = null,
+        ScopeConfigInterface $scopeConfig
     ) {
         $this->scope = $scope;
         $this->reader = $reader;
         $this->logger = $logger ?: ObjectManager::getInstance()->get(LoggerInterface::class);
         $this->httpHeader = $httpHeader ?: ObjectManager::getInstance()->get(HttpHeader::class);
+        $this->scopeConfig = $scopeConfig;
     }
 
     /**
@@ -177,6 +192,19 @@ class PhpCookieManager implements CookieManagerInterface
     }
 
     /**
+     * Retrieve the max cookie number from website config
+     *
+     * @return int
+     */
+    private function getMaxCookieNumber()
+    {
+        return (int) $this->scopeConfig->getValue(
+            'web/cookie/cookie_max',
+            ScopeInterface::SCOPE_WEBSITE
+        );
+    }
+
+    /**
      * Determines whether or not it is possible to send the cookie, based on the number of cookies that already
      * exist and the size of the cookie.
      *
@@ -204,7 +232,7 @@ class PhpCookieManager implements CookieManagerInterface
 
         $sizeOfCookie = $this->sizeOfCookie($name, $value);
 
-        if ($numCookies > PhpCookieManager::MAX_NUM_COOKIES) {
+        if ($numCookies > $this->getMaxCookieNumber()) {
             $this->logger->warning(
                 new Phrase('Unable to send the cookie. Maximum number of cookies would be exceeded.'),
                 array_merge($_COOKIE, ['user-agent' => $this->httpHeader->getHttpUserAgent()])
