@@ -134,7 +134,10 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
             $arguments['data'] = $oneInvoiceData;
             $arguments = $objectManagerHelper->getConstructArguments($className, $arguments);
             /** @var $prevInvoice \Magento\Sales\Model\Order\Invoice */
-            $prevInvoice = $this->getMockBuilder($className)->setMethods(['_init'])->setConstructorArgs($arguments)->getMock();
+            $prevInvoice = $this->getMockBuilder($className)
+                ->setMethods(['_init'])
+                ->setConstructorArgs($arguments)
+                ->getMock();
             $result->addItem($prevInvoice);
         }
         return $result;

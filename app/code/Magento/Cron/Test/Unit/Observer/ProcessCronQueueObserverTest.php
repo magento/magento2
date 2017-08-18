@@ -89,11 +89,6 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
     protected $scheduleResource;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $connection;
-
-    /**
      * Prepare parameters
      */
     protected function setUp()
@@ -151,12 +146,12 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
         $this->scheduleResource = $this->getMockBuilder(\Magento\Cron\Model\ResourceModel\Schedule::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+        $connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->scheduleResource->method('getConnection')->willReturn($this->connection);
-        $this->connection->method('delete')->willReturn(1);
+        $this->scheduleResource->method('getConnection')->willReturn($connection);
+        $connection->method('delete')->willReturn(1);
 
         $this->_observer = new ProcessCronQueueObserver(
             $this->_objectManager,
