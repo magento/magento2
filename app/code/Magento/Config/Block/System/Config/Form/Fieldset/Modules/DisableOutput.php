@@ -10,7 +10,11 @@ namespace Magento\Config\Block\System\Config\Form\Fieldset\Modules;
  * on the store settings page.
  *
  * @method \Magento\Config\Block\System\Config\Form getForm()
- * @deprecated 100.2.0 Magento does not support custom disabling/enabling module output since 2.2.0 version
+ * @deprecated 100.2.0 Magento does not support disabling/enabling modules output from the Admin Panel since 2.2.0
+ * version. Module output can still be enabled/disabled in configuration files. However, this functionality should
+ * not be used in future development. Module design should explicitly state dependencies to avoid requiring output
+ * disabling. This functionality will temporarily be kept in Magento core, as there are unresolved modularity
+ * issues that will be addressed in future releases.
  * @api
  * @since 100.0.2
  */
@@ -18,25 +22,25 @@ class DisableOutput extends \Magento\Config\Block\System\Config\Form\Fieldset
 {
     /**
      * @var \Magento\Framework\DataObject
-     * @deprecated 100.2.0 Magento does not support custom disabling/enabling module output since 2.2.0 version
+     * @deprecated 100.2.0
      */
     protected $_dummyElement;
 
     /**
      * @var \Magento\Config\Block\System\Config\Form\Field
-     * @deprecated 100.2.0 Magento does not support custom disabling/enabling module output since 2.2.0 version
+     * @deprecated 100.2.0
      */
     protected $_fieldRenderer;
 
     /**
      * @var array
-     * @deprecated 100.2.0 Magento does not support custom disabling/enabling module output since 2.2.0 version
+     * @deprecated 100.2.0
      */
     protected $_values;
 
     /**
      * @var \Magento\Framework\Module\ModuleListInterface
-     * @deprecated 100.2.0 Magento does not support custom disabling/enabling module output since 2.2.0 version
+     * @deprecated 100.2.0
      */
     protected $_moduleList;
 
@@ -60,7 +64,11 @@ class DisableOutput extends \Magento\Config\Block\System\Config\Form\Fieldset
 
     /**
      * {@inheritdoc}
-     * @deprecated 100.2.0 Magento does not support custom disabling/enabling module output since 2.2.0 version
+     * @deprecated 100.2.0 Magento does not support disabling/enabling modules output from the Admin Panel since 2.2.0
+     * version. Module output can still be enabled/disabled in configuration files. However, this functionality should
+     * not be used in future development. Module design should explicitly state dependencies to avoid requiring output
+     * disabling. This functionality will temporarily be kept in Magento core, as there are unresolved modularity
+     * issues that will be addressed in future releases.
      */
     public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
@@ -89,7 +97,7 @@ class DisableOutput extends \Magento\Config\Block\System\Config\Form\Fieldset
     }
 
     /**
-     * @deprecated 100.2.0 Magento does not support custom disabling/enabling module output since 2.2.0 version
+     * @deprecated 100.2.0
      * @return \Magento\Framework\DataObject
      */
     protected function _getDummyElement()
@@ -101,7 +109,7 @@ class DisableOutput extends \Magento\Config\Block\System\Config\Form\Fieldset
     }
 
     /**
-     * @deprecated 100.2.0 Magento does not support custom disabling/enabling module output since 2.2.0 version
+     * @deprecated 100.2.0
      * @return \Magento\Config\Block\System\Config\Form\Field
      */
     protected function _getFieldRenderer()
@@ -115,7 +123,7 @@ class DisableOutput extends \Magento\Config\Block\System\Config\Form\Fieldset
     }
 
     /**
-     * @deprecated 100.2.0 Magento does not support custom disabling/enabling module output since 2.2.0 version
+     * @deprecated 100.2.0
      * @return array
      */
     protected function _getValues()
@@ -132,7 +140,7 @@ class DisableOutput extends \Magento\Config\Block\System\Config\Form\Fieldset
     /**
      * @param \Magento\Framework\Data\Form\Element\Fieldset $fieldset
      * @param string $moduleName
-     * @deprecated 100.2.0 Magento does not support custom disabling/enabling module output since 2.2.0 version
+     * @deprecated 100.2.0
      * @return mixed
      */
     protected function _getFieldHtml($fieldset, $moduleName)
