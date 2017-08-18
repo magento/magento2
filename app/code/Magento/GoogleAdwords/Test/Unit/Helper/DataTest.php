@@ -225,7 +225,6 @@ class DataTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($returnValue)
         );
 
-
         $this->assertEquals($returnValue, $this->_helper->getConversionValue());
     }
 
