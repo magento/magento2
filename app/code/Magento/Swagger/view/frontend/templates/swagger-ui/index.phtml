@@ -14,7 +14,7 @@
 
 /** @var \Magento\Framework\View\Element\Template $block */
 
-$schemaUrl = rtrim($block->getBaseUrl(), '/') . '/rest/' . $this->helper('Magento\Swagger\Helper\Data')->getParamStore() . '/schema?services=all';
+$schemaUrl = $block->getSchemaUrl();
 ?>
 
 <div id='header'>
