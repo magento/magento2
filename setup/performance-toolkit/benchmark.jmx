@@ -549,6 +549,11 @@
             <stringProp name="Argument.value">${__P(scenario,)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
+          <elementProp name="seedForRandom" elementType="Argument">
+            <stringProp name="Argument.name">seedForRandom</stringProp>
+            <stringProp name="Argument.value">${__P(seedForRandom,0)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
           <elementProp name="searchQuick" elementType="Argument">
             <stringProp name="Argument.name">searchQuick</stringProp>
             <stringProp name="Argument.value">${__P(searchQuick,0)}</stringProp>
@@ -732,8 +737,17 @@
       <stringProp name="ThreadGroup.delay"/>
     </SetupThreadGroup>
     <hashTree>
-      <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="SetUp - BeanShell Sampler: Clear properties" enabled="true">
-        <stringProp name="BeanShellSampler.query">props.remove("category_url_key");
+      <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="SetUp - BeanShell Sampler: Initialize" enabled="true">
+        <stringProp name="BeanShellSampler.query">
+// Init and save random object for get random values with/without seed
+import java.util.Random;
+Random random = new Random();
+if (${seedForRandom} &gt; 0) {
+    random.setSeed(${seedForRandom});
+}
+props.put("RandomObject", random);
+
+props.remove("category_url_key");
 props.remove("category_url_keys_list");
 props.remove("category_name");
 props.remove("category_names_list");
@@ -2230,57 +2244,28 @@ if ("${cache_indicator}" == "1") {
       <stringProp name="ThreadGroup.delay"/>
     </ThreadGroup>
     <hashTree>
-    <RandomVariableConfig guiclass="TestBeanGUI" testclass="RandomVariableConfig" testname="Random Variable 1" enabled="true">
-      <stringProp name="variableName">rv1</stringProp>
-      <stringProp name="outputFormat">'.'</stringProp>
-      <stringProp name="minimumValue">1</stringProp>
-      <stringProp name="maximumValue">999999</stringProp>
-      <stringProp name="randomSeed">1</stringProp>
-      <boolProp name="perThread">true</boolProp>
-    </RandomVariableConfig>
-    <hashTree/>
-  
-    <RandomVariableConfig guiclass="TestBeanGUI" testclass="RandomVariableConfig" testname="Random Variable 2" enabled="true">
-      <stringProp name="variableName">rv2</stringProp>
-      <stringProp name="outputFormat">'.'</stringProp>
-      <stringProp name="minimumValue">1</stringProp>
-      <stringProp name="maximumValue">999999</stringProp>
-      <stringProp name="randomSeed">2</stringProp>
-      <boolProp name="perThread">true</boolProp>
-    </RandomVariableConfig>
-    <hashTree/>
-  
-    <RandomVariableConfig guiclass="TestBeanGUI" testclass="RandomVariableConfig" testname="Random Variable 3" enabled="true">
-      <stringProp name="variableName">rv3</stringProp>
-      <stringProp name="outputFormat">'.'</stringProp>
-      <stringProp name="minimumValue">1</stringProp>
-      <stringProp name="maximumValue">999999</stringProp>
-      <stringProp name="randomSeed">3</stringProp>
-      <boolProp name="perThread">true</boolProp>
-    </RandomVariableConfig>
-    <hashTree/>
-  
     <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="Get arguments${__property(activeAdminThread)}(CatProdBrows)" enabled="true">
       <stringProp name="TestPlan.comments">Passing arguments between threads</stringProp>
-      <stringProp name="BeanShellSampler.query">number = (int)(${rv1} * props.get("simple_products_list").size());
+      <stringProp name="BeanShellSampler.query">
+number = props.get("RandomObject").nextInt(props.get("simple_products_list").size());
 simpleList = props.get("simple_products_list").get(number);
 vars.put("simple_product_1_url_key", simpleList.get("url_key"));
 vars.put("simple_product_1_name", simpleList.get("title"));
 vars.put("simple_product_1_id", simpleList.get("id"));
 
-number1 = (int)(${rv2} * props.get("simple_products_list").size());
+number1 = props.get("RandomObject").nextInt(props.get("simple_products_list").size());
 simpleList = props.get("simple_products_list").get(number1);
 vars.put("simple_product_2_url_key", simpleList.get("url_key"));
 vars.put("simple_product_2_name", simpleList.get("title"));
 vars.put("simple_product_2_id", simpleList.get("id"));
 
-number = (int)(${rv3} * props.get("configurable_products_list").size());
+number = props.get("RandomObject").nextInt(props.get("configurable_products_list").size());
 configurableList = props.get("configurable_products_list").get(number);
 vars.put("configurable_product_1_url_key", configurableList.get("url_key"));
 vars.put("configurable_product_1_name", configurableList.get("title"));
 vars.put("configurable_product_1_id", configurableList.get("id"));
 
-number = (int)(Math.random() * props.get("category_url_keys_list").size());
+number = props.get("RandomObject").nextInt(props.get("category_url_keys_list").size());
 vars.put("category_url_key", props.get("category_url_keys_list").get(number));
 vars.put("category_name", props.get("category_names_list").get(number));
 vars.put("testLabel", "CatProdBrows");</stringProp>
@@ -2609,53 +2594,23 @@ vars.put("testLabel", "CatProdBrows");</stringProp>
       <stringProp name="ThreadGroup.delay"/>
     </ThreadGroup>
     <hashTree>
-    <RandomVariableConfig guiclass="TestBeanGUI" testclass="RandomVariableConfig" testname="Random Variable 1" enabled="true">
-      <stringProp name="variableName">rv1</stringProp>
-      <stringProp name="outputFormat">'.'</stringProp>
-      <stringProp name="minimumValue">1</stringProp>
-      <stringProp name="maximumValue">999999</stringProp>
-      <stringProp name="randomSeed">1</stringProp>
-      <boolProp name="perThread">true</boolProp>
-    </RandomVariableConfig>
-    <hashTree/>
-  
-    <RandomVariableConfig guiclass="TestBeanGUI" testclass="RandomVariableConfig" testname="Random Variable 2" enabled="true">
-      <stringProp name="variableName">rv2</stringProp>
-      <stringProp name="outputFormat">'.'</stringProp>
-      <stringProp name="minimumValue">1</stringProp>
-      <stringProp name="maximumValue">999999</stringProp>
-      <stringProp name="randomSeed">2</stringProp>
-      <boolProp name="perThread">true</boolProp>
-    </RandomVariableConfig>
-    <hashTree/>
-  
-    <RandomVariableConfig guiclass="TestBeanGUI" testclass="RandomVariableConfig" testname="Random Variable 3" enabled="true">
-      <stringProp name="variableName">rv3</stringProp>
-      <stringProp name="outputFormat">'.'</stringProp>
-      <stringProp name="minimumValue">1</stringProp>
-      <stringProp name="maximumValue">999999</stringProp>
-      <stringProp name="randomSeed">3</stringProp>
-      <boolProp name="perThread">true</boolProp>
-    </RandomVariableConfig>
-    <hashTree/>
-  
     <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="Get arguments${__property(activeAdminThread)}(BrowsAddToCart)" enabled="true">
       <stringProp name="TestPlan.comments">Passing arguments between threads</stringProp>
-      <stringProp name="BeanShellSampler.query">number = (int)(${rv1} * props.get("simple_products_list").size());
+      <stringProp name="BeanShellSampler.query">number = props.get("RandomObject").nextInt(props.get("simple_products_list").size());
 simpleList = props.get("simple_products_list").get(number);
 vars.put("simple_product_1_url_key", simpleList.get("url_key"));
 vars.put("simple_product_1_name", simpleList.get("title"));
 vars.put("simple_product_1_id", simpleList.get("id"));
 vars.put("simple_product_1_uenc", simpleList.get("uenc"));
 
-number1 = (int)(${rv2} * props.get("simple_products_list").size());
+number1 = props.get("RandomObject").nextInt(props.get("simple_products_list").size());
 simpleList = props.get("simple_products_list").get(number1);
 vars.put("simple_product_2_url_key", simpleList.get("url_key"));
 vars.put("simple_product_2_name", simpleList.get("title"));
 vars.put("simple_product_2_id", simpleList.get("id"));
 vars.put("simple_product_2_uenc", simpleList.get("uenc"));
 
-number = (int)(${rv3} * props.get("configurable_products_list").size());
+number = props.get("RandomObject").nextInt(props.get("configurable_products_list").size());
 configurableList = props.get("configurable_products_list").get(number);
 vars.put("configurable_product_1_url_key", configurableList.get("url_key"));
 vars.put("configurable_product_1_name", configurableList.get("title"));
@@ -2664,7 +2619,7 @@ vars.put("configurable_attribute_id", configurableList.get("attribute_id"));
 vars.put("configurable_option_id", configurableList.get("attribute_option_id"));
 vars.put("configurable_product_1_uenc", simpleList.get("uenc"));
 
-number = (int)(Math.random() * props.get("category_url_keys_list").size());
+number = props.get("RandomObject").nextInt(props.get("category_url_keys_list").size());
 vars.put("category_url_key", props.get("category_url_keys_list").get(number));
 vars.put("category_name", props.get("category_names_list").get(number));
 vars.put("testLabel", "BrowsAddToCart");
@@ -3691,53 +3646,24 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="ThreadGroup.delay"/>
     </ThreadGroup>
     <hashTree>
-    <RandomVariableConfig guiclass="TestBeanGUI" testclass="RandomVariableConfig" testname="Random Variable 1" enabled="true">
-      <stringProp name="variableName">rv1</stringProp>
-      <stringProp name="outputFormat">'.'</stringProp>
-      <stringProp name="minimumValue">1</stringProp>
-      <stringProp name="maximumValue">999999</stringProp>
-      <stringProp name="randomSeed">1</stringProp>
-      <boolProp name="perThread">true</boolProp>
-    </RandomVariableConfig>
-    <hashTree/>
-  
-    <RandomVariableConfig guiclass="TestBeanGUI" testclass="RandomVariableConfig" testname="Random Variable 2" enabled="true">
-      <stringProp name="variableName">rv2</stringProp>
-      <stringProp name="outputFormat">'.'</stringProp>
-      <stringProp name="minimumValue">1</stringProp>
-      <stringProp name="maximumValue">999999</stringProp>
-      <stringProp name="randomSeed">2</stringProp>
-      <boolProp name="perThread">true</boolProp>
-    </RandomVariableConfig>
-    <hashTree/>
-  
-    <RandomVariableConfig guiclass="TestBeanGUI" testclass="RandomVariableConfig" testname="Random Variable 3" enabled="true">
-      <stringProp name="variableName">rv3</stringProp>
-      <stringProp name="outputFormat">'.'</stringProp>
-      <stringProp name="minimumValue">1</stringProp>
-      <stringProp name="maximumValue">999999</stringProp>
-      <stringProp name="randomSeed">3</stringProp>
-      <boolProp name="perThread">true</boolProp>
-    </RandomVariableConfig>
-    <hashTree/>
-  
     <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="Get arguments${__property(activeAdminThread)}(GuestChkt)" enabled="true">
       <stringProp name="TestPlan.comments">Passing arguments between threads</stringProp>
-      <stringProp name="BeanShellSampler.query">number = (int)(${rv1} * props.get("simple_products_list").size());
+      <stringProp name="BeanShellSampler.query">
+number = props.get("RandomObject").nextInt(props.get("simple_products_list").size());
 simpleList = props.get("simple_products_list").get(number);
 vars.put("simple_product_1_url_key", simpleList.get("url_key"));
 vars.put("simple_product_1_name", simpleList.get("title"));
 vars.put("simple_product_1_id", simpleList.get("id"));
 vars.put("simple_product_1_uenc", simpleList.get("uenc"));
 
-number1 = (int)(${rv2} * props.get("simple_products_list").size());
+number1 = props.get("RandomObject").nextInt(props.get("simple_products_list").size());
 simpleList = props.get("simple_products_list").get(number1);
 vars.put("simple_product_2_url_key", simpleList.get("url_key"));
 vars.put("simple_product_2_name", simpleList.get("title"));
 vars.put("simple_product_2_id", simpleList.get("id"));
 vars.put("simple_product_2_uenc", simpleList.get("uenc"));
 
-number = (int)(${rv3} * props.get("configurable_products_list").size());
+number = props.get("RandomObject").nextInt(props.get("configurable_products_list").size());
 configurableList = props.get("configurable_products_list").get(number);
 vars.put("configurable_product_1_url_key", configurableList.get("url_key"));
 vars.put("configurable_product_1_name", configurableList.get("title"));
@@ -3746,7 +3672,7 @@ vars.put("configurable_attribute_id", configurableList.get("attribute_id"));
 vars.put("configurable_option_id", configurableList.get("attribute_option_id"));
 vars.put("configurable_product_1_uenc", simpleList.get("uenc"));
 
-number = (int)(Math.random() * props.get("category_url_keys_list").size());
+number = props.get("RandomObject").nextInt(props.get("category_url_keys_list").size());
 vars.put("category_url_key", props.get("category_url_keys_list").get(number));
 vars.put("category_name", props.get("category_names_list").get(number));
 vars.put("testLabel", "GuestChkt");
@@ -5170,55 +5096,25 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="ThreadGroup.delay"/>
     </ThreadGroup>
     <hashTree>
-    <RandomVariableConfig guiclass="TestBeanGUI" testclass="RandomVariableConfig" testname="Random Variable 1" enabled="true">
-      <stringProp name="variableName">rv1</stringProp>
-      <stringProp name="outputFormat">'.'</stringProp>
-      <stringProp name="minimumValue">1</stringProp>
-      <stringProp name="maximumValue">999999</stringProp>
-      <stringProp name="randomSeed">1</stringProp>
-      <boolProp name="perThread">true</boolProp>
-    </RandomVariableConfig>
-    <hashTree/>
-  
-    <RandomVariableConfig guiclass="TestBeanGUI" testclass="RandomVariableConfig" testname="Random Variable 2" enabled="true">
-      <stringProp name="variableName">rv2</stringProp>
-      <stringProp name="outputFormat">'.'</stringProp>
-      <stringProp name="minimumValue">1</stringProp>
-      <stringProp name="maximumValue">999999</stringProp>
-      <stringProp name="randomSeed">2</stringProp>
-      <boolProp name="perThread">true</boolProp>
-    </RandomVariableConfig>
-    <hashTree/>
-  
-    <RandomVariableConfig guiclass="TestBeanGUI" testclass="RandomVariableConfig" testname="Random Variable 3" enabled="true">
-      <stringProp name="variableName">rv3</stringProp>
-      <stringProp name="outputFormat">'.'</stringProp>
-      <stringProp name="minimumValue">1</stringProp>
-      <stringProp name="maximumValue">999999</stringProp>
-      <stringProp name="randomSeed">3</stringProp>
-      <boolProp name="perThread">true</boolProp>
-    </RandomVariableConfig>
-    <hashTree/>
-  
     <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="Get arguments${__property(activeAdminThread)}(CustomerChkt)" enabled="true">
       <stringProp name="TestPlan.comments">Passing arguments between threads</stringProp>
       <stringProp name="BeanShellSampler.query">import org.apache.jmeter.samplers.SampleResult;
 
-number = (int)(${rv1} * props.get("simple_products_list").size());
+number = props.get("RandomObject").nextInt(props.get("simple_products_list").size());
 simpleList = props.get("simple_products_list").get(number);
 vars.put("simple_product_1_url_key", simpleList.get("url_key"));
 vars.put("simple_product_1_name", simpleList.get("title"));
 vars.put("simple_product_1_id", simpleList.get("id"));
 vars.put("simple_product_1_uenc", simpleList.get("uenc"));
 
-number1 = (int)(${rv2} * props.get("simple_products_list").size());
+number1 = props.get("RandomObject").nextInt(props.get("simple_products_list").size());
 simpleList = props.get("simple_products_list").get(number1);
 vars.put("simple_product_2_url_key", simpleList.get("url_key"));
 vars.put("simple_product_2_name", simpleList.get("title"));
 vars.put("simple_product_2_id", simpleList.get("id"));
 vars.put("simple_product_2_uenc", simpleList.get("uenc"));
 
-number = (int)(${rv3} * props.get("configurable_products_list").size());
+number = props.get("RandomObject").nextInt(props.get("configurable_products_list").size());
 configurableList = props.get("configurable_products_list").get(number);
 vars.put("configurable_product_1_url_key", configurableList.get("url_key"));
 vars.put("configurable_product_1_name", configurableList.get("title"));
@@ -5227,7 +5123,7 @@ vars.put("configurable_attribute_id", configurableList.get("attribute_id"));
 vars.put("configurable_option_id", configurableList.get("attribute_option_id"));
 vars.put("configurable_product_1_uenc", simpleList.get("uenc"));
 
-number = (int)(Math.random() * props.get("category_url_keys_list").size());
+number = props.get("RandomObject").nextInt(props.get("category_url_keys_list").size());
 vars.put("category_url_key", props.get("category_url_keys_list").get(number));
 vars.put("category_name", props.get("category_names_list").get(number));
 
