@@ -36,4 +36,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return ($this->request->getParam('store')) ? $this->request->getParam('store') : 'all';
     }
+
+    /**
+     * @return string
+     */
+    public function getSchemaUrl()
+    {
+        return rtrim($this->getBaseUrl(), '/') . '/rest/' . $this->getParamStore() . '/schema?services=all';
+    }
 }
