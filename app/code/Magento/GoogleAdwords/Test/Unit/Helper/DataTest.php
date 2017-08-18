@@ -172,7 +172,6 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ['getConversionLabel', \Magento\GoogleAdwords\Helper\Data::XML_PATH_CONVERSION_LABEL, 'Label'],
             ['getConversionValueType', \Magento\GoogleAdwords\Helper\Data::XML_PATH_CONVERSION_VALUE_TYPE, '1'],
             ['getConversionValueConstant', \Magento\GoogleAdwords\Helper\Data::XML_PATH_CONVERSION_VALUE, '0'],
-            ['hasSendCurrency', \Magento\GoogleAdwords\Helper\Data::XML_PATH_SEND_CURRENCY, '1']
         ];
     }
 
@@ -197,10 +196,16 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($returnValue, $this->_helper->{$method}());
     }
 
+    public function testHasSendCurrency()
+    {
+        $this->_scopeConfigMock->expects($this->once())->method('isSetFlag')->willReturn(true);
+
+        $this->assertTrue($this->_helper->hasSendCurrency());
+    }
+
     public function testGetConversionValueDynamic()
     {
         $returnValue = 4.1;
-        $returnValueCurrency = 'USD';
         $this->_scopeConfigMock->expects(
             $this->any()
         )->method(
@@ -219,6 +224,16 @@ class DataTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue($returnValue)
         );
+
+
+        $this->assertEquals($returnValue, $this->_helper->getConversionValue());
+
+    }
+
+    public function testGetConversionValueCurrency()
+    {
+        $returnValueCurrency = 'USD';
+        $this->_scopeConfigMock->expects($this->once())->method('isSetFlag')->willReturn(true);
         $this->_registryMock->expects(
             $this->once()
         )->method(
@@ -229,7 +244,6 @@ class DataTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($returnValueCurrency)
         );
 
-        $this->assertEquals($returnValue, $this->_helper->getConversionValue());
         $this->assertEquals($returnValueCurrency, $this->_helper->getConversionValueCurrency());
     }
 

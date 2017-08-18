@@ -5,6 +5,8 @@
  */
 namespace Magento\GoogleAdwords\Test\Unit\Observer;
 
+use Magento\GoogleAdwords\Helper\Data;
+
 class SetConversionValueObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -135,7 +137,10 @@ class SetConversionValueObserverTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($this->_eventMock)
         );
 
-        $iteratorMock = $this->createMock(\Iterator::class);
+        $orderMock = $this->createMock(\Magento\Sales\Api\Data\OrderInterface::class);
+        $orderMock->expects($this->once())->method('getOrderCurrencyCode')->willReturn($conversionCurrency);
+
+        $iteratorMock = new \ArrayIterator([$orderMock]);
         $this->_collectionMock->expects($this->any())->method('getIterator')->will($this->returnValue($iteratorMock));
         $this->_collectionMock->expects(
             $this->once()
@@ -146,20 +151,18 @@ class SetConversionValueObserverTest extends \PHPUnit\Framework\TestCase
             ['in' => $ordersIds]
         );
         $this->_registryMock->expects(
-            $this->once()
+            $this->atLeastOnce()
         )->method(
             'register'
-        )->with(
-            \Magento\GoogleAdwords\Helper\Data::CONVERSION_VALUE_REGISTRY_NAME,
-            $conversionValue
-        );
-        $this->_registryMock->expects(
-            $this->once()
-        )->method(
-            'register'
-        )->with(
-            \Magento\GoogleAdwords\Helper\Data::CONVERSION_VALUE_CURRENCY_REGISTRY_NAME,
-            $conversionCurrency
+        )->withConsecutive(
+            [
+                Data::CONVERSION_VALUE_CURRENCY_REGISTRY_NAME,
+                $conversionCurrency
+            ],
+            [
+                Data::CONVERSION_VALUE_REGISTRY_NAME,
+                $conversionValue,
+            ]
         );
 
         $this->assertSame($this->_model, $this->_model->execute($this->_eventObserverMock));
