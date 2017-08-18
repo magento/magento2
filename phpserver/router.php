@@ -47,7 +47,8 @@ if (php_sapi_name() === 'cli-server') {
     $path = pathinfo($_SERVER["SCRIPT_FILENAME"]);
     $url   = pathinfo(substr($_SERVER["REQUEST_URI"], 1));
     $route = parse_url(substr($_SERVER["REQUEST_URI"], 1))["path"];
-    $ext = @pathinfo($route)['extension'];
+    $pathinfo = pathinfo($route);
+    $ext = isset($pathinfo['extension']) ? $pathinfo['extension'] : '';
 
     if ($path["basename"] == 'favicon.ico') {
         return false;
@@ -95,7 +96,7 @@ if (php_sapi_name() === 'cli-server') {
                 'html' => 'text/html',
             ];
 
-            $type = @$mimeTypes[$ext];
+            $type = isset($mimeTypes[$ext]) && $mimeTypes[$ext];
             if ($type) {
                 header("Content-Type: $type");
             }
