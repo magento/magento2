@@ -11,7 +11,7 @@ namespace Magento\Cms\Test\Unit\Helper;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PageTest extends \PHPUnit_Framework_TestCase
+class PageTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Cms\Helper\Page
@@ -175,6 +175,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $this->layoutProcessorMock = $this->getMockBuilder(\Magento\Framework\View\Layout\ProcessorInterface::class)
             ->getMockForAbstractClass();
         $this->blockMock = $this->getMockBuilder(\Magento\Framework\View\Element\AbstractBlock::class)
+            ->setMethods(['setContentHeading'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->messagesBlockMock = $this->getMockBuilder(\Magento\Framework\View\Element\Messages::class)
@@ -196,7 +197,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->resultPageFactory = $this->getMock(\Magento\Framework\View\Result\PageFactory::class, [], [], '', false);
+        $this->resultPageFactory = $this->createMock(\Magento\Framework\View\Result\PageFactory::class);
 
         $this->object = $objectManager->getObject(
             \Magento\Cms\Helper\Page::class,

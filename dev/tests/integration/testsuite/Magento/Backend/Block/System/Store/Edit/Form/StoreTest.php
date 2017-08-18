@@ -9,7 +9,7 @@ namespace Magento\Backend\Block\System\Store\Edit\Form;
  * @magentoAppIsolation enabled
  * @magentoAppArea adminhtml
  */
-class StoreTest extends \PHPUnit_Framework_TestCase
+class StoreTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Block\System\Store\Edit\Form\Store

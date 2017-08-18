@@ -10,6 +10,10 @@ namespace Magento\Eav\Model\Entity\Setup\PropertyMapper;
 use Magento\Eav\Model\Entity\Setup\PropertyMapperInterface;
 use Magento\Framework\ObjectManagerInterface;
 
+/**
+ * Class \Magento\Eav\Model\Entity\Setup\PropertyMapper\Composite
+ *
+ */
 class Composite implements PropertyMapperInterface
 {
     /**

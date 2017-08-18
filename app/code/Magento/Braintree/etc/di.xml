@@ -187,6 +187,12 @@
     </type>
     <!-- END command managers section for Vault -->
 
+    <type name="Magento\Braintree\Gateway\Request\ChannelDataBuilder">
+        <arguments>
+            <argument name="config" xsi:type="object">Magento\Braintree\Gateway\Config\Config</argument>
+        </arguments>
+    </type>
+
     <!-- Braintree commands  -->
     <virtualType name="BraintreeAuthorizeCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
         <arguments>

@@ -8,6 +8,10 @@ namespace Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Valid
 use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 
+/**
+ * Class \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator\TierPrice
+ *
+ */
 class TierPrice extends \Magento\CatalogImportExport\Model\Import\Product\Validator\AbstractPrice
 {
     /**

@@ -6,6 +6,10 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Set;
 
+/**
+ * Class \Magento\Catalog\Controller\Adminhtml\Product\Set\Delete
+ *
+ */
 class Delete extends \Magento\Catalog\Controller\Adminhtml\Product\Set
 {
     /**

@@ -11,6 +11,10 @@ use Magento\Framework\Event\ObserverInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\CustomerRegistry;
 
+/**
+ * Class \Magento\Customer\Observer\UpgradeCustomerPasswordObserver
+ *
+ */
 class UpgradeCustomerPasswordObserver implements ObserverInterface
 {
     /**

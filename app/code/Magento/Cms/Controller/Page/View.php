@@ -6,6 +6,10 @@
  */
 namespace Magento\Cms\Controller\Page;
 
+/**
+ * Class \Magento\Cms\Controller\Page\View
+ *
+ */
 class View extends \Magento\Framework\App\Action\Action
 {
     /**

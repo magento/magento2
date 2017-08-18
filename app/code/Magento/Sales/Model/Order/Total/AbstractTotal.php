@@ -8,7 +8,7 @@ namespace Magento\Sales\Model\Order\Total;
 /**
  * Base class for configure totals order
  * @api
- * 
+ *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 abstract class AbstractTotal extends \Magento\Framework\DataObject

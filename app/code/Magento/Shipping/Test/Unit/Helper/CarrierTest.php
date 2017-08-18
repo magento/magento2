@@ -8,7 +8,7 @@ namespace Magento\Shipping\Test\Unit\Helper;
 /**
  * Carrier helper test
  */
-class CarrierTest extends \PHPUnit_Framework_TestCase
+class CarrierTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Shipping Carrier helper

@@ -5,6 +5,9 @@
  */
 namespace Magento\Eav\Model\Entity\Attribute;
 
+/**
+ * @api
+ */
 interface ScopedAttributeInterface
 {
     const SCOPE_STORE = 0;

@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\Config;
 
+/**
+ * Class \Magento\Framework\Config\Scope
+ *
+ */
 class Scope implements \Magento\Framework\Config\ScopeInterface, \Magento\Framework\Config\ScopeListInterface
 {
     /**

@@ -8,6 +8,10 @@ namespace Magento\Customer\Controller\Adminhtml\Wishlist\Product\Composite\Wishl
 
 use Exception;
 
+/**
+ * Class \Magento\Customer\Controller\Adminhtml\Wishlist\Product\Composite\Wishlist\Update
+ *
+ */
 class Update extends \Magento\Customer\Controller\Adminhtml\Wishlist\Product\Composite\Wishlist
 {
     /**

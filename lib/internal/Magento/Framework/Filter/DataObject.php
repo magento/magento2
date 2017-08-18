@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\Filter;
 
+/**
+ * Class \Magento\Framework\Filter\DataObject
+ *
+ */
 class DataObject extends \Zend_Filter
 {
     /**

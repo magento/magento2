@@ -60,16 +60,16 @@ class Bundle extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected function _getSelect($productId, $columns = [])
     {
         return $this->getConnection()->select()->from(
-            ["bundle_option" => $this->getTable('catalog_product_bundle_option')],
+            ["bo" => $this->getTable('catalog_product_bundle_option')],
             ['type', 'option_id']
         )->where(
-            "bundle_option.parent_id = ?",
+            "bo.parent_id = ?",
             $productId
         )->where(
-            "bundle_option.required = 1"
+            "bo.required = 1"
         )->joinLeft(
-            ["bundle_selection" => $this->getTable('catalog_product_bundle_selection')],
-            "bundle_selection.option_id = bundle_option.option_id",
+            ["bs" => $this->getTable('catalog_product_bundle_selection')],
+            "bs.option_id = bo.option_id AND bs.parent_product_id = bo.parent_id",
             $columns
         );
     }
@@ -149,6 +149,7 @@ class Bundle extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $parentId
      * @param int $childId
      * @return $this
+     * @since 100.1.0
      */
     public function addProductRelation($parentId, $childId)
     {

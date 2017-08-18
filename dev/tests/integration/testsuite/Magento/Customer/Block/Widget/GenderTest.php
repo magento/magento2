@@ -10,7 +10,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * @magentoAppArea frontend
  */
-class GenderTest extends \PHPUnit_Framework_TestCase
+class GenderTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Gender */
     protected $_block;

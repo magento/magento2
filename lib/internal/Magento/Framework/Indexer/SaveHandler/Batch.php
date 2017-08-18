@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\Indexer\SaveHandler;
 
+/**
+ * Class \Magento\Framework\Indexer\SaveHandler\Batch
+ *
+ */
 class Batch
 {
     /**

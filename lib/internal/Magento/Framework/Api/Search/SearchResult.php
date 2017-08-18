@@ -10,6 +10,10 @@ use Magento\Framework\Api\SearchCriteriaInterface as BaseSearchCriteriaInterface
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\Api\Search\SearchResultInterface;
 
+/**
+ * Class \Magento\Framework\Api\Search\SearchResult
+ *
+ */
 class SearchResult extends AbstractSimpleObject implements SearchResultInterface
 {
     /**

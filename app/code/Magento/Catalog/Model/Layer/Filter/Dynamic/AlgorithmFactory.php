@@ -11,6 +11,10 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * Class \Magento\Catalog\Model\Layer\Filter\Dynamic\AlgorithmFactory
+ *
+ */
 class AlgorithmFactory
 {
     /**

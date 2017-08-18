@@ -9,6 +9,10 @@ namespace Magento\Payment\Model\Config;
 
 use Magento\Framework\Module\Dir;
 
+/**
+ * Class \Magento\Payment\Model\Config\SchemaLocator
+ *
+ */
 class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {
     /**

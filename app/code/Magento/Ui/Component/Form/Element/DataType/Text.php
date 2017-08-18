@@ -6,7 +6,7 @@
 namespace Magento\Ui\Component\Form\Element\DataType;
 
 /**
- * Class Text
+ * @api
  */
 class Text extends AbstractDataType
 {

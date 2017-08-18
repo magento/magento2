@@ -7,9 +7,15 @@ namespace Magento\CatalogUrlRewrite\Model\Category;
 
 use Magento\Catalog\Model\Category;
 
+/**
+ * Class \Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider
+ *
+ */
 class ChildrenCategoriesProvider
 {
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $childrenIds = [];
 
     /**

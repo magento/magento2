@@ -9,6 +9,9 @@
  */
 namespace Magento\Config\Model\Config;
 
+/**
+ * @api
+ */
 class Factory
 {
     /**

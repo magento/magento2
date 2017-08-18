@@ -8,6 +8,9 @@
  */
 namespace Magento\Backend\App;
 
+/**
+ * @api
+ */
 class Router extends \Magento\Framework\App\Router\Base
 {
     /**

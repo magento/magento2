@@ -7,7 +7,7 @@ namespace Magento\Theme\Test\Unit\Model\Theme\Customization\File;
 
 use \Magento\Theme\Model\Theme\Customization\File\CustomCss;
 
-class CustomCssTest extends \PHPUnit_Framework_TestCase
+class CustomCssTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Design\Theme\Customization\Path

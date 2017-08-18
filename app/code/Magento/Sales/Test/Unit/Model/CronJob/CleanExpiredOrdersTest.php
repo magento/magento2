@@ -9,7 +9,7 @@ namespace Magento\Sales\Test\Unit\Model\CronJob;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Model\CronJob\CleanExpiredOrders;
 
-class CleanExpiredOrdersTest extends \PHPUnit_Framework_TestCase
+class CleanExpiredOrdersTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -38,27 +38,12 @@ class CleanExpiredOrdersTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->storesConfigMock = $this->getMock(
-            \Magento\Store\Model\StoresConfig::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->collectionFactoryMock = $this->getMock(
+        $this->storesConfigMock = $this->createMock(\Magento\Store\Model\StoresConfig::class);
+        $this->collectionFactoryMock = $this->createPartialMock(
             \Magento\Sales\Model\ResourceModel\Order\CollectionFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->orderCollectionMock = $this->getMock(
-            \Magento\Sales\Model\ResourceModel\Order\Collection::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->orderCollectionMock = $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Collection::class);
 
         $this->model = new CleanExpiredOrders(
             $this->storesConfigMock,
@@ -82,7 +67,7 @@ class CleanExpiredOrdersTest extends \PHPUnit_Framework_TestCase
         $this->orderCollectionMock->expects($this->exactly(4))->method('addFieldToFilter');
         $this->orderCollectionMock->expects($this->exactly(4))->method('walk');
 
-        $selectMock = $this->getMock(\Magento\Framework\DB\Select::class, [], [], '', false);
+        $selectMock = $this->createMock(\Magento\Framework\DB\Select::class);
         $selectMock->expects($this->exactly(2))->method('where')->willReturnSelf();
         $this->orderCollectionMock->expects($this->exactly(2))->method('getSelect')->willReturn($selectMock);
 
@@ -109,7 +94,7 @@ class CleanExpiredOrdersTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->orderCollectionMock);
         $this->orderCollectionMock->expects($this->exactly(2))->method('addFieldToFilter');
 
-        $selectMock = $this->getMock(\Magento\Framework\DB\Select::class, [], [], '', false);
+        $selectMock = $this->createMock(\Magento\Framework\DB\Select::class);
         $selectMock->expects($this->once())->method('where')->willReturnSelf();
         $this->orderCollectionMock->expects($this->once())->method('getSelect')->willReturn($selectMock);
 

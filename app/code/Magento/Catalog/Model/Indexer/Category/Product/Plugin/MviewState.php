@@ -10,6 +10,10 @@
 
 namespace Magento\Catalog\Model\Indexer\Category\Product\Plugin;
 
+/**
+ * Class \Magento\Catalog\Model\Indexer\Category\Product\Plugin\MviewState
+ *
+ */
 class MviewState
 {
     /**

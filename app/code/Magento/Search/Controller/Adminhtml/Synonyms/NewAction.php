@@ -5,6 +5,10 @@
  */
 namespace Magento\Search\Controller\Adminhtml\Synonyms;
 
+/**
+ * Class \Magento\Search\Controller\Adminhtml\Synonyms\NewAction
+ *
+ */
 class NewAction extends \Magento\Backend\App\Action
 {
     /**

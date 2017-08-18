@@ -39,10 +39,12 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->assertSessionMessages($this->isEmpty(), \Magento\Framework\Message\MessageInterface::TYPE_ERROR);
 
-        $this->assertSelectCount(
-            'button[type="submit"][title="Update Cart"]',
+        $this->assertEquals(
             1,
-            $response->getBody(),
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//button[@type="submit" and @title="Update Cart"]',
+                $response->getBody()
+            ),
             'Response for simple product doesn\'t contain "Update Cart" button'
         );
     }
@@ -72,17 +74,21 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->assertSessionMessages($this->isEmpty(), \Magento\Framework\Message\MessageInterface::TYPE_ERROR);
 
-        $this->assertSelectCount(
-            'button[type="submit"][title="Update Cart"]',
+        $this->assertEquals(
             1,
-            $response->getBody(),
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//button[@type="submit" and @title="Update Cart"]',
+                $response->getBody()
+            ),
             'Response for simple product with custom option doesn\'t contain "Update Cart" button'
         );
 
-        $this->assertSelectCount(
-            'input.product-custom-option[type="text"]',
+        $this->assertEquals(
             1,
-            $response->getBody(),
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//input[contains(@class,"product-custom-option") and @type="text"]',
+                $response->getBody()
+            ),
             'Response for simple product with custom option doesn\'t contain custom option input field'
         );
     }
@@ -112,10 +118,12 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->assertSessionMessages($this->isEmpty(), \Magento\Framework\Message\MessageInterface::TYPE_ERROR);
 
-        $this->assertSelectCount(
-            'button[type="submit"][title="Update Cart"]',
+        $this->assertEquals(
             1,
-            $response->getBody(),
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//button[@type="submit" and @title="Update Cart"]',
+                $response->getBody()
+            ),
             'Response for bundle product doesn\'t contain "Update Cart" button'
         );
     }
@@ -145,17 +153,21 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->assertSessionMessages($this->isEmpty(), \Magento\Framework\Message\MessageInterface::TYPE_ERROR);
 
-        $this->assertSelectCount(
-            'button[type="submit"][title="Update Cart"]',
+        $this->assertEquals(
             1,
-            $response->getBody(),
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//button[@type="submit" and @title="Update Cart"]',
+                $response->getBody()
+            ),
             'Response for downloadable product doesn\'t contain "Update Cart" button'
         );
 
-        $this->assertSelectCount(
-            '#downloadable-links-list',
+        $this->assertEquals(
             1,
-            $response->getBody(),
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//*[@id="downloadable-links-list"]',
+                $response->getBody()
+            ),
             'Response for downloadable product doesn\'t contain links for download'
         );
     }

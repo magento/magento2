@@ -13,6 +13,10 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
 
+/**
+ * Class \Magento\Setup\Controller\CustomizeYourStore
+ *
+ */
 class CustomizeYourStore extends AbstractActionController
 {
     /**

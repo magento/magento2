@@ -27,8 +27,8 @@ class IndexerResetStateCommandTest extends AbstractIndexerCommandCommonSetup
     public function testExecute()
     {
         $this->configureAdminArea();
-        $collection = $this->getMock(\Magento\Indexer\Model\Indexer\Collection::class, [], [], '', false);
-        $indexerOne = $this->getMock(\Magento\Indexer\Model\Indexer::class, [], [], '', false);
+        $collection = $this->createMock(\Magento\Indexer\Model\Indexer\Collection::class);
+        $indexerOne = $this->createMock(\Magento\Indexer\Model\Indexer::class);
 
         $indexerOne->expects($this->once())
             ->method('getTitle')
@@ -38,7 +38,7 @@ class IndexerResetStateCommandTest extends AbstractIndexerCommandCommonSetup
             ->method('getItems')
             ->willReturn([$indexerOne]);
 
-        $stateMock = $this->getMock(\Magento\Indexer\Model\Indexer\State::class, [], [], '', false);
+        $stateMock = $this->createMock(\Magento\Indexer\Model\Indexer\State::class);
         $stateMock->expects($this->exactly(1))
             ->method('setStatus')
             ->with(\Magento\Framework\Indexer\StateInterface::STATUS_INVALID)

@@ -11,7 +11,7 @@ namespace Magento\Quote\Test\Unit\Model\Quote;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ItemTest extends \PHPUnit_Framework_TestCase
+class ItemTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Quote\Model\Quote\Item
@@ -110,21 +110,9 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $this->compareHelper = $this->getMock(
-            \Magento\Quote\Model\Quote\Item\Compare::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->compareHelper = $this->createMock(\Magento\Quote\Model\Quote\Item\Compare::class);
 
-        $this->stockItemMock = $this->getMock(
-            \Magento\CatalogInventory\Model\Stock\Item::class,
-            ['getIsQtyDecimal', '__wakeup'],
-            [],
-            '',
-            false
-        );
+        $this->stockItemMock = $this->createPartialMock(\Magento\CatalogInventory\Model\Stock\Item::class, ['getIsQtyDecimal', '__wakeup']);
 
         $this->serializer = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
             ->setMethods(['unserialize'])
@@ -473,7 +461,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $productMock->expects($this->any())
             ->method('getCost')
             ->will($this->returnValue($productCost));
-        $store = $this->getMock(\Magento\Store\Model\Store::class, ['getWebsiteId'], [], '', false);
+        $store = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getWebsiteId']);
         $store->expects($this->any())
             ->method('getWebsiteId')
             ->will($this->returnValue(10));
@@ -670,13 +658,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
      */
     public function testCompare()
     {
-        $itemMock = $this->getMock(
-            \Magento\Quote\Model\Quote\Item::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $itemMock = $this->createMock(\Magento\Quote\Model\Quote\Item::class);
         $this->compareHelper->expects($this->once())
             ->method('compare')
             ->with($this->equalTo($this->model), $this->equalTo($itemMock))

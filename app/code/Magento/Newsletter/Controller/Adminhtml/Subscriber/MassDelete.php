@@ -6,6 +6,10 @@
  */
 namespace Magento\Newsletter\Controller\Adminhtml\Subscriber;
 
+/**
+ * Class \Magento\Newsletter\Controller\Adminhtml\Subscriber\MassDelete
+ *
+ */
 class MassDelete extends \Magento\Newsletter\Controller\Adminhtml\Subscriber
 {
     /**

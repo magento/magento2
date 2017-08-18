@@ -11,6 +11,10 @@ use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Framework\Setup\UpgradeSchemaInterface;
 
+/**
+ * Class \Magento\Store\Setup\UpgradeSchema
+ *
+ */
 class UpgradeSchema implements UpgradeSchemaInterface
 {
     /**

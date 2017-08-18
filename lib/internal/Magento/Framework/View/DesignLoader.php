@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\View;
 
+/**
+ * Class \Magento\Framework\View\DesignLoader
+ *
+ */
 class DesignLoader
 {
     /**

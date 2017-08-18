@@ -11,6 +11,9 @@
  */
 namespace Magento\Reports\Model\ResourceModel\Wishlist\Product;
 
+/**
+ * @api
+ */
 class Collection extends \Magento\Wishlist\Model\ResourceModel\Item\Collection
 {
     /**

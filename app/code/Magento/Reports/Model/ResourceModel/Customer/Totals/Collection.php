@@ -13,6 +13,7 @@ namespace Magento\Reports\Model\ResourceModel\Customer\Totals;
 
 /**
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @api
  */
 class Collection extends \Magento\Reports\Model\ResourceModel\Order\Collection
 {

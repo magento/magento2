@@ -10,6 +10,10 @@ use Magento\Backend\App\Action\Context;
 use Magento\Catalog\Controller\Adminhtml\Product\Builder as ProductBuilder;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Review\Controller\Adminhtml\Product\Reviews\Grid
+ *
+ */
 class Grid extends Action
 {
     /**

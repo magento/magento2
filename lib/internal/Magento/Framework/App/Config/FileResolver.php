@@ -9,6 +9,10 @@ namespace Magento\Framework\App\Config;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * Class \Magento\Framework\App\Config\FileResolver
+ *
+ */
 class FileResolver implements \Magento\Framework\Config\FileResolverInterface
 {
     /**

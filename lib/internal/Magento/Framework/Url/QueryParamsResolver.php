@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\Url;
 
+/**
+ * Class \Magento\Framework\Url\QueryParamsResolver
+ *
+ */
 class QueryParamsResolver extends \Magento\Framework\DataObject implements QueryParamsResolverInterface
 {
     /**

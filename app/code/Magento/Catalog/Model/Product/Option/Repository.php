@@ -232,7 +232,7 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
 
     /**
      * @return \Magento\Framework\EntityManager\HydratorPool
-     * @deprecated
+     * @deprecated 101.0.0
      */
     private function getHydratorPool()
     {

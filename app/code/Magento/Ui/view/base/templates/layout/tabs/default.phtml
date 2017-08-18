@@ -7,6 +7,6 @@
  * @var \Magento\Ui\Component\Layout\Tabs $block
  */
 ?>
-<div data-bind="scope: '<?php /* @escapeNotVerified */ echo $block->getDataScope(); ?>.sections' " class="ui-tabs">
+<div data-bind="scope: '<?= /* @escapeNotVerified */ $block->getDataScope() ?>.sections' " class="ui-tabs">
     <!-- ko template: getTemplate() --><!-- /ko -->
 </div>

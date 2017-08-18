@@ -209,6 +209,11 @@ class View extends AbstractConfigureBlock
     private $videoContainer = 'div.fotorama-video-container';
 
     /**
+     * @var string
+     */
+    private $productVideo = '.product-video';
+
+    /**
      * Threshold message selector.
      *
      * @var string
@@ -646,5 +651,17 @@ class View extends AbstractConfigureBlock
     public function isVideoVisible()
     {
         return $this->_rootElement->find($this->videoContainer)->isVisible();
+    }
+
+    /**
+     * Check definite video data is presented on product page
+     *
+     * @param string $videoData
+     * @return bool
+     */
+    public function checkVideoDataPresence($videoData)
+    {
+        $dataVideoSelector = $this->productVideo . '[data-code="' . $videoData. '"]';
+        return $this->_rootElement->find($dataVideoSelector)->isPresent();
     }
 }

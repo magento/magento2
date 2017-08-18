@@ -8,6 +8,10 @@ namespace Magento\Review\Controller\Adminhtml\Product;
 use Magento\Review\Controller\Adminhtml\Product as ProductController;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Review\Controller\Adminhtml\Product\Delete
+ *
+ */
 class Delete extends ProductController
 {
     /**
