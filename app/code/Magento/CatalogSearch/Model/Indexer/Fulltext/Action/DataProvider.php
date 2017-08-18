@@ -286,7 +286,11 @@ class DataProvider
     {
         $result = [];
         $selects = [];
-        $ifStoreValue = $this->connection->getCheckSql('cpe_type.value_id > 0' ,'cpe_type.value','cpe_type_default.value');
+        $ifStoreValue = $this->connection->getCheckSql(
+            'cpe_type.value_id > 0',
+            'cpe_type.value',
+            'cpe_type_default.value'
+        );
         $linkField = $this->metadata->getLinkField();
         $productLinkFieldsToEntityIdMap = $this->connection->fetchPairs(
             $this->connection->select()->from(
@@ -311,13 +315,15 @@ class DataProvider
                 )->joinLeft(
                     ['cpe_type' => $tableName],
                     $this->connection->quoteInto(
-                        'cpe.row_id = cpe_type.row_id AND cpe_type.store_id = ? AND cea.attribute_id = cpe_type.attribute_id',
+                        'cpe.row_id = cpe_type.row_id AND cpe_type.store_id = ? '
+                        . 'AND cea.attribute_id = cpe_type.attribute_id',
                         $storeId
                     ),
                     []
                 )->joinLeft(
                     ['cpe_type_default' => $tableName],
-                    'cpe.row_id = cpe_type_default.row_id AND cpe_type_default.store_id = 0 AND cea.attribute_id = cpe_type_default.attribute_id',
+                    'cpe.row_id = cpe_type_default.row_id AND cpe_type_default.store_id = 0'
+                    . 'AND cea.attribute_id = cpe_type_default.attribute_id',
                     []
                 )->where(
                     'cea.attribute_id IN (?)',
