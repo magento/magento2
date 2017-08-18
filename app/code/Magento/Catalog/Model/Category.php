@@ -1094,6 +1094,9 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
             $flatIndexer = $this->indexerRegistry->get(Indexer\Category\Flat\State::INDEXER_ID);
             if (!$flatIndexer->isScheduled()) {
                 $flatIndexer->reindexRow($this->getId());
+                if ($this->dataHasChangedFor('url_key')) {
+                    $flatIndexer->reindexList(explode(',', $this->getAllChildren()));
+                }
             }
         }
         $productIndexer = $this->indexerRegistry->get(Indexer\Category\Product::INDEXER_ID);
