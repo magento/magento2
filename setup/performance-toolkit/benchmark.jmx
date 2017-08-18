@@ -551,7 +551,7 @@
           </elementProp>
           <elementProp name="seedForRandom" elementType="Argument">
             <stringProp name="Argument.name">seedForRandom</stringProp>
-            <stringProp name="Argument.value">${__P(seedForRandom,0)}</stringProp>
+            <stringProp name="Argument.value">${__P(seedForRandom,1)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="searchQuick" elementType="Argument">
