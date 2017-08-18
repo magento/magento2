@@ -9,7 +9,7 @@ namespace Magento\AsynchronousOperations\Api\Data;
 /**
  * Class OperationInterface
  * @api
- * @since 2.2.0
+ * @since 100.2.0
  */
 interface OperationInterface extends \Magento\Framework\Bulk\OperationInterface
 {
@@ -17,7 +17,7 @@ interface OperationInterface extends \Magento\Framework\Bulk\OperationInterface
      * Retrieve existing extension attributes object.
      *
      * @return \Magento\AsynchronousOperations\Api\Data\OperationExtensionInterface|null
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function getExtensionAttributes();
 
@@ -26,7 +26,7 @@ interface OperationInterface extends \Magento\Framework\Bulk\OperationInterface
      *
      * @param \Magento\AsynchronousOperations\Api\Data\OperationExtensionInterface $extensionAttributes
      * @return $this
-     * @since 2.2.0
+     * @since 100.2.0
      */
     public function setExtensionAttributes(
         \Magento\AsynchronousOperations\Api\Data\OperationExtensionInterface $extensionAttributes

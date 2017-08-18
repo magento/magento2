@@ -14,19 +14,16 @@ use Magento\Framework\Bulk\OperationInterface;
 
 /**
  * Class SearchResult
- * @since 2.2.0
  */
 class SearchResult extends \Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult
 {
     /**
      * @var IdentifierResolver
-     * @since 2.2.0
      */
     private $identifierResolver;
 
     /**
      * @var \Magento\Framework\Json\Helper\Data
-     * @since 2.2.0
      */
     private $jsonHelper;
 
@@ -41,7 +38,6 @@ class SearchResult extends \Magento\Framework\View\Element\UiComponent\DataProvi
      * @param string $mainTable
      * @param null $resourceModel
      * @param string $identifierName identifier field name for collection items
-     * @since 2.2.0
      */
     public function __construct(
         EntityFactory $entityFactory,
@@ -69,7 +65,6 @@ class SearchResult extends \Magento\Framework\View\Element\UiComponent\DataProvi
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     protected function _initSelect()
     {
@@ -82,7 +77,6 @@ class SearchResult extends \Magento\Framework\View\Element\UiComponent\DataProvi
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     protected function _afterLoad()
     {
@@ -106,7 +100,6 @@ class SearchResult extends \Magento\Framework\View\Element\UiComponent\DataProvi
      *
      * @param array $item
      * @return string
-     * @since 2.2.0
      */
     private function provideMetaInfo($item)
     {
@@ -122,7 +115,6 @@ class SearchResult extends \Magento\Framework\View\Element\UiComponent\DataProvi
      *
      * @param array $item
      * @return string
-     * @since 2.2.0
      */
     private function getLink($item)
     {
@@ -138,7 +130,6 @@ class SearchResult extends \Magento\Framework\View\Element\UiComponent\DataProvi
      *
      * @param array $item
      * @return string
-     * @since 2.2.0
      */
     private function getEntityId($item)
     {
