@@ -5,6 +5,7 @@
  */
 namespace Magento\Indexer\Test\Unit\Model;
 
+use Magento\Framework\Indexer\IndexerInterfaceFactory;
 use Magento\Framework\Indexer\StateInterface;
 
 class ProcessorTest extends \PHPUnit\Framework\TestCase
@@ -20,7 +21,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     protected $configMock;
 
     /**
-     * @var \Magento\Indexer\Model\IndexerFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexerInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $indexerFactoryMock;
 
@@ -45,7 +46,10 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
             true,
             ['getIndexers']
         );
-        $this->indexerFactoryMock = $this->createPartialMock(\Magento\Indexer\Model\IndexerFactory::class, ['create']);
+        $this->indexerFactoryMock = $this->createPartialMock(
+            IndexerInterfaceFactory::class,
+            ['create']
+        );
         $this->indexersFactoryMock = $this->createPartialMock(
             \Magento\Indexer\Model\Indexer\CollectionFactory::class,
             ['create']
