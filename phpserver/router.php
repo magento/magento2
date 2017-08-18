@@ -100,7 +100,8 @@ if (php_sapi_name() === 'cli-server') {
             if ($type) {
                 header("Content-Type: $type");
             }
-            return readfile($file);
+            readfile($file);
+            return;
         } else {
             $debug('file does not exist');
             if (strpos($route, 'static/') === 0) {
