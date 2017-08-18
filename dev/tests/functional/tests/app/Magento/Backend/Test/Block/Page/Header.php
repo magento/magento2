@@ -44,6 +44,9 @@ class Header extends Block
     public function logOut()
     {
         if ($this->isLoggedIn()) {
+            $this->browser->waitUntil(function () {
+                return $this->browser->find('[data-role="spinner"]')->isVisible() ? null : true;
+            });
             $this->_rootElement->find($this->adminAccountLink)->click();
             $this->_rootElement->find($this->signOutLink)->click();
             $this->waitForElementNotVisible($this->signOutLink);

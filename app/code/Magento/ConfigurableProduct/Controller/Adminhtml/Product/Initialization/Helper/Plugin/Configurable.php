@@ -95,7 +95,7 @@ class Configurable
             $product->setAttributeSetId($setId);
         }
         $extensionAttributes = $product->getExtensionAttributes();
-
+        $product->getResource()->getSortedAttributes($setId);
         $product->setNewVariationsAttributeSetId($setId);
 
         $configurableOptions = [];

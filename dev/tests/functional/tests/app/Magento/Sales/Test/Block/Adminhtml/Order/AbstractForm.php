@@ -50,6 +50,7 @@ abstract class AbstractForm extends Form
      */
     public function fillFormData(array $data)
     {
+        $this->waitLoader();
         $data = $this->prepareData($data);
         if (isset($data['form_data'])) {
             $data['form_data'] = $this->dataMapping($data['form_data']);

@@ -121,6 +121,11 @@ abstract class AbstractFile implements WriterInterface
                 } catch (\InvalidArgumentException $e) {
                     throw new \InvalidArgumentException($e->getMessage() . ' Row #' . ($key + 1) . '.');
                 }
+
+                if (null === $path) {
+                    continue;
+                }
+
                 $filename = $path . $this->_locale . '.' . $this->_getFileExtension();
                 $files[$filename][$phrase->getPhrase()] = $phrase;
             }

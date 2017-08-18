@@ -10,6 +10,7 @@ use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Checkout\Test\Page\CheckoutCart;
 use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
@@ -53,11 +54,26 @@ class AddProductsToTheCartStep implements TestStepInterface
     protected $browser;
 
     /**
+     * Fixture factory.
+     *
+     * @var FixtureFactory
+     */
+    private $fixtureFactory;
+
+    /**
+     * Selector for element wait.
+     *
+     * @var string
+     */
+    private $loadingSelector = '.loading-mask';
+
+    /**
      * @constructor
      * @param CatalogProductView $catalogProductView
      * @param CheckoutCart $checkoutCart
      * @param CmsIndex $cmsIndex
      * @param BrowserInterface $browser
+     * @param FixtureFactory $fixtureFactory
      * @param array $products
      */
     public function __construct(
@@ -65,6 +81,7 @@ class AddProductsToTheCartStep implements TestStepInterface
         CheckoutCart $checkoutCart,
         CmsIndex $cmsIndex,
         BrowserInterface $browser,
+        FixtureFactory $fixtureFactory,
         array $products
     ) {
         $this->products = $products;
@@ -72,12 +89,14 @@ class AddProductsToTheCartStep implements TestStepInterface
         $this->checkoutCart = $checkoutCart;
         $this->cmsIndex = $cmsIndex;
         $this->browser = $browser;
+        $this->fixtureFactory = $fixtureFactory;
+        $this->products = $products;
     }
 
     /**
-     * Add products to the cart
+     * Add products to the cart.
      *
-     * @return void
+     * @return array
      */
     public function run()
     {
@@ -86,8 +105,11 @@ class AddProductsToTheCartStep implements TestStepInterface
 
         foreach ($this->products as $product) {
             $this->browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
+            $this->catalogProductView->getViewBlock()->waitForElementNotVisible($this->loadingSelector);
             $this->catalogProductView->getViewBlock()->addToCart($product);
-            $this->catalogProductView->getMessagesBlock()->waitSuccessMessage();
         }
+        $cart['data']['items'] = ['products' => $this->products];
+
+        return ['cart' => $this->fixtureFactory->createByCode('cart', $cart)];
     }
 }

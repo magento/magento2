@@ -387,4 +387,65 @@
         <from>0</from>
         <size>10</size>
     </request>
+    <request query="filter_out_of_stock_child" index="catalogsearch_fulltext">
+        <dimensions>
+            <dimension name="scope" value="default"/>
+        </dimensions>
+        <queries>
+            <query xsi:type="boolQuery" name="filter_out_of_stock_child" boost="1">
+                <queryReference clause="must" ref="test_configurable_searchable"/>
+            </query>
+            <query xsi:type="filteredQuery" name="test_configurable_searchable">
+                <filterReference clause="must" ref="test_configurable_filter"/>
+            </query>
+        </queries>
+        <filters>
+            <filter xsi:type="termFilter" name="test_configurable_filter" field="test_configurable_searchable" value="$test_configurable_searchable$"/>
+        </filters>
+        <aggregations/>
+        <from>0</from>
+        <size>10</size>
+    </request>
+    <request query="search_custom_price_field" index="catalogsearch_fulltext">
+        <dimensions>
+            <dimension name="scope" value="default"/>
+        </dimensions>
+        <queries>
+            <query xsi:type="boolQuery" name="search_custom_price_field" boost="1">
+                <queryReference clause="must" ref="custom_price_query"/>
+            </query>
+            <query xsi:type="filteredQuery" name="custom_price_query">
+                <filterReference clause="must" ref="custom_price_filter"/>
+            </query>
+        </queries>
+        <filters>
+            <filter name="custom_price_filter"
+                    xsi:type="rangeFilter"
+                    field="price_attribute"
+                    from="$price.from$" to="$price.to$"/>
+        </filters>
+        <from>0</from>
+        <size>10</size>
+    </request>
+    <request query="tax_class_id_filter_query" index="catalogsearch_fulltext">
+        <dimensions>
+            <dimension name="scope" value="default"/>
+        </dimensions>
+        <queries>
+            <query xsi:type="boolQuery" name="tax_class_id_filter_query" boost="1">
+                <queryReference clause="must" ref="filter_query"/>
+            </query>
+            <query xsi:type="filteredQuery" name="filter_query">
+                <filterReference clause="must" ref="tax_class_id_filter"/>
+            </query>
+        </queries>
+        <filters>
+            <filter name="tax_class_id_filter"
+                    xsi:type="termFilter"
+                    field="tax_class_id"
+                    value="$term$"/>
+        </filters>
+        <from>0</from>
+        <size>10</size>
+    </request>
 </requests>
