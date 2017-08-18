@@ -21,24 +21,16 @@ class Multi extends \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Optio
     /**
      * @inheritdoc
      */
-    protected function _getSelectedOptions()
+    protected function assignSelection(\Magento\Bundle\Model\Option $option, $selectionId)
     {
-        if ($this->_selectedOptions === null) {
-            $this->_selectedOptions = [];
-            /** @var \Magento\Bundle\Model\Option $option */
-            $option = $this->getOption();
-            if ($this->getProduct()->hasPreconfiguredValues()) {
-                $selectionIds = $this->getProduct()->getPreconfiguredValues()->getData(
-                    'bundle_option/' . $option->getId()
-                );
-                foreach ($selectionIds as $selectionId) {
-                    if ($selectionId && $option->getSelectionById($selectionId)) {
-                        $this->_selectedOptions[] = $selectionId;
-                    }
+        if (is_array($selectionId)) {
+            foreach ($selectionId as $id) {
+                if ($id && $option->getSelectionById($id)) {
+                    $this->_selectedOptions[] = $id;
                 }
             }
+        } else {
+            parent::assignSelection($option, $selectionId);
         }
-
-        return $this->_selectedOptions;
     }
 }
