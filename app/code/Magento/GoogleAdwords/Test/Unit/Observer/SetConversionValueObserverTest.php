@@ -127,7 +127,8 @@ class SetConversionValueObserverTest extends \PHPUnit\Framework\TestCase
         $conversionCurrency = 'USD';
         $this->_helperMock->expects($this->once())->method('isGoogleAdwordsActive')->will($this->returnValue(true));
         $this->_helperMock->expects($this->once())->method('isDynamicConversionValue')->will($this->returnValue(true));
-        $this->_helperMock->expects($this->once())->method('hasSendConversionValueCurrency')->will($this->returnValue(true));
+        $this->_helperMock->expects($this->once())->method('hasSendConversionValueCurrency')
+            ->will($this->returnValue(true));
         $this->_eventMock->expects($this->once())->method('getOrderIds')->will($this->returnValue($ordersIds));
         $this->_eventObserverMock->expects(
             $this->once()
