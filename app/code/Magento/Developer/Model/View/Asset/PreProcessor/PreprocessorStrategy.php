@@ -78,7 +78,7 @@ class PreprocessorStrategy implements PreProcessorInterface
 
     /**
      * @return State
-     * @deprecated
+     * @deprecated 100.2.0
      */
     private function getState()
     {

@@ -11,6 +11,10 @@
  */
 namespace Magento\Framework\Archive;
 
+/**
+ * Class \Magento\Framework\Archive\Zip
+ *
+ */
 class Zip extends AbstractArchive implements ArchiveInterface
 {
     /**

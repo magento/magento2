@@ -16,6 +16,10 @@ use Magento\Backend\App\Action\Context;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\DateTime\Filter\Date;
 
+/**
+ * Class \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
+ *
+ */
 abstract class Catalog extends Action
 {
     /**

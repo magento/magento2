@@ -5,6 +5,10 @@
  */
 namespace Magento\CatalogImportExport\Model\Indexer\Product\Flat\Plugin;
 
+/**
+ * Class \Magento\CatalogImportExport\Model\Indexer\Product\Flat\Plugin\Import
+ *
+ */
 class Import
 {
     /**

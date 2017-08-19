@@ -7,6 +7,10 @@
  */
 namespace Magento\Framework\Event;
 
+/**
+ * Class \Magento\Framework\Event\ObserverFactory
+ *
+ */
 class ObserverFactory
 {
     /**

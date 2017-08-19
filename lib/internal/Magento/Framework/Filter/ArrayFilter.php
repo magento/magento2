@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\Filter;
 
+/**
+ * Class \Magento\Framework\Filter\ArrayFilter
+ *
+ */
 class ArrayFilter extends \Zend_Filter
 {
     /**

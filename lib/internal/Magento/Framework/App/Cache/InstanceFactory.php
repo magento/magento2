@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\App\Cache;
 
+/**
+ * Class \Magento\Framework\App\Cache\InstanceFactory
+ *
+ */
 class InstanceFactory
 {
     /**

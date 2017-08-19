@@ -7,6 +7,10 @@
  */
 namespace Magento\Framework\DB\Helper;
 
+/**
+ * Class \Magento\Framework\DB\Helper\AbstractHelper
+ *
+ */
 abstract class AbstractHelper
 {
     /**

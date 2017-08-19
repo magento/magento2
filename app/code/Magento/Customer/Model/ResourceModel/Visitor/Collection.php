@@ -5,6 +5,10 @@
  */
 namespace Magento\Customer\Model\ResourceModel\Visitor;
 
+/**
+ * Class \Magento\Customer\Model\ResourceModel\Visitor\Collection
+ *
+ */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**

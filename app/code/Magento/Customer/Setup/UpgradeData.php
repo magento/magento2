@@ -168,7 +168,7 @@ class UpgradeData implements UpgradeDataInterface
     /**
      * Retrieve Store Manager
      *
-     * @deprecated
+     * @deprecated 100.1.3
      * @return StoreManagerInterface
      */
     private function getStoreManager()
@@ -183,7 +183,7 @@ class UpgradeData implements UpgradeDataInterface
     /**
      * Retrieve Allowed Countries Reader
      *
-     * @deprecated
+     * @deprecated 100.1.3
      * @return AllowedCountries
      */
     private function getAllowedCountriesReader()

@@ -5,6 +5,10 @@
  */
 namespace Magento\User\Controller\Adminhtml;
 
+/**
+ * Class \Magento\User\Controller\Adminhtml\User
+ *
+ */
 abstract class User extends \Magento\Backend\App\AbstractAction
 {
     /**

@@ -6,6 +6,10 @@
 
 namespace Magento\NewRelicReporting\Model\ResourceModel\Orders;
 
+/**
+ * Class \Magento\NewRelicReporting\Model\ResourceModel\Orders\Collection
+ *
+ */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**

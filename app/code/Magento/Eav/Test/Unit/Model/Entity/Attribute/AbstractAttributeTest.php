@@ -7,7 +7,7 @@
 
 namespace Magento\Eav\Test\Unit\Model\Entity\Attribute;
 
-class AbstractAttributeTest extends \PHPUnit_Framework_TestCase
+class AbstractAttributeTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetOptionWhenOptionsAreSet()
     {
@@ -95,13 +95,10 @@ class AbstractAttributeTest extends \PHPUnit_Framework_TestCase
 
     public function testConvertToObjects()
     {
-        $attributeOptionMock = $this->getMock(\Magento\Eav\Api\Data\AttributeOptionInterface::class);
-        $dataFactoryMock = $this->getMock(
+        $attributeOptionMock = $this->createMock(\Magento\Eav\Api\Data\AttributeOptionInterface::class);
+        $dataFactoryMock = $this->createPartialMock(
             \Magento\Eav\Api\Data\AttributeOptionInterfaceFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
         $dataObjectHelperMock = $this->getMockBuilder(\Magento\Framework\Api\DataObjectHelper::class)
             ->disableOriginalConstructor()
@@ -150,7 +147,7 @@ class AbstractAttributeTest extends \PHPUnit_Framework_TestCase
         $modelClassName = \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class;
         $model = $this->getMockForAbstractClass($modelClassName, [], '', false);
 
-        $serializerMock = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
+        $serializerMock = $this->createMock(\Magento\Framework\Serialize\SerializerInterface::class);
 
         $reflection = new \ReflectionClass($modelClassName);
         $reflectionProperty = $reflection->getProperty('serializer');

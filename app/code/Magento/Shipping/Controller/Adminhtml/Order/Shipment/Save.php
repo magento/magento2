@@ -190,7 +190,7 @@ class Save extends \Magento\Backend\App\Action
 
     /**
      * @return \Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface
-     * @deprecated
+     * @deprecated 100.1.1
      */
     private function getShipmentValidator()
     {

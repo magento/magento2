@@ -6,6 +6,10 @@
  */
 namespace Magento\User\Controller\Adminhtml\User\Role;
 
+/**
+ * Class \Magento\User\Controller\Adminhtml\User\Role\RoleGrid
+ *
+ */
 class RoleGrid extends \Magento\User\Controller\Adminhtml\User\Role
 {
     /**

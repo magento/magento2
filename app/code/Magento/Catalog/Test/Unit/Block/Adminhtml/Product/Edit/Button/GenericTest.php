@@ -14,7 +14,7 @@ use Magento\Catalog\Block\Adminhtml\Product\Edit\Button\Generic;
 /**
  * Class GenericTest
  */
-class GenericTest extends \PHPUnit_Framework_TestCase
+class GenericTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager

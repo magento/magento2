@@ -123,6 +123,7 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
      *
      * @param UiComponentInterface $component
      * @return $this
+     * @since 100.1.0
      */
     protected function prepareChildComponent(UiComponentInterface $component)
     {

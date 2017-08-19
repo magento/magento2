@@ -12,6 +12,10 @@ use Magento\Store\Model\StoreFactory;
 use Psr\Log\LoggerInterface as Logger;
 use Magento\Framework\Registry;
 
+/**
+ * Class \Magento\Catalog\Controller\Adminhtml\Product\Builder
+ *
+ */
 class Builder
 {
     /**

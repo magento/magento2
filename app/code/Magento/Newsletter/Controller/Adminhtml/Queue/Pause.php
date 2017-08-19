@@ -6,6 +6,10 @@
  */
 namespace Magento\Newsletter\Controller\Adminhtml\Queue;
 
+/**
+ * Class \Magento\Newsletter\Controller\Adminhtml\Queue\Pause
+ *
+ */
 class Pause extends \Magento\Newsletter\Controller\Adminhtml\Queue
 {
     /**

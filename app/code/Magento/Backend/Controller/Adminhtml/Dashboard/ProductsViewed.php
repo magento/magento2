@@ -6,6 +6,10 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\Dashboard;
 
+/**
+ * Class \Magento\Backend\Controller\Adminhtml\Dashboard\ProductsViewed
+ *
+ */
 class ProductsViewed extends AjaxBlock
 {
     /**

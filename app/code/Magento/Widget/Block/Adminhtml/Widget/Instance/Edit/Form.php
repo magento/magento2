@@ -11,6 +11,10 @@
  */
 namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit;
 
+/**
+ * Class \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Form
+ *
+ */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**

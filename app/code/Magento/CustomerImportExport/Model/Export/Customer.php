@@ -42,11 +42,7 @@ class Customer extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
 
     /**#@-*/
 
-    /**
-     * Overridden attributes parameters.
-     *
-     * @var array
-     */
+    /**#@-*/
     protected $_attributeOverrides = [
         'created_at' => ['backend_type' => 'datetime'],
         'reward_update_notification' => ['source_model' => \Magento\Eav\Model\Entity\Attribute\Source\Boolean::class],

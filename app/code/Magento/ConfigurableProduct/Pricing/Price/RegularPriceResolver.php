@@ -6,6 +6,10 @@
 
 namespace Magento\ConfigurableProduct\Pricing\Price;
 
+/**
+ * Class \Magento\ConfigurableProduct\Pricing\Price\RegularPriceResolver
+ *
+ */
 class RegularPriceResolver implements PriceResolverInterface
 {
     /**

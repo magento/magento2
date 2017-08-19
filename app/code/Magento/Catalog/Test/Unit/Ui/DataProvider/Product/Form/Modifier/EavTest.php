@@ -261,7 +261,8 @@ class EavTest extends AbstractModifierTest
             ->disableOriginalConstructor()
             ->getMock();
         $this->productAttributeMock = $this->getMockBuilder(ProductAttributeInterface::class)
-            ->getMock();
+            ->setMethods(['getValue'])
+            ->getMockForAbstractClass();
         $this->arrayManagerMock = $this->getMockBuilder(ArrayManager::class)
             ->getMock();
         $this->eavAttributeFactoryMock = $this->getMockBuilder(EavAttributeFactory::class)
@@ -398,7 +399,7 @@ class EavTest extends AbstractModifierTest
         $this->sortOrderBuilderMock->expects($this->once())
             ->method('setAscendingDirection')
             ->willReturnSelf();
-        $dataObjectMock = $this->getMock(\Magento\Framework\Api\AbstractSimpleObject::class, [], [], '', false);
+        $dataObjectMock = $this->createMock(\Magento\Framework\Api\AbstractSimpleObject::class);
         $this->sortOrderBuilderMock->expects($this->once())
             ->method('create')
             ->willReturn($dataObjectMock);
@@ -490,8 +491,9 @@ class EavTest extends AbstractModifierTest
             ->willReturn($note);
 
         $attributeMock = $this->getMockBuilder(AttributeInterface::class)
+            ->setMethods(['getValue'])
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $attributeMock->expects($this->any())
             ->method('getValue')

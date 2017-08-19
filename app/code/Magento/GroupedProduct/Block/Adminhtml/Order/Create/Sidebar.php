@@ -5,6 +5,10 @@
  */
 namespace Magento\GroupedProduct\Block\Adminhtml\Order\Create;
 
+/**
+ * Class \Magento\GroupedProduct\Block\Adminhtml\Order\Create\Sidebar
+ *
+ */
 class Sidebar
 {
     /**

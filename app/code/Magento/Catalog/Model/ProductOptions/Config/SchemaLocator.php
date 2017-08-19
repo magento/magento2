@@ -7,6 +7,10 @@ namespace Magento\Catalog\Model\ProductOptions\Config;
 
 use Magento\Framework\Module\Dir;
 
+/**
+ * Class \Magento\Catalog\Model\ProductOptions\Config\SchemaLocator
+ *
+ */
 class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {
     /**

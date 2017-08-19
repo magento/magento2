@@ -16,7 +16,7 @@ use Psr\Log\LoggerInterface;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class GatewayCommandTest extends \PHPUnit_Framework_TestCase
+class GatewayCommandTest extends \PHPUnit\Framework\TestCase
 {
     /** @var GatewayCommand */
     protected $command;
@@ -53,22 +53,22 @@ class GatewayCommandTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->requestBuilderMock = $this->getMock(
+        $this->requestBuilderMock = $this->createMock(
             BuilderInterface::class
         );
-        $this->transferFactoryMock = $this->getMock(
+        $this->transferFactoryMock = $this->createMock(
             TransferFactoryInterface::class
         );
-        $this->clientMock = $this->getMock(
+        $this->clientMock = $this->createMock(
             ClientInterface::class
         );
-        $this->responseHandlerMock = $this->getMock(
+        $this->responseHandlerMock = $this->createMock(
             HandlerInterface::class
         );
-        $this->validatorMock = $this->getMock(
+        $this->validatorMock = $this->createMock(
             ValidatorInterface::class
         );
-        $this->logger = $this->getMock(LoggerInterface::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
 
         $this->command = new GatewayCommand(
             $this->requestBuilderMock,
@@ -129,7 +129,7 @@ class GatewayCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteValidationFail()
     {
-        $this->setExpectedException(
+        $this->expectException(
             \Magento\Payment\Gateway\Command\CommandException::class
         );
 

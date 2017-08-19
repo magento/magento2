@@ -7,6 +7,10 @@ namespace Magento\Search\Controller\Adminhtml\Term;
 
 use Magento\Search\Controller\Adminhtml\Term as TermController;
 
+/**
+ * Class \Magento\Search\Controller\Adminhtml\Term\Index
+ *
+ */
 class Index extends TermController
 {
     /**

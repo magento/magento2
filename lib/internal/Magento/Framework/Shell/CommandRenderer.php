@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\Shell;
 
+/**
+ * Class \Magento\Framework\Shell\CommandRenderer
+ *
+ */
 class CommandRenderer implements CommandRendererInterface
 {
     /**

@@ -27,7 +27,9 @@ class Last extends \Magento\Backend\Block\Dashboard\Grid
      */
     protected $_moduleManager;
 
-    /** @var string  */
+    /**
+     * @var string
+     */
     protected $_template = 'Magento_Backend::dashboard/grid.phtml';
 
     /**

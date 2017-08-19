@@ -9,6 +9,10 @@ namespace Magento\ConfigurableProduct\Controller\Adminhtml\Product;
 use Magento\Backend\App\Action;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\ConfigurableProduct\Controller\Adminhtml\Product\AddAttribute
+ *
+ */
 class AddAttribute extends Action
 {
     /**

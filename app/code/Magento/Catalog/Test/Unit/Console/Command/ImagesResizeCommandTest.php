@@ -19,7 +19,7 @@ use \Magento\Framework\App\Area;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ImagesResizeCommandTest extends \PHPUnit_Framework_TestCase
+class ImagesResizeCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ImagesResizeCommand

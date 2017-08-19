@@ -7,6 +7,10 @@
 
 namespace Magento\Setup\Module\Di\Compiler;
 
+/**
+ * Class \Magento\Setup\Module\Di\Compiler\ArgumentsResolver
+ *
+ */
 class ArgumentsResolver
 {
     /**

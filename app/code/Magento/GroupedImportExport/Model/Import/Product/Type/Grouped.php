@@ -10,6 +10,10 @@ namespace Magento\GroupedImportExport\Model\Import\Product\Type;
 use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\ImportExport\Model\Import;
 
+/**
+ * Class \Magento\GroupedImportExport\Model\Import\Product\Type\Grouped
+ *
+ */
 class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
 {
     /**

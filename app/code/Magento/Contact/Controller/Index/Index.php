@@ -8,6 +8,10 @@ namespace Magento\Contact\Controller\Index;
 
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Contact\Controller\Index\Index
+ *
+ */
 class Index extends \Magento\Contact\Controller\Index
 {
     /**

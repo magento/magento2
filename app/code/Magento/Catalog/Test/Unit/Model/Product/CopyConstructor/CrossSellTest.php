@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Product\CopyConstructor;
 
-class CrossSellTest extends \PHPUnit_Framework_TestCase
+class CrossSellTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Product\CopyConstructor\CrossSell
@@ -36,22 +36,16 @@ class CrossSellTest extends \PHPUnit_Framework_TestCase
     {
         $this->_model = new \Magento\Catalog\Model\Product\CopyConstructor\CrossSell();
 
-        $this->_productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $this->_productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
 
-        $this->_duplicateMock = $this->getMock(
+        $this->_duplicateMock = $this->createPartialMock(
             \Magento\Catalog\Model\Product::class,
-            ['setCrossSellLinkData', '__wakeup'],
-            [],
-            '',
-            false
+            ['setCrossSellLinkData', '__wakeup']
         );
 
-        $this->_linkMock = $this->getMock(
+        $this->_linkMock = $this->createPartialMock(
             \Magento\Catalog\Model\Product\Link::class,
-            ['__wakeup', 'getAttributes', 'getCrossSellLinkCollection', 'useCrossSellLinks'],
-            [],
-            '',
-            false
+            ['__wakeup', 'getAttributes', 'getCrossSellLinkCollection', 'useCrossSellLinks']
         );
 
         $this->_productMock->expects(
@@ -74,12 +68,9 @@ class CrossSellTest extends \PHPUnit_Framework_TestCase
 
         $this->_linkMock->expects($this->once())->method('getAttributes')->will($this->returnValue($attributes));
 
-        $productLinkMock = $this->getMock(
+        $productLinkMock = $this->createPartialMock(
             \Magento\Catalog\Model\ResourceModel\Product\Link::class,
-            ['__wakeup', 'getLinkedProductId', 'toArray'],
-            [],
-            '',
-            false
+            ['__wakeup', 'getLinkedProductId', 'toArray']
         );
 
         $productLinkMock->expects($this->once())->method('getLinkedProductId')->will($this->returnValue('100500'));

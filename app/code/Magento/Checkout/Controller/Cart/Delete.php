@@ -6,6 +6,10 @@
  */
 namespace Magento\Checkout\Controller\Cart;
 
+/**
+ * Class \Magento\Checkout\Controller\Cart\Delete
+ *
+ */
 class Delete extends \Magento\Checkout\Controller\Cart
 {
     /**

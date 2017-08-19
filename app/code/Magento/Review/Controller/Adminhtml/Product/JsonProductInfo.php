@@ -14,6 +14,10 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Review\Controller\Adminhtml\Product\JsonProductInfo
+ *
+ */
 class JsonProductInfo extends ProductController
 {
     /**

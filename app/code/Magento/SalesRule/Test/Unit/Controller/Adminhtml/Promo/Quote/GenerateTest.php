@@ -12,7 +12,7 @@ use Magento\SalesRule\Model\CouponGenerator;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class GenerateTest extends \PHPUnit_Framework_TestCase
+class GenerateTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\SalesRule\Controller\Adminhtml\Promo\Quote\Generate */
     protected $model;
@@ -63,11 +63,11 @@ class GenerateTest extends \PHPUnit_Framework_TestCase
             ->getMockBuilder(\Magento\Framework\App\Response\Http::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->messageManager = $this->getMock(\Magento\Framework\Message\ManagerInterface::class);
+        $this->messageManager = $this->createMock(\Magento\Framework\Message\ManagerInterface::class);
         $this->objectManagerMock = $this->getMockBuilder(ObjectManager::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->view = $this->getMock(\Magento\Framework\App\ViewInterface::class);
+        $this->view = $this->createMock(\Magento\Framework\App\ViewInterface::class);
         $this->contextMock->expects($this->once())
             ->method('getView')
             ->willReturn($this->view);

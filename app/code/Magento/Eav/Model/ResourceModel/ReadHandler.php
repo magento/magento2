@@ -11,6 +11,10 @@ use Magento\Framework\Model\Entity\ScopeInterface;
 use Magento\Framework\Model\Entity\ScopeResolver;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Class \Magento\Eav\Model\ResourceModel\ReadHandler
+ *
+ */
 class ReadHandler implements AttributeInterface
 {
     /**
@@ -28,7 +32,9 @@ class ReadHandler implements AttributeInterface
      */
     private $logger;
 
-    /** @var \Magento\Eav\Model\Config */
+    /**
+     * @var \Magento\Eav\Model\Config
+     */
     private $config;
 
     /**

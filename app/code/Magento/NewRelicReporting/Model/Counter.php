@@ -13,6 +13,10 @@ use Magento\Customer\Api\CustomerManagementInterface;
 use Magento\Store\Api\WebsiteManagementInterface;
 use Magento\Store\Api\StoreManagementInterface;
 
+/**
+ * Class \Magento\NewRelicReporting\Model\Counter
+ *
+ */
 class Counter
 {
     /**

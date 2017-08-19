@@ -6,6 +6,10 @@
  */
 namespace Magento\Backup\Controller\Adminhtml\Index;
 
+/**
+ * Class \Magento\Backup\Controller\Adminhtml\Index\MassDelete
+ *
+ */
 class MassDelete extends \Magento\Backup\Controller\Adminhtml\Index
 {
     /**

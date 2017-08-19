@@ -15,7 +15,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Phrase;
 use Magento\SampleData\Model\Dependency;
 
-class DependencyTest extends \PHPUnit_Framework_TestCase
+class DependencyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider dataPackagesFromComposerSuggest
