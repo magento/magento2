@@ -24,6 +24,7 @@ namespace Magento\Reports\Model;
  * @method \Magento\Reports\Model\Event setStoreId(int $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Event extends \Magento\Framework\Model\AbstractModel
 {

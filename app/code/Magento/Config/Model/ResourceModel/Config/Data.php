@@ -9,6 +9,7 @@ namespace Magento\Config\Model\ResourceModel\Config;
  * Core config data resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

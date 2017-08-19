@@ -7,34 +7,34 @@
 ?>
 <section class="admin__page-section">
     <div class="admin__page-section-title">
-        <span class="title"><?php echo $block->escapeHtml(__('General Information')); ?></span>
+        <span class="title"><?= $block->escapeHtml(__('General Information')) ?></span>
     </div>
     <div class="admin__page-section-content log-details">
         <table class="data-table admin__table-secondary order-billing-agreement-table">
             <tbody>
                 <tr>
-                    <th><?php echo $block->escapeHtml(__('Reference ID')); ?></th>
-                    <td><?php echo $block->escapeHtml($block->getReferenceId()); ?></td>
+                    <th><?= $block->escapeHtml(__('Reference ID')) ?></th>
+                    <td><?= $block->escapeHtml($block->getReferenceId()) ?></td>
                 </tr>
                 <tr>
-                    <th><?php echo $block->escapeHtml(__('Customer')); ?></th>
+                    <th><?= $block->escapeHtml(__('Customer')) ?></th>
                     <td>
-                        <a href="<?php echo $block->escapeUrl($block->getCustomerUrl()); ?>">
-                            <?php echo $block->escapeHtml($block->getCustomerEmail()); ?>
+                        <a href="<?= $block->escapeUrl($block->getCustomerUrl()) ?>">
+                            <?= $block->escapeHtml($block->getCustomerEmail()) ?>
                         </a>
                     </td>
                 </tr>
                 <tr>
-                    <th><?php echo $block->escapeHtml(__('Status')); ?></th>
-                    <td><?php echo $block->escapeHtml($block->getStatus()); ?></td>
+                    <th><?= $block->escapeHtml(__('Status')) ?></th>
+                    <td><?= $block->escapeHtml($block->getStatus()) ?></td>
                 </tr>
                 <tr>
-                    <th><?php echo $block->escapeHtml(__('Created At')); ?></th>
-                    <td><?php echo $block->escapeHtml($block->getCreatedAt()); ?></td>
+                    <th><?= $block->escapeHtml(__('Created At')) ?></th>
+                    <td><?= $block->escapeHtml($block->getCreatedAt()) ?></td>
                 </tr>
                 <tr>
-                    <th><?php echo $block->escapeHtml(__('Updated At')); ?></th>
-                    <td><?php echo $block->escapeHtml($block->getUpdatedAt()); ?></td>
+                    <th><?= $block->escapeHtml(__('Updated At')) ?></th>
+                    <td><?= $block->escapeHtml($block->getUpdatedAt()) ?></td>
                 </tr>
             </tbody>
         </table>

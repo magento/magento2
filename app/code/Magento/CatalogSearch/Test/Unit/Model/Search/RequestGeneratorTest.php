@@ -170,6 +170,16 @@ class RequestGeneratorTest extends \PHPUnit_Framework_TestCase
             $this->countVal($result['catalog_view_container']['queries']),
             'Queries count for "catalog_view_container" doesn\'t match'
         );
+        foreach ($result as $key => $value) {
+            if (isset($value['queries'][$key]['queryReference'])) {
+                foreach ($value['queries'][$key]['queryReference'] as $reference) {
+                    $this->assertEquals(
+                        'must',
+                        $reference['clause']
+                    );
+                }
+            }
+        }
     }
 
     /**

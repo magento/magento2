@@ -315,7 +315,6 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
     public function testRunWithException()
     {
         $data = [
-            ScopeInterface::SCOPE_GROUPS => [],
             ScopeInterface::SCOPE_WEBSITES => [],
             ScopeInterface::SCOPE_STORES => []
         ];

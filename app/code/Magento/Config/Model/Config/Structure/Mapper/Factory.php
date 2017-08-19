@@ -9,6 +9,9 @@
  */
 namespace Magento\Config\Model\Config\Structure\Mapper;
 
+/**
+ * @api
+ */
 class Factory
 {
     const MAPPER_SORTING = 'sorting';

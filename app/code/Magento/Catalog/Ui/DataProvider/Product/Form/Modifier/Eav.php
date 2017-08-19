@@ -555,7 +555,7 @@ class Eav extends AbstractModifier
             'formElement' => $this->getFormElementsMapValue($attribute->getFrontendInput()),
             'visible' => $attribute->getIsVisible(),
             'required' => $attribute->getIsRequired(),
-            'notice' => $attribute->getNote(),
+            'notice' => $attribute->getNote() === null ? null : __($attribute->getNote()),
             'default' => (!$this->isProductExists()) ? $attribute->getDefaultValue() : null,
             'label' => $attribute->getDefaultFrontendLabel(),
             'code' => $attribute->getAttributeCode(),

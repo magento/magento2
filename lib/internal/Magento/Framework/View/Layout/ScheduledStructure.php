@@ -7,6 +7,8 @@ namespace Magento\Framework\View\Layout;
 
 /**
  * Layout structure model
+ *
+ * @api
  */
 class ScheduledStructure
 {

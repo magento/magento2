@@ -51,7 +51,7 @@ class DiInfoCommand extends Command
              ->setDescription('Provides information on Dependency Injection configuration for the Command.')
              ->setDefinition([
                 new InputArgument(self::CLASS_NAME, InputArgument::REQUIRED, 'Class name')
-            ]);
+             ]);
 
         parent::configure();
     }

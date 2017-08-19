@@ -16,7 +16,7 @@
     <tr>
         <td class="col photo">
             <a href="<?= /* @escapeNotVerified */  $_product->getProductUrl() ?>" title="<?= $block->escapeHtml($_product->getName()) ?>" class="product photo">
-                <?php echo $block->getImage($_product, 'product_thumbnail_image', ['class' => 'photo image'])->toHtml(); ?>
+                <?= $block->getImage($_product, 'product_thumbnail_image', ['class' => 'photo image'])->toHtml() ?>
             </a>
         </td>
         <td class="col item">

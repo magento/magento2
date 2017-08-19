@@ -7,53 +7,175 @@
  */
 namespace Magento\Framework\Mail;
 
-class Message extends \Zend_Mail implements MessageInterface
+use Zend\Mime\Mime;
+use Zend\Mime\Part;
+
+/**
+ * Class Message.
+ */
+class Message implements MailMessageInterface
 {
     /**
-     * @param string $charset
+     * @var \Zend\Mail\Message
      */
-    public function __construct($charset = 'utf-8')
-    {
-        parent::__construct($charset);
-    }
+    private $zendMessage;
 
     /**
      * Message type
      *
      * @var string
      */
-    protected $messageType = self::TYPE_TEXT;
+    private $messageType = self::TYPE_TEXT;
 
     /**
-     * Set message body
+     * Initialize dependencies.
      *
-     * @param string $body
-     * @return $this
+     * @param string $charset
      */
-    public function setBody($body)
+    public function __construct($charset = 'utf-8')
     {
-        return $this->messageType == self::TYPE_TEXT ? $this->setBodyText($body) : $this->setBodyHtml($body);
+        $this->zendMessage = new \Zend\Mail\Message();
+        $this->zendMessage->setEncoding($charset);
     }
 
     /**
-     * Set message body
+     * {@inheritdoc}
      *
-     * @return string
-     */
-    public function getBody()
-    {
-        return $this->messageType == self::TYPE_TEXT ? $this->getBodyText() : $this->getBodyHtml();
-    }
-
-    /**
-     * Set message type
-     *
-     * @param string $type
-     * @return $this
+     * @deprecated
+     * @see \Magento\Framework\Mail\Message::setBodyText
+     * @see \Magento\Framework\Mail\Message::setBodyHtml
      */
     public function setMessageType($type)
     {
         $this->messageType = $type;
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @deprecated
+     * @see \Magento\Framework\Mail\Message::setBodyText
+     * @see \Magento\Framework\Mail\Message::setBodyHtml
+     */
+    public function setBody($body)
+    {
+        if (is_string($body) && $this->messageType === MailMessageInterface::TYPE_HTML) {
+            $body = self::createHtmlMimeFromString($body);
+        }
+        $this->zendMessage->setBody($body);
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setSubject($subject)
+    {
+        $this->zendMessage->setSubject($subject);
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSubject()
+    {
+        return $this->zendMessage->getSubject();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBody()
+    {
+        return $this->zendMessage->getBody();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setFrom($fromAddress)
+    {
+        $this->zendMessage->setFrom($fromAddress);
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addTo($toAddress)
+    {
+        $this->zendMessage->addTo($toAddress);
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addCc($ccAddress)
+    {
+        $this->zendMessage->addCc($ccAddress);
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addBcc($bccAddress)
+    {
+        $this->zendMessage->addBcc($bccAddress);
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setReplyTo($replyToAddress)
+    {
+        $this->zendMessage->setReplyTo($replyToAddress);
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getRawMessage()
+    {
+        return $this->zendMessage->toString();
+    }
+
+    /**
+     * Create HTML mime message from the string.
+     *
+     * @param string $htmlBody
+     * @return \Zend\Mime\Message
+     */
+    private function createHtmlMimeFromString($htmlBody)
+    {
+        $htmlPart = new Part($htmlBody);
+        $htmlPart->setCharset($this->zendMessage->getEncoding());
+        $htmlPart->setType(Mime::TYPE_HTML);
+        $mimeMessage = new \Zend\Mime\Message();
+        $mimeMessage->addPart($htmlPart);
+        return $mimeMessage;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBodyHtml($html)
+    {
+        $this->setMessageType(self::TYPE_HTML);
+        return $this->setBody($html);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBodyText($text)
+    {
+        $this->setMessageType(self::TYPE_TEXT);
+        return $this->setBody($text);
     }
 }

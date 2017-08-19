@@ -848,4 +848,31 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
         $this->_productFlatIndexerHelper = $objectManager->get(\Magento\Catalog\Helper\Product\Flat\Indexer::class);
         $this->attrLockValidator = $objectManager->get(LockValidatorInterface::class);
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function setIsUsedInGrid($isUsedInGrid)
+    {
+        $this->setData(self::IS_USED_IN_GRID, $isUsedInGrid);
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setIsVisibleInGrid($isVisibleInGrid)
+    {
+        $this->setData(self::IS_VISIBLE_IN_GRID, $isVisibleInGrid);
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setIsFilterableInGrid($isFilterableInGrid)
+    {
+        $this->setData(self::IS_FILTERABLE_IN_GRID, $isFilterableInGrid);
+        return $this;
+    }
 }

@@ -10,6 +10,7 @@ namespace Magento\Reports\Block\Adminhtml\Grid\Column\Renderer;
  * Adminhtml grid item renderer currency
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Currency extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Currency
 {

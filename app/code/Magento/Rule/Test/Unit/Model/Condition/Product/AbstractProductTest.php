@@ -39,6 +39,13 @@ class AbstractProductTest extends \PHPUnit_Framework_TestCase
      */
     protected $_configProperty;
 
+    /**
+     * Reflection for Magento\Rule\Model\Condition\Product\AbstractProduct::$productCategoryListProperty
+     *
+     * @var \ReflectionProperty
+     */
+    private $productCategoryListProperty;
+
     protected function setUp()
     {
         $this->_condition = $this->getMockForAbstractClass(
@@ -47,6 +54,13 @@ class AbstractProductTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+
+        $this->productCategoryListProperty = new \ReflectionProperty(
+            \Magento\Rule\Model\Condition\Product\AbstractProduct::class,
+            'productCategoryList'
+        );
+        $this->productCategoryListProperty->setAccessible(true);
+
         $this->_entityAttributeValuesProperty = new \ReflectionProperty(
             \Magento\Rule\Model\Condition\Product\AbstractProduct::class,
             '_entityAttributeValues'
@@ -62,10 +76,29 @@ class AbstractProductTest extends \PHPUnit_Framework_TestCase
 
     public function testValidateAttributeEqualCategoryId()
     {
-        $product = $this->getMock(\Magento\Framework\Model\AbstractModel::class, ["getAttribute"], [], '', false);
+        $product = $this->getMockBuilder(\Magento\Framework\Model\AbstractModel::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->_condition->setAttribute('category_ids');
-        $product->setAvailableInCategories(new \Magento\Framework\DataObject());
-        $this->assertFalse($this->_condition->validate($product));
+        $this->_condition->setValueParsed('1');
+        $this->_condition->setOperator('{}');
+
+        $productCategoryList = $this->getMockBuilder(\Magento\Catalog\Model\ProductCategoryList::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $productCategoryList->method('getCategoryIds')->willReturn([1, 2]);
+        $this->productCategoryListProperty->setValue(
+            $this->_condition,
+            $productCategoryList
+        );
+        $this->_configProperty->setValue(
+            $this->_condition,
+            $this->getMockBuilder(\Magento\Eav\Model\Config::class)
+                ->disableOriginalConstructor()
+                ->getMock()
+        );
+
+        $this->assertTrue($this->_condition->validate($product));
     }
 
     public function testValidateEmptyEntityAttributeValues()

@@ -9,6 +9,7 @@ namespace Magento\Backend\App;
 
 /**
  * Backend config accessor
+ * @api
  */
 interface ConfigInterface
 {

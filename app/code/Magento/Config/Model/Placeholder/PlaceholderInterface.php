@@ -9,6 +9,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * Interface PlaceholderInterface
+ * @api
  */
 interface PlaceholderInterface
 {

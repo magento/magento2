@@ -9,6 +9,7 @@ use Magento\Framework\Module\Dir;
 
 /**
  * Configuration for reports
+ * @api
  */
 class Config extends \Magento\Framework\DataObject
 {

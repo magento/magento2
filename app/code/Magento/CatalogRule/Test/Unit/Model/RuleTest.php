@@ -411,4 +411,10 @@ class RuleTest extends \PHPUnit_Framework_TestCase
         $expectedResult = 'form_namerule_conditions_fieldset_100';
         $this->assertEquals($expectedResult, $this->rule->getConditionsFieldSetId($formName));
     }
+
+    public function testReindex()
+    {
+        $this->_ruleProductProcessor->expects($this->once())->method('reindexList');
+        $this->rule->reindex();
+    }
 }

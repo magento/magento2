@@ -9,6 +9,9 @@
  */
 namespace Magento\Config\Model\Config\Backend\File\RequestData;
 
+/**
+ * @api
+ */
 interface RequestDataInterface
 {
     /**

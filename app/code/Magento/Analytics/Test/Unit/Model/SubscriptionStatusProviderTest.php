@@ -6,6 +6,7 @@
 namespace Magento\Analytics\Test\Unit\Model;
 
 use Magento\Analytics\Model\AnalyticsToken;
+use Magento\Analytics\Model\Config\Backend\Baseurl\SubscriptionUpdateHandler;
 use Magento\Analytics\Model\Config\Backend\Enabled\SubscriptionHandler;
 use Magento\Analytics\Model\SubscriptionStatusProvider;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -70,7 +71,11 @@ class SubscriptionStatusProviderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGetStatusShouldBeFailed()
+    /**
+     * @param array $flagManagerData
+     * @dataProvider getStatusShouldBeFailedDataProvider
+     */
+    public function testGetStatusShouldBeFailed(array $flagManagerData)
     {
         $this->analyticsTokenMock->expects($this->once())
             ->method('isTokenExist')
@@ -80,26 +85,86 @@ class SubscriptionStatusProviderTest extends \PHPUnit_Framework_TestCase
             ->with('analytics/subscription/enabled')
             ->willReturn(true);
 
-        $this->expectFlagCounterReturn(null);
+        $this->expectFlagManagerReturn($flagManagerData);
         $this->assertEquals(SubscriptionStatusProvider::FAILED, $this->statusProvider->getStatus());
     }
 
-    public function testGetStatusShouldBePending()
+    /**
+     * @return array
+     */
+    public function getStatusShouldBeFailedDataProvider()
+    {
+        return [
+            'Subscription update doesn\'t active' => [
+                'Flag Manager data mapping' => [
+                    [SubscriptionUpdateHandler::PREVIOUS_BASE_URL_FLAG_CODE, null],
+                    [SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE, null]
+                ],
+            ],
+            'Subscription update is active' => [
+                'Flag Manager data mapping' => [
+                    [SubscriptionUpdateHandler::PREVIOUS_BASE_URL_FLAG_CODE, 'http://store.com'],
+                    [SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE, null]
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @param array $flagManagerData
+     * @param bool $isTokenExist
+     * @dataProvider getStatusShouldBePendingDataProvider
+     */
+    public function testGetStatusShouldBePending(array $flagManagerData, bool $isTokenExist)
     {
         $this->analyticsTokenMock->expects($this->once())
             ->method('isTokenExist')
-            ->willReturn(false);
+            ->willReturn($isTokenExist);
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
             ->with('analytics/subscription/enabled')
             ->willReturn(true);
 
-        $this->expectFlagCounterReturn(45);
+        $this->expectFlagManagerReturn($flagManagerData);
         $this->assertEquals(SubscriptionStatusProvider::PENDING, $this->statusProvider->getStatus());
+    }
+
+    /**
+     * @return array
+     */
+    public function getStatusShouldBePendingDataProvider()
+    {
+        return [
+            'Subscription update doesn\'t active and the token does not exist' => [
+                'Flag Manager data mapping' => [
+                    [SubscriptionUpdateHandler::PREVIOUS_BASE_URL_FLAG_CODE, null],
+                    [SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE, 45]
+                ],
+                'isTokenExist' => false,
+            ],
+            'Subscription update is active and the token does not exist' => [
+                'Flag Manager data mapping' => [
+                    [SubscriptionUpdateHandler::PREVIOUS_BASE_URL_FLAG_CODE, 'http://store.com'],
+                    [SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE, 45]
+                ],
+                'isTokenExist' => false,
+            ],
+            'Subscription update is active and token exist' => [
+                'Flag Manager data mapping' => [
+                    [SubscriptionUpdateHandler::PREVIOUS_BASE_URL_FLAG_CODE, 'http://store.com'],
+                    [SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE, null]
+                ],
+                'isTokenExist' => true,
+            ],
+        ];
     }
 
     public function testGetStatusShouldBeEnabled()
     {
+        $this->flagManagerMock
+            ->method('getFlagData')
+            ->with(SubscriptionUpdateHandler::PREVIOUS_BASE_URL_FLAG_CODE)
+            ->willReturn(null);
         $this->analyticsTokenMock->expects($this->once())
             ->method('isTokenExist')
             ->willReturn(true);
@@ -120,15 +185,12 @@ class SubscriptionStatusProviderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param null|int $value
+     * @param array $mapping
      */
-    private function expectFlagCounterReturn($value)
+    private function expectFlagManagerReturn(array $mapping)
     {
-        $this->flagManagerMock->expects($this->once())->method('getFlagData')
-            ->willReturnMap(
-                [
-                    [SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE, $value],
-                ]
-            );
+        $this->flagManagerMock
+            ->method('getFlagData')
+            ->willReturnMap($mapping);
     }
 }

@@ -10,6 +10,7 @@ namespace Magento\Framework\Config\Reader;
 
 /**
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @api
  */
 class Filesystem implements \Magento\Framework\Config\ReaderInterface
 {

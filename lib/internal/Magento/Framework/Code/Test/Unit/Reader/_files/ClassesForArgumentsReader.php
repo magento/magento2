@@ -1,11 +1,13 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
+/**
+ * @codingStandardsIgnoreFile
+ * Coding Standards have to be ignored in this file, as it is just a data source for tests.
+ */
 
 class ClassWithAllArgumentTypes
 {
@@ -49,7 +51,7 @@ class ClassWithAllArgumentTypes
     /**
      * @param stdClass $stdClassObject
      * @param ClassWithoutConstruct $withoutConstructorClassObject
-     * @param $someVariable
+     * @param mixed $someVariable
      * @param string $const
      * @param int $optionalNumValue
      * @param string $optionalStringValue
