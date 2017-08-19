@@ -559,7 +559,7 @@ define([
          * @param {Object} elem - instance
          */
         setMaxPosition: function (position, elem) {
-            if (position) {
+            if (position || position === 0) {
                 this.checkMaxPosition(position);
                 this.sort(position, elem);
             } else {
@@ -579,7 +579,7 @@ define([
                 updatedCollection;
 
             if (this.elems().filter(function (el) {
-                    return el.position;
+                    return el.position || el.position === 0;
                 }).length !== this.getChildItems().length) {
 
                 return false;

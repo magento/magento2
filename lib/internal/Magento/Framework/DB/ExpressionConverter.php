@@ -7,6 +7,10 @@
  */
 namespace Magento\Framework\DB;
 
+/**
+ * Class \Magento\Framework\DB\ExpressionConverter
+ *
+ */
 class ExpressionConverter
 {
     /**

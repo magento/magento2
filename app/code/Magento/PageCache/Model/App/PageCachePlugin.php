@@ -6,6 +6,10 @@
 
 namespace Magento\PageCache\Model\App;
 
+/**
+ * Class \Magento\PageCache\Model\App\PageCachePlugin
+ *
+ */
 class PageCachePlugin
 {
     /**

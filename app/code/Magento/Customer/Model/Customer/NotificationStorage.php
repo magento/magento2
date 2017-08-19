@@ -8,6 +8,10 @@ namespace Magento\Customer\Model\Customer;
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 
+/**
+ * Class \Magento\Customer\Model\Customer\NotificationStorage
+ *
+ */
 class NotificationStorage
 {
     const UPDATE_CUSTOMER_SESSION = 'update_customer_session';
@@ -22,7 +26,7 @@ class NotificationStorage
      */
 
     /**
-     * @var SerializerInterface
+     * @param FrontendInterface $cache
      */
     private $serializer;
 
@@ -93,7 +97,7 @@ class NotificationStorage
      * Get serializer
      *
      * @return SerializerInterface
-     * @deprecated
+     * @deprecated 100.2.0
      */
     private function getSerializer()
     {

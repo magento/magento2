@@ -11,6 +11,10 @@ use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\CatalogInventory\Model\Stock\Item as StockItem;
 
+/**
+ * Class \Magento\CatalogInventory\Setup\UpgradeSchema
+ *
+ */
 class UpgradeSchema implements UpgradeSchemaInterface
 {
     /**
@@ -157,11 +161,11 @@ class UpgradeSchema implements UpgradeSchemaInterface
      */
     private function addReplicaTable(SchemaSetupInterface $setup, $existingTable, $replicaTable)
     {
-        $setup->getConnection()->createTable(
-            $setup->getConnection()->createTableByDdl(
-                $setup->getTable($existingTable),
-                $setup->getTable($replicaTable)
-            )
+        $sql = sprintf(
+            'CREATE TABLE IF NOT EXISTS %s LIKE %s',
+            $setup->getConnection()->quoteIdentifier($setup->getTable($replicaTable)),
+            $setup->getConnection()->quoteIdentifier($setup->getTable($existingTable))
         );
+        $setup->getConnection()->query($sql);
     }
 }

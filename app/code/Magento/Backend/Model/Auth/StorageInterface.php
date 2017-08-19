@@ -7,6 +7,8 @@ namespace Magento\Backend\Model\Auth;
 
 /**
  * Backend Auth Storage interface
+ *
+ * @api
  */
 interface StorageInterface
 {

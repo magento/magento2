@@ -5,56 +5,64 @@
  */
 namespace Magento\Usps\Test\Unit\Model;
 
+use Magento\Framework\HTTP\ZendClient;
+use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Usps\Helper\Data as DataHelper;
 use Magento\Usps\Model\Carrier;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CarrierTest extends \PHPUnit_Framework_TestCase
+class CarrierTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Zend_Http_Response|MockObject
      */
-    protected $httpResponse;
+    private $httpResponse;
 
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
-    protected $helper;
+    private $objectManager;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Address\RateResult\Error|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote\Address\RateResult\Error|MockObject
      */
-    protected $error;
+    private $error;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory|MockObject
      */
-    protected $errorFactory;
+    private $errorFactory;
 
     /**
-     * @var \Magento\Usps\Model\Carrier|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Usps\Model\Carrier|MockObject
      */
-    protected $carrier;
+    private $carrier;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|MockObject
      */
-    protected $scope;
+    private $scope;
 
     /**
-     * @var DataHelper|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataHelper|MockObject
      */
     private $dataHelper;
+
+    /**
+     * @var ZendClient|MockObject
+     */
+    private $httpClient;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
     {
-        $this->helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->scope = $this->getMockBuilder(
             \Magento\Framework\App\Config\ScopeConfigInterface::class
@@ -121,19 +129,16 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
             ['getBody']
         )->getMock();
 
-        $httpClient = $this->getMockBuilder(
-            \Magento\Framework\HTTP\ZendClient::class
-        )->disableOriginalConstructor()->setMethods(
-            ['request']
-        )->getMock();
-        $httpClient->expects($this->any())->method('request')->will($this->returnValue($this->httpResponse));
+        $this->httpClient = $this->getMockBuilder(ZendClient::class)
+            ->getMock();
+        $this->httpClient->method('request')
+            ->willReturn($this->httpResponse);
 
-        $httpClientFactory = $this->getMockBuilder(
-            \Magento\Framework\HTTP\ZendClientFactory::class
-        )->disableOriginalConstructor()->setMethods(
-            ['create']
-        )->getMock();
-        $httpClientFactory->expects($this->any())->method('create')->will($this->returnValue($httpClient));
+        $httpClientFactory = $this->getMockBuilder(ZendClientFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $httpClientFactory->method('create')
+            ->willReturn($this->httpClient);
 
         $data = ['id' => 'usps', 'store' => '1'];
 
@@ -148,6 +153,15 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
 
         $this->errorFactory->expects($this->any())->method('create')->willReturn($this->error);
 
+        $localeResolver = $this->getMockForAbstractClass(\Magento\Framework\Locale\ResolverInterface::class);
+        $localeResolver->method('getLocale')->willReturn('fr_FR');
+        $carrierHelper = $this->objectManager->getObject(
+            \Magento\Shipping\Helper\Carrier::class,
+            [
+                'localeResolver' => $localeResolver
+            ]
+        );
+
         $arguments = [
             'scopeConfig' => $this->scope,
             'xmlSecurity' => new \Magento\Framework\Xml\Security(),
@@ -157,7 +171,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
             'httpClientFactory' => $httpClientFactory,
             'data' => $data,
             'rateErrorFactory' => $this->errorFactory,
-
+            'carrierHelper' => $carrierHelper,
         ];
 
         $this->dataHelper = $this->getMockBuilder(DataHelper::class)
@@ -165,9 +179,9 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['displayGirthValue'])
             ->getMock();
 
-        $this->carrier = $this->helper->getObject(\Magento\Usps\Model\Carrier::class, $arguments);
+        $this->carrier = $this->objectManager->getObject(\Magento\Usps\Model\Carrier::class, $arguments);
 
-        $this->helper->setBackwardCompatibleProperty($this->carrier, 'dataHelper', $this->dataHelper);
+        $this->objectManager->setBackwardCompatibleProperty($this->carrier, 'dataHelper', $this->dataHelper);
     }
 
     /**
@@ -185,23 +199,29 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
 
     public function testCollectRates()
     {
-        $this->scope->expects($this->any())->method('isSetFlag')->will($this->returnValue(true));
+        $expectedRequest = '<?xml version="1.0" encoding="UTF-8"?><RateV4Request USERID="213MAGEN6752">'
+            . '<Revision>2</Revision><Package ID="0"><Service>ALL</Service><ZipOrigination/>'
+            . '<ZipDestination>90032</ZipDestination><Pounds>4</Pounds><Ounces>4.2512000000</Ounces>'
+            . '<Container>VARIABLE</Container><Size>REGULAR</Size><Machinable/></Package></RateV4Request>';
+        $expectedXml = new \SimpleXMLElement($expectedRequest);
 
-        $this->httpResponse->expects(
-            $this->any()
-        )->method(
-            'getBody'
-        )->will(
-            $this->returnValue(file_get_contents(__DIR__ . '/_files/success_usps_response_rates.xml'))
-        );
-        // for setRequest
+        $this->scope->method('isSetFlag')
+            ->willReturn(true);
+
+        $this->httpClient->expects(self::exactly(2))
+            ->method('setParameterGet')
+            ->withConsecutive(
+                ['API', 'RateV4'],
+                ['XML', self::equalTo($expectedXml->asXML())]
+            );
+
+        $this->httpResponse->method('getBody')
+            ->willReturn(file_get_contents(__DIR__ . '/_files/success_usps_response_rates.xml'));
+
         $data = require __DIR__ . '/_files/rates_request_data.php';
-        $request = $this->helper->getObject(
-            \Magento\Quote\Model\Quote\Address\RateRequest::class,
-            ['data' => $data[0]]
-        );
+        $request = $this->objectManager->getObject(RateRequest::class, ['data' => $data[0]]);
 
-        $this->assertNotEmpty($this->carrier->collectRates($request)->getAllRates());
+        self::assertNotEmpty($this->carrier->collectRates($request)->getAllRates());
     }
 
     public function testCollectRatesWithUnavailableService()
@@ -217,7 +237,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
             ->willReturn(file_get_contents(__DIR__ . '/_files/response_rates.xml'));
 
         $data = require __DIR__ . '/_files/rates_request_data.php';
-        $request = $this->helper->getObject(RateRequest::class, ['data' => $data[1]]);
+        $request = $this->objectManager->getObject(RateRequest::class, ['data' => $data[1]]);
         $rates = $this->carrier->collectRates($request)->getAllRates();
         static::assertEquals($expectedCount, count($rates));
     }
@@ -231,19 +251,27 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue(file_get_contents(__DIR__ . '/_files/success_usps_response_return_shipment.xml'))
         );
-        $request = $this->helper->getObject(
+        $request = $this->objectManager->getObject(
             \Magento\Shipping\Model\Shipment\ReturnShipment::class,
             require __DIR__ . '/_files/return_shipment_request_data.php'
         );
+        $this->httpClient->expects(self::exactly(2))
+            ->method('setParameterGet')
+            ->withConsecutive(
+                ['API', 'SignatureConfirmationCertifyV3'],
+                ['XML', $this->stringContains('<WeightInOunces>80</WeightInOunces>')]
+            );
+
         $this->assertNotEmpty($this->carrier->returnOfShipment($request)->getInfo()[0]['tracking_number']);
     }
 
     /**
-     * Callback function, emulates getValue function
+     * Emulates the config's `getValue` method.
+     *
      * @param $path
-     * @return null|string
+     * @return string|string
      */
-    public function scopeConfiggetValue($path)
+    public function scopeConfigGetValue($path)
     {
         switch ($path) {
             case 'carriers/usps/allowed_methods':

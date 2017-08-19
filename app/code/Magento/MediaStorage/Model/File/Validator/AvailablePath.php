@@ -26,6 +26,10 @@
  */
 namespace Magento\MediaStorage\Model\File\Validator;
 
+/**
+ * Class \Magento\MediaStorage\Model\File\Validator\AvailablePath
+ *
+ */
 class AvailablePath extends \Zend_Validate_Abstract
 {
     const PROTECTED_PATH = 'protectedPath';

@@ -14,7 +14,7 @@ use Magento\GiftMessage\Model\GuestItemRepository;
 use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\QuoteIdMaskFactory;
 
-class GuestCartRepositoryTest extends \PHPUnit_Framework_TestCase
+class GuestCartRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var GuestItemRepository

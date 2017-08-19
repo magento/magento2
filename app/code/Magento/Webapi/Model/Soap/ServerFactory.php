@@ -7,11 +7,15 @@
  */
 namespace Magento\Webapi\Model\Soap;
 
+/**
+ * Class \Magento\Webapi\Model\Soap\ServerFactory
+ *
+ */
 class ServerFactory
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
-     * @deprecated
+     * @deprecated 100.1.0
      */
     protected $_objectManager;
 

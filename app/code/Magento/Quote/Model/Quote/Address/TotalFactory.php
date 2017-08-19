@@ -9,6 +9,10 @@
  */
 namespace Magento\Quote\Model\Quote\Address;
 
+/**
+ * Class \Magento\Quote\Model\Quote\Address\TotalFactory
+ *
+ */
 class TotalFactory
 {
     /**
@@ -33,9 +37,9 @@ class TotalFactory
      *
      * @param string $instanceName
      * @param array $data
-     * @return \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
+     * @return Total\AbstractTotal|Total
      */
-    public function create($instanceName, array $data = [])
+    public function create($instanceName = Total::class, array $data = [])
     {
         return $this->_objectManager->create($instanceName, $data);
     }

@@ -5,6 +5,10 @@
  */
 namespace Magento\Checkout\Block\Cart;
 
+/**
+ * Class \Magento\Checkout\Block\Cart\LayoutProcessor
+ *
+ */
 class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcessorInterface
 {
     /**

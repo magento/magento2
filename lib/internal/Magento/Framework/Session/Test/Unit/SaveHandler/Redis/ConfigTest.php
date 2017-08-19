@@ -8,7 +8,7 @@ namespace Magento\Framework\Session\Test\Unit\SaveHandler\Redis;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\Session\SaveHandler\Redis\Config;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
@@ -32,9 +32,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->deploymentConfigMock = $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false);
-        $this->appStateMock = $this->getMock(\Magento\Framework\App\State::class, [], [], '', false);
-        $this->scopeConfigMock = $this->getMock(\Magento\Framework\App\Config::class, [], [], '', false);
+        $this->deploymentConfigMock = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
+        $this->appStateMock = $this->createMock(\Magento\Framework\App\State::class);
+        $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config::class);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->config = $objectManager->getObject(

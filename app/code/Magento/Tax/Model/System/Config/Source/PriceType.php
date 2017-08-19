@@ -5,6 +5,10 @@
  */
 namespace Magento\Tax\Model\System\Config\Source;
 
+/**
+ * Class \Magento\Tax\Model\System\Config\Source\PriceType
+ *
+ */
 class PriceType implements \Magento\Framework\Option\ArrayInterface
 {
     /**

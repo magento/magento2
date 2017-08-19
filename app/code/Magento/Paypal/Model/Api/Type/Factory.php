@@ -9,6 +9,10 @@
  */
 namespace Magento\Paypal\Model\Api\Type;
 
+/**
+ * Class \Magento\Paypal\Model\Api\Type\Factory
+ *
+ */
 class Factory
 {
     /**

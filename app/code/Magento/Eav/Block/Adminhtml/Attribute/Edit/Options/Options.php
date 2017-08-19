@@ -89,6 +89,7 @@ class Options extends \Magento\Backend\Block\Template
      * Returns stores sorted by Sort Order
      *
      * @return array
+     * @since 100.1.0
      */
     public function getStoresSortedBySortOrder()
     {

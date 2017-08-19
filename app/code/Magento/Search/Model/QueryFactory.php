@@ -11,6 +11,9 @@ use Magento\Framework\App\Helper\Context;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Stdlib\StringUtils as StdlibString;
 
+/**
+ * @api
+ */
 class QueryFactory implements QueryFactoryInterface
 {
     /**

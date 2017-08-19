@@ -7,8 +7,6 @@
 /**
  * Catalog Rule Product Aggregated Price per date Model
  *
- * @method \Magento\CatalogRule\Model\ResourceModel\Rule\Product\Price _getResource()
- * @method \Magento\CatalogRule\Model\ResourceModel\Rule\Product\Price getResource()
  * @method string getRuleDate()
  * @method \Magento\CatalogRule\Model\Rule\Product\Price setRuleDate(string $value)
  * @method int getCustomerGroupId()
@@ -30,6 +28,10 @@ namespace Magento\CatalogRule\Model\Rule\Product;
 
 use Magento\Framework\DB\Select;
 
+/**
+ * Class \Magento\CatalogRule\Model\Rule\Product\Price
+ *
+ */
 class Price extends \Magento\Framework\Model\AbstractModel
 {
     /**

@@ -6,6 +6,10 @@
 
 namespace Magento\Developer\Model\Tools;
 
+/**
+ * Class \Magento\Developer\Model\Tools\Formatter
+ *
+ */
 class Formatter
 {
     /**

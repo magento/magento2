@@ -5,7 +5,7 @@
  */
 namespace Magento\ImportExport\Model;
 
-class ExportTest extends \PHPUnit_Framework_TestCase
+class ExportTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Model object which used for tests

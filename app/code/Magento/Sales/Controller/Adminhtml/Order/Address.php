@@ -6,6 +6,10 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Order\Address
+ *
+ */
 class Address extends \Magento\Sales\Controller\Adminhtml\Order
 {
     /**

@@ -7,6 +7,10 @@ namespace Magento\Review\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class \Magento\Review\Observer\TagProductCollectionLoadAfterObserver
+ *
+ */
 class TagProductCollectionLoadAfterObserver implements ObserverInterface
 {
     /**

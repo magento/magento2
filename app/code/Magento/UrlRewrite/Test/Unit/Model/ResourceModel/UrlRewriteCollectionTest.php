@@ -7,7 +7,7 @@ namespace Magento\UrlRewrite\Test\Unit\Model\ResourceModel;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class UrlRewriteCollectionTest extends \PHPUnit_Framework_TestCase
+class UrlRewriteCollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -41,14 +41,11 @@ class UrlRewriteCollectionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->storeManager = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->select = $this->getMock(\Magento\Framework\DB\Select::class, ['from', 'where'], [], '', false);
-        $this->connectionMock = $this->getMock(
+        $this->storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->select = $this->createPartialMock(\Magento\Framework\DB\Select::class, ['from', 'where']);
+        $this->connectionMock = $this->createPartialMock(
             \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
-            ['select', 'prepareSqlCondition', 'quoteIdentifier'],
-            [],
-            '',
-            false
+            ['select', 'prepareSqlCondition', 'quoteIdentifier']
         );
         $this->resource = $this->getMockForAbstractClass(
             \Magento\Framework\Model\ResourceModel\Db\AbstractDb::class,
@@ -125,7 +122,7 @@ class UrlRewriteCollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddStoreFilterIfStoreIsInt($storeId, $withAdmin, $condition)
     {
-        $store = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
+        $store = $this->createMock(\Magento\Store\Model\Store::class);
         $store->expects($this->once())->method('getId')->will($this->returnValue($storeId));
         $this->storeManager->expects($this->once())->method('getStore')->will($this->returnValue($store));
 

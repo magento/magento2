@@ -6,6 +6,10 @@
  */
 namespace Magento\Reports\Controller\Adminhtml\Report\Product;
 
+/**
+ * Class \Magento\Reports\Controller\Adminhtml\Report\Product\Lowstock
+ *
+ */
 class Lowstock extends \Magento\Reports\Controller\Adminhtml\Report\Product
 {
     /**

@@ -5,6 +5,10 @@
  */
 namespace Magento\CatalogImportExport\Model\Indexer\Product\Price\Plugin;
 
+/**
+ * Class \Magento\CatalogImportExport\Model\Indexer\Product\Price\Plugin\Import
+ *
+ */
 class Import extends \Magento\Catalog\Model\Indexer\Product\Price\Plugin\AbstractPlugin
 {
     /**

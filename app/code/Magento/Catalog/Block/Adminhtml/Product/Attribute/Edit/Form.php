@@ -14,6 +14,10 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit;
 use Magento\Backend\Block\Widget\Form\Generic;
 use Magento\Framework\Data\Form as DataForm;
 
+/**
+ * Class \Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Form
+ *
+ */
 class Form extends Generic
 {
     /**

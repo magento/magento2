@@ -124,7 +124,6 @@ class CouponPost extends \Magento\Checkout\Controller\Cart
                                 $escaper->escapeHtml($couponCode)
                             )
                         );
-                        $this->cart->save();
                     }
                 }
             } else {

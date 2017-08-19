@@ -9,6 +9,10 @@ namespace Magento\PageCache\Model\Varnish;
 use Magento\PageCache\Model\VclGeneratorInterface;
 use Magento\PageCache\Model\VclTemplateLocatorInterface;
 
+/**
+ * Class \Magento\PageCache\Model\Varnish\VclGenerator
+ *
+ */
 class VclGenerator implements VclGeneratorInterface
 {
     /**

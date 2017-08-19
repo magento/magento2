@@ -11,6 +11,10 @@
  */
 namespace Magento\Framework\HTTP\Adapter;
 
+/**
+ * Class \Magento\Framework\HTTP\Adapter\Curl
+ *
+ */
 class Curl implements \Zend_Http_Client_Adapter_Interface
 {
     /**
@@ -173,12 +177,14 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
         curl_setopt($this->_getResource(), CURLOPT_RETURNTRANSFER, true);
         if ($method == \Zend_Http_Client::POST) {
             curl_setopt($this->_getResource(), CURLOPT_POST, true);
+            curl_setopt($this->_getResource(), CURLOPT_CUSTOMREQUEST, 'POST');
+            curl_setopt($this->_getResource(), CURLOPT_POSTFIELDS, $body);
+        } elseif ($method == \Zend_Http_Client::PUT) {
+            curl_setopt($this->_getResource(), CURLOPT_CUSTOMREQUEST, 'PUT');
             curl_setopt($this->_getResource(), CURLOPT_POSTFIELDS, $body);
         } elseif ($method == \Zend_Http_Client::GET) {
             curl_setopt($this->_getResource(), CURLOPT_HTTPGET, true);
-        } elseif ($method == \Zend_Http_Client::PUT) {
-            curl_setopt($this->_getResource(), CURLOPT_CUSTOMREQUEST, \Zend_Http_Client::PUT);
-            curl_setopt($this->_getResource(), CURLOPT_POSTFIELDS, $body);
+            curl_setopt($this->_getResource(), CURLOPT_CUSTOMREQUEST, 'GET');
         }
 
         if (is_array($headers)) {

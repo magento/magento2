@@ -14,7 +14,7 @@ use Magento\Customer\Controller\RegistryConstants;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @magentoAppArea adminhtml
  */
-class PersonalInfoTest extends \PHPUnit_Framework_TestCase
+class PersonalInfoTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  \Magento\Backend\Block\Template\Context */
     private $_context;

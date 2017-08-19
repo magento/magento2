@@ -6,6 +6,10 @@
 
 namespace Magento\Framework\Translate\Inline;
 
+/**
+ * Class \Magento\Framework\Translate\Inline\Provider
+ *
+ */
 class Provider implements ProviderInterface
 {
     /**

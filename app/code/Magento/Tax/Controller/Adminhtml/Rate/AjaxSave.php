@@ -8,12 +8,17 @@ namespace Magento\Tax\Controller\Adminhtml\Rate;
 
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Tax\Controller\Adminhtml\Rate\AjaxSave
+ *
+ */
 class AjaxSave extends \Magento\Tax\Controller\Adminhtml\Rate
 {
     /**
      * Save Tax Rate via AJAX
      *
      * @return \Magento\Framework\Controller\Result\Json
+     * @throws \InvalidArgumentException
      */
     public function execute()
     {

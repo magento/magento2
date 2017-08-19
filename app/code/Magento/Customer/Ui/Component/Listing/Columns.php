@@ -12,15 +12,25 @@ use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Customer\Ui\Component\Listing\Column\InlineEditUpdater;
 use Magento\Customer\Api\CustomerMetadataInterface;
 
+/**
+ * Class \Magento\Customer\Ui\Component\Listing\Columns
+ *
+ */
 class Columns extends \Magento\Ui\Component\Listing\Columns
 {
-    /** @var int */
+    /**
+     * @var int
+     */
     protected $columnSortOrder;
 
-    /** @var AttributeRepository  */
+    /**
+     * @var \Magento\Customer\Ui\Component\Listing\AttributeRepository
+     */
     protected $attributeRepository;
 
-    /** @var InlineEditUpdater */
+    /**
+     * @var \Magento\Customer\Ui\Component\Listing\Column\InlineEditUpdater
+     */
     protected $inlineEditUpdater;
 
     /**

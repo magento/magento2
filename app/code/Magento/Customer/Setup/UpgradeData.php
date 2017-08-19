@@ -155,6 +155,10 @@ class UpgradeData implements UpgradeDataInterface
             );
         }
 
+        if (version_compare($context->getVersion(), '2.0.12', '<')) {
+            $this->upgradeVersionTwoZeroTwelve($customerSetup);
+        }
+
         $indexer = $this->indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
         $indexer->reindexAll();
         $this->eavConfig->clear();
@@ -164,7 +168,7 @@ class UpgradeData implements UpgradeDataInterface
     /**
      * Retrieve Store Manager
      *
-     * @deprecated
+     * @deprecated 100.1.3
      * @return StoreManagerInterface
      */
     private function getStoreManager()
@@ -179,7 +183,7 @@ class UpgradeData implements UpgradeDataInterface
     /**
      * Retrieve Allowed Countries Reader
      *
-     * @deprecated
+     * @deprecated 100.1.3
      * @return AllowedCountries
      */
     private function getAllowedCountriesReader()
@@ -634,6 +638,15 @@ class UpgradeData implements UpgradeDataInterface
                 'system' => true,
             ]
         );
+    }
+
+    /**
+     * @param CustomerSetup $customerSetup
+     * @return void
+     */
+    private function upgradeVersionTwoZeroTwelve(CustomerSetup $customerSetup)
+    {
+        $customerSetup->updateAttribute('customer_address', 'vat_id', 'frontend_label', 'VAT Number');
     }
 
     /**

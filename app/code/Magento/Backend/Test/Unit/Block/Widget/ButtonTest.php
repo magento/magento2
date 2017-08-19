@@ -9,7 +9,7 @@
  */
 namespace Magento\Backend\Test\Unit\Block\Widget;
 
-class ButtonTest extends \PHPUnit_Framework_TestCase
+class ButtonTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -33,10 +33,10 @@ class ButtonTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_layoutMock = $this->getMock(\Magento\Framework\View\Layout::class, [], [], '', false, false);
+        $this->_layoutMock = $this->createMock(\Magento\Framework\View\Layout::class);
 
         $arguments = [
-            'urlBuilder' => $this->getMock(\Magento\Backend\Model\Url::class, [], [], '', false, false),
+            'urlBuilder' => $this->createMock(\Magento\Backend\Model\Url::class),
             'layout' => $this->_layoutMock,
         ];
 

@@ -7,6 +7,10 @@
  */
 namespace Magento\Sales\Model\ResourceModel\Order\Customer;
 
+/**
+ * Class \Magento\Sales\Model\ResourceModel\Order\Customer\Collection
+ *
+ */
 class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collection
 {
     /**

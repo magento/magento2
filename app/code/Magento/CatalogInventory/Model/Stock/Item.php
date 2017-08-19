@@ -43,7 +43,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      *
      * @var string
      */
-    protected $eventObject = 'item';
+    protected $_eventObject = 'item';
 
     /**
      * Store model manager

@@ -11,6 +11,10 @@ use Magento\Catalog\Model\Product\Visibility;
 use Magento\Framework\DB\Select;
 use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * Class \Magento\Catalog\Model\Layer\Search\CollectionFilter
+ *
+ */
 class CollectionFilter implements CollectionFilterInterface
 {
     /**

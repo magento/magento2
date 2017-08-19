@@ -8,6 +8,10 @@ namespace Magento\ConfigurableProduct\Model\Product\Type;
 
 use Magento\Framework\Module\Manager;
 
+/**
+ * Class \Magento\ConfigurableProduct\Model\Product\Type\Plugin
+ *
+ */
 class Plugin
 {
     /**

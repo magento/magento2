@@ -5,6 +5,10 @@
  */
 namespace Magento\Shipping\Model\Config\Source;
 
+/**
+ * Class \Magento\Shipping\Model\Config\Source\Allspecificcountries
+ *
+ */
 class Allspecificcountries implements \Magento\Framework\Option\ArrayInterface
 {
     /**

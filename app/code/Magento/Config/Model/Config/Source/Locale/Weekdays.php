@@ -9,6 +9,9 @@
  */
 namespace Magento\Config\Model\Config\Source\Locale;
 
+/**
+ * @api
+ */
 class Weekdays implements \Magento\Framework\Option\ArrayInterface
 {
     /**

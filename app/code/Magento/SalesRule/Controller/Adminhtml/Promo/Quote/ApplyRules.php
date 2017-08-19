@@ -6,6 +6,10 @@
  */
 namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
 
+/**
+ * Class \Magento\SalesRule\Controller\Adminhtml\Promo\Quote\ApplyRules
+ *
+ */
 class ApplyRules extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
 {
     /**

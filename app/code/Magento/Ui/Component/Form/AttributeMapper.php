@@ -5,6 +5,9 @@
  */
 namespace Magento\Ui\Component\Form;
 
+/**
+ * @api
+ */
 class AttributeMapper
 {
     /**

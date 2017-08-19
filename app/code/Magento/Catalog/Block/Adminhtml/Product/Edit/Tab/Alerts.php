@@ -13,6 +13,10 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab;
 
+/**
+ * Class \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Alerts
+ *
+ */
 class Alerts extends \Magento\Backend\Block\Widget\Tab
 {
     /**

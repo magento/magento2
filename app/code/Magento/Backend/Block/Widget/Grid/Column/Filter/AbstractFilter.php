@@ -4,11 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Grid column filter block
- */
 namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 
+/**
+ * Grid column filter block
+ *
+ * @api
+ * @deprecated 100.2.0 in favour of UI component implementation
+ */
 class AbstractFilter extends \Magento\Backend\Block\AbstractBlock implements
     \Magento\Backend\Block\Widget\Grid\Column\Filter\FilterInterface
 {

@@ -7,9 +7,15 @@ namespace Magento\Customer\Ui\Component\Listing\Column;
 
 use Magento\Framework\View\Element\UiComponentInterface;
 
+/**
+ * Class \Magento\Customer\Ui\Component\Listing\Column\InlineEditUpdater
+ *
+ */
 class InlineEditUpdater
 {
-    /** @var ValidationRules  */
+    /**
+     * @var \Magento\Customer\Ui\Component\Listing\Column\ValidationRules
+     */
     protected $validationRules;
 
     /**
@@ -51,7 +57,6 @@ class InlineEditUpdater
         if (in_array($frontendInput, $this->editableFields)) {
             $config = $column->getConfiguration();
             if (!(isset($config['editor']) && isset($config['editor']['editorType']))) {
-
                 if (isset($config['editor']) && is_string($config['editor'])) {
                     $editorType = $config['editor'];
                 } elseif (isset($config['dataType'])) {

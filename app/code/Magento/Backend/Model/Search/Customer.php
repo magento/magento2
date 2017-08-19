@@ -19,6 +19,7 @@ namespace Magento\Backend\Model\Search;
  * @method bool hasLimit()
  * @method Customer setResults(array $results)
  * @method array getResults()
+ * @api
  */
 class Customer extends \Magento\Framework\DataObject
 {
