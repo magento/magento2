@@ -6,9 +6,7 @@
 
 namespace Magento\Inventory\Indexer\StockItem\Service;
 
-
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Exception\InputException;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\StockInterface;
 
@@ -43,7 +41,6 @@ class GetAssignedStocks implements GetAssignedStocksInterface
             $select->where(SourceInterface::SOURCE_ID . ' (?)', $sourceIds);
         }
         $select->group(StockInterface::STOCK_ID);
-
         return $connection->fetchAll($select);
     }
 }

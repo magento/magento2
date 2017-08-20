@@ -7,6 +7,8 @@
 namespace Magento\Inventory\Indexer\StockItem;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\InventoryApi\Api\Data\SourceInterface;
+use Magento\InventoryApi\Api\Data\StockInterface;
 
 /**
  * Stock Item Dimension
@@ -35,27 +37,27 @@ class DataProvider
      * @param array $ids
      * @return \ArrayIterator
      */
-    public function fetchDocuments(array $ids)
+    public function fetchDocuments($stockId, array $sourceIds)
     {
 
         /** @var \Magento\Framework\DB\Adapter\AdapterInterface $connection */
         $connection = $this->resource->getConnection();
 
-
-        $columns = ['sku', 'quantity', 'status'];
+        $columns = ['sku', 'SUM(quantity) as quantity', 'status'];
         $select = $connection
             ->select()->from(['main' => $this->getSourceItemTableName($connection)], $columns)
             ->joinLeft(
                 ['link_table' => $this->getLinkTableName($connection)],
                 'main.source_id = link_table.source_id',
                 ['stock_id' => 'stock_id']
-            );
+            )->where(StockInterface::STOCK_ID . '= ?', $stockId);
 
-        if (count($ids) > 0) {
-            $select->where('stock_id IN(?)', implode(',', $ids));
+        if (count($sourceIds) !== 0) {
+            $select->where(SourceInterface::SOURCE_ID . ' (?)', $sourceIds);
         }
 
-        return new \ArrayIterator($connection->query($select)->fetchAll());
+        $select->group(['sku', 'status']);
+        return new \ArrayIterator($connection->fetchAll($select));
     }
 
 

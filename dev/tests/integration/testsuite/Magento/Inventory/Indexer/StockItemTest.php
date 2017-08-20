@@ -16,9 +16,6 @@ class StockItemTest extends \PHPUnit\Framework\TestCase
      */
     private $indexer;
 
-    /**
-     *
-     */
     protected function setUp()
     {
         /** @var \Magento\Framework\Indexer\IndexerInterface indexer */
@@ -33,11 +30,11 @@ class StockItemTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Inventory/_files/products.php
      * @magentoDataFixture Magento/Inventory/_files/source.php
      * @magentoDataFixture Magento/Inventory/_files/source_item.php
+     * @magentoDataFixture Magento/Inventory/_files/stock.php
+     * @magentoDataFixture Magento/Inventory/_files/stock_source_link.php
      */
      public function testExecuteFull()
      {
-
-         // @todo impelment asserts
          $this->indexer->reindexAll();
      }
 }

@@ -8,6 +8,7 @@ namespace Magento\Inventory\Indexer\StockItem;
 
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Indexer\IndexStructureInterface;
 
@@ -96,7 +97,12 @@ class IndexStructure implements IndexStructureInterface
                 Table::OPTION_UNSIGNED => true,
             ],
             'Status'
+        )->addIndex(
+            'idx_sku_stock_id',
+            [ 'sku',  StockItemInterface::STOCK_ID],
+            ['type' => AdapterInterface::INDEX_TYPE_INDEX]
         );
+
         $this->resource->getConnection()->createTable($table);
     }
 }
