@@ -13,9 +13,11 @@ use Magento\Config\Model\Config\Structure\Element\Iterator as ElementIterator;
 /**
  * Search Config Model
  *
+ * @method Config setQuery(string $query)
  * @method string|null getQuery()
  * @method bool hasQuery()
  * @method Config setResults(array $results)
+ * @method array getResults()
  */
 class Config extends \Magento\Framework\DataObject
 {
