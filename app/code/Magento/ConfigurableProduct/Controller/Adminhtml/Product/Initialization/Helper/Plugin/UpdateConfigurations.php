@@ -94,22 +94,22 @@ class UpdateConfigurations
     {
         $result = [];
         $configurableMatrix = $this->request->getParam('configurable-matrix-serialized', '[]');
-        if ($configurableMatrix != null && !empty($configurableMatrix)) {
+        if (isset($configurableMatrix) && $configurableMatrix != "") {
             $configurableMatrix = json_decode($configurableMatrix, true);
-        }
 
-        foreach ($configurableMatrix as $item) {
-            if (empty($item['was_changed'])) {
-                continue;
-            } else {
-                unset($item['was_changed']);
-            }
+            foreach ($configurableMatrix as $item) {
+                if (empty($item['was_changed'])) {
+                    continue;
+                } else {
+                    unset($item['was_changed']);
+                }
 
-            if (!$item['newProduct']) {
-                $result[$item['id']] = $this->mapData($item);
+                if (!$item['newProduct']) {
+                    $result[$item['id']] = $this->mapData($item);
 
-                if (isset($item['qty'])) {
-                    $result[$item['id']]['quantity_and_stock_status']['qty'] = $item['qty'];
+                    if (isset($item['qty'])) {
+                        $result[$item['id']]['quantity_and_stock_status']['qty'] = $item['qty'];
+                    }
                 }
             }
         }
