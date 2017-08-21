@@ -60,8 +60,12 @@ class DebugHintsTest extends \PHPUnit\Framework\TestCase
      * @return void
      * @dataProvider afterCreateActiveDataProvider
      */
-    public function testAfterCreateActive($debugHintsPath, $showBlockHints)
-    {
+    public function testAfterCreateActive(
+        $debugHintsPath,
+        $showBlockHints,
+        $debugHintsShowWithParameter,
+        $debugHintsParameter
+    ) {
         $this->devHelperMock->expects($this->once())
             ->method('isDevAllowed')
             ->willReturn(true);
@@ -88,12 +92,17 @@ class DebugHintsTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->httpMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
+
         $debugHints = new DebugHints(
             $this->scopeConfigMock,
             $this->storeManager,
             $this->devHelperMock,
             $this->debugHintsFactory,
-            $debugHintsPath
+            $debugHintsPath,
+            $this->httpMock,
+            $debugHintsShowWithParameter,
+            $debugHintsParameter
         );
 
         $this->assertEquals($debugHintsDecorator, $debugHints->afterCreate($subjectMock, $engine));
@@ -105,10 +114,10 @@ class DebugHintsTest extends \PHPUnit\Framework\TestCase
     public function afterCreateActiveDataProvider()
     {
         return [
-            ['dev/debug/template_hints_storefront', false],
-            ['dev/debug/template_hints_storefront', true],
-            ['dev/debug/template_hints_admin', false],
-            ['dev/debug/template_hints_admin', true],
+            ['dev/debug/template_hints_storefront', false, false, null],
+            ['dev/debug/template_hints_storefront', true, false, null],
+            ['dev/debug/template_hints_admin', false, false, null],
+            ['dev/debug/template_hints_admin', true, false, null],
         ];
     }
 
@@ -119,8 +128,13 @@ class DebugHintsTest extends \PHPUnit\Framework\TestCase
      * @return void
      * @dataProvider afterCreateInactiveDataProvider
      */
-    public function testAfterCreateInactive($debugHintsPath, $isDevAllowed, $showTemplateHints)
-    {
+    public function testAfterCreateInactive(
+        $debugHintsPath,
+        $isDevAllowed,
+        $showTemplateHints,
+        $debugHintsShowWithParameter,
+        $debugHintsParameter
+    ) {
         $this->devHelperMock->expects($this->any())
             ->method('isDevAllowed')
             ->willReturn($isDevAllowed);
@@ -133,12 +147,17 @@ class DebugHintsTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->httpMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
+
         $debugHints = new DebugHints(
             $this->scopeConfigMock,
             $this->storeManager,
             $this->devHelperMock,
             $this->debugHintsFactory,
-            $debugHintsPath
+            $debugHintsPath,
+            $this->httpMock,
+            $debugHintsShowWithParameter,
+            $debugHintsParameter
         );
 
         $this->assertSame($engine, $debugHints->afterCreate($subjectMock, $engine));
@@ -150,12 +169,12 @@ class DebugHintsTest extends \PHPUnit\Framework\TestCase
     public function afterCreateInactiveDataProvider()
     {
         return [
-            ['dev/debug/template_hints_storefront', false, false],
-            ['dev/debug/template_hints_storefront', false, true],
-            ['dev/debug/template_hints_storefront', true, false],
-            ['dev/debug/template_hints_admin', false, false],
-            ['dev/debug/template_hints_admin', false, true],
-            ['dev/debug/template_hints_admin', true, false],
+            ['dev/debug/template_hints_storefront', false, false, false, null],
+            ['dev/debug/template_hints_storefront', false, true, false, null],
+            ['dev/debug/template_hints_storefront', true, false, false, null],
+            ['dev/debug/template_hints_admin', false, false, false, null],
+            ['dev/debug/template_hints_admin', false, true, false, null],
+            ['dev/debug/template_hints_admin', true, false, false, null],
         ];
     }
 
