@@ -284,7 +284,7 @@ class Bundle extends Block
     }
 
     /**
-     * Parse option text to title, price and optionally add selected attribute value.
+     * Parse option text to title and price
      *
      * @param string $optionText
      * @return array
@@ -294,12 +294,11 @@ class Bundle extends Block
         preg_match('`^(.*?)\+ ?\$(\d.*?)$`sim', $optionText, $match);
         $optionPrice = isset($match[2]) ? str_replace(',', '', $match[2]) : 0;
         $optionTitle = isset($match[1]) ? trim($match[1]) : $optionText;
-        $option = [
+
+        return [
             'title' => $optionTitle,
             'price' => $optionPrice
         ];
-
-        return $option;
     }
 
     /**
