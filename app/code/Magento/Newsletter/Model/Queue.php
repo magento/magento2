@@ -110,6 +110,13 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
     protected $_transportBuilder;
 
     /**
+     * Timezone library.
+     * 
+     * @var \Magento\Framework\Stdlib\DateTime\Timezone
+     */
+    private $timezone;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Newsletter\Model\Template\Filter $templateFilter
@@ -120,6 +127,7 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
      * @param \Magento\Newsletter\Model\Queue\TransportBuilder $transportBuilder
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param \Magento\Framework\Stdlib\DateTime\Timezone $timezone
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -134,6 +142,7 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
         \Magento\Newsletter\Model\Queue\TransportBuilder $transportBuilder,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        \Magento\Framework\Stdlib\DateTime\Timezone $timezone = null,
         array $data = []
     ) {
         parent::__construct(
@@ -149,6 +158,9 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
         $this->_problemFactory = $problemFactory;
         $this->_subscribersCollection = $subscriberCollectionFactory->create();
         $this->_transportBuilder = $transportBuilder;
+        $this->timezone = $timezone ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \Magento\Framework\Stdlib\DateTime\Timezone::class
+        );
     }
 
     /**
@@ -183,8 +195,7 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
         if ($startAt === null || $startAt == '') {
             $this->setQueueStartAt(null);
         } else {
-            $time = (new \DateTime($startAt))->getTimestamp();
-            $this->setQueueStartAt($this->_date->gmtDate(null, $time));
+            $this->setQueueStartAt($this->timezone->convertConfigTimeToUtc($startAt));
         }
         return $this;
     }
