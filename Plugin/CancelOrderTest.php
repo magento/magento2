@@ -5,7 +5,6 @@
  */
 namespace Magento\Signifyd\Plugin;
 
-use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderManagementInterface;
@@ -100,17 +99,9 @@ class CancelOrderTest extends \PHPUnit\Framework\TestCase
      */
     private function getOrder()
     {
-        /** @var FilterBuilder $filterBuilder */
-        $filterBuilder = $this->objectManager->get(FilterBuilder::class);
-        $filters = [
-            $filterBuilder->setField(OrderInterface::INCREMENT_ID)
-                ->setValue('100000001')
-                ->create()
-        ];
-
         /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
         $searchCriteriaBuilder = $this->objectManager->get(SearchCriteriaBuilder::class);
-        $searchCriteria = $searchCriteriaBuilder->addFilters($filters)
+        $searchCriteria = $searchCriteriaBuilder->addFilter(OrderInterface::INCREMENT_ID, '100000001')
             ->create();
 
         $orderRepository = $this->objectManager->get(OrderRepositoryInterface::class);

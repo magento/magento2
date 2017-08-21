@@ -133,12 +133,12 @@ class CreationServiceTest extends \PHPUnit\Framework\TestCase
         $orderRepository = $this->objectManager->get(OrderRepositoryInterface::class);
         $order = $orderRepository->get($updatedCase->getOrderId());
         $histories = $order->getStatusHistories();
-        static::assertNotEmpty($histories);
+        self::assertNotEmpty($histories);
 
         /** @var OrderStatusHistoryInterface $caseCreationComment */
         $caseCreationComment = array_pop($histories);
-        static::assertInstanceOf(OrderStatusHistoryInterface::class, $caseCreationComment);
-        static::assertEquals('Case Update: Case is submitted for guarantee.', $caseCreationComment->getComment());
+        self::assertInstanceOf(OrderStatusHistoryInterface::class, $caseCreationComment);
+        self::assertEquals('Case Update: Case is submitted for guarantee.', $caseCreationComment->getComment());
     }
 
     /**

@@ -35,7 +35,7 @@ class FingerprintTest extends \PHPUnit\Framework\TestCase
      */
     public function testSessionIdPresent()
     {
-        static::assertContains('data-order-session-id', $this->getBlockContents());
+        self::assertContains('data-order-session-id', $this->getBlockContents());
     }
 
     /**
@@ -45,7 +45,7 @@ class FingerprintTest extends \PHPUnit\Framework\TestCase
      */
     public function testBlockEmpty()
     {
-        static::assertEmpty($this->getBlockContents());
+        self::assertEmpty($this->getBlockContents());
     }
 
     /**

@@ -51,7 +51,7 @@ class CaseInfoTest extends \PHPUnit\Framework\TestCase
     {
         $this->order->loadByIncrementId('100000001');
 
-        static::assertNotEmpty($this->getBlock()->toHtml());
+        self::assertNotEmpty($this->getBlock()->toHtml());
     }
 
     /**
@@ -67,7 +67,7 @@ class CaseInfoTest extends \PHPUnit\Framework\TestCase
     {
         $this->order->loadByIncrementId('100000001');
 
-        static::assertEmpty($this->getBlock()->toHtml());
+        self::assertEmpty($this->getBlock()->toHtml());
     }
 
     /**
@@ -85,8 +85,8 @@ class CaseInfoTest extends \PHPUnit\Framework\TestCase
         $this->order->loadByIncrementId('100000001');
 
         $block = $this->getBlock();
-        static::assertNotEmpty($block->toHtml());
-        static::assertContains((string) $block->getCaseGuaranteeDisposition(), $block->toHtml());
+        self::assertNotEmpty($block->toHtml());
+        self::assertContains((string) $block->getCaseGuaranteeDisposition(), $block->toHtml());
     }
 
     /**
