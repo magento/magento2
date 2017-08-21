@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "5037e3acde39ddc448dbfc6caae9b1d1",
-    "content-hash": "ab523bf1ee680cb995e3421628ea27c2",
+    "hash": "590cacb23cafb5bddf3865bf1d949e48",
+    "content-hash": "196c28956ee09d96956c7ffc26d0a136",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -491,55 +491,6 @@
             "description": "Promoting the interoperability of container objects (DIC, SL, etc.)",
             "homepage": "https://github.com/container-interop/container-interop",
             "time": "2017-02-14 19:40:03"
-        },
-        {
-            "name": "darsyn/ip",
-            "version": "3.3.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/darsyn/ip.git",
-                "reference": "cbd2f7ec59f34b6fe698486cad7e460e2ab33ee9"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/darsyn/ip/zipball/cbd2f7ec59f34b6fe698486cad7e460e2ab33ee9",
-                "reference": "cbd2f7ec59f34b6fe698486cad7e460e2ab33ee9",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.5"
-            },
-            "suggest": {
-                "doctrine/dbal": "to use IP as a column type"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Darsyn\\IP\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Zander Baldwin",
-                    "email": "hello@zanderbaldwin.com",
-                    "homepage": "http://zanderbaldwin.com"
-                }
-            ],
-            "description": "An immutable IP Address value object that provides several different notations, including helper functions.",
-            "homepage": "https://github.com/darsyn/ip",
-            "keywords": [
-                "IP",
-                "immutable",
-                "ipv4",
-                "ipv6",
-                "library",
-                "value-object"
-            ],
-            "time": "2017-08-03 13:09:45"
         },
         {
             "name": "justinrainbow/json-schema",
@@ -1805,6 +1756,59 @@
             "description": "Symfony Finder Component",
             "homepage": "https://symfony.com",
             "time": "2017-10-02 06:42:24"
+        },
+        {
+            "name": "symfony/http-foundation",
+            "version": "v3.3.10",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/http-foundation.git",
+                "reference": "22cf9c2b1d9f67cc8e75ae7f4eaa60e4c1eff1f8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/22cf9c2b1d9f67cc8e75ae7f4eaa60e4c1eff1f8",
+                "reference": "22cf9c2b1d9f67cc8e75ae7f4eaa60e4c1eff1f8",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.5.9|>=7.0.8",
+                "symfony/polyfill-mbstring": "~1.1"
+            },
+            "require-dev": {
+                "symfony/expression-language": "~2.8|~3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.3-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\HttpFoundation\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony HttpFoundation Component",
+            "homepage": "https://symfony.com",
+            "time": "2017-10-05 23:10:23"
         },
         {
             "name": "symfony/polyfill-mbstring",
@@ -5827,59 +5831,6 @@
             "description": "Symfony DependencyInjection Component",
             "homepage": "https://symfony.com",
             "time": "2017-10-04 17:15:30"
-        },
-        {
-            "name": "symfony/http-foundation",
-            "version": "v3.3.10",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/http-foundation.git",
-                "reference": "22cf9c2b1d9f67cc8e75ae7f4eaa60e4c1eff1f8"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/22cf9c2b1d9f67cc8e75ae7f4eaa60e4c1eff1f8",
-                "reference": "22cf9c2b1d9f67cc8e75ae7f4eaa60e4c1eff1f8",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^5.5.9|>=7.0.8",
-                "symfony/polyfill-mbstring": "~1.1"
-            },
-            "require-dev": {
-                "symfony/expression-language": "~2.8|~3.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "3.3-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\Component\\HttpFoundation\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Symfony HttpFoundation Component",
-            "homepage": "https://symfony.com",
-            "time": "2017-10-05 23:10:23"
         },
         {
             "name": "symfony/polyfill-php54",

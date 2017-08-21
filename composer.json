@@ -47,6 +47,7 @@
         "sjparkinson/static-review": "~4.1",
         "symfony/console": "~2.3, !=2.7.0",
         "symfony/event-dispatcher": "~2.1",
+        "symfony/http-foundation": "^3.3",
         "symfony/process": "~2.1",
         "tedivm/jshrink": "~1.1.0",
         "tubalmartin/cssmin": "4.1.0",
@@ -75,8 +76,7 @@
         "zendframework/zend-text": "^2.6.0",
         "zendframework/zend-uri": "^2.5.1",
         "zendframework/zend-validator": "^2.6.0",
-        "zendframework/zend-view": "^2.8.1",
-        "darsyn/ip": "^3.3"
+        "zendframework/zend-view": "^2.8.1"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "~2.1.1",

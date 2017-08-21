@@ -5,9 +5,6 @@
  */
 namespace Magento\Setup\Validator;
 
-use Darsyn\IP\IP;
-use Darsyn\IP\InvalidIpAddressException;
-
 /**
  * Class to validate list of IPs for maintenance commands
  */
@@ -70,30 +67,31 @@ class IpValidator
     private function filterIps(array $ips)
     {
         foreach ($ips as $range) {
+            if ($range === 'none') {
+                $this->none[] = $range;
+                continue;
+            }
+
             $cidr = 32;
             $ip = $range;
             if (strpos($range, '/') !== false) {
                 list($ip, $cidr) = explode('/', $range);
             }
 
-            try {
-                $validIp = new IP($ip);
-            } catch (InvalidIpAddressException $e) {
-                if ($range == 'none') {
-                    $this->none[] = $range;
-                    continue;
-                }
+            $ipValidator = new \Zend_Validate_Ip(['allowipv6' => true, 'allowipv4' => true]);
+            if (!$ipValidator->isValid($ip)) {
                 $this->invalidIps[] = $range;
                 continue;
             }
 
-            $max = $validIp->isVersion4() ? 32 : 128;
-            if ($cidr >= 0 && $cidr <= $max) {
-                $this->validIps[] = $range;
+            $ipv4Validator = new \Zend_Validate_Ip(['allowipv6' => false, 'allowipv4' => true]);
+            $max = $ipv4Validator->isValid($ip) ? 32 : 128;
+            if ($cidr < 0 || $cidr > $max) {
+                $this->invalidIps[] = $range;
                 continue;
             }
 
-            $this->invalidIps[] = $range;
+            $this->validIps[] = $range;
         }
     }
 }

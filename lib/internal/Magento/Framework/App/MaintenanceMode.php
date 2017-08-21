@@ -7,7 +7,7 @@ namespace Magento\Framework\App;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
-use Darsyn\IP\IP;
+use Symfony\Component\HttpFoundation\IpUtils;
 
 /**
  * Application Maintenance Mode
@@ -62,23 +62,7 @@ class MaintenanceMode
         if (!$this->flagDir->isExist(self::FLAG_FILENAME)) {
             return false;
         }
-        $info = $this->getAddressInfo();
-        $testIp = new IP($remoteAddr);
-        foreach ($info as $range) {
-            $cidr = 32;
-            $ip = $range;
-            if (strpos($range, '/') !== false) {
-                list($ip, $cidr) = explode('/', $range);
-            }
-            $rangeIp = new IP($ip);
-            if ($rangeIp->isVersion4()) {
-                $cidr += IP::CIDR4TO6;
-            }
-            if ($testIp->inRange($rangeIp, $cidr)) {
-                return false;
-            }
-        }
-        return true;
+        return !IpUtils::checkIp($remoteAddr, $this->getAddressInfo());
     }
 
     /**
