@@ -8,5 +8,8 @@
         <job name="messagequeue_clean_outdated_locks" instance="Magento\Framework\MessageQueue\Lock\WriterInterface" method="releaseOutdatedLocks">
             <schedule>0 * * * *</schedule>
         </job>
+        <job name="consumers_runner" instance="Magento\MessageQueue\Model\Cron\ConsumersRunner" method="run">
+            <schedule>* * * * *</schedule>
+        </job>
     </group>
 </config>
