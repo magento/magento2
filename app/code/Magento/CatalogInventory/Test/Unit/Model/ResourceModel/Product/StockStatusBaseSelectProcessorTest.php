@@ -11,6 +11,7 @@ use Magento\CatalogInventory\Model\Stock;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\CatalogInventory\Api\StockConfigurationInterface;
 
 class StockStatusBaseSelectProcessorTest extends \PHPUnit_Framework_TestCase
 {
@@ -25,6 +26,11 @@ class StockStatusBaseSelectProcessorTest extends \PHPUnit_Framework_TestCase
     private $select;
 
     /**
+     * @var StockConfigurationInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stockConfig;
+
+    /**
      * @var StockStatusBaseSelectProcessor
      */
     private $stockStatusBaseSelectProcessor;
@@ -33,16 +39,26 @@ class StockStatusBaseSelectProcessorTest extends \PHPUnit_Framework_TestCase
     {
         $this->resource = $this->getMockBuilder(ResourceConnection::class)->disableOriginalConstructor()->getMock();
         $this->select = $this->getMockBuilder(Select::class)->disableOriginalConstructor()->getMock();
+        $this->stockConfig = $this->getMockBuilder(StockConfigurationInterface::class)
+            //->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
         $this->stockStatusBaseSelectProcessor =  (new ObjectManager($this))->getObject(
             StockStatusBaseSelectProcessor::class,
             [
                 'resource' => $this->resource,
+                'stockConfig' => $this->stockConfig
             ]
         );
     }
 
-    public function testProcess()
+    /**
+     * @param bool $showOutOfStock
+     * @param int $selectJoinCount
+     * @param int $selectWhereCount
+     * @dataProvider processDataProvider
+     */
+    public function testProcess($showOutOfStock, $selectJoinCount, $selectWhereCount)
     {
         $tableName = 'table_name';
 
@@ -51,7 +67,11 @@ class StockStatusBaseSelectProcessorTest extends \PHPUnit_Framework_TestCase
             ->with('cataloginventory_stock_status')
             ->willReturn($tableName);
 
-        $this->select->expects($this->once())
+        $this->stockConfig->expects($this->once())
+            ->method('isShowOutOfStock')
+            ->willReturn($showOutOfStock);
+
+        $this->select->expects($this->exactly($selectJoinCount))
             ->method('join')
             ->with(
                 ['stock' => $tableName],
@@ -59,11 +79,23 @@ class StockStatusBaseSelectProcessorTest extends \PHPUnit_Framework_TestCase
                 []
             )
             ->willReturnSelf();
-        $this->select->expects($this->once())
+        $this->select->expects($this->exactly($selectWhereCount))
             ->method('where')
             ->with('stock.stock_status = ?', Stock::STOCK_IN_STOCK)
             ->willReturnSelf();
 
         $this->stockStatusBaseSelectProcessor->process($this->select);
+    }
+
+    /**
+     * Data provider for testProcess
+     * @return array
+     */
+    public function processDataProvider()
+    {
+        return [
+            [true, 0, 0],
+            [false, 1, 1]
+        ];
     }
 }
