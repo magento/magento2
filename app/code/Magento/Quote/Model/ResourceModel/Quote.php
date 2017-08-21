@@ -91,9 +91,6 @@ class Quote extends AbstractDb
             'customer_id',
             $customerId,
             $quote
-        )->where(
-            'is_active = ?',
-            1
         )->order(
             'updated_at ' . \Magento\Framework\DB\Select::SQL_DESC
         )->limit(
@@ -101,8 +98,7 @@ class Quote extends AbstractDb
         );
 
         $data = $connection->fetchRow($select);
-
-        if ($data) {
+        if ($data && $data['is_active']) {
             $quote->setData($data);
         }
 
