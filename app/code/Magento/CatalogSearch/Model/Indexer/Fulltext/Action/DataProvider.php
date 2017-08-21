@@ -306,42 +306,42 @@ class DataProvider
                 $tableName = $this->getTable('catalog_product_entity_' . $backendType);
                 $selects[] = $this->connection->select()
                     ->from(
-                    ['cpe' => $this->getTable('catalog_product_entity')],
-                    []
-                )->joinInner(
-                    ['cea' => $this->getTable('catalog_eav_attribute')],
-                    '',
-                    []
-                )->joinLeft(
-                    ['cpe_type' => $tableName],
-                    $this->connection->quoteInto(
-                        'cpe. ' . $linkField . ' = cpe_type.' . $linkField . ' AND cpe_type.store_id = ? '
-                        . 'AND cea.attribute_id = cpe_type.attribute_id',
-                        $storeId
-                    ),
-                    []
-                )->joinLeft(
-                    ['cpe_type_default' => $tableName],
-                    'cpe.' . $linkField . ' = cpe_type_default.' . $linkField
-                    . ' AND cpe_type_default.store_id = 0'
-                    . ' AND cea.attribute_id = cpe_type_default.attribute_id',
-                    []
-                )->where(
-                    'cea.attribute_id IN (?)',
-                    $attributeIds
-                )->where(
-                    'cpe.' . $linkField . ' IN (?)',
-                    array_keys($productLinkFieldsToEntityIdMap)
-                )->where(
-                    'cpe_type.attribute_id IS NOT NULL OR cpe_type_default.attribute_id IS NOT NULL',
-                    array_keys($productLinkFieldsToEntityIdMap)
-                )->columns(
-                    [
-                        $linkField => 'cpe.' . $linkField,
-                        'attribute_id' => 'cea.attribute_id',
-                        'value' => $this->unifyField($ifStoreValue, $backendType)
-                    ]
-                );
+                        ['cpe' => $this->getTable('catalog_product_entity')],
+                        []
+                    )->joinInner(
+                        ['cea' => $this->getTable('catalog_eav_attribute')],
+                        '',
+                        []
+                    )->joinLeft(
+                        ['cpe_type' => $tableName],
+                        $this->connection->quoteInto(
+                            'cpe. ' . $linkField . ' = cpe_type.' . $linkField . ' AND cpe_type.store_id = ? '
+                            . 'AND cea.attribute_id = cpe_type.attribute_id',
+                            $storeId
+                        ),
+                        []
+                    )->joinLeft(
+                        ['cpe_type_default' => $tableName],
+                        'cpe.' . $linkField . ' = cpe_type_default.' . $linkField
+                        . ' AND cpe_type_default.store_id = 0'
+                        . ' AND cea.attribute_id = cpe_type_default.attribute_id',
+                        []
+                    )->where(
+                        'cea.attribute_id IN (?)',
+                        $attributeIds
+                    )->where(
+                        'cpe.' . $linkField . ' IN (?)',
+                        array_keys($productLinkFieldsToEntityIdMap)
+                    )->where(
+                        'cpe_type.attribute_id IS NOT NULL OR cpe_type_default.attribute_id IS NOT NULL',
+                        array_keys($productLinkFieldsToEntityIdMap)
+                    )->columns(
+                        [
+                            $linkField => 'cpe.' . $linkField,
+                            'attribute_id' => 'cea.attribute_id',
+                            'value' => $this->unifyField($ifStoreValue, $backendType)
+                        ]
+                    );
             }
         }
 
