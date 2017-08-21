@@ -448,14 +448,14 @@ class EavTest extends AbstractModifierTest
 
     /**
      * @param int $productId
-     * @param bool $productRequired
+     * @param array $attributeData
      * @param string $attrValue
      * @param array $expected
      * @covers \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav::isProductExists
      * @covers \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav::setupAttributeMeta
      * @dataProvider setupAttributeMetaDataProvider
      */
-    public function testSetupAttributeMetaDefaultAttribute($productId, $productRequired, $attrValue, $expected)
+    public function testSetupAttributeMetaDefaultAttribute($productId, array $attributeData, $attrValue, $expected)
     {
         $configPath =  'arguments/data/config';
         $groupCode = 'product-details';
@@ -465,9 +465,7 @@ class EavTest extends AbstractModifierTest
             ->method('getId')
             ->willReturn($productId);
 
-        $this->productAttributeMock->expects($this->any())
-            ->method('getIsRequired')
-            ->willReturn($productRequired);
+        $this->initDataMock($this->productAttributeMock, $attributeData);
 
         $this->productAttributeMock->expects($this->any())
             ->method('getDefaultValue')
@@ -529,7 +527,10 @@ class EavTest extends AbstractModifierTest
         return [
             'default_null_prod_not_new_and_required' => [
                 'productId' => 1,
-                'productRequired' => true,
+                'attributeData' => [
+                    'is_required' => true,
+                    'default_frontend_label' => 'text',
+                ],
                 'attrValue' => 'val',
                 'expected' => [
                     'dataType' => null,
@@ -538,7 +539,7 @@ class EavTest extends AbstractModifierTest
                     'required' => true,
                     'notice' => null,
                     'default' => null,
-                    'label' => null,
+                    'label' => __('text'),
                     'code' => 'code',
                     'source' => 'product-details',
                     'scopeLabel' => '',
@@ -548,7 +549,10 @@ class EavTest extends AbstractModifierTest
             ],
             'default_null_prod_not_new_and_not_required' => [
                 'productId' => 1,
-                'productRequired' => false,
+                'attributeData' => [
+                    'productRequired' => false,
+                    'default_frontend_label' => 'text',
+                ],
                 'attrValue' => 'val',
                 'expected' => [
                     'dataType' => null,
@@ -557,7 +561,7 @@ class EavTest extends AbstractModifierTest
                     'required' => false,
                     'notice' => null,
                     'default' => null,
-                    'label' => null,
+                    'label' => __('text'),
                     'code' => 'code',
                     'source' => 'product-details',
                     'scopeLabel' => '',
@@ -567,7 +571,9 @@ class EavTest extends AbstractModifierTest
             ],
             'default_null_prod_new_and_not_required' => [
                 'productId' => null,
-                'productRequired' => false,
+                'attributeData' => [
+                    'productRequired' => false,
+                ],
                 'attrValue' => null,
                 'expected' => [
                     'dataType' => null,
@@ -576,7 +582,7 @@ class EavTest extends AbstractModifierTest
                     'required' => false,
                     'notice' => null,
                     'default' => 'required_value',
-                    'label' => null,
+                    'label' => __(null),
                     'code' => 'code',
                     'source' => 'product-details',
                     'scopeLabel' => '',
@@ -586,7 +592,9 @@ class EavTest extends AbstractModifierTest
             ],
             'default_null_prod_new_and_required' => [
                 'productId' => null,
-                'productRequired' => false,
+                'attributeData' => [
+                    'productRequired' => false,
+                ],
                 'attrValue' => null,
                 'expected' => [
                     'dataType' => null,
@@ -595,7 +603,7 @@ class EavTest extends AbstractModifierTest
                     'required' => false,
                     'notice' => null,
                     'default' => 'required_value',
-                    'label' => null,
+                    'label' => __(null),
                     'code' => 'code',
                     'source' => 'product-details',
                     'scopeLabel' => '',
@@ -604,5 +612,17 @@ class EavTest extends AbstractModifierTest
                 ],
             ]
         ];
+    }
+
+    /**
+     * @param \PHPUnit_Framework_MockObject_MockObject $mock
+     * @param array $data
+     */
+    private function initDataMock(\PHPUnit_Framework_MockObject_MockObject $mock, array $data)
+    {
+        foreach ($data as $key => $value) {
+            $mock->method('get' . implode(explode('_', ucwords($key, "_"))))
+                ->willReturn($value);
+        }
     }
 }
