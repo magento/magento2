@@ -168,7 +168,7 @@ class Template implements \Zend_Filter_Interface
      * @example syntax {{for thing in things}} {{var thing.whatever}} {{/for}} e.g.:custom collection.
      * @return string
      */
-    protected function filterFor($value)
+    private function filterFor($value)
     {
         if (preg_match_all(self::LOOP_PATTERN, $value, $constructions, PREG_SET_ORDER)) {
             foreach ($constructions as $construction) {
