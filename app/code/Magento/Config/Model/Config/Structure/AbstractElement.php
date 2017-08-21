@@ -12,7 +12,7 @@ use Magento\Framework\App\ObjectManager;
 /**
  * @api
  */
-abstract class AbstractElement implements ElementInterface
+abstract class AbstractElement implements ElementNewInterface
 {
     /**
      * Element data

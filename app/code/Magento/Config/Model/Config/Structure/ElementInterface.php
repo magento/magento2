@@ -7,6 +7,8 @@ namespace Magento\Config\Model\Config\Structure;
 
 /**
  * @api
+ * @deprecated
+ * @see ElementNewInterface
  */
 interface ElementInterface
 {

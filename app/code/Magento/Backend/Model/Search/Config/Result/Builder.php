@@ -5,8 +5,9 @@
  */
 namespace Magento\Backend\Model\Search\Config\Result;
 
-use Magento\Config\Model\Config\Structure\Element\AbstractComposite;
-use Magento\Config\Model\Config\Structure\ElementInterface;
+use Magento\Backend\Model\Search\Config\Structure\ElementBuilderInterface;
+use Magento\Backend\Model\UrlInterface;
+use Magento\Config\Model\Config\Structure\ElementNewInterface;
 
 /**
  * Config SearchResult Builder
@@ -20,28 +21,26 @@ class Builder
     /**
      * @var array
      */
-    private $supportedElementTypes = [
-        self::STRUCTURE_ELEMENT_TYPE_SECTION,
-        self::STRUCTURE_ELEMENT_TYPE_GROUP,
-        self::STRUCTURE_ELEMENT_TYPE_FIELD,
-    ];
-
-    /**
-     * @var array
-     */
     private $results = [];
 
     /**
-     * @var \Magento\Backend\Model\UrlInterface
+     * @var UrlInterface
      */
     private $urlBuilder;
 
     /**
-     * @param \Magento\Backend\Model\UrlInterface $urlBuilder
+     * @var ElementBuilderInterface[]
      */
-    public function __construct(\Magento\Backend\Model\UrlInterface $urlBuilder)
+    private $structureElementTypes;
+
+    /**
+     * @param UrlInterface $urlBuilder
+     * @param array $structureElementTypes
+     */
+    public function __construct(UrlInterface $urlBuilder, array $structureElementTypes)
     {
         $this->urlBuilder = $urlBuilder;
+        $this->structureElementTypes = $structureElementTypes;
     }
 
     /**
@@ -53,38 +52,22 @@ class Builder
     }
 
     /**
-     * @param AbstractComposite|ElementInterface $structureElement
+     * @param ElementNewInterface $structureElement
      * @param string $elementPathLabel
      * @return void
      */
-    public function add(ElementInterface $structureElement, $elementPathLabel)
+    public function add(ElementNewInterface $structureElement, $elementPathLabel)
     {
         $urlParams = [];
         $elementData = $structureElement->getData();
 
-        if (!in_array($elementData['_elementType'], $this->supportedElementTypes)) {
+        if (!in_array($elementData['_elementType'], array_keys($this->structureElementTypes))) {
             return;
         }
 
-        $elementPathParts = explode('/', $structureElement->getPath());
-
-        switch ($elementData['_elementType']) {
-            case self::STRUCTURE_ELEMENT_TYPE_SECTION:
-                $urlParams = ['section' => $elementPathParts[1]];
-                break;
-            case self::STRUCTURE_ELEMENT_TYPE_GROUP:
-                $urlParams = [
-                    'section' => $elementPathParts[0],
-                    'group'   => $elementPathParts[1],
-                ];
-                break;
-            case self::STRUCTURE_ELEMENT_TYPE_FIELD:
-                $urlParams = [
-                    'section' => $elementPathParts[0],
-                    'group'   => $elementPathParts[1],
-                    'field'   => $structureElement->getId(),
-                ];
-                break;
+        if (isset($this->structureElementTypes[$elementData['_elementType']])) {
+            $urlParamsBuilder = $this->structureElementTypes[$elementData['_elementType']];
+            $urlParams = $urlParamsBuilder->build($structureElement);
         }
 
         $this->results[] = [
