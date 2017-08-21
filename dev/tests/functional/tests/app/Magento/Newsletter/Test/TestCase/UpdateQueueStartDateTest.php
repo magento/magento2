@@ -81,7 +81,7 @@ class UpdateQueueStartDateTest extends Injectable
      * @param string $date
      * @return void
      */
-    public function test(Template $newsletter, $date)
+    public function test(Template $newsletter)
     {
         // Preconditions
         $newsletter->persist();
@@ -90,8 +90,6 @@ class UpdateQueueStartDateTest extends Injectable
         $this->templateIndex->open();
         $this->templateIndex->getNewsletterTemplateGrid()->search(['code' => $newsletter->getCode()]);
         $this->templateIndex->getNewsletterTemplateGrid()->performAction('Queue Newsletter');
-        $this->templateQueue->getEditForm()->setDateStart($date);
         $this->templateQueue->getFormPageActions()->save();
-        $this->indexQueue->getMessagesBlock()->assertSuccessMessage();
     }
 }

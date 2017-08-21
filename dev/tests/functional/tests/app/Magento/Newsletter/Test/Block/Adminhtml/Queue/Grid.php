@@ -36,7 +36,7 @@ class Grid extends \Magento\Backend\Test\Block\Widget\Grid
      *
      * @var string
      */
-    protected $action = '.col-actions [class*="control-select"]';
+    private $action = '.col-actions [class*="control-select"]';
 
     /**
      * Action for newsletter queue template.

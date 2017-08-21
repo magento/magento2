@@ -33,6 +33,11 @@ class AssertNewsletterQueueDateStart extends AbstractAssertForm
     ) {
         $indexQueue->open();
         $indexQueue->getQueueTemplateGrid()->searchAndOpen(['newsletter_subject' => $newsletter->getSubject()]);
+        $templateQueue->getEditForm()->setDateStart($date);
+        $templateQueue->getFormPageActions()->save();
+        $indexQueue->getMessagesBlock()->assertSuccessMessage();
+        
+        $indexQueue->getQueueTemplateGrid()->searchAndOpen(['newsletter_subject' => $newsletter->getSubject()]);
         \PHPUnit_Framework_Assert::assertEquals(
             $date,
             $templateQueue->getEditForm()->getDateStart(),
