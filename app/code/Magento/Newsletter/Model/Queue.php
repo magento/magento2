@@ -111,7 +111,7 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
 
     /**
      * Timezone library.
-     * 
+     *
      * @var \Magento\Framework\Stdlib\DateTime\Timezone
      */
     private $timezone;
