@@ -67,12 +67,14 @@ class SampleRepository implements SampleRepositoryInterface
     public function get($id)
     {
         if (!$id) {
-            throw new \Magento\Framework\Exception\InputException(__('ID required'));
+            throw new \Magento\Framework\Exception\InputException(new \Magento\Framework\Phrase('ID required'));
         }
         if (!isset($this->registry[$id])) {
             $entity = $this->sampleInterfacePersistor->loadEntity($id);
             if (!$entity->getId()) {
-                throw new \Magento\Framework\Exception\NoSuchEntityException(__('Requested entity doesn\'t exist'));
+                throw new \Magento\Framework\Exception\NoSuchEntityException(
+                    new \Magento\Framework\Phrase('Requested entity doesn\'t exist')
+                );
             }
             $this->registry[$id] = $entity;
         }

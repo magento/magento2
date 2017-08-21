@@ -214,7 +214,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
     /**
      * Returns get() method
      *
-     * @return string
+     * @return array
      */
     protected function _getGetMethod()
     {
@@ -223,13 +223,15 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
         /** @var ParameterReflection $parameterReflection */
         $parameterReflection = $methodReflection->getParameters()[0];
         $body = "if (!\$id) {\n"
-            . "    throw new \\" . InputException::class . "(__('ID required'));\n"
+            . "    throw new \\" . InputException::class . "(new \\Magento\\Framework\\Phrase('ID required'));\n"
             . "}\n"
             . "if (!isset(\$this->registry[\$id])) {\n"
             . "    \$entity = \$this->" . $this->_getSourcePersistorPropertyName()
             . "->loadEntity(\$id);\n"
             . "    if (!\$entity->getId()) {\n"
-            . "        throw new \\" . NoSuchEntityException::class . "(__('Requested entity doesn\\'t exist'));\n"
+            . "        throw new \\" . NoSuchEntityException::class . "(\n"
+            . "            new \\Magento\\Framework\\Phrase('Requested entity doesn\\'t exist')\n"
+            . "        );\n"
             . "    }\n"
             . "    \$this->registry[\$id] = \$entity;\n"
             . "}\n"
