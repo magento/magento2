@@ -304,7 +304,6 @@ class StockItemRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('save')
             ->with($this->stockItemMock)
             ->willReturnSelf();
-        $this->indexProcessorMock->expects($this->never())->method('reindexRow')->with($productId);
 
         $this->assertEquals($this->stockItemMock, $this->model->save($this->stockItemMock));
     }
