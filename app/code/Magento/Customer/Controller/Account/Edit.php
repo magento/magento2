@@ -12,12 +12,20 @@ use Magento\Customer\Model\Session;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\App\Action\Context;
 
+/**
+ * Class \Magento\Customer\Controller\Account\Edit
+ *
+ */
 class Edit extends \Magento\Customer\Controller\AbstractAccount
 {
-    /** @var CustomerRepositoryInterface  */
+    /**
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface
+     */
     protected $customerRepository;
 
-    /** @var DataObjectHelper */
+    /**
+     * @var \Magento\Framework\Api\DataObjectHelper
+     */
     protected $dataObjectHelper;
 
     /**

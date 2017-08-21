@@ -9,7 +9,7 @@ use \Magento\Framework\Module\Plugin\DbStatusValidator;
 
 use Magento\Framework\Module\DbVersionInfo;
 
-class DbStatusValidatorTest extends \PHPUnit_Framework_TestCase
+class DbStatusValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Module\Plugin\DbStatusValidator
@@ -43,16 +43,21 @@ class DbStatusValidatorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_cacheMock = $this->getMock(\Magento\Framework\Cache\FrontendInterface::class);
-        $this->requestMock = $this->getMock(\Magento\Framework\App\RequestInterface::class);
-        $this->subjectMock = $this->getMock(\Magento\Framework\App\FrontController::class, [], [], '', false);
+        $this->_cacheMock = $this->getMockBuilder(\Magento\Framework\Cache\FrontendInterface::class)
+            ->setMethods(['db_is_up_to_date'])
+            ->getMockForAbstractClass();
+        $this->requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
+        $this->subjectMock = $this->createMock(\Magento\Framework\App\FrontController::class);
         $moduleList = $this->getMockForAbstractClass(\Magento\Framework\Module\ModuleListInterface::class);
         $moduleList->expects($this->any())
             ->method('getNames')
             ->will($this->returnValue(['Module_One', 'Module_Two']));
 
-        $this->moduleManager = $this->getMock(\Magento\Framework\Module\Manager::class, [], [], '', false);
-        $this->dbVersionInfoMock = $this->getMock(\Magento\Framework\Module\DbVersionInfo::class, [], [], '', false);
+        $this->moduleManager = $this->createPartialMock(
+            \Magento\Framework\Module\Manager::class,
+            ['isDbSchemaUpToDate', 'isDbDataUpToDate']
+        );
+        $this->dbVersionInfoMock = $this->createMock(\Magento\Framework\Module\DbVersionInfo::class);
         $this->_model = new DbStatusValidator(
             $this->_cacheMock,
             $this->dbVersionInfoMock

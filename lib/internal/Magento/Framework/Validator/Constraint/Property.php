@@ -8,6 +8,10 @@
 
 namespace Magento\Framework\Validator\Constraint;
 
+/**
+ * Class \Magento\Framework\Validator\Constraint\Property
+ *
+ */
 class Property extends \Magento\Framework\Validator\Constraint
 {
     /**

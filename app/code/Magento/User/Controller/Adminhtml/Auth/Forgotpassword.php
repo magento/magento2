@@ -8,6 +8,10 @@ namespace Magento\User\Controller\Adminhtml\Auth;
 
 use Magento\Security\Model\SecurityManager;
 
+/**
+ * Class \Magento\User\Controller\Adminhtml\Auth\Forgotpassword
+ *
+ */
 class Forgotpassword extends \Magento\User\Controller\Adminhtml\Auth
 {
     /**

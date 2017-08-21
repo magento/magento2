@@ -1,22 +1,17 @@
 <?php
 /**
- * Test for \Magento\Integration\Model\AdminTokenService
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\Integration\Test\Unit\Model;
 
 use Magento\Integration\Model\Integration;
 use Magento\Integration\Model\Oauth\Token;
 
 /**
- * Test for \Magento\Integration\Model\AdminTokenService
+ * @codingStandardsIgnoreFile
  */
-class AdminTokenServiceTest extends \PHPUnit_Framework_TestCase
+class AdminTokenServiceTest extends \PHPUnit\Framework\TestCase
 {
     /** \Magento\Integration\Model\AdminTokenService */
     protected $_tokenService;
@@ -58,7 +53,7 @@ class AdminTokenServiceTest extends \PHPUnit_Framework_TestCase
         $this->_tokenModelCollectionMock = $this->getMockBuilder(
             \Magento\Integration\Model\ResourceModel\Oauth\Token\Collection::class
         )->disableOriginalConstructor()->setMethods(
-                ['addFilterByAdminId', 'getSize', '__wakeup', '_beforeLoad', '_afterLoad', 'getIterator']
+                ['addFilterByAdminId', 'getSize', '__wakeup', '_beforeLoad', '_afterLoad', 'getIterator', '_fetchAll']
             )->getMock();
 
         $this->_tokenModelCollectionFactoryMock = $this->getMockBuilder(

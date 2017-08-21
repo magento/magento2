@@ -10,6 +10,10 @@
  */
 namespace Magento\Catalog\Model\Layer\Search\Filter;
 
+/**
+ * Class \Magento\Catalog\Model\Layer\Search\Filter\Attribute
+ *
+ */
 class Attribute extends \Magento\Catalog\Model\Layer\Filter\Attribute
 {
     /**

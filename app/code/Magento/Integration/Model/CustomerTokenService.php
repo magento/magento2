@@ -15,6 +15,10 @@ use Magento\Integration\Model\ResourceModel\Oauth\Token\CollectionFactory as Tok
 use Magento\Integration\Model\Oauth\Token\RequestThrottler;
 use Magento\Framework\Exception\AuthenticationException;
 
+/**
+ * Class \Magento\Integration\Model\CustomerTokenService
+ *
+ */
 class CustomerTokenService implements \Magento\Integration\Api\CustomerTokenServiceInterface
 {
     /**
@@ -116,7 +120,7 @@ class CustomerTokenService implements \Magento\Integration\Api\CustomerTokenServ
      * Get request throttler instance
      *
      * @return RequestThrottler
-     * @deprecated
+     * @deprecated 100.0.4
      */
     private function getRequestThrottler()
     {

@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\Sitemap\Model;
 
 use Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot;
@@ -18,10 +15,6 @@ use Magento\Sitemap\Model\ItemProvider\ItemProviderInterface;
 use Magento\Sitemap\Model\ResourceModel\Sitemap as SitemapResource;
 
 /**
- * Sitemap model
- *
- * @method SitemapResource _getResource()
- * @method SitemapResource getResource()
  * @method string getSitemapType()
  * @method \Magento\Sitemap\Model\Sitemap setSitemapType(string $value)
  * @method string getSitemapFilename()
@@ -35,6 +28,7 @@ use Magento\Sitemap\Model\ResourceModel\Sitemap as SitemapResource;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @codingStandardsIgnoreFile
  */
 class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\DataObject\IdentityInterface
 {
@@ -158,6 +152,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      * Model cache tag for clear cache in after save and after delete
      *
      * @var string
+     * @since 100.2.0
      */
     protected $_cacheTag = true;
 
@@ -244,7 +239,6 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
             \Magento\Sitemap\Model\SitemapItemInterfaceFactory::class
         );
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
-
     }
 
     /**
@@ -277,7 +271,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      *
      * @param DataObject $sitemapItem
      * @return $this
-     * @deprecated
+     * @deprecated 100.2.0
      * @see ItemProviderInterface
      */
     public function addSitemapItem(DataObject $sitemapItem)
@@ -291,7 +285,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      * Collect all sitemap items
      *
      * @return void
-     * @deprecated
+     * @deprecated 100.2.0
      * @see ItemProviderInterface
      */
     public function collectSitemapItems()
@@ -837,6 +831,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      * Get unique page cache identities
      *
      * @return array
+     * @since 100.2.0
      */
     public function getIdentities()
     {

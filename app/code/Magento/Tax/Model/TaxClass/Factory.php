@@ -9,6 +9,10 @@
  */
 namespace Magento\Tax\Model\TaxClass;
 
+/**
+ * Class \Magento\Tax\Model\TaxClass\Factory
+ *
+ */
 class Factory
 {
     /**

@@ -13,7 +13,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AdapterTest extends \PHPUnit_Framework_TestCase
+class AdapterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ResponseFactory|\PHPUnit_Framework_MockObject_MockObject

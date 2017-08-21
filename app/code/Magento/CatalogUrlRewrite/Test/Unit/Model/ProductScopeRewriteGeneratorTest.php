@@ -15,7 +15,7 @@ use Magento\Store\Model\StoreManagerInterface;
  * @package Magento\CatalogUrlRewrite\Test\Unit\Model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ProductScopeRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
+class ProductScopeRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     private $canonicalUrlRewriteGenerator;
@@ -49,7 +49,7 @@ class ProductScopeRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->serializer = $this->getMock(\Magento\Framework\Serialize\Serializer\Json::class, [], [], '', false);
+        $this->serializer = $this->createMock(\Magento\Framework\Serialize\Serializer\Json::class);
         $this->serializer->expects($this->any())
             ->method('serialize')
             ->willReturnCallback(
@@ -82,15 +82,12 @@ class ProductScopeRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
         )->disableOriginalConstructor()->setMethods(['create'])->getMock();
         $this->storeViewService = $this->getMockBuilder(\Magento\CatalogUrlRewrite\Service\V1\StoreViewService::class)
             ->disableOriginalConstructor()->getMock();
-        $this->storeManager = $this->getMock(StoreManagerInterface::class);
-        $mergeDataProviderFactory = $this->getMock(
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $mergeDataProviderFactory = $this->createPartialMock(
             \Magento\UrlRewrite\Model\MergeDataProviderFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->mergeDataProvider = new \Magento\UrlRewrite\Model\MergeDataProvider;
+        $this->mergeDataProvider = new \Magento\UrlRewrite\Model\MergeDataProvider();
         $mergeDataProviderFactory->expects($this->once())->method('create')->willReturn($this->mergeDataProvider);
 
         $this->productScopeGenerator = (new ObjectManager($this))->getObject(
@@ -110,7 +107,7 @@ class ProductScopeRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testGenerationForGlobalScope()
     {
-        $product = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $product = $this->createMock(\Magento\Catalog\Model\Product::class);
         $product->expects($this->any())->method('getStoreId')->will($this->returnValue(null));
         $product->expects($this->any())->method('getStoreIds')->will($this->returnValue([1]));
         $this->storeViewService->expects($this->once())->method('doesEntityHaveOverriddenUrlKeyForStore')
@@ -158,11 +155,11 @@ class ProductScopeRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testGenerationForSpecificStore()
     {
-        $product = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $product = $this->createMock(\Magento\Catalog\Model\Product::class);
         $product->expects($this->any())->method('getStoreId')->will($this->returnValue(1));
         $product->expects($this->never())->method('getStoreIds');
         $storeRootCategoryId = 'root-for-store-id';
-        $category = $this->getMock(\Magento\Catalog\Model\Category::class, [], [], '', false);
+        $category = $this->createMock(\Magento\Catalog\Model\Category::class);
         $category->expects($this->any())->method('getParentIds')
             ->will($this->returnValue(['root-id', $storeRootCategoryId]));
         $category->expects($this->any())->method('getParentId')->will($this->returnValue('parent_id'));
@@ -196,7 +193,7 @@ class ProductScopeRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testSkipGenerationForGlobalScope()
     {
-        $product = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $product = $this->createMock(\Magento\Catalog\Model\Product::class);
         $product->expects($this->any())->method('getStoreIds')->will($this->returnValue([1, 2]));
         $this->storeViewService->expects($this->exactly(2))->method('doesEntityHaveOverriddenUrlKeyForStore')
             ->will($this->returnValue(true));

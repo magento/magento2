@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\ObjectManager\Config\Reader;
 
+/**
+ * Class \Magento\Framework\ObjectManager\Config\Reader\Dom
+ *
+ */
 class Dom extends \Magento\Framework\Config\Reader\Filesystem
 {
     /**

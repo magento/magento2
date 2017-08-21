@@ -5,6 +5,10 @@
  */
 namespace Magento\CatalogRule\Model\Rule;
 
+/**
+ * Class \Magento\CatalogRule\Model\Rule\WebsitesOptionsProvider
+ *
+ */
 class WebsitesOptionsProvider implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**

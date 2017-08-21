@@ -8,6 +8,10 @@ namespace Magento\Reports\Controller\Adminhtml\Report\Product;
 
 use Magento\Framework\App\ResponseInterface;
 
+/**
+ * Class \Magento\Reports\Controller\Adminhtml\Report\Product\ExportDownloadsExcel
+ *
+ */
 class ExportDownloadsExcel extends \Magento\Reports\Controller\Adminhtml\Report\Product
 {
     /**

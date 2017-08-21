@@ -8,7 +8,7 @@ namespace Magento\PageCache\Test\Unit\Observer;
 use Magento\Framework\App\PageCache\FormKey;
 use Magento\PageCache\Observer\FlushFormKeyOnLogout;
 
-class FlushFormKeyOnLogoutTest extends \PHPUnit_Framework_TestCase
+class FlushFormKeyOnLogoutTest extends \PHPUnit\Framework\TestCase
 {
     public function testExecute()
     {
@@ -19,7 +19,7 @@ class FlushFormKeyOnLogoutTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $observerObject = $this->getMock(\Magento\Framework\Event\Observer::class);
+        $observerObject = $this->createMock(\Magento\Framework\Event\Observer::class);
 
         $observer = new FlushFormKeyOnLogout($cookieFormKey);
 

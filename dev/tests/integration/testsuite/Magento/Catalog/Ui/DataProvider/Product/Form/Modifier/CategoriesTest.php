@@ -14,7 +14,7 @@ use Magento\TestFramework\Helper\CacheCleaner;
  * @magentoDbIsolation enabled
  * @magentoAppIsolation enabled
  */
-class CategoriesTest extends \PHPUnit_Framework_TestCase
+class CategoriesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Categories

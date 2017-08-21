@@ -8,6 +8,10 @@ namespace Magento\Framework\Mview\View;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Phrase;
 
+/**
+ * Class \Magento\Framework\Mview\View\Changelog
+ *
+ */
 class Changelog implements ChangelogInterface
 {
     /**

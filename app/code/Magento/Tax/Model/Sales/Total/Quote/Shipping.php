@@ -8,6 +8,10 @@ namespace Magento\Tax\Model\Sales\Total\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Api\Data\ShippingAssignmentInterface;
 
+/**
+ * Class \Magento\Tax\Model\Sales\Total\Quote\Shipping
+ *
+ */
 class Shipping extends CommonTaxCollector
 {
     /**

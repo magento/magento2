@@ -8,6 +8,10 @@ namespace Magento\Downloadable\Controller\Adminhtml\Downloadable\File;
 
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Downloadable\Controller\Adminhtml\Downloadable\File\Upload
+ *
+ */
 class Upload extends \Magento\Downloadable\Controller\Adminhtml\Downloadable\File
 {
     /**

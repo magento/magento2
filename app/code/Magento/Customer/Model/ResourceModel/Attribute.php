@@ -11,6 +11,10 @@
  */
 namespace Magento\Customer\Model\ResourceModel;
 
+/**
+ * Class \Magento\Customer\Model\ResourceModel\Attribute
+ *
+ */
 class Attribute extends \Magento\Eav\Model\ResourceModel\Attribute
 {
     /**

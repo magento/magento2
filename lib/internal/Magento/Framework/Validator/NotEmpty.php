@@ -7,6 +7,10 @@
  */
 namespace Magento\Framework\Validator;
 
+/**
+ * Class \Magento\Framework\Validator\NotEmpty
+ *
+ */
 class NotEmpty extends \Zend_Validate_NotEmpty implements \Magento\Framework\Validator\ValidatorInterface
 {
 }

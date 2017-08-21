@@ -10,7 +10,7 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\DB\Select\QueryModifierInterface;
 use Magento\Framework\DB\Select\CompositeQueryModifier;
 
-class CompositeQueryModifierTest extends \PHPUnit_Framework_TestCase
+class CompositeQueryModifierTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager
@@ -24,9 +24,9 @@ class CompositeQueryModifierTest extends \PHPUnit_Framework_TestCase
 
     public function testModify()
     {
-        $queryModifierMockOne = $this->getMock(QueryModifierInterface::class);
-        $queryModifierMockTwo = $this->getMock(QueryModifierInterface::class);
-        $selectMock = $this->getMock(Select::class, [], [], '', false);
+        $queryModifierMockOne = $this->createMock(QueryModifierInterface::class);
+        $queryModifierMockTwo = $this->createMock(QueryModifierInterface::class);
+        $selectMock = $this->createMock(Select::class);
         $queryModifierMockOne->expects($this->once())
             ->method('modify')
             ->with($selectMock);

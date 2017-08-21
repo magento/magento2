@@ -7,6 +7,10 @@
  */
 namespace Magento\Catalog\Model\Product;
 
+/**
+ * Class \Magento\Catalog\Model\Product\LinkTypeProvider
+ *
+ */
 class LinkTypeProvider implements \Magento\Catalog\Api\ProductLinkTypeListInterface
 {
     /**

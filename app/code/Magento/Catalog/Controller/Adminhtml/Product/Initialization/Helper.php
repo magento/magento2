@@ -41,22 +41,25 @@ class Helper
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\Filter\Date
-     * @deprecated
+     * @deprecated 101.0.0
      */
     protected $dateFilter;
 
     /**
      * @var CustomOptionFactory
+     * @since 101.0.0
      */
     protected $customOptionFactory;
 
     /**
      * @var ProductLinkFactory
+     * @since 101.0.0
      */
     protected $productLinkFactory;
 
     /**
      * @var ProductRepository
+     * @since 101.0.0
      */
     protected $productRepository;
 
@@ -132,6 +135,7 @@ class Helper
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 101.0.0
      */
     public function initializeFromData(\Magento\Catalog\Model\Product $product, array $productData)
     {
@@ -231,6 +235,7 @@ class Helper
      * @param \Magento\Catalog\Model\Product $product
      * @return \Magento\Catalog\Model\Product
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 101.0.0
      */
     protected function setProductLinks(\Magento\Catalog\Model\Product $product)
     {
@@ -279,6 +284,7 @@ class Helper
      * @param array $productData
      * @return array
      * @todo Remove this method
+     * @since 101.0.0
      */
     protected function normalize(array $productData)
     {
@@ -360,7 +366,7 @@ class Helper
 
     /**
      * @return LinkResolver
-     * @deprecated
+     * @deprecated 101.0.0
      */
     private function getLinkResolver()
     {
@@ -372,7 +378,7 @@ class Helper
 
     /**
      * @return \Magento\Framework\Stdlib\DateTime\Filter\DateTime
-     * @deprecated
+     * @deprecated 101.0.0
      */
     private function getDateTimeFilter()
     {

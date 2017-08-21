@@ -7,6 +7,10 @@ namespace Magento\Sales\Controller\Adminhtml\Order\Create;
 
 use Magento\Framework\Exception\PaymentException;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Order\Create\Save
+ *
+ */
 class Save extends \Magento\Sales\Controller\Adminhtml\Order\Create
 {
     /**

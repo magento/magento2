@@ -35,7 +35,6 @@ class UpgradeData implements UpgradeDataInterface
     /**
      * @var SearchCriteriaFactory
      */
-
     private $searchCriteriaFactory;
 
     /**
@@ -87,15 +86,13 @@ class UpgradeData implements UpgradeDataInterface
             $taxRateList = $this->taxRateRepository->getList($this->searchCriteriaFactory->create());
             /** @var \Magento\Tax\Api\Data\TaxRateInterface $taxRateData */
             foreach ($taxRateList->getItems() as $taxRateData) {
-                if (!empty($taxRateData->getData('percentage_rate'))) {
-                    $regionCode = $this->parseRegionFromTaxCode($taxRateData->getCode());
-                    if ($regionCode) {
-                        /** @var \Magento\Directory\Model\Region $region */
-                        $region = $this->directoryRegionFactory->create();
-                        $region->loadByCode($regionCode, $taxRateData->getTaxCountryId());
-                        $taxRateData->setTaxRegionId($region->getRegionId());
-                        $this->taxRateRepository->save($taxRateData);
-                    }
+                $regionCode = $this->parseRegionFromTaxCode($taxRateData->getCode());
+                if ($regionCode) {
+                    /** @var \Magento\Directory\Model\Region $region */
+                    $region = $this->directoryRegionFactory->create();
+                    $region->loadByCode($regionCode, $taxRateData->getTaxCountryId());
+                    $taxRateData->setTaxRegionId($region->getRegionId());
+                    $this->taxRateRepository->save($taxRateData);
                 }
             }
         }

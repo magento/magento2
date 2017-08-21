@@ -9,6 +9,10 @@
  */
 namespace Magento\CatalogImportExport\Model\Export\Product\Type;
 
+/**
+ * Class \Magento\CatalogImportExport\Model\Export\Product\Type\Factory
+ *
+ */
 class Factory
 {
     /**

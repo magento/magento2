@@ -12,8 +12,6 @@ use Magento\AdminNotification\Model\InboxInterface;
 /**
  * AdminNotification Inbox model
  *
- * @method \Magento\AdminNotification\Model\ResourceModel\Inbox _getResource()
- * @method \Magento\AdminNotification\Model\ResourceModel\Inbox getResource()
  * @method int getSeverity()
  * @method \Magento\AdminNotification\Model\Inbox setSeverity(int $value)
  * @method string getDateAdded()

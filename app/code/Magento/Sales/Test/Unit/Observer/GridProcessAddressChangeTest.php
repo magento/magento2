@@ -9,7 +9,7 @@ namespace Magento\Sales\Test\Unit\Observer;
 /**
  * Class GridProcessAddressChangeTest
  */
-class GridProcessAddressChangeTest extends \PHPUnit_Framework_TestCase
+class GridProcessAddressChangeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Observer\GridProcessAddressChange

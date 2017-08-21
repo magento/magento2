@@ -15,7 +15,9 @@ abstract class AbstractRepository implements RepositoryInterface
      */
     protected $attributes;
 
-    /** @var \Magento\Framework\Api\SearchCriteriaBuilder */
+    /**
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder
+     */
     protected $searchCriteriaBuilder;
 
     /**

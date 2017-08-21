@@ -14,7 +14,7 @@ use Magento\Store\Model\Store;
 use Magento\Catalog\Model\Product;
 use Magento\TestFramework\Helper\Bootstrap;
 
-class FullTest extends \PHPUnit_Framework_TestCase
+class FullTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full

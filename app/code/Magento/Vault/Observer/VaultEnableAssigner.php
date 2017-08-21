@@ -10,6 +10,10 @@ use Magento\Payment\Observer\AbstractDataAssignObserver;
 use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Vault\Model\Ui\VaultConfigProvider;
 
+/**
+ * Class \Magento\Vault\Observer\VaultEnableAssigner
+ *
+ */
 class VaultEnableAssigner extends AbstractDataAssignObserver
 {
     /**

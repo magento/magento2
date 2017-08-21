@@ -9,7 +9,7 @@ namespace Magento\Wishlist\Model;
 /**
  * Item test class.
  */
-class ItemTest extends \PHPUnit_Framework_TestCase
+class ItemTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\ObjectManager

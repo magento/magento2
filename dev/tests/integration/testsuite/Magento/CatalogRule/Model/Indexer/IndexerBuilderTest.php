@@ -7,7 +7,7 @@ namespace Magento\CatalogRule\Model\Indexer;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
-class IndexerBuilderTest extends \PHPUnit_Framework_TestCase
+class IndexerBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogRule\Model\Indexer\IndexBuilder

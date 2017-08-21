@@ -39,11 +39,7 @@ class Template implements \Zend_Filter_Interface
      */
     const LOOP_PATTERN = '/{{for(?P<loopItem>.*? )(in)(?P<loopData>.*?)}}(?P<loopBody>.*?){{\/for}}/si';
 
-    /**
-     * Callbacks that will be applied after filtering
-     *
-     * @var array
-     */
+    /**#@-*/
     private $afterFilterCallbacks = [];
 
     /**

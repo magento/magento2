@@ -5,6 +5,10 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Order\Unhold
+ *
+ */
 class Unhold extends \Magento\Sales\Controller\Adminhtml\Order
 {
     /**

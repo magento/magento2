@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\Model\ResourceModel\Type;
 
+/**
+ * Class \Magento\Framework\Model\ResourceModel\Type\AbstractType
+ *
+ */
 abstract class AbstractType
 {
     /**

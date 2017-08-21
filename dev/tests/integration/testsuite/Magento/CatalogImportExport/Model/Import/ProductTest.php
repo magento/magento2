@@ -15,6 +15,7 @@
 namespace Magento\CatalogImportExport\Model\Import;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductCustomOptionRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Category;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
@@ -256,26 +257,13 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     public function testSaveCustomOptions($importFile, $sku)
     {
         $pathToFile = __DIR__ . '/_files/' . $importFile;
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create(\Magento\Framework\Filesystem::class);
-        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
-
-        $source = $this->objectManager->create(
-            \Magento\ImportExport\Model\Import\Source\Csv::class,
-            [
-                'file' => $pathToFile,
-                'directory' => $directory
-            ]
-        );
-        $errors = $this->_model->setParameters(
-            ['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND, 'entity' => 'catalog_product']
-        )->setSource(
-            $source
-        )->validateData();
+        $importModel = $this->createImportModel($pathToFile);
+        $errors = $importModel->validateData();
 
         $this->assertTrue($errors->getErrorsCount() == 0);
-        $this->_model->importData();
+        $importModel->importData();
 
+        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
         $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Catalog\Api\ProductRepositoryInterface::class
         );
@@ -316,11 +304,14 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             }
             $this->assertTrue($elementExist, 'Element must exist.');
         }
+
+        // Make sure that after importing existing options again, option IDs and option value IDs are not changed
+        $customOptionValues = $this->getCustomOptionValues($sku);
+        $this->createImportModel($pathToFile)->importData();
+        $this->assertEquals($customOptionValues, $this->getCustomOptionValues($sku));
     }
 
     /**
-     * Data provider for test 'testSaveCustomOptionsDuplicate'
-     *
      * @return array
      */
     public function getBehaviorDataProvider()
@@ -335,6 +326,57 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
                 '$sku' => 'simple_new',
             ]
         ];
+    }
+
+    /**
+     * @param string $pathToFile
+     * @param string $behavior
+     * @return \Magento\CatalogImportExport\Model\Import\Product
+     */
+    private function createImportModel($pathToFile, $behavior = \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND)
+    {
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create(\Magento\Framework\Filesystem::class);
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+
+        /** @var \Magento\ImportExport\Model\Import\Source\Csv $source */
+        $source = $this->objectManager->create(
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
+            [
+                'file' => $pathToFile,
+                'directory' => $directory
+            ]
+        );
+
+        /** @var \Magento\CatalogImportExport\Model\Import\Product $importModel */
+        $importModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\CatalogImportExport\Model\Import\Product::class
+        );
+        $importModel->setParameters(['behavior' => $behavior, 'entity' => 'catalog_product'])->setSource($source);
+
+        return $importModel;
+    }
+
+    /**
+     * @param string $productSku
+     * @return array ['optionId' => ['optionValueId' => 'optionValueTitle', ...], ...]
+     */
+    private function getCustomOptionValues($productSku)
+    {
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        /** @var ProductCustomOptionRepositoryInterface $customOptionRepository */
+        $customOptionRepository = $this->objectManager->get(ProductCustomOptionRepositoryInterface::class);
+        $simpleProduct = $productRepository->get($productSku, false, null, true);
+        $originalProductOptions = $customOptionRepository->getProductOptions($simpleProduct);
+        $optionValues = [];
+        foreach ($originalProductOptions as $productOption) {
+            foreach ((array)$productOption->getValues() as $optionValue) {
+                $optionValues[$productOption->getOptionId()][$optionValue->getOptionTypeId()]
+                    = $optionValue->getTitle();
+            }
+        }
+        return $optionValues;
     }
 
     /**

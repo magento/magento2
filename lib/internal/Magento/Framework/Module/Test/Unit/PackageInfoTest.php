@@ -8,7 +8,7 @@ namespace Magento\Framework\Module\Test\Unit;
 use Magento\Framework\Module\ModuleList;
 use \Magento\Framework\Module\PackageInfo;
 
-class PackageInfoTest extends \PHPUnit_Framework_TestCase
+class PackageInfoTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Component\ComponentRegistrar|\PHPUnit_Framework_MockObject_MockObject
@@ -27,14 +27,8 @@ class PackageInfoTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->componentRegistrar = $this->getMock(
-            \Magento\Framework\Component\ComponentRegistrar::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->reader = $this->getMock(\Magento\Framework\Module\Dir\Reader::class, [], [], '', false);
+        $this->componentRegistrar = $this->createMock(\Magento\Framework\Component\ComponentRegistrar::class);
+        $this->reader = $this->createMock(\Magento\Framework\Module\Dir\Reader::class);
         $this->componentRegistrar->expects($this->once())
             ->method('getPaths')
             ->will($this->returnValue(['A' => 'A', 'B' => 'B', 'C' => 'C', 'D' => 'D', 'E' => 'E']));
@@ -46,7 +40,7 @@ class PackageInfoTest extends \PHPUnit_Framework_TestCase
             'D/composer.json' => '{"name":"d", "conflict":{"c":"0.1"}, "version":"0.3"}',
             'E/composer.json' => '{"name":"e", "version":"0.4"}',
         ];
-        $fileIteratorMock = $this->getMock(\Magento\Framework\Config\FileIterator::class, [], [], '', false);
+        $fileIteratorMock = $this->createMock(\Magento\Framework\Config\FileIterator::class);
         $fileIteratorMock->expects($this->once())
             ->method('toArray')
             ->will($this->returnValue($composerData));

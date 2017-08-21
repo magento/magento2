@@ -5,6 +5,10 @@
  */
 namespace Magento\Catalog\Model\Config\Source\Price;
 
+/**
+ * Class \Magento\Catalog\Model\Config\Source\Price\Scope
+ *
+ */
 class Scope implements \Magento\Framework\Option\ArrayInterface
 {
     /**

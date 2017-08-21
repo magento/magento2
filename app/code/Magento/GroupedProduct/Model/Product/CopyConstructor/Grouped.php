@@ -5,6 +5,10 @@
  */
 namespace Magento\GroupedProduct\Model\Product\CopyConstructor;
 
+/**
+ * Class \Magento\GroupedProduct\Model\Product\CopyConstructor\Grouped
+ *
+ */
 class Grouped implements \Magento\Catalog\Model\Product\CopyConstructorInterface
 {
     /**

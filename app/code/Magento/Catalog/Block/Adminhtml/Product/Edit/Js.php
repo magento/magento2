@@ -10,6 +10,10 @@ use Magento\Customer\Helper\Session\CurrentCustomer;
 use Magento\Tax\Api\TaxCalculationInterface;
 use Magento\Tax\Model\TaxClass\Source\Product as ProductTaxClassSource;
 
+/**
+ * Class \Magento\Catalog\Block\Adminhtml\Product\Edit\Js
+ *
+ */
 class Js extends \Magento\Backend\Block\Template
 {
     /**

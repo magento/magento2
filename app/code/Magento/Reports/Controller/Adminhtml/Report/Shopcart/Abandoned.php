@@ -6,6 +6,10 @@
  */
 namespace Magento\Reports\Controller\Adminhtml\Report\Shopcart;
 
+/**
+ * Class \Magento\Reports\Controller\Adminhtml\Report\Shopcart\Abandoned
+ *
+ */
 class Abandoned extends \Magento\Reports\Controller\Adminhtml\Report\Shopcart
 {
     /**

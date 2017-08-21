@@ -19,7 +19,7 @@ require_once __DIR__ . '/../Custom/Module/Model/ItemPlugin/Advanced.php';
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -59,23 +59,17 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->readerMock = $this->getMock(
-            \Magento\Framework\ObjectManager\Config\Reader\Dom::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->configScopeMock = $this->getMock(\Magento\Framework\Config\ScopeListInterface::class);
-        $this->cacheMock = $this->getMock(\Magento\Framework\Cache\FrontendInterface::class);
+        $this->readerMock = $this->createMock(\Magento\Framework\ObjectManager\Config\Reader\Dom::class);
+        $this->configScopeMock = $this->createMock(\Magento\Framework\Config\ScopeListInterface::class);
+        $this->cacheMock = $this->createMock(\Magento\Framework\Cache\FrontendInterface::class);
         $this->omConfigMock = $this->getMockForAbstractClass(
             \Magento\Framework\Interception\ObjectManager\ConfigInterface::class
         );
-        $this->definitionMock = $this->getMock(\Magento\Framework\ObjectManager\DefinitionInterface::class);
+        $this->definitionMock = $this->createMock(\Magento\Framework\ObjectManager\DefinitionInterface::class);
         $this->relationsMock = $this->getMockForAbstractClass(
             \Magento\Framework\ObjectManager\RelationsInterface::class
         );
-        $this->serializerMock = $this->getMock(SerializerInterface::class);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
     }
 

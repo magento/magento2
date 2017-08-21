@@ -134,6 +134,7 @@ abstract class AbstractType
      * Product metadata pool
      *
      * @var \Magento\Framework\EntityManager\MetadataPool
+     * @since 100.1.0
      */
     protected $metadataPool;
 
@@ -553,6 +554,7 @@ abstract class AbstractType
      * Get product metadata pool
      *
      * @return \Magento\Framework\EntityManager\MetadataPool
+     * @since 100.1.0
      */
     protected function getMetadataPool()
     {
@@ -567,6 +569,7 @@ abstract class AbstractType
      * Get product entity link field
      *
      * @return string
+     * @since 100.1.0
      */
     protected function getProductEntityLinkField()
     {
@@ -580,6 +583,7 @@ abstract class AbstractType
 
     /**
      * Clean cached values
+     * @since 100.2.0
      */
     public function __destruct()
     {

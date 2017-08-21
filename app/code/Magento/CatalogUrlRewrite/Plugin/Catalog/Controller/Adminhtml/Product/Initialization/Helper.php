@@ -5,9 +5,15 @@
  */
 namespace Magento\CatalogUrlRewrite\Plugin\Catalog\Controller\Adminhtml\Product\Initialization;
 
+/**
+ * Class \Magento\CatalogUrlRewrite\Plugin\Catalog\Controller\Adminhtml\Product\Initialization\Helper
+ *
+ */
 class Helper
 {
-    /** @var \Magento\Framework\App\RequestInterface */
+    /**
+     * @var \Magento\Framework\App\RequestInterface
+     */
     protected $request;
 
     /**

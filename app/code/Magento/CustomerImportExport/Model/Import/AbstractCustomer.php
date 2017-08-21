@@ -50,13 +50,7 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
 
     /**#@-*/
 
-    /**
-     * Array of attribute codes which will be ignored in validation and import procedures.
-     * For example, when entity attribute has own validation and import procedures
-     * or just to deny this attribute processing.
-     *
-     * @var string[]
-     */
+    /**#@-*/
     protected $_ignoredAttributes = ['website_id', 'store_id',
         self::COLUMN_DEFAULT_BILLING, self::COLUMN_DEFAULT_SHIPPING];
 

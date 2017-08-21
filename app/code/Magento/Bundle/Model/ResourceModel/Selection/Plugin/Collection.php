@@ -7,6 +7,10 @@ namespace Magento\Bundle\Model\ResourceModel\Selection\Plugin;
 
 use Magento\Store\Model\Store;
 
+/**
+ * Class \Magento\Bundle\Model\ResourceModel\Selection\Plugin\Collection
+ *
+ */
 class Collection
 {
     /**

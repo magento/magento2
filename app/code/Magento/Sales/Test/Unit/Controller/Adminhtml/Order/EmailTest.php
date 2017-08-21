@@ -6,17 +6,16 @@
 
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order;
 
-use \Magento\Sales\Controller\Adminhtml\Order\Email;
-
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Sales\Controller\Adminhtml\Order\Email;
 
 /**
  * Class EmailTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @package Magento\Sales\Controller\Adminhtml\Order
  */
-class EmailTest extends \PHPUnit_Framework_TestCase
+class EmailTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Email
@@ -91,9 +90,7 @@ class EmailTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->context = $this->getMock(
-            \Magento\Backend\App\Action\Context::class,
-            [
+        $this->context = $this->createPartialMock(\Magento\Backend\App\Action\Context::class, [
                 'getRequest',
                 'getResponse',
                 'getMessageManager',
@@ -103,47 +100,34 @@ class EmailTest extends \PHPUnit_Framework_TestCase
                 'getActionFlag',
                 'getHelper',
                 'getResultRedirectFactory'
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
         $this->orderManagementMock = $this->getMockBuilder(\Magento\Sales\Api\OrderManagementInterface::class)
             ->getMockForAbstractClass();
         $this->orderRepositoryMock = $this->getMockBuilder(\Magento\Sales\Api\OrderRepositoryInterface::class)
             ->getMockForAbstractClass();
         $this->loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
             ->getMockForAbstractClass();
-        $resultRedirectFactory = $this->getMock(
+        $resultRedirectFactory = $this->createPartialMock(
             \Magento\Backend\Model\View\Result\RedirectFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->response = $this->getMock(
+        $this->response = $this->createPartialMock(
             \Magento\Framework\App\ResponseInterface::class,
-            ['setRedirect', 'sendResponse'],
-            [],
-            '',
-            false
+            ['setRedirect', 'sendResponse']
         );
         $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()->getMock();
-        $this->messageManager = $this->getMock(
+        $this->messageManager = $this->createPartialMock(
             \Magento\Framework\Message\Manager::class,
-            ['addSuccess', 'addError'],
-            [],
-            '',
-            false
+            ['addSuccess', 'addError']
         );
 
         $this->orderMock = $this->getMockBuilder(\Magento\Sales\Api\Data\OrderInterface::class)
             ->getMockForAbstractClass();
-        $this->session = $this->getMock(\Magento\Backend\Model\Session::class, ['setIsUrlNotice'], [], '', false);
-        $this->actionFlag = $this->getMock(\Magento\Framework\App\ActionFlag::class, ['get', 'set'], [], '', false);
-        $this->helper = $this->getMock(\Magento\Backend\Helper\Data::class, ['getUrl'], [], '', false);
-        $this->resultRedirect = $this->getMock(\Magento\Backend\Model\View\Result\Redirect::class, [], [], '', false);
+        $this->session = $this->createPartialMock(\Magento\Backend\Model\Session::class, ['setIsUrlNotice']);
+        $this->actionFlag = $this->createPartialMock(\Magento\Framework\App\ActionFlag::class, ['get', 'set']);
+        $this->helper = $this->createPartialMock(\Magento\Backend\Helper\Data::class, ['getUrl']);
+        $this->resultRedirect = $this->createMock(\Magento\Backend\Model\View\Result\Redirect::class);
         $resultRedirectFactory->expects($this->any())->method('create')->willReturn($this->resultRedirect);
 
         $this->context->expects($this->once())->method('getMessageManager')->willReturn($this->messageManager);

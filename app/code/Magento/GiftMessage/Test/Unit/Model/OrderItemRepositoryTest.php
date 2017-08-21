@@ -13,7 +13,7 @@ use Magento\Framework\Exception\CouldNotSaveException;
  * Test class for \Magento\GiftMessage\Model\OrderItemRepository
  * * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class OrderItemRepositoryTest extends \PHPUnit_Framework_TestCase
+class OrderItemRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\GiftMessage\Model\OrderItemRepository|\PHPUnit_Framework_MockObject_MockObject

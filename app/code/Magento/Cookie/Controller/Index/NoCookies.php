@@ -6,6 +6,10 @@
  */
 namespace Magento\Cookie\Controller\Index;
 
+/**
+ * Class \Magento\Cookie\Controller\Index\NoCookies
+ *
+ */
 class NoCookies extends \Magento\Framework\App\Action\Action
 {
     /**

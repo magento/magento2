@@ -13,6 +13,10 @@ use Magento\Framework\Module\Manager;
 use Magento\PageCache\Model\Config;
 use Magento\Tax\Helper\Data;
 
+/**
+ * Class \Magento\Tax\Observer\AfterAddressSaveObserver
+ *
+ */
 class AfterAddressSaveObserver implements ObserverInterface
 {
     /**

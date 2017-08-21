@@ -7,7 +7,7 @@ namespace Magento\Search\Test\Unit\Adapter\Query\Preprocessor;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class SynonymsTest extends \PHPUnit_Framework_TestCase
+class SynonymsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Search\Api\SynonymAnalyzerInterface|\PHPUnit_Framework_MockObject_MockObject

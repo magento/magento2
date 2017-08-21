@@ -12,11 +12,17 @@ use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Message\Factory;
 use Magento\Framework\Exception\RuntimeException;
 
+/**
+ * Class \Magento\UrlRewrite\Model\Message\UrlRewriteExceptionMessageFactory
+ *
+ */
 class UrlRewriteExceptionMessageFactory implements ExceptionMessageFactoryInterface
 {
     const URL_DUPLICATE_MESSAGE_MAP_ID = 'urlDuplicateMessageMapId';
 
-    /** @var Factory */
+    /**
+     * @var \Magento\Framework\Message\Factory
+     */
     private $messageFactory;
 
     /**

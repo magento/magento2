@@ -7,6 +7,10 @@ namespace Magento\CacheInvalidate\Model;
 
 use Magento\Framework\Cache\InvalidateLogger;
 
+/**
+ * Class \Magento\CacheInvalidate\Model\PurgeCache
+ *
+ */
 class PurgeCache
 {
     const HEADER_X_MAGENTO_TAGS_PATTERN = 'X-Magento-Tags-Pattern';
