@@ -9,6 +9,10 @@ namespace Magento\Customer\Controller\Account;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 
+/**
+ * Class \Magento\Customer\Controller\Account\LogoutSuccess
+ *
+ */
 class LogoutSuccess extends \Magento\Customer\Controller\AbstractAccount
 {
     /**

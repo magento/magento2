@@ -10,6 +10,10 @@ use Magento\Framework\Api\Code\Generator\ExtensionAttributesInterfaceGenerator;
 use Magento\Framework\ObjectManager\Code\Generator\Factory as FactoryGenerator;
 use Magento\Setup\Module\Di\Compiler\Log\Log;
 
+/**
+ * Class \Magento\Setup\Module\Di\Code\Scanner\PhpScanner
+ *
+ */
 class PhpScanner implements ScannerInterface
 {
     /**

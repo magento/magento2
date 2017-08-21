@@ -8,8 +8,6 @@ namespace Magento\Variable\Model;
 /**
  * Custom variable model
  *
- * @method \Magento\Variable\Model\ResourceModel\Variable _getResource()
- * @method \Magento\Variable\Model\ResourceModel\Variable getResource()
  * @method string getCode()
  * @method \Magento\Variable\Model\Variable setCode(string $value)
  * @method string getName()

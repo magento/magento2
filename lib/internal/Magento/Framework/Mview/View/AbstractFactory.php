@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\Mview\View;
 
+/**
+ * Class \Magento\Framework\Mview\View\AbstractFactory
+ *
+ */
 abstract class AbstractFactory
 {
     /**

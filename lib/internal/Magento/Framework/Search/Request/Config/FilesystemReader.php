@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\Search\Request\Config;
 
+/**
+ * Class \Magento\Framework\Search\Request\Config\FilesystemReader
+ *
+ */
 class FilesystemReader extends \Magento\Framework\Config\Reader\Filesystem
 {
     /**

@@ -8,6 +8,10 @@ namespace Magento\Catalog\Model\Product\Option\Validator;
 
 use Magento\Catalog\Model\Product\Option;
 
+/**
+ * Class \Magento\Catalog\Model\Product\Option\Validator\Select
+ *
+ */
 class Select extends DefaultValidator
 {
     /**
@@ -78,6 +82,9 @@ class Select extends DefaultValidator
     {
         // we should be able to remove website values for default store fallback
         if ($storeId > \Magento\Store\Model\Store::DEFAULT_STORE_ID && $priceType === null && $price === null) {
+            return true;
+        }
+        if (!$priceType && !$price) {
             return true;
         }
         if (!$this->isInRange($priceType, $this->priceTypes) || $this->isNegative($price)) {

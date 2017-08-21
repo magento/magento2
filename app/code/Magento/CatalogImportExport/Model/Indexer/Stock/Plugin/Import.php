@@ -5,6 +5,10 @@
  */
 namespace Magento\CatalogImportExport\Model\Indexer\Stock\Plugin;
 
+/**
+ * Class \Magento\CatalogImportExport\Model\Indexer\Stock\Plugin\Import
+ *
+ */
 class Import
 {
     /**

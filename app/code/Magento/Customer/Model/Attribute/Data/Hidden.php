@@ -11,6 +11,10 @@
  */
 namespace Magento\Customer\Model\Attribute\Data;
 
+/**
+ * Class \Magento\Customer\Model\Attribute\Data\Hidden
+ *
+ */
 class Hidden extends \Magento\Eav\Model\Attribute\Data\Hidden
 {
 }

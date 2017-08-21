@@ -9,6 +9,10 @@
  */
 namespace Magento\Catalog\Block\Product\View;
 
+/**
+ * Class \Magento\Catalog\Block\Product\View\Tabs
+ *
+ */
 class Tabs extends \Magento\Framework\View\Element\Template
 {
     /**

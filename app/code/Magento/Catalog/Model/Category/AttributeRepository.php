@@ -7,6 +7,10 @@ namespace Magento\Catalog\Model\Category;
 
 use Magento\Catalog\Api\CategoryAttributeRepositoryInterface;
 
+/**
+ * Class \Magento\Catalog\Model\Category\AttributeRepository
+ *
+ */
 class AttributeRepository implements CategoryAttributeRepositoryInterface
 {
     /**

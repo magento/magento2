@@ -11,7 +11,7 @@ use Magento\Framework\App\RequestInterface;
 /**
  * EAV Entity Attribute File Data Model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class File extends \Magento\Eav\Model\Attribute\Data\AbstractData
 {

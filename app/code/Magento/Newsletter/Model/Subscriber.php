@@ -13,8 +13,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
 /**
  * Subscriber model
  *
- * @method \Magento\Newsletter\Model\ResourceModel\Subscriber _getResource()
- * @method \Magento\Newsletter\Model\ResourceModel\Subscriber getResource()
  * @method int getStoreId()
  * @method $this setStoreId(int $value)
  * @method string getChangeStatusAt()

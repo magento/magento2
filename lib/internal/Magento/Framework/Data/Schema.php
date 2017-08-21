@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\Data;
 
+/**
+ * Class \Magento\Framework\Data\Schema
+ *
+ */
 class Schema extends \Magento\Framework\DataObject
 {
     /**

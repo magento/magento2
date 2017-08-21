@@ -1297,7 +1297,7 @@ class Installer
 
         // unload Magento autoloader because it may be using compiled definition
         foreach (spl_autoload_functions() as $autoloader) {
-            if ($autoloader[0] instanceof \Magento\Framework\Code\Generator\Autoloader) {
+            if (is_array($autoloader) && $autoloader[0] instanceof \Magento\Framework\Code\Generator\Autoloader) {
                 spl_autoload_unregister([$autoloader[0], $autoloader[1]]);
                 break;
             }

@@ -5,6 +5,9 @@
  */
 namespace Magento\Reports\Model\Product\Index;
 
+/**
+ * @api
+ */
 class Factory
 {
     const TYPE_COMPARED = 'compared';

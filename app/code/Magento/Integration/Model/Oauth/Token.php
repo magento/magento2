@@ -14,10 +14,6 @@ use Magento\Integration\Model\ResourceModel\Oauth\Token\Collection as TokenColle
  * oAuth token model
  *
  * @method string getName() Consumer name (joined from consumer table)
- * @method TokenCollection getCollection()
- * @method TokenCollection getResourceCollection()
- * @method \Magento\Integration\Model\ResourceModel\Oauth\Token getResource()
- * @method \Magento\Integration\Model\ResourceModel\Oauth\Token _getResource()
  * @method int getConsumerId()
  * @method Token setConsumerId() setConsumerId(int $consumerId)
  * @method int getAdminId()
@@ -56,9 +52,7 @@ class Token extends \Magento\Framework\Model\AbstractModel
 
     /**#@- */
 
-    /**
-     * @var OauthHelper
-     */
+    /**#@- */
     protected $_oauthHelper;
 
     /**

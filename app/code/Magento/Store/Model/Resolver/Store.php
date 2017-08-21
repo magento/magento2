@@ -5,6 +5,10 @@
  */
 namespace Magento\Store\Model\Resolver;
 
+/**
+ * Class \Magento\Store\Model\Resolver\Store
+ *
+ */
 class Store implements \Magento\Framework\App\ScopeResolverInterface
 {
     /**

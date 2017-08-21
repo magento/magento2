@@ -5,6 +5,10 @@
  */
 namespace Magento\Cms\Block\Adminhtml\Page\Grid\Renderer;
 
+/**
+ * Class \Magento\Cms\Block\Adminhtml\Page\Grid\Renderer\Action
+ *
+ */
 class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**

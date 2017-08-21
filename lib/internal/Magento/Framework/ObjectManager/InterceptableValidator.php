@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\ObjectManager;
 
+/**
+ * Class \Magento\Framework\ObjectManager\InterceptableValidator
+ *
+ */
 class InterceptableValidator
 {
     /**

@@ -7,10 +7,13 @@ namespace Magento\CatalogSearch\Model\Adminhtml\System\Config\Backend;
 
 /**
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Engine extends \Magento\Framework\App\Config\Value
 {
-    /** @var \Magento\Framework\Indexer\IndexerRegistry */
+    /**
+     * @var \Magento\Framework\Indexer\IndexerRegistry
+     */
     protected $indexerRegistry;
 
     /**

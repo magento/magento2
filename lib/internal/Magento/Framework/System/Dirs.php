@@ -7,6 +7,10 @@ namespace Magento\Framework\System;
 
 use Magento\Framework\Filesystem\DriverInterface;
 
+/**
+ * Class \Magento\Framework\System\Dirs
+ *
+ */
 class Dirs
 {
     /**

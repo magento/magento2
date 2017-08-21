@@ -10,6 +10,10 @@ use Magento\Framework\Filesystem\Directory\WriteInterface as DirectoryWrite;
 use Magento\Framework\Filesystem\File\Write;
 use Magento\Framework\Exception\FileSystemException;
 
+/**
+ * Class \Magento\MediaStorage\Model\File\Storage\Config
+ *
+ */
 class Config
 {
     /**

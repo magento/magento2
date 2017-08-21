@@ -9,6 +9,10 @@ use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\HandlerFa
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\HandlerInterface;
 use Magento\Catalog\Model\Product;
 
+/**
+ * Class \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Handler\Composite
+ *
+ */
 class Composite implements HandlerInterface
 {
     /**

@@ -8,8 +8,6 @@ namespace Magento\Reports\Model\Product\Index;
 /**
  * Catalog Viewed Product Index
  *
- * @method \Magento\Reports\Model\ResourceModel\Product\Index\Viewed _getResource()
- * @method \Magento\Reports\Model\ResourceModel\Product\Index\Viewed getResource()
  * @method \Magento\Reports\Model\Product\Index\Viewed setVisitorId(int $value)
  * @method \Magento\Reports\Model\Product\Index\Viewed setCustomerId(int $value)
  * @method int getProductId()
@@ -19,6 +17,7 @@ namespace Magento\Reports\Model\Product\Index;
  * @method \Magento\Reports\Model\Product\Index\Viewed setAddedAt(string $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Viewed extends \Magento\Reports\Model\Product\Index\AbstractIndex
 {

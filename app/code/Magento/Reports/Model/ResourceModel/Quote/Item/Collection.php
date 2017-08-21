@@ -12,6 +12,7 @@ use Magento\Framework\App\ResourceConnection;
  * Collection of Magento\Quote\Model\Quote\Item
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {

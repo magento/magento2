@@ -5,6 +5,10 @@
  */
 namespace Magento\Tax\Model\System\Config\Source\Tax;
 
+/**
+ * Class \Magento\Tax\Model\System\Config\Source\Tax\Region
+ *
+ */
 class Region implements \Magento\Framework\Option\ArrayInterface
 {
     /**

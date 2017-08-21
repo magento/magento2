@@ -6,6 +6,10 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\System;
 
+/**
+ * Class \Magento\Backend\Controller\Adminhtml\System\SetStore
+ *
+ */
 class SetStore extends \Magento\Backend\Controller\Adminhtml\System
 {
     /**

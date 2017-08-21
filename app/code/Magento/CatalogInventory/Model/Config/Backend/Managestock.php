@@ -11,6 +11,10 @@
  */
 namespace Magento\CatalogInventory\Model\Config\Backend;
 
+/**
+ * Class \Magento\CatalogInventory\Model\Config\Backend\Managestock
+ *
+ */
 class Managestock extends AbstractValue
 {
     /**

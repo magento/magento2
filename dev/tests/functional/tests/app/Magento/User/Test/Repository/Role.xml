@@ -77,5 +77,15 @@
                 <item name="Sitemap" xsi:type="string">Magento_Sitemap::sitemap</item>
             </field>
         </dataset>
+
+        <dataset name="role_empty_config">
+            <field name="rolename" xsi:type="string">RoleName%isolation%</field>
+            <field name="resource_access" xsi:type="string">Custom</field>
+            <field name="current_password" xsi:type="string">%current_password%</field>
+            <field name="roles_resources" xsi:type="array">
+                <item name="Dashboard" xsi:type="string">Magento_Backend::dashboard</item>
+                <item name="Configuration" xsi:type="string">Magento_Config::config</item>
+            </field>
+        </dataset>
     </repository>
 </config>

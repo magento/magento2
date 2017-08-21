@@ -8,7 +8,7 @@ namespace Magento\SalesRule\Test\Unit\Model\Coupon;
 /**
  * Class CodegeneratorTest
  */
-class CodegeneratorTest extends \PHPUnit_Framework_TestCase
+class CodegeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\SalesRule\Model\Coupon\Codegenerator

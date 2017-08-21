@@ -7,6 +7,10 @@ namespace Magento\NewRelicReporting\Model;
 
 use \Magento\Framework\HTTP\ZendClient;
 
+/**
+ * Class \Magento\NewRelicReporting\Model\CronEvent
+ *
+ */
 class CronEvent
 {
     /**

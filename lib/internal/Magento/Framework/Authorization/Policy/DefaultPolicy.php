@@ -9,6 +9,10 @@
  */
 namespace Magento\Framework\Authorization\Policy;
 
+/**
+ * Class \Magento\Framework\Authorization\Policy\DefaultPolicy
+ *
+ */
 class DefaultPolicy implements \Magento\Framework\Authorization\PolicyInterface
 {
     /**

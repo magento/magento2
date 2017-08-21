@@ -10,7 +10,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create\Form;
 /**
  * @magentoAppArea adminhtml
  */
-class AccountTest extends \PHPUnit_Framework_TestCase
+class AccountTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Sales\Block\Adminhtml\Order\Create\Form\Account */
     protected $_accountBlock;

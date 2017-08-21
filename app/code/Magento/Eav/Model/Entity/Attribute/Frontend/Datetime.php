@@ -8,6 +8,9 @@
 
 namespace Magento\Eav\Model\Entity\Attribute\Frontend;
 
+/**
+ * @api
+ */
 class Datetime extends \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend
 {
     /**

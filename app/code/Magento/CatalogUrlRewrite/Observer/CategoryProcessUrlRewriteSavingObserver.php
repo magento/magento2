@@ -13,21 +13,34 @@ use Magento\CatalogUrlRewrite\Model\Map\DataProductUrlRewriteDatabaseMap;
 use Magento\CatalogUrlRewrite\Model\UrlRewriteBunchReplacer;
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Generates Category Url Rewrites after save and Products Url Rewrites assigned to the category that's being saved
+ */
 class CategoryProcessUrlRewriteSavingObserver implements ObserverInterface
 {
-    /** @var CategoryUrlRewriteGenerator */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator
+     */
     private $categoryUrlRewriteGenerator;
 
-    /** @var UrlRewriteBunchReplacer */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\UrlRewriteBunchReplacer
+     */
     private $urlRewriteBunchReplacer;
 
-    /** @var UrlRewriteHandler */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Observer\UrlRewriteHandler
+     */
     private $urlRewriteHandler;
 
-    /** @var DatabaseMapPool */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\Map\DatabaseMapPool
+     */
     private $databaseMapPool;
 
-    /** @var string[] */
+    /**
+     * @var string[]
+     */
     private $dataUrlRewriteClassNames;
 
     /**
@@ -59,6 +72,7 @@ class CategoryProcessUrlRewriteSavingObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
+     * @throws \Magento\Framework\Exception\AlreadyExistsException
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
@@ -67,17 +81,23 @@ class CategoryProcessUrlRewriteSavingObserver implements ObserverInterface
         if ($category->getParentId() == Category::TREE_ROOT_ID) {
             return;
         }
+
+        $mapsGenerated = false;
         if ($category->dataHasChangedFor('url_key')
             || $category->dataHasChangedFor('is_anchor')
             || $category->getIsChangedProductList()
         ) {
-            $categoryUrlRewriteResult = $this->categoryUrlRewriteGenerator->generate($category);
-            $this->urlRewriteBunchReplacer->doBunchReplace($categoryUrlRewriteResult);
-
+            if ($category->dataHasChangedFor('url_key')) {
+                $categoryUrlRewriteResult = $this->categoryUrlRewriteGenerator->generate($category);
+                $this->urlRewriteBunchReplacer->doBunchReplace($categoryUrlRewriteResult);
+            }
             $productUrlRewriteResult = $this->urlRewriteHandler->generateProductUrlRewrites($category);
             $this->urlRewriteBunchReplacer->doBunchReplace($productUrlRewriteResult);
+            $mapsGenerated = true;
+        }
 
-            //frees memory for maps that are self-initialized in multiple classes that were called by the generators
+        //frees memory for maps that are self-initialized in multiple classes that were called by the generators
+        if ($mapsGenerated) {
             $this->resetUrlRewritesDataMaps($category);
         }
     }

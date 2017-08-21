@@ -8,7 +8,7 @@ namespace Magento\Eav\Model\ResourceModel\Entity;
 /**
  * EAV entity type resource model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Type extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

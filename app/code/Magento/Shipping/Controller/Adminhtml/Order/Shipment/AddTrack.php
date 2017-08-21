@@ -8,6 +8,10 @@ namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
 
 use Magento\Backend\App\Action;
 
+/**
+ * Class \Magento\Shipping\Controller\Adminhtml\Order\Shipment\AddTrack
+ *
+ */
 class AddTrack extends \Magento\Backend\App\Action
 {
     /**

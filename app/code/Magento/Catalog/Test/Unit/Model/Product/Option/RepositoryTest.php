@@ -12,7 +12,7 @@ use \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RepositoryTest extends \PHPUnit_Framework_TestCase
+class RepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Repository
@@ -46,36 +46,12 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->productRepositoryMock = $this->getMock(
-            \Magento\Catalog\Model\ProductRepository::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->optionResourceMock = $this->getMock(
-            \Magento\Catalog\Model\ResourceModel\Product\Option::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->converterMock = $this->getMock(
-            \Magento\Catalog\Model\Product\Option\Converter::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->optionMock = $this->getMock(\Magento\Catalog\Model\Product\Option::class, [], [], '', false);
-        $this->productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
-        $optionFactory = $this->getMock(
-            \Magento\Catalog\Model\Product\OptionFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
+        $this->productRepositoryMock = $this->createMock(\Magento\Catalog\Model\ProductRepository::class);
+        $this->optionResourceMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product\Option::class);
+        $this->converterMock = $this->createMock(\Magento\Catalog\Model\Product\Option\Converter::class);
+        $this->optionMock = $this->createMock(\Magento\Catalog\Model\Product\Option::class);
+        $this->productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $optionFactory = $this->createPartialMock(\Magento\Catalog\Model\Product\OptionFactory::class, ['create']);
         $this->optionCollectionFactory = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])

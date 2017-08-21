@@ -8,6 +8,10 @@ namespace Magento\Sales\Controller\Order\Plugin;
 
 use Magento\Framework\App\RequestInterface;
 
+/**
+ * Class \Magento\Sales\Controller\Order\Plugin\Authentication
+ *
+ */
 class Authentication
 {
     /**

@@ -11,6 +11,10 @@
  */
 namespace Magento\Captcha\Helper\Adminhtml;
 
+/**
+ * Class \Magento\Captcha\Helper\Adminhtml\Data
+ *
+ */
 class Data extends \Magento\Captcha\Helper\Data
 {
     /**
