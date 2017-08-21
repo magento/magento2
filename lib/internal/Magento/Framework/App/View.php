@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\App;
 
+/**
+ * Class \Magento\Framework\App\View
+ *
+ */
 class View implements ViewInterface
 {
     /**

@@ -6,6 +6,10 @@
 
 namespace Magento\Paypal\Model\System\Config\Source;
 
+/**
+ * Class \Magento\Paypal\Model\System\Config\Source\BmlPosition
+ *
+ */
 class BmlPosition
 {
     /**

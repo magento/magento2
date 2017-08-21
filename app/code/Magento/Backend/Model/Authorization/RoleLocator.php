@@ -5,6 +5,9 @@
  */
 namespace Magento\Backend\Model\Authorization;
 
+/**
+ * @api
+ */
 class RoleLocator implements \Magento\Framework\Authorization\RoleLocatorInterface
 {
     /**

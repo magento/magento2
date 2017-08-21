@@ -7,6 +7,10 @@ namespace Magento\Weee\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class \Magento\Weee\Observer\AssignBackendModelToAttributeObserver
+ *
+ */
 class AssignBackendModelToAttributeObserver implements ObserverInterface
 {
     /**

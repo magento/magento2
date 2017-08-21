@@ -10,6 +10,10 @@ use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Quote\Api\Data\CartInterface;
 
+/**
+ * Class \Magento\Vault\Model\Method\NullPaymentProvider
+ *
+ */
 class NullPaymentProvider implements MethodInterface
 {
     /**
@@ -28,7 +32,7 @@ class NullPaymentProvider implements MethodInterface
      *
      * @return string
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     public function getFormBlockType()
     {
@@ -270,7 +274,7 @@ class NullPaymentProvider implements MethodInterface
      *
      * @return string
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     public function getInfoBlockType()
     {
@@ -283,7 +287,7 @@ class NullPaymentProvider implements MethodInterface
      * @return InfoInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     public function getInfoInstance()
     {
@@ -296,7 +300,7 @@ class NullPaymentProvider implements MethodInterface
      * @param InfoInterface $info
      * @return void
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     public function setInfoInstance(InfoInterface $info)
     {
@@ -484,7 +488,7 @@ class NullPaymentProvider implements MethodInterface
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     public function initialize($paymentAction, $stateObject)
     {

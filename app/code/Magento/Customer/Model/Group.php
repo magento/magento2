@@ -8,8 +8,7 @@ namespace Magento\Customer\Model;
 /**
  * Customer group model
  *
- * @method \Magento\Customer\Model\ResourceModel\Group _getResource()
- * @method \Magento\Customer\Model\ResourceModel\Group getResource()
+ * @api
  * @method string getCustomerGroupCode()
  * @method \Magento\Customer\Model\Group setCustomerGroupCode(string $value)
  * @method \Magento\Customer\Model\Group setTaxClassId(int $value)

@@ -8,7 +8,7 @@ namespace Magento\Backend\Block\System\Account\Edit;
 /**
  * @magentoAppArea adminhtml
  */
-class FormTest extends \PHPUnit_Framework_TestCase
+class FormTest extends \PHPUnit\Framework\TestCase
 {
     public function testPrepareForm()
     {

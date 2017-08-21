@@ -11,6 +11,10 @@
  */
 namespace Magento\Customer\Model\Attribute\Data;
 
+/**
+ * Class \Magento\Customer\Model\Attribute\Data\Multiselect
+ *
+ */
 class Multiselect extends \Magento\Eav\Model\Attribute\Data\Multiselect
 {
 }

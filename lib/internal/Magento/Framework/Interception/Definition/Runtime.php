@@ -10,6 +10,10 @@ namespace Magento\Framework\Interception\Definition;
 
 use Magento\Framework\Interception\DefinitionInterface;
 
+/**
+ * Class \Magento\Framework\Interception\Definition\Runtime
+ *
+ */
 class Runtime implements DefinitionInterface
 {
     /**

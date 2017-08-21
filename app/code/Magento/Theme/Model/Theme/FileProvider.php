@@ -5,6 +5,10 @@
  */
 namespace Magento\Theme\Model\Theme;
 
+/**
+ * Class \Magento\Theme\Model\Theme\FileProvider
+ *
+ */
 class FileProvider implements \Magento\Framework\View\Design\Theme\FileProviderInterface
 {
     /**

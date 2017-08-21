@@ -11,6 +11,10 @@
  */
 namespace Magento\CatalogImportExport\Model\Import\Proxy;
 
+/**
+ * Class \Magento\CatalogImportExport\Model\Import\Proxy\Product
+ *
+ */
 class Product extends \Magento\Catalog\Model\Product
 {
     /**

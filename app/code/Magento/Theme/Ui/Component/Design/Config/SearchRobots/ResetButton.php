@@ -14,6 +14,7 @@ use Magento\Ui\Component\Form\Field;
  * ResetButton field instance
  *
  * @api
+ * @since 100.2.0
  */
 class ResetButton extends Field
 {
@@ -35,6 +36,7 @@ class ResetButton extends Field
      * @param \Magento\Framework\View\Element\UiComponentInterface[] $components
      * @param array $data
      * @param ScopeConfigInterface $scopeConfig
+     * @since 100.2.0
      */
     public function __construct(
         ContextInterface $context,
@@ -65,6 +67,7 @@ class ResetButton extends Field
      *
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 100.2.0
      */
     public function prepare()
     {

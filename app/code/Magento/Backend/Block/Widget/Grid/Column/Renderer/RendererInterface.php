@@ -10,7 +10,8 @@ use Magento\Backend\Block\Widget\Grid\Column;
 /**
  * Backend grid item renderer interface
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @deprecated 100.2.0 in favour of UI component implementation
  */
 interface RendererInterface
 {

@@ -7,6 +7,10 @@ namespace Magento\GiftMessage\Model;
 
 use Magento\Framework\Exception\CouldNotSaveException;
 
+/**
+ * Class \Magento\GiftMessage\Model\GiftMessageManager
+ *
+ */
 class GiftMessageManager
 {
     /**

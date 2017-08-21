@@ -12,6 +12,10 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Search\Controller\Term\Popular
+ *
+ */
 class Popular extends Action
 {
     /**

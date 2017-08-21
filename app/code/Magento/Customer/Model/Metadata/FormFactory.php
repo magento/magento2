@@ -7,6 +7,10 @@
  */
 namespace Magento\Customer\Model\Metadata;
 
+/**
+ * Class \Magento\Customer\Model\Metadata\FormFactory
+ *
+ */
 class FormFactory
 {
     /**

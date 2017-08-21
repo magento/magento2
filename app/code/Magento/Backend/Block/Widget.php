@@ -8,8 +8,7 @@ namespace Magento\Backend\Block;
 /**
  * Base widget class
  *
- * @author     Magento Core Team <core@magentocommerce.com>
- *
+ * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 class Widget extends \Magento\Backend\Block\Template

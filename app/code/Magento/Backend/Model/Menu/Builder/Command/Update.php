@@ -7,6 +7,7 @@ namespace Magento\Backend\Model\Menu\Builder\Command;
 
 /**
  * Command to update menu item data
+ * @api
  */
 class Update extends \Magento\Backend\Model\Menu\Builder\AbstractCommand
 {

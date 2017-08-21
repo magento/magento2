@@ -14,7 +14,7 @@ use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\Data\Collection;
 use Magento\TestFramework\Helper\Bootstrap;
 
-class SpecialPriceTest extends \PHPUnit_Framework_TestCase
+class SpecialPriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ProductRepositoryInterface

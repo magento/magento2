@@ -10,6 +10,7 @@ use Magento\Store\Model\Store;
 
 /**
  * Path config to be used in adminhtml area
+ * @api
  */
 class AdminPathConfig implements PathConfigInterface
 {

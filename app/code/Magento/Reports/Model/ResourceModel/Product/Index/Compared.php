@@ -11,6 +11,9 @@
  */
 namespace Magento\Reports\Model\ResourceModel\Product\Index;
 
+/**
+ * @api
+ */
 class Compared extends \Magento\Reports\Model\ResourceModel\Product\Index\AbstractIndex
 {
     /**

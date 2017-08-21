@@ -13,6 +13,10 @@ namespace Magento\Framework\Data\Form\Element;
 
 use Magento\Framework\Escaper;
 
+/**
+ * Class \Magento\Framework\Data\Form\Element\Gallery
+ *
+ */
 class Gallery extends AbstractElement
 {
     /**

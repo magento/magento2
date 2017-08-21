@@ -6,6 +6,10 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Edit;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Order\Edit\AddConfigured
+ *
+ */
 class AddConfigured extends \Magento\Sales\Controller\Adminhtml\Order\Create\AddConfigured
 {
     /**

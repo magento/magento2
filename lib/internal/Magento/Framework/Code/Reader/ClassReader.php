@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\Code\Reader;
 
+/**
+ * Class \Magento\Framework\Code\Reader\ClassReader
+ *
+ */
 class ClassReader implements ClassReaderInterface
 {
     /**

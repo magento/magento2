@@ -18,13 +18,13 @@ class MethodList
 {
     /**
      * @var \Magento\Payment\Helper\Data
-     * @deprecated Do not use this property in case of inheritance.
+     * @deprecated 100.1.3 Do not use this property in case of inheritance.
      */
     protected $paymentHelper;
 
     /**
      * @var \Magento\Payment\Model\Checks\SpecificationFactory
-     * @deprecated Do not use this property in case of inheritance.
+     * @deprecated 100.2.0 Do not use this property in case of inheritance.
      */
     protected $methodSpecificationFactory;
 

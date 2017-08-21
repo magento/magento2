@@ -548,6 +548,7 @@ abstract class AbstractEntity
 
     /**
      * Clean cached values
+     * @since 100.1.2
      */
     public function __destruct()
     {

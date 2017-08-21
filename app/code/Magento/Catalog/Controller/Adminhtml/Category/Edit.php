@@ -6,6 +6,10 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category;
 
+/**
+ * Class \Magento\Catalog\Controller\Adminhtml\Category\Edit
+ *
+ */
 class Edit extends \Magento\Catalog\Controller\Adminhtml\Category
 {
     /**

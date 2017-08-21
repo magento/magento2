@@ -12,6 +12,10 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Tax\Api\Data\TaxClassKeyInterface;
 use Magento\Tax\Model\ClassModel;
 
+/**
+ * Class \Magento\Tax\Model\TaxClass\Management
+ *
+ */
 class Management implements \Magento\Tax\Api\TaxClassManagementInterface
 {
     /**

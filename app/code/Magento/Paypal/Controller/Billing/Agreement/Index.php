@@ -6,6 +6,10 @@
  */
 namespace Magento\Paypal\Controller\Billing\Agreement;
 
+/**
+ * Class \Magento\Paypal\Controller\Billing\Agreement\Index
+ *
+ */
 class Index extends \Magento\Paypal\Controller\Billing\Agreement
 {
     /**

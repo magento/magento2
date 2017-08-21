@@ -9,7 +9,7 @@
  */
 namespace Magento\Framework\Data\Form\Element;
 
-class FieldsetTest extends \PHPUnit_Framework_TestCase
+class FieldsetTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Data\Form\Element\Fieldset

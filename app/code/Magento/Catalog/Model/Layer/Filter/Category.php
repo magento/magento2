@@ -11,8 +11,6 @@ use Magento\Catalog\Model\Layer\Filter\DataProvider\CategoryFactory;
 
 /**
  * Layer category filter
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Category extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
 {

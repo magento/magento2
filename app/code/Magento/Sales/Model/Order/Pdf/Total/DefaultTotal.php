@@ -97,7 +97,7 @@ class DefaultTotal extends \Magento\Framework\DataObject
     public function getFullTaxInfo()
     {
         $fontSize = $this->getFontSize() ? $this->getFontSize() : 7;
-        $taxClassAmount = $this->_taxHelper->getCalculatedTaxes($this->getOrder());
+        $taxClassAmount = $this->_taxHelper->getCalculatedTaxes($this->getSource());
         if (!empty($taxClassAmount)) {
             foreach ($taxClassAmount as &$tax) {
                 $percent = $tax['percent'] ? ' (' . $tax['percent'] . '%)' : '';

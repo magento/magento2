@@ -8,6 +8,10 @@ namespace Magento\CatalogUrlRewrite\Model;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\Category;
 
+/**
+ * Class \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator
+ *
+ */
 class CategoryUrlPathGenerator
 {
     /**
@@ -27,10 +31,14 @@ class CategoryUrlPathGenerator
      */
     protected $categoryUrlSuffix = [];
 
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface */
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
     protected $scopeConfig;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface */
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
     protected $storeManager;
 
     /**

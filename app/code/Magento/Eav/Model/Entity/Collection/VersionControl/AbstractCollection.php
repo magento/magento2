@@ -7,6 +7,7 @@ namespace Magento\Eav\Model\Entity\Collection\VersionControl;
 
 /**
  * Class Abstract Collection
+ * @api
  */
 abstract class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCollection
 {

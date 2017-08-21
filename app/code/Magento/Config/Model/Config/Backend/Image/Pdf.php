@@ -11,6 +11,9 @@
  */
 namespace Magento\Config\Model\Config\Backend\Image;
 
+/**
+ * @api
+ */
 class Pdf extends \Magento\Config\Model\Config\Backend\Image
 {
     /**

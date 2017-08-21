@@ -5,6 +5,10 @@
  */
 namespace Magento\Dhl\Model\Source\Method;
 
+/**
+ * Class \Magento\Dhl\Model\Source\Method\Generic
+ *
+ */
 class Generic
 {
     /**

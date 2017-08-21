@@ -13,6 +13,10 @@
  */
 namespace Magento\Config\Block\System\Config\Form\Field\Select;
 
+/**
+ * Class \Magento\Config\Block\System\Config\Form\Field\Select\Allowspecific
+ *
+ */
 class Allowspecific extends \Magento\Framework\Data\Form\Element\Select
 {
     /**

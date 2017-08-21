@@ -5,6 +5,10 @@
  */
 namespace Magento\Indexer\Controller\Adminhtml;
 
+/**
+ * Class \Magento\Indexer\Controller\Adminhtml\Indexer
+ *
+ */
 abstract class Indexer extends \Magento\Backend\App\Action
 {
     /**

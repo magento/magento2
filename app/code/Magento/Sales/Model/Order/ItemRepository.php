@@ -61,7 +61,9 @@ class ItemRepository implements OrderItemRepositoryInterface
      */
     protected $registry = [];
 
-    /** @var  CollectionProcessorInterface */
+    /**
+     * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
+     */
     private $collectionProcessor;
 
     /**
@@ -273,7 +275,7 @@ class ItemRepository implements OrderItemRepositoryInterface
     /**
      * Retrieve collection processor
      *
-     * @deprecated
+     * @deprecated 100.2.0
      * @return CollectionProcessorInterface
      */
     private function getCollectionProcessor()

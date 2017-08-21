@@ -9,11 +9,11 @@
 ?>
 <div class="footer-container">
     <div class="footer">
-        <?php echo $block->getChildHtml() ?>
-        <p class="bugs"><?php /* @escapeNotVerified */ echo __('Help Us Keep Magento Healthy') ?> - <a
+        <?= $block->getChildHtml() ?>
+        <p class="bugs"><?= /* @escapeNotVerified */ __('Help Us Keep Magento Healthy') ?> - <a
             href="http://www.magentocommerce.com/bug-tracking"
-            target="_blank"><strong><?php /* @escapeNotVerified */ echo __('Report All Bugs') ?></strong></a>
+            target="_blank"><strong><?= /* @escapeNotVerified */ __('Report All Bugs') ?></strong></a>
         </p>
-        <address><?php /* @escapeNotVerified */ echo $block->getCopyright() ?></address>
+        <address><?= /* @escapeNotVerified */ $block->getCopyright() ?></address>
     </div>
 </div>

@@ -5,7 +5,7 @@
  */
 namespace Magento\Reports\Test\Unit\Model\ResourceModel\Quote;
 
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Reports\Model\ResourceModel\Quote\Collection

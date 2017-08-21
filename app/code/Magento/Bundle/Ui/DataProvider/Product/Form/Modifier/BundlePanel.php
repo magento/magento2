@@ -518,7 +518,7 @@ class BundlePanel extends AbstractModifier
                                 'dataType' => Form\Element\DataType\Text::NAME,
                                 'formElement' => Form\Element\Select::NAME,
                                 'componentType' => Form\Field::NAME,
-                                'component' => 'Magento_Bundle/js/components/bundle-input-type',
+                                'component' => 'Magento_Ui/js/form/element/select',
                                 'parentContainer' => 'product_bundle_container',
                                 'selections' => 'bundle_selections',
                                 'isDefaultIndex' => 'is_default',
@@ -594,8 +594,11 @@ class BundlePanel extends AbstractModifier
                     'config' => [
                         'componentType' => Container::NAME,
                         'isTemplate' => true,
-                        'component' => 'Magento_Ui/js/dynamic-rows/record',
-                        'is_collection' => true
+                        'component' => 'Magento_Bundle/js/components/bundle-record',
+                        'is_collection' => true,
+                        'imports' => [
+                            'onTypeChanged' => '${ $.provider }:${ $.bundleOptionsDataScope }.type'
+                        ]
                     ],
                 ],
             ],

@@ -6,6 +6,10 @@
  */
 namespace Magento\AdminNotification\Controller\Adminhtml\Notification;
 
+/**
+ * Class \Magento\AdminNotification\Controller\Adminhtml\Notification\Remove
+ *
+ */
 class Remove extends \Magento\AdminNotification\Controller\Adminhtml\Notification
 {
 

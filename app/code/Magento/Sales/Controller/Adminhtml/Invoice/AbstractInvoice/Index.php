@@ -6,6 +6,10 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\Index
+ *
+ */
 abstract class Index extends \Magento\Backend\App\Action
 {
     /**

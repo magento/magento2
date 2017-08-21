@@ -11,15 +11,25 @@ use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 use Magento\UrlRewrite\Model\MergeDataProviderFactory;
 use Magento\Framework\App\ObjectManager;
 
+/**
+ * Class \Magento\CatalogUrlRewrite\Model\Category\ChildrenUrlRewriteGenerator
+ *
+ */
 class ChildrenUrlRewriteGenerator
 {
-    /** @var \Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider
+     */
     protected $childrenCategoriesProvider;
 
-    /** @var \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGeneratorFactory */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGeneratorFactory
+     */
     protected $categoryUrlRewriteGeneratorFactory;
 
-    /** @var \Magento\UrlRewrite\Model\MergeDataProvider */
+    /**
+     * @var \Magento\UrlRewrite\Model\MergeDataProvider
+     */
     private $mergeDataProviderPrototype;
 
     /**

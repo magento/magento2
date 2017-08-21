@@ -7,6 +7,10 @@
  */
 namespace Magento\Newsletter\Model\ResourceModel\Subscriber\Grid;
 
+/**
+ * Class \Magento\Newsletter\Model\ResourceModel\Subscriber\Grid\Collection
+ *
+ */
 class Collection extends \Magento\Newsletter\Model\ResourceModel\Subscriber\Collection
 {
     /**
