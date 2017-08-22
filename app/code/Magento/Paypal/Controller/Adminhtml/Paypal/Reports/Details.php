@@ -6,6 +6,10 @@
  */
 namespace Magento\Paypal\Controller\Adminhtml\Paypal\Reports;
 
+/**
+ * Class \Magento\Paypal\Controller\Adminhtml\Paypal\Reports\Details
+ *
+ */
 class Details extends \Magento\Paypal\Controller\Adminhtml\Paypal\Reports
 {
     /**

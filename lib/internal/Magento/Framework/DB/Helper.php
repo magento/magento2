@@ -8,6 +8,10 @@
 
 namespace Magento\Framework\DB;
 
+/**
+ * Class \Magento\Framework\DB\Helper
+ *
+ */
 class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
 {
     /**

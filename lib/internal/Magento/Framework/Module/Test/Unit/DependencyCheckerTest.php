@@ -7,7 +7,7 @@ namespace Magento\Framework\Module\Test\Unit;
 
 use \Magento\Framework\Module\DependencyChecker;
 
-class DependencyCheckerTest extends \PHPUnit_Framework_TestCase
+class DependencyCheckerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Module\DependencyChecker|\PHPUnit_Framework_MockObject_MockObject
@@ -36,7 +36,7 @@ class DependencyCheckerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->packageInfoMock = $this->getMock(\Magento\Framework\Module\PackageInfo::class, [], [], '', false);
+        $this->packageInfoMock = $this->createMock(\Magento\Framework\Module\PackageInfo::class);
         $requireMap = [
             ['A', ['B']],
             ['B', ['D', 'E']],
@@ -49,19 +49,13 @@ class DependencyCheckerTest extends \PHPUnit_Framework_TestCase
             ->method('getRequire')
             ->will($this->returnValueMap($requireMap));
 
-        $this->packageInfoFactoryMock = $this->getMock(
-            \Magento\Framework\Module\PackageInfoFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->packageInfoFactoryMock = $this->createMock(\Magento\Framework\Module\PackageInfoFactory::class);
         $this->packageInfoFactoryMock->expects($this->once())
             ->method('create')
             ->will($this->returnValue($this->packageInfoMock));
 
-        $this->listMock = $this->getMock(\Magento\Framework\Module\ModuleList::class, [], [], '', false);
-        $this->loaderMock = $this->getMock(\Magento\Framework\Module\ModuleList\Loader::class, [], [], '', false);
+        $this->listMock = $this->createMock(\Magento\Framework\Module\ModuleList::class);
+        $this->loaderMock = $this->createMock(\Magento\Framework\Module\ModuleList\Loader::class);
         $this->loaderMock
             ->expects($this->any())
             ->method('load')

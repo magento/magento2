@@ -5,7 +5,7 @@
  */
 namespace Magento\GroupedProduct\Test\Unit\Block\Adminhtml\Order\Create;
 
-class SidebarTest extends \PHPUnit_Framework_TestCase
+class SidebarTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\GroupedProduct\Block\Adminhtml\Order\Create\Sidebar
@@ -34,14 +34,10 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->itemMock = $this->getMock(\Magento\Framework\DataObject::class, ['getProduct'], [], '', false);
-        $this->productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
-        $this->subjectMock = $this->getMock(
-            \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar::class,
-            [],
-            [],
-            '',
-            false
+        $this->itemMock = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getProduct']);
+        $this->productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $this->subjectMock = $this->createMock(
+            \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar::class
         );
         $this->closureMock = function () {
             return 'Expected';

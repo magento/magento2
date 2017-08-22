@@ -9,6 +9,9 @@
  */
 namespace Magento\Config\Model\Config\Backend\Image;
 
+/**
+ * @api
+ */
 class Logo extends \Magento\Config\Model\Config\Backend\Image
 {
     /**

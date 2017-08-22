@@ -7,6 +7,10 @@
  */
 namespace Magento\Framework;
 
+/**
+ * Class \Magento\Framework\Authorization
+ *
+ */
 class Authorization implements \Magento\Framework\AuthorizationInterface
 {
     /**

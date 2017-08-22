@@ -181,7 +181,7 @@ class Authentication implements AuthenticationInterface
      * Get customer authentication update model
      *
      * @return \Magento\Customer\Model\CustomerAuthUpdate
-     * @deprecated
+     * @deprecated 100.1.1
      */
     private function getCustomerAuthUpdate()
     {

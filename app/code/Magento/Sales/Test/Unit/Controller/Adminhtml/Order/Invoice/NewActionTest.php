@@ -13,7 +13,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
  * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class NewActionTest extends \PHPUnit_Framework_TestCase
+class NewActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -103,8 +103,8 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
             ->setMethods([])
             ->getMock();
 
-        $this->messageManagerMock = $this->getMock(\Magento\Framework\Message\ManagerInterface::class);
-        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->messageManagerMock = $this->createMock(\Magento\Framework\Message\ManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
 
         $this->actionFlagMock = $this->getMockBuilder(\Magento\Framework\App\ActionFlag::class)
             ->disableOriginalConstructor()
@@ -152,7 +152,20 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
 
         $contextMock = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->setMethods(
+                [
+                    'getRequest',
+                    'getResponse',
+                    'getObjectManager',
+                    'getTitle',
+                    'getSession',
+                    'getHelper',
+                    'getActionFlag',
+                    'getMessageManager',
+                    'getResultRedirectFactory',
+                    'getView'
+                ]
+            )
             ->getMock();
         $contextMock->expects($this->any())
             ->method('getRequest')

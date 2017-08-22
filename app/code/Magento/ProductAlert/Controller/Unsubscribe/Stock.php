@@ -12,6 +12,10 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
 
+/**
+ * Class \Magento\ProductAlert\Controller\Unsubscribe\Stock
+ *
+ */
 class Stock extends UnsubscribeController
 {
     /**

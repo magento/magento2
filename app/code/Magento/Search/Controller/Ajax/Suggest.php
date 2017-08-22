@@ -10,6 +10,10 @@ use Magento\Framework\App\Action\Context;
 use Magento\Search\Model\AutocompleteInterface;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Search\Controller\Ajax\Suggest
+ *
+ */
 class Suggest extends Action
 {
     /**

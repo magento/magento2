@@ -10,6 +10,10 @@ namespace Magento\Framework\Setup;
 use Magento\Framework\ObjectManagerInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Class \Magento\Framework\Setup\BackupRollbackFactory
+ *
+ */
 class BackupRollbackFactory
 {
     /**

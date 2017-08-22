@@ -8,6 +8,10 @@ namespace Magento\Setup\Module\Di\Code\Reader;
 
 use Magento\Setup\Module\Di\Compiler\ConstructorArgument;
 
+/**
+ * Class \Magento\Setup\Module\Di\Code\Reader\ClassReaderDecorator
+ *
+ */
 class ClassReaderDecorator implements \Magento\Framework\Code\Reader\ClassReaderInterface
 {
     /**

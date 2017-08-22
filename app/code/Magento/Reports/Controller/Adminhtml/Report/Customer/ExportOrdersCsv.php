@@ -10,6 +10,10 @@ use Magento\Backend\Block\Widget\Grid\ExportInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * Class \Magento\Reports\Controller\Adminhtml\Report\Customer\ExportOrdersCsv
+ *
+ */
 class ExportOrdersCsv extends \Magento\Reports\Controller\Adminhtml\Report\Customer
 {
     /**

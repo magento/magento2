@@ -7,6 +7,10 @@
  */
 namespace Magento\Framework\View\Layout\PageType\Config;
 
+/**
+ * Class \Magento\Framework\View\Layout\PageType\Config\Reader
+ *
+ */
 class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {
     /**

@@ -32,7 +32,6 @@ class HtmlContent implements ConverterInterface
             $items['name']['xsi:type'] = 'string';
             $items['name']['name'] = 'block';
             $items['name']['value'] = $node->getAttribute('name');
-
         }
         return [
             'xsi:type' => 'array',

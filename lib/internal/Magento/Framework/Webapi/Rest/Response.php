@@ -7,12 +7,20 @@
  */
 namespace Magento\Framework\Webapi\Rest;
 
+/**
+ * Class \Magento\Framework\Webapi\Rest\Response
+ *
+ */
 class Response extends \Magento\Framework\Webapi\Response
 {
-    /** @var \Magento\Framework\Webapi\ErrorProcessor */
+    /**
+     * @var \Magento\Framework\Webapi\ErrorProcessor
+     */
     protected $_errorProcessor;
 
-    /** @var \Magento\Framework\Webapi\Rest\Response\RendererInterface */
+    /**
+     * @var \Magento\Framework\Webapi\Rest\Response\RendererInterface
+     */
     protected $_renderer;
 
     /**

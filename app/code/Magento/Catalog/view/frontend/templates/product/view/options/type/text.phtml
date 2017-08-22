@@ -14,10 +14,10 @@ $class = ($_option->getIsRequire()) ? ' required' : '';
 
 <div class="field<?php if ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_AREA) {
     echo ' textarea';
-} ?><?php /* @escapeNotVerified */ echo $class ?>">
-    <label class="label" for="options_<?php /* @escapeNotVerified */ echo $_option->getId() ?>_text">
-        <span><?php echo $block->escapeHtml($_option->getTitle()) ?></span>
-        <?php /* @escapeNotVerified */ echo $block->getFormatedPrice() ?>
+} ?><?= /* @escapeNotVerified */ $class ?>">
+    <label class="label" for="options_<?= /* @escapeNotVerified */ $_option->getId() ?>_text">
+        <span><?= $block->escapeHtml($_option->getTitle()) ?></span>
+        <?= /* @escapeNotVerified */ $block->getFormatedPrice() ?>
     </label>
 
     <div class="control">
@@ -31,14 +31,14 @@ $class = ($_option->getIsRequire()) ? ' required' : '';
             }
             ?>
             <input type="text"
-                   id="options_<?php /* @escapeNotVerified */ echo $_option->getId() ?>_text"
+                   id="options_<?= /* @escapeNotVerified */ $_option->getId() ?>_text"
                    class="input-text product-custom-option"
                    <?php if (!empty($_textValidate)) {?>
-                   data-validate="<?php echo  $block->escapeHtml(json_encode($_textValidate));?>"
+                   data-validate="<?= $block->escapeHtml(json_encode($_textValidate)) ?>"
                    <?php } ?>
-                   name="options[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]"
-                   data-selector="options[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]"
-                   value="<?php echo $block->escapeHtml($block->getDefaultValue()) ?>"/>
+                   name="options[<?= /* @escapeNotVerified */ $_option->getId() ?>]"
+                   data-selector="options[<?= /* @escapeNotVerified */ $_option->getId() ?>]"
+                   value="<?= $block->escapeHtml($block->getDefaultValue()) ?>"/>
         <?php elseif ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_AREA): ?>
             <?php $_textAreaValidate = null;
             if ($_option->getIsRequire()) {
@@ -48,19 +48,19 @@ $class = ($_option->getIsRequire()) ? ' required' : '';
                 $_textAreaValidate['maxlength'] = $_option->getMaxCharacters();
             }
             ?>
-            <textarea id="options_<?php /* @escapeNotVerified */ echo $_option->getId() ?>_text"
+            <textarea id="options_<?= /* @escapeNotVerified */ $_option->getId() ?>_text"
                       class="product-custom-option"
                     <?php if (!empty($_textAreaValidate)) {?>
-                        data-validate="<?php echo $block->escapeHtml(json_encode($_textAreaValidate));?>"
+                        data-validate="<?= $block->escapeHtml(json_encode($_textAreaValidate)) ?>"
                     <?php } ?>
-                      name="options[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]"
-                      data-selector="options[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]"
+                      name="options[<?= /* @escapeNotVerified */ $_option->getId() ?>]"
+                      data-selector="options[<?= /* @escapeNotVerified */ $_option->getId() ?>]"
                       rows="5"
-                      cols="25"><?php echo $block->escapeHtml($block->getDefaultValue()) ?></textarea>
+                      cols="25"><?= $block->escapeHtml($block->getDefaultValue()) ?></textarea>
         <?php endif; ?>
         <?php if ($_option->getMaxCharacters()): ?>
-            <p class="note"><?php /* @escapeNotVerified */ echo __('Maximum number of characters:') ?>
-                <strong><?php /* @escapeNotVerified */ echo $_option->getMaxCharacters() ?></strong></p>
+            <p class="note"><?= /* @escapeNotVerified */ __('Maximum number of characters:') ?>
+                <strong><?= /* @escapeNotVerified */ $_option->getMaxCharacters() ?></strong></p>
         <?php endif; ?>
     </div>
 </div>

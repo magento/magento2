@@ -7,6 +7,10 @@
  */
 namespace Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
+/**
+ * Class \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Price
+ *
+ */
 class Price extends \Magento\Catalog\Model\Product\Type\Price
 {
     /**

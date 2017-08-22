@@ -13,7 +13,7 @@ use Magento\Framework\View\Asset\Repository;
 /**
  * Class PlaceholderTest
  */
-class PlaceholderTest extends \PHPUnit_Framework_TestCase
+class PlaceholderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\View\Asset\Placeholder

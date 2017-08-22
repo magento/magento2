@@ -8,6 +8,10 @@ namespace Magento\Customer\Controller\Adminhtml\Index;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\SecurityViolationException;
 
+/**
+ * Class \Magento\Customer\Controller\Adminhtml\Index\ResetPassword
+ *
+ */
 class ResetPassword extends \Magento\Customer\Controller\Adminhtml\Index
 {
     /**

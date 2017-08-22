@@ -6,6 +6,10 @@
 
 namespace Magento\Framework\Cache\Backend;
 
+/**
+ * Class \Magento\Framework\Cache\Backend\Eaccelerator
+ *
+ */
 class Eaccelerator extends \Zend_Cache_Backend implements \Zend_Cache_Backend_ExtendedInterface
 {
     /**

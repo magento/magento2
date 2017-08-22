@@ -10,6 +10,10 @@ use Magento\Backend\App\Action;
 use Magento\Framework\Controller\Result;
 use Magento\Framework\Encryption\Helper\Security;
 
+/**
+ * Class \Magento\Backend\Controller\Adminhtml\Dashboard\Tunnel
+ *
+ */
 class Tunnel extends \Magento\Backend\Controller\Adminhtml\Dashboard
 {
     /**

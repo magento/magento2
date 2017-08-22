@@ -13,6 +13,9 @@ use Magento\Framework\Stdlib\ArrayManager;
 
 /**
  * Class for retrieving configurations from environment variables.
+ *
+ * @api
+ * @since 100.2.0
  */
 class EnvironmentConfigSource implements ConfigSourceInterface
 {
@@ -33,6 +36,7 @@ class EnvironmentConfigSource implements ConfigSourceInterface
     /**
      * @param ArrayManager $arrayManager
      * @param PlaceholderFactory $placeholderFactory
+     * @since 100.2.0
      */
     public function __construct(
         ArrayManager $arrayManager,
@@ -44,6 +48,7 @@ class EnvironmentConfigSource implements ConfigSourceInterface
 
     /**
      * @inheritdoc
+     * @since 100.2.0
      */
     public function get($path = '')
     {

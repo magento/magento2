@@ -6,6 +6,10 @@
 
 namespace Magento\Catalog\Model;
 
+/**
+ * Class \Magento\Catalog\Model\ProductWebsiteLink
+ *
+ */
 class ProductWebsiteLink extends \Magento\Framework\Api\AbstractSimpleObject implements
     \Magento\Catalog\Api\Data\ProductWebsiteLinkInterface
 {

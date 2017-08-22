@@ -8,6 +8,10 @@ namespace Magento\SalesRule\Observer;
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class \Magento\SalesRule\Observer\CatalogAttributeDeleteAfterObserver
+ *
+ */
 class CatalogAttributeDeleteAfterObserver implements ObserverInterface
 {
     /**

@@ -9,6 +9,10 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Main\Tree;
 
+/**
+ * Class \Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Main\Tree\Attribute
+ *
+ */
 class Attribute extends \Magento\Backend\Block\Template
 {
     /**

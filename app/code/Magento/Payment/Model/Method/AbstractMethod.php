@@ -18,10 +18,12 @@ use Magento\Quote\Api\Data\PaymentMethodInterface;
 
 /**
  * Payment method abstract model
+ *
+ * @api
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @deprecated
+ * @deprecated 100.0.6
  * @see \Magento\Payment\Model\Method\Adapter
  * @see http://devdocs.magento.com/guides/v2.1/payments-integrations/payment-gateway/payment-gateway-intro.html
  */

@@ -39,26 +39,7 @@ class TypeProcessor
     const NORMALIZED_ANY_TYPE = 'anyType';
     /**#@-*/
 
-    /**
-     * Array of types data.
-     * <pre>array(
-     *     $complexTypeName => array(
-     *         'documentation' => $typeDocumentation
-     *         'parameters' => array(
-     *             $firstParameter => array(
-     *                 'type' => $type,
-     *                 'required' => $isRequired,
-     *                 'default' => $defaultValue,
-     *                 'documentation' => $parameterDocumentation
-     *             ),
-     *             ...
-     *         )
-     *     ),
-     *     ...
-     * )</pre>
-     *
-     * @var array
-     */
+    /**#@-*/
     protected $_types = [];
 
     /**
@@ -71,7 +52,7 @@ class TypeProcessor
      *
      * @return NameFinder
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getNameFinder()
     {
@@ -260,7 +241,7 @@ class TypeProcessor
      * @param string $getterName
      * @return string
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     public function dataObjectGetterNameToFieldName($getterName)
     {
@@ -273,7 +254,7 @@ class TypeProcessor
      * @param string $shortDescription
      * @return string
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     protected function dataObjectGetterDescriptionToFieldDescription($shortDescription)
     {
@@ -584,7 +565,7 @@ class TypeProcessor
      * @return string processed method name
      * @throws \Exception If $camelCaseProperty has no corresponding getter method
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     public function findGetterMethodName(ClassReflection $class, $camelCaseProperty)
     {
@@ -622,7 +603,7 @@ class TypeProcessor
      * @return string processed method name
      * @throws \Exception If $camelCaseProperty has no corresponding setter method
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     public function findSetterMethodName(ClassReflection $class, $camelCaseProperty)
     {
@@ -639,7 +620,7 @@ class TypeProcessor
      * @return string processed method name
      * @throws \Exception If $camelCaseProperty has no corresponding setter method
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     protected function findAccessorMethodName(
         ClassReflection $class,
@@ -660,7 +641,7 @@ class TypeProcessor
      * @param string $methodName
      * @return bool
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     protected function classHasMethod(ClassReflection $class, $methodName)
     {

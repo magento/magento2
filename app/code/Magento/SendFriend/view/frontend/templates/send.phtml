@@ -16,24 +16,24 @@
     <div class="actions-toolbar">
         <div class="secondary">
             <button type="button" id="btn-remove<%- data._index_ %>" class="action remove"
-               title="<?php echo $block->escapeHtmlAttr(__('Remove Recipent')) ?>">
-               <span><?php echo $block->escapeJs($block->escapeHtml(__('Remove'))) ?></span>
+               title="<?= $block->escapeHtmlAttr(__('Remove Recipent')) ?>">
+               <span><?= $block->escapeJs($block->escapeHtml(__('Remove'))) ?></span>
             </button>
         </div>
     </div>
     <fieldset class="fieldset">
         <div class="field name required">
-            <label for="recipients-name<%- data._index_ %>" class="label"><span><?php echo $block->escapeJs($block->escapeHtml(__('Name'))) ?></span></label>
+            <label for="recipients-name<%- data._index_ %>" class="label"><span><?= $block->escapeJs($block->escapeHtml(__('Name'))) ?></span></label>
             <div class="control">
-                <input name="recipients[name][<%- data._index_ %>]" type="text" title="<?php echo $block->escapeHtmlAttr(__('Name')) ?>" class="input-text"
+                <input name="recipients[name][<%- data._index_ %>]" type="text" title="<?= $block->escapeHtmlAttr(__('Name')) ?>" class="input-text"
                        id="recipients-name<%- data._index_ %>" data-validate="{required:true}"/>
             </div>
         </div>
 
         <div class="field email required">
-            <label for="recipients-email<%- data._index_ %>" class="label"><span><?php echo $block->escapeJs($block->escapeHtml(__('Email'))) ?></span></label>
+            <label for="recipients-email<%- data._index_ %>" class="label"><span><?= $block->escapeJs($block->escapeHtml(__('Email'))) ?></span></label>
             <div class="control">
-                <input name="recipients[email][<%- data._index_ %>]" title="<?php echo $block->escapeHtmlAttr(__('Email')) ?>"
+                <input name="recipients[email][<%- data._index_ %>]" title="<?= $block->escapeHtmlAttr(__('Email')) ?>"
                        id="recipients-email<%- data._index_ %>" type="email" class="input-text"
                        data-validate="{required:true, 'validate-email':true}"/>
             </div>
@@ -41,7 +41,7 @@
     </fieldset>
 </script>
 
-<form action="<?php echo $block->escapeUrl($block->getSendUrl()) ?>" method="post" id="product-sendtofriend-form"
+<form action="<?= $block->escapeUrl($block->getSendUrl()) ?>" method="post" id="product-sendtofriend-form"
       data-mage-init='{
         "rowBuilder":{
             "rowTemplate":"#add-recipient-tmpl",
@@ -49,71 +49,71 @@
             "rowParentElem":"<div></div>",
             "remEventSelector":"button",
             "btnRemoveSelector":".action.remove",
-            "maxRows":"<?php /* @noEscape */ echo (int)$block->getMaxRecipients() ?>",
+            "maxRows":"<?= /* @noEscape */ (int)$block->getMaxRecipients() ?>",
             "maxRowsMsg":"#max-recipient-message",
             "addRowBtn":"#add-recipient-button",
             "additionalRowClass":"additional"},
         "validation":{}}'
-      class="form send friend" data-hasRequired="<?php echo $block->escapeHtmlAttr(__('* Required Fields')) ?>">
+      class="form send friend" data-hasRequired="<?= $block->escapeHtmlAttr(__('* Required Fields')) ?>">
     <fieldset class="fieldset sender" id="sender_options">
-        <?php echo $block->getBlockHtml('formkey')?>
-        <legend class="legend"><span><?php echo $block->escapeHtml(__('Sender')) ?></span></legend>
+        <?= $block->getBlockHtml('formkey') ?>
+        <legend class="legend"><span><?= $block->escapeHtml(__('Sender')) ?></span></legend>
         <br>
         <div class="field sender required">
-            <label for="sender-name" class="label"><span><?php echo $block->escapeHtml(__('Name')) ?></span></label>
+            <label for="sender-name" class="label"><span><?= $block->escapeHtml(__('Name')) ?></span></label>
             <div class="control">
-                <input name="sender[name]" value="<?php echo $block->escapeHtmlAttr($block->getUserName()) ?>"
-                       title="<?php echo $block->escapeHtmlAttr(__('Name')) ?>" id="sender-name" type="text" class="input-text"
+                <input name="sender[name]" value="<?= $block->escapeHtmlAttr($block->getUserName()) ?>"
+                       title="<?= $block->escapeHtmlAttr(__('Name')) ?>" id="sender-name" type="text" class="input-text"
                        data-validate="{required:true}"/>
             </div>
         </div>
 
         <div class="field email required">
-            <label for="sender-email" class="label"><span><?php echo $block->escapeHtml(__('Email')) ?></span></label>
+            <label for="sender-email" class="label"><span><?= $block->escapeHtml(__('Email')) ?></span></label>
             <div class="control">
-                <input name="sender[email]" value="<?php echo $block->escapeHtmlAttr($block->getEmail()) ?>"
-                       title="<?php echo $block->escapeHtmlAttr(__('Email')) ?>" id="sender-email" type="text" class="input-text"
+                <input name="sender[email]" value="<?= $block->escapeHtmlAttr($block->getEmail()) ?>"
+                       title="<?= $block->escapeHtmlAttr(__('Email')) ?>" id="sender-email" type="text" class="input-text"
                        data-validate="{required:true, 'validate-email':true}"/>
             </div>
         </div>
 
         <div class="field text required">
-            <label for="sender-message" class="label"><span><?php echo $block->escapeHtml(__('Message')) ?></span></label>
+            <label for="sender-message" class="label"><span><?= $block->escapeHtml(__('Message')) ?></span></label>
             <div class="control">
                 <textarea name="sender[message]" class="input-text" id="sender-message" cols="3" rows="3"
-                          data-validate="{required:true}"><?php echo $block->escapeHtml($block->getMessage()) ?></textarea>
+                          data-validate="{required:true}"><?= $block->escapeHtml($block->getMessage()) ?></textarea>
             </div>
         </div>
     </fieldset>
 
     <fieldset class="fieldset recipients">
-        <?php echo $block->getBlockHtml('formkey')?>
-        <legend class="legend"><span><?php echo $block->escapeHtml(__('Invitee')) ?></span></legend>
+        <?= $block->getBlockHtml('formkey') ?>
+        <legend class="legend"><span><?= $block->escapeHtml(__('Invitee')) ?></span></legend>
         <br />
         <div id="recipients-options"></div>
         <?php if ($block->getMaxRecipients()): ?>
             <div id="max-recipient-message" style="display: none;" class="message notice limit" role="alert">
-                <span><?php echo $block->escapeHtml(__('Maximum %1 email addresses allowed.', $block->getMaxRecipients())) ?></span>
+                <span><?= $block->escapeHtml(__('Maximum %1 email addresses allowed.', $block->getMaxRecipients())) ?></span>
             </div>
         <?php endif; ?>
         <div class="actions-toolbar">
             <div class="secondary">
             <?php if (1 < $block->getMaxRecipients()): ?>
                 <button type="button" id="add-recipient-button" class="action add">
-                    <span><?php echo $block->escapeHtml(__('Add Invitee')) ?></span></button>
+                    <span><?= $block->escapeHtml(__('Add Invitee')) ?></span></button>
             <?php endif; ?>
             </div>
         </div>
-        <?php echo $block->getChildHtml('form_additional_info'); ?>
+        <?= $block->getChildHtml('form_additional_info') ?>
     </fieldset>
     <div class="actions-toolbar">
         <div class="primary">
             <button type="submit"
                     class="action submit primary"<?php if (!$block->canSend()): ?> disabled="disabled"<?php endif ?>>
-                <span><?php echo $block->escapeHtml(__('Send Email')) ?></span></button>
+                <span><?= $block->escapeHtml(__('Send Email')) ?></span></button>
         </div>
         <div class="secondary">
-            <a class="action back" href="#" role="back"><span><?php echo $block->escapeHtml(__('Back')) ?></span></a>
+            <a class="action back" href="#" role="back"><span><?= $block->escapeHtml(__('Back')) ?></span></a>
         </div>
     </div>
 </form>

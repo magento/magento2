@@ -6,6 +6,10 @@
 
 namespace Magento\Catalog\Model\Indexer\Product\Eav\Plugin\AttributeSet;
 
+/**
+ * Class \Magento\Catalog\Model\Indexer\Product\Eav\Plugin\AttributeSet\IndexableAttributeFilter
+ *
+ */
 class IndexableAttributeFilter
 {
     /**

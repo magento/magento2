@@ -12,8 +12,7 @@ use Magento\Quote\Model\Quote\Address;
 /**
  * Shopping Cart Rule data model
  *
- * @method \Magento\SalesRule\Model\ResourceModel\Rule _getResource()
- * @method \Magento\SalesRule\Model\ResourceModel\Rule getResource()
+ * @api
  * @method string getName()
  * @method \Magento\SalesRule\Model\Rule setName(string $value)
  * @method string getDescription()
@@ -540,6 +539,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
 
     /**
      * @return string
+     * @since 100.1.0
      */
     public function getFromDate()
     {
@@ -548,6 +548,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
 
     /**
      * @return string
+     * @since 100.1.0
      */
     public function getToDate()
     {
@@ -610,6 +611,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     /**
      * @param string $formName
      * @return string
+     * @since 100.1.0
      */
     public function getConditionsFieldSetId($formName = '')
     {
@@ -619,6 +621,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     /**
      * @param string $formName
      * @return string
+     * @since 100.1.0
      */
     public function getActionsFieldSetId($formName = '')
     {

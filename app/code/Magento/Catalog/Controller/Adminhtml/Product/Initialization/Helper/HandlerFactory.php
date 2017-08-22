@@ -5,6 +5,10 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper;
 
+/**
+ * Class \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\HandlerFactory
+ *
+ */
 class HandlerFactory
 {
     /**

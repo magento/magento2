@@ -8,9 +8,9 @@
  */
 ?>
 <dl class="payment-method purchase order">
-    <dt class="title"><?php echo $block->escapeHtml($block->getMethod()->getTitle()) ?></dt>
+    <dt class="title"><?= $block->escapeHtml($block->getMethod()->getTitle()) ?></dt>
     <dd class="content">
-        <strong><?php echo $block->escapeHtml(__('Purchase Order Number')) ?></strong>
-        <span class="number"><?php echo $block->escapeHtml($block->getInfo()->getPoNumber()) ?></span>
+        <strong><?= $block->escapeHtml(__('Purchase Order Number')) ?></strong>
+        <span class="number"><?= $block->escapeHtml($block->getInfo()->getPoNumber()) ?></span>
     </dd>
 </dl>

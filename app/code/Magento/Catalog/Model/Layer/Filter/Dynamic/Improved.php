@@ -12,6 +12,10 @@ use Magento\Framework\Search\Dynamic\Algorithm;
 use Magento\Framework\Search\Dynamic\IntervalFactory;
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * Class \Magento\Catalog\Model\Layer\Filter\Dynamic\Improved
+ *
+ */
 class Improved implements AlgorithmInterface
 {
     const XML_PATH_INTERVAL_DIVISION_LIMIT = 'catalog/layered_navigation/interval_division_limit';

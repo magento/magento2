@@ -9,6 +9,10 @@
  */
 namespace Magento\Tax\Model\TaxClass;
 
+/**
+ * Class \Magento\Tax\Model\TaxClass\AbstractType
+ *
+ */
 abstract class AbstractType extends \Magento\Framework\DataObject implements Type\TypeInterface
 {
     /**

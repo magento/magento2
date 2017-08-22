@@ -52,7 +52,9 @@ class PaymentTokenRepository implements PaymentTokenRepositoryInterface
      */
     protected $collectionFactory;
 
-    /** @var  CollectionProcessorInterface */
+    /**
+     * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
+     */
     private $collectionProcessor;
 
     /**
@@ -154,7 +156,7 @@ class PaymentTokenRepository implements PaymentTokenRepositoryInterface
      * @param FilterGroup $filterGroup
      * @param Collection $collection
      * @return void
-     * @deprecated
+     * @deprecated 100.3.0
      * @throws \Magento\Framework\Exception\InputException
      */
     protected function addFilterGroupToCollection(FilterGroup $filterGroup, Collection $collection)
@@ -168,7 +170,7 @@ class PaymentTokenRepository implements PaymentTokenRepositoryInterface
     /**
      * Retrieve collection processor
      *
-     * @deprecated
+     * @deprecated 100.3.0
      * @return CollectionProcessorInterface
      */
     private function getCollectionProcessor()

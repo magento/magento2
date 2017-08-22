@@ -9,7 +9,7 @@ namespace Magento\ProductAlert\Model;
 /**
  * @magentoAppIsolation enabled
  */
-class EmailTest extends \PHPUnit_Framework_TestCase
+class EmailTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\ProductAlert\Model\Email
@@ -82,7 +82,7 @@ class EmailTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertContains(
             'John Smith,',
-            $transportBuilder->getSentMessage()->getBodyHtml()->getRawContent()
+            $transportBuilder->getSentMessage()->getRawMessage()
         );
     }
 

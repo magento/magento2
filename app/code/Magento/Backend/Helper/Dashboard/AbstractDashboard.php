@@ -7,6 +7,8 @@ namespace Magento\Backend\Helper\Dashboard;
 
 /**
  * Adminhtml abstract  dashboard helper.
+ *
+ * @api
  */
 abstract class AbstractDashboard extends \Magento\Framework\App\Helper\AbstractHelper
 {

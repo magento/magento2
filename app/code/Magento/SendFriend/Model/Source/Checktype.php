@@ -11,6 +11,10 @@
  */
 namespace Magento\SendFriend\Model\Source;
 
+/**
+ * Class \Magento\SendFriend\Model\Source\Checktype
+ *
+ */
 class Checktype implements \Magento\Framework\Option\ArrayInterface
 {
     /**

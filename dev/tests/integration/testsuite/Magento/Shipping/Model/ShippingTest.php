@@ -14,7 +14,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * Contains list of tests for Shipping model
  */
-class ShippingTest extends \PHPUnit_Framework_TestCase
+class ShippingTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Shipping

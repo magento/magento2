@@ -8,6 +8,10 @@ namespace Magento\Shipping\Controller\Tracking;
 
 use Magento\Framework\Exception\NotFoundException;
 
+/**
+ * Class \Magento\Shipping\Controller\Tracking\Popup
+ *
+ */
 class Popup extends \Magento\Framework\App\Action\Action
 {
     /**

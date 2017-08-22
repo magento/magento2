@@ -6,6 +6,10 @@
  */
 namespace Magento\Reports\Controller\Adminhtml\Report\Customer;
 
+/**
+ * Class \Magento\Reports\Controller\Adminhtml\Report\Customer\Totals
+ *
+ */
 class Totals extends \Magento\Reports\Controller\Adminhtml\Report\Customer
 {
     /**

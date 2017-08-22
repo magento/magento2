@@ -7,6 +7,10 @@
  */
 namespace Magento\Customer\Model\ResourceModel\Group\Grid;
 
+/**
+ * Class \Magento\Customer\Model\ResourceModel\Group\Grid\Collection
+ *
+ */
 class Collection extends \Magento\Customer\Model\ResourceModel\Group\Collection
 {
     /**
