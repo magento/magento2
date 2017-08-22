@@ -223,15 +223,15 @@ class Filter
         if ($this->getDataProvider() instanceof \Magento\Ui\DataProvider\AbstractDataProvider) {
             // Use collection's getAllIds for optimization purposes.
             $idsArray = $this->getDataProvider()->getAllIds();
-        }else {
+        } else {
             $searchResult = $this->getDataProvider()->getSearchResult();
-            if($limit){
+            if ($limit) {
                 // Use compatible search api getItems when searchResult is not a collection.
                 foreach ($searchResult->getItems() as $item) {
                     /** @var $item \Magento\Framework\Api\Search\DocumentInterface */
                     $idsArray[] = $item->getId();
                 }
-            }else{
+            } else {
                 //Grab all selected even if they are not on the current page.
                 $idsArray = $searchResult->getAllIds();
             }

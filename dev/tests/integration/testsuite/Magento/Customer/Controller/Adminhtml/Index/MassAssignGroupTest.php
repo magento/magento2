@@ -70,6 +70,33 @@ class MassAssignGroupTest extends \Magento\TestFramework\TestCase\AbstractBacken
     }
 
     /**
+     * @magentoDataFixture Magento/Customer/_files/twenty_one_customers.php
+     */
+    public function testLargeGroupMassAssignGroupAction()
+    {
+
+        for($i = 1; $i < 22; $i++){
+            $customer = $this->customerRepository->getById($i);
+            $this->assertEquals(1, $customer->getGroupId());
+        }
+
+        $this->getRequest()
+            ->setParam('group', 0)
+            ->setPostValue('namespace', 'customer_listing')
+            ->setPostValue('selected', [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]);
+        $this->dispatch('backend/customer/index/massAssignGroup');
+        $this->assertSessionMessages(
+            $this->equalTo(['A total of 21 record(s) were updated.']),
+            \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
+        );
+        $this->assertRedirect($this->stringStartsWith($this->baseControllerUrl));
+        for($i = 1; $i < 22; $i++){
+            $customer = $this->customerRepository->getById($i);
+            $this->assertEquals(0, $customer->getGroupId());
+        }
+    }
+
+    /**
      * Valid group Id but no customer Ids specified
      * @magentoDbIsolation enabled
      */
