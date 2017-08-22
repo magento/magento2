@@ -122,6 +122,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      * Serializer Instance.
      *
      * @var Json
+     * @since 100.2.0
      */
     protected $serializer;
 
@@ -196,9 +197,10 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
 
     /**
      * Get Serializer instance.
-     * @deprecated
+     * @deprecated 100.2.0
      *
      * @return Json
+     * @since 100.2.0
      */
     protected function getSerializer()
     {
@@ -658,6 +660,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      *
      * @param array|null|bool|int|float|string $value
      * @return bool
+     * @since 100.2.0
      */
     public function isAllowedEmptyTextValue($value)
     {
@@ -866,7 +869,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      * Retrieve flat columns definition in old format (before MMDB support)
      * Used in database compatible mode
      *
-     * @deprecated
+     * @deprecated 100.2.0
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
@@ -1322,6 +1325,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
 
     /**
      * @inheritdoc
+     * @since 100.0.7
      */
     public function __sleep()
     {
@@ -1346,6 +1350,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
 
     /**
      * @inheritdoc
+     * @since 100.0.7
      */
     public function __wakeup()
     {

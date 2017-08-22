@@ -11,6 +11,10 @@ use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Api\AttributeSetFinderInterface;
 use Magento\Framework\DB\Select;
 
+/**
+ * Class \Magento\Catalog\Model\Product\Attribute\AttributeSetFinder
+ *
+ */
 class AttributeSetFinder implements AttributeSetFinderInterface
 {
     /**

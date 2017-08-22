@@ -5,6 +5,10 @@
  */
 namespace Magento\Indexer\Cron;
 
+/**
+ * Class \Magento\Indexer\Cron\ClearChangelog
+ *
+ */
 class ClearChangelog
 {
     /**

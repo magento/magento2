@@ -12,6 +12,10 @@ namespace Magento\Paypal\Block\Express\Review;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Quote\Model\Quote;
 
+/**
+ * Class \Magento\Paypal\Block\Express\Review\Shipping
+ *
+ */
 class Shipping extends \Magento\Framework\View\Element\Template
 {
     /**

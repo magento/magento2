@@ -11,6 +11,10 @@
  */
 namespace Magento\User\Model\System\Config\Source;
 
+/**
+ * Class \Magento\User\Model\System\Config\Source\Password
+ *
+ */
 class Password extends \Magento\Framework\DataObject implements \Magento\Framework\Option\ArrayInterface
 {
     /**

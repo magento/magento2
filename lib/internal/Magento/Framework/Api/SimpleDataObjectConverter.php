@@ -8,6 +8,10 @@ namespace Magento\Framework\Api;
 use Magento\Framework\Convert\ConvertArray;
 use Magento\Framework\Reflection\DataObjectProcessor;
 
+/**
+ * Class \Magento\Framework\Api\SimpleDataObjectConverter
+ *
+ */
 class SimpleDataObjectConverter
 {
     /**

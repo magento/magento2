@@ -7,6 +7,10 @@ namespace Magento\ImportExport\Model\Import\Config;
 
 use Magento\Framework\Module\Dir;
 
+/**
+ * Class \Magento\ImportExport\Model\Import\Config\SchemaLocator
+ *
+ */
 class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {
     /**

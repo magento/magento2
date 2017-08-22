@@ -5,6 +5,10 @@
  */
 namespace Magento\SalesRule\Model\Quote;
 
+/**
+ * Class \Magento\SalesRule\Model\Quote\Discount
+ *
+ */
 class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
 {
     /**

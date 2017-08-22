@@ -10,6 +10,10 @@ use Zend\View\Model\JsonModel;
 use Zend\Json\Json;
 use Magento\Framework\Validator\Url as UrlValidator;
 
+/**
+ * Class \Magento\Setup\Controller\UrlCheck
+ *
+ */
 class UrlCheck extends AbstractActionController
 {
     /**

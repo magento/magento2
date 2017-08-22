@@ -8,6 +8,10 @@ namespace Magento\Reports\Controller\Adminhtml\Report\Shopcart;
 
 use Magento\Framework\App\ResponseInterface;
 
+/**
+ * Class \Magento\Reports\Controller\Adminhtml\Report\Shopcart\ExportCustomerExcel
+ *
+ */
 class ExportCustomerExcel extends \Magento\Reports\Controller\Adminhtml\Report\Shopcart
 {
     /**

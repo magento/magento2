@@ -8,6 +8,10 @@ namespace Magento\Swatches\Plugin\Catalog;
 use \Magento\Framework\App\Cache\Type\Block;
 use \Magento\Framework\App\Cache\Type\Collection;
 
+/**
+ * Class \Magento\Swatches\Plugin\Catalog\CacheInvalidate
+ *
+ */
 class CacheInvalidate
 {
     /**

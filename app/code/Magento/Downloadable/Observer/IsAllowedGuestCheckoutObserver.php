@@ -8,6 +8,10 @@ namespace Magento\Downloadable\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * Class \Magento\Downloadable\Observer\IsAllowedGuestCheckoutObserver
+ *
+ */
 class IsAllowedGuestCheckoutObserver implements ObserverInterface
 {
     /**

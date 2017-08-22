@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\App\Test\Unit\Route;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\Route\Config
@@ -39,10 +39,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_readerMock = $this->getMock(\Magento\Framework\App\Route\Config\Reader::class, [], [], '', false);
-        $this->_cacheMock = $this->getMock(\Magento\Framework\Config\CacheInterface::class);
-        $this->_configScopeMock = $this->getMock(\Magento\Framework\Config\ScopeInterface::class);
-        $this->_areaList = $this->getMock(\Magento\Framework\App\AreaList::class, [], [], '', false);
+        $this->_readerMock = $this->createMock(\Magento\Framework\App\Route\Config\Reader::class);
+        $this->_cacheMock = $this->createMock(\Magento\Framework\Config\CacheInterface::class);
+        $this->_configScopeMock = $this->createMock(\Magento\Framework\Config\ScopeInterface::class);
+        $this->_areaList = $this->createMock(\Magento\Framework\App\AreaList::class);
         $this->_configScopeMock->expects($this->any())
             ->method('getCurrentScope')
             ->willReturn('areaCode');
@@ -56,7 +56,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 'areaList' => $this->_areaList
             ]
         );
-        $this->serializerMock = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
+        $this->serializerMock = $this->createMock(\Magento\Framework\Serialize\SerializerInterface::class);
         $objectManager->setBackwardCompatibleProperty($this->_config, 'serializer', $this->serializerMock);
     }
 

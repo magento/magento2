@@ -11,6 +11,9 @@ namespace Magento\Config\Block\System\Config\Form;
 
 use Magento\Framework\Data\Form\Element\AbstractElement;
 
+/**
+ * @api
+ */
 class Fieldset extends \Magento\Backend\Block\AbstractBlock implements
     \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
 {
@@ -69,6 +72,7 @@ class Fieldset extends \Magento\Backend\Block\AbstractBlock implements
     /**
      * @param AbstractElement $element
      * @return string
+     * @since 100.1.0
      */
     protected function _getChildrenElementsHtml(AbstractElement $element)
     {

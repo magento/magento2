@@ -11,6 +11,7 @@ use Magento\Framework\View\Layout\Reader\Visibility\Condition;
 
 /**
  * Backend block structure reader with ACL support
+ * @api
  */
 class Block extends Layout\Reader\Block
 {

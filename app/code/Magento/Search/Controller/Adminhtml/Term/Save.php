@@ -11,6 +11,10 @@ use Magento\Search\Model\QueryFactory;
 use Magento\Search\Controller\Adminhtml\Term as TermController;
 use Magento\Framework\Exception\LocalizedException;
 
+/**
+ * Class \Magento\Search\Controller\Adminhtml\Term\Save
+ *
+ */
 class Save extends TermController
 {
     /**

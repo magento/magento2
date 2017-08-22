@@ -6,6 +6,10 @@
  */
 namespace Magento\Directory\Controller\Currency;
 
+/**
+ * Class \Magento\Directory\Controller\Currency\SwitchAction
+ *
+ */
 class SwitchAction extends \Magento\Framework\App\Action\Action
 {
     /**

@@ -22,9 +22,7 @@ class RequestThrottler
     const USER_TYPE_ADMIN = 3;
     /**#@-*/
 
-    /**
-     * @var RequestLogReader
-     */
+    /**#@-*/
     private $requestLogReader;
 
     /**

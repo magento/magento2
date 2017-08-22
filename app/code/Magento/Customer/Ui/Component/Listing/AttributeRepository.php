@@ -13,26 +13,42 @@ use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Customer\Api\MetadataManagementInterface;
 use Magento\Customer\Model\Indexer\Attribute\Filter;
 
+/**
+ * Class \Magento\Customer\Ui\Component\Listing\AttributeRepository
+ *
+ */
 class AttributeRepository
 {
     const BILLING_ADDRESS_PREFIX = 'billing_';
 
-    /** @var [] */
+    /**
+     * @var array
+     */
     protected $attributes;
 
-    /** @var CustomerMetadataInterface */
+    /**
+     * @var \Magento\Customer\Api\CustomerMetadataInterface
+     */
     protected $customerMetadata;
 
-    /** @var AddressMetadataInterface */
+    /**
+     * @var \Magento\Customer\Api\AddressMetadataInterface
+     */
     protected $addressMetadata;
 
-    /** @var CustomerMetadataManagementInterface */
+    /**
+     * @var \Magento\Customer\Api\CustomerMetadataManagementInterface
+     */
     protected $customerMetadataManagement;
 
-    /** @var AddressMetadataManagementInterface */
+    /**
+     * @var \Magento\Customer\Api\AddressMetadataManagementInterface
+     */
     protected $addressMetadataManagement;
 
-    /** @var Filter */
+    /**
+     * @var \Magento\Customer\Model\Indexer\Attribute\Filter
+     */
     protected $attributeFilter;
 
     /**

@@ -15,6 +15,10 @@ use Magento\Backend\Block\Widget\Grid;
 use Magento\Backend\Block\Widget\Grid\Column;
 use Magento\Backend\Block\Widget\Grid\Extended;
 
+/**
+ * Class \Magento\Catalog\Block\Adminhtml\Category\Tab\Product
+ *
+ */
 class Product extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**

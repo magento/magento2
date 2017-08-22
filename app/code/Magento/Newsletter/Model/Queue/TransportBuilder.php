@@ -7,6 +7,10 @@ namespace Magento\Newsletter\Model\Queue;
 
 use Magento\Email\Model\AbstractTemplate;
 
+/**
+ * Class \Magento\Newsletter\Model\Queue\TransportBuilder
+ *
+ */
 class TransportBuilder extends \Magento\Framework\Mail\Template\TransportBuilder
 {
     /**
@@ -48,9 +52,7 @@ class TransportBuilder extends \Magento\Framework\Mail\Template\TransportBuilder
         $template = $this->getTemplate()->setData($this->templateData);
         $this->setTemplateFilter($template);
 
-        $this->message->setMessageType(
-            \Magento\Framework\Mail\MessageInterface::TYPE_HTML
-        )->setBody(
+        $this->message->setBodyHtml(
             $template->getProcessedTemplate($this->templateVars)
         )->setSubject(
             $template->getSubject()

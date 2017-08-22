@@ -8,6 +8,10 @@ namespace Magento\Framework\Reflection;
 
 use Zend\Code\Reflection\ClassReflection;
 
+/**
+ * Class \Magento\Framework\Reflection\NameFinder
+ *
+ */
 class NameFinder
 {
     /**

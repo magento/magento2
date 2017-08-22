@@ -11,7 +11,7 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Math\Random;
 
-class TemporaryTableServiceTest extends \PHPUnit_Framework_TestCase
+class TemporaryTableServiceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var TemporaryTableService|\PHPUnit_Framework_MockObject_MockObject
@@ -40,9 +40,9 @@ class TemporaryTableServiceTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->adapterMock = $this->getMock(AdapterInterface::class);
-        $this->selectMock = $this->getMock(Select::class, [], [], '', false);
-        $this->randomMock = $this->getMock(Random::class, [], [], '', false);
+        $this->adapterMock = $this->createMock(AdapterInterface::class);
+        $this->selectMock = $this->createMock(Select::class);
+        $this->randomMock = $this->createMock(Random::class);
         $this->temporaryTableService = (new ObjectManager($this))->getObject(
             TemporaryTableService::class,
             [
@@ -60,7 +60,7 @@ class TemporaryTableServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateFromSelectWithException()
     {
-        $this->setExpectedException(\InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $random = 'random_table';
         $indexes = [
             ['PRIMARY' => ['primary_column_name']],

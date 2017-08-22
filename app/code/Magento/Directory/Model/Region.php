@@ -9,8 +9,6 @@ namespace Magento\Directory\Model;
 /**
  * Region
  *
- * @method \Magento\Directory\Model\ResourceModel\Region _getResource()
- * @method \Magento\Directory\Model\ResourceModel\Region getResource()
  * @method string getRegionId()
  * @method string getCountryId()
  * @method \Magento\Directory\Model\Region setCountryId(string $value)

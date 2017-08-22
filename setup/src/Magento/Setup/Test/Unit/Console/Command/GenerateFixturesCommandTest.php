@@ -10,7 +10,7 @@ use Magento\Setup\Fixtures\FixtureModel;
 use Magento\Setup\Console\Command\GenerateFixturesCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class GenerateFixturesCommandTest extends \PHPUnit_Framework_TestCase
+class GenerateFixturesCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var FixtureModel|\PHPUnit_Framework_MockObject_MockObject
@@ -24,7 +24,7 @@ class GenerateFixturesCommandTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->fixtureModel = $this->getMock(\Magento\Setup\Fixtures\FixtureModel::class, [], [], '', false);
+        $this->fixtureModel = $this->createMock(\Magento\Setup\Fixtures\FixtureModel::class);
         $this->command = new GenerateFixturesCommand($this->fixtureModel);
     }
 

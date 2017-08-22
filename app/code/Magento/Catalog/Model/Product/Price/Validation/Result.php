@@ -10,6 +10,7 @@ namespace Magento\Catalog\Model\Product\Price\Validation;
  * Validation Result is used to aggregate errors that occurred during price update.
  *
  * @api
+ * @since 101.1.0
  */
 class Result
 {
@@ -27,6 +28,7 @@ class Result
 
     /**
      * @param \Magento\Catalog\Api\Data\PriceUpdateResultInterfaceFactory $priceUpdateResultFactory
+     * @since 101.1.0
      */
     public function __construct(
         \Magento\Catalog\Api\Data\PriceUpdateResultInterfaceFactory $priceUpdateResultFactory
@@ -42,6 +44,7 @@ class Result
      * @param array $parameters (optional). Placeholder values in ['placeholder key' => 'placeholder value'] format
      * for failure reason message.
      * @return void
+     * @since 101.1.0
      */
     public function addFailedItem($id, $message, array $parameters = [])
     {
@@ -55,6 +58,7 @@ class Result
      * Get ids of rows, that contained errors during price update.
      *
      * @return int[]
+     * @since 101.1.0
      */
     public function getFailedRowIds()
     {
@@ -65,6 +69,7 @@ class Result
      * Get price update errors, that occurred during price update.
      *
      * @return \Magento\Catalog\Api\Data\PriceUpdateResultInterface[]
+     * @since 101.1.0
      */
     public function getFailedItems()
     {

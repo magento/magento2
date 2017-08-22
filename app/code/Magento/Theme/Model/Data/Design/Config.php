@@ -8,6 +8,10 @@ namespace Magento\Theme\Model\Data\Design;
 use Magento\Framework\Api\AbstractExtensibleObject;
 use Magento\Theme\Api\Data\DesignConfigInterface;
 
+/**
+ * Class \Magento\Theme\Model\Data\Design\Config
+ *
+ */
 class Config extends AbstractExtensibleObject implements DesignConfigInterface
 {
     /**

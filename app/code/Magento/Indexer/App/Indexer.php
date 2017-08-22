@@ -8,6 +8,10 @@ namespace Magento\Indexer\App;
 use Magento\Framework\App;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * Class \Magento\Indexer\App\Indexer
+ *
+ */
 class Indexer implements \Magento\Framework\AppInterface
 {
     /**

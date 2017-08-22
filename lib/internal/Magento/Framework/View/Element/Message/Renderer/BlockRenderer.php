@@ -8,6 +8,10 @@ namespace Magento\Framework\View\Element\Message\Renderer;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\View\Element\Message\Renderer\BlockRenderer\Template;
 
+/**
+ * Class \Magento\Framework\View\Element\Message\Renderer\BlockRenderer
+ *
+ */
 class BlockRenderer implements RendererInterface
 {
     /**

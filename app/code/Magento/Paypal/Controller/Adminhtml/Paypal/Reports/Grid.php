@@ -6,6 +6,10 @@
  */
 namespace Magento\Paypal\Controller\Adminhtml\Paypal\Reports;
 
+/**
+ * Class \Magento\Paypal\Controller\Adminhtml\Paypal\Reports\Grid
+ *
+ */
 class Grid extends \Magento\Paypal\Controller\Adminhtml\Paypal\Reports
 {
     /**

@@ -8,7 +8,7 @@ namespace Magento\ConfigurableImportExport\Model\Export;
 /**
  * @magentoAppArea adminhtml
  */
-class RowCustomizerTest extends \PHPUnit_Framework_TestCase
+class RowCustomizerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\ConfigurableImportExport\Model\Export\RowCustomizer

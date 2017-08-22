@@ -94,7 +94,7 @@ interface AttributeInterface extends \Magento\Framework\Api\CustomAttributesData
     /**
      * Retrieve entity type id
      *
-     * @return string|null
+     * @return string
      */
     public function getEntityTypeId();
 

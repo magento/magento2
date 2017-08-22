@@ -11,6 +11,10 @@
  */
 namespace Magento\Catalog\Model\Product\Type;
 
+/**
+ * Class \Magento\Catalog\Model\Product\Type\Virtual
+ *
+ */
 class Virtual extends \Magento\Catalog\Model\Product\Type\AbstractType
 {
     /**
