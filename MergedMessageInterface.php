@@ -13,7 +13,7 @@ interface MergedMessageInterface
     /**
      * Get merged message instance.
      *
-     * @return object
+     * @return mixed
      */
     public function getMergedMessage();
 

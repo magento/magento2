@@ -11,7 +11,7 @@ namespace Magento\Framework\MessageQueue;
 class MergedMessage implements MergedMessageInterface
 {
     /**
-     * @var object
+     * @var mixed
      */
     private $mergedMessage;
 
@@ -21,7 +21,7 @@ class MergedMessage implements MergedMessageInterface
     private $originalMessagesIds;
 
     /**
-     * @param object $mergedMessage
+     * @param mixed $mergedMessage
      * @param array $originalMessagesIds
      */
     public function __construct($mergedMessage, array $originalMessagesIds)

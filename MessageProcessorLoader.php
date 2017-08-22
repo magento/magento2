@@ -50,7 +50,7 @@ class MessageProcessorLoader
      * Get first message from the list of merged messages.
      *
      * @param array $messages
-     * @return object|null
+     * @return mixed|null
      */
     private function getMergedMessage(array $messages)
     {
