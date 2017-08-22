@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Weee\Test\Unit\Observer;
+
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class AfterAddressSaveTest extends \PHPUnit\Framework\TestCase
