@@ -84,13 +84,15 @@ class Attributes extends \Magento\Framework\View\Element\Template
 
                 if (!$product->hasData($attribute->getAttributeCode())) {
                     $value = __('N/A');
+                } elseif ($value instanceof Phrase) {
+                    $value = (string)$value;
                 } elseif ((string)$value == '') {
                     $value = __('No');
                 } elseif ($attribute->getFrontendInput() == 'price' && is_string($value)) {
                     $value = $this->priceCurrency->convertAndFormat($value);
                 }
 
-                if ($value instanceof Phrase || (is_string($value) && strlen($value))) {
+                if (is_string($value) && strlen($value)) {
                     $data[$attribute->getAttributeCode()] = [
                         'label' => __($attribute->getStoreLabel()),
                         'value' => $value,
