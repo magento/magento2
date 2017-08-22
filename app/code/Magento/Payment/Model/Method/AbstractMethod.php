@@ -318,7 +318,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      * Check capture availability
      *
      * @return bool
-     * @apiчс
+     * @api
      * @deprecated 2.1.0
      */
     public function canCapture()
