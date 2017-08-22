@@ -48,7 +48,7 @@ class CustomerLoggedInObserverTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->observerMock = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
             ->disableOriginalConstructor()
             ->setMethods([
@@ -79,7 +79,7 @@ class CustomerLoggedInObserverTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->session = $this->objectManager->getObject(
+        $this->session = $objectManager->getObject(
             \Magento\Tax\Observer\CustomerLoggedInObserver::class,
             [
                 'groupRepository' => $this->groupRepositoryMock,
@@ -91,6 +91,9 @@ class CustomerLoggedInObserverTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @test
+     */
     public function testExecute()
     {
         $this->moduleManagerMock->expects($this->once())
@@ -119,6 +122,15 @@ class CustomerLoggedInObserverTest extends \PHPUnit\Framework\TestCase
             ->method('getGroupId')
             ->willReturn(1);
 
+        /* @var \Magento\Customer\Api\Data\AddressInterface|\PHPUnit_Framework_MockObject_MockObject $address */
+        $address = $this->getMockBuilder(\Magento\Customer\Api\Data\AddressInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $customerMock->expects($this->once())
+            ->method('getAddresses')
+            ->willReturn([$address]);
+
         $customerGroupMock = $this->getMockBuilder(\Magento\Customer\Model\Data\Group::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -136,23 +148,9 @@ class CustomerLoggedInObserverTest extends \PHPUnit\Framework\TestCase
             ->method('setCustomerTaxClassId')
             ->with(1);
 
-        $address = $this->objectManager->getObject(\Magento\Customer\Model\Data\Address::class);
-        $address->setIsDefaultShipping(true);
-        $address->setIsDefaultBilling(true);
-        $address->setCountryId(1);
-        $address->setPostCode(11111);
-
-        $addresses = [$address];
-        $customerMock->expects($this->once())
-            ->method('getAddresses')
-            ->willReturn($addresses);
-
-        $this->customerSessionMock->expects($this->once())
-            ->method('setDefaultTaxBillingAddress')
-            ->with(['country_id' => 1, 'region_id' => null, 'postcode' => 11111]);
-        $this->customerSessionMock->expects($this->once())
-            ->method('setDefaultTaxShippingAddress')
-            ->with(['country_id' => 1, 'region_id' => null, 'postcode' => 11111]);
+        $this->taxHelperMock->expects($this->once())
+            ->method('setAddressCustomerSessionLogIn')
+            ->with([$address]);
 
         $this->session->execute($this->observerMock);
     }

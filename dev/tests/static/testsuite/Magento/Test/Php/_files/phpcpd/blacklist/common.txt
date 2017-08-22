@@ -173,8 +173,6 @@ Magento/Reports/Model/ResourceModel/Customer/Orders
 Magento/Sales/Model/ResourceModel/Report
 Magento/SalesRule/Model
 Magento/Search/Ui/Component/Listing/Column/Scope
-Magento/Tax/Model/Calculation
-Magento/Tax/Observer
 Magento/Vault/Model/Ui
 Magento/GroupedProduct/Model/ResourceModel/Product/Indexer/Price
 Magento/AdvancedSalesRule/Model/Rule/Condition/Product

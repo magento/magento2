@@ -11,6 +11,7 @@ use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Module\Manager;
 use Magento\PageCache\Model\Config;
 use Magento\Weee\Helper\Data;
+use Magento\Tax\Helper\Data as TaxHelper;
 
 class CustomerLoggedIn implements ObserverInterface
 {
@@ -23,6 +24,11 @@ class CustomerLoggedIn implements ObserverInterface
      * @var Data
      */
     protected $weeeHelper;
+    
+    /**
+     * @var TaxHelper
+     */
+    private $taxHelper;
 
     /**
      * Module manager
@@ -39,21 +45,21 @@ class CustomerLoggedIn implements ObserverInterface
     private $cacheConfig;
 
     /**
-     * @param Session $customerSession
      * @param Data $weeeHelper
      * @param Manager $moduleManager
      * @param Config $cacheConfig
+     * @param TaxHelper $taxHelper
      */
     public function __construct(
-        Session $customerSession,
         Data $weeeHelper,
         Manager $moduleManager,
-        Config $cacheConfig
+        Config $cacheConfig,
+        TaxHelper $taxHelper
     ) {
-        $this->customerSession = $customerSession;
         $this->weeeHelper = $weeeHelper;
         $this->moduleManager = $moduleManager;
         $this->cacheConfig = $cacheConfig;
+        $this->taxHelper = $taxHelper;
     }
 
     /**
@@ -63,41 +69,15 @@ class CustomerLoggedIn implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
-        if ($this->moduleManager->isEnabled('Magento_PageCache') && $this->cacheConfig->isEnabled() &&
-            $this->weeeHelper->isEnabled()) {
+        if ($this->moduleManager->isEnabled('Magento_PageCache')
+            && $this->cacheConfig->isEnabled()
+            && $this->weeeHelper->isEnabled()
+        ) {
             /** @var \Magento\Customer\Model\Data\Customer $customer */
             $customer = $observer->getData('customer');
-
-            /** @var \Magento\Customer\Api\Data\AddressInterface[] $addresses */
             $addresses = $customer->getAddresses();
             if (isset($addresses)) {
-                $defaultShippingFound = false;
-                $defaultBillingFound = false;
-                foreach ($addresses as $address) {
-                    if ($address->isDefaultBilling()) {
-                        $defaultBillingFound = true;
-                        $this->customerSession->setDefaultTaxBillingAddress(
-                            [
-                                'country_id' => $address->getCountryId(),
-                                'region_id'  => $address->getRegion() ? $address->getRegion()->getRegionId() : null,
-                                'postcode'   => $address->getPostcode(),
-                            ]
-                        );
-                    }
-                    if ($address->isDefaultShipping()) {
-                        $defaultShippingFound = true;
-                        $this->customerSession->setDefaultTaxShippingAddress(
-                            [
-                                'country_id' => $address->getCountryId(),
-                                'region_id'  => $address->getRegion() ? $address->getRegion()->getRegionId() : null,
-                                'postcode'   => $address->getPostcode(),
-                            ]
-                        );
-                    }
-                    if ($defaultShippingFound && $defaultBillingFound) {
-                        break;
-                    }
-                }
+                $this->taxHelper->setAddressCustomerSessionLogIn($addresses);
             }
         }
     }
