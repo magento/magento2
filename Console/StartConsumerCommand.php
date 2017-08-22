@@ -11,6 +11,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\MessageQueue\ConsumerFactory;
+use Magento\Framework\Filesystem\File\WriteFactory;
+use Magento\Framework\Filesystem\DriverPool;
 
 /**
  * Command for starting MessageQueue consumers.
@@ -21,6 +23,7 @@ class StartConsumerCommand extends Command
     const OPTION_NUMBER_OF_MESSAGES = 'max-messages';
     const OPTION_BATCH_SIZE = 'batch-size';
     const OPTION_AREACODE = 'area-code';
+    const PID_FILE_PATH = 'pid-file-path';
     const COMMAND_QUEUE_CONSUMERS_START = 'queue:consumers:start';
 
     /**
@@ -34,20 +37,29 @@ class StartConsumerCommand extends Command
     private $appState;
 
     /**
+     * @var WriteFactory
+     */
+    private $writeFactory;
+
+    /**
      * StartConsumerCommand constructor.
      * {@inheritdoc}
      *
      * @param \Magento\Framework\App\State $appState
      * @param ConsumerFactory $consumerFactory
+     * @param WriteFactory $filesystem
      * @param string $name
      */
     public function __construct(
         \Magento\Framework\App\State $appState,
         ConsumerFactory $consumerFactory,
+        WriteFactory $writeFactory = null,
         $name = null
     ) {
         $this->appState = $appState;
         $this->consumerFactory = $consumerFactory;
+        $this->writeFactory = $writeFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(WriteFactory::class);
         parent::__construct($name);
     }
 
@@ -60,14 +72,33 @@ class StartConsumerCommand extends Command
         $numberOfMessages = $input->getOption(self::OPTION_NUMBER_OF_MESSAGES);
         $batchSize = (int)$input->getOption(self::OPTION_BATCH_SIZE);
         $areaCode = $input->getOption(self::OPTION_AREACODE);
+        $pidFilePath = $input->getOption(self::PID_FILE_PATH);
+
+        if ($pidFilePath) {
+            $this->savePid($pidFilePath);
+        }
+
         if ($areaCode !== null) {
             $this->appState->setAreaCode($areaCode);
         } else {
             $this->appState->setAreaCode('global');
         }
+
         $consumer = $this->consumerFactory->get($consumerName, $batchSize);
         $consumer->process($numberOfMessages);
         return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
+    }
+
+    /**
+     * Saves pid of current process to file
+     *
+     * @param string $pidFilePath The path to file with pid
+     */
+    private function savePid($pidFilePath)
+    {
+        $file = $this->writeFactory->create($pidFilePath, DriverPool::FILE, 'w');
+        $file->write(posix_getpid());
+        $file->close();
     }
 
     /**
@@ -102,6 +133,12 @@ class StartConsumerCommand extends Command
             'The preferred area (global, adminhtml, etc...) '
             . 'default is global.'
         );
+        $this->addOption(
+            self::PID_FILE_PATH,
+            null,
+            InputOption::VALUE_REQUIRED,
+            'The file path for saving PID'
+        );
         $this->setHelp(
             <<<HELP
 This command starts MessageQueue consumer by its name.
@@ -121,6 +158,10 @@ To specify the number of messages per batch for the batch consumer:
 To specify the preferred area:
 
     <comment>%command.full_name% someConsumer --area-code='adminhtml'</comment>
+
+To save PID enter path:
+
+    <comment>%command.full_name% someConsumer --pid-file-path='/var/someConsumer.pid'</comment>
 HELP
         );
         parent::configure();

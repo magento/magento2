@@ -8,19 +8,13 @@ namespace Magento\MessageQueue\Model\Cron;
 use Magento\Framework\ShellInterface;
 use Magento\Framework\MessageQueue\Consumer\ConfigInterface as ConsumerConfigInterface;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\MessageQueue\Model\Cron\ConsumersRunner\Pid;
 
 /**
  * Class for running consumers processes by cron
  */
 class ConsumersRunner
 {
-    /**
-     * Shell command line wrapper
-     *
-     * @var ShellInterface
-     */
-    private $shell;
-
     /**
      * Shell command line wrapper for executing command in background
      *
@@ -43,21 +37,26 @@ class ConsumersRunner
     private $deploymentConfig;
 
     /**
+     * @var Pid
+     */
+    private $pid;
+
+    /**
      * @param ConsumerConfigInterface $consumerConfig The consumer config provider
      * @param DeploymentConfig $deploymentConfig The application deployment configuration
-     * @param ShellInterface $shell The shell command line wrapper
      * @param ShellInterface $shellBackground The shell command line wrapper for executing command in background
+     * @param Pid $pid The class for checking status of process by PID
      */
     public function __construct(
         ConsumerConfigInterface $consumerConfig,
         DeploymentConfig $deploymentConfig,
-        ShellInterface $shell,
-        ShellInterface $shellBackground
+        ShellInterface $shellBackground,
+        Pid $pid
     ) {
         $this->consumerConfig = $consumerConfig;
         $this->deploymentConfig = $deploymentConfig;
-        $this->shell = $shell;
         $this->shellBackground = $shellBackground;
+        $this->pid = $pid;
     }
 
     /**
@@ -68,16 +67,20 @@ class ConsumersRunner
         $runByCron = $this->deploymentConfig->get('queue_consumer/cron_run', true);
         $maxMessages = (int) $this->deploymentConfig->get('queue_consumer/max_messages', 10000);
 
-        $isRun = $this->shell->execute("ps aux | grep '[q]ueue:consumers:start' | awk '{print $2}'")
-            ? true : false;
-
-        if (!$runByCron || $isRun) {
+        if (!$runByCron) {
             return;
         }
 
         foreach ($this->consumerConfig->getConsumers() as $consumer) {
-            $command = 'php '. BP . '/bin/magento queue:consumers:start ' . $consumer->getName()
-                . ' --max-messages=' . $maxMessages;
+            $consumerName = $consumer->getName();
+
+            if ($this->pid->isRun($consumerName)) {
+                continue;
+            }
+
+            $command = 'php '. BP . '/bin/magento queue:consumers:start ' . $consumerName
+                . ($maxMessages ? ' --max-messages=' . $maxMessages : '')
+                . ' --pid-file-path=' . $this->pid->getPidFilePath($consumerName);
             $this->shellBackground->execute($command);
         }
     }

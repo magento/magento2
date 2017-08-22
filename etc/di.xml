@@ -35,7 +35,6 @@
     </type>
     <type name="Magento\MessageQueue\Model\Cron\ConsumersRunner">
         <arguments>
-            <argument name="shell" xsi:type="object">Magento\Framework\App\Shell</argument>
             <argument name="shellBackground" xsi:type="object">shellBackground</argument>
         </arguments>
     </type>
