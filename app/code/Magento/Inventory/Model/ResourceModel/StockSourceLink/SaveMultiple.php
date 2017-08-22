@@ -36,7 +36,7 @@ class SaveMultiple
      * @param array $sourceIds
      * @return void
      */
-    public function execute($stockId, array $sourceIds)
+    public function execute(array $sourceIds, $stockId)
     {
         $connection = $this->connection->getConnection();
         $tableName = $connection->getTableName(StockSourceLinkResourceModel::TABLE_NAME_STOCK_SOURCE_LINK);

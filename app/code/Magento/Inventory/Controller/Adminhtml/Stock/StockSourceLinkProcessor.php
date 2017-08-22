@@ -88,11 +88,11 @@ class StockSourceLinkProcessor
         }
 
         if ($sourceIdsForSave) {
-            $this->assignSourcesToStock->execute($stockId, array_keys($sourceIdsForSave));
+            $this->assignSourcesToStock->execute(array_keys($sourceIdsForSave), $stockId);
         }
         if ($sourceIdsForDelete) {
             foreach ($sourceIdsForDelete as $sourceIdForDelete) {
-                $this->unassignSourceFromStock->execute($stockId, $sourceIdForDelete);
+                $this->unassignSourceFromStock->execute($sourceIdForDelete, $stockId);
             }
         }
     }
