@@ -14,13 +14,6 @@ use Magento\Mtf\Client\Element\SimpleElement;
 class QueueForm extends \Magento\Mtf\Block\Form
 {
     /**
-     * "Queue Date Start" field selector.
-     *
-     * @var string
-     */
-    private $dateStartSelector = 'input[name=start_at]';
-
-    /**
      * Get data of specified form data.
      *
      * @param array $fields
@@ -31,26 +24,5 @@ class QueueForm extends \Magento\Mtf\Block\Form
     {
         unset($fields['code']);
         return parent::_getData($fields, $element);
-    }
-
-    /**
-     * Get Queue Date Start value.
-     *
-     * @return string
-     */
-    public function getDateStart()
-    {
-        return $this->_rootElement->find($this->dateStartSelector)->getValue();
-    }
-
-    /**
-     * Set Queue Date Start value.
-     *
-     * @param string $val
-     * @return void
-     */
-    public function setDateStart($val)
-    {
-        $this->_rootElement->find($this->dateStartSelector)->setValue($val);
     }
 }

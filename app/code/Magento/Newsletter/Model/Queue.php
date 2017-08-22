@@ -6,6 +6,7 @@
 namespace Magento\Newsletter\Model;
 
 use Magento\Framework\App\TemplateTypesInterface;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
  * Newsletter queue model.
@@ -112,7 +113,7 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
     /**
      * Timezone library.
      *
-     * @var \Magento\Framework\Stdlib\DateTime\Timezone
+     * @var TimezoneInterface
      */
     private $timezone;
 
@@ -127,8 +128,8 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
      * @param \Magento\Newsletter\Model\Queue\TransportBuilder $transportBuilder
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
-     * @param \Magento\Framework\Stdlib\DateTime\Timezone $timezone
      * @param array $data
+     * @param TimezoneInterface $timezone
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -142,8 +143,8 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
         \Magento\Newsletter\Model\Queue\TransportBuilder $transportBuilder,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        \Magento\Framework\Stdlib\DateTime\Timezone $timezone = null,
-        array $data = []
+        array $data = [],
+        TimezoneInterface $timezone = null
     ) {
         parent::__construct(
             $context,
@@ -159,7 +160,7 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
         $this->_subscribersCollection = $subscriberCollectionFactory->create();
         $this->_transportBuilder = $transportBuilder;
         $this->timezone = $timezone ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
-            \Magento\Framework\Stdlib\DateTime\Timezone::class
+            TimezoneInterface::class
         );
     }
 

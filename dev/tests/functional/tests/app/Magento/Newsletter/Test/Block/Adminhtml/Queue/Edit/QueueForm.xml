@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<mapping strict="0">
+    <fields>
+        <queue_start_at>
+            <selector>input[name='start_at']</selector>
+        </queue_start_at>
+        <newsletter_subject>
+            <selector>input[name='subject']</selector>
+        </newsletter_subject>
+        <newsletter_sender_name>
+            <selector>input[name='sender_name']</selector>
+        </newsletter_sender_name>
+        <newsletter_sender_email>
+            <selector>input[name='sender_email']</selector>
+        </newsletter_sender_email>
+        <newsletter_text>
+            <selector>textarea[name='text']</selector>
+        </newsletter_text>
+        <newsletter_styles>
+            <selector>textarea[name='styles']</selector>
+        </newsletter_styles>
+    </fields>
+</mapping>
