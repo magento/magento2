@@ -149,7 +149,8 @@ $numColumns = sizeof($block->getColumns());
     <?php endif; ?>
 
     <?php if (strpos($block->getRowClickCallback(), 'order.') !== false): ?>
-    deps.push('Magento_Sales/order/create/form')
+    deps.push('Magento_Sales/order/create/form');
+    deps.push('jQuery');
     <?php endif; ?>
 
     deps.push('mage/adminhtml/grid');
