@@ -13,7 +13,7 @@ namespace Magento\InventoryApi\Api;
  *
  * @api
  */
-interface SourceItemSaveInterface
+interface SourceItemsSaveInterface
 {
     /**
      * Save Multiple Source item data

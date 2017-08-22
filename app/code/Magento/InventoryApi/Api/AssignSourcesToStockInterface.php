@@ -17,11 +17,11 @@ interface AssignSourcesToStockInterface
     /**
      * Assign source id list by stock id
      *
-     * @param int $stockId
      * @param int[] $sourceIds
+     * @param int $stockId
      * @return void
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function execute($stockId, array $sourceIds);
+    public function execute(array $sourceIds, $stockId);
 }

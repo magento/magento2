@@ -13,7 +13,7 @@ use Magento\Framework\Api\SearchCriteriaBuilderFactory;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterfaceFactory;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
-use Magento\InventoryApi\Api\SourceItemSaveInterface;
+use Magento\InventoryApi\Api\SourceItemsSaveInterface;
 
 /**
  * At the time of processing Product save form this class used to save source items correctly
@@ -42,9 +42,9 @@ class SourceItemsProcessor
     private $dataObjectHelper;
 
     /**
-     * @var SourceItemSaveInterface
+     * @var SourceItemsSaveInterface
      */
-    private $sourceItemSave;
+    private $sourceItemsSave;
 
     /**
      * SourceItemsProcessor constructor
@@ -53,20 +53,20 @@ class SourceItemsProcessor
      * @param SourceItemRepositoryInterface $sourceItemRepository
      * @param SourceItemInterfaceFactory $sourceItemFactory
      * @param DataObjectHelper $dataObjectHelper
-     * @param SourceItemSaveInterface $sourceItemSave
+     * @param SourceItemsSaveInterface $sourceItemsSave
      */
     public function __construct(
         SearchCriteriaBuilderFactory $searchCriteriaBuilderFactory,
         SourceItemRepositoryInterface $sourceItemRepository,
         SourceItemInterfaceFactory $sourceItemFactory,
         DataObjectHelper $dataObjectHelper,
-        SourceItemSaveInterface $sourceItemSave
+        SourceItemsSaveInterface $sourceItemsSave
     ) {
         $this->searchCriteriaBuilderFactory = $searchCriteriaBuilderFactory;
         $this->sourceItemRepository = $sourceItemRepository;
         $this->sourceItemFactory = $sourceItemFactory;
         $this->dataObjectHelper = $dataObjectHelper;
-        $this->sourceItemSave = $sourceItemSave;
+        $this->sourceItemsSave = $sourceItemsSave;
     }
 
     /**
@@ -98,7 +98,7 @@ class SourceItemsProcessor
             unset($sourceItemsForDelete[$sourceId]);
         }
         if ($sourceItemsForSave) {
-            $this->sourceItemSave->execute($sourceItemsForSave);
+            $this->sourceItemsSave->execute($sourceItemsForSave);
         }
         if ($sourceItemsForDelete) {
             $this->deleteSourceItems($sourceItemsForDelete);

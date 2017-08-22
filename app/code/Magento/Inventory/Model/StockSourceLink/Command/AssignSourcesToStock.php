@@ -3,18 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Inventory\Model;
+namespace Magento\Inventory\Model\StockSourceLink\Command;
 
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
-use Magento\Inventory\Model\ResourceModel\SourceItem\SaveMultiple;
-use Magento\InventoryApi\Api\SourceItemSaveInterface;
+use Magento\Inventory\Model\ResourceModel\StockSourceLink\SaveMultiple;
+use Magento\InventoryApi\Api\AssignSourcesToStockInterface;
 use Psr\Log\LoggerInterface;
 
 /**
  * @inheritdoc
  */
-class SourceItemSave implements SourceItemSaveInterface
+class AssignSourcesToStock implements AssignSourcesToStockInterface
 {
     /**
      * @var SaveMultiple
@@ -41,16 +41,16 @@ class SourceItemSave implements SourceItemSaveInterface
     /**
      * @inheritdoc
      */
-    public function execute(array $sourceItems)
+    public function execute(array $sourceIds, $stockId)
     {
-        if (empty($sourceItems)) {
-            throw new InputException(__('Input data is empty'));
+        if (!is_numeric($stockId) || empty($sourceIds)) {
+            throw new InputException(__('Input data is invalid'));
         }
         try {
-            $this->saveMultiple->execute($sourceItems);
+            $this->saveMultiple->execute($sourceIds, $stockId);
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
-            throw new CouldNotSaveException(__('Could not save Source Item'), $e);
+            throw new CouldNotSaveException(__('Could not assign Sources to Stock'), $e);
         }
     }
 }
