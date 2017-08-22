@@ -5,6 +5,10 @@
  */
 namespace Magento\ConfigurableProduct\Model;
 
+/**
+ * Class \Magento\ConfigurableProduct\Model\ConfigurableAttributeHandler
+ *
+ */
 class ConfigurableAttributeHandler
 {
     /**

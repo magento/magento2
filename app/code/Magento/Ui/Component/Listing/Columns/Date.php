@@ -11,7 +11,7 @@ use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
- * Class Date
+ * @api
  */
 class Date extends Column
 {
@@ -53,11 +53,13 @@ class Date extends Column
     {
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
-                if (isset($item[$this->getData('name')])) {
+                if (isset($item[$this->getData('name')])
+                   && $item[$this->getData('name')] !== "0000-00-00 00:00:00"
+                ) {
                     $date = $this->timezone->date(new \DateTime($item[$this->getData('name')]));
                     $timezone = isset($this->getConfiguration()['timezone'])
                         ? $this->booleanUtils->convert($this->getConfiguration()['timezone'])
-                        : false;
+                        : true;
                     if (!$timezone) {
                         $date = new \DateTime($item[$this->getData('name')]);
                     }

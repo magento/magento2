@@ -13,6 +13,9 @@ namespace Magento\LayeredNavigation\Block;
 
 use Magento\Framework\View\Element\Template;
 
+/**
+ * @api
+ */
 class Navigation extends \Magento\Framework\View\Element\Template
 {
     /**

@@ -7,6 +7,10 @@
  */
 namespace Magento\Framework\Url;
 
+/**
+ * Class \Magento\Framework\Url\SecurityInfo
+ *
+ */
 class SecurityInfo implements \Magento\Framework\Url\SecurityInfoInterface
 {
     /**

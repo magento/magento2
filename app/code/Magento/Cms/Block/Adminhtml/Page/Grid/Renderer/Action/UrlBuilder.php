@@ -7,6 +7,10 @@ namespace Magento\Cms\Block\Adminhtml\Page\Grid\Renderer\Action;
 
 use Magento\Store\Api\StoreResolverInterface;
 
+/**
+ * Class \Magento\Cms\Block\Adminhtml\Page\Grid\Renderer\Action\UrlBuilder
+ *
+ */
 class UrlBuilder
 {
     /**

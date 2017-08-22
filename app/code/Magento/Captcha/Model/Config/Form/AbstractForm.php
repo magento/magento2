@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Data source to fill "Forms" field
  *
@@ -13,7 +11,13 @@
  */
 namespace Magento\Captcha\Model\Config\Form;
 
-abstract class AbstractForm extends \Magento\Framework\App\Config\Value implements \Magento\Framework\Option\ArrayInterface
+use Magento\Framework\App\Config\Value;
+
+/**
+ * Class \Magento\Captcha\Model\Config\Form\AbstractForm
+ *
+ */
+abstract class AbstractForm extends Value implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @var string

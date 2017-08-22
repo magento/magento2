@@ -5,6 +5,10 @@
  */
 namespace Magento\Backend\Block\System\Design;
 
+/**
+ * Class \Magento\Backend\Block\System\Design\Edit
+ *
+ */
 class Edit extends \Magento\Backend\Block\Widget
 {
     /**

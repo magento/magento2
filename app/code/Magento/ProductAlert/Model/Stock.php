@@ -10,8 +10,6 @@ use Magento\ProductAlert\Model\ResourceModel\Stock\Customer\Collection;
 /**
  * ProductAlert for back in stock model
  *
- * @method \Magento\ProductAlert\Model\ResourceModel\Stock _getResource()
- * @method \Magento\ProductAlert\Model\ResourceModel\Stock getResource()
  * @method int getCustomerId()
  * @method \Magento\ProductAlert\Model\Stock setCustomerId(int $value)
  * @method int getProductId()

@@ -6,8 +6,7 @@
 namespace Magento\Eav\Model\Entity;
 
 /**
- * @method \Magento\Eav\Model\ResourceModel\Entity\Store _getResource()
- * @method \Magento\Eav\Model\ResourceModel\Entity\Store getResource()
+ * @api
  * @method int getEntityTypeId()
  * @method \Magento\Eav\Model\Entity\Store setEntityTypeId(int $value)
  * @method int getStoreId()
@@ -16,8 +15,6 @@ namespace Magento\Eav\Model\Entity;
  * @method \Magento\Eav\Model\Entity\Store setIncrementPrefix(string $value)
  * @method string getIncrementLastId()
  * @method \Magento\Eav\Model\Entity\Store setIncrementLastId(string $value)
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Store extends \Magento\Framework\Model\AbstractModel
 {

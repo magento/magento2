@@ -6,6 +6,9 @@
 
 namespace Magento\Search\Model\Autocomplete;
 
+/**
+ * @api
+ */
 interface DataProviderInterface
 {
     /**

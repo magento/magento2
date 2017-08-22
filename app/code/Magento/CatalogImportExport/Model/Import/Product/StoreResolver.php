@@ -5,6 +5,10 @@
  */
 namespace Magento\CatalogImportExport\Model\Import\Product;
 
+/**
+ * Class \Magento\CatalogImportExport\Model\Import\Product\StoreResolver
+ *
+ */
 class StoreResolver
 {
     /**

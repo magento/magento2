@@ -6,6 +6,10 @@
  */
 namespace Magento\Downloadable\Controller\Adminhtml\Downloadable\Product\Edit;
 
+/**
+ * Class \Magento\Downloadable\Controller\Adminhtml\Downloadable\Product\Edit\Validate
+ *
+ */
 class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Validate
 {
 }

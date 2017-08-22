@@ -5,6 +5,9 @@
  */
 namespace Magento\Reports\Model;
 
+/**
+ * @api
+ */
 class Item extends \Magento\Framework\DataObject
 {
     /**

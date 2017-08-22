@@ -6,6 +6,10 @@
 
 namespace Magento\Backend\Block\Widget\Button;
 
+/**
+ * Interface \Magento\Backend\Block\Widget\Button\ToolbarInterface
+ *
+ */
 interface ToolbarInterface
 {
     /**

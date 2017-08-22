@@ -7,6 +7,10 @@
  */
 namespace Magento\Framework\App\Config\Initial;
 
+/**
+ * Class \Magento\Framework\App\Config\Initial\Reader
+ *
+ */
 class Reader
 {
     /**

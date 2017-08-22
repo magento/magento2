@@ -10,6 +10,10 @@ use Magento\Framework\Search\Dynamic\DataProviderInterface;
 use Magento\Framework\Search\Dynamic\EntityStorage;
 use Magento\Framework\Search\Request\BucketInterface;
 
+/**
+ * Class \Magento\Framework\Search\Dynamic\Algorithm\Manual
+ *
+ */
 class Manual implements AlgorithmInterface
 {
     /**
@@ -53,7 +57,7 @@ class Manual implements AlgorithmInterface
     }
 
     /**
-     * @param array $items \
+     * @param array $items
      * @param int $maxIntervalsNumber
      * @return array
      */

@@ -8,6 +8,10 @@ namespace Magento\Integration\Model\Oauth\Nonce;
 use Magento\Framework\Oauth\ConsumerInterface;
 use Magento\Framework\Oauth\NonceGeneratorInterface;
 
+/**
+ * Class \Magento\Integration\Model\Oauth\Nonce\Generator
+ *
+ */
 class Generator implements NonceGeneratorInterface
 {
     /**

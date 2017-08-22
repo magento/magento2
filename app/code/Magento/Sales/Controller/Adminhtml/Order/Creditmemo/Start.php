@@ -5,6 +5,10 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Creditmemo;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Order\Creditmemo\Start
+ *
+ */
 class Start extends \Magento\Backend\App\Action
 {
     /**

@@ -8,6 +8,8 @@ namespace Magento\Framework\View\Page\Config;
 
 /**
  * Page config structure model
+ *
+ * @api
  */
 class Structure
 {
@@ -214,6 +216,7 @@ class Structure
      * Reformat 'Page config structure' to array.
      *
      * @return array
+     * @since 100.2.0
      */
     public function __toArray()
     {
@@ -230,6 +233,7 @@ class Structure
      *
      * @param array $data
      * @return void
+     * @since 100.2.0
      */
     public function populateWithArray(array $data)
     {

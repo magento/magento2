@@ -14,6 +14,10 @@ namespace Magento\Framework\Backup;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem as AppFilesystem;
 
+/**
+ * Class \Magento\Framework\Backup\Snapshot
+ *
+ */
 class Snapshot extends Filesystem
 {
     /**

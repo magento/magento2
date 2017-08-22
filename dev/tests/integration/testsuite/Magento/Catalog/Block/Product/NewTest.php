@@ -10,7 +10,7 @@ namespace Magento\Catalog\Block\Product;
  *
  * @magentoDataFixture Magento/Catalog/_files/products_new.php
  */
-class NewTest extends \PHPUnit_Framework_TestCase
+class NewTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Block\Product\NewProduct

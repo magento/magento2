@@ -169,6 +169,7 @@ class Config implements ConfigInterface
 
     /**
      * @return array
+     * @since 100.0.4
      */
     public function getMediaAttributeCodes()
     {

@@ -37,7 +37,7 @@ class Shipping extends Form
     protected $shippingMethod = '//span[text()="%s"]/following::label[contains(., "%s")]/../input';
 
     /**
-     * From with shipping available shipping methods.
+     * Form with shipping available shipping methods.
      *
      * @var string
      */

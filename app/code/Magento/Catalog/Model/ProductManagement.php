@@ -9,6 +9,10 @@ use Magento\Catalog\Api\ProductManagementInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 
+/**
+ * Class \Magento\Catalog\Model\ProductManagement
+ *
+ */
 class ProductManagement implements ProductManagementInterface
 {
     /**

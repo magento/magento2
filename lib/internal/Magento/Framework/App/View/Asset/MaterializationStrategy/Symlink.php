@@ -10,6 +10,10 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\View\Asset;
 
+/**
+ * Class \Magento\Framework\App\View\Asset\MaterializationStrategy\Symlink
+ *
+ */
 class Symlink implements StrategyInterface
 {
     /**

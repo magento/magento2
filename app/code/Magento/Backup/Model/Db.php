@@ -8,7 +8,7 @@ namespace Magento\Backup\Model;
 /**
  * Database backup model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Db implements \Magento\Framework\Backup\Db\BackupDbInterface
 {

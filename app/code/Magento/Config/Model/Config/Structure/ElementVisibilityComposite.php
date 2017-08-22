@@ -10,6 +10,8 @@ use Magento\Framework\Exception\ConfigurationMismatchException;
 /**
  * Contains list of classes which implement ElementVisibilityInterface for
  * checking of visibility of form elements on Stores > Settings > Configuration page in Admin Panel.
+ * @api
+ * @since 100.2.0
  */
 class ElementVisibilityComposite implements ElementVisibilityInterface
 {
@@ -26,6 +28,7 @@ class ElementVisibilityComposite implements ElementVisibilityInterface
      * under its own conditions.
      * @throws ConfigurationMismatchException It is thrown if some object from list $visibility
      * implements the wrong interface.
+     * @since 100.2.0
      */
     public function __construct(array $visibility = [])
     {
@@ -47,6 +50,7 @@ class ElementVisibilityComposite implements ElementVisibilityInterface
 
     /**
      * @inheritdoc
+     * @since 100.2.0
      */
     public function isHidden($path)
     {
@@ -61,6 +65,7 @@ class ElementVisibilityComposite implements ElementVisibilityInterface
 
     /**
      * @inheritdoc
+     * @since 100.2.0
      */
     public function isDisabled($path)
     {

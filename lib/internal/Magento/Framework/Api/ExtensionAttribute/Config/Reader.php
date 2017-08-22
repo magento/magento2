@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\Api\ExtensionAttribute\Config;
 
+/**
+ * Class \Magento\Framework\Api\ExtensionAttribute\Config\Reader
+ *
+ */
 class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {
     /**

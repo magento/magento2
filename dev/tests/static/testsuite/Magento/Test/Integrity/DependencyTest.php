@@ -20,7 +20,7 @@ use Magento\TestFramework\Dependency\VirtualType\VirtualTypeMapper;
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-class DependencyTest extends \PHPUnit_Framework_TestCase
+class DependencyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Types of dependencies between modules

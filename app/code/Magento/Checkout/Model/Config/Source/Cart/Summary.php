@@ -5,6 +5,10 @@
  */
 namespace Magento\Checkout\Model\Config\Source\Cart;
 
+/**
+ * Class \Magento\Checkout\Model\Config\Source\Cart\Summary
+ *
+ */
 class Summary implements \Magento\Framework\Option\ArrayInterface
 {
     /**

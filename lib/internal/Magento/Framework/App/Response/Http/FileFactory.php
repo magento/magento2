@@ -8,6 +8,10 @@ namespace Magento\Framework\App\Response\Http;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * Class \Magento\Framework\App\Response\Http\FileFactory
+ *
+ */
 class FileFactory
 {
     /**

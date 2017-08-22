@@ -3,7 +3,6 @@ module Magento_Captcha view/frontend/web/onepage.js
 module Magento_Catalog view/adminhtml/web/catalog/category/edit.js
 module Magento_Catalog view/adminhtml/web/catalog/product.js
 module Magento_Catalog view/adminhtml/web/catalog/product/composite/configure.js
-module Magento_Checkout view/frontend/web/js/opcheckout.js
 module Magento_Rule view/adminhtml/web/rules.js
 module Magento_Sales view/adminhtml/web/order/create/giftmessage.js
 module Magento_Sales view/adminhtml/web/order/create/scripts.js

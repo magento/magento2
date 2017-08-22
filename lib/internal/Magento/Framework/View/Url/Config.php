@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\View\Url;
 
+/**
+ * Class \Magento\Framework\View\Url\Config
+ *
+ */
 class Config implements \Magento\Framework\View\Url\ConfigInterface
 {
     /**

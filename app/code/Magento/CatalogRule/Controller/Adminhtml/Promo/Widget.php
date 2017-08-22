@@ -7,6 +7,10 @@ namespace Magento\CatalogRule\Controller\Adminhtml\Promo;
 
 use Magento\Backend\App\Action;
 
+/**
+ * Class \Magento\CatalogRule\Controller\Adminhtml\Promo\Widget
+ *
+ */
 abstract class Widget extends Action
 {
     /**

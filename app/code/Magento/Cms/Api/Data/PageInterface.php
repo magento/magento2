@@ -67,6 +67,7 @@ interface PageInterface
      * Get meta title
      *
      * @return string|null
+     * @since 101.0.0
      */
     public function getMetaTitle();
 
@@ -205,6 +206,7 @@ interface PageInterface
      *
      * @param string $metaTitle
      * @return \Magento\Cms\Api\Data\PageInterface
+     * @since 101.0.0
      */
     public function setMetaTitle($metaTitle);
 

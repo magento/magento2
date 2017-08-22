@@ -7,6 +7,10 @@
  */
 namespace Magento\Customer\Model\Plugin\CustomerRepository;
 
+/**
+ * Class \Magento\Customer\Model\Plugin\CustomerRepository\TransactionWrapper
+ *
+ */
 class TransactionWrapper
 {
     /**

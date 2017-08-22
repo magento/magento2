@@ -11,6 +11,10 @@ use Magento\Framework\Encryption\Helper\Security;
 use Magento\Framework\Oauth\TokenProviderInterface;
 use Magento\Integration\Model\Oauth\Token;
 
+/**
+ * Class \Magento\Integration\Model\Oauth\Token\Provider
+ *
+ */
 class Provider implements TokenProviderInterface
 {
     /**

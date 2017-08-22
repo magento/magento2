@@ -11,17 +11,21 @@ use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class \Magento\CatalogUrlRewrite\Observer\ProductProcessUrlRewriteSavingObserver
+ *
+ */
 class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
 {
     /**
      * @var ProductUrlRewriteGenerator
      */
-    protected $productUrlRewriteGenerator;
+    private $productUrlRewriteGenerator;
 
     /**
      * @var UrlPersistInterface
      */
-    protected $urlPersist;
+    private $urlPersist;
 
     /**
      * @param ProductUrlRewriteGenerator $productUrlRewriteGenerator

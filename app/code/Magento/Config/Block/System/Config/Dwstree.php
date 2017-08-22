@@ -9,6 +9,10 @@
  */
 namespace Magento\Config\Block\System\Config;
 
+/**
+ * Class \Magento\Config\Block\System\Config\Dwstree
+ *
+ */
 class Dwstree extends \Magento\Backend\Block\Widget\Tabs
 {
     /**

@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\Search\Request;
 
+/**
+ * Interface \Magento\Framework\Search\Request\IndexScopeResolverInterface
+ *
+ */
 interface IndexScopeResolverInterface
 {
     /**

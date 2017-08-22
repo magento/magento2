@@ -8,6 +8,10 @@ namespace Magento\ImportExport\Controller\Adminhtml\History;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * Class \Magento\ImportExport\Controller\Adminhtml\History\Download
+ *
+ */
 class Download extends \Magento\ImportExport\Controller\Adminhtml\History
 {
     /**

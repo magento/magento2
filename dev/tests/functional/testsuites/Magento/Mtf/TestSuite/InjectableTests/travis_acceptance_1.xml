@@ -11,7 +11,6 @@
         <allow>
             <module value="Magento_AdminNotification" strict="1" />
             <module value="Magento_AdvancedPricingImportExport" strict="1" />
-            <module value="Magento_Analytics" strict="1" />
             <module value="Magento_Authorizenet" strict="1" />
             <module value="Magento_Backend" strict="1" />
             <module value="Magento_Backup" strict="1" />

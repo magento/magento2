@@ -9,6 +9,10 @@ use Magento\Backend\App\Action;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Controller;
 
+/**
+ * Class \Magento\Sitemap\Controller\Adminhtml\Sitemap\Save
+ *
+ */
 class Save extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
 {
     /**

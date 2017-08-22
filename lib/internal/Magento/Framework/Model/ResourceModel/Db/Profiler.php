@@ -7,6 +7,10 @@
  */
 namespace Magento\Framework\Model\ResourceModel\Db;
 
+/**
+ * Class \Magento\Framework\Model\ResourceModel\Db\Profiler
+ *
+ */
 class Profiler extends \Magento\Framework\DB\Profiler
 {
     /**
