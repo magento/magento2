@@ -77,7 +77,7 @@ class UpgradeData implements \Magento\Framework\Setup\UpgradeDataInterface
      * @inheritdoc
      */
     public function upgrade(
-        \Magento\Framework\Setup\ModuleDataSetupInterface $setup, 
+        \Magento\Framework\Setup\ModuleDataSetupInterface $setup,
         \Magento\Framework\Setup\ModuleContextInterface $context
     ) {
         $setup->startSetup();
