@@ -105,22 +105,24 @@ class BundleOptionPrice extends AbstractPrice implements BundleOptionPriceInterf
      * Get selection amount
      *
      * @param \Magento\Bundle\Model\Selection $selection
+     * @param bool $useRegularPrice
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
      */
-    public function getOptionSelectionAmount($selection)
+    public function getOptionSelectionAmount($selection, $useRegularPrice = false)
     {
         $cacheKey = implode(
             '_',
             [
                 $this->product->getId(),
                 $selection->getOptionId(),
-                $selection->getSelectionId()
+                $selection->getSelectionId(),
+                $useRegularPrice ? 1: 0
             ]
         );
 
         if (!isset($this->optionSelecionAmountCache[$cacheKey])) {
             $selectionPrice = $this->selectionFactory
-                ->create($this->product, $selection, $selection->getSelectionQty());
+                ->create($this->product, $selection, $selection->getSelectionQty(), ['useRegularPrice' => $useRegularPrice ? true: false]);
             $this->optionSelecionAmountCache[$cacheKey] =  $selectionPrice->getAmount();
         }
 

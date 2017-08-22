@@ -227,11 +227,14 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
     {
         $qty = ($selection->getSelectionQty() * 1) ?: '1';
 
-        $optionPriceAmount = $product->getPriceInfo()
-            ->getPrice('bundle_option')
-            ->getOptionSelectionAmount($selection);
-        $finalPrice = $optionPriceAmount->getValue();
-        $basePrice = $optionPriceAmount->getBaseAmount();
+        $bundleOptionPrice = $product->getPriceInfo()
+            ->getPrice('bundle_option');
+        $finalPrice = $bundleOptionPrice->getOptionSelectionAmount($selection)->getValue();
+        $basePrice = $bundleOptionPrice->getOptionSelectionAmount($selection)->getBaseAmount();
+
+        $oldPrice = $bundleOptionPrice
+            ->getOptionSelectionAmount($selection, true)
+            ->getValue();
 
         $selection = [
             'qty' => $qty,
@@ -239,7 +242,7 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
             'optionId' => $selection->getId(),
             'prices' => [
                 'oldPrice' => [
-                    'amount' => $basePrice
+                    'amount' => $oldPrice
                 ],
                 'basePrice' => [
                     'amount' => $basePrice

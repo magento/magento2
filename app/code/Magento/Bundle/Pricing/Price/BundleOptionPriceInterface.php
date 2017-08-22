@@ -21,7 +21,8 @@ interface BundleOptionPriceInterface
 
     /**
      * @param \Magento\Bundle\Model\Selection $selection
+     * @param bool $useRegularPrice
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
      */
-    public function getOptionSelectionAmount($selection);
+    public function getOptionSelectionAmount($selection, $useRegularPrice = false);
 }
