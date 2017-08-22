@@ -75,7 +75,7 @@ class MassAssignGroupTest extends \Magento\TestFramework\TestCase\AbstractBacken
     public function testLargeGroupMassAssignGroupAction()
     {
 
-        for($i = 1; $i < 22; $i++){
+        for ($i = 1; $i < 22; $i++) {
             $customer = $this->customerRepository->getById($i);
             $this->assertEquals(1, $customer->getGroupId());
         }
@@ -90,7 +90,7 @@ class MassAssignGroupTest extends \Magento\TestFramework\TestCase\AbstractBacken
             \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
         );
         $this->assertRedirect($this->stringStartsWith($this->baseControllerUrl));
-        for($i = 1; $i < 22; $i++){
+        for ($i = 1; $i < 22; $i++) {
             $customer = $this->customerRepository->getById($i);
             $this->assertEquals(0, $customer->getGroupId());
         }

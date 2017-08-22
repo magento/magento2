@@ -424,4 +424,3 @@ $customer->setWebsiteId(1)
     ->setCreatedAt('2012-02-28 15:52:26');
 $customer->isObjectNew(true);
 $customer->save();
-
