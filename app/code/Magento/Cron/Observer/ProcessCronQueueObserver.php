@@ -329,12 +329,13 @@ class ProcessCronQueueObserver implements ObserverInterface
          * check if schedule generation is needed
          */
         $lastRun = (int)$this->_cache->load(self::CACHE_KEY_LAST_SCHEDULE_GENERATE_AT . $groupId);
+        $currentTime = $this->dateTime->gmtTimestamp() - gmdate('s');
         $rawSchedulePeriod = (int)$this->_scopeConfig->getValue(
             'system/cron/' . $groupId . '/' . self::XML_PATH_SCHEDULE_GENERATE_EVERY,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         $schedulePeriod = $rawSchedulePeriod * self::SECONDS_IN_MINUTE;
-        if ($lastRun > $this->dateTime->gmtTimestamp() - $schedulePeriod) {
+        if ($lastRun > $currentTime - $schedulePeriod) {
             return $this;
         }
 
@@ -357,7 +358,7 @@ class ProcessCronQueueObserver implements ObserverInterface
          * save time schedules generation was ran with no expiration
          */
         $this->_cache->save(
-            $this->dateTime->gmtTimestamp(),
+            $currentTime,
             self::CACHE_KEY_LAST_SCHEDULE_GENERATE_AT . $groupId,
             ['crontab'],
             null
@@ -400,11 +401,12 @@ class ProcessCronQueueObserver implements ObserverInterface
 
         // check if history cleanup is needed
         $lastCleanup = (int)$this->_cache->load(self::CACHE_KEY_LAST_HISTORY_CLEANUP_AT . $groupId);
+        $currentTime = $this->dateTime->gmtTimestamp() - gmdate('s');
         $historyCleanUp = (int)$this->_scopeConfig->getValue(
             'system/cron/' . $groupId . '/' . self::XML_PATH_HISTORY_CLEANUP_EVERY,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
-        if ($lastCleanup > $this->dateTime->gmtTimestamp() - $historyCleanUp * self::SECONDS_IN_MINUTE) {
+        if ($lastCleanup > $currentTime - $historyCleanUp * self::SECONDS_IN_MINUTE) {
             return $this;
         }
 
@@ -449,7 +451,7 @@ class ProcessCronQueueObserver implements ObserverInterface
 
         // save time history cleanup was ran with no expiration
         $this->_cache->save(
-            $this->dateTime->gmtTimestamp(),
+            $currentTime,
             self::CACHE_KEY_LAST_HISTORY_CLEANUP_AT . $groupId,
             ['crontab'],
             null
