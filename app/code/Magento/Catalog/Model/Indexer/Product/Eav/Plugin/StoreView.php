@@ -5,6 +5,10 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product\Eav\Plugin;
 
+/**
+ * Class \Magento\Catalog\Model\Indexer\Product\Eav\Plugin\StoreView
+ *
+ */
 class StoreView
 {
     /**

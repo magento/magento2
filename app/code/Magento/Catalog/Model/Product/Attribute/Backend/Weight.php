@@ -11,6 +11,10 @@
  */
 namespace Magento\Catalog\Model\Product\Attribute\Backend;
 
+/**
+ * Class \Magento\Catalog\Model\Product\Attribute\Backend\Weight
+ *
+ */
 class Weight extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
 

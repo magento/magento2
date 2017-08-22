@@ -15,6 +15,10 @@ use Magento\Customer\Model\Config\Share;
 use Magento\Directory\Model\AllowedCountries;
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * Class \Magento\Customer\Model\ResourceModel\Address\Attribute\Source\CountryWithWebsites
+ *
+ */
 class CountryWithWebsites extends \Magento\Eav\Model\Entity\Attribute\Source\Table
 {
     /**

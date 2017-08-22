@@ -6,6 +6,10 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Group;
 
+/**
+ * Class \Magento\Catalog\Controller\Adminhtml\Product\Group\Save
+ *
+ */
 class Save extends \Magento\Backend\App\Action
 {
     /**

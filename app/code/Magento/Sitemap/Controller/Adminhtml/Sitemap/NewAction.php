@@ -6,6 +6,10 @@
  */
 namespace Magento\Sitemap\Controller\Adminhtml\Sitemap;
 
+/**
+ * Class \Magento\Sitemap\Controller\Adminhtml\Sitemap\NewAction
+ *
+ */
 class NewAction extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
 {
     /**

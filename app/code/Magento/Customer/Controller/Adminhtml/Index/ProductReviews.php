@@ -5,6 +5,10 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
+/**
+ * Class \Magento\Customer\Controller\Adminhtml\Index\ProductReviews
+ *
+ */
 class ProductReviews extends \Magento\Customer\Controller\Adminhtml\Index
 {
     /**

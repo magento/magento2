@@ -8,6 +8,10 @@ namespace Magento\Ui\Model;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\View\Element\Template;
 
+/**
+ * Class \Magento\Ui\Model\Config
+ *
+ */
 class Config
 {
     /**

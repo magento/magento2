@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\Locale;
 
+/**
+ * Class \Magento\Framework\Locale\Config
+ *
+ */
 class Config implements \Magento\Framework\Locale\ConfigInterface
 {
     /**

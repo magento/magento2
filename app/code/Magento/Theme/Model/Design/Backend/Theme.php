@@ -7,6 +7,10 @@ namespace Magento\Theme\Model\Design\Backend;
 
 use Magento\Framework\App\Config\Value;
 
+/**
+ * Class \Magento\Theme\Model\Design\Backend\Theme
+ *
+ */
 class Theme extends Value
 {
     /**

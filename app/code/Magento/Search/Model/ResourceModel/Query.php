@@ -102,7 +102,7 @@ class Query extends AbstractDb
      * @param AbstractModel $object
      * @param string $value
      * @return $this
-     * @deprecated "synonym for" feature has been removed
+     * @deprecated 100.1.0 "synonym for" feature has been removed
      */
     public function loadByQuery(AbstractModel $object, $value)
     {

@@ -7,6 +7,10 @@
  */
 namespace Magento\Framework\Acl\Loader;
 
+/**
+ * Class \Magento\Framework\Acl\Loader\DefaultLoader
+ *
+ */
 class DefaultLoader implements \Magento\Framework\Acl\LoaderInterface
 {
     /**

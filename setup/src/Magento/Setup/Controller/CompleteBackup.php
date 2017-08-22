@@ -10,6 +10,10 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 
+/**
+ * Class \Magento\Setup\Controller\CompleteBackup
+ *
+ */
 class CompleteBackup extends AbstractActionController
 {
     /**

@@ -7,6 +7,10 @@
  */
 namespace Magento\Theme\Model\Layout\Config;
 
+/**
+ * Class \Magento\Theme\Model\Layout\Config\Converter
+ *
+ */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**

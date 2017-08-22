@@ -22,7 +22,6 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Catalog advanced search model
- * @method \Magento\CatalogSearch\Model\ResourceModel\Advanced getResource()
  * @method int getEntityTypeId()
  * @method \Magento\CatalogSearch\Model\Advanced setEntityTypeId(int $value)
  * @method int getAttributeSetId()

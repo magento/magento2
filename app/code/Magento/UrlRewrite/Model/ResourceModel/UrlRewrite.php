@@ -7,6 +7,10 @@
  */
 namespace Magento\UrlRewrite\Model\ResourceModel;
 
+/**
+ * Class \Magento\UrlRewrite\Model\ResourceModel\UrlRewrite
+ *
+ */
 class UrlRewrite extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**

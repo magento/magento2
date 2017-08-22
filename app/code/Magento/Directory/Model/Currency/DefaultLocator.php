@@ -5,6 +5,10 @@
  */
 namespace Magento\Directory\Model\Currency;
 
+/**
+ * Class \Magento\Directory\Model\Currency\DefaultLocator
+ *
+ */
 class DefaultLocator
 {
     /**

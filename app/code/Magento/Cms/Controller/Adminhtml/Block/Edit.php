@@ -5,6 +5,10 @@
  */
 namespace Magento\Cms\Controller\Adminhtml\Block;
 
+/**
+ * Class \Magento\Cms\Controller\Adminhtml\Block\Edit
+ *
+ */
 class Edit extends \Magento\Cms\Controller\Adminhtml\Block
 {
     /**

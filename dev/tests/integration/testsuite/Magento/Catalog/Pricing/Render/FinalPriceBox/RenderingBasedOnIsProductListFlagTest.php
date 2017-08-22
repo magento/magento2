@@ -16,7 +16,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * Test price rendering according to is_product_list flag
  */
-class RenderingBasedOnIsProductListFlagTest extends \PHPUnit_Framework_TestCase
+class RenderingBasedOnIsProductListFlagTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ProductInterface
@@ -74,8 +74,20 @@ class RenderingBasedOnIsProductListFlagTest extends \PHPUnit_Framework_TestCase
     {
         $html = $this->finalPriceBox->toHtml();
         self::assertContains('5.99', $html);
-        self::assertSelectCount('.special-price', true, $html);
-        self::assertSelectCount('.old-price', true, $html);
+        $this->assertGreaterThanOrEqual(
+            1,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//*[contains(@class,"special-price")]',
+                $html
+            )
+        );
+        $this->assertGreaterThanOrEqual(
+            1,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//*[contains(@class,"old-price")]',
+                $html
+            )
+        );
     }
 
     /**
@@ -92,8 +104,20 @@ class RenderingBasedOnIsProductListFlagTest extends \PHPUnit_Framework_TestCase
         $this->finalPriceBox->setData('is_product_list', $flag);
         $html = $this->finalPriceBox->toHtml();
         self::assertContains('5.99', $html);
-        self::assertSelectCount('.special-price', true, $html);
-        self::assertSelectCount('.old-price', true, $html);
+        $this->assertGreaterThanOrEqual(
+            1,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//*[contains(@class,"special-price")]',
+                $html
+            )
+        );
+        $this->assertGreaterThanOrEqual(
+            1,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//*[contains(@class,"old-price")]',
+                $html
+            )
+        );
     }
 
     /**

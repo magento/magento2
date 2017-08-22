@@ -14,8 +14,6 @@ use Magento\Framework\DataObject\IdentityInterface;
 /**
  * Catalog Rule data model
  *
- * @method \Magento\CatalogRule\Model\ResourceModel\Rule _getResource()
- * @method \Magento\CatalogRule\Model\ResourceModel\Rule getResource()
  * @method \Magento\CatalogRule\Model\Rule setFromDate(string $value)
  * @method \Magento\CatalogRule\Model\Rule setToDate(string $value)
  * @method \Magento\CatalogRule\Model\Rule setCustomerGroupIds(string $value)
@@ -787,7 +785,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
 
     /**
      * @return Data\Condition\Converter
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getRuleConditionConverter()
     {

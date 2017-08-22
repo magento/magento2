@@ -7,7 +7,7 @@ namespace Magento\Framework\DB\Test\Unit\Select;
 
 use Magento\Framework\DB\Select;
 
-class LimitRendererTest extends \PHPUnit_Framework_TestCase
+class LimitRendererTest extends \PHPUnit\Framework\TestCase
 {
     public function testRender()
     {

@@ -9,7 +9,7 @@ namespace Magento\Test\Profiler;
  * Test class for \Magento\TestFramework\Profiler\OutputBamboo.
  */
 require_once __DIR__ . '/OutputBambooTestFilter.php';
-class OutputBambooTest extends \PHPUnit_Framework_TestCase
+class OutputBambooTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\TestFramework\Profiler\OutputBamboo

@@ -15,6 +15,7 @@ namespace Magento\Catalog\Api\Data\ProductRender;
  * Consider currency, rounding and html
  *
  * @api
+ * @since 101.1.0
  */
 interface FormattedPriceInfoInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -22,6 +23,7 @@ interface FormattedPriceInfoInterface extends \Magento\Framework\Api\ExtensibleD
      * Retrieve html with final price
      *
      * @return string
+     * @since 101.1.0
      */
     public function getFinalPrice();
 
@@ -31,6 +33,7 @@ interface FormattedPriceInfoInterface extends \Magento\Framework\Api\ExtensibleD
      *
      * @param string $finalPrice
      * @return void
+     * @since 101.1.0
      */
     public function setFinalPrice($finalPrice);
 
@@ -39,6 +42,7 @@ interface FormattedPriceInfoInterface extends \Magento\Framework\Api\ExtensibleD
      * E.g. for product with custom options is price with the most expensive custom option
      *
      * @return string
+     * @since 101.1.0
      */
     public function getMaxPrice();
 
@@ -47,6 +51,7 @@ interface FormattedPriceInfoInterface extends \Magento\Framework\Api\ExtensibleD
      *
      * @param string $maxPrice
      * @return void
+     * @since 101.1.0
      */
     public function setMaxPrice($maxPrice);
 
@@ -55,6 +60,7 @@ interface FormattedPriceInfoInterface extends \Magento\Framework\Api\ExtensibleD
      * The minimal price is for example, the lowest price of all variations for complex product
      *
      * @return string
+     * @since 101.1.0
      */
     public function getMinimalPrice();
 
@@ -65,6 +71,7 @@ interface FormattedPriceInfoInterface extends \Magento\Framework\Api\ExtensibleD
      *
      * @param string $maxRegularPrice
      * @return void
+     * @since 101.1.0
      */
     public function setMaxRegularPrice($maxRegularPrice);
 
@@ -72,6 +79,7 @@ interface FormattedPriceInfoInterface extends \Magento\Framework\Api\ExtensibleD
      * Retrieve max regular price
      *
      * @return string
+     * @since 101.1.0
      */
     public function getMaxRegularPrice();
 
@@ -80,6 +88,7 @@ interface FormattedPriceInfoInterface extends \Magento\Framework\Api\ExtensibleD
      *
      * @param string $minRegularPrice
      * @return void
+     * @since 101.1.0
      */
     public function setMinimalRegularPrice($minRegularPrice);
 
@@ -87,6 +96,7 @@ interface FormattedPriceInfoInterface extends \Magento\Framework\Api\ExtensibleD
      * Retrieve minimal regular price
      *
      * @return string
+     * @since 101.1.0
      */
     public function getMinimalRegularPrice();
 
@@ -97,6 +107,7 @@ interface FormattedPriceInfoInterface extends \Magento\Framework\Api\ExtensibleD
      *
      * @param string $specialPrice
      * @return void
+     * @since 101.1.0
      */
     public function setSpecialPrice($specialPrice);
 
@@ -104,6 +115,7 @@ interface FormattedPriceInfoInterface extends \Magento\Framework\Api\ExtensibleD
      * Retrieve special price
      *
      * @return string
+     * @since 101.1.0
      */
     public function getSpecialPrice();
 
@@ -112,6 +124,7 @@ interface FormattedPriceInfoInterface extends \Magento\Framework\Api\ExtensibleD
      *
      * @param string $minimalPrice
      * @return void
+     * @since 101.1.0
      */
     public function setMinimalPrice($minimalPrice);
 
@@ -120,6 +133,7 @@ interface FormattedPriceInfoInterface extends \Magento\Framework\Api\ExtensibleD
      * Usually this price is corresponding to price in admin panel of product
      *
      * @return string
+     * @since 101.1.0
      */
     public function getRegularPrice();
 
@@ -128,6 +142,7 @@ interface FormattedPriceInfoInterface extends \Magento\Framework\Api\ExtensibleD
      *
      * @param string $regularPrice
      * @return void
+     * @since 101.1.0
      */
     public function setRegularPrice($regularPrice);
 
@@ -135,6 +150,7 @@ interface FormattedPriceInfoInterface extends \Magento\Framework\Api\ExtensibleD
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Catalog\Api\Data\ProductRender\FormattedPriceInfoExtensionInterface|null
+     * @since 101.1.0
      */
     public function getExtensionAttributes();
 
@@ -143,6 +159,7 @@ interface FormattedPriceInfoInterface extends \Magento\Framework\Api\ExtensibleD
      *
      * @param \Magento\Catalog\Api\Data\ProductRender\FormattedPriceInfoExtensionInterface $extensionAttributes
      * @return $this
+     * @since 101.1.0
      */
     public function setExtensionAttributes(
         \Magento\Catalog\Api\Data\ProductRender\FormattedPriceInfoExtensionInterface $extensionAttributes

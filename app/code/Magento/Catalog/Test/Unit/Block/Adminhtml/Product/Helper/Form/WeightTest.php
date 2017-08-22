@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Block\Adminhtml\Product\Helper\Form;
 
-class WeightTest extends \PHPUnit_Framework_TestCase
+class WeightTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Weight
@@ -34,18 +34,15 @@ class WeightTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->weightSwitcher = $this->getMock(
+        $this->weightSwitcher = $this->createPartialMock(
             \Magento\Framework\Data\Form\Element\Radios::class,
-            ['setId', 'setName', 'setLabel', 'setForm'],
-            [],
-            '',
-            false
+            ['setId', 'setName', 'setLabel', 'setForm']
         );
         $this->weightSwitcher->expects($this->any())->method('setId')->will($this->returnSelf());
         $this->weightSwitcher->expects($this->any())->method('setName')->will($this->returnSelf());
         $this->weightSwitcher->expects($this->any())->method('setLabel')->will($this->returnSelf());
 
-        $this->factory = $this->getMock(\Magento\Framework\Data\Form\Element\Factory::class, [], [], '', false);
+        $this->factory = $this->createMock(\Magento\Framework\Data\Form\Element\Factory::class);
         $this->factory->expects(
             $this->once()
         )->method(
@@ -55,20 +52,11 @@ class WeightTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($this->weightSwitcher)
         );
-        $this->localeFormat = $this->getMock(
-            \Magento\Framework\Locale\Format::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->localeFormat = $this->createMock(\Magento\Framework\Locale\Format::class);
 
-        $this->collectionFactory = $this->getMock(
+        $this->collectionFactory = $this->createPartialMock(
             \Magento\Framework\Data\Form\Element\CollectionFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
 
         $this->_model = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
@@ -83,7 +71,7 @@ class WeightTest extends \PHPUnit_Framework_TestCase
 
     public function testSetForm()
     {
-        $form = $this->getMock(\Magento\Framework\Data\Form::class, [], [], '', false);
+        $form = $this->createMock(\Magento\Framework\Data\Form::class);
         $this->weightSwitcher->expects(
             $this->any()
         )->method(

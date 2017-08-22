@@ -5,7 +5,7 @@
  */
 namespace Magento\Captcha\Test\Unit\Model\Cart;
 
-class ConfigPluginTest extends \PHPUnit_Framework_TestCase
+class ConfigPluginTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Captcha\Model\Cart\ConfigPlugin
@@ -19,13 +19,7 @@ class ConfigPluginTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->configProviderMock = $this->getMock(
-            \Magento\Captcha\Model\Checkout\ConfigProvider::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->configProviderMock = $this->createMock(\Magento\Captcha\Model\Checkout\ConfigProvider::class);
         $this->model = new \Magento\Captcha\Model\Cart\ConfigPlugin(
             $this->configProviderMock
         );
@@ -44,7 +38,7 @@ class ConfigPluginTest extends \PHPUnit_Framework_TestCase
             ]
         ];
         $expectedResult = array_merge_recursive($resultMock, $configMock);
-        $sidebarMock = $this->getMock(\Magento\Checkout\Block\Cart\Sidebar::class, [], [], '', false);
+        $sidebarMock = $this->createMock(\Magento\Checkout\Block\Cart\Sidebar::class);
         $this->configProviderMock->expects($this->once())->method('getConfig')->willReturn($configMock);
 
         $this->assertEquals($expectedResult, $this->model->afterGetConfig($sidebarMock, $resultMock));

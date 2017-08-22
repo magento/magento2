@@ -7,6 +7,10 @@ namespace Magento\Framework\Code\Generator;
 
 use Magento\Framework\Code\Generator;
 
+/**
+ * Class \Magento\Framework\Code\Generator\Autoloader
+ *
+ */
 class Autoloader
 {
     /**

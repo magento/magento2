@@ -15,7 +15,7 @@ use Magento\Tax\Helper\Data;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AfterAddressSaveObserverTest extends \PHPUnit_Framework_TestCase
+class AfterAddressSaveObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Observer

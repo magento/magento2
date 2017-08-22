@@ -10,7 +10,7 @@ use Magento\Store\Model\Store;
 /**
  * Unit test for Magento\Email\Model\Source\Variables
  */
-class VariablesTest extends \PHPUnit_Framework_TestCase
+class VariablesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Variables model

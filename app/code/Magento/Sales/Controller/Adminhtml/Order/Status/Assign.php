@@ -10,6 +10,10 @@ use Magento\Framework\Registry;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Order\Status\Assign
+ *
+ */
 class Assign extends \Magento\Sales\Controller\Adminhtml\Order\Status
 {
     /**

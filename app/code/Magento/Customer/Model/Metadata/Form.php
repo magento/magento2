@@ -22,9 +22,7 @@ class Form
 
     /**#@-*/
 
-    /**
-     * @var CustomerMetadataInterface
-     */
+    /**#@-*/
     protected $_customerMetadataService;
 
     /**

@@ -9,6 +9,10 @@ namespace Magento\Multishipping\Controller\Checkout;
 use Magento\Multishipping\Model\Checkout\Type\Multishipping\State;
 use Magento\Framework\App\ResponseInterface;
 
+/**
+ * Class \Magento\Multishipping\Controller\Checkout\Billing
+ *
+ */
 class Billing extends \Magento\Multishipping\Controller\Checkout
 {
     /**

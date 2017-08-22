@@ -13,7 +13,7 @@ use Magento\SalesInventory\Observer\RefundOrderInventoryObserver;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RefundOrderInventoryObserverTest extends \PHPUnit_Framework_TestCase
+class RefundOrderInventoryObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var RefundOrderInventoryObserver
@@ -72,21 +72,12 @@ class RefundOrderInventoryObserverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stockIndexerProcessor = $this->getMock(
+        $this->stockIndexerProcessor = $this->createPartialMock(
             \Magento\CatalogInventory\Model\Indexer\Stock\Processor::class,
-            ['reindexList'],
-            [],
-            '',
-            false
+            ['reindexList']
         );
 
-        $this->stockManagement = $this->getMock(
-            \Magento\CatalogInventory\Model\StockManagement::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->stockManagement = $this->createMock(\Magento\CatalogInventory\Model\StockManagement::class);
 
         $this->stockConfiguration = $this->getMockForAbstractClass(
             \Magento\CatalogInventory\Api\StockConfigurationInterface::class,
@@ -157,7 +148,7 @@ class RefundOrderInventoryObserverTest extends \PHPUnit_Framework_TestCase
         $ids = ['1', '14'];
         $items = [];
 
-        $creditMemo = $this->getMock(\Magento\Sales\Model\Order\Creditmemo::class, [], [], '', false);
+        $creditMemo = $this->createMock(\Magento\Sales\Model\Order\Creditmemo::class);
 
         foreach ($ids as $id) {
             $item = $this->getCreditMemoItem($id);
@@ -185,12 +176,9 @@ class RefundOrderInventoryObserverTest extends \PHPUnit_Framework_TestCase
     private function getCreditMemoItem($productId)
     {
         $backToStock = true;
-        $item = $this->getMock(
+        $item = $this->createPartialMock(
             \Magento\Sales\Model\Order\Creditmemo\Item::class,
-            ['getOrderItemId', 'getBackToStock', 'getQty', '__wakeup'],
-            [],
-            '',
-            false
+            ['getOrderItemId', 'getBackToStock', 'getQty', '__wakeup']
         );
         $item->expects($this->any())->method('getBackToStock')->willReturn($backToStock);
         $item->expects($this->any())->method('getOrderItemId')->willReturn($productId);

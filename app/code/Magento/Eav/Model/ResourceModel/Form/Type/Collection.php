@@ -13,6 +13,10 @@ namespace Magento\Eav\Model\ResourceModel\Form\Type;
 
 use Magento\Eav\Model\Entity\Type;
 
+/**
+ * Class \Magento\Eav\Model\ResourceModel\Form\Type\Collection
+ *
+ */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**

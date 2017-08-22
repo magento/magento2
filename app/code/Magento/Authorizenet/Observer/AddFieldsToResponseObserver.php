@@ -8,6 +8,10 @@ namespace Magento\Authorizenet\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Sales\Model\Order;
 
+/**
+ * Class \Magento\Authorizenet\Observer\AddFieldsToResponseObserver
+ *
+ */
 class AddFieldsToResponseObserver implements ObserverInterface
 {
     /**

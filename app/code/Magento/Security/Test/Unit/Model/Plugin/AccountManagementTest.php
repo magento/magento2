@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * Test class for \Magento\Security\Model\Plugin\AccountManagement testing
  */
-class AccountManagementTest extends \PHPUnit_Framework_TestCase
+class AccountManagementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var  \Magento\Security\Model\Plugin\AccountManagement
@@ -46,29 +46,14 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->request =  $this->getMock(
-            \Magento\Framework\App\RequestInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->request =  $this->createMock(\Magento\Framework\App\RequestInterface::class);
 
-        $this->securityManager = $this->getMock(
+        $this->securityManager = $this->createPartialMock(
             \Magento\Security\Model\SecurityManager::class,
-            ['performSecurityCheck'],
-            [],
-            '',
-            false
+            ['performSecurityCheck']
         );
 
-        $this->accountManagement =  $this->getMock(
-            \Magento\Customer\Model\AccountManagement::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->accountManagement =  $this->createMock(\Magento\Customer\Model\AccountManagement::class);
 
         $this->model = $this->objectManager->getObject(
             \Magento\Security\Model\Plugin\AccountManagement::class,

@@ -105,7 +105,7 @@ abstract class AbstractIndexerManageCommand extends AbstractIndexerCommand
      * Get indexer factory
      *
      * @return IndexerFactory
-     * @deprecated
+     * @deprecated 100.2.0
      */
     private function getIndexerFactory()
     {

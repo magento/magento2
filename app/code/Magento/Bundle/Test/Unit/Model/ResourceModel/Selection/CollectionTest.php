@@ -17,7 +17,7 @@ use Magento\Framework\DB\Select;
 /**
  * Class CollectionTest.
  */
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

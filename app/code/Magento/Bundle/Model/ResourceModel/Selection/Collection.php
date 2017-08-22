@@ -165,6 +165,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Add filtering of product then havent enoght stock
      *
      * @return $this
+     * @since 100.2.0
      */
     public function addQuantityFilter()
     {
@@ -182,6 +183,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
     /**
      * @inheritDoc
+     * @since 100.2.0
      */
     public function getNewEmptyItem()
     {
@@ -199,6 +201,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param bool $useRegularPrice
      *
      * @return $this
+     * @since 100.2.0
      */
     public function addPriceFilter($product, $searchMin, $useRegularPrice = false)
     {
@@ -250,7 +253,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
     /**
      * @return \Magento\CatalogRule\Model\ResourceModel\Product\CollectionProcessor
-     * @deprecated
+     * @deprecated 100.2.0
      */
     private function getCatalogRuleProcessor()
     {

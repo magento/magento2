@@ -7,6 +7,10 @@ namespace Magento\Framework\Search\SearchEngine\Config;
 
 use Magento\Framework\Config\SchemaLocatorInterface;
 
+/**
+ * Class \Magento\Framework\Search\SearchEngine\Config\SchemaLocator
+ *
+ */
 class SchemaLocator implements SchemaLocatorInterface
 {
     const SEARCH_ENGINE_XSD_PATH = 'urn:magento:framework:Search/etc/search_engine.xsd';

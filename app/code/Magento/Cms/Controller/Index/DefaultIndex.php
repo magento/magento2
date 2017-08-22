@@ -8,6 +8,10 @@
  */
 namespace Magento\Cms\Controller\Index;
 
+/**
+ * Class \Magento\Cms\Controller\Index\DefaultIndex
+ *
+ */
 class DefaultIndex extends DefaultNoRoute
 {
 }

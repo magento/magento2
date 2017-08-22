@@ -8,6 +8,10 @@ namespace Magento\Framework\Image;
 
 use Magento\Framework\ObjectManagerInterface;
 
+/**
+ * Class \Magento\Framework\Image\Factory
+ *
+ */
 class Factory
 {
     /**

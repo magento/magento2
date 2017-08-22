@@ -24,7 +24,7 @@ use Magento\Framework\Search\Request\Filter\Term;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SelectContainerBuilderTest extends \PHPUnit_Framework_TestCase
+class SelectContainerBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SelectContainerFactory|\PHPUnit_Framework_MockObject_MockObject

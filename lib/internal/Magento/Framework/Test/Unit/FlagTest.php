@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Test\Unit;
 
-class FlagTest extends \PHPUnit_Framework_TestCase
+class FlagTest extends \PHPUnit\Framework\TestCase
 {
     public function testConstruct()
     {
@@ -87,37 +87,29 @@ class FlagTest extends \PHPUnit_Framework_TestCase
     private function createFlagInstance(array $data = [])
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $eventManagerMock = $this->getMock(\Magento\Framework\Event\Manager::class, ['dispatch'], [], '', false);
+        $eventManagerMock = $this->createPartialMock(\Magento\Framework\Event\Manager::class, ['dispatch']);
         /** @var \Magento\Framework\Model\Context|\PHPUnit_Framework_MockObject_MockObject $contextMock */
-        $contextMock = $this->getMock(\Magento\Framework\Model\Context::class, [], [], '', false);
+        $contextMock = $this->createMock(\Magento\Framework\Model\Context::class);
         $contextMock->expects($this->once())
             ->method('getEventDispatcher')
             ->willReturn($eventManagerMock);
-        $connectionMock = $this->getMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
+        $connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
         $connectionMock->expects($this->any())
             ->method('beginTransaction')
             ->willReturnSelf();
-        $appResource = $this->getMock(
-            \Magento\Framework\App\ResourceConnection::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $appResource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
         $appResource->expects($this->any())
             ->method('getConnection')
             ->willReturn($connectionMock);
-        $dbContextMock = $this->getMock(\Magento\Framework\Model\ResourceModel\Db\Context::class, [], [], '', false);
+        $dbContextMock = $this->createMock(\Magento\Framework\Model\ResourceModel\Db\Context::class);
         $dbContextMock->expects($this->once())
             ->method('getResources')
             ->willReturn($appResource);
-        $resourceMock = $this->getMock(
-            \Magento\Framework\Flag\FlagResource::class,
-            ['__wakeup', 'load', 'save', 'addCommitCallback', 'commit', 'rollBack'],
-            ['context' => $dbContextMock],
-            '',
-            true
-        );
+        $resourceMock = $this->getMockBuilder(\Magento\Framework\Flag\FlagResource::class)
+            ->setMethods(['__wakeup', 'load', 'save', 'addCommitCallback', 'commit', 'rollBack'])
+            ->setConstructorArgs(['context' => $dbContextMock])
+            ->getMock();
+
         $resourceMock->expects($this->any())
             ->method('addCommitCallback')
             ->willReturnSelf();

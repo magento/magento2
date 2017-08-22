@@ -6,6 +6,10 @@
 
 namespace Magento\GoogleOptimizer\Block\Adminhtml\Catalog\Category\Edit;
 
+/**
+ * Class \Magento\GoogleOptimizer\Block\Adminhtml\Catalog\Category\Edit\Googleoptimizer
+ *
+ */
 class Googleoptimizer extends \Magento\Backend\Block\Template
 {
     /**
