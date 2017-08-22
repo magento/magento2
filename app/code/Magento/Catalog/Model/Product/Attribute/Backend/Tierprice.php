@@ -180,7 +180,7 @@ class Tierprice extends \Magento\Catalog\Model\Product\Attribute\Backend\GroupPr
     {
         $isChanged = false;
         foreach ($valuesToUpdate as $key => $value) {
-            if ($oldValues[$key]['price'] != $value['value']
+            if ((!empty($value['value']) && $oldValues[$key]['price'] != $value['value'])
                 || $this->getPercentage($oldValues[$key]) != $this->getPercentage($value)
             ) {
                 $price = new \Magento\Framework\DataObject(

@@ -87,11 +87,13 @@ define([
                 data.shippingCarrierCode = quote.shippingMethod()['carrier_code'];
             }
 
+            var quoteSubtotal = quote.totals().subtotal;
             if (!cartCache.isChanged('cartVersion', customerData.get('cart')()['data_id']) &&
                 !cartCache.isChanged('shippingMethodCode', data.shippingMethodCode) &&
                 !cartCache.isChanged('shippingCarrierCode', data.shippingCarrierCode) &&
                 !cartCache.isChanged('address', address) &&
-                cartCache.get('totals')
+                cartCache.get('totals') &&
+                !cartCache.isChanged('subtotal', quoteSubtotal)
             ) {
                 quote.setTotals(cartCache.get('totals'));
             } else {

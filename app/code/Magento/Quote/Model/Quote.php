@@ -2374,7 +2374,8 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     protected function _afterLoad()
     {
         // collect totals and save me, if required
-        if (1 == $this->getData('trigger_recollect')) {
+        if (1 == $this->getTriggerRecollect()) {
+            $this->setTriggerRecollect(0);
             $this->collectTotals()->save();
         }
         return parent::_afterLoad();
