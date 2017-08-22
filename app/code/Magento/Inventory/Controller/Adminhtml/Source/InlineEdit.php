@@ -73,10 +73,13 @@ class InlineEdit extends Action
                         ['value' => $itemData[SourceInterface::SOURCE_ID]]
                     );
                 } catch (CouldNotSaveException $e) {
-                    $errorMessages[] = __('[ID: %value] %message', [
-                        'value' => $itemData[SourceInterface::SOURCE_ID],
-                        'message' => $e->getMessage(),
-                    ]);
+                    $errorMessages[] = __(
+                        '[ID: %value] %message',
+                        [
+                            'value' => $itemData[SourceInterface::SOURCE_ID],
+                            'message' => $e->getMessage()
+                        ]
+                    );
                 }
             }
         } else {

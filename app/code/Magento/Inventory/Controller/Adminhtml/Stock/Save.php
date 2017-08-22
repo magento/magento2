@@ -82,7 +82,6 @@ class Save extends Action
 
                 $this->messageManager->addSuccessMessage(__('The Stock has been saved.'));
                 $this->processRedirectAfterSuccessSave($resultRedirect, $stockId);
-
             } catch (NoSuchEntityException $e) {
                 $this->messageManager->addErrorMessage(__('The Stock does not exist.'));
                 $this->processRedirectAfterFailureSave($resultRedirect);

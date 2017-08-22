@@ -72,7 +72,6 @@ class Save extends Action
 
                 $this->messageManager->addSuccessMessage(__('The Source has been saved.'));
                 $this->processRedirectAfterSuccessSave($resultRedirect, $sourceId);
-
             } catch (NoSuchEntityException $e) {
                 $this->messageManager->addErrorMessage(__('The Source does not exist.'));
                 $this->processRedirectAfterFailureSave($resultRedirect);

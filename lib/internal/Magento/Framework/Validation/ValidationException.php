@@ -5,40 +5,25 @@
  */
 namespace Magento\Framework\Validation;
 
-use Magento\Framework\Exception\ValidatorException;
+use Magento\Framework\Exception\AbstractAggregateException;
 
 /**
  * Add possibility to set several messages to exception
+ *
+ * @api
  */
-class ValidationException extends ValidatorException
+class ValidationException extends AbstractAggregateException
 {
     /**
-     * @var array
-     */
-    private $errors;
-
-    /**
      * @param array $errors
-     * @param \Exception $previous
+     * @param \Exception $cause
+     * @param int $code
      */
-    public function __construct(array $errors = [], \Exception $previous = null)
+    public function __construct(array $errors = [], \Exception $cause = null, $code = 0)
     {
-        // TODO: remove logic
-        $errorsCount = count($errors);
-        if ($errorsCount) {
-            $message = $errorsCount == 1 ? reset($errors) : __(implode('; ', $errors));
-        } else {
-            $message = __('Entity isn\'t valid.');
+        foreach ($errors as $error) {
+            $this->addError($error);
         }
-        parent::__construct($message, $previous);
-        $this->errors = $errors;
-    }
-
-    /**
-     * @return array
-     */
-    public function getErrors()
-    {
-        return $this->errors;
+        parent::__construct($this->phrase, $cause, $code);
     }
 }

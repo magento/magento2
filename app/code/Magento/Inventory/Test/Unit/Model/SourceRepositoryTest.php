@@ -15,8 +15,9 @@ use Magento\Inventory\Model\Source\Command\SaveInterface;
 use Magento\Inventory\Model\SourceRepository;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceSearchResultsInterface;
+use PHPUnit\Framework\TestCase;
 
-class SourceRepositoryTest extends \PHPUnit_Framework_TestCase
+class SourceRepositoryTest extends TestCase
 {
     /**
      * @var SaveInterface|\PHPUnit_Framework_MockObject_MockObject
