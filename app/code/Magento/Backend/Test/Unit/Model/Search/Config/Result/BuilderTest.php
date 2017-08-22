@@ -60,7 +60,7 @@ class BuilderTest extends TestCase
 
         $expectedSearchResult = [
             [
-                'id'          => md5($structureElementPath),
+                'id'          => $structureElementPath,
                 'type'        => null,
                 'name'        => 'Section Label',
                 'description' => 'Section Label',

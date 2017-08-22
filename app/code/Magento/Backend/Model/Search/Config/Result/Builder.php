@@ -14,10 +14,6 @@ use Magento\Config\Model\Config\Structure\ElementNewInterface;
  */
 class Builder
 {
-    const STRUCTURE_ELEMENT_TYPE_SECTION = 'section';
-    const STRUCTURE_ELEMENT_TYPE_GROUP   = 'group';
-    const STRUCTURE_ELEMENT_TYPE_FIELD   = 'field';
-
     /**
      * @var array
      */
@@ -71,9 +67,9 @@ class Builder
         }
 
         $this->results[] = [
-            'id'          => md5($structureElement->getPath()),
+            'id'          => $structureElement->getPath(),
             'type'        => null,
-            'name'        => $structureElement->getLabel(),
+            'name'        => (string)$structureElement->getLabel(),
             'description' => $elementPathLabel,
             'url'         => $this->urlBuilder->getUrl('*/system_config/edit', $urlParams),
         ];
