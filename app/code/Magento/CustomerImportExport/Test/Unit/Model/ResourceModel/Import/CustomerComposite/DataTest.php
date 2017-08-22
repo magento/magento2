@@ -88,16 +88,19 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
         $resource = $dependencies['resource'];
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $jsonDecoderMock = $this->getMockBuilder(\Magento\Framework\Json\DecoderInterface::class)
-            ->disableOriginalConstructor()
+        $serializerMock = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
             ->getMock();
-        $jsonDecoderMock->expects($this->once())
-            ->method('decode')
-            ->willReturn(json_decode($bunchData, true));
+        $serializerMock->expects($this->any())
+            ->method('unserialize')
+            ->willReturnCallback(
+                function ($serializedData) {
+                    return json_decode($serializedData, true);
+                }
+            );
         $jsonHelper = $helper->getObject(
             \Magento\Framework\Json\Helper\Data::class,
             [
-                'jsonDecoder' => $jsonDecoderMock,
+                'serializer' => $serializerMock,
             ]
         );
         unset($dependencies['resource'], $dependencies['json_helper']);

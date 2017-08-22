@@ -14,38 +14,51 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * @var \Magento\Framework\Json\DecoderInterface
+     * @deprecated
      */
     protected $jsonDecoder;
 
     /**
      * @var \Magento\Framework\Json\EncoderInterface
+     * @deprecated
      */
     protected $jsonEncoder;
+
+    /**
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\Json\DecoderInterface $jsonDecoder
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @throws \RuntimeException
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Framework\Json\DecoderInterface $jsonDecoder,
-        \Magento\Framework\Json\EncoderInterface $jsonEncoder
+        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         parent::__construct($context);
         $this->jsonDecoder = $jsonDecoder;
         $this->jsonEncoder = $jsonEncoder;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
     }
 
     /**
      * Encode the mixed $valueToEncode into the JSON format
      *
      * @param mixed $valueToEncode
-     * @return string
+     * @return bool|string
+     * @throws \InvalidArgumentException
      */
     public function jsonEncode($valueToEncode)
     {
-        return $this->jsonEncoder->encode($valueToEncode);
+        return $this->serializer->serialize($valueToEncode);
     }
 
     /**
@@ -53,10 +66,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * encoded in the JSON format
      *
      * @param string $encodedValue
-     * @return mixed
+     * @return array|bool|float|int|mixed|null|string
+     * @throws \InvalidArgumentException
      */
     public function jsonDecode($encodedValue)
     {
-        return $this->jsonDecoder->decode($encodedValue);
+        return $this->serializer->unserialize($encodedValue);
     }
 }
