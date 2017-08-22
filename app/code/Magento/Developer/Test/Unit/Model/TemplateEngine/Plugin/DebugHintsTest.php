@@ -63,7 +63,7 @@ class DebugHintsTest extends \PHPUnit\Framework\TestCase
     public function testAfterCreateActive(
         $debugHintsPath,
         $showBlockHints,
-        $debugHintsShowWithParameter,
+        $debugHintsWithParam,
         $debugHintsParameter
     ) {
         $this->devHelperMock->expects($this->once())
@@ -101,7 +101,7 @@ class DebugHintsTest extends \PHPUnit\Framework\TestCase
             $this->debugHintsFactory,
             $debugHintsPath,
             $this->httpMock,
-            $debugHintsShowWithParameter,
+            $debugHintsWithParam,
             $debugHintsParameter
         );
 
@@ -132,7 +132,7 @@ class DebugHintsTest extends \PHPUnit\Framework\TestCase
         $debugHintsPath,
         $isDevAllowed,
         $showTemplateHints,
-        $debugHintsShowWithParameter,
+        $debugHintsWithParam,
         $debugHintsParameter
     ) {
         $this->devHelperMock->expects($this->any())
@@ -156,7 +156,7 @@ class DebugHintsTest extends \PHPUnit\Framework\TestCase
             $this->debugHintsFactory,
             $debugHintsPath,
             $this->httpMock,
-            $debugHintsShowWithParameter,
+            $debugHintsWithParam,
             $debugHintsParameter
         );
 

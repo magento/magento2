@@ -65,7 +65,7 @@ class DebugHints
      *
      * @var string
      */
-    protected $debugHintsShowWithParameter;
+    private $debugHintsWithParam;
 
     /**
      * XPath of configuration of the debug hints URL parameter
@@ -74,7 +74,7 @@ class DebugHints
      *
      * @var string
      */
-    protected $debugHintsParameter;
+    private $debugHintsParameter;
 
     /**
      * @param ScopeConfigInterface $scopeConfig
@@ -83,7 +83,7 @@ class DebugHints
      * @param DebugHintsFactory $debugHintsFactory
      * @param string $debugHintsPath
      * @param Http $http
-     * @param string $debugHintsShowWithParameter
+     * @param string $debugHintsWithParam
      * @param string $debugHintsParameter
      */
     public function __construct(
@@ -92,17 +92,19 @@ class DebugHints
         DevHelper $devHelper,
         DebugHintsFactory $debugHintsFactory,
         $debugHintsPath,
-        Http $http,
-        $debugHintsShowWithParameter,
-        $debugHintsParameter
+        Http $http = null,
+        $debugHintsWithParam = null,
+        $debugHintsParameter = null
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->storeManager = $storeManager;
         $this->devHelper = $devHelper;
         $this->debugHintsFactory = $debugHintsFactory;
         $this->debugHintsPath = $debugHintsPath;
-        $this->http = $http;
-        $this->debugHintsShowWithParameter = $debugHintsShowWithParameter;
+        $this->http = $http ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \Magento\Framework\App\Request\Http::class
+        );
+        $this->debugHintsWithParam = $debugHintsWithParam;
         $this->debugHintsParameter = $debugHintsParameter;
     }
 
@@ -122,8 +124,8 @@ class DebugHints
         $storeCode = $this->storeManager->getStore()->getCode();
         if ($this->scopeConfig->getValue($this->debugHintsPath, ScopeInterface::SCOPE_STORE, $storeCode)
             && $this->devHelper->isDevAllowed()) {
-            $debugHintsShowWithParameter = $this->scopeConfig->getValue(
-                $this->debugHintsShowWithParameter,
+            $debugHintsWithParam = $this->scopeConfig->getValue(
+                $this->debugHintsWithParam,
                 ScopeInterface::SCOPE_STORE,
                 $storeCode
             );
@@ -133,9 +135,16 @@ class DebugHints
                 $storeCode
             );
             $debugHintsParameterInUrl = $this->http->getParam('templatehints');
-            if ((!$debugHintsShowWithParameter) ||
-                ($debugHintsShowWithParameter &&
-                 $debugHintsParameter == $debugHintsParameterInUrl)) {
+
+            $showHints = false;
+            if (!$debugHintsWithParam) {
+                $showHints = true;
+            }
+            if ($debugHintsWithParam && $debugHintsParameter == $debugHintsParameterInUrl) {
+                $showHints = true;
+            }
+
+            if ($showHints) {
                 $showBlockHints = $this->scopeConfig->getValue(
                     self::XML_PATH_DEBUG_TEMPLATE_HINTS_BLOCKS,
                     ScopeInterface::SCOPE_STORE,
