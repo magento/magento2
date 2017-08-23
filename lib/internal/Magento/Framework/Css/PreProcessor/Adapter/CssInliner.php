@@ -75,5 +75,4 @@ class CssInliner
     {
         return $this->emogrifier->emogrify();
     }
-
 }
