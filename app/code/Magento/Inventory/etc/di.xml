@@ -65,4 +65,8 @@
     <preference for="Magento\InventoryApi\Api\AssignSourcesToStockInterface" type="Magento\Inventory\Model\StockSourceLink\Command\AssignSourcesToStock"/>
     <preference for="Magento\InventoryApi\Api\GetAssignedSourcesForStockInterface" type="Magento\Inventory\Model\StockSourceLink\Command\GetAssignedSourcesForStock"/>
     <preference for="Magento\InventoryApi\Api\UnassignSourceFromStockInterface" type="Magento\Inventory\Model\StockSourceLink\Command\UnassignSourceFromStock"/>
+    <!-- Reservation -->
+    <preference for="Magento\InventoryApi\Api\ReservationAppendInterface" type="Magento\Inventory\Model\ReservationAppend"/>
+    <preference for="Magento\InventoryApi\Api\Data\ReservationInterface" type="Magento\Inventory\Model\Reservation"/>
+    <preference for="Magento\Inventory\Model\ReservationBuilderInterface" type="Magento\Inventory\Model\ReservationBuilder"/>
 </config>
