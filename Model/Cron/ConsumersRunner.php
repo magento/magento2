@@ -52,14 +52,15 @@ class ConsumersRunner
     private $pid;
 
     /**
-     * @param phpExecutableFinder $phpExecutableFinder The executable finder specifically designed for the PHP executable
+     * @param PhpExecutableFinder $phpExecutableFinder The executable finder specifically designed
+     *        for the PHP executable
      * @param ConsumerConfigInterface $consumerConfig The consumer config provider
      * @param DeploymentConfig $deploymentConfig The application deployment configuration
      * @param ShellInterface $shellBackground The shell command line wrapper for executing command in background
      * @param Pid $pid The class for checking status of process by PID
      */
     public function __construct(
-        phpExecutableFinder $phpExecutableFinder,
+        PhpExecutableFinder $phpExecutableFinder,
         ConsumerConfigInterface $consumerConfig,
         DeploymentConfig $deploymentConfig,
         ShellInterface $shellBackground,
