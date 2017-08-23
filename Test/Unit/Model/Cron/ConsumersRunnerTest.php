@@ -5,7 +5,6 @@
  */
 namespace Magento\MessageQueue\Test\Unit\Model\Cron;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use \PHPUnit_Framework_MockObject_MockObject as MockObject;
 use Magento\Framework\ShellInterface;
 use Magento\Framework\MessageQueue\Consumer\ConfigInterface as ConsumerConfigInterface;
@@ -17,11 +16,6 @@ use Symfony\Component\Process\PhpExecutableFinder;
 
 class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var ObjectManagerHelper
-     */
-    private $objectManager;
-
     /**
      * @var Pid|MockObject
      */
@@ -57,7 +51,6 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
-        $this->objectManager = new ObjectManagerHelper($this);
         $this->phpExecutableFinderMock = $this->getMockBuilder(phpExecutableFinder::class)
             ->disableOriginalConstructor()
             ->getMock();
