@@ -54,22 +54,8 @@ class TransportTest extends \PHPUnit\Framework\TestCase
     public function testSendMessageException()
     {
         $this->scopeConfigMock->expects($this->once())
-            ->method('isSetFlag')
+            ->method('getValue')
             ->willThrowException(new \Exception('some exception'));
-        $this->model->sendMessage();
-    }
-
-    /**
-     * Tests that if sending emails is disabled in System Configuration, send nothing
-     */
-    public function testSendMessageSmtpDisabled()
-    {
-        $this->scopeConfigMock->expects($this->once())
-            ->method('isSetFlag')
-            ->with(Transport::XML_PATH_SYSTEM_SMTP_DISABLE, ScopeInterface::SCOPE_STORE)
-            ->willReturn(true);
-        $this->transportMock->expects($this->never())
-            ->method('send');
         $this->model->sendMessage();
     }
 
@@ -154,11 +140,6 @@ class TransportTest extends \PHPUnit\Framework\TestCase
      */
     private function prepareSendingMessage($returnPathSet, $returnPathEmail)
     {
-        $this->scopeConfigMock->expects($this->once())
-            ->method('isSetFlag')
-            ->with(Transport::XML_PATH_SYSTEM_SMTP_DISABLE, ScopeInterface::SCOPE_STORE)
-            ->willReturn(false);
-
         $map = [
             [Transport::XML_PATH_SENDING_SET_RETURN_PATH, ScopeInterface::SCOPE_STORE, null, $returnPathSet],
             [Transport::XML_PATH_SENDING_RETURN_PATH_EMAIL, ScopeInterface::SCOPE_STORE, null, $returnPathEmail]
