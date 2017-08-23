@@ -8,10 +8,6 @@ namespace Magento\AdvancedSearch\Model\DataProvider;
 use Magento\Search\Model\QueryInterface;
 use Magento\AdvancedSearch\Model\SuggestedQueriesInterface;
 
-/**
- * Class \Magento\AdvancedSearch\Model\DataProvider\Suggestions
- *
- */
 class Suggestions implements SuggestedQueriesInterface
 {
     /**

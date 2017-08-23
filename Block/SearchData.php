@@ -10,10 +10,6 @@ use Magento\Search\Model\QueryFactoryInterface;
 use Magento\Search\Model\QueryInterface;
 use Magento\AdvancedSearch\Model\SuggestedQueriesInterface;
 
-/**
- * Class \Magento\AdvancedSearch\Block\SearchData
- *
- */
 abstract class SearchData extends Template implements SearchDataInterface
 {
     /**

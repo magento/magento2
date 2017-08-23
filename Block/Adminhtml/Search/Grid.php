@@ -10,6 +10,7 @@ namespace Magento\AdvancedSearch\Block\Adminhtml\Search;
  *
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Grid extends \Magento\Backend\Block\Widget\Grid
 {
