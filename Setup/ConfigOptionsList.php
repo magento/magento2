@@ -40,7 +40,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
      * Default values
      */
     const DEFAULT_AMQP_HOST = '';
-    const DEFAULT_AMQP_PORT = '';
+    const DEFAULT_AMQP_PORT = '5672';
     const DEFAULT_AMQP_USER = '';
     const DEFAULT_AMQP_PASSWORD = '';
     const DEFAULT_AMQP_VIRTUAL_HOST = '/';
@@ -119,34 +119,27 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     public function createConfig(array $data, DeploymentConfig $deploymentConfig)
     {
         $configData = new ConfigData(ConfigFilePool::APP_ENV);
-        if (isset($data[self::INPUT_KEY_QUEUE_AMQP_HOST])) {
+
+        if (!$this->isDataEmpty($data, self::INPUT_KEY_QUEUE_AMQP_HOST)) {
             $configData->set(self::CONFIG_PATH_QUEUE_AMQP_HOST, $data[self::INPUT_KEY_QUEUE_AMQP_HOST]);
-        }
-
-        if (isset($data[self::INPUT_KEY_QUEUE_AMQP_PORT])) {
-            $configData->set(self::CONFIG_PATH_QUEUE_AMQP_PORT, $data[self::INPUT_KEY_QUEUE_AMQP_PORT]);
-        }
-
-        if (isset($data[self::INPUT_KEY_QUEUE_AMQP_USER])) {
-            $configData->set(self::CONFIG_PATH_QUEUE_AMQP_USER, $data[self::INPUT_KEY_QUEUE_AMQP_USER]);
-        }
-
-        if (isset($data[self::INPUT_KEY_QUEUE_AMQP_PASSWORD])) {
-            $configData->set(self::CONFIG_PATH_QUEUE_AMQP_PASSWORD, $data[self::INPUT_KEY_QUEUE_AMQP_PASSWORD]);
-        }
-
-        if (isset($data[self::INPUT_KEY_QUEUE_AMQP_VIRTUAL_HOST])) {
-            $configData->set(
-                self::CONFIG_PATH_QUEUE_AMQP_VIRTUAL_HOST,
-                $data[self::INPUT_KEY_QUEUE_AMQP_VIRTUAL_HOST]
-            );
-        }
-
-        if (isset($data[self::INPUT_KEY_QUEUE_AMQP_SSL])) {
-            $configData->set(
-                self::CONFIG_PATH_QUEUE_AMQP_SSL,
-                $data[self::INPUT_KEY_QUEUE_AMQP_SSL]
-            );
+            if (!$this->isDataEmpty($data, self::INPUT_KEY_QUEUE_AMQP_PORT)) {
+                $configData->set(self::CONFIG_PATH_QUEUE_AMQP_PORT, $data[self::INPUT_KEY_QUEUE_AMQP_PORT]);
+            }
+            if (!$this->isDataEmpty($data, self::INPUT_KEY_QUEUE_AMQP_USER)) {
+                $configData->set(self::CONFIG_PATH_QUEUE_AMQP_USER, $data[self::INPUT_KEY_QUEUE_AMQP_USER]);
+            }
+            if (!$this->isDataEmpty($data, self::INPUT_KEY_QUEUE_AMQP_PASSWORD)) {
+                $configData->set(self::CONFIG_PATH_QUEUE_AMQP_PASSWORD, $data[self::INPUT_KEY_QUEUE_AMQP_PASSWORD]);
+            }
+            if (!$this->isDataEmpty($data, self::INPUT_KEY_QUEUE_AMQP_VIRTUAL_HOST)) {
+                $configData->set(
+                    self::CONFIG_PATH_QUEUE_AMQP_VIRTUAL_HOST,
+                    $data[self::INPUT_KEY_QUEUE_AMQP_VIRTUAL_HOST]
+                );
+            }
+            if (!$this->isDataEmpty($data, self::INPUT_KEY_QUEUE_AMQP_SSL)) {
+                $configData->set(self::CONFIG_PATH_QUEUE_AMQP_SSL, $data[self::INPUT_KEY_QUEUE_AMQP_SSL]);
+            }
         }
 
         return [$configData];
@@ -175,5 +168,21 @@ class ConfigOptionsList implements ConfigOptionsListInterface
         }
 
         return $errors;
+    }
+
+    /**
+     * Check if data ($data) with key ($key) is empty
+     *
+     * @param array $data
+     * @param string $key
+     * @return bool
+     */
+    private function isDataEmpty(array $data, $key)
+    {
+        if (isset($data[$key]) && $data[$key] !== '') {
+            return false;
+        }
+
+        return true;
     }
 }
