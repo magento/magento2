@@ -168,7 +168,7 @@ class CrontabManager implements CrontabManagerInterface
      */
     private function save($content)
     {
-        $content = str_replace('%', '%%', $content);
+        $content = str_replace(['%', '"'], ['%%', '\"'], $content);
 
         try {
             $this->shell->execute('echo "' . $content . '" | crontab -');

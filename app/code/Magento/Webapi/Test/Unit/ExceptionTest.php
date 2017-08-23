@@ -7,7 +7,7 @@
  */
 namespace Magento\Webapi\Test\Unit;
 
-class ExceptionTest extends \PHPUnit_Framework_TestCase
+class ExceptionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test Webapi exception construct.
@@ -43,7 +43,7 @@ class ExceptionTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructInvalidHttpCode($httpCode)
     {
-        $this->setExpectedException('InvalidArgumentException', "The specified HTTP code \"{$httpCode}\" is invalid.");
+        $this->expectException('InvalidArgumentException', "The specified HTTP code \"{$httpCode}\" is invalid.");
         /** Create \Magento\Framework\Webapi\Exception object with invalid code. */
         /** Valid codes range is from 400 to 599. */
         new \Magento\Framework\Webapi\Exception(__('Message'), 0, $httpCode);

@@ -7,6 +7,10 @@ namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab;
 
 use Magento\Framework\App\ObjectManager;
 
+/**
+ * Class \Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Conditions
+ *
+ */
 class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
     \Magento\Ui\Component\Layout\Tabs\TabInterface
 {

@@ -26,7 +26,9 @@ class Info extends \Magento\Framework\View\Element\Template
      */
     protected $_subscriberFactory;
 
-    /** @var \Magento\Customer\Helper\View */
+    /**
+     * @var \Magento\Customer\Helper\View
+     */
     protected $_helperView;
 
     /**

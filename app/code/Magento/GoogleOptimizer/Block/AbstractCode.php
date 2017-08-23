@@ -7,6 +7,10 @@
  */
 namespace Magento\GoogleOptimizer\Block;
 
+/**
+ * Class \Magento\GoogleOptimizer\Block\AbstractCode
+ *
+ */
 abstract class AbstractCode extends \Magento\Framework\View\Element\Template
 {
     /**

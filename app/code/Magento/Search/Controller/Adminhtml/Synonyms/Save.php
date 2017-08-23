@@ -8,6 +8,10 @@ namespace Magento\Search\Controller\Adminhtml\Synonyms;
 
 use Magento\Search\Model\Synonym\MergeConflictException;
 
+/**
+ * Class \Magento\Search\Controller\Adminhtml\Synonyms\Save
+ *
+ */
 class Save extends \Magento\Backend\App\Action
 {
     /**

@@ -6,7 +6,7 @@
 namespace Magento\Ui\Component\Form\Element;
 
 /**
- * Class Input
+ * @api
  */
 class Input extends AbstractElement
 {

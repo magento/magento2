@@ -11,6 +11,10 @@
  */
 namespace Magento\Newsletter\Block\Adminhtml;
 
+/**
+ * Class \Magento\Newsletter\Block\Adminhtml\Template
+ *
+ */
 class Template extends \Magento\Backend\Block\Template
 {
     /**

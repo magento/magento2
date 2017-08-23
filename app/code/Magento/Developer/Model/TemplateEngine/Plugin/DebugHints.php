@@ -14,7 +14,12 @@ use Magento\Framework\View\TemplateEngineFactory;
 use Magento\Framework\View\TemplateEngineInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\App\Request\Http;
 
+/**
+ * Class \Magento\Developer\Model\TemplateEngine\Plugin\DebugHints
+ *
+ */
 class DebugHints
 {
     /**
@@ -54,24 +59,53 @@ class DebugHints
     protected $debugHintsPath;
 
     /**
+     * XPath of configuration of the debug hints show with parameter
+     *
+     *     dev/debug/template_hints_storefront_show_with_parameter
+     *
+     * @var string
+     */
+    private $debugHintsWithParam;
+
+    /**
+     * XPath of configuration of the debug hints URL parameter
+     *
+     *     dev/debug/template_hints_parameter_value
+     *
+     * @var string
+     */
+    private $debugHintsParameter;
+
+    /**
      * @param ScopeConfigInterface $scopeConfig
      * @param StoreManagerInterface $storeManager
      * @param DevHelper $devHelper
      * @param DebugHintsFactory $debugHintsFactory
      * @param string $debugHintsPath
+     * @param Http $http
+     * @param string $debugHintsWithParam
+     * @param string $debugHintsParameter
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         StoreManagerInterface $storeManager,
         DevHelper $devHelper,
         DebugHintsFactory $debugHintsFactory,
-        $debugHintsPath
+        $debugHintsPath,
+        Http $http = null,
+        $debugHintsWithParam = null,
+        $debugHintsParameter = null
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->storeManager = $storeManager;
         $this->devHelper = $devHelper;
         $this->debugHintsFactory = $debugHintsFactory;
         $this->debugHintsPath = $debugHintsPath;
+        $this->http = $http ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \Magento\Framework\App\Request\Http::class
+        );
+        $this->debugHintsWithParam = $debugHintsWithParam;
+        $this->debugHintsParameter = $debugHintsParameter;
     }
 
     /**
@@ -90,15 +124,37 @@ class DebugHints
         $storeCode = $this->storeManager->getStore()->getCode();
         if ($this->scopeConfig->getValue($this->debugHintsPath, ScopeInterface::SCOPE_STORE, $storeCode)
             && $this->devHelper->isDevAllowed()) {
-            $showBlockHints = $this->scopeConfig->getValue(
-                self::XML_PATH_DEBUG_TEMPLATE_HINTS_BLOCKS,
+            $debugHintsWithParam = $this->scopeConfig->getValue(
+                $this->debugHintsWithParam,
                 ScopeInterface::SCOPE_STORE,
                 $storeCode
             );
-            return $this->debugHintsFactory->create([
-                'subject' => $invocationResult,
-                'showBlockHints' => $showBlockHints,
-            ]);
+            $debugHintsParameter = $this->scopeConfig->getValue(
+                $this->debugHintsParameter,
+                ScopeInterface::SCOPE_STORE,
+                $storeCode
+            );
+            $debugHintsParameterInUrl = $this->http->getParam('templatehints');
+
+            $showHints = false;
+            if (!$debugHintsWithParam) {
+                $showHints = true;
+            }
+            if ($debugHintsWithParam && $debugHintsParameter == $debugHintsParameterInUrl) {
+                $showHints = true;
+            }
+
+            if ($showHints) {
+                $showBlockHints = $this->scopeConfig->getValue(
+                    self::XML_PATH_DEBUG_TEMPLATE_HINTS_BLOCKS,
+                    ScopeInterface::SCOPE_STORE,
+                    $storeCode
+                );
+                return $this->debugHintsFactory->create([
+                    'subject' => $invocationResult,
+                    'showBlockHints' => $showBlockHints,
+                ]);
+            }
         }
         return $invocationResult;
     }

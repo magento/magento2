@@ -13,7 +13,7 @@ use Magento\Store\Model\ScopeInterface;
 /**
  * Unit test for Magento\Framework\View\Asset\Minification
  */
-class MinificationTest extends \PHPUnit_Framework_TestCase
+class MinificationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Asset\Minification

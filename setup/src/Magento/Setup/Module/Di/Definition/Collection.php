@@ -6,6 +6,10 @@
 
 namespace Magento\Setup\Module\Di\Definition;
 
+/**
+ * Class \Magento\Setup\Module\Di\Definition\Collection
+ *
+ */
 class Collection
 {
     /**

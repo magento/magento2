@@ -11,6 +11,10 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\App\Config\ConfigResource\ConfigInterface;
 
+/**
+ * Class \Magento\Developer\Console\Command\TemplateHintsEnableCommand
+ *
+ */
 class TemplateHintsEnableCommand extends Command
 {
 

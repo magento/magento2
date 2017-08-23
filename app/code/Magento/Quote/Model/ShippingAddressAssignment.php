@@ -6,6 +6,10 @@
 
 namespace Magento\Quote\Model;
 
+/**
+ * Class \Magento\Quote\Model\ShippingAddressAssignment
+ *
+ */
 class ShippingAddressAssignment
 {
     /**

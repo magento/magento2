@@ -6,6 +6,10 @@
 
 namespace Magento\Framework\Api;
 
+/**
+ * Class \Magento\Framework\Api\ObjectFactory
+ *
+ */
 class ObjectFactory
 {
     /**

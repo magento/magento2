@@ -8,33 +8,47 @@ namespace Magento\CatalogUrlRewrite\Model\Category;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 use Magento\UrlRewrite\Model\OptionProvider;
 
+/**
+ * Class \Magento\CatalogUrlRewrite\Model\Category\CurrentUrlRewritesRegenerator
+ *
+ */
 class CurrentUrlRewritesRegenerator
 {
-    /** @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator
+     */
     protected $categoryUrlPathGenerator;
 
-    /** @var \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory */
+    /**
+     * @var \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory
+     */
     protected $urlRewriteFactory;
 
-    /** @var \Magento\UrlRewrite\Service\V1\Data\UrlRewrite */
+    /**
+     * @var \Magento\UrlRewrite\Service\V1\Data\UrlRewrite
+     */
     private $urlRewritePrototype;
 
     /**
      * @var \Magento\Catalog\Model\Category
-     * @deprecated
+     * @deprecated 100.2.0
      */
     protected $category;
 
     /**
      * @var \Magento\UrlRewrite\Model\UrlFinderInterface
-     * @deprecated
+     * @deprecated 100.2.0
      */
     protected $urlFinder;
 
-    /** @var \Magento\CatalogUrlRewrite\Model\Map\UrlRewriteFinder */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\Map\UrlRewriteFinder
+     */
     private $urlRewriteFinder;
 
-    /** @var \Magento\UrlRewrite\Model\MergeDataProvider */
+    /**
+     * @var \Magento\UrlRewrite\Model\MergeDataProvider
+     */
     private $mergeDataProviderPrototype;
 
     /**

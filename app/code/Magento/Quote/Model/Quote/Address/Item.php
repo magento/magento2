@@ -9,8 +9,6 @@ use Magento\Quote\Model\Quote;
 
 /**
  * @api
- * @method \Magento\Quote\Model\ResourceModel\Quote\Address\Item _getResource()
- * @method \Magento\Quote\Model\ResourceModel\Quote\Address\Item getResource()
  * @method int getParentItemId()
  * @method \Magento\Quote\Model\Quote\Address\Item setParentItemId(int $value)
  * @method int getQuoteAddressId()

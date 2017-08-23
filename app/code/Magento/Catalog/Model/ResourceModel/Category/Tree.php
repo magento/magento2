@@ -94,6 +94,7 @@ class Tree extends Dbp
 
     /**
      * @var MetadataPool
+     * @since 101.0.0
      */
     protected $metadataPool;
 

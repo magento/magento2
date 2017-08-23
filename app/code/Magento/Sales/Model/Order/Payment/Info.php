@@ -13,6 +13,7 @@ use Magento\Payment\Model\InfoInterface;
 /**
  *
  * Payment information model
+ * @api
  */
 class Info extends AbstractModel implements InfoInterface
 {

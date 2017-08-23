@@ -7,6 +7,10 @@
  */
 namespace Magento\Framework\Model\ActionValidator\RemoveAction;
 
+/**
+ * Class \Magento\Framework\Model\ActionValidator\RemoveAction\Allowed
+ *
+ */
 class Allowed extends \Magento\Framework\Model\ActionValidator\RemoveAction
 {
     /**

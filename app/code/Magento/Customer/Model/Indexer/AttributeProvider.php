@@ -10,6 +10,10 @@ use Magento\Framework\Indexer\FieldsetInterface;
 use Magento\Eav\Model\Config;
 use Magento\Customer\Model\Attribute;
 
+/**
+ * Class \Magento\Customer\Model\Indexer\AttributeProvider
+ *
+ */
 class AttributeProvider implements FieldsetInterface
 {
     /**

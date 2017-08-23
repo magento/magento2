@@ -7,7 +7,7 @@ namespace Magento\Framework\Model\Test\Unit\ResourceModel\Db\Relation;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class ActionPoolTest extends \PHPUnit_Framework_TestCase
+class ActionPoolTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Model\ResourceModel\Db\Relation\ActionPool

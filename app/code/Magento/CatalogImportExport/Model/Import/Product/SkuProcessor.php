@@ -113,6 +113,7 @@ class SkuProcessor
      */
     public function addNewSku($sku, $data)
     {
+        $sku = strtolower($sku);
         $this->newSkus[$sku] = $data;
         return $this;
     }
@@ -125,6 +126,7 @@ class SkuProcessor
      */
     public function setNewSkuData($sku, $key, $data)
     {
+        $sku = strtolower($sku);
         if (isset($this->newSkus[$sku])) {
             $this->newSkus[$sku][$key] = $data;
         }
@@ -138,6 +140,7 @@ class SkuProcessor
     public function getNewSku($sku = null)
     {
         if ($sku !== null) {
+            $sku = strtolower($sku);
             return isset($this->newSkus[$sku]) ? $this->newSkus[$sku] : null;
         }
         return $this->newSkus;
@@ -157,7 +160,7 @@ class SkuProcessor
         }
         foreach ($this->productFactory->create()->getProductEntitiesInfo($columns) as $info) {
             $typeId = $info['type_id'];
-            $sku = $info['sku'];
+            $sku = strtolower($info['sku']);
             $oldSkus[$sku] = [
                 'type_id' => $typeId,
                 'attr_set_id' => $info['attribute_set_id'],

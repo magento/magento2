@@ -21,7 +21,9 @@ class SpecificationFactory
      */
     protected $compositeFactory;
 
-    /** @var  array mapping */
+    /**
+     * @var array
+     */
     protected $mapping;
 
     /**

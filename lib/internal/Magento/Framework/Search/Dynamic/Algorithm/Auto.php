@@ -11,6 +11,10 @@ use Magento\Framework\Search\Dynamic\DataProviderInterface;
 use Magento\Framework\Search\Dynamic\EntityStorage;
 use Magento\Framework\Search\Request\BucketInterface;
 
+/**
+ * Class \Magento\Framework\Search\Dynamic\Algorithm\Auto
+ *
+ */
 class Auto implements AlgorithmInterface
 {
     /**
@@ -55,7 +59,7 @@ class Auto implements AlgorithmInterface
     /**
      * @param BucketInterface $bucket
      * @param array $dimensions
-     * @param int[] $entityIds
+     * @param EntityStorage $entityStorage
      * @return number
      */
     private function getRange($bucket, array $dimensions, EntityStorage $entityStorage)
@@ -87,7 +91,6 @@ class Auto implements AlgorithmInterface
     }
 
     /**
-     * @param DataProviderInterface $dataProvider
      * @return int
      */
     private function getMinRangePower()

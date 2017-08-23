@@ -60,7 +60,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     /**
      * Add date filter to collection
      *
-     * @param null|int|string|\DateTime $date
+     * @param null|int|string|\DateTimeInterface $date
      * @return $this
      */
     public function addDateFilter($date = null)

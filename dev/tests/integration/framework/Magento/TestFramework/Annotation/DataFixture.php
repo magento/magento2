@@ -42,11 +42,11 @@ class DataFixture
     /**
      * Handler for 'startTestTransactionRequest' event
      *
-     * @param \PHPUnit_Framework_TestCase $test
+     * @param \PHPUnit\Framework\TestCase $test
      * @param \Magento\TestFramework\Event\Param\Transaction $param
      */
     public function startTestTransactionRequest(
-        \PHPUnit_Framework_TestCase $test,
+        \PHPUnit\Framework\TestCase $test,
         \Magento\TestFramework\Event\Param\Transaction $param
     ) {
         /* Start transaction before applying first fixture to be able to revert them all further */
@@ -62,11 +62,11 @@ class DataFixture
     /**
      * Handler for 'endTestNeedTransactionRollback' event
      *
-     * @param \PHPUnit_Framework_TestCase $test
+     * @param \PHPUnit\Framework\TestCase $test
      * @param \Magento\TestFramework\Event\Param\Transaction $param
      */
     public function endTestTransactionRequest(
-        \PHPUnit_Framework_TestCase $test,
+        \PHPUnit\Framework\TestCase $test,
         \Magento\TestFramework\Event\Param\Transaction $param
     ) {
         /* Isolate other tests from test-specific fixtures */
@@ -82,9 +82,9 @@ class DataFixture
     /**
      * Handler for 'startTransaction' event
      *
-     * @param \PHPUnit_Framework_TestCase $test
+     * @param \PHPUnit\Framework\TestCase $test
      */
-    public function startTransaction(\PHPUnit_Framework_TestCase $test)
+    public function startTransaction(\PHPUnit\Framework\TestCase $test)
     {
         $this->_applyFixtures($this->_getFixtures($test));
     }
@@ -100,12 +100,12 @@ class DataFixture
     /**
      * Retrieve fixtures from annotation
      *
-     * @param \PHPUnit_Framework_TestCase $test
+     * @param \PHPUnit\Framework\TestCase $test
      * @param string $scope
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function _getFixtures(\PHPUnit_Framework_TestCase $test, $scope = null)
+    protected function _getFixtures(\PHPUnit\Framework\TestCase $test, $scope = null)
     {
         if ($scope === null) {
             $annotations = $this->getAnnotations($test);
@@ -133,10 +133,10 @@ class DataFixture
     }
 
     /**
-     * @param \PHPUnit_Framework_TestCase $test
+     * @param \PHPUnit\Framework\TestCase $test
      * @return array
      */
-    private function getAnnotations(\PHPUnit_Framework_TestCase $test)
+    private function getAnnotations(\PHPUnit\Framework\TestCase $test)
     {
         $annotations = $test->getAnnotations();
         return array_replace($annotations['class'], $annotations['method']);
@@ -145,10 +145,10 @@ class DataFixture
     /**
      * Return is explicit set isolation state
      *
-     * @param \PHPUnit_Framework_TestCase $test
+     * @param \PHPUnit\Framework\TestCase $test
      * @return bool|null
      */
-    protected function getDbIsolationState(\PHPUnit_Framework_TestCase $test)
+    protected function getDbIsolationState(\PHPUnit\Framework\TestCase $test)
     {
         $annotations = $this->getAnnotations($test);
         return isset($annotations[DbIsolation::MAGENTO_DB_ISOLATION])

@@ -14,7 +14,7 @@ use Magento\Braintree\Gateway\Helper\SubjectReader;
 /**
  * Class CustomerDataBuilderTest
  */
-class CustomerDataBuilderTest extends \PHPUnit_Framework_TestCase
+class CustomerDataBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var PaymentDataObjectInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -38,8 +38,8 @@ class CustomerDataBuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->paymentDOMock = $this->getMock(PaymentDataObjectInterface::class);
-        $this->orderMock = $this->getMock(OrderAdapterInterface::class);
+        $this->paymentDOMock = $this->createMock(PaymentDataObjectInterface::class);
+        $this->orderMock = $this->createMock(OrderAdapterInterface::class);
         $this->subjectReaderMock = $this->getMockBuilder(SubjectReader::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -126,7 +126,7 @@ class CustomerDataBuilderTest extends \PHPUnit_Framework_TestCase
      */
     private function getBillingMock($billingData)
     {
-        $addressMock = $this->getMock(AddressAdapterInterface::class);
+        $addressMock = $this->createMock(AddressAdapterInterface::class);
 
         $addressMock->expects(static::once())
             ->method('getFirstname')

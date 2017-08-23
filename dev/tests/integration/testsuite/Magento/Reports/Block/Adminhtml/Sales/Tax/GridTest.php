@@ -8,7 +8,7 @@ namespace Magento\Reports\Block\Adminhtml\Sales\Tax;
 /**
  * @magentoAppArea adminhtml
  */
-class GridTest extends \PHPUnit_Framework_TestCase
+class GridTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Creates and inits block

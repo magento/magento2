@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Cache\Test\Unit\Frontend\Decorator;
 
-class TagScopeTest extends \PHPUnit_Framework_TestCase
+class TagScopeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Cache\Frontend\Decorator\TagScope
@@ -19,7 +19,7 @@ class TagScopeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_frontend = $this->getMock(\Magento\Framework\Cache\FrontendInterface::class);
+        $this->_frontend = $this->createMock(\Magento\Framework\Cache\FrontendInterface::class);
         $this->_object = new \Magento\Framework\Cache\Frontend\Decorator\TagScope($this->_frontend, 'enforced_tag');
     }
 

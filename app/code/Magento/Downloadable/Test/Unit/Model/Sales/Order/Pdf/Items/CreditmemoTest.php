@@ -8,7 +8,7 @@ namespace Magento\Downloadable\Test\Unit\Model\Sales\Order\Pdf\Items;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CreditmemoTest extends \PHPUnit_Framework_TestCase
+class CreditmemoTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Downloadable\Model\Sales\Order\Pdf\Items\Creditmemo
@@ -35,21 +35,14 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
             ->method('formatPriceTxt')
             ->will($this->returnCallback([$this, 'formatPrice']));
 
-        $this->pdf = $this->getMock(
+        $this->pdf = $this->createPartialMock(
             \Magento\Sales\Model\Order\Pdf\AbstractPdf::class,
-            ['drawLineBlocks', 'getPdf'],
-            [],
-            '',
-            false,
-            false
+            ['drawLineBlocks', 'getPdf']
         );
 
-        $filterManager = $this->getMock(
+        $filterManager = $this->createPartialMock(
             \Magento\Framework\Filter\FilterManager::class,
-            ['stripTags'],
-            [],
-            '',
-            false
+            ['stripTags']
         );
         $filterManager->expects($this->any())->method('stripTags')->will($this->returnArgument(0));
 
@@ -58,11 +51,10 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
             ['string' => new \Magento\Framework\Stdlib\StringUtils(), 'filterManager' => $filterManager]
         );
 
-        $this->model = $this->getMock(
-            \Magento\Downloadable\Model\Sales\Order\Pdf\Items\Creditmemo::class,
-            ['getLinks', 'getLinksTitle'],
-            $modelConstructorArgs
-        );
+        $this->model = $this->getMockBuilder(\Magento\Downloadable\Model\Sales\Order\Pdf\Items\Creditmemo::class)
+            ->setMethods(['getLinks', 'getLinksTitle'])
+            ->setConstructorArgs($modelConstructorArgs)
+            ->getMock();
 
         $this->model->setOrder($this->order);
         $this->model->setPdf($this->pdf);

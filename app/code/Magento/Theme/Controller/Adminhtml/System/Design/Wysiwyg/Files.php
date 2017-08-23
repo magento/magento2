@@ -9,6 +9,10 @@
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg;
 
+/**
+ * Class \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files
+ *
+ */
 abstract class Files extends \Magento\Backend\App\Action
 {
     /**

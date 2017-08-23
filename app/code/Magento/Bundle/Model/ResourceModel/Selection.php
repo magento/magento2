@@ -5,8 +5,10 @@
  */
 namespace Magento\Bundle\Model\ResourceModel;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\EntityManager\EntityManager;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 
 /**
@@ -18,8 +20,14 @@ class Selection extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * @var MetadataPool
+     * @since 100.1.0
      */
     protected $metadataPool;
+
+    /**
+     * @var EntityManager
+     */
+    private $entityManager;
 
     /**
      * Selection constructor.
@@ -27,14 +35,24 @@ class Selection extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param Context $context
      * @param MetadataPool $metadataPool
      * @param null|string $connectionName
+     * @param EntityManager|null $entityManager
+     * @since 100.1.0
      */
-    public function __construct(Context $context, MetadataPool $metadataPool, $connectionName = null)
-    {
+    public function __construct(
+        Context $context,
+        MetadataPool $metadataPool,
+        $connectionName = null,
+        EntityManager $entityManager = null
+    ) {
         parent::__construct(
             $context,
             $connectionName
         );
+
         $this->metadataPool = $metadataPool;
+
+        $this->entityManager = $entityManager
+            ?: ObjectManager::getInstance()->get(EntityManager::class);
     }
 
     /**
@@ -145,7 +163,11 @@ class Selection extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         if ($item->getDefaultPriceScope()) {
             $connection->delete(
                 $this->getTable('catalog_product_bundle_selection_price'),
-                ['selection_id = ?' => $item->getSelectionId(), 'website_id = ?' => $item->getWebsiteId()]
+                [
+                    'selection_id = ?' => $item->getSelectionId(),
+                    'website_id = ?' => $item->getWebsiteId(),
+                    'parent_product_id = ?' => $item->getParentProductId(),
+                ]
             );
         } else {
             $values = [
@@ -153,6 +175,7 @@ class Selection extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 'website_id' => $item->getWebsiteId(),
                 'selection_price_type' => $item->getSelectionPriceType(),
                 'selection_price_value' => $item->getSelectionPriceValue(),
+                'parent_product_id' => $item->getParentProductId(),
             ];
             $connection->insertOnDuplicate(
                 $this->getTable('catalog_product_bundle_selection_price'),
@@ -160,5 +183,16 @@ class Selection extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 ['selection_price_type', 'selection_price_value']
             );
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     * @since 100.2.0
+     */
+    public function save(\Magento\Framework\Model\AbstractModel $object)
+    {
+        $this->entityManager->save($object);
+
+        return $this;
     }
 }

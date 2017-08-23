@@ -11,6 +11,8 @@ use Magento\Quote\Model\Quote\Address;
 
 /**
  * Sales Rules resource collection model.
+ *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\AbstractCollection
@@ -24,6 +26,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
 
     /**
      * @var \Magento\SalesRule\Model\ResourceModel\Rule\DateApplier
+     * @since 100.1.0
      */
     protected $dateApplier;
 
@@ -79,6 +82,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
      * @param string $objectField
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
+     * @since 100.1.0
      */
     protected function mapAssociatedEntities($entityType, $objectField)
     {
@@ -110,6 +114,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
     /**
      * @return $this
      * @throws \Exception
+     * @since 100.1.0
      */
     protected function _afterLoad()
     {
@@ -337,6 +342,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
      *
      * @param int $customerGroupId
      * @return $this
+     * @since 100.1.0
      */
     public function addCustomerGroupFilter($customerGroupId)
     {
@@ -357,7 +363,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
 
     /**
      * @return array
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getAssociatedEntitiesMap()
     {
@@ -371,7 +377,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
 
     /**
      * @return DateApplier
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getDateApplier()
     {

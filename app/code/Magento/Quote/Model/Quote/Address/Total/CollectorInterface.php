@@ -5,6 +5,10 @@
  */
 namespace Magento\Quote\Model\Quote\Address\Total;
 
+/**
+ * Interface \Magento\Quote\Model\Quote\Address\Total\CollectorInterface
+ *
+ */
 interface CollectorInterface
 {
     /**

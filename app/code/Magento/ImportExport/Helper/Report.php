@@ -17,10 +17,14 @@ use Magento\ImportExport\Model\Import;
  */
 class Report extends \Magento\Framework\App\Helper\AbstractHelper
 {
-    /** @var \Magento\Framework\Stdlib\DateTime\Timezone */
+    /**
+     * @var \Magento\Framework\Stdlib\DateTime\Timezone
+     */
     protected $timeZone;
 
-    /** @var \Magento\Framework\Filesystem\Directory\WriteInterface */
+    /**
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
+     */
     protected $varDirectory;
 
     /**

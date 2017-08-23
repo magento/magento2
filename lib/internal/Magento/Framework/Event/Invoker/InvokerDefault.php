@@ -10,6 +10,10 @@ namespace Magento\Framework\Event\Invoker;
 
 use Magento\Framework\Event\Observer;
 
+/**
+ * Class \Magento\Framework\Event\Invoker\InvokerDefault
+ *
+ */
 class InvokerDefault implements \Magento\Framework\Event\InvokerInterface
 {
     /**

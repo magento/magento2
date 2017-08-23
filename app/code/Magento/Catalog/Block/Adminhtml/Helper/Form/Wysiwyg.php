@@ -11,6 +11,10 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Helper\Form;
 
+/**
+ * Class \Magento\Catalog\Block\Adminhtml\Helper\Form\Wysiwyg
+ *
+ */
 class Wysiwyg extends \Magento\Framework\Data\Form\Element\Textarea
 {
     /**

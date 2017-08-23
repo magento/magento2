@@ -5,6 +5,10 @@
  */
 namespace Magento\CustomerImportExport\Model\ResourceModel\Import\Customer;
 
+/**
+ * Class \Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\Storage
+ *
+ */
 class Storage
 {
     /**

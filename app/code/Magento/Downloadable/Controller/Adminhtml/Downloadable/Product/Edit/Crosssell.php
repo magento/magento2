@@ -6,6 +6,10 @@
  */
 namespace Magento\Downloadable\Controller\Adminhtml\Downloadable\Product\Edit;
 
+/**
+ * Class \Magento\Downloadable\Controller\Adminhtml\Downloadable\Product\Edit\Crosssell
+ *
+ */
 class Crosssell extends \Magento\Catalog\Controller\Adminhtml\Product\Crosssell
 {
 }

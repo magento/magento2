@@ -6,6 +6,10 @@
 
 namespace Magento\Tax\Model;
 
+/**
+ * Class \Magento\Tax\Model\AggregateSalesReportTaxData
+ *
+ */
 class AggregateSalesReportTaxData
 {
     /**

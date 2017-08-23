@@ -6,7 +6,7 @@
 
 namespace Magento\Catalog\Test\Unit\Pricing\Price;
 
-class SpecialPriceTest extends \PHPUnit_Framework_TestCase
+class SpecialPriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -20,7 +20,7 @@ class SpecialPriceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->priceCurrencyMock = $this->getMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
+        $this->priceCurrencyMock = $this->createMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
 
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
     }
@@ -62,12 +62,9 @@ class SpecialPriceTest extends \PHPUnit_Framework_TestCase
      */
     protected function prepareSaleableItem($specialPrice)
     {
-        $saleableItemMock = $this->getMock(
+        $saleableItemMock = $this->createPartialMock(
             \Magento\Catalog\Model\Product::class,
-            ['getSpecialPrice', 'getPriceInfo', 'getStore', '__wakeup'],
-            [],
-            '',
-            false
+            ['getSpecialPrice', 'getPriceInfo', 'getStore', '__wakeup']
         );
 
         $saleableItemMock->expects($this->any())
