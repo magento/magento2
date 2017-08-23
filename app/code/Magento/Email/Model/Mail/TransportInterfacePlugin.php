@@ -18,11 +18,6 @@ use Magento\Store\Model\ScopeInterface;
 class TransportInterfacePlugin
 {
     /**
-     * Config path to mail sending setting that shows if email communications are disabled
-     */
-    const XML_PATH_SYSTEM_SMTP_DISABLE = 'system/smtp/disable';
-
-    /**
      * @var ScopeConfigInterface
      */
     private $scopeConfig;
@@ -49,7 +44,7 @@ class TransportInterfacePlugin
         TransportInterface $subject,
         \Closure $proceed
     ) {
-        if (!$this->scopeConfig->isSetFlag(self::XML_PATH_SYSTEM_SMTP_DISABLE, ScopeInterface::SCOPE_STORE)) {
+        if (!$this->scopeConfig->isSetFlag('system/smtp/disable', ScopeInterface::SCOPE_STORE)) {
             $proceed();
         }
     }
