@@ -79,6 +79,7 @@ class ConsumersRunner
     {
         $runByCron = $this->deploymentConfig->get('queue_consumer/cron_run', true);
         $maxMessages = (int) $this->deploymentConfig->get('queue_consumer/max_messages', 10000);
+        $allowedConsumers = $this->deploymentConfig->get('queue_consumer/consumers', []);
         $php = $this->phpExecutableFinder->find() ?: 'php';
 
         if (!$runByCron) {
@@ -88,7 +89,7 @@ class ConsumersRunner
         foreach ($this->consumerConfig->getConsumers() as $consumer) {
             $consumerName = $consumer->getName();
 
-            if ($this->pid->isRun($consumerName)) {
+            if ($this->isAllowed($consumerName, $allowedConsumers)) {
                 continue;
             }
 
@@ -106,5 +107,19 @@ class ConsumersRunner
 
             $this->shellBackground->execute($command, $arguments);
         }
+    }
+
+    /**
+     * Checks that the consumer can be run
+     *
+     * @param string $consumerName The consumer name
+     * @param array $allowedConsumers The list of allowed consumers
+     * @return bool
+     */
+    private function isAllowed($consumerName, array $allowedConsumers = [])
+    {
+        $allowed = empty($allowedConsumers) ?: in_array($consumerName, $allowedConsumers);
+
+        return !$allowed || $this->pid->isRun($consumerName);
     }
 }
