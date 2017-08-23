@@ -7,8 +7,14 @@ namespace Magento\ConfigurableImportExport\Model;
 
 use Magento\CatalogImportExport\Model\AbstractProductExportImportTestCase;
 
+/**
+ * Configurable product import test.
+ */
 class ConfigurableTest extends AbstractProductExportImportTestCase
 {
+    /**
+     * @return array
+     */
     public function exportImportDataProvider()
     {
         return [
@@ -18,6 +24,15 @@ class ConfigurableTest extends AbstractProductExportImportTestCase
                 ],
                 [
                     'configurable',
+                ],
+                ['_cache_instance_products', '_cache_instance_configurable_attributes'],
+            ],
+            'configurable-product-12345' => [
+                [
+                    'Magento/ConfigurableProduct/_files/product_configurable_12345.php'
+                ],
+                [
+                    '12345',
                 ],
                 ['_cache_instance_products', '_cache_instance_configurable_attributes'],
             ],

@@ -6,11 +6,9 @@
 namespace Magento\CatalogUrlRewrite\Observer;
 
 use Magento\Catalog\Model\Category;
-use Magento\Catalog\Model\Product;
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Framework\Event\Observer;
-use Magento\Framework\App\ResourceConnection;
 use Magento\ImportExport\Model\Import as ImportExport;
 use Magento\Store\Model\Store;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
@@ -20,6 +18,9 @@ use Magento\UrlRewrite\Model\OptionProvider;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Catalog\Model\Product\Visibility;
+use Magento\Framework\App\ObjectManager;
+use Magento\UrlRewrite\Model\MergeDataProviderFactory;
+
 /**
  * Class AfterImportDataObserver
  *
@@ -97,6 +98,13 @@ class AfterImportDataObserver implements ObserverInterface
     ];
 
     /**
+     * Container for new generated url rewrites.
+     *
+     * @var \Magento\UrlRewrite\Model\MergeDataProvider
+     */
+    private $mergeDataProviderPrototype;
+
+    /**
      * @param \Magento\Catalog\Model\ProductFactory $catalogProductFactory
      * @param \Magento\CatalogUrlRewrite\Model\ObjectRegistryFactory $objectRegistryFactory
      * @param \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator $productUrlPathGenerator
@@ -105,6 +113,7 @@ class AfterImportDataObserver implements ObserverInterface
      * @param UrlPersistInterface $urlPersist
      * @param UrlRewriteFactory $urlRewriteFactory
      * @param UrlFinderInterface $urlFinder
+     * @param \Magento\UrlRewrite\Model\MergeDataProviderFactory|null $mergeDataProviderFactory
      * @throws \InvalidArgumentException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -116,7 +125,8 @@ class AfterImportDataObserver implements ObserverInterface
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         UrlPersistInterface $urlPersist,
         UrlRewriteFactory $urlRewriteFactory,
-        UrlFinderInterface $urlFinder
+        UrlFinderInterface $urlFinder,
+        MergeDataProviderFactory $mergeDataProviderFactory = null
     ) {
         $this->urlPersist = $urlPersist;
         $this->catalogProductFactory = $catalogProductFactory;
@@ -126,6 +136,10 @@ class AfterImportDataObserver implements ObserverInterface
         $this->storeManager = $storeManager;
         $this->urlRewriteFactory = $urlRewriteFactory;
         $this->urlFinder = $urlFinder;
+        if (!isset($mergeDataProviderFactory)) {
+            $mergeDataProviderFactory = ObjectManager::getInstance()->get(MergeDataProviderFactory::class);
+        }
+        $this->mergeDataProviderPrototype = $mergeDataProviderFactory->create();
     }
 
     /**
@@ -258,24 +272,15 @@ class AfterImportDataObserver implements ObserverInterface
      */
     protected function generateUrls()
     {
-        /**
-         * @var $urls \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
-         */
-        $urls = array_merge(
-            $this->canonicalUrlRewriteGenerate(),
-            $this->categoriesUrlRewriteGenerate(),
-            $this->currentUrlRewritesRegenerate()
-        );
-
-        /* Reduce duplicates. Last wins */
-        $result = [];
-        foreach ($urls as $url) {
-            $result[$url->getTargetPath() . '-' . $url->getStoreId()] = $url;
-        }
+        $mergeDataProvider = clone $this->mergeDataProviderPrototype;
+        $mergeDataProvider->merge($this->canonicalUrlRewriteGenerate());
+        $mergeDataProvider->merge($this->categoriesUrlRewriteGenerate());
+        $mergeDataProvider->merge($this->currentUrlRewritesRegenerate());
         $this->productCategories = null;
-
+        unset($this->products);
         $this->products = [];
-        return $result;
+
+        return $mergeDataProvider->getData();
     }
 
     /**

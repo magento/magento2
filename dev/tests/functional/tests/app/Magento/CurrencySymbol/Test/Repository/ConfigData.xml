@@ -159,5 +159,34 @@
                 </item>
             </field>
         </dataset>
+
+        <dataset name="config_allow_and_default_currency_eur">
+            <field name="currency/options/allow" xsi:type="array">
+                <item name="scope" xsi:type="string">currency</item>
+                <item name="value" xsi:type="array">
+                    <item name="US Dollar" xsi:type="string">USD</item>
+                    <item name="Euro" xsi:type="string">EUR</item>
+                </item>
+            </field>
+            <field name="currency/options/default" xsi:type="array">
+                <item name="scope" xsi:type="string">currency</item>
+                <item name="label" xsi:type="string">Euro</item>
+                <item name="value" xsi:type="string">EUR</item>
+            </field>
+        </dataset>
+
+        <dataset name="config_allow_and_default_currency_eur_rollback">
+            <field name="currency/options/allow" xsi:type="array">
+                <item name="scope" xsi:type="string">currency</item>
+                <item name="value" xsi:type="array">
+                    <item name="US Dollar" xsi:type="string">USD</item>
+                </item>
+            </field>
+            <field name="currency/options/default" xsi:type="array">
+                <item name="scope" xsi:type="string">currency</item>
+                <item name="label" xsi:type="string">US Dollar</item>
+                <item name="value" xsi:type="string">USD</item>
+            </field>
+        </dataset>
     </repository>
 </config>

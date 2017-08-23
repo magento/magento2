@@ -6,7 +6,7 @@
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\Initialization;
 
 use Magento\Catalog\Api\Data\ProductLinkInterfaceFactory;
-use Magento\Catalog\Api\ProductRepositoryInterface as ProductRepository;
+use Magento\Catalog\Api\ProductRepositoryInterface\Proxy as ProductRepository;
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper;
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter;
 use Magento\Catalog\Model\Product;
@@ -19,9 +19,6 @@ use Magento\Framework\Stdlib\DateTime\Filter\Date as DateFilter;
 use Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory;
 use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
 use Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks;
-use Magento\Catalog\Model\Product\LinkTypeProvider;
-use Magento\Catalog\Api\Data\ProductLinkTypeInterface;
-use Magento\Catalog\Model\ProductLink\Link as ProductLink;
 
 /**
  * Class HelperTest
@@ -108,11 +105,6 @@ class HelperTest extends \PHPUnit_Framework_TestCase
     protected $linkResolverMock;
 
     /**
-     * @var \Magento\Catalog\Model\Product\LinkTypeProvider|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $linkTypeProviderMock;
-
-    /**
      * @var ProductLinks|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $productLinksMock;
@@ -121,7 +113,6 @@ class HelperTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new ObjectManager($this);
         $this->productLinkFactoryMock = $this->getMockBuilder(ProductLinkInterfaceFactory::class)
-            ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->productRepositoryMock = $this->getMockBuilder(ProductRepository::class)
@@ -159,6 +150,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
                 '__sleep',
                 '__wakeup',
                 'getSku',
+                'getProductLinks',
                 'getWebsiteIds'
             ])
             ->disableOriginalConstructor()
@@ -176,9 +168,6 @@ class HelperTest extends \PHPUnit_Framework_TestCase
         $this->productLinksMock->expects($this->any())
             ->method('initializeLinks')
             ->willReturn($this->productMock);
-        $this->linkTypeProviderMock = $this->getMockBuilder(LinkTypeProvider::class)
-            ->disableOriginalConstructor()
-            ->getMock();
 
         $this->helper = $this->objectManager->getObject(Helper::class, [
             'request' => $this->requestMock,
@@ -189,7 +178,6 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             'customOptionFactory' => $this->customOptionFactoryMock,
             'productLinkFactory' => $this->productLinkFactoryMock,
             'productRepository' => $this->productRepositoryMock,
-            'linkTypeProvider' => $this->linkTypeProviderMock,
         ]);
 
         $this->linkResolverMock = $this->getMockBuilder(\Magento\Catalog\Model\Product\Link\Resolver::class)
@@ -202,10 +190,10 @@ class HelperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper::initialize
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @param array $links
      */
-    private function assembleProductMock($links = [])
+    public function testInitialize()
     {
         $this->customOptionMock->expects($this->once())
             ->method('setProductSku');
@@ -241,6 +229,9 @@ class HelperTest extends \PHPUnit_Framework_TestCase
         $attributeDate->expects($this->any())
             ->method('getBackend')
             ->willReturn($attributeDateBackEnd);
+        $this->productMock->expects($this->any())
+            ->method('getProductLinks')
+            ->willReturn([]);
         $attributeNonDateBackEnd->expects($this->any())
             ->method('getType')
             ->willReturn('non-datetime');
@@ -263,7 +254,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             ->method('getPost')
             ->with('use_default')
             ->willReturn($useDefaults);
-        $this->linkResolverMock->expects($this->once())->method('getLinks')->willReturn($links);
+        $this->linkResolverMock->expects($this->once())->method('getLinks')->willReturn([]);
         $this->stockFilterMock->expects($this->once())
             ->method('filter')
             ->with(['stock_data'])
@@ -275,6 +266,9 @@ class HelperTest extends \PHPUnit_Framework_TestCase
         $this->productMock->expects($this->once())
             ->method('unlockAttribute')
             ->with('media');
+        $this->productMock->expects($this->any())
+            ->method('getProductLinks')
+            ->willReturn([]);
         $this->productMock->expects($this->once())
             ->method('lockAttribute')
             ->with('media');
@@ -289,7 +283,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
         $this->productMock->expects($this->once())
             ->method('addData')
             ->with($productData);
-        $this->productMock->expects($this->any())
+        $this->productMock->expects($this->once())
             ->method('getSku')
             ->willReturn('sku');
         $this->productMock->expects($this->any())
@@ -303,191 +297,8 @@ class HelperTest extends \PHPUnit_Framework_TestCase
         $this->productMock->expects($this->once())
             ->method('setOptions')
             ->with([$this->customOptionMock]);
-    }
-
-    /**
-     * @covers \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper::initialize
-     */
-    public function testInitialize()
-    {
-        $this->assembleProductMock();
-        $this->linkTypeProviderMock->expects($this->once())
-            ->method('getItems')
-            ->willReturn($this->assembleLinkTypes(['related', 'upsell', 'crosssell']));
 
         $this->assertEquals($this->productMock, $this->helper->initialize($this->productMock));
-    }
-
-    /**
-     * @covers \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper::initialize
-     * @dataProvider initializeWithLinksDataProvider
-     */
-    public function testInitializeWithLinks($links, $linkTypes, $expectedLinks)
-    {
-        $this->productLinkFactoryMock->expects($this->any())
-            ->method('create')
-            ->willReturnCallback(function () {
-                return $this->getMockBuilder(ProductLink::class)
-                    ->setMethods(null)
-                    ->disableOriginalConstructor()
-                    ->getMock();
-            });
-
-        $this->linkTypeProviderMock->expects($this->once())
-            ->method('getItems')
-            ->willReturn($this->assembleLinkTypes($linkTypes));
-
-        $this->assembleProductRepositoryMock($links);
-        $this->assembleProductMock($links);
-
-        $this->assertEquals($this->productMock, $this->helper->initialize($this->productMock));
-
-        $productLinks = $this->productMock->getProductLinks();
-        $this->assertCount(count($expectedLinks), $productLinks);
-        $resultLinks = [];
-
-        foreach ($productLinks as $link) {
-            $this->assertInstanceOf(ProductLink::class, $link);
-            $this->assertEquals('sku', $link->getSku());
-            $resultLinks[] = ['type' => $link->getLinkType(), 'linked_product_sku' => $link->getLinkedProductSku()];
-        }
-
-        $this->assertEquals($expectedLinks, $resultLinks);
-    }
-
-    /**
-     * @return array
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     */
-    public function initializeWithLinksDataProvider()
-    {
-        return [
-            // No links
-            [
-                'links' => [],
-                'linkTypes' => ['related', 'upsell', 'crosssell'],
-                'expected_links' => [],
-            ],
-
-            // Related links
-            [
-                'links' => [
-                    'related' => [
-                        0 => [
-                            'id' => 1,
-                            'thumbnail' => 'http://magento.dev/media/no-image.jpg',
-                            'name' => 'Test',
-                            'status' => 'Enabled',
-                            'attribute_set' => 'Default',
-                            'sku' => 'Test',
-                            'price' => 1.00,
-                            'position' => 1,
-                            'record_id' => 1,
-                        ]
-                    ]
-                ],
-                'linkTypes' => ['related', 'upsell', 'crosssell'],
-                'expected_links' => [
-                    ['type' => 'related', 'linked_product_sku' => 'Test'],
-                ],
-            ],
-
-            // Custom link
-            [
-                'links' => [
-                    'customlink' => [
-                        0 => [
-                            'id' => 4,
-                            'thumbnail' => 'http://magento.dev/media/no-image.jpg',
-                            'name' => 'Test Custom',
-                            'status' => 'Enabled',
-                            'attribute_set' => 'Default',
-                            'sku' => 'Testcustom',
-                            'price' => 1.00,
-                            'position' => 1,
-                            'record_id' => 1,
-                        ],
-                    ],
-                ],
-                'linkTypes' => ['related', 'upsell', 'crosssell', 'customlink'],
-                'expected_links' => [
-                    ['type' => 'customlink', 'linked_product_sku' => 'Testcustom'],
-                ],
-            ],
-
-            // Both links
-            [
-                'links' => [
-                    'related' => [
-                        0 => [
-                            'id' => 1,
-                            'thumbnail' => 'http://magento.dev/media/no-image.jpg',
-                            'name' => 'Test',
-                            'status' => 'Enabled',
-                            'attribute_set' => 'Default',
-                            'sku' => 'Test',
-                            'price' => 1.00,
-                            'position' => 1,
-                            'record_id' => 1,
-                        ],
-                    ],
-                    'customlink' => [
-                        0 => [
-                            'id' => 4,
-                            'thumbnail' => 'http://magento.dev/media/no-image.jpg',
-                            'name' => 'Test Custom',
-                            'status' => 'Enabled',
-                            'attribute_set' => 'Default',
-                            'sku' => 'Testcustom',
-                            'price' => 2.00,
-                            'position' => 2,
-                            'record_id' => 1,
-                        ],
-                    ],
-                ],
-                'linkTypes' => ['related', 'upsell', 'crosssell', 'customlink'],
-                'expected_links' => [
-                    ['type' => 'related', 'linked_product_sku' => 'Test'],
-                    ['type' => 'customlink', 'linked_product_sku' => 'Testcustom'],
-                ],
-            ],
-
-            // Undefined link type
-            [
-                'links' => [
-                    'related' => [
-                        0 => [
-                            'id' => 1,
-                            'thumbnail' => 'http://magento.dev/media/no-image.jpg',
-                            'name' => 'Test',
-                            'status' => 'Enabled',
-                            'attribute_set' => 'Default',
-                            'sku' => 'Test',
-                            'price' => 1.00,
-                            'position' => 1,
-                            'record_id' => 1,
-                        ],
-                    ],
-                    'customlink' => [
-                        0 => [
-                            'id' => 4,
-                            'thumbnail' => 'http://magento.dev/media/no-image.jpg',
-                            'name' => 'Test Custom',
-                            'status' => 'Enabled',
-                            'attribute_set' => 'Default',
-                            'sku' => 'Testcustom',
-                            'price' => 2.00,
-                            'position' => 2,
-                            'record_id' => 1,
-                        ],
-                    ],
-                ],
-                'linkTypes' => ['related', 'upsell', 'crosssell'],
-                'expected_links' => [
-                    ['type' => 'related', 'linked_product_sku' => 'Test'],
-                ],
-            ],
-        ];
     }
 
     /**
@@ -578,56 +389,5 @@ class HelperTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->helper->mergeProductOptions($productOptions, $defaultOptions);
         $this->assertEquals($expectedResults, $result);
-    }
-
-    /**
-     * @param array $types
-     * @return array
-     */
-    private function assembleLinkTypes($types)
-    {
-        $linkTypes = [];
-        $linkTypeCode = 1;
-
-        foreach ($types as $typeName) {
-            $linkType = $this->getMock(ProductLinkTypeInterface::class);
-            $linkType->method('getCode')->willReturn($linkTypeCode++);
-            $linkType->method('getName')->willReturn($typeName);
-
-            $linkTypes[] = $linkType;
-        }
-
-        return $linkTypes;
-    }
-
-    /**
-     * @param array $links
-     */
-    private function assembleProductRepositoryMock($links)
-    {
-        $repositoryReturnMap = [];
-
-        foreach ($links as $linkType) {
-            foreach ($linkType as $link) {
-                $mockLinkedProduct = $this->getMockBuilder(Product::class)
-                    ->disableOriginalConstructor()
-                    ->getMock();
-
-                $mockLinkedProduct->expects($this->any())
-                    ->method('getId')
-                    ->willReturn($link['id']);
-
-                $mockLinkedProduct->expects($this->any())
-                    ->method('getSku')
-                    ->willReturn($link['sku']);
-
-                // Even optional arguments need to be provided for returnMapValue
-                $repositoryReturnMap[] = [$link['id'], false, null, false, $mockLinkedProduct];
-            }
-        }
-
-        $this->productRepositoryMock->expects($this->any())
-            ->method('getById')
-            ->will($this->returnValueMap($repositoryReturnMap));
     }
 }

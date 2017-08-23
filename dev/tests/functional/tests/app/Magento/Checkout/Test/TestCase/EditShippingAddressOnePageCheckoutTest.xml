@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Checkout\Test\TestCase\EditShippingAddressOnePageCheckoutTest" summary="Customer can place order with new addresses that was edited during checkout with several conditions" ticketId="MAGETWO-71053">
+        <variation name="EditShippingAddressOnePageCheckoutTestVariation1">
+            <data name="tag" xsi:type="string">severity:S1</data>
+            <data name="customer/dataset" xsi:type="string">johndoe_with_addresses</data>
+            <data name="shippingAddress/dataset" xsi:type="string">UK_address_without_email</data>
+            <data name="editShippingAddress/dataset" xsi:type="string">empty_UK_address_without_email</data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="billingCheckboxState" xsi:type="string">Yes</data>
+            <data name="products" xsi:type="array">
+                <item name="0" xsi:type="string">catalogProductSimple::default</item>
+            </data>
+            <data name="payment/method" xsi:type="string">checkmo</data>
+            <data name="editBillingInformation" xsi:type="boolean">false</data>
+            <data name="editSave" xsi:type="boolean">false</data>
+            <data name="refresh" xsi:type="boolean">true</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertAdditionalAddressCreatedFrontend" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderAddresses" />
+        </variation>
+    </testCase>
+</config>

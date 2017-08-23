@@ -70,7 +70,7 @@
         <field name="id" />
         <field name="type_id" />
         <field name="attribute_set_id" group="product-details" source="Magento\Catalog\Test\Fixture\Product\AttributeSetId" />
-        <field name="website_ids" group="websites" />
+        <field name="website_ids" group="websites" source="Magento\Catalog\Test\Fixture\Product\WebsiteIds" />
         <field name="price" source="Magento\Catalog\Test\Fixture\Product\Price" repository="Magento\GroupedProduct\Test\Repository\GroupedProduct\Price" />
         <field name="checkout_data" group="null" repository="Magento\GroupedProduct\Test\Repository\GroupedProduct\CheckoutData" />
         <field name="tax_class" />
