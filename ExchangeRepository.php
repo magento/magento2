@@ -5,10 +5,6 @@
  */
 namespace Magento\Framework\MessageQueue;
 
-/**
- * Class \Magento\Framework\MessageQueue\ExchangeRepository
- *
- */
 class ExchangeRepository
 {
     /**
