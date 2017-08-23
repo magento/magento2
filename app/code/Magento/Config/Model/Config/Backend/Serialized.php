@@ -52,7 +52,12 @@ class Serialized extends \Magento\Framework\App\Config\Value
     {
         $value = $this->getValue();
         if (!is_array($value)) {
-            $this->setValue(empty($value) ? false : $this->serializer->unserialize($value));
+            try {
+                $this->setValue(empty($value) ? false : $this->serializer->unserialize($value));
+            } catch (\InvalidArgumentException $e) {
+                // backwards compatibility: check for serialized array
+                $this->setValue(empty($value) ? false : unserialize($value));
+            }
         }
     }
 
