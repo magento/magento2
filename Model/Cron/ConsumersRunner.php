@@ -8,7 +8,7 @@ namespace Magento\MessageQueue\Model\Cron;
 use Magento\Framework\ShellInterface;
 use Magento\Framework\MessageQueue\Consumer\ConfigInterface as ConsumerConfigInterface;
 use Magento\Framework\App\DeploymentConfig;
-use Symfony\Component\Process\phpExecutableFinder;
+use Symfony\Component\Process\PhpExecutableFinder;
 use Magento\MessageQueue\Model\Cron\ConsumersRunner\Pid;
 
 /**
@@ -40,7 +40,7 @@ class ConsumersRunner
     /**
      * The executable finder specifically designed for the PHP executable
      *
-     * @var phpExecutableFinder
+     * @var PhpExecutableFinder
      */
     private $phpExecutableFinder;
 
@@ -89,7 +89,7 @@ class ConsumersRunner
         foreach ($this->consumerConfig->getConsumers() as $consumer) {
             $consumerName = $consumer->getName();
 
-            if ($this->isAllowed($consumerName, $allowedConsumers)) {
+            if (!$this->isAllowed($consumerName, $allowedConsumers)) {
                 continue;
             }
 
@@ -114,12 +114,12 @@ class ConsumersRunner
      *
      * @param string $consumerName The consumer name
      * @param array $allowedConsumers The list of allowed consumers
-     * @return bool
+     * @return bool Returns true if the consumer can be run
      */
     private function isAllowed($consumerName, array $allowedConsumers = [])
     {
         $allowed = empty($allowedConsumers) ?: in_array($consumerName, $allowedConsumers);
 
-        return !$allowed || $this->pid->isRun($consumerName);
+        return $allowed && !$this->pid->isRun($consumerName);
     }
 }
