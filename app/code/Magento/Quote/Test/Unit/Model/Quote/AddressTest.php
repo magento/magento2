@@ -48,6 +48,11 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     private $quote;
 
     /**
+     * @var \Magento\Quote\Model\Quote\Address\CustomAttributeListInterface | \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $attributeList;
+
+    /**
      * @var \Magento\Framework\App\Config | \PHPUnit_Framework_MockObject_MockObject
      */
     private $scopeConfig;
@@ -165,9 +170,13 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->attributeList = $this->createMock(\Magento\Quote\Model\Quote\Address\CustomAttributeListInterface::class);
+        $this->attributeList->method('getAttributes')->willReturn([]);
+
         $this->address = $objectManager->getObject(
             \Magento\Quote\Model\Quote\Address::class,
             [
+                'attributeList' => $this->attributeList,
                 'scopeConfig' => $this->scopeConfig,
                 'serializer' => $this->serializer,
                 'storeManager' => $this->storeManager,
