@@ -62,7 +62,7 @@ class TransportInterfacePluginTest extends \PHPUnit\Framework\TestCase
 
         $this->scopeConfigMock->expects($this->once())
             ->method('isSetFlag')
-            ->with(TransportInterfacePlugin::XML_PATH_SYSTEM_SMTP_DISABLE, ScopeInterface::SCOPE_STORE)
+            ->with('system/smtp/disable', ScopeInterface::SCOPE_STORE)
             ->willReturn($isDisabled);
         $this->model->aroundSendMessage($this->transportMock, $this->proceedMock);
         $this->assertEquals($shouldProceedRun, $this->isProceedMockCalled);
