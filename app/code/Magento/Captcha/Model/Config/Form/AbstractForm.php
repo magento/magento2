@@ -13,10 +13,6 @@ namespace Magento\Captcha\Model\Config\Form;
 
 use Magento\Framework\App\Config\Value;
 
-/**
- * Class \Magento\Captcha\Model\Config\Form\AbstractForm
- *
- */
 abstract class AbstractForm extends Value implements \Magento\Framework\Option\ArrayInterface
 {
     /**

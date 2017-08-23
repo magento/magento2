@@ -5,10 +5,6 @@
  */
 namespace Magento\Integration\Model\ResourceModel\Oauth;
 
-/**
- * Class \Magento\Integration\Model\ResourceModel\Oauth\Consumer
- *
- */
 class Consumer extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**

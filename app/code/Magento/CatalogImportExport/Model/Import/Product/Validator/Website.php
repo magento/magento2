@@ -8,10 +8,6 @@ namespace Magento\CatalogImportExport\Model\Import\Product\Validator;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 
-/**
- * Class \Magento\CatalogImportExport\Model\Import\Product\Validator\Website
- *
- */
 class Website extends AbstractImportValidator implements RowValidatorInterface
 {
     /**

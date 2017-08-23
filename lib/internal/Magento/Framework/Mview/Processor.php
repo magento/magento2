@@ -5,10 +5,6 @@
  */
 namespace Magento\Framework\Mview;
 
-/**
- * Class \Magento\Framework\Mview\Processor
- *
- */
 class Processor implements ProcessorInterface
 {
     /**

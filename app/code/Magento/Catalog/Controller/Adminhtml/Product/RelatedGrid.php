@@ -7,10 +7,6 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
-/**
- * Class \Magento\Catalog\Controller\Adminhtml\Product\RelatedGrid
- *
- */
 class RelatedGrid extends Related
 {
 }

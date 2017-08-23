@@ -12,6 +12,7 @@ use Magento\Framework\View\Element\Template;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Container extends \Magento\Backend\Block\Template implements ContainerInterface
 {

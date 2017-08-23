@@ -16,6 +16,7 @@ use Magento\Framework\Model\AbstractModel;
  *
  * @api
  * @codeCoverageIgnore
+ * @since 100.0.2
  */
 class Option extends AbstractModel implements AttributeOptionInterface
 {

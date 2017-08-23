@@ -6,10 +6,6 @@
 
 namespace Magento\CatalogRule\Observer;
 
-/**
- * Class \Magento\CatalogRule\Observer\RulePricesStorage
- *
- */
 class RulePricesStorage
 {
     /**

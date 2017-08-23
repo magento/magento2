@@ -12,10 +12,6 @@ use Magento\Framework\Module\Manager;
 use Magento\PageCache\Model\Config;
 use Magento\Weee\Helper\Data;
 
-/**
- * Class \Magento\Weee\Observer\CustomerLoggedIn
- *
- */
 class CustomerLoggedIn implements ObserverInterface
 {
     /**

@@ -9,6 +9,7 @@ namespace Magento\Swatches\Block\Adminhtml\Attribute\Edit\Options;
  * Block Class for Text Swatch
  *
  * @api
+ * @since 100.0.2
  */
 class Text extends AbstractSwatch
 {

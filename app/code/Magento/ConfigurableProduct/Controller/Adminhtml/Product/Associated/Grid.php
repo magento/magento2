@@ -10,10 +10,6 @@ use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\View\Result\LayoutFactory;
 
-/**
- * Class \Magento\ConfigurableProduct\Controller\Adminhtml\Product\Associated\Grid
- *
- */
 class Grid extends Action
 {
     /**

@@ -11,10 +11,6 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\EntityManager\HydratorPool;
 use Magento\Framework\EntityManager\Db\ReadRow;
 
-/**
- * Class \Magento\Framework\EntityManager\Operation\Read\ReadMain
- *
- */
 class ReadMain
 {
     /**

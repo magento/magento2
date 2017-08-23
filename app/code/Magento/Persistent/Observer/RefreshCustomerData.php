@@ -9,10 +9,6 @@ use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
 
-/**
- * Class \Magento\Persistent\Observer\RefreshCustomerData
- *
- */
 class RefreshCustomerData implements ObserverInterface
 {
     /**

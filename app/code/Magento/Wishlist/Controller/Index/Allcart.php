@@ -12,10 +12,6 @@ use Magento\Wishlist\Controller\WishlistProviderInterface;
 use Magento\Wishlist\Model\ItemCarrier;
 use Magento\Framework\Controller\ResultFactory;
 
-/**
- * Class \Magento\Wishlist\Controller\Index\Allcart
- *
- */
 class Allcart extends \Magento\Wishlist\Controller\AbstractIndex
 {
     /**

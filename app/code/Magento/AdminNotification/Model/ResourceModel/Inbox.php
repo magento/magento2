@@ -7,6 +7,7 @@ namespace Magento\AdminNotification\Model\ResourceModel;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Inbox extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

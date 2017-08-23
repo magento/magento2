@@ -6,10 +6,6 @@
  */
 namespace Magento\Cms\Controller\Noroute;
 
-/**
- * Class \Magento\Cms\Controller\Noroute\Index
- *
- */
 class Index extends \Magento\Framework\App\Action\Action
 {
     /**

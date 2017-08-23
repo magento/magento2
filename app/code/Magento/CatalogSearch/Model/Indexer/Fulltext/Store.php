@@ -11,10 +11,6 @@ use Magento\Framework\Search\Request\DimensionFactory;
 use Magento\Framework\Indexer\ConfigInterface;
 use Magento\Framework\Event\ObserverInterface;
 
-/**
- * Class \Magento\CatalogSearch\Model\Indexer\Fulltext\Store
- *
- */
 class Store implements ObserverInterface
 {
     /**

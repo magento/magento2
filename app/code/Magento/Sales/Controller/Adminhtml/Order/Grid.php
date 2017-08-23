@@ -5,10 +5,6 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
-/**
- * Class \Magento\Sales\Controller\Adminhtml\Order\Grid
- *
- */
 class Grid extends \Magento\Sales\Controller\Adminhtml\Order
 {
     /**

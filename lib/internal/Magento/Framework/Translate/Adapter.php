@@ -9,10 +9,6 @@
  */
 namespace Magento\Framework\Translate;
 
-/**
- * Class \Magento\Framework\Translate\Adapter
- *
- */
 class Adapter extends AbstractAdapter
 {
     /**

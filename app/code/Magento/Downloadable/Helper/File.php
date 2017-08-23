@@ -11,6 +11,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  * Downloadable Products File Helper
  *
  * @api
+ * @since 100.0.2
  */
 class File extends \Magento\Framework\App\Helper\AbstractHelper
 {

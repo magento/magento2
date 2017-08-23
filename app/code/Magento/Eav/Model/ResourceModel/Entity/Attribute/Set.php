@@ -5,10 +5,6 @@
  */
 namespace Magento\Eav\Model\ResourceModel\Entity\Attribute;
 
-/**
- * Class \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set
- *
- */
 class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**

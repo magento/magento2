@@ -32,7 +32,6 @@ class AttributeSetText extends \Magento\Ui\Component\Listing\Columns\Column
      * @param AttributeSetRepositoryInterface $attributeSetRepository
      * @param array $components
      * @param array $data
-     * @since 101.0.0
      */
     public function __construct(
         ContextInterface $context,

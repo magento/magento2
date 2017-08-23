@@ -5,10 +5,6 @@
  */
 namespace Magento\Cms\Controller\Index;
 
-/**
- * Class \Magento\Cms\Controller\Index\DefaultNoRoute
- *
- */
 class DefaultNoRoute extends \Magento\Framework\App\Action\Action
 {
     /**

@@ -10,10 +10,6 @@ use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Catalog\Model\Indexer\Category\Flat\State;
 
-/**
- * Class \Magento\Catalog\Model\Indexer\Category\Flat\Plugin\StoreGroup
- *
- */
 class StoreGroup
 {
     /**

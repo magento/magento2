@@ -8,10 +8,6 @@ namespace Magento\Sitemap\Controller\Adminhtml\Sitemap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 
-/**
- * Class \Magento\Sitemap\Controller\Adminhtml\Sitemap\Delete
- *
- */
 class Delete extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
 {
     /**

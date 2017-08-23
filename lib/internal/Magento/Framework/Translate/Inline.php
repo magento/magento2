@@ -8,10 +8,6 @@
 
 namespace Magento\Framework\Translate;
 
-/**
- * Class \Magento\Framework\Translate\Inline
- *
- */
 class Inline implements \Magento\Framework\Translate\InlineInterface
 {
     /**

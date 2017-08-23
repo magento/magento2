@@ -11,10 +11,6 @@ use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\Search\Request\IndexScopeResolverInterface;
 
-/**
- * Class \Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver
- *
- */
 class IndexScopeResolver implements IndexScopeResolverInterface
 {
     /**

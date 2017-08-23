@@ -10,10 +10,6 @@ namespace Magento\ConfigurableProduct\Model\Entity\Product\Attribute\Group\Attri
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\AttributeFactory;
 use Magento\Framework\Registry;
 
-/**
- * Class \Magento\ConfigurableProduct\Model\Entity\Product\Attribute\Group\AttributeMapper\Plugin
- *
- */
 class Plugin
 {
     /**

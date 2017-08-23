@@ -5,10 +5,6 @@
  */
 namespace Magento\Sales\Helper;
 
-/**
- * Class \Magento\Sales\Helper\Admin
- *
- */
 class Admin extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**

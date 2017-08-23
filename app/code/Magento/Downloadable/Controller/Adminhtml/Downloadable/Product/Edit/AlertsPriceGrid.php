@@ -6,10 +6,6 @@
  */
 namespace Magento\Downloadable\Controller\Adminhtml\Downloadable\Product\Edit;
 
-/**
- * Class \Magento\Downloadable\Controller\Adminhtml\Downloadable\Product\Edit\AlertsPriceGrid
- *
- */
 class AlertsPriceGrid extends \Magento\Catalog\Controller\Adminhtml\Product\AlertsPriceGrid
 {
 }

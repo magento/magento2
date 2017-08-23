@@ -14,10 +14,6 @@ namespace Magento\Catalog\Model\Product\Attribute\Source;
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 use Magento\Framework\Data\OptionSourceInterface;
 
-/**
- * Class \Magento\Catalog\Model\Product\Attribute\Source\Countryofmanufacture
- *
- */
 class Countryofmanufacture extends AbstractSource implements OptionSourceInterface
 {
     /**

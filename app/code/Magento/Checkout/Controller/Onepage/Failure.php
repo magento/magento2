@@ -6,10 +6,6 @@
  */
 namespace Magento\Checkout\Controller\Onepage;
 
-/**
- * Class \Magento\Checkout\Controller\Onepage\Failure
- *
- */
 class Failure extends \Magento\Checkout\Controller\Onepage
 {
     /**

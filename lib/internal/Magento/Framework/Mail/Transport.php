@@ -11,7 +11,6 @@ class Transport implements \Magento\Framework\Mail\TransportInterface
      * @var \Zend\Mail\Transport\Sendmail
      */
     private $zendTransport;
-
     /**
      * @var \Magento\Framework\Mail\MessageInterface
      */
@@ -43,5 +42,13 @@ class Transport implements \Magento\Framework\Mail\TransportInterface
         } catch (\Exception $e) {
             throw new \Magento\Framework\Exception\MailException(new \Magento\Framework\Phrase($e->getMessage()), $e);
         }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getMessage()
+    {
+        return $this->message;
     }
 }

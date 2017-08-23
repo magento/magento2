@@ -9,10 +9,6 @@ namespace Magento\Framework\Data\Argument\Interpreter;
 use Magento\Framework\Data\Argument\InterpreterInterface;
 use Magento\Framework\Stdlib\BooleanUtils;
 
-/**
- * Class \Magento\Framework\Data\Argument\Interpreter\DataObject
- *
- */
 class DataObject implements InterpreterInterface
 {
     /**

@@ -11,10 +11,6 @@ use Magento\Framework\Module\ModuleListInterface;
 use Magento\NewRelicReporting\Model\Config;
 use Magento\NewRelicReporting\Model\Module;
 
-/**
- * Class \Magento\NewRelicReporting\Model\Module\Collect
- *
- */
 class Collect
 {
     /**

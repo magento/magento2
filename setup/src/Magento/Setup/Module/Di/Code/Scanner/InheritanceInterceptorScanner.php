@@ -7,10 +7,6 @@ namespace Magento\Setup\Module\Di\Code\Scanner;
 
 use Magento\Framework\ObjectManager\InterceptableValidator;
 
-/**
- * Class \Magento\Setup\Module\Di\Code\Scanner\InheritanceInterceptorScanner
- *
- */
 class InheritanceInterceptorScanner implements ScannerInterface
 {
     /**

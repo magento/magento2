@@ -5,10 +5,6 @@
  */
 namespace Magento\Theme\Model\Layout\Source;
 
-/**
- * Class \Magento\Theme\Model\Layout\Source\Layout
- *
- */
 class Layout implements \Magento\Framework\Option\ArrayInterface
 {
     /**

@@ -11,10 +11,6 @@
  */
 namespace Magento\Framework\Data\Form\Element;
 
-/**
- * Class \Magento\Framework\Data\Form\Element\Obscure
- *
- */
 class Obscure extends \Magento\Framework\Data\Form\Element\Password
 {
     /**

@@ -67,7 +67,6 @@ class PreparedValueFactory
      * @param BackendFactory $valueFactory The factory for configuration value objects
      * @param ScopeConfigInterface $config The scope configuration
      * @param ScopeTypeNormalizer $scopeTypeNormalizer The scope type normalizer
-     * @since 100.2.0
      */
     public function __construct(
         ScopeResolverPool $scopeResolverPool,

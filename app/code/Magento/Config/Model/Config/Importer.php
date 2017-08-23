@@ -81,7 +81,6 @@ class Importer implements ImporterInterface
      * @param ScopeConfigInterface $scopeConfig The application config storage.
      * @param State $state The application scope to run
      * @param ScopeInterface $scope The application scope
-     * @since 100.2.0
      */
     public function __construct(
         FlagManager $flagManager,

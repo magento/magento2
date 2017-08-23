@@ -9,10 +9,6 @@ use Magento\Framework\Cache\Frontend\Decorator\TagScope;
 use Magento\Framework\Config\CacheInterface;
 use Magento\Framework\App\Cache\Type\FrontendPool;
 
-/**
- * Class \Magento\Framework\App\Interception\Cache\CompiledConfig
- *
- */
 class CompiledConfig extends TagScope implements CacheInterface
 {
     /**

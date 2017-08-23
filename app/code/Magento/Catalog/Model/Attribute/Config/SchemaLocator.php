@@ -9,10 +9,6 @@ namespace Magento\Catalog\Model\Attribute\Config;
 
 use Magento\Framework\Module\Dir;
 
-/**
- * Class \Magento\Catalog\Model\Attribute\Config\SchemaLocator
- *
- */
 class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {
     /**

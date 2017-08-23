@@ -17,6 +17,7 @@ use Magento\Sales\Model\AbstractModel;
  * @method Address setCustomerAddressData(\Magento\Customer\Api\Data\AddressInterface $value)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @since 100.0.2
  */
 class Address extends AbstractModel implements OrderAddressInterface, AddressModelInterface
 {

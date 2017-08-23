@@ -11,10 +11,6 @@
  */
 namespace Magento\Framework\App\Cache\Type;
 
-/**
- * Class \Magento\Framework\App\Cache\Type\Block
- *
- */
 class Block extends \Magento\Framework\Cache\Frontend\Decorator\TagScope
 {
     /**

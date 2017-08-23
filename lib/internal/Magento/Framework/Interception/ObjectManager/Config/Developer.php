@@ -12,10 +12,6 @@ use Magento\Framework\ObjectManager\DefinitionInterface;
 use Magento\Framework\ObjectManager\RelationsInterface;
 use Magento\Framework\ObjectManager\InterceptableValidator;
 
-/**
- * Class \Magento\Framework\Interception\ObjectManager\Config\Developer
- *
- */
 class Developer extends \Magento\Framework\ObjectManager\Config\Config implements ConfigInterface
 {
     /**

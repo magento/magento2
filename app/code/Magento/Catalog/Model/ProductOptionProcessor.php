@@ -12,10 +12,6 @@ use Magento\Catalog\Model\CustomOptions\CustomOptionFactory;
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\Factory as DataObjectFactory;
 
-/**
- * Class \Magento\Catalog\Model\ProductOptionProcessor
- *
- */
 class ProductOptionProcessor implements ProductOptionProcessorInterface
 {
     /**

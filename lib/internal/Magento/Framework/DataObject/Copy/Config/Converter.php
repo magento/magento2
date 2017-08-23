@@ -5,10 +5,6 @@
  */
 namespace Magento\Framework\DataObject\Copy\Config;
 
-/**
- * Class \Magento\Framework\DataObject\Copy\Config\Converter
- *
- */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**

@@ -10,10 +10,6 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface as AttributeRepository;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 
-/**
- * Class \Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct\Columns\Attributes
- *
- */
 class Attributes extends \Magento\Ui\Component\Listing\Columns\Column
 {
     /**

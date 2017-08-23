@@ -8,10 +8,6 @@ namespace Magento\Search\Controller\Adminhtml\Term;
 use Magento\Search\Controller\Adminhtml\Term as TermController;
 use Magento\Framework\Controller\ResultFactory;
 
-/**
- * Class \Magento\Search\Controller\Adminhtml\Term\MassDelete
- *
- */
 class MassDelete extends TermController
 {
     /**

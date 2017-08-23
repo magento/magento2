@@ -5,10 +5,6 @@
  */
 namespace Magento\Indexer\Model\ResourceModel\Indexer;
 
-/**
- * Class \Magento\Indexer\Model\ResourceModel\Indexer\State
- *
- */
 class State extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**

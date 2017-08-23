@@ -7,10 +7,6 @@ namespace Magento\Framework\Locale;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
-/**
- * Class \Magento\Framework\Locale\Resolver
- *
- */
 class Resolver implements ResolverInterface
 {
     /**

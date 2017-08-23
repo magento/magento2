@@ -8,10 +8,6 @@
  */
 namespace Magento\Framework\App;
 
-/**
- * Class \Magento\Framework\App\RouterList
- *
- */
 class RouterList implements RouterListInterface
 {
     /**

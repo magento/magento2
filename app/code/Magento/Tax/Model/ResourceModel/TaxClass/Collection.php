@@ -11,10 +11,6 @@
  */
 namespace Magento\Tax\Model\ResourceModel\TaxClass;
 
-/**
- * Class \Magento\Tax\Model\ResourceModel\TaxClass\Collection
- *
- */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**

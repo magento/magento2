@@ -5,10 +5,6 @@
  */
 namespace Magento\Msrp\Model\Quote\Address;
 
-/**
- * Class \Magento\Msrp\Model\Quote\Address\CanApplyMsrp
- *
- */
 class CanApplyMsrp
 {
     /**
