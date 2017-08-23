@@ -59,6 +59,7 @@
     </type>
     <type name="Magento\Framework\Mail\TransportInterface">
         <plugin name="WindowsSmtpConfig" type="Magento\Email\Model\Plugin\WindowsSmtpConfig" />
+        <plugin name="EmailDisable" type="Magento\Email\Model\Mail\TransportInterfacePlugin" />
     </type>
     <type name="Magento\Config\Model\Config\TypePool">
         <arguments>
