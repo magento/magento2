@@ -6,13 +6,13 @@
 
 namespace Magento\Backend\Test\Unit\App;
 
-class UserConfigTest extends \PHPUnit_Framework_TestCase
+class UserConfigTest extends \PHPUnit\Framework\TestCase
 {
     public function testUserRequestCreation()
     {
-        $factoryMock = $this->getMock(\Magento\Config\Model\Config\Factory::class, ['create'], [], '', false);
-        $responseMock = $this->getMock(\Magento\Framework\App\Console\Response::class, [], [], '', false);
-        $configMock = $this->getMock(\Magento\Config\Model\Config::class, [], [], '', false);
+        $factoryMock = $this->createPartialMock(\Magento\Config\Model\Config\Factory::class, ['create']);
+        $responseMock = $this->createMock(\Magento\Framework\App\Console\Response::class);
+        $configMock = $this->createMock(\Magento\Config\Model\Config::class);
 
         $key = 'key';
         $value = 'value';

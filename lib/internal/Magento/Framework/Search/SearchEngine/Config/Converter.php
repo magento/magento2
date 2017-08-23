@@ -7,6 +7,10 @@ namespace Magento\Framework\Search\SearchEngine\Config;
 
 use Magento\Framework\Config\ConverterInterface;
 
+/**
+ * Class \Magento\Framework\Search\SearchEngine\Config\Converter
+ *
+ */
 class Converter implements ConverterInterface
 {
     /**

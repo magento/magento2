@@ -7,6 +7,10 @@
  */
 namespace Magento\Framework\App\Config\Scope;
 
+/**
+ * Interface \Magento\Framework\App\Config\Scope\ReaderInterface
+ *
+ */
 interface ReaderInterface
 {
     /**

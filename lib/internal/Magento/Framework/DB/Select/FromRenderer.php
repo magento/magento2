@@ -8,6 +8,10 @@ namespace Magento\Framework\DB\Select;
 use Magento\Framework\DB\Select;
 use Magento\Framework\DB\Platform\Quote;
 
+/**
+ * Class \Magento\Framework\DB\Select\FromRenderer
+ *
+ */
 class FromRenderer implements RendererInterface
 {
     /**

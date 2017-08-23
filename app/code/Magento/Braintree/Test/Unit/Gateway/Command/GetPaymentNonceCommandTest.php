@@ -21,7 +21,7 @@ use Magento\Vault\Model\PaymentTokenManagement;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class GetPaymentNonceCommandTest extends \PHPUnit_Framework_TestCase
+class GetPaymentNonceCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var GetPaymentNonceCommand

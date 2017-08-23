@@ -11,7 +11,7 @@ use Magento\Sales\Model\Order;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Model\ResourceModel\Order\Plugin\Authorization;
 
-class AuthorizationTest extends \PHPUnit_Framework_TestCase
+class AuthorizationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager

@@ -11,6 +11,10 @@ use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Ui\Component\Form;
 
+/**
+ * Class \Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\UsedDefault
+ *
+ */
 class UsedDefault extends AbstractModifier
 {
     /**

@@ -8,6 +8,10 @@ namespace Magento\PageCache\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\App\PageCache\FormKey;
 
+/**
+ * Class \Magento\PageCache\Observer\FlushFormKeyOnLogout
+ *
+ */
 class FlushFormKeyOnLogout implements ObserverInterface
 {
     /**

@@ -9,7 +9,7 @@ namespace Magento\Catalog\Model\Product\Option\Type;
 /**
  * Test for \Magento\Catalog\Model\Product\Option\Type\Date
  */
-class DateTest extends \PHPUnit_Framework_TestCase
+class DateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Product\Option\Type\Date

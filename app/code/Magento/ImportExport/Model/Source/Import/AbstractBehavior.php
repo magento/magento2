@@ -39,7 +39,7 @@ abstract class AbstractBehavior implements \Magento\Framework\Option\ArrayInterf
 
     /**
      * Get current behaviour group code
-     *;
+     *
      * @abstract
      * @return string
      */

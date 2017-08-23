@@ -5,6 +5,10 @@
  */
 namespace Magento\Multishipping\Model\Cart\Controller;
 
+/**
+ * Class \Magento\Multishipping\Model\Cart\Controller\CartPlugin
+ *
+ */
 class CartPlugin
 {
     /**

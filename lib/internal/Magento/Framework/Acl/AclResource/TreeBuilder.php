@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\Acl\AclResource;
 
+/**
+ * Class \Magento\Framework\Acl\AclResource\TreeBuilder
+ *
+ */
 class TreeBuilder
 {
     /**

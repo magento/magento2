@@ -24,7 +24,7 @@ use Magento\Framework\EntityManager\HydratorInterface;
  * Class CreditmemoDocumentFactoryTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CreditmemoDocumentFactoryTest extends \PHPUnit_Framework_TestCase
+class CreditmemoDocumentFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager

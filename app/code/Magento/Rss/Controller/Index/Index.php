@@ -8,6 +8,10 @@ namespace Magento\Rss\Controller\Index;
 
 use Magento\Framework\Exception\NotFoundException;
 
+/**
+ * Class \Magento\Rss\Controller\Index\Index
+ *
+ */
 class Index extends \Magento\Rss\Controller\Index
 {
     /**

@@ -12,6 +12,10 @@ use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 
+/**
+ * Class \Magento\Setup\Model\AdminAccount
+ *
+ */
 class AdminAccount
 {
     /**#@+
@@ -268,7 +272,7 @@ class AdminAccount
 
     /**
      * Take table with prefix without loading modules
-     * 
+     *
      * @param string $table
      * @return string
      */

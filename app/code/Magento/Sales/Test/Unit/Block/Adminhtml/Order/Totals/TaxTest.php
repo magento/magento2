@@ -9,7 +9,7 @@
  */
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\Totals;
 
-class TaxTest extends \PHPUnit_Framework_TestCase
+class TaxTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Block\Adminhtml\Order\Totals\Tax */
     private $taxMock;

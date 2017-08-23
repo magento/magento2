@@ -82,7 +82,7 @@ abstract class Category extends \Magento\Backend\App\Action
      *
      * @return \Magento\Framework\Controller\Result\Json
      *
-     * @deprecated
+     * @deprecated 101.0.0
      */
     protected function ajaxRequestResponse($category, $resultPage)
     {
@@ -128,7 +128,7 @@ abstract class Category extends \Magento\Backend\App\Action
     /**
      * @return \Magento\Framework\Stdlib\DateTime\Filter\DateTime
      *
-     * @deprecated
+     * @deprecated 101.0.0
      */
     private function getDateTimeFilter()
     {

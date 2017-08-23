@@ -27,6 +27,7 @@ use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\StringUtils;
 
 // @codingStandardsIgnoreStart
+
 /**
  * MySQL database adapter
  *
@@ -189,6 +190,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
 
     /**
      * @var SelectFactory
+     * @since 100.1.0
      */
     protected $selectFactory;
 
@@ -591,7 +593,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @throws \Zend_Db_Adapter_Exception To re-throw \PDOException.
      * @throws LocalizedException In case multiple queries are attempted at once, to protect from SQL injection
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @deprecated
+     * @deprecated 100.2.0
      */
     public function multiQuery($sql, $bind = [])
     {
@@ -758,7 +760,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @deprecated
+     * @deprecated 100.1.2
      */
     protected function _splitMultiQuery($sql)
     {
@@ -3368,8 +3370,9 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      */
     public function insertFromSelect(Select $select, $table, array $fields = [], $mode = false)
     {
-        $query = 'INSERT';
-        if ($mode == self::INSERT_IGNORE) {
+        $query = $mode === self::REPLACE ? 'REPLACE' : 'INSERT';
+
+        if ($mode === self::INSERT_IGNORE) {
             $query .= ' IGNORE';
         }
         $query = sprintf('%s INTO %s', $query, $this->quoteIdentifier($table));
@@ -3380,26 +3383,36 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
 
         $query = sprintf('%s %s', $query, $select->assemble());
 
-        if ($mode == self::INSERT_ON_DUPLICATE) {
-            if (!$fields) {
-                $describe = $this->describeTable($table);
-                foreach ($describe as $column) {
-                    if ($column['PRIMARY'] === false) {
-                        $fields[] = $column['COLUMN_NAME'];
-                    }
-                }
-            }
-            $update = [];
-            foreach ($fields as $field) {
-                $update[] = sprintf('%1$s = VALUES(%1$s)', $this->quoteIdentifier($field));
-            }
-
-            if ($update) {
-                $query = sprintf('%s ON DUPLICATE KEY UPDATE %s', $query, join(', ', $update));
-            }
+        if ($mode === self::INSERT_ON_DUPLICATE) {
+            $query .= $this->renderOnDuplicate($table, $fields);
         }
 
         return $query;
+    }
+
+    /**
+     * Render On Duplicate query part
+     *
+     * @param string $table
+     * @param array $fields
+     * @return string
+     */
+    private function renderOnDuplicate($table, array $fields)
+    {
+        if (!$fields) {
+            $describe = $this->describeTable($table);
+            foreach ($describe as $column) {
+                if ($column['PRIMARY'] === false) {
+                    $fields[] = $column['COLUMN_NAME'];
+                }
+            }
+        }
+        $update = [];
+        foreach ($fields as $field) {
+            $update[] = sprintf('%1$s = VALUES(%1$s)', $this->quoteIdentifier($field));
+        }
+
+        return count($update) ? ' ON DUPLICATE KEY UPDATE ' . join(', ', $update) : '';
     }
 
     /**
@@ -3410,7 +3423,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param int $stepCount
      * @return \Magento\Framework\DB\Select[]
      * @throws LocalizedException
-     * @deprecated
+     * @deprecated 100.1.3
      */
     public function selectsByRange($rangeField, \Magento\Framework\DB\Select $select, $stepCount = 100)
     {
@@ -3426,7 +3439,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * Get query generator
      *
      * @return QueryGenerator
-     * @deprecated
+     * @deprecated 100.1.3
      */
     private function getQueryGenerator()
     {
@@ -3649,6 +3662,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param array $columns
      * @param array $values
      * @return string
+     * @since 100.2.0
      */
     protected function _getReplaceSqlQuery($tableName, array $columns, array $values)
     {
@@ -3874,6 +3888,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $tableName
      * @param string|null $schemaName
      * @return string|bool
+     * @since 100.1.0
      */
     public function getAutoIncrementField($tableName, $schemaName = null)
     {

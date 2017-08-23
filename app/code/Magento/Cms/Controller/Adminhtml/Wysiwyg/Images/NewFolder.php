@@ -6,6 +6,10 @@
  */
 namespace Magento\Cms\Controller\Adminhtml\Wysiwyg\Images;
 
+/**
+ * Class \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\NewFolder
+ *
+ */
 class NewFolder extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
 {
     /**

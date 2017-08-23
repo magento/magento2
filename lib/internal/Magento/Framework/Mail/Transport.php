@@ -1,6 +1,5 @@
 <?php
 /**
- * Mail Transport
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */

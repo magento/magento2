@@ -9,6 +9,10 @@ use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\App\ObjectManager;
 
+/**
+ * Class \Magento\Captcha\Observer\CheckContactUsFormObserver
+ *
+ */
 class CheckContactUsFormObserver implements ObserverInterface
 {
     /**

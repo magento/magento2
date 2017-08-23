@@ -5,6 +5,10 @@
  */
 namespace Magento\Search\Model\SearchEngine;
 
+/**
+ * Class \Magento\Search\Model\SearchEngine\Config
+ *
+ */
 class Config implements \Magento\Framework\Search\SearchEngine\ConfigInterface
 {
     /**

@@ -6,6 +6,10 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
+/**
+ * Class \Magento\Catalog\Controller\Adminhtml\Product\SuggestAttributes
+ *
+ */
 class SuggestAttributes extends \Magento\Backend\App\Action
 {
     /**

@@ -8,6 +8,10 @@ namespace Magento\Multishipping\Controller\Checkout;
 
 use Magento\Multishipping\Model\Checkout\Type\Multishipping\State;
 
+/**
+ * Class \Magento\Multishipping\Controller\Checkout\BackToShipping
+ *
+ */
 class BackToShipping extends \Magento\Multishipping\Controller\Checkout
 {
     /**

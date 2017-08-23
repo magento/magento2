@@ -5,6 +5,10 @@
  */
 namespace Magento\AdminNotification\Block\System;
 
+/**
+ * Class \Magento\AdminNotification\Block\System\Messages
+ *
+ */
 class Messages extends \Magento\Backend\Block\Template
 {
     /**

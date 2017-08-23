@@ -35,7 +35,9 @@ class Data extends \Magento\Framework\Url\Helper\Data
      */
     protected $_layout;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface */
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
     private $_storeManager;
 
     /**

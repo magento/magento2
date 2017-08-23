@@ -5,6 +5,10 @@
  */
 namespace Magento\Paypal\Model;
 
+/**
+ * Class \Magento\Paypal\Model\IpnFactory
+ *
+ */
 class IpnFactory
 {
     /**

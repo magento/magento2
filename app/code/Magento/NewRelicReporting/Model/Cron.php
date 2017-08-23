@@ -9,6 +9,10 @@ use Magento\NewRelicReporting\Model\Cron\ReportCounts;
 use Magento\NewRelicReporting\Model\Cron\ReportModulesInfo;
 use Magento\NewRelicReporting\Model\Cron\ReportNewRelicCron;
 
+/**
+ * Class \Magento\NewRelicReporting\Model\Cron
+ *
+ */
 class Cron
 {
     /**

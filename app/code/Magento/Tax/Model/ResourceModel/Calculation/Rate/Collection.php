@@ -9,6 +9,10 @@
  */
 namespace Magento\Tax\Model\ResourceModel\Calculation\Rate;
 
+/**
+ * Class \Magento\Tax\Model\ResourceModel\Calculation\Rate\Collection
+ *
+ */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**

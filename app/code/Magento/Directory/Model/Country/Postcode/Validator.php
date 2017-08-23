@@ -5,6 +5,10 @@
  */
 namespace Magento\Directory\Model\Country\Postcode;
 
+/**
+ * Class \Magento\Directory\Model\Country\Postcode\Validator
+ *
+ */
 class Validator implements ValidatorInterface
 {
     /**

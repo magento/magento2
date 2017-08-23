@@ -10,6 +10,10 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
 
+/**
+ * Class \Magento\Framework\Api\SearchCriteria\CollectionProcessor\JoinProcessor
+ *
+ */
 class JoinProcessor implements CollectionProcessorInterface
 {
     /**
@@ -22,7 +26,9 @@ class JoinProcessor implements CollectionProcessorInterface
      */
     private $fieldMapping;
 
-    /** @var array  */
+    /**
+     * @var array
+     */
     private $appliedFields = [];
 
     /**

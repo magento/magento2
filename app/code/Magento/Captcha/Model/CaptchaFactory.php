@@ -7,6 +7,10 @@
  */
 namespace Magento\Captcha\Model;
 
+/**
+ * Class \Magento\Captcha\Model\CaptchaFactory
+ *
+ */
 class CaptchaFactory
 {
     /**

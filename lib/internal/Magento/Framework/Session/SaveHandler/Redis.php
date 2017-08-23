@@ -14,6 +14,10 @@ use Magento\Framework\Phrase;
 use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * Class \Magento\Framework\Session\SaveHandler\Redis
+ *
+ */
 class Redis extends \Cm\RedisSession\Handler
 {
     /**

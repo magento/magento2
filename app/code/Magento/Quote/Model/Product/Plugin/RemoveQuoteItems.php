@@ -7,6 +7,10 @@ namespace Magento\Quote\Model\Product\Plugin;
 
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 
+/**
+ * Class \Magento\Quote\Model\Product\Plugin\RemoveQuoteItems
+ *
+ */
 class RemoveQuoteItems
 {
     /**

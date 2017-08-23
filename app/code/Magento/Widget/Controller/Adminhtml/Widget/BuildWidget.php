@@ -6,6 +6,10 @@
  */
 namespace Magento\Widget\Controller\Adminhtml\Widget;
 
+/**
+ * Class \Magento\Widget\Controller\Adminhtml\Widget\BuildWidget
+ *
+ */
 class BuildWidget extends \Magento\Backend\App\Action
 {
     /**

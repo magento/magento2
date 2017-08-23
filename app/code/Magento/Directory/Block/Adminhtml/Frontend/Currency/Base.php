@@ -9,6 +9,10 @@
  */
 namespace Magento\Directory\Block\Adminhtml\Frontend\Currency;
 
+/**
+ * Class \Magento\Directory\Block\Adminhtml\Frontend\Currency\Base
+ *
+ */
 class Base extends \Magento\Config\Block\System\Config\Form\Field
 {
     /**

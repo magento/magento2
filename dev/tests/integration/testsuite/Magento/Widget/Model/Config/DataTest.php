@@ -9,7 +9,7 @@ namespace Magento\Widget\Model\Config;
 /**
  * @magentoAppArea adminhtml
  */
-class DataTest extends \PHPUnit_Framework_TestCase
+class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoCache config disabled

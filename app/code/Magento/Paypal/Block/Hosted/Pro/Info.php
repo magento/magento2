@@ -11,6 +11,10 @@
  */
 namespace Magento\Paypal\Block\Hosted\Pro;
 
+/**
+ * Class \Magento\Paypal\Block\Hosted\Pro\Info
+ *
+ */
 class Info extends \Magento\Paypal\Block\Payment\Info
 {
     /**
