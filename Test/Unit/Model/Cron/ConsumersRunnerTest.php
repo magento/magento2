@@ -111,7 +111,7 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
         array $allowedConsumers,
         $shellBackgroundExpects,
         $isRunExpects,
-        $getPidFilePath
+        $getPidFilePathExpects
     ) {
         $consumerName = 'consumerName';
         $pidFilePath = '/var/consumer.pid';
@@ -139,16 +139,16 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
             ->method('getConsumers')
             ->willReturn([$consumer]);
 
-        $this->pidMock->expects($isRunExpects)
+        $this->pidMock->expects($this->exactly($isRunExpects))
             ->method('isRun')
             ->with($consumerName)
             ->willReturn($isRun);
-        $this->pidMock->expects($getPidFilePath)
+        $this->pidMock->expects($this->exactly($getPidFilePathExpects))
             ->method('getPidFilePath')
             ->with($consumerName)
             ->willReturn($pidFilePath);
 
-        $this->shellBackgroundMock->expects($shellBackgroundExpects)
+        $this->shellBackgroundMock->expects($this->exactly($shellBackgroundExpects))
             ->method('execute')
             ->with($command, $arguments);
 
@@ -168,9 +168,9 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
                 'command' => 'php '. BP . '/bin/magento queue:consumers:start %s %s %s',
                 'arguments' => ['consumerName', '--pid-file-path=/var/consumer.pid', '--max-messages=20000'],
                 'allowedConsumers' => [],
-                'shellBackgroundExpects' => $this->once(),
-                'isRunExpects' => $this->once(),
-                'getPidFilePath' => $this->once(),
+                'shellBackgroundExpects' => 1,
+                'isRunExpects' => 1,
+                'getPidFilePath' => 1,
             ],
             [
                 'maxMessages' => 10000,
@@ -179,9 +179,9 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
                 'command' => 'php '. BP . '/bin/magento queue:consumers:start %s %s %s',
                 'arguments' => ['consumerName', '--pid-file-path=/var/consumer.pid', '--max-messages=10000'],
                 'allowedConsumers' => [],
-                'shellBackgroundExpects' => $this->once(),
-                'isRunExpects' => $this->once(),
-                'getPidFilePath' => $this->once(),
+                'shellBackgroundExpects' => 1,
+                'isRunExpects' => 1,
+                'getPidFilePath' => 1,
             ],
             [
                 'maxMessages' => 10000,
@@ -190,9 +190,9 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
                 'command' => 'php '. BP . '/bin/magento queue:consumers:start %s %s %s',
                 'arguments' => ['consumerName', '--pid-file-path=/var/consumer.pid', '--max-messages=10000'],
                 'allowedConsumers' => ['someConsumer'],
-                'shellBackgroundExpects' => $this->never(),
-                'isRunExpects' => $this->never(),
-                'getPidFilePath' => $this->never(),
+                'shellBackgroundExpects' => 0,
+                'isRunExpects' => 0,
+                'getPidFilePath' => 0,
             ],
             [
                 'maxMessages' => 10000,
@@ -201,9 +201,9 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
                 'command' => 'php '. BP . '/bin/magento queue:consumers:start %s %s %s',
                 'arguments' => ['consumerName', '--pid-file-path=/var/consumer.pid', '--max-messages=10000'],
                 'allowedConsumers' => ['someConsumer'],
-                'shellBackgroundExpects' => $this->never(),
-                'isRunExpects' => $this->never(),
-                'getPidFilePath' => $this->never(),
+                'shellBackgroundExpects' => 0,
+                'isRunExpects' => 0,
+                'getPidFilePath' => 0,
             ],
             [
                 'maxMessages' => 10000,
@@ -212,9 +212,9 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
                 'command' => 'php '. BP . '/bin/magento queue:consumers:start %s %s %s',
                 'arguments' => ['consumerName', '--pid-file-path=/var/consumer.pid', '--max-messages=10000'],
                 'allowedConsumers' => [],
-                'shellBackgroundExpects' => $this->never(),
-                'isRunExpects' => $this->once(),
-                'getPidFilePath' => $this->never(),
+                'shellBackgroundExpects' => 0,
+                'isRunExpects' => 1,
+                'getPidFilePath' => 0,
             ],
             [
                 'maxMessages' => 10000,
@@ -223,9 +223,9 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
                 'command' => 'php '. BP . '/bin/magento queue:consumers:start %s %s %s',
                 'arguments' => ['consumerName', '--pid-file-path=/var/consumer.pid', '--max-messages=10000'],
                 'allowedConsumers' => ['consumerName'],
-                'shellBackgroundExpects' => $this->never(),
-                'isRunExpects' => $this->once(),
-                'getPidFilePath' => $this->never(),
+                'shellBackgroundExpects' => 0,
+                'isRunExpects' => 1,
+                'getPidFilePath' => 0,
             ],
             [
                 'maxMessages' => 10000,
@@ -234,9 +234,9 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
                 'command' => 'php '. BP . '/bin/magento queue:consumers:start %s %s %s',
                 'arguments' => ['consumerName', '--pid-file-path=/var/consumer.pid', '--max-messages=10000'],
                 'allowedConsumers' => ['consumerName'],
-                'shellBackgroundExpects' => $this->once(),
-                'isRunExpects' => $this->once(),
-                'getPidFilePath' => $this->once(),
+                'shellBackgroundExpects' => 1,
+                'isRunExpects' => 1,
+                'getPidFilePath' => 1,
             ],
             [
                 'maxMessages' => 0,
@@ -245,9 +245,9 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
                 'command' => '/bin/php '. BP . '/bin/magento queue:consumers:start %s %s',
                 'arguments' => ['consumerName', '--pid-file-path=/var/consumer.pid'],
                 'allowedConsumers' => ['consumerName'],
-                'shellBackgroundExpects' => $this->once(),
-                'isRunExpects' => $this->once(),
-                'getPidFilePath' => $this->once(),
+                'shellBackgroundExpects' => 1,
+                'isRunExpects' => 1,
+                'getPidFilePath' => 1,
             ],
         ];
     }

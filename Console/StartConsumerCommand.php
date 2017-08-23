@@ -47,14 +47,14 @@ class StartConsumerCommand extends Command
      *
      * @param \Magento\Framework\App\State $appState
      * @param ConsumerFactory $consumerFactory
-     * @param WriteFactory $filesystem
      * @param string $name
+     * @param WriteFactory $writeFactory
      */
     public function __construct(
         \Magento\Framework\App\State $appState,
         ConsumerFactory $consumerFactory,
-        WriteFactory $writeFactory = null,
-        $name = null
+        $name = null,
+        WriteFactory $writeFactory = null
     ) {
         $this->appState = $appState;
         $this->consumerFactory = $consumerFactory;

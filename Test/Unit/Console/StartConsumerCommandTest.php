@@ -7,6 +7,9 @@
 namespace Magento\MessageQueue\Test\Unit\Console;
 
 use Magento\MessageQueue\Console\StartConsumerCommand;
+use Magento\Framework\Filesystem\File\WriteFactory;
+use Magento\Framework\Filesystem\File\Write;
+use Magento\Framework\Filesystem\DriverPool;
 
 /**
  * Unit tests for StartConsumerCommand.
@@ -29,6 +32,11 @@ class StartConsumerCommandTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
+     * @var WriteFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $writeFactoryMock;
+
+    /**
      * @var StartConsumerCommand
      */
     private $command;
@@ -42,6 +50,9 @@ class StartConsumerCommandTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()->getMock();
         $this->appState = $this->getMockBuilder(\Magento\Framework\App\State::class)
             ->disableOriginalConstructor()->getMock();
+        $this->writeFactoryMock = $this->getMockBuilder(WriteFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->command = $this->objectManager->getObject(
@@ -49,6 +60,7 @@ class StartConsumerCommandTest extends \PHPUnit\Framework\TestCase
             [
                 'consumerFactory' => $this->consumerFactory,
                 'appState' => $this->appState,
+                'writeFactory' => $this->writeFactoryMock,
             ]
         );
         parent::setUp();
@@ -57,9 +69,12 @@ class StartConsumerCommandTest extends \PHPUnit\Framework\TestCase
     /**
      * Test for execute method.
      *
+     * @param $pidFilePath
+     * @param $savePidExpects
      * @return void
+     * @dataProvider executeDataProvider
      */
-    public function testExecute()
+    public function testExecute($pidFilePath, $savePidExpects)
     {
         $areaCode = 'area_code';
         $numberOfMessages = 10;
@@ -72,15 +87,17 @@ class StartConsumerCommandTest extends \PHPUnit\Framework\TestCase
         $input->expects($this->once())->method('getArgument')
             ->with(\Magento\MessageQueue\Console\StartConsumerCommand::ARGUMENT_CONSUMER)
             ->willReturn($consumerName);
-        $input->expects($this->exactly(3))->method('getOption')
+        $input->expects($this->exactly(4))->method('getOption')
             ->withConsecutive(
                 [\Magento\MessageQueue\Console\StartConsumerCommand::OPTION_NUMBER_OF_MESSAGES],
                 [\Magento\MessageQueue\Console\StartConsumerCommand::OPTION_BATCH_SIZE],
-                [\Magento\MessageQueue\Console\StartConsumerCommand::OPTION_AREACODE]
+                [\Magento\MessageQueue\Console\StartConsumerCommand::OPTION_AREACODE],
+                [\Magento\MessageQueue\Console\StartConsumerCommand::PID_FILE_PATH]
             )->willReturnOnConsecutiveCalls(
                 $numberOfMessages,
                 $batchSize,
-                $areaCode
+                $areaCode,
+                $pidFilePath
             );
         $this->appState->expects($this->once())->method('setAreaCode')->with($areaCode);
         $consumer = $this->getMockBuilder(\Magento\Framework\MessageQueue\ConsumerInterface::class)
@@ -88,10 +105,37 @@ class StartConsumerCommandTest extends \PHPUnit\Framework\TestCase
         $this->consumerFactory->expects($this->once())
             ->method('get')->with($consumerName, $batchSize)->willReturn($consumer);
         $consumer->expects($this->once())->method('process')->with($numberOfMessages);
+
+        /** @var Write|\PHPUnit_Framework_MockObject_MockObject $writeMock */
+        $writeMock = $this->getMockBuilder(Write::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $writeMock->expects($this->exactly($savePidExpects))
+            ->method('write')
+            ->with(posix_getpid());
+        $writeMock->expects($this->exactly($savePidExpects))
+            ->method('close');
+
+        $this->writeFactoryMock->expects($this->exactly($savePidExpects))
+            ->method('create')
+            ->with($pidFilePath, DriverPool::FILE, 'w')
+            ->willReturn($writeMock);
+
         $this->assertEquals(
             \Magento\Framework\Console\Cli::RETURN_SUCCESS,
             $this->command->run($input, $output)
         );
+    }
+
+    /**
+     * @return array
+     */
+    public function executeDataProvider()
+    {
+        return [
+            ['pidFilePath' => null, 'savePidExpects' => 0],
+            ['pidFilePath' => '/var/consumer.pid', 'savePidExpects' => 1],
+        ];
     }
 
     /**
@@ -107,6 +151,7 @@ class StartConsumerCommandTest extends \PHPUnit\Framework\TestCase
         $this->command->getDefinition()->getArgument(StartConsumerCommand::ARGUMENT_CONSUMER);
         $this->command->getDefinition()->getOption(StartConsumerCommand::OPTION_NUMBER_OF_MESSAGES);
         $this->command->getDefinition()->getOption(StartConsumerCommand::OPTION_AREACODE);
+        $this->command->getDefinition()->getOption(StartConsumerCommand::PID_FILE_PATH);
         $this->assertContains('To start consumer which will process', $this->command->getHelp());
     }
 }
