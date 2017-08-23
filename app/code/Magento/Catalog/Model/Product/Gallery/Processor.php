@@ -192,6 +192,7 @@ class Processor
         $mediaGalleryData['images'][] = [
             'file' => $fileName,
             'position' => $position,
+            'media_type' => 'image',
             'label' => '',
             'disabled' => (int)$exclude,
         ];
