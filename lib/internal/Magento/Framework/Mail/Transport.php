@@ -5,42 +5,44 @@
  */
 namespace Magento\Framework\Mail;
 
+use Magento\Framework\Exception\MailException;
+use Magento\Framework\Phrase;
+use Zend\Mail\Message;
+use Zend\Mail\Transport\Sendmail;
+
 class Transport implements \Magento\Framework\Mail\TransportInterface
 {
     /**
-     * @var \Zend\Mail\Transport\Sendmail
+     * @var Sendmail
      */
     private $zendTransport;
+
     /**
-     * @var \Magento\Framework\Mail\MessageInterface
+     * @var MessageInterface
      */
     private $message;
 
     /**
      * @param MessageInterface $message
-     * @param null $parameters
-     * @throws \InvalidArgumentException
+     * @param null|string|array|\Traversable $parameters
      */
-    public function __construct(\Magento\Framework\Mail\MessageInterface $message, $parameters = null)
+    public function __construct(MessageInterface $message, $parameters = null)
     {
-        $this->zendTransport = new \Zend\Mail\Transport\Sendmail($parameters);
+        $this->zendTransport = new Sendmail($parameters);
         $this->message = $message;
     }
 
     /**
-     * Send a mail using this transport
-     *
-     * @return void
-     * @throws \Magento\Framework\Exception\MailException
+     * @inheritdoc
      */
     public function sendMessage()
     {
         try {
             $this->zendTransport->send(
-                \Zend\Mail\Message::fromString($this->message->getRawMessage())
+                Message::fromString($this->message->getRawMessage())
             );
         } catch (\Exception $e) {
-            throw new \Magento\Framework\Exception\MailException(new \Magento\Framework\Phrase($e->getMessage()), $e);
+            throw new MailException(new Phrase($e->getMessage()), $e);
         }
     }
 
