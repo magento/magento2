@@ -17,7 +17,7 @@ class Index extends Template
     /**
      * @return mixed|string
      */
-    public function getParamStore()
+    private function getParamStore()
     {
         return ($this->getRequest()->getParam('store')) ? $this->getRequest()->getParam('store') : 'all';
     }
