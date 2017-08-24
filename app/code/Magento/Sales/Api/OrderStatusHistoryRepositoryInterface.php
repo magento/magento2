@@ -40,6 +40,7 @@ interface OrderStatusHistoryRepositoryInterface
      *
      * @param \Magento\Sales\Api\Data\OrderStatusHistoryInterface $entity The order status comment.
      * @return bool
+     * @throws \Magento\Framework\Exception\CouldNotDeleteException
      */
     public function delete(\Magento\Sales\Api\Data\OrderStatusHistoryInterface $entity);
 
@@ -48,6 +49,7 @@ interface OrderStatusHistoryRepositoryInterface
      *
      * @param \Magento\Sales\Api\Data\OrderStatusHistoryInterface $entity The order status comment.
      * @return \Magento\Sales\Api\Data\OrderStatusHistoryInterface Order status history interface.
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
     public function save(\Magento\Sales\Api\Data\OrderStatusHistoryInterface $entity);
 }
