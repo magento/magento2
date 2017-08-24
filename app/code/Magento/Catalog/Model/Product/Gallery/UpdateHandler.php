@@ -27,10 +27,15 @@ class UpdateHandler extends \Magento\Catalog\Model\Product\Gallery\CreateHandler
 
         foreach ($images as &$image) {
             if (!empty($image['removed'])) {
-                if (!empty($image['value_id']) && !isset($picturesInOtherStores[$image['file']])) {
+                if (!empty($image['value_id'])) {
+                    /**
+                     * Records work on store level and should be deleted no matter the same file
+                     * used across stores or not
+                     */
                     $recordsToDelete[] = $image['value_id'];
+
                     // only delete physical files if they are not used by any other products
-                    if (!($this->resourceModel->countImageUses($image['file']) > 1)) {
+                    if (!($this->resourceModel->countImageUses($image['file']) > 1) && !isset($picturesInOtherStores[$image['file']])) {
                         $filesToDelete[] = ltrim($image['file'], '/');
                     }
                 }
