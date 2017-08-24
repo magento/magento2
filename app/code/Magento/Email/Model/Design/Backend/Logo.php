@@ -7,6 +7,10 @@ namespace Magento\Email\Model\Design\Backend;
 
 use Magento\Theme\Model\Design\Backend\Logo as DesignLogo;
 
+/**
+ * Class \Magento\Email\Model\Design\Backend\Logo
+ *
+ */
 class Logo extends DesignLogo
 {
     /**

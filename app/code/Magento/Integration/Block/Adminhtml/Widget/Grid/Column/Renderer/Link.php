@@ -10,9 +10,15 @@ namespace Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer;
 use Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer;
 use Magento\Framework\DataObject;
 
+/**
+ * Class \Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Link
+ *
+ */
 class Link extends AbstractRenderer
 {
-    /** @var \Magento\Framework\DataObject */
+    /**
+     * @var \Magento\Framework\DataObject
+     */
     protected $_row;
 
     /**

@@ -9,6 +9,10 @@
  */
 namespace Magento\Paypal\Block\Adminhtml\System\Config\Fieldset;
 
+/**
+ * Class \Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Group
+ *
+ */
 class Group extends \Magento\Config\Block\System\Config\Form\Fieldset
 {
     /**

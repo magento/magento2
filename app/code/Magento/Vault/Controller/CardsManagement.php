@@ -11,6 +11,10 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Exception\NotFoundException;
 
+/**
+ * Class \Magento\Vault\Controller\CardsManagement
+ *
+ */
 abstract class CardsManagement extends \Magento\Framework\App\Action\Action
 {
     /**

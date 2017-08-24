@@ -26,7 +26,7 @@ use Magento\Framework\Event\ManagerInterface;
  * @see Update
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class UpdateTest extends \PHPUnit_Framework_TestCase
+class UpdateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Update

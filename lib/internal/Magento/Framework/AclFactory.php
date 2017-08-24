@@ -7,6 +7,10 @@
  */
 namespace Magento\Framework;
 
+/**
+ * Class \Magento\Framework\AclFactory
+ *
+ */
 class AclFactory
 {
     /**

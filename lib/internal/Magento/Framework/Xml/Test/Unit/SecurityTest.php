@@ -12,7 +12,7 @@ use Magento\Framework\Xml\Security;
  *
  * Test for class \Magento\Framework\Xml\Security
  */
-class SecurityTest extends \PHPUnit_Framework_TestCase
+class SecurityTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Security

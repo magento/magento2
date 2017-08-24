@@ -5,6 +5,10 @@
  */
 namespace Magento\Sitemap\Model\Config\Source;
 
+/**
+ * Class \Magento\Sitemap\Model\Config\Source\Frequency
+ *
+ */
 class Frequency implements \Magento\Framework\Option\ArrayInterface
 {
     /**

@@ -8,6 +8,10 @@ namespace Magento\Checkout\Controller\Onepage;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\PaymentException;
 
+/**
+ * Class \Magento\Checkout\Controller\Onepage\SaveOrder
+ *
+ */
 class SaveOrder extends \Magento\Checkout\Controller\Onepage
 {
     /**

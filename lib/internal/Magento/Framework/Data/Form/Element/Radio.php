@@ -11,6 +11,10 @@
  */
 namespace Magento\Framework\Data\Form\Element;
 
+/**
+ * Class \Magento\Framework\Data\Form\Element\Radio
+ *
+ */
 class Radio extends \Magento\Framework\Data\Form\Element\AbstractElement
 {
     /**

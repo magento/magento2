@@ -8,7 +8,7 @@ namespace Magento\Catalog\Test\Unit\Model\Product\Attribute\Backend;
 /**
  * Unit test for Tierprice model.
  */
-class TierpriceTest extends \PHPUnit_Framework_TestCase
+class TierpriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Tierprice
@@ -125,7 +125,7 @@ class TierpriceTest extends \PHPUnit_Framework_TestCase
                 'price_qty' => 1,
             ]
         ];
-        $object = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $object = $this->createMock(\Magento\Catalog\Model\Product::class);
         $this->attribute->expects($this->atLeastOnce())->method('getName')->willReturn($attributeName);
         $object->expects($this->atLeastOnce())->method('getData')->with($attributeName)->willReturn($tierPrices);
         $this->localeFormat->expects($this->once())->method('getNumber')->with(-10)->willReturnArgument(0);

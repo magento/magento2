@@ -6,6 +6,10 @@
 
 namespace Magento\Paypal\Helper\Shortcut;
 
+/**
+ * Class \Magento\Paypal\Helper\Shortcut\Factory
+ *
+ */
 class Factory
 {
     /**

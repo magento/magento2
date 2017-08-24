@@ -9,6 +9,10 @@ use Magento\Framework\Search\RequestInterface;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * Class \Magento\CatalogSearch\Model\Adapter\Aggregation\RequestCheckerComposite
+ *
+ */
 class RequestCheckerComposite implements RequestCheckerInterface
 {
     /**

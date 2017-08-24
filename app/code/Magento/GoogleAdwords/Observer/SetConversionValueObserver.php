@@ -9,6 +9,10 @@ namespace Magento\GoogleAdwords\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class \Magento\GoogleAdwords\Observer\SetConversionValueObserver
+ *
+ */
 class SetConversionValueObserver implements ObserverInterface
 {
     /**
@@ -54,11 +58,19 @@ class SetConversionValueObserver implements ObserverInterface
             return $this;
         }
         $this->_collection->addFieldToFilter('entity_id', ['in' => $orderIds]);
+
         $conversionValue = 0;
-        /** @var $order \Magento\Sales\Model\Order */
+        $conversionCurrency = false;
+        $sendOrderCurrency = $this->_helper->hasSendConversionValueCurrency();
         foreach ($this->_collection as $order) {
-            $conversionValue += $order->getBaseGrandTotal();
+            /** @var $order \Magento\Sales\Api\Data\OrderInterface */
+            $conversionValue += $sendOrderCurrency ? $order->getGrandTotal() : $order->getBaseGrandTotal();
+            $conversionCurrency = $sendOrderCurrency ? $order->getOrderCurrencyCode() : false;
         }
+        $this->_registry->register(
+            \Magento\GoogleAdwords\Helper\Data::CONVERSION_VALUE_CURRENCY_REGISTRY_NAME,
+            $conversionCurrency
+        );
         $this->_registry->register(
             \Magento\GoogleAdwords\Helper\Data::CONVERSION_VALUE_REGISTRY_NAME,
             $conversionValue

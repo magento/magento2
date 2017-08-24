@@ -12,7 +12,7 @@ namespace Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset;
 /**
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @deprecated
+ * @deprecated 100.2.0
  */
 class Grouped extends \Magento\GroupedProduct\Block\Product\View\Type\Grouped
 {

@@ -6,6 +6,10 @@
  */
 namespace Magento\User\Controller\Adminhtml\User;
 
+/**
+ * Class \Magento\User\Controller\Adminhtml\User\Validate
+ *
+ */
 class Validate extends \Magento\User\Controller\Adminhtml\User
 {
     /**

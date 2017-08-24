@@ -9,6 +9,10 @@ namespace Magento\Newsletter\Controller\Adminhtml\Template;
 use Magento\Framework\App\TemplateTypesInterface;
 use Magento\Framework\Exception\LocalizedException;
 
+/**
+ * Class \Magento\Newsletter\Controller\Adminhtml\Template\Save
+ *
+ */
 class Save extends \Magento\Newsletter\Controller\Adminhtml\Template
 {
     /**

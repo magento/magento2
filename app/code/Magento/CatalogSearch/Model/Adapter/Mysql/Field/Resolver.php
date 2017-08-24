@@ -10,6 +10,10 @@ use Magento\Framework\Search\Adapter\Mysql\Field\FieldFactory;
 use Magento\Framework\Search\Adapter\Mysql\Field\FieldInterface;
 use Magento\Framework\Search\Adapter\Mysql\Field\ResolverInterface;
 
+/**
+ * Class \Magento\CatalogSearch\Model\Adapter\Mysql\Field\Resolver
+ *
+ */
 class Resolver implements ResolverInterface
 {
     /**

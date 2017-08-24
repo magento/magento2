@@ -14,6 +14,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Helper\Table;
 
+/**
+ * Class \Magento\Developer\Console\Command\DiInfoCommand
+ *
+ */
 class DiInfoCommand extends Command
 {
     /**
@@ -51,7 +55,7 @@ class DiInfoCommand extends Command
              ->setDescription('Provides information on Dependency Injection configuration for the Command.')
              ->setDefinition([
                 new InputArgument(self::CLASS_NAME, InputArgument::REQUIRED, 'Class name')
-            ]);
+             ]);
 
         parent::configure();
     }

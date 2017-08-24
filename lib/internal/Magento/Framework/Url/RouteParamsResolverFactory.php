@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\Url;
 
+/**
+ * Class \Magento\Framework\Url\RouteParamsResolverFactory
+ *
+ */
 class RouteParamsResolverFactory
 {
     /**

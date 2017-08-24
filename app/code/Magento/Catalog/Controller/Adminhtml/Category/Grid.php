@@ -6,6 +6,10 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category;
 
+/**
+ * Class \Magento\Catalog\Controller\Adminhtml\Category\Grid
+ *
+ */
 class Grid extends \Magento\Catalog\Controller\Adminhtml\Category
 {
     /**

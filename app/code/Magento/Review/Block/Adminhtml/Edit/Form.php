@@ -9,6 +9,10 @@
  */
 namespace Magento\Review\Block\Adminhtml\Edit;
 
+/**
+ * Class \Magento\Review\Block\Adminhtml\Edit\Form
+ *
+ */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**

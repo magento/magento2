@@ -9,6 +9,10 @@
  */
 namespace Magento\Paypal\Model;
 
+/**
+ * Class \Magento\Paypal\Model\Payflowadvanced
+ *
+ */
 class Payflowadvanced extends \Magento\Paypal\Model\Payflowlink
 {
     /**

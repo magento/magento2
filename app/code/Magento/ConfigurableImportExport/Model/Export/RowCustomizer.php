@@ -11,6 +11,10 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableP
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 use Magento\ImportExport\Model\Import;
 
+/**
+ * Class \Magento\ConfigurableImportExport\Model\Export\RowCustomizer
+ *
+ */
 class RowCustomizer implements RowCustomizerInterface
 {
     /**

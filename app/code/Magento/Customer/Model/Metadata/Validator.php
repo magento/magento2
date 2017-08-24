@@ -6,6 +6,10 @@
  */
 namespace Magento\Customer\Model\Metadata;
 
+/**
+ * Class \Magento\Customer\Model\Metadata\Validator
+ *
+ */
 class Validator extends \Magento\Eav\Model\Validator\Attribute\Data
 {
     /**

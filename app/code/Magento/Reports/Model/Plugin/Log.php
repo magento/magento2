@@ -7,6 +7,10 @@
  */
 namespace Magento\Reports\Model\Plugin;
 
+/**
+ * Class \Magento\Reports\Model\Plugin\Log
+ *
+ */
 class Log
 {
     /**

@@ -5,6 +5,10 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Create;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Order\Create\ConfigureProductToAdd
+ *
+ */
 class ConfigureProductToAdd extends \Magento\Sales\Controller\Adminhtml\Order\Create
 {
     /**

@@ -9,6 +9,10 @@
  */
 namespace Magento\Catalog\Model\Product\Option\Type;
 
+/**
+ * Class \Magento\Catalog\Model\Product\Option\Type\Factory
+ *
+ */
 class Factory
 {
     /**

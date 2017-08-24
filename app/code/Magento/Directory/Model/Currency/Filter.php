@@ -11,6 +11,10 @@ namespace Magento\Directory\Model\Currency;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 
+/**
+ * Class \Magento\Directory\Model\Currency\Filter
+ *
+ */
 class Filter implements \Zend_Filter_Interface
 {
     /**

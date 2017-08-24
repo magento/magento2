@@ -9,6 +9,10 @@ use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\TaxImportExport\Controller\Adminhtml\Rate\ExportXml
+ *
+ */
 class ExportXml extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
 {
     /**

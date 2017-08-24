@@ -13,6 +13,10 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Request\BucketInterface;
 use Magento\Framework\Search\Request\Dimension;
 
+/**
+ * Class \Magento\CatalogSearch\Model\Adapter\Mysql\Plugin\Aggregation\Category\DataProvider
+ *
+ */
 class DataProvider
 {
     /**

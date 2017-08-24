@@ -11,6 +11,10 @@ use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\InputException;
 
+/**
+ * Class \Magento\Catalog\Model\ProductLink\Management
+ *
+ */
 class Management implements \Magento\Catalog\Api\ProductLinkManagementInterface
 {
     /**

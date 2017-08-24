@@ -12,6 +12,10 @@ use Magento\Framework\App;
 use Magento\Setup\Module\Di\Code\GeneratorFactory;
 use Magento\Setup\Module\Di\Code\Reader\ClassesScanner;
 
+/**
+ * Class \Magento\Setup\Module\Di\App\Task\Operation\Interception
+ *
+ */
 class Interception implements OperationInterface
 {
     /**

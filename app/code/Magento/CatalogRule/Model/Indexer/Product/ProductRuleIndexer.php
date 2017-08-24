@@ -7,6 +7,10 @@ namespace Magento\CatalogRule\Model\Indexer\Product;
 
 use Magento\CatalogRule\Model\Indexer\AbstractIndexer;
 
+/**
+ * Class \Magento\CatalogRule\Model\Indexer\Product\ProductRuleIndexer
+ *
+ */
 class ProductRuleIndexer extends AbstractIndexer
 {
     /**

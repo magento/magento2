@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\Filter;
 
+/**
+ * Class \Magento\Framework\Filter\Money
+ *
+ */
 class Money implements \Zend_Filter_Interface
 {
     /**

@@ -65,13 +65,14 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
                 ]
             );
 
-            $deleteConfirmMsg = __("Are you sure you want to revoke the user\'s tokens?");
+            $deleteConfirmMsg = __("Are you sure you want to revoke the user's tokens?");
             $this->addButton(
                 'invalidate',
                 [
                     'label' => __('Force Sign-In'),
                     'class' => 'invalidate-token',
-                    'onclick' => "deleteConfirm('" . $deleteConfirmMsg . "', '" . $this->getInvalidateUrl() . "')",
+                    'onclick' => "deleteConfirm('" . $this->escapeJs($this->escapeHtml($deleteConfirmMsg)) .
+                        "', '" . $this->getInvalidateUrl() . "')",
                 ]
             );
         }
@@ -85,6 +86,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * - click "Delete User" at top left part of the page;
      *
      * @return \Magento\Framework\Phrase
+     * @since 100.2.0
      */
     public function getDeleteMessage()
     {
@@ -97,6 +99,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Magento\User\Controller\Adminhtml\User\Delete
      *
      * @return string
+     * @since 100.2.0
      */
     public function getDeleteUrl()
     {
@@ -109,6 +112,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * to create a new user account OR to edit the previously created user account
      *
      * @return int
+     * @since 100.2.0
      */
     public function getObjectId()
     {

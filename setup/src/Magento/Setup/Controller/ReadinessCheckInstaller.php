@@ -8,6 +8,10 @@ namespace Magento\Setup\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
+/**
+ * Class \Magento\Setup\Controller\ReadinessCheckInstaller
+ *
+ */
 class ReadinessCheckInstaller extends AbstractActionController
 {
     const INSTALLER = 'installer';

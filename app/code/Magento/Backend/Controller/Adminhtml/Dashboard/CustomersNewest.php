@@ -6,6 +6,10 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\Dashboard;
 
+/**
+ * Class \Magento\Backend\Controller\Adminhtml\Dashboard\CustomersNewest
+ *
+ */
 class CustomersNewest extends AjaxBlock
 {
     /**

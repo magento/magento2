@@ -7,7 +7,7 @@ namespace Magento\Framework\Acl\Test\Unit;
 
 use Magento\Framework\Acl\Builder;
 
-class BuilderTest extends \PHPUnit_Framework_TestCase
+class BuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -42,11 +42,11 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_aclMock = new \Magento\Framework\Acl();
-        $this->_aclFactoryMock = $this->getMock(\Magento\Framework\AclFactory::class, [], [], '', false);
+        $this->_aclFactoryMock = $this->createMock(\Magento\Framework\AclFactory::class);
         $this->_aclFactoryMock->expects($this->any())->method('create')->will($this->returnValue($this->_aclMock));
-        $this->_roleLoader = $this->getMock(\Magento\Framework\Acl\Loader\DefaultLoader::class);
-        $this->_ruleLoader = $this->getMock(\Magento\Framework\Acl\Loader\DefaultLoader::class);
-        $this->_resourceLoader = $this->getMock(\Magento\Framework\Acl\Loader\DefaultLoader::class);
+        $this->_roleLoader = $this->createMock(\Magento\Framework\Acl\Loader\DefaultLoader::class);
+        $this->_ruleLoader = $this->createMock(\Magento\Framework\Acl\Loader\DefaultLoader::class);
+        $this->_resourceLoader = $this->createMock(\Magento\Framework\Acl\Loader\DefaultLoader::class);
         $this->_model = new \Magento\Framework\Acl\Builder(
             $this->_aclFactoryMock,
             $this->_roleLoader,

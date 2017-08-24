@@ -34,7 +34,9 @@ class Tabs extends \Magento\Backend\Block\Widget
      */
     protected $_destElementId = 'content';
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $_template = 'Magento_Backend::widget/tabs.phtml';
 
     /**

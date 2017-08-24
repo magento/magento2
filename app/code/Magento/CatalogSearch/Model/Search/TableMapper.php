@@ -105,7 +105,7 @@ class TableMapper
      * This method is deprecated.
      * Please use \Magento\CatalogSearch\Model\Adapter\Mysql\Filter\AliasResolver::getAlias() instead.
      *
-     * @deprecated
+     * @deprecated 100.2.0
      * @see AliasResolver::getAlias()
      *
      * @param FilterInterface $filter

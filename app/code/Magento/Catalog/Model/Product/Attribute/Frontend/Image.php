@@ -11,6 +11,10 @@
  */
 namespace Magento\Catalog\Model\Product\Attribute\Frontend;
 
+/**
+ * Class \Magento\Catalog\Model\Product\Attribute\Frontend\Image
+ *
+ */
 class Image extends \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend
 {
     /**
