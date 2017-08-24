@@ -68,19 +68,6 @@ class BundleOptionRegularPrice extends AbstractPrice implements BundleOptionPric
     }
 
     /**
-     * Getter for maximal price of options
-     *
-     * @return bool|float
-     */
-    public function getMaxValue()
-    {
-        if (null === $this->maximalPrice) {
-            $this->maximalPrice = $this->bundleOptions->calculateOptions($this->product, false);
-        }
-        return $this->maximalPrice;
-    }
-
-    /**
      * Get Options with attached Selections collection
      *
      * @return \Magento\Bundle\Model\ResourceModel\Option\Collection

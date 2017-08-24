@@ -56,7 +56,6 @@ class BundleOptions
         return $priceOptions;
     }
 
-
     /**
      * Calculate maximal or minimal options value
      *
@@ -111,7 +110,7 @@ class BundleOptions
                     $bundleProduct,
                     $selection,
                     $selection->getSelectionQty(),
-                    ['useRegularPrice' => $useRegularPrice ? true : false]
+                    ['useRegularPrice' => $useRegularPrice]
                 );
             $this->optionSelectionAmountCache[$cacheKey] =  $selectionPrice->getAmount();
         }

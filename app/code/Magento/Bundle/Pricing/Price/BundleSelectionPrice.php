@@ -150,7 +150,10 @@ class BundleSelectionPrice extends AbstractPrice
     public function getAmount()
     {
         $product = $this->selection;
-        $bundleSelectionKey = 'bundle-selection-amount-' . $product->getSelectionId() . '-' . ($this->useRegularPrice ? 1 : 0);
+        $bundleSelectionKey = 'bundle-selection-amount-'
+            . $product->getSelectionId()
+            . '-'
+            . ($this->useRegularPrice ? '' : 'regular-price');
         if ($product->hasData($bundleSelectionKey)) {
             return $product->getData($bundleSelectionKey);
         }
