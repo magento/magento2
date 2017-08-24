@@ -143,7 +143,7 @@ class LoaderTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage Circular sequence reference from 'b' to 'a'
+     * @expectedExceptionMessage Dependency cycle detected: a -> b -> a
      */
     public function testLoadCircular()
     {

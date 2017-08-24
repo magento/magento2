@@ -77,6 +77,26 @@ class Graph
     }
 
     /**
+     * Unset a relation between nodes
+     *
+     * @param string|int $fromNode
+     * @param string|int $toNode
+     * @return $this
+     * @throws \InvalidArgumentException
+     */
+    public function removeRelation($fromNode, $toNode)
+    {
+        if ($fromNode == $toNode) {
+            throw new \InvalidArgumentException("Graph node '{$fromNode}' is linked to itself.");
+        }
+        $this->_assertNode($fromNode, true);
+        $this->_assertNode($toNode, true);
+        unset($this->_from[$fromNode][$toNode]);
+        unset($this->_to[$toNode][$fromNode]);
+        return $this;
+    }
+
+    /**
      * Export relations between nodes. Can return inverse relations
      *
      * @param int $mode
@@ -182,6 +202,68 @@ class Graph
     }
 
     /**
+     * Perform a topological sort on the graph. This algorithm is not possible if the graph contains a cycle.
+     *
+     * @return array
+     * @throws \Exception
+     */
+    public function topoSort()
+    {
+        $l = [];
+        $s = $this->_findStartNodes();
+
+        while (!empty($s)) {
+            $n = array_shift($s);
+            array_unshift($l, $n);
+            if (!isset($this->_from[$n])) {
+                continue;
+            }
+            foreach ($this->_from[$n] as $m) {
+                $this->removeRelation($n, $m);
+                if (empty($this->_to[$m])) {
+                    array_push($s, $m);
+                }
+            }
+        }
+
+        if ($this->hasEdges()) {
+            $cycle = $this->findCycle();
+            $message = "Dependency cycle detected: " . implode(" -> ", $cycle);
+            throw new \Exception($message);
+        }
+
+        return $l;
+    }
+
+    public function hasEdges()
+    {
+        foreach ($this->_from as $from) {
+            if (count($from) > 0) {
+                return true;
+            }
+        }
+
+        foreach ($this->_to as $to) {
+            if (count($to) > 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Finds all graph nodes with no incoming edge
+     *
+     * @return array
+     */
+    protected function _findStartNodes()
+    {
+        $nodesWithIncomingEdges = array_keys($this->_to);
+        return array_diff($this->_nodes, $nodesWithIncomingEdges);
+    }
+
+        /**
      * Recursive sub-routine of dfs()
      *
      * @param string|int $fromNode
