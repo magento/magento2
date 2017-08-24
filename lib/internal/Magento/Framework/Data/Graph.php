@@ -209,19 +209,19 @@ class Graph
      */
     public function topoSort()
     {
-        $l = [];
-        $s = $this->_findStartNodes();
+        $sortedElements = [];
+        $nodeSet = $this->_findStartNodes();
 
-        while (!empty($s)) {
-            $n = array_shift($s);
-            array_unshift($l, $n);
-            if (!isset($this->_from[$n])) {
+        while (!empty($nodeSet)) {
+            $cur = array_shift($nodeSet);
+            array_unshift($sortedElements, $cur);
+            if (!isset($this->_from[$cur])) {
                 continue;
             }
-            foreach ($this->_from[$n] as $m) {
-                $this->removeRelation($n, $m);
-                if (empty($this->_to[$m])) {
-                    array_push($s, $m);
+            foreach ($this->_from[$cur] as $parent) {
+                $this->removeRelation($cur, $parent);
+                if (empty($this->_to[$parent])) {
+                    array_push($nodeSet, $parent);
                 }
             }
         }
@@ -232,9 +232,16 @@ class Graph
             throw new \Exception($message);
         }
 
-        return $l;
+        return $sortedElements;
     }
 
+    /**
+     * Determines whether the graph has edges.
+     *
+     * Returns true if the graph has edges. Returns false otherwise.
+     *
+     * @return bool
+     */
     public function hasEdges()
     {
         foreach ($this->_from as $from) {
@@ -259,8 +266,8 @@ class Graph
      */
     protected function _findStartNodes()
     {
-        $nodesWithIncomingEdges = array_keys($this->_to);
-        return array_diff($this->_nodes, $nodesWithIncomingEdges);
+        $incomingEdgeNodes = array_keys($this->_to);
+        return array_diff($this->_nodes, $incomingEdgeNodes);
     }
 
     /**
