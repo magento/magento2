@@ -9,6 +9,7 @@ namespace Magento\MysqlMq\Model;
  * Main class for managing MySQL implementation of message queue.
  *
  * @api
+ * @since 100.0.2
  */
 class QueueManagement
 {

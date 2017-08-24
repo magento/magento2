@@ -10,10 +10,6 @@ use Magento\Framework\MessageQueue\ExchangeInterface;
 use Magento\Framework\MessageQueue\ConfigInterface as MessageQueueConfig;
 use Magento\MysqlMq\Model\QueueManagement;
 
-/**
- * Class \Magento\MysqlMq\Model\Driver\Exchange
- *
- */
 class Exchange implements ExchangeInterface
 {
     /**
