@@ -72,7 +72,6 @@ class BundleOptionRegularPriceTest extends \PHPUnit\Framework\TestCase
             ->method('getOptionSelectionAmount')
             ->will($this->returnValue($selectionAmount))
             ->with($product, $selection, true);
-
         $this->assertEquals($selectionAmount, $this->bundleOptionRegularPrice->getOptionSelectionAmount($selection));
     }
 

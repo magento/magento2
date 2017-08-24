@@ -103,7 +103,10 @@ class BundleSelectionPrice extends AbstractPrice
             return $this->value;
         }
         $product = $this->selection;
-        $bundleSelectionKey = 'bundle-selection-value-' . $product->getSelectionId() . '-' . ($this->useRegularPrice ? 1 : 0);
+        $bundleSelectionKey = 'bundle-selection-'
+            . ($this->useRegularPrice ? 'regular-' : '')
+            . 'value-'
+            . $product->getSelectionId();
         if ($product->hasData($bundleSelectionKey)) {
             return $product->getData($bundleSelectionKey);
         }
@@ -150,10 +153,10 @@ class BundleSelectionPrice extends AbstractPrice
     public function getAmount()
     {
         $product = $this->selection;
-        $bundleSelectionKey = 'bundle-selection-amount-'
-            . $product->getSelectionId()
-            . '-'
-            . ($this->useRegularPrice ? '' : 'regular-price');
+        $bundleSelectionKey = 'bundle-selection'
+            . ($this->useRegularPrice ? 'regular-' : '')
+            . '-amount-'
+            . $product->getSelectionId();
         if ($product->hasData($bundleSelectionKey)) {
             return $product->getData($bundleSelectionKey);
         }
