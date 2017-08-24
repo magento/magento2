@@ -4,8 +4,12 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Css\PreProcessor\Adapter;
+
 use Pelago\Emogrifier;
 
+/**
+ * Adapter for Emogrifier 3rd party library
+ */
 class CssInliner
 {
     /**
@@ -13,12 +17,9 @@ class CssInliner
      */
     private $emogrifier;
 
-    /**
-     * @param Emogrifier $emogrifier
-     */
-    public function __construct(Emogrifier $emogrifier)
+    public function __construct()
     {
-        $this->emogrifier = $emogrifier;
+        $this->emogrifier = new Emogrifier;
     }
 
     /**
