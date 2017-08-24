@@ -10,10 +10,6 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Search\Model\QueryInterface;
 use Magento\AdvancedSearch\Model\SuggestedQueriesInterface;
 
-/**
- * Class \Magento\AdvancedSearch\Model\Recommendations\DataProvider
- *
- */
 class DataProvider implements SuggestedQueriesInterface
 {
     /**

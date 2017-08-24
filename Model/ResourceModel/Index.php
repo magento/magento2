@@ -35,7 +35,6 @@ class Index extends AbstractDb
      * @param StoreManagerInterface $storeManager
      * @param MetadataPool $metadataPool
      * @param null $connectionName
-     * @since 100.1.0
      */
     public function __construct(
         Context $context,
