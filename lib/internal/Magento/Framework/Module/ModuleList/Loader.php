@@ -133,7 +133,7 @@ class Loader
         $relations = [];
 
         // collect graph nodes and edges
-        foreach($origList as $module) {
+        foreach ($origList as $module) {
             $nodes[] = $module['name'];
             foreach ($module['sequence'] as $dependency) {
                 $relations[] = [$module['name'], $dependency];

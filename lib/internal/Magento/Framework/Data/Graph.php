@@ -263,7 +263,7 @@ class Graph
         return array_diff($this->_nodes, $nodesWithIncomingEdges);
     }
 
-        /**
+    /**
      * Recursive sub-routine of dfs()
      *
      * @param string|int $fromNode
