@@ -9,10 +9,6 @@ namespace Magento\AsynchronousOperations\Model\BulkStatus;
 use Magento\AsynchronousOperations\Api\Data\OperationInterface;
 use Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface;
 
-/**
- * Class \Magento\AsynchronousOperations\Model\BulkStatus\CalculatedStatusSql
- *
- */
 class CalculatedStatusSql
 {
     /**
