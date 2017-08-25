@@ -29,9 +29,8 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
     //const MODULE_NAME = 'Magento_Eav';
 
     /**
-     * Prefix of model events object
-     *
-     * @var string
+     * Name of the module
+     * Override it
      */
     protected $_eventObject = 'attribute';
 

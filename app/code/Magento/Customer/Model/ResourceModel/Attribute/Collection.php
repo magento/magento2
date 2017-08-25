@@ -11,6 +11,10 @@
  */
 namespace Magento\Customer\Model\ResourceModel\Attribute;
 
+/**
+ * Class \Magento\Customer\Model\ResourceModel\Attribute\Collection
+ *
+ */
 class Collection extends \Magento\Eav\Model\ResourceModel\Attribute\Collection
 {
     /**

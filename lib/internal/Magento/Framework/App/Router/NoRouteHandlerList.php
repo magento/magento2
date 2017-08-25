@@ -7,6 +7,10 @@
  */
 namespace Magento\Framework\App\Router;
 
+/**
+ * Class \Magento\Framework\App\Router\NoRouteHandlerList
+ *
+ */
 class NoRouteHandlerList
 {
     /**

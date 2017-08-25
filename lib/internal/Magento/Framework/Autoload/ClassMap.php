@@ -7,6 +7,10 @@
  */
 namespace Magento\Framework\Autoload;
 
+/**
+ * Class \Magento\Framework\Autoload\ClassMap
+ *
+ */
 class ClassMap
 {
     /**

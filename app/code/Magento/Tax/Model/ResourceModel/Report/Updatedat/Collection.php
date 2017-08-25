@@ -11,6 +11,10 @@
  */
 namespace Magento\Tax\Model\ResourceModel\Report\Updatedat;
 
+/**
+ * Class \Magento\Tax\Model\ResourceModel\Report\Updatedat\Collection
+ *
+ */
 class Collection extends \Magento\Tax\Model\ResourceModel\Report\Collection
 {
     /**

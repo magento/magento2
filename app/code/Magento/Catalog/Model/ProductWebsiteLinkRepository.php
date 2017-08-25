@@ -10,6 +10,10 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Catalog\Api\Data\ProductWebsiteLinkInterface;
 
+/**
+ * Class \Magento\Catalog\Model\ProductWebsiteLinkRepository
+ *
+ */
 class ProductWebsiteLinkRepository implements \Magento\Catalog\Api\ProductWebsiteLinkRepositoryInterface
 {
     /**

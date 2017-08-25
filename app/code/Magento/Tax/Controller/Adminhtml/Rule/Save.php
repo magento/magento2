@@ -8,6 +8,10 @@ namespace Magento\Tax\Controller\Adminhtml\Rule;
 
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Tax\Controller\Adminhtml\Rule\Save
+ *
+ */
 class Save extends \Magento\Tax\Controller\Adminhtml\Rule
 {
     /**

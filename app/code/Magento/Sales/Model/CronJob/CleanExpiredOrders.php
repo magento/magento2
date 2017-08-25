@@ -8,6 +8,10 @@ namespace Magento\Sales\Model\CronJob;
 use Magento\Store\Model\StoresConfig;
 use Magento\Sales\Model\Order;
 
+/**
+ * Class \Magento\Sales\Model\CronJob\CleanExpiredOrders
+ *
+ */
 class CleanExpiredOrders
 {
     /**

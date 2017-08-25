@@ -6,6 +6,10 @@
  */
 namespace Magento\Newsletter\Controller\Adminhtml\Queue;
 
+/**
+ * Class \Magento\Newsletter\Controller\Adminhtml\Queue\Resume
+ *
+ */
 class Resume extends \Magento\Newsletter\Controller\Adminhtml\Queue
 {
     /**

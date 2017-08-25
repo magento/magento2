@@ -7,6 +7,10 @@ namespace Magento\Search\Model;
 
 use Magento\Search\Api\SynonymAnalyzerInterface;
 
+/**
+ * Class \Magento\Search\Model\SynonymAnalyzer
+ *
+ */
 class SynonymAnalyzer implements SynonymAnalyzerInterface
 {
     /**

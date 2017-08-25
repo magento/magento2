@@ -6,6 +6,10 @@
  */
 namespace Magento\Cms\Controller\Adminhtml\Wysiwyg\Images;
 
+/**
+ * Class \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\DeleteFolder
+ *
+ */
 class DeleteFolder extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
 {
     /**

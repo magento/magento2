@@ -6,6 +6,10 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Design;
 
+/**
+ * Class \Magento\Backend\Controller\Adminhtml\System\Design\Grid
+ *
+ */
 class Grid extends \Magento\Backend\Controller\Adminhtml\System\Design
 {
     /**

@@ -9,8 +9,6 @@ namespace Magento\Authorization\Model;
 /**
  * Admin Rules Model
  *
- * @method \Magento\Authorization\Model\ResourceModel\Rules _getResource()
- * @method \Magento\Authorization\Model\ResourceModel\Rules getResource()
  * @method int getRoleId()
  * @method \Magento\Authorization\Model\Rules setRoleId(int $value)
  * @method string getResourceId()

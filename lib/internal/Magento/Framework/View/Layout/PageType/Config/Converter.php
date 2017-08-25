@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\View\Layout\PageType\Config;
 
+/**
+ * Class \Magento\Framework\View\Layout\PageType\Config\Converter
+ *
+ */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**

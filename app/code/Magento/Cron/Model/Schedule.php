@@ -7,12 +7,12 @@
 namespace Magento\Cron\Model;
 
 use Magento\Framework\Exception\CronException;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
  * Crontab schedule model
  *
- * @method \Magento\Cron\Model\ResourceModel\Schedule _getResource()
- * @method \Magento\Cron\Model\ResourceModel\Schedule getResource()
  * @method string getJobCode()
  * @method \Magento\Cron\Model\Schedule setJobCode(string $value)
  * @method string getStatus()
@@ -45,20 +45,28 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
     const STATUS_ERROR = 'error';
 
     /**
+     * @var TimezoneInterface
+     */
+    private $timezoneConverter;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param TimezoneInterface $timezoneConverter
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        TimezoneInterface $timezoneConverter = null
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+        $this->timezoneConverter = $timezoneConverter ?: ObjectManager::getInstance()->get(TimezoneInterface::class);
     }
 
     /**
@@ -101,6 +109,9 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
             return false;
         }
         if (!is_numeric($time)) {
+            //convert time from UTC to admin store timezone
+            //we assume that all schedules in configuration (crontab.xml and DB tables) are in admin store timezone
+            $time = $this->timezoneConverter->date($time)->format('Y-m-d H:i');
             $time = strtotime($time);
         }
         $match = $this->matchCronExpression($e[0], strftime('%M', $time))

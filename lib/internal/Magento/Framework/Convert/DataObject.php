@@ -11,6 +11,10 @@
  */
 namespace Magento\Framework\Convert;
 
+/**
+ * Class \Magento\Framework\Convert\DataObject
+ *
+ */
 class DataObject
 {
     /** Constant used to mark cycles in the input array/objects */

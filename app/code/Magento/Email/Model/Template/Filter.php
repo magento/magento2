@@ -310,7 +310,7 @@ class Filter extends \Magento\Framework\Filter\Template
     }
 
     /**
-     * @deprecated
+     * @deprecated 100.1.2
      * @return Css\Processor
      */
     private function getCssProcessor()
@@ -322,7 +322,7 @@ class Filter extends \Magento\Framework\Filter\Template
     }
 
     /**
-     * @deprecated
+     * @deprecated 100.1.2
      * @param string $dirType
      * @return ReadInterface
      */

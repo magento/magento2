@@ -8,8 +8,6 @@ namespace Magento\Directory\Model\Country;
 /**
  * Directory country format model
  *
- * @method \Magento\Directory\Model\ResourceModel\Country\Format _getResource()
- * @method \Magento\Directory\Model\ResourceModel\Country\Format getResource()
  * @method string getCountryId()
  * @method \Magento\Directory\Model\Country\Format setCountryId(string $value)
  * @method string getType()

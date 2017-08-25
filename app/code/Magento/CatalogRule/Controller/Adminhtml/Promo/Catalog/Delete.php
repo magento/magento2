@@ -8,6 +8,10 @@ namespace Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog;
 
 use Magento\Framework\Exception\LocalizedException;
 
+/**
+ * Class \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog\Delete
+ *
+ */
 class Delete extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
 {
     /**

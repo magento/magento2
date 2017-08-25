@@ -14,6 +14,10 @@ namespace Magento\CatalogRule\Block\Adminhtml\Promo\Widget\Chooser;
 use Magento\Backend\Block\Widget\Grid;
 use Magento\Backend\Block\Widget\Grid\Column;
 
+/**
+ * Class \Magento\CatalogRule\Block\Adminhtml\Promo\Widget\Chooser\Sku
+ *
+ */
 class Sku extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**

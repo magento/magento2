@@ -11,6 +11,10 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 
+/**
+ * Class \Magento\Setup\Model\AdminAccountFactory
+ *
+ */
 class AdminAccountFactory
 {
     /**

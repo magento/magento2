@@ -12,6 +12,7 @@ use Magento\Config\App\Config\Type\System\Reader;
 /**
  * System configuration type
  * @api
+ * @since 100.1.2
  */
 class System implements ConfigTypeInterface
 {
@@ -90,6 +91,7 @@ class System implements ConfigTypeInterface
      * @param int $cachingNestedLevel
      * @param string $configType
      * @param Reader $reader
+     * @since 100.1.2
      */
     public function __construct(
         \Magento\Framework\App\Config\ConfigSourceInterface $source,
@@ -129,6 +131,7 @@ class System implements ConfigTypeInterface
      * '{scopeType}/{scopeCode}/some/config/variable' - will return value of the config variable in the specified scope
      *
      * @inheritdoc
+     * @since 100.1.2
      */
     public function get($path = '')
     {
@@ -288,6 +291,7 @@ class System implements ConfigTypeInterface
      * - All records in cache storage tagged with CACHE_TAG
      *
      * @return void
+     * @since 100.1.2
      */
     public function clean()
     {

@@ -13,7 +13,7 @@ use Magento\Setup\Model\FixtureGenerator\SqlCollector;
 /**
  * Collect insert queries for quick entity generation
  */
-class SqlCollectorTest extends \PHPUnit_Framework_TestCase
+class SqlCollectorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SqlCollector

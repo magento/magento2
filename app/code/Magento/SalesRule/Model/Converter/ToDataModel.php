@@ -13,6 +13,10 @@ use Magento\SalesRule\Model\Data\Rule as RuleDataModel;
 use Magento\SalesRule\Model\Rule;
 use Magento\Framework\Serialize\Serializer\Json;
 
+/**
+ * Class \Magento\SalesRule\Model\Converter\ToDataModel
+ *
+ */
 class ToDataModel
 {
     /**

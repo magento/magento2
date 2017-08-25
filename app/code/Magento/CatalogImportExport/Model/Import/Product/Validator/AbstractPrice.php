@@ -7,6 +7,10 @@ namespace Magento\CatalogImportExport\Model\Import\Product\Validator;
 
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 
+/**
+ * Class \Magento\CatalogImportExport\Model\Import\Product\Validator\AbstractPrice
+ *
+ */
 abstract class AbstractPrice extends AbstractImportValidator implements RowValidatorInterface
 {
     /**

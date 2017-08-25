@@ -9,7 +9,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * @api
- * @deprecated in favour of UI component implementation
+ * @deprecated 100.2.0 in favour of UI component implementation
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -314,7 +314,8 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
         if ($this->getColumnSet()->getChildBlock($columnId)) {
             $this->getColumnSet()->unsetChild($columnId);
             if ($this->_lastColumnId == $columnId) {
-                $this->_lastColumnId = array_pop($this->getColumnSet()->getChildNames());
+                $names = $this->getColumnSet()->getChildNames();
+                $this->_lastColumnId = array_pop($names);
             }
         }
         return $this;

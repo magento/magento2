@@ -12,9 +12,13 @@ use Magento\Cms\Api\Data\PageInterface;
  */
 class CmsPageUrlPathGenerator
 {
-    /** @var \Magento\Framework\Filter\FilterManager */
+    /**
+     * @var \Magento\Framework\Filter\FilterManager
+     */
     protected $filterManager;
 
+    /**
+     */
     public function __construct(
         \Magento\Framework\Filter\FilterManager $filterManager
     ) {

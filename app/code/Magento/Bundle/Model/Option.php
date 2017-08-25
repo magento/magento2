@@ -28,11 +28,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
     const KEY_PRODUCT_LINKS = 'product_links';
     /**#@-*/
 
-    /**
-     * Default selection object
-     *
-     * @var \Magento\Catalog\Model\Product|null
-     */
+    /**#@-*/
     protected $defaultSelection = null;
 
     /**

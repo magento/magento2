@@ -10,6 +10,10 @@ use Magento\Quote\Api\Data\CartItemInterface;
 use Magento\Bundle\Api\Data\BundleOptionInterfaceFactory;
 use Magento\Quote\Api\Data as QuoteApi;
 
+/**
+ * Class \Magento\Bundle\Model\CartItemProcessor
+ *
+ */
 class CartItemProcessor implements CartItemProcessorInterface
 {
     /**

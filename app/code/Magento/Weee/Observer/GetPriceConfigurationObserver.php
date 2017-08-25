@@ -7,6 +7,10 @@ namespace Magento\Weee\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class \Magento\Weee\Observer\GetPriceConfigurationObserver
+ *
+ */
 class GetPriceConfigurationObserver implements ObserverInterface
 {
     /**
@@ -23,7 +27,9 @@ class GetPriceConfigurationObserver implements ObserverInterface
      */
     protected $weeeData;
 
-    /** @var \Magento\Framework\Registry */
+    /**
+     * @var \Magento\Framework\Registry
+     */
     protected $registry;
 
     /**

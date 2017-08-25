@@ -13,7 +13,7 @@ use Magento\Theme\Model\Theme\Collection as ThemeFilesystemCollection;
 use Magento\Theme\Model\Theme\Data;
 use Magento\Theme\Model\Theme\Registration;
 
-class ImporterTest extends \PHPUnit_Framework_TestCase
+class ImporterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ThemeFilesystemCollection|\PHPUnit_Framework_MockObject_MockObject

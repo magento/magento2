@@ -5,6 +5,10 @@
  */
 namespace Magento\NewRelicReporting\Model;
 
+/**
+ * Class \Magento\NewRelicReporting\Model\Config
+ *
+ */
 class Config
 {
     /**#@+
@@ -51,9 +55,7 @@ class Config
     const FALSE = 'false';
     /**#@-*/
 
-    /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
+    /**#@-*/
     protected $scopeConfig;
 
     /**

@@ -7,6 +7,10 @@ namespace Magento\Sales\Controller\Adminhtml\Order\Creditmemo;
 
 use Magento\Backend\App\Action;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Order\Creditmemo\NewAction
+ *
+ */
 class NewAction extends \Magento\Backend\App\Action
 {
     /**

@@ -16,6 +16,10 @@ use Magento\Framework\Model\Entity\ScopeInterface;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute as CatalogEavAttribute;
 
+/**
+ * Class \Magento\Catalog\Model\ResourceModel\AttributePersistor
+ *
+ */
 class AttributePersistor extends \Magento\Eav\Model\ResourceModel\AttributePersistor
 {
     /**

@@ -8,7 +8,7 @@ namespace Magento\Customer\Block\Address;
 /**
  * Tests Address Edit Block
  */
-class EditTest extends \PHPUnit_Framework_TestCase
+class EditTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Edit */
     protected $_block;

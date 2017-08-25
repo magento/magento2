@@ -9,6 +9,10 @@ use Magento\Framework\Data\Form\Filter\FilterInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
 
+/**
+ * Class \Magento\Framework\Data\Form\FilterFactory
+ *
+ */
 class FilterFactory
 {
     /**

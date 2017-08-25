@@ -9,6 +9,10 @@
  */
 namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 
+/**
+ * Class \Magento\Backend\Block\Widget\Grid\Column\Filter\Theme
+ *
+ */
 class Theme extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilter
 {
     /**

@@ -19,7 +19,7 @@ use Magento\Config\App\Config\Type\System\Reader;
  * Test how Class process source, cache them and retrieve value by path
  * @package Magento\Config\Test\Unit\App\Config\Type
  */
-class SystemTest extends \PHPUnit_Framework_TestCase
+class SystemTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ConfigSourceInterface|\PHPUnit_Framework_MockObject_MockObject

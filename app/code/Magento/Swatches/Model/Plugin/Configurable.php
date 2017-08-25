@@ -9,6 +9,10 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableProductType;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection;
 
+/**
+ * Class \Magento\Swatches\Model\Plugin\Configurable
+ *
+ */
 class Configurable
 {
     /**

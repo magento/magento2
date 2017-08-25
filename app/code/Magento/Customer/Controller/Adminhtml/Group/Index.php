@@ -6,6 +6,10 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\Group;
 
+/**
+ * Class \Magento\Customer\Controller\Adminhtml\Group\Index
+ *
+ */
 class Index extends \Magento\Customer\Controller\Adminhtml\Group
 {
     /**

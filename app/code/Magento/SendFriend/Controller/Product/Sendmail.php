@@ -11,9 +11,15 @@ namespace Magento\SendFriend\Controller\Product;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\SendFriend\Controller\Product\Sendmail
+ *
+ */
 class Sendmail extends \Magento\SendFriend\Controller\Product
 {
-    /** @var  \Magento\Catalog\Api\CategoryRepositoryInterface */
+    /**
+     * @var \Magento\Catalog\Api\CategoryRepositoryInterface
+     */
     protected $categoryRepository;
 
     /**

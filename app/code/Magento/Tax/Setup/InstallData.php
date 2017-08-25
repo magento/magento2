@@ -6,10 +6,10 @@
 
 namespace Magento\Tax\Setup;
 
-use Magento\Directory\Model\ResourceModel\Region\CollectionFactory;
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Directory\Model\RegionFactory;
 
 /**
  * @codeCoverageIgnore
@@ -24,31 +24,20 @@ class InstallData implements InstallDataInterface
     private $taxSetupFactory;
 
     /**
-     * Region collection factory.
-     *
-     * @var \Magento\Directory\Model\ResourceModel\Region\CollectionFactory
+     * @var RegionFactory
      */
-    private $regionCollectionFactory;
+    private $directoryRegionFactory;
 
     /**
-     * Region collection.
-     *
-     * @var \Magento\Directory\Model\ResourceModel\Region\Collection
-     */
-    private $regionCollection;
-
-    /**
-     * Init
-     *
      * @param TaxSetupFactory $taxSetupFactory
-     * @param CollectionFactory $collectionFactory
+     * @param RegionFactory $directoryRegionFactory
      */
     public function __construct(
         TaxSetupFactory $taxSetupFactory,
-        CollectionFactory $collectionFactory
+        RegionFactory $directoryRegionFactory
     ) {
         $this->taxSetupFactory = $taxSetupFactory;
-        $this->regionCollectionFactory = $collectionFactory;
+        $this->directoryRegionFactory = $directoryRegionFactory;
     }
 
     /**
@@ -116,11 +105,13 @@ class InstallData implements InstallDataInterface
         /**
          * install tax calculation rates
          */
+        /** @var \Magento\Directory\Model\Region $region */
+        $region = $this->directoryRegionFactory->create();
         $data = [
             [
                 'tax_calculation_rate_id' => 1,
                 'tax_country_id' => 'US',
-                'tax_region_id' => $this->getRegionId('CA'),
+                'tax_region_id' => $region->loadByCode('CA', 'US')->getRegionId(),
                 'tax_postcode' => '*',
                 'code' => 'US-CA-*-Rate 1',
                 'rate' => '8.2500',
@@ -128,41 +119,14 @@ class InstallData implements InstallDataInterface
             [
                 'tax_calculation_rate_id' => 2,
                 'tax_country_id' => 'US',
-                'tax_region_id' => $this->getRegionId('NY'),
+                'tax_region_id' => $region->loadByCode('NY', 'US')->getRegionId(),
                 'tax_postcode' => '*',
                 'code' => 'US-NY-*-Rate 1',
                 'rate' => '8.3750'
             ],
         ];
-
         foreach ($data as $row) {
             $setup->getConnection()->insertForce($setup->getTable('tax_calculation_rate'), $row);
         }
-    }
-
-    /**
-     * Return region id by code.
-     *
-     * @param string $regionCode
-     * @return string
-     */
-    private function getRegionId($regionCode)
-    {
-        if ($this->regionCollection === null) {
-            /** @var \Magento\Directory\Model\ResourceModel\Region\Collection $regionCollection */
-            $this->regionCollection = $this->regionCollectionFactory->create();
-            $this->regionCollection->addCountryFilter('US')
-                ->addRegionCodeOrNameFilter(['CA', 'NY']);
-        }
-
-        $regionId = '';
-
-        /** @var \Magento\Directory\Model\Region $item */
-        $item = $this->regionCollection->getItemByColumnValue('code', $regionCode);
-        if ($item) {
-            $regionId = $item->getId();
-        }
-
-        return $regionId;
     }
 }

@@ -11,6 +11,10 @@ namespace Magento\Framework\Archive\Helper;
 
 use Magento\Framework\Exception\LocalizedException;
 
+/**
+ * Class \Magento\Framework\Archive\Helper\File
+ *
+ */
 class File
 {
     /**

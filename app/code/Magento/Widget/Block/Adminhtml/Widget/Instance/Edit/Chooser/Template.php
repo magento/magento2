@@ -11,6 +11,10 @@
  */
 namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser;
 
+/**
+ * Class \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Template
+ *
+ */
 class Template extends \Magento\Backend\Block\Widget
 {
     /**
