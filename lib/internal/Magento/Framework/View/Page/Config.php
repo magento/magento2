@@ -463,7 +463,7 @@ class Config
      */
     public function addBodyClass($className)
     {
-        $className = preg_replace('#[^a-z0-9-]+#', '-', strtolower($className));
+        $className = preg_replace('#[^a-z0-9-_]+#', '-', strtolower($className));
         $bodyClasses = $this->getElementAttribute(self::ELEMENT_TYPE_BODY, self::BODY_ATTRIBUTE_CLASS);
         $bodyClasses = $bodyClasses ? explode(' ', $bodyClasses) : [];
         $bodyClasses[] = $className;
