@@ -210,7 +210,7 @@ class Graph
     public function topoSort()
     {
         $sortedElements = [];
-        $nodeSet = $this->_findStartNodes();
+        $nodeSet = $this->findStartNodes();
 
         while (!empty($nodeSet)) {
             $cur = array_shift($nodeSet);
@@ -264,7 +264,7 @@ class Graph
      *
      * @return array
      */
-    protected function _findStartNodes()
+    public function findStartNodes()
     {
         $incomingEdgeNodes = array_keys($this->_to);
         return array_diff($this->_nodes, $incomingEdgeNodes);
