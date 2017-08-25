@@ -6,6 +6,8 @@
 namespace Magento\Weee\Test\Unit\Observer;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Tax\Api\TaxAddressManagerInterface;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 class AfterAddressSaveTest extends \PHPUnit\Framework\TestCase
 {
@@ -37,11 +39,11 @@ class AfterAddressSaveTest extends \PHPUnit\Framework\TestCase
      * @var \Magento\Weee\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
      */
     private $weeeHelperMock;
-
+    
     /**
-     * @var \Magento\Tax\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var TaxAddressManagerInterface|MockObject
      */
-    protected $taxHelperMock;
+    private $addressManagerMock;
 
     /**
      * @var \Magento\Weee\Observer\AfterAddressSave
@@ -67,8 +69,9 @@ class AfterAddressSaveTest extends \PHPUnit\Framework\TestCase
         $this->weeeHelperMock = $this->getMockBuilder(\Magento\Weee\Helper\Data::class)
             ->disableOriginalConstructor()
             ->getMock();
-        
-        $this->taxHelperMock = $this->getMockBuilder(\Magento\Tax\Helper\Data::class)
+
+        $this->addressManagerMock = $this->getMockBuilder(TaxAddressManagerInterface::class)
+            ->setMethods(['setDefaultAddressAfterSave', 'setDefaultAddressAfterLogIn'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -78,7 +81,7 @@ class AfterAddressSaveTest extends \PHPUnit\Framework\TestCase
                 'weeeHelper' => $this->weeeHelperMock,
                 'moduleManager' => $this->moduleManagerMock,
                 'cacheConfig' => $this->cacheConfigMock,
-                'taxHelper' => $this->taxHelperMock,
+                'addressManager' => $this->addressManagerMock,
             ]
         );
     }
@@ -120,8 +123,8 @@ class AfterAddressSaveTest extends \PHPUnit\Framework\TestCase
             ->method('getCustomerAddress')
             ->willReturn($address);
 
-        $this->taxHelperMock->expects($isNeedSetAddress ? $this->once() : $this->never())
-            ->method('setAddressCustomerSessionAddressSave')
+        $this->addressManagerMock->expects($isNeedSetAddress ? $this->once() : $this->never())
+            ->method('setDefaultAddressAfterSave')
             ->with($address);
         
         $this->session->execute($this->observerMock);

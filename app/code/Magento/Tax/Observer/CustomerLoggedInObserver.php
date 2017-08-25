@@ -11,6 +11,7 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Module\Manager;
 use Magento\PageCache\Model\Config;
+use Magento\Tax\Api\TaxAddressManagerInterface;
 use Magento\Tax\Helper\Data;
 
 class CustomerLoggedInObserver implements ObserverInterface
@@ -45,24 +46,34 @@ class CustomerLoggedInObserver implements ObserverInterface
     private $groupRepository;
 
     /**
+     * Manager to save data in customer session.
+     *
+     * @var TaxAddressManagerInterface
+     */
+    private $addressManager;
+
+    /**
      * @param GroupRepositoryInterface $groupRepository
      * @param Session $customerSession
      * @param Data $taxHelper
      * @param Manager $moduleManager
      * @param Config $cacheConfig
+     * @param TaxAddressManagerInterface $addressManager
      */
     public function __construct(
         GroupRepositoryInterface $groupRepository,
         Session $customerSession,
         Data $taxHelper,
         Manager $moduleManager,
-        Config $cacheConfig
+        Config $cacheConfig,
+        TaxAddressManagerInterface $addressManager
     ) {
         $this->groupRepository = $groupRepository;
         $this->customerSession = $customerSession;
         $this->taxHelper = $taxHelper;
         $this->moduleManager = $moduleManager;
         $this->cacheConfig = $cacheConfig;
+        $this->addressManager = $addressManager;
     }
 
     /**
@@ -85,7 +96,7 @@ class CustomerLoggedInObserver implements ObserverInterface
 
             $addresses = $customer->getAddresses();
             if (isset($addresses)) {
-                $this->taxHelper->setAddressCustomerSessionLogIn($addresses);
+                $this->addressManager->setDefaultAddressAfterLogIn($addresses);
             }
         }
     }

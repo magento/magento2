@@ -10,8 +10,8 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Module\Manager;
 use Magento\PageCache\Model\Config;
+use Magento\Tax\Api\TaxAddressManagerInterface;
 use Magento\Weee\Helper\Data;
-use Magento\Tax\Helper\Data as TaxHelper;
 
 class AfterAddressSave implements ObserverInterface
 {
@@ -35,28 +35,28 @@ class AfterAddressSave implements ObserverInterface
     private $cacheConfig;
 
     /**
-     * Tax helper
+     * Manager to save data in customer session.
      *
-     * @var TaxHelper
+     * @var TaxAddressManagerInterface
      */
-    private $taxHelper;
+    private $addressManager;
 
     /**
      * @param Data $weeeHelper
      * @param Manager $moduleManager
      * @param Config $cacheConfig
-     * @param TaxHelper $taxHelper
+     * @param TaxAddressManagerInterface $addressManager
      */
     public function __construct(
         Data $weeeHelper,
         Manager $moduleManager,
         Config $cacheConfig,
-        TaxHelper $taxHelper
+        TaxAddressManagerInterface $addressManager
     ) {
         $this->weeeHelper = $weeeHelper;
         $this->moduleManager = $moduleManager;
         $this->cacheConfig = $cacheConfig;
-        $this->taxHelper = $taxHelper;
+        $this->addressManager = $addressManager;
     }
 
     /**
@@ -72,7 +72,7 @@ class AfterAddressSave implements ObserverInterface
         ) {
             /** @var $customerAddress Address */
             $address = $observer->getCustomerAddress();
-            $this->taxHelper->setAddressCustomerSessionAddressSave($address);
+            $this->addressManager->setDefaultAddressAfterSave($address);
         }
     }
 }

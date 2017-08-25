@@ -5,6 +5,9 @@
  */
 namespace Magento\Tax\Test\Unit\Observer;
 
+use Magento\Tax\Api\TaxAddressManagerInterface;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
+
 class CustomerLoggedInObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -40,6 +43,11 @@ class CustomerLoggedInObserverTest extends \PHPUnit\Framework\TestCase
      * @var \Magento\Tax\Helper\Data
      */
     protected $taxHelperMock;
+
+    /**
+     * @var TaxAddressManagerInterface|MockObject
+     */
+    private $addressManagerMock;
 
     /**
      * @var \Magento\Tax\Observer\CustomerLoggedInObserver
@@ -79,6 +87,11 @@ class CustomerLoggedInObserverTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->addressManagerMock = $this->getMockBuilder(TaxAddressManagerInterface::class)
+            ->setMethods(['setDefaultAddressAfterSave', 'setDefaultAddressAfterLogIn'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->session = $objectManager->getObject(
             \Magento\Tax\Observer\CustomerLoggedInObserver::class,
             [
@@ -86,7 +99,8 @@ class CustomerLoggedInObserverTest extends \PHPUnit\Framework\TestCase
                 'customerSession' => $this->customerSessionMock,
                 'taxHelper' => $this->taxHelperMock,
                 'moduleManager' => $this->moduleManagerMock,
-                'cacheConfig' => $this->cacheConfigMock
+                'cacheConfig' => $this->cacheConfigMock,
+                'addressManager' => $this->addressManagerMock,
             ]
         );
     }
@@ -148,8 +162,8 @@ class CustomerLoggedInObserverTest extends \PHPUnit\Framework\TestCase
             ->method('setCustomerTaxClassId')
             ->with(1);
 
-        $this->taxHelperMock->expects($this->once())
-            ->method('setAddressCustomerSessionLogIn')
+        $this->addressManagerMock->expects($this->once())
+            ->method('setDefaultAddressAfterLogIn')
             ->with([$address]);
 
         $this->session->execute($this->observerMock);

@@ -5,6 +5,9 @@
  */
 namespace Magento\Weee\Test\Unit\Observer;
 
+use Magento\Tax\Api\TaxAddressManagerInterface;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
+
 class CustomerLoggedInTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -32,9 +35,9 @@ class CustomerLoggedInTest extends \PHPUnit\Framework\TestCase
     protected $weeeHelperMock;
 
     /**
-     * @var \Magento\Tax\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var TaxAddressManagerInterface|MockObject
      */
-    private $taxHelperMock;
+    private $addressManagerMock;
 
     /**
      * @var \Magento\Weee\Observer\CustomerLoggedIn
@@ -63,7 +66,8 @@ class CustomerLoggedInTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->taxHelperMock = $this->getMockBuilder(\Magento\Tax\Helper\Data::class)
+        $this->addressManagerMock = $this->getMockBuilder(TaxAddressManagerInterface::class)
+            ->setMethods(['setDefaultAddressAfterSave', 'setDefaultAddressAfterLogIn'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -73,7 +77,7 @@ class CustomerLoggedInTest extends \PHPUnit\Framework\TestCase
                 'weeeHelper' => $this->weeeHelperMock,
                 'moduleManager' => $this->moduleManagerMock,
                 'cacheConfig' => $this->cacheConfigMock,
-                'taxHelper' => $this->taxHelperMock,
+                'addressManager' => $this->addressManagerMock,
             ]
         );
     }
@@ -114,8 +118,8 @@ class CustomerLoggedInTest extends \PHPUnit\Framework\TestCase
             ->with('customer')
             ->willReturn($customerMock);
 
-        $this->taxHelperMock->expects($this->once())
-            ->method('setAddressCustomerSessionLogIn')
+        $this->addressManagerMock->expects($this->once())
+            ->method('setDefaultAddressAfterLogIn')
             ->with([$address]);
 
         $this->session->execute($this->observerMock);

@@ -8,7 +8,6 @@ namespace Magento\Tax\Helper;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Store\Model\Store;
 use Magento\Customer\Model\Address;
-use Magento\Customer\Model\Session;
 use Magento\Tax\Model\Config;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Tax\Api\OrderTaxManagementInterface;
@@ -102,13 +101,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     private $serializer;
 
     /**
-     * Customer session model.
-     *
-     * @var Session
-     */
-    protected $customerSession;
-
-    /**
      * Constructor
      *
      * @param \Magento\Framework\App\Helper\Context $context
@@ -122,7 +114,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param OrderTaxManagementInterface $orderTaxManagement
      * @param PriceCurrencyInterface $priceCurrency
      * @param Json $serializer
-     * @param Session|null $customerSession
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -136,8 +127,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Catalog\Helper\Data $catalogHelper,
         OrderTaxManagementInterface $orderTaxManagement,
         PriceCurrencyInterface $priceCurrency,
-        Json $serializer = null,
-        Session $customerSession = null
+        Json $serializer = null
     ) {
         parent::__construct($context);
         $this->priceCurrency = $priceCurrency;
@@ -150,7 +140,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $this->catalogHelper = $catalogHelper;
         $this->orderTaxManagement = $orderTaxManagement;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
-        $this->customerSession = $customerSession ?: ObjectManager::getInstance()->get(Session::class);
     }
 
     /**
@@ -807,96 +796,5 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         } else {
             return $this->displayPriceIncludingTax();
         }
-    }
-
-    /**
-     * Set default Tax Billing and Shipping address into customer session after address save.
-     *
-     * @param Address $address
-     * @return void
-     */
-    public function setAddressCustomerSessionAddressSave(Address $address)
-    {
-        if ($this->isDefaultBilling($address)) {
-            $this->customerSession->setDefaultTaxBillingAddress(
-                [
-                    'country_id' => $address->getCountryId(),
-                    'region_id' => $address->getRegion() ? $address->getRegionId() : null,
-                    'postcode' => $address->getPostcode(),
-                ]
-            );
-        }
-        if ($this->isDefaultShipping($address)) {
-            $this->customerSession->setDefaultTaxShippingAddress(
-                [
-                    'country_id' => $address->getCountryId(),
-                    'region_id' => $address->getRegion() ? $address->getRegionId() : null,
-                    'postcode' => $address->getPostcode(),
-                ]
-            );
-        }
-    }
-
-    /**
-     * Set default Tax Shipping and Billing addresses into customer session after login.
-     *
-     * @param \Magento\Customer\Api\Data\AddressInterface[] $addresses
-     * @return void
-     */
-    public function setAddressCustomerSessionLogIn(array $addresses)
-    {
-        $defaultShippingFound = false;
-        $defaultBillingFound = false;
-        foreach ($addresses as $address) {
-            if ($address->isDefaultBilling()) {
-                $defaultBillingFound = true;
-                $this->customerSession->setDefaultTaxBillingAddress(
-                    [
-                        'country_id' => $address->getCountryId(),
-                        'region_id' => $address->getRegion() ? $address->getRegionId() : null,
-                        'postcode' => $address->getPostcode(),
-                    ]
-                );
-            }
-            if ($address->isDefaultShipping()) {
-                $defaultShippingFound = true;
-                $this->customerSession->setDefaultTaxShippingAddress(
-                    [
-                        'country_id' => $address->getCountryId(),
-                        'region_id' => $address->getRegion() ? $address->getRegionId() : null,
-                        'postcode' => $address->getPostcode(),
-                    ]
-                );
-            }
-            if ($defaultShippingFound && $defaultBillingFound) {
-                break;
-            }
-        }
-    }
-
-    /**
-     * Check whether specified billing address is default for customer from address.
-     *
-     * @param Address $address
-     * @return bool
-     */
-    private function isDefaultBilling(Address $address)
-    {
-        return $address->getId() && $address->getId() == $address->getCustomer()->getDefaultBilling()
-            || $address->getIsPrimaryBilling()
-            || $address->getIsDefaultBilling();
-    }
-
-    /**
-     * Check whether specified shipping address is default for customer from address.
-     *
-     * @param Address $address
-     * @return bool
-     */
-    private function isDefaultShipping(Address $address)
-    {
-        return $address->getId() && $address->getId() == $address->getCustomer()->getDefaultShipping()
-            || $address->getIsPrimaryShipping()
-            || $address->getIsDefaultShipping();
     }
 }

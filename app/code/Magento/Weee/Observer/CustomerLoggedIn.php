@@ -10,6 +10,7 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Module\Manager;
 use Magento\PageCache\Model\Config;
+use Magento\Tax\Api\TaxAddressManagerInterface;
 use Magento\Weee\Helper\Data;
 use Magento\Tax\Helper\Data as TaxHelper;
 
@@ -24,11 +25,13 @@ class CustomerLoggedIn implements ObserverInterface
      * @var Data
      */
     protected $weeeHelper;
-    
+
     /**
-     * @var TaxHelper
+     * Manager to save data in customer session.
+     *
+     * @var TaxAddressManagerInterface
      */
-    private $taxHelper;
+    private $addressManager;
 
     /**
      * Module manager
@@ -48,18 +51,18 @@ class CustomerLoggedIn implements ObserverInterface
      * @param Data $weeeHelper
      * @param Manager $moduleManager
      * @param Config $cacheConfig
-     * @param TaxHelper $taxHelper
+     * @param TaxAddressManagerInterface $addressManager
      */
     public function __construct(
         Data $weeeHelper,
         Manager $moduleManager,
         Config $cacheConfig,
-        TaxHelper $taxHelper
+        TaxAddressManagerInterface $addressManager
     ) {
         $this->weeeHelper = $weeeHelper;
         $this->moduleManager = $moduleManager;
         $this->cacheConfig = $cacheConfig;
-        $this->taxHelper = $taxHelper;
+        $this->addressManager = $addressManager;
     }
 
     /**
@@ -77,7 +80,7 @@ class CustomerLoggedIn implements ObserverInterface
             $customer = $observer->getData('customer');
             $addresses = $customer->getAddresses();
             if (isset($addresses)) {
-                $this->taxHelper->setAddressCustomerSessionLogIn($addresses);
+                $this->addressManager->setDefaultAddressAfterLogIn($addresses);
             }
         }
     }
