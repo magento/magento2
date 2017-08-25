@@ -33,7 +33,7 @@ class Filter extends \Magento\Cms\Model\Template\Filter
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Framework\UrlInterface $urlModel
-     * @param \Magento\Framework\Css\PreProcessor\Adapter\CssInliner $cssInliner
+     * @param \Pelago\Emogrifier $emogrifier
      * @param \Magento\Email\Model\Source\Variables $configVariables
      * @param \Magento\Widget\Model\ResourceModel\Widget $widgetResource
      * @param \Magento\Widget\Model\Widget $widget
@@ -51,7 +51,7 @@ class Filter extends \Magento\Cms\Model\Template\Filter
         \Magento\Framework\View\LayoutFactory $layoutFactory,
         \Magento\Framework\App\State $appState,
         \Magento\Framework\UrlInterface $urlModel,
-        \Magento\Framework\Css\PreProcessor\Adapter\CssInliner $cssInliner,
+        \Pelago\Emogrifier $emogrifier,
         \Magento\Email\Model\Source\Variables $configVariables,
         \Magento\Widget\Model\ResourceModel\Widget $widgetResource,
         \Magento\Widget\Model\Widget $widget
@@ -70,7 +70,7 @@ class Filter extends \Magento\Cms\Model\Template\Filter
             $layoutFactory,
             $appState,
             $urlModel,
-            $cssInliner,
+            $emogrifier,
             $configVariables
         );
     }

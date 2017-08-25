@@ -149,9 +149,15 @@ class Filter extends \Magento\Framework\Filter\Template
     protected $urlModel;
 
     /**
+     * @var \Pelago\Emogrifier
+     * @deprecated
+     */
+    protected $emogrifier;
+
+    /**
      * @var \Magento\Framework\Css\PreProcessor\Adapter\CssInliner
      */
-    protected $cssInliner;
+    private $cssInliner;
 
     /**
      * @var \Magento\Email\Model\Source\Variables
@@ -180,9 +186,10 @@ class Filter extends \Magento\Framework\Filter\Template
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Framework\UrlInterface $urlModel
-     * @param \Magento\Framework\Css\PreProcessor\Adapter\CssInliner $cssInliner
+     * @param \Pelago\Emogrifier $emogrifier
      * @param \Magento\Email\Model\Source\Variables $configVariables
      * @param array $variables
+     * @param \Magento\Framework\Css\PreProcessor\Adapter\CssInliner|null $cssInliner
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -198,9 +205,10 @@ class Filter extends \Magento\Framework\Filter\Template
         \Magento\Framework\View\LayoutFactory $layoutFactory,
         \Magento\Framework\App\State $appState,
         \Magento\Framework\UrlInterface $urlModel,
-        \Magento\Framework\Css\PreProcessor\Adapter\CssInliner $cssInliner,
+        \Pelago\Emogrifier $emogrifier,
         \Magento\Email\Model\Source\Variables $configVariables,
-        $variables = []
+        $variables = [],
+        \Magento\Framework\Css\PreProcessor\Adapter\CssInliner $cssInliner = null
     ) {
         $this->_escaper = $escaper;
         $this->_assetRepo = $assetRepo;
@@ -213,7 +221,9 @@ class Filter extends \Magento\Framework\Filter\Template
         $this->_layoutFactory = $layoutFactory;
         $this->_appState = $appState;
         $this->urlModel = $urlModel;
-        $this->cssInliner = $cssInliner;
+        $this->emogrifier = $emogrifier;
+        $this->cssInliner = $cssInliner ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Css\PreProcessor\Adapter\CssInliner::class);
         $this->configVariables = $configVariables;
         parent::__construct($string, $variables);
     }

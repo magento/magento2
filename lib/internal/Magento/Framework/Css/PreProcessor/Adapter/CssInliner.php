@@ -19,14 +19,14 @@ class CssInliner
 
     public function __construct()
     {
-        $this->emogrifier = new Emogrifier;
+        $this->emogrifier = new Emogrifier();
     }
 
     /**
-     * Sets the HTML to emogrify.
+     * Sets the HTML to be used with the css.
+     * This method should be used with setCss.
      *
-     * @param string $html the HTML to emogrify, must be UTF-8-encoded
-     *
+     * @param string $html
      * @return void
      */
     public function setHtml($html)
@@ -35,10 +35,10 @@ class CssInliner
     }
 
     /**
-     * Sets the CSS to merge with the HTML.
+     * Sets the CSS to be merged with the HTML.
+     * This method should be used with setHtml.
      *
-     * @param string $css the CSS to merge, must be UTF-8-encoded
-     *
+     * @param string $css
      * @return void
      */
     public function setCss($css)
@@ -63,13 +63,10 @@ class CssInliner
     }
 
     /**
-     * Applies $this->css to $this->html and returns the HTML with the CSS
-     * applied.
-     *
-     * This method places the CSS inline.
+     * Processes the html by placing the css inline.
+     * You must set first the css by using setCss and html by using setHtml.
      *
      * @return string
-     *
      * @throws \BadMethodCallException
      */
     public function process()
