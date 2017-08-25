@@ -396,8 +396,8 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
     protected function _getCaptureAmount($amount)
     {
         $infoInstance = $this->getInfoInstance();
-        $amountToPay = number_format($amount, 2);
-        $authorizedAmount = number_format($infoInstance->getAmountAuthorized(), 2);
+        $amountToPay = sprintf('%.2F', $amount);
+        $authorizedAmount = sprintf('%.2F', $infoInstance->getAmountAuthorized());
         return $amountToPay != $authorizedAmount ? $amountToPay : 0;
     }
 
