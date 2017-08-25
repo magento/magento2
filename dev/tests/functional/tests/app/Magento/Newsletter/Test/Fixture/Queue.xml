@@ -24,7 +24,8 @@
         <field name="newsletter_sender_name" is_required="" />
         <field name="newsletter_sender_email" is_required="" />
         <field name="queue_status" is_required="1" />
-        <field name="queue_start_at" is_required="" />
-        <field name="queue_finish_at" is_required="" />
+        <field name="queue_start_at" is_required="" source="Magento\Backend\Test\Fixture\Source\Date" />
+        <field name="queue_finish_at" is_required="" source="Magento\Backend\Test\Fixture\Source\Date" />
+        <field name="stores" is_required="1" source="Magento\Newsletter\Test\Fixture\Queue\Stores"/>
     </fixture>
 </config>

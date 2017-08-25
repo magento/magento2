@@ -10,6 +10,10 @@
         <queue_start_at>
             <selector>input[name='start_at']</selector>
         </queue_start_at>
+        <stores>
+            <selector>select[name="stores[]"]</selector>
+            <input>multiselectgrouplist</input>
+        </stores>
         <newsletter_subject>
             <selector>input[name='subject']</selector>
         </newsletter_subject>

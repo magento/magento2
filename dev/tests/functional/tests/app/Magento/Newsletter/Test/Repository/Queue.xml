@@ -7,8 +7,16 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
     <repository class="Magento\Newsletter\Test\Repository\Queue">
-        <dataset name="default">
-            <field name="queue_start_at" xsi:type="string">Aug 17, 2017 2:50:30 PM</field>
+        <dataset name="default_with_stores">
+            <field name="queue_start_at" xsi:type="array">
+                <item name="pattern" xsi:type="string">M j, Y g:i:s A</item>
+            </field>
+            <field name="stores" xsi:type="array">
+                <item name="dataset" xsi:type="array">
+                    <item name="0" xsi:type="string">default</item>
+                    <item name="1" xsi:type="string">custom</item>
+                </item>
+            </field>
             <field name="newsletter_subject" xsi:type="string">Newsletter Subject %isolation%</field>
             <field name="newsletter_sender_name" xsi:type="string">Sender Name %isolation%</field>
             <field name="newsletter_sender_email" xsi:type="string">support%isolation%@example.com</field>

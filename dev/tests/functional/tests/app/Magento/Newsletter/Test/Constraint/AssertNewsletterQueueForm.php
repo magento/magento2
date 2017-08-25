@@ -8,17 +8,16 @@ namespace Magento\Newsletter\Test\Constraint;
 
 use Magento\Mtf\Constraint\AbstractAssertForm;
 use Magento\Newsletter\Test\Fixture\Queue;
-use Magento\Newsletter\Test\Fixture\Template;
 use Magento\Newsletter\Test\Page\Adminhtml\TemplateQueue;
 use Magento\Newsletter\Test\Page\Adminhtml\TemplateQueueIndex;
 
 /**
- * Assert that "Newsletter Queue" saved correctly.
+ * Assert that Newsletter Queue form data equal the fixture data.
  */
-class AssertNewsletterQueueSave extends AbstractAssertForm
+class AssertNewsletterQueueForm extends AbstractAssertForm
 {
     /**
-     * Assert that "Newsletter Queue" saved correctly.
+     * Assert that Newsletter Queue form data equal the fixture data.
      *
      * @param TemplateQueueIndex $indexQueue
      * @param TemplateQueue $templateQueue
@@ -30,7 +29,7 @@ class AssertNewsletterQueueSave extends AbstractAssertForm
         TemplateQueue $templateQueue,
         Queue $queue
     ) {
-        $indexQueue->getMessagesBlock()->assertSuccessMessage();
+        $indexQueue->open();
         $indexQueue->getQueueTemplateGrid()->searchAndOpen(['newsletter_subject' => $queue->getNewsletterSubject()]);
 
         $dataDiff = $this->verifyData($queue->getData(), $templateQueue->getEditForm()->getData($queue));
@@ -42,6 +41,6 @@ class AssertNewsletterQueueSave extends AbstractAssertForm
      */
     public function toString()
     {
-        return '"Newsletter Queue" saved correctly';
+        return 'Newsletter Queue form data equal the fixture data.';
     }
 }
