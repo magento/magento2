@@ -554,6 +554,9 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
             } elseif ($isConfirmNeed) {
                 $status = self::STATUS_NOT_ACTIVE;
             }
+        } elseif (($this->getStatus() == self::STATUS_UNCONFIRMED) && ($customerData->getConfirmation() === null)) {
+            $status = self::STATUS_SUBSCRIBED;
+            $sendInformationEmail = true;
         } else {
             $status = self::STATUS_UNSUBSCRIBED;
         }
