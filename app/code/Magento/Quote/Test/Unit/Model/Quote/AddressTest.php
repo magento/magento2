@@ -33,6 +33,7 @@ use Magento\Quote\Model\Quote\Address\RateResult\AbstractResult;
  * Test class for sales quote address model
  *
  * @see \Magento\Quote\Model\Quote\Address
+ * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AddressTest extends \PHPUnit\Framework\TestCase
