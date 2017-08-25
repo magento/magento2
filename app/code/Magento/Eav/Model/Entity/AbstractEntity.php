@@ -887,7 +887,8 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         $select = $connection->select();
 
         $entityIdField = $this->getEntityIdField();
-        if ($attribute->getBackend()->getType() === 'static') {
+        $attributeBackend = $attribute->getBackend();
+        if ($attributeBackend->getType() === 'static') {
             $value = $object->getData($attribute->getAttributeCode());
             $bind = ['value' => trim($value)];
 
@@ -899,7 +900,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
             );
         } else {
             $value = $object->getData($attribute->getAttributeCode());
-            if ($attribute->getBackend()->getType() == 'datetime') {
+            if ($attributeBackend->getType() == 'datetime') {
                 $value = (new \DateTime($value))->format('Y-m-d H:i:s');
             }
             $bind = [
@@ -907,10 +908,9 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
                 'value' => trim($value),
             ];
 
-            $backend = $attribute->getBackend();
-            $entityIdField = $backend->getEntityIdField();
+            $entityIdField = $attributeBackend->getEntityIdField();
             $select->from(
-                $backend->getTable(),
+                $attributeBackend->getTable(),
                 $entityIdField
             )->where(
                 'attribute_id = :attribute_id'
