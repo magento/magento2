@@ -5,12 +5,10 @@
  */
 namespace Magento\SalesRule\Test\Unit\Model;
 
-use Magento\Framework\Api\SortOrder;
-
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CouponRepositoryTest extends \PHPUnit_Framework_TestCase
+class CouponRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\SalesRule\Model\CouponRepository
@@ -65,44 +63,25 @@ class CouponRepositoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->searchResultFactory = $this->getMock(
+        $this->searchResultFactory = $this->createPartialMock(
             \Magento\SalesRule\Api\Data\CouponSearchResultInterfaceFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->searchResultsMock = $this->getMock(
-            \Magento\SalesRule\Api\Data\CouponSearchResultInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->couponFactory = $this->getMock(\Magento\SalesRule\Model\CouponFactory::class, ['create'], [], '', false);
-        $this->ruleFactory = $this->getMock(\Magento\SalesRule\Model\RuleFactory::class, ['create'], [], '', false);
-        $this->collectionFactory = $this->getMock(
+        $this->searchResultsMock = $this->createMock(\Magento\SalesRule\Api\Data\CouponSearchResultInterface::class);
+        $this->couponFactory = $this->createPartialMock(\Magento\SalesRule\Model\CouponFactory::class, ['create']);
+        $this->ruleFactory = $this->createPartialMock(\Magento\SalesRule\Model\RuleFactory::class, ['create']);
+        $this->collectionFactory = $this->createPartialMock(
             \Magento\SalesRule\Model\ResourceModel\Coupon\CollectionFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->resource = $this->getMock(\Magento\SalesRule\Model\ResourceModel\Coupon::class, [], [], '', false);
-        $this->extensionAttributesJoinProcessorMock = $this->getMock(
+        $this->resource = $this->createMock(\Magento\SalesRule\Model\ResourceModel\Coupon::class);
+        $this->extensionAttributesJoinProcessorMock = $this->createPartialMock(
             \Magento\Framework\Api\ExtensionAttribute\JoinProcessor::class,
-            ['process'],
-            [],
-            '',
-            false
+            ['process']
         );
 
-        $this->collectionProcessor = $this->getMock(
-            \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class,
-            [],
-            [],
-            '',
-            false
+        $this->collectionProcessor = $this->createMock(
+            \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class
         );
 
         $this->model = $this->objectManager->getObject(
@@ -122,13 +101,7 @@ class CouponRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testSave()
     {
         $id = 1;
-        $coupon = $this->getMock(
-            \Magento\SalesRule\Model\Coupon::class,
-            ['load', 'getCouponId', 'getById'],
-            [],
-            '',
-            false
-        );
+        $coupon = $this->createPartialMock(\Magento\SalesRule\Model\Coupon::class, ['load', 'getCouponId', 'getById']);
         $coupon->expects($this->any())->method('load')->with($id)->willReturnSelf();
         $coupon->expects($this->any())->method('getCouponId')->willReturn($id);
         $this->couponFactory->expects($this->once())->method('create')->willReturn($coupon);
@@ -136,7 +109,7 @@ class CouponRepositoryTest extends \PHPUnit_Framework_TestCase
         /**
          * @var \Magento\SalesRule\Model\Rule $rule
          */
-        $rule = $this->getMock(\Magento\SalesRule\Model\Rule::class, ['load', 'getRuleId'], [], '', false);
+        $rule = $this->createPartialMock(\Magento\SalesRule\Model\Rule::class, ['load', 'getRuleId']);
 
         $rule->expects($this->any())->method('load')->willReturnSelf();
         $rule->expects($this->any())->method('getRuleId')->willReturn($id);
@@ -161,12 +134,12 @@ class CouponRepositoryTest extends \PHPUnit_Framework_TestCase
         /**
          * @var \Magento\SalesRule\Model\Coupon $coupon
          */
-        $coupon = $this->getMock(\Magento\SalesRule\Model\Coupon::class, [], [], '', false);
+        $coupon = $this->createMock(\Magento\SalesRule\Model\Coupon::class);
 
         /**
          * @var \Magento\SalesRule\Model\Rule $rule
          */
-        $rule = $this->getMock(\Magento\SalesRule\Model\Rule::class, ['load', 'getRuleId'], [], '', false);
+        $rule = $this->createPartialMock(\Magento\SalesRule\Model\Rule::class, ['load', 'getRuleId']);
 
         $rule->expects($this->any())->method('load')->willReturnSelf();
         $rule->expects($this->any())->method('getRuleId')->willReturn($id);
@@ -177,7 +150,7 @@ class CouponRepositoryTest extends \PHPUnit_Framework_TestCase
             $this->resource->expects($this->once())->method('save')->with($coupon)
                 ->willThrowException($exceptionObject);
         }
-        $this->setExpectedException($exceptionName, $exceptionMessage);
+        $this->expectException($exceptionName, $exceptionMessage);
         $this->model->save($coupon);
     }
 
@@ -207,7 +180,7 @@ class CouponRepositoryTest extends \PHPUnit_Framework_TestCase
         /**
          * @var \Magento\SalesRule\Model\Coupon $coupon
          */
-        $coupon = $this->getMock(\Magento\SalesRule\Model\Coupon::class, ['load', 'getCouponId'], [], '', false);
+        $coupon = $this->createPartialMock(\Magento\SalesRule\Model\Coupon::class, ['load', 'getCouponId']);
         $coupon->expects($this->any())->method('load')->with($id)->willReturnSelf();
         $coupon->expects($this->any())->method('getCouponId')->willReturn($id);
         $this->couponFactory->expects($this->once())->method('create')->willReturn($coupon);
@@ -220,7 +193,7 @@ class CouponRepositoryTest extends \PHPUnit_Framework_TestCase
         /**
          * @var \Magento\SalesRule\Model\Coupon $coupon
          */
-        $coupon = $this->getMock(\Magento\SalesRule\Model\Coupon::class, ['load', 'getCouponId'], [], '', false);
+        $coupon = $this->createPartialMock(\Magento\SalesRule\Model\Coupon::class, ['load', 'getCouponId']);
         $coupon->expects($this->any())->method('load')->with($id)->willReturnSelf();
         $coupon->expects($this->any())->method('getCouponId')->willReturn($id);
         $this->couponFactory->expects($this->any())->method('create')->willReturn($coupon);
@@ -233,18 +206,12 @@ class CouponRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testGetList()
     {
         $collectionSize = 1;
-        $couponMock = $this->getMock(\Magento\SalesRule\Api\Data\CouponInterface::class);
+        $couponMock = $this->createMock(\Magento\SalesRule\Api\Data\CouponInterface::class);
         /**
          * @var \Magento\Framework\Api\SearchCriteriaInterface $searchCriteriaMock
          */
-        $searchCriteriaMock = $this->getMock(\Magento\Framework\Api\SearchCriteria::class, [], [], '', false);
-        $collectionMock = $this->getMock(
-            \Magento\SalesRule\Model\ResourceModel\Coupon\Collection::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
+        $collectionMock = $this->createMock(\Magento\SalesRule\Model\ResourceModel\Coupon\Collection::class);
         $this->extensionAttributesJoinProcessorMock->expects($this->once())
             ->method('process')
             ->with($collectionMock, \Magento\SalesRule\Api\Data\CouponInterface::class);

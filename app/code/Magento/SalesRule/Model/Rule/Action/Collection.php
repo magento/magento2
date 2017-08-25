@@ -5,6 +5,10 @@
  */
 namespace Magento\SalesRule\Model\Rule\Action;
 
+/**
+ * Class \Magento\SalesRule\Model\Rule\Action\Collection
+ *
+ */
 class Collection extends \Magento\Rule\Model\Action\Collection
 {
     /**

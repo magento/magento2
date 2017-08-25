@@ -75,6 +75,7 @@ class Fulltext extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param int|array $childIds
      * @return array
+     * @since 100.2.0
      */
     public function getRelationsByChild($childIds)
     {

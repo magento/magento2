@@ -9,6 +9,10 @@
  */
 namespace Magento\Framework\TestFramework\Unit\Helper;
 
+/**
+ * Class \Magento\Framework\TestFramework\Unit\Helper\ProxyTesting
+ *
+ */
 class ProxyTesting
 {
     /**

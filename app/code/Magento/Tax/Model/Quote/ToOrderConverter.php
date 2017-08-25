@@ -9,6 +9,10 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Quote\Model\Quote\Address\ToOrder as QuoteAddressToOrder;
 use Magento\Quote\Model\Quote\Address as QuoteAddress;
 
+/**
+ * Class \Magento\Tax\Model\Quote\ToOrderConverter
+ *
+ */
 class ToOrderConverter
 {
     /**

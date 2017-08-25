@@ -6,6 +6,10 @@
  */
 namespace Magento\MediaStorage\Controller\Adminhtml\System\Config\System\Storage;
 
+/**
+ * Class \Magento\MediaStorage\Controller\Adminhtml\System\Config\System\Storage\Synchronize
+ *
+ */
 class Synchronize extends \Magento\MediaStorage\Controller\Adminhtml\System\Config\System\Storage
 {
     /**

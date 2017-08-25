@@ -11,6 +11,10 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\ResourceModel\Order as ResourceOrder;
 
+/**
+ * Class \Magento\Sales\Model\ResourceModel\Order\Plugin\Authorization
+ *
+ */
 class Authorization
 {
     /**

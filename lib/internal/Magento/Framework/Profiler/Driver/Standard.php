@@ -12,6 +12,10 @@ use Magento\Framework\Profiler\Driver\Standard\OutputInterface;
 use Magento\Framework\Profiler\Driver\Standard\Stat;
 use Magento\Framework\Profiler\DriverInterface;
 
+/**
+ * Class \Magento\Framework\Profiler\Driver\Standard
+ *
+ */
 class Standard implements DriverInterface
 {
     /**

@@ -5,6 +5,10 @@
  */
 namespace Magento\CatalogSearch\Model\Search;
 
+/**
+ * Class \Magento\CatalogSearch\Model\Search\ReaderPlugin
+ *
+ */
 class ReaderPlugin
 {
     /**

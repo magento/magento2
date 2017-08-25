@@ -14,6 +14,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\Config\File\ConfigFilePool;
 
+/**
+ * Class \Magento\Developer\Console\Command\QueryLogEnableCommand
+ *
+ */
 class QueryLogEnableCommand extends Command
 {
     /**

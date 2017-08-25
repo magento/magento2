@@ -7,6 +7,10 @@
  */
 namespace Magento\Customer\Model\Metadata\Form;
 
+/**
+ * Class \Magento\Customer\Model\Metadata\Form\Boolean
+ *
+ */
 class Boolean extends Select
 {
     /**

@@ -11,14 +11,14 @@ use Magento\Framework\Locale\Deployed\Options;
 use Magento\Framework\Locale\ListsInterface;
 use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\View\DesignInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use \PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Test for Options class.
  *
  * @see Options
  */
-class OptionsTest extends \PHPUnit_Framework_TestCase
+class OptionsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var State|MockObject

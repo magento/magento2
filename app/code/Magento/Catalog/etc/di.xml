@@ -145,11 +145,11 @@
             <argument name="options" xsi:type="array">
                 <item name="option1" xsi:type="array">
                     <item name="value" xsi:type="string">container1</item>
-                    <item name="label" xsi:type="string">Product Info Column</item>
+                    <item name="label" xsi:type="string" translatable="true">Product Info Column</item>
                 </item>
                 <item name="option2" xsi:type="array">
                     <item name="value" xsi:type="string">container2</item>
-                    <item name="label" xsi:type="string">Block after Info Column</item>
+                    <item name="label" xsi:type="string" translatable="true">Block after Info Column</item>
                 </item>
             </argument>
         </arguments>

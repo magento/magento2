@@ -8,6 +8,10 @@ namespace Magento\Framework\Indexer\Handler;
 use Magento\Framework\App\ResourceConnection\SourceProviderInterface;
 use Magento\Framework\Indexer\HandlerInterface;
 
+/**
+ * Class \Magento\Framework\Indexer\Handler\DefaultHandler
+ *
+ */
 class DefaultHandler implements HandlerInterface
 {
     /**

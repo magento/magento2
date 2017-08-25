@@ -5,12 +5,12 @@
 "There is no item with provided id in the cart","There is no item with provided id in the cart"
 "There is no product with provided  itemId: %1 in the cart","There is no product with provided  itemId: %1 in the cart"
 "There is no item with provided id in the order","There is no item with provided id in the order"
-"There is no item with provided id in the order or gift message isn\'t allowed","There is no item with provided id in the order or gift message isn\'t allowed"
+"There is no item with provided id in the order or gift message isn't allowed","There is no item with provided id in the order or gift message isn't allowed"
 "Could not add gift message to order: ""%1""","Could not add gift message to order: ""%1"""
-"There is no order with provided id or gift message isn\'t allowed","There is no order with provided id or gift message isn\'t allowed"
+"There is no order with provided id or gift message isn't allowed","There is no order with provided id or gift message isn't allowed"
 "There is no order with provided id","There is no order with provided id"
 "Gift Messages are not applicable for empty order","Gift Messages are not applicable for empty order"
-"Could not add gift message to order\'s item: ""%1""","Could not add gift message to order\'s item: ""%1"""
+"Could not add gift message to order's item: ""%1""","Could not add gift message to order's item: ""%1"""
 "Unknown entity type","Unknown entity type"
 "Test label","Test label"
 "Use Config Settings","Use Config Settings"
@@ -24,20 +24,20 @@ OK,OK
 "Do you have any gift items in your order?","Do you have any gift items in your order?"
 "Add Gift Options","Add Gift Options"
 "Gift Options for the Entire Order","Gift Options for the Entire Order"
-"Leave this box blank if you don\'t want to leave a gift message for the entire order.","Leave this box blank if you don\'t want to leave a gift message for the entire order."
+"Leave this box blank if you don't want to leave a gift message for the entire order.","Leave this box blank if you don't want to leave a gift message for the entire order."
 "Gift Options for Individual Items","Gift Options for Individual Items"
 "<span>Item %1</span> of %2","<span>Item %1</span> of %2"
-"Leave a box blank if you don\'t want to add a gift message for that item.","Leave a box blank if you don\'t want to add a gift message for that item."
+"Leave a box blank if you don't want to add a gift message for that item.","Leave a box blank if you don't want to add a gift message for that item."
 "Add Gift Options for the Entire Order","Add Gift Options for the Entire Order"
-"You can leave this box blank if you don\'t want to add a gift message for this address.","You can leave this box blank if you don\'t want to add a gift message for this address."
+"You can leave this box blank if you don't want to add a gift message for this address.","You can leave this box blank if you don't want to add a gift message for this address."
 "Add Gift Options for Individual Items","Add Gift Options for Individual Items"
-"You can leave this box blank if you don\'t want to add a gift message for the item.","You can leave this box blank if you don\'t want to add a gift message for the item."
+"You can leave this box blank if you don't want to add a gift message for the item.","You can leave this box blank if you don't want to add a gift message for the item."
 "Gift Message (optional)","Gift Message (optional)"
 To:,To:
 From:,From:
 Message:,Message:
 Update,Update
-"Gift Options","Gift Options"
+"Gift options","Gift options"
 Edit,Edit
 Delete,Delete
 "Allow Gift Messages on Order Level","Allow Gift Messages on Order Level"

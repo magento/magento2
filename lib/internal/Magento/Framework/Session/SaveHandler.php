@@ -133,7 +133,7 @@ class SaveHandler implements SaveHandlerInterface
      * Get config
      *
      * @return ConfigInterface
-     * @deprecated
+     * @deprecated 100.0.8
      */
     private function getConfig()
     {

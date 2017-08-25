@@ -7,6 +7,10 @@ namespace Magento\TaxImportExport\Controller\Adminhtml\Rate;
 
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\TaxImportExport\Controller\Adminhtml\Rate\ImportExport
+ *
+ */
 class ImportExport extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
 {
     /**

@@ -8,6 +8,10 @@
  */
 namespace Magento\Framework\Event;
 
+/**
+ * Class \Magento\Framework\Event\Manager
+ *
+ */
 class Manager implements ManagerInterface
 {
     /**

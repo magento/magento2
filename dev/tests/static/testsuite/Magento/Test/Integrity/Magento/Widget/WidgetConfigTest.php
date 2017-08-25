@@ -7,7 +7,7 @@
  */
 namespace Magento\Test\Integrity\Magento\Widget;
 
-class WidgetConfigTest extends \PHPUnit_Framework_TestCase
+class WidgetConfigTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\Config\Dom\UrnResolver */
     protected $urnResolver;

@@ -6,6 +6,10 @@
  */
 namespace Magento\Reports\Controller\Adminhtml\Report\Review;
 
+/**
+ * Class \Magento\Reports\Controller\Adminhtml\Report\Review\ProductDetail
+ *
+ */
 class ProductDetail extends \Magento\Reports\Controller\Adminhtml\Report\Review
 {
     /**

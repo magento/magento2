@@ -6,7 +6,7 @@
 
 namespace Magento\Bundle\Model\ResourceModel\Indexer;
 
-class StockTest extends \PHPUnit_Framework_TestCase
+class StockTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogInventory\Model\Indexer\Stock\Processor

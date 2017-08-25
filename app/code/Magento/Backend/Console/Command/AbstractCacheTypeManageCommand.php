@@ -16,7 +16,9 @@ use Magento\Framework\App\Cache\Manager;
  */
 abstract class AbstractCacheTypeManageCommand extends AbstractCacheManageCommand
 {
-    /** @var EventManagerInterface */
+    /**
+     * @var \Magento\Framework\Event\ManagerInterface
+     */
     protected $eventManager;
 
     /**

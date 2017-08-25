@@ -14,7 +14,7 @@ use Magento\Payment\Gateway\Http\TransferInterface;
 /**
  * Class ZendTest
  */
-class ZendTest extends \PHPUnit_Framework_TestCase
+class ZendTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Zend */
     protected $model;

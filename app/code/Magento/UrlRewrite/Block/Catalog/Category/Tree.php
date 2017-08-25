@@ -161,7 +161,8 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
             'parent_id' => (int)$node->getParentId(),
             'children_count' => (int)$node->getChildrenCount(),
             'is_active' => (bool)$node->getIsActive(),
-            'name' => $node->getName(),
+            // Scrub names for raw js output
+            'name' => $this->escapeHtml($node->getName()),
             'level' => (int)$node->getLevel(),
             'product_count' => (int)$node->getProductCount(),
         ];

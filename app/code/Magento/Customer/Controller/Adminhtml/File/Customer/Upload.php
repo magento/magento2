@@ -14,6 +14,10 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Class \Magento\Customer\Controller\Adminhtml\File\Customer\Upload
+ *
+ */
 class Upload extends Action
 {
     /**

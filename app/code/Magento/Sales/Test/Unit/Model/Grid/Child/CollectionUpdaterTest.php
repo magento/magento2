@@ -8,7 +8,7 @@
 
 namespace Magento\Sales\Test\Unit\Model\Grid\Child;
 
-class CollectionUpdaterTest extends \PHPUnit_Framework_TestCase
+class CollectionUpdaterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\Grid\Child\CollectionUpdater
@@ -22,7 +22,7 @@ class CollectionUpdaterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->registryMock = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
+        $this->registryMock = $this->createMock(\Magento\Framework\Registry::class);
 
         $this->collectionUpdater = new \Magento\Sales\Model\Grid\Child\CollectionUpdater(
             $this->registryMock
@@ -31,10 +31,8 @@ class CollectionUpdaterTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateIfOrderExists()
     {
-        $collectionMock = $this->getMock(
-            \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\Collection::class, [], [], '', false
-        );
-        $transactionMock = $this->getMock(\Magento\Sales\Model\Order\Payment\Transaction::class, [], [], '', false);
+        $collectionMock = $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\Collection::class);
+        $transactionMock = $this->createMock(\Magento\Sales\Model\Order\Payment\Transaction::class);
         $this->registryMock
             ->expects($this->once())
             ->method('registry')

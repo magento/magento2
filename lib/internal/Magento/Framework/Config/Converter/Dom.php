@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\Config\Converter;
 
+/**
+ * Class \Magento\Framework\Config\Converter\Dom
+ *
+ */
 class Dom implements \Magento\Framework\Config\ConverterInterface
 {
     const ATTRIBUTES = '__attributes__';

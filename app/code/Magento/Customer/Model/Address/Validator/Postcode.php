@@ -5,6 +5,10 @@
  */
 namespace Magento\Customer\Model\Address\Validator;
 
+/**
+ * Class \Magento\Customer\Model\Address\Validator\Postcode
+ *
+ */
 class Postcode
 {
     /**

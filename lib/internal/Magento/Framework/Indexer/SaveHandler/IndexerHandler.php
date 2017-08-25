@@ -14,6 +14,10 @@ use Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver;
 use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
 use Magento\Framework\Indexer\SaveHandler\Batch;
 
+/**
+ * Class \Magento\Framework\Indexer\SaveHandler\IndexerHandler
+ *
+ */
 class IndexerHandler implements IndexerInterface
 {
     /**

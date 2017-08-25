@@ -24,6 +24,7 @@ class Inventory extends \Magento\Backend\Block\Widget implements \Magento\Backen
 
     /**
      * @var array
+     * @since 101.0.0
      */
     protected $disabledFields = [];
 
@@ -124,6 +125,7 @@ class Inventory extends \Magento\Backend\Block\Widget implements \Magento\Backen
      * @param string $fieldName
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 101.0.0
      */
     public function isAvailable($fieldName)
     {

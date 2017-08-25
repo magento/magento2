@@ -9,6 +9,10 @@ namespace Magento\Reports\Controller\Adminhtml\Report\Shopcart;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * Class \Magento\Reports\Controller\Adminhtml\Report\Shopcart\ExportAbandonedExcel
+ *
+ */
 class ExportAbandonedExcel extends \Magento\Reports\Controller\Adminhtml\Report\Shopcart
 {
     /**

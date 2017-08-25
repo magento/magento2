@@ -9,6 +9,10 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\FileSystemException;
 
+/**
+ * Class \Magento\Setup\Module\Di\Code\Reader\ClassesScanner
+ *
+ */
 class ClassesScanner implements ClassesScannerInterface
 {
     /**
