@@ -82,11 +82,10 @@ class Filter
      * Adds filters to collection using DataProvider filter results
      *
      * @param AbstractDb $collection
-     * @param bool $limit for limiting maximum amount of query results
      * @return AbstractDb
      * @throws LocalizedException
      */
-    public function getCollection(AbstractDb $collection, $limit = true)
+    public function getCollection(AbstractDb $collection)
     {
         $selected = $this->request->getParam(static::SELECTED_PARAM);
         $excluded = $this->request->getParam(static::EXCLUDED_PARAM);
@@ -100,7 +99,7 @@ class Filter
             }
         }
         /** @var \Magento\Customer\Model\ResourceModel\Customer\Collection $collection */
-        $idsArray = $this->getFilterIds($limit);
+        $idsArray = $this->getFilterIds();
         if (!empty($idsArray)) {
             $collection->addFieldToFilter(
                 $collection->getIdFieldName(),
@@ -213,10 +212,10 @@ class Filter
 
     /**
      * Get filter ids as array
-     * @param bool $limit
+     *
      * @return int[]
      */
-    private function getFilterIds($limit = true)
+    private function getFilterIds()
     {
         $idsArray = [];
         $this->applySelectionOnTargetProvider();
@@ -224,16 +223,13 @@ class Filter
             // Use collection's getAllIds for optimization purposes.
             $idsArray = $this->getDataProvider()->getAllIds();
         } else {
-            $searchResult = $this->getDataProvider()->getSearchResult();
-            if ($limit) {
-                // Use compatible search api getItems when searchResult is not a collection.
-                foreach ($searchResult->getItems() as $item) {
-                    /** @var $item \Magento\Framework\Api\Search\DocumentInterface */
-                    $idsArray[] = $item->getId();
-                }
-            } else {
-                //Grab all selected even if they are not on the current page.
-                $idsArray = $searchResult->getAllIds();
+            $dataProvider = $this->getDataProvider();
+            $dataProvider->setLimit(0, false);
+            $searchResult = $dataProvider->getSearchResult();
+            // Use compatible search api getItems when searchResult is not a collection.
+            foreach ($searchResult->getItems() as $item) {
+                /** @var $item \Magento\Framework\Api\Search\DocumentInterface */
+                $idsArray[] = $item->getId();
             }
         }
         return  $idsArray;
