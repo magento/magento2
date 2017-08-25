@@ -8,6 +8,10 @@ namespace Magento\Catalog\Controller\Adminhtml\Product\Gallery;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * Class \Magento\Catalog\Controller\Adminhtml\Product\Gallery\Upload
+ *
+ */
 class Upload extends \Magento\Backend\App\Action
 {
     /**

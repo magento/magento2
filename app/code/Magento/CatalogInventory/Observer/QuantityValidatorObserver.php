@@ -9,6 +9,10 @@ namespace Magento\CatalogInventory\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class \Magento\CatalogInventory\Observer\QuantityValidatorObserver
+ *
+ */
 class QuantityValidatorObserver implements ObserverInterface
 {
     /**

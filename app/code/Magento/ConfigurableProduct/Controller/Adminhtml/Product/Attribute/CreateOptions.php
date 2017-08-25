@@ -9,6 +9,10 @@ namespace Magento\ConfigurableProduct\Controller\Adminhtml\Product\Attribute;
 use Magento\Backend\App\Action;
 use Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory;
 
+/**
+ * Class \Magento\ConfigurableProduct\Controller\Adminhtml\Product\Attribute\CreateOptions
+ *
+ */
 class CreateOptions extends Action
 {
     /**

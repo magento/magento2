@@ -10,8 +10,6 @@ use Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item as Resource;
 /**
  * Downloadable links purchased item model
  *
- * @method Resource _getResource()
- * @method Resource getResource()
  * @method int getPurchasedId()
  * @method Item setPurchasedId($value)
  * @method int getOrderItemId()

@@ -10,6 +10,10 @@
  */
 namespace Magento\Search\Block\Adminhtml\Term\Edit;
 
+/**
+ * Class \Magento\Search\Block\Adminhtml\Term\Edit\Form
+ *
+ */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**

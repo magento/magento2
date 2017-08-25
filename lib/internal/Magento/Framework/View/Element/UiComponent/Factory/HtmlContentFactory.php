@@ -7,6 +7,10 @@ namespace Magento\Framework\View\Element\UiComponent\Factory;
 
 use Magento\Framework\View\Layout;
 
+/**
+ * Class \Magento\Framework\View\Element\UiComponent\Factory\HtmlContentFactory
+ *
+ */
 class HtmlContentFactory implements ComponentFactoryInterface
 {
     /**

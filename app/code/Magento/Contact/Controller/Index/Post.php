@@ -16,6 +16,10 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\HTTP\PhpEnvironment\Request;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Class \Magento\Contact\Controller\Index\Post
+ *
+ */
 class Post extends \Magento\Contact\Controller\Index
 {
     /**

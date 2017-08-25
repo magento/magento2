@@ -7,6 +7,10 @@ namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle;
 
 use Magento\Framework\Data\Form\Element\AbstractElement;
 
+/**
+ * Class \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option
+ *
+ */
 class Option extends \Magento\Backend\Block\Widget
 {
     /**

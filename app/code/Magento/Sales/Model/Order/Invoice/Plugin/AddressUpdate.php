@@ -6,6 +6,10 @@
 
 namespace Magento\Sales\Model\Order\Invoice\Plugin;
 
+/**
+ * Class \Magento\Sales\Model\Order\Invoice\Plugin\AddressUpdate
+ *
+ */
 class AddressUpdate
 {
     /**

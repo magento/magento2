@@ -6,6 +6,10 @@
  */
 namespace Magento\Paypal\Controller\Payflowadvanced;
 
+/**
+ * Class \Magento\Paypal\Controller\Payflowadvanced\Form
+ *
+ */
 class Form extends \Magento\Paypal\Controller\Payflow\Form
 {
 }

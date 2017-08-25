@@ -11,6 +11,10 @@ namespace Magento\Paypal\Controller\Adminhtml\Paypal\Reports;
 
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Paypal\Controller\Adminhtml\Paypal\Reports\Fetch
+ *
+ */
 class Fetch extends \Magento\Paypal\Controller\Adminhtml\Paypal\Reports
 {
     /**

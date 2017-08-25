@@ -7,7 +7,6 @@
 /**
  * Eav attribute set model
  *
- * @method \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set getResource()
  * @method int getEntityTypeId()
  * @method \Magento\Eav\Model\Entity\Attribute\Set setEntityTypeId(int $value)
  * @method string getAttributeSetName()
@@ -38,11 +37,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
     const KEY_ENTITY_TYPE_ID = 'entity_type_id';
     /**#@-*/
 
-    /**
-     * Resource instance
-     *
-     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set
-     */
+    /**#@-*/
     protected $_resource;
 
     /**
@@ -373,6 +368,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Get resource instance
      *
      * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+     * @deprecated because resource models should be used directly
      */
     protected function _getResource()
     {

@@ -11,6 +11,10 @@ use Magento\Framework\Code\Generator\DefinedClasses;
 use Magento\Framework\Code\Generator\Io;
 use Magento\Framework\Code\Generator\CodeGeneratorInterface;
 
+/**
+ * Class \Magento\Framework\Api\Code\Generator\ExtensionAttributesInterfaceFactoryGenerator
+ *
+ */
 class ExtensionAttributesInterfaceFactoryGenerator extends Factory
 {
     /**

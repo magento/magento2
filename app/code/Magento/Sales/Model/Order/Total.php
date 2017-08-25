@@ -5,6 +5,10 @@
  */
 namespace Magento\Sales\Model\Order;
 
+/**
+ * Class \Magento\Sales\Model\Order\Total
+ *
+ */
 class Total extends \Magento\Framework\DataObject
 {
 }

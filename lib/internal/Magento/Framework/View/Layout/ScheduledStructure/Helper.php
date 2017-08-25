@@ -8,6 +8,10 @@ namespace Magento\Framework\View\Layout\ScheduledStructure;
 use Magento\Framework\View\Layout;
 use Magento\Framework\App\State;
 
+/**
+ * Class \Magento\Framework\View\Layout\ScheduledStructure\Helper
+ *
+ */
 class Helper
 {
     /**#@+
@@ -20,11 +24,7 @@ class Helper
     const SCHEDULED_STRUCTURE_INDEX_IS_AFTER = 4;
     /**#@-*/
 
-    /**
-     * Anonymous block counter
-     *
-     * @var int
-     */
+    /**#@-*/
     protected $counter = 0;
 
     /**

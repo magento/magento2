@@ -5,6 +5,10 @@
  */
 namespace Magento\Catalog\Model\Product\CopyConstructor;
 
+/**
+ * Class \Magento\Catalog\Model\Product\CopyConstructor\UpSell
+ *
+ */
 class UpSell implements \Magento\Catalog\Model\Product\CopyConstructorInterface
 {
     /**

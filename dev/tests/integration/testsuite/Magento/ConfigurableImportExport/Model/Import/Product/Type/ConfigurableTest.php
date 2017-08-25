@@ -11,7 +11,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * @magentoAppArea adminhtml
  */
-class ConfigurableTest extends \PHPUnit_Framework_TestCase
+class ConfigurableTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configurable product test Type

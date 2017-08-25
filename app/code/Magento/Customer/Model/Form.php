@@ -11,6 +11,10 @@
  */
 namespace Magento\Customer\Model;
 
+/**
+ * Class \Magento\Customer\Model\Form
+ *
+ */
 class Form extends \Magento\Eav\Model\Form
 {
     /**

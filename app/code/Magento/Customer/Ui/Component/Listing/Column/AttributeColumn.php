@@ -11,9 +11,15 @@ use Magento\Ui\Component\Listing\Columns\Column;
 use Magento\Customer\Ui\Component\Listing\AttributeRepository;
 use Magento\Customer\Api\Data\AttributeMetadataInterface as AttributeMetadata;
 
+/**
+ * Class \Magento\Customer\Ui\Component\Listing\Column\AttributeColumn
+ *
+ */
 class AttributeColumn extends Column
 {
-    /** @var AttributeRepository */
+    /**
+     * @var \Magento\Customer\Ui\Component\Listing\AttributeRepository
+     */
     protected $attributeRepository;
 
     /**

@@ -5,6 +5,10 @@
  */
 namespace Magento\OfflinePayments\Block\Form;
 
+/**
+ * Class \Magento\OfflinePayments\Block\Form\Checkmo
+ *
+ */
 class Checkmo extends \Magento\Payment\Block\Form
 {
     /**

@@ -5,12 +5,31 @@
  */
 namespace Magento\Framework\Code\Reader;
 
+/**
+ * Class \Magento\Framework\Code\Reader\SourceArgumentsReader
+ *
+ */
 class SourceArgumentsReader
 {
     /**
      * Namespace separator
+     * @deprecated
+     * @see \Magento\Framework\Code\Reader\NamespaceResolver::NS_SEPARATOR
      */
     const NS_SEPARATOR = '\\';
+
+    /**
+     * @var NamespaceResolver
+     */
+    private $namespaceResolver;
+
+    /**
+     * @param NamespaceResolver|null $namespaceResolver
+     */
+    public function __construct(NamespaceResolver $namespaceResolver = null)
+    {
+        $this->namespaceResolver = $namespaceResolver ?: new NamespaceResolver();
+    }
 
     /**
      * Read constructor argument types from source code and perform namespace resolution if required.
@@ -33,12 +52,16 @@ class SourceArgumentsReader
         }
         $reflectionConstructor = $class->getConstructor();
         $fileContent = file($class->getFileName());
-        $availableNamespaces = $this->getImportedNamespaces($fileContent);
+        $availableNamespaces = $this->namespaceResolver->getImportedNamespaces($fileContent);
         $availableNamespaces[0] = $class->getNamespaceName();
         $constructorStartLine = $reflectionConstructor->getStartLine() - 1;
         $constructorEndLine = $reflectionConstructor->getEndLine();
         $fileContent = array_slice($fileContent, $constructorStartLine, $constructorEndLine - $constructorStartLine);
         $source = '<?php ' . trim(implode('', $fileContent));
+
+        // Remove parameter default value.
+        $source = preg_replace("/ = (.*)/", ',)', $source);
+
         $methodTokenized = token_get_all($source);
         $argumentsStart = array_search('(', $methodTokenized) + 1;
         $argumentsEnd = array_search(')', $methodTokenized);
@@ -66,7 +89,7 @@ class SourceArgumentsReader
         foreach ($arguments as $key => &$argument) {
             $argument = $this->removeToken($argument, '=');
             $argument = $this->removeToken($argument, '&');
-            $argument = $this->resolveNamespaces($argument, $availableNamespaces);
+            $argument = $this->namespaceResolver->resolveNamespace($argument, $availableNamespaces);
         }
         unset($argument);
         return $arguments;
@@ -78,25 +101,12 @@ class SourceArgumentsReader
      * @param string $argument
      * @param array $availableNamespaces
      * @return string
+     * @deprecated 100.2.0
+     * @see \Magento\Framework\Code\Reader\NamespaceResolver::resolveNamespace
      */
     protected function resolveNamespaces($argument, $availableNamespaces)
     {
-        if (substr($argument, 0, 1) !== self::NS_SEPARATOR && $argument !== 'array' && !empty($argument)) {
-            $name = explode(self::NS_SEPARATOR, $argument);
-            $unqualifiedName = $name[0];
-            $isQualifiedName = count($name) > 1 ? true : false;
-            if (isset($availableNamespaces[$unqualifiedName])) {
-                $namespace = $availableNamespaces[$unqualifiedName];
-                if ($isQualifiedName) {
-                    array_shift($name);
-                    return $namespace . self::NS_SEPARATOR . implode(self::NS_SEPARATOR, $name);
-                }
-                return $namespace;
-            } else {
-                return self::NS_SEPARATOR . $availableNamespaces[0] . self::NS_SEPARATOR . $argument;
-            }
-        }
-        return $argument;
+        return $this->namespaceResolver->resolveNamespace($argument, $availableNamespaces);
     }
 
     /**
@@ -120,60 +130,11 @@ class SourceArgumentsReader
      *
      * @param array $file
      * @return array
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @deprecated 100.2.0
+     * @see \Magento\Framework\Code\Reader\NamespaceResolver::getImportedNamespaces
      */
     protected function getImportedNamespaces(array $file)
     {
-        $file = implode('', $file);
-        $file = token_get_all($file);
-        $classStart = array_search('{', $file);
-        $file = array_slice($file, 0, $classStart);
-        $output = [];
-        foreach ($file as $position => $token) {
-            if (is_array($token) && $token[0] === T_USE) {
-                $import = array_slice($file, $position);
-                $importEnd = array_search(';', $import);
-                $import = array_slice($import, 0, $importEnd);
-                $imports = [];
-                $importsCount = 0;
-                foreach ($import as $item) {
-                    if ($item === ',') {
-                        $importsCount++;
-                        continue;
-                    }
-                    $imports[$importsCount][] = $item;
-                }
-                foreach ($imports as $import) {
-                    $import = array_filter($import, function ($token) {
-                        $whitelist = [T_NS_SEPARATOR, T_STRING, T_AS];
-                        if (isset($token[0]) && in_array($token[0], $whitelist)) {
-                            return true;
-                        }
-                        return false;
-                    });
-                    $import = array_map(function ($element) {
-                        return $element[1];
-                    }, $import);
-                    $import = array_values($import);
-                    if ($import[0] === self::NS_SEPARATOR) {
-                        array_shift($import);
-                    }
-                    $importName = null;
-                    if (in_array('as', $import)) {
-                        $importName = array_splice($import, -1)[0];
-                        array_pop($import);
-                    }
-                    $useStatement = implode('', $import);
-                    if ($importName) {
-                        $output[$importName] = self::NS_SEPARATOR . $useStatement;
-                    } else {
-                        $key = explode(self::NS_SEPARATOR, $useStatement);
-                        $key = end($key);
-                        $output[$key] = self::NS_SEPARATOR . $useStatement;
-                    }
-                }
-            }
-        }
-        return $output;
+        return $this->namespaceResolver->getImportedNamespaces($file);
     }
 }

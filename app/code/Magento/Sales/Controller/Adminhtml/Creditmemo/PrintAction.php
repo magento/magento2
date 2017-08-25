@@ -5,6 +5,10 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Creditmemo;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Creditmemo\PrintAction
+ *
+ */
 class PrintAction extends \Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo\PrintAction
 {
 }

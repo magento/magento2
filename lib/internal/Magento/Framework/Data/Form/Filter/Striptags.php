@@ -11,6 +11,10 @@
  */
 namespace Magento\Framework\Data\Form\Filter;
 
+/**
+ * Class \Magento\Framework\Data\Form\Filter\Striptags
+ *
+ */
 class Striptags implements \Magento\Framework\Data\Form\Filter\FilterInterface
 {
     /**

@@ -10,6 +10,10 @@ namespace Magento\Setup\Module\Di\Compiler\Config\Writer;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Setup\Module\Di\Compiler\Config\WriterInterface;
 
+/**
+ * Class \Magento\Setup\Module\Di\Compiler\Config\Writer\Filesystem
+ *
+ */
 class Filesystem implements WriterInterface
 {
     /**

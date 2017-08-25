@@ -14,7 +14,7 @@ use Magento\Framework\App\State;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class BootstrapTest extends \PHPUnit_Framework_TestCase
+class BootstrapTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\AppInterface | \PHPUnit_Framework_MockObject_MockObject
@@ -68,46 +68,16 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManagerFactory = $this->getMock(
-            \Magento\Framework\App\ObjectManagerFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
-        $this->dirs = $this->getMock(
-            \Magento\Framework\App\Filesystem\DirectoryList::class,
-            ['getPath'],
-            [],
-            '',
-            false
-        );
-        $this->maintenanceMode = $this->getMock(
-            \Magento\Framework\App\MaintenanceMode::class,
-            ['isOn'],
-            [],
-            '',
-            false
-        );
-        $this->remoteAddress = $this->getMock(
-            \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $filesystem = $this->getMock(
-            \Magento\Framework\Filesystem::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->objectManagerFactory = $this->createMock(\Magento\Framework\App\ObjectManagerFactory::class);
+        $this->objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->dirs = $this->createPartialMock(\Magento\Framework\App\Filesystem\DirectoryList::class, ['getPath']);
+        $this->maintenanceMode = $this->createPartialMock(\Magento\Framework\App\MaintenanceMode::class, ['isOn']);
+        $this->remoteAddress = $this->createMock(\Magento\Framework\HTTP\PhpEnvironment\RemoteAddress::class);
+        $filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
 
-        $this->logger = $this->getMock(\Psr\Log\LoggerInterface::class);
+        $this->logger = $this->createMock(\Psr\Log\LoggerInterface::class);
 
-        $this->deploymentConfig = $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false);
+        $this->deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
 
         $mapObjectManager = [
             [\Magento\Framework\App\Filesystem\DirectoryList::class, $this->dirs],
@@ -134,11 +104,10 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerFactory->expects($this->any())->method('create')
             ->will(($this->returnValue($this->objectManager)));
 
-        $this->bootstrapMock = $this->getMock(
-            \Magento\Framework\App\Bootstrap::class,
-            ['assertMaintenance', 'assertInstalled', 'getIsExpected', 'isInstalled', 'terminate'],
-            [$this->objectManagerFactory, '', ['value1', 'value2']]
-        );
+        $this->bootstrapMock = $this->getMockBuilder(\Magento\Framework\App\Bootstrap::class)
+            ->setMethods(['assertMaintenance', 'assertInstalled', 'getIsExpected', 'isInstalled', 'terminate'])
+            ->setConstructorArgs([$this->objectManagerFactory, '', ['value1', 'value2']])
+            ->getMock();
     }
 
     public function testCreateObjectManagerFactory()

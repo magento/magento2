@@ -9,6 +9,10 @@ use Magento\CatalogSearch\Model\Indexer\Fulltext;
 use Magento\Framework\Mview\ActionInterface;
 use Magento\Framework\Indexer\IndexerInterfaceFactory;
 
+/**
+ * Class \Magento\CatalogSearch\Model\Indexer\Mview\Action
+ *
+ */
 class Action implements ActionInterface
 {
     /**

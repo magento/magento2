@@ -11,6 +11,10 @@
  */
 namespace Magento\Tax\Model\ResourceModel\Report\Tax;
 
+/**
+ * Class \Magento\Tax\Model\ResourceModel\Report\Tax\Createdat
+ *
+ */
 class Createdat extends \Magento\Reports\Model\ResourceModel\Report\AbstractReport
 {
     /**

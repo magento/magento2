@@ -9,6 +9,7 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
 /**
  * @api
+ * @since 100.1.0
  */
 class Sidebar
 {
@@ -20,6 +21,7 @@ class Sidebar
      * @param \Magento\Framework\DataObject $item
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 100.1.0
      */
     public function aroundGetItemQty(
         \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar $subject,
@@ -40,6 +42,7 @@ class Sidebar
      * @param string $productType
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 100.1.0
      */
     public function aroundIsConfigurationRequired(
         \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar $subject,

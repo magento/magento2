@@ -12,7 +12,7 @@ use Magento\Catalog\Api\Data\ProductRender\FormattedPriceInfoInterface;
 use Magento\Catalog\Api\Data\ProductRender\FormattedPriceInfoInterfaceFactory;
 use Magento\Catalog\Model\ProductRender\FormattedPriceInfoBuilder;
 
-class FormattedPriceInfoBuilderTest extends \PHPUnit_Framework_TestCase
+class FormattedPriceInfoBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject;

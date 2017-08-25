@@ -9,6 +9,10 @@ namespace Magento\Catalog\Model\Product\Option\Validator;
 use Magento\Catalog\Model\Product\Option;
 use Zend_Validate_Exception;
 
+/**
+ * Class \Magento\Catalog\Model\Product\Option\Validator\DefaultValidator
+ *
+ */
 class DefaultValidator extends \Magento\Framework\Validator\AbstractValidator
 {
     /**

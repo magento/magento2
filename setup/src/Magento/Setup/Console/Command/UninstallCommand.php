@@ -12,6 +12,10 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Magento\Setup\Model\InstallerFactory;
 use Magento\Framework\Setup\ConsoleLogger;
 
+/**
+ * Class \Magento\Setup\Console\Command\UninstallCommand
+ *
+ */
 class UninstallCommand extends AbstractSetupCommand
 {
     /**
