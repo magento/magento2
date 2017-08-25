@@ -3,10 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Catalog\Block\Product\View;
+namespace Magento\Bundle\Block\Catalog\Product\View\Type;
 
 /**
- * @magentoDataFixture Magento/Bundle/_files/product_dynamic_price_with_option.php
+ * @magentoDataFixture Magento/Bundle/_files/product.php
  * @magentoAppArea frontend
  */
 class BundleTest extends \PHPUnit\Framework\TestCase
@@ -37,7 +37,7 @@ class BundleTest extends \PHPUnit\Framework\TestCase
 
         $this->productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         $this->product = $this->productRepository->get('bundle-product', false, null, true);
-
+        $this->product->setPriceType(\Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC)->save();
         $this->objectManager->get(\Magento\Framework\Registry::class)->unregister('product');
         $this->objectManager->get(\Magento\Framework\Registry::class)->register('product', $this->product);
 
