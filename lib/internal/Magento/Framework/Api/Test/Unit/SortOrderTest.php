@@ -11,7 +11,7 @@ use Magento\Framework\Api\SortOrder;
 /**
  * @covers \Magento\Framework\Api\SortOrder
  */
-class SortOrderTest extends \PHPUnit_Framework_TestCase
+class SortOrderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SortOrder

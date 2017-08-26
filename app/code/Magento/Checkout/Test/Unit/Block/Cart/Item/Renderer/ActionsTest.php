@@ -9,7 +9,7 @@ use Magento\Checkout\Block\Cart\Item\Renderer\Actions;
 use Magento\Checkout\Block\Cart\Item\Renderer\Actions\Generic;
 use Magento\Quote\Model\Quote\Item;
 
-class ActionsTest extends \PHPUnit_Framework_TestCase
+class ActionsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Actions

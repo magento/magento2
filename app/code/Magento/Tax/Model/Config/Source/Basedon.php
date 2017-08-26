@@ -5,6 +5,10 @@
  */
 namespace Magento\Tax\Model\Config\Source;
 
+/**
+ * Class \Magento\Tax\Model\Config\Source\Basedon
+ *
+ */
 class Basedon implements \Magento\Framework\Option\ArrayInterface
 {
     /**

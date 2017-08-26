@@ -6,8 +6,9 @@
  * @api
  */
 define([
-    'underscore'
-], function (_) {
+    'underscore',
+    'Magento_Checkout/js/model/default-post-code-resolver'
+], function (_, DefaultPostCodeResolver) {
     'use strict';
 
     /**
@@ -35,7 +36,7 @@ define([
             company: addressData.company,
             telephone: addressData.telephone,
             fax: addressData.fax,
-            postcode: addressData.postcode ? addressData.postcode : window.checkoutConfig.defaultPostcode || undefined,
+            postcode: addressData.postcode ? addressData.postcode : DefaultPostCodeResolver.resolve(),
             city: addressData.city,
             firstname: addressData.firstname,
             lastname: addressData.lastname,

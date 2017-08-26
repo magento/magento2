@@ -5,6 +5,10 @@
  */
 namespace Magento\Sitemap\Model\Config\Backend;
 
+/**
+ * Class \Magento\Sitemap\Model\Config\Backend\Priority
+ *
+ */
 class Priority extends \Magento\Framework\App\Config\Value
 {
     /**

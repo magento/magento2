@@ -15,6 +15,7 @@ use Magento\Framework\View\Element\Template\Context;
  * Provide information to frontend storage manager
  *
  * @api
+ * @since 101.1.0
  */
 class FrontendStorageManager extends \Magento\Framework\View\Element\Template
 {
@@ -33,6 +34,7 @@ class FrontendStorageManager extends \Magento\Framework\View\Element\Template
      * @param FrontendStorageConfigurationPool $storageConfigurationPool
      * @param Config $appConfig
      * @param array $data
+     * @since 101.1.0
      */
     public function __construct(
         Context $context,
@@ -50,6 +52,7 @@ class FrontendStorageManager extends \Magento\Framework\View\Element\Template
      * in json format
      *
      * @return string
+     * @since 101.1.0
      */
     public function getConfigurationJson()
     {

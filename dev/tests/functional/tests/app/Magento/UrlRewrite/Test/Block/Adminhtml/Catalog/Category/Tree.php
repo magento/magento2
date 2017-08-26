@@ -32,7 +32,7 @@ class Tree extends Block
     {
         if ($category != null && $category->hasData('name')) {
             $this->_rootElement->find(
-                "//a[contains(text(),'{$category->getName()}')]",
+                "//a[contains(text(),\"{$category->getName()}\")]",
                 Locator::SELECTOR_XPATH
             )->click();
         } else {

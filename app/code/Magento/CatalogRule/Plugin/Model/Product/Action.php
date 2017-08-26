@@ -9,6 +9,10 @@ namespace Magento\CatalogRule\Plugin\Model\Product;
 use Magento\Catalog\Model\Product\Action as ProductAction;
 use Magento\CatalogRule\Model\Indexer\Product\ProductRuleProcessor;
 
+/**
+ * Class \Magento\CatalogRule\Plugin\Model\Product\Action
+ *
+ */
 class Action
 {
     /**

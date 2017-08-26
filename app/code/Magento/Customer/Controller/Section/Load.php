@@ -22,7 +22,7 @@ class Load extends \Magento\Framework\App\Action\Action
 
     /**
      * @var Identifier
-     * @deprecated
+     * @deprecated 100.2.0
      */
     protected $sectionIdentifier;
 

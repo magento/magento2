@@ -92,7 +92,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_configStructure;
 
     /**
-     *Form fieldset factory
+     * Form fieldset factory
      *
      * @var \Magento\Config\Block\System\Config\Form\Fieldset\Factory
      */
@@ -157,7 +157,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
-     * @deprecated
+     * @deprecated 100.1.2
      * @return SettingChecker
      */
     private function getSettingChecker()
@@ -600,6 +600,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @param int $fieldValue
      * @return bool
+     * @since 100.1.0
      */
     public function isCanRestoreToDefault($fieldValue)
     {
@@ -785,7 +786,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Retrieve Deployment Configuration object.
      *
-     * @deprecated
+     * @deprecated 100.1.2
      * @return DeploymentConfig
      */
     private function getAppConfig()
@@ -820,9 +821,10 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Gets instance of ElementVisibilityInterface.
      *
      * @return ElementVisibilityInterface
-     * @deprecated Added to not break backward compatibility of the constructor signature
+     * @deprecated 100.2.0 Added to not break backward compatibility of the constructor signature
      *             by injecting the new dependency directly.
      *             The method can be removed in a future major release, when constructor signature can be changed.
+     * @since 100.2.0
      */
     public function getElementVisibility()
     {

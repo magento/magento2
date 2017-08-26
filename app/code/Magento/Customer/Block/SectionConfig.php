@@ -10,7 +10,9 @@ namespace Magento\Customer\Block;
  */
 class SectionConfig extends \Magento\Framework\View\Element\Template
 {
-    /** @var \Magento\Framework\Config\DataInterface */
+    /**
+     * @var \Magento\Framework\Config\DataInterface
+     */
     protected $sectionConfig;
 
     /**

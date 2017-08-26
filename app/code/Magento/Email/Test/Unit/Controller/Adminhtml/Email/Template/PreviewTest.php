@@ -20,7 +20,7 @@ use Magento\Framework\View\Result\Page;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PreviewTest extends \PHPUnit_Framework_TestCase
+class PreviewTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Preview

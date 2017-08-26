@@ -7,9 +7,13 @@ namespace Magento\Captcha\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class \Magento\Captcha\Observer\ResetAttemptForFrontendObserver
+ *
+ */
 class ResetAttemptForFrontendObserver implements ObserverInterface
 {
-    /*
+    /**
      * @var \Magento\Captcha\Model\ResourceModel\LogFactory
      */
     public $resLogFactory;

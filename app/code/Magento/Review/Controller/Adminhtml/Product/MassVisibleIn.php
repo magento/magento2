@@ -9,6 +9,10 @@ use Magento\Review\Controller\Adminhtml\Product as ProductController;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Review\Controller\Adminhtml\Product\MassVisibleIn
+ *
+ */
 class MassVisibleIn extends ProductController
 {
     /**

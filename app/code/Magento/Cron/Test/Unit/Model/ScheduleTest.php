@@ -11,8 +11,11 @@ use Magento\Cron\Model\Schedule;
  * Class \Magento\Cron\Test\Unit\Model\ObserverTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ScheduleTest extends \PHPUnit_Framework_TestCase
+class ScheduleTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
     protected $helper;
 
     protected $resourceJobMock;
@@ -174,6 +177,35 @@ class ScheduleTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $result);
     }
 
+    public function testTryScheduleWithConversionToAdminStoreTime()
+    {
+        $scheduledAt = '2011-12-13 14:15:16';
+        $cronExprArr = ['*', '*', '*', '*', '*'];
+
+        // 1. Create mocks
+        $timezoneConverter = $this->createMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
+        $timezoneConverter->expects($this->once())
+            ->method('date')
+            ->with($scheduledAt)
+            ->willReturn(new \DateTime($scheduledAt));
+
+        /** @var \Magento\Cron\Model\Schedule $model */
+        $model = $this->helper->getObject(
+            \Magento\Cron\Model\Schedule::class,
+            ['timezoneConverter' => $timezoneConverter]
+        );
+
+        // 2. Set fixtures
+        $model->setScheduledAt($scheduledAt);
+        $model->setCronExprArr($cronExprArr);
+
+        // 3. Run tested method
+        $result = $model->trySchedule();
+
+        // 4. Compare actual result with expected result
+        $this->assertTrue($result);
+    }
+
     /**
      * @return array
      */
@@ -187,7 +219,6 @@ class ScheduleTest extends \PHPUnit_Framework_TestCase
             [$date, [], false],
             [$date, null, false],
             [$date, false, false],
-            [$date, ['*', '*', '*', '*', '*'], true],
             [strtotime($date), ['*', '*', '*', '*', '*'], true],
             [strtotime($date), ['15', '*', '*', '*', '*'], true],
             [strtotime($date), ['*', '14', '*', '*', '*'], true],

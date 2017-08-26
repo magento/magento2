@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder;
 
+/**
+ * Class \Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder\Container
+ *
+ */
 class Container
 {
     /**

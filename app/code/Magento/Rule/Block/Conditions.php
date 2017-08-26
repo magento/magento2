@@ -7,6 +7,10 @@ namespace Magento\Rule\Block;
 
 use Magento\Framework\Data\Form\Element\AbstractElement;
 
+/**
+ * Class \Magento\Rule\Block\Conditions
+ *
+ */
 class Conditions implements \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
 {
     /**

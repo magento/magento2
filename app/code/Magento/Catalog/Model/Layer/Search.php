@@ -11,6 +11,10 @@ use Magento\Catalog\Model\Layer;
 use Magento\Catalog\Model\ResourceModel;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory as AttributeCollectionFactory;
 
+/**
+ * Class \Magento\Catalog\Model\Layer\Search
+ *
+ */
 class Search extends \Magento\Catalog\Model\Layer
 {
     /**

@@ -11,8 +11,6 @@ use Magento\Framework\Model\AbstractModel;
 /**
  * Emtity attribute option model
  *
- * @method \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option _getResource()
- * @method \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option getResource()
  * @method int getAttributeId()
  * @method \Magento\Eav\Model\Entity\Attribute\Option setAttributeId(int $value)
  *

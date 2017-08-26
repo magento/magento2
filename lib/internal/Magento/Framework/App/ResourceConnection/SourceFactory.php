@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\App\ResourceConnection;
 
+/**
+ * Class \Magento\Framework\App\ResourceConnection\SourceFactory
+ *
+ */
 class SourceFactory
 {
     /**

@@ -7,6 +7,10 @@ namespace Magento\Msrp\Model\Product;
 
 use Magento\Msrp\Model\Product\Attribute\Source\Type\Price as TypePrice;
 
+/**
+ * Class \Magento\Msrp\Model\Product\Options
+ *
+ */
 class Options
 {
     /**

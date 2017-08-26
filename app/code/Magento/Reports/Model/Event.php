@@ -8,8 +8,6 @@ namespace Magento\Reports\Model;
 /**
  * Events model
  *
- * @method \Magento\Reports\Model\ResourceModel\Event _getResource()
- * @method \Magento\Reports\Model\ResourceModel\Event getResource()
  * @method string getLoggedAt()
  * @method \Magento\Reports\Model\Event setLoggedAt(string $value)
  * @method int getEventTypeId()

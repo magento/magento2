@@ -10,6 +10,10 @@ use Magento\Customer\Model\AttributeMetadataDataProvider;
 use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
+/**
+ * Class \Magento\Customer\Model\Metadata\AttributeResolver
+ *
+ */
 class AttributeResolver
 {
     /**

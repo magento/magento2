@@ -5,14 +5,14 @@
  */
 namespace Magento\Backend\Model\Session;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Magento\Backend\Model\Session\AdminConfig.
  *
  * @magentoAppArea adminhtml
  */
-class AdminConfigTest extends \PHPUnit_Framework_TestCase
+class AdminConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface

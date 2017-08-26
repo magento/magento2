@@ -6,6 +6,10 @@
  */
 namespace Magento\Framework\ObjectManager\Profiler\Tree;
 
+/**
+ * Class \Magento\Framework\ObjectManager\Profiler\Tree\Item
+ *
+ */
 class Item
 {
     /**

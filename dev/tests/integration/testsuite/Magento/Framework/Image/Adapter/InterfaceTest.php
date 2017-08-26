@@ -10,7 +10,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * @magentoAppIsolation enabled
  */
-class InterfaceTest extends \PHPUnit_Framework_TestCase
+class InterfaceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Adapter classes for test

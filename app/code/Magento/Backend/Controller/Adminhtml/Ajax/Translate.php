@@ -8,6 +8,10 @@ namespace Magento\Backend\Controller\Adminhtml\Ajax;
 
 use Magento\Backend\App\Action;
 
+/**
+ * Class \Magento\Backend\Controller\Adminhtml\Ajax\Translate
+ *
+ */
 class Translate extends \Magento\Backend\App\Action
 {
     /**

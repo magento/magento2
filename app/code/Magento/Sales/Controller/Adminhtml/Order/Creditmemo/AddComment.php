@@ -8,6 +8,10 @@ namespace Magento\Sales\Controller\Adminhtml\Order\Creditmemo;
 use Magento\Backend\App\Action;
 use Magento\Sales\Model\Order\Email\Sender\CreditmemoCommentSender;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Order\Creditmemo\AddComment
+ *
+ */
 class AddComment extends \Magento\Backend\App\Action
 {
     /**

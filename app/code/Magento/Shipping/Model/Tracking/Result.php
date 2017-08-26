@@ -8,6 +8,10 @@ namespace Magento\Shipping\Model\Tracking;
 use Magento\Shipping\Model\Rate\Result as RateResult;
 use Magento\Shipping\Model\Tracking\Result\AbstractResult;
 
+/**
+ * Class \Magento\Shipping\Model\Tracking\Result
+ *
+ */
 class Result
 {
     /**

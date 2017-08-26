@@ -22,9 +22,7 @@ class PluginList extends Interception\PluginList\PluginList
     const PLUGIN_TYPE_AFTER = 'after';
     /**#@-*/
 
-    /**
-     * @var array
-     */
+    /**#@-*/
     private $pluginList = [
        self::PLUGIN_TYPE_BEFORE => [],
        self::PLUGIN_TYPE_AROUND => [],
