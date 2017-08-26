@@ -47,7 +47,6 @@ class FileIterator extends \Magento\Framework\Config\FileIterator
             );
         }
 
-        /** @var \Magento\Framework\Filesystem\File\Read $fileRead */
         $fileRead = $this->fileReadFactory->create($this->key(), DriverPool::FILE);
         $contents = $fileRead->readAll();
         return str_replace('<template ', '<template module="' . $moduleName . '" ', $contents);
