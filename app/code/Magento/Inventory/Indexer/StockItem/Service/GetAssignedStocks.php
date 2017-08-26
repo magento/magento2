@@ -38,9 +38,9 @@ class GetAssignedStocks implements GetAssignedStocksInterface
         );
 
         if (count($sourceIds) !== 0) {
-            $select->where(SourceInterface::SOURCE_ID . ' (?)', $sourceIds);
+            $select->where(SourceInterface::SOURCE_ID . ' =?', $sourceIds);
         }
         $select->group(StockInterface::STOCK_ID);
-        return $connection->fetchAll($select);
+        return $connection->fetchCol($select);
     }
 }

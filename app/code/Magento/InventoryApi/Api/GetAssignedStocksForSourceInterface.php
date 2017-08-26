@@ -15,8 +15,6 @@ namespace Magento\InventoryApi\Api;
 interface GetAssignedStocksForSourceInterface
 {
     /**
-     * Get Stock assigned to Sources
-     *
      * @param int $sourceId
      * @return \Magento\InventoryApi\Api\Data\StockItemInterface[]
      * @throws \Magento\Framework\Exception\InputException

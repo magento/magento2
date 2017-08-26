@@ -12,7 +12,6 @@ use Magento\Inventory\Indexer\StockItem\DataProvider;
 use Magento\Inventory\Indexer\StockItem\DimensionFactory;
 use Magento\Inventory\Indexer\StockItem\IndexHandler;
 use Magento\Inventory\Indexer\StockItem\Service\GetAssignedStocksInterface;
-use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -79,14 +78,13 @@ class StockItem implements StockItemIndexerInterface
     {
         $stocks = $this->assignedStocksForSource->execute([]);
 
-        foreach ($stocks as $stock) {
-            $stockId = $stock[StockInterface::STOCK_ID];
-            $dimensions = [$this->dimensionFactory->create(['name' => 'stock_', 'value' => $stockId])];
+        foreach ($stocks as $stockId) {
+            $dimension = [$this->dimensionFactory->create(['name' => 'stock_', 'value' => $stockId])];
             $this->indexScopeState->useTemporaryIndex();
-            $this->handler->cleanIndex($dimensions);
-            $this->handler->saveIndex($dimensions, $this->dataProvider->fetchDocuments($stockId, []));
+            $this->handler->cleanIndex($dimension);
+            $this->handler->saveIndex($dimension, $this->dataProvider->fetchDocuments($stockId, []));
 
-            $this->indexSwitcher->switchIndex($dimensions, static::INDEXER_ID);
+            $this->indexSwitcher->switchIndex($dimension, static::INDEXER_ID);
             $this->indexScopeState->useRegularIndex();
         }
     }
@@ -104,12 +102,12 @@ class StockItem implements StockItemIndexerInterface
      */
     public function executeList(array $ids)
     {
-        $stocks = $this->assignedStocksForSource->execute($ids);
+        $stockIds = $this->assignedStocksForSource->execute($ids);
 
-        foreach ($stocks as $stockId) {
-            $dimensions = [$this->dimensionFactory->create(['name' => 'stock', 'value' => $stockId])];
-            $this->handler->cleanIndex($dimensions);
-            $this->handler->saveIndex($dimensions, $this->dataProvider->fetchDocuments($stockId, $ids));
+        foreach ($stockIds as $stockId) {
+            $dimension = [$this->dimensionFactory->create(['name' => 'stock', 'value' => $stockId])];
+            $this->handler->cleanIndex($dimension);
+            $this->handler->saveIndex($dimension, $this->dataProvider->fetchDocuments($stockId, $ids));
         }
     }
 

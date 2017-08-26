@@ -8,6 +8,7 @@ namespace Magento\Inventory\Indexer;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
+
 class StockItemTest extends \PHPUnit\Framework\TestCase
 {
 
@@ -16,6 +17,14 @@ class StockItemTest extends \PHPUnit\Framework\TestCase
      */
     private $indexer;
 
+    /**
+     * @var Checker
+     */
+    private $indexerChecker;
+
+    /**
+     *
+     */
     protected function setUp()
     {
         /** @var \Magento\Framework\Indexer\IndexerInterface indexer */
@@ -23,6 +32,7 @@ class StockItemTest extends \PHPUnit\Framework\TestCase
             \Magento\Indexer\Model\Indexer::class
         );
         $this->indexer->load(StockItemIndexerInterface::INDEXER_ID);
+        $this->indexerChecker = Bootstrap::getObjectManager()->create(Checker::class);
     }
 
     /**
@@ -33,8 +43,11 @@ class StockItemTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Inventory/_files/stock.php
      * @magentoDataFixture Magento/Inventory/_files/stock_source_link.php
      */
-     public function testExecuteFull()
-     {
-         $this->indexer->reindexAll();
-     }
+    public function testIndexRow()
+    {
+        self::assertEquals(0, $this->indexerChecker->execute(1, 'inventory_1'));
+        $this->indexer->reindexRow(1);
+        self::assertEquals(10,$this->indexerChecker->execute(1, 'inventory_1'));
+        self::assertEquals(0, $this->indexerChecker->execute(1, 'inventory_2'));
+    }
 }

@@ -3,17 +3,35 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\InventoryApi\Api\Data\SourceInterface;
-use Magento\InventoryApi\Api\Data\SourceInterfaceFactory;
-use Magento\InventoryApi\Api\SourceRepositoryInterface;
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterfaceFactory;
 use Magento\InventoryApi\Api\SourceItemSaveInterface;
+use Magento\InventoryApi\Api\SourceRepositoryInterface;
+use Magento\TestFramework\Helper\Bootstrap;
 
+/** @var SourceRepositoryInterface $sourceRepository */
+$sourceRepository = Bootstrap::getObjectManager()->get(SourceRepositoryInterface::class);
+$searchCriteriaBuilder = Bootstrap::getObjectManager()->get(Magento\Framework\Api\SearchCriteriaBuilder::class);
+$sortOrderBuilder =  Bootstrap::getObjectManager()->create(\Magento\Framework\Api\SortOrderBuilder::class);
 
+/*
+$nameList = ['source-name-1', 'source-name-2', 'source-name-3', 'source-name-4', 'source-name-5'];
 
+$sortOrder = $sortOrderBuilder
+    ->setField(SourceInterface::NAME)
+    ->setDirection(\Magento\Framework\Api\SortOrder::SORT_ASC)
+    ->create();
+
+$searchCriteria = $searchCriteriaBuilder
+    ->addFilter(SourceInterface::NAME, $nameList, 'in')
+    ->addSortOrder($sortOrder)
+    ->create();
+$sourceList = array_values($sourceRepository->getList($searchCriteria)->getItems());
+
+*/
 
 // ---------------  Create 10 source items for the 5 sources ---------------------------
 $sourcesItemData = [

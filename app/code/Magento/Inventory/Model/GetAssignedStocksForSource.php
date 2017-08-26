@@ -94,13 +94,14 @@ class GetAssignedStocksForSource implements GetAssignedStocksForSourceInterface
     /**
      * Get all linked StockIds by given sourceId.
      *
-     * @param $sourceId
+     * @param int $sourceId
      * @return array
      */
     private function getAssignedStockIds($sourceId)
     {
+        $sourceId = (int)$sourceId;
         $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter(StockSourceLink::SOURCE_ID, (int)$sourceId)
+            ->addFilter(StockSourceLink::SOURCE_ID, $sourceId)
             ->create();
         /** @var Collection $collection */
         $collection = $this->stockLinkCollectionFactory->create();

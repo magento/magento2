@@ -7,7 +7,6 @@
 namespace Magento\Inventory\Indexer\StockItem;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\StockInterface;
 
 /**
@@ -53,7 +52,7 @@ class DataProvider
             )->where(StockInterface::STOCK_ID . '= ?', $stockId);
 
         if (count($sourceIds) !== 0) {
-            $select->where(SourceInterface::SOURCE_ID . ' (?)', $sourceIds);
+            $select->where('link_table.source_id=?', $sourceIds);
         }
 
         $select->group(['sku', 'status']);
