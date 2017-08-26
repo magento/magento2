@@ -5,7 +5,6 @@
  */
 namespace Magento\Framework\DB\Sql;
 
-
 /**
  * Class is wrapper over Zend_Db_Expr for implement JsonSerializable interface.
  */
