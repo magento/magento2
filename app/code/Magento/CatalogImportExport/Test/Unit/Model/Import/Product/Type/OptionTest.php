@@ -5,6 +5,12 @@
  */
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product\Type;
 
+use Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory as ResourceCollectionFactory;
+use Magento\Catalog\Model\ResourceModel\Product\Option\Value\Collection;
+use Magento\Catalog\Model\ResourceModel\Product\Option\Value\CollectionFactory as ResourceValueCollectionFactory;
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
+use Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory;
+
 /**
  * Test class for import product options module
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -204,7 +210,7 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
     protected $_iteratorPageSize = 100;
 
     /**
-     * @var \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface
+     * @var ProcessingErrorAggregatorInterface
      */
     protected $errorAggregator;
 
@@ -255,37 +261,35 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
         $entityMetadataMock->expects($this->any())
             ->method('getLinkField')
             ->willReturn('entity_id');
+
+        $optionValueCollectionFactoryMock = $this->getMockBuilder(ResourceValueCollectionFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $optionValueCollectionMock = $this->createDefaultMock(Collection::class);
+        $optionValueCollectionMock
+            ->expects($this->any())
+            ->method('getIterator')
+            ->willReturn($this->createDefaultMock(\Traversable::class));
+        $optionValueCollectionFactoryMock
+            ->expects($this->any())
+            ->method('create')
+            ->willReturn($optionValueCollectionMock);
+
         $modelClassArgs = [
-            $this->getMock(\Magento\ImportExport\Model\ResourceModel\Import\Data::class, [], [], '', false),
-            $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false),
-            $this->getMock(\Magento\ImportExport\Model\ResourceModel\Helper::class, [], [], '', false),
-            $this->getMock(\Magento\Store\Model\StoreManagerInterface::class, [], [], '', false),
-            $this->getMock(\Magento\Catalog\Model\ProductFactory::class, [], [], '', false),
-            $this->getMock(
-                \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory::class,
-                [],
-                [],
-                '',
-                false
-            ),
-            $this->getMock(
-                \Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory::class,
-                [],
-                [],
-                '',
-                false
-            ),
+            $this->createDefaultMock(\Magento\ImportExport\Model\ResourceModel\Import\Data::class),
+            $this->createDefaultMock(\Magento\Framework\App\ResourceConnection::class),
+            $this->createDefaultMock(\Magento\ImportExport\Model\ResourceModel\Helper::class),
+            $this->createDefaultMock(\Magento\Store\Model\StoreManagerInterface::class),
+            $this->createDefaultMock(\Magento\Catalog\Model\ProductFactory::class),
+            $this->createDefaultMock(ResourceCollectionFactory::class),
+            $this->createDefaultMock(CollectionByPagesIteratorFactory::class),
             $catalogDataMock,
             $scopeConfig,
             $timezoneInterface,
-            $this->getMock(
-                \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface::class,
-                [],
-                [],
-                '',
-                false
-            ),
-            $this->_getModelDependencies($addExpectations, $deleteBehavior, $doubleOptions)
+            $this->createDefaultMock(ProcessingErrorAggregatorInterface::class),
+            $this->_getModelDependencies($addExpectations, $deleteBehavior, $doubleOptions),
+            $optionValueCollectionFactoryMock
         ];
 
         $modelClassName = \Magento\CatalogImportExport\Model\Import\Product\Option::class;
@@ -1012,5 +1016,16 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
         $reflectionProperty->setAccessible(true);
 
         return $reflectionProperty->getValue($object);
+    }
+
+    /**
+     * @param string $originalClassName Name of the class to mock.
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function createDefaultMock($originalClassName)
+    {
+        return $this->getMockBuilder($originalClassName)
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 }
