@@ -14,10 +14,6 @@ use Magento\Framework\Search\Request\Config;
 use Magento\Framework\Search\RequestInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection as AttributeCollection;
 
-/**
- * Class \Magento\CatalogSearch\Model\Adapter\Aggregation\AggregationResolver
- *
- */
 class AggregationResolver implements AggregationResolverInterface
 {
     /**

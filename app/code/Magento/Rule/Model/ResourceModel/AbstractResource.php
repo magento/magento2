@@ -10,6 +10,7 @@ namespace Magento\Rule\Model\ResourceModel;
  * Abstract Rule entity resource model
  *
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

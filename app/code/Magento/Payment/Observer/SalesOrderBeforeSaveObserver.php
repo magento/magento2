@@ -8,10 +8,6 @@ namespace Magento\Payment\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
-/**
- * Class \Magento\Payment\Observer\SalesOrderBeforeSaveObserver
- *
- */
 class SalesOrderBeforeSaveObserver implements ObserverInterface
 {
     /**

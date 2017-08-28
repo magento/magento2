@@ -6,10 +6,6 @@
  */
 namespace Magento\User\Controller\Adminhtml\User;
 
-/**
- * Class \Magento\User\Controller\Adminhtml\User\Index
- *
- */
 class Index extends \Magento\User\Controller\Adminhtml\User
 {
     /**

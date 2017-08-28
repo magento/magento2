@@ -5,10 +5,6 @@
  */
 namespace Magento\Checkout\Block;
 
-/**
- * Class \Magento\Checkout\Block\Success
- *
- */
 class Success extends \Magento\Framework\View\Element\Template
 {
     /**

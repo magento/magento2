@@ -6,10 +6,6 @@
  */
 namespace Magento\MediaStorage\Controller\Adminhtml\System\Config\System\Storage;
 
-/**
- * Class \Magento\MediaStorage\Controller\Adminhtml\System\Config\System\Storage\Status
- *
- */
 class Status extends \Magento\MediaStorage\Controller\Adminhtml\System\Config\System\Storage
 {
     /**

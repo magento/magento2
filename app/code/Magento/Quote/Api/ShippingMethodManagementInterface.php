@@ -8,6 +8,7 @@ namespace Magento\Quote\Api;
 /**
  * Interface ShippingMethodManagementInterface
  * @api
+ * @since 100.0.2
  */
 interface ShippingMethodManagementInterface
 {

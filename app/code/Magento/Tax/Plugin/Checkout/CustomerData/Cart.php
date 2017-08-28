@@ -6,10 +6,6 @@
 
 namespace Magento\Tax\Plugin\Checkout\CustomerData;
 
-/**
- * Class \Magento\Tax\Plugin\Checkout\CustomerData\Cart
- *
- */
 class Cart
 {
     /**

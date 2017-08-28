@@ -5,10 +5,6 @@
  */
 namespace Magento\Cron\Model\System\Config\Initial;
 
-/**
- * Class \Magento\Cron\Model\System\Config\Initial\Converter
- *
- */
 class Converter
 {
     /**

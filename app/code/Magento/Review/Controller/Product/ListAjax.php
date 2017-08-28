@@ -9,10 +9,6 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Review\Controller\Product as ProductController;
 use Magento\Framework\Controller\ResultFactory;
 
-/**
- * Class \Magento\Review\Controller\Product\ListAjax
- *
- */
 class ListAjax extends ProductController
 {
     /**

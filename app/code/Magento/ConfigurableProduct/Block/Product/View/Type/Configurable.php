@@ -17,6 +17,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @since 100.0.2
  */
 class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
 {

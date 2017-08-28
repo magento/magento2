@@ -11,10 +11,6 @@ namespace Magento\Theme\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
-/**
- * Class \Magento\Theme\Model\Config
- *
- */
 class Config
 {
     /**

@@ -8,10 +8,6 @@ namespace Magento\Catalog\Plugin\Model\ResourceModel;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\SerializerInterface;
 
-/**
- * Class \Magento\Catalog\Plugin\Model\ResourceModel\Config
- *
- */
 class Config
 {
     /**#@+

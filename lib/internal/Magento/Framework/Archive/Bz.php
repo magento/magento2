@@ -11,10 +11,6 @@
  */
 namespace Magento\Framework\Archive;
 
-/**
- * Class \Magento\Framework\Archive\Bz
- *
- */
 class Bz extends \Magento\Framework\Archive\AbstractArchive implements \Magento\Framework\Archive\ArchiveInterface
 {
     /**

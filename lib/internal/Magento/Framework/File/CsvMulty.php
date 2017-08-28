@@ -11,10 +11,6 @@
  */
 namespace Magento\Framework\File;
 
-/**
- * Class \Magento\Framework\File\CsvMulty
- *
- */
 class CsvMulty extends \Magento\Framework\File\Csv
 {
     /**

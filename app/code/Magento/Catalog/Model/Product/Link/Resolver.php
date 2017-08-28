@@ -26,7 +26,6 @@ class Resolver
     /**
      * Resolver constructor.
      * @param \Magento\Framework\App\RequestInterface $request
-     * @since 101.0.0
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request

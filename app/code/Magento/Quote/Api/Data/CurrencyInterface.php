@@ -8,6 +8,7 @@ namespace Magento\Quote\Api\Data;
 /**
  * Interface CurrencyInterface
  * @api
+ * @since 100.0.2
  */
 interface CurrencyInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {

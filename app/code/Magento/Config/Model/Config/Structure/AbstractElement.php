@@ -11,6 +11,7 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractElement implements ElementInterface
 {

@@ -6,10 +6,6 @@
 
 namespace Magento\Framework\File;
 
-/**
- * Class \Magento\Framework\File\Mime
- *
- */
 class Mime
 {
     /**

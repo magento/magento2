@@ -9,10 +9,6 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Model\Session;
 use Magento\SalesRule\Model\ResourceModel\Rule as RuleResource;
 
-/**
- * Class \Magento\SalesRule\Model\Plugin\QuoteConfigProductAttributes
- *
- */
 class QuoteConfigProductAttributes
 {
     /**

@@ -6,10 +6,6 @@
  */
 namespace Magento\Paypal\Controller\Payflowexpress;
 
-/**
- * Class \Magento\Paypal\Controller\Payflowexpress\Cancel
- *
- */
 class Cancel extends \Magento\Paypal\Controller\Express\AbstractExpress\Cancel
 {
     /**

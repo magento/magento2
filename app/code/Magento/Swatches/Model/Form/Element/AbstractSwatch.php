@@ -5,10 +5,6 @@
  */
 namespace Magento\Swatches\Model\Form\Element;
 
-/**
- * Class \Magento\Swatches\Model\Form\Element\AbstractSwatch
- *
- */
 class AbstractSwatch extends \Magento\Framework\Data\Form\Element\Select
 {
     /**

@@ -6,10 +6,6 @@
  */
 namespace Magento\Reports\Controller\Adminhtml\Report\Product;
 
-/**
- * Class \Magento\Reports\Controller\Adminhtml\Report\Product\Downloads
- *
- */
 class Downloads extends \Magento\Reports\Controller\Adminhtml\Report\Product
 {
     /**

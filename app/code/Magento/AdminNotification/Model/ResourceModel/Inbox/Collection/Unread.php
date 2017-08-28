@@ -13,6 +13,7 @@ namespace Magento\AdminNotification\Model\ResourceModel\Inbox\Collection;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Unread extends \Magento\AdminNotification\Model\ResourceModel\Inbox\Collection
 {

@@ -8,10 +8,6 @@ namespace Magento\Framework\Code;
 use Magento\Framework\Code\Generator\DefinedClasses;
 use Magento\Framework\Code\Generator\EntityAbstract;
 
-/**
- * Class \Magento\Framework\Code\Generator
- *
- */
 class Generator
 {
     const GENERATION_SUCCESS = 'success';

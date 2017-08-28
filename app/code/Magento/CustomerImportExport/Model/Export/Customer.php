@@ -11,6 +11,7 @@ namespace Magento\CustomerImportExport\Model\Export;
  * @api
  *
  * @method \Magento\Customer\Model\ResourceModel\Attribute\Collection getAttributeCollection() getAttributeCollection()
+ * @since 100.0.2
  */
 class Customer extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
 {

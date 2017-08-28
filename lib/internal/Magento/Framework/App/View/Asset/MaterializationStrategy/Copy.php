@@ -9,10 +9,6 @@ namespace Magento\Framework\App\View\Asset\MaterializationStrategy;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\View\Asset;
 
-/**
- * Class \Magento\Framework\App\View\Asset\MaterializationStrategy\Copy
- *
- */
 class Copy implements StrategyInterface
 {
     /**

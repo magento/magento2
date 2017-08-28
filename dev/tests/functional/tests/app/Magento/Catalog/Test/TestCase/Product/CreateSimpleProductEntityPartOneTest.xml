@@ -115,8 +115,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductTierPriceOnProductPage" />
         </variation>
-        <variation name="CreateSimpleProductEntityTestVariation18">
-            <data name="issue" xsi:type="string">MAGETWO-60470: [Import Custom options] An error occurs on attempt to save the product with imported options</data>
+        <variation name="CreateSimpleProductEntityTestVariation18" summary="Create simple product with imported options" ticketId="MAGETWO-71386">
             <data name="description" xsi:type="string">Create product wit suite of custom options</data>
             <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
@@ -129,7 +128,6 @@
             <data name="product/data/custom_options/dataset" xsi:type="string">options_suite</data>
             <data name="product/data/checkout_data/dataset" xsi:type="string">simple_options_suite</data>
             <data name="product/data/custom_options/import_products" xsi:type="string">catalogProductSimple::with_two_custom_option,catalogProductSimple::with_all_custom_option</data>
-            <data name="issue" xsi:type="string">MAGETWO-58181: All kind of Custom Options have dynamic view on Bamboo</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />

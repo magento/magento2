@@ -9,10 +9,6 @@ use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Controller\ResultFactory;
 
-/**
- * Class \Magento\TaxImportExport\Controller\Adminhtml\Rate\ExportCsv
- *
- */
 class ExportCsv extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
 {
     /**

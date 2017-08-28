@@ -12,6 +12,7 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Date extends Column
 {

@@ -8,10 +8,6 @@ namespace Magento\CatalogRule\Model\ResourceModel\Rule;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\App\ObjectManager;
 
-/**
- * Class \Magento\CatalogRule\Model\ResourceModel\Rule\Collection
- *
- */
 class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\AbstractCollection
 {
     /**

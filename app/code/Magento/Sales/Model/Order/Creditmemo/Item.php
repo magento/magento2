@@ -13,6 +13,7 @@ use Magento\Sales\Model\AbstractModel;
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @since 100.0.2
  */
 class Item extends AbstractModel implements CreditmemoItemInterface
 {

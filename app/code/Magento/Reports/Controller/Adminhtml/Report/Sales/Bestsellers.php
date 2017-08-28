@@ -8,10 +8,6 @@ namespace Magento\Reports\Controller\Adminhtml\Report\Sales;
 
 use Magento\Reports\Model\Flag;
 
-/**
- * Class \Magento\Reports\Controller\Adminhtml\Report\Sales\Bestsellers
- *
- */
 class Bestsellers extends \Magento\Reports\Controller\Adminhtml\Report\Sales
 {
     /**

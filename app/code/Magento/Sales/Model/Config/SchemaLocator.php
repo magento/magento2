@@ -11,10 +11,6 @@ namespace Magento\Sales\Model\Config;
 
 use Magento\Framework\Module\Dir;
 
-/**
- * Class \Magento\Sales\Model\Config\SchemaLocator
- *
- */
 class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {
     /**

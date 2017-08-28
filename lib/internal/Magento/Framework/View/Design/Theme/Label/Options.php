@@ -7,10 +7,6 @@ namespace Magento\Framework\View\Design\Theme\Label;
 
 use Magento\Framework\Option\ArrayInterface;
 
-/**
- * Class \Magento\Framework\View\Design\Theme\Label\Options
- *
- */
 class Options implements ArrayInterface
 {
     /**

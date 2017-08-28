@@ -6,10 +6,6 @@
 
 namespace Magento\CatalogRule\Cron;
 
-/**
- * Class \Magento\CatalogRule\Cron\DailyCatalogUpdate
- *
- */
 class DailyCatalogUpdate
 {
     /**

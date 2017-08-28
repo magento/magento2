@@ -6,10 +6,6 @@
  */
 namespace Magento\Cms\Controller\Adminhtml\Wysiwyg\Images;
 
-/**
- * Class \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\TreeJson
- *
- */
 class TreeJson extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
 {
     /**

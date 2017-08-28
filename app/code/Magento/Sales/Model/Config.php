@@ -9,10 +9,6 @@
  */
 namespace Magento\Sales\Model;
 
-/**
- * Class \Magento\Sales\Model\Config
- *
- */
 class Config implements \Magento\Sales\Model\ConfigInterface
 {
     /**

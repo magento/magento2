@@ -36,7 +36,6 @@ class ResetButton extends Field
      * @param \Magento\Framework\View\Element\UiComponentInterface[] $components
      * @param array $data
      * @param ScopeConfigInterface $scopeConfig
-     * @since 100.2.0
      */
     public function __construct(
         ContextInterface $context,

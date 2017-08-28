@@ -5,10 +5,6 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Creditmemo;
 
-/**
- * Class \Magento\Sales\Controller\Adminhtml\Creditmemo\Grid
- *
- */
 class Grid extends \Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo\Grid
 {
 }

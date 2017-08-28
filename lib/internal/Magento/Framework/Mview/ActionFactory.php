@@ -8,10 +8,6 @@
 
 namespace Magento\Framework\Mview;
 
-/**
- * Class \Magento\Framework\Mview\ActionFactory
- *
- */
 class ActionFactory
 {
     /**

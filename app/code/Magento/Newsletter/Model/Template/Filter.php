@@ -11,10 +11,6 @@
  */
 namespace Magento\Newsletter\Model\Template;
 
-/**
- * Class \Magento\Newsletter\Model\Template\Filter
- *
- */
 class Filter extends \Magento\Widget\Model\Template\FilterEmulate
 {
     /**

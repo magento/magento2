@@ -112,7 +112,6 @@ class AdvancedPricing extends AbstractModifier
      * @param string $scopeName
      * @param GroupSourceInterface $customerGroupSource
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 101.0.0
      */
     public function __construct(
         LocatorInterface $locator,

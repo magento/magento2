@@ -5,10 +5,6 @@
  */
 namespace Magento\Framework\Model\ResourceModel\Entity;
 
-/**
- * Class \Magento\Framework\Model\ResourceModel\Entity\AbstractEntity
- *
- */
 abstract class AbstractEntity
 {
     /**

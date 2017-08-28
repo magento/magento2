@@ -5,10 +5,6 @@
  */
 namespace Magento\CatalogUrlRewrite\Observer;
 
-/**
- * Class \Magento\CatalogUrlRewrite\Observer\UrlRewriteHandler
- *
- */
 class UrlRewriteHandler
 {
     /**

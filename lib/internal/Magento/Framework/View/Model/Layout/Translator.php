@@ -7,10 +7,6 @@ namespace Magento\Framework\View\Model\Layout;
 
 use Magento\Framework\Simplexml\Element;
 
-/**
- * Class \Magento\Framework\View\Model\Layout\Translator
- *
- */
 class Translator
 {
     /**

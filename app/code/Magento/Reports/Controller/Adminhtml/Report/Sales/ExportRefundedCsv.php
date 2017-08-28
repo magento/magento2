@@ -9,10 +9,6 @@ namespace Magento\Reports\Controller\Adminhtml\Report\Sales;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-/**
- * Class \Magento\Reports\Controller\Adminhtml\Report\Sales\ExportRefundedCsv
- *
- */
 class ExportRefundedCsv extends \Magento\Reports\Controller\Adminhtml\Report\Sales
 {
     /**

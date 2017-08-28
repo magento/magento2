@@ -6,10 +6,6 @@
  */
 namespace Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
 
-/**
- * Class \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite\ProductGrid
- *
- */
 class ProductGrid extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite
 {
     /**

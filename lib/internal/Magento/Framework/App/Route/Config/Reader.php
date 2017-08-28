@@ -7,10 +7,6 @@
  */
 namespace Magento\Framework\App\Route\Config;
 
-/**
- * Class \Magento\Framework\App\Route\Config\Reader
- *
- */
 class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {
     /**

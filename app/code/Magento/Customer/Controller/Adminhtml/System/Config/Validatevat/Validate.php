@@ -7,10 +7,6 @@ namespace Magento\Customer\Controller\Adminhtml\System\Config\Validatevat;
 
 use Magento\Framework\Controller\Result\JsonFactory;
 
-/**
- * Class \Magento\Customer\Controller\Adminhtml\System\Config\Validatevat\Validate
- *
- */
 class Validate extends \Magento\Customer\Controller\Adminhtml\System\Config\Validatevat
 {
     /**

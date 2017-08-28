@@ -7,10 +7,6 @@ namespace Magento\Rule\Block;
 
 use Magento\Framework\Data\Form\Element\AbstractElement;
 
-/**
- * Class \Magento\Rule\Block\Newchild
- *
- */
 class Newchild extends \Magento\Framework\View\Element\AbstractBlock implements
     \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
 {

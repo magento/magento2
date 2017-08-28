@@ -5,10 +5,6 @@
  */
 namespace Magento\Widget\Model\Template;
 
-/**
- * Class \Magento\Widget\Model\Template\FilterEmulate
- *
- */
 class FilterEmulate extends Filter
 {
     /**

@@ -10,6 +10,7 @@ namespace Magento\Backend\Block\Page;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Footer extends \Magento\Backend\Block\Template
 {
@@ -28,7 +29,6 @@ class Footer extends \Magento\Backend\Block\Template
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\App\ProductMetadataInterface $productMetadata
      * @param array $data
-     * @since 100.1.0
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,

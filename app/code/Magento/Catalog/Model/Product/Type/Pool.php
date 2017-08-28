@@ -9,10 +9,6 @@
  */
 namespace Magento\Catalog\Model\Product\Type;
 
-/**
- * Class \Magento\Catalog\Model\Product\Type\Pool
- *
- */
 class Pool
 {
     /**

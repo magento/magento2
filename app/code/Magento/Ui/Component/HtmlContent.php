@@ -9,10 +9,6 @@ use Magento\Framework\View\Element\BlockInterface;
 use Magento\Framework\View\Element\UiComponent\BlockWrapperInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
-/**
- * Class \Magento\Ui\Component\HtmlContent
- *
- */
 class HtmlContent extends AbstractComponent implements BlockWrapperInterface
 {
     const NAME = 'html_content';

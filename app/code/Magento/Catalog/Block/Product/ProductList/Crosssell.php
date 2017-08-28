@@ -9,10 +9,6 @@
  */
 namespace Magento\Catalog\Block\Product\ProductList;
 
-/**
- * Class \Magento\Catalog\Block\Product\ProductList\Crosssell
- *
- */
 class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
 {
     /**

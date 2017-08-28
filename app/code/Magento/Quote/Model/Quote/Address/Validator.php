@@ -8,10 +8,6 @@ namespace Magento\Quote\Model\Quote\Address;
 
 use Zend_Validate_Exception;
 
-/**
- * Class \Magento\Quote\Model\Quote\Address\Validator
- *
- */
 class Validator extends \Magento\Framework\Validator\AbstractValidator
 {
     /**

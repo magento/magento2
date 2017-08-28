@@ -9,10 +9,6 @@ use Magento\Framework\App\Response\HeaderProvider\HeaderProviderInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 
-/**
- * Class \Magento\Framework\App\Response\HeaderManager
- *
- */
 class HeaderManager
 {
     /**

@@ -6,10 +6,6 @@
  */
 namespace Magento\Catalog\Model\Product\Attribute;
 
-/**
- * Class \Magento\Catalog\Model\Product\Attribute\Management
- *
- */
 class Management implements \Magento\Catalog\Api\ProductAttributeManagementInterface
 {
     /**

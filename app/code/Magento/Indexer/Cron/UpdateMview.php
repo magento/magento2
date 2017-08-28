@@ -5,10 +5,6 @@
  */
 namespace Magento\Indexer\Cron;
 
-/**
- * Class \Magento\Indexer\Cron\UpdateMview
- *
- */
 class UpdateMview
 {
     /**

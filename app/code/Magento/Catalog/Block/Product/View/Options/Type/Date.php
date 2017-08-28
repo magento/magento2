@@ -9,6 +9,7 @@ namespace Magento\Catalog\Block\Product\View\Options\Type;
  * Product options text type block
  *
  * @api
+ * @since 100.0.2
  */
 class Date extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
 {
