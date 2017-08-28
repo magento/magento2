@@ -7,10 +7,6 @@ namespace Magento\Catalog\Model\Indexer\Product\Price\Plugin;
 
 use Magento\Customer\Api\GroupRepositoryInterface;
 
-/**
- * Class \Magento\Catalog\Model\Indexer\Product\Price\Plugin\CustomerGroup
- *
- */
 class CustomerGroup extends AbstractPlugin
 {
     /**

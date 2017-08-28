@@ -9,10 +9,6 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\MetadataPool;
 
-/**
- * Class \Magento\Catalog\Model\ResourceModel\Product\Website\Link
- *
- */
 class Link
 {
     /**

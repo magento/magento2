@@ -16,6 +16,7 @@ use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
 {

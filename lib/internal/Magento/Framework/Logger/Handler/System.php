@@ -9,10 +9,6 @@ namespace Magento\Framework\Logger\Handler;
 use Magento\Framework\Filesystem\DriverInterface;
 use Monolog\Logger;
 
-/**
- * Class \Magento\Framework\Logger\Handler\System
- *
- */
 class System extends Base
 {
     /**

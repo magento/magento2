@@ -9,10 +9,6 @@ namespace Magento\Framework\Api;
 
 use Magento\Framework\ObjectManagerInterface;
 
-/**
- * Class \Magento\Framework\Api\AttributeValueFactory
- *
- */
 class AttributeValueFactory
 {
     /**

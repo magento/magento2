@@ -9,10 +9,6 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
 
-/**
- * Class \Magento\Framework\Api\SearchCriteria\CollectionProcessor\PaginationProcessor
- *
- */
 class PaginationProcessor implements CollectionProcessorInterface
 {
     /**

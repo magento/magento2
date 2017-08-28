@@ -41,4 +41,14 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->configMock->expects($this->once())->method('get')->with($indexerId)->willReturnSelf();
         $this->model->getIndexer($indexerId);
     }
+
+    public function testGetNotExistingIndexer()
+    {
+        $indexerId = 1;
+        $this->configMock
+            ->expects($this->once())
+            ->method('get')
+            ->with($indexerId);
+        $this->assertEquals([], $this->model->getIndexer($indexerId));
+    }
 }

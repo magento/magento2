@@ -55,7 +55,6 @@ class Builder
      * @param Copy $objectCopyService
      * @param DataObjectHelper $dataObjectHelper
      * @param LinkFactory $componentFactory
-     * @since 100.1.0
      */
     public function __construct(
         File $downloadableFile,

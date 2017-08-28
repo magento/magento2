@@ -6,10 +6,6 @@
 
 namespace Magento\GoogleOptimizer\Model\Plugin\Cms\Page;
 
-/**
- * Class \Magento\GoogleOptimizer\Model\Plugin\Cms\Page\DataProvider
- *
- */
 class DataProvider
 {
     /**

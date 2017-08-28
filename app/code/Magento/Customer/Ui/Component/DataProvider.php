@@ -12,10 +12,6 @@ use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\Reporting;
 
-/**
- * Class \Magento\Customer\Ui\Component\DataProvider
- *
- */
 class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider
 {
     /**

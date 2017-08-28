@@ -11,10 +11,6 @@
  */
 namespace Magento\Customer\Block\Adminhtml\Form\Element;
 
-/**
- * Class \Magento\Customer\Block\Adminhtml\Form\Element\Boolean
- *
- */
 class Boolean extends \Magento\Framework\Data\Form\Element\Select
 {
     /**

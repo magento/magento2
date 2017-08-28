@@ -10,10 +10,6 @@ use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\Api\ImageProcessor;
 use Magento\Framework\Filesystem;
 
-/**
- * Class \Magento\Catalog\Model\Webapi\Product\Option\Type\File\Processor
- *
- */
 class Processor
 {
     /**

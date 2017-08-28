@@ -7,10 +7,6 @@
  */
 namespace Magento\GroupedProduct\Model\Product\Type\Grouped;
 
-/**
- * Class \Magento\GroupedProduct\Model\Product\Type\Grouped\Price
- *
- */
 class Price extends \Magento\Catalog\Model\Product\Type\Price
 {
     /**

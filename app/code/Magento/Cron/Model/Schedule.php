@@ -31,6 +31,7 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
  * @method \Magento\Cron\Model\Schedule setCronExprArr(array $value)
  *
  * @api
+ * @since 100.0.2
  */
 class Schedule extends \Magento\Framework\Model\AbstractModel
 {

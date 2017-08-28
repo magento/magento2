@@ -9,10 +9,6 @@ use Magento\Framework\App\Action;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Controller\ResultFactory;
 
-/**
- * Class \Magento\Wishlist\Controller\Index\Index
- *
- */
 class Index extends \Magento\Wishlist\Controller\AbstractIndex
 {
     /**

@@ -9,10 +9,6 @@ namespace Magento\Customer\Model\Address\Config;
 
 use Magento\Framework\Module\Dir;
 
-/**
- * Class \Magento\Customer\Model\Address\Config\SchemaLocator
- *
- */
 class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {
     /**

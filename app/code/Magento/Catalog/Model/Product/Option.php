@@ -26,6 +26,7 @@ use Magento\Framework\Model\AbstractExtensibleModel;
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @since 100.0.2
  */
 class Option extends AbstractExtensibleModel implements ProductCustomOptionInterface
 {
@@ -147,7 +148,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      * Get resource instance
      *
      * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
-     * @deprecated because resource models should be used directly
+     * @deprecated 101.1.0 because resource models should be used directly
      */
     protected function _getResource()
     {

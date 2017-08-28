@@ -5,10 +5,6 @@
  */
 namespace Magento\Wishlist\Block\Adminhtml\Widget\Grid\Column\Filter;
 
-/**
- * Class \Magento\Wishlist\Block\Adminhtml\Widget\Grid\Column\Filter\Text
- *
- */
 class Text extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Text
 {
     /**

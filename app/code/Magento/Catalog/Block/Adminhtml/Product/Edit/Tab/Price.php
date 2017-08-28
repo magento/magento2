@@ -9,10 +9,6 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab;
 
-/**
- * Class \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Price
- *
- */
 class Price extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**

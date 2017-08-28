@@ -6,10 +6,6 @@
 
 namespace Magento\Paypal\Model\System\Config\Source;
 
-/**
- * Class \Magento\Paypal\Model\System\Config\Source\BmlSize
- *
- */
 class BmlSize
 {
     /**

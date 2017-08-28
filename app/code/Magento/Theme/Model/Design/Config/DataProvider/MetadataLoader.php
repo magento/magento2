@@ -10,10 +10,6 @@ use Magento\Framework\App\ScopeFallbackResolverInterface;
 use Magento\Theme\Api\DesignConfigRepositoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
-/**
- * Class \Magento\Theme\Model\Design\Config\DataProvider\MetadataLoader
- *
- */
 class MetadataLoader
 {
     /**

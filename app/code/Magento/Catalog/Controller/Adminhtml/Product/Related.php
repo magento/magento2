@@ -7,10 +7,6 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
-/**
- * Class \Magento\Catalog\Controller\Adminhtml\Product\Related
- *
- */
 class Related extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**

@@ -11,6 +11,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 /**
  * Order item render block
  * @api
+ * @since 100.0.2
  */
 class Renderer extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
 {
@@ -27,7 +28,6 @@ class Renderer extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
      * @param \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json $serializer
-     * @since 100.2.0
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,

@@ -8,10 +8,6 @@ namespace Magento\LayeredNavigation\Model\Aggregation;
 
 use Magento\Framework\Search\Request\Aggregation\StatusInterface;
 
-/**
- * Class \Magento\LayeredNavigation\Model\Aggregation\Status
- *
- */
 class Status implements StatusInterface
 {
     /**

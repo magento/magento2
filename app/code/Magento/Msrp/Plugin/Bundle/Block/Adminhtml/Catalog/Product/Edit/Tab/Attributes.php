@@ -7,10 +7,6 @@ namespace Magento\Msrp\Plugin\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab;
 
 use Magento\Msrp\Model\Product\Attribute\Source\Type\Price;
 
-/**
- * Class \Magento\Msrp\Plugin\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes
- *
- */
 class Attributes
 {
     /**

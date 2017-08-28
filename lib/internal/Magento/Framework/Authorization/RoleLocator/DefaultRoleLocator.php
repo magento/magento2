@@ -5,10 +5,6 @@
  */
 namespace Magento\Framework\Authorization\RoleLocator;
 
-/**
- * Class \Magento\Framework\Authorization\RoleLocator\DefaultRoleLocator
- *
- */
 class DefaultRoleLocator implements \Magento\Framework\Authorization\RoleLocatorInterface
 {
     /**

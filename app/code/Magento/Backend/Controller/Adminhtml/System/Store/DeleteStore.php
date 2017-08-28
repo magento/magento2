@@ -6,10 +6,6 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Store;
 
-/**
- * Class \Magento\Backend\Controller\Adminhtml\System\Store\DeleteStore
- *
- */
 class DeleteStore extends \Magento\Backend\Controller\Adminhtml\System\Store
 {
     /**

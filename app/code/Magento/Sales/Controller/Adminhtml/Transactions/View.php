@@ -9,10 +9,6 @@ namespace Magento\Sales\Controller\Adminhtml\Transactions;
 use Magento\Backend\App\Action;
 use Magento\Backend\Model\View\Result\Page;
 
-/**
- * Class \Magento\Sales\Controller\Adminhtml\Transactions\View
- *
- */
 class View extends \Magento\Sales\Controller\Adminhtml\Transactions
 {
     /**

@@ -13,6 +13,7 @@ namespace Magento\Backup\Model\Grid;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Options implements \Magento\Framework\Option\ArrayInterface
 {

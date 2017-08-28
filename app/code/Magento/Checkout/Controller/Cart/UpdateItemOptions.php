@@ -6,10 +6,6 @@
  */
 namespace Magento\Checkout\Controller\Cart;
 
-/**
- * Class \Magento\Checkout\Controller\Cart\UpdateItemOptions
- *
- */
 class UpdateItemOptions extends \Magento\Checkout\Controller\Cart
 {
     /**

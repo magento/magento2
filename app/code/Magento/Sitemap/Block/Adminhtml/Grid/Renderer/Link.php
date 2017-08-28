@@ -14,10 +14,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot;
 use Magento\Framework\App\ObjectManager;
 
-/**
- * Class \Magento\Sitemap\Block\Adminhtml\Grid\Renderer\Link
- *
- */
 class Link extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**

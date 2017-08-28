@@ -5,10 +5,6 @@
  */
 namespace Magento\Bundle\Block\Adminhtml\Order\Create;
 
-/**
- * Class \Magento\Bundle\Block\Adminhtml\Order\Create\Sidebar
- *
- */
 class Sidebar
 {
     /**

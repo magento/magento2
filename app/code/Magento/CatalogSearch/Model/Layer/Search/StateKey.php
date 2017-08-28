@@ -9,10 +9,6 @@ namespace Magento\CatalogSearch\Model\Layer\Search;
 
 use Magento\Catalog\Model\Layer\StateKeyInterface;
 
-/**
- * Class \Magento\CatalogSearch\Model\Layer\Search\StateKey
- *
- */
 class StateKey extends \Magento\Catalog\Model\Layer\Category\StateKey implements StateKeyInterface
 {
     /**

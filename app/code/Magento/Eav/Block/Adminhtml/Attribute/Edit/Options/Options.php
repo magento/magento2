@@ -15,6 +15,7 @@ use Magento\Store\Model\ResourceModel\Store\Collection;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Options extends \Magento\Backend\Block\Template
 {

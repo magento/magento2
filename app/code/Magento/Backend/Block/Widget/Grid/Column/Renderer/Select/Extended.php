@@ -5,10 +5,6 @@
  */
 namespace Magento\Backend\Block\Widget\Grid\Column\Renderer\Select;
 
-/**
- * Class \Magento\Backend\Block\Widget\Grid\Column\Renderer\Select\Extended
- *
- */
 class Extended extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Select
 {
     /**

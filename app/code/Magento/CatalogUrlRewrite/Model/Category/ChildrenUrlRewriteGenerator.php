@@ -11,10 +11,6 @@ use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 use Magento\UrlRewrite\Model\MergeDataProviderFactory;
 use Magento\Framework\App\ObjectManager;
 
-/**
- * Class \Magento\CatalogUrlRewrite\Model\Category\ChildrenUrlRewriteGenerator
- *
- */
 class ChildrenUrlRewriteGenerator
 {
     /**

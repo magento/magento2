@@ -11,10 +11,6 @@
  */
 namespace Magento\Customer\Model\Attribute\Data;
 
-/**
- * Class \Magento\Customer\Model\Attribute\Data\Date
- *
- */
 class Date extends \Magento\Eav\Model\Attribute\Data\Date
 {
 }

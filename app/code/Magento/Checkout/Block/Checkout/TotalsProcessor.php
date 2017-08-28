@@ -7,10 +7,6 @@ namespace Magento\Checkout\Block\Checkout;
 
 use Magento\Checkout\Model\Layout\AbstractTotalsProcessor;
 
-/**
- * Class \Magento\Checkout\Block\Checkout\TotalsProcessor
- *
- */
 class TotalsProcessor extends AbstractTotalsProcessor implements LayoutProcessorInterface
 {
     /**

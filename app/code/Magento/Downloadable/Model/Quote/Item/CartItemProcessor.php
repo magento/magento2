@@ -9,10 +9,6 @@ use Magento\Quote\Model\Quote\Item\CartItemProcessorInterface;
 use Magento\Quote\Api\Data\CartItemInterface;
 use Magento\Framework\DataObject\Factory as DataObjectFactory;
 
-/**
- * Class \Magento\Downloadable\Model\Quote\Item\CartItemProcessor
- *
- */
 class CartItemProcessor implements CartItemProcessorInterface
 {
     /**

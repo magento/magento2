@@ -7,10 +7,6 @@ namespace Magento\Checkout\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
-/**
- * Class \Magento\Checkout\Observer\LoadCustomerQuoteObserver
- *
- */
 class LoadCustomerQuoteObserver implements ObserverInterface
 {
     /**

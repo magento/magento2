@@ -6,10 +6,6 @@
 
 namespace Magento\Catalog\Model\ProductLink\CollectionProvider;
 
-/**
- * Class \Magento\Catalog\Model\ProductLink\CollectionProvider\Crosssell
- *
- */
 class Crosssell implements \Magento\Catalog\Model\ProductLink\CollectionProviderInterface
 {
     /**

@@ -5,10 +5,6 @@
  */
 namespace Magento\SalesRule\Model\Rule\Condition;
 
-/**
- * Class \Magento\SalesRule\Model\Rule\Condition\Address
- *
- */
 class Address extends \Magento\Rule\Model\Condition\AbstractCondition
 {
     /**

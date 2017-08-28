@@ -9,10 +9,6 @@
  */
 namespace Magento\Setup\Model;
 
-/**
- * Class \Magento\Setup\Model\DataGenerator
- *
- */
 class DataGenerator
 {
     /**

@@ -11,10 +11,6 @@
  */
 namespace Magento\Newsletter\Model\ResourceModel\Queue\Grid;
 
-/**
- * Class \Magento\Newsletter\Model\ResourceModel\Queue\Grid\Collection
- *
- */
 class Collection extends \Magento\Newsletter\Model\ResourceModel\Queue\Collection
 {
     /**

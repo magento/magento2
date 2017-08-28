@@ -5,10 +5,6 @@
  */
 namespace Magento\Framework\Search;
 
-/**
- * Class \Magento\Framework\Search\AbstractKeyValuePair
- *
- */
 class AbstractKeyValuePair
 {
     /**

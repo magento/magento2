@@ -10,10 +10,6 @@ use Magento\GiftMessage\Helper\Message as MessageHelper;
 use Magento\Quote\Model\Quote\Item\ToOrderItem;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
 
-/**
- * Class \Magento\GiftMessage\Model\Plugin\QuoteItem
- *
- */
 class QuoteItem
 {
     /**

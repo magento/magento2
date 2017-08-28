@@ -8,10 +8,6 @@ namespace Magento\Integration\Controller\Adminhtml\Integration;
 
 use Magento\Integration\Model\Integration as IntegrationModel;
 
-/**
- * Class \Magento\Integration\Controller\Adminhtml\Integration\TokensExchange
- *
- */
 class TokensExchange extends \Magento\Integration\Controller\Adminhtml\Integration
 {
     /**

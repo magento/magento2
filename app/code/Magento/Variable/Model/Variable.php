@@ -14,6 +14,7 @@ namespace Magento\Variable\Model;
  * @method \Magento\Variable\Model\Variable setName(string $value)
  *
  * @api
+ * @since 100.0.2
  */
 class Variable extends \Magento\Framework\Model\AbstractModel
 {

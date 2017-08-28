@@ -6,10 +6,6 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Store;
 
-/**
- * Class \Magento\Backend\Controller\Adminhtml\System\Store\EditWebsite
- *
- */
 class EditWebsite extends \Magento\Backend\Controller\Adminhtml\System\Store
 {
     /**

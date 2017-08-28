@@ -5,10 +5,6 @@
  */
 namespace Magento\Framework\Api\Search;
 
-/**
- * Class \Magento\Framework\Api\Search\SearchCriteriaFactory
- *
- */
 class SearchCriteriaFactory
 {
     /**

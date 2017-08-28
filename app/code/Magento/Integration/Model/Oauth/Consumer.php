@@ -22,6 +22,7 @@ use Magento\Framework\Oauth\ConsumerInterface;
  * @method Consumer setUpdatedAt() setUpdatedAt(string $date)
  * @method string getRejectedCallbackUrl()
  * @method Consumer setRejectedCallbackUrl() setRejectedCallbackUrl(string $rejectedCallbackUrl)
+ * @since 100.0.2
  */
 class Consumer extends \Magento\Framework\Model\AbstractModel implements ConsumerInterface
 {

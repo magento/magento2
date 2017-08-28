@@ -8,10 +8,6 @@ namespace Magento\Framework\Interception\Code;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Phrase;
 
-/**
- * Class \Magento\Framework\Interception\Code\InterfaceValidator
- *
- */
 class InterfaceValidator
 {
     const METHOD_BEFORE = 'before';

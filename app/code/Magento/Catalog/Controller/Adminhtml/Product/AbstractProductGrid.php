@@ -10,10 +10,6 @@ use Magento\Backend\App\Action;
 use Magento\Catalog\Controller\Adminhtml\Product;
 use Magento\Framework\Controller\Result;
 
-/**
- * Class \Magento\Catalog\Controller\Adminhtml\Product\AbstractProductGrid
- *
- */
 abstract class AbstractProductGrid extends Product
 {
     /**

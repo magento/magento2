@@ -13,6 +13,7 @@ namespace Magento\Email\Block\Adminhtml\Template;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Preview extends \Magento\Backend\Block\Widget
 {

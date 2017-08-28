@@ -8,10 +8,6 @@ namespace Magento\Sales\Controller\Adminhtml\Transactions;
 
 use Magento\Backend\Model\View\Result\Page;
 
-/**
- * Class \Magento\Sales\Controller\Adminhtml\Transactions\Index
- *
- */
 class Index extends \Magento\Sales\Controller\Adminhtml\Transactions
 {
     /**

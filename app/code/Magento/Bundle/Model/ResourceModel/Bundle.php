@@ -9,6 +9,7 @@ namespace Magento\Bundle\Model\ResourceModel;
  * Bundle Resource Model
  *
  * @api
+ * @since 100.0.2
  */
 class Bundle extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

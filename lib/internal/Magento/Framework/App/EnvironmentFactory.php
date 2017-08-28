@@ -11,10 +11,6 @@ use Magento\Framework\App\ObjectManager\ConfigLoader;
 use Magento\Framework\ObjectManager\RelationsInterface;
 use Magento\Framework\ObjectManager\DefinitionInterface;
 
-/**
- * Class \Magento\Framework\App\EnvironmentFactory
- *
- */
 class EnvironmentFactory
 {
     /**

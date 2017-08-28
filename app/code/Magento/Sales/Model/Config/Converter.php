@@ -9,10 +9,6 @@
  */
 namespace Magento\Sales\Model\Config;
 
-/**
- * Class \Magento\Sales\Model\Config\Converter
- *
- */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**

@@ -12,10 +12,6 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\RouterInterface;
 use Magento\Framework\App\ActionInterface;
 
-/**
- * Class \Magento\Framework\App\Router\DefaultRouter
- *
- */
 class DefaultRouter implements RouterInterface
 {
     /**

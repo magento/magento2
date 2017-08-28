@@ -65,7 +65,6 @@ class ConfigSetCommand extends Command
      * @param ChangeDetector $changeDetector The config change detector
      * @param ProcessorFacadeFactory $processorFacadeFactory The factory for processor facade
      * @param DeploymentConfig $deploymentConfig Application deployment configuration
-     * @since 100.2.0
      */
     public function __construct(
         EmulatedAdminhtmlAreaProcessor $emulatedAreaProcessor,

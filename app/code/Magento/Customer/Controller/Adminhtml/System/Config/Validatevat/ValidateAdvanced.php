@@ -6,10 +6,6 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\System\Config\Validatevat;
 
-/**
- * Class \Magento\Customer\Controller\Adminhtml\System\Config\Validatevat\ValidateAdvanced
- *
- */
 class ValidateAdvanced extends \Magento\Customer\Controller\Adminhtml\System\Config\Validatevat
 {
     /**
