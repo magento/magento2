@@ -11,8 +11,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\MessageQueue\ConsumerFactory;
-use Magento\Framework\Filesystem\File\WriteFactory;
-use Magento\Framework\Filesystem\DriverPool;
+use Magento\MessageQueue\Model\Cron\ConsumersRunner\Pid;
 
 /**
  * Command for starting MessageQueue consumers.
@@ -37,9 +36,9 @@ class StartConsumerCommand extends Command
     private $appState;
 
     /**
-     * @var WriteFactory
+     * @var Pid
      */
-    private $writeFactory;
+    private $pid;
 
     /**
      * StartConsumerCommand constructor.
@@ -48,18 +47,18 @@ class StartConsumerCommand extends Command
      * @param \Magento\Framework\App\State $appState
      * @param ConsumerFactory $consumerFactory
      * @param string $name
-     * @param WriteFactory $writeFactory
+     * @param Pid $pid
      */
     public function __construct(
         \Magento\Framework\App\State $appState,
         ConsumerFactory $consumerFactory,
         $name = null,
-        WriteFactory $writeFactory = null
+        Pid $pid = null
     ) {
         $this->appState = $appState;
         $this->consumerFactory = $consumerFactory;
-        $this->writeFactory = $writeFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(WriteFactory::class);
+        $this->pid = $pid ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(Pid::class);
         parent::__construct($name);
     }
 
@@ -75,7 +74,7 @@ class StartConsumerCommand extends Command
         $pidFilePath = $input->getOption(self::PID_FILE_PATH);
 
         if ($pidFilePath) {
-            $this->savePid($pidFilePath);
+            $this->pid->savePid($pidFilePath);
         }
 
         if ($areaCode !== null) {
@@ -87,18 +86,6 @@ class StartConsumerCommand extends Command
         $consumer = $this->consumerFactory->get($consumerName, $batchSize);
         $consumer->process($numberOfMessages);
         return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
-    }
-
-    /**
-     * Saves pid of current process to file
-     *
-     * @param string $pidFilePath The path to file with pid
-     */
-    private function savePid($pidFilePath)
-    {
-        $file = $this->writeFactory->create($pidFilePath, DriverPool::FILE, 'w');
-        $file->write(posix_getpid());
-        $file->close();
     }
 
     /**

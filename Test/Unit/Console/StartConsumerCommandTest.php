@@ -10,6 +10,7 @@ use Magento\MessageQueue\Console\StartConsumerCommand;
 use Magento\Framework\Filesystem\File\WriteFactory;
 use Magento\Framework\Filesystem\File\Write;
 use Magento\Framework\Filesystem\DriverPool;
+use Magento\MessageQueue\Model\Cron\ConsumersRunner\Pid;
 
 /**
  * Unit tests for StartConsumerCommand.
@@ -37,6 +38,11 @@ class StartConsumerCommandTest extends \PHPUnit\Framework\TestCase
     private $writeFactoryMock;
 
     /**
+     * @var Pid|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $pidMock;
+
+    /**
      * @var StartConsumerCommand
      */
     private $command;
@@ -46,6 +52,9 @@ class StartConsumerCommandTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
+        $this->pidMock = $this->getMockBuilder(Pid::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->consumerFactory = $this->getMockBuilder(\Magento\Framework\MessageQueue\ConsumerFactory::class)
             ->disableOriginalConstructor()->getMock();
         $this->appState = $this->getMockBuilder(\Magento\Framework\App\State::class)
@@ -61,6 +70,7 @@ class StartConsumerCommandTest extends \PHPUnit\Framework\TestCase
                 'consumerFactory' => $this->consumerFactory,
                 'appState' => $this->appState,
                 'writeFactory' => $this->writeFactoryMock,
+                'pid' => $this->pidMock,
             ]
         );
         parent::setUp();
@@ -106,20 +116,9 @@ class StartConsumerCommandTest extends \PHPUnit\Framework\TestCase
             ->method('get')->with($consumerName, $batchSize)->willReturn($consumer);
         $consumer->expects($this->once())->method('process')->with($numberOfMessages);
 
-        /** @var Write|\PHPUnit_Framework_MockObject_MockObject $writeMock */
-        $writeMock = $this->getMockBuilder(Write::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $writeMock->expects($this->exactly($savePidExpects))
-            ->method('write')
-            ->with(posix_getpid());
-        $writeMock->expects($this->exactly($savePidExpects))
-            ->method('close');
-
-        $this->writeFactoryMock->expects($this->exactly($savePidExpects))
-            ->method('create')
-            ->with($pidFilePath, DriverPool::FILE, 'w')
-            ->willReturn($writeMock);
+        $this->pidMock->expects($this->exactly($savePidExpects))
+            ->method('savePid')
+            ->with($pidFilePath);
 
         $this->assertEquals(
             \Magento\Framework\Console\Cli::RETURN_SUCCESS,

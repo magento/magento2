@@ -9,6 +9,9 @@ use Magento\MessageQueue\Model\Cron\ConsumersRunner\Pid;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\File\WriteFactory;
+use Magento\Framework\Filesystem\DriverPool;
+use Magento\Framework\Filesystem\File\Write;
 use \PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 class PidTest extends \PHPUnit\Framework\TestCase
@@ -22,6 +25,11 @@ class PidTest extends \PHPUnit\Framework\TestCase
      * @var DirectoryList|MockObject
      */
     private $directoryListMock;
+
+    /**
+     * @var WriteFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $writeFactoryMock;
 
     /**
      * @var Pid
@@ -41,8 +49,11 @@ class PidTest extends \PHPUnit\Framework\TestCase
         $this->directoryListMock = $this->getMockBuilder(DirectoryList::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->writeFactoryMock = $this->getMockBuilder(WriteFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->pid = new Pid($this->filesystemMock, $this->directoryListMock);
+        $this->pid = new Pid($this->filesystemMock, $this->writeFactoryMock, $this->directoryListMock);
     }
 
     /**
@@ -100,5 +111,27 @@ class PidTest extends \PHPUnit\Framework\TestCase
             ->willReturn($varPath);
 
         $this->assertSame($expectedResult, $this->pid->getPidFilePath($consumerName));
+    }
+
+    public function testSavePid()
+    {
+        $pidFilePath = '/var/somePath/pidfile.pid';
+
+        /** @var Write|\PHPUnit_Framework_MockObject_MockObject $writeMock */
+        $writeMock = $this->getMockBuilder(Write::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $writeMock->expects($this->once())
+            ->method('write')
+            ->with(posix_getpid());
+        $writeMock->expects($this->once())
+            ->method('close');
+
+        $this->writeFactoryMock->expects($this->once())
+            ->method('create')
+            ->with($pidFilePath, DriverPool::FILE, 'w')
+            ->willReturn($writeMock);
+
+        $this->pid->savePid($pidFilePath);
     }
 }
