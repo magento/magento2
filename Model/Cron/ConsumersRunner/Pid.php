@@ -55,17 +55,32 @@ class Pid
      * Checks if consumer process is run by consumers name
      *
      * @param string $consumerName The consumers name
-     * @return bool Return true if consumer process is run
+     * @return bool Returns true if consumer process is run
      */
     public function isRun($consumerName)
+    {
+        $pid = $this->getPid($consumerName);
+        if ($pid) {
+            return (bool) posix_getpgid($pid);
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns pid by consumer name
+     *
+     * @param string $consumerName The consumers name
+     * @return int|bool Returns pid if pid file exists for consumer else returns false
+     */
+    public function getPid($consumerName)
     {
         $pidFile = $consumerName . static::PID_FILE_EXT;
         /** @var WriteInterface $directory */
         $directory = $this->filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
 
         if ($directory->isExist($pidFile)) {
-            $pid = (int) $directory->readFile($pidFile);
-            return (bool) posix_getpgid($pid);
+            return (int) $directory->readFile($pidFile);
         }
 
         return false;
