@@ -38,6 +38,7 @@ interface CreditmemoItemRepositoryInterface
      *
      * @param \Magento\Sales\Api\Data\CreditmemoItemInterface $entity The credit memo item.
      * @return bool
+     * @throws \Magento\Framework\Exception\CouldNotDeleteException
      */
     public function delete(\Magento\Sales\Api\Data\CreditmemoItemInterface $entity);
 
@@ -46,6 +47,7 @@ interface CreditmemoItemRepositoryInterface
      *
      * @param \Magento\Sales\Api\Data\CreditmemoItemInterface $entity The credit memo item.
      * @return \Magento\Sales\Api\Data\CreditmemoItemInterface Credit memo interface.
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
     public function save(\Magento\Sales\Api\Data\CreditmemoItemInterface $entity);
 }

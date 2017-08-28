@@ -6,12 +6,14 @@
 
 namespace Magento\Weee\Api\Data\ProductRender;
 
+use Magento\Framework\Api\ExtensibleDataInterface;
+
 /**
  * List of all weee attributes, their amounts, etc.., that product has
  * @api
  * @since 100.2.0
  */
-interface WeeeAdjustmentAttributeInterface
+interface WeeeAdjustmentAttributeInterface extends ExtensibleDataInterface
 {
     /**
      * Set amount
