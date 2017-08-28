@@ -213,15 +213,15 @@ class Graph
         $nodeSet = $this->findStartNodes();
 
         while (!empty($nodeSet)) {
-            $cur = array_shift($nodeSet);
-            array_unshift($sortedElements, $cur);
+            $cur = array_pop($nodeSet);
+            $sortedElements[] = $cur;
             if (!isset($this->_from[$cur])) {
                 continue;
             }
             foreach ($this->_from[$cur] as $parent) {
                 $this->removeRelation($cur, $parent);
                 if (empty($this->_to[$parent])) {
-                    array_push($nodeSet, $parent);
+                    $nodeSet[] = $parent;
                 }
             }
         }
@@ -232,7 +232,7 @@ class Graph
             throw new \Exception($message);
         }
 
-        return $sortedElements;
+        return array_reverse($sortedElements);
     }
 
     /**
