@@ -1,9 +1,7 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: serhii
- * Date: 25.08.17
- * Time: 15:48
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Api;
 
