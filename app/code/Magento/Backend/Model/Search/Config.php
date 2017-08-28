@@ -12,7 +12,7 @@ use Magento\Config\Model\Config\Structure\Element\Iterator as ElementIterator;
 
 /**
  * Search Config Model
-  */
+ */
 class Config extends \Magento\Framework\DataObject
 {
     /**

@@ -33,7 +33,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         foreach ($expectedResult as $itemIndex => $expectedItem) {
             /** Validate URL to item */
             $elementPathParts = explode('/', $expectedItem['id']);
-            array_filter($elementPathParts, function($value) { return $value !== ''; });
+            array_filter($elementPathParts, function ($value) {
+                return $value !== '';
+            });
             foreach ($elementPathParts as $elementPathPart) {
                 $this->assertContains($elementPathPart, $searchResults[$itemIndex]['url'], 'Item URL is invalid.');
             }
