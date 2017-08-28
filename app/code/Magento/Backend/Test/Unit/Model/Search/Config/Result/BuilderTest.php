@@ -8,7 +8,7 @@ namespace Magento\Backend\Test\Unit\Model\Search\Config\Result;
 use Magento\Backend\Model\Search\Config\Structure\ElementBuilderInterface;
 use Magento\Backend\Model\UrlInterface;
 use Magento\Backend\Model\Search\Config\Result\Builder;
-use Magento\Config\Model\Config\Structure\ElementNewInterface;
+use Magento\Config\Model\Config\StructureElementInterface;
 use PHPUnit\Framework\TestCase;
 
 class BuilderTest extends TestCase
@@ -19,7 +19,7 @@ class BuilderTest extends TestCase
     protected $model;
 
     /**
-     * @var ElementNewInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StructureElementInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $structureElementMock;
 
@@ -36,7 +36,7 @@ class BuilderTest extends TestCase
     protected function setUp()
     {
         $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
-        $this->structureElementMock = $this->getMockForAbstractClass(ElementNewInterface::class);
+        $this->structureElementMock = $this->getMockForAbstractClass(StructureElementInterface::class);
         $this->structureElementUrlParamsBuilderMock = $this->getMockForAbstractClass(ElementBuilderInterface::class);
         $this->model = new Builder($this->urlBuilderMock, ['section' => $this->structureElementUrlParamsBuilderMock]);
     }

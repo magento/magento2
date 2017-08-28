@@ -12,13 +12,7 @@ use Magento\Config\Model\Config\Structure\Element\Iterator as ElementIterator;
 
 /**
  * Search Config Model
- *
- * @method Config setQuery(string $query)
- * @method string|null getQuery()
- * @method bool hasQuery()
- * @method Config setResults(array $results)
- * @method array getResults()
- */
+  */
 class Config extends \Magento\Framework\DataObject
 {
     /**
@@ -39,6 +33,50 @@ class Config extends \Magento\Framework\DataObject
     {
         $this->configStructure = $configStructure;
         $this->resultBuilder = $resultBuilder;
+    }
+
+    /**
+     * @param string $query
+     * @return $this
+     */
+    public function setQuery($query)
+    {
+        $this->setData('query', $query);
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getQuery()
+    {
+        return $this->getData('query');
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasQuery()
+    {
+        return $this->hasData('query');
+    }
+
+    /**
+     * @param array $results
+     * @return $this
+     */
+    public function setResults(array $results)
+    {
+        $this->setData('results', $results);
+        return $this;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getResults()
+    {
+        return $this->getData('results');
     }
 
     /**

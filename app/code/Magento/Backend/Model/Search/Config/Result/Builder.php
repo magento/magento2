@@ -7,7 +7,7 @@ namespace Magento\Backend\Model\Search\Config\Result;
 
 use Magento\Backend\Model\Search\Config\Structure\ElementBuilderInterface;
 use Magento\Backend\Model\UrlInterface;
-use Magento\Config\Model\Config\Structure\ElementNewInterface;
+use Magento\Config\Model\Config\StructureElementInterface;
 
 /**
  * Config SearchResult Builder
@@ -48,11 +48,11 @@ class Builder
     }
 
     /**
-     * @param ElementNewInterface $structureElement
+     * @param StructureElementInterface $structureElement
      * @param string $elementPathLabel
      * @return void
      */
-    public function add(ElementNewInterface $structureElement, $elementPathLabel)
+    public function add(StructureElementInterface $structureElement, $elementPathLabel)
     {
         $urlParams = [];
         $elementData = $structureElement->getData();

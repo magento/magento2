@@ -5,13 +5,13 @@
  */
 namespace Magento\Backend\Model\Search\Config\Structure;
 
-use Magento\Config\Model\Config\Structure\ElementNewInterface;
+use Magento\Config\Model\Config\StructureElementInterface;
 
 interface ElementBuilderInterface
 {
     /**
-     * @param ElementNewInterface $structureElement
+     * @param StructureElementInterface $structureElement
      * @return array
      */
-    public function build(ElementNewInterface $structureElement);
+    public function build(StructureElementInterface $structureElement);
 }

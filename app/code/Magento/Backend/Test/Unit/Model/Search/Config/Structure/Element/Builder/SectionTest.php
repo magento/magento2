@@ -7,13 +7,13 @@
 namespace Magento\Backend\Test\Unit\Model\Search\Config\Structure\Element\Builder;
 
 use Magento\Backend\Model\Search\Config\Structure\Element\Builder\Section;
-use Magento\Config\Model\Config\Structure\ElementNewInterface;
+use Magento\Config\Model\Config\StructureElementInterface;
 use PHPUnit\Framework\TestCase;
 
 class SectionTest extends TestCase
 {
     /**
-     * @var ElementNewInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StructureElementInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $structureElementMock;
 
@@ -24,7 +24,7 @@ class SectionTest extends TestCase
 
     protected function setUp()
     {
-        $this->structureElementMock = $this->getMockForAbstractClass(ElementNewInterface::class);
+        $this->structureElementMock = $this->getMockForAbstractClass(StructureElementInterface::class);
         $this->model = new Section();
     }
 

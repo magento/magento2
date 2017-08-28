@@ -13,7 +13,7 @@ class Iterator implements \Iterator
     /**
      * List of element data
      *
-     * @var \Magento\Config\Model\Config\Structure\ElementNewInterface[]
+     * @var \Magento\Config\Model\Config\StructureElementInterface[]
      */
     protected $_elements;
 
@@ -66,7 +66,7 @@ class Iterator implements \Iterator
     /**
      * Return the current element
      *
-     * @return \Magento\Config\Model\Config\Structure\ElementNewInterface
+     * @return \Magento\Config\Model\Config\StructureElementInterface
      */
     public function current()
     {

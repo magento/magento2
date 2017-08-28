@@ -3,12 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Config\Model\Config\Structure;
+namespace Magento\Config\Model\Config;
 
 /**
  * @api
  */
-interface ElementNewInterface extends ElementInterface
+interface StructureElementInterface extends Structure\ElementInterface
 {
     /**
      * Retrieve element config path

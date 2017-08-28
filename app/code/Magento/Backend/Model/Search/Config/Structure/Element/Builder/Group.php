@@ -6,14 +6,14 @@
 namespace Magento\Backend\Model\Search\Config\Structure\Element\Builder;
 
 use Magento\Backend\Model\Search\Config\Structure\ElementBuilderInterface;
-use Magento\Config\Model\Config\Structure\ElementNewInterface;
+use Magento\Config\Model\Config\StructureElementInterface;
 
 class Group implements ElementBuilderInterface
 {
     /**
      * @inheritdoc
      */
-    public function build(ElementNewInterface $structureElement)
+    public function build(StructureElementInterface $structureElement)
     {
         $elementPathParts = explode('/', $structureElement->getPath());
         return [
