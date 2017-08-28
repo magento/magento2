@@ -22,11 +22,9 @@ class Stores extends DataSource
      *
      * @var array
      */
-    protected $stores;
+    private $stores;
 
     /**
-     * Create custom Store if we have block with custom store view.
-     *
      * @constructor
      * @param FixtureFactory $fixtureFactory
      * @param array $params

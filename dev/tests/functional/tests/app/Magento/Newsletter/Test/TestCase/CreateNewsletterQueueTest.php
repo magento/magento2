@@ -14,7 +14,7 @@ use Magento\Newsletter\Test\Page\Adminhtml\TemplateQueue;
 use Magento\Newsletter\Test\Page\Adminhtml\TemplateQueueIndex;
 
 /**
- * Test to update fields in Newsletter Queue.
+ * Test to create Newsletter Queue.
  *
  * Test Flow:
  * Preconditions:
@@ -31,7 +31,7 @@ use Magento\Newsletter\Test\Page\Adminhtml\TemplateQueueIndex;
  * @group Newsletters
  * @ZephyrId MAGETWO-71653
  */
-class UpdateQueueTest extends Injectable
+class CreateNewsletterQueueTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
