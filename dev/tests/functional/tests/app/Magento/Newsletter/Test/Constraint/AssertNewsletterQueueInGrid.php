@@ -26,13 +26,18 @@ class AssertNewsletterQueueInGrid extends AbstractAssertForm
         TemplateQueueIndex $indexQueue,
         Queue $queue
     ) {
-        $indexQueue->open();
+        $startAt = strftime("%b %e, %Y", strtotime($queue->getQueueStartAt()));
         $filter = [
             'newsletter_subject' => $queue->getNewsletterSubject(),
+            'start_at_from' => $startAt,
+            'start_at_to' => $startAt,
         ];
 
+        $indexQueue->open();
+        $indexQueue->getQueueTemplateGrid()->search(['newsletter_subject' => $queue->getNewsletterSubject()]);
+
         \PHPUnit_Framework_Assert::assertTrue(
-            $indexQueue->getQueueTemplateGrid()->isRowVisible($filter),
+            $indexQueue->getQueueTemplateGrid()->isRowVisible($filter, false, false),
             'Newsletter Queue \'' . $queue->getNewsletterSubject() . '\' is absent in grid.'
         );
     }

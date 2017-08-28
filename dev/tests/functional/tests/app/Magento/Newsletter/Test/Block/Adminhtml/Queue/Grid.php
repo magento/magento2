@@ -22,6 +22,12 @@ class Grid extends \Magento\Backend\Test\Block\Widget\Grid
         'newsletter_subject' => [
             'selector' => 'input[name="newsletter_subject"]',
         ],
+        'start_at_from' => [
+            'selector' => 'input[name="start_at[from]"]',
+        ],
+        'start_at_to' => [
+            'selector' => 'input[name="start_at[to]"]',
+        ],
     ];
 
     /**
