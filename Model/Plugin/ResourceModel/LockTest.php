@@ -58,7 +58,7 @@ class LockTest extends \PHPUnit\Framework\TestCase
         $this->reader->read($this->lock, $code);
         $emptyId = $this->lock->getId();
 
-        $this->assertEquals('1', $id);
+        $this->assertGreaterThanOrEqual('1', $id);
         $this->assertEmpty($emptyId);
     }
 }
