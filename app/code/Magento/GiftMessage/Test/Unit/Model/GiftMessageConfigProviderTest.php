@@ -104,7 +104,7 @@ class GiftMessageConfigProviderTest extends \PHPUnit\Framework\TestCase
         $productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
         $storeMock = $this->createPartialMock(
             \Magento\Store\Model\Store::class,
-            ['isFrontUrlSecure', 'getBaseUrl', 'getCode']
+            ['getBaseUrl', 'getCode']
         );
         $quoteMock = $this->createPartialMock(
             \Magento\Quote\Model\Quote::class,
@@ -142,8 +142,7 @@ class GiftMessageConfigProviderTest extends \PHPUnit\Framework\TestCase
             ->willReturn($isCustomerLoggedIn);
         $this->formKeyMock->expects($this->once())->method('getFormKey')->willReturn($formKey);
         $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($storeMock);
-        $storeMock->expects($this->once())->method('isFrontUrlSecure')->willReturn($isFrontUrlSecure);
-        $storeMock->expects($this->once())->method('getBaseUrl')->with(UrlInterface::URL_TYPE_LINK, $isFrontUrlSecure)
+        $storeMock->expects($this->once())->method('getBaseUrl')->with(UrlInterface::URL_TYPE_LINK)
             ->willReturn($baseUrl);
 
         $expectedResult = [
