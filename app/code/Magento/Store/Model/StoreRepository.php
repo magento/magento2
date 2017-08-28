@@ -150,7 +150,7 @@ class StoreRepository implements \Magento\Store\Api\StoreRepositoryInterface
     /**
      * Retrieve application config.
      *
-     * @deprecated
+     * @deprecated 100.1.3
      * @return Config
      */
     private function getAppConfig()

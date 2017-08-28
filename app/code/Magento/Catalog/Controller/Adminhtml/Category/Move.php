@@ -6,6 +6,10 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category;
 
+/**
+ * Class \Magento\Catalog\Controller\Adminhtml\Category\Move
+ *
+ */
 class Move extends \Magento\Catalog\Controller\Adminhtml\Category
 {
     /**
@@ -27,7 +31,7 @@ class Move extends \Magento\Catalog\Controller\Adminhtml\Category
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory,
-     * @param \Psr\Log\LoggerInterface $logger,
+     * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -67,20 +71,17 @@ class Move extends \Magento\Catalog\Controller\Adminhtml\Category
                 throw new \Exception(__('Category is not available for requested store.'));
             }
             $category->move($parentNodeId, $prevNodeId);
-        } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
-            $error = true;
-            $this->messageManager->addError(__('There was a category move error. %1', $e->getMessage()));
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $error = true;
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addExceptionMessage($e);
         } catch (\Exception $e) {
             $error = true;
-            $this->messageManager->addError(__('There was a category move error.'));
+            $this->messageManager->addErrorMessage(__('There was a category move error.'));
             $this->logger->critical($e);
         }
 
         if (!$error) {
-            $this->messageManager->addSuccess(__('You moved the category.'));
+            $this->messageManager->addSuccessMessage(__('You moved the category.'));
         }
 
         $block->setMessages($this->messageManager->getMessages(true));

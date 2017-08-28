@@ -6,6 +6,10 @@
  */
 namespace Magento\Indexer\Controller\Adminhtml\Indexer;
 
+/**
+ * Class \Magento\Indexer\Controller\Adminhtml\Indexer\MassChangelog
+ *
+ */
 class MassChangelog extends \Magento\Indexer\Controller\Adminhtml\Indexer
 {
     /**

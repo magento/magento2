@@ -5,6 +5,10 @@
  */
 namespace Magento\Search\Model;
 
+/**
+ * Class \Magento\Search\Model\Autocomplete
+ *
+ */
 class Autocomplete implements AutocompleteInterface
 {
     /**

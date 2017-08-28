@@ -7,6 +7,10 @@ namespace Magento\Braintree\Gateway\Http\Client;
 
 use Magento\Braintree\Gateway\Request\PaymentDataBuilder;
 
+/**
+ * Class \Magento\Braintree\Gateway\Http\Client\TransactionRefund
+ *
+ */
 class TransactionRefund extends AbstractTransaction
 {
     /**

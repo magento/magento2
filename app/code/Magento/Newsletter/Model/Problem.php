@@ -8,8 +8,6 @@ namespace Magento\Newsletter\Model;
 /**
  * Newsletter problem model
  *
- * @method \Magento\Newsletter\Model\ResourceModel\Problem _getResource()
- * @method \Magento\Newsletter\Model\ResourceModel\Problem getResource()
  * @method int getSubscriberId()
  * @method \Magento\Newsletter\Model\Problem setSubscriberId(int $value)
  * @method int getQueueId()

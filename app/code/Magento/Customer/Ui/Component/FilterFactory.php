@@ -7,6 +7,10 @@ namespace Magento\Customer\Ui\Component;
 
 use Magento\Customer\Api\Data\AttributeMetadataInterface as AttributeMetadata;
 
+/**
+ * Class \Magento\Customer\Ui\Component\FilterFactory
+ *
+ */
 class FilterFactory
 {
     /**

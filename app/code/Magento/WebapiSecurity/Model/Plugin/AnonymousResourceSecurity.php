@@ -7,6 +7,10 @@ namespace Magento\WebapiSecurity\Model\Plugin;
 
 use Magento\Webapi\Model\Config\Converter;
 
+/**
+ * Class \Magento\WebapiSecurity\Model\Plugin\AnonymousResourceSecurity
+ *
+ */
 class AnonymousResourceSecurity
 {
     /**

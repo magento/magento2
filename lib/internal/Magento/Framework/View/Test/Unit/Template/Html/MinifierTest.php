@@ -12,7 +12,7 @@ use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Template\Html\Minifier;
 
-class MinifierTest extends \PHPUnit_Framework_TestCase
+class MinifierTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Minifier
@@ -210,7 +210,7 @@ TEXT;
         $file = '/absolute/path/to/phtml/template/file';
         $relativeGeneratedPath = 'absolute/path/to/phtml/template/file';
 
-        $htmlDriver = $this->getMock(\Magento\Framework\Filesystem\DriverInterface::class, [], [], '', false);
+        $htmlDriver = $this->createMock(\Magento\Framework\Filesystem\DriverInterface::class);
         $htmlDriver
             ->expects($this->once())
             ->method('getRealPathSafety')

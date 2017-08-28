@@ -12,7 +12,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SynchronizerTest extends \PHPUnit_Framework_TestCase
+class SynchronizerTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Catalog\Model\Product\ProductFrontendAction\Synchronizer */
     protected $model;
@@ -94,7 +94,7 @@ class SynchronizerTest extends \PHPUnit_Framework_TestCase
                 'product_id' => 3,
             ]
         ];
-        $frontendConfiguration = $this->getMock(\Magento\Catalog\Model\FrontendStorageConfigurationInterface::class);
+        $frontendConfiguration = $this->createMock(\Magento\Catalog\Model\FrontendStorageConfigurationInterface::class);
         $frontendConfiguration->expects($this->once())
             ->method('get')
             ->willReturn([
@@ -110,7 +110,7 @@ class SynchronizerTest extends \PHPUnit_Framework_TestCase
         $action2 = $this->getMockBuilder(ProductFrontendActionInterface::class)
             ->getMockForAbstractClass();
 
-        $frontendAction = $this->getMock(ProductFrontendActionInterface::class);
+        $frontendAction = $this->createMock(ProductFrontendActionInterface::class);
         $collection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();

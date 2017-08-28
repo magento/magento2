@@ -5,6 +5,10 @@
  */
 namespace Magento\Customer\Model;
 
+/**
+ * Class \Magento\Customer\Model\FileProcessor
+ *
+ */
 class FileProcessor
 {
     /**

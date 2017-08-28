@@ -343,7 +343,7 @@ abstract class AbstractConfig implements ConfigInterface
      * The getter function to get the ProductMetadata
      *
      * @return ProductMetadataInterface
-     * @deprecated
+     * @deprecated 100.1.0
      */
     protected function getProductMetadata()
     {

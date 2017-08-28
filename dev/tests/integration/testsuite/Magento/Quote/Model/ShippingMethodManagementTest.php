@@ -11,7 +11,7 @@ namespace Magento\Quote\Model;
  *
  * @magentoDbIsolation enabled
  */
-class ShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
+class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoConfigFixture current_store carriers/tablerate/active 1

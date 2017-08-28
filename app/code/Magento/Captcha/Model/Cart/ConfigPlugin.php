@@ -5,6 +5,10 @@
  */
 namespace Magento\Captcha\Model\Cart;
 
+/**
+ * Class \Magento\Captcha\Model\Cart\ConfigPlugin
+ *
+ */
 class ConfigPlugin
 {
     /**

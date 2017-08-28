@@ -13,6 +13,10 @@ namespace Magento\Framework\Data\Form\Element;
 
 use Magento\Framework\UrlInterface;
 
+/**
+ * Class \Magento\Framework\Data\Form\Element\Image
+ *
+ */
 class Image extends \Magento\Framework\Data\Form\Element\AbstractElement
 {
     /**

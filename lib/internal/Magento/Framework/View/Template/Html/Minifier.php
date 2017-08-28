@@ -9,6 +9,10 @@ namespace Magento\Framework\View\Template\Html;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 
+/**
+ * Class \Magento\Framework\View\Template\Html\Minifier
+ *
+ */
 class Minifier implements MinifierInterface
 {
     /**

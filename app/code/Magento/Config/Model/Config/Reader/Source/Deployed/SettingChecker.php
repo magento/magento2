@@ -15,6 +15,7 @@ use Magento\Framework\App\Config\ScopeCodeResolver;
 /**
  * Class for checking settings that defined in config file
  * @api
+ * @since 100.1.2
  */
 class SettingChecker
 {
@@ -37,6 +38,7 @@ class SettingChecker
      * @param DeploymentConfig $config
      * @param PlaceholderFactory $placeholderFactory
      * @param ScopeCodeResolver $scopeCodeResolver
+     * @since 100.1.2
      */
     public function __construct(
         DeploymentConfig $config,
@@ -55,6 +57,7 @@ class SettingChecker
      * @param string $scope
      * @param string|null $scopeCode
      * @return boolean
+     * @since 100.1.2
      */
     public function isReadOnly($path, $scope, $scopeCode = null)
     {
@@ -79,6 +82,7 @@ class SettingChecker
      * @param string $scopeCode
      * @param string|null $scopeCode
      * @return string|null
+     * @since 100.1.2
      */
     public function getPlaceholderValue($path, $scope, $scopeCode = null)
     {
@@ -90,6 +94,7 @@ class SettingChecker
      *
      * @param string $placeholder
      * @return string|null
+     * @since 100.1.2
      */
     public function getEnvValue($placeholder)
     {

@@ -11,6 +11,10 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Class \Magento\Setup\Console\Command\AbstractMaintenanceCommand
+ *
+ */
 abstract class AbstractMaintenanceCommand extends AbstractSetupCommand
 {
     /**

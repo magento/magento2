@@ -5,6 +5,10 @@
  */
 namespace Magento\Setup\Module\Di\App\Task;
 
+/**
+ * Class \Magento\Setup\Module\Di\App\Task\Manager
+ *
+ */
 class Manager
 {
     /**

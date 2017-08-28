@@ -5,6 +5,10 @@
  */
 namespace Magento\Sales\Model\Order\Email\Container;
 
+/**
+ * Class \Magento\Sales\Model\Order\Email\Container\CreditmemoIdentity
+ *
+ */
 class CreditmemoIdentity extends Container implements IdentityInterface
 {
     const XML_PATH_EMAIL_COPY_METHOD = 'sales_email/creditmemo/copy_method';

@@ -5,7 +5,7 @@
  */
 namespace Magento\Shipping\Helper;
 
-class DataTest extends \PHPUnit_Framework_TestCase
+class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Shipping\Helper\Data
@@ -62,7 +62,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $order = $objectManager->create(\Magento\Sales\Model\Order::class);
         $order->setProtectCode($code);
-        $orderRepository = $this->getMock(\Magento\Sales\Api\OrderRepositoryInterface::class, [], [], '', false);
+        $orderRepository = $this->createMock(\Magento\Sales\Api\OrderRepositoryInterface::class);
         $orderRepository->expects($this->atLeastOnce())->method('get')->will($this->returnValue($order));
         return $orderRepository;
     }
@@ -78,13 +78,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $shipmentArgs = ['orderRepository' => $orderRepository];
 
         $shipment = $objectManager->create(\Magento\Sales\Model\Order\Shipment::class, $shipmentArgs);
-        $shipmentRepository = $this->getMock(
-            \Magento\Sales\Model\Order\ShipmentRepository::class,
-            ['get'],
-            [],
-            '',
-            false
-        );
+        $shipmentRepository = $this->createPartialMock(\Magento\Sales\Model\Order\ShipmentRepository::class, ['get']);
         $shipmentRepository->expects($this->atLeastOnce())->method('get')->willReturn($shipment);
         return $shipmentRepository;
     }

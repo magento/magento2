@@ -7,6 +7,10 @@ namespace Magento\Framework\Search\Adapter\Aggregation;
 
 use Magento\Framework\Search\RequestInterface;
 
+/**
+ * Class \Magento\Framework\Search\Adapter\Aggregation\AggregationResolver
+ *
+ */
 class AggregationResolver implements AggregationResolverInterface
 {
     /**

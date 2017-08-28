@@ -6,6 +6,10 @@
  */
 namespace Magento\CheckoutAgreements\Controller\Adminhtml\Agreement;
 
+/**
+ * Class \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement\Edit
+ *
+ */
 class Edit extends \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement
 {
     /**

@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework;
 
+/**
+ * Class \Magento\Framework\EventFactory
+ *
+ */
 class EventFactory
 {
     /**

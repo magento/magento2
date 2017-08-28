@@ -73,7 +73,7 @@ class MassDisable extends \Magento\Backend\Controller\Adminhtml\Cache
      * Get State Instance
      *
      * @return State
-     * @deprecated
+     * @deprecated 100.2.0
      */
     private function getState()
     {

@@ -5,6 +5,10 @@
  */
 namespace Magento\SalesRule\Model\Rule\Action;
 
+/**
+ * Class \Magento\SalesRule\Model\Rule\Action\Product
+ *
+ */
 class Product extends \Magento\Rule\Model\Action\AbstractAction
 {
     /**

@@ -10,6 +10,10 @@ use Magento\Backend\App\Action\Context;
 use Magento\Catalog\Model\Category;
 use Magento\Framework\Registry;
 
+/**
+ * Class \Magento\CatalogRule\Controller\Adminhtml\Promo\Widget\CategoriesJson
+ *
+ */
 class CategoriesJson extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Widget
 {
     /**

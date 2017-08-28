@@ -8,6 +8,10 @@ namespace Magento\Customer\Controller\Adminhtml\Group;
 
 use Magento\Customer\Controller\RegistryConstants;
 
+/**
+ * Class \Magento\Customer\Controller\Adminhtml\Group\NewAction
+ *
+ */
 class NewAction extends \Magento\Customer\Controller\Adminhtml\Group
 {
     /**

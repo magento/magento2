@@ -9,6 +9,10 @@ namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin;
 use Magento\Catalog\Model\ResourceModel\Product as ResourceProduct;
 use Magento\Framework\Model\AbstractModel;
 
+/**
+ * Class \Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Product
+ *
+ */
 class Product extends AbstractPlugin
 {
     /**

@@ -12,7 +12,7 @@ namespace Magento\Sitemap\Model\ResourceModel\Catalog;
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
  * @magentoDataFixture Magento/Sitemap/_files/sitemap_products.php
  */
-class ProductTest extends \PHPUnit_Framework_TestCase
+class ProductTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Base product image path

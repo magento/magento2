@@ -9,6 +9,10 @@ namespace Magento\CatalogInventory\Model\Plugin;
 
 use Magento\Catalog\Model\Product\Attribute\Repository;
 
+/**
+ * Class \Magento\CatalogInventory\Model\Plugin\FilterCustomAttribute
+ *
+ */
 class FilterCustomAttribute
 {
     /**

@@ -5,6 +5,10 @@
  */
 namespace Magento\Widget\Model\Widget\Instance;
 
+/**
+ * Class \Magento\Widget\Model\Widget\Instance\OptionsFactory
+ *
+ */
 class OptionsFactory
 {
     /**

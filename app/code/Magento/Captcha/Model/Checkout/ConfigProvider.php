@@ -5,6 +5,10 @@
  */
 namespace Magento\Captcha\Model\Checkout;
 
+/**
+ * Class \Magento\Captcha\Model\Checkout\ConfigProvider
+ *
+ */
 class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
 {
     /**

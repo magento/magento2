@@ -6,6 +6,10 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Order\Cancel
+ *
+ */
 class Cancel extends \Magento\Sales\Controller\Adminhtml\Order
 {
     /**

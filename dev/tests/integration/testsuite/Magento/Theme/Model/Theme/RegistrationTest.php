@@ -7,7 +7,7 @@ namespace Magento\Theme\Model\Theme;
 
 use Magento\Framework\Component\ComponentRegistrar;
 
-class RegistrationTest extends \PHPUnit_Framework_TestCase
+class RegistrationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Theme\Model\Theme\Registration

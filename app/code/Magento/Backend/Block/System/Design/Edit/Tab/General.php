@@ -6,6 +6,10 @@
 
 namespace Magento\Backend\Block\System\Design\Edit\Tab;
 
+/**
+ * Class \Magento\Backend\Block\System\Design\Edit\Tab\General
+ *
+ */
 class General extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**

@@ -20,6 +20,7 @@ class Selection extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * @var MetadataPool
+     * @since 100.1.0
      */
     protected $metadataPool;
 
@@ -35,6 +36,7 @@ class Selection extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param MetadataPool $metadataPool
      * @param null|string $connectionName
      * @param EntityManager|null $entityManager
+     * @since 100.1.0
      */
     public function __construct(
         Context $context,
@@ -185,6 +187,7 @@ class Selection extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * {@inheritdoc}
+     * @since 100.2.0
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {

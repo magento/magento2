@@ -3,6 +3,7 @@
 [GLOBAL],[GLOBAL]
 [WEBSITE],[WEBSITE]
 "[STORE VIEW]","[STORE VIEW]"
+"Use system value","Use system value"
 "Use Default","Use Default"
 "Use Website","Use Website"
 Add,Add
@@ -14,6 +15,12 @@ Add,Add
 Enable,Enable
 Disable,Disable
 Configuration,Configuration
+"Class for type ""%1"" was not declared","Class for type ""%1"" was not declared"
+"%1 should implement %2","%1 should implement %2"
+"We can't save this option because Magento is not installed. To lock this value, enter the command again using the --%1 option.","We can't save this option because Magento is not installed. To lock this value, enter the command again using the --%1 option."
+"The value you set has already been locked. To change the value, use the --%1 option.","The value you set has already been locked. To change the value, use the --%1 option."
+%1,%1
+"Configuration for path: ""%1"" doesn't exist","Configuration for path: ""%1"" doesn't exist"
 System,System
 "You saved the configuration.","You saved the configuration."
 "Something went wrong while saving this configuration:","Something went wrong while saving this configuration:"
@@ -26,15 +33,14 @@ System,System
 "Specify a fully qualified URL.","Specify a fully qualified URL."
 "Selected allowed currency ""%1"" is not available in installed currencies.","Selected allowed currency ""%1"" is not available in installed currencies."
 "Default display currency ""%1"" is not available in allowed currencies.","Default display currency ""%1"" is not available in allowed currencies."
-"Sorry, we haven\'t installed the base currency you selected.","Sorry, we haven\'t installed the base currency you selected."
-"We can\'t save the Cron expression.","We can\'t save the Cron expression."
-"Sorry, we haven\'t installed the default display currency you selected.","Sorry, we haven\'t installed the default display currency you selected."
+"Sorry, we haven't installed the base currency you selected.","Sorry, we haven't installed the base currency you selected."
+"We can't save the Cron expression.","We can't save the Cron expression."
+"Sorry, we haven't installed the default display currency you selected.","Sorry, we haven't installed the default display currency you selected."
 "Sorry, the default display currency you selected is not available in allowed currencies.","Sorry, the default display currency you selected is not available in allowed currencies."
 "Please correct the email address: ""%1"".","Please correct the email address: ""%1""."
 "The sender name ""%1"" is not valid. Please use only visible characters and spaces.","The sender name ""%1"" is not valid. Please use only visible characters and spaces."
 "Maximum sender name length is 255. Please correct your settings.","Maximum sender name length is 255. Please correct your settings."
-%1,%1
-"The file you\'re uploading exceeds the server size limit of %1 kilobytes.","The file you\'re uploading exceeds the server size limit of %1 kilobytes."
+"The file you're uploading exceeds the server size limit of %1 kilobytes.","The file you're uploading exceeds the server size limit of %1 kilobytes."
 "The base directory to upload file is not specified.","The base directory to upload file is not specified."
 "The specified image adapter cannot be used because of: %1","The specified image adapter cannot be used because of: %1"
 "Default scope","Default scope"
@@ -45,6 +51,7 @@ System,System
 "Currency ""%1"" is used as %2 in %3.","Currency ""%1"" is used as %2 in %3."
 "Please correct the timezone.","Please correct the timezone."
 "The file ""%1"" does not exist","The file ""%1"" does not exist"
+"The ""%1"" path does not exist","The ""%1"" path does not exist"
 "Always (during development)","Always (during development)"
 "Only Once (version upgrade)","Only Once (version upgrade)"
 "Never (production)","Never (production)"
@@ -65,8 +72,17 @@ Store,Store
 Yes,Yes
 Specified,Specified
 "Config form fieldset clone model required to be able to clone fields","Config form fieldset clone model required to be able to clone fields"
+"%1: Instance of %2 is expected, got %3 instead","%1: Instance of %2 is expected, got %3 instead"
 "Invalid XML in file %1:\n%2","Invalid XML in file %1:\n%2"
 .,.
+"'There is no defined type ' .","'There is no defined type ' ."
+"'Object is not instance of ' .","'Object is not instance of ' ."
+"Filesystem is not writable.","Filesystem is not writable."
+"Some error","Some error"
+"Some message","Some message"
+"This command is unavailable right now.","This command is unavailable right now."
+"The ""test/test/test"" path does not exists","The ""test/test/test"" path does not exists"
+"error message","error message"
 some_label,some_label
 some_comment,some_comment
 "some prefix","some prefix"
@@ -102,4 +118,3 @@ Dashboard,Dashboard
 "Web Section","Web Section"
 "Store Email Addresses Section","Store Email Addresses Section"
 "Email to a Friend","Email to a Friend"
-"Use system value","Use system value"

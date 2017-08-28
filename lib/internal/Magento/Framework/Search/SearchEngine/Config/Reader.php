@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\Search\SearchEngine\Config;
 
+/**
+ * Class \Magento\Framework\Search\SearchEngine\Config\Reader
+ *
+ */
 class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {
     /**

@@ -6,6 +6,10 @@
 
 namespace Magento\NewRelicReporting\Model;
 
+/**
+ * Class \Magento\NewRelicReporting\Model\Orders
+ *
+ */
 class Orders extends \Magento\Framework\Model\AbstractModel
 {
     /**

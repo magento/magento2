@@ -12,6 +12,10 @@ use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\Factory as DataObjectFactory;
 
+/**
+ * Class \Magento\Downloadable\Model\ProductOptionProcessor
+ *
+ */
 class ProductOptionProcessor implements ProductOptionProcessorInterface
 {
     /**
