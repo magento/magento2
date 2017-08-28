@@ -32,6 +32,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     /**
      * Current customer
      *
+     * @deprecated, as unused property
      * @var CurrentCustomer
      */
     protected $currentCustomer;
