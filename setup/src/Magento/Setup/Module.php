@@ -14,10 +14,6 @@ use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 
-/**
- * Class \Magento\Setup\Module
- *
- */
 class Module implements
     BootstrapListenerInterface,
     ConfigProviderInterface

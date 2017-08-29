@@ -5,10 +5,6 @@
  */
 namespace Magento\Framework\Code\Reader;
 
-/**
- * Class \Magento\Framework\Code\Reader\ArgumentsReader
- *
- */
 class ArgumentsReader
 {
     const NO_DEFAULT_VALUE = 'NO-DEFAULT';

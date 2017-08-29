@@ -9,10 +9,6 @@ namespace Magento\Downloadable\Controller\Download;
 use Magento\Downloadable\Helper\Download as DownloadHelper;
 use Magento\Framework\App\ResponseInterface;
 
-/**
- * Class \Magento\Downloadable\Controller\Download\LinkSample
- *
- */
 class LinkSample extends \Magento\Downloadable\Controller\Download
 {
     /**

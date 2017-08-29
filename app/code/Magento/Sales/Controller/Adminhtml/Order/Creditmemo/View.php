@@ -7,10 +7,6 @@ namespace Magento\Sales\Controller\Adminhtml\Order\Creditmemo;
 
 use Magento\Backend\App\Action;
 
-/**
- * Class \Magento\Sales\Controller\Adminhtml\Order\Creditmemo\View
- *
- */
 class View extends \Magento\Backend\App\Action
 {
     /**

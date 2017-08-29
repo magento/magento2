@@ -21,6 +21,7 @@ namespace Magento\Store\Model;
  * @method \Magento\Store\Model\Website setIsDefault($value)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Website extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Framework\DataObject\IdentityInterface,

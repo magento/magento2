@@ -7,10 +7,6 @@ namespace Magento\Framework\View\Design\Fallback\Rule;
 
 use Magento\Framework\ObjectManagerInterface;
 
-/**
- * Class \Magento\Framework\View\Design\Fallback\Rule\ModuleFactory
- *
- */
 class ModuleFactory
 {
     /**

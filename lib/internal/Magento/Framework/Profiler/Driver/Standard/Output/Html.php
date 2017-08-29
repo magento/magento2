@@ -11,10 +11,6 @@ use Magento\Framework\Profiler;
 use Magento\Framework\Profiler\Driver\Standard\AbstractOutput;
 use Magento\Framework\Profiler\Driver\Standard\Stat;
 
-/**
- * Class \Magento\Framework\Profiler\Driver\Standard\Output\Html
- *
- */
 class Html extends AbstractOutput
 {
     /**

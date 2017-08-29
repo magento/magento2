@@ -13,10 +13,6 @@ namespace Magento\Framework\Event;
 
 use Magento\Framework\Event;
 
-/**
- * Class \Magento\Framework\Event\Collection
- *
- */
 class Collection
 {
     /**

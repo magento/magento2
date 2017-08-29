@@ -5,10 +5,6 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
-/**
- * Class \Magento\Customer\Controller\Adminhtml\Index\ViewWishlist
- *
- */
 class ViewWishlist extends \Magento\Customer\Controller\Adminhtml\Index
 {
     /**

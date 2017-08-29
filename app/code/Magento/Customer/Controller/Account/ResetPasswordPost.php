@@ -14,10 +14,6 @@ use Magento\Framework\Exception\InputException;
 use Magento\Customer\Model\Customer\CredentialsValidator;
 use Magento\Framework\App\ObjectManager;
 
-/**
- * Class \Magento\Customer\Controller\Account\ResetPasswordPost
- *
- */
 class ResetPasswordPost extends \Magento\Customer\Controller\AbstractAccount
 {
     /**

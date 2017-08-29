@@ -6,10 +6,6 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Status;
 
-/**
- * Class \Magento\Sales\Controller\Adminhtml\Order\Status\Unassign
- *
- */
 class Unassign extends \Magento\Sales\Controller\Adminhtml\Order\Status
 {
     /**

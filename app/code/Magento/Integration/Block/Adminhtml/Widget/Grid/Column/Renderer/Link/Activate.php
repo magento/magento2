@@ -11,10 +11,6 @@ use Magento\Framework\DataObject;
 use Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Link;
 use Magento\Integration\Model\Integration;
 
-/**
- * Class \Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Link\Activate
- *
- */
 class Activate extends Link
 {
     /**

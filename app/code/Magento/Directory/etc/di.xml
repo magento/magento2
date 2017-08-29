@@ -37,6 +37,8 @@
             <argument name="countriesWithNotRequiredStates" xsi:type="array">
                 <item name="FR" xsi:type="string">FR</item>
                 <item name="DE" xsi:type="string">DE</item>
+                <item name="AT" xsi:type="string">AT</item>
+                <item name="FI" xsi:type="string">FI</item>
             </argument>
         </arguments>
     </type>

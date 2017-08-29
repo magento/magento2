@@ -9,10 +9,6 @@
  */
 namespace Magento\Customer\Model\Metadata;
 
-/**
- * Class \Magento\Customer\Model\Metadata\ElementFactory
- *
- */
 class ElementFactory
 {
     const OUTPUT_FORMAT_JSON = 'json';

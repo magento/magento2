@@ -8,10 +8,6 @@ namespace Magento\Framework\Filesystem\File;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Filesystem\DriverPool;
 
-/**
- * Class \Magento\Framework\Filesystem\File\ReadFactory
- *
- */
 class ReadFactory
 {
     /**

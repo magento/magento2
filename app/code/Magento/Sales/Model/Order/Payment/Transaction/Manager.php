@@ -10,10 +10,6 @@ use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Order\Payment\Transaction;
 
-/**
- * Class \Magento\Sales\Model\Order\Payment\Transaction\Manager
- *
- */
 class Manager implements ManagerInterface
 {
     /**

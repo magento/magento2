@@ -5,10 +5,6 @@
  */
 namespace Magento\Braintree\Gateway\Http\Client;
 
-/**
- * Class \Magento\Braintree\Gateway\Http\Client\TransactionVoid
- *
- */
 class TransactionVoid extends AbstractTransaction
 {
     /**

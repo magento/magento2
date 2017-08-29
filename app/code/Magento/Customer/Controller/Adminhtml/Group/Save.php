@@ -10,10 +10,6 @@ use Magento\Customer\Api\Data\GroupInterfaceFactory;
 use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Customer\Api\GroupRepositoryInterface;
 
-/**
- * Class \Magento\Customer\Controller\Adminhtml\Group\Save
- *
- */
 class Save extends \Magento\Customer\Controller\Adminhtml\Group
 {
     /**

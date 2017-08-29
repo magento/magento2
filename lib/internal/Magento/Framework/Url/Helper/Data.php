@@ -11,10 +11,6 @@
  */
 namespace Magento\Framework\Url\Helper;
 
-/**
- * Class \Magento\Framework\Url\Helper\Data
- *
- */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**

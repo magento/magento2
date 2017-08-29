@@ -5,10 +5,6 @@
  */
 namespace Magento\Sales\Model\Order\Email\Container;
 
-/**
- * Class \Magento\Sales\Model\Order\Email\Container\InvoiceCommentIdentity
- *
- */
 class InvoiceCommentIdentity extends Container implements IdentityInterface
 {
     const XML_PATH_EMAIL_COPY_METHOD = 'sales_email/invoice_comment/copy_method';

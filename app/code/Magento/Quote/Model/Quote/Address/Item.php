@@ -84,6 +84,7 @@ use Magento\Quote\Model\Quote;
  * @method \Magento\Quote\Model\Quote\Address\Item setBaseDiscountTaxCompensationAmount(float $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem
 {

@@ -12,10 +12,6 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Ddl\Trigger;
 use Magento\Framework\Mview\View\StateInterface;
 
-/**
- * Class \Magento\Framework\Mview\View\Subscription
- *
- */
 class Subscription implements SubscriptionInterface
 {
     /**

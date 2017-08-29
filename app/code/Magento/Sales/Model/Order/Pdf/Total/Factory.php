@@ -5,10 +5,6 @@
  */
 namespace Magento\Sales\Model\Order\Pdf\Total;
 
-/**
- * Class \Magento\Sales\Model\Order\Pdf\Total\Factory
- *
- */
 class Factory
 {
     /**

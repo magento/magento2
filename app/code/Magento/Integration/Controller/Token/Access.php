@@ -10,10 +10,6 @@ use Magento\Integration\Model\Integration as IntegrationModel;
 use Magento\Integration\Api\IntegrationServiceInterface as IntegrationService;
 use Magento\Integration\Api\OauthServiceInterface as IntegrationOauthService;
 
-/**
- * Class \Magento\Integration\Controller\Token\Access
- *
- */
 class Access extends \Magento\Framework\App\Action\Action
 {
     /**

@@ -8,6 +8,7 @@ namespace Magento\Eav\Api;
 /**
  * Interface AttributeOptionManagementInterface
  * @api
+ * @since 100.0.2
  */
 interface AttributeOptionManagementInterface
 {

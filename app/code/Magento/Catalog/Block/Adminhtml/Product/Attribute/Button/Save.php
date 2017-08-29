@@ -5,10 +5,6 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Button;
 
-/**
- * Class \Magento\Catalog\Block\Adminhtml\Product\Attribute\Button\Save
- *
- */
 class Save extends Generic
 {
     /**

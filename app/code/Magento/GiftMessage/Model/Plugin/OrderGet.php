@@ -9,10 +9,6 @@ namespace Magento\GiftMessage\Model\Plugin;
 
 use Magento\Framework\Exception\NoSuchEntityException;
 
-/**
- * Class \Magento\GiftMessage\Model\Plugin\OrderGet
- *
- */
 class OrderGet
 {
     /**

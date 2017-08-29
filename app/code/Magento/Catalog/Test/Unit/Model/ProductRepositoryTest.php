@@ -193,7 +193,8 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
                 'validate',
                 'save',
                 'getMediaGalleryEntries',
-                'setData'
+                'setData',
+                'getStoreId'
             ]);
         $this->initializedProductMock->expects($this->any())
             ->method('hasGalleryAttribute')

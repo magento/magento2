@@ -11,6 +11,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
  * Downloadable Product  Samples resource model
  *
  * @api
+ * @since 100.0.2
  */
 class Sample extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -24,7 +25,6 @@ class Sample extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param null $connectionName
-     * @since 100.1.0
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,

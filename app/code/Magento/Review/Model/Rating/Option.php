@@ -20,6 +20,7 @@ namespace Magento\Review\Model\Rating;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @codeCoverageIgnore
+ * @since 100.0.2
  */
 class Option extends \Magento\Framework\Model\AbstractModel
 {

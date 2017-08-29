@@ -9,10 +9,6 @@ use Magento\Framework\App\ResponseInterface;
 use Magento\Backend\App\Action;
 use Magento\Sales\Api\CreditmemoRepositoryInterface;
 
-/**
- * Class \Magento\Sales\Controller\Adminhtml\Order\Creditmemo\PrintAction
- *
- */
 class PrintAction extends \Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo\PrintAction
 {
     /**

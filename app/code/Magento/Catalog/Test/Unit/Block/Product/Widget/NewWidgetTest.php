@@ -186,6 +186,8 @@ class NewWidgetTest extends \PHPUnit\Framework\TestCase
     {
         $this->eventManager->expects($this->exactly(2))->method('dispatch')
             ->will($this->returnValue(true));
+        $this->scopeConfig->expects($this->once())->method('getValue')->withAnyParameters()
+            ->willReturn(false);
         $this->cacheState->expects($this->atLeastOnce())->method('isEnabled')->withAnyParameters()
             ->willReturn(false);
         $this->catalogConfig->expects($this->once())->method('getProductAttributes')

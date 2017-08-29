@@ -10,6 +10,7 @@ namespace Magento\Eav\Block\Adminhtml\Attribute\Edit\Options;
  *
  * @api
  * @deprecated 100.2.0
+ * @since 100.0.2
  */
 abstract class AbstractOptions extends \Magento\Framework\View\Element\AbstractBlock
 {

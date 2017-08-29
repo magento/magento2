@@ -8,10 +8,6 @@ namespace Magento\Cms\Controller\Adminhtml\Wysiwyg\Images;
 
 use Magento\Backend\App\Action;
 
-/**
- * Class \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\Thumbnail
- *
- */
 class Thumbnail extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
 {
     /**

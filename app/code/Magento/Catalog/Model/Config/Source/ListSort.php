@@ -11,10 +11,6 @@
  */
 namespace Magento\Catalog\Model\Config\Source;
 
-/**
- * Class \Magento\Catalog\Model\Config\Source\ListSort
- *
- */
 class ListSort implements \Magento\Framework\Option\ArrayInterface
 {
     /**

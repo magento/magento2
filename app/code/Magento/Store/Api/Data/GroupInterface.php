@@ -9,6 +9,7 @@ namespace Magento\Store\Api\Data;
  * Group interface
  *
  * @api
+ * @since 100.0.2
  */
 interface GroupInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {

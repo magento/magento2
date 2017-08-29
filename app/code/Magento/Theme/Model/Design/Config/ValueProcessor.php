@@ -7,10 +7,6 @@ namespace Magento\Theme\Model\Design\Config;
 
 use Magento\Theme\Model\Design\BackendModelFactory;
 
-/**
- * Class \Magento\Theme\Model\Design\Config\ValueProcessor
- *
- */
 class ValueProcessor
 {
     /**

@@ -12,6 +12,7 @@ use Magento\Framework\Validator\AbstractValidator;
  * Class Validator
  *
  * @api
+ * @since 100.0.2
  */
 class Validator extends AbstractValidator implements RowValidatorInterface
 {

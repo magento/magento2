@@ -35,7 +35,6 @@ class EnvironmentPlaceholder implements PreProcessorInterface
     /**
      * @param PlaceholderFactory $placeholderFactory
      * @param ArrayManager $arrayManager
-     * @since 100.1.2
      */
     public function __construct(
         PlaceholderFactory $placeholderFactory,

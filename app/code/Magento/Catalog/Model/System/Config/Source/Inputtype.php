@@ -5,10 +5,6 @@
  */
 namespace Magento\Catalog\Model\System\Config\Source;
 
-/**
- * Class \Magento\Catalog\Model\System\Config\Source\Inputtype
- *
- */
 class Inputtype
 {
     /**

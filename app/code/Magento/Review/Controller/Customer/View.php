@@ -11,10 +11,6 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Review\Controller\Customer as CustomerController;
 use Magento\Review\Model\ReviewFactory;
 
-/**
- * Class \Magento\Review\Controller\Customer\View
- *
- */
 class View extends CustomerController
 {
     /**

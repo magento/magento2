@@ -9,6 +9,7 @@ namespace Magento\Quote\Model\Quote\Address;
  * @method string getCode()
  *
  * @api
+ * @since 100.0.2
  */
 class Total extends \Magento\Framework\DataObject
 {
@@ -34,7 +35,6 @@ class Total extends \Magento\Framework\DataObject
      *
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
-     * @since 100.2.0
      */
     public function __construct(
         array $data = [],

@@ -12,10 +12,6 @@ use Magento\Framework\Registry;
 use Magento\Sales\Api\InvoiceRepositoryInterface;
 use Magento\Sales\Model\Order\InvoiceRepository;
 
-/**
- * Class \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\View
- *
- */
 abstract class View extends \Magento\Backend\App\Action
 {
     /**

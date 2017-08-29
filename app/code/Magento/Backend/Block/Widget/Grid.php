@@ -14,6 +14,7 @@ namespace Magento\Backend\Block\Widget;
  * @method string getRowClickCallback() getRowClickCallback()
  * @method \Magento\Backend\Block\Widget\Grid setRowClickCallback() setRowClickCallback(string $value)
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @since 100.0.2
  */
 class Grid extends \Magento\Backend\Block\Widget
 {

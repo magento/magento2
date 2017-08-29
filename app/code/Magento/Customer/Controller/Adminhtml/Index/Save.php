@@ -13,10 +13,6 @@ use Magento\Customer\Model\EmailNotificationInterface;
 use Magento\Customer\Model\Metadata\Form;
 use Magento\Framework\Exception\LocalizedException;
 
-/**
- * Class \Magento\Customer\Controller\Adminhtml\Index\Save
- *
- */
 class Save extends \Magento\Customer\Controller\Adminhtml\Index
 {
     /**

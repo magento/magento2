@@ -11,10 +11,6 @@
  */
 namespace Magento\Tax\Block\Adminhtml\Rate\Grid\Renderer;
 
-/**
- * Class \Magento\Tax\Block\Adminhtml\Rate\Grid\Renderer\Data
- *
- */
 class Data extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
 }

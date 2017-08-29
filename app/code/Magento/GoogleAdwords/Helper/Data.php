@@ -9,6 +9,7 @@ namespace Magento\GoogleAdwords\Helper;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -36,6 +37,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     const CONVERSION_VALUE_REGISTRY_NAME = 'google_adwords_conversion_value';
 
     /**
+     * Google AdWords registry name for conversion value currency
+     */
+    const CONVERSION_VALUE_CURRENCY_REGISTRY_NAME = 'google_adwords_conversion_value_currency';
+
+    /**
      * Default value for conversion value
      */
     const CONVERSION_VALUE_DEFAULT = 0;
@@ -58,6 +64,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     const XML_PATH_CONVERSION_VALUE_TYPE = 'google/adwords/conversion_value_type';
 
     const XML_PATH_CONVERSION_VALUE = 'google/adwords/conversion_value';
+
+    /**
+     * Google Adwords send order conversion value currency when using dynamic value
+     */
+    const XML_PATH_SEND_CURRENCY = 'google/adwords/send_currency';
 
     /**#@-*/
 
@@ -263,5 +274,31 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $conversionValue = $this->getConversionValueConstant();
         }
         return empty($conversionValue) ? self::CONVERSION_VALUE_DEFAULT : $conversionValue;
+    }
+
+    /**
+     * Get send order currency to Google Adwords
+     *
+     * @return boolean
+     */
+    public function hasSendConversionValueCurrency()
+    {
+        return $this->scopeConfig->isSetFlag(
+            self::XML_PATH_SEND_CURRENCY,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+    }
+
+    /**
+     * Get Google AdWords conversion value currency
+     *
+     * @return string|false
+     */
+    public function getConversionValueCurrency()
+    {
+        if ($this->hasSendConversionValueCurrency()) {
+            return (string) $this->_registry->registry(self::CONVERSION_VALUE_CURRENCY_REGISTRY_NAME);
+        }
+        return false;
     }
 }

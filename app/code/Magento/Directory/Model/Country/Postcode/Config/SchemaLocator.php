@@ -7,10 +7,6 @@ namespace Magento\Directory\Model\Country\Postcode\Config;
 
 use Magento\Framework\Module\Dir;
 
-/**
- * Class \Magento\Directory\Model\Country\Postcode\Config\SchemaLocator
- *
- */
 class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {
     /**

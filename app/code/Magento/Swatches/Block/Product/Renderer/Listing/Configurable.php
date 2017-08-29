@@ -11,6 +11,7 @@ use Magento\Catalog\Model\Product;
  * Swatch renderer block in Category page
  *
  * @api
+ * @since 100.0.2
  */
 class Configurable extends \Magento\Swatches\Block\Product\Renderer\Configurable
 {
