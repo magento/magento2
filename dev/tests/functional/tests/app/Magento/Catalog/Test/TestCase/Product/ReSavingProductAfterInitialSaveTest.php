@@ -6,7 +6,6 @@
 
 namespace Magento\Catalog\Test\TestCase\Product;
 
-
 use Magento\Catalog\Test\Constraint\AssertDateInvalidErrorMessage as AssertDateErrorMessage;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
@@ -24,8 +23,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 4. Modify the  dates to valid values
  * 5. Save the product again
  * 6. Product is saved successfully
-  */
-
+ */
 class ReSavingProductAfterInitialSaveTest extends Injectable
 {
     /**
@@ -66,22 +64,20 @@ class ReSavingProductAfterInitialSaveTest extends Injectable
      * @param CatalogProductEdit $catalogProductEdit
      * @param FixtureFactory $fixtureFactory
      */
-   public function __inject
-   (
-       CatalogProductEdit $catalogProductEdit,
-       CatalogProductIndex $productGrid,
-       CatalogProductNew $newProductPage,
-       FixtureFactory $fixtureFactory,
-       AssertDateErrorMessage $assertDateErrorMessage
-   )
-   {
-       $this->productGrid = $productGrid;
-       $this->newProductPage = $newProductPage;
-       $this->catalogProductEdit = $catalogProductEdit;
-       $this->fixtureFactory = $fixtureFactory;
-       $this->assertDateErrorMessage = $assertDateErrorMessage;
+    public function __inject(
+        CatalogProductEdit $catalogProductEdit,
+        CatalogProductIndex $productGrid,
+        CatalogProductNew $newProductPage,
+        FixtureFactory $fixtureFactory,
+        AssertDateErrorMessage $assertDateErrorMessage
+    ) {
+        $this->productGrid = $productGrid;
+        $this->newProductPage = $newProductPage;
+        $this->catalogProductEdit = $catalogProductEdit;
+        $this->fixtureFactory = $fixtureFactory;
+        $this->assertDateErrorMessage = $assertDateErrorMessage;
 
-   }
+    }
 
     /**
      * Verify the product can be saved successfully after its initial save is failed.
@@ -89,16 +85,18 @@ class ReSavingProductAfterInitialSaveTest extends Injectable
      * @param CatalogProductSimple $productWithValidFromDate
      * @param CatalogProductSimple $productWithValidToDate
      */
-
-   public function test(CatalogProductSimple $originalProduct, CatalogProductSimple $productWithValidFromDate, CatalogProductSimple $productWithValidToDate )
-   {
-       $this->productGrid->open();
-       $this->productGrid->getGridPageActionBlock()->addProduct('simple');
-       $this->newProductPage->getProductForm()->fill($originalProduct);
-       $this->catalogProductEdit->getProductForm()->fill($productWithValidFromDate);
-       $this->catalogProductEdit->getFormPageActions()->save();
-       $this->assertDateErrorMessage->processAssert($this->catalogProductEdit);
-       $this->catalogProductEdit->getProductForm()->fill($productWithValidToDate);
-       $this->catalogProductEdit->getFormPageActions()->save();
-   }
+    public function test(
+        CatalogProductSimple $originalProduct,
+        CatalogProductSimple $productWithValidFromDate,
+        CatalogProductSimple $productWithValidToDate
+    ) {
+        $this->productGrid->open();
+        $this->productGrid->getGridPageActionBlock()->addProduct('simple');
+        $this->newProductPage->getProductForm()->fill($originalProduct);
+        $this->catalogProductEdit->getProductForm()->fill($productWithValidFromDate);
+        $this->catalogProductEdit->getFormPageActions()->save();
+        $this->assertDateErrorMessage->processAssert($this->catalogProductEdit);
+        $this->catalogProductEdit->getProductForm()->fill($productWithValidToDate);
+        $this->catalogProductEdit->getFormPageActions()->save();
+    }
 }
