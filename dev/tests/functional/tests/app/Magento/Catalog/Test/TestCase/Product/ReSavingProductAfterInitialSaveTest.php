@@ -76,7 +76,6 @@ class ReSavingProductAfterInitialSaveTest extends Injectable
         $this->catalogProductEdit = $catalogProductEdit;
         $this->fixtureFactory = $fixtureFactory;
         $this->assertDateErrorMessage = $assertDateErrorMessage;
-
     }
 
     /**
