@@ -7,7 +7,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
-        <tab id="test">
+        <tab id="test" translate="label" sortOrder="100">
             <label>Test Tab</label>
         </tab>
         <section id="test_section" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" type="text" sortOrder="0">
