@@ -278,6 +278,8 @@ class CreateHandler implements ExtensionInterface
     }
 
     /**
+     * Duplicate product media gallery data.
+     *
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
      */
@@ -294,7 +296,7 @@ class CreateHandler implements ExtensionInterface
         $this->resourceModel->duplicate(
             $this->getAttribute()->getAttributeId(),
             isset($mediaGalleryData['duplicate']) ? $mediaGalleryData['duplicate'] : [],
-            $product->getOriginalId(),
+            $product->getOriginalLinkId(),
             $product->getData($this->metadata->getLinkField())
         );
 

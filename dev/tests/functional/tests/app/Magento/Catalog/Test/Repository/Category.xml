@@ -17,6 +17,17 @@
             </field>
         </dataset>
 
+        <dataset name="default_with_custom_url">
+            <field name="name" xsi:type="string">Category%isolation%</field>
+            <field name="url_key" xsi:type="string">custom%isolation%</field>
+            <field name="is_active" xsi:type="string">Yes</field>
+            <field name="include_in_menu" xsi:type="string">Yes</field>
+            <field name="parent_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_category</item>
+            </field>
+            <field name="use_default_url_key" xsi:type="string">Yes</field>
+        </dataset>
+
         <dataset name="default_category">
             <field name="name" xsi:type="string">Default Category</field>
             <field name="parent_id" xsi:type="string">1</field>
