@@ -531,12 +531,7 @@
             </htmlContent>
         </container>
     </fieldset>
-    <fieldset name="manage_coupon_codes" sortOrder="50">
-        <argument name="data" xsi:type="array">
-            <item name="config" xsi:type="array">
-                <item name="component" xsi:type="string">Magento_SalesRule/js/form/element/manage-coupon-codes</item>
-            </item>
-        </argument>
+    <fieldset name="manage_coupon_codes" sortOrder="50" component="Magento_SalesRule/js/form/element/manage-coupon-codes">
         <settings>
             <collapsible>true</collapsible>
             <label translate="true">Manage Coupon Codes</label>
