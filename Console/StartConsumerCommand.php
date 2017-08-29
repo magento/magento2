@@ -11,7 +11,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\MessageQueue\ConsumerFactory;
-use Magento\MessageQueue\Model\Cron\ConsumersRunner\Pid;
+use Magento\MessageQueue\Model\Cron\ConsumersRunner\PidConsumerManager;
 
 /**
  * Command for starting MessageQueue consumers.
@@ -36,9 +36,9 @@ class StartConsumerCommand extends Command
     private $appState;
 
     /**
-     * @var Pid
+     * @var PidConsumerManager
      */
-    private $pid;
+    private $pidConsumerManager;
 
     /**
      * StartConsumerCommand constructor.
@@ -47,18 +47,18 @@ class StartConsumerCommand extends Command
      * @param \Magento\Framework\App\State $appState
      * @param ConsumerFactory $consumerFactory
      * @param string $name
-     * @param Pid $pid
+     * @param PidConsumerManager $pidConsumerManager
      */
     public function __construct(
         \Magento\Framework\App\State $appState,
         ConsumerFactory $consumerFactory,
         $name = null,
-        Pid $pid = null
+        PidConsumerManager $pidConsumerManager = null
     ) {
         $this->appState = $appState;
         $this->consumerFactory = $consumerFactory;
-        $this->pid = $pid ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(Pid::class);
+        $this->pidConsumerManager = $pidConsumerManager ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(PidConsumerManager::class);
         parent::__construct($name);
     }
 
@@ -74,7 +74,7 @@ class StartConsumerCommand extends Command
         $pidFilePath = $input->getOption(self::PID_FILE_PATH);
 
         if ($pidFilePath) {
-            $this->pid->savePid($pidFilePath);
+            $this->pidConsumerManager->savePid($pidFilePath);
         }
 
         if ($areaCode !== null) {

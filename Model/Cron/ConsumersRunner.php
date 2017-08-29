@@ -9,7 +9,7 @@ use Magento\Framework\ShellInterface;
 use Magento\Framework\MessageQueue\Consumer\ConfigInterface as ConsumerConfigInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Symfony\Component\Process\PhpExecutableFinder;
-use Magento\MessageQueue\Model\Cron\ConsumersRunner\Pid;
+use Magento\MessageQueue\Model\Cron\ConsumersRunner\PidConsumerManager;
 
 /**
  * Class for running consumers processes by cron
@@ -47,9 +47,9 @@ class ConsumersRunner
     /**
      * The class for checking status of process by PID
      *
-     * @var Pid
+     * @var PidConsumerManager
      */
-    private $pid;
+    private $pidConsumerManager;
 
     /**
      * @param PhpExecutableFinder $phpExecutableFinder The executable finder specifically designed
@@ -57,20 +57,20 @@ class ConsumersRunner
      * @param ConsumerConfigInterface $consumerConfig The consumer config provider
      * @param DeploymentConfig $deploymentConfig The application deployment configuration
      * @param ShellInterface $shellBackground The shell command line wrapper for executing command in background
-     * @param Pid $pid The class for checking status of process by PID
+     * @param PidConsumerManager $pidConsumerManager The class for checking status of process by PID
      */
     public function __construct(
         PhpExecutableFinder $phpExecutableFinder,
         ConsumerConfigInterface $consumerConfig,
         DeploymentConfig $deploymentConfig,
         ShellInterface $shellBackground,
-        Pid $pid
+        PidConsumerManager $pidConsumerManager
     ) {
         $this->phpExecutableFinder = $phpExecutableFinder;
         $this->consumerConfig = $consumerConfig;
         $this->deploymentConfig = $deploymentConfig;
         $this->shellBackground = $shellBackground;
-        $this->pid = $pid;
+        $this->pidConsumerManager = $pidConsumerManager;
     }
 
     /**
@@ -97,7 +97,7 @@ class ConsumersRunner
 
             $arguments = [
                 $consumerName,
-                '--pid-file-path=' . $this->pid->getPidFilePath($consumerName),
+                '--pid-file-path=' . $this->pidConsumerManager->getPidFilePath($consumerName),
             ];
 
             if ($maxMessages) {
@@ -123,6 +123,6 @@ class ConsumersRunner
     {
         $allowed = empty($allowedConsumers) ?: in_array($consumerName, $allowedConsumers);
 
-        return $allowed && !$this->pid->isRun($consumerName);
+        return $allowed && !$this->pidConsumerManager->isRun($consumerName);
     }
 }

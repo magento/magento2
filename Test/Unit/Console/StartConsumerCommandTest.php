@@ -8,9 +8,7 @@ namespace Magento\MessageQueue\Test\Unit\Console;
 
 use Magento\MessageQueue\Console\StartConsumerCommand;
 use Magento\Framework\Filesystem\File\WriteFactory;
-use Magento\Framework\Filesystem\File\Write;
-use Magento\Framework\Filesystem\DriverPool;
-use Magento\MessageQueue\Model\Cron\ConsumersRunner\Pid;
+use Magento\MessageQueue\Model\Cron\ConsumersRunner\PidConsumerManager;
 
 /**
  * Unit tests for StartConsumerCommand.
@@ -38,9 +36,9 @@ class StartConsumerCommandTest extends \PHPUnit\Framework\TestCase
     private $writeFactoryMock;
 
     /**
-     * @var Pid|\PHPUnit_Framework_MockObject_MockObject
+     * @var PidConsumerManager|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $pidMock;
+    private $pidConsumerManagerMock;
 
     /**
      * @var StartConsumerCommand
@@ -52,7 +50,7 @@ class StartConsumerCommandTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
-        $this->pidMock = $this->getMockBuilder(Pid::class)
+        $this->pidConsumerManagerMock = $this->getMockBuilder(PidConsumerManager::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->consumerFactory = $this->getMockBuilder(\Magento\Framework\MessageQueue\ConsumerFactory::class)
@@ -70,7 +68,7 @@ class StartConsumerCommandTest extends \PHPUnit\Framework\TestCase
                 'consumerFactory' => $this->consumerFactory,
                 'appState' => $this->appState,
                 'writeFactory' => $this->writeFactoryMock,
-                'pid' => $this->pidMock,
+                'pidConsumerManager' => $this->pidConsumerManagerMock,
             ]
         );
         parent::setUp();
@@ -116,7 +114,7 @@ class StartConsumerCommandTest extends \PHPUnit\Framework\TestCase
             ->method('get')->with($consumerName, $batchSize)->willReturn($consumer);
         $consumer->expects($this->once())->method('process')->with($numberOfMessages);
 
-        $this->pidMock->expects($this->exactly($savePidExpects))
+        $this->pidConsumerManagerMock->expects($this->exactly($savePidExpects))
             ->method('savePid')
             ->with($pidFilePath);
 

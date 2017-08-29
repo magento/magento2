@@ -14,7 +14,7 @@ use Magento\Framework\Filesystem\DriverPool;
 /**
  * The class for checking status of process by PID
  */
-class Pid
+class PidConsumerManager
 {
     /**
      * Extension of PID file

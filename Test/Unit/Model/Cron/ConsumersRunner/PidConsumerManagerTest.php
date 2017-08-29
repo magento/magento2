@@ -5,7 +5,7 @@
  */
 namespace Magento\MessageQueue\Test\Unit\Model\Cron\ConsumersRunner;
 
-use Magento\MessageQueue\Model\Cron\ConsumersRunner\Pid;
+use Magento\MessageQueue\Model\Cron\ConsumersRunner\PidConsumerManager;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem;
@@ -14,7 +14,7 @@ use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Filesystem\File\Write;
 use \PHPUnit_Framework_MockObject_MockObject as MockObject;
 
-class PidTest extends \PHPUnit\Framework\TestCase
+class PidConsumerManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Filesystem|MockObject
@@ -32,9 +32,9 @@ class PidTest extends \PHPUnit\Framework\TestCase
     private $writeFactoryMock;
 
     /**
-     * @var Pid
+     * @var PidConsumerManager
      */
-    private $pid;
+    private $pidConsumerManager;
 
     /**
      * {@inheritdoc}
@@ -53,7 +53,7 @@ class PidTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->pid = new Pid($this->filesystemMock, $this->writeFactoryMock, $this->directoryListMock);
+        $this->pidConsumerManager = new PidConsumerManager($this->filesystemMock, $this->writeFactoryMock, $this->directoryListMock);
     }
 
     /**
@@ -65,7 +65,7 @@ class PidTest extends \PHPUnit\Framework\TestCase
     public function testIsRun($fileExists, $pid, $expectedResult)
     {
         $consumerName = 'consumerName';
-        $pidFile = $consumerName . Pid::PID_FILE_EXT;
+        $pidFile = $consumerName . PidConsumerManager::PID_FILE_EXT;
 
         /** @var WriteInterface|MockObject $directoryMock */
         $directoryMock = $this->getMockBuilder(WriteInterface::class)
@@ -83,7 +83,7 @@ class PidTest extends \PHPUnit\Framework\TestCase
             ->with(DirectoryList::VAR_DIR)
             ->willReturn($directoryMock);
 
-        $this->assertSame($expectedResult, $this->pid->isRun($consumerName));
+        $this->assertSame($expectedResult, $this->pidConsumerManager->isRun($consumerName));
     }
 
     /**
@@ -103,14 +103,14 @@ class PidTest extends \PHPUnit\Framework\TestCase
     {
         $consumerName = 'consumerName';
         $varPath = '/magento/var';
-        $expectedResult = $varPath . '/' . $consumerName . Pid::PID_FILE_EXT;
+        $expectedResult = $varPath . '/' . $consumerName . PidConsumerManager::PID_FILE_EXT;
 
         $this->directoryListMock->expects($this->once())
             ->method('getPath')
             ->with(DirectoryList::VAR_DIR)
             ->willReturn($varPath);
 
-        $this->assertSame($expectedResult, $this->pid->getPidFilePath($consumerName));
+        $this->assertSame($expectedResult, $this->pidConsumerManager->getPidFilePath($consumerName));
     }
 
     public function testSavePid()
@@ -132,6 +132,6 @@ class PidTest extends \PHPUnit\Framework\TestCase
             ->with($pidFilePath, DriverPool::FILE, 'w')
             ->willReturn($writeMock);
 
-        $this->pid->savePid($pidFilePath);
+        $this->pidConsumerManager->savePid($pidFilePath);
     }
 }

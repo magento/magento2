@@ -11,15 +11,15 @@ use Magento\Framework\MessageQueue\Consumer\ConfigInterface as ConsumerConfigInt
 use Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItemInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\MessageQueue\Model\Cron\ConsumersRunner;
-use Magento\MessageQueue\Model\Cron\ConsumersRunner\Pid;
+use Magento\MessageQueue\Model\Cron\ConsumersRunner\PidConsumerManager;
 use Symfony\Component\Process\PhpExecutableFinder;
 
 class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Pid|MockObject
+     * @var PidConsumerManager|MockObject
      */
-    private $pidMock;
+    private $pidConsumerManagerMock;
 
     /**
      * @var ShellInterface|MockObject
@@ -54,7 +54,7 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
         $this->phpExecutableFinderMock = $this->getMockBuilder(phpExecutableFinder::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->pidMock = $this->getMockBuilder(Pid::class)
+        $this->pidConsumerManagerMock = $this->getMockBuilder(PidConsumerManager::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->shellBackgroundMock = $this->getMockBuilder(ShellInterface::class)
@@ -70,7 +70,7 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
             $this->consumerConfigMock,
             $this->deploymentConfigMock,
             $this->shellBackgroundMock,
-            $this->pidMock
+            $this->pidConsumerManagerMock
         );
     }
 
@@ -86,9 +86,9 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
 
         $this->consumerConfigMock->expects($this->never())
             ->method('getConsumers');
-        $this->pidMock->expects($this->never())
+        $this->pidConsumerManagerMock->expects($this->never())
             ->method('isRun');
-        $this->pidMock->expects($this->never())
+        $this->pidConsumerManagerMock->expects($this->never())
             ->method('getPidFilePath');
         $this->shellBackgroundMock->expects($this->never())
             ->method('execute');
@@ -139,11 +139,11 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
             ->method('getConsumers')
             ->willReturn([$consumer]);
 
-        $this->pidMock->expects($this->exactly($isRunExpects))
+        $this->pidConsumerManagerMock->expects($this->exactly($isRunExpects))
             ->method('isRun')
             ->with($consumerName)
             ->willReturn($isRun);
-        $this->pidMock->expects($this->exactly($getPidFilePathExpects))
+        $this->pidConsumerManagerMock->expects($this->exactly($getPidFilePathExpects))
             ->method('getPidFilePath')
             ->with($consumerName)
             ->willReturn($pidFilePath);
