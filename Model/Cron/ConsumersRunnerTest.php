@@ -6,7 +6,7 @@
 namespace Magento\MessageQueue\Model\Cron;
 
 use Magento\Framework\MessageQueue\Consumer\ConfigInterface as ConsumerConfigInterface;
-use Magento\MessageQueue\Model\Cron\ConsumersRunner\Pid;
+use Magento\MessageQueue\Model\Cron\ConsumersRunner\PidConsumerManager;
 use Magento\Framework\App\DeploymentConfig\FileReader;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\Config\File\ConfigFilePool;
@@ -35,7 +35,7 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
     private $consumerConfig;
 
     /**
-     * @var Pid
+     * @var PidConsumerManager
      */
     private $pid;
 
@@ -82,7 +82,7 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->shellMock = $this->getMockBuilder(ShellInterface::class)
             ->getMockForAbstractClass();
-        $this->pid = $this->objectManager->get(Pid::class);
+        $this->pid = $this->objectManager->get(PidConsumerManager::class);
         $this->consumerConfig = $this->objectManager->get(ConsumerConfigInterface::class);
         $this->reader = $this->objectManager->get(FileReader::class);
         $this->filesystem = $this->objectManager->get(Filesystem::class);
