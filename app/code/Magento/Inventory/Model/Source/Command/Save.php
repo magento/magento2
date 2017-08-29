@@ -55,7 +55,7 @@ class Save implements SaveInterface
         $validationResult = $this->sourceValidator->validate($source);
 
         if (!$validationResult->isValid()) {
-            throw new ValidationException($validationResult->getErrors());
+            throw new ValidationException($validationResult);
         }
 
         // TODO: check if exists?

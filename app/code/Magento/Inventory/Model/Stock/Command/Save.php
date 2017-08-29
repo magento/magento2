@@ -54,7 +54,7 @@ class Save implements SaveInterface
     {
         $validationResult = $this->stockValidator->validate($stock);
         if (!$validationResult->isValid()) {
-            throw new ValidationException($validationResult->getErrors());
+            throw new ValidationException($validationResult);
         }
 
         try {

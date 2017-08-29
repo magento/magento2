@@ -6,7 +6,7 @@
 namespace Magento\InventoryApi\Api;
 
 /**
- * Get assigned Sources for Stock command
+ * Get assigned Sources for Stock
  *
  * Used fully qualified namespaces in annotations for proper work of WebApi request parser
  *

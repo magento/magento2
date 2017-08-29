@@ -6,7 +6,7 @@
 namespace Magento\InventoryApi\Api;
 
 /**
- * Unassign source from stock command
+ * Unassign source from stock
  *
  * Used fully qualified namespaces in annotations for proper work of WebApi request parser
  *
@@ -17,10 +17,10 @@ interface UnassignSourceFromStockInterface
     /**
      * Unassign source from stock
      *
-     * @param int $stockId
      * @param int $sourceId
+     * @param int $stockId
      * @return void
      * @throws \Magento\Framework\Exception\InputException
      */
-    public function execute($stockId, $sourceId);
+    public function execute($sourceId, $stockId);
 }

@@ -21,7 +21,7 @@ use Magento\InventoryApi\Api\Data\SourceItemInterface;
  *    considered as SPI - Interfaces that you should extend and implement to customize current behaviour
  *
  * The method save is absent, due to different semantic (save multiple)
- * @see SourceItemSaveInterface
+ * @see SourceItemsSaveInterface
  *
  * There is no get method because SourceItem identifies by compound identifier (sku and source_id),
  * so need to use getList() method

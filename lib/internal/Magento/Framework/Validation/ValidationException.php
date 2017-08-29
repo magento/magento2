@@ -15,13 +15,13 @@ use Magento\Framework\Exception\AbstractAggregateException;
 class ValidationException extends AbstractAggregateException
 {
     /**
-     * @param array $errors
+     * @param ValidationResult $validationResult
      * @param \Exception $cause
      * @param int $code
      */
-    public function __construct(array $errors = [], \Exception $cause = null, $code = 0)
+    public function __construct(ValidationResult $validationResult, \Exception $cause = null, $code = 0)
     {
-        foreach ($errors as $error) {
+        foreach ($validationResult->getErrors() as $error) {
             $this->addError($error);
         }
         parent::__construct($this->phrase, $cause, $code);
