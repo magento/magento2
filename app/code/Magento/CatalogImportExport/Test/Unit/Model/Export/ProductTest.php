@@ -270,11 +270,15 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $headerColumnsValue = ['headerColumns value'];
         $expectedResult = 'result';
         $this->setPropertyValue($product, '_headerColumns', $headerColumnsValue);
-        $product
-            ->expects($this->once())
+        $this->setPropertyValue($product, 'rowCustomizer', $this->rowCustomizer);
+        $product->expects($this->once())
             ->method('_customHeadersMapping')
             ->with($headerColumnsValue)
             ->willReturn($expectedResult);
+        $this->rowCustomizer->expects($this->once())
+            ->method('addHeaderColumns')
+            ->with($headerColumnsValue)
+            ->willReturn($headerColumnsValue);
 
         $result = $product->_getHeaderColumns();
 
