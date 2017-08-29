@@ -11,6 +11,10 @@
  */
 namespace Magento\Customer\Block\Adminhtml\System\Config;
 
+/**
+ * Class \Magento\Customer\Block\Adminhtml\System\Config\Validatevat
+ *
+ */
 class Validatevat extends \Magento\Config\Block\System\Config\Form\Field
 {
     /**

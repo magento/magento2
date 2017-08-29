@@ -7,7 +7,7 @@ namespace Magento\Theme\Test\Unit\Model\Theme;
 
 use Magento\Theme\Model\Theme\ThemePackageInfo;
 
-class ThemePackageInfoTest extends \PHPUnit_Framework_TestCase
+class ThemePackageInfoTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Filesystem\Directory\Read|\PHPUnit_Framework_MockObject_MockObject
@@ -34,21 +34,9 @@ class ThemePackageInfoTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->componentRegistrar = $this->getMock(
-            \Magento\Framework\Component\ComponentRegistrar::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->dirRead = $this->getMock(\Magento\Framework\Filesystem\Directory\Read::class, [], [], '', false);
-        $this->dirReadFactory = $this->getMock(
-            \Magento\Framework\Filesystem\Directory\ReadFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->componentRegistrar = $this->createMock(\Magento\Framework\Component\ComponentRegistrar::class);
+        $this->dirRead = $this->createMock(\Magento\Framework\Filesystem\Directory\Read::class);
+        $this->dirReadFactory = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadFactory::class);
         $this->dirReadFactory->expects($this->any())->method('create')->willReturn($this->dirRead);
         $this->serializerMock = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
             ->getMock();

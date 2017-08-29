@@ -5,6 +5,10 @@
  */
 namespace Magento\Sales\Model\Order\Creditmemo\Total;
 
+/**
+ * Class \Magento\Sales\Model\Order\Creditmemo\Total\Discount
+ *
+ */
 class Discount extends AbstractTotal
 {
     /**

@@ -6,6 +6,10 @@
  */
 namespace Magento\Catalog\Model\Layer\Search;
 
+/**
+ * Class \Magento\Catalog\Model\Layer\Search\FilterableAttributeList
+ *
+ */
 class FilterableAttributeList extends \Magento\Catalog\Model\Layer\Category\FilterableAttributeList
 {
     /**

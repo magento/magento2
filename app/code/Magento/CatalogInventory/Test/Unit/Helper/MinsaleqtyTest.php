@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * Class MinsaleqtyTest
  */
-class MinsaleqtyTest extends \PHPUnit_Framework_TestCase
+class MinsaleqtyTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\CatalogInventory\Helper\Minsaleqty */
     protected $minsaleqty;
@@ -30,8 +30,8 @@ class MinsaleqtyTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->scopeConfigMock = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $this->randomMock = $this->getMock(\Magento\Framework\Math\Random::class);
+        $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->randomMock = $this->createMock(\Magento\Framework\Math\Random::class);
         $this->randomMock->expects($this->any())
             ->method('getUniqueHash')
             ->with($this->equalTo('_'))
@@ -53,7 +53,7 @@ class MinsaleqtyTest extends \PHPUnit_Framework_TestCase
             ->method('getAllCustomersGroup')
             ->will($this->returnValue($allGroup));
 
-        $this->serializerMock = $this->getMock(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->serializerMock = $this->createMock(\Magento\Framework\Serialize\Serializer\Json::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->minsaleqty = $this->objectManagerHelper->getObject(

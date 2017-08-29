@@ -7,6 +7,10 @@ namespace Magento\Framework\View\Element\Message;
 
 use Magento\Framework\Message\MessageInterface;
 
+/**
+ * Class \Magento\Framework\View\Element\Message\InterpretationMediator
+ *
+ */
 class InterpretationMediator implements InterpretationStrategyInterface
 {
     /**

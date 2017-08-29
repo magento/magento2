@@ -9,6 +9,10 @@
  */
 namespace Magento\Theme\Helper;
 
+/**
+ * Class \Magento\Theme\Helper\Theme
+ *
+ */
 class Theme extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**

@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\Acl\AclResource\Config\Reader;
 
+/**
+ * Class \Magento\Framework\Acl\AclResource\Config\Reader\Filesystem
+ *
+ */
 class Filesystem extends \Magento\Framework\Config\Reader\Filesystem
 {
     /**

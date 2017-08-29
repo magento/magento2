@@ -8,6 +8,10 @@ namespace Magento\ConfigurableProduct\Plugin\Model\ResourceModel;
 
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
+/**
+ * Class \Magento\ConfigurableProduct\Plugin\Model\ResourceModel\Product
+ *
+ */
 class Product
 {
     /**

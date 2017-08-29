@@ -10,6 +10,10 @@ use Magento\Framework\View\Result\PageFactory;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Registry;
 
+/**
+ * Class \Magento\Sales\Controller\Adminhtml\Order\Invoice\View
+ *
+ */
 class View extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\View
 {
 

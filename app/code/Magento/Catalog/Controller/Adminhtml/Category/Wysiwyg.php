@@ -6,6 +6,10 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category;
 
+/**
+ * Class \Magento\Catalog\Controller\Adminhtml\Category\Wysiwyg
+ *
+ */
 class Wysiwyg extends \Magento\Catalog\Controller\Adminhtml\Product\Wysiwyg
 {
     /**

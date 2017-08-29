@@ -11,6 +11,10 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Category\Helper\Sortby;
 
+/**
+ * Class \Magento\Catalog\Block\Adminhtml\Category\Helper\Sortby\Available
+ *
+ */
 class Available extends \Magento\Framework\Data\Form\Element\Multiselect
 {
     /**

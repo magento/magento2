@@ -35,7 +35,7 @@ use Magento\Framework\View\Result\PageFactory;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class FormPostTest extends \PHPUnit_Framework_TestCase
+class FormPostTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var FormPost

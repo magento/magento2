@@ -306,6 +306,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
 
     /**
      * @inheritdoc
+     * @since 100.2.0
      */
     public function getChildHtml($alias = '', $useCache = true)
     {

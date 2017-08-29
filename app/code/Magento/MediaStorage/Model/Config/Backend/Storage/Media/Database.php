@@ -5,6 +5,10 @@
  */
 namespace Magento\MediaStorage\Model\Config\Backend\Storage\Media;
 
+/**
+ * Class \Magento\MediaStorage\Model\Config\Backend\Storage\Media\Database
+ *
+ */
 class Database extends \Magento\Framework\App\Config\Value
 {
     /**

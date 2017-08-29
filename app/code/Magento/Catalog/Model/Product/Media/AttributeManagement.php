@@ -9,6 +9,10 @@ use Magento\Catalog\Api\ProductMediaAttributeManagementInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Catalog\Model\Product;
 
+/**
+ * Class \Magento\Catalog\Model\Product\Media\AttributeManagement
+ *
+ */
 class AttributeManagement implements ProductMediaAttributeManagementInterface
 {
     /**

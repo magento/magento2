@@ -11,6 +11,10 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Select;
 use Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderInterface;
 
+/**
+ * Class \Magento\Catalog\Model\ResourceModel\Product\Indexer\LinkedProductSelectBuilderByIndexPrice
+ *
+ */
 class LinkedProductSelectBuilderByIndexPrice implements LinkedProductSelectBuilderInterface
 {
     /**

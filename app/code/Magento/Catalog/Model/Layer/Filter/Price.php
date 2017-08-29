@@ -58,7 +58,9 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      */
     private $algorithmFactory;
 
-    /** @var DataProvider\Price */
+    /**
+     * @var \Magento\Catalog\Model\Layer\Filter\DataProvider\Price
+     */
     private $dataProvider;
 
     /**

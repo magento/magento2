@@ -5,6 +5,10 @@
  */
 namespace Magento\Sales\Model\Order\Email\Container;
 
+/**
+ * Class \Magento\Sales\Model\Order\Email\Container\ShipmentCommentIdentity
+ *
+ */
 class ShipmentCommentIdentity extends Container implements IdentityInterface
 {
     const XML_PATH_EMAIL_COPY_METHOD = 'sales_email/shipment_comment/copy_method';

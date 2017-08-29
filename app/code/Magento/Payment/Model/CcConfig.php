@@ -19,7 +19,9 @@ use Magento\Payment\Model\Config as PaymentConfig;
  */
 class CcConfig
 {
-    /** @var PaymentConfig */
+    /**
+     * @var \Magento\Payment\Model\Config
+     */
     protected $config;
 
     /**
@@ -67,7 +69,7 @@ class CcConfig
      * Solo/switch card start years
      *
      * @return array
-     * @deprecated unused
+     * @deprecated 100.1.0 unused
      */
     public function getSsStartYears()
     {
@@ -125,7 +127,7 @@ class CcConfig
      * Whether switch/solo card type available
      *
      * @return bool
-     * @deprecated unused
+     * @deprecated 100.1.0 unused
      */
     public function hasSsCardType()
     {

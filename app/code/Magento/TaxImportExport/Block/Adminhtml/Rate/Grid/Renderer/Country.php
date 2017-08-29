@@ -11,6 +11,10 @@
  */
 namespace Magento\TaxImportExport\Block\Adminhtml\Rate\Grid\Renderer;
 
+/**
+ * Class \Magento\TaxImportExport\Block\Adminhtml\Rate\Grid\Renderer\Country
+ *
+ */
 class Country extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Country
 {
     /**

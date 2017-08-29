@@ -11,7 +11,7 @@ use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Block\CustomerScopeData;
 
-class CustomerScopeDataTest extends \PHPUnit_Framework_TestCase
+class CustomerScopeDataTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Customer\Block\CustomerScopeData */
     private $model;

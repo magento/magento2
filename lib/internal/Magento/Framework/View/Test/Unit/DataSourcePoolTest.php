@@ -13,7 +13,7 @@ use \Magento\Framework\View\DataSourcePool;
 /**
  * Test for view Context model
  */
-class DataSourcePoolTest extends \PHPUnit_Framework_TestCase
+class DataSourcePoolTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DataSourcePool
@@ -49,7 +49,7 @@ class DataSourcePoolTest extends \PHPUnit_Framework_TestCase
 
     protected function createBlock($blockClass)
     {
-        $block = $this->getMock(\Magento\Framework\View\Element\BlockInterface::class);
+        $block = $this->createMock(\Magento\Framework\View\Element\BlockInterface::class);
 
         $this->blockFactory->expects($this->once())
             ->method('createBlock')

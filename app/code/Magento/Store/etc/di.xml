@@ -341,7 +341,7 @@
                 </item>
                 <item name="runtime" xsi:type="array">
                     <item name="source" xsi:type="object">Magento\Store\App\Config\Source\RuntimeConfigSource</item>
-                    <item name="sortOrder" xsi:type="string">10</item>
+                    <item name="sortOrder" xsi:type="string">0</item>
                 </item>
             </argument>
         </arguments>

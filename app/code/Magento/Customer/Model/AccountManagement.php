@@ -996,7 +996,7 @@ class AccountManagement implements AccountManagementInterface
      * @param string $sendemailStoreId
      * @return $this
      * @throws LocalizedException
-     * @deprecated
+     * @deprecated 100.1.0
      */
     protected function sendNewAccountEmail(
         $customer,
@@ -1035,7 +1035,7 @@ class AccountManagement implements AccountManagementInterface
      *
      * @param CustomerInterface $customer
      * @return $this
-     * @deprecated
+     * @deprecated 100.1.0
      */
     protected function sendPasswordResetNotificationEmail($customer)
     {
@@ -1048,7 +1048,7 @@ class AccountManagement implements AccountManagementInterface
      * @param CustomerInterface $customer
      * @param int|string|null $defaultStoreId
      * @return int
-     * @deprecated
+     * @deprecated 100.1.0
      */
     protected function getWebsiteStoreId($customer, $defaultStoreId = null)
     {
@@ -1062,7 +1062,7 @@ class AccountManagement implements AccountManagementInterface
 
     /**
      * @return array
-     * @deprecated
+     * @deprecated 100.1.0
      */
     protected function getTemplateTypes()
     {
@@ -1094,7 +1094,7 @@ class AccountManagement implements AccountManagementInterface
      * @param int|null $storeId
      * @param string $email
      * @return $this
-     * @deprecated
+     * @deprecated 100.1.0
      */
     protected function sendEmailTemplate(
         $customer,
@@ -1226,7 +1226,7 @@ class AccountManagement implements AccountManagementInterface
      *
      * @param CustomerInterface $customer
      * @return $this
-     * @deprecated
+     * @deprecated 100.1.0
      */
     public function sendPasswordReminderEmail($customer)
     {
@@ -1253,7 +1253,7 @@ class AccountManagement implements AccountManagementInterface
      *
      * @param CustomerInterface $customer
      * @return $this
-     * @deprecated
+     * @deprecated 100.1.0
      */
     public function sendPasswordResetConfirmationEmail($customer)
     {
@@ -1297,7 +1297,7 @@ class AccountManagement implements AccountManagementInterface
      *
      * @param CustomerInterface $customer
      * @return Data\CustomerSecure
-     * @deprecated
+     * @deprecated 100.1.0
      */
     protected function getFullCustomerObject($customer)
     {
@@ -1326,7 +1326,7 @@ class AccountManagement implements AccountManagementInterface
      * Get email notification
      *
      * @return EmailNotificationInterface
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getEmailNotification()
     {

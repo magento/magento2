@@ -7,6 +7,10 @@
  */
 namespace Magento\GroupedProduct\Model\Order\Pdf\Items\Invoice;
 
+/**
+ * Class \Magento\GroupedProduct\Model\Order\Pdf\Items\Invoice\Grouped
+ *
+ */
 class Grouped extends \Magento\Sales\Model\Order\Pdf\Items\Invoice\DefaultInvoice
 {
     /**

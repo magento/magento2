@@ -8,6 +8,10 @@ namespace Magento\Review\Controller\Customer;
 use Magento\Review\Controller\Customer as CustomerController;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Review\Controller\Customer\Index
+ *
+ */
 class Index extends CustomerController
 {
     /**

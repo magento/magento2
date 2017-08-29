@@ -8,6 +8,10 @@ namespace Magento\Cms\Controller\Adminhtml\Wysiwyg;
 
 use Magento\Backend\App\Action;
 
+/**
+ * Class \Magento\Cms\Controller\Adminhtml\Wysiwyg\Directive
+ *
+ */
 class Directive extends \Magento\Backend\App\Action
 {
     /**

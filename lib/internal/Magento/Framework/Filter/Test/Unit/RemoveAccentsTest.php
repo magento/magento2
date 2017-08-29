@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Filter\Test\Unit;
 
-class RemoveAccentsTest extends \PHPUnit_Framework_TestCase
+class RemoveAccentsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param string $string

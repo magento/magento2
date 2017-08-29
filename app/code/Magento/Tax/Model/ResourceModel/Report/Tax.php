@@ -9,6 +9,10 @@
  */
 namespace Magento\Tax\Model\ResourceModel\Report;
 
+/**
+ * Class \Magento\Tax\Model\ResourceModel\Report\Tax
+ *
+ */
 class Tax extends \Magento\Reports\Model\ResourceModel\Report\AbstractReport
 {
     /**

@@ -7,6 +7,10 @@
  */
 namespace Magento\Payment\Model\Config;
 
+/**
+ * Class \Magento\Payment\Model\Config\Converter
+ *
+ */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**

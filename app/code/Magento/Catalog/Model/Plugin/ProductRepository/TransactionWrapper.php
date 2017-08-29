@@ -7,6 +7,10 @@
  */
 namespace Magento\Catalog\Model\Plugin\ProductRepository;
 
+/**
+ * Class \Magento\Catalog\Model\Plugin\ProductRepository\TransactionWrapper
+ *
+ */
 class TransactionWrapper
 {
     /**

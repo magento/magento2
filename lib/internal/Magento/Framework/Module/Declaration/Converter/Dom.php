@@ -7,6 +7,10 @@
  */
 namespace Magento\Framework\Module\Declaration\Converter;
 
+/**
+ * Class \Magento\Framework\Module\Declaration\Converter\Dom
+ *
+ */
 class Dom implements \Magento\Framework\Config\ConverterInterface
 {
     /**

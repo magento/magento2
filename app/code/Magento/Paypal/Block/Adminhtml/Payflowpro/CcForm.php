@@ -14,6 +14,10 @@ use Magento\Paypal\Model\Payflow\Transparent;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Vault\Model\VaultPaymentInterface;
 
+/**
+ * Class \Magento\Paypal\Block\Adminhtml\Payflowpro\CcForm
+ *
+ */
 class CcForm extends \Magento\Payment\Block\Transparent\Form
 {
     /**
@@ -82,7 +86,7 @@ class CcForm extends \Magento\Payment\Block\Transparent\Form
     /**
      * Get payment data helper instance
      * @return Data
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getPaymentDataHelper()
     {

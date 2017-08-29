@@ -7,6 +7,10 @@ namespace Magento\Catalog\Model\Indexer\Product\Flat;
 
 use Magento\Catalog\Model\Indexer\Product\Flat\Table\BuilderInterfaceFactory;
 
+/**
+ * Class \Magento\Catalog\Model\Indexer\Product\Flat\TableBuilder
+ *
+ */
 class TableBuilder
 {
     /**
@@ -33,13 +37,6 @@ class TableBuilder
      * @var BuilderInterfaceFactory
      */
     private $tableBuilderFactory;
-
-    /**
-     * Check whether builder was executed
-     *
-     * @var bool
-     */
-    protected $_isExecuted = false;
 
     /**
      * Constructor
@@ -70,9 +67,6 @@ class TableBuilder
      */
     public function build($storeId, $changedIds, $valueFieldSuffix)
     {
-        if ($this->_isExecuted) {
-            return;
-        }
         $entityTableName = $this->_productIndexerHelper->getTable('catalog_product_entity');
         $attributes = $this->_productIndexerHelper->getAttributes();
         $eavAttributes = $this->_productIndexerHelper->getTablesStructure($attributes);
@@ -117,7 +111,6 @@ class TableBuilder
             //Fill temporary tables with attributes grouped by it type
             $this->_fillTemporaryTable($tableName, $columns, $changedIds, $valueFieldSuffix, $storeId);
         }
-        $this->_isExecuted = true;
     }
 
     /**
@@ -357,7 +350,7 @@ class TableBuilder
 
     /**
      * @return \Magento\Framework\EntityManager\MetadataPool
-     * @deprecated
+     * @deprecated 101.1.0
      */
     private function getMetadataPool()
     {

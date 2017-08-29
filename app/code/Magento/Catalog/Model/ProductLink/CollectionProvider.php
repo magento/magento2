@@ -9,6 +9,10 @@ namespace Magento\Catalog\Model\ProductLink;
 use Magento\Catalog\Model\ProductLink\Converter\ConverterPool;
 use Magento\Framework\Exception\NoSuchEntityException;
 
+/**
+ * Class \Magento\Catalog\Model\ProductLink\CollectionProvider
+ *
+ */
 class CollectionProvider
 {
     /**
