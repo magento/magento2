@@ -8,7 +8,7 @@ namespace Magento\Framework\Css\PreProcessor\Adapter;
 use Pelago\Emogrifier;
 
 /**
- * Adapter for Emogrifier 3rd party library
+ * This class will inline the css of an html to each tag to be used for applications such as a styled email.
  */
 class CssInliner
 {
@@ -23,8 +23,7 @@ class CssInliner
     }
 
     /**
-     * Sets the HTML to be used with the css.
-     * This method should be used with setCss.
+     * Sets the HTML to be used with the css. This method should be used with setCss.
      *
      * @param string $html
      * @return void
@@ -35,8 +34,7 @@ class CssInliner
     }
 
     /**
-     * Sets the CSS to be merged with the HTML.
-     * This method should be used with setHtml.
+     * Sets the CSS to be merged with the HTML. This method should be used with setHtml.
      *
      * @param string $css
      * @return void
@@ -63,8 +61,7 @@ class CssInliner
     }
 
     /**
-     * Processes the html by placing the css inline.
-     * You must set first the css by using setCss and html by using setHtml.
+     * Processes the html by placing the css inline. Set first the css by using setCss and html by using setHtml.
      *
      * @return string
      * @throws \BadMethodCallException
