@@ -126,11 +126,8 @@ define([
             return this;
         },
 
-        /**
-         * Load data from server for shipping step
-         */
         navigate: function () {
-            //load data from server for shipping step
+            this.isVisible(true);
         },
 
         /**
