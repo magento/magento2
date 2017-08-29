@@ -165,7 +165,10 @@ class PaymentMethodManagementTest extends \PHPUnit\Framework\TestCase
 
         $quoteMock->expects($this->once())->method('setTotalsCollectedFlag')->with(false)->willReturnSelf();
         $quoteMock->expects($this->once())->method('collectTotals')->willReturnSelf();
-        $quoteMock->expects($this->once())->method('save')->willReturnSelf();
+        $this->quoteRepositoryMock->expects($this->once())
+            ->method('save')
+            ->with($quoteMock)
+            ->will($this->returnValue($quoteMock));
 
         $paymentMock->expects($this->once())->method('getId')->willReturn($paymentId);
         $this->assertEquals($paymentId, $this->model->set($cartId, $methodMock));
@@ -289,7 +292,10 @@ class PaymentMethodManagementTest extends \PHPUnit\Framework\TestCase
 
         $quoteMock->expects($this->once())->method('setTotalsCollectedFlag')->with(false)->willReturnSelf();
         $quoteMock->expects($this->once())->method('collectTotals')->willReturnSelf();
-        $quoteMock->expects($this->once())->method('save')->willReturnSelf();
+        $this->quoteRepositoryMock->expects($this->once())
+            ->method('save')
+            ->with($quoteMock)
+            ->will($this->returnValue($quoteMock));
 
         $paymentMock->expects($this->once())->method('getId')->willReturn($paymentId);
         $this->assertEquals($paymentId, $this->model->set($cartId, $methodMock));
