@@ -47,23 +47,6 @@
             </settings>
         </dataProvider>
     </dataSource>
-    <htmlContent name="promo_sales_rule_edit_tab_coupons_content">
-        <block class="Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Coupons" name="promo_sales_rule_edit_tab_coupons" as="promo_sales_rule_edit_tab_coupons" template="Magento_SalesRule::tab/coupons.phtml">
-            <arguments>
-                <argument name="config" xsi:type="array">
-                    <item name="label" xsi:type="string" translate="true">Manage Coupon Codes</item>
-                    <item name="collapsible" xsi:type="boolean">true</item>
-                    <item name="opened" xsi:type="boolean">false</item>
-                    <item name="sortOrder" xsi:type="string">50</item>
-                    <item name="canShow" xsi:type="boolean">false</item>
-                    <item name="componentType" xsi:type="string">fieldset</item>
-                    <item name="component" xsi:type="string">Magento_SalesRule/js/form/element/manage-coupon-codes</item>
-                </argument>
-            </arguments>
-            <block class="Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Coupons\Form" name="promo_quote_edit_tab_coupons_form"/>
-            <block class="Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Coupons\Grid" name="promo_quote_edit_tab_coupons_grid"/>
-        </block>
-    </htmlContent>
     <fieldset name="general">
         <settings>
             <additionalClasses>
@@ -547,5 +530,22 @@
                 <block name="store_view_labels" class="Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Labels"/>
             </htmlContent>
         </container>
+    </fieldset>
+    <fieldset name="manage_coupon_codes" sortOrder="50">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_SalesRule/js/form/element/manage-coupon-codes</item>
+            </item>
+        </argument>
+        <settings>
+            <collapsible>true</collapsible>
+            <label translate="true">Manage Coupon Codes</label>
+        </settings>
+        <htmlContent name="html_content">
+            <block class="Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Coupons" name="promo_sales_rule_edit_tab_coupons" as="promo_sales_rule_edit_tab_coupons" template="Magento_SalesRule::tab/coupons.phtml">
+                <block class="Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Coupons\Form" name="promo_quote_edit_tab_coupons_form"/>
+                <block class="Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Coupons\Grid" name="promo_quote_edit_tab_coupons_grid"/>
+            </block>
+        </htmlContent>
     </fieldset>
 </form>

@@ -88,7 +88,7 @@ class CouponManagementService implements \Magento\SalesRule\Api\CouponManagement
                     $couponSpec->getRuleId()
                 );
             }
-            if (!$rule->getUseAutoGeneration()) {
+            if (!$rule->getUseAutoGeneration() && $rule->getCouponType() != $rule::COUPON_TYPE_AUTO) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __('Specified rule does not allow automatic coupon generation')
                 );
