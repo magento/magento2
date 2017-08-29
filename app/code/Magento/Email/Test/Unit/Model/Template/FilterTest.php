@@ -92,7 +92,6 @@ class FilterTest extends \PHPUnit\Framework\TestCase
      */
     private $cssInliner;
 
-
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
