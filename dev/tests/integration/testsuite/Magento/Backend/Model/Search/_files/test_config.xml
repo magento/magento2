@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="test">
+            <label>Test Tab</label>
+        </tab>
+        <section id="test_section" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" type="text" sortOrder="0">
+            <label>Test Section</label>
+            <tab>test</tab>
+
+            <group id="test_group" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" type="text" sortOrder="10">
+                <label>Test Group</label>
+                <field id="test_field_1" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" type="text" sortOrder="20">
+                    <label>Test Field</label>
+                </field>
+                <field id="test_field_2" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" type="text" sortOrder="20">
+                    <label>Test Field</label>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

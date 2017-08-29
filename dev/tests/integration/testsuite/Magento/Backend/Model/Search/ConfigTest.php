@@ -6,6 +6,13 @@
 
 namespace Magento\Backend\Model\Search;
 
+use Magento\Backend\App\Area\FrontNameResolver;
+use Magento\Framework\App\Area;
+use Magento\Framework\App\AreaList;
+use Magento\Framework\App\Cache\State;
+use Magento\Framework\App\Config\FileResolver;
+use Magento\Framework\Config\FileIteratorFactory;
+use Magento\Framework\Config\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -15,13 +22,12 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider loadDataProvider
+     * @magentoConfigFixture current_store general/store_information/name Foo
      */
     public function testLoad($query, $expectedResult)
     {
-        /** Preconditions */
-        $objectManager = Bootstrap::getObjectManager();
         /** @var \Magento\Backend\Model\Search\Config $configSearch */
-        $configSearch = $objectManager->create(\Magento\Backend\Model\Search\Config::class);
+        $configSearch = $this->getConfigSearchInstance();
         $configSearch->setQuery($query);
         $configSearch->load();
 
@@ -46,62 +52,93 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         }
     }
 
+    /**
+     * @return \Magento\Backend\Model\Search\Config
+     */
+    private function getConfigSearchInstance()
+    {
+        Bootstrap::getInstance()->reinitialize([
+            State::PARAM_BAN_CACHE => true,
+        ]);
+        Bootstrap::getObjectManager()
+            ->get(ScopeInterface::class)
+            ->setCurrentScope(FrontNameResolver::AREA_CODE);
+        Bootstrap::getObjectManager()->get(AreaList::class)
+            ->getArea(FrontNameResolver::AREA_CODE)
+            ->load(Area::PART_CONFIG);
+
+        $fileResolverMock = $this->getMockBuilder(FileResolver::class)->disableOriginalConstructor()->getMock();
+        $fileIteratorFactory = Bootstrap::getObjectManager()->get(FileIteratorFactory::class);
+        $fileIterator = $fileIteratorFactory->create(
+            [__DIR__ . '/_files/test_config.xml']
+        );
+        $fileResolverMock->expects($this->any())->method('get')->will($this->returnValue($fileIterator));
+
+        $objectManager = Bootstrap::getObjectManager();
+        /** @var \Magento\Config\Model\Config\Structure\Reader $structureReader */
+        $structureReader = $objectManager->create(
+            \Magento\Config\Model\Config\Structure\Reader::class,
+            ['fileResolver' => $fileResolverMock]
+        );
+        /** @var \Magento\Config\Model\Config\Structure\Data $structureData */
+        $structureData = $objectManager->create(
+            \Magento\Config\Model\Config\Structure\Data::class,
+            ['reader' => $structureReader]
+        );
+        /** @var \Magento\Config\Model\Config\Structure $structure  */
+        $structure = $objectManager->create(
+            \Magento\Config\Model\Config\Structure::class,
+            ['structureData' => $structureData]
+        );
+
+        return $objectManager->create(
+            \Magento\Backend\Model\Search\Config::class,
+            ['configStructure' => $structure]
+        );
+    }
+
+    /**
+     * @return array
+     */
     public static function loadDataProvider()
     {
         return [
             'Search by field name' => [
-                'Store Name',
+                'Test Field',
                 [
                     [
-                        'id'          => 'general/store_information/name',
+                        'id'          => 'test_section/test_group/test_field_1',
                         'type'        => null,
-                        'name'        => 'Store Name',
-                        'description' => '/ General / General / Store Information',
-                    ],
-                ],
-            ],
-            'Search by field name, multiple items result' => [
-                'Secure Base URL',
-                [
-                    [
-                        'id'          => 'web/secure/base_url',
-                        'type'        => null,
-                        'name'        => 'Secure Base URL',
-                        'description' => '/ General / Web / Base URLs (Secure)',
+                        'name'        => 'Test Field',
+                        'description' => '/ Test Tab / Test Section / Test Group',
                     ],
                     [
-                        'id'          => 'web/secure/base_static_url',
+                        'id'          => 'test_section/test_group/test_field_2',
                         'type'        => null,
-                        'name'        => 'Secure Base URL for Static View Files',
-                        'description' => '/ General / Web / Base URLs (Secure)',
-                    ],
-                    [
-                        'id'          => 'web/secure/base_media_url',
-                        'type'        => null,
-                        'name'        => 'Secure Base URL for User Media Files',
-                        'description' => '/ General / Web / Base URLs (Secure)',
+                        'name'        => 'Test Field',
+                        'description' => '/ Test Tab / Test Section / Test Group',
                     ],
                 ],
             ],
             'Search by group name' => [
-                'Country Options',
+                'Test Group',
                 [
                     [
-                        'id'          => 'general/country',
+                        'id'          => 'test_section/test_group',
                         'type'        => null,
-                        'name'        => 'Country Options',
-                        'description' => '/ General / General',
+                        'name'        => 'Test Group',
+                        'description' => '/ Test Tab / Test Section',
                     ],
                 ],
             ],
             'Search by section name' => [
-                'Currency Setup',
+                'Test Section',
                 [
                     [
-                        'id'          => '/currency',
+                        'id'          => '/test_section',
                         'type'        => null,
-                        'name'        => 'Currency Setup',
-                        'description' => '/ General',
+                        'name'        => 'Test Section',
+                        'description' => '/ Test Tab',
                     ],
                 ],
             ],
