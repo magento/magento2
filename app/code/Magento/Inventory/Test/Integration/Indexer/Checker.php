@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Inventory\Indexer;
+namespace Magento\Inventory\Test\Integration\Indexer;
 
 use Magento\Framework\App\ResourceConnection;
 

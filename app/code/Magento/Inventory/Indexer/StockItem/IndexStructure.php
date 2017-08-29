@@ -13,33 +13,32 @@ use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Indexer\IndexStructureInterface;
 
 /**
- * @todo add comment
+ * Index structure is responsible for index structure
  */
 class IndexStructure implements IndexStructureInterface
 {
-
     /**
-     * @var Resource
+     * @var ResourceConnection
      */
-    private $resource;
+    private $resourceConnection;
 
     /**
-     * @param ResourceConnection $resource
+     * @param ResourceConnection $resourceConnection
      */
     public function __construct(
-        ResourceConnection $resource
+        ResourceConnection $resourceConnection
     ) {
-        $this->resource = $resource;
+        $this->resourceConnection = $resourceConnection;
     }
-
 
     /**
      * @inheritdoc
      */
     public function delete($index, array $dimensions = [])
     {
-        if ($this->resource->getConnection()->isTableExists($index)) {
-            $this->resource->getConnection()->dropTable($index);
+        $connection = $this->resourceConnection->getConnection();
+        if ($connection->isTableExists($index)) {
+            $connection->dropTable($index);
         }
     }
 
@@ -48,7 +47,7 @@ class IndexStructure implements IndexStructureInterface
      */
     public function create($index, array $fields, array $dimensions = [])
     {
-        $table = $this->resource->getConnection()->newTable($index)->setComment(
+        $table = $this->resourceConnection->getConnection()->newTable($index)->setComment(
             'Inventory Stock item Table'
         )->addColumn(
             'stock_item_id',
@@ -99,10 +98,10 @@ class IndexStructure implements IndexStructureInterface
             'Status'
         )->addIndex(
             'idx_sku_stock_id',
-            [ 'sku',  StockItemInterface::STOCK_ID],
+            ['sku', StockItemInterface::STOCK_ID],
             ['type' => AdapterInterface::INDEX_TYPE_INDEX]
         );
 
-        $this->resource->getConnection()->createTable($table);
+        $this->resourceConnection->getConnection()->createTable($table);
     }
 }

@@ -3,8 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-namespace Magento\Inventory\Indexer\Scope;
+namespace Magento\Inventory\Indexer\StockItem\Scope;
 
 /**
  * This class represents state that defines which table should be used during indexation process
@@ -18,11 +17,17 @@ namespace Magento\Inventory\Indexer\Scope;
  * The 'use_temporary_table' state is an opposite for 'use_main_table'
  *   which means that default indexer table should be left unchanged during indexation
  *   and temporary table should be used instead.
- * @todo refactoring it copy from catalog search module
  */
 class State
 {
+    /**
+     * Use temporary index table state
+     */
     const USE_TEMPORARY_INDEX = 'use_temporary_table';
+
+    /**
+     * Use main index table state
+     */
     const USE_REGULAR_INDEX = 'use_main_table';
 
     /**

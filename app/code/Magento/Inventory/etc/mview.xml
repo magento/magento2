@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Mview/etc/mview.xsd">
-    <view id="inventory_stock_item" class="Magento\Inventory\Model\Indexer\Mview\StockItemAction" group="indexer">
+    <view id="inventory_stock_item" class="Magento\Inventory\Model\Indexer\StockItem\Mview\StockItemAction" group="indexer">
         <subscriptions>
             <table name="inventory_source_item" entity_column="source_id" />
             <table name="inventory_source_stock_link" entity_column="source_id" />

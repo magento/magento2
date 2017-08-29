@@ -3,8 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-namespace Magento\Inventory\Indexer\Scope;
+namespace Magento\Inventory\Indexer\Scope\StockItem;
 
 use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
 use Magento\Framework\Search\Request\Dimension;
@@ -13,7 +12,7 @@ use Magento\Framework\Search\Request\Dimension;
  * Resolves name of a temporary table for indexation
  * @todo refactoring it copy from catalog search module
  */
-class TemporaryResolver implements \Magento\Framework\Search\Request\IndexScopeResolverInterface
+class TemporaryTableIndexScopeResolver implements \Magento\Framework\Search\Request\IndexScopeResolverInterface
 {
     /**
      * @var IndexScopeResolver

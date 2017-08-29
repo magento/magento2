@@ -3,18 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Inventory\Indexer\StockItem\Mview;
 
 use Magento\Framework\Indexer\IndexerInterfaceFactory;
-use Magento\Inventory\Indexer\StockItem;
+use Magento\Framework\Mview\ActionInterface;
+use Magento\Inventory\Indexer\StockItemIndexerInterface;
 
 /**
- * @todo add description
+ * Execute materialization on ids entities
+ *
+ * Extension pint for indexation
+ *
+ * @api
  */
-class Action implements \Magento\Framework\Mview\ActionInterface
+class Action implements ActionInterface
 {
-
     /**
      * @var IndexerInterfaceFactory
      */
@@ -33,12 +36,11 @@ class Action implements \Magento\Framework\Mview\ActionInterface
      *
      * @param int[] $ids
      * @return void
-     * @api
      */
     public function execute($ids)
     {
         /** @var \Magento\Framework\Indexer\IndexerInterface $indexer */
-        $indexer = $this->indexerFactory->create()->load(StockItem::INDEXER_ID);
+        $indexer = $this->indexerFactory->create()->load(StockItemIndexerInterface::INDEXER_ID);
         $indexer->reindexList($ids);
     }
 }

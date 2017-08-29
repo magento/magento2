@@ -67,24 +67,23 @@
     <preference for="Magento\InventoryApi\Api\UnassignSourceFromStockInterface" type="Magento\Inventory\Model\StockSourceLink\Command\UnassignSourceFromStock"/>
 
     <!-- StockItem Indexer -->
-    <preference for="Magento\Inventory\Indexer\StockItem\Service\GetAssignedStocksInterface" type="Magento\Inventory\Indexer\StockItem\Service\GetAssignedStocks"/>
-    <preference for="Magento\Inventory\Indexer\Scope\IndexSwitcherInterface" type="Magento\Inventory\Indexer\Scope\IndexSwitcher"/>
-    <type name="Magento\Inventory\Indexer\Scope\IndexSwitcher">
+    <preference for="Magento\Inventory\Indexer\StockItem\Scope\IndexSwitcherInterface" type="Magento\Inventory\Indexer\StockItem\Scope\IndexSwitcher"/>
+    <type name="Magento\Inventory\Indexer\StockItem\Scope\IndexSwitcher">
         <arguments>
-            <argument name="indexScopeResolver" xsi:type="object">\Magento\Inventory\Indexer\Scope\ScopeProxy</argument>
+            <argument name="indexScopeResolver" xsi:type="object">Magento\Inventory\Indexer\StockItem\Scope\IndexScopeResolver</argument>
         </arguments>
     </type>
     <type name="Magento\Inventory\Indexer\StockItem\IndexHandler">
         <arguments>
             <argument name="indexStructure" xsi:type="object">Magento\Inventory\Indexer\StockItem\IndexStructure</argument>
-            <argument name="indexScopeResolver" xsi:type="object">\Magento\Inventory\Indexer\Scope\ScopeProxy</argument>
+            <argument name="indexScopeResolver" xsi:type="object">Magento\Inventory\Indexer\StockItem\Scope\IndexScopeResolver</argument>
             <argument name="batchSize" xsi:type="string">100</argument>
         </arguments>
     </type>
-    <type name="Magento\Inventory\Indexer\Scope\ScopeProxy">
+    <type name="Magento\Inventory\Indexer\StockItem\Scope\IndexScopeResolver">
         <arguments>
-            <argument name="states" xsi:type="array">
-                <item name="use_temporary_table" xsi:type="string">Magento\Inventory\Indexer\Scope\TemporaryResolver</item>
+            <argument name="statesMap" xsi:type="array">
+                <item name="use_temporary_table" xsi:type="string">Magento\Inventory\Indexer\StockItem\Scope\TemporaryTableIndexScopeResolver</item>
                 <item name="use_main_table" xsi:type="string">Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver</item>
             </argument>
         </arguments>

@@ -3,27 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Inventory\Indexer;
 
-use Magento\Inventory\Indexer\Scope\IndexSwitcherInterface;
-use Magento\Inventory\Indexer\Scope\State;
-use Magento\Inventory\Indexer\StockItem\DataProvider;
+use Magento\Inventory\Indexer\StockItem\Scope\IndexSwitcherInterface;
+use Magento\Inventory\Indexer\StockItem\Scope\State;
+use Magento\Inventory\Indexer\StockItem\IndexDataProvider;
 use Magento\Inventory\Indexer\StockItem\DimensionFactory;
+use Magento\Inventory\Indexer\StockItem\GetAssignedStockIds;
 use Magento\Inventory\Indexer\StockItem\IndexHandler;
-use Magento\Inventory\Indexer\StockItem\Service\GetAssignedStocksInterface;
-use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * @inheritdoc
  */
 class StockItem implements StockItemIndexerInterface
 {
-
     /**
-     * @var GetAssignedStocksInterface
+     * @var GetAssignedStockIds
      */
-    private $assignedStocksForSource;
+    private $getAssignedStockIds;
 
     /**
      * @var DimensionFactory
@@ -33,12 +30,12 @@ class StockItem implements StockItemIndexerInterface
     /**
      * @var IndexHandler
      */
-    private $handler;
+    private $indexHandler;
 
     /**
-     * @var DataProvider
+     * @var IndexDataProvider
      */
-    private $dataProvider;
+    private $indexDataProvider;
 
     /**
      * @var State
@@ -51,22 +48,25 @@ class StockItem implements StockItemIndexerInterface
     private $indexSwitcher;
 
     /**
-     * StockItem constructor.
      * @param DimensionFactory $dimensionFactory
-     * @param StoreManagerInterface $storeManager
+     * @param GetAssignedStockIds $getAssignedStockIds
+     * @param State $indexScopeState
+     * @param IndexHandler $indexHandler
+     * @param IndexDataProvider $indexDataProvider
+     * @param IndexSwitcherInterface $indexSwitcher
      */
     public function __construct(
         DimensionFactory $dimensionFactory,
-        GetAssignedStocksInterface $assignedStocksForSource,
+        GetAssignedStockIds $getAssignedStockIds,
         State $indexScopeState,
-        IndexHandler $handler,
-        DataProvider $dataProvider,
+        IndexHandler $indexHandler,
+        IndexDataProvider $indexDataProvider,
         IndexSwitcherInterface $indexSwitcher
     ) {
         $this->dimensionFactory = $dimensionFactory;
-        $this->handler = $handler;
-        $this->dataProvider = $dataProvider;
-        $this->assignedStocksForSource = $assignedStocksForSource;
+        $this->indexHandler = $indexHandler;
+        $this->indexDataProvider = $indexDataProvider;
+        $this->getAssignedStockIds = $getAssignedStockIds;
         $this->indexScopeState = $indexScopeState;
         $this->indexSwitcher = $indexSwitcher;
     }
@@ -76,15 +76,15 @@ class StockItem implements StockItemIndexerInterface
      */
     public function executeFull()
     {
-        $stocks = $this->assignedStocksForSource->execute([]);
+        $stockIds = $this->getAssignedStockIds->execute([]);
 
-        foreach ($stocks as $stockId) {
-            $dimension = [$this->dimensionFactory->create(['name' => 'stock_', 'value' => $stockId])];
+        foreach ($stockIds as $stockId) {
+            $dimensions = [$this->dimensionFactory->create(['name' => 'stock_', 'value' => $stockId])];
             $this->indexScopeState->useTemporaryIndex();
-            $this->handler->cleanIndex($dimension);
-            $this->handler->saveIndex($dimension, $this->dataProvider->fetchDocuments($stockId, []));
+            $this->indexHandler->cleanIndex($dimensions);
+            $this->indexHandler->saveIndex($dimensions, $this->indexDataProvider->getData($stockId));
 
-            $this->indexSwitcher->switchIndex($dimension, static::INDEXER_ID);
+            $this->indexSwitcher->switchOnTemporaryIndex($dimensions, static::INDEXER_ID);
             $this->indexScopeState->useRegularIndex();
         }
     }
@@ -92,22 +92,22 @@ class StockItem implements StockItemIndexerInterface
     /**
      * @inheritdoc
      */
-    public function executeRow($id)
+    public function executeRow($sourceId)
     {
-        $this->executeList([$id]);
+        $this->executeList([$sourceId]);
     }
 
     /**
      * @inheritdoc
      */
-    public function executeList(array $ids)
+    public function executeList(array $sourceIds)
     {
-        $stockIds = $this->assignedStocksForSource->execute($ids);
+        $stockIds = $this->getAssignedStockIds->execute($sourceIds);
 
         foreach ($stockIds as $stockId) {
-            $dimension = [$this->dimensionFactory->create(['name' => 'stock', 'value' => $stockId])];
-            $this->handler->cleanIndex($dimension);
-            $this->handler->saveIndex($dimension, $this->dataProvider->fetchDocuments($stockId, $ids));
+            $dimensions = [$this->dimensionFactory->create(['name' => 'stock', 'value' => $stockId])];
+            $this->indexHandler->cleanIndex($dimensions);
+            $this->indexHandler->saveIndex($dimensions, $this->indexDataProvider->getData($stockId, $sourceIds));
         }
     }
 
@@ -116,6 +116,6 @@ class StockItem implements StockItemIndexerInterface
      */
     public function getName()
     {
-        return StockItem::INDEXER_ID;
+        return self::INDEXER_ID;
     }
 }

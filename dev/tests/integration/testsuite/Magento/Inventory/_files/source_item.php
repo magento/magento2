@@ -8,7 +8,7 @@ use Magento\Framework\Api\DataObjectHelper;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterfaceFactory;
-use Magento\InventoryApi\Api\SourceItemSaveInterface;
+use Magento\InventoryApi\Api\SourceItemsSaveInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -107,6 +107,6 @@ foreach ($sourcesItemData as $sourceItemData) {
     $dataObjectHelper->populateWithArray($sourceItem, $sourceItemData, SourceItemInterface::class);
     $sourceItemList[] = $sourceItem;
 }
-/** @var  SourceItemSaveInterface $sourceItemSave */
-$sourceItemSave = Bootstrap::getObjectManager()->get(SourceItemSaveInterface::class);
-$sourceItemSave->execute($sourceItemList);
+/** @var  SourceItemsSaveInterface $sourceItemsSave */
+$sourceItemsSave = Bootstrap::getObjectManager()->get(SourceItemsSaveInterface::class);
+$sourceItemsSave->execute($sourceItemList);

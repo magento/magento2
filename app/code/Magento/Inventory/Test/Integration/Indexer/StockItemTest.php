@@ -32,7 +32,7 @@ class StockItemTest extends \PHPUnit\Framework\TestCase
             \Magento\Indexer\Model\Indexer::class
         );
         $this->indexer->load(StockItemIndexerInterface::INDEXER_ID);
-        $this->indexerChecker = Bootstrap::getObjectManager()->create(Checker::class);
+        $this->indexerChecker = Bootstrap::getObjectManager()->create(\Magento\Inventory\Test\Integration\Indexer\Checker::class);
     }
 
     /**

@@ -3,8 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Inventory\Indexer\Scope;
-
+namespace Magento\Inventory\Indexer\StockItem\Scope;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Search\Request\IndexScopeResolverInterface;
@@ -17,9 +16,9 @@ use Magento\Framework\Search\Request\IndexScopeResolverInterface;
 class IndexSwitcher implements IndexSwitcherInterface
 {
     /**
-     * @var Resource
+     * @var ResourceConnection
      */
-    private $resource;
+    private $resourceConnection;
 
     /**
      * @var ScopeProxy
@@ -41,7 +40,7 @@ class IndexSwitcher implements IndexSwitcherInterface
         IndexScopeResolverInterface $indexScopeResolver,
         State $state
     ) {
-        $this->resource = $resource;
+        $this->resourceConnection = $resource;
         $this->resolver = $indexScopeResolver;
         $this->state = $state;
     }
@@ -50,11 +49,11 @@ class IndexSwitcher implements IndexSwitcherInterface
      * {@inheritdoc}
      * @throws IndexTableNotExistException
      */
-    public function switchIndex(array $dimensions, $index)
+    public function switchOnTemporaryIndex(array $dimensions, $index)
     {
         if (State::USE_TEMPORARY_INDEX === $this->state->getState()) {
             $temporalIndexTable = $this->resolver->resolve($index, $dimensions);
-            if (!$this->resource->getConnection()->isTableExists($temporalIndexTable)) {
+            if (!$this->resourceConnection->getConnection()->isTableExists($temporalIndexTable)) {
                 throw new IndexTableNotExistException(
                     __(
                         "Temporary table for index $index doesn't exist,"
@@ -65,11 +64,11 @@ class IndexSwitcher implements IndexSwitcherInterface
 
             $this->state->useRegularIndex();
             $tableName = $this->resolver->resolve($index, $dimensions);
-            if ($this->resource->getConnection()->isTableExists($tableName)) {
-                $this->resource->getConnection()->dropTable($tableName);
+            if ($this->resourceConnection->getConnection()->isTableExists($tableName)) {
+                $this->resourceConnection->getConnection()->dropTable($tableName);
             }
 
-            $this->resource->getConnection()->renameTable($temporalIndexTable, $tableName);
+            $this->resourceConnection->getConnection()->renameTable($temporalIndexTable, $tableName);
             $this->state->useTemporaryIndex();
         }
     }
