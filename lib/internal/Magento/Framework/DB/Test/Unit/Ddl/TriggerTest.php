@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\DB\Test\Unit\Ddl;
 
-class TriggerTest extends \PHPUnit_Framework_TestCase
+class TriggerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\DB\Ddl\Trigger

@@ -23,7 +23,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
  * @package Magento\Vault\Test\Unit\Model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PaymentTokenRepositoryTest extends \PHPUnit_Framework_TestCase
+class PaymentTokenRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     const PUBLIC_HASH = 'hash';
 
@@ -134,12 +134,8 @@ class PaymentTokenRepositoryTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->collectionProcessor = $this->getMock(
-            \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class,
-            [],
-            [],
-            '',
-            false
+        $this->collectionProcessor = $this->createMock(
+            \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class
         );
         $this->repositoryModel = $this->getMockBuilder(PaymentTokenRepository::class)
             ->setConstructorArgs([

@@ -111,6 +111,10 @@ class Delete implements ProcessorInterface
             ];
 
             foreach ($entities as $scope) {
+                if (!isset($data[$scope])) {
+                    continue;
+                }
+
                 $items = $this->dataDifferenceCalculator->getItemsToDelete($scope, $data[$scope]);
 
                 if (!$items) {

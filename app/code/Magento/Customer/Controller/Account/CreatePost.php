@@ -33,43 +33,69 @@ use Magento\Framework\Exception\InputException;
  */
 class CreatePost extends \Magento\Customer\Controller\AbstractAccount
 {
-    /** @var AccountManagementInterface */
+    /**
+     * @var \Magento\Customer\Api\AccountManagementInterface
+     */
     protected $accountManagement;
 
-    /** @var Address */
+    /**
+     * @var \Magento\Customer\Helper\Address
+     */
     protected $addressHelper;
 
-    /** @var FormFactory */
+    /**
+     * @var \Magento\Customer\Model\Metadata\FormFactory
+     */
     protected $formFactory;
 
-    /** @var SubscriberFactory */
+    /**
+     * @var \Magento\Newsletter\Model\SubscriberFactory
+     */
     protected $subscriberFactory;
 
-    /** @var RegionInterfaceFactory */
+    /**
+     * @var \Magento\Customer\Api\Data\RegionInterfaceFactory
+     */
     protected $regionDataFactory;
 
-    /** @var AddressInterfaceFactory */
+    /**
+     * @var \Magento\Customer\Api\Data\AddressInterfaceFactory
+     */
     protected $addressDataFactory;
 
-    /** @var Registration */
+    /**
+     * @var \Magento\Customer\Model\Registration
+     */
     protected $registration;
 
-    /** @var CustomerInterfaceFactory */
+    /**
+     * @var \Magento\Customer\Api\Data\CustomerInterfaceFactory
+     */
     protected $customerDataFactory;
 
-    /** @var CustomerUrl */
+    /**
+     * @var \Magento\Customer\Model\Url
+     */
     protected $customerUrl;
 
-    /** @var Escaper */
+    /**
+     * @var \Magento\Framework\Escaper
+     */
     protected $escaper;
 
-    /** @var CustomerExtractor */
+    /**
+     * @var \Magento\Customer\Model\CustomerExtractor
+     */
     protected $customerExtractor;
 
-    /** @var \Magento\Framework\UrlInterface */
+    /**
+     * @var \Magento\Framework\UrlInterface
+     */
     protected $urlModel;
 
-    /** @var DataObjectHelper  */
+    /**
+     * @var \Magento\Framework\Api\DataObjectHelper
+     */
     protected $dataObjectHelper;
 
     /**
@@ -157,7 +183,7 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
     /**
      * Retrieve cookie manager
      *
-     * @deprecated
+     * @deprecated 100.1.0
      * @return \Magento\Framework\Stdlib\Cookie\PhpCookieManager
      */
     private function getCookieManager()
@@ -173,7 +199,7 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
     /**
      * Retrieve cookie metadata factory
      *
-     * @deprecated
+     * @deprecated 100.1.0
      * @return \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
      */
     private function getCookieMetadataFactory()

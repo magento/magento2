@@ -8,12 +8,12 @@
 ?>
 <div class="block account-nav">
     <div class="title">
-        <strong><?php echo $block->escapeHtml(__('My Account')); ?></strong>
+        <strong><?= $block->escapeHtml(__('My Account')) ?></strong>
     </div>
     <div class="content">
         <nav class="account-nav">
             <ul class="nav items">
-                <?php echo $block->getChildHtml(); ?>
+                <?= $block->getChildHtml() ?>
             </ul>
         </nav>
     </div>

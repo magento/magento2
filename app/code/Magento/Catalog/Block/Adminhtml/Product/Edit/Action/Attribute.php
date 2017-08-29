@@ -16,6 +16,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Attribute extends \Magento\Backend\Block\Widget
 {

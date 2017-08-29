@@ -8,6 +8,10 @@ namespace Magento\Ui\DataProvider;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 abstract class AbstractDataProvider implements DataProviderInterface
 {
     /**
@@ -284,6 +288,7 @@ abstract class AbstractDataProvider implements DataProviderInterface
      * Retrieve all ids from collection
      *
      * @return int[]
+     * @since 100.2.0
      */
     public function getAllIds()
     {

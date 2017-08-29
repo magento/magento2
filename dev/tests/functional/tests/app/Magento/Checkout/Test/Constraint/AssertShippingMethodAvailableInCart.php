@@ -28,7 +28,6 @@ class AssertShippingMethodAvailableInCart extends AbstractConstraint
      */
     public function processAssert(CheckoutCart $checkoutCart, array $shippingExists, $requireReload = true)
     {
-
         if ($requireReload) {
             $checkoutCart->open();
         }
@@ -40,7 +39,6 @@ class AssertShippingMethodAvailableInCart extends AbstractConstraint
             ),
             $shippingExists['exists']
         );
-
     }
 
     /**

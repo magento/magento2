@@ -13,56 +13,56 @@
         <?php $edition = $block->hasEdition() ? 'data-edition="' . $block->escapeHtml($block->getEdition()) . '"' : ''; ?>
         <?php $logoSrc = ($block->hasLogoImageSrc()) ? $block->escapeHtml($block->getLogoImageSrc()) : 'images/magento-logo.svg' ?>
         <a
-            href="<?php /* @escapeNotVerified */ echo $block->getHomeLink() ?>"
-            <?php /* @escapeNotVerified */ echo $edition; ?>
+            href="<?= /* @escapeNotVerified */ $block->getHomeLink() ?>"
+            <?= /* @escapeNotVerified */ $edition ?>
             class="logo">
-            <img class="logo-img" src="<?php /* @escapeNotVerified */ echo $block->getViewFileUrl($logoSrc) ?>"
-            alt="<?php echo $block->escapeHtml(__('Magento Admin Panel')) ?>"/>
+            <img class="logo-img" src="<?= /* @escapeNotVerified */ $block->getViewFileUrl($logoSrc) ?>"
+            alt="<?= $block->escapeHtml(__('Magento Admin Panel')) ?>"/>
         </a>
     <?php break; ?>
     <?php case 'user': ?>
         <div class="admin-user admin__action-dropdown-wrap">
             <a
-                href="<?php /* @escapeNotVerified */ echo $block->getUrl('adminhtml/system_account/index') ?>"
+                href="<?= /* @escapeNotVerified */ $block->getUrl('adminhtml/system_account/index') ?>"
                 class="admin__action-dropdown"
-                title="<?php echo $block->escapeHtml(__('My Account')) ?>"
+                title="<?= $block->escapeHtml(__('My Account')) ?>"
                 data-mage-init='{"dropdown":{}}'
                 data-toggle="dropdown">
                 <span class="admin__action-dropdown-text">
-                    <span class="admin-user-account-text"><?php echo $block->escapeHtml($block->getUser()->getUsername()); ?></span>
+                    <span class="admin-user-account-text"><?= $block->escapeHtml($block->getUser()->getUsername()) ?></span>
                 </span>
             </a>
             <ul class="admin__action-dropdown-menu">
                 <?php if ($block->getAuthorization()->isAllowed('Magento_Backend::myaccount')): ?>
                 <li>
                     <a
-                        href="<?php /* @escapeNotVerified */ echo $block->getUrl('adminhtml/system_account/index') ?>"
-                        <?php /* @escapeNotVerified */ echo $block->getUiId('user', 'account', 'settings')?>
-                        title="<?php echo $block->escapeHtml(__('Account Setting')) ?>">
-                        <?php /* @escapeNotVerified */ echo __('Account Setting') ?> (<span class="admin-user-name"><?php echo $block->escapeHtml($block->getUser()->getUsername()); ?></span>)
+                        href="<?= /* @escapeNotVerified */ $block->getUrl('adminhtml/system_account/index') ?>"
+                        <?= /* @escapeNotVerified */ $block->getUiId('user', 'account', 'settings') ?>
+                        title="<?= $block->escapeHtml(__('Account Setting')) ?>">
+                        <?= /* @escapeNotVerified */ __('Account Setting') ?> (<span class="admin-user-name"><?= $block->escapeHtml($block->getUser()->getUsername()) ?></span>)
                     </a>
                 </li>
                 <?php endif; ?>
                 <li>
                     <a
-                        href="<?php /* @escapeNotVerified */ echo $block->getBaseUrl(); ?>"
-                        title="<?php echo $block->escapeHtml(__('Customer View')); ?>"
+                        href="<?= /* @escapeNotVerified */ $block->getBaseUrl() ?>"
+                        title="<?= $block->escapeHtml(__('Customer View')) ?>"
                         target="_blank" class="store-front">
-                        <?php /* @escapeNotVerified */ echo __('Customer View'); ?>
+                        <?= /* @escapeNotVerified */ __('Customer View') ?>
                     </a>
                 </li>
                 <li>
                     <a
-                        href="<?php /* @escapeNotVerified */ echo $block->getLogoutLink() ?>"
+                        href="<?= /* @escapeNotVerified */ $block->getLogoutLink() ?>"
                         class="account-signout"
-                        title="<?php echo $block->escapeHtml(__('Sign Out')) ?>">
-                        <?php /* @escapeNotVerified */ echo __('Sign Out') ?>
+                        title="<?= $block->escapeHtml(__('Sign Out')) ?>">
+                        <?= /* @escapeNotVerified */ __('Sign Out') ?>
                     </a>
                 </li>
             </ul>
         </div>
     <?php break; ?>
     <?php case 'other': ?>
-        <?php echo $block->getChildHtml(); ?>
+        <?= $block->getChildHtml() ?>
     <?php break; ?>
 <?php endswitch; ?>

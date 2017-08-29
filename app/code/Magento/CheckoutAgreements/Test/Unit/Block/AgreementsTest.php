@@ -5,10 +5,10 @@
  */
 namespace Magento\CheckoutAgreements\Test\Unit\Block;
 
-use Magento\Store\Model\ScopeInterface;
 use Magento\CheckoutAgreements\Model\AgreementsProvider;
+use Magento\Store\Model\ScopeInterface;
 
-class AgreementsTest extends \PHPUnit_Framework_TestCase
+class AgreementsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CheckoutAgreements\Block\Agreements
@@ -33,18 +33,15 @@ class AgreementsTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->agreementCollFactoryMock = $this->getMock(
+        $this->agreementCollFactoryMock = $this->createPartialMock(
             \Magento\CheckoutAgreements\Model\ResourceModel\Agreement\CollectionFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
 
-        $this->scopeConfigMock = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $this->storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
 
-        $contextMock = $this->getMock(\Magento\Framework\View\Element\Template\Context::class, [], [], '', false);
+        $contextMock = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
         $contextMock->expects($this->once())->method('getScopeConfig')->willReturn($this->scopeConfigMock);
         $contextMock->expects($this->once())->method('getStoreManager')->willReturn($this->storeManagerMock);
 
@@ -65,16 +62,12 @@ class AgreementsTest extends \PHPUnit_Framework_TestCase
             ->with(AgreementsProvider::PATH_ENABLED, ScopeInterface::SCOPE_STORE)
             ->willReturn(true);
 
-        $agreementCollection = $this->getMock(
-            \Magento\CheckoutAgreements\Model\ResourceModel\Agreement\Collection::class,
-            [],
-            [],
-            '',
-            false
+        $agreementCollection = $this->createMock(
+            \Magento\CheckoutAgreements\Model\ResourceModel\Agreement\Collection::class
         );
         $this->agreementCollFactoryMock->expects($this->once())->method('create')->willReturn($agreementCollection);
 
-        $storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
+        $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
         $storeMock->expects($this->once())->method('getId')->willReturn($storeId);
         $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($storeMock);
 

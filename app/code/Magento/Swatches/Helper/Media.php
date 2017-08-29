@@ -13,6 +13,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  * Helper to move images from tmp to catalog directory
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Media extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -109,7 +110,11 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
         $absoluteImagePath = $this->mediaDirectory
             ->getAbsolutePath($this->getSwatchMediaPath() . '/' . $generationPath);
         if (!file_exists($absoluteImagePath)) {
-            $this->generateSwatchVariations($file);
+            try {
+                $this->generateSwatchVariations($file);
+            } catch (\Exception $e) {
+                return '';
+            }
         }
         return $this->getSwatchMediaUrl() . '/' . $generationPath;
     }

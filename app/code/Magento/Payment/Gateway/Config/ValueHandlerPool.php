@@ -15,6 +15,7 @@ use Magento\Framework\ObjectManager\TMapFactory;
  * Inheritance from this class is not recommended (declare virtual type or implement ValueHandlerPoolInterface instead).
  *
  * @api
+ * @since 100.0.2
  */
 class ValueHandlerPool implements \Magento\Payment\Gateway\Config\ValueHandlerPoolInterface
 {

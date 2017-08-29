@@ -8,7 +8,7 @@ namespace Magento\Setup\Test\Unit\Model;
 
 use \Magento\Setup\Model\PayloadValidator;
 
-class PayloadValidatorTest extends \PHPUnit_Framework_TestCase
+class PayloadValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Module\FullModuleList|\PHPUnit_Framework_MockObject_MockObject
@@ -22,7 +22,7 @@ class PayloadValidatorTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->fullModuleList = $this->getMock(\Magento\Framework\Module\FullModuleList::class, [], [], '', false);
+        $this->fullModuleList = $this->createMock(\Magento\Framework\Module\FullModuleList::class);
         $this->model = new PayloadValidator($this->fullModuleList);
     }
 

@@ -14,6 +14,8 @@ use Magento\Framework\Session\Config;
 
 /**
  * Magento Backend session configuration
+ * @api
+ * @since 100.0.2
  */
 class AdminConfig extends Config
 {
@@ -110,6 +112,7 @@ class AdminConfig extends Config
      * Set session cookie lifetime to session duration
      *
      * @return $this
+     * @since 100.1.0
      */
     protected function configureCookieLifetime()
     {
