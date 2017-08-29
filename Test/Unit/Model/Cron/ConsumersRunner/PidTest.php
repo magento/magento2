@@ -27,7 +27,7 @@ class PidTest extends \PHPUnit\Framework\TestCase
     private $directoryListMock;
 
     /**
-     * @var WriteFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var WriteFactory|MockObject
      */
     private $writeFactoryMock;
 

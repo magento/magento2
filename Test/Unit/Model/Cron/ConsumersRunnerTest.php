@@ -76,7 +76,7 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
 
     public function testRunDisabled()
     {
-        $this->deploymentConfigMock->expects($this->exactly(3))
+        $this->deploymentConfigMock->expects($this->once())
             ->method('get')
             ->willReturnMap([
                 ['queue_consumer/cron_run', true, false],

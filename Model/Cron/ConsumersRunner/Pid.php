@@ -22,23 +22,29 @@ class Pid
     const PID_FILE_EXT = '.pid';
 
     /**
-     * @var Filesystem The class for working with FS
+     * The class for working with FS
+     *
+     * @var Filesystem
      */
     private $filesystem;
 
     /**
+     * The factory of Write class which creates and writes to file
+     *
      * @var WriteFactory
      */
     private $writeFactory;
 
     /**
-     * @var DirectoryList The Magento application specific list of directories
+     * The Magento application specific list of directories
+     *
+     * @var DirectoryList
      */
     private $directoryList;
 
     /**
      * @param Filesystem $filesystem The class for working with FS
-     * @param WriteFactory $writeFactory
+     * @param WriteFactory $writeFactory The factory of Write class which creates and writes to file
      * @param DirectoryList $directoryList The Magento application specific list of directories
      */
     public function __construct(
