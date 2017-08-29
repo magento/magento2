@@ -53,7 +53,11 @@ class PidConsumerManagerTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->pidConsumerManager = new PidConsumerManager($this->filesystemMock, $this->writeFactoryMock, $this->directoryListMock);
+        $this->pidConsumerManager = new PidConsumerManager(
+            $this->filesystemMock,
+            $this->writeFactoryMock,
+            $this->directoryListMock
+        );
     }
 
     /**
