@@ -6,7 +6,7 @@
 namespace Magento\Tax\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Tax\Api\TaxAddressManagerInterface;
+use Magento\Tax\Model\TaxAddressManager;
 use \PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 class TaxAddressManagerTest extends \PHPUnit\Framework\TestCase
@@ -17,7 +17,7 @@ class TaxAddressManagerTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var TaxAddressManagerInterface
+     * @var TaxAddressManager
      */
     private $manager;
 
@@ -36,7 +36,7 @@ class TaxAddressManagerTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->manager = $this->objectManager->getObject(
-            TaxAddressManagerInterface::class,
+            TaxAddressManager::class,
             [
                 'customerSession' => $this->customerSessionMock,
             ]

@@ -36,7 +36,7 @@ class AfterAddressSaveObserver implements ObserverInterface
 
     /**
      * Manager to save data in customer session.
-     * 
+     *
      * @var TaxAddressManagerInterface
      */
     private $addressManager;
