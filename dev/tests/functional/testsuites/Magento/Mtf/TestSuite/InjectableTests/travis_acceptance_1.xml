@@ -35,13 +35,11 @@
             <module value="Magento_Customer" strict="1" />
             <module value="Magento_CustomerImportExport" strict="1" />
             <module value="Magento_Dhl" strict="1" />
-            <module value="Magento_Directory" strict="1" />
             <module value="Magento_Downloadable" strict="1" />
             <module value="Magento_Email" strict="1" />
             <module value="Magento_Fedex" strict="1" />
             <module value="Magento_GiftMessage" strict="1" />
             <module value="Magento_GroupedImportExport" strict="1" />
-            <module value="Magento_GroupedProduct" strict="1" />
             <module value="Magento_ImportExport" strict="1" />
             <module value="Magento_Indexer" strict="1" />
             <module value="Magento_Install" strict="1" />
