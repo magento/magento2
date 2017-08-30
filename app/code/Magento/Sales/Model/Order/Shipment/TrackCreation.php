@@ -54,6 +54,24 @@ class TrackCreation implements ShipmentTrackCreationInterface
     /**
      * {@inheritdoc}
      */
+    public function setTrackUrl($trackUrl)
+    {
+        return $this->setData(ShipmentTrackInterface::TRACK_URL, $trackUrl);
+    }
+
+    /**
+     * Returns track_url
+     *
+     * @return string
+     */
+    public function getTrackUrl()
+    {
+        return $this->getData(ShipmentTrackInterface::TRACK_URL);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getTitle()
     {
         return $this->title;

@@ -120,6 +120,31 @@ class Track extends AbstractModel implements ShipmentTrackInterface
     }
 
     /**
+     * Tracking URL getter
+     *
+     * @codeCoverageIgnore
+     *
+     * @return string
+     */
+     public function getUrl()
+     {
+         return $this->getData('track_url');
+     }
+
+     /**
+      * Tracking URL setter
+      *
+      * @codeCoverageIgnore
+      *
+      * @param string $url
+      * @return \Magento\Framework\DataObject
+      */
+     public function setUrl($url)
+     {
+         return $this->setData('track_url', $url);
+     }
+
+    /**
      * Declare Shipment instance
      *
      * @codeCoverageIgnore
@@ -222,6 +247,16 @@ class Track extends AbstractModel implements ShipmentTrackInterface
     public function getTrackNumber()
     {
         return $this->getData(ShipmentTrackInterface::TRACK_NUMBER);
+    }
+
+    /**
+     * Returns track_url
+     *
+     * @return string
+     */
+    public function getTrackUrl()
+    {
+        return $this->getData(ShipmentTrackInterface::TRACK_URL);
     }
 
     /**
@@ -368,6 +403,14 @@ class Track extends AbstractModel implements ShipmentTrackInterface
     public function setTrackNumber($trackNumber)
     {
         return $this->setData(ShipmentTrackInterface::TRACK_NUMBER, $trackNumber);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTrackUrl($trackUrl)
+    {
+        return $this->setData(ShipmentTrackInterface::TRACK_URL, $trackUrl);
     }
 
     /**

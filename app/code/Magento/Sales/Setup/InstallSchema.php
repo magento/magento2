@@ -2659,6 +2659,12 @@ class InstallSchema implements InstallSchemaInterface
             null,
             ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
             'Updated At'
+        )->addColumn(
+            'track_url',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            ['nullable' => true, 'default' => null],
+            'Tracking URL'
         )->addIndex(
             $installer->getIdxName('sales_shipment_track', ['parent_id']),
             ['parent_id']
@@ -5569,5 +5575,6 @@ class InstallSchema implements InstallSchemaInterface
         $installer->getConnection()->createTable($table);
 
         $installer->endSetup();
+
     }
 }
