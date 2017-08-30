@@ -267,4 +267,29 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         ]);
         $this->assertEquals($this->optionMock, $this->optionRepository->save($this->optionMock));
     }
+
+    public function testSaveWhenOptionTypeWasChanged()
+    {
+        $productSku = 'simple_product';
+        $optionId = 1;
+        $this->optionMock->expects($this->once())->method('getProductSku')->willReturn($productSku);
+        $this->productRepositoryMock
+            ->expects($this->once())
+            ->method('get')
+            ->with($productSku)
+            ->willReturn($this->productMock);
+        $this->optionMock->expects($this->any())->method('getOptionId')->willReturn($optionId);
+        $this->productMock->expects($this->once())->method('getOptions')->willReturn([]);
+        $this->optionMock->expects($this->once())->method('getData')->with('values')->willReturn([
+            ['option_type_id' => 4],
+            ['option_type_id' => 5]
+        ]);
+        $optionCollection = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Option\Collection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $optionCollection->expects($this->once())->method('getProductOptions')->willReturn([$this->optionMock]);
+        $this->optionCollectionFactory->expects($this->once())->method('create')->willReturn($optionCollection);
+        $this->optionMock->expects($this->once())->method('getValues')->willReturn(null);
+        $this->assertEquals($this->optionMock, $this->optionRepository->save($this->optionMock));
+    }
 }

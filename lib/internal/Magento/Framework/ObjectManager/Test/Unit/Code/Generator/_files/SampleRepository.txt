@@ -2,6 +2,9 @@ namespace Magento\Framework\ObjectManager\Code\Generator;
 
 /**
  * Repository class for @see \Magento\Framework\ObjectManager\Code\Generator\SampleInterface
+ *
+ * @deprecated 2.2.0
+ * @see \Magento\Framework\ObjectManager\Code\Generator\Repository
  */
 class SampleRepository implements SampleRepositoryInterface
 {
@@ -63,6 +66,7 @@ class SampleRepository implements SampleRepositoryInterface
      * @return \Magento\Framework\ObjectManager\Code\Generator\SampleInterface
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @deprecated
      */
     public function get($id)
     {
@@ -84,6 +88,7 @@ class SampleRepository implements SampleRepositoryInterface
      *
      * @param array $data
      * @return \Magento\Framework\ObjectManager\Code\Generator\SampleInterface
+     * @deprecated
      */
     public function create(\Magento\Framework\ObjectManager\Code\Generator\SampleInterface $entity)
     {
@@ -95,6 +100,7 @@ class SampleRepository implements SampleRepositoryInterface
      *
      * @param array $data
      * @return \Magento\Framework\ObjectManager\Code\Generator\SampleRepository
+     * @deprecated
      */
     public function createFromArray(array $data)
     {
@@ -106,6 +112,7 @@ class SampleRepository implements SampleRepositoryInterface
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\Framework\ObjectManager\Code\Generator\SampleInterface[]
+     * @deprecated
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
@@ -119,6 +126,7 @@ class SampleRepository implements SampleRepositoryInterface
      * Register entity to delete
      *
      * @param \Magento\Framework\ObjectManager\Code\Generator\SampleInterface $entity
+     * @deprecated
      */
     public function remove(\Magento\Framework\ObjectManager\Code\Generator\SampleInterface $entity)
     {
@@ -130,6 +138,7 @@ class SampleRepository implements SampleRepositoryInterface
      *
      * @param \Magento\Framework\ObjectManager\Code\Generator\SampleInterface $entity
      * @return bool
+     * @deprecated
      */
     public function delete(\Magento\Framework\ObjectManager\Code\Generator\SampleInterface $entity)
     {
@@ -142,6 +151,7 @@ class SampleRepository implements SampleRepositoryInterface
      *
      * @param int $id
      * @return bool
+     * @deprecated
      */
     public function deleteById($id)
     {
@@ -152,6 +162,8 @@ class SampleRepository implements SampleRepositoryInterface
 
     /**
      * Perform persist operations
+     *
+     * @deprecated
      */
     public function flush()
     {
@@ -166,6 +178,7 @@ class SampleRepository implements SampleRepositoryInterface
      *
      * @param \Magento\Framework\ObjectManager\Code\Generator\SampleInterface $entity
      * @return \Magento\Framework\ObjectManager\Code\Generator\SampleInterface
+     * @deprecated
      */
     public function save(\Magento\Framework\ObjectManager\Code\Generator\SampleInterface $entity)
     {
