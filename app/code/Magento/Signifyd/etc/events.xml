@@ -9,4 +9,7 @@
     <event name="checkout_submit_all_after">
         <observer name="signifyd_place_order_observer" instance="Magento\Signifyd\Observer\PlaceOrder" />
     </event>
+    <event name="paypal_express_place_order_success">
+        <observer name="signifyd_place_order_paypal_express_observer" instance="Magento\Signifyd\Observer\PlaceOrder"/>
+    </event>
 </config>
