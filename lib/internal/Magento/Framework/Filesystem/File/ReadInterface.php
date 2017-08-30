@@ -20,6 +20,15 @@ interface ReadInterface
     public function read($length);
 
     /**
+     * Returns the complete content of the file.
+     *
+     * @param string|null $flag
+     * @param resource|null $context
+     * @return string
+     */
+    public function readAll($flag = null, $context = null);
+
+    /**
      * Reads the line with specified number of bytes from the current position.
      *
      * @param int $length The number of bytes to read
