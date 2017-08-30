@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\ConfigurableProduct\Test\TestCase\UpdateConfigurableProductCustomWebsiteTest" summary="Update Configurable Product" ticketId="MAGETWO-64720">
+        <variation name="UpdateConfigurableProductCustomWebsiteTestVariation1" summary="'As low as' Price not Shown if Product Price Different for Different Websites">
+            <data name="configData" xsi:type="string">price_per_website</data>
+            <data name="product" xsi:type="string">configurableProduct::two_variations_two_websites</data>
+            <data name="store/dataset" xsi:type="string">default</data>
+            <data name="updatedSimple/data/price/value" xsi:type="string">15.00</data>
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCategory"/>
+        </variation>
+    </testCase>
+</config>

@@ -54,7 +54,7 @@
             <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCart" />
         </variation>
         <variation name="CreateConfigurableProductEntityTestVariation3" summary="Create product with special price">
-            <data name="tag" xsi:type="string">to_maintain:yes</data>
+            <data name="tag" xsi:type="string">to_maintain:no</data>
             <data name="product/data/url_key" xsi:type="string">configurable-product-%isolation%</data>
             <data name="product/data/configurable_attributes_data/dataset" xsi:type="string">two_options_with_assigned_product_special_price</data>
             <data name="product/data/checkout_data/dataset" xsi:type="string">configurable_two_new_options_with_special_price</data>
@@ -179,6 +179,18 @@
             <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableAttributesBlockIsAbsentOnProductPage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory" />
+        </variation>
+        <variation name="CreateConfigurableProductEntityTestVariation10" summary="Use Layered Navigation to filter Products by Out of Stock option of configurable product" ticketId="MAGETWO-66890">
+            <data name="product/data/configurable_attributes_data/dataset" xsi:type="string">with_one_out_of_stock_item</data>
+            <data name="product/data/name" xsi:type="string">Configurable Product %isolation%</data>
+            <data name="product/data/sku" xsi:type="string">configurable_sku_%isolation%</data>
+            <data name="product/data/price/value" xsi:type="string">100</data>
+            <data name="product/data/price/dataset" xsi:type="string">default</data>
+            <data name="product/data/category_ids/new_category" xsi:type="string">no</data>
+            <data name="product/data/category_ids/dataset" xsi:type="string">default_anchor_subcategory</data>
+            <data name="product/data/url_key" xsi:type="string">configurable-product-%isolation%</data>
+            <data name="productSimple" xsi:type="string">catalogProductSimple::default</data>
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertProductsInStockInLayeredNavigation" />
         </variation>
     </testCase>
 </config>

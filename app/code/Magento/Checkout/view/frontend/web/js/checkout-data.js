@@ -15,27 +15,32 @@ define([
 
     var cacheKey = 'checkout-data';
 
-    var getData = function () {
-        return storage.get(cacheKey)();
-    };
-
     var saveData = function (checkoutData) {
         storage.set(cacheKey, checkoutData);
-    };
+    },
+        
+    /**
+     * @return {*}
+     */
+    getData = function () {
+        var data = storage.get(cacheKey)();
 
-    if ($.isEmptyObject(getData())) {
-        var checkoutData = {
-            'selectedShippingAddress': null,
-            'shippingAddressFromData' : null,
-            'newCustomerShippingAddress' : null,
-            'selectedShippingRate' : null,
-            'selectedPaymentMethod' : null,
-            'selectedBillingAddress' : null,
-            'billingAddressFormData' : null,
-            'newCustomerBillingAddress' : null
-        };
-        saveData(checkoutData);
-    }
+        if ($.isEmptyObject(data)) {
+            data = {
+                'selectedShippingAddress': null,
+                'shippingAddressFromData': null,
+                'newCustomerShippingAddress': null,
+                'selectedShippingRate': null,
+                'selectedPaymentMethod': null,
+                'selectedBillingAddress': null,
+                'billingAddressFormData': null,
+                'newCustomerBillingAddress': null
+            };
+            saveData(data);
+        }
+
+        return data;
+    };
 
     return {
         setSelectedShippingAddress: function (data) {

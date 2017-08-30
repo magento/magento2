@@ -21,6 +21,13 @@ class AddressModal extends Form
     private $saveButton = '.action-save-address';
 
     /**
+     * CSS Selector for Cancel button.
+     *
+     * @var string
+     */
+    private $cancelButton = '.action-hide-popup';
+
+    /**
      * Selector for field's error message.
      *
      * @var string
@@ -49,6 +56,16 @@ class AddressModal extends Form
     public function save()
     {
         $this->_rootElement->find($this->saveButton)->click();
+    }
+
+    /**
+     * Click on 'Cancel' button.
+     *
+     * @return void
+     */
+    public function cancel()
+    {
+        $this->_rootElement->find($this->cancelButton)->click();
     }
 
     /**

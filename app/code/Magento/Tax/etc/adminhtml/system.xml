@@ -60,7 +60,7 @@
                     <label>Apply Discount On Prices</label>
                     <source_model>Magento\Tax\Model\System\Config\Source\PriceType</source_model>
                     <backend_model>Magento\Tax\Model\Config\Notification</backend_model>
-                    <comment>Apply discount on price including tax is calculated based on store tax if "Apply Tax after Discount" is selected.</comment>
+                    <comment>Warning: To apply the discount on prices including tax and apply the tax after discount, set Catalog Prices to “Including Tax”.</comment>
                 </field>
                 <field id="apply_tax_on" translate="label comment" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Apply Tax On</label>

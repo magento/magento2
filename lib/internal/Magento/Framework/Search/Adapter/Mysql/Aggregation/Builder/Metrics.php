@@ -10,14 +10,14 @@ use Magento\Framework\Search\Request\BucketInterface as RequestBucketInterface;
 class Metrics
 {
     /**
-     * Available metrics
+     * Available metrics.
      *
      * @var string[]
      */
-    private $mapMetrics = ['count', 'sum', 'min', 'max', 'avg'];
+    private $allowedMetrics = ['count', 'sum', 'min', 'max', 'avg'];
 
     /**
-     * Build metrics for Select->columns
+     * Build metrics for Select->columns.
      *
      * @param RequestBucketInterface $bucket
      * @return string[]
@@ -30,7 +30,7 @@ class Metrics
 
         foreach ($metrics as $metric) {
             $metricType = $metric->getType();
-            if (in_array($metricType, $this->mapMetrics)) {
+            if (in_array($metricType, $this->allowedMetrics, true)) {
                 $selectAggregations[$metricType] = "$metricType(main_table.value)";
             }
         }

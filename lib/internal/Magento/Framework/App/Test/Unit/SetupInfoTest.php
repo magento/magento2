@@ -193,6 +193,13 @@ class SetupInfoTest extends \PHPUnit_Framework_TestCase
                 ],
                 true
             ],
+            'root within doc root + pub, existent sub-directory' => [
+                [
+                    'DOCUMENT_ROOT' => __DIR__ . '/_files/pub/',
+                    'SCRIPT_FILENAME' => __DIR__ . '/_files/pub/index.php',
+                ],
+                true
+            ],
         ];
     }
 }
