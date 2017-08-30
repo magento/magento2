@@ -151,14 +151,14 @@ abstract class Create extends \Magento\Backend\App\Action
             'session' => $this->_getSession(),
         ];
 
-        $this->_eventManager->dispatch('adminhtml_sales_order_create_process_data_before', $eventData);
-
         /**
-         * Saving order data
+         * Import post data, in order to make order quote valid
          */
         if ($data = $this->getRequest()->getPost('order')) {
             $this->_getOrderCreateModel()->importPostData($data);
         }
+
+        $this->_eventManager->dispatch('adminhtml_sales_order_create_process_data_before', $eventData);
 
         /**
          * Initialize catalog rule data
