@@ -12,7 +12,6 @@
             <module value="Magento_ConfigurableProduct" strict="1" />
             <module value="Magento_Checkout" strict="1" />
             <module value="Magento_LayeredNavigation" strict="1" />
-            <module value="Magento_Msrp" strict="1" />
             <module value="Magento_Multishipping" strict="1" />
             <module value="Magento_Newsletter" strict="1" />
             <module value="Magento_OfflinePayments" strict="1" />
