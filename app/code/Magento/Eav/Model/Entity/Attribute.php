@@ -27,6 +27,11 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
     const ATTRIBUTE_CODE_MAX_LENGTH = 30;
 
     /**
+     * Attribute code min length.
+     */
+    const ATTRIBUTE_CODE_MIN_LENGTH = 1;
+
+    /**
      * Cache tag
      */
     const CACHE_TAG = 'EAV_ATTRIBUTE';
