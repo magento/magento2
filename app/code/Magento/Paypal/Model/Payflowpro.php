@@ -7,6 +7,7 @@ namespace Magento\Paypal\Model;
 
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Payment\Helper\Formatter;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Model\Method\ConfigInterface;
 use Magento\Payment\Model\Method\ConfigInterfaceFactory;
@@ -82,6 +83,8 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
     const RESPONSE_CODE_VOID_ERROR = 108;
 
     const PNREF = 'pnref';
+
+    use Formatter;
 
     /**#@-*/
 
@@ -396,8 +399,8 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
     protected function _getCaptureAmount($amount)
     {
         $infoInstance = $this->getInfoInstance();
-        $amountToPay = sprintf('%.2F', $amount);
-        $authorizedAmount = sprintf('%.2F', $infoInstance->getAmountAuthorized());
+        $amountToPay = $this->formatPrice($amount);
+        $authorizedAmount = $this->formatPrice($infoInstance->getAmountAuthorized());
         return $amountToPay != $authorizedAmount ? $amountToPay : 0;
     }
 
