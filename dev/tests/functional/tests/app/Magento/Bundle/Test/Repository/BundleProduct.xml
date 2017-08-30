@@ -478,5 +478,43 @@
                 <item name="dataset" xsi:type="string">default_with_one_simple_product_and_custom_option</item>
             </field>
         </dataset>
+
+        <dataset name="bundle_with_multiselect_option_one_selection">
+            <field name="name" xsi:type="string">Bundle with multiselect option %isolation%</field>
+            <field name="url_key" xsi:type="string">bundle-with-multiselect-option-%isolation%</field>
+            <field name="sku" xsi:type="string">sku_bundle_with_multiselect_option_%isolation%</field>
+            <field name="sku_type" xsi:type="string">Yes</field>
+            <field name="price_type" xsi:type="string">Yes</field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
+            </field>
+            <field name="bundle_selections" xsi:type="array">
+                <item name="dataset" xsi:type="string">multiselect_option</item>
+            </field>
+            <field name="checkout_data" xsi:type="array">
+                <item name="dataset" xsi:type="string">bundle_multiselect_one_option</item>
+            </field>
+        </dataset>
+
+        <dataset name="bundle_with_multiselect_option_two_selections">
+            <field name="name" xsi:type="string">Bundle with multiselect option %isolation%</field>
+            <field name="url_key" xsi:type="string">bundle-with-multiselect-option-%isolation%</field>
+            <field name="sku" xsi:type="string">sku_bundle_with_multiselect_option_%isolation%</field>
+            <field name="sku_type" xsi:type="string">Yes</field>
+            <field name="price_type" xsi:type="string">Yes</field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
+            </field>
+            <field name="bundle_selections" xsi:type="array">
+                <item name="dataset" xsi:type="string">multiselect_option</item>
+            </field>
+            <field name="checkout_data" xsi:type="array">
+                <item name="dataset" xsi:type="string">bundle_multiselect_two_options</item>
+            </field>
+        </dataset>
     </repository>
 </config>
