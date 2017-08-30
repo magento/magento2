@@ -15,10 +15,11 @@ $priceLabel = ($block->getPriceLabel() !== null)
 ?>
 <p class="price-as-configured">
     <?php if ($configuredPrice->getValue() !== 0): ?>
-        <?php /* @escapeNotVerified */ echo $block->renderAmount($configuredPrice->getAmount(), [
-            'display_label'     => $priceLabel,
-            'price_id'          => $block->getPriceId('product-price-'),
-            'price_type'        => 'finalPrice',
+        <?php /* @escapeNotVerified */
+        echo $block->renderAmount($configuredPrice->getAmount(), [
+            'display_label' => $priceLabel,
+            'price_id' => $block->getPriceId('product-price-'),
+            'price_type' => 'finalPrice',
             'include_container' => true,
             'schema' => $schema
         ]); ?>
