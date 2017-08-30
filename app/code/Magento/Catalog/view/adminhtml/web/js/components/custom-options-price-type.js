@@ -35,20 +35,17 @@ define([
          * Update addbefore for price field. Change it to currency or % depends of price_type value.
          */
         updateAddBeforeForPrice: function () {
-            var priceIndex = typeof this.imports.priceIndex == 'undefined'
-                ? 'price'
-                : this.imports.priceIndex;
-
+            var addBefore, currentValue;
+            var priceIndex = typeof this.imports.priceIndex == 'undefined' ? 'price' : this.imports.priceIndex;
             var priceName = this.parentName + '.' + priceIndex;
 
             var uiPrice = uiRegistry.get(priceName);
 
             if (uiPrice && uiPrice.addbeforePool) {
-                var currentValue = this.value();
-                var addBefore;
+                currentValue = this.value();
 
                 uiPrice.addbeforePool.forEach(function (item) {
-                    if (item.value == currentValue) {
+                    if (item.value === currentValue) {
                         addBefore = item.label;
                     }
                 });
