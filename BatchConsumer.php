@@ -75,6 +75,8 @@ class BatchConsumer implements ConsumerInterface
      * @param int $interval [optional]
      * @param int $batchSize [optional]
      * @param MessageProcessorLoader $messageProcessorLoader [optional]
+     * @param MessageController $messageController [optional]
+     * @param ConsumerConfig $consumerConfig [optional]
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -87,7 +89,9 @@ class BatchConsumer implements ConsumerInterface
         ConsumerConfigurationInterface $configuration,
         $interval = 5,
         $batchSize = 0,
-        MessageProcessorLoader $messageProcessorLoader = null
+        MessageProcessorLoader $messageProcessorLoader = null,
+        MessageController $messageController = null,
+        ConsumerConfig $consumerConfig = null
     ) {
         $this->messageEncoder = $messageEncoder;
         $this->queueRepository = $queueRepository;
@@ -98,6 +102,10 @@ class BatchConsumer implements ConsumerInterface
         $this->configuration = $configuration;
         $this->messageProcessorLoader = $messageProcessorLoader
             ?: \Magento\Framework\App\ObjectManager::getInstance()->get(MessageProcessorLoader::class);
+        $this->messageController = $messageController
+            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(MessageController::class);
+        $this->consumerConfig = $consumerConfig
+            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(ConsumerConfig::class);
     }
 
     /**
@@ -107,7 +115,7 @@ class BatchConsumer implements ConsumerInterface
     {
         $queueName = $this->configuration->getQueueName();
         $consumerName = $this->configuration->getConsumerName();
-        $connectionName = $this->getConsumerConfig()->getConsumer($consumerName)->getConnection();
+        $connectionName = $this->consumerConfig->getConsumer($consumerName)->getConnection();
 
         $queue = $this->queueRepository->get($connectionName, $queueName);
         $merger = $this->mergerFactory->create($consumerName);
@@ -257,47 +265,12 @@ class BatchConsumer implements ConsumerInterface
         $toAcknowledge = [];
         foreach ($messages as $message) {
             try {
-                $this->getMessageController()->lock($message, $this->configuration->getConsumerName());
+                $this->messageController->lock($message, $this->configuration->getConsumerName());
                 $toProcess[] = $message;
             } catch (MessageLockException $exception) {
                 $toAcknowledge[] = $message;
             }
         }
         return [$toProcess, $toAcknowledge];
-    }
-
-    /**
-     * Get consumer config.
-     *
-     * This getter serves as a workaround to add this dependency to this class without breaking constructor structure
-     *
-     * @return ConsumerConfig
-     *
-     * @deprecated 100.2.0
-     */
-    private function getConsumerConfig()
-    {
-        if ($this->consumerConfig === null) {
-            $this->consumerConfig = \Magento\Framework\App\ObjectManager::getInstance()->get(ConsumerConfig::class);
-        }
-        return $this->consumerConfig;
-    }
-
-    /**
-     * Get message controller.
-     *
-     * This getter serves as a workaround to add this dependency to this class without breaking constructor structure
-     *
-     * @return MessageController
-     *
-     * @deprecated 100.1.0
-     */
-    private function getMessageController()
-    {
-        if ($this->messageController === null) {
-            $this->messageController = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\MessageQueue\MessageController::class);
-        }
-        return $this->messageController;
     }
 }
