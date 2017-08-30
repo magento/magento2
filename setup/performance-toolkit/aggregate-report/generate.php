@@ -4,6 +4,11 @@
  * See COPYING.txt for license details.
  */
 
+/**
+* @SuppressWarnings(PHPMD.CyclomaticComplexity)
+* @SuppressWarnings(PHPMD.NPathComplexity)
+*/
+
 $usageMessage =
     'Usage:' . PHP_EOL
     . '   php generate.php -j jmeter_report.jtl -m memory_usage.log -o output_file.csv' . PHP_EOL
@@ -286,9 +291,9 @@ function calculate_percentile(array $arr, $percentile)
     $allindex = ($count - 1) * $percentile;
     $intvalindex = intval($allindex);
     $floatval = $allindex - $intvalindex;
-    if (!is_float($floatval)){
+    if (!is_float($floatval)) {
         $result = $arr[$intvalindex];
-    }else {
+    } else {
         if ($count > $intvalindex + 1) {
             $result = $floatval * ($arr[$intvalindex + 1] - $arr[$intvalindex]) + $arr[$intvalindex];
         } else {

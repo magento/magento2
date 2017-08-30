@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 $mapping = [
     [
         'label' => 'Open Home Page',
@@ -580,7 +583,8 @@ $mapping = [
     ],
     [
         'label' => 'Admin - Save New Configurable Product',
-        'uri' => '\/admin\/catalog\/product\/save\/set\/4\/type\/configurable\/back\/edit\/active_tab\/product-details\/',
+        'uri' => '\/admin\/catalog\/product\/save\/set\/4\/type\/configurable'
+                . '\/back\/edit\/active_tab\/product-details\/',
         'title' => 'Admin Create Product - New Configurable Product Save',
         'scenario' => 'Admin - Create Product',
     ],
@@ -610,7 +614,8 @@ $mapping = [
     ],
     [
         'label' => 'Admin - Save New Downloadable Product',
-        'uri' => '\/admin\/catalog\/product\/save\/set\/4\/type\/downloadable\/back\/edit\/active_tab\/product-details\/',
+        'uri' => '\/admin\/catalog\/product\/save\/set\/4\/type\/downloadable'
+                . '\/back\/edit\/active_tab\/product-details\/',
         'title' => 'Admin Create Product - New Downloadable Product Save',
         'scenario' => 'Admin - Create Product',
     ],
@@ -700,7 +705,8 @@ $mapping = [
     ],
     [
         'label' => 'Admin - Create New Condition For Promotion Rule',
-        'uri' => '\/admin\/sales_rule\/promo_quote\/newConditionHtml\/form\/sales_rule_formrule_conditions_fieldset_\/form_namespace\/sales_rule_form',
+        'uri' => '\/admin\/sales_rule\/promo_quote\/newConditionHtml\/form\/sales_rule_formrule_conditions_fieldset_'
+                . '\/form_namespace\/sales_rule_form',
         'title' => 'Admin Promotions Management - Create New Conditional',
         'scenario' => 'Admin - Promotion Rules',
     ],
