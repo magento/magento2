@@ -76,4 +76,9 @@
             <argument name="severity" xsi:type="string">S3</argument>
         </arguments>
     </type>
+    <type name="Magento\Widget\Test\Constraint\AssertProductInCatalogNewProductsList">
+        <arguments>
+            <argument name="severity" xsi:type="string">S2</argument>
+        </arguments>
+    </type>
 </config>

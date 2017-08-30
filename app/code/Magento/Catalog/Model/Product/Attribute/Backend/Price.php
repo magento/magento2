@@ -11,7 +11,10 @@ use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
 /**
  * Backend model for set of EAV attributes with 'frontend_input' equals 'price'.
  *
+ * @api
+ *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
@@ -126,7 +129,8 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         $attribute = $this->getAttribute();
         $attributeCode = $attribute->getAttributeCode();
         $value = $object->getData($attributeCode);
-        if ((float)$value > 0) {
+        // $value may be passed as null to unset the attribute
+        if ($value === null || (float)$value > 0) {
             if ($attribute->isScopeWebsite() && $object->getStoreId() != \Magento\Store\Model\Store::DEFAULT_STORE_ID) {
                 if ($this->isUseDefault($object)) {
                     $value = null;

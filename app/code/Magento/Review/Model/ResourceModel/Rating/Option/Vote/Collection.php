@@ -8,7 +8,9 @@ namespace Magento\Review\Model\ResourceModel\Rating\Option\Vote;
 /**
  * Rating votes collection
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {

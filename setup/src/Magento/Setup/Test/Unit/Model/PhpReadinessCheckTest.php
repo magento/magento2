@@ -9,7 +9,7 @@ use Magento\Setup\Controller\ResponseTypeInterface;
 use Magento\Setup\Model\PhpReadinessCheck;
 use Magento\Framework\Convert\DataSize;
 
-class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
+class PhpReadinessCheckTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Composer\ComposerInformation
@@ -40,10 +40,10 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->composerInfo = $this->getMock(\Magento\Framework\Composer\ComposerInformation::class, [], [], '', false);
-        $this->phpInfo = $this->getMock(\Magento\Setup\Model\PhpInformation::class, [], [], '', false);
-        $this->versionParser = $this->getMock(\Composer\Package\Version\VersionParser::class, [], [], '', false);
-        $this->dataSize = $this->getMock(\Magento\Framework\Convert\DataSize::class, [], [], '', false);
+        $this->composerInfo = $this->createMock(\Magento\Framework\Composer\ComposerInformation::class);
+        $this->phpInfo = $this->createMock(\Magento\Setup\Model\PhpInformation::class);
+        $this->versionParser = $this->createMock(\Composer\Package\Version\VersionParser::class);
+        $this->dataSize = $this->createMock(\Magento\Framework\Convert\DataSize::class);
         $this->phpReadinessCheck = new PhpReadinessCheck(
             $this->composerInfo,
             $this->phpInfo,

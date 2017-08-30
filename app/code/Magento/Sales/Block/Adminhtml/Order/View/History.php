@@ -8,7 +8,8 @@ namespace Magento\Sales\Block\Adminhtml\Order\View;
 /**
  * Order history block
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
 class History extends \Magento\Backend\Block\Template
 {

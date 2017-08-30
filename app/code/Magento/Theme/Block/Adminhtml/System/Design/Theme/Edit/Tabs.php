@@ -7,6 +7,9 @@ namespace Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit;
 
 /**
  * Theme editor tab container
+ *
+ * @api
+ * @since 100.0.2
  */
 class Tabs extends \Magento\Backend\Block\Widget\Tabs
 {

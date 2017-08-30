@@ -10,21 +10,27 @@ use Magento\Catalog\Model\Product;
 
 /**
  * Read handler for catalog product gallery.
+ *
+ * @api
+ * @since 101.0.0
  */
 class ReadHandler implements ExtensionInterface
 {
     /**
      * @var \Magento\Catalog\Api\Data\ProductAttributeInterface
+     * @since 101.0.0
      */
     protected $attribute;
 
     /**
      * @var \Magento\Catalog\Api\ProductAttributeRepositoryInterface
+     * @since 101.0.0
      */
     protected $attributeRepository;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Gallery
+     * @since 101.0.0
      */
     protected $resourceModel;
 
@@ -45,6 +51,7 @@ class ReadHandler implements ExtensionInterface
      * @param array $arguments
      * @return object
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 101.0.0
      */
     public function execute($entity, $arguments = [])
     {
@@ -68,6 +75,7 @@ class ReadHandler implements ExtensionInterface
      * @param Product $product
      * @param array $mediaEntries
      * @return void
+     * @since 101.0.1
      */
     public function addMediaDataToProduct(Product $product, array $mediaEntries)
     {
@@ -106,6 +114,7 @@ class ReadHandler implements ExtensionInterface
 
     /**
      * @return \Magento\Catalog\Api\Data\ProductAttributeInterface
+     * @since 101.0.0
      */
     public function getAttribute()
     {
@@ -120,7 +129,8 @@ class ReadHandler implements ExtensionInterface
      * @param string $key
      * @param string[] &$image
      * @return string
-     * @deprecated
+     * @deprecated 101.0.1
+     * @since 101.0.0
      */
     protected function findDefaultValue($key, &$image)
     {

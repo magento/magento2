@@ -12,7 +12,9 @@ use Magento\Framework\Model\AbstractExtensibleModel;
  * Sales abstract model
  * Provide date processing functionality
  *
+ * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @since 100.0.2
  */
 abstract class AbstractModel extends AbstractExtensibleModel
 {

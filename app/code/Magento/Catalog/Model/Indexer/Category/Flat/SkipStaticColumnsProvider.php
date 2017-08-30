@@ -6,6 +6,12 @@
 
 namespace Magento\Catalog\Model\Indexer\Category\Flat;
 
+/**
+ * Static columns provider
+ *
+ * @api
+ * @since 101.0.0
+ */
 class SkipStaticColumnsProvider
 {
     /**
@@ -24,6 +30,7 @@ class SkipStaticColumnsProvider
 
     /**
      * @return array
+     * @since 101.0.0
      */
     public function get()
     {

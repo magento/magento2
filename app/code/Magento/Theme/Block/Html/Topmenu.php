@@ -15,6 +15,7 @@ use Magento\Framework\View\Element\Template;
  * Html page top menu block
  *
  * @api
+ * @since 100.0.2
  */
 class Topmenu extends Template implements IdentityInterface
 {
@@ -63,6 +64,7 @@ class Topmenu extends Template implements IdentityInterface
      * Get block cache life time
      *
      * @return int
+     * @since 100.1.0
      */
     protected function getCacheLifetime()
     {
@@ -349,6 +351,7 @@ class Topmenu extends Template implements IdentityInterface
      * Get cache key informative items
      *
      * @return array
+     * @since 100.1.0
      */
     public function getCacheKeyInfo()
     {
@@ -361,6 +364,7 @@ class Topmenu extends Template implements IdentityInterface
      * Get tags array for saving cache
      *
      * @return array
+     * @since 100.1.0
      */
     protected function getCacheTags()
     {
@@ -374,6 +378,7 @@ class Topmenu extends Template implements IdentityInterface
      * The creation logic was moved from class constructor into separate method.
      *
      * @return Node
+     * @since 100.1.0
      */
     public function getMenu()
     {

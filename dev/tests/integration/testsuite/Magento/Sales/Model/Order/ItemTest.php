@@ -3,13 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Sales\Model\Order;
 
-/**
- * Item test class.
- */
-class ItemTest extends \PHPUnit_Framework_TestCase
+class ItemTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param string $options
@@ -29,25 +25,12 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     public function getProductOptionsDataProvider()
     {
         return [
-            // Variation #1
             [
-                // $options
                 '{"option1":1,"option2":2}',
-                //$expectedData
                 ["option1" => 1, "option2" => 2]
             ],
-            // Variation #2
             [
-                // $options
-                'a:2:{s:7:"option1";i:1;s:7:"option2";i:2;}',
-                //$expectedData
-                null
-            ],
-            // Variation #3
-            [
-                // $options
                 ["option1" => 1, "option2" => 2],
-                //$expectedData
                 ["option1" => 1, "option2" => 2]
             ],
         ];

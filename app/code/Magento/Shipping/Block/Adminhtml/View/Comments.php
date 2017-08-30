@@ -11,6 +11,10 @@
  */
 namespace Magento\Shipping\Block\Adminhtml\View;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Comments extends \Magento\Backend\Block\Text\ListText
 {
     /**

@@ -12,7 +12,11 @@ use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 
 /**
  * Catalog entity abstract model
+ *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
 {

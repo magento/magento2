@@ -16,7 +16,7 @@
             <block class="Magento\AdminNotification\Block\Window"
                    name="notification_window"
                    as="notification_window"
-                   acl="Magento_AdminNotification::show_toolbar"
+                   aclResource="Magento_AdminNotification::show_toolbar"
                    template="Magento_AdminNotification::notification/window.phtml"/>
         </referenceContainer>
         <referenceContainer name="header">

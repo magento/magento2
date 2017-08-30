@@ -3,7 +3,7 @@ namespace Magento\Framework\ObjectManager\Code\Generator;
 /**
  * Proxy class for @see \Magento\Framework\ObjectManager\Code\Generator\Sample
  */
-class Sample_Proxy extends \Magento\Framework\ObjectManager\Code\Generator\Sample implements \Magento\Framework\ObjectManager\NoninterceptableInterface
+class Sample_Proxy extends Sample implements \Magento\Framework\ObjectManager\NoninterceptableInterface
 {
     /**
      * Object Manager instance

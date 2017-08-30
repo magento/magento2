@@ -9,7 +9,7 @@ namespace Magento\Bundle\Model\Product;
 /**
  * Test class for \Magento\Bundle\Model\Product\Type (bundle product type)
  */
-class TypeTest extends \PHPUnit_Framework_TestCase
+class TypeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -76,5 +76,24 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Bundle\Model\Product\Type $bundleType */
         $options = $bundleType->getOptionsCollection($bundleProduct);
         $this->assertCount(5, $options->getItems());
+    }
+
+    /**
+     * @magentoDataFixture Magento/Bundle/_files/product.php
+     * @covers \Magento\Bundle\Model\Product\Type::getParentIdsByChild()
+     */
+    public function testGetParentIdsByChild()
+    {
+        $productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        /** @var \Magento\Catalog\Api\Data\ProductInterface $bundleProduct */
+        $bundleProduct = $productRepository->get('bundle-product');
+        /** @var \Magento\Catalog\Api\Data\ProductInterface $simpleProduct */
+        $simpleProduct = $productRepository->get('simple');
+
+        /** @var \Magento\Bundle\Model\Product\Type $bundleType */
+        $bundleType = $bundleProduct->getTypeInstance();
+        $parentIds = $bundleType->getParentIdsByChild($simpleProduct->getId());
+        $this->assertNotEmpty($parentIds);
+        $this->assertEquals($bundleProduct->getId(), $parentIds[0]);
     }
 }

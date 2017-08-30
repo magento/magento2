@@ -11,11 +11,15 @@ use Magento\Framework\UrlInterface;
 
 /**
  * DataProvider for new category form
+ *
+ * @api
+ * @since 101.0.0
  */
 class NewCategoryDataProvider extends AbstractDataProvider
 {
     /**
      * @var UrlInterface
+     * @since 101.0.0
      */
     protected $urlBuilder;
 
@@ -44,6 +48,7 @@ class NewCategoryDataProvider extends AbstractDataProvider
 
     /**
      * {@inheritdoc}
+     * @since 101.0.0
      */
     public function getData()
     {
@@ -66,6 +71,7 @@ class NewCategoryDataProvider extends AbstractDataProvider
 
     /**
      * {@inheritdoc}
+     * @since 101.0.0
      */
     public function getMeta()
     {
@@ -86,6 +92,7 @@ class NewCategoryDataProvider extends AbstractDataProvider
      * Get notice message
      *
      * @return \Magento\Framework\Phrase
+     * @since 101.0.0
      */
     protected function getNotice()
     {

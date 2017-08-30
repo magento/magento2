@@ -5,7 +5,7 @@
  */
 namespace Magento\CheckoutAgreements\Test\Unit\Model;
 
-class AgreementTest extends \PHPUnit_Framework_TestCase
+class AgreementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CheckoutAgreements\Model\Agreement

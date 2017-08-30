@@ -4,13 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\App\Test\Unit\ObjectManager;
 
 use Magento\Framework\Serialize\SerializerInterface;
 
-class ConfigLoaderTest extends \PHPUnit_Framework_TestCase
+class ConfigLoaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\ObjectManager\ConfigLoader
@@ -39,31 +37,17 @@ class ConfigLoaderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->readerMock = $this->getMock(
-            \Magento\Framework\ObjectManager\Config\Reader\Dom::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->readerMock = $this->createMock(\Magento\Framework\ObjectManager\Config\Reader\Dom::class);
 
-        $this->readerFactoryMock = $this->getMock(
-            \Magento\Framework\ObjectManager\Config\Reader\DomFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
+        $this->readerFactoryMock =
+            $this->createPartialMock(\Magento\Framework\ObjectManager\Config\Reader\DomFactory::class, ['create']);
 
-        $this->readerFactoryMock->expects(
-            $this->any()
-        )->method(
-            'create'
-        )->will(
-            $this->returnValue($this->readerMock)
-        );
+        $this->readerFactoryMock->expects($this->any())
+            ->method('create')
+            ->will($this->returnValue($this->readerMock));
 
-        $this->cacheMock = $this->getMock(\Magento\Framework\App\Cache\Type\Config::class, [], [], '', false);
+        $this->cacheMock = $this->createMock(\Magento\Framework\App\Cache\Type\Config::class);
+
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->object = $objectManagerHelper->getObject(
@@ -73,7 +57,7 @@ class ConfigLoaderTest extends \PHPUnit_Framework_TestCase
                 'readerFactory' => $this->readerFactoryMock,
             ]
         );
-        $this->serializerMock = $this->getMock(SerializerInterface::class);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
         $objectManagerHelper->setBackwardCompatibleProperty(
             $this->object,
             'serializer',
@@ -98,7 +82,10 @@ class ConfigLoaderTest extends \PHPUnit_Framework_TestCase
         $this->cacheMock->expects($this->once())
             ->method('save')
             ->with($serializedData);
-        $this->readerMock->expects($this->once())->method('read')->with($area)->will($this->returnValue($configData));
+        $this->readerMock->expects($this->once())
+            ->method('read')
+            ->with($area)
+            ->will($this->returnValue($configData));
 
         $this->serializerMock->expects($this->once())
             ->method('serialize')

@@ -11,6 +11,10 @@
  */
 namespace Magento\ProductVideo\Block\Product\View;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Gallery extends \Magento\Catalog\Block\Product\View\Gallery
 {
     /**
@@ -21,22 +25,28 @@ class Gallery extends \Magento\Catalog\Block\Product\View\Gallery
     /**
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Framework\Stdlib\ArrayUtils $arrayUtils
-     * @param \Magento\ProductVideo\Helper\Media $mediaHelper
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
+     * @param \Magento\ProductVideo\Helper\Media $mediaHelper
      * @param array $data
+     * @param \Magento\Catalog\Model\Product\Gallery\ImagesConfigFactoryInterface $imagesConfigFactory
+     * @param array $galleryImagesConfig
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
         \Magento\Framework\Stdlib\ArrayUtils $arrayUtils,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\ProductVideo\Helper\Media $mediaHelper,
-        array $data = []
+        array $data = [],
+        \Magento\Catalog\Model\Product\Gallery\ImagesConfigFactoryInterface $imagesConfigFactory = null,
+        array $galleryImagesConfig = []
     ) {
         parent::__construct(
             $context,
             $arrayUtils,
             $jsonEncoder,
-            $data
+            $data,
+            $imagesConfigFactory,
+            $galleryImagesConfig
         );
         $this->mediaHelper = $mediaHelper;
     }
@@ -77,6 +87,7 @@ class Gallery extends \Magento\Catalog\Block\Product\View\Gallery
     /**
      * Return media gallery for product options
      * @return string
+     * @since 100.1.0
      */
     public function getOptionsMediaGalleryDataJson()
     {

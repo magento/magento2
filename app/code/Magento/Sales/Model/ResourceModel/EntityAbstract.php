@@ -16,6 +16,7 @@ use Magento\Sales\Model\EntityInterface;
  *
  * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @since 100.0.2
  */
 abstract class EntityAbstract extends AbstractDb
 {

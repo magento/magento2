@@ -16,16 +16,21 @@ use Magento\Framework\View\LayoutInterface;
 
 /**
  * Catalog Wysiwyg
+ *
+ * @api
+ * @since 101.0.0
  */
 class Wysiwyg extends \Magento\Ui\Component\Form\Element\Wysiwyg
 {
     /**
      * @var DataHelper
+     * @since 101.0.0
      */
     protected $backendHelper;
 
     /**
      * @var LayoutInterface
+     * @since 101.0.0
      */
     protected $layout;
 

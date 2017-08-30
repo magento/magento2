@@ -5,6 +5,10 @@
  */
 namespace Magento\CatalogRule\Model\Rule\Action;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Collection extends \Magento\Rule\Model\Action\Collection
 {
     /**

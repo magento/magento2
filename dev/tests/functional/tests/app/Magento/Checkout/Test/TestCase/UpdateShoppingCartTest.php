@@ -33,7 +33,6 @@ class UpdateShoppingCartTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const STABLE = 'no';
     const SEVERITY = 'S0';
     /* end tags */
 

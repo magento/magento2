@@ -8,7 +8,9 @@ namespace Magento\Theme\Block\Adminhtml\Wysiwyg\Files;
 /**
  * Files tree block
  *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Tree extends \Magento\Backend\Block\Template
 {

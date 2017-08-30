@@ -5,6 +5,10 @@
  */
 namespace Magento\User\Block;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Buttons extends \Magento\Backend\Block\Template
 {
     /**

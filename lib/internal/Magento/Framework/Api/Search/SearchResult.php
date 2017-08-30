@@ -85,18 +85,4 @@ class SearchResult extends AbstractSimpleObject implements SearchResultInterface
     {
         return $this->setData(self::TOTAL_COUNT, $totalCount);
     }
-
-    /**
-     * Retrieve ids of all items
-     *
-     * @return array
-     */
-    public function getAllIds()
-    {
-        $ids = [];
-        foreach ($this->getItems() as $item) {
-            $ids[] = $item->getId();
-        }
-        return $ids;
-    }
 }

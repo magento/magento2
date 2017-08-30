@@ -11,7 +11,8 @@ use Magento\Framework\Filesystem\DriverPool;
 /**
  * Import entity product model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
 class Uploader extends \Magento\MediaStorage\Model\File\Uploader
 {

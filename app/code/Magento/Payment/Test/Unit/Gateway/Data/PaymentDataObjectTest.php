@@ -12,7 +12,7 @@ use Magento\Payment\Model\InfoInterface;
 /**
  * Class PaymentDataObjectTest
  */
-class PaymentDataObjectTest extends \PHPUnit_Framework_TestCase
+class PaymentDataObjectTest extends \PHPUnit\Framework\TestCase
 {
     /** @var PaymentDataObject */
     protected $model;

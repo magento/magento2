@@ -10,6 +10,8 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Result Factory
+ *
+ * @api
  */
 class ResultFactory
 {
@@ -24,11 +26,7 @@ class ResultFactory
     const TYPE_PAGE     = 'page';
     /**#@-*/
 
-    /**
-     * Map of types which are references to classes
-     *
-     * @var array
-     */
+    /**#@-*/
     protected $typeMap = [
         self::TYPE_JSON     => Result\Json::class,
         self::TYPE_RAW      => Result\Raw::class,

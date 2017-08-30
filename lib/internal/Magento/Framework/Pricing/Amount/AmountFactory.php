@@ -8,6 +8,8 @@ namespace Magento\Framework\Pricing\Amount;
 
 /**
  * Class AmountFactory
+ *
+ * @api
  */
 class AmountFactory
 {

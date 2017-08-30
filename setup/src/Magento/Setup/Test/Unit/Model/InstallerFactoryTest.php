@@ -11,7 +11,7 @@ use \Magento\Setup\Model\InstallerFactory;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class InstallerFactoryTest extends \PHPUnit_Framework_TestCase
+class InstallerFactoryTest extends \PHPUnit\Framework\TestCase
 {
     public function testCreate()
     {
@@ -23,17 +23,11 @@ class InstallerFactoryTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValueMap($this->getReturnValueMap()));
 
         $log = $this->getMockForAbstractClass(\Magento\Framework\Setup\LoggerInterface::class);
-        $resourceFactoryMock = $this->getMock(\Magento\Setup\Module\ResourceFactory::class, [], [], '', false);
+        $resourceFactoryMock = $this->createMock(\Magento\Setup\Module\ResourceFactory::class);
         $resourceFactoryMock
             ->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->getMock(
-                \Magento\Framework\App\ResourceConnection::class,
-                [],
-                [],
-                '',
-                false
-            )));
+            ->will($this->returnValue($this->createMock(\Magento\Framework\App\ResourceConnection::class)));
         $installerFactory = new InstallerFactory($serviceLocatorMock, $resourceFactoryMock);
         $installer = $installerFactory->create($log);
         $this->assertInstanceOf(\Magento\Setup\Model\Installer::class, $installer);
@@ -47,89 +41,83 @@ class InstallerFactoryTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 \Magento\Framework\Setup\FilePermissions::class,
-                $this->getMock(\Magento\Framework\Setup\FilePermissions::class, [], [], '', false),
+                $this->createMock(\Magento\Framework\Setup\FilePermissions::class),
             ],
             [
                 \Magento\Framework\App\DeploymentConfig\Writer::class,
-                $this->getMock(\Magento\Framework\App\DeploymentConfig\Writer::class, [], [], '', false),
+                $this->createMock(\Magento\Framework\App\DeploymentConfig\Writer::class),
             ],
             [
                 \Magento\Framework\App\DeploymentConfig\Reader::class,
-                $this->getMock(\Magento\Framework\App\DeploymentConfig\Reader::class, [], [], '', false),
+                $this->createMock(\Magento\Framework\App\DeploymentConfig\Reader::class),
             ],
             [
                 \Magento\Framework\App\DeploymentConfig::class,
-                $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false),
+                $this->createMock(\Magento\Framework\App\DeploymentConfig::class),
             ],
             [
                 \Magento\Framework\Module\ModuleList::class,
-                $this->getMock(\Magento\Framework\Module\ModuleList::class, [], [], '', false),
+                $this->createMock(\Magento\Framework\Module\ModuleList::class),
             ],
             [
                 \Magento\Framework\Module\ModuleList\Loader::class,
-                $this->getMock(\Magento\Framework\Module\ModuleList\Loader::class, [], [], '', false),
+                $this->createMock(\Magento\Framework\Module\ModuleList\Loader::class),
             ],
             [
                 \Magento\Setup\Model\AdminAccountFactory::class,
-                $this->getMock(\Magento\Setup\Model\AdminAccountFactory::class, [], [], '', false),
+                $this->createMock(\Magento\Setup\Model\AdminAccountFactory::class),
             ],
             [
                 \Magento\Setup\Module\ConnectionFactory::class,
-                $this->getMock(\Magento\Setup\Module\ConnectionFactory::class, [], [], '', false),
+                $this->createMock(\Magento\Setup\Module\ConnectionFactory::class),
             ],
             [
                 \Magento\Framework\App\MaintenanceMode::class,
-                $this->getMock(\Magento\Framework\App\MaintenanceMode::class, [], [], '', false),
+                $this->createMock(\Magento\Framework\App\MaintenanceMode::class),
             ],
             [
                 \Magento\Framework\Filesystem::class,
-                $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false),
+                $this->createMock(\Magento\Framework\Filesystem::class),
             ],
             [
                 \Magento\Setup\Model\ObjectManagerProvider::class,
-                $this->getMock(\Magento\Setup\Model\ObjectManagerProvider::class, [], [], '', false),
+                $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class),
             ],
             [
                 \Magento\Framework\Model\ResourceModel\Db\TransactionManager::class,
-                $this->getMock(\Magento\Framework\Model\ResourceModel\Db\TransactionManager::class, [], [], '', false),
+                $this->createMock(\Magento\Framework\Model\ResourceModel\Db\TransactionManager::class),
             ],
             [
                 \Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor::class,
-                $this->getMock(
-                    \Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor::class,
-                    [],
-                    [],
-                    '',
-                    false
-                ),
+                $this->createMock(\Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor::class),
             ],
             [
                 \Magento\Setup\Model\ConfigModel::class,
-                $this->getMock(\Magento\Setup\Model\ConfigModel::class, [], [], '', false),
+                $this->createMock(\Magento\Setup\Model\ConfigModel::class),
             ],
             [
                 \Magento\Framework\App\State\CleanupFiles::class,
-                $this->getMock(\Magento\Framework\App\State\CleanupFiles::class, [], [], '', false),
+                $this->createMock(\Magento\Framework\App\State\CleanupFiles::class),
             ],
             [
                 \Magento\Setup\Validator\DbValidator::class,
-                $this->getMock(\Magento\Setup\Validator\DbValidator::class, [], [], '', false),
+                $this->createMock(\Magento\Setup\Validator\DbValidator::class),
             ],
             [
                 \Magento\Setup\Module\SetupFactory::class,
-                $this->getMock(\Magento\Setup\Module\SetupFactory::class, [], [], '', false),
+                $this->createMock(\Magento\Setup\Module\SetupFactory::class),
             ],
             [
                 \Magento\Setup\Module\DataSetupFactory::class,
-                $this->getMock(\Magento\Setup\Module\DataSetupFactory::class, [], [], '', false),
+                $this->createMock(\Magento\Setup\Module\DataSetupFactory::class),
             ],
             [
                 \Magento\Framework\Setup\SampleData\State::class,
-                $this->getMock(\Magento\Framework\Setup\SampleData\State::class, [], [], '', false),
+                $this->createMock(\Magento\Framework\Setup\SampleData\State::class),
             ],
             [
                 \Magento\Setup\Model\PhpReadinessCheck::class,
-                $this->getMock(\Magento\Setup\Model\PhpReadinessCheck::class, [], [], '', false),
+                $this->createMock(\Magento\Setup\Model\PhpReadinessCheck::class),
             ],
         ];
     }

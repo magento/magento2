@@ -8,9 +8,11 @@ namespace Magento\Catalog\Model\ResourceModel\Product\Compare\Item;
 /**
  * Catalog Product Compare Items Resource Collection
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {

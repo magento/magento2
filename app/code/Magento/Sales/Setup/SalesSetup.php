@@ -322,4 +322,53 @@ class SalesSetup extends EavSetup
     {
         return $this->getSetup()->getTable($table, self::$connectionName);
     }
+
+    /**
+     * Update entity types
+     *
+     * @return void
+     */
+    public function updateEntityTypes()
+    {
+        $this->updateEntityType(
+            \Magento\Sales\Model\Order::ENTITY,
+            'entity_model',
+            \Magento\Sales\Model\ResourceModel\Order::class
+        );
+        $this->updateEntityType(
+            \Magento\Sales\Model\Order::ENTITY,
+            'increment_model',
+            \Magento\Eav\Model\Entity\Increment\NumericValue::class
+        );
+        $this->updateEntityType(
+            'invoice',
+            'entity_model',
+            \Magento\Sales\Model\ResourceModel\Order::class
+        );
+        $this->updateEntityType(
+            'invoice',
+            'increment_model',
+            \Magento\Eav\Model\Entity\Increment\NumericValue::class
+        );
+        $this->updateEntityType(
+            'creditmemo',
+            'entity_model',
+            \Magento\Sales\Model\ResourceModel\Order\Creditmemo::class
+        );
+        $this->updateEntityType(
+            'creditmemo',
+            'increment_model',
+            \Magento\Eav\Model\Entity\Increment\NumericValue::class
+        );
+        $this->updateEntityType(
+            'shipment',
+            'entity_model',
+            \Magento\Sales\Model\ResourceModel\Order\Shipment::class
+        );
+        $this->updateEntityType(
+            'shipment',
+            'increment_model',
+            \Magento\Eav\Model\Entity\Increment\NumericValue::class
+        );
+    }
 }

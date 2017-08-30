@@ -11,6 +11,10 @@
  */
 namespace Magento\Multishipping\Block\Checkout\Payment;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Info extends \Magento\Payment\Block\Info\AbstractContainer
 {
     /**

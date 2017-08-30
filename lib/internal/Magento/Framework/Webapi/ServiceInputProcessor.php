@@ -29,19 +29,29 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
 {
     const EXTENSION_ATTRIBUTES_TYPE = \Magento\Framework\Api\ExtensionAttributesInterface::class;
 
-    /** @var \Magento\Framework\Reflection\TypeProcessor */
+    /**
+     * @var \Magento\Framework\Reflection\TypeProcessor
+     */
     protected $typeProcessor;
 
-    /** @var ObjectManagerInterface */
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
     protected $objectManager;
 
-    /** @var AttributeValueFactory */
+    /**
+     * @var \Magento\Framework\Api\AttributeValueFactory
+     */
     protected $attributeValueFactory;
 
-    /** @var  CustomAttributeTypeLocatorInterface */
+    /**
+     * @var \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface
+     */
     protected $customAttributeTypeLocator;
 
-    /** @var  MethodsMap */
+    /**
+     * @var \Magento\Framework\Reflection\MethodsMap
+     */
     protected $methodsMap;
 
     /**
@@ -77,7 +87,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      *
      * @return \Magento\Framework\Reflection\NameFinder
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getNameFinder()
     {
@@ -146,6 +156,9 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
     protected function _createFromArray($className, $data)
     {
         $data = is_array($data) ? $data : [];
+        // convert to string directly to avoid situations when $className is object
+        // which implements __toString method like \ReflectionObject
+        $className = (string) $className;
         $class = new ClassReflection($className);
         if (is_subclass_of($className, self::EXTENSION_ATTRIBUTES_TYPE)) {
             $className = substr($className, 0, -strlen('Interface'));
@@ -261,7 +274,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
             throw new SerializationException(new Phrase('There is an empty custom attribute specified.'));
         } elseif (!$customAttributeCode) {
             throw new SerializationException(new Phrase('A custom attribute is specified without an attribute code.'));
-        } elseif (!isset($customAttribute[AttributeValue::VALUE])) {
+        } elseif (!array_key_exists(AttributeValue::VALUE, $customAttribute)) {
             throw new SerializationException(
                 new Phrase('Value is not set for attribute code "' . $customAttributeCode . '"')
             );

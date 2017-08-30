@@ -15,8 +15,12 @@ use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorI
 
 /**
  * Import entity abstract model
+ *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 abstract class AbstractEntity
 {
@@ -43,6 +47,9 @@ abstract class AbstractEntity
     const ERROR_CODE_COLUMNS_NUMBER = 'wrongColumnsNumber';
     const ERROR_CODE_CATEGORY_NOT_VALID = 'categoryNotValid';
 
+    /**
+     * @var array
+     */
     protected $errorMessageTemplates = [
         self::ERROR_CODE_SYSTEM_EXCEPTION => 'General system exception happened',
         self::ERROR_CODE_COLUMN_NOT_FOUND => 'We can\'t find required columns: %s.',
@@ -245,6 +252,7 @@ abstract class AbstractEntity
      * Product metadata pool
      *
      * @var \Magento\Framework\EntityManager\MetadataPool
+     * @since 100.1.0
      */
     protected $metadataPool;
 
@@ -434,7 +442,7 @@ abstract class AbstractEntity
      * Workaround. Only way to implement dependency and not to break inherited child classes
      *
      * @return Json
-     * @deprecated
+     * @deprecated 100.2.0
      */
     private function getSerializer()
     {
@@ -866,6 +874,7 @@ abstract class AbstractEntity
      * Get product metadata pool
      *
      * @return \Magento\Framework\EntityManager\MetadataPool
+     * @since 100.1.0
      */
     protected function getMetadataPool()
     {

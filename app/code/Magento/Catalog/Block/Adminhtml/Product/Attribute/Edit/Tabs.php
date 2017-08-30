@@ -11,6 +11,10 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Tabs extends \Magento\Backend\Block\Widget\Tabs
 {
     /**

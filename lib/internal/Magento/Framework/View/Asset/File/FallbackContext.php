@@ -10,6 +10,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * An advanced context that contains information necessary for view files fallback system
+ *
+ * @api
  */
 class FallbackContext extends Context
 {

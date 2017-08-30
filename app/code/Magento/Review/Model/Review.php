@@ -13,6 +13,7 @@ use Magento\Review\Model\ResourceModel\Review\Status\Collection as StatusCollect
 /**
  * Review model
  *
+ * @api
  * @method string getCreatedAt()
  * @method \Magento\Review\Model\Review setCreatedAt(string $value)
  * @method \Magento\Review\Model\Review setEntityId(int $value)
@@ -21,6 +22,7 @@ use Magento\Review\Model\ResourceModel\Review\Status\Collection as StatusCollect
  * @method int getStatusId()
  * @method \Magento\Review\Model\Review setStatusId(int $value)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Review extends \Magento\Framework\Model\AbstractModel implements IdentityInterface
 {

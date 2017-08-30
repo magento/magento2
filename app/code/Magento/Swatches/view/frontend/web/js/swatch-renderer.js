@@ -246,6 +246,9 @@ define([
             // Cache for BaseProduct images. Needed when option unset
             mediaGalleryInitial: [{}],
 
+            // Use ajax to get image data
+            useAjax: false,
+
             /**
              * Defines the mechanism of how images of a gallery should be
              * updated when user switches between configurations of a product.
@@ -272,21 +275,31 @@ define([
         /**
          * Get chosen product
          *
-         * @returns array
+         * @returns int|null
          */
         getProduct: function () {
-            return this._CalcProducts().shift();
+            var products = this._CalcProducts();
+
+            return _.isArray(products) ? products[0] : null;
         },
 
         /**
          * @private
          */
         _init: function () {
+            if (_.isEmpty(this.options.jsonConfig.images)) {
+                this.options.useAjax = true;
+                // creates debounced variant of _LoadProductMedia()
+                // to use it in events handlers instead of _LoadProductMedia()
+                this._debouncedLoadProductMedia = _.debounce(this._LoadProductMedia.bind(this), 500);
+            }
+
             if (this.options.jsonConfig !== '' && this.options.jsonSwatchConfig !== '') {
                 // store unsorted attributes
                 this.options.jsonConfig.mappedAttributes = _.clone(this.options.jsonConfig.attributes);
                 this._sortAttributes();
                 this._RenderControls();
+                this._setPreSelectedGallery();
                 $(this.element).trigger('swatch.initialized');
             } else {
                 console.log('SwatchRenderer: No input data received');
@@ -337,7 +350,6 @@ define([
         _determineProductData: function () {
             // Check if product is in a list of products.
             var productId,
-                product,
                 isInProductView = false;
 
             productId = this.element.parents('.product-item-details')
@@ -345,8 +357,7 @@ define([
 
             if (!productId) {
                 // Check individual product.
-                product = document.getElementsByName('product')[0];
-                productId = product ? product.value : undefined;
+                productId = $('[name=product]').val();
                 isInProductView = productId > 0;
             }
 
@@ -633,6 +644,30 @@ define([
         },
 
         /**
+         * Load media gallery using ajax or json config.
+         *
+         * @private
+         */
+        _loadMedia: function () {
+            var $main = this.inProductList ?
+                    this.element.parents('.product-item-info') :
+                    this.element.parents('.column.main'),
+                images;
+
+            if (this.options.useAjax) {
+                this._debouncedLoadProductMedia();
+            }  else {
+                images = this.options.jsonConfig.images[this.getProduct()];
+
+                if (!images) {
+                    images = this.options.mediaGalleryInitial;
+                }
+
+                this.updateBaseImage(images, $main, !this.inProductList);
+            }
+        },
+
+        /**
          * Event for swatch options
          *
          * @param {Object} $this
@@ -678,7 +713,7 @@ define([
                 $widget._UpdatePrice();
             }
 
-            $widget._LoadProductMedia();
+            $widget._loadMedia();
             $input.trigger('change');
         },
 
@@ -736,7 +771,7 @@ define([
 
             $widget._Rebuild();
             $widget._UpdatePrice();
-            $widget._LoadProductMedia();
+            $widget._loadMedia();
             $input.trigger('change');
         },
 
@@ -767,7 +802,6 @@ define([
          * @private
          */
         _Rebuild: function () {
-
             var $widget = this,
                 controls = $widget.element.find('.' + $widget.options.classes.attributeClass + '[attribute-id]'),
                 selected = controls.filter('[option-selected]');
@@ -924,7 +958,6 @@ define([
         _LoadProductMedia: function () {
             var $widget = this,
                 $this = $widget.element,
-                attributes = {},
                 productData = this._determineProductData(),
                 mediaCallData,
                 mediaCacheKey,
@@ -940,33 +973,30 @@ define([
                         $widget.options.mediaCache[mediaCacheKey] = data;
                     }
                     $widget._ProductMediaCallback($this, data, productData.isInProductView);
-                    $widget._DisableProductMediaLoader($this);
+                    setTimeout(function () {
+                        $widget._DisableProductMediaLoader($this);
+                    }, 300);
                 };
 
             if (!$widget.options.mediaCallback) {
                 return;
             }
 
-            $this.find('[option-selected]').each(function () {
-                var $selected = $(this);
-
-                attributes[$selected.attr('attribute-code')] = $selected.attr('option-selected');
-            });
-
             mediaCallData = {
-                'product_id': productData.productId,
-                'attributes': attributes,
-                'additional': $.parseQuery()
+                'product_id': this.getProduct()
             };
+
             mediaCacheKey = JSON.stringify(mediaCallData);
 
             if (mediaCacheKey in $widget.options.mediaCache) {
+                $widget._XhrKiller();
+                $widget._EnableProductMediaLoader($this);
                 mediaSuccessCallback($widget.options.mediaCache[mediaCacheKey]);
             } else {
                 mediaCallData.isAjax = true;
                 $widget._XhrKiller();
                 $widget._EnableProductMediaLoader($this);
-                $widget.xhr = $.post(
+                $widget.xhr = $.get(
                     $widget.options.mediaCallback,
                     mediaCallData,
                     mediaSuccessCallback,
@@ -1078,7 +1108,9 @@ define([
                 images = $.extend(true, [], this.options.mediaGalleryInitial);
             } else {
                 images.map(function (img) {
-                    img.type = 'image';
+                    if (!img.type) {
+                        img.type = 'image';
+                    }
                 });
             }
 
@@ -1106,10 +1138,16 @@ define([
                     imagesToUpdate = imagesToUpdate.concat(initialImages);
                 }
 
+                imagesToUpdate = this._setImageIndex(imagesToUpdate);
                 gallery.updateData(imagesToUpdate);
 
                 if (isInitial) {
                     $(this.options.mediaGallerySelector).AddFotoramaVideoEvents();
+                } else {
+                    $(this.options.mediaGallerySelector).AddFotoramaVideoEvents({
+                        selectedOption: this.getProduct(),
+                        dataMergeStrategy: this.options.gallerySwitchStrategy
+                    });
                 }
 
                 gallery.first();
@@ -1117,6 +1155,23 @@ define([
             } else if (justAnImage && justAnImage.img) {
                 context.find('.product-image-photo').attr('src', justAnImage.img);
             }
+        },
+
+        /**
+         * Set correct indexes for image set.
+         *
+         * @param {Array} images
+         * @private
+         */
+        _setImageIndex: function (images) {
+            var length = images.length,
+                i;
+
+            for (i = 0; length > i; i++) {
+                images[i].i = i + 1;
+            }
+
+            return images;
         },
 
         /**
@@ -1200,6 +1255,23 @@ define([
             var galleryObject = element.data('gallery');
 
             this.options.mediaGalleryInitial = galleryObject.returnCurrentImages();
+        },
+
+        /**
+         * Sets mediaCache for cases when jsonConfig contains preSelectedGallery on layered navigation result pages
+         *
+         * @private
+         */
+        _setPreSelectedGallery: function () {
+            var mediaCallData;
+
+            if (this.options.jsonConfig.preSelectedGallery) {
+                mediaCallData = {
+                    'product_id': this.getProduct()
+                };
+
+                this.options.mediaCache[JSON.stringify(mediaCallData)] = this.options.jsonConfig.preSelectedGallery;
+            }
         }
     });
 

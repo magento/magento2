@@ -34,7 +34,7 @@ class VoidAuthorizationTest extends Scenario
 {
     /* tags */
     const MVP = 'yes';
-    const TEST_TYPE = '3rd_party_test';
+    const TEST_TYPE = '3rd_party_test, 3rd_party_test_single_flow';
     const SEVERITY = 'S0';
     /* end tags */
 

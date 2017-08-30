@@ -8,7 +8,8 @@ namespace Magento\CatalogImportExport\Model\Import\Product\Type;
 /**
  * Import entity simple product type
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
 class Simple extends \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
 {

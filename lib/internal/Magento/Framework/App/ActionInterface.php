@@ -1,13 +1,13 @@
 <?php
 /**
- * Magento application action
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App;
 
 /**
+ * Magento application action controller type. Every action controller in Application should implement this interface.
+ *
  * @api
  */
 interface ActionInterface
@@ -23,7 +23,9 @@ interface ActionInterface
     const PARAM_NAME_URL_ENCODED = 'uenc';
 
     /**
-     * Dispatch request
+     * Execute action based on request and return result
+     *
+     * Note: Request will be added as operation argument in future
      *
      * @return \Magento\Framework\Controller\ResultInterface|ResponseInterface
      * @throws \Magento\Framework\Exception\NotFoundException

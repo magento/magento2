@@ -12,10 +12,12 @@ use \Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 /**
  * Export entity product model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
 {
@@ -265,6 +267,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * Attributes codes which shows as date
      *
      * @var array
+     * @since 100.1.2
      */
     protected $dateAttrCodes = [
         'special_from_date',
@@ -332,6 +335,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
 
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
+     * @since 100.1.0
      */
     protected $metadataPool;
 
@@ -762,8 +766,9 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     protected function getItemsPerPage()
     {
         if ($this->_itemsPerPage === null) {
-            $memoryLimit = trim(ini_get('memory_limit'));
-            $lastMemoryLimitLetter = strtolower($memoryLimit[strlen($memoryLimit) - 1]);
+            $memoryLimitConfigValue = trim(ini_get('memory_limit'));
+            $lastMemoryLimitLetter = strtolower($memoryLimitConfigValue[strlen($memoryLimitConfigValue) - 1]);
+            $memoryLimit = (int) $memoryLimitConfigValue;
             switch ($lastMemoryLimitLetter) {
                 case 'g':
                     $memoryLimit *= 1024;
@@ -851,6 +856,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
 
     /**
      * {@inheritdoc}
+     * @since 100.2.0
      */
     protected function _prepareEntityCollection(\Magento\Eav\Model\Entity\Collection\AbstractCollection $collection)
     {
@@ -1234,7 +1240,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     }
 
     /**
-     * @deprecated
+     * @deprecated 100.1.0
      * @param array $dataRow
      * @param array $multiRawData
      * @return array
@@ -1457,6 +1463,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * Get product entity link field
      *
      * @return string
+     * @since 100.1.0
      */
     protected function getProductEntityLinkField()
     {

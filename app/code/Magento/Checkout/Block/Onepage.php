@@ -7,6 +7,7 @@ namespace Magento\Checkout\Block;
 
 /**
  * Onepage checkout block
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Onepage extends \Magento\Framework\View\Element\Template
@@ -114,6 +115,7 @@ class Onepage extends \Magento\Framework\View\Element\Template
 
     /**
      * @return bool|string
+     * @since 100.2.0
      */
     public function getSerializedCheckoutConfig()
     {

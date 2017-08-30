@@ -8,7 +8,7 @@ namespace Magento\Sales\Test\Unit\Observer\Backend;
 use Magento\Framework\Event\Observer;
 use Magento\Sales\Observer\Backend\CatalogPriceRule;
 
-class CatalogPriceRuleTest extends \PHPUnit_Framework_TestCase
+class CatalogPriceRuleTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CatalogPriceRule
@@ -27,8 +27,8 @@ class CatalogPriceRuleTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->eventObserverMock = $this->getMock(\Magento\Framework\Event\Observer::class);
-        $this->_quoteMock = $this->getMock(\Magento\Quote\Model\ResourceModel\Quote::class, [], [], '', false);
+        $this->eventObserverMock = $this->createMock(\Magento\Framework\Event\Observer::class);
+        $this->_quoteMock = $this->createMock(\Magento\Quote\Model\ResourceModel\Quote::class);
         $this->_model = new CatalogPriceRule($this->_quoteMock);
     }
 

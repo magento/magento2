@@ -8,7 +8,10 @@ namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Price;
 /**
  * Catalog Product Type Price Indexer interface
  *
+ * @api
+ *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 interface PriceInterface
 {

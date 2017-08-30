@@ -9,14 +9,20 @@
  */
 namespace Magento\Framework\View\Test\Unit\Layout\Reader;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Layout\AclCondition;
+use Magento\Framework\View\Layout\ConfigCondition;
+use Magento\Framework\View\Layout\Reader\Context;
+use Magento\Framework\View\Layout\Reader\UiComponent;
+use Magento\Framework\View\Layout\Reader\Visibility\Condition;
+use Magento\Framework\View\Layout\ScheduledStructure\Helper;
 use Magento\Framework\Config\DataInterfaceFactory;
 use Magento\Framework\Config\DataInterface;
 use Magento\Framework\View\Layout\Element;
-use Magento\Framework\View\Layout\Reader\UiComponent;
 use Magento\Framework\View\Layout\ReaderPool;
 use Magento\Framework\View\Layout\ScheduledStructure;
 
-class UiComponentTest extends \PHPUnit_Framework_TestCase
+class UiComponentTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Layout\Reader\UiComponent
@@ -24,7 +30,7 @@ class UiComponentTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\View\Layout\ScheduledStructure\Helper|\PHPUnit_Framework_MockObject_MockObject
+     * @var Helper|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $helper;
 
@@ -44,17 +50,17 @@ class UiComponentTest extends \PHPUnit_Framework_TestCase
     private $readerPool;
 
     /**
-     * @var \Magento\Framework\View\Layout\Reader\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $context;
 
     protected function setUp()
     {
-        $this->helper = $this->getMockBuilder(\Magento\Framework\View\Layout\ScheduledStructure\Helper::class)
+        $this->helper = $this->getMockBuilder(Helper::class)
             ->setMethods(['scheduleStructure'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->context = $this->getMockBuilder(\Magento\Framework\View\Layout\Reader\Context::class)
+        $this->context = $this->getMockBuilder(Context::class)
             ->setMethods(['getScheduledStructure', 'setElementToIfconfigList'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -68,7 +74,9 @@ class UiComponentTest extends \PHPUnit_Framework_TestCase
         $this->readerPool = $this->getMockBuilder(ReaderPool::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->model = new UiComponent($this->helper, $this->dataConfigFactory, $this->readerPool, 'scope');
+        $objectManager = new ObjectManager($this);
+        $condition = $objectManager->getObject(Condition::class);
+        $this->model = new UiComponent($this->helper, $condition, $this->dataConfigFactory, $this->readerPool);
     }
 
     public function testGetSupportedNodes()
@@ -98,12 +106,27 @@ class UiComponentTest extends \PHPUnit_Framework_TestCase
 
         $scheduleStructure->expects($this->once())->method('setStructureElementData')->with(
             $element->getAttribute('name'),
-            ['attributes' => ['group' => '', 'component' => 'listing', 'acl' => 'test', 'condition' => 'test']]
-        );
-        $scheduleStructure->expects($this->once())->method('setElementToIfconfigList')->with(
-            $element->getAttribute('name'),
-            'config_path',
-            'scope'
+            [
+                'attributes' => [
+                    'group' => '',
+                    'component' => 'listing',
+                    'aclResource' => 'test_acl',
+                    'visibilityConditions' => [
+                        'ifconfig' => [
+                            'name' => ConfigCondition::class,
+                            'arguments' => [
+                                'configPath' => 'config_path'
+                            ],
+                        ],
+                        'acl' => [
+                            'name' => AclCondition::class,
+                            'arguments' => [
+                                'acl' => 'test_acl'
+                            ],
+                        ],
+                    ],
+                ],
+            ]
         );
         $this->dataConfigFactory->expects($this->once())
             ->method('create')
@@ -142,10 +165,10 @@ class UiComponentTest extends \PHPUnit_Framework_TestCase
                 $this->getElement(
                     '<uiComponent
                         name="cms_block_listing"
-                        acl="test" condition="test"
+                        aclResource="test_acl"
                         component="listing"
                         ifconfig="config_path"
-                    />',
+                    ><visibilityCondition name="test_name" className="name"></visibilityCondition></uiComponent>',
                     'uiComponent'
                 ),
             ]

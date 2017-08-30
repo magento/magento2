@@ -8,6 +8,9 @@ namespace Magento\Backend\Block\Page;
 
 /**
  * Require Js block
+ *
+ * @api
+ * @since 100.0.2
  */
 class RequireJs extends \Magento\Framework\View\Element\Template
 {

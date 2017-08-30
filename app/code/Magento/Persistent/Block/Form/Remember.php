@@ -8,7 +8,9 @@ namespace Magento\Persistent\Block\Form;
 /**
  * Remember Me block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Remember extends \Magento\Framework\View\Element\Template
 {

@@ -3,6 +3,9 @@
  * See COPYING.txt for license details.
  */
 
+/**
+ * @api
+ */
 define(['Magento_Ui/js/lib/validation/utils'], function (utils) {
     'use strict';
 

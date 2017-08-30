@@ -9,11 +9,15 @@ use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * Class AllowedProductTypes contains product types on which some product type can be displayed
+ *
+ * @api
+ * @since 101.0.0
  */
 class AllowedProductTypes
 {
     /**
      * @var array
+     * @since 101.0.0
      */
     protected $allowedProductTypes = [];
 
@@ -29,6 +33,7 @@ class AllowedProductTypes
      * Get allowed product types
      *
      * @return array
+     * @since 101.0.0
      */
     public function getAllowedProductTypes()
     {
@@ -40,6 +45,7 @@ class AllowedProductTypes
      *
      * @param ProductInterface $product
      * @return bool
+     * @since 101.0.0
      */
     public function isAllowedProductType(ProductInterface $product)
     {

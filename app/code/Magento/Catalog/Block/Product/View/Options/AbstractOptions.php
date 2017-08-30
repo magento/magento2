@@ -13,6 +13,10 @@ namespace Magento\Catalog\Block\Product\View\Options;
 
 use Magento\Catalog\Pricing\Price\CustomOptionPriceInterface;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 abstract class AbstractOptions extends \Magento\Framework\View\Element\Template
 {
     /**

@@ -8,6 +8,10 @@ namespace Magento\Ui\DataProvider;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 abstract class AbstractDataProvider implements DataProviderInterface
 {
     /**
@@ -172,7 +176,7 @@ abstract class AbstractDataProvider implements DataProviderInterface
     /**
      * Returns SearchResult
      *
-     * @return null
+     * @return \Magento\Framework\Api\Search\SearchResultInterface
      */
     public function getSearchResult()
     {
@@ -278,5 +282,16 @@ abstract class AbstractDataProvider implements DataProviderInterface
     public function setConfigData($config)
     {
         $this->data['config'] = $config;
+    }
+
+    /**
+     * Retrieve all ids from collection
+     *
+     * @return int[]
+     * @since 100.2.0
+     */
+    public function getAllIds()
+    {
+        return  $this->collection->getAllIds();
     }
 }

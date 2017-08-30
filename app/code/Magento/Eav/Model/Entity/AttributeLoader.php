@@ -57,22 +57,20 @@ class AttributeLoader implements AttributeLoaderInterface
      */
     public function loadAllAttributes(AbstractEntity $resource, DataObject $object = null)
     {
-        $attributeCodes = $this->config->getEntityAttributeCodes($resource->getEntityType(), $object);
+        $attributes = $this->config->getEntityAttributes($resource->getEntityType(), $object);
+        $attributeCodes = array_keys($attributes);
         /**
          * Check and init default attributes
          */
-        $defaultAttributes = $resource->getDefaultAttributes();
-        foreach ($defaultAttributes as $attributeCode) {
-            $attributeIndex = array_search($attributeCode, $attributeCodes);
-            if ($attributeIndex !== false) {
-                $resource->getAttribute($attributeCodes[$attributeIndex]);
-                unset($attributeCodes[$attributeIndex]);
-            } else {
-                $resource->addAttribute($this->_getDefaultAttribute($resource, $attributeCode));
-            }
+        $defaultAttributesCodes = array_diff($resource->getDefaultAttributes(), $attributeCodes);
+
+        $resource->unsetAttributes();
+
+        foreach ($defaultAttributesCodes as $attributeCode) {
+            $resource->addAttribute($this->_getDefaultAttribute($resource, $attributeCode));
         }
-        foreach ($attributeCodes as $code) {
-            $resource->getAttribute($code);
+        foreach ($attributes as $attributeCode => $attribute) {
+            $resource->addAttribute($attribute);
         }
         return $resource;
     }

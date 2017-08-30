@@ -8,7 +8,9 @@ namespace Magento\Sales\Block\Adminhtml\Order\Creditmemo\View;
 /**
  * Adminhtml sales shipment comment view block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Comments extends \Magento\Backend\Block\Text\ListText
 {

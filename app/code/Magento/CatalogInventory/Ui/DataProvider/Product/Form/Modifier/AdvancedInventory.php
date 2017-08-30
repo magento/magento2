@@ -13,6 +13,8 @@ use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\JsonValidator;
 
 /**
  * Data provider for advanced inventory form
@@ -52,24 +54,34 @@ class AdvancedInventory extends AbstractModifier
     private $serializer;
 
     /**
+     * @var JsonValidator
+     */
+    private $jsonValidator;
+
+    /**
+     * Constructor
+     *
      * @param LocatorInterface $locator
      * @param StockRegistryInterface $stockRegistry
      * @param ArrayManager $arrayManager
      * @param StockConfigurationInterface $stockConfiguration
      * @param Json|null $serializer
+     * @param JsonValidator|null $jsonValidator
      */
     public function __construct(
         LocatorInterface $locator,
         StockRegistryInterface $stockRegistry,
         ArrayManager $arrayManager,
         StockConfigurationInterface $stockConfiguration,
-        Json $serializer = null
+        Json $serializer = null,
+        JsonValidator $jsonValidator = null
     ) {
         $this->locator = $locator;
         $this->stockRegistry = $stockRegistry;
         $this->arrayManager = $arrayManager;
         $this->stockConfiguration = $stockConfiguration;
-        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Json::class);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
+        $this->jsonValidator = $jsonValidator ?: ObjectManager::getInstance()->get(JsonValidator::class);
     }
 
     /**
@@ -100,16 +112,20 @@ class AdvancedInventory extends AbstractModifier
         if (!empty($this->stockConfiguration->getDefaultConfigValue(StockItemInterface::MIN_SALE_QTY))) {
             $minSaleQtyData = $this->stockConfiguration->getDefaultConfigValue(StockItemInterface::MIN_SALE_QTY);
 
-            if (is_string($minSaleQtyData)) {
-                // Set data source for dynamicRows Minimum Qty Allowed in Shopping Cart
+            if (is_string($minSaleQtyData) && $this->jsonValidator->isValid($minSaleQtyData)) {
+                // Set data source for dynamicRows minimum qty allowed in shopping cart
                 $unserializedMinSaleQty = $this->serializer->unserialize($minSaleQtyData);
-                if (is_array($unserializedMinSaleQty) && json_last_error() === JSON_ERROR_NONE) {
-                    $minSaleQtyData = array_map(function ($group, $qty) {
-                        return [
-                            StockItemInterface::CUSTOMER_GROUP_ID => $group,
-                            StockItemInterface::MIN_SALE_QTY => $qty
-                        ];
-                    }, array_keys($unserializedMinSaleQty), array_values($unserializedMinSaleQty));
+                if (is_array($unserializedMinSaleQty)) {
+                    $minSaleQtyData = array_map(
+                        function ($group, $qty) {
+                            return [
+                                StockItemInterface::CUSTOMER_GROUP_ID => $group,
+                                StockItemInterface::MIN_SALE_QTY => $qty
+                            ];
+                        },
+                        array_keys($unserializedMinSaleQty),
+                        array_values($unserializedMinSaleQty)
+                    );
                 }
             }
 

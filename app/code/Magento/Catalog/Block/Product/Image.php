@@ -6,6 +6,7 @@
 namespace Magento\Catalog\Block\Product;
 
 /**
+ * @api
  * @method string getImageUrl()
  * @method string getWidth()
  * @method string getHeight()
@@ -14,6 +15,7 @@ namespace Magento\Catalog\Block\Product;
  * @method mixed getResizedImageHeight()
  * @method float getRatio()
  * @method string getCustomAttributes()
+ * @since 100.0.2
  */
 class Image extends \Magento\Framework\View\Element\Template
 {

@@ -15,6 +15,10 @@ use Magento\Catalog\Model\Product;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Data\Collection;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Gallery extends \Magento\Framework\View\Element\Template
 {
     /**

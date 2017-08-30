@@ -18,26 +18,33 @@ use Magento\Store\Api\StoreRepositoryInterface;
 
 /**
  * Class AbstractDataProvider
+ *
+ * @api
+ * @since 101.0.0
  */
 abstract class AbstractDataProvider extends ProductDataProvider
 {
     /**
      * @var RequestInterface
+     * @since 101.0.0
      */
     protected $request;
 
     /**
      * @var ProductRepositoryInterface
+     * @since 101.0.0
      */
     protected $productRepository;
 
     /**
      * @var StoreRepositoryInterface
+     * @since 101.0.0
      */
     protected $storeRepository;
 
     /**
      * @var ProductLinkRepositoryInterface
+     * @since 101.0.0
      */
     protected $productLinkRepository;
 
@@ -101,11 +108,13 @@ abstract class AbstractDataProvider extends ProductDataProvider
      * Retrieve link type
      *
      * @return string
+     * @since 101.0.0
      */
     abstract protected function getLinkType();
 
     /**
      * {@inheritdoc}
+     * @since 101.0.0
      */
     public function getCollection()
     {
@@ -134,6 +143,7 @@ abstract class AbstractDataProvider extends ProductDataProvider
      *
      * @param Collection $collection
      * @return Collection
+     * @since 101.0.0
      */
     protected function addCollectionFilters(Collection $collection)
     {
@@ -162,6 +172,7 @@ abstract class AbstractDataProvider extends ProductDataProvider
      * Retrieve product
      *
      * @return ProductInterface|null
+     * @since 101.0.0
      */
     protected function getProduct()
     {
@@ -180,6 +191,7 @@ abstract class AbstractDataProvider extends ProductDataProvider
      * Retrieve store
      *
      * @return StoreInterface|null
+     * @since 101.0.0
      */
     protected function getStore()
     {

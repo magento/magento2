@@ -61,7 +61,7 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInMiniShoppingCart" />
         </variation>
         <variation name="AddProductsToShoppingCartEntityTestVariation5">
-            <data name="tag" xsi:type="string">to_maintain:yes, severity:S0</data>
+            <data name="tag" xsi:type="string">severity:S0</data>
             <data name="productsData/0" xsi:type="string">configurableProduct::default</data>
             <data name="cart/data/grand_total" xsi:type="string">135</data>
             <data name="cart/data/subtotal" xsi:type="string">120</data>
@@ -74,7 +74,6 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInMiniShoppingCart" />
         </variation>
         <variation name="AddProductsToShoppingCartEntityTestVariation6">
-            <data name="issue" xsi:type="string">MAGETWO-64874: Eternal loader in shipping and tax block</data>
             <data name="tag" xsi:type="string">severity:S2</data>
             <data name="productsData/0" xsi:type="string">downloadableProduct::with_two_separately_links</data>
             <data name="cart/data/grand_total" xsi:type="string">22.43</data>
@@ -88,7 +87,7 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInMiniShoppingCart" />
         </variation>
         <variation name="AddProductsToShoppingCartEntityTestVariation7">
-            <data name="tag" xsi:type="string">to_maintain:yes, severity:S2</data>
+            <data name="tag" xsi:type="string">severity:S2</data>
             <data name="productsData/0" xsi:type="string">groupedProduct::three_simple_products</data>
             <data name="cart/data/grand_total" xsi:type="string">1950</data>
             <data name="cart/data/subtotal" xsi:type="string">1920</data>

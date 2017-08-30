@@ -10,6 +10,8 @@ use Magento\Framework\App\DeploymentConfig;
 
 /**
  * In-memory readonly pool of cache front-ends with enforced access control, specific to cache types
+ *
+ * @api
  */
 class FrontendPool
 {

@@ -26,6 +26,15 @@ define([
             arg,
             event;
 
+        beforeEach(function () {
+            spyOn($, '_data').and.callFake(function () {
+                return {
+                    click: [{}, {}],
+                    mousedown: [{}, {}]
+                };
+            });
+        });
+
         describe('"initialize" method', function () {
             it('Check for defined ', function () {
                 expect(obj.hasOwnProperty('initialize')).toBeDefined();
@@ -70,13 +79,8 @@ define([
                         $parent: obj
                     };
                 });
-                $._data = jasmine.createSpy().and.callFake(function () {
-                    return {
-                        click: [{}, {}],
-                        mousedown: [{}, {}]
-                    };
-                });
             });
+
             it('Check for defined ', function () {
                 expect(obj.hasOwnProperty('initColumn')).toBeDefined();
             });

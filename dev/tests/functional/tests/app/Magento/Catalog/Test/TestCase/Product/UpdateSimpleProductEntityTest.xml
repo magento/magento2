@@ -177,5 +177,9 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPriceOnDifferentStoreViews" />
         </variation>
+        <variation name="UpdateSimpleProductEntityTestVariation14" summary="An error appears on open tier price with locale formatting" ticketId="MAGETWO-62076">
+            <data name="initialProduct/dataset" xsi:type="string">simple_with_hight_tier_price</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductFormattingTierPrice" />
+        </variation>
     </testCase>
 </config>

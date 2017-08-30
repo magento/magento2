@@ -8,6 +8,8 @@ namespace Magento\Framework\Pricing\Price;
 
 /**
  * Class Pool
+ *
+ * @api
  */
 class Pool implements \Iterator, \ArrayAccess
 {

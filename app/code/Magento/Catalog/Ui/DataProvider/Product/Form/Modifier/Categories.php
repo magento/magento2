@@ -17,7 +17,11 @@ use Magento\Framework\Stdlib\ArrayManager;
 
 /**
  * Data provider for categories field of product page
+ *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 101.0.0
  */
 class Categories extends AbstractModifier
 {
@@ -29,32 +33,38 @@ class Categories extends AbstractModifier
 
     /**
      * @var CategoryCollectionFactory
+     * @since 101.0.0
      */
     protected $categoryCollectionFactory;
 
     /**
      * @var DbHelper
+     * @since 101.0.0
      */
     protected $dbHelper;
 
     /**
      * @var array
-     * @deprecated
+     * @deprecated 101.0.3
+     * @since 101.0.0
      */
     protected $categoriesTrees = [];
 
     /**
      * @var LocatorInterface
+     * @since 101.0.0
      */
     protected $locator;
 
     /**
      * @var UrlInterface
+     * @since 101.0.0
      */
     protected $urlBuilder;
 
     /**
      * @var ArrayManager
+     * @since 101.0.0
      */
     protected $arrayManager;
 
@@ -96,7 +106,7 @@ class Categories extends AbstractModifier
      * Retrieve cache interface
      *
      * @return CacheInterface
-     * @deprecated
+     * @deprecated 101.0.3
      */
     private function getCacheManager()
     {
@@ -109,6 +119,7 @@ class Categories extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 101.0.0
      */
     public function modifyMeta(array $meta)
     {
@@ -120,6 +131,7 @@ class Categories extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 101.0.0
      */
     public function modifyData(array $data)
     {
@@ -131,6 +143,7 @@ class Categories extends AbstractModifier
      *
      * @param array $meta
      * @return array
+     * @since 101.0.0
      */
     protected function createNewCategoryModal(array $meta)
     {
@@ -189,6 +202,7 @@ class Categories extends AbstractModifier
      *
      * @param array $meta
      * @return array
+     * @since 101.0.0
      */
     protected function customizeCategoriesField(array $meta)
     {
@@ -290,6 +304,7 @@ class Categories extends AbstractModifier
      *
      * @param string|null $filter
      * @return array
+     * @since 101.0.0
      */
     protected function getCategoriesTree($filter = null)
     {
@@ -347,7 +362,7 @@ class Categories extends AbstractModifier
             $categoryById[$category->getId()]['label'] = $category->getName();
             $categoryById[$category->getParentId()]['optgroup'][] = &$categoryById[$category->getId()];
         }
-        
+
         $this->getCacheManager()->save(
             $this->serializer->serialize($categoryById[CategoryModel::TREE_ROOT_ID]['optgroup']),
             self::CATEGORY_TREE_ID . '_' . $filter,

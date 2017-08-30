@@ -10,7 +10,9 @@ use Magento\Quote\Model\Quote\Item;
 /**
  * Adminhtml sales order create items block
  *
+ * @api
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Items extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
 {

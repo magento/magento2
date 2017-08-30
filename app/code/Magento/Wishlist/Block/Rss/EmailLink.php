@@ -12,7 +12,9 @@ namespace Magento\Wishlist\Block\Rss;
 /**
  * Class EmailLink
  *
+ * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 100.0.2
  */
 class EmailLink extends Link
 {

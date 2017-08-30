@@ -8,7 +8,9 @@ namespace Magento\Backend\Block\Widget;
 /**
  * Magento_Backend page breadcrumbs
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Breadcrumbs extends \Magento\Backend\Block\Template
 {

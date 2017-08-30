@@ -13,6 +13,11 @@ use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Code\GeneratedFiles;
 
 /**
+ * Initialization of object manager is a complex operation.
+ * To abstract away this complexity, this class was introduced.
+ * Objects of this class create fully initialized instance of object manager with "global" configuration loaded.
+ *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ObjectManagerFactory
@@ -220,7 +225,7 @@ class ObjectManagerFactory
         $result = new \Magento\Framework\Data\Argument\Interpreter\Composite(
             [
                 'boolean' => new \Magento\Framework\Data\Argument\Interpreter\Boolean($booleanUtils),
-                'string' => new \Magento\Framework\Data\Argument\Interpreter\StringUtils($booleanUtils),
+                'string' => new \Magento\Framework\Data\Argument\Interpreter\BaseStringUtils($booleanUtils),
                 'number' => new \Magento\Framework\Data\Argument\Interpreter\Number(),
                 'null' => new \Magento\Framework\Data\Argument\Interpreter\NullType(),
                 'object' => new \Magento\Framework\Data\Argument\Interpreter\DataObject($booleanUtils),
@@ -255,7 +260,7 @@ class ObjectManagerFactory
                     new \Magento\Framework\Filesystem\Directory\WriteFactory($driverPool)
                 ),
                 new \Magento\Framework\Config\FileIteratorFactory(
-                    new \Magento\Framework\Filesystem\File\ReadFactory(new \Magento\Framework\Filesystem\DriverPool())
+                    new \Magento\Framework\Filesystem\File\ReadFactory($driverPool)
                 )
             );
             $schemaLocator = new \Magento\Framework\ObjectManager\Config\SchemaLocator();
@@ -286,7 +291,7 @@ class ObjectManagerFactory
      * @param \Magento\Framework\ObjectManager\Config\Config $diConfig
      * @param \Magento\Framework\ObjectManager\DefinitionInterface $definitions
      * @return \Magento\Framework\Interception\PluginList\PluginList
-     * @deprecated
+     * @deprecated 100.2.0
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _createPluginList(

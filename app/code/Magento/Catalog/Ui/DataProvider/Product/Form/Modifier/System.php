@@ -10,6 +10,9 @@ use Magento\Framework\UrlInterface;
 
 /**
  * Class SystemDataProvider
+ *
+ * @api
+ * @since 101.0.0
  */
 class System extends AbstractModifier
 {
@@ -19,16 +22,19 @@ class System extends AbstractModifier
 
     /**
      * @var LocatorInterface
+     * @since 101.0.0
      */
     protected $locator;
 
     /**
      * @var UrlInterface
+     * @since 101.0.0
      */
     protected $urlBuilder;
 
     /**
      * @var array
+     * @since 101.0.0
      */
     protected $productUrls = [
         self::KEY_SUBMIT_URL => 'catalog/product/save',
@@ -53,6 +59,7 @@ class System extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 101.0.0
      */
     public function modifyData(array $data)
     {
@@ -93,6 +100,7 @@ class System extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 101.0.0
      */
     public function modifyMeta(array $meta)
     {

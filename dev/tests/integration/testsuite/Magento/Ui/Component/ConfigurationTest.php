@@ -14,7 +14,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Ui\Config\Reader\DefinitionMap;
 use Magento\Framework\Component\ComponentRegistrar;
 
-class ConfigurationTest extends \PHPUnit_Framework_TestCase
+class ConfigurationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DirSearch
@@ -53,9 +53,6 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         'argument[@name="data"]/item[@name="config"]/item[@name="multiple"]' => [
             '//*[@formElement="select"]',
             '//*[substring(@component, string-length(@component) - string-length("ui-group") +1) = "ui-group"]'
-        ],
-        'argument[@name="block"]' => [
-            '//*[@name="html_content"]'
         ]
     ];
 

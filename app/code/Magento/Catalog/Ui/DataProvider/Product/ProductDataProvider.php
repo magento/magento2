@@ -9,6 +9,9 @@ use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 
 /**
  * Class ProductDataProvider
+ *
+ * @api
+ * @since 100.0.2
  */
 class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 {

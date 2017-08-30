@@ -14,7 +14,6 @@
     <preference for="Magento\Backend\Model\UrlInterface" type="Magento\Backend\Model\Url" />
     <preference for="Magento\Backend\Block\Widget\Button\ToolbarInterface" type="Magento\Backend\Block\Widget\Button\Toolbar" />
     <preference for="Magento\Backend\Service\V1\ModuleServiceInterface" type="Magento\Backend\Service\V1\ModuleService" />
-    <preference for="Magento\Backend\Model\View\Layout\FilterInterface" type="Magento\Backend\Model\View\Layout\Filter" />
     <type name="Magento\Backend\Block\Widget\Button\ButtonList" shared="false" />
     <type name="Magento\Framework\App\AreaList">
         <arguments>
@@ -186,14 +185,6 @@
                 <item name="trans_email/ident_sales/name" xsi:type="string">1</item>
                 <item name="trans_email/ident_support/email" xsi:type="string">1</item>
                 <item name="trans_email/ident_support/name" xsi:type="string">1</item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Backend\Model\View\Layout\Filter">
-        <arguments>
-            <argument name="filters" xsi:type="array">
-                <item name="acl-filter" xsi:type="object">Magento\Backend\Model\View\Layout\Filter\Acl</item>
-                <item name="condition-filter" xsi:type="object">Magento\Backend\Model\View\Layout\Filter\Condition</item>
             </argument>
         </arguments>
     </type>

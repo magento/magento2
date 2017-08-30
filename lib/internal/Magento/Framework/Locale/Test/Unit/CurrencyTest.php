@@ -4,14 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Locale\Test\Unit;
 
 use Magento\Framework\Locale\Currency;
 use Magento\Framework\Locale\CurrencyInterface;
 
-class CurrencyTest extends \PHPUnit_Framework_TestCase
+class CurrencyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Event\Manager | \PHPUnit_Framework_MockObject_MockObject

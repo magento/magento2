@@ -14,7 +14,7 @@ use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\TierPrice;
 /**
  * Class TierPriceTest.
  */
-class TierPriceTest extends \PHPUnit_Framework_TestCase
+class TierPriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ProductPriceOptionsInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -37,8 +37,8 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->productPriceOptions = $this->getMock(ProductPriceOptionsInterface::class);
-        $this->arrayManager = $this->getMock(ArrayManager::class, [], [], '', false);
+        $this->productPriceOptions = $this->createMock(ProductPriceOptionsInterface::class);
+        $this->arrayManager = $this->createMock(ArrayManager::class);
 
         $this->tierPrice = (new ObjectManager($this))->getObject(TierPrice::class, [
             'productPriceOptions' => $this->productPriceOptions,
@@ -69,7 +69,7 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
                 'data' => [
                     'config' => [
                         'visible' => true,
-                        'validation' => ['validate-number' => true],
+                        'validation' => ['validate-zero-or-greater' => true],
                     ],
                 ],
             ],

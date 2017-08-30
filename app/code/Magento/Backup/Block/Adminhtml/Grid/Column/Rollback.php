@@ -11,6 +11,10 @@
  */
 namespace Magento\Backup\Block\Adminhtml\Grid\Column;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Rollback extends \Magento\Backend\Block\Widget\Grid\Column
 {
     /**

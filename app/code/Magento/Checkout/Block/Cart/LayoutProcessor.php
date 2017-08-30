@@ -28,19 +28,29 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
     protected $defaultShippingAddress = null;
 
     /**
+     * @var \Magento\Directory\Model\TopDestinationCountries
+     */
+    private $topDestinationCountries;
+
+    /**
      * @param \Magento\Checkout\Block\Checkout\AttributeMerger $merger
      * @param \Magento\Directory\Model\ResourceModel\Country\Collection $countryCollection
      * @param \Magento\Directory\Model\ResourceModel\Region\Collection $regionCollection
+     * @param \Magento\Directory\Model\TopDestinationCountries $topDestinationCountries
      * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Checkout\Block\Checkout\AttributeMerger $merger,
         \Magento\Directory\Model\ResourceModel\Country\Collection $countryCollection,
-        \Magento\Directory\Model\ResourceModel\Region\Collection $regionCollection
+        \Magento\Directory\Model\ResourceModel\Region\Collection $regionCollection,
+        \Magento\Directory\Model\TopDestinationCountries $topDestinationCountries = null
     ) {
         $this->merger = $merger;
         $this->countryCollection = $countryCollection;
         $this->regionCollection = $regionCollection;
+        $this->topDestinationCountries = $topDestinationCountries ?:
+            \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Directory\Model\TopDestinationCountries::class);
     }
 
     /**
@@ -105,11 +115,12 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
 
         if (!isset($jsLayout['components']['checkoutProvider']['dictionaries'])) {
             $jsLayout['components']['checkoutProvider']['dictionaries'] = [
-                'country_id' => $this->countryCollection->loadByStore()->toOptionArray(),
+                'country_id' => $this->countryCollection->loadByStore()->setForegroundCountries(
+                    $this->topDestinationCountries->getTopDestinations()
+                )->toOptionArray(),
                 'region_id' => $this->regionCollection->addAllowedCountriesFilter()->toOptionArray(),
             ];
         }
-
         if (isset($jsLayout['components']['block-summary']['children']['block-shipping']['children']
             ['address-fieldsets']['children'])
         ) {

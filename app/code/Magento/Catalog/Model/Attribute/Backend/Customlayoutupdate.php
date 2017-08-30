@@ -9,9 +9,12 @@ use Magento\Framework\View\Model\Layout\Update\ValidatorFactory;
 use Magento\Eav\Model\Entity\Attribute\Exception;
 
 /**
- * Product url key attribute backend
+ * Layout update attribute backend
+ *
+ * @api
  *
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @since 100.0.2
  */
 class Customlayoutupdate extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {

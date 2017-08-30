@@ -5,6 +5,10 @@
  */
 namespace Magento\Sales\Block\Order;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Comments extends \Magento\Framework\View\Element\Template
 {
     /**

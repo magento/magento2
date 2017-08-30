@@ -8,8 +8,7 @@ namespace Magento\Review\Model\Rating;
 /**
  * Rating option model
  *
- * @method \Magento\Review\Model\ResourceModel\Rating\Option _getResource()
- * @method \Magento\Review\Model\ResourceModel\Rating\Option getResource()
+ * @api
  * @method int getRatingId()
  * @method \Magento\Review\Model\Rating\Option setRatingId(int $value)
  * @method string getCode()
@@ -21,6 +20,7 @@ namespace Magento\Review\Model\Rating;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @codeCoverageIgnore
+ * @since 100.0.2
  */
 class Option extends \Magento\Framework\Model\AbstractModel
 {

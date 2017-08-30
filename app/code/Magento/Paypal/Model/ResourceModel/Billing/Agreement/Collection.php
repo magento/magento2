@@ -7,6 +7,9 @@ namespace Magento\Paypal\Model\ResourceModel\Billing\Agreement;
 
 /**
  * Billing agreements resource collection
+ *
+ * @api
+ * @since 100.0.2
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {

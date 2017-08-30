@@ -11,8 +11,9 @@ use Magento\Catalog\Pricing\Price\FinalPrice;
 /**
  * Adminhtml dashboard most viewed products grid
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 100.0.2
  */
 class Viewed extends \Magento\Backend\Block\Dashboard\Grid
 {

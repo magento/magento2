@@ -10,8 +10,7 @@ use Magento\Framework\DataObject\IdentityInterface;
 /**
  * Rating model
  *
- * @method \Magento\Review\Model\ResourceModel\Rating getResource()
- * @method \Magento\Review\Model\ResourceModel\Rating _getResource()
+ * @api
  * @method array getRatingCodes()
  * @method \Magento\Review\Model\Rating setRatingCodes(array $value)
  * @method array getStores()
@@ -19,6 +18,7 @@ use Magento\Framework\DataObject\IdentityInterface;
  * @method string getRatingCode()
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Rating extends \Magento\Framework\Model\AbstractModel implements IdentityInterface
 {

@@ -9,7 +9,7 @@ namespace Magento\Customer\Test\Unit\Model\Attribute\Data;
 use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 
-class PostcodeTest extends \PHPUnit_Framework_TestCase
+class PostcodeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DirectoryHelper|\PHPUnit_Framework_MockObject_MockObject
@@ -64,7 +64,7 @@ class PostcodeTest extends \PHPUnit_Framework_TestCase
     public function testValidateValue($value, $expected, $countryId, $isOptional)
     {
         $storeLabel = 'Zip/Postal Code';
-        $this->attributeMock->expects($this->once())
+        $this->attributeMock->expects($this->any())
             ->method('getStoreLabel')
             ->willReturn($storeLabel);
 

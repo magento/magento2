@@ -8,7 +8,8 @@ namespace Magento\ImportExport\Model\Source\Import;
 /**
  * Source import behavior model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
 abstract class AbstractBehavior implements \Magento\Framework\Option\ArrayInterface
 {
@@ -39,7 +40,7 @@ abstract class AbstractBehavior implements \Magento\Framework\Option\ArrayInterf
 
     /**
      * Get current behaviour group code
-     *;
+     *
      * @abstract
      * @return string
      */

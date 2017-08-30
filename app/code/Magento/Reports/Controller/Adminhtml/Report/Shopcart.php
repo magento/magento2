@@ -11,6 +11,10 @@
  */
 namespace Magento\Reports\Controller\Adminhtml\Report;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 abstract class Shopcart extends \Magento\Backend\App\Action
 {
     /**

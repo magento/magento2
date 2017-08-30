@@ -5,6 +5,10 @@
  */
 namespace Magento\Weee\Block\Sales\Order;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Totals extends \Magento\Framework\View\Element\Template
 {
     /**

@@ -6,6 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="DateTimeInterface" type="DateTime" />
     <preference for="Psr\Log\LoggerInterface" type="Magento\Framework\Logger\Monolog" />
     <preference for="Magento\Framework\EntityManager\EntityMetadataInterface" type="Magento\Framework\EntityManager\EntityMetadata" />
     <preference for="Magento\Framework\EntityManager\HydratorInterface" type="Magento\Framework\EntityManager\Hydrator" />
@@ -172,6 +173,7 @@
     <preference for="Magento\Framework\View\Element\Message\InterpretationStrategyInterface" type="Magento\Framework\View\Element\Message\InterpretationMediator" />
     <preference for="Magento\Framework\App\FeedInterface" type="Magento\Framework\App\Feed" />
     <preference for="Magento\Framework\App\FeedFactoryInterface" type="Magento\Framework\App\FeedFactory" />
+    <preference for="Magento\Framework\Indexer\Config\DependencyInfoProviderInterface" type="Magento\Framework\Indexer\Config\DependencyInfoProvider" />
     <type name="Magento\Framework\Model\ResourceModel\Db\TransactionManager" shared="false" />
     <type name="Magento\Framework\Acl\Data\Cache">
         <arguments>
@@ -223,6 +225,7 @@
     <type name="Magento\Framework\Message\Manager">
         <arguments>
             <argument name="session" xsi:type="object">Magento\Framework\Message\Session\Proxy</argument>
+            <argument name="exceptionMessageFactory" xsi:type="object">Magento\Framework\Message\ExceptionMessageLookupFactory</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\View\BlockPool" shared="false" />
@@ -491,9 +494,12 @@
     </type>
     <type name="Magento\Framework\View\Layout\Reader\UiComponent">
         <arguments>
-            <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
             <argument name="readerPool" xsi:type="object">blockRenderPool</argument>
-            <argument name="argumentInterpreter" xsi:type="object">layoutArgumentReaderInterpreter</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Layout\ConfigCondition">
+        <arguments>
+            <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
         </arguments>
     </type>
     <virtualType name="bodyRenderPool" type="Magento\Framework\View\Layout\ReaderPool">
@@ -588,11 +594,6 @@
             <argument name="argumentInterpreter" xsi:type="object">layoutArgumentGeneratorInterpreter</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\View\Layout\Generator\UiComponent">
-        <arguments>
-            <argument name="argumentInterpreter" xsi:type="object">layoutArgumentGeneratorInterpreter</argument>
-        </arguments>
-    </type>
     <type name="Magento\Framework\Mview\View">
         <arguments>
             <argument name="state" xsi:type="object" shared="false">Magento\Indexer\Model\Mview\View\State</argument>
@@ -678,6 +679,7 @@
     <type name="Magento\Framework\Code\Generator">
         <arguments>
             <argument name="generatedEntities" xsi:type="array">
+                <item name="extensionInterfaceFactory" xsi:type="string">\Magento\Framework\Api\Code\Generator\ExtensionAttributesInterfaceFactoryGenerator</item>
                 <item name="factory" xsi:type="string">\Magento\Framework\ObjectManager\Code\Generator\Factory</item>
                 <item name="proxy" xsi:type="string">\Magento\Framework\ObjectManager\Code\Generator\Proxy</item>
                 <item name="interceptor" xsi:type="string">\Magento\Framework\Interception\Code\Generator\Interceptor</item>
@@ -1232,9 +1234,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Model\ResourceModel\Db\AbstractDb">
-        <plugin name="clean_cache" type="Magento\Framework\App\Cache\FlushCacheByTags" />
-    </type>
     <type name="Magento\Framework\EntityManager\CompositeMapper">
         <arguments>
             <argument name="mappers" xsi:type="array">
@@ -1257,6 +1256,7 @@
             <argument name="queryModifiers" xsi:type="array">
                 <item name="in" xsi:type="string">Magento\Framework\DB\Select\InQueryModifier</item>
                 <item name="like" xsi:type="string">Magento\Framework\DB\Select\LikeQueryModifier</item>
+                <item name="composite" xsi:type="string">Magento\Framework\DB\Select\CompositeQueryModifier</item>
             </argument>
         </arguments>
     </type>
@@ -1329,5 +1329,21 @@
             <argument name="logCallStack" xsi:type="init_parameter">Magento\Framework\Config\ConfigOptionsListConstants::CONFIG_PATH_DB_LOGGER_INCLUDE_STACKTRACE</argument>
         </arguments>
     </type>
-
+    <type name="Magento\Framework\App\Config\MetadataConfigTypeProcessor">
+        <arguments>
+            <argument name="configSource" xsi:type="object">Magento\Config\App\Config\Source\EnvironmentConfigSource</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Message\ExceptionMessageFactoryPool">
+        <arguments>
+            <argument name="defaultExceptionMessageFactory" xsi:type="object">Magento\Framework\Message\ExceptionMessageFactory</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Mview\View\Subscription">
+        <arguments>
+            <argument name="ignoredUpdateColumns" xsi:type="array">
+                <item name="updated_at" xsi:type="string">updated_at</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

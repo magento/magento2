@@ -23,11 +23,7 @@ class ComponentRegistrar implements ComponentRegistrarInterface
     const LANGUAGE = 'language';
     /**#@- */
 
-    /**
-     * All paths
-     *
-     * @var array
-     */
+    /**#@- */
     private static $paths = [
         self::MODULE => [],
         self::LIBRARY => [],
@@ -46,8 +42,6 @@ class ComponentRegistrar implements ComponentRegistrarInterface
      */
     public static function register($type, $componentName, $path)
     {
-        $path = str_replace("magento2ee", "magento2ce", $path);
-        $path = str_replace("magento2b2b", "magento2ce", $path);
         self::validateType($type);
         if (isset(self::$paths[$type][$componentName])) {
             throw new \LogicException(

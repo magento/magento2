@@ -4,13 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\App\Test\Unit;
 
 use \Magento\Framework\App\AreaList;
 
-class AreaListTest extends \PHPUnit_Framework_TestCase
+class AreaListTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\AreaList
@@ -29,9 +27,9 @@ class AreaListTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_resolverFactory = $this
-            ->getMock(\Magento\Framework\App\Area\FrontNameResolverFactory::class, [], [], '', false);
+            ->createMock(\Magento\Framework\App\Area\FrontNameResolverFactory::class);
     }
 
     public function testGetCodeByFrontNameWhenAreaDoesNotContainFrontName()
@@ -44,16 +42,16 @@ class AreaListTest extends \PHPUnit_Framework_TestCase
             $expected
         );
 
-        $resolverMock = $this->getMock(\Magento\Framework\App\Area\FrontNameResolverInterface::class);
+        $resolverMock = $this->createMock(\Magento\Framework\App\Area\FrontNameResolverInterface::class);
         $this->_resolverFactory->expects(
             $this->any()
         )->method(
-                'create'
-            )->with(
-                'testValue'
-            )->will(
-                $this->returnValue($resolverMock)
-            );
+            'create'
+        )->with(
+            'testValue'
+        )->will(
+            $this->returnValue($resolverMock)
+        );
 
         $actual = $this->_model->getCodeByFrontName('testFrontName');
         $this->assertEquals($expected, $actual);
@@ -106,7 +104,10 @@ class AreaListTest extends \PHPUnit_Framework_TestCase
     {
         $areas = ['area1' => 'value1', 'area2' => 'value2'];
         $this->_model = new \Magento\Framework\App\AreaList(
-            $this->objectManagerMock, $this->_resolverFactory, $areas, ''
+            $this->objectManagerMock,
+            $this->_resolverFactory,
+            $areas,
+            ''
         );
 
         $expected = array_keys($areas);
@@ -118,7 +119,10 @@ class AreaListTest extends \PHPUnit_Framework_TestCase
     {
         $areas = ['area1' => ['router' => 'value1'], 'area2' => 'value2'];
         $this->_model = new \Magento\Framework\App\AreaList(
-            $this->objectManagerMock, $this->_resolverFactory, $areas, ''
+            $this->objectManagerMock,
+            $this->_resolverFactory,
+            $areas,
+            ''
         );
 
         $this->assertEquals($this->_model->getDefaultRouter('area1'), $areas['area1']['router']);
@@ -131,7 +135,10 @@ class AreaListTest extends \PHPUnit_Framework_TestCase
         $objectManagerMock = $this->getObjectManagerMockGetArea();
         $areas = ['area1' => ['router' => 'value1'], 'area2' => 'value2'];
         $this->_model = new AreaList(
-            $objectManagerMock, $this->_resolverFactory, $areas, ''
+            $objectManagerMock,
+            $this->_resolverFactory,
+            $areas,
+            ''
         );
 
         $this->assertEquals($this->_model->getArea('testArea'), 'ok');
@@ -142,7 +149,7 @@ class AreaListTest extends \PHPUnit_Framework_TestCase
      */
     protected function getObjectManagerMockGetArea()
     {
-        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $objectManagerMock
             ->expects($this->any())
             ->method('create')

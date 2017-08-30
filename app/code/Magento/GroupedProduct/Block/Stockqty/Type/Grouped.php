@@ -9,7 +9,9 @@ use Magento\Framework\DataObject\IdentityInterface;
 
 /**
  * Product stock qty block for grouped product type
+ *
  * @api
+ * @since 100.0.2
  */
 class Grouped extends \Magento\CatalogInventory\Block\Stockqty\Composite implements IdentityInterface
 {

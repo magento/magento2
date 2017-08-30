@@ -138,6 +138,11 @@ return [
                 'name' => 'Magento_Cms',
                 'path' => 'Setup/ContentConverter.php'
             ],
+            [
+                'type' => 'library',
+                'name' => 'magento/framework',
+                'path' => 'Unserialize/Test/Unit/UnserializeTest.php'
+            ],
         ]
     ],
     'ArrayObject' => [

@@ -10,7 +10,8 @@ use Magento\Framework\View\Element\Template;
 /**
  * Import frame result block.
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
 class Result extends \Magento\Backend\Block\Template
 {

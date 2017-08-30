@@ -7,7 +7,9 @@ namespace Magento\Search\Block\Adminhtml\Dashboard;
 
 /**
  * Dashboard last search keywords block
+ * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 100.0.2
  */
 class Last extends \Magento\Backend\Block\Dashboard\Grid
 {
@@ -26,7 +28,9 @@ class Last extends \Magento\Backend\Block\Dashboard\Grid
      */
     protected $_moduleManager;
 
-    /** @var string  */
+    /**
+     * @var string
+     */
     protected $_template = 'Magento_Backend::dashboard/grid.phtml';
 
     /**

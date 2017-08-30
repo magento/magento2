@@ -8,6 +8,12 @@ namespace Magento\Catalog\Model;
 use Magento\Catalog\Api\Data\ProductOptionInterface;
 use Magento\Framework\DataObject;
 
+/**
+ * Allows to dump and apply product configurations
+ *
+ * @api
+ * @since 100.0.2
+ */
 interface ProductOptionProcessorInterface
 {
     /**

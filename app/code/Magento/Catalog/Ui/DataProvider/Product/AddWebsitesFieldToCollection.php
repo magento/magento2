@@ -10,6 +10,9 @@ use Magento\Ui\DataProvider\AddFieldToCollectionInterface;
 
 /**
  * Class AddWebsitesFieldToCollection
+ *
+ * @api
+ * @since 100.0.2
  */
 class AddWebsitesFieldToCollection implements AddFieldToCollectionInterface
 {

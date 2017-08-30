@@ -7,6 +7,9 @@ namespace Magento\Framework\Filesystem\Directory;
 
 use Magento\Framework\Exception\FileSystemException;
 
+/**
+ * @api
+ */
 class Read implements ReadInterface
 {
     /**

@@ -4,13 +4,14 @@
  * See COPYING.txt for license details.
  */
 
+namespace Magento\Catalog\Block\Adminhtml\Product\Composite;
+
 /**
  * Adminhtml catalog product composite configure block
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
-namespace Magento\Catalog\Block\Adminhtml\Product\Composite;
-
 class Configure extends \Magento\Backend\Block\Widget
 {
     /**

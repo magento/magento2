@@ -7,6 +7,9 @@ namespace Magento\ImportExport\Model\ResourceModel;
 
 /**
  * Class History
+ *
+ * @api
+ * @since 100.0.2
  */
 class History extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

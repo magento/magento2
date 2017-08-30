@@ -7,6 +7,12 @@ namespace Magento\Catalog\Model\Indexer\Category;
 
 use Magento\Framework\Indexer\CacheContext;
 
+/**
+ * Category flat indexer
+ *
+ * @api
+ * @since 100.0.2
+ */
 class Flat implements \Magento\Framework\Indexer\ActionInterface, \Magento\Framework\Mview\ActionInterface
 {
     /**
@@ -103,7 +109,8 @@ class Flat implements \Magento\Framework\Indexer\ActionInterface, \Magento\Frame
      * Get cache context
      *
      * @return \Magento\Framework\Indexer\CacheContext
-     * @deprecated
+     * @deprecated 100.0.11
+     * @since 100.0.11
      */
     protected function getCacheContext()
     {

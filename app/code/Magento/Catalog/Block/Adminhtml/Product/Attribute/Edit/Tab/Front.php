@@ -20,6 +20,10 @@ use Magento\Eav\Block\Adminhtml\Attribute\PropertyLocker;
 use Magento\Framework\Data\FormFactory;
 use Magento\Framework\Registry;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Front extends Generic
 {
     /**

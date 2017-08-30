@@ -8,8 +8,7 @@ namespace Magento\Authorization\Model;
 /**
  * Admin Role Model
  *
- * @method \Magento\Authorization\Model\ResourceModel\Role _getResource()
- * @method \Magento\Authorization\Model\ResourceModel\Role getResource()
+ * @api
  * @method int getParentId()
  * @method \Magento\Authorization\Model\Role setParentId(int $value)
  * @method int getTreeLevel()
@@ -25,6 +24,7 @@ namespace Magento\Authorization\Model;
  * @method string getRoleName()
  * @method \Magento\Authorization\Model\Role setRoleName(string $value)
  * @api
+ * @since 100.0.2
  */
 class Role extends \Magento\Framework\Model\AbstractModel
 {

@@ -10,13 +10,14 @@ use Magento\Catalog\Model\Product;
 /**
  * Catalog Compare Item Model
  *
- * @method \Magento\Catalog\Model\ResourceModel\Product\Compare\Item getResource()
+ * @api
  * @method \Magento\Catalog\Model\Product\Compare\Item setVisitorId(int $value)
  * @method \Magento\Catalog\Model\Product\Compare\Item setCustomerId(int $value)
  * @method int getProductId()
  * @method \Magento\Catalog\Model\Product\Compare\Item setProductId(int $value)
  * @method int getStoreId()
  * @method \Magento\Catalog\Model\Product\Compare\Item setStoreId(int $value)
+ * @since 100.0.2
  */
 class Item extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\DataObject\IdentityInterface
 {
@@ -106,16 +107,6 @@ class Item extends \Magento\Framework\Model\AbstractModel implements \Magento\Fr
     protected function _construct()
     {
         $this->_init(\Magento\Catalog\Model\ResourceModel\Product\Compare\Item::class);
-    }
-
-    /**
-     * Retrieve Resource instance
-     *
-     * @return \Magento\Catalog\Model\ResourceModel\Product\Compare\Item
-     */
-    protected function _getResource()
-    {
-        return parent::_getResource();
     }
 
     /**

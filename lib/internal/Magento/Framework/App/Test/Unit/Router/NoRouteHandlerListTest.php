@@ -4,11 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\App\Test\Unit\Router;
 
-class NoRouteHandlerListTest extends \PHPUnit_Framework_TestCase
+class NoRouteHandlerListTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -22,7 +20,7 @@ class NoRouteHandlerListTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->_objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $handlersList = [
             'default_handler' => ['class' => \Magento\Framework\App\Router\NoRouteHandler::class, 'sortOrder' => 100],
             'backend_handler' => ['class' => \Magento\Backend\App\Router\NoRouteHandler::class, 'sortOrder' => 10],
@@ -33,8 +31,8 @@ class NoRouteHandlerListTest extends \PHPUnit_Framework_TestCase
 
     public function testGetHandlers()
     {
-        $backendHandlerMock = $this->getMock(\Magento\Backend\App\Router\NoRouteHandler::class, [], [], '', false);
-        $defaultHandlerMock = $this->getMock(\Magento\Framework\App\Router\NoRouteHandler::class, [], [], '', false);
+        $backendHandlerMock = $this->createMock(\Magento\Backend\App\Router\NoRouteHandler::class);
+        $defaultHandlerMock = $this->createMock(\Magento\Framework\App\Router\NoRouteHandler::class);
 
         $this->_objectManagerMock->expects(
             $this->at(0)

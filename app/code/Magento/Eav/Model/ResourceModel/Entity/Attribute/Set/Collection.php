@@ -8,7 +8,9 @@ namespace Magento\Eav\Model\ResourceModel\Entity\Attribute\Set;
 /**
  * Eav Resource Attribute Set Collection
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {

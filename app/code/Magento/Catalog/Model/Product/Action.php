@@ -11,7 +11,10 @@ namespace Magento\Catalog\Model\Product;
 /**
  * Catalog Product Mass Action processing model
  *
+ * @api
+ *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Action extends \Magento\Framework\Model\AbstractModel
 {
@@ -22,7 +25,9 @@ class Action extends \Magento\Framework\Model\AbstractModel
      */
     protected $_productWebsiteFactory;
 
-    /** @var \Magento\Framework\Indexer\IndexerRegistry */
+    /**
+     * @var \Magento\Framework\Indexer\IndexerRegistry
+     */
     protected $indexerRegistry;
 
     /**
@@ -72,16 +77,6 @@ class Action extends \Magento\Framework\Model\AbstractModel
     protected function _construct()
     {
         $this->_init(\Magento\Catalog\Model\ResourceModel\Product\Action::class);
-    }
-
-    /**
-     * Retrieve resource instance wrapper
-     *
-     * @return \Magento\Catalog\Model\ResourceModel\Product\Action
-     */
-    protected function _getResource()
-    {
-        return parent::_getResource();
     }
 
     /**

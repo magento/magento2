@@ -6,5 +6,5 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Mview/etc/mview.xsd">
-    <view id="customer_dummy" class="Magento\Customer\Model\Indexer\Mview\Dummy" group="indexer"/>
+    <view id="customer_dummy" class="Magento\Framework\Indexer\Action\Dummy" group="indexer"/>
 </config>

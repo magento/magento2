@@ -7,6 +7,9 @@ namespace Magento\Paypal\Block\Checkout\Onepage\Success;
 
 /**
  * Billing agreement information on Order success page
+ *
+ * @api
+ * @since 100.0.2
  */
 class BillingAgreement extends \Magento\Framework\View\Element\Template
 {

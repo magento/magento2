@@ -9,11 +9,15 @@ use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 
 /**
  * Update handler for catalog product gallery.
+ *
+ * @api
+ * @since 101.0.0
  */
 class UpdateHandler extends \Magento\Catalog\Model\Product\Gallery\CreateHandler
 {
     /**
      * {@inheritdoc}
+     * @since 101.0.0
      */
     protected function processDeletedImages($product, array &$images)
     {
@@ -44,6 +48,7 @@ class UpdateHandler extends \Magento\Catalog\Model\Product\Gallery\CreateHandler
 
     /**
      * {@inheritdoc}
+     * @since 101.0.0
      */
     protected function processNewImage($product, array &$image)
     {
@@ -71,6 +76,7 @@ class UpdateHandler extends \Magento\Catalog\Model\Product\Gallery\CreateHandler
     /**
      * @param \Magento\Catalog\Model\Product $product
      * @return array
+     * @since 101.0.0
      */
     protected function extractStoreIds($product)
     {
@@ -88,6 +94,7 @@ class UpdateHandler extends \Magento\Catalog\Model\Product\Gallery\CreateHandler
     /**
      * @param array $files
      * @return null
+     * @since 101.0.0
      */
     protected function removeDeletedImages(array $files)
     {

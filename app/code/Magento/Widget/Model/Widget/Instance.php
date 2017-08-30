@@ -12,6 +12,7 @@ use Magento\Framework\App\ObjectManager;
 /**
  * Widget Instance Model
  *
+ * @api
  * @method string getTitle()
  * @method \Magento\Widget\Model\Widget\Instance setTitle(string $value)
  * @method \Magento\Widget\Model\Widget\Instance setStoreIds(string $value)
@@ -21,9 +22,8 @@ use Magento\Framework\App\ObjectManager;
  * @method \Magento\Widget\Model\Widget\Instance setThemeId(int $value)
  * @method int getThemeId()
  *
- * @api
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Instance extends \Magento\Framework\Model\AbstractModel
 {
@@ -596,6 +596,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
                 $value = implode(',', $value);
             }
             if ($name && strlen((string)$value)) {
+                $value = html_entity_decode($value);
                 $xml .= '<action method="setData">' .
                     '<argument name="name" xsi:type="string">' .
                     $name .

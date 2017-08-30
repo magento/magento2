@@ -19,6 +19,7 @@ use Magento\Framework\Filesystem\DriverPool;
  * Performs basic initialization root function: injects init parameters and creates object manager
  * Can create/run applications
  *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Bootstrap

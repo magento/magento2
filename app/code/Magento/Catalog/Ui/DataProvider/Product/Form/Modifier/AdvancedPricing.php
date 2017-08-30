@@ -28,57 +28,70 @@ use Magento\Framework\Stdlib\ArrayManager;
 /**
  * Class AdvancedPricing
  *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 101.0.0
  */
 class AdvancedPricing extends AbstractModifier
 {
     /**
      * @var LocatorInterface
+     * @since 101.0.0
      */
     protected $locator;
 
     /**
      * @var ModuleManager
+     * @since 101.0.0
      */
     protected $moduleManager;
 
     /**
      * @var GroupManagementInterface
+     * @since 101.0.0
      */
     protected $groupManagement;
 
     /**
      * @var SearchCriteriaBuilder
+     * @since 101.0.0
      */
     protected $searchCriteriaBuilder;
 
     /**
      * @var GroupRepositoryInterface
+     * @since 101.0.0
      */
     protected $groupRepository;
 
     /**
      * @var Data
+     * @since 101.0.0
      */
     protected $directoryHelper;
 
     /**
      * @var StoreManagerInterface
+     * @since 101.0.0
      */
     protected $storeManager;
 
     /**
      * @var ArrayManager
+     * @since 101.0.0
      */
     protected $arrayManager;
 
     /**
      * @var string
+     * @since 101.0.0
      */
     protected $scopeName;
 
     /**
      * @var array
+     * @since 101.0.0
      */
     protected $meta = [];
 
@@ -127,6 +140,7 @@ class AdvancedPricing extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 101.0.0
      */
     public function modifyMeta(array $meta)
     {
@@ -145,6 +159,7 @@ class AdvancedPricing extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 101.0.0
      */
     public function modifyData(array $data)
     {
@@ -158,6 +173,7 @@ class AdvancedPricing extends AbstractModifier
      *
      * @param string $fieldCode
      * @return $this
+     * @since 101.0.0
      */
     protected function preparePriceFields($fieldCode)
     {
@@ -296,6 +312,7 @@ class AdvancedPricing extends AbstractModifier
      * Retrieve default value for website
      *
      * @return int
+     * @since 101.0.0
      */
     public function getDefaultWebsite()
     {

@@ -5,15 +5,15 @@
  */
 namespace Magento\Paypal\Test\Unit\Model;
 
+use Magento\Paypal\Block\Payment\Info;
 use Magento\Paypal\Model\Payflowlink;
-use Magento\Paypal\Model\Config;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PayflowlinkTest extends \PHPUnit_Framework_TestCase
+class PayflowlinkTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Payflowlink */
     protected $model;
@@ -38,14 +38,8 @@ class PayflowlinkTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->store = $this->getMock(
-            \Magento\Store\Model\Store::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $storeManager = $this->getMock(
+        $this->store = $this->createMock(\Magento\Store\Model\Store::class);
+        $storeManager = $this->createMock(
             \Magento\Store\Model\StoreManagerInterface::class
         );
         $this->paypalConfig = $this->getMockBuilder(\Magento\Paypal\Model\Config::class)
@@ -107,13 +101,7 @@ class PayflowlinkTest extends \PHPUnit_Framework_TestCase
 
     public function testInitialize()
     {
-        $order = $this->getMock(
-            \Magento\Sales\Model\Order::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $order = $this->createMock(\Magento\Sales\Model\Order::class);
         $this->infoInstance->expects($this->any())
             ->method('getOrder')
             ->will($this->returnValue($order));
@@ -190,5 +178,13 @@ class PayflowlinkTest extends \PHPUnit_Framework_TestCase
             [false, '0'],
             [true, '1']
         ];
+    }
+
+    /**
+     * @covers \Magento\Paypal\Model\Payflowlink::getInfoBlockType()
+     */
+    public function testGetInfoBlockType()
+    {
+        static::assertEquals(Info::class, $this->model->getInfoBlockType());
     }
 }

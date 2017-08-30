@@ -99,5 +99,10 @@
             </data>
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertCatalogSearchResultOrder" />
         </variation>
+        <variation name="SearchEntityResultsTestVariation18" summary="Search Configurable Product with Enabled and Disabled Children." ticketId="MAGETWO-69181">
+            <data name="catalogSearch/data/query_text/value" xsi:type="string">configurableProduct::one_simple_product_not_visible_individually::name</data>
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertCatalogSearchResult" />
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertConfigurableWithDisabledOtpionCatalogSearchNoResult" />
+        </variation>
     </testCase>
 </config>

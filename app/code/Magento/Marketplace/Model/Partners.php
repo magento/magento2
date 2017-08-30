@@ -9,6 +9,10 @@ use Magento\Framework\HTTP\Client\Curl;
 use Magento\Marketplace\Helper\Cache;
 use Magento\Backend\Model\UrlInterface;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Partners
 {
     /**

@@ -15,6 +15,7 @@ use Magento\Quote\Model\Quote\Item\AbstractItem;
 /**
  * Shopping cart item render block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  *
  * @method \Magento\Checkout\Block\Cart\Item\Renderer setProductName(string)

@@ -20,6 +20,11 @@ class Collection extends \Magento\Framework\View\Element\UiComponent\DataProvide
     protected $document = Document::class;
 
     /**
+     * @inheritdoc
+     */
+    protected $_map = ['fields' => ['entity_id' => 'main_table.entity_id']];
+
+    /**
      * Initialize dependencies.
      *
      * @param EntityFactory $entityFactory

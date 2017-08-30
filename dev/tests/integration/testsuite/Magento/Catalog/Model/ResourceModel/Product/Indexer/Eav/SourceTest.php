@@ -13,7 +13,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * Class SourceTest
  * @magentoAppIsolation enabled
  */
-class SourceTest extends \PHPUnit_Framework_TestCase
+class SourceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\Source
@@ -67,9 +67,6 @@ class SourceTest extends \PHPUnit_Framework_TestCase
 
         $this->_eavIndexerProcessor->reindexAll();
 
-        $suffix = $objectManager->get(\Magento\Indexer\Model\Indexer\StateFactory::class)->create()->loadByIndexer(
-            \Magento\Catalog\Model\Indexer\Product\Eav\Processor::INDEXER_ID
-        )->getTableSuffix();
         /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection $options **/
         $options = $objectManager->create(
             \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection::class
@@ -79,7 +76,7 @@ class SourceTest extends \PHPUnit_Framework_TestCase
 
         $connection = $this->productResource->getConnection();
 
-        $select = $connection->select()->from($this->productResource->getTable('catalog_product_index_eav') . $suffix)
+        $select = $connection->select()->from($this->productResource->getTable('catalog_product_index_eav'))
             ->where('entity_id = ?', 1)
             ->where('attribute_id = ?', $attr->getId())
             ->where('value IN (?)', $optionIds);
@@ -106,19 +103,17 @@ class SourceTest extends \PHPUnit_Framework_TestCase
      */
     public function testReindexMultiselectAttribute()
     {
+        $objectManager = Bootstrap::getObjectManager();
+
         /** @var ProductRepositoryInterface $productRepository */
-        $productRepository = Bootstrap::getObjectManager()
-            ->create(ProductRepositoryInterface::class);
+        $productRepository = $objectManager->create(ProductRepositoryInterface::class);
 
         /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attr **/
-        $attr = Bootstrap::getObjectManager()->get(\Magento\Eav\Model\Config::class)
+        $attr = $objectManager->get(\Magento\Eav\Model\Config::class)
            ->getAttribute('catalog_product', 'multiselect_attribute');
-        $attr->setIsFilterable(1)->save();
 
         /** @var $options \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection */
-        $options = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection::class
-        );
+        $options = $objectManager->create(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection::class);
         $options->setAttributeFilter($attr->getId());
         $optionIds = $options->getAllIds();
         $product1Id = $optionIds[0] * 10;
@@ -137,7 +132,6 @@ class SourceTest extends \PHPUnit_Framework_TestCase
         $productRepository->save($product2);
 
         $this->_eavIndexerProcessor->reindexAll();
-
         $connection = $this->productResource->getConnection();
         $select = $connection->select()->from($this->productResource->getTable('catalog_product_index_eav'))
             ->where('entity_id in (?)', [$product1Id, $product2Id])

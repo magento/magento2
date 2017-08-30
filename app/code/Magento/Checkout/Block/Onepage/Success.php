@@ -10,6 +10,8 @@ use Magento\Sales\Model\Order;
 
 /**
  * One page checkout success page
+ *
+ * @api
  */
 class Success extends \Magento\Framework\View\Element\Template
 {
@@ -125,6 +127,7 @@ class Success extends \Magento\Framework\View\Element\Template
 
     /**
      * @return string
+     * @since 100.2.0
      */
     public function getContinueUrl()
     {

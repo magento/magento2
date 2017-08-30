@@ -7,6 +7,9 @@ namespace Magento\Theme\Block\Adminhtml\System\Design;
 
 /**
  *  Container for theme grid
+ *
+ * @api
+ * @since 100.0.2
  */
 class Theme extends \Magento\Backend\Block\Widget\Grid\Container
 {

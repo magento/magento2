@@ -2,11 +2,11 @@
     "name": "magento/module-require-js",
     "description": "N/A",
     "require": {
-        "php": "~5.6.5|7.0.2|7.0.4|~7.0.6",
-        "magento/framework": "100.2.*"
+        "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
+        "magento/framework": "100.3.*"
     },
     "type": "magento2-module",
-    "version": "100.2.0-dev",
+    "version": "100.3.0-dev",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

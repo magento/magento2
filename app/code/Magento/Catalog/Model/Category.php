@@ -17,6 +17,7 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 /**
  * Catalog category
  *
+ * @api
  * @method Category setAffectedProductIds(array $productIds)
  * @method array getAffectedProductIds()
  * @method Category setMovedCategoryId(array $productIds)
@@ -33,6 +34,7 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Category extends \Magento\Catalog\Model\AbstractModel implements
     \Magento\Framework\DataObject\IdentityInterface,
@@ -84,11 +86,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     const KEY_CHILDREN_DATA = 'children_data';
     /**#@-*/
 
-    /**
-     * Prefix of model events names
-     *
-     * @var string
-     */
+    /**#@-*/
     protected $_eventPrefix = 'catalog_category';
 
     /**
@@ -116,7 +114,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * URL rewrite model
      *
      * @var \Magento\UrlRewrite\Model\UrlRewrite
-     * @deprecated since 2.2.0
+     * @deprecated 101.1.0
      */
     protected $_urlRewrite;
 
@@ -207,13 +205,19 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      */
     protected $flatState;
 
-    /** @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator
+     */
     protected $categoryUrlPathGenerator;
 
-    /** @var UrlFinderInterface */
+    /**
+     * @var \Magento\UrlRewrite\Model\UrlFinderInterface
+     */
     protected $urlFinder;
 
-    /** @var \Magento\Framework\Indexer\IndexerRegistry */
+    /**
+     * @var \Magento\Framework\Indexer\IndexerRegistry
+     */
     protected $indexerRegistry;
 
     /**

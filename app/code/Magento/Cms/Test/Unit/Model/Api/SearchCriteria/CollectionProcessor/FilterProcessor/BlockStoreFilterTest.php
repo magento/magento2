@@ -7,7 +7,7 @@ namespace Magento\Cms\Test\Unit\Model\Api\SearchCriteria\CollectionProcessor\Fil
 
 use Magento\Cms\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor\BlockStoreFilter;
 
-class BlockStoreFilterTest extends \PHPUnit_Framework_TestCase
+class BlockStoreFilterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var BlockStoreFilter

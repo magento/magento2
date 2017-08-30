@@ -8,7 +8,9 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create;
 /**
  * Adminhtml sales order create block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Customer extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
 {

@@ -10,21 +10,27 @@ use Magento\Security\Model\ConfigInterface;
 
 /**
  * Block Session Activity
+ *
+ * @api
+ * @since 100.1.0
  */
 class Activity extends \Magento\Backend\Block\Template
 {
     /**
      * @var ConfigInterface
+     * @since 100.1.0
      */
     protected $securityConfig;
 
     /**
      * @var \Magento\Security\Model\AdminSessionsManager
+     * @since 100.1.0
      */
     protected $sessionsManager;
 
     /**
      * @var \Magento\Security\Model\ResourceModel\AdminSessionInfo\CollectionFactory
+     * @since 100.1.0
      */
     protected $sessionsInfoCollection;
 
@@ -53,6 +59,7 @@ class Activity extends \Magento\Backend\Block\Template
 
     /**
      * @return \Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection
+     * @since 100.1.0
      */
     public function getSessionInfoCollection()
     {
@@ -64,6 +71,7 @@ class Activity extends \Magento\Backend\Block\Template
 
     /**
      * @return bool
+     * @since 100.1.0
      */
     public function areMultipleSessionsActive()
     {
@@ -72,6 +80,7 @@ class Activity extends \Magento\Backend\Block\Template
 
     /**
      * @return string
+     * @since 100.1.0
      */
     public function getRemoteIp()
     {
@@ -83,6 +92,7 @@ class Activity extends \Magento\Backend\Block\Template
      *
      * @param   string $time
      * @return  string
+     * @since 100.1.0
      */
     public function formatDateTime($time)
     {

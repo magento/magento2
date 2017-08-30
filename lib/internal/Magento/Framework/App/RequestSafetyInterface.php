@@ -1,7 +1,5 @@
 <?php
 /**
- * Application request
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -9,9 +7,9 @@
 namespace Magento\Framework\App;
 
 /**
- * Interface RequestSafetyInterface
+ * Request safety check. Can be used to identify if current application request is safe (does not modify state) or not.
  *
- * @package Magento\Framework\App
+ * @api
  */
 interface RequestSafetyInterface
 {

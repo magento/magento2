@@ -15,8 +15,10 @@ use Magento\Framework\View\Element\Template;
 /**
  * Catalog Price Render
  *
+ * @api
  * @method string getPriceRender()
  * @method string getPriceTypeCode()
+ * @since 100.0.2
  */
 class Render extends Template
 {

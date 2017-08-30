@@ -8,7 +8,10 @@ namespace Magento\CustomerImportExport\Model\Export;
 /**
  * Export entity customer model
  *
+ * @api
+ *
  * @method \Magento\Customer\Model\ResourceModel\Attribute\Collection getAttributeCollection() getAttributeCollection()
+ * @since 100.0.2
  */
 class Customer extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
 {
@@ -40,11 +43,7 @@ class Customer extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
 
     /**#@-*/
 
-    /**
-     * Overridden attributes parameters.
-     *
-     * @var array
-     */
+    /**#@-*/
     protected $_attributeOverrides = [
         'created_at' => ['backend_type' => 'datetime'],
         'reward_update_notification' => ['source_model' => \Magento\Eav\Model\Entity\Attribute\Source\Boolean::class],

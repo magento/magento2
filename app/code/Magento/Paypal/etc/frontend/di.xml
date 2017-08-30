@@ -92,6 +92,7 @@
                 <item name="template" xsi:type="string">Magento_Paypal::express/in-context/shortcut/button.phtml</item>
                 <item name="alias" xsi:type="string">paypal.express-in-context.mini-cart</item>
                 <item name="button_id" xsi:type="string">paypal-express-in-context-mini-cart</item>
+                <item name="link_data_action" xsi:type="string">paypal-in-context-checkout</item>
             </argument>
             <argument name="payment" xsi:type="object">Magento\Paypal\Model\Express</argument>
         </arguments>
@@ -111,5 +112,8 @@
                 <item name="paypal-billing-agreement" xsi:type="string">Magento\Paypal\CustomerData\BillingAgreement</item>
             </argument>
         </arguments>
+    </type>
+    <type name="Magento\Quote\Model\QuoteRepository\SaveHandler">
+        <plugin name="paypal-cartitem" type="Magento\Paypal\Model\Express\QuotePlugin"/>
     </type>
 </config>

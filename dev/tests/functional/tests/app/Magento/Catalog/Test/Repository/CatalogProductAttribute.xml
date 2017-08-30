@@ -327,5 +327,13 @@
             <field name="search_weight" xsi:type="string">1</field>
             <field name="default_value_text" xsi:type="string">Alaska Lorem ipsum dolor sit Alaska amet</field>
         </dataset>
+
+        <dataset name="free_shipping">
+            <field name="frontend_label" xsi:type="string">free_shipping_%isolation%</field>
+            <field name="attribute_code" xsi:type="string">free_shipping_%isolation%</field>
+            <field name="frontend_input" xsi:type="string">Yes/No</field>
+            <field name="is_required" xsi:type="string">No</field>
+            <field name="is_used_for_promo_rules" xsi:type="string">Yes</field>
+        </dataset>
     </repository>
 </config>

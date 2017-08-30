@@ -7,6 +7,9 @@ namespace Magento\PageCache\Block\System\Config\Form\Field;
 
 /**
  * Class Export
+ *
+ * @api
+ * @since 100.0.2
  */
 class Export extends \Magento\Config\Block\System\Config\Form\Field
 {
@@ -70,7 +73,7 @@ class Export extends \Magento\Config\Block\System\Config\Form\Field
      * to avoid saving empty field
      *
      * @return string
-     * @deprecated
+     * @deprecated 100.1.0
      */
     public function getTtlValue()
     {

@@ -8,6 +8,9 @@ namespace Magento\Catalog\Helper\Product\Configuration;
 
 /**
  * Interface for product configuration helpers
+ *
+ * @api
+ * @since 100.0.2
  */
 interface ConfigurationInterface
 {

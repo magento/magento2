@@ -9,6 +9,9 @@ use Magento\Review\Model\ResourceModel\Review\Product\Collection;
 
 /**
  * Recent Customer Reviews Block
+ *
+ * @api
+ * @since 100.0.2
  */
 class Recent extends \Magento\Framework\View\Element\Template
 {

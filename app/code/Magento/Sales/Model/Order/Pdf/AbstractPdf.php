@@ -12,8 +12,11 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Sales Order PDF abstract model
+ *
+ * @api
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 abstract class AbstractPdf extends \Magento\Framework\DataObject
 {

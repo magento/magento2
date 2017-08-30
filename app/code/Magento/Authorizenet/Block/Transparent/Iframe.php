@@ -8,7 +8,8 @@ namespace Magento\Authorizenet\Block\Transparent;
 use Magento\Payment\Block\Transparent\Iframe as TransparentIframe;
 
 /**
- * Class Iframe
+ * @api
+ * @since 100.0.2
  */
 class Iframe extends TransparentIframe
 {

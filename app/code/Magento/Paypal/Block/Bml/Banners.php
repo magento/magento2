@@ -9,6 +9,10 @@ namespace Magento\Paypal\Block\Bml;
 use Magento\Framework\View\Element\Template;
 use Magento\Paypal\Model\Config;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Banners extends Template
 {
     /**
