@@ -41,10 +41,12 @@ class AssertWebapiNoAccessByCookie extends AbstractConstraint
     ) {
         // Create and login a customer on frontend
         $customer->persist();
-        $this->objectManager->create(
-            'Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep',
+        /** @var \Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep $customerLoginStep */
+        $customerLoginStep = $this->objectManager->create(
+            \Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep::class,
             ['customer' => $customer]
-        )->run();
+        );
+        $customerLoginStep->run();
 
         // Go to cms page with form as logged in customer and submit request
         $browser->open($_ENV['app_frontend_url'] . $cms->getIdentifier());
@@ -55,6 +57,8 @@ class AssertWebapiNoAccessByCookie extends AbstractConstraint
             $browser->getHtmlSource(),
             'Customer should not have customer webapi access through cookies.'
         );
+
+        $customerLoginStep->cleanup();
     }
 
     /**

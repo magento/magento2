@@ -8,6 +8,8 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Webapi\Test\TestCase\CustomerWebapisPermissionTest" summary="Customer Webapi Permission Test" ticketId="MAGETWO-64389">
         <variation name="CustomerWebapisPermissionTestVariation1">
+            <data name="url">rest/V1/carts/mine</data>
+            <data name="method">POST</data>
             <constraint name="Magento\Webapi\Test\Constraint\AssertWebapiNoAccessByCookie" />
         </variation>
     </testCase>

@@ -119,7 +119,7 @@ class AbstractAttributeTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $dataObjectHelperMock->expects($this->once())->method('populateWithArray')
-            ->with($attributeOptionMock, ['some value'], '\Magento\Eav\Api\Data\AttributeOptionInterface')
+            ->with($attributeOptionMock, ['some value'], \Magento\Eav\Api\Data\AttributeOptionInterface::class)
             ->willReturnSelf();
         $dataFactoryMock->expects($this->once())->method('create')->willReturn($attributeOptionMock);
 

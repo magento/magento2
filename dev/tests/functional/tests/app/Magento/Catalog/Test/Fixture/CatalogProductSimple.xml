@@ -47,6 +47,7 @@
         <field name="msrp" is_required="0" />
         <field name="msrp_display_actual_price_type" is_required="0" />
         <field name="name" is_required="1" group="product-details" />
+        <field name="use_default_name" group="product-details" />
         <field name="old_id" is_required="0" />
         <field name="options_container" is_required="0" />
         <field name="page_layout" is_required="0" />
@@ -75,10 +76,10 @@
         <field name="attribute_set_id" group="product-details" source="Magento\Catalog\Test\Fixture\Product\AttributeSetId" />
         <field name="custom_attribute" source="Magento\Catalog\Test\Fixture\CatalogProductSimple\CustomAttribute" />
         <field name="custom_options" is_required="0" group="customer-options" source="Magento\Catalog\Test\Fixture\Product\CustomOptions" repository="Magento\Catalog\Test\Repository\Product\CustomOptions" />
-        <field name="website_ids" group="websites" />
+        <field name="website_ids" group="websites"  source="Magento\Catalog\Test\Fixture\Product\WebsiteIds" />
         <field name="is_returnable" is_required="0" group="product-details" />
-        <field name="news_from_date" is_required="0" source="Magento\Backend\Test\Fixture\Source\Date" />
-        <field name="news_to_date" is_required="0" source="Magento\Backend\Test\Fixture\Source\Date" />
+        <field name="news_from_date" is_required="0" group="product-details" source="Magento\Backend\Test\Fixture\Source\Date" />
+        <field name="news_to_date" is_required="0" group="product-details" source="Magento\Backend\Test\Fixture\Source\Date" />
         <field name="stock_data" group="advanced-inventory" />
         <field name="checkout_data" group="null" repository="Magento\Catalog\Test\Repository\CatalogProductSimple\CheckoutData" />
         <field name="cross_sell_products" group="related" source="Magento\Catalog\Test\Fixture\Product\RelatedProducts" />
@@ -87,5 +88,6 @@
         <field name="product_has_weight" group="product-details" />
         <field name="attributes" />
         <field name="fpt" is_required="0" group="product-details" repository="Magento\Catalog\Test\Repository\Product\Fpt" />
+        <field name="store_code" is_required="0" />
     </fixture>
 </config>

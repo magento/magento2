@@ -188,6 +188,18 @@
             <field name="telephone" xsi:type="string">444-44-444-44</field>
         </dataset>
 
+        <dataset name="empty_UK_address_without_email">
+            <field name="firstname" xsi:type="string"/>
+            <field name="lastname" xsi:type="string"/>
+            <field name="company" xsi:type="string"/>
+            <field name="city" xsi:type="string"/>
+            <field name="street" xsi:type="string"/>
+            <field name="postcode" xsi:type="string"/>
+            <field name="country_id" xsi:type="string"/>
+            <field name="region" xsi:type="string"/>
+            <field name="telephone" xsi:type="string"/>
+        </dataset>
+
         <dataset name="UK_address_with_VAT">
             <field name="firstname" xsi:type="string">Jane</field>
             <field name="lastname" xsi:type="string">Doe</field>
@@ -211,7 +223,8 @@
             <field name="street" xsi:type="string">Augsburger Strabe 41</field>
             <field name="postcode" xsi:type="string">10789</field>
             <field name="country_id" xsi:type="string">Germany</field>
-            <field name="region_id" xsi:type="string">Berlin</field>
+            <field name="region" xsi:type="string">Berlin</field>
+            <field name="region_id" xsi:type="string">82</field>
             <field name="telephone" xsi:type="string">333-33-333-33</field>
         </dataset>
     </repository>

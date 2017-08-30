@@ -23,18 +23,22 @@ class AssertCategoryForAssignedProducts extends AbstractConstraint
      * @param Category $category
      * @param CatalogCategoryView $categoryView
      * @param BrowserInterface $browser
+     * @param array $products
      * @return void
      */
     public function processAssert(
         Category $category,
         CatalogCategoryView $categoryView,
-        BrowserInterface $browser
+        BrowserInterface $browser,
+        array $products = []
     ) {
         $categoryUrlKey = $category->hasData('url_key')
             ? strtolower($category->getUrlKey())
             : trim(strtolower(preg_replace('#[^0-9a-z%]+#i', '-', $category->getName())), '-');
-        
-        $products = $category->getDataFieldConfig('category_products')['source']->getProducts();
+
+        if (empty($products)) {
+            $products = $category->getDataFieldConfig('category_products')['source']->getProducts();
+        }
 
         $browser->open($_ENV['app_frontend_url'] . $categoryUrlKey . '.html');
         foreach ($products as $productFixture) {

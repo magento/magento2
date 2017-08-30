@@ -104,7 +104,7 @@ define([
          * @returns {Boolean}
          */
         isActive: function (record) {
-            return record.status === 1;
+            return Number(record.status) === 1;
         },
 
         /**
@@ -115,7 +115,7 @@ define([
          * @returns {Boolean}
          */
         isUpcoming: function (record) {
-            return record.status === 2;
+            return Number(record.status) === 2;
         },
 
         /**
