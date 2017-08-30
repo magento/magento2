@@ -12,10 +12,6 @@ use Magento\Setup\Module\Di\Code\Reader\ClassesScanner;
 use Magento\Setup\Module\Di\Code\Scanner\DirectoryScanner;
 use Magento\Setup\Module\Di\Code\Scanner\PhpScanner;
 
-/**
- * Class \Magento\Setup\Module\Di\App\Task\Operation\ApplicationCodeGenerator
- *
- */
 class ApplicationCodeGenerator implements OperationInterface
 {
     /**

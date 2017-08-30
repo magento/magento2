@@ -12,10 +12,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Model\QuoteAddressValidator;
 use Magento\Customer\Api\AddressRepositoryInterface;
 
-/**
- * Class \Magento\Quote\Model\Quote\Address\BillingAddressPersister
- *
- */
 class BillingAddressPersister
 {
     /**

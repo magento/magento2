@@ -9,10 +9,6 @@ namespace Magento\Newsletter\Controller\Adminhtml\Subscriber;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-/**
- * Class \Magento\Newsletter\Controller\Adminhtml\Subscriber\ExportCsv
- *
- */
 class ExportCsv extends \Magento\Newsletter\Controller\Adminhtml\Subscriber
 {
     /**

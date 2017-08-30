@@ -21,6 +21,7 @@ use Magento\Eav\Model\Entity\Attribute\Source\BooleanFactory;
 
 /**
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\Frontend\FrontendInterface
 {

@@ -5,10 +5,6 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo;
 
-/**
- * Class \Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo\View
- *
- */
 class View extends \Magento\Backend\App\Action
 {
     /**

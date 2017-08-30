@@ -15,6 +15,7 @@ use Magento\Catalog\Model\Product\Type;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @since 100.0.2
  */
 class Tax extends \Magento\Framework\Model\AbstractModel
 {

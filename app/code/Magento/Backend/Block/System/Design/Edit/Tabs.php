@@ -5,10 +5,6 @@
  */
 namespace Magento\Backend\Block\System\Design\Edit;
 
-/**
- * Class \Magento\Backend\Block\System\Design\Edit\Tabs
- *
- */
 class Tabs extends \Magento\Backend\Block\Widget\Tabs
 {
     /**

@@ -6,10 +6,6 @@
  */
 namespace Magento\Email\Controller\Adminhtml\Email\Template;
 
-/**
- * Class \Magento\Email\Controller\Adminhtml\Email\Template\NewAction
- *
- */
 class NewAction extends \Magento\Email\Controller\Adminhtml\Email\Template
 {
     /**

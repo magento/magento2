@@ -10,10 +10,6 @@ use Magento\Framework\App\ResponseInterface;
 use Magento\Config\Controller\Adminhtml\System\ConfigSectionChecker;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-/**
- * Class \Magento\OfflineShipping\Controller\Adminhtml\System\Config\ExportTablerates
- *
- */
 class ExportTablerates extends \Magento\Config\Controller\Adminhtml\System\AbstractConfig
 {
     /**

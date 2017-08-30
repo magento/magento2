@@ -5,10 +5,6 @@
  */
 namespace Magento\Cms\Controller\Adminhtml;
 
-/**
- * Class \Magento\Cms\Controller\Adminhtml\Block
- *
- */
 abstract class Block extends \Magento\Backend\App\Action
 {
     /**

@@ -11,10 +11,6 @@
  */
 namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes;
 
-/**
- * Class \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes\Extend
- *
- */
 class Extend extends \Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset\Element
 {
     /**

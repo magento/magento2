@@ -8,10 +8,6 @@ namespace Magento\Sales\Model;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
 
-/**
- * Class \Magento\Sales\Model\Download
- *
- */
 class Download
 {
     /**

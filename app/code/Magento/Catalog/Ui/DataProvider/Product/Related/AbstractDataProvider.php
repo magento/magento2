@@ -72,7 +72,6 @@ abstract class AbstractDataProvider extends ProductDataProvider
      * @param array $meta
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 101.0.0
      */
     public function __construct(
         $name,

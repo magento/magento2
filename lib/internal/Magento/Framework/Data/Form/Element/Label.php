@@ -11,10 +11,6 @@
  */
 namespace Magento\Framework\Data\Form\Element;
 
-/**
- * Class \Magento\Framework\Data\Form\Element\Label
- *
- */
 class Label extends \Magento\Framework\Data\Form\Element\AbstractElement
 {
     /**

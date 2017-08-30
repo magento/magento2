@@ -5,10 +5,6 @@
  */
 namespace Magento\Widget\Model\Config;
 
-/**
- * Class \Magento\Widget\Model\Config\Reader
- *
- */
 class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {
     /**

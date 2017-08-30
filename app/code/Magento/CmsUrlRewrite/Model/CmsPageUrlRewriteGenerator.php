@@ -8,10 +8,6 @@ namespace Magento\CmsUrlRewrite\Model;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 
-/**
- * Class \Magento\CmsUrlRewrite\Model\CmsPageUrlRewriteGenerator
- *
- */
 class CmsPageUrlRewriteGenerator
 {
     /**

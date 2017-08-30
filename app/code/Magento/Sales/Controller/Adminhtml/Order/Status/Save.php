@@ -6,10 +6,6 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Status;
 
-/**
- * Class \Magento\Sales\Controller\Adminhtml\Order\Status\Save
- *
- */
 class Save extends \Magento\Sales\Controller\Adminhtml\Order\Status
 {
     /**

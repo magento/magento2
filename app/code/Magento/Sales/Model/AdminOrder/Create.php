@@ -18,6 +18,7 @@ use Magento\Quote\Model\Quote\Item;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\Model\Cart\CartInterface
 {
@@ -1678,8 +1679,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      */
     protected function _customerIsInStore($store)
     {
-        $customerId = (int)$this->getSession()->getCustomerId();
-        $customer = $this->customerRepository->getById($customerId);
+        $customer = $this->getQuote()->getCustomer();
 
         return $customer->getWebsiteId() == $store->getWebsiteId()
             || $this->accountManagement->isCustomerInStore($customer->getWebsiteId(), $store->getId());
@@ -1738,6 +1738,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         /** @var $store \Magento\Store\Model\Store */
         $store = $this->getSession()->getStore();
         $customer = $this->getQuote()->getCustomer();
+
         if ($customer->getId() && !$this->_customerIsInStore($store)) {
             /** Create a new customer record if it is not available in the specified store */
             /** Unset customer ID to ensure that new customer will be created */

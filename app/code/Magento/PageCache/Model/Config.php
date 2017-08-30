@@ -16,6 +16,7 @@ use Magento\PageCache\Model\Varnish\VclGeneratorFactory;
  * file configuration with user-defined from configuration
  *
  * @api
+ * @since 100.0.2
  */
 class Config
 {

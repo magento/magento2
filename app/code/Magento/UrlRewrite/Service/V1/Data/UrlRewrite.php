@@ -12,6 +12,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 /**
  * Data abstract class for url storage
  * @api
+ * @since 100.0.2
  */
 class UrlRewrite extends AbstractSimpleObject
 {
@@ -48,7 +49,6 @@ class UrlRewrite extends AbstractSimpleObject
      *
      * @param array $data
      * @param Json $serializer
-     * @since 100.2.0
      */
     public function __construct(
         $data = [],

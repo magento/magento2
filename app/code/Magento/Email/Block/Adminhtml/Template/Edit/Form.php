@@ -9,10 +9,6 @@
  */
 namespace Magento\Email\Block\Adminhtml\Template\Edit;
 
-/**
- * Class \Magento\Email\Block\Adminhtml\Template\Edit\Form
- *
- */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**

@@ -10,10 +10,6 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\Result;
 use Magento\Framework\View\Result\PageFactory;
 
-/**
- * Class \Magento\Catalog\Controller\Product\Gallery
- *
- */
 class Gallery extends \Magento\Catalog\Controller\Product
 {
     /**

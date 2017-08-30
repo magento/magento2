@@ -10,10 +10,6 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
-/**
- * Class \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite\Save
- *
- */
 class Save extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite
 {
     /**

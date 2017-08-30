@@ -13,10 +13,6 @@ use Magento\Framework\ObjectManager\Profiler\FactoryDecorator;
 use Magento\Framework\ObjectManager\FactoryInterface;
 use Magento\Framework\ObjectManager\Profiler\Log;
 
-/**
- * Class \Magento\Framework\App\ObjectManager\Environment\AbstractEnvironment
- *
- */
 abstract class AbstractEnvironment implements EnvironmentInterface
 {
     /**

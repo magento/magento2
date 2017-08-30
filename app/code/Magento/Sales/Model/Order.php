@@ -7,6 +7,8 @@ namespace Magento\Sales\Model;
 
 use Magento\Directory\Model\Currency;
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderStatusHistoryInterface;
@@ -47,6 +49,7 @@ use Magento\Sales\Model\ResourceModel\Order\Status\History\Collection as History
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Order extends AbstractModel implements EntityInterface, OrderInterface
 {
@@ -182,7 +185,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
 
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
-     * @deprecated 100.2.0 Remove unused dependency.
+     * @deprecated 100.1.7 Remove unused dependency.
      */
     protected $productRepository;
 
@@ -210,6 +213,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * @var \Magento\Directory\Model\CurrencyFactory
      */
     protected $_currencyFactory;
+
+    /**
+     * @var \Magento\Eav\Model\Config
+     */
+    private $_eavConfig;
 
     /**
      * @var \Magento\Sales\Model\Order\Status\HistoryFactory
@@ -267,6 +275,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     protected $timezone;
 
     /**
+     * @var ResolverInterface
+     */
+    private $localeResolver;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -294,6 +307,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param ResolverInterface $localeResolver
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -323,7 +337,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productListFactory,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        ResolverInterface $localeResolver = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_orderConfig = $orderConfig;
@@ -345,6 +360,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         $this->_trackCollectionFactory = $trackCollectionFactory;
         $this->salesOrderCollectionFactory = $salesOrderCollectionFactory;
         $this->priceCurrency = $priceCurrency;
+        $this->localeResolver = $localeResolver ?: ObjectManager::getInstance()->get(ResolverInterface::class);
+
         parent::__construct(
             $context,
             $registry,
@@ -1829,7 +1846,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
             new \DateTime($this->getCreatedAt()),
             $format,
             $format,
-            null,
+            $this->localeResolver->getDefaultLocale(),
             $this->timezone->getConfigTimezone('store', $this->getStore())
         );
     }

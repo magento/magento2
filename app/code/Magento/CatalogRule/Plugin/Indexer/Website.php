@@ -7,10 +7,6 @@ namespace Magento\CatalogRule\Plugin\Indexer;
 
 use Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor;
 
-/**
- * Class \Magento\CatalogRule\Plugin\Indexer\Website
- *
- */
 class Website
 {
     /**

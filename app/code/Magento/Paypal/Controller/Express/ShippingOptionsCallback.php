@@ -6,10 +6,6 @@
  */
 namespace Magento\Paypal\Controller\Express;
 
-/**
- * Class \Magento\Paypal\Controller\Express\ShippingOptionsCallback
- *
- */
 class ShippingOptionsCallback extends \Magento\Paypal\Controller\Express\AbstractExpress\ShippingOptionsCallback
 {
     /**

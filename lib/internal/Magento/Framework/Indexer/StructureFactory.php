@@ -7,10 +7,6 @@ namespace Magento\Framework\Indexer;
 
 use Magento\Framework\Indexer\IndexStructureInterface;
 
-/**
- * Class \Magento\Framework\Indexer\StructureFactory
- *
- */
 class StructureFactory
 {
     /**

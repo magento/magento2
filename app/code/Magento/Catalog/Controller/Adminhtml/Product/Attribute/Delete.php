@@ -6,10 +6,6 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 
-/**
- * Class \Magento\Catalog\Controller\Adminhtml\Product\Attribute\Delete
- *
- */
 class Delete extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
 {
     /**

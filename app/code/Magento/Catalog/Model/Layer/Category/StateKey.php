@@ -9,10 +9,6 @@ namespace Magento\Catalog\Model\Layer\Category;
 
 use Magento\Catalog\Model\Layer\StateKeyInterface;
 
-/**
- * Class \Magento\Catalog\Model\Layer\Category\StateKey
- *
- */
 class StateKey implements StateKeyInterface
 {
     /**

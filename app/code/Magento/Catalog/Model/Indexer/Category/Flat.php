@@ -11,6 +11,7 @@ use Magento\Framework\Indexer\CacheContext;
  * Category flat indexer
  *
  * @api
+ * @since 100.0.2
  */
 class Flat implements \Magento\Framework\Indexer\ActionInterface, \Magento\Framework\Mview\ActionInterface
 {

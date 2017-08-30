@@ -9,10 +9,6 @@
  */
 namespace Magento\Framework\Archive\Helper\File;
 
-/**
- * Class \Magento\Framework\Archive\Helper\File\Bz
- *
- */
 class Bz extends \Magento\Framework\Archive\Helper\File
 {
     /**

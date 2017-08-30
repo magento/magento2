@@ -9,10 +9,6 @@ namespace Magento\Reports\Controller\Adminhtml\Report\Product;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-/**
- * Class \Magento\Reports\Controller\Adminhtml\Report\Product\ExportViewedExcel
- *
- */
 class ExportViewedExcel extends \Magento\Reports\Controller\Adminhtml\Report\Product
 {
     /**

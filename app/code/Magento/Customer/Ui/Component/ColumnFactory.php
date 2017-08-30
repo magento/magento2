@@ -9,10 +9,6 @@ use Magento\Customer\Api\Data\AttributeMetadataInterface as AttributeMetadata;
 use Magento\Customer\Ui\Component\Listing\Column\InlineEditUpdater;
 use Magento\Customer\Api\CustomerMetadataInterface;
 
-/**
- * Class \Magento\Customer\Ui\Component\ColumnFactory
- *
- */
 class ColumnFactory
 {
     /**

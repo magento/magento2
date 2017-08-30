@@ -9,10 +9,6 @@ namespace Magento\Framework\Webapi\Rest\Response;
 
 use Magento\Framework\Phrase;
 
-/**
- * Class \Magento\Framework\Webapi\Rest\Response\RendererFactory
- *
- */
 class RendererFactory
 {
     /**

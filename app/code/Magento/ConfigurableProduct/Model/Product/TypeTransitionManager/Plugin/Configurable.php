@@ -10,10 +10,6 @@ namespace Magento\ConfigurableProduct\Model\Product\TypeTransitionManager\Plugin
 use Closure;
 use Magento\Framework\App\RequestInterface;
 
-/**
- * Class \Magento\ConfigurableProduct\Model\Product\TypeTransitionManager\Plugin\Configurable
- *
- */
 class Configurable
 {
     /**

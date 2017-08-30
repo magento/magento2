@@ -9,10 +9,6 @@
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design;
 
-/**
- * Class \Magento\Theme\Controller\Adminhtml\System\Design\Theme
- *
- */
 abstract class Theme extends \Magento\Backend\App\Action
 {
     /**

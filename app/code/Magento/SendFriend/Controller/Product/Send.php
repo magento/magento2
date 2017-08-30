@@ -7,10 +7,6 @@ namespace Magento\SendFriend\Controller\Product;
 
 use Magento\Framework\Controller\ResultFactory;
 
-/**
- * Class \Magento\SendFriend\Controller\Product\Send
- *
- */
 class Send extends \Magento\SendFriend\Controller\Product
 {
     /**

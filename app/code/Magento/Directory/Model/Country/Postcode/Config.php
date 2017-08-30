@@ -5,10 +5,6 @@
  */
 namespace Magento\Directory\Model\Country\Postcode;
 
-/**
- * Class \Magento\Directory\Model\Country\Postcode\Config
- *
- */
 class Config implements ConfigInterface
 {
     /**

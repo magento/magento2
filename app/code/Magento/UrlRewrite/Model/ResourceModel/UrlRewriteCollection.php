@@ -7,10 +7,6 @@
  */
 namespace Magento\UrlRewrite\Model\ResourceModel;
 
-/**
- * Class \Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollection
- *
- */
 class UrlRewriteCollection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**

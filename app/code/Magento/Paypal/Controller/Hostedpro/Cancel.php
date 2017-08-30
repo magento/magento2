@@ -9,10 +9,6 @@ namespace Magento\Paypal\Controller\Hostedpro;
 use Magento\Framework\App\Action\Context;
 use Magento\Paypal\Helper\Checkout;
 
-/**
- * Class \Magento\Paypal\Controller\Hostedpro\Cancel
- *
- */
 class Cancel extends \Magento\Framework\App\Action\Action
 {
     /**

@@ -7,10 +7,6 @@ namespace Magento\Framework\Search\Adapter\Mysql\Filter\Builder;
 
 use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
 
-/**
- * Class \Magento\Framework\Search\Adapter\Mysql\Filter\Builder\Wildcard
- *
- */
 class Wildcard implements FilterInterface
 {
     const CONDITION_LIKE = 'LIKE';

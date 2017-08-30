@@ -13,10 +13,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\ImportExport\Model\Import\Adapter as ImportAdapter;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
-/**
- * Class \Magento\ImportExport\Controller\Adminhtml\Import\Validate
- *
- */
 class Validate extends ImportResultController
 {
     /**

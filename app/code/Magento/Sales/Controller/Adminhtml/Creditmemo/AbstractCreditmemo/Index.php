@@ -5,10 +5,6 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo;
 
-/**
- * Class \Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo\Index
- *
- */
 class Index extends \Magento\Backend\App\Action
 {
     /**
