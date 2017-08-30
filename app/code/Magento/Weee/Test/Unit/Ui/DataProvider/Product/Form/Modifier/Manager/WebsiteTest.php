@@ -16,7 +16,7 @@ use Magento\Catalog\Model\ResourceModel\Eav\Attribute as EavAttribute;
 /**
  * Class WebsiteTest
  */
-class WebsiteTest extends \PHPUnit_Framework_TestCase
+class WebsiteTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager

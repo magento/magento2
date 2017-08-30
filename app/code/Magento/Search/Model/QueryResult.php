@@ -5,6 +5,9 @@
  */
 namespace Magento\Search\Model;
 
+/**
+ * @api
+ */
 class QueryResult
 {
     /**

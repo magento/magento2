@@ -8,6 +8,10 @@ namespace Magento\Multishipping\Controller\Checkout;
 
 use Magento\Multishipping\Model\Checkout\Type\Multishipping\State;
 
+/**
+ * Class \Magento\Multishipping\Controller\Checkout\Success
+ *
+ */
 class Success extends \Magento\Multishipping\Controller\Checkout
 {
     /**

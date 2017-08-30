@@ -10,6 +10,9 @@
  */
 namespace Magento\Config\Model\Config\Backend;
 
+/**
+ * @api
+ */
 class Cache extends \Magento\Framework\App\Config\Value
 {
     /**

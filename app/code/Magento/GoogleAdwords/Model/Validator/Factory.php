@@ -12,6 +12,9 @@ use Magento\Framework\Validator\IntUtils;
 use Magento\Framework\Validator\Regex;
 use Magento\Framework\Validator\UniversalFactory;
 
+/**
+ * @api
+ */
 class Factory
 {
     /**

@@ -10,6 +10,10 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Store\Model\Store;
 use Magento\Framework\Exception\LocalizedException;
 
+/**
+ * Class \Magento\Review\Controller\Adminhtml\Product\Post
+ *
+ */
 class Post extends ProductController
 {
     /**

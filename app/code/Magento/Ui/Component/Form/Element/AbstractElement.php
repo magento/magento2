@@ -9,6 +9,8 @@ use Magento\Ui\Component\AbstractComponent;
 
 /**
  * Class AbstractElement
+ *
+ * @api
  */
 abstract class AbstractElement extends AbstractComponent implements ElementInterface
 {

@@ -5,6 +5,9 @@
  */
 namespace Magento\Config\Model\Config\Source\Email;
 
+/**
+ * @api
+ */
 class Template extends \Magento\Framework\DataObject implements \Magento\Framework\Option\ArrayInterface
 {
     /**

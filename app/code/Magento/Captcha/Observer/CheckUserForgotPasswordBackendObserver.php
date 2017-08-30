@@ -7,6 +7,10 @@ namespace Magento\Captcha\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class \Magento\Captcha\Observer\CheckUserForgotPasswordBackendObserver
+ *
+ */
 class CheckUserForgotPasswordBackendObserver implements ObserverInterface
 {
     /**

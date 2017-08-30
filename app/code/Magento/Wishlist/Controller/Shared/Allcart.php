@@ -9,6 +9,10 @@ use Magento\Framework\App\Action\Context;
 use Magento\Wishlist\Model\ItemCarrier;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class \Magento\Wishlist\Controller\Shared\Allcart
+ *
+ */
 class Allcart extends \Magento\Framework\App\Action\Action
 {
     /**

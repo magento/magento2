@@ -6,6 +6,10 @@
  */
 namespace Magento\Email\Controller\Adminhtml\Email\Template;
 
+/**
+ * Class \Magento\Email\Controller\Adminhtml\Email\Template\Grid
+ *
+ */
 class Grid extends \Magento\Email\Controller\Adminhtml\Email\Template
 {
     /**

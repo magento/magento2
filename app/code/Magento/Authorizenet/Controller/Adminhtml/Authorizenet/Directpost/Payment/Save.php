@@ -6,6 +6,10 @@
  */
 namespace Magento\Authorizenet\Controller\Adminhtml\Authorizenet\Directpost\Payment;
 
+/**
+ * Class \Magento\Authorizenet\Controller\Adminhtml\Authorizenet\Directpost\Payment\Save
+ *
+ */
 class Save extends \Magento\Sales\Controller\Adminhtml\Order\Create\Save
 {
 }

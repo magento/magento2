@@ -7,6 +7,10 @@ namespace Magento\Framework\Indexer\Config;
 
 use Magento\Framework\Config\ConverterInterface;
 
+/**
+ * Class \Magento\Framework\Indexer\Config\Converter
+ *
+ */
 class Converter implements ConverterInterface
 {
     /**
@@ -207,7 +211,7 @@ class Converter implements ConverterInterface
      *
      * @param \DOMNode $node
      * @return string
-     * @deprecated
+     * @deprecated 100.2.0
      */
     protected function getTranslatedNodeValue(\DOMNode $node)
     {

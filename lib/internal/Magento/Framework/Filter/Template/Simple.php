@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\Filter\Template;
 
+/**
+ * Class \Magento\Framework\Filter\Template\Simple
+ *
+ */
 class Simple extends \Magento\Framework\DataObject implements \Zend_Filter_Interface
 {
     /**

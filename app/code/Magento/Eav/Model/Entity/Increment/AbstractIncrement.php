@@ -3,18 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\Eav\Model\Entity\Increment;
 
 /**
- * Enter description here...
- *
  * Properties:
  * - prefix
  * - pad_length
  * - pad_char
  * - last_id
+ *
+ * @api
  */
-namespace Magento\Eav\Model\Entity\Increment;
-
 abstract class AbstractIncrement extends \Magento\Framework\DataObject implements
     \Magento\Eav\Model\Entity\Increment\IncrementInterface
 {

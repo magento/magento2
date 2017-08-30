@@ -27,7 +27,7 @@ interface MethodInterface
      *
      * @return string
      *
-     * @deprecated
+     * @deprecated 100.0.2
      */
     public function getFormBlockType();
 
@@ -203,7 +203,7 @@ interface MethodInterface
      *
      * @return string
      *
-     * @deprecated
+     * @deprecated 100.0.2
      */
     public function getInfoBlockType();
 
@@ -213,7 +213,7 @@ interface MethodInterface
      * @return InfoInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      *
-     * @deprecated
+     * @deprecated 100.0.2
      */
     public function getInfoInstance();
 
@@ -223,7 +223,7 @@ interface MethodInterface
      * @param InfoInterface $info
      * @return void
      *
-     * @deprecated
+     * @deprecated 100.0.2
      */
     public function setInfoInstance(InfoInterface $info);
 

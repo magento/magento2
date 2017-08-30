@@ -6,6 +6,10 @@
  */
 namespace Magento\Customer\Controller\Address;
 
+/**
+ * Class \Magento\Customer\Controller\Address\Form
+ *
+ */
 class Form extends \Magento\Customer\Controller\Address
 {
     /**

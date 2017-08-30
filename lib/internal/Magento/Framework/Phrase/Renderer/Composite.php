@@ -9,6 +9,10 @@ namespace Magento\Framework\Phrase\Renderer;
 
 use Magento\Framework\Phrase\RendererInterface;
 
+/**
+ * Class \Magento\Framework\Phrase\Renderer\Composite
+ *
+ */
 class Composite implements RendererInterface
 {
     /**

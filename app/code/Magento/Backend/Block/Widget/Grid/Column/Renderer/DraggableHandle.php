@@ -5,6 +5,10 @@
  */
 namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 
+/**
+ * @api
+ * @deprecated 100.2.0 in favour of UI component implementation
+ */
 class DraggableHandle extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**

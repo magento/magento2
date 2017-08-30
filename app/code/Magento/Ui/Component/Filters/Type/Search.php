@@ -6,7 +6,7 @@
 namespace Magento\Ui\Component\Filters\Type;
 
 /**
- * Class Input
+ * @api
  */
 class Search extends \Magento\Ui\Component\Filters\Type\AbstractFilter
 {

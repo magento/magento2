@@ -14,9 +14,7 @@ use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 
 /**
- * Class Filter
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class Filter
 {

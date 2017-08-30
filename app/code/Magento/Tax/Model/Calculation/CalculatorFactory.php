@@ -8,6 +8,10 @@ namespace Magento\Tax\Model\Calculation;
 
 use Magento\Customer\Api\Data\AddressInterface as CustomerAddress;
 
+/**
+ * Class \Magento\Tax\Model\Calculation\CalculatorFactory
+ *
+ */
 class CalculatorFactory
 {
     /**

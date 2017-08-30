@@ -6,6 +6,10 @@
 
 namespace Magento\Catalog\Model\Product\Edit;
 
+/**
+ * Class \Magento\Catalog\Model\Product\Edit\WeightResolver
+ *
+ */
 class WeightResolver
 {
     /**

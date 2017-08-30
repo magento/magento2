@@ -61,6 +61,14 @@ if (php_sapi_name() === 'cli-server') {
     }
 
     $debug($route);
+    
+    if (strpos($route, 'static/version') === 0) {
+        $redirectRoute = preg_replace("/version\d+\//", "", $route, 1);
+        $redirectDebugInfo = "redirect static version string to: " . $redirectRoute;
+        $debug($redirectDebugInfo);
+        header('Location: /' . $redirectRoute);
+        exit;
+    }
 
     if (strpos($route, 'media/') === 0 ||
         strpos($route, 'opt/') === 0 ||

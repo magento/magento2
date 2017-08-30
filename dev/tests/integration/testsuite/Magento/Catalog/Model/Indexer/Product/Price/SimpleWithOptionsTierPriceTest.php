@@ -6,7 +6,7 @@
 
 namespace Magento\Catalog\Model\Indexer\Product\Price;
 
-class SimpleWithOptionsTierPriceTest extends \PHPUnit_Framework_TestCase
+class SimpleWithOptionsTierPriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface

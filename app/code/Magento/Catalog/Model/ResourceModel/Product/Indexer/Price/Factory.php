@@ -9,6 +9,10 @@
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Price;
 
+/**
+ * Class \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Factory
+ *
+ */
 class Factory
 {
     /**

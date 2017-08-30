@@ -5,6 +5,10 @@
  */
 namespace Magento\CatalogRule\Model\ResourceModel\Grid;
 
+/**
+ * Class \Magento\CatalogRule\Model\ResourceModel\Grid\Collection
+ *
+ */
 class Collection extends \Magento\CatalogRule\Model\ResourceModel\Rule\Collection
 {
     /**

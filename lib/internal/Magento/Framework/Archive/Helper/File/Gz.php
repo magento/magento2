@@ -9,6 +9,10 @@
  */
 namespace Magento\Framework\Archive\Helper\File;
 
+/**
+ * Class \Magento\Framework\Archive\Helper\File\Gz
+ *
+ */
 class Gz extends \Magento\Framework\Archive\Helper\File
 {
     /**

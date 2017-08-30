@@ -17,9 +17,13 @@ use Symfony\Component\Console\Command\Command;
  */
 class WebsiteListCommand extends Command
 {
-    /** @var \Magento\Store\Api\WebsiteManagementInterface $storeManager */
+    /**
+     * @var \Magento\Store\Api\WebsiteManagementInterface
+     */
     private $manager;
 
+    /**
+     */
     public function __construct(
         \Magento\Store\Api\WebsiteRepositoryInterface $websiteManagement
     ) {

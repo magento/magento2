@@ -11,6 +11,10 @@
  */
 namespace Magento\CurrencySymbol\Block\Adminhtml\System\Currency\Rate;
 
+/**
+ * Class \Magento\CurrencySymbol\Block\Adminhtml\System\Currency\Rate\Services
+ *
+ */
 class Services extends \Magento\Backend\Block\Template
 {
     /**

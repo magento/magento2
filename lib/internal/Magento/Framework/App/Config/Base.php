@@ -8,6 +8,10 @@
  */
 namespace Magento\Framework\App\Config;
 
+/**
+ * Class \Magento\Framework\App\Config\Base
+ *
+ */
 class Base extends \Magento\Framework\Simplexml\Config
 {
     /**
@@ -18,7 +22,7 @@ class Base extends \Magento\Framework\Simplexml\Config
     public static $instances = [];
 
     /**
-     * @param string|\Magento\Framework\Simplexml\Element $sourceData $sourceData
+     * @param \Magento\Framework\Simplexml\Element|string $sourceData $sourceData
      */
     public function __construct($sourceData = null)
     {
