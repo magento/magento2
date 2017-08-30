@@ -10,6 +10,7 @@ use Magento\Config\Console\Command\ConfigSet\ProcessorFacade;
 use Magento\Config\Console\Command\ConfigSetCommand;
 use Magento\Config\Console\Command\EmulatedAdminhtmlAreaProcessor;
 use Magento\Deploy\Model\DeploymentConfig\ChangeDetector;
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Exception\ValidatorException;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
@@ -20,7 +21,7 @@ use Symfony\Component\Console\Tester\CommandTester;
  *
  * @see ConfigSetCommand
  */
-class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
+class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ConfigSetCommand
@@ -41,6 +42,11 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
      * @var ProcessorFacadeFactory|Mock
      */
     private $processorFacadeFactoryMock;
+
+    /**
+     * @var DeploymentConfig|Mock
+     */
+    private $deploymentConfigMock;
 
     /**
      * @var ProcessorFacade|Mock
@@ -64,16 +70,23 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
         $this->processorFacadeMock = $this->getMockBuilder(ProcessorFacade::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->command = new ConfigSetCommand(
             $this->emulatedAreProcessorMock,
             $this->changeDetectorMock,
-            $this->processorFacadeFactoryMock
+            $this->processorFacadeFactoryMock,
+            $this->deploymentConfigMock
         );
     }
 
     public function testExecute()
     {
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('isAvailable')
+            ->willReturn(true);
         $this->changeDetectorMock->expects($this->once())
             ->method('hasChanges')
             ->willReturn(false);
@@ -102,8 +115,32 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(Cli::RETURN_SUCCESS, $tester->getStatusCode());
     }
 
+    public function testExecuteMagentoUninstalled()
+    {
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('isAvailable')
+            ->willReturn(false);
+        $this->emulatedAreProcessorMock->expects($this->never())
+            ->method('process');
+
+        $tester = new CommandTester($this->command);
+        $tester->execute([
+            ConfigSetCommand::ARG_PATH => 'test/test/test',
+            ConfigSetCommand::ARG_VALUE => 'value'
+        ]);
+
+        $this->assertContains(
+            __('You cannot run this command because the Magento application is not installed.')->render(),
+            $tester->getDisplay()
+        );
+        $this->assertSame(Cli::RETURN_FAILURE, $tester->getStatusCode());
+    }
+
     public function testExecuteNeedsRegeneration()
     {
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('isAvailable')
+            ->willReturn(true);
         $this->changeDetectorMock->expects($this->once())
             ->method('hasChanges')
             ->willReturn(true);
@@ -125,6 +162,9 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteWithException()
     {
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('isAvailable')
+            ->willReturn(true);
         $this->changeDetectorMock->expects($this->once())
             ->method('hasChanges')
             ->willReturn(false);

@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Mail\Test\Unit;
 
-class TransportTest extends \PHPUnit_Framework_TestCase
+class TransportTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @covers \Magento\Framework\Mail\Transport::sendMessage

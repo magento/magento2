@@ -525,7 +525,7 @@ abstract class AbstractAction
 
     /**
      * @return \Magento\Catalog\Model\ResourceModel\Product
-     * @deprecated
+     * @deprecated 101.1.0
      */
     private function getProductResource()
     {

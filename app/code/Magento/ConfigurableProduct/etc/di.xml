@@ -148,6 +148,9 @@
     <type name="Magento\Catalog\Model\Product\Attribute\Backend\Price">
         <plugin name="configurable" type="Magento\ConfigurableProduct\Model\Plugin\PriceBackend" sortOrder="100" />
     </type>
+    <type name="Magento\ProductVideo\Block\Product\View\Gallery">
+        <plugin name="product_video_gallery" type="Magento\ConfigurableProduct\Block\Plugin\Product\Media\Gallery" />
+    </type>
     <type name="Magento\ConfigurableProduct\Model\Product\Type\Configurable">
         <arguments>
             <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Collection</argument>
@@ -176,6 +179,9 @@
         <arguments>
             <argument name="estimators" xsi:type="array">
                 <item name="configurable" xsi:type="object">Magento\Catalog\Model\Indexer\Price\CompositeProductBatchSizeManagement</item>
+            </argument>
+            <argument name="batchSizeAdjusters" xsi:type="array">
+                <item name="configurable" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\CompositeProductBatchSizeAdjuster</item>
             </argument>
         </arguments>
     </type>

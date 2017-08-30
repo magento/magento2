@@ -5,6 +5,7 @@
  */
 namespace Magento\Sales\Model\AdminOrder;
 
+use Magento\Sales\Api\OrderManagementInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Sales\Model\Order;
 use Magento\Framework\Registry;
@@ -12,8 +13,9 @@ use Magento\Framework\Registry;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @magentoAppArea adminhtml
+ * @magentoAppIsolation enabled
  */
-class CreateTest extends \PHPUnit_Framework_TestCase
+class CreateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\AdminOrder\Create
@@ -418,6 +420,55 @@ class CreateTest extends \PHPUnit_Framework_TestCase
             $orderData,
             $paymentMethod
         );
+        $order = $this->_model->createOrder();
+        $this->_verifyCreatedOrder($order, $shippingMethod);
+    }
+
+    /**
+     * Tests order creation with new customer after failed first place order action.
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     */
+    public function testCreateOrderNewCustomerWithFailedFirstPlaceOrderAction()
+    {
+        $productIdFromFixture = 1;
+        $shippingMethod = 'freeshipping_freeshipping';
+        $paymentMethod = 'checkmo';
+        $shippingAddressAsBilling = 1;
+        $customerEmail = 'new_customer@example.com';
+        $orderData = [
+            'currency' => 'USD',
+            'account' => ['group_id' => '1', 'email' => $customerEmail],
+            'billing_address' => array_merge($this->_getValidAddressData(), ['save_in_address_book' => '1']),
+            'shipping_method' => $shippingMethod,
+            'comment' => ['customer_note' => ''],
+            'send_confirmation' => false,
+        ];
+        $paymentData = ['method' => $paymentMethod];
+
+        $this->_preparePreconditionsForCreateOrder(
+            $productIdFromFixture,
+            $customerEmail,
+            $shippingMethod,
+            $shippingAddressAsBilling,
+            $paymentData,
+            $orderData,
+            $paymentMethod
+        );
+
+        // Emulates failing place order action
+        $orderManagement = $this->getMockForAbstractClass(OrderManagementInterface::class);
+        $orderManagement->method('place')
+            ->willThrowException(new \Exception('Can\'t place order'));
+        Bootstrap::getObjectManager()->addSharedInstance($orderManagement, OrderManagementInterface::class);
+        try {
+            $this->_model->createOrder();
+        } catch (\Exception $e) {
+            Bootstrap::getObjectManager()->removeSharedInstance(OrderManagementInterface::class);
+        }
+
         $order = $this->_model->createOrder();
         $this->_verifyCreatedOrder($order, $shippingMethod);
     }

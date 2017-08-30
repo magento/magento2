@@ -21,7 +21,7 @@ use Magento\Catalog\Model\Product;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ViewTest extends \PHPUnit_Framework_TestCase
+class ViewTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager

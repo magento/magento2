@@ -268,7 +268,7 @@ class AdminAccount
 
     /**
      * Take table with prefix without loading modules
-     * 
+     *
      * @param string $table
      * @return string
      */

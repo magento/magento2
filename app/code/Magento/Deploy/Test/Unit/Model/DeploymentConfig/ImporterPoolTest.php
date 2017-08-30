@@ -11,7 +11,7 @@ use Magento\Framework\App\DeploymentConfig\ValidatorInterface;
 use Magento\Framework\ObjectManagerInterface;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 
-class ImporterPoolTest extends \PHPUnit_Framework_TestCase
+class ImporterPoolTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ImporterPool

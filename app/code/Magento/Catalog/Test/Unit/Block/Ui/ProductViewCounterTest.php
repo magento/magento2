@@ -23,7 +23,7 @@ use Magento\Catalog\Block\Ui\ProductViewCounter;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ProductViewCounterTest extends \PHPUnit_Framework_TestCase
+class ProductViewCounterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Block\Ui\ProductViewCounter|\PHPUnit_Framework_MockObject_MockObject

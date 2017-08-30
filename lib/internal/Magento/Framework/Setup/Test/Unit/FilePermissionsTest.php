@@ -8,7 +8,7 @@ namespace Magento\Framework\Setup\Test\Unit;
 use \Magento\Framework\Setup\FilePermissions;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-class FilePermissionsTest extends \PHPUnit_Framework_TestCase
+class FilePermissionsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem\Directory\Write
@@ -32,26 +32,14 @@ class FilePermissionsTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->directoryWriteMock = $this->getMock(
-            \Magento\Framework\Filesystem\Directory\Write::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->filesystemMock = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
+        $this->directoryWriteMock = $this->createMock(\Magento\Framework\Filesystem\Directory\Write::class);
+        $this->filesystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
 
         $this->filesystemMock
             ->expects($this->any())
             ->method('getDirectoryWrite')
             ->will($this->returnValue($this->directoryWriteMock));
-        $this->directoryListMock = $this->getMock(
-            \Magento\Framework\App\Filesystem\DirectoryList::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->directoryListMock = $this->createMock(\Magento\Framework\App\Filesystem\DirectoryList::class);
 
         $this->filePermissions = new FilePermissions(
             $this->filesystemMock,

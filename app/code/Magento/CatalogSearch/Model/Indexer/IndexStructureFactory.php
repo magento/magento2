@@ -12,6 +12,7 @@ use Magento\Store\Model\ScopeInterface;
 
 /**
  * @api
+ * @since 100.1.0
  */
 class IndexStructureFactory
 {
@@ -19,6 +20,7 @@ class IndexStructureFactory
      * Object Manager instance
      *
      * @var ObjectManagerInterface
+     * @since 100.1.0
      */
     protected $objectManager = null;
 
@@ -26,6 +28,7 @@ class IndexStructureFactory
      * Instance name to create
      *
      * @var string
+     * @since 100.1.0
      */
     protected $structures = null;
 
@@ -66,6 +69,7 @@ class IndexStructureFactory
      *
      * @param array $data
      * @return IndexStructureInterface
+     * @since 100.1.0
      */
     public function create(array $data = [])
     {

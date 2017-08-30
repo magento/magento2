@@ -21,6 +21,7 @@ use Magento\Bundle\Model\ResourceModel\Selection\Collection\FilterApplier as Sel
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @since 100.0.2
  */
 class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 {
@@ -47,7 +48,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Cache key for Selections Collection
      *
      * @var string
-     * @deprecated
+     * @deprecated 100.2.0
      */
     protected $_keySelectionsCollection = '_cache_instance_selections_collection';
 

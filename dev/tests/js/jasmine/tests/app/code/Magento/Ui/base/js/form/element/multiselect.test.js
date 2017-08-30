@@ -52,6 +52,12 @@ define([
                 expect(obj.source.set).toHaveBeenCalledWith(dataScope + '-prepared-for-send', '');
             });
 
+            it('Check method call with undefined as parameter.', function () {
+
+                expect(obj.setPrepareToSendData(undefined)).toBeUndefined();
+                expect(obj.source.set).toHaveBeenCalledWith(dataScope + '-prepared-for-send', '');
+            });
+
             it('Check method call with array with data as parameter.', function () {
                 expect(obj.setPrepareToSendData(['1', '2', '3'])).toBeUndefined();
                 expect(obj.source.set).toHaveBeenCalledWith(dataScope + '-prepared-for-send', ['1', '2', '3']);

@@ -69,17 +69,21 @@ var catalogWysiwygEditor = {
         $(elementId + '_editor').value = $(elementId).value;
     },
     okDialogWindow : function(dialogWindow) {
-        if (dialogWindow.options.firedElementId) {
-            wysiwygObj = eval('wysiwyg'+dialogWindow.options.firedElementId+'_editor');
+        var $firedElement = jQuery('#' + dialogWindow.options.firedElementId),
+            $editorElement = jQuery('#' + dialogWindow.options.firedElementId + '_editor'),
+            firedElementId = $firedElement.attr('id'),
+            wysiwygObj = window['wysiwyg' + firedElementId + '_editor'];
+
+        if ($firedElement.length) {
             wysiwygObj.turnOff();
             if (tinyMCE.get(wysiwygObj.id)) {
-                $(dialogWindow.options.firedElementId).value = tinyMCE.get(wysiwygObj.id).getContent();
+                $firedElement.val(tinyMCE.get(wysiwygObj.id).getContent()).change();
             } else {
-                if ($(dialogWindow.options.firedElementId+'_editor')) {
-                    $(dialogWindow.options.firedElementId).value = $(dialogWindow.options.firedElementId+'_editor').value;
-                }
+                $firedElement.val($editorElement.val()).change();
             }
-            tinyMCE.editors[dialogWindow.options.firedElementId].load();
+            if (tinyMCE.get(firedElementId)) {
+                tinyMCE.get(firedElementId).load();
+            }
             if (typeof varienGlobalEvents != undefined) {
                 varienGlobalEvents.fireEvent('tinymceChange');
             }

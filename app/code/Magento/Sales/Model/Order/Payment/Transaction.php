@@ -18,12 +18,10 @@ use Magento\Sales\Model\AbstractModel;
  * By default transactions are saved as closed.
  *
  * @api
- * @method \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction _getResource()
- * @method \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction getResource()
-
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Transaction extends AbstractModel implements TransactionInterface
 {
