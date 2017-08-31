@@ -20,11 +20,7 @@ class Helper
     const SCHEDULED_STRUCTURE_INDEX_IS_AFTER = 4;
     /**#@-*/
 
-    /**
-     * Anonymous block counter
-     *
-     * @var int
-     */
+    /**#@-*/
     protected $counter = 0;
 
     /**

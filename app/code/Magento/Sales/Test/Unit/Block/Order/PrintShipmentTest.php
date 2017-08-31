@@ -7,7 +7,7 @@ namespace Magento\Sales\Test\Unit\Block\Order;
 
 use Magento\Sales\Model\ResourceModel\Order\Item\Collection as ItemCollection;
 
-class PrintShipmentTest extends \PHPUnit_Framework_TestCase
+class PrintShipmentTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

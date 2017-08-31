@@ -20,7 +20,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
+class ApplicationDumpCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerInterface
@@ -79,6 +79,23 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
         // Snapshot of configuration.
         $this->config = $this->loadConfig();
         $this->envConfig = $this->loadEnvConfig();
+
+        $this->writer->saveConfig(
+            [
+                ConfigFilePool::APP_CONFIG => [
+                    'system' => [
+                        'default' => [
+                            'web' => [
+                                'test' => [
+                                    'test_value_3' => 'value from the file'
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            true
+        );
     }
 
     /**
@@ -153,7 +170,7 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
             'CONFIG__DEFAULT__WEB__TEST__TEST_SENSITIVE_ENVIRONMENT4 for web/test/test_sensitive_environment4',
             'CONFIG__DEFAULT__WEB__TEST__TEST_SENSITIVE_ENVIRONMENT5 for web/test/test_sensitive_environment5'
         ]);
-        $outputMock = $this->getMock(OutputInterface::class);
+        $outputMock = $this->createMock(OutputInterface::class);
         $outputMock->expects($this->at(0))
             ->method('writeln')
             ->with(['system' => $comment]);
@@ -163,7 +180,7 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
 
         /** @var ApplicationDumpCommand command */
         $command = $this->objectManager->create(ApplicationDumpCommand::class);
-        $command->run($this->getMock(InputInterface::class), $outputMock);
+        $command->run($this->createMock(InputInterface::class), $outputMock);
 
         $config = $this->loadConfig();
 
@@ -197,6 +214,26 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayNotHasKey('test_sensitive_environment5', $config['system']['default']['web']['test']);
         $this->assertArrayNotHasKey('test_sensitive_environment6', $config['system']['default']['web']['test']);
         $this->assertArrayNotHasKey('test_environment9', $config['system']['default']['web']['test']);
+        /** @see Magento/Deploy/_files/config_data.php */
+        $this->assertEquals(
+            'frontend/Magento/blank',
+            $config['system']['default']['design']['theme']['theme_id']
+        );
+        $this->assertEquals(
+            'frontend/Magento/luma',
+            $config['system']['stores']['default']['design']['theme']['theme_id']
+        );
+        $this->assertEquals(
+            'frontend/Magento/luma',
+            $config['system']['websites']['base']['design']['theme']['theme_id']
+        );
+
+        $this->assertEquals('value from the file', $config['system']['default']['web']['test']['test_value_3']);
+        $this->assertEquals('GB', $config['system']['default']['general']['country']['default']);
+        $this->assertEquals(
+            'HK,IE,MO,PA,GB',
+            $config['system']['default']['general']['country']['optional_zip_countries']
+        );
     }
 
     /**

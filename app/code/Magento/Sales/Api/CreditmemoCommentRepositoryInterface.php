@@ -16,6 +16,7 @@ namespace Magento\Sales\Api;
  * customer account so that the customer can make future purchases. A credit memo usually includes comments that detail
  * why the credit memo amount was credited to the customer.
  * @api
+ * @since 100.0.2
  */
 interface CreditmemoCommentRepositoryInterface
 {
@@ -42,6 +43,7 @@ interface CreditmemoCommentRepositoryInterface
      *
      * @param \Magento\Sales\Api\Data\CreditmemoCommentInterface $entity The credit memo comment.
      * @return bool
+     * @throws \Magento\Framework\Exception\CouldNotDeleteException
      */
     public function delete(\Magento\Sales\Api\Data\CreditmemoCommentInterface $entity);
 
@@ -50,6 +52,7 @@ interface CreditmemoCommentRepositoryInterface
      *
      * @param \Magento\Sales\Api\Data\CreditmemoCommentInterface $entity The credit memo comment.
      * @return \Magento\Sales\Api\Data\CreditmemoCommentInterface Credit memo comment interface.
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
     public function save(\Magento\Sales\Api\Data\CreditmemoCommentInterface $entity);
 }

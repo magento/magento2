@@ -15,7 +15,7 @@ use Magento\Vault\Model\VaultPaymentInterface;
 /**
  * Contains tests for vault payment list methods
  */
-class PaymentMethodListTest extends \PHPUnit_Framework_TestCase
+class PaymentMethodListTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var PaymentMethodListInterface

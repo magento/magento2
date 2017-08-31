@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Framework\View\Test\Unit\Element;
 
 use Magento\Framework\View\Element\AbstractBlock;
@@ -19,7 +22,7 @@ use Magento\Framework\Session\SessionManagerInterface;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AbstractBlockTest extends \PHPUnit_Framework_TestCase
+class AbstractBlockTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var AbstractBlock
@@ -67,7 +70,7 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
         $this->cacheMock = $this->getMockForAbstractClass(CacheInterface::class);
         $this->sidResolverMock = $this->getMockForAbstractClass(SidResolverInterface::class);
         $this->sessionMock = $this->getMockForAbstractClass(SessionManagerInterface::class);
-        $contextMock = $this->getMock(Context::class, [], [], '', false);
+        $contextMock = $this->createMock(Context::class);
         $contextMock->expects($this->once())
             ->method('getEventManager')
             ->willReturn($this->eventManagerMock);
@@ -141,7 +144,7 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetVar()
     {
-        $config = $this->getMock(View::class, ['getVarValue'], [], '', false);
+        $config = $this->createPartialMock(View::class, ['getVarValue']);
         $module = uniqid();
 
         $config->expects($this->any())
@@ -151,7 +154,7 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
                 [$module, 'v2', 'two']
             ]);
 
-        $configManager = $this->getMock(ConfigInterface::class, [], [], '', false);
+        $configManager = $this->createMock(ConfigInterface::class);
         $configManager->expects($this->exactly(2))->method('getViewConfig')->willReturn($config);
 
         /** @var $block AbstractBlock|\PHPUnit_Framework_MockObject_MockObject */
@@ -204,12 +207,13 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
         $moduleName = 'Test';
         $this->block->setData('module_name', $moduleName);
 
-        $this->eventManagerMock->expects($this->exactly(2))
+        $this->eventManagerMock->expects($this->any())
             ->method('dispatch')
-            ->willReturnMap([
-                ['view_block_abstract_to_html_before', ['block' => $this->block]],
-                ['view_block_abstract_to_html_after', ['block' => $this->block]],
-            ]);
+            ->with('view_block_abstract_to_html_before', ['block' => $this->block]);
+        $this->scopeConfigMock->expects($this->once())
+            ->method('getValue')
+            ->with('advanced/modules_disable_output/' . $moduleName, \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
+            ->willReturn(true);
 
         $this->assertSame('', $this->block->toHtml());
     }
@@ -242,6 +246,10 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
 
         $this->eventManagerMock->expects($expectsDispatchEvent)
             ->method('dispatch');
+        $this->scopeConfigMock->expects($this->once())
+            ->method('getValue')
+            ->with('advanced/modules_disable_output/' . $moduleName, \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
+            ->willReturn(false);
         $this->cacheStateMock->expects($this->any())
             ->method('isEnabled')
             ->with(AbstractBlock::CACHE_GROUP)

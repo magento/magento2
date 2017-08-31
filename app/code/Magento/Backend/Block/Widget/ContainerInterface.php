@@ -6,6 +6,10 @@
 
 namespace Magento\Backend\Block\Widget;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 interface ContainerInterface extends \Magento\Backend\Block\Widget\Button\ContextInterface
 {
     /**

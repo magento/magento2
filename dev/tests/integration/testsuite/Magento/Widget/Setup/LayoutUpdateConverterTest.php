@@ -5,7 +5,7 @@
  */
 namespace Magento\Widget\Setup;
 
-class LayoutUpdateConverterTest extends \PHPUnit_Framework_TestCase
+class LayoutUpdateConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var LayoutUpdateConverter

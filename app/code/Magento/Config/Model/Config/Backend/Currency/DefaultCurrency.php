@@ -10,6 +10,10 @@
  */
 namespace Magento\Config\Model\Config\Backend\Currency;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class DefaultCurrency extends AbstractCurrency
 {
     /**

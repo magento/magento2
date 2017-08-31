@@ -108,12 +108,28 @@
         <section id="dev" translate="label" type="text" sortOrder="920" showInDefault="1" showInWebsite="1" showInStore="1">
             <label>Developer</label>
             <tab>advanced</tab>
-            <resource>Magento_Backend::dev</resource>
+            <resource>Magento_Config::dev</resource>
             <group id="debug" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Debug</label>
                 <field id="template_hints_storefront" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Enabled Template Path Hints for Storefront</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="template_hints_storefront_show_with_parameter" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable Hints for Storefront with URL Parameter</label>
+                    <depends>
+                        <field id="*/*/template_hints_storefront">1</field>
+                    </depends>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Use URL parameter to enable template path hints for Storefront</comment>
+                </field>
+                <field id="template_hints_parameter_value" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Parameter Value</label>
+                    <depends>
+                        <field id="*/*/template_hints_storefront">1</field>
+                        <field id="*/*/template_hints_storefront_show_with_parameter">1</field>
+                    </depends>
+                    <comment>Add the following paramater to the URL to show template hints ?templatehints=[parameter_value]</comment>
                 </field>
                 <field id="template_hints_admin" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Enabled Template Path Hints for Admin</label>
@@ -408,7 +424,7 @@
         <section id="web" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
             <label>Web</label>
             <tab>general</tab>
-            <resource>Magento_Backend::web</resource>
+            <resource>Magento_Config::web</resource>
             <group id="url" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Url Options</label>
                 <field id="use_store" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">

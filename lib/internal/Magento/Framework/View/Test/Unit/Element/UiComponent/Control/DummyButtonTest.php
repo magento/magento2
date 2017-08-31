@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * Class DummyButtonTest
  */
-class DummyButtonTest extends \PHPUnit_Framework_TestCase
+class DummyButtonTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Checks that button data for button dummy is empty array

@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Test\Unit\Block\Order;
 
-class HistoryTest extends \PHPUnit_Framework_TestCase
+class HistoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Block\Order\History
@@ -54,21 +54,14 @@ class HistoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->context = $this->getMock(
-            \Magento\Framework\View\Element\Template\Context::class,
-            [],
-            [],
-            '',
-            false,
-            false
-        );
+        $this->context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
         $this->orderCollectionFactory =
             $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\Order\CollectionFactory::class)
             ->disableOriginalConstructor()->setMethods(['create'])->getMock();
         $this->orderCollectionFactoryInterface =
             $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\Order\CollectionFactoryInterface::class)
                 ->disableOriginalConstructor()->setMethods(['create'])->getMock();
-        $this->objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class, [], [], '', false);
+        $this->objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->objectManager->expects($this->any())
             ->method('get')
             ->will($this->returnValue($this->orderCollectionFactoryInterface));
@@ -101,13 +94,9 @@ class HistoryTest extends \PHPUnit_Framework_TestCase
             ->method('getVisibleOnFrontStatuses')
             ->will($this->returnValue($statuses));
 
-        $orderCollection = $this->getMock(
+        $orderCollection = $this->createPartialMock(
             \Magento\Sales\Model\ResourceModel\Order\Collection::class,
-            ['addFieldToSelect', 'addFieldToFilter', 'setOrder'],
-            [],
-            '',
-            false,
-            false
+            ['addFieldToSelect', 'addFieldToFilter', 'setOrder']
         );
 
         $this->context->expects($this->any())

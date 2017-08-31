@@ -16,6 +16,7 @@ use Magento\Framework\Xml\Security;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 abstract class AbstractCarrierOnline extends AbstractCarrier
 {
