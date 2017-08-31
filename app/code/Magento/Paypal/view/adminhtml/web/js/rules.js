@@ -117,6 +117,7 @@ define([
      * @param {String} enabler
      */
     disableSolution = function (solution, enabler) {
+        setSolutionUsedefaultEnabled(solution, enabler);
         setSolutionMarkEnabled(solution, enabler, false);
         setSolutionSelectEnabled(solution, enabler, false);
         setSolutionPropEnabled(solution, enabler, false);
@@ -129,6 +130,7 @@ define([
      * @param {String} enabler
      */
     enableSolution = function (solution, enabler) {
+        setSolutionUsedefaultEnabled(solution, enabler);
         setSolutionPropEnabled(solution, enabler);
         setSolutionSelectEnabled(solution, enabler);
         setSolutionMarkEnabled(solution, enabler);
