@@ -91,6 +91,11 @@ class ReSavingProductAfterInitialSaveTest extends Injectable
     ) {
         $this->productGrid->open();
         $this->productGrid->getGridPageActionBlock()->addProduct('simple');
+
+        if(!($this->newProductPage->getProductForm()->isProductNewFromDateVisible('product-details')))
+        {
+            $this->markTestSkipped('This is a CE only test.');
+        }
         $this->newProductPage->getProductForm()->fill($originalProduct);
         $this->catalogProductEdit->getProductForm()->fill($productWithValidFromDate);
         $this->catalogProductEdit->getFormPageActions()->save();
