@@ -3,17 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\Inventory\Test\Integration\Indexer;
 
-namespace Magento\Inventory\Indexer;
-
+use Magento\Framework\Indexer\IndexerInterface;
+use Magento\Indexer\Model\Indexer;
+use Magento\Inventory\Indexer\StockItemIndexerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 
 class StockItemTest extends \PHPUnit\Framework\TestCase
 {
-
     /**
-     * @var \Magento\Framework\Indexer\IndexerInterface
+     * @var IndexerInterface
      */
     private $indexer;
 
@@ -22,17 +23,11 @@ class StockItemTest extends \PHPUnit\Framework\TestCase
      */
     private $indexerChecker;
 
-    /**
-     *
-     */
     protected function setUp()
     {
-        /** @var \Magento\Framework\Indexer\IndexerInterface indexer */
-        $this->indexer = Bootstrap::getObjectManager()->create(
-            \Magento\Indexer\Model\Indexer::class
-        );
+        $this->indexer = Bootstrap::getObjectManager()->create(Indexer::class);
         $this->indexer->load(StockItemIndexerInterface::INDEXER_ID);
-        $this->indexerChecker = Bootstrap::getObjectManager()->create(\Magento\Inventory\Test\Integration\Indexer\Checker::class);
+        $this->indexerChecker = Bootstrap::getObjectManager()->create(Checker::class);
     }
 
     /**
@@ -46,7 +41,7 @@ class StockItemTest extends \PHPUnit\Framework\TestCase
     public function testIndexRow()
     {
         self::assertEquals(0, $this->indexerChecker->execute(1, 'inventory_1'));
-        $this->indexer->reindexRow(1);
+        $this->indexer->reindexAll();
         self::assertEquals(10,$this->indexerChecker->execute(1, 'inventory_1'));
         self::assertEquals(0, $this->indexerChecker->execute(1, 'inventory_2'));
     }

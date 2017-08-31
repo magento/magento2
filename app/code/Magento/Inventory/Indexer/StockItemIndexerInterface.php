@@ -18,11 +18,4 @@ interface StockItemIndexerInterface extends ActionInterface
      * Indexer ID in configuration
      */
     const INDEXER_ID = 'inventory_stock_item';
-
-    /**
-     * Returns the indexer name
-     *
-     * @return string
-     */
-    public function getName();
 }

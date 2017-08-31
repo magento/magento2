@@ -36,7 +36,7 @@ class Checker
 
         /** @var \Magento\Framework\DB\Adapter\AdapterInterface $connection */
         $connection = $this->resource->getConnection();
-        $tableName = $connection->getTableName('inventory_stock_item_stock' . $stockId);
+        $tableName = $connection->getTableName('inventory_stock_item_stock_' . $stockId);
 
         $result = 0;
         // can make select to non exitsing table count must be 0.

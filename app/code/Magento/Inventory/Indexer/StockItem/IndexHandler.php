@@ -6,28 +6,20 @@
 namespace Magento\Inventory\Indexer\StockItem;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Indexer\IndexStructureInterface;
 use Magento\Framework\Indexer\SaveHandler\Batch;
-use Magento\Framework\Indexer\SaveHandler\IndexerInterface;
-use Magento\Framework\Search\Request\Dimension;
-use Magento\Framework\Search\Request\DimensionFactory;
-use Magento\Framework\Search\Request\IndexScopeResolverInterface;
-use Magento\Inventory\Indexer\StockItemIndexerInterface;
+use Magento\Inventory\Indexer\IndexHandlerInterface;
+use Magento\Inventory\Indexer\IndexName;
+use Magento\Inventory\Indexer\IndexNameResolverInterface;
 
 /**
  * Index handler is responsible for index data manipulation
  */
-class IndexHandler implements IndexerInterface
+class IndexHandler implements IndexHandlerInterface
 {
     /**
-     * @var IndexStructure
+     * @var IndexNameResolverInterface
      */
-    private $indexStructure;
-
-    /**
-     * @var DimensionFactory
-     */
-    private $indexScopeResolver;
+    private $indexNameResolver;
 
     /**
      * @var Batch
@@ -35,31 +27,28 @@ class IndexHandler implements IndexerInterface
     private $batch;
 
     /**
-     * @var int
-     */
-    private $batchSize;
-
-    /**
      * @var ResourceConnection
      */
     private $resourceConnection;
 
     /**
-     * @param IndexStructureInterface $indexStructure
-     * @param IndexScopeResolverInterface $indexScopeResolver
+     * @var int
+     */
+    private $batchSize;
+
+    /**
+     * @param IndexNameResolverInterface $indexNameResolver
      * @param Batch $batch
      * @param ResourceConnection $resourceConnection
      * @param int $batchSize
      */
     public function __construct(
-        IndexStructureInterface $indexStructure,
-        IndexScopeResolverInterface $indexScopeResolver,
+        IndexNameResolverInterface $indexNameResolver,
         Batch $batch,
         ResourceConnection $resourceConnection,
         $batchSize
     ) {
-        $this->indexStructure = $indexStructure;
-        $this->indexScopeResolver = $indexScopeResolver;
+        $this->indexNameResolver = $indexNameResolver;
         $this->batch = $batch;
         $this->resourceConnection = $resourceConnection;
         $this->batchSize = $batchSize;
@@ -68,54 +57,29 @@ class IndexHandler implements IndexerInterface
     /**
      * @inheritdoc
      */
-    public function saveIndex($dimensions, \Traversable $documents)
+    public function saveIndex(IndexName $indexName, \Traversable $documents): void
     {
+        $tableName = $this->indexNameResolver->resolveName($indexName);
+
         $columns = ['sku', 'quantity', 'status', 'stock_id'];
         foreach ($this->batch->getItems($documents, $this->batchSize) as $batchDocuments) {
             $this->resourceConnection
                 ->getConnection()
-                ->insertArray($this->resolveTableName($dimensions), $columns, $batchDocuments);
+                ->insertArray($tableName, $columns, $batchDocuments);
         }
     }
 
     /**
      * @inheritdoc
      */
-    public function deleteIndex($dimensions, \Traversable $documents)
+    public function deleteIndex(IndexName $indexName, \Traversable $documents): void
     {
+        $tableName = $this->indexNameResolver->resolveName($indexName);
+
         foreach ($this->batch->getItems($documents, $this->batchSize) as $batchDocuments) {
             $this->resourceConnection
                 ->getConnection()
-                ->delete($this->resolveTableName($dimensions), ['stock_id IN (?)' => $batchDocuments]);
+                ->delete($tableName, ['stock_id IN (?)' => $batchDocuments]);
         }
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function cleanIndex($dimensions)
-    {
-        $this->indexStructure->delete($this->resolveTableName($dimensions), $dimensions);
-        $this->indexStructure->create($this->resolveTableName($dimensions), [], $dimensions);
-    }
-
-    /**
-     * @param Dimension[] $dimensions
-     * @return string
-     */
-    private function resolveTableName($dimensions)
-    {
-        $tableName = $this->indexScopeResolver->resolve(StockItemIndexerInterface::INDEXER_ID, $dimensions);
-        return $tableName;
-    }
-
-    /**
-     * Define if engine is available
-     *
-     * @return bool
-     */
-    public function isAvailable()
-    {
-        return true;
     }
 }

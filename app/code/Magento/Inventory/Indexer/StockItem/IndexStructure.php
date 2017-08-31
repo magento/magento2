@@ -6,14 +6,14 @@
 
 namespace Magento\Inventory\Indexer\StockItem;
 
-use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
-use Magento\Framework\Indexer\IndexStructureInterface;
+use Magento\Inventory\Indexer\IndexName;
+use Magento\Inventory\Indexer\IndexNameResolverInterface;
+use Magento\Inventory\Indexer\IndexStructureInterface;
 
 /**
- * Index structure is responsible for index structure
+ * @inheritdoc
  */
 class IndexStructure implements IndexStructureInterface
 {
@@ -23,48 +23,45 @@ class IndexStructure implements IndexStructureInterface
     private $resourceConnection;
 
     /**
+     * @var IndexNameResolverInterface
+     */
+    private $indexNameResolver;
+
+    /**
      * @param ResourceConnection $resourceConnection
+     * @param IndexNameResolverInterface $indexNameResolver
      */
     public function __construct(
-        ResourceConnection $resourceConnection
+        ResourceConnection $resourceConnection,
+        IndexNameResolverInterface $indexNameResolver
     ) {
         $this->resourceConnection = $resourceConnection;
+        $this->indexNameResolver = $indexNameResolver;
     }
 
     /**
      * @inheritdoc
      */
-    public function delete($index, array $dimensions = [])
+    public function create(IndexName $indexName, string $connectionName = ResourceConnection::DEFAULT_CONNECTION): void
     {
-        $connection = $this->resourceConnection->getConnection();
-        if ($connection->isTableExists($index)) {
-            $connection->dropTable($index);
+        $connection = $this->resourceConnection->getConnection($connectionName);
+        $tableName = $this->indexNameResolver->resolveName($indexName);
+
+        if ($connection->isTableExists($tableName)) {
+            $connection->truncateTable($tableName);
+            return;
         }
-    }
 
-    /**
-     * @inheritdoc
-     */
-    public function create($index, array $fields, array $dimensions = [])
-    {
-        $table = $this->resourceConnection->getConnection()->newTable($index)->setComment(
+        $table = $connection->newTable(
+            $tableName
+        )->setComment(
             'Inventory Stock item Table'
         )->addColumn(
-            'stock_item_id',
+            'stock_id',
             Table::TYPE_INTEGER,
             null,
             [
-                Table::OPTION_IDENTITY => true,
-                Table::OPTION_UNSIGNED => true,
-                Table::OPTION_NULLABLE => false,
                 Table::OPTION_PRIMARY => true,
-            ],
-            'Stock Item ID'
-        )->addColumn(
-            StockItemInterface::STOCK_ID,
-            Table::TYPE_INTEGER,
-            null,
-            [
                 Table::OPTION_UNSIGNED => true,
                 Table::OPTION_NULLABLE => false,
             ],
@@ -74,6 +71,7 @@ class IndexStructure implements IndexStructureInterface
             Table::TYPE_TEXT,
             64,
             [
+                Table::OPTION_PRIMARY => true,
                 Table::OPTION_NULLABLE => false,
             ],
             'Sku'
@@ -96,12 +94,20 @@ class IndexStructure implements IndexStructureInterface
                 Table::OPTION_UNSIGNED => true,
             ],
             'Status'
-        )->addIndex(
-            'idx_sku_stock_id',
-            ['sku', StockItemInterface::STOCK_ID],
-            ['type' => AdapterInterface::INDEX_TYPE_INDEX]
         );
+        $connection->createTable($table);
+    }
 
-        $this->resourceConnection->getConnection()->createTable($table);
+    /**
+     * @inheritdoc
+     */
+    public function delete(IndexName $indexName, string $connectionName = ResourceConnection::DEFAULT_CONNECTION): void
+    {
+        $connection = $this->resourceConnection->getConnection($connectionName);
+        $tableName = $this->indexNameResolver->resolveName($indexName);
+
+        if ($connection->isTableExists($tableName)) {
+            $connection->dropTable($tableName);
+        }
     }
 }
