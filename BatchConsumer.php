@@ -75,6 +75,8 @@ class BatchConsumer implements ConsumerInterface
      * @param int $interval [optional]
      * @param int $batchSize [optional]
      * @param MessageProcessorLoader $messageProcessorLoader [optional]
+     * @param MessageController $messageController [optional]
+     * @param ConsumerConfig $consumerConfig [optional]
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */

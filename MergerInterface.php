@@ -16,7 +16,7 @@ interface MergerInterface
      * MergedMessage object contains array with ids of original queue messages
      *
      * @param object[] $messages
-     * @return MergedMessageInterface[]|mixed[]
+     * @return object[]|MergedMessageInterface[]
      */
     public function merge(array $messages);
 }
