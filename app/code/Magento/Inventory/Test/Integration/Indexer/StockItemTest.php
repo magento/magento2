@@ -44,9 +44,9 @@ class StockItemTest extends TestCase
     }
 
     /**
-     * @magentoDataFixture ../../../../app/code/Magento/Inventory/Test/_files/product_list.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source/source_list.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock/stock_list.php
+     * @magentoDataFixture ../../../../app/code/Magento/Inventory/Test/_files/products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source/sources.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock/stocks.php
      * @magentoDataFixture ../../../../app/code/Magento/Inventory/Test/_files/source_item.php
      * @magentoDataFixture ../../../../app/code/Magento/Inventory/Test/_files/stock_source_link.php
      */

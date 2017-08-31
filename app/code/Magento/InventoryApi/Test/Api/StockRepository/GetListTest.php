@@ -21,7 +21,7 @@ class GetListTest extends WebapiAbstract
     /**#@-*/
 
     /**
-     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock/stock_list.php
+     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock/stocks.php
      * @param array $searchCriteria
      * @param array $expectedItemsData
      * @dataProvider dataProviderGetList
