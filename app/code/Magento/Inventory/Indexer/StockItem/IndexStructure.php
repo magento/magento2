@@ -52,6 +52,7 @@ class IndexStructure implements IndexStructureInterface
             return;
         }
 
+        // TODO: foreign keys
         $table = $connection->newTable(
             $tableName
         )->setComment(
