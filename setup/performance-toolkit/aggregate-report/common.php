@@ -5,11 +5,6 @@
  */
 
 /**
- * @SuppressWarnings(PHPMD.CyclomaticComplexity)
- * @SuppressWarnings(PHPMD.NPathComplexity)
- */
-
-/**
  * Generate aggregate report in CSV format based on JTL file.
  *
  * @param array $mapping
@@ -32,7 +27,7 @@ function generateReport(array $mapping, callable $generateSummary, callable $row
     $args = getopt('j:m:o:f');
     if (empty($args['j']) || empty($args['o'])) {
         echo $usageMessage;
-        exit(0);
+        return;
     }
 
     list($jmeterData, $executionTime) = parseJmeterReport($args['j'], isset($args['f']));
@@ -73,6 +68,7 @@ function parseMemoryUsageLog($memoryUsageReport)
  * @param string $jmeterReport Path to the JTL report
  * @param bool $includeErrors If true failed requests are included in report
  * @return array First element - requests grouped by title, second - total execution time of the scenario
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  */
 function parseJmeterReport($jmeterReport, $includeErrors)
 {
@@ -117,6 +113,7 @@ function parseJmeterReport($jmeterReport, $includeErrors)
  * @param array $memoryUsageData
  * @param array $mappings
  * @return array
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  */
 function prepareAggregatedResult(array $jmeterData, array $memoryUsageData, array $mappings)
 {
@@ -174,6 +171,7 @@ function prepareAggregatedResult(array $jmeterData, array $memoryUsageData, arra
  * @param callable $generateSummary
  * @param callable $rowCallback [optional]
  * @return void
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  */
 function parseReportAndWriteToCsv(
     array $aggregatedResult,
