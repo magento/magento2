@@ -130,7 +130,7 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
     {
         $specificConsumer = 'quoteItemCleaner';
         $config = $this->config;
-        $config['queue_consumer'] = ['consumers' => [$specificConsumer], 'max_messages' => 0];
+        $config['cron_consumers_runner'] = ['consumers' => [$specificConsumer], 'max_messages' => 0];
 
         $this->writeConfig($config);
         $this->reRunConsumersAndCheckPidFiles($specificConsumer);
@@ -169,7 +169,7 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
     public function testCronJobDisabled()
     {
         $config = $this->config;
-        $config['queue_consumer'] = ['cron_run' => false];
+        $config['cron_consumers_runner'] = ['cron_run' => false];
 
         $this->writeConfig($config);
 
