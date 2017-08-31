@@ -15,11 +15,11 @@
     <tr>
         <td class="label">
             <?php if ($_order->getCouponCode()): ?>
-                <?php /* @escapeNotVerified */ echo __('Discount (%1)', $_order->getCouponCode()) ?>
+                <?= /* @escapeNotVerified */ __('Discount (%1)', $_order->getCouponCode()) ?>
             <?php else: ?>
-                <?php /* @escapeNotVerified */ echo __('Discount') ?>
+                <?= /* @escapeNotVerified */ __('Discount') ?>
             <?php endif; ?>
         </td>
-        <td><?php /* @escapeNotVerified */ echo $block->displayPriceAttribute('discount_amount') ?></td>
+        <td><?= /* @escapeNotVerified */ $block->displayPriceAttribute('discount_amount') ?></td>
     </tr>
 <?php endif; ?>

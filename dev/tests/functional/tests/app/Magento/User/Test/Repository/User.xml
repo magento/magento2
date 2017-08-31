@@ -16,6 +16,7 @@
             <field name="password" xsi:type="string">123123q</field>
             <field name="password_confirmation" xsi:type="string">123123q</field>
             <field name="current_password" xsi:type="string">%current_password%</field>
+            <field name="interface_locale" xsi:type="string">English (United States)</field>
         </dataset>
 
         <dataset name="custom_admin">

@@ -28,7 +28,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
     protected function setUp()
     {
         parent::setUp();
-        $logger = $this->getMock(\Psr\Log\LoggerInterface::class, [], [], '', false);
+        $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
         $this->_customerSession = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Customer\Model\Session::class,
             [$logger]
@@ -73,8 +73,20 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         $this->dispatch('wishlist/index/index');
         $body = $this->getResponse()->getBody();
-        $this->assertSelectCount('img[src~="small_image.jpg"][alt="Simple Product"]', 1, $body);
-        $this->assertSelectCount('textarea[name~="description"]', 1, $body);
+        $this->assertEquals(
+            1,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//img[contains(@src, "small_image.jpg") and @alt = "Simple Product"]',
+                $body
+            )
+        );
+        $this->assertEquals(
+            1,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//textarea[contains(@name, "description")]',
+                $body
+            )
+        );
     }
 
     /**
@@ -158,7 +170,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
         );
 
         $actualResult = \Zend_Mime_Decode::decodeQuotedPrintable(
-            $transportBuilder->getSentMessage()->getBodyHtml()->getContent()
+            $transportBuilder->getSentMessage()->getRawMessage()
         );
 
         $this->assertStringMatchesFormat(

@@ -5,9 +5,9 @@
  */
 namespace Magento\Sales\Test\Unit\Block\Items;
 
-use \Magento\Sales\Block\Items\AbstractItems;
+use Magento\Sales\Block\Items\AbstractItems;
 
-class AbstractTest extends \PHPUnit_Framework_TestCase
+class AbstractTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager  */
     protected $_objectManager;
@@ -20,15 +20,12 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     public function testGetItemRenderer()
     {
         $rendererType = 'some-type';
-        $renderer = $this->getMock(
+        $renderer = $this->createPartialMock(
             \Magento\Framework\View\Element\AbstractBlock::class,
-            ['setRenderedBlock'],
-            [],
-            '',
-            false
+            ['setRenderedBlock']
         );
 
-        $rendererList = $this->getMock(\Magento\Framework\View\Element\RendererList::class, [], [], '', false);
+        $rendererList = $this->createMock(\Magento\Framework\View\Element\RendererList::class);
         $rendererList->expects(
             $this->once()
         )->method(
@@ -40,13 +37,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($renderer)
         );
 
-        $layout = $this->getMock(
-            \Magento\Framework\View\Layout::class,
-            ['getChildName', 'getBlock'],
-            [],
-            '',
-            false
-        );
+        $layout = $this->createPartialMock(\Magento\Framework\View\Layout::class, ['getChildName', 'getBlock']);
 
         $layout->expects($this->once())->method('getChildName')->will($this->returnValue('renderer.list'));
 
@@ -82,13 +73,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetItemRendererThrowsExceptionForNonexistentRenderer()
     {
-        $layout = $this->getMock(
-            \Magento\Framework\View\Layout::class,
-            ['getChildName', 'getBlock'],
-            [],
-            '',
-            false
-        );
+        $layout = $this->createPartialMock(\Magento\Framework\View\Layout::class, ['getChildName', 'getBlock']);
         $layout->expects($this->once())->method('getChildName')->will($this->returnValue(null));
 
         /** @var $block \Magento\Sales\Block\Items\AbstractItems */

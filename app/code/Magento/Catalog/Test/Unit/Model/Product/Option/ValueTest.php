@@ -12,7 +12,7 @@ use Magento\Catalog\Model\Product\Option;
 use Magento\Framework\Model\ActionValidator\RemoveAction;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class ValueTest extends \PHPUnit_Framework_TestCase
+class ValueTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Product\Option\Value

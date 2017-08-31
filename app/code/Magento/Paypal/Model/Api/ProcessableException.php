@@ -13,6 +13,7 @@ use Magento\Framework\Phrase;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class ProcessableException extends LocalizedException
 {
@@ -29,6 +30,7 @@ class ProcessableException extends LocalizedException
     const API_MAXIMUM_AMOUNT_FILTER_DECLINE = 10538;
     const API_OTHER_FILTER_DECLINE = 10539;
     const API_ADDRESS_MATCH_FAIL = 10736;
+    const API_TRANSACTION_HAS_BEEN_COMPLETED = 10415;
     /**#@-*/
 
     /**
@@ -40,7 +42,7 @@ class ProcessableException extends LocalizedException
      */
     public function __construct(Phrase $phrase, \Exception $cause = null, $code = 0)
     {
-        parent::__construct($phrase, $cause);
+        parent::__construct($phrase, $cause, $code);
         $this->code = $code;
     }
 

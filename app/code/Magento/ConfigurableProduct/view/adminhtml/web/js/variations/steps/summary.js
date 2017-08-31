@@ -91,6 +91,7 @@ define([
             var productSku = this.variationsComponent().getProductValue('sku'),
                 productPrice = this.variationsComponent().getProductPrice(),
                 productWeight = this.variationsComponent().getProductValue('weight'),
+                productName = this.variationsComponent().getProductValue('name'),
                 variationsKeys = [],
                 gridExisting = [],
                 gridNew = [],
@@ -98,7 +99,7 @@ define([
 
             this.variations = [];
             _.each(variations, function (options) {
-                var product, images, sku, quantity, price, variation,
+                var product, images, sku, name, quantity, price, variation,
                     productId = this.variationsComponent().getProductIdByOptions(options);
 
                 if (productId) {
@@ -110,6 +111,9 @@ define([
                 sku = productSku + _.reduce(options, function (memo, option) {
                     return memo + '-' + option.label;
                 }, '');
+                name = productName + _.reduce(options, function (memo, option) {
+                        return memo + '-' + option.label;
+                    }, '');
                 quantity = getSectionValue('quantity', options);
 
                 if (!quantity && productId) {
@@ -128,7 +132,7 @@ define([
                     options: options,
                     images: images,
                     sku: sku,
-                    name: sku,
+                    name: name,
                     quantity: quantity,
                     price: price,
                     productId: productId,

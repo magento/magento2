@@ -10,6 +10,10 @@ namespace Magento\Sales\Test\Unit\Model\Order;
 
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\ResourceModel\OrderFactory;
+use Magento\Sales\Model\Order;
+use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use Magento\Sales\Model\ResourceModel\Order\Invoice\Collection as InvoiceCollection;
 
 /**
  * Class InvoiceTest
@@ -17,7 +21,7 @@ use Magento\Sales\Model\ResourceModel\OrderFactory;
  * @package Magento\Sales\Model\Order
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class InvoiceTest extends \PHPUnit_Framework_TestCase
+class InvoiceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\Order\Invoice
@@ -41,9 +45,9 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
     protected $orderFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Model\Order
+     * @var Order|MockObject
      */
-    protected $orderMock;
+    private $order;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Model\Order\Payment
@@ -63,18 +67,18 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->helperManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->orderMock = $this->getMockBuilder(
-            \Magento\Sales\Model\Order::class
-        )->disableOriginalConstructor()->setMethods(
-            [
-                'getPayment', '__wakeup', 'load', 'setHistoryEntityName', 'getStore', 'getBillingAddress',
-                'getShippingAddress'
-            ]
-        )->getMock();
-        $this->orderMock->expects($this->any())
-            ->method('setHistoryEntityName')
+        $this->order = $this->getMockBuilder(Order::class)
+            ->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'getPayment', '__wakeup', 'load', 'setHistoryEntityName', 'getStore', 'getBillingAddress',
+                    'getShippingAddress'
+                ]
+            )
+            ->getMock();
+        $this->order->method('setHistoryEntityName')
             ->with($this->entityType)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->paymentMock = $this->getMockBuilder(
             \Magento\Sales\Model\Order\Payment::class
@@ -82,10 +86,10 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
             ['canVoid', '__wakeup', 'canCapture', 'capture', 'pay']
         )->getMock();
 
-        $this->orderFactory = $this->getMock(\Magento\Sales\Model\OrderFactory::class, ['create'], [], '', false);
+        $this->orderFactory = $this->createPartialMock(\Magento\Sales\Model\OrderFactory::class, ['create']);
 
-        $this->eventManagerMock = $this->getMock(\Magento\Framework\Event\ManagerInterface::class, [], [], '', false);
-        $contextMock = $this->getMock(\Magento\Framework\Model\Context::class, [], [], '', false);
+        $this->eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
+        $contextMock = $this->createMock(\Magento\Framework\Model\Context::class);
         $contextMock->expects($this->any())
             ->method('getEventDispatcher')
             ->willReturn($this->eventManagerMock);
@@ -93,44 +97,13 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
         $arguments = [
             'context' => $contextMock,
             'orderFactory' => $this->orderFactory,
-            'orderResourceFactory' => $this->getMock(
-                \Magento\Sales\Model\ResourceModel\OrderFactory::class,
-                [],
-                [],
-                '',
-                false
-            ),
-            'calculatorFactory' => $this->getMock(
-                \Magento\Framework\Math\CalculatorFactory::class,
-                    [],
-                    [],
-                    '',
-                    false
-                ),
-            'invoiceItemCollectionFactory' => $this->getMock(
-                \Magento\Sales\Model\ResourceModel\Order\Invoice\Item\CollectionFactory::class,
-                [],
-                [],
-                '',
-                false
-            ),
-            'invoiceCommentFactory' => $this->getMock(
-                \Magento\Sales\Model\Order\Invoice\CommentFactory::class,
-                [],
-                [],
-                '',
-                false
-            ),
-            'commentCollectionFactory' => $this->getMock(
-                \Magento\Sales\Model\ResourceModel\Order\Invoice\Comment\CollectionFactory::class,
-                [],
-                [],
-                '',
-                false
-            ),
+            'calculatorFactory' => $this->createMock(\Magento\Framework\Math\CalculatorFactory::class),
+            'invoiceItemCollectionFactory' => $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Invoice\Item\CollectionFactory::class),
+            'invoiceCommentFactory' => $this->createMock(\Magento\Sales\Model\Order\Invoice\CommentFactory::class),
+            'commentCollectionFactory' => $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Invoice\Comment\CollectionFactory::class),
         ];
         $this->model = $this->helperManager->getObject(\Magento\Sales\Model\Order\Invoice::class, $arguments);
-        $this->model->setOrder($this->orderMock);
+        $this->model->setOrder($this->order);
         $this->modelWithoutOrder = $this->helperManager->getObject(
             \Magento\Sales\Model\Order\Invoice::class,
             $arguments
@@ -143,7 +116,7 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testCanVoid($canVoid)
     {
-        $this->orderMock->expects($this->once())->method('getPayment')->willReturn($this->paymentMock);
+        $this->order->expects($this->once())->method('getPayment')->willReturn($this->paymentMock);
         $this->paymentMock->expects($this->once())
             ->method('canVoid', '__wakeup')
             ->willReturn($canVoid);
@@ -171,31 +144,31 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
 
     public function testGetOrder()
     {
-        $this->orderMock->expects($this->once())
+        $this->order->expects($this->once())
             ->method('setHistoryEntityName')
             ->with($this->entityType)
             ->will($this->returnSelf());
 
-        $this->assertEquals($this->orderMock, $this->model->getOrder());
+        $this->assertEquals($this->order, $this->model->getOrder());
     }
 
     public function testGetOrderLoadedById()
     {
         $orderId = 100000041;
         $this->modelWithoutOrder->setOrderId($orderId);
-        $this->orderMock->expects($this->once())
+        $this->order->expects($this->once())
             ->method('load')
             ->with($orderId)
             ->willReturnSelf();
-        $this->orderMock->expects($this->once())
+        $this->order->expects($this->once())
             ->method('setHistoryEntityName')
             ->with($this->entityType)
             ->willReturnSelf();
         $this->orderFactory->expects($this->once())
             ->method('create')
-            ->willReturn($this->orderMock);
+            ->willReturn($this->order);
 
-        $this->assertEquals($this->orderMock, $this->modelWithoutOrder->getOrder());
+        $this->assertEquals($this->order, $this->modelWithoutOrder->getOrder());
     }
 
     public function testGetEntityType()
@@ -213,13 +186,13 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
     {
         $orderId = 1111;
         $storeId = 2221;
-        $this->orderMock->setId($orderId);
-        $this->orderMock->setStoreId($storeId);
+        $this->order->setId($orderId);
+        $this->order->setStoreId($storeId);
         $this->assertNull($this->model->getOrderId());
         $this->assertNull($this->model->getStoreId());
 
-        $this->assertEquals($this->model, $this->model->setOrder($this->orderMock));
-        $this->assertEquals($this->orderMock, $this->model->getOrder());
+        $this->assertEquals($this->model, $this->model->setOrder($this->order));
+        $this->assertEquals($this->order, $this->model->getOrder());
         $this->assertEquals($orderId, $this->model->getOrderId());
         $this->assertEquals($storeId, $this->model->getStoreId());
     }
@@ -227,7 +200,7 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
     public function testGetStore()
     {
         $store = $this->helperManager->getObject(\Magento\Store\Model\Store::class, []);
-        $this->orderMock->expects($this->once())->method('getStore')->willReturn($store);
+        $this->order->expects($this->once())->method('getStore')->willReturn($store);
         $this->assertEquals($store, $this->model->getStore());
 
     }
@@ -235,7 +208,7 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
     public function testGetShippingAddress()
     {
         $address = $this->helperManager->getObject(\Magento\Sales\Model\Order\Address::class, []);
-        $this->orderMock->expects($this->once())->method('getShippingAddress')->willReturn($address);
+        $this->order->expects($this->once())->method('getShippingAddress')->willReturn($address);
         $this->assertEquals($address, $this->model->getShippingAddress());
 
     }
@@ -250,10 +223,10 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
     {
         $this->model->setState($state);
         if (null !== $canPaymentCapture) {
-            $this->orderMock->expects($this->once())->method('getPayment')->willReturn($this->paymentMock);
+            $this->order->expects($this->once())->method('getPayment')->willReturn($this->paymentMock);
             $this->paymentMock->expects($this->once())->method('canCapture')->willReturn($canPaymentCapture);
         } else {
-            $this->orderMock->expects($this->never())->method('getPayment');
+            $this->order->expects($this->never())->method('getPayment');
             $this->paymentMock->expects($this->never())->method('canCapture');
         }
         $this->assertEquals($expectedResult, $this->model->canCapture());
@@ -337,7 +310,7 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
     public function testCaptureNotPaid()
     {
         $this->model->setIsPaid(false);
-        $this->orderMock->expects($this->once())->method('getPayment')->willReturn($this->paymentMock);
+        $this->order->expects($this->once())->method('getPayment')->willReturn($this->paymentMock);
         $this->paymentMock->expects($this->once())->method('capture')->with($this->model)->willReturnSelf();
         $this->paymentMock->expects($this->never())->method('pay');
         $this->assertEquals($this->model, $this->model->capture());
@@ -345,16 +318,24 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
 
     public function testCapturePaid()
     {
+        $collection = $this->getOrderInvoiceCollection();
+        $collection->method('getItems')
+            ->willReturn([$this->model]);
+
         $this->model->setIsPaid(true);
-        $this->orderMock->expects($this->any())->method('getPayment')->willReturn($this->paymentMock);
-        $this->paymentMock->expects($this->any())->method('capture')->with($this->model)->willReturnSelf();
+        $this->order->method('getPayment')
+            ->willReturn($this->paymentMock);
+        $this->paymentMock->method('capture')
+            ->with($this->model)
+            ->willReturnSelf();
         $this->mockPay();
-        $this->assertEquals($this->model, $this->model->capture());
+
+        self::assertEquals($this->model, $this->model->capture());
     }
 
     public function mockPay()
     {
-        $this->orderMock->expects($this->any())->method('getPayment')->willReturn($this->paymentMock);
+        $this->order->expects($this->any())->method('getPayment')->willReturn($this->paymentMock);
         $this->paymentMock->expects($this->once())->method('pay')->with($this->model)->willReturnSelf();
         $this->eventManagerMock
             ->expects($this->once())
@@ -364,37 +345,66 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider payDataProvider
-     * @param float $orderTotalPaid
-     * @param float $orderBaseTotalPaid
-     * @param float $grandTotal
-     * @param float $baseGrandTotal
+     * @param float $totalPaid
+     * @param float $baseTotalPaid
+     * @param float $expectedTotal
+     * @param float $expectedBaseTotal
      * @param float $expectedState
+     * @param array $items
      */
     public function testPay(
-        $orderTotalPaid,
-        $orderBaseTotalPaid,
-        $grandTotal,
-        $baseGrandTotal,
-        $expectedState
+        $totalPaid,
+        $baseTotalPaid,
+        $expectedTotal,
+        $expectedBaseTotal,
+        $expectedState,
+        array $items
     ) {
         $this->mockPay();
-        $this->model->setGrandTotal($grandTotal);
-        $this->model->setBaseGrandTotal($baseGrandTotal);
-        $this->orderMock->setTotalPaid($orderTotalPaid);
-        $this->orderMock->setBaseTotalPaid($orderBaseTotalPaid);
-        $this->assertFalse($this->model->wasPayCalled());
-        $this->assertEquals($this->model, $this->model->pay());
-        $this->assertTrue($this->model->wasPayCalled());
-        $this->assertEquals($expectedState, $this->model->getState());
+        $this->model->setGrandTotal($totalPaid);
+        $this->model->setBaseGrandTotal($baseTotalPaid);
+        $this->order->setTotalPaid($totalPaid);
+        $this->order->setBaseTotalPaid($baseTotalPaid);
+        $collection = $this->getOrderInvoiceCollection();
+        $collection->method('getItems')
+            ->willReturn($items);
+
+        self::assertFalse($this->model->wasPayCalled());
+        self::assertEquals($this->model, $this->model->pay());
+        self::assertTrue($this->model->wasPayCalled());
+        self::assertEquals($expectedState, $this->model->getState());
+
         #second call of pay() method must do nothing
         $this->model->pay();
+
+        self::assertEquals($expectedBaseTotal, $this->order->getBaseTotalPaid());
+        self::assertEquals($expectedTotal, $this->order->getTotalPaid());
     }
 
     public function payDataProvider()
     {
-        //ToDo: fill data provider and uncomment assertings totals in testPay
         return [
-            [10.99, 1.00, 10.99, 1.00, Invoice::STATE_PAID]
+            [10.99, 1.00, 10.99, 1.00, Invoice::STATE_PAID, ['item1']],
+            [11.00, 1.00, 22.00, 2.00, Invoice::STATE_PAID, ['item1', 'item2']],
         ];
+    }
+
+    /**
+     * Creates collection of invoices for order.
+     *
+     * @return InvoiceCollection|MockObject
+     */
+    private function getOrderInvoiceCollection()
+    {
+        $collection = $this->getMockBuilder(InvoiceCollection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $refObject = new \ReflectionClass($this->order);
+        $refProperty = $refObject->getProperty('_invoices');
+        $refProperty->setAccessible(true);
+        $refProperty->setValue($this->order, $collection);
+
+        return $collection;
     }
 }

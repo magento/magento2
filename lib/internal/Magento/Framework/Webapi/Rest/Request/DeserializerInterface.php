@@ -7,6 +7,10 @@
  */
 namespace Magento\Framework\Webapi\Rest\Request;
 
+/**
+ * Interface \Magento\Framework\Webapi\Rest\Request\DeserializerInterface
+ *
+ */
 interface DeserializerInterface
 {
     /**

@@ -9,6 +9,10 @@ namespace Magento\Backend\Model\Menu\Config;
 
 use Magento\Framework\Module\Dir;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {
     /**

@@ -7,7 +7,7 @@
  */
 namespace Magento\TestFramework\Integrity;
 
-abstract class AbstractConfig extends \PHPUnit_Framework_TestCase
+abstract class AbstractConfig extends \PHPUnit\Framework\TestCase
 {
     public function testXmlFiles()
     {

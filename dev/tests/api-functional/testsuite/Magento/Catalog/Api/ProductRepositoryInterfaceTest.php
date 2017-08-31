@@ -313,7 +313,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     {
         $sku = $fixtureProduct[ProductInterface::SKU];
         $this->saveProduct($fixtureProduct);
-        $this->setExpectedException('Exception', 'Requested product doesn\'t exist');
+        $this->expectException('Exception', 'Requested product doesn\'t exist');
 
         // Delete all with 'all' store code
         $this->deleteProduct($sku);
@@ -1263,6 +1263,38 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $attributeCodes = array_column($customAttributes, 'attribute_code');
         $this->assertEquals(0, count(array_intersect($attributeCodes, $missingAttributes)));
         $this->assertEquals(2, count(array_intersect($attributeCodes, $expectedAttribute)));
+    }
+
+    /**
+     * Tests the ability to "reset" (nullify) a special_price by passing null in the web api request.
+     *
+     * Steps:
+     *  1. Save the product with a special_price of $5.00
+     *  2. Save the product with a special_price of null
+     *  3. Confirm that the special_price is no longer set
+     */
+    public function testResetSpecialPrice()
+    {
+        $this->_markTestAsRestOnly(
+            'In order to properly run this test for SOAP, XML must be used to specify <value></value> ' .
+            'for the special_price value. Otherwise, the null value gets processed as a string and ' .
+            'cast to a double value of 0.0.'
+        );
+        $productData = $this->getSimpleProductData();
+        $productData['custom_attributes'] = [
+            ['attribute_code' => self::KEY_SPECIAL_PRICE, 'value' => 5.00]
+        ];
+        $this->saveProduct($productData);
+        $response = $this->getProduct($productData[ProductInterface::SKU]);
+        $customAttributes = array_column($response['custom_attributes'], 'value', 'attribute_code');
+        $this->assertEquals(5, $customAttributes[self::KEY_SPECIAL_PRICE]);
+        $productData['custom_attributes'] = [
+            ['attribute_code' => self::KEY_SPECIAL_PRICE, 'value' => null]
+        ];
+        $this->saveProduct($productData);
+        $response = $this->getProduct($productData[ProductInterface::SKU]);
+        $customAttributes = array_column($response['custom_attributes'], 'value', 'attribute_code');
+        $this->assertFalse(array_key_exists(self::KEY_SPECIAL_PRICE, $customAttributes));
     }
 
     public function testUpdateStatus()
