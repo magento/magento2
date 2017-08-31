@@ -20,6 +20,11 @@ class TrackCreation implements ShipmentTrackCreationInterface
     /**
      * @var string
      */
+    private $trackUrl;
+
+    /**
+     * @var string
+     */
     private $title;
 
     /**
@@ -54,19 +59,18 @@ class TrackCreation implements ShipmentTrackCreationInterface
     /**
      * {@inheritdoc}
      */
-    public function setTrackUrl($trackUrl)
+    public function getTrackUrl()
     {
-        return $this->setData(ShipmentTrackInterface::TRACK_URL, $trackUrl);
+        return $this->trackUrl;
     }
 
     /**
-     * Returns track_url
-     *
-     * @return string
+     * {@inheritdoc}
      */
-    public function getTrackUrl()
+    public function setTrackUrl($trackUrl)
     {
-        return $this->getData(ShipmentTrackInterface::TRACK_URL);
+        $this->trackUrl = $trackUrl;
+        return $this;
     }
 
     /**
