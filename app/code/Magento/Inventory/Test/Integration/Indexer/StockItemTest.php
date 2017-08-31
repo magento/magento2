@@ -44,11 +44,13 @@ class StockItemTest extends TestCase
     }
 
     /**
-     * @magentoDataFixture ../../../../app/code/Magento/Inventory/Test/_files/products.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source/sources.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock/stocks.php
-     * @magentoDataFixture ../../../../app/code/Magento/Inventory/Test/_files/source_item.php
-     * @magentoDataFixture ../../../../app/code/Magento/Inventory/Test/_files/stock_source_link.php
+     * TODO: fixture via composer
+     *
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_link.php
      */
     public function testReindexAll()
     {
