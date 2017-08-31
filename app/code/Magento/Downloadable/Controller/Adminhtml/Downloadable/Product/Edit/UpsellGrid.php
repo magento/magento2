@@ -6,10 +6,6 @@
  */
 namespace Magento\Downloadable\Controller\Adminhtml\Downloadable\Product\Edit;
 
-/**
- * Class \Magento\Downloadable\Controller\Adminhtml\Downloadable\Product\Edit\UpsellGrid
- *
- */
 class UpsellGrid extends \Magento\Catalog\Controller\Adminhtml\Product\UpsellGrid
 {
 }

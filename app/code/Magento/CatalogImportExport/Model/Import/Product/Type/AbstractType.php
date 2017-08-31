@@ -17,6 +17,7 @@ use Magento\Framework\EntityManager\MetadataPool;
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 abstract class AbstractType
 {

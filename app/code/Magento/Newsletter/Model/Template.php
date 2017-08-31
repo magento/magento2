@@ -33,6 +33,7 @@ namespace Magento\Newsletter\Model;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api
+ * @since 100.0.2
  */
 class Template extends \Magento\Email\Model\AbstractTemplate
 {

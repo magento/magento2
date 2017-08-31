@@ -20,7 +20,6 @@ class Notifier implements \Magento\Sales\Model\Order\Creditmemo\NotifierInterfac
 
     /**
      * @param \Magento\Sales\Model\Order\CreditMemo\SenderInterface[] $senders
-     * @since 100.1.3
      */
     public function __construct(array $senders = [])
     {

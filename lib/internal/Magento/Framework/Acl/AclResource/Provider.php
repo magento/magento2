@@ -9,10 +9,6 @@ namespace Magento\Framework\Acl\AclResource;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
 
-/**
- * Class \Magento\Framework\Acl\AclResource\Provider
- *
- */
 class Provider implements ProviderInterface
 {
     /**

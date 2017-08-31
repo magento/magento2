@@ -7,10 +7,6 @@ namespace Magento\Setup\Module\Di\App\Task\Operation;
 
 use Magento\Setup\Module\Di\App\Task\OperationInterface;
 
-/**
- * Class \Magento\Setup\Module\Di\App\Task\Operation\InterceptionCache
- *
- */
 class InterceptionCache implements OperationInterface
 {
     /**

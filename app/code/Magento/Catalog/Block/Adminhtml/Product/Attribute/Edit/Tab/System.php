@@ -13,10 +13,6 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab;
 
 use Magento\Backend\Block\Widget\Form\Generic;
 
-/**
- * Class \Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\System
- *
- */
 class System extends Generic
 {
     /**

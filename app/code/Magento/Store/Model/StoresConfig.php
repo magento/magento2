@@ -8,10 +8,6 @@ namespace Magento\Store\Model;
 
 use Magento\Framework\Exception\NoSuchEntityException;
 
-/**
- * Class \Magento\Store\Model\StoresConfig
- *
- */
 class StoresConfig
 {
     /**

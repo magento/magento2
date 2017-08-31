@@ -5,10 +5,6 @@
  */
 namespace Magento\Backend\Block\Widget\Grid\Column\Filter\Select;
 
-/**
- * Class \Magento\Backend\Block\Widget\Grid\Column\Filter\Select\Extended
- *
- */
 class Extended extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
 {
     /**

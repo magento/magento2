@@ -5,10 +5,6 @@
  */
 namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab;
 
-/**
- * Class \Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Labels
- *
- */
 class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
     \Magento\Ui\Component\Layout\Tabs\TabInterface
 {

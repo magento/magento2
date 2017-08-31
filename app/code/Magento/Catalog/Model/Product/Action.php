@@ -14,6 +14,7 @@ namespace Magento\Catalog\Model\Product;
  * @api
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Action extends \Magento\Framework\Model\AbstractModel
 {

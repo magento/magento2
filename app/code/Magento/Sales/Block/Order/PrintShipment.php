@@ -11,6 +11,7 @@ use Magento\Framework\View\Element\AbstractBlock;
  * Order information for print
  *
  * @api
+ * @since 100.0.2
  */
 class PrintShipment extends \Magento\Sales\Block\Items\AbstractItems
 {

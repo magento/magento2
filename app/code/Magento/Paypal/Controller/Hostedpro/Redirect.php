@@ -6,10 +6,6 @@
  */
 namespace Magento\Paypal\Controller\Hostedpro;
 
-/**
- * Class \Magento\Paypal\Controller\Hostedpro\Redirect
- *
- */
 class Redirect extends \Magento\Paypal\Controller\Payflow
 {
     /**

@@ -8,10 +8,6 @@ namespace Magento\Framework\Oauth;
 use Magento\Framework\Encryption\Helper\Security;
 use Magento\Framework\Phrase;
 
-/**
- * Class \Magento\Framework\Oauth\Oauth
- *
- */
 class Oauth implements OauthInterface
 {
     /**

@@ -9,10 +9,6 @@ namespace Magento\ConfigurableProduct\Model\ResourceModel\Setup;
 
 use Magento\Eav\Model\Entity\Setup\PropertyMapperAbstract;
 
-/**
- * Class \Magento\ConfigurableProduct\Model\ResourceModel\Setup\PropertyMapper
- *
- */
 class PropertyMapper extends PropertyMapperAbstract
 {
     /**

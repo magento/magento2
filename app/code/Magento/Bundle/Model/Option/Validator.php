@@ -9,10 +9,6 @@ use Magento\Framework\Validator\NotEmpty;
 use Magento\Framework\Validator\NotEmptyFactory;
 use Zend_Validate_Exception;
 
-/**
- * Class \Magento\Bundle\Model\Option\Validator
- *
- */
 class Validator extends \Magento\Framework\Validator\AbstractValidator
 {
     /**

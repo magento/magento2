@@ -16,6 +16,7 @@ use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
  * @method \Magento\Eav\Model\Entity\Attribute setOption($value)
  * @method \Magento\Eav\Api\Data\AttributeExtensionInterface getExtensionAttributes()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute implements
     \Magento\Framework\DataObject\IdentityInterface

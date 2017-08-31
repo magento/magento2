@@ -31,7 +31,6 @@ class NewCategoryDataProvider extends AbstractDataProvider
      * @param UrlInterface $urlBuilder
      * @param array $meta
      * @param array $data
-     * @since 101.0.0
      */
     public function __construct(
         $name,

@@ -5,10 +5,6 @@
  */
 namespace Magento\Quote\Model\Quote;
 
-/**
- * Class \Magento\Quote\Model\Quote\Config
- *
- */
 class Config
 {
     /**

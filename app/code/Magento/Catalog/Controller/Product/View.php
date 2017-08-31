@@ -9,10 +9,6 @@ namespace Magento\Catalog\Controller\Product;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 
-/**
- * Class \Magento\Catalog\Controller\Product\View
- *
- */
 class View extends \Magento\Catalog\Controller\Product
 {
     /**

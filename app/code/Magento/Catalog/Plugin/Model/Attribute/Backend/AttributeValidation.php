@@ -7,10 +7,6 @@ namespace Magento\Catalog\Plugin\Model\Attribute\Backend;
 
 use Magento\Store\Model\Store;
 
-/**
- * Class \Magento\Catalog\Plugin\Model\Attribute\Backend\AttributeValidation
- *
- */
 class AttributeValidation
 {
     /**

@@ -10,10 +10,6 @@ use Magento\Downloadable\Helper\Download as DownloadHelper;
 use Magento\Downloadable\Model\Link\Purchased\Item as PurchasedLink;
 use Magento\Framework\App\ResponseInterface;
 
-/**
- * Class \Magento\Downloadable\Controller\Download\Link
- *
- */
 class Link extends \Magento\Downloadable\Controller\Download
 {
     /**

@@ -8,10 +8,6 @@ namespace Magento\PageCache\Controller\Adminhtml\PageCache;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-/**
- * Class \Magento\PageCache\Controller\Adminhtml\PageCache\ExportVarnishConfig
- *
- */
 class ExportVarnishConfig extends \Magento\Backend\App\Action
 {
     /**

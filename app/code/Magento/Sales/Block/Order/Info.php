@@ -16,6 +16,7 @@ use Magento\Sales\Model\Order\Address\Renderer as AddressRenderer;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Info extends \Magento\Framework\View\Element\Template
 {

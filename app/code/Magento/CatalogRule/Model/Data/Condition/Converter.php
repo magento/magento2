@@ -5,10 +5,6 @@
  */
 namespace Magento\CatalogRule\Model\Data\Condition;
 
-/**
- * Class \Magento\CatalogRule\Model\Data\Condition\Converter
- *
- */
 class Converter
 {
     /**

@@ -13,6 +13,7 @@ use Magento\Payment\Model\Method\AbstractMethod;
  * Methods List service class.
  *
  * @api
+ * @since 100.0.2
  */
 class MethodList
 {

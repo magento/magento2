@@ -5,10 +5,6 @@
  */
 namespace Magento\Tax\Model\Calculation;
 
-/**
- * Class \Magento\Tax\Model\Calculation\RowBaseCalculator
- *
- */
 class RowBaseCalculator extends AbstractAggregateCalculator
 {
     /**

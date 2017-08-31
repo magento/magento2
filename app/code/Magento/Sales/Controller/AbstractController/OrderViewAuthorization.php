@@ -7,10 +7,6 @@
 
 namespace Magento\Sales\Controller\AbstractController;
 
-/**
- * Class \Magento\Sales\Controller\AbstractController\OrderViewAuthorization
- *
- */
 class OrderViewAuthorization implements OrderViewAuthorizationInterface
 {
     /**

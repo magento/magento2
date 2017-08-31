@@ -8,10 +8,6 @@ namespace Magento\Quote\Model\Quote\Address\Total;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Quote\Model\Quote\Address\FreeShippingInterface;
 
-/**
- * Class \Magento\Quote\Model\Quote\Address\Total\Shipping
- *
- */
 class Shipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
 {
     /**

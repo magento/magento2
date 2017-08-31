@@ -19,6 +19,7 @@ use Magento\Framework\Pricing\PriceInfoInterface;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class TierPrice extends AbstractPrice implements TierPriceInterface, BasePriceProviderInterface
 {

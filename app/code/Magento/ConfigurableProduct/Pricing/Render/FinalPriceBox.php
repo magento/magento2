@@ -17,10 +17,6 @@ use Magento\Framework\Pricing\Render\RendererPool;
 use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Framework\View\Element\Template\Context;
 
-/**
- * Class \Magento\ConfigurableProduct\Pricing\Render\FinalPriceBox
- *
- */
 class FinalPriceBox extends \Magento\Catalog\Pricing\Render\FinalPriceBox
 {
     /**

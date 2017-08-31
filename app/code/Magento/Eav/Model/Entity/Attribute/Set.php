@@ -368,7 +368,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Get resource instance
      *
      * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
-     * @deprecated because resource models should be used directly
+     * @deprecated 100.2.0 because resource models should be used directly
      */
     protected function _getResource()
     {

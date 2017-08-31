@@ -6,10 +6,6 @@
  */
 namespace Magento\Reports\Controller\Adminhtml\Report\Shopcart;
 
-/**
- * Class \Magento\Reports\Controller\Adminhtml\Report\Shopcart\Product
- *
- */
 class Product extends \Magento\Reports\Controller\Adminhtml\Report\Shopcart
 {
     /**

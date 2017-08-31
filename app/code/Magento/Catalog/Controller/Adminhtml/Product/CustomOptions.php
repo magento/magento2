@@ -9,10 +9,6 @@ namespace Magento\Catalog\Controller\Adminhtml\Product;
 use Magento\Backend\App\Action;
 use Magento\Catalog\Controller\Adminhtml\Product;
 
-/**
- * Class \Magento\Catalog\Controller\Adminhtml\Product\CustomOptions
- *
- */
 class CustomOptions extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**

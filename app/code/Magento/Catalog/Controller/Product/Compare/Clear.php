@@ -8,10 +8,6 @@ namespace Magento\Catalog\Controller\Product\Compare;
 
 use Magento\Framework\Controller\ResultFactory;
 
-/**
- * Class \Magento\Catalog\Controller\Product\Compare\Clear
- *
- */
 class Clear extends \Magento\Catalog\Controller\Product\Compare
 {
     /**

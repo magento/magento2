@@ -5,10 +5,6 @@
  */
 namespace Magento\Framework\Mview\View\State;
 
-/**
- * Class \Magento\Framework\Mview\View\State\CollectionFactory
- *
- */
 class CollectionFactory extends \Magento\Framework\Mview\View\AbstractFactory
 {
     /**

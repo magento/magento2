@@ -8,10 +8,6 @@ namespace Magento\Framework\View\Page\Config\Generator;
 use Magento\Framework\View\Layout;
 use Magento\Framework\View\Page\Config\Structure;
 
-/**
- * Class \Magento\Framework\View\Page\Config\Generator\Body
- *
- */
 class Body implements Layout\GeneratorInterface
 {
     /**

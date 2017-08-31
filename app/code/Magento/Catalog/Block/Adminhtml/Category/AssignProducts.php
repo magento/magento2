@@ -6,10 +6,6 @@
 
 namespace Magento\Catalog\Block\Adminhtml\Category;
 
-/**
- * Class \Magento\Catalog\Block\Adminhtml\Category\AssignProducts
- *
- */
 class AssignProducts extends \Magento\Backend\Block\Template
 {
     /**

@@ -58,6 +58,12 @@ class AjaxTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $eventManager->expects($this->exactly(2))->method('dispatch')->will($this->returnValue(true));
 
+        $scopeConfig = $this->getMockBuilder(\Magento\Framework\App\Config::class)
+            ->setMethods(['getValue'])
+            ->disableOriginalConstructor()->getMock();
+        $scopeConfig->expects($this->once())->method('getValue')->withAnyParameters()
+            ->will($this->returnValue(false));
+
         $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)->disableOriginalConstructor()
             ->setMethods(['setStoreId', 'load', 'getId', '__wakeup', '__sleep'])
             ->getMock();
@@ -90,6 +96,8 @@ class AjaxTest extends \PHPUnit\Framework\TestCase
 
         $this->context->expects($this->once())->method('getEventManager')
             ->will($this->returnValue($eventManager));
+        $this->context->expects($this->once())->method('getScopeConfig')
+            ->will($this->returnValue($scopeConfig));
         $this->context->expects($this->once())->method('getLayout')
             ->will($this->returnValue($layout));
         $this->context->expects($this->once())->method('getRequest')

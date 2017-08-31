@@ -8,10 +8,6 @@ namespace Magento\Webapi\Controller;
 
 use Magento\Framework\Exception\NoSuchEntityException;
 
-/**
- * Class \Magento\Webapi\Controller\PathProcessor
- *
- */
 class PathProcessor
 {
     /**  Store code alias to indicate that all stores should be affected by action */

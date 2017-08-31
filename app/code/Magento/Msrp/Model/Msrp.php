@@ -8,10 +8,6 @@ namespace Magento\Msrp\Model;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory;
 
-/**
- * Class \Magento\Msrp\Model\Msrp
- *
- */
 class Msrp
 {
     /**

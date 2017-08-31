@@ -8,10 +8,6 @@ namespace Magento\Framework\App\Response\HeaderProvider;
 use Magento\Framework\App\Response\HeaderProvider\HeaderProviderInterface;
 use Magento\Framework\HTTP\Header;
 
-/**
- * Class \Magento\Framework\App\Response\HeaderProvider\XssProtection
- *
- */
 class XssProtection extends AbstractHeaderProvider
 {
     /**

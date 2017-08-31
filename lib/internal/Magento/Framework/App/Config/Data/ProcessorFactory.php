@@ -7,10 +7,6 @@
  */
 namespace Magento\Framework\App\Config\Data;
 
-/**
- * Class \Magento\Framework\App\Config\Data\ProcessorFactory
- *
- */
 class ProcessorFactory
 {
     /**

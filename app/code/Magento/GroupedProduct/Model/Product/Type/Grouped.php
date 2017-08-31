@@ -12,6 +12,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @since 100.0.2
  */
 class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
 {

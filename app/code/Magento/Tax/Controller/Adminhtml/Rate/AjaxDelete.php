@@ -8,10 +8,6 @@ namespace Magento\Tax\Controller\Adminhtml\Rate;
 
 use Magento\Framework\Controller\ResultFactory;
 
-/**
- * Class \Magento\Tax\Controller\Adminhtml\Rate\AjaxDelete
- *
- */
 class AjaxDelete extends \Magento\Tax\Controller\Adminhtml\Rate
 {
     /**

@@ -85,7 +85,6 @@ class Categories extends AbstractModifier
      * @param UrlInterface $urlBuilder
      * @param ArrayManager $arrayManager
      * @param SerializerInterface $serializer
-     * @since 101.0.0
      */
     public function __construct(
         LocatorInterface $locator,

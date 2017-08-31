@@ -6,10 +6,6 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Design;
 
-/**
- * Class \Magento\Backend\Controller\Adminhtml\System\Design\Delete
- *
- */
 class Delete extends \Magento\Backend\Controller\Adminhtml\System\Design
 {
     /**

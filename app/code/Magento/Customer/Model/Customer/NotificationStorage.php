@@ -8,10 +8,6 @@ namespace Magento\Customer\Model\Customer;
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 
-/**
- * Class \Magento\Customer\Model\Customer\NotificationStorage
- *
- */
 class NotificationStorage
 {
     const UPDATE_CUSTOMER_SESSION = 'update_customer_session';

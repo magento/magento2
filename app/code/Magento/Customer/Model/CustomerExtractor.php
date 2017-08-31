@@ -11,10 +11,6 @@ use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Framework\App\RequestInterface;
 
-/**
- * Class \Magento\Customer\Model\CustomerExtractor
- *
- */
 class CustomerExtractor
 {
     /**

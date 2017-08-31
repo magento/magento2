@@ -6,10 +6,6 @@
  */
 namespace Magento\Authorizenet\Controller\Directpost\Payment;
 
-/**
- * Class \Magento\Authorizenet\Controller\Directpost\Payment\ReturnQuote
- *
- */
 class ReturnQuote extends \Magento\Authorizenet\Controller\Directpost\Payment
 {
     /**

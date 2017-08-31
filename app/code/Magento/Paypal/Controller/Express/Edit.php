@@ -6,10 +6,6 @@
  */
 namespace Magento\Paypal\Controller\Express;
 
-/**
- * Class \Magento\Paypal\Controller\Express\Edit
- *
- */
 class Edit extends \Magento\Paypal\Controller\Express\AbstractExpress\Edit
 {
     /**

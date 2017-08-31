@@ -6,10 +6,6 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\Cart\Product\Composite\Cart;
 
-/**
- * Class \Magento\Customer\Controller\Adminhtml\Cart\Product\Composite\Cart\Update
- *
- */
 class Update extends \Magento\Customer\Controller\Adminhtml\Cart\Product\Composite\Cart
 {
     /**

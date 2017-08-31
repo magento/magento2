@@ -11,10 +11,6 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form;
 
-/**
- * Class \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Image
- *
- */
 class Image extends \Magento\Framework\Data\Form\Element\Image
 {
     /**

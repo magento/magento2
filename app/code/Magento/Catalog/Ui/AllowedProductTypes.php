@@ -23,7 +23,6 @@ class AllowedProductTypes
 
     /**
      * @param array $productTypes
-     * @since 101.0.0
      */
     public function __construct(array $productTypes = [])
     {

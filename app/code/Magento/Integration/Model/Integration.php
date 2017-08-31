@@ -26,6 +26,7 @@ namespace Magento\Integration\Model;
  * @method \string getUpdatedAt()
  * @method Integration setUpdatedAt(\string $createdAt)
  * @api
+ * @since 100.0.2
  */
 class Integration extends \Magento\Framework\Model\AbstractModel
 {
