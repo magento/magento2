@@ -78,14 +78,14 @@ class ConsumersRunner
      */
     public function run()
     {
-        $runByCron = $this->deploymentConfig->get('queue_consumer/cron_run', true);
+        $runByCron = $this->deploymentConfig->get('cron_consumers_runner/cron_run', true);
 
         if (!$runByCron) {
             return;
         }
 
-        $maxMessages = (int) $this->deploymentConfig->get('queue_consumer/max_messages', 10000);
-        $allowedConsumers = $this->deploymentConfig->get('queue_consumer/consumers', []);
+        $maxMessages = (int) $this->deploymentConfig->get('cron_consumers_runner/max_messages', 10000);
+        $allowedConsumers = $this->deploymentConfig->get('cron_consumers_runner/consumers', []);
         $php = $this->phpExecutableFinder->find() ?: 'php';
 
         foreach ($this->consumerConfig->getConsumers() as $consumer) {

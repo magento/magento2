@@ -79,9 +79,9 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
         $this->deploymentConfigMock->expects($this->once())
             ->method('get')
             ->willReturnMap([
-                ['queue_consumer/cron_run', true, false],
-                ['queue_consumer/max_messages', 10000, 10000],
-                ['queue_consumer/consumers', [], []],
+                ['cron_consumers_runner/cron_run', true, false],
+                ['cron_consumers_runner/max_messages', 10000, 10000],
+                ['cron_consumers_runner/consumers', [], []],
             ]);
 
         $this->consumerConfigMock->expects($this->never())
@@ -119,9 +119,9 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
         $this->deploymentConfigMock->expects($this->exactly(3))
             ->method('get')
             ->willReturnMap([
-                ['queue_consumer/cron_run', true, true],
-                ['queue_consumer/max_messages', 10000, $maxMessages],
-                ['queue_consumer/consumers', [], $allowedConsumers],
+                ['cron_consumers_runner/cron_run', true, true],
+                ['cron_consumers_runner/max_messages', 10000, $maxMessages],
+                ['cron_consumers_runner/consumers', [], $allowedConsumers],
             ]);
 
         /** @var ConsumerConfigInterface|MockObject $firstCunsumer */
