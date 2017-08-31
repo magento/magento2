@@ -9,12 +9,12 @@ namespace Magento\Inventory\Indexer;
  * Index Name builder. It is Facade for simplifying IndexName object creation
  * @api
  */
-class IndexNameBuilder
+class IndexNameBuilder  // TODO: \Magento\Framework\Api\AbstractSimpleObjectBuilder
 {
     /**
      * Index id parameter name
      */
-    const INDEX_ID = 'index_id';
+    /* TODO: private only 7.1 */ const INDEX_ID = 'indexId';
 
     /**
      * Dimensions parameter name

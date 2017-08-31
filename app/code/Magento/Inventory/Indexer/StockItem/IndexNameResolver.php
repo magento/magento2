@@ -45,7 +45,7 @@ class IndexNameResolver implements IndexNameResolverInterface
     {
         $tableName = $this->indexScopeResolver->resolve($indexName->getIndexId(), $indexName->getDimensions());
 
-        // Demetra phly phly
+        // TODO: Demetra phly phly
         if ($indexName->getAlias()->getValue() === Alias::ALIAS_REPLICA) {
             $tableName = $this->activeTableSwitcher->getAdditionalTableName($tableName);
         }

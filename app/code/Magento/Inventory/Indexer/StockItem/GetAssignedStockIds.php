@@ -34,7 +34,7 @@ class GetAssignedStockIds
      * @param array $sourceIds
      * @return int[] List of stock ids
      */
-    public function execute(array $sourceIds)
+    public function execute(array $sourceIds): array
     {
         $connection = $this->resourceConnection->getConnection();
         $select = $connection->select()->from(

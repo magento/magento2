@@ -34,7 +34,7 @@ class IndexDataProvider
      * @param array $sourceIds
      * @return \ArrayIterator
      */
-    public function getData(int $stockId, array $sourceIds = [])
+    public function getData(int $stockId, array $sourceIds = []): \ArrayIterator
     {
         $connection = $this->resourceConnection->getConnection();
         $sourceItemTable = $connection->getTableName(SourceItemResourceModel::TABLE_NAME_SOURCE_ITEM);

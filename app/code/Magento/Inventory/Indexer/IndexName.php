@@ -9,7 +9,7 @@ namespace Magento\Inventory\Indexer;
  * Index Name object
  * @api
  */
-class IndexName
+class IndexName // TODO: \Magento\Framework\Api\AbstractSimpleObject
 {
     /**
      * @var string

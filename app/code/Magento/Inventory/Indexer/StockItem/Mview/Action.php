@@ -39,7 +39,6 @@ class Action implements ActionInterface
      */
     public function execute($ids)
     {
-        /** @var \Magento\Framework\Indexer\IndexerInterface $indexer */
         $indexer = $this->indexerFactory->create()->load(StockItemIndexerInterface::INDEXER_ID);
         $indexer->reindexList($ids);
     }

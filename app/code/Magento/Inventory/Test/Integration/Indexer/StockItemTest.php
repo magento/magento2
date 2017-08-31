@@ -31,12 +31,11 @@ class StockItemTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoDbIsolation disabled
-     * @magentoDataFixture Magento/Inventory/_files/products.php
-     * @magentoDataFixture Magento/Inventory/_files/source.php
-     * @magentoDataFixture Magento/Inventory/_files/source_item.php
-     * @magentoDataFixture Magento/Inventory/_files/stock.php
-     * @magentoDataFixture Magento/Inventory/_files/stock_source_link.php
+     * @magentoDataFixture ../../../../app/code/Magento/Inventory/Test/_files/products.php
+     * @magentoDataFixture ../../../../app/code/Magento/Inventory/Test/_files/source.php
+     * @magentoDataFixture ../../../../app/code/Magento/Inventory/Test/_files/source_item.php
+     * @magentoDataFixture ../../../../app/code/Magento/Inventory/Test/_files/stock.php
+     * @magentoDataFixture ../../../../app/code/Magento/Inventory/Test/_files/stock_source_link.php
      */
     public function testIndexRow()
     {

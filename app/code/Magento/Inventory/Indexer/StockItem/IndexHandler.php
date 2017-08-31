@@ -61,6 +61,7 @@ class IndexHandler implements IndexHandlerInterface
     {
         $tableName = $this->indexNameResolver->resolveName($indexName);
 
+        // TODO: stock item object for constants
         $columns = ['sku', 'quantity', 'status', 'stock_id'];
         foreach ($this->batch->getItems($documents, $this->batchSize) as $batchDocuments) {
             $this->resourceConnection
