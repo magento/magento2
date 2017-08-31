@@ -259,7 +259,7 @@ By default, the percentage ratio between thread groups is as follows:
 
 ### Results Interpretation
 
-In order to build an aggregate report from the results of the `benchmark.kmx` scenario run, use the script `generate.php` in the folder `setup/performance-toolkit/aggregate-report`.
+In order to build an aggregate report from the results of the `benchmark.kmx` scenario run, use the script `generate-b2c.php` in the folder `setup/performance-toolkit/aggregate-report`.
 
 The script parses the JTL file and generates an aggregate report in CSV format. The report consists of the 4 sections separated by two empty lines:
 
@@ -281,7 +281,7 @@ After that, the information about memory usage for each request will be logged i
 
 To generate the aggregate report, run the following command from the Magento root directory:
 
-    php setup/performance-toolkit/aggregate-report/generate.php -j {path to folder with JTL file}/jmeter_report.jtl -m var/log/memory_usage.log -o aggregate_report.csv
+    php setup/performance-toolkit/aggregate-report/generate-b2c.php -j {path to folder with JTL file}/jmeter_report.jtl -m var/log/memory_usage.log -o aggregate_report.csv
 
 **Legacy Scenario**
 

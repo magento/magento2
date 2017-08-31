@@ -5,32 +5,41 @@
  */
 
 /**
-* @SuppressWarnings(PHPMD.CyclomaticComplexity)
-* @SuppressWarnings(PHPMD.NPathComplexity)
-*/
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+ * @SuppressWarnings(PHPMD.NPathComplexity)
+ */
 
-$usageMessage =
-    'Usage:' . PHP_EOL
-    . '   php generate.php -j jmeter_report.jtl -m memory_usage.log -o output_file.csv' . PHP_EOL
-    . PHP_EOL
-    . 'Parameters:' . PHP_EOL
-    . '   -j   - jmeter report file' . PHP_EOL
-    . '   -m   - memory usage report file (optional)' . PHP_EOL
-    . '   -o   - output report file' . PHP_EOL
-    . '   -f   - include failed requests in report (optional)' . PHP_EOL;
+/**
+ * Generate aggregate report in CSV format based on JTL file.
+ *
+ * @param array $mapping
+ * @param callable $generateSummary
+ * @param callable $rowCallback [optional]
+ * @return void
+ */
+function generateReport(array $mapping, callable $generateSummary, callable $rowCallback = null)
+{
+    $usageMessage =
+        'Usage:' . PHP_EOL
+        . '   php generate.php -j jmeter_report.jtl -m memory_usage.log -o output_file.csv' . PHP_EOL
+        . PHP_EOL
+        . 'Parameters:' . PHP_EOL
+        . '   -j   - jmeter report file' . PHP_EOL
+        . '   -m   - memory usage report file (optional)' . PHP_EOL
+        . '   -o   - output report file' . PHP_EOL
+        . '   -f   - include failed requests in report (optional)' . PHP_EOL;
 
-$args = getopt('j:m:o:f');
-if (empty($args['j']) || empty($args['o'])) {
-    echo $usageMessage;
-    exit(0);
+    $args = getopt('j:m:o:f');
+    if (empty($args['j']) || empty($args['o'])) {
+        echo $usageMessage;
+        exit(0);
+    }
+
+    list($jmeterData, $executionTime) = parseJmeterReport($args['j'], isset($args['f']));
+    $memoryUsageData = !empty($args['m']) ? parseMemoryUsageLog($args['m']) : [];
+    $aggregatedResult = prepareAggregatedResult($jmeterData, $memoryUsageData, $mapping);
+    parseReportAndWriteToCsv($aggregatedResult, $executionTime, $args['o'], $generateSummary, $rowCallback);
 }
-
-require_once("b2c_mappings.php");
-
-list($jmeterData, $executionTime) = parseJmeterReport($args['j'], isset($args['f']));
-$memoryUsageData = !empty($args['m']) ? parseMemoryUsageLog($args['m']) : [];
-$aggregatedResult = prepareAggregatedResult($jmeterData, $memoryUsageData, $mapping);
-parseReportAndWriteToCsv($aggregatedResult, $executionTime, $args['o']);
 
 /**
  * Read memory usage log into array.
@@ -116,6 +125,7 @@ function prepareAggregatedResult(array $jmeterData, array $memoryUsageData, arra
         $aggregatedResult[$key]['label'] = $mapping['label'];
         $aggregatedResult[$key]['scenario'] = $mapping['scenario'] ?? 'Total';
         $aggregatedResult[$key]['is_service_url'] = $mapping['is_service_url'] ?? false;
+        $aggregatedResult[$key]['is_requisition'] = $mapping['is_requisition'] ?? false;
         $aggregatedResult[$key]['is_storefront'] = $mapping['is_storefront'] ?? false;
         $aggregatedResult[$key]['time'] = [];
         $aggregatedResult[$key]['labels'] = [];
@@ -161,10 +171,17 @@ function prepareAggregatedResult(array $jmeterData, array $memoryUsageData, arra
  * @param array $aggregatedResult
  * @param int $executionTime
  * @param string $outputFile Path to the output report
+ * @param callable $generateSummary
+ * @param callable $rowCallback [optional]
  * @return void
  */
-function parseReportAndWriteToCsv(array $aggregatedResult, $executionTime, $outputFile)
-{
+function parseReportAndWriteToCsv(
+    array $aggregatedResult,
+    $executionTime,
+    $outputFile,
+    callable $generateSummary,
+    callable $rowCallback = null
+) {
     $headersArray = [
         'Scenario',
         'Label',
@@ -179,23 +196,7 @@ function parseReportAndWriteToCsv(array $aggregatedResult, $executionTime, $outp
         'Memory Usage, Mb'
     ];
     $fp = fopen($outputFile, 'w');
-
-    $pageViews = 0;
-    $checkoutCount = 0;
-    foreach ($aggregatedResult as $row) {
-        if ($row['is_storefront']) {
-            $pageViews += count($row['time']);
-        }
-        if (strpos($row['label'], 'Checkout Success Page') !== false) {
-            $checkoutCount += count($row['time']);
-        }
-    }
-    fputcsv($fp, ['Checkouts Per Hour:', round($checkoutCount / $executionTime * 3600000, 2)]);
-    fputcsv($fp, ['Page Views Per Hour:', round($pageViews / $executionTime * 3600000, 2)]);
-    fputcsv($fp, ['Test Duration, s:', round($executionTime / 1000)]);
-    fputcsv($fp, ['']);
-    fputcsv($fp, ['']);
-    fputcsv($fp, $headersArray);
+    $generateSummary($fp, $aggregatedResult, $headersArray, $executionTime);
     foreach ($aggregatedResult as $row) {
         if (count($row['time']) && !$row['is_service_url']) {
             sort($row['time']);
@@ -212,6 +213,9 @@ function parseReportAndWriteToCsv(array $aggregatedResult, $executionTime, $outp
                 round(count($row['time']) / $executionTime * 3600000, 2),
                 $row['memory']
             ];
+            if ($rowCallback) {
+                $rowCallback($row, $ar);
+            }
             fputcsv($fp, $ar);
         }
     }
@@ -233,6 +237,9 @@ function parseReportAndWriteToCsv(array $aggregatedResult, $executionTime, $outp
                 round(count($row['time']) / $executionTime * 3600000, 2),
                 $row['memory']
             ];
+            if ($rowCallback) {
+                $rowCallback($row, $ar);
+            }
             fputcsv($fp, $ar);
         }
     }
@@ -241,6 +248,9 @@ function parseReportAndWriteToCsv(array $aggregatedResult, $executionTime, $outp
     foreach ($aggregatedResult as $row) {
         if (count($row['time']) == 0) {
             $ar = [$row['scenario'], $row['label'], '-', '-', '-', '-', '-', '-', '-', 0, '-'];
+            if ($rowCallback) {
+                $rowCallback($row, $ar);
+            }
             fputcsv($fp, $ar);
         }
     }
