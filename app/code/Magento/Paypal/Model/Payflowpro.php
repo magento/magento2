@@ -28,6 +28,8 @@ use Magento\Store\Model\ScopeInterface;
  */
 class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInterface
 {
+    use Formatter;
+
     /**
      * Transaction action codes
      */
@@ -83,10 +85,6 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
     const RESPONSE_CODE_VOID_ERROR = 108;
 
     const PNREF = 'pnref';
-
-    use Formatter;
-
-    /**#@-*/
 
     /**#@-*/
     protected $_responseParamsMappings = [
@@ -417,7 +415,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
     {
         if ($payment->getAdditionalInformation(self::PNREF)) {
             $request = $this->buildBasicRequest();
-            $request->setAmt(round($amount, 2));
+            $request->setAmt($this->formatPrice($amount));
             $request->setTrxtype(self::TRXTYPE_SALE);
             $request->setOrigid($payment->getAdditionalInformation(self::PNREF));
             $payment->unsAdditionalInformation(self::PNREF);
