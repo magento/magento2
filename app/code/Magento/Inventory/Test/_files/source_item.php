@@ -37,62 +37,52 @@ $sourceList = array_values($sourceRepository->getList($searchCriteria)->getItems
 $sourcesItemData = [
     [
         SourceItemInterface::SOURCE_ID => 1,
-        SourceItemInterface::SKU => 'inventory_1',
+        SourceItemInterface::SKU => 'SKU-1',
         SourceItemInterface::QUANTITY => 10,
         SourceItemInterface::STATUS => SourceItemInterface::STATUS_IN_STOCK
     ],
     [
         SourceItemInterface::SOURCE_ID => 2,
-        SourceItemInterface::SKU => 'inventory_1',
+        SourceItemInterface::SKU => 'SKU-1',
         SourceItemInterface::QUANTITY => 20,
         SourceItemInterface::STATUS => SourceItemInterface::STATUS_IN_STOCK
     ],
     [
         SourceItemInterface::SOURCE_ID => 3,
-        SourceItemInterface::SKU => 'inventory_1',
+        SourceItemInterface::SKU => 'SKU-1',
         SourceItemInterface::QUANTITY => 30,
         SourceItemInterface::STATUS => SourceItemInterface::STATUS_IN_STOCK
     ],
     [
         SourceItemInterface::SOURCE_ID => 4,
-        SourceItemInterface::SKU => 'inventory_1',
-        SourceItemInterface::QUANTITY => 10,
-        SourceItemInterface::STATUS => SourceItemInterface::STATUS_IN_STOCK
-    ], [
-        SourceItemInterface::SOURCE_ID => 5,
-        SourceItemInterface::SKU => 'inventory_1',
+        SourceItemInterface::SKU => 'SKU-1',
         SourceItemInterface::QUANTITY => 10,
         SourceItemInterface::STATUS => SourceItemInterface::STATUS_IN_STOCK
     ],
     [
         SourceItemInterface::SOURCE_ID => 1,
-        SourceItemInterface::SKU => 'inventory_1',
+        SourceItemInterface::SKU => 'SKU-1',
         SourceItemInterface::QUANTITY => 10,
         SourceItemInterface::STATUS => SourceItemInterface::STATUS_IN_STOCK
     ],
     [
         SourceItemInterface::SOURCE_ID => 2,
-        SourceItemInterface::SKU => 'inventory_2',
+        SourceItemInterface::SKU => 'SKU-2',
         SourceItemInterface::QUANTITY => 30,
         SourceItemInterface::STATUS => SourceItemInterface::STATUS_IN_STOCK
     ],
     [
         SourceItemInterface::SOURCE_ID => 3,
-        SourceItemInterface::SKU => 'inventory_2',
+        SourceItemInterface::SKU => 'SKU-2',
         SourceItemInterface::QUANTITY => 50,
         SourceItemInterface::STATUS => SourceItemInterface::STATUS_IN_STOCK
     ],
     [
         SourceItemInterface::SOURCE_ID => 4,
-        SourceItemInterface::SKU => 'inventory_2',
+        SourceItemInterface::SKU => 'SKU-2',
         SourceItemInterface::QUANTITY => 10,
         SourceItemInterface::STATUS => SourceItemInterface::STATUS_IN_STOCK
-    ], [
-        SourceItemInterface::SOURCE_ID => 5,
-        SourceItemInterface::SKU => 'inventory_2',
-        SourceItemInterface::QUANTITY => 10,
-        SourceItemInterface::STATUS => SourceItemInterface::STATUS_IN_STOCK
-    ]
+    ],
 ];
 
 /** @var DataObjectHelper $dataObjectHelper */
