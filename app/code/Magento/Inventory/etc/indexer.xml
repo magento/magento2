@@ -6,8 +6,8 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Indexer/etc/indexer.xsd">
-    <indexer id="inventory_stock_item" view_id="inventory_stock_item" class="Magento\Inventory\Indexer\StockItem">
+    <indexer id="inventory_stock_item" view_id="inventory_stock_item" class="Magento\Inventory\Indexer\StockItem\StockItem">
         <title translate="true">StockItem</title>
-        <description translate="true">Rebuild msi Stock item index</description>
+        <description translate="true">Rebuild Stock Item index (MSI)</description>
     </indexer>
 </config>
