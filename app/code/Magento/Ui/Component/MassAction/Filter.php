@@ -223,7 +223,9 @@ class Filter
             // Use collection's getAllIds for optimization purposes.
             $idsArray = $this->getDataProvider()->getAllIds();
         } else {
-            $searchResult = $this->getDataProvider()->getSearchResult();
+            $dataProvider = $this->getDataProvider();
+            $dataProvider->setLimit(0, false);
+            $searchResult = $dataProvider->getSearchResult();
             // Use compatible search api getItems when searchResult is not a collection.
             foreach ($searchResult->getItems() as $item) {
                 /** @var $item \Magento\Framework\Api\Search\DocumentInterface */
