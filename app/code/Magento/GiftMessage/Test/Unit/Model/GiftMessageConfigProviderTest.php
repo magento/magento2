@@ -98,7 +98,6 @@ class GiftMessageConfigProviderTest extends \PHPUnit\Framework\TestCase
         $storeCode = 4;
         $messageDataMock = ['from' => 'John Doe', 'to' => 'Jane Doe'];
         $formKey = 'ABCDEFGHIJKLMNOP';
-        $isFrontUrlSecure = true;
         $baseUrl = 'https://magento.com/';
         $quoteItemMock = $this->createMock(\Magento\Quote\Model\Quote\Item::class);
         $productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
