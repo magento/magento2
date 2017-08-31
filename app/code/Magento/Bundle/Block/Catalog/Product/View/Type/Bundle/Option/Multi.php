@@ -9,6 +9,7 @@ namespace Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option;
  * Bundle option multi select type renderer
  *
  * @api
+ * @since 100.0.2
  */
 class Multi extends \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option
 {

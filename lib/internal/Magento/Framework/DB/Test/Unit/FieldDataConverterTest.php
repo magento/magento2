@@ -14,7 +14,7 @@ use Magento\Framework\DB\DataConverter\DataConverterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\DB\Select\QueryModifierInterface;
 
-class FieldDataConverterTest extends \PHPUnit_Framework_TestCase
+class FieldDataConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -59,11 +59,11 @@ class FieldDataConverterTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
-        $this->connectionMock = $this->getMock(AdapterInterface::class);
-        $this->queryGeneratorMock = $this->getMock(Generator::class, [], [], '', false);
-        $this->dataConverterMock = $this->getMock(DataConverterInterface::class);
-        $this->selectMock = $this->getMock(Select::class, [], [], '', false);
-        $this->queryModifierMock = $this->getMock(QueryModifierInterface::class);
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
+        $this->queryGeneratorMock = $this->createMock(Generator::class);
+        $this->dataConverterMock = $this->createMock(DataConverterInterface::class);
+        $this->selectMock = $this->createMock(Select::class);
+        $this->queryModifierMock = $this->createMock(QueryModifierInterface::class);
         $this->selectFactoryMock = $this->getMockBuilder(SelectFactory::class)
             ->disableOriginalConstructor()
             ->getMock();

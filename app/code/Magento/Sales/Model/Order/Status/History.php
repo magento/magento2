@@ -13,9 +13,8 @@ use Magento\Sales\Model\AbstractModel;
  * Order status history comments
  *
  * @api
- * @method \Magento\Sales\Model\ResourceModel\Order\Status\History _getResource()
- * @method \Magento\Sales\Model\ResourceModel\Order\Status\History getResource()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class History extends AbstractModel implements OrderStatusHistoryInterface
 {

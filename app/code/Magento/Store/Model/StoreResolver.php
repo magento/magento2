@@ -180,7 +180,7 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
      * Get serializer
      *
      * @return \Magento\Framework\Serialize\SerializerInterface
-     * @deprecated
+     * @deprecated 100.2.0
      */
     private function getSerializer()
     {

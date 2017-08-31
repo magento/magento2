@@ -5,7 +5,7 @@
  */
 namespace Magento\Indexer\Test\Unit\Block\Backend\Grid\Column\Renderer;
 
-class ScheduledTest extends \PHPUnit_Framework_TestCase
+class ScheduledTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param bool $rowValue

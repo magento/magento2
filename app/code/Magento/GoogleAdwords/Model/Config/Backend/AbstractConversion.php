@@ -9,6 +9,8 @@ namespace Magento\GoogleAdwords\Model\Config\Backend;
 
 /**
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @api
+ * @since 100.0.2
  */
 abstract class AbstractConversion extends \Magento\Framework\App\Config\Value
 {

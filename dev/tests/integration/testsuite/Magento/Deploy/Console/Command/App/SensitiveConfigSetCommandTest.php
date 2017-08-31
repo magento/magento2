@@ -23,7 +23,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SensitiveConfigSetCommandTest extends \PHPUnit_Framework_TestCase
+class SensitiveConfigSetCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerInterface
@@ -90,12 +90,12 @@ class SensitiveConfigSetCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecute($scope, $scopeCode, callable $assertCallback)
     {
-        $outputMock = $this->getMock(OutputInterface::class);
+        $outputMock = $this->createMock(OutputInterface::class);
         $outputMock->expects($this->at(0))
             ->method('writeln')
             ->with('<info>Configuration value saved in app/etc/env.php</info>');
 
-        $inputMock = $this->getMock(InputInterface::class);
+        $inputMock = $this->createMock(InputInterface::class);
         $inputMock->expects($this->exactly(2))
             ->method('getArgument')
             ->withConsecutive(
@@ -166,8 +166,8 @@ class SensitiveConfigSetCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteInteractive($scope, $scopeCode, callable $assertCallback)
     {
-        $inputMock = $this->getMock(InputInterface::class);
-        $outputMock = $this->getMock(OutputInterface::class);
+        $inputMock = $this->createMock(InputInterface::class);
+        $outputMock = $this->createMock(OutputInterface::class);
         $outputMock->expects($this->at(0))
             ->method('writeln')
             ->with('<info>Please set configuration values or skip them by pressing [Enter]:</info>');
@@ -187,7 +187,7 @@ class SensitiveConfigSetCommandTest extends \PHPUnit_Framework_TestCase
                 true
             );
 
-        $questionHelperMock = $this->getMock(QuestionHelper::class);
+        $questionHelperMock = $this->createMock(QuestionHelper::class);
         $questionHelperMock->expects($this->exactly(3))
             ->method('ask')
             ->willReturn('sensitiveValue');

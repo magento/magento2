@@ -31,9 +31,9 @@ abstract class AbstractSchemaGenerator
      */
     protected $customAttributeTypeLocator;
 
-     /**
-      * @var ServiceMetadata
-      */
+    /**
+     * @var ServiceMetadata
+     */
     protected $serviceMetadata;
 
     /**
