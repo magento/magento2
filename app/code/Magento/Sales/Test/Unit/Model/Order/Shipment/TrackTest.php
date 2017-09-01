@@ -55,6 +55,15 @@ class TrackTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('test', $this->_model->getTrackNumber());
     }
 
+    public function testSetGetUrl()
+    {
+        $this->assertNull($this->_model->getTrackUrl());
+
+        $this->_model->setTrackUrl('http://www.magento.com/track/test');
+
+        $this->assertEquals('http://www.magento.com/track/test', $this->_model->getTrackUrl());
+    }
+
     /**
      * @dataProvider isCustomDataProvider
      * @param bool $expectedResult
