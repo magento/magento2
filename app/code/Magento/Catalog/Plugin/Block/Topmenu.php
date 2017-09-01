@@ -98,6 +98,7 @@ class Topmenu
                 $parentCategoryNode->getTree(),
                 $parentCategoryNode
             );
+            $categoryNode->setData('is_parent_active', $category->getParentId() == $categoryParentId);
             $parentCategoryNode->addChild($categoryNode);
 
             $mapping[$category->getId()] = $categoryNode; //add node in stack
