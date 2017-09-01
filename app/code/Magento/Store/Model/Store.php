@@ -643,6 +643,8 @@ class Store extends AbstractExtensibleModel implements
 
             if (false !== strpos($url, self::BASE_URL_PLACEHOLDER)) {
                 $url = str_replace(self::BASE_URL_PLACEHOLDER, $this->_request->getDistroBaseUrl(), $url);
+            } elseif (rtrim($url, '/') . '/' === 'http://localhost/') {
+                $url = $this->_request->getDistroBaseUrl();
             }
 
             $this->_baseUrlCache[$cacheKey] = $this->getUrlModifier()->execute(
