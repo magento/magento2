@@ -18,6 +18,7 @@ use Magento\Framework\View\Asset\ContentProcessorInterface;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Filter extends \Magento\Framework\Filter\Template
 {
@@ -310,7 +311,7 @@ class Filter extends \Magento\Framework\Filter\Template
     }
 
     /**
-     * @deprecated
+     * @deprecated 100.1.2
      * @return Css\Processor
      */
     private function getCssProcessor()
@@ -322,7 +323,7 @@ class Filter extends \Magento\Framework\Filter\Template
     }
 
     /**
-     * @deprecated
+     * @deprecated 100.1.2
      * @param string $dirType
      * @return ReadInterface
      */

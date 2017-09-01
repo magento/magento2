@@ -9,6 +9,7 @@ namespace Magento\Customer\Api;
 /**
  * Interface for getting attributes metadata. Note that this interface should not be used directly, use its children.
  * @api
+ * @since 100.0.2
  */
 interface MetadataInterface extends \Magento\Framework\Api\MetadataServiceInterface
 {

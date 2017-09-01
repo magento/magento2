@@ -7,7 +7,7 @@ namespace Magento\Framework\Composer;
 
 use Magento\Composer\MagentoComposerApplication;
 
-class RemoveTest extends \PHPUnit_Framework_TestCase
+class RemoveTest extends \PHPUnit\Framework\TestCase
 {
     public function testRemove()
     {

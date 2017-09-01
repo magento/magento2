@@ -8,7 +8,7 @@ namespace Magento\Customer\Test\Unit\Model\Plugin;
 use Magento\Customer\Model\Customer\NotificationStorage;
 use Magento\Customer\Model\Plugin\CustomerNotification;
 
-class CustomerNotificationTest extends \PHPUnit_Framework_TestCase
+class CustomerNotificationTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject */
     protected $session;

@@ -60,6 +60,16 @@ class Links extends Block
     }
 
     /**
+     * Open customer registration
+     *
+     * @return void
+     */
+    public function openCustomerCreateLink()
+    {
+        $this->openLink('Create an Account');
+    }
+
+    /**
      * Open link by its title.
      *
      * @param string $linkTitle

@@ -22,6 +22,7 @@ use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\RateQueryFacto
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api
+ * @since 100.0.2
  */
 class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -91,21 +92,25 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 100.1.0
      */
     protected $coreConfig;
 
     /**
      * @var \Psr\Log\LoggerInterface
+     * @since 100.1.0
      */
     protected $logger;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @since 100.1.0
      */
     protected $storeManager;
 
     /**
      * @var \Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate
+     * @since 100.1.0
      */
     protected $carrierTablerate;
 
@@ -113,6 +118,7 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Filesystem instance
      *
      * @var \Magento\Framework\Filesystem
+     * @since 100.1.0
      */
     protected $filesystem;
 
@@ -297,6 +303,7 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * @param \Magento\Framework\DataObject $object
      * @return mixed|string
+     * @since 100.1.0
      */
     public function getConditionName(\Magento\Framework\DataObject $object)
     {

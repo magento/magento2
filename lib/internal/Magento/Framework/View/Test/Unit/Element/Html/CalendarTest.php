@@ -5,49 +5,92 @@
  */
 namespace Magento\Framework\View\Test\Unit\Element\Html;
 
-class CalendarTest extends \PHPUnit_Framework_TestCase
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Element\Html\Calendar;
+use Magento\Framework\View\Element\Template\Context;
+use \PHPUnit_Framework_MockObject_MockObject as MockObject;
+
+/**
+ * @see Calendar
+ */
+class CalendarTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @see MAGETWO-60828
+     * @see Calendar::_toHtml
+     *
+     * @param string $locale
+     * @dataProvider localesDataProvider
      */
-    protected $objectManagerHelper;
-
-    /** @var \Magento\Framework\View\Element\Html\Calendar */
-    protected $block;
-
-    /** @var \Magento\Framework\View\Element\Template\Context */
-    protected $context;
-
-    /** @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $localeDate;
-
-    protected function setUp()
+    public function testToHtmlWithDifferentLocales($locale)
     {
-        $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->localeDate = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class)
-            ->getMock();
-
-        /** @var  \Magento\Framework\View\Element\Template\Context $context */
-        $this->context = $this->objectManagerHelper->getObject(
-            \Magento\Framework\View\Element\Template\Context::class,
+        $calendarBlock = (new ObjectManager($this))->getObject(
+            Calendar::class,
             [
-                'localeDate' => $this->localeDate,
+                'localeResolver' => $this->getLocalResolver($locale)
             ]
         );
 
-        /** @var \Magento\Framework\View\Element\Html\Links $block */
-        $this->block = $this->objectManagerHelper->getObject(
-            \Magento\Framework\View\Element\Html\Calendar::class,
-            ['context' => $this->context]
+        $calendarBlock->toHtml();
+    }
+
+    /**
+     * @return array
+     */
+    public function localesDataProvider()
+    {
+        return [
+            ['en_US'],
+            ['ja_JP'],
+            ['ko_KR'],
+        ];
+    }
+
+    /**
+     * @see Calendar::getYearRange
+     */
+    public function testGetYearRange()
+    {
+        $calendarBlock = (new ObjectManager($this))->getObject(
+            Calendar::class,
+            [
+                'context' => $this->getContext()
+            ]
+        );
+
+        $testCurrentYear = (new \DateTime())->format('Y');
+        $this->assertEquals(
+            (int) $testCurrentYear - 100 . ':' . ($testCurrentYear + 100),
+            $calendarBlock->getYearRange()
         );
     }
 
     /**
-     * @test
+     * @param string $locale
+     * @return ResolverInterface|MockObject
      */
-    public function testGetYearRange()
+    private function getLocalResolver($locale)
     {
-        $testCurrentYear = (new \DateTime())->format('Y');
-        $this->assertEquals((int)$testCurrentYear - 100 . ':' . ($testCurrentYear + 100), $this->block->getYearRange());
+        $localResolver = $this->getMockBuilder(ResolverInterface::class)
+            ->getMockForAbstractClass();
+        $localResolver->method('getLocale')->willReturn($locale);
+
+        return $localResolver;
+    }
+
+    /**
+     * @return Context|Object
+     */
+    private function getContext()
+    {
+        $localeDate = $this->getMockBuilder(TimezoneInterface::class)
+            ->getMockForAbstractClass();
+
+        return (new ObjectManager($this))->getObject(
+            Context::class,
+            ['localeDate' => $localeDate]
+        );
     }
 }

@@ -21,7 +21,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
+class FinalPriceBoxTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ProductInterface

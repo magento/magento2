@@ -9,7 +9,7 @@
  */
 namespace Magento\Framework\Test\Unit;
 
-class DataObjectTest extends \PHPUnit_Framework_TestCase
+class DataObjectTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\DataObject
@@ -160,7 +160,7 @@ string',
      */
     public function testSetGetDataUsingMethod()
     {
-        $mock = $this->getMock(\Magento\Framework\DataObject::class, ['setTestData', 'getTestData']);
+        $mock = $this->createPartialMock(\Magento\Framework\DataObject::class, ['setTestData', 'getTestData']);
         $mock->expects($this->once())->method('setTestData')->with($this->equalTo('data'));
         $mock->expects($this->once())->method('getTestData');
 

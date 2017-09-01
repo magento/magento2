@@ -13,7 +13,7 @@ use Magento\Framework\App\Utility\Files;
  * Ensure that all interfaces inherited from \Magento\Framework\Api\ExtensibleDataInterface
  * override getExtensionAttributes() method and have correct return type specified.
  */
-class ExtensibleInterfacesTest extends \PHPUnit_Framework_TestCase
+class ExtensibleInterfacesTest extends \PHPUnit\Framework\TestCase
 {
     const EXTENSIBLE_DATA_INTERFACE = \Magento\Framework\Api\ExtensibleDataInterface::class;
 

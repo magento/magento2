@@ -7,6 +7,6 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<?php if ($block->getRealOrderId()) : ?><p><?php /* @escapeNotVerified */ echo __('Order #') . $block->getRealOrderId() ?></p><?php endif ?>
-<?php if ($error = $block->getErrorMessage()) : ?><p><?php /* @escapeNotVerified */ echo $error ?></p><?php endif ?>
-<p><?php /* @escapeNotVerified */ echo __('Click <a href="%1">here</a> to continue shopping.', $block->escapeUrl($block->getContinueShoppingUrl())) ?></p>
+<?php if ($block->getRealOrderId()) : ?><p><?= /* @escapeNotVerified */ __('Order #') . $block->getRealOrderId() ?></p><?php endif ?>
+<?php if ($error = $block->getErrorMessage()) : ?><p><?= /* @escapeNotVerified */ $error ?></p><?php endif ?>
+<p><?= /* @escapeNotVerified */ __('Click <a href="%1">here</a> to continue shopping.', $block->escapeUrl($block->getContinueShoppingUrl())) ?></p>

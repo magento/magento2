@@ -70,4 +70,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Customer\Block\CustomerData">
+        <arguments>
+            <argument name="expirableSectionNames" xsi:type="array">
+                <item name="cart" xsi:type="string">cart</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

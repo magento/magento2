@@ -9,6 +9,7 @@ namespace Magento\ImportExport\Model\ResourceModel\Import;
  * ImportExport import data resource model
  *
  * @api
+ * @since 100.0.2
  */
 class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implements \IteratorAggregate
 {

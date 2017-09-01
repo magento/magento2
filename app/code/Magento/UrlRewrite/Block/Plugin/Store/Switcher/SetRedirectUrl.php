@@ -14,16 +14,24 @@ use Magento\Framework\App\ActionInterface;
 
 class SetRedirectUrl
 {
-    /** @var UrlHelper */
+    /**
+     * @var \Magento\Framework\Url\Helper\Data
+     */
     private $urlHelper;
 
-    /** @var UrlInterface */
+    /**
+     * @var \Magento\Framework\UrlInterface
+     */
     private $urlBuilder;
 
-    /** @var UrlFinderInterface */
+    /**
+     * @var \Magento\UrlRewrite\Model\UrlFinderInterface
+     */
     private $urlFinder;
 
-    /** @var RequestInterface */
+    /**
+     * @var \Magento\Framework\App\RequestInterface
+     */
     private $request;
 
     /**
@@ -64,7 +72,7 @@ class SetRedirectUrl
         ]);
         if ($urlRewrite) {
             $data[ActionInterface::PARAM_NAME_URL_ENCODED] = $this->urlHelper->getEncodedUrl(
-                $this->trimSlashInPath($this->urlBuilder->getUrl($urlRewrite->getRequestPath()))
+                $this->trimSlashInPath($this->urlBuilder->getUrl($urlRewrite->getRequestPath(), ['_scope' => $store]))
             );
         }
         return [$store, $data];

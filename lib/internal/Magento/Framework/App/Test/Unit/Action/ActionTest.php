@@ -10,7 +10,7 @@ use \Magento\Framework\App\Action\Action;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class ActionTest extends \PHPUnit_Framework_TestCase
+class ActionTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\App\Test\Unit\Action\ActionFake */
     protected $action;
@@ -82,27 +82,15 @@ class ActionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_eventManagerMock = $this->getMock(\Magento\Framework\Event\ManagerInterface::class, [], [], '', false);
-        $this->_actionFlagMock = $this->getMock(\Magento\Framework\App\ActionFlag::class, [], [], '', false);
-        $this->_redirectMock = $this->getMock(
-            \Magento\Framework\App\Response\RedirectInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->_eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
+        $this->_actionFlagMock = $this->createMock(\Magento\Framework\App\ActionFlag::class);
+        $this->_redirectMock = $this->createMock(\Magento\Framework\App\Response\RedirectInterface::class);
         $this->_requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()->getMock();
-        $this->_responseMock = $this->getMock(\Magento\Framework\App\ResponseInterface::class, [], [], '', false);
+        $this->_responseMock = $this->createMock(\Magento\Framework\App\ResponseInterface::class);
 
-        $this->pageConfigMock = $this->getMock(
-            \Magento\Framework\View\Page\Config::class,
-            ['getConfig'],
-            [],
-            '',
-            false
-        );
-        $this->viewMock = $this->getMock(\Magento\Framework\App\ViewInterface::class);
+        $this->pageConfigMock = $this->createPartialMock(\Magento\Framework\View\Page\Config::class, ['getConfig']);
+        $this->viewMock = $this->createMock(\Magento\Framework\App\ViewInterface::class);
         $this->viewMock->expects($this->any())->method('getPage')->will($this->returnValue($this->pageConfigMock));
         $this->pageConfigMock->expects($this->any())->method('getConfig')->will($this->returnValue(1));
 

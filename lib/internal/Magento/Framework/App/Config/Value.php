@@ -8,7 +8,6 @@ namespace Magento\Framework\App\Config;
 /**
  * Config data model
  *
- * @method \Magento\Framework\Model\ResourceModel\Db\AbstractDb getResource()
  * @method string getScope()
  * @method \Magento\Framework\App\Config\ValueInterface setScope(string $value)
  * @method int getScopeId()
