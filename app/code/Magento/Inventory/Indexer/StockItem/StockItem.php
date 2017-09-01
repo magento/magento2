@@ -6,13 +6,11 @@
 namespace Magento\Inventory\Indexer\StockItem;
 
 use Magento\Inventory\Indexer\IndexStructureInterface;
-use Magento\Inventory\Indexer\{
-    Alias,
-    IndexHandlerInterface,
-    IndexNameBuilder,
-    IndexTableSwitcherInterface,
-    StockItemIndexerInterface
-};
+use Magento\Inventory\Indexer\Alias;
+use Magento\Inventory\Indexer\IndexHandlerInterface;
+use Magento\Inventory\Indexer\IndexNameBuilder;
+use Magento\Inventory\Indexer\IndexTableSwitcherInterface;
+use Magento\Inventory\Indexer\StockItemIndexerInterface;
 
 /**
  * @inheritdoc

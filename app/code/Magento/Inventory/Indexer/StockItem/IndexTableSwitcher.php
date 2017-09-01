@@ -7,11 +7,9 @@ namespace Magento\Inventory\Indexer\StockItem;
 
 use Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Inventory\Indexer\{
-    IndexName,
-    IndexNameResolverInterface,
-    IndexTableSwitcherInterface
-};
+use Magento\Inventory\Indexer\IndexName;
+use Magento\Inventory\Indexer\IndexNameResolverInterface;
+use Magento\Inventory\Indexer\IndexTableSwitcherInterface;
 
 /**
  * @inheritdoc
