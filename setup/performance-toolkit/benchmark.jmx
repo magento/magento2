@@ -14,6 +14,11 @@
       <stringProp name="TestPlan.user_define_classpath"></stringProp>
       <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
         <collectionProp name="Arguments.arguments">
+          <elementProp name="request_protocol" elementType="Argument">
+            <stringProp name="Argument.name">request_protocol</stringProp>
+            <stringProp name="Argument.value">${__P(request_protocol,http)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
           <elementProp name="abandonedCartByGuest" elementType="Argument">
             <stringProp name="Argument.name">abandonedCartByGuest</stringProp>
             <stringProp name="Argument.value">${__P(abandonedCartByGuest,0)}</stringProp>
@@ -51,7 +56,7 @@
           </elementProp>
           <elementProp name="admin_path" elementType="Argument">
             <stringProp name="Argument.name">admin_path</stringProp>
-            <stringProp name="Argument.value">${__P(admin_path,admin)}</stringProp>
+            <stringProp name="Argument.value">${__P(admin_path,backend)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="admin_user" elementType="Argument">
@@ -421,7 +426,7 @@
           </elementProp>
           <elementProp name="customer_checkout_percent" elementType="Argument">
             <stringProp name="Argument.name">customer_checkout_percent</stringProp>
-            <stringProp name="Argument.value">${__P(customer_checkout_percent,4)}</stringProp>
+            <stringProp name="Argument.value">${__P(customer_checkout_percent,100)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="customer_limit" elementType="Argument">
@@ -451,7 +456,7 @@
           </elementProp>
           <elementProp name="guest_checkout_percent" elementType="Argument">
             <stringProp name="Argument.name">guest_checkout_percent</stringProp>
-            <stringProp name="Argument.value">${__P(guest_checkout_percent,4)}</stringProp>
+            <stringProp name="Argument.value">${__P(guest_checkout_percent,100)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="host" elementType="Argument">
@@ -636,12 +641,12 @@
           </elementProp>
           <elementProp name="view_catalog_percent" elementType="Argument">
             <stringProp name="Argument.name">view_catalog_percent</stringProp>
-            <stringProp name="Argument.value">${__P(view_catalog_percent,62)}</stringProp>
+            <stringProp name="Argument.value">${__P(view_catalog_percent,100)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="view_product_add_to_cart_percent" elementType="Argument">
             <stringProp name="Argument.name">view_product_add_to_cart_percent</stringProp>
-            <stringProp name="Argument.value">${__P(view_product_add_to_cart_percent,30)}</stringProp>
+            <stringProp name="Argument.value">${__P(view_product_add_to_cart_percent,100)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="website_id" elementType="Argument">
@@ -676,14 +681,14 @@
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol">http</stringProp>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding">utf-8</stringProp>
       <stringProp name="HTTPSampler.path"/>
       <stringProp name="HTTPSampler.implementation">Java</stringProp>
       <stringProp name="HTTPSampler.concurrentPool">4</stringProp>
     </ConfigTestElement>
     <hashTree/>
-  
+
     <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
       <collectionProp name="HeaderManager.headers">
         <elementProp name="Accept-Language" elementType="Header">
@@ -705,7 +710,7 @@
       </collectionProp>
     </HeaderManager>
     <hashTree/>
-  
+
     <CookieManager guiclass="CookiePanel" testclass="CookieManager" testname="HTTP Cookie Manager" enabled="true">
       <collectionProp name="CookieManager.cookies">
         <elementProp name="product_list_limit" elementType="Cookie" testname="product_list_limit">
@@ -721,7 +726,7 @@
       <boolProp name="CookieManager.clearEachIteration">true</boolProp>
     </CookieManager>
     <hashTree/>
-  
+
     <SetupThreadGroup guiclass="SetupThreadGroupGui" testclass="SetupThreadGroup" testname="setUp Thread Group" enabled="true">
       <stringProp name="ThreadGroup.on_sample_error">stoptest</stringProp>
       <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
@@ -799,7 +804,7 @@ if (!slash.equals(path.substring(path.length() -1)) || !slash.equals(path.substr
         <stringProp name="HTTPSampler.port"/>
         <stringProp name="HTTPSampler.connect_timeout"/>
         <stringProp name="HTTPSampler.response_timeout"/>
-        <stringProp name="HTTPSampler.protocol"/>
+        <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
         <stringProp name="HTTPSampler.contentEncoding"/>
         <stringProp name="HTTPSampler.path">${base_path}${admin_path}</stringProp>
         <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -879,7 +884,7 @@ if (!slash.equals(path.substring(path.length() -1)) || !slash.equals(path.substr
         <stringProp name="HTTPSampler.port"/>
         <stringProp name="HTTPSampler.connect_timeout"/>
         <stringProp name="HTTPSampler.response_timeout"/>
-        <stringProp name="HTTPSampler.protocol"/>
+        <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
         <stringProp name="HTTPSampler.contentEncoding"/>
         <stringProp name="HTTPSampler.path">${base_path}${admin_path}/admin/dashboard/</stringProp>
         <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -933,7 +938,7 @@ if (!slash.equals(path.substring(path.length() -1)) || !slash.equals(path.substr
         <stringProp name="HTTPSampler.port"/>
         <stringProp name="HTTPSampler.connect_timeout"/>
         <stringProp name="HTTPSampler.response_timeout"/>
-        <stringProp name="HTTPSampler.protocol"/>
+        <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
         <stringProp name="HTTPSampler.contentEncoding"/>
         <stringProp name="HTTPSampler.path">${base_path}${admin_path}/admin/cache/massEnable</stringProp>
         <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -976,7 +981,7 @@ if (!slash.equals(path.substring(path.length() -1)) || !slash.equals(path.substr
         <stringProp name="HTTPSampler.port"/>
         <stringProp name="HTTPSampler.connect_timeout"/>
         <stringProp name="HTTPSampler.response_timeout"/>
-        <stringProp name="HTTPSampler.protocol"/>
+        <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
         <stringProp name="HTTPSampler.contentEncoding"/>
         <stringProp name="HTTPSampler.path">${base_path}${admin_path}/admin/cache/massRefresh</stringProp>
         <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -1019,7 +1024,7 @@ if (!slash.equals(path.substring(path.length() -1)) || !slash.equals(path.substr
           <stringProp name="HTTPSampler.port"/>
           <stringProp name="HTTPSampler.connect_timeout"/>
           <stringProp name="HTTPSampler.response_timeout"/>
-          <stringProp name="HTTPSampler.protocol"/>
+          <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"/>
           <stringProp name="HTTPSampler.path">${base_path}rest/V1/integration/admin/token</stringProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -1111,7 +1116,7 @@ if (!slash.equals(path.substring(path.length() -1)) || !slash.equals(path.substr
           <stringProp name="HTTPSampler.port"/>
           <stringProp name="HTTPSampler.connect_timeout"/>
           <stringProp name="HTTPSampler.response_timeout"/>
-          <stringProp name="HTTPSampler.protocol"/>
+          <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"/>
           <stringProp name="HTTPSampler.path">${base_path}rest/V1/categories/list</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -1248,7 +1253,7 @@ props.put("category_name", vars.get("category_name"));</stringProp>
           <stringProp name="HTTPSampler.port"/>
           <stringProp name="HTTPSampler.connect_timeout"/>
           <stringProp name="HTTPSampler.response_timeout"/>
-          <stringProp name="HTTPSampler.protocol"/>
+          <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"/>
           <stringProp name="HTTPSampler.path">${base_path}rest/V1/integration/admin/token</stringProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -1319,7 +1324,7 @@ props.put("category_name", vars.get("category_name"));</stringProp>
           <stringProp name="HTTPSampler.port"/>
           <stringProp name="HTTPSampler.connect_timeout"/>
           <stringProp name="HTTPSampler.response_timeout"/>
-          <stringProp name="HTTPSampler.protocol"/>
+          <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"/>
           <stringProp name="HTTPSampler.path">${base_path}rest/V1/products</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -1387,7 +1392,7 @@ if (1 == Integer.parseInt(vars.get("simple_products_counter"))) {
 } else {
     productList = props.get("simple_products_list");
 }
-String productUrl = "http://" + vars.get("host") + vars.get("base_path") + vars.get("simple_products_url_keys_" + vars.get("simple_products_counter"))+ vars.get("url_suffix");
+String productUrl = vars.get("request_protocol") + "://" + vars.get("host") + vars.get("base_path") + vars.get("simple_products_url_keys_" + vars.get("simple_products_counter"))+ vars.get("url_suffix");
 encodedUrl = Base64.encodeBase64(productUrl.getBytes());
 // Create product map
 Map productMap = new HashMap();
@@ -1434,7 +1439,7 @@ productList.add(productMap);</stringProp>
           <stringProp name="HTTPSampler.port"/>
           <stringProp name="HTTPSampler.connect_timeout"/>
           <stringProp name="HTTPSampler.response_timeout"/>
-          <stringProp name="HTTPSampler.protocol"/>
+          <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"/>
           <stringProp name="HTTPSampler.path">${base_path}rest/V1/integration/admin/token</stringProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -1505,7 +1510,7 @@ productList.add(productMap);</stringProp>
           <stringProp name="HTTPSampler.port"/>
           <stringProp name="HTTPSampler.connect_timeout"/>
           <stringProp name="HTTPSampler.response_timeout"/>
-          <stringProp name="HTTPSampler.protocol"/>
+          <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"/>
           <stringProp name="HTTPSampler.path">${base_path}rest/V1/products</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -1583,7 +1588,7 @@ if (1 == Integer.parseInt(vars.get("configurable_products_counter"))) {
     productList = props.get("configurable_products_list");
 }
 
-String productUrl = "http://" + vars.get("host") + vars.get("base_path") + vars.get("configurable_products_url_keys_" + vars.get("configurable_products_counter"))+ vars.get("url_suffix");
+String productUrl = vars.get("request_protocol") + "://" + vars.get("host") + vars.get("base_path") + vars.get("configurable_products_url_keys_" + vars.get("configurable_products_counter"))+ vars.get("url_suffix");
 encodedUrl = Base64.encodeBase64(productUrl.getBytes());
 // Create product map
 Map productMap = new HashMap();
@@ -1609,7 +1614,7 @@ productList.add(productMap);</stringProp>
         <stringProp name="HTTPSampler.port"/>
         <stringProp name="HTTPSampler.connect_timeout"/>
         <stringProp name="HTTPSampler.response_timeout"/>
-        <stringProp name="HTTPSampler.protocol"/>
+        <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
         <stringProp name="HTTPSampler.contentEncoding"/>
         <stringProp name="HTTPSampler.path">${base_path}${admin_path}/customer/index/</stringProp>
         <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -1643,7 +1648,7 @@ manager.add(cookie); </stringProp>
         </ResponseAssertion>
         <hashTree/>
       </hashTree>
-      
+
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="SetUp - Search Customers" enabled="true">
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
         <collectionProp name="Arguments.arguments">
@@ -1709,7 +1714,7 @@ manager.add(cookie); </stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}${admin_path}/mui/index/render/</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -1902,7 +1907,7 @@ if ("${cache_indicator}" == "1") {
           <stringProp name="HTTPSampler.port"/>
           <stringProp name="HTTPSampler.connect_timeout"/>
           <stringProp name="HTTPSampler.response_timeout"/>
-          <stringProp name="HTTPSampler.protocol"/>
+          <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"/>
           <stringProp name="HTTPSampler.path">${base_path}${admin_path}/admin/cache/massDisable</stringProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -1938,7 +1943,7 @@ if ("${cache_indicator}" == "1") {
           <stringProp name="HTTPSampler.port"/>
           <stringProp name="HTTPSampler.connect_timeout"/>
           <stringProp name="HTTPSampler.response_timeout"/>
-          <stringProp name="HTTPSampler.protocol"/>
+          <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"/>
           <stringProp name="HTTPSampler.path">${base_path}${admin_path}/admin/cache/</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -1996,7 +2001,7 @@ if ("${cache_indicator}" == "1") {
           <stringProp name="HTTPSampler.port"/>
           <stringProp name="HTTPSampler.connect_timeout"/>
           <stringProp name="HTTPSampler.response_timeout"/>
-          <stringProp name="HTTPSampler.protocol"/>
+          <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"/>
           <stringProp name="HTTPSampler.path">${base_path}${admin_path}/admin/cache/</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -2054,7 +2059,7 @@ if ("${cache_indicator}" == "1") {
           <stringProp name="HTTPSampler.port"/>
           <stringProp name="HTTPSampler.connect_timeout"/>
           <stringProp name="HTTPSampler.response_timeout"/>
-          <stringProp name="HTTPSampler.protocol"/>
+          <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"/>
           <stringProp name="HTTPSampler.path">${base_path}${admin_path}/admin/cache/</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -2134,7 +2139,7 @@ if ("${cache_indicator}" == "1") {
         <stringProp name="HTTPSampler.port"/>
         <stringProp name="HTTPSampler.connect_timeout"/>
         <stringProp name="HTTPSampler.response_timeout"/>
-        <stringProp name="HTTPSampler.protocol"/>
+        <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
         <stringProp name="HTTPSampler.contentEncoding"/>
         <stringProp name="HTTPSampler.path">${base_path}page_cache/block/render/</stringProp>
         <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -2215,7 +2220,7 @@ if ("${cache_indicator}" == "1") {
         <stringProp name="HTTPSampler.port"/>
         <stringProp name="HTTPSampler.connect_timeout"/>
         <stringProp name="HTTPSampler.response_timeout"/>
-        <stringProp name="HTTPSampler.protocol"/>
+        <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
         <stringProp name="HTTPSampler.contentEncoding"/>
         <stringProp name="HTTPSampler.path">${base_path}checkout/cart/add</stringProp>
         <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -2228,7 +2233,7 @@ if ("${cache_indicator}" == "1") {
       </HTTPSamplerProxy>
       <hashTree/>
     </hashTree>
-  
+
     <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Catalog Browsing By Guest" enabled="true">
       <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
       <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
@@ -2274,7 +2279,7 @@ vars.put("testLabel", "CatProdBrows");</stringProp>
       <boolProp name="BeanShellSampler.resetInterpreter">true</boolProp>
     </BeanShellSampler>
     <hashTree/>
-  
+
       <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Open Home Page${__property(activeAdminThread)}(${testLabel})" enabled="true">
         <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
           <collectionProp name="Arguments.arguments"/>
@@ -2283,7 +2288,7 @@ vars.put("testLabel", "CatProdBrows");</stringProp>
         <stringProp name="HTTPSampler.port"/>
         <stringProp name="HTTPSampler.connect_timeout"/>
         <stringProp name="HTTPSampler.response_timeout"/>
-        <stringProp name="HTTPSampler.protocol"/>
+        <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
         <stringProp name="HTTPSampler.contentEncoding"/>
         <stringProp name="HTTPSampler.path">${base_path}</stringProp>
         <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -2305,13 +2310,13 @@ vars.put("testLabel", "CatProdBrows");</stringProp>
         </ResponseAssertion>
         <hashTree/>
       </hashTree>
-  
+
     <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Random Timer" enabled="true">
       <stringProp name="ConstantTimer.delay">${think_time_delay_offset}</stringProp>
       <stringProp name="RandomTimer.range">${think_time_deviation}</stringProp>
     </GaussianRandomTimer>
     <hashTree/>
-  
+
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Open Category${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
         <collectionProp name="Arguments.arguments"/>
@@ -2320,7 +2325,7 @@ vars.put("testLabel", "CatProdBrows");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}${category_url_key}${url_suffix}</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -2363,13 +2368,13 @@ vars.put("testLabel", "CatProdBrows");</stringProp>
       </ResponseAssertion>
       <hashTree/>
     </hashTree>
-  
+
     <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Random Timer" enabled="true">
       <stringProp name="ConstantTimer.delay">${think_time_delay_offset}</stringProp>
       <stringProp name="RandomTimer.range">${think_time_deviation}</stringProp>
     </GaussianRandomTimer>
     <hashTree/>
-  
+
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Simple Product 1 View${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
         <collectionProp name="Arguments.arguments"/>
@@ -2378,7 +2383,7 @@ vars.put("testLabel", "CatProdBrows");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}${simple_product_1_url_key}${url_suffix}</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -2429,7 +2434,7 @@ vars.put("testLabel", "CatProdBrows");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}review/product/listAjax/id/${product_id}/</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -2451,13 +2456,13 @@ vars.put("testLabel", "CatProdBrows");</stringProp>
       </ResponseAssertion>
       <hashTree/>
     </hashTree>
-  
+
     <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Random Timer" enabled="true">
       <stringProp name="ConstantTimer.delay">${think_time_delay_offset}</stringProp>
       <stringProp name="RandomTimer.range">${think_time_deviation}</stringProp>
     </GaussianRandomTimer>
     <hashTree/>
-  
+
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Simple Product 2 View${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
         <collectionProp name="Arguments.arguments"/>
@@ -2466,7 +2471,7 @@ vars.put("testLabel", "CatProdBrows");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}${simple_product_2_url_key}${url_suffix}</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -2517,7 +2522,7 @@ vars.put("testLabel", "CatProdBrows");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}review/product/listAjax/id/${product_id}/</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -2539,13 +2544,13 @@ vars.put("testLabel", "CatProdBrows");</stringProp>
       </ResponseAssertion>
       <hashTree/>
     </hashTree>
-  
+
     <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Random Timer" enabled="true">
       <stringProp name="ConstantTimer.delay">${think_time_delay_offset}</stringProp>
       <stringProp name="RandomTimer.range">${think_time_deviation}</stringProp>
     </GaussianRandomTimer>
     <hashTree/>
-  
+
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Configurable Product 1 View${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
         <collectionProp name="Arguments.arguments"/>
@@ -2554,7 +2559,7 @@ vars.put("testLabel", "CatProdBrows");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}${configurable_product_1_url_key}${url_suffix}</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -2578,7 +2583,7 @@ vars.put("testLabel", "CatProdBrows");</stringProp>
       <hashTree/>
     </hashTree>
   </hashTree>
-  
+
     <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Abandoned Cart By Guest" enabled="true">
       <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
       <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
@@ -2629,7 +2634,7 @@ vars.put("loadType", "Guest");</stringProp>
       <boolProp name="BeanShellSampler.resetInterpreter">true</boolProp>
     </BeanShellSampler>
     <hashTree/>
-  
+
       <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Open Home Page${__property(activeAdminThread)}(${testLabel})" enabled="true">
         <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
           <collectionProp name="Arguments.arguments"/>
@@ -2638,7 +2643,7 @@ vars.put("loadType", "Guest");</stringProp>
         <stringProp name="HTTPSampler.port"/>
         <stringProp name="HTTPSampler.connect_timeout"/>
         <stringProp name="HTTPSampler.response_timeout"/>
-        <stringProp name="HTTPSampler.protocol"/>
+        <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
         <stringProp name="HTTPSampler.contentEncoding"/>
         <stringProp name="HTTPSampler.path">${base_path}</stringProp>
         <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -2660,7 +2665,7 @@ vars.put("loadType", "Guest");</stringProp>
         </ResponseAssertion>
         <hashTree/>
       </hashTree>
-  
+
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Ajax Load Login Form${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
         <collectionProp name="Arguments.arguments">
@@ -2705,7 +2710,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}page_cache/block/render/</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -2749,13 +2754,13 @@ vars.put("loadType", "Guest");</stringProp>
       </ResponseAssertion>
       <hashTree/>
     </hashTree>
-  
+
     <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Random Timer" enabled="true">
       <stringProp name="ConstantTimer.delay">${think_time_delay_offset}</stringProp>
       <stringProp name="RandomTimer.range">${think_time_deviation}</stringProp>
     </GaussianRandomTimer>
     <hashTree/>
-  
+
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Open Category${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
         <collectionProp name="Arguments.arguments"/>
@@ -2764,7 +2769,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}${category_url_key}${url_suffix}</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -2807,13 +2812,13 @@ vars.put("loadType", "Guest");</stringProp>
       </ResponseAssertion>
       <hashTree/>
     </hashTree>
-  
+
     <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Random Timer" enabled="true">
       <stringProp name="ConstantTimer.delay">${think_time_delay_offset}</stringProp>
       <stringProp name="RandomTimer.range">${think_time_deviation}</stringProp>
     </GaussianRandomTimer>
     <hashTree/>
-  
+
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Simple Product 1 View${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
         <collectionProp name="Arguments.arguments"/>
@@ -2822,7 +2827,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}${simple_product_1_url_key}${url_suffix}</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -2873,7 +2878,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}review/product/listAjax/id/${product_id}/</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -2895,13 +2900,13 @@ vars.put("loadType", "Guest");</stringProp>
       </ResponseAssertion>
       <hashTree/>
     </hashTree>
-  
+
     <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Random Timer" enabled="true">
       <stringProp name="ConstantTimer.delay">${think_time_delay_offset}</stringProp>
       <stringProp name="RandomTimer.range">${think_time_deviation}</stringProp>
     </GaussianRandomTimer>
     <hashTree/>
-  
+
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Simple Product 1 Add To Cart${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
         <collectionProp name="Arguments.arguments">
@@ -2939,7 +2944,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}checkout/cart/add/</stringProp>
       <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -2962,7 +2967,7 @@ vars.put("loadType", "Guest");</stringProp>
     </HeaderManager>
     <hashTree/>
   </hashTree>
-  
+
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Load ${loadType}${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
         <collectionProp name="Arguments.arguments">
@@ -2993,7 +2998,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}customer/section/load/</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -3014,7 +3019,7 @@ vars.put("loadType", "Guest");</stringProp>
       </collectionProp>
     </HeaderManager>
     <hashTree/>
-  
+
       <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
         <collectionProp name="Asserion.test_strings">
           <stringProp name="210217247">You added ${simple_product_1_name} to your shopping cart.</stringProp>
@@ -3043,13 +3048,13 @@ vars.put("loadType", "Guest");</stringProp>
       </ResponseAssertion>
       <hashTree/>
     </hashTree>
-  
+
     <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Random Timer" enabled="true">
       <stringProp name="ConstantTimer.delay">${think_time_delay_offset}</stringProp>
       <stringProp name="RandomTimer.range">${think_time_deviation}</stringProp>
     </GaussianRandomTimer>
     <hashTree/>
-  
+
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Simple Product 2 View${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
         <collectionProp name="Arguments.arguments"/>
@@ -3058,7 +3063,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}${simple_product_2_url_key}${url_suffix}</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -3109,7 +3114,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}review/product/listAjax/id/${product_id}/</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -3131,13 +3136,13 @@ vars.put("loadType", "Guest");</stringProp>
       </ResponseAssertion>
       <hashTree/>
     </hashTree>
-  
+
     <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Random Timer" enabled="true">
       <stringProp name="ConstantTimer.delay">${think_time_delay_offset}</stringProp>
       <stringProp name="RandomTimer.range">${think_time_deviation}</stringProp>
     </GaussianRandomTimer>
     <hashTree/>
-  
+
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Simple Product 2 Add To Cart${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
         <collectionProp name="Arguments.arguments">
@@ -3175,7 +3180,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}checkout/cart/add/</stringProp>
       <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -3197,7 +3202,7 @@ vars.put("loadType", "Guest");</stringProp>
     </HeaderManager>
     <hashTree/>
   </hashTree>
-  
+
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Load ${loadType}2${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
         <collectionProp name="Arguments.arguments">
@@ -3231,7 +3236,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}customer/section/load/</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -3252,7 +3257,7 @@ vars.put("loadType", "Guest");</stringProp>
       </collectionProp>
     </HeaderManager>
     <hashTree/>
-  
+
       <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
         <collectionProp name="Asserion.test_strings">
           <stringProp name="221533374">You added ${simple_product_2_name} to your shopping cart.</stringProp>
@@ -3281,13 +3286,13 @@ vars.put("loadType", "Guest");</stringProp>
       </ResponseAssertion>
       <hashTree/>
     </hashTree>
-  
+
     <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Random Timer" enabled="true">
       <stringProp name="ConstantTimer.delay">${think_time_delay_offset}</stringProp>
       <stringProp name="RandomTimer.range">${think_time_deviation}</stringProp>
     </GaussianRandomTimer>
     <hashTree/>
-  
+
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Configurable Product 1 View${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
         <collectionProp name="Arguments.arguments"/>
@@ -3296,7 +3301,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}${configurable_product_1_url_key}${url_suffix}</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -3318,7 +3323,7 @@ vars.put("loadType", "Guest");</stringProp>
         <intProp name="Assertion.test_type">2</intProp>
       </ResponseAssertion>
       <hashTree/>
-    
+
     <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract product sku" enabled="true">
       <stringProp name="RegexExtractor.useHeaders">false</stringProp>
       <stringProp name="RegexExtractor.refname">configurable_product_sku</stringProp>
@@ -3329,13 +3334,13 @@ vars.put("loadType", "Guest");</stringProp>
     </RegexExtractor>
     <hashTree/>
   </hashTree>
-  
+
     <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Random Timer" enabled="true">
       <stringProp name="ConstantTimer.delay">${think_time_delay_offset}</stringProp>
       <stringProp name="RandomTimer.range">${think_time_deviation}</stringProp>
     </GaussianRandomTimer>
     <hashTree/>
-  
+
     <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="Get Configurable Product Options" enabled="true">
       <boolProp name="LoopController.continue_forever">true</boolProp>
       <stringProp name="LoopController.loops">1</stringProp>
@@ -3369,7 +3374,7 @@ vars.put("loadType", "Guest");</stringProp>
         <stringProp name="HTTPSampler.port"/>
         <stringProp name="HTTPSampler.connect_timeout"/>
         <stringProp name="HTTPSampler.response_timeout"/>
-        <stringProp name="HTTPSampler.protocol"/>
+        <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
         <stringProp name="HTTPSampler.contentEncoding"/>
         <stringProp name="HTTPSampler.path">${base_path}rest/V1/integration/admin/token</stringProp>
         <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -3418,7 +3423,7 @@ vars.put("loadType", "Guest");</stringProp>
         <stringProp name="HTTPSampler.port"/>
         <stringProp name="HTTPSampler.connect_timeout"/>
         <stringProp name="HTTPSampler.response_timeout"/>
-        <stringProp name="HTTPSampler.protocol"/>
+        <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
         <stringProp name="HTTPSampler.contentEncoding"/>
         <stringProp name="HTTPSampler.path">${base_path}rest/V1/configurable-products/${configurable_product_sku}/options/all</stringProp>
         <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -3448,7 +3453,7 @@ vars.put("loadType", "Guest");</stringProp>
         <hashTree/>
       </hashTree>
     </hashTree>
-  
+
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Configurable Product 1 Add To Cart${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
         <collectionProp name="Arguments.arguments">
@@ -3493,7 +3498,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}checkout/cart/add/</stringProp>
       <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -3514,7 +3519,7 @@ vars.put("loadType", "Guest");</stringProp>
       </collectionProp>
     </HeaderManager>
     <hashTree/>
-  
+
         <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="BeanShell PreProcessor" enabled="true">
                 <boolProp name="resetInterpreter">false</boolProp>
                 <stringProp name="parameters"/>
@@ -3545,7 +3550,7 @@ vars.put("loadType", "Guest");</stringProp>
               </BeanShellPreProcessor>
         <hashTree/>
     </hashTree>
-  
+
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Load ${loadType}3${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
         <collectionProp name="Arguments.arguments">
@@ -3579,7 +3584,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}customer/section/load/</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -3600,7 +3605,7 @@ vars.put("loadType", "Guest");</stringProp>
       </collectionProp>
     </HeaderManager>
     <hashTree/>
-  
+
       <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
         <collectionProp name="Asserion.test_strings">
           <stringProp name="-1346272328">You added ${configurable_product_1_name} to your shopping cart.</stringProp>
@@ -3630,7 +3635,7 @@ vars.put("loadType", "Guest");</stringProp>
       <hashTree/>
     </hashTree>
   </hashTree>
-  
+
     <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Checkout By Guest" enabled="true">
       <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
       <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
@@ -3682,7 +3687,7 @@ vars.put("loadType", "Guest");</stringProp>
       <boolProp name="BeanShellSampler.resetInterpreter">true</boolProp>
     </BeanShellSampler>
     <hashTree/>
-  
+
       <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Open Home Page${__property(activeAdminThread)}(${testLabel})" enabled="true">
         <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
           <collectionProp name="Arguments.arguments"/>
@@ -3691,7 +3696,7 @@ vars.put("loadType", "Guest");</stringProp>
         <stringProp name="HTTPSampler.port"/>
         <stringProp name="HTTPSampler.connect_timeout"/>
         <stringProp name="HTTPSampler.response_timeout"/>
-        <stringProp name="HTTPSampler.protocol"/>
+        <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
         <stringProp name="HTTPSampler.contentEncoding"/>
         <stringProp name="HTTPSampler.path">${base_path}</stringProp>
         <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -3713,7 +3718,7 @@ vars.put("loadType", "Guest");</stringProp>
         </ResponseAssertion>
         <hashTree/>
       </hashTree>
-  
+
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Ajax Load Login Form${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
         <collectionProp name="Arguments.arguments">
@@ -3758,7 +3763,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}page_cache/block/render/</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -3802,13 +3807,13 @@ vars.put("loadType", "Guest");</stringProp>
       </ResponseAssertion>
       <hashTree/>
     </hashTree>
-  
+
     <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Random Timer" enabled="true">
       <stringProp name="ConstantTimer.delay">${think_time_delay_offset}</stringProp>
       <stringProp name="RandomTimer.range">${think_time_deviation}</stringProp>
     </GaussianRandomTimer>
     <hashTree/>
-  
+
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Open Category${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
         <collectionProp name="Arguments.arguments"/>
@@ -3817,7 +3822,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}${category_url_key}${url_suffix}</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -3860,13 +3865,13 @@ vars.put("loadType", "Guest");</stringProp>
       </ResponseAssertion>
       <hashTree/>
     </hashTree>
-  
+
     <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Random Timer" enabled="true">
       <stringProp name="ConstantTimer.delay">${think_time_delay_offset}</stringProp>
       <stringProp name="RandomTimer.range">${think_time_deviation}</stringProp>
     </GaussianRandomTimer>
     <hashTree/>
-  
+
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Simple Product 1 View${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
         <collectionProp name="Arguments.arguments"/>
@@ -3875,7 +3880,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}${simple_product_1_url_key}${url_suffix}</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -3926,7 +3931,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}review/product/listAjax/id/${product_id}/</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -3948,13 +3953,13 @@ vars.put("loadType", "Guest");</stringProp>
       </ResponseAssertion>
       <hashTree/>
     </hashTree>
-  
+
     <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Random Timer" enabled="true">
       <stringProp name="ConstantTimer.delay">${think_time_delay_offset}</stringProp>
       <stringProp name="RandomTimer.range">${think_time_deviation}</stringProp>
     </GaussianRandomTimer>
     <hashTree/>
-  
+
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Simple Product 1 Add To Cart${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
         <collectionProp name="Arguments.arguments">
@@ -3992,7 +3997,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}checkout/cart/add/</stringProp>
       <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -4015,7 +4020,7 @@ vars.put("loadType", "Guest");</stringProp>
     </HeaderManager>
     <hashTree/>
   </hashTree>
-  
+
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Load ${loadType}${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
         <collectionProp name="Arguments.arguments">
@@ -4046,7 +4051,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}customer/section/load/</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -4067,7 +4072,7 @@ vars.put("loadType", "Guest");</stringProp>
       </collectionProp>
     </HeaderManager>
     <hashTree/>
-  
+
       <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
         <collectionProp name="Asserion.test_strings">
           <stringProp name="210217247">You added ${simple_product_1_name} to your shopping cart.</stringProp>
@@ -4096,13 +4101,13 @@ vars.put("loadType", "Guest");</stringProp>
       </ResponseAssertion>
       <hashTree/>
     </hashTree>
-  
+
     <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Random Timer" enabled="true">
       <stringProp name="ConstantTimer.delay">${think_time_delay_offset}</stringProp>
       <stringProp name="RandomTimer.range">${think_time_deviation}</stringProp>
     </GaussianRandomTimer>
     <hashTree/>
-  
+
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Simple Product 2 View${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
         <collectionProp name="Arguments.arguments"/>
@@ -4111,7 +4116,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}${simple_product_2_url_key}${url_suffix}</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -4162,7 +4167,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}review/product/listAjax/id/${product_id}/</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -4184,13 +4189,13 @@ vars.put("loadType", "Guest");</stringProp>
       </ResponseAssertion>
       <hashTree/>
     </hashTree>
-  
+
     <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Random Timer" enabled="true">
       <stringProp name="ConstantTimer.delay">${think_time_delay_offset}</stringProp>
       <stringProp name="RandomTimer.range">${think_time_deviation}</stringProp>
     </GaussianRandomTimer>
     <hashTree/>
-  
+
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Simple Product 2 Add To Cart${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
         <collectionProp name="Arguments.arguments">
@@ -4228,7 +4233,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}checkout/cart/add/</stringProp>
       <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -4250,7 +4255,7 @@ vars.put("loadType", "Guest");</stringProp>
     </HeaderManager>
     <hashTree/>
   </hashTree>
-  
+
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Load ${loadType}2${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
         <collectionProp name="Arguments.arguments">
@@ -4284,7 +4289,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}customer/section/load/</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -4305,7 +4310,7 @@ vars.put("loadType", "Guest");</stringProp>
       </collectionProp>
     </HeaderManager>
     <hashTree/>
-  
+
       <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
         <collectionProp name="Asserion.test_strings">
           <stringProp name="221533374">You added ${simple_product_2_name} to your shopping cart.</stringProp>
@@ -4334,13 +4339,13 @@ vars.put("loadType", "Guest");</stringProp>
       </ResponseAssertion>
       <hashTree/>
     </hashTree>
-  
+
     <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Random Timer" enabled="true">
       <stringProp name="ConstantTimer.delay">${think_time_delay_offset}</stringProp>
       <stringProp name="RandomTimer.range">${think_time_deviation}</stringProp>
     </GaussianRandomTimer>
     <hashTree/>
-  
+
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Configurable Product 1 View${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
         <collectionProp name="Arguments.arguments"/>
@@ -4349,7 +4354,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}${configurable_product_1_url_key}${url_suffix}</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -4371,7 +4376,7 @@ vars.put("loadType", "Guest");</stringProp>
         <intProp name="Assertion.test_type">2</intProp>
       </ResponseAssertion>
       <hashTree/>
-    
+
     <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract product sku" enabled="true">
       <stringProp name="RegexExtractor.useHeaders">false</stringProp>
       <stringProp name="RegexExtractor.refname">configurable_product_sku</stringProp>
@@ -4382,13 +4387,13 @@ vars.put("loadType", "Guest");</stringProp>
     </RegexExtractor>
     <hashTree/>
   </hashTree>
-  
+
     <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Random Timer" enabled="true">
       <stringProp name="ConstantTimer.delay">${think_time_delay_offset}</stringProp>
       <stringProp name="RandomTimer.range">${think_time_deviation}</stringProp>
     </GaussianRandomTimer>
     <hashTree/>
-  
+
     <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="Get Configurable Product Options" enabled="true">
       <boolProp name="LoopController.continue_forever">true</boolProp>
       <stringProp name="LoopController.loops">1</stringProp>
@@ -4422,7 +4427,7 @@ vars.put("loadType", "Guest");</stringProp>
         <stringProp name="HTTPSampler.port"/>
         <stringProp name="HTTPSampler.connect_timeout"/>
         <stringProp name="HTTPSampler.response_timeout"/>
-        <stringProp name="HTTPSampler.protocol"/>
+        <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
         <stringProp name="HTTPSampler.contentEncoding"/>
         <stringProp name="HTTPSampler.path">${base_path}rest/V1/integration/admin/token</stringProp>
         <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -4471,7 +4476,7 @@ vars.put("loadType", "Guest");</stringProp>
         <stringProp name="HTTPSampler.port"/>
         <stringProp name="HTTPSampler.connect_timeout"/>
         <stringProp name="HTTPSampler.response_timeout"/>
-        <stringProp name="HTTPSampler.protocol"/>
+        <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
         <stringProp name="HTTPSampler.contentEncoding"/>
         <stringProp name="HTTPSampler.path">${base_path}rest/V1/configurable-products/${configurable_product_sku}/options/all</stringProp>
         <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -4501,7 +4506,7 @@ vars.put("loadType", "Guest");</stringProp>
         <hashTree/>
       </hashTree>
     </hashTree>
-  
+
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Configurable Product 1 Add To Cart${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
         <collectionProp name="Arguments.arguments">
@@ -4546,7 +4551,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}checkout/cart/add/</stringProp>
       <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -4567,7 +4572,7 @@ vars.put("loadType", "Guest");</stringProp>
       </collectionProp>
     </HeaderManager>
     <hashTree/>
-  
+
         <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="BeanShell PreProcessor" enabled="true">
                 <boolProp name="resetInterpreter">false</boolProp>
                 <stringProp name="parameters"/>
@@ -4598,7 +4603,7 @@ vars.put("loadType", "Guest");</stringProp>
               </BeanShellPreProcessor>
         <hashTree/>
     </hashTree>
-  
+
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Load ${loadType}3${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
         <collectionProp name="Arguments.arguments">
@@ -4632,7 +4637,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}customer/section/load/</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -4653,7 +4658,7 @@ vars.put("loadType", "Guest");</stringProp>
       </collectionProp>
     </HeaderManager>
     <hashTree/>
-  
+
       <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
         <collectionProp name="Asserion.test_strings">
           <stringProp name="-1346272328">You added ${configurable_product_1_name} to your shopping cart.</stringProp>
@@ -4682,13 +4687,13 @@ vars.put("loadType", "Guest");</stringProp>
       </ResponseAssertion>
       <hashTree/>
     </hashTree>
-  
+
     <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Random Timer" enabled="true">
       <stringProp name="ConstantTimer.delay">${think_time_delay_offset}</stringProp>
       <stringProp name="RandomTimer.range">${think_time_deviation}</stringProp>
     </GaussianRandomTimer>
     <hashTree/>
-  
+
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Checkout start${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
         <collectionProp name="Arguments.arguments"/>
@@ -4697,7 +4702,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}checkout/</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -4768,13 +4773,13 @@ vars.put("loadType", "Guest");</stringProp>
       </ResponseAssertion>
       <hashTree/>
     </hashTree>
-  
+
     <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Random Timer" enabled="true">
       <stringProp name="ConstantTimer.delay">${think_time_delay_offset}</stringProp>
       <stringProp name="RandomTimer.range">${think_time_deviation}</stringProp>
     </GaussianRandomTimer>
     <hashTree/>
-  
+
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Checkout Email Available${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
@@ -4790,7 +4795,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}rest/default/V1/customers/isEmailAvailable</stringProp>
       <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -4833,13 +4838,13 @@ vars.put("loadType", "Guest");</stringProp>
       </ResponseAssertion>
       <hashTree/>
     </hashTree>
-  
+
     <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Random Timer" enabled="true">
       <stringProp name="ConstantTimer.delay">${think_time_delay_offset}</stringProp>
       <stringProp name="RandomTimer.range">${think_time_deviation}</stringProp>
     </GaussianRandomTimer>
     <hashTree/>
-  
+
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Checkout Estimate Shipping Methods${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
@@ -4855,7 +4860,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}rest/default/V1/guest-carts/${cart_id}/estimate-shipping-methods</stringProp>
       <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -4898,13 +4903,13 @@ vars.put("loadType", "Guest");</stringProp>
       </ResponseAssertion>
       <hashTree/>
     </hashTree>
-  
+
     <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Random Timer" enabled="true">
       <stringProp name="ConstantTimer.delay">${think_time_delay_offset}</stringProp>
       <stringProp name="RandomTimer.range">${think_time_deviation}</stringProp>
     </GaussianRandomTimer>
     <hashTree/>
-  
+
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Checkout Billing/Shipping Information${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
@@ -4920,7 +4925,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}rest/default/V1/guest-carts/${cart_id}/shipping-information</stringProp>
       <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -4963,13 +4968,13 @@ vars.put("loadType", "Guest");</stringProp>
       </ResponseAssertion>
       <hashTree/>
     </hashTree>
-  
+
     <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Random Timer" enabled="true">
       <stringProp name="ConstantTimer.delay">${think_time_delay_offset}</stringProp>
       <stringProp name="RandomTimer.range">${think_time_deviation}</stringProp>
     </GaussianRandomTimer>
     <hashTree/>
-  
+
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Checkout Payment Info/Place Order${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
@@ -4985,7 +4990,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}rest/default/V1/guest-carts/${cart_id}/payment-information</stringProp>
       <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -5047,7 +5052,7 @@ vars.put("loadType", "Guest");</stringProp>
       </ResponseAssertion>
       <hashTree/>
     </hashTree>
-  
+
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Checkout success${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
         <collectionProp name="Arguments.arguments"/>
@@ -5056,7 +5061,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}checkout/onepage/success/</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -5080,7 +5085,7 @@ vars.put("loadType", "Guest");</stringProp>
       <hashTree/>
     </hashTree>
   </hashTree>
-  
+
     <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Checkout By Customer" enabled="true">
       <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
       <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
@@ -5153,7 +5158,7 @@ vars.put("loadType", "Customer");</stringProp>
       <boolProp name="BeanShellSampler.resetInterpreter">true</boolProp>
     </BeanShellSampler>
     <hashTree/>
-  
+
       <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Open Home Page${__property(activeAdminThread)}(${testLabel})" enabled="true">
         <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
           <collectionProp name="Arguments.arguments"/>
@@ -5162,7 +5167,7 @@ vars.put("loadType", "Customer");</stringProp>
         <stringProp name="HTTPSampler.port"/>
         <stringProp name="HTTPSampler.connect_timeout"/>
         <stringProp name="HTTPSampler.response_timeout"/>
-        <stringProp name="HTTPSampler.protocol"/>
+        <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
         <stringProp name="HTTPSampler.contentEncoding"/>
         <stringProp name="HTTPSampler.path">${base_path}</stringProp>
         <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -5184,13 +5189,13 @@ vars.put("loadType", "Customer");</stringProp>
         </ResponseAssertion>
         <hashTree/>
       </hashTree>
-  
+
     <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Random Timer" enabled="true">
       <stringProp name="ConstantTimer.delay">${think_time_delay_offset}</stringProp>
       <stringProp name="RandomTimer.range">${think_time_deviation}</stringProp>
     </GaussianRandomTimer>
     <hashTree/>
-  
+
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Open Login Page${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
         <collectionProp name="Arguments.arguments"/>
@@ -5199,7 +5204,7 @@ vars.put("loadType", "Customer");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}customer/account/login/</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -5221,7 +5226,7 @@ vars.put("loadType", "Customer");</stringProp>
       </ResponseAssertion>
       <hashTree/>
     </hashTree>
-  
+
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Ajax Load Login Form${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
         <collectionProp name="Arguments.arguments">
@@ -5266,7 +5271,7 @@ vars.put("loadType", "Customer");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}page_cache/block/render/</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -5310,13 +5315,13 @@ vars.put("loadType", "Customer");</stringProp>
       </ResponseAssertion>
       <hashTree/>
     </hashTree>
-  
+
     <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Random Timer" enabled="true">
       <stringProp name="ConstantTimer.delay">${think_time_delay_offset}</stringProp>
       <stringProp name="RandomTimer.range">${think_time_deviation}</stringProp>
     </GaussianRandomTimer>
     <hashTree/>
-  
+
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Login${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
         <collectionProp name="Arguments.arguments">
@@ -5354,7 +5359,7 @@ vars.put("loadType", "Customer");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}customer/account/loginPost/</stringProp>
       <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -5396,13 +5401,13 @@ vars.put("loadType", "Customer");</stringProp>
       </ResponseAssertion>
       <hashTree/>
     </hashTree>
-  
+
     <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Random Timer" enabled="true">
       <stringProp name="ConstantTimer.delay">${think_time_delay_offset}</stringProp>
       <stringProp name="RandomTimer.range">${think_time_deviation}</stringProp>
     </GaussianRandomTimer>
     <hashTree/>
-  
+
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Open Category${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
         <collectionProp name="Arguments.arguments"/>
@@ -5411,7 +5416,7 @@ vars.put("loadType", "Customer");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}${category_url_key}${url_suffix}</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -5454,13 +5459,13 @@ vars.put("loadType", "Customer");</stringProp>
       </ResponseAssertion>
       <hashTree/>
     </hashTree>
-  
+
     <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Random Timer" enabled="true">
       <stringProp name="ConstantTimer.delay">${think_time_delay_offset}</stringProp>
       <stringProp name="RandomTimer.range">${think_time_deviation}</stringProp>
     </GaussianRandomTimer>
     <hashTree/>
-  
+
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Simple Product 1 View${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
         <collectionProp name="Arguments.arguments"/>
@@ -5469,7 +5474,7 @@ vars.put("loadType", "Customer");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}${simple_product_1_url_key}${url_suffix}</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -5520,7 +5525,7 @@ vars.put("loadType", "Customer");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}review/product/listAjax/id/${product_id}/</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -5542,13 +5547,13 @@ vars.put("loadType", "Customer");</stringProp>
       </ResponseAssertion>
       <hashTree/>
     </hashTree>
-  
+
     <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Random Timer" enabled="true">
       <stringProp name="ConstantTimer.delay">${think_time_delay_offset}</stringProp>
       <stringProp name="RandomTimer.range">${think_time_deviation}</stringProp>
     </GaussianRandomTimer>
     <hashTree/>
-  
+
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Simple Product 1 Add To Cart${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
         <collectionProp name="Arguments.arguments">
@@ -5586,7 +5591,7 @@ vars.put("loadType", "Customer");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}checkout/cart/add/</stringProp>
       <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -5609,7 +5614,7 @@ vars.put("loadType", "Customer");</stringProp>
     </HeaderManager>
     <hashTree/>
   </hashTree>
-  
+
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Load ${loadType}${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
         <collectionProp name="Arguments.arguments">
@@ -5640,7 +5645,7 @@ vars.put("loadType", "Customer");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}customer/section/load/</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -5661,7 +5666,7 @@ vars.put("loadType", "Customer");</stringProp>
       </collectionProp>
     </HeaderManager>
     <hashTree/>
-  
+
       <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
         <collectionProp name="Asserion.test_strings">
           <stringProp name="210217247">You added ${simple_product_1_name} to your shopping cart.</stringProp>
@@ -5690,13 +5695,13 @@ vars.put("loadType", "Customer");</stringProp>
       </ResponseAssertion>
       <hashTree/>
     </hashTree>
-  
+
     <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Random Timer" enabled="true">
       <stringProp name="ConstantTimer.delay">${think_time_delay_offset}</stringProp>
       <stringProp name="RandomTimer.range">${think_time_deviation}</stringProp>
     </GaussianRandomTimer>
     <hashTree/>
-  
+
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Simple Product 2 View${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
         <collectionProp name="Arguments.arguments"/>
@@ -5705,7 +5710,7 @@ vars.put("loadType", "Customer");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}${simple_product_2_url_key}${url_suffix}</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -5756,7 +5761,7 @@ vars.put("loadType", "Customer");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}review/product/listAjax/id/${product_id}/</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -5778,13 +5783,13 @@ vars.put("loadType", "Customer");</stringProp>
       </ResponseAssertion>
       <hashTree/>
     </hashTree>
-  
+
     <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Random Timer" enabled="true">
       <stringProp name="ConstantTimer.delay">${think_time_delay_offset}</stringProp>
       <stringProp name="RandomTimer.range">${think_time_deviation}</stringProp>
     </GaussianRandomTimer>
     <hashTree/>
-  
+
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Simple Product 2 Add To Cart${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
         <collectionProp name="Arguments.arguments">
@@ -5822,7 +5827,7 @@ vars.put("loadType", "Customer");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}checkout/cart/add/</stringProp>
       <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -5844,7 +5849,7 @@ vars.put("loadType", "Customer");</stringProp>
     </HeaderManager>
     <hashTree/>
   </hashTree>
-  
+
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Load ${loadType}2${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
         <collectionProp name="Arguments.arguments">
@@ -5878,7 +5883,7 @@ vars.put("loadType", "Customer");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}customer/section/load/</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -5899,7 +5904,7 @@ vars.put("loadType", "Customer");</stringProp>
       </collectionProp>
     </HeaderManager>
     <hashTree/>
-  
+
       <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
         <collectionProp name="Asserion.test_strings">
           <stringProp name="221533374">You added ${simple_product_2_name} to your shopping cart.</stringProp>
@@ -5928,13 +5933,13 @@ vars.put("loadType", "Customer");</stringProp>
       </ResponseAssertion>
       <hashTree/>
     </hashTree>
-  
+
     <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Random Timer" enabled="true">
       <stringProp name="ConstantTimer.delay">${think_time_delay_offset}</stringProp>
       <stringProp name="RandomTimer.range">${think_time_deviation}</stringProp>
     </GaussianRandomTimer>
     <hashTree/>
-  
+
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Configurable Product 1 View${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
         <collectionProp name="Arguments.arguments"/>
@@ -5943,7 +5948,7 @@ vars.put("loadType", "Customer");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}${configurable_product_1_url_key}${url_suffix}</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -5965,7 +5970,7 @@ vars.put("loadType", "Customer");</stringProp>
         <intProp name="Assertion.test_type">2</intProp>
       </ResponseAssertion>
       <hashTree/>
-    
+
     <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract product sku" enabled="true">
       <stringProp name="RegexExtractor.useHeaders">false</stringProp>
       <stringProp name="RegexExtractor.refname">configurable_product_sku</stringProp>
@@ -5976,13 +5981,13 @@ vars.put("loadType", "Customer");</stringProp>
     </RegexExtractor>
     <hashTree/>
   </hashTree>
-  
+
     <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Random Timer" enabled="true">
       <stringProp name="ConstantTimer.delay">${think_time_delay_offset}</stringProp>
       <stringProp name="RandomTimer.range">${think_time_deviation}</stringProp>
     </GaussianRandomTimer>
     <hashTree/>
-  
+
     <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="Get Configurable Product Options" enabled="true">
       <boolProp name="LoopController.continue_forever">true</boolProp>
       <stringProp name="LoopController.loops">1</stringProp>
@@ -6016,7 +6021,7 @@ vars.put("loadType", "Customer");</stringProp>
         <stringProp name="HTTPSampler.port"/>
         <stringProp name="HTTPSampler.connect_timeout"/>
         <stringProp name="HTTPSampler.response_timeout"/>
-        <stringProp name="HTTPSampler.protocol"/>
+        <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
         <stringProp name="HTTPSampler.contentEncoding"/>
         <stringProp name="HTTPSampler.path">${base_path}rest/V1/integration/admin/token</stringProp>
         <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -6065,7 +6070,7 @@ vars.put("loadType", "Customer");</stringProp>
         <stringProp name="HTTPSampler.port"/>
         <stringProp name="HTTPSampler.connect_timeout"/>
         <stringProp name="HTTPSampler.response_timeout"/>
-        <stringProp name="HTTPSampler.protocol"/>
+        <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
         <stringProp name="HTTPSampler.contentEncoding"/>
         <stringProp name="HTTPSampler.path">${base_path}rest/V1/configurable-products/${configurable_product_sku}/options/all</stringProp>
         <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -6095,7 +6100,7 @@ vars.put("loadType", "Customer");</stringProp>
         <hashTree/>
       </hashTree>
     </hashTree>
-  
+
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Configurable Product 1 Add To Cart${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
         <collectionProp name="Arguments.arguments">
@@ -6140,7 +6145,7 @@ vars.put("loadType", "Customer");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}checkout/cart/add/</stringProp>
       <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -6161,7 +6166,7 @@ vars.put("loadType", "Customer");</stringProp>
       </collectionProp>
     </HeaderManager>
     <hashTree/>
-  
+
         <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="BeanShell PreProcessor" enabled="true">
                 <boolProp name="resetInterpreter">false</boolProp>
                 <stringProp name="parameters"/>
@@ -6192,7 +6197,7 @@ vars.put("loadType", "Customer");</stringProp>
               </BeanShellPreProcessor>
         <hashTree/>
     </hashTree>
-  
+
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Load ${loadType}3${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
         <collectionProp name="Arguments.arguments">
@@ -6226,7 +6231,7 @@ vars.put("loadType", "Customer");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}customer/section/load/</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -6247,7 +6252,7 @@ vars.put("loadType", "Customer");</stringProp>
       </collectionProp>
     </HeaderManager>
     <hashTree/>
-  
+
       <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
         <collectionProp name="Asserion.test_strings">
           <stringProp name="-1346272328">You added ${configurable_product_1_name} to your shopping cart.</stringProp>
@@ -6276,13 +6281,13 @@ vars.put("loadType", "Customer");</stringProp>
       </ResponseAssertion>
       <hashTree/>
     </hashTree>
-  
+
     <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Random Timer" enabled="true">
       <stringProp name="ConstantTimer.delay">${think_time_delay_offset}</stringProp>
       <stringProp name="RandomTimer.range">${think_time_deviation}</stringProp>
     </GaussianRandomTimer>
     <hashTree/>
-  
+
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Checkout start${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
         <collectionProp name="Arguments.arguments"/>
@@ -6291,7 +6296,7 @@ vars.put("loadType", "Customer");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}checkout/</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -6402,13 +6407,13 @@ vars.put("loadType", "Customer");</stringProp>
       </ResponseAssertion>
       <hashTree/>
     </hashTree>
-  
+
     <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Random Timer" enabled="true">
       <stringProp name="ConstantTimer.delay">${think_time_delay_offset}</stringProp>
       <stringProp name="RandomTimer.range">${think_time_deviation}</stringProp>
     </GaussianRandomTimer>
     <hashTree/>
-  
+
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Checkout Estimate Shipping Methods${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
@@ -6424,7 +6429,7 @@ vars.put("loadType", "Customer");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}rest/default/V1/carts/mine/estimate-shipping-methods-by-address-id</stringProp>
       <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -6467,13 +6472,13 @@ vars.put("loadType", "Customer");</stringProp>
       </ResponseAssertion>
       <hashTree/>
     </hashTree>
-  
+
     <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Random Timer" enabled="true">
       <stringProp name="ConstantTimer.delay">${think_time_delay_offset}</stringProp>
       <stringProp name="RandomTimer.range">${think_time_deviation}</stringProp>
     </GaussianRandomTimer>
     <hashTree/>
-  
+
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Checkout Billing/Shipping Information${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
@@ -6489,7 +6494,7 @@ vars.put("loadType", "Customer");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}rest/default/V1/carts/mine/shipping-information</stringProp>
       <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -6532,13 +6537,13 @@ vars.put("loadType", "Customer");</stringProp>
       </ResponseAssertion>
       <hashTree/>
     </hashTree>
-  
+
     <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Random Timer" enabled="true">
       <stringProp name="ConstantTimer.delay">${think_time_delay_offset}</stringProp>
       <stringProp name="RandomTimer.range">${think_time_deviation}</stringProp>
     </GaussianRandomTimer>
     <hashTree/>
-  
+
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Checkout Payment Info/Place Order${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
@@ -6554,7 +6559,7 @@ vars.put("loadType", "Customer");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}rest/default/V1/carts/mine/payment-information</stringProp>
       <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -6597,13 +6602,13 @@ vars.put("loadType", "Customer");</stringProp>
       </ResponseAssertion>
       <hashTree/>
     </hashTree>
-  
+
     <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Random Timer" enabled="true">
       <stringProp name="ConstantTimer.delay">${think_time_delay_offset}</stringProp>
       <stringProp name="RandomTimer.range">${think_time_deviation}</stringProp>
     </GaussianRandomTimer>
     <hashTree/>
-  
+
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Checkout success${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
         <collectionProp name="Arguments.arguments"/>
@@ -6612,7 +6617,7 @@ vars.put("loadType", "Customer");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}checkout/onepage/success/</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -6636,7 +6641,7 @@ vars.put("loadType", "Customer");</stringProp>
       <hashTree/>
     </hashTree>
   </hashTree>
-  
+
     <PostThreadGroup guiclass="PostThreadGroupGui" testclass="PostThreadGroup" testname="tearDown Thread Group" enabled="true">
       <stringProp name="ThreadGroup.on_sample_error">stoptest</stringProp>
       <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
@@ -6694,7 +6699,7 @@ vars.put("loadType", "Customer");</stringProp>
           <stringProp name="HTTPSampler.port"/>
           <stringProp name="HTTPSampler.connect_timeout"/>
           <stringProp name="HTTPSampler.response_timeout"/>
-          <stringProp name="HTTPSampler.protocol"/>
+          <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"/>
           <stringProp name="HTTPSampler.path">${base_path}DeploymentEvent.php</stringProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -6744,7 +6749,7 @@ props.remove("customer_emails_list");</stringProp>
       </BeanShellSampler>
       <hashTree/>
     </hashTree>
-  
+
     <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
       <boolProp name="ResultCollector.error_logging">false</boolProp>
       <objProp>
@@ -6808,7 +6813,7 @@ props.remove("customer_emails_list");</stringProp>
       <stringProp name="filename"/>
     </ResultCollector>
     <hashTree/>
-  
+
     <ResultCollector guiclass="TableVisualizer" testclass="ResultCollector" testname="Detailed URLs report" enabled="true">
       <boolProp name="ResultCollector.error_logging">false</boolProp>
       <objProp>
@@ -6844,7 +6849,7 @@ props.remove("customer_emails_list");</stringProp>
       <stringProp name="filename">${report_save_path}/detailed-urls-report.log</stringProp>
     </ResultCollector>
     <hashTree/>
-  
+
     <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report" enabled="true">
       <boolProp name="ResultCollector.error_logging">false</boolProp>
       <objProp>
