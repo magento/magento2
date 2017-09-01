@@ -126,7 +126,7 @@ case $TEST_SUITE in
 
         cp ./phpunit.xml.dist ./phpunit.xml
         sed -e "s?127.0.0.1?${MAGENTO_HOST_NAME}?g" --in-place ./phpunit.xml
-        sed -e "s?basic?travis_acceptance_${ACCEPTANCE_INDEX}?g" --in-place ./phpunit.xml
+        sed -e "s?basic?travis_acceptance?g" --in-place ./phpunit.xml
         cp ./.htaccess.sample ./.htaccess
         cd ./utils
         php -f mtf troubleshooting:check-all
