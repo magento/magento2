@@ -13,6 +13,7 @@ use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Validation\ValidationException;
 use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\InventoryApi\Api\Data\StockInterfaceFactory;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
@@ -85,6 +86,9 @@ class Save extends Action
             } catch (NoSuchEntityException $e) {
                 $this->messageManager->addErrorMessage(__('The Stock does not exist.'));
                 $this->processRedirectAfterFailureSave($resultRedirect);
+            } catch (ValidationException $e) {
+                $this->messageManager->addErrorMessage($e->getMessage());
+                $this->processRedirectAfterFailureSave($resultRedirect, $stockId);
             } catch (CouldNotSaveException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
                 $this->processRedirectAfterFailureSave($resultRedirect, $stockId);
@@ -157,7 +161,7 @@ class Save extends Action
     private function processRedirectAfterFailureSave(Redirect $resultRedirect, $stockId = null)
     {
         if (null === $stockId) {
-            $resultRedirect->setPath('*/*/');
+            $resultRedirect->setPath('*/*/new');
         } else {
             $resultRedirect->setPath('*/*/edit', [
                 StockInterface::STOCK_ID => $stockId,

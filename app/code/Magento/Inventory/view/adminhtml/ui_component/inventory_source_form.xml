@@ -170,6 +170,9 @@
             <settings>
                 <dataType>text</dataType>
                 <label translate="true">Country</label>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
             </settings>
             <formElements>
                 <select>

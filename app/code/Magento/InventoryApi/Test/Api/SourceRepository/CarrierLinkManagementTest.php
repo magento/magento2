@@ -22,7 +22,7 @@ class CarrierLinkManagementTest extends WebapiAbstract
 
     /**
      * @param array $carrierLinks
-     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source/source.php
+     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source.php
      * @dataProvider dataProviderCarrierLinks
      */
     public function testCarrierLinksManagement(array $carrierLinks)
@@ -95,7 +95,7 @@ class CarrierLinkManagementTest extends WebapiAbstract
     }
 
     /**
-     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source/source.php
+     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source.php
      */
     public function testAssignCarrierLinksIfUseGlobalConfigurationChosen()
     {

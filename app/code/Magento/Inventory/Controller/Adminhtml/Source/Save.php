@@ -11,6 +11,7 @@ use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Validation\ValidationException;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceInterfaceFactory;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
@@ -75,6 +76,9 @@ class Save extends Action
             } catch (NoSuchEntityException $e) {
                 $this->messageManager->addErrorMessage(__('The Source does not exist.'));
                 $this->processRedirectAfterFailureSave($resultRedirect);
+            } catch (ValidationException $e) {
+                $this->messageManager->addErrorMessage($e->getMessage());
+                $this->processRedirectAfterFailureSave($resultRedirect, $sourceId);
             } catch (CouldNotSaveException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
                 $this->processRedirectAfterFailureSave($resultRedirect, $sourceId);
@@ -137,7 +141,7 @@ class Save extends Action
     private function processRedirectAfterFailureSave(Redirect $resultRedirect, $sourceId = null)
     {
         if (null === $sourceId) {
-            $resultRedirect->setPath('*/*/');
+            $resultRedirect->setPath('*/*/new');
         } else {
             $resultRedirect->setPath('*/*/edit', [
                 SourceInterface::SOURCE_ID => $sourceId,

@@ -77,7 +77,7 @@ class InlineEdit extends Action
                         '[ID: %value] %message',
                         [
                             'value' => $itemData[SourceInterface::SOURCE_ID],
-                            'message' => $e->getMessage()
+                            'message' => $e->getMessage(),
                         ]
                     );
                 }
