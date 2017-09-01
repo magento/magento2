@@ -249,6 +249,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             ->willReturn($productType);
         $optionCollection->expects($this->any())
             ->method('appendSelections')
+            ->with($selectionCollection, true, true)
             ->willReturn([$option]);
         $productType->expects($this->once())
             ->method('setStoreFilter');
@@ -433,7 +434,8 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             ->method('getItemById')
             ->willReturn($option);
         $optionCollection->expects($this->once())
-            ->method('appendSelections');
+            ->method('appendSelections')
+            ->with($selectionCollection, true, true);
         $productType->expects($this->once())
             ->method('setStoreFilter');
         $buyRequest->expects($this->once())
@@ -668,7 +670,8 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             ->method('getItemById')
             ->willReturn($option);
         $optionCollection->expects($this->once())
-            ->method('appendSelections');
+            ->method('appendSelections')
+            ->with($selectionCollection, true, true);
         $productType->expects($this->once())
             ->method('setStoreFilter');
         $buyRequest->expects($this->once())
@@ -891,7 +894,8 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             ->method('getItemById')
             ->willReturn($option);
         $optionCollection->expects($this->once())
-            ->method('appendSelections');
+            ->method('appendSelections')
+            ->with($selectionCollection, true, true);
         $productType->expects($this->once())
             ->method('setStoreFilter');
         $buyRequest->expects($this->once())
@@ -1169,7 +1173,8 @@ class TypeTest extends \PHPUnit\Framework\TestCase
                 }
             );
         $optionCollection->expects($this->once())
-            ->method('appendSelections');
+            ->method('appendSelections')
+            ->with($selectionCollection, true, true);
         $productType->expects($this->once())
             ->method('setStoreFilter');
         $buyRequest->expects($this->once())
