@@ -510,6 +510,7 @@
                 <item name="shipping_and_handling" xsi:type="string">sales_order.base_shipping_amount</item>
                 <item name="customer_name" xsi:type="object">CustomerNameAggregator</item>
                 <item name="payment_method" xsi:type="string">sales_order_payment.method</item>
+                <item name="payment_cctype" xsi:type="string">sales_order_payment.cc_type</item>
                 <item name="total_refunded" xsi:type="string">sales_order.total_refunded</item>
             </argument>
         </arguments>

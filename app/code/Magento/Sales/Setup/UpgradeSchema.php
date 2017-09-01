@@ -69,6 +69,9 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $this->addColumnBaseGrandTotal($installer);
             $this->addIndexBaseGrandTotal($installer);
         }
+        if (version_compare($context->getVersion(), '2.0.4', '<')) {
+            $this->addColumnPaymentCctype($installer);
+        }
     }
 
     /**
@@ -103,5 +106,41 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $installer->getIdxName('sales_invoice_grid', ['base_grand_total'], '', self::$connectionName),
             ['base_grand_total']
         );
+    }
+    
+    private function addColumnPaymentCctype(SchemaSetupInterface $installer)
+    {
+        /** @var $connection \Magento\Framework\DB\Adapter\Pdo\MySql */
+        $connection = $installer->getConnection();
+        $gridTableName = $installer->getTable('sales_order_grid');
+        $paymentTableName = $installer->getTable('sales_order_payment');
+
+        $cctypeColumns = [
+            'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            'length' => 32,
+            'nullable' => true,
+            'comment' => 'Payment CC Type',
+        ];
+
+        $connection->addColumn(
+            $gridTableName,
+            'payment_cctype',
+            $cctypeColumns
+        );
+        
+        
+        //Populate "payment_cctype" in sales_order_grid with values in sales_order_payments
+        $connection->query(
+            $connection->updateFromSelect(
+                $connection->select()
+                    ->join(
+                        $paymentTableName,
+                        sprintf('%s.entity_id = %s.parent_id', $gridTableName, $paymentTableName),
+                        'cc_type AS payment_cctype'
+                    ),
+                $gridTableName
+            )
+        );
+        
     }
 }

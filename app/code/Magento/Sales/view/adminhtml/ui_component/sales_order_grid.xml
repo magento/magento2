@@ -323,6 +323,18 @@
                 </item>
             </argument>
         </column>
+        <column name="payment_cctype">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">Magento\Payment\Ui\Component\Listing\Column\CcType\Options</item>
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">select</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
+                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="dataType" xsi:type="string">select</item>
+                    <item name="label" xsi:type="string" translate="true">Payment Details</item>
+                </item>
+            </argument>
+        </column>
         <column name="total_refunded" class="Magento\Sales\Ui\Component\Listing\Column\Price">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
