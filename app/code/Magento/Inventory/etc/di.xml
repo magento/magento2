@@ -69,4 +69,14 @@
     <preference for="Magento\InventoryApi\Api\ReservationAppendInterface" type="Magento\Inventory\Model\ReservationAppend"/>
     <preference for="Magento\InventoryApi\Api\Data\ReservationInterface" type="Magento\Inventory\Model\Reservation"/>
     <preference for="Magento\Inventory\Model\ReservationBuilderInterface" type="Magento\Inventory\Model\ReservationBuilder"/>
+    <preference for="Magento\Inventory\Model\ReservationBuilder\Validator\ReservationBuilderValidatorInterface" type="Magento\Inventory\Model\ReservationBuilder\Validator\ValidatorChain"/>
+    <type name="Magento\Inventory\Model\ReservationBuilder\Validator\ValidatorChain">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="stockId" xsi:type="object">Magento\Inventory\Model\ReservationBuilder\Validator\StockIdValidator</item>
+                <item name="sku" xsi:type="object">Magento\Inventory\Model\ReservationBuilder\Validator\SkuValidator</item>
+                <item name="quantity" xsi:type="object">Magento\Inventory\Model\ReservationBuilder\Validator\QuantityValidator</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

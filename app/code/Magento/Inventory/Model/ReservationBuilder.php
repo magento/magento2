@@ -5,7 +5,9 @@
  */
 namespace Magento\Inventory\Model;
 
+use Magento\Framework\Validation\ValidationException;
 use Magento\InventoryApi\Api\Data\ReservationInterface;
+use Zend\Filter\Word\UnderscoreToCamelCase;
 
 /**
  * Used to instantiate ReservationInterface objects
@@ -42,7 +44,19 @@ class ReservationBuilder implements ReservationBuilderInterface
      *
      * @var \Magento\Framework\ObjectManagerInterface
      */
-    protected $_objectManager = null;
+    private $objectManager = null;
+
+    /**
+     * @var \Magento\Inventory\Model\ReservationBuilder\Validator\ReservationBuilderValidatorInterface
+     */
+    private $reservationBuilderValidator;
+
+    /**
+     * String Service instance
+     *
+     * @var \Magento\Inventory\Model\String\Service
+     */
+    private $stringService;
 
     /**
      * ReservationBuilder constructor.
@@ -50,9 +64,13 @@ class ReservationBuilder implements ReservationBuilderInterface
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      */
     public function __construct(
-        \Magento\Framework\ObjectManagerInterface $objectManager
+        \Magento\Framework\ObjectManagerInterface $objectManager,
+        \Magento\Inventory\Model\ReservationBuilder\Validator\ReservationBuilderValidatorInterface $reservationBuilderValidator,
+        \Magento\Inventory\Model\String\Service $stringService
     ) {
-        $this->_objectManager = $objectManager;
+        $this->objectManager = $objectManager;
+        $this->reservationBuilderValidator = $reservationBuilderValidator;
+        $this->stringService = $stringService;
     }
 
     /**
@@ -74,6 +92,14 @@ class ReservationBuilder implements ReservationBuilderInterface
     }
 
     /**
+     * @return int|null
+     */
+    public function getStockId()
+    {
+        return $this->stockId;
+    }
+
+    /**
      * @inheritdoc
      */
     public function setSku(string $sku): ReservationBuilder
@@ -83,12 +109,28 @@ class ReservationBuilder implements ReservationBuilderInterface
     }
 
     /**
+     * @return string|null
+     */
+    public function getSku()
+    {
+        return $this->sku;
+    }
+
+    /**
      * @inheritdoc
      */
     public function setQuantity(float $quantity): ReservationBuilder
     {
         $this->quantity = $quantity;
         return $this;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getQuantity()
+    {
+        return $this->quantity;
     }
 
     /**
@@ -105,6 +147,12 @@ class ReservationBuilder implements ReservationBuilderInterface
      */
     public function build(): ReservationInterface
     {
+        $validationResult = $this->reservationBuilderValidator->validate($this);
+
+        if (!$validationResult->isValid()) {
+            throw new ValidationException($validationResult);
+        }
+
         $data = [
             ReservationInterface::RESERVATION_ID => $this->reservationId,
             ReservationInterface::STOCK_ID => $this->stockId,
@@ -113,10 +161,21 @@ class ReservationBuilder implements ReservationBuilderInterface
             ReservationInterface::METADATA => $this->metadata,
         ];
 
-        $arguments = [
-            'data' => $data,
-        ];
+        $arguments = $this->stringService->convertArrayKeysFromSnakeToCamelCase($data);
+        $reservationInstance = $this->objectManager->create(ReservationInterface::class, $arguments);
+        $this->reset();
+        return $reservationInstance;
+    }
 
-        return $this->_objectManager->create(ReservationInterface::class, $arguments);
+    /**
+     * Used to clean state after object creation.
+     */
+    private function reset()
+    {
+        $this->reservationId = null;
+        $this->stockId = null;
+        $this->sku = null;
+        $this->quantity = null;
+        $this->metadata = null;
     }
 }

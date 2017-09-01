@@ -80,7 +80,7 @@ class CreateReservationTable
         )->addColumn(
             ReservationInterface::METADATA,
             Table::TYPE_TEXT,
-            '64k',
+            255,
             [],
             'Metadata'
         )->addForeignKey(

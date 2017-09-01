@@ -10,12 +10,13 @@ use Magento\InventoryApi\Api\Data\ReservationInterface;
 /**
  * Used to instantiate ReservationInterface objects
  *
+ * @api
  * @see ReservationInterface
  */
 interface ReservationBuilderInterface
 {
     /**
-     * @param int|null $reservationId
+     * @param int $reservationId
      * @return ReservationBuilder
      */
     public function setReservationId($reservationId): ReservationBuilder;
@@ -39,13 +40,14 @@ interface ReservationBuilderInterface
     public function setQuantity(float $quantity): ReservationBuilder;
 
     /**
-     * @param string|null $metadata
+     * @param string $metadata
      * @return ReservationBuilder
      */
     public function setMetadata($metadata): ReservationBuilder;
 
     /**
      * @return ReservationInterface
+     * @throws ValidationException
      */
     public function build(): ReservationInterface;
 }

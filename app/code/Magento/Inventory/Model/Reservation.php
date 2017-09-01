@@ -5,7 +5,6 @@
  */
 namespace Magento\Inventory\Model;
 
-use Magento\Framework\Model\AbstractModel;
 use Magento\Inventory\Model\ResourceModel\Reservation as ReservationResourceModel;
 use Magento\InventoryApi\Api\Data\ReservationInterface;
 
@@ -14,14 +13,45 @@ use Magento\InventoryApi\Api\Data\ReservationInterface;
  *
  * @codeCoverageIgnore
  */
-class Reservation extends AbstractModel implements ReservationInterface
+class Reservation implements ReservationInterface
 {
     /**
-     * @inheritdoc
+     * @var int|null
      */
-    protected function _construct()
-    {
-        $this->_init(ReservationResourceModel::class);
+    private $reservationId;
+
+    /**
+     * @var int
+     */
+    private $stockId;
+
+    /**
+     * @var string
+     */
+    private $sku;
+
+    /**
+     * @var float
+     */
+    private $quantity;
+
+    /**
+     * @var string|null
+     */
+    private $metadata;
+
+    public function __construct(
+        $reservationId,
+        int $stockId,
+        string $sku,
+        float $quantity,
+        $metadata
+    ) {
+        $this->reservationId = $reservationId;
+        $this->stockId = $stockId;
+        $this->sku = $sku;
+        $this->quantity = $quantity;
+        $this->metadata = $metadata;
     }
 
     /**
@@ -29,7 +59,7 @@ class Reservation extends AbstractModel implements ReservationInterface
      */
     public function getReservationId()
     {
-        return $this->getData(self::RESERVATION_ID);
+        return $this->reservationId;
     }
 
     /**
@@ -37,7 +67,7 @@ class Reservation extends AbstractModel implements ReservationInterface
      */
     public function getStockId(): int
     {
-        return $this->getData(self::STOCK_ID);
+        return $this->stockId;
     }
 
     /**
@@ -45,7 +75,7 @@ class Reservation extends AbstractModel implements ReservationInterface
      */
     public function getSku(): string
     {
-        return $this->getData(self::SKU);
+        return $this->sku;
     }
 
     /**
@@ -53,7 +83,7 @@ class Reservation extends AbstractModel implements ReservationInterface
      */
     public function getQuantity(): float
     {
-        return $this->getData(self::QUANTITY);
+        return $this->quantity;
     }
 
     /**
@@ -61,6 +91,6 @@ class Reservation extends AbstractModel implements ReservationInterface
      */
     public function getMetadata()
     {
-        return $this->getData(self::METADATA);
+        return $this->metadata;
     }
 }

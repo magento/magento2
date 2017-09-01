@@ -16,7 +16,7 @@ use Magento\InventoryApi\Api\Data\ReservationExtensionInterface;
  *
  * @api
  */
-interface ReservationInterface extends ExtensibleDataInterface
+interface ReservationInterface
 {
     /**
      * Constants for keys of data array. Identical to the name of the getter in snake case

@@ -11,8 +11,6 @@ use Magento\Inventory\Model\Reservation as ReservationModel;
 
 /**
  * Resource Collection of Reservation entities
- *
- * @api
  */
 class Collection extends AbstractCollection
 {

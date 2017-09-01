@@ -9,13 +9,13 @@ use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
 use Magento\Inventory\Model\ResourceModel\Reservation\SaveMultiple;
 use Magento\InventoryApi\Api\Data\ReservationInterface;
-use Magento\InventoryApi\Api\ReservationAppendInterface;
+use Magento\InventoryApi\Api\ReservationsAppendInterface;
 use Psr\Log\LoggerInterface;
 
 /**
  * @inheritdoc
  */
-class ReservationAppend implements ReservationAppendInterface
+class ReservationsAppend implements ReservationsAppendInterface
 {
     /**
      * @var SaveMultiple
