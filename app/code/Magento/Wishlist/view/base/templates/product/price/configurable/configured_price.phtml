@@ -15,7 +15,7 @@ $option = $configuredPrice->getOption();
 <!-- if any of the options have special price -->
 <?php if ($block->hasSpecialPrice()
     && $configuredPrice->getOption()
-    && $configuredPrice->getAmount()->getValue() !== $configuredPrice->getRegularAmount()->getValue()) : ?>
+    && $configuredPrice->getAmount()->getValue() !== $configuredPrice->getConfiguredAmount(true)->getValue()) : ?>
     <p class="price-as-configured">
         <span class="special-price">
             <?= /* @noEscape */ $block->renderAmount(
@@ -31,7 +31,7 @@ $option = $configuredPrice->getOption();
         </span>
         <span class="old-price">
             <?= /* @noEscape */ $block->renderAmount(
-                $configuredPrice->getRegularAmount(),
+                $configuredPrice->getConfiguredAmount(true),
                 [
                     'display_label'     => $block->escapeHtml(__('Regular Price')),
                     'price_id'          => $block->escapeHtml($block->getPriceId('old-price-' . $idSuffix)),
