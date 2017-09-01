@@ -55,12 +55,18 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
     private $eavConfig;
 
     /**
+     * @var \Magento\Framework\Stdlib\DateTime\Filter\Date
+     */
+    private $dateFilter;
+
+    /**
      * Constructor
      *
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
+     * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
      * @param StoreManagerInterface $storeManager
      * @param \Magento\Eav\Model\Config $eavConfig
      */
@@ -69,6 +75,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
         \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Framework\View\LayoutFactory $layoutFactory,
+        \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
         StoreManagerInterface $storeManager,
         \Magento\Eav\Model\Config $eavConfig = null
     ) {
@@ -76,6 +83,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
         $this->resultRawFactory = $resultRawFactory;
         $this->resultJsonFactory = $resultJsonFactory;
         $this->layoutFactory = $layoutFactory;
+        $this->dateFilter = $dateFilter;
         $this->storeManager = $storeManager;
         $this->eavConfig = $eavConfig
             ?: \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Eav\Model\Config::class);
@@ -362,5 +370,28 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
             $params['id'] = $categoryId;
         }
         return ['path' => $path, 'params' => $params];
+    }
+
+    /**
+     * Datetime data preprocessing
+     *
+     * @param \Magento\Catalog\Model\Category $category
+     * @param array $postData
+     *
+     * @return array
+     */
+    private function dateTimePreprocessing($category, $postData)
+    {
+        $dateFieldFilters = [];
+        $attributes = $category->getAttributes();
+        foreach ($attributes as $attrKey => $attribute) {
+            if ($attribute->getBackend()->getType() == 'datetime') {
+                if (array_key_exists($attrKey, $postData) && $postData[$attrKey] != '') {
+                    $dateFieldFilters[$attrKey] = $this->dateFilter;
+                }
+            }
+        }
+        $inputFilter = new \Zend_Filter_Input($dateFieldFilters, [], $postData);
+        return $inputFilter->getUnescaped();
     }
 }

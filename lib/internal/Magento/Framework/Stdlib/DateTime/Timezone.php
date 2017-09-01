@@ -151,7 +151,6 @@ class Timezone implements TimezoneInterface
 
     /**
      * {@inheritdoc}
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function date($date = null, $locale = null, $useTimezone = true, $includeTime = true)
     {
@@ -175,7 +174,7 @@ class Timezone implements TimezoneInterface
                     $timeType,
                     new \DateTimeZone($timezone)
                 );
-                $date = $formatter->parse($date) ?: (new \DateTime($date))->getTimestamp();
+                $date = $formatter->parse($date);
                 break;
         }
 
