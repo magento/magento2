@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Backend\Controller\Adminhtml;
+namespace Magento\Cron\Controller\Adminhtml;
 
 use Magento\Backend\App\Action;
 use Magento\Framework\Exception\LocalizedException;
@@ -15,7 +15,7 @@ abstract class Cron extends Action
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Backend::cron_management';
+    const ADMIN_RESOURCE = 'Magento_Cron::cron_management';
 
     /**
      * Core registry

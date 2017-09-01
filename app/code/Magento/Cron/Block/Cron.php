@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Backend\Block;
+namespace Magento\Cron\Block;
 
 class Cron extends \Magento\Backend\Block\Widget\Grid\Container
 {

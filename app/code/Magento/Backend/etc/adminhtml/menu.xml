@@ -16,7 +16,6 @@
         <add id="Magento_Backend::system_design" title="Design" translate="title" module="Magento_Backend" sortOrder="20" parent="Magento_Backend::content" resource="Magento_Backend::design"/>
         <add id="Magento_Backend::system_convert" title="Data Transfer" translate="title" module="Magento_Backend" sortOrder="10" parent="Magento_Backend::system" resource="Magento_Backend::convert"/>
         <add id="Magento_Backend::system_cache" title="Cache Management" translate="title" module="Magento_Backend" sortOrder="10" parent="Magento_Backend::system_tools" action="adminhtml/cache" resource="Magento_Backend::cache"/>
-        <add id="Magento_Backend::cron_management" title="Cron Management" translate="title" module="Magento_Backend" sortOrder="60" parent="Magento_Backend::system_tools" action="adminhtml/cron" resource="Magento_Backend::cron"/>
         <add id="Magento_Backend::marketing" title="Marketing" translate="title" module="Magento_Backend" sortOrder="40" resource="Magento_Backend::marketing"/>
         <add id="Magento_Backend::marketing_communications" title="Communications" translate="title" module="Magento_Backend" sortOrder="30" parent="Magento_Backend::marketing"  resource="Magento_Backend::marketing_communications"/>
         <add id="Magento_Backend::marketing_seo" title="SEO &amp; Search" translate="title" module="Magento_Backend" sortOrder="40" parent="Magento_Backend::marketing"  resource="Magento_Backend::marketing_seo"/>
