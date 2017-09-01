@@ -20,7 +20,7 @@ class UpdateTest extends WebapiAbstract
     /**#@-*/
 
     /**
-     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock/stock.php
+     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock.php
      */
     public function testUpdate()
     {
