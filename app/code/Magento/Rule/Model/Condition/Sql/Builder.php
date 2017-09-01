@@ -116,24 +116,26 @@ class Builder
     protected function _getMappedSqlCondition(AbstractCondition $condition, $value = '')
     {
         $argument = $condition->getMappedSqlField();
-        if ($argument) {
-            $conditionOperator = $condition->getOperatorForValidate();
 
-            if (!isset($this->_conditionOperatorMap[$conditionOperator])) {
-                throw new \Magento\Framework\Exception\LocalizedException(__('Unknown condition operator'));
-            }
-
-            $sql = str_replace(
-                ':field',
-                $this->_connection->getIfNullSql($this->_connection->quoteIdentifier($argument), 0),
-                $this->_conditionOperatorMap[$conditionOperator]
-            );
-
-            return $this->_expressionFactory->create(
-                ['expression' => $value . $this->_connection->quoteInto($sql, $condition->getBindArgumentValue())]
-            );
+        if (empty($argument)) {
+            return $this->_expressionFactory->create(['expression' => '1 = -1']);
         }
-        return '';
+
+        $conditionOperator = $condition->getOperatorForValidate();
+
+        if (!isset($this->_conditionOperatorMap[$conditionOperator])) {
+            throw new \Magento\Framework\Exception\LocalizedException(__('Unknown condition operator'));
+        }
+
+        $sql = str_replace(
+            ':field',
+            $this->_connection->getIfNullSql($this->_connection->quoteIdentifier($argument), 0),
+            $this->_conditionOperatorMap[$conditionOperator]
+        );
+
+        return $this->_expressionFactory->create(
+            ['expression' => $value . $this->_connection->quoteInto($sql, $condition->getBindArgumentValue())]
+        );
     }
 
     /**
