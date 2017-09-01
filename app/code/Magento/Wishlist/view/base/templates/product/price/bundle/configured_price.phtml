@@ -10,16 +10,22 @@ $schema = ($block->getZone() == 'item_view') ? true : false;
 $idSuffix = $block->getIdSuffix() ? $block->getIdSuffix() : '';
 /** @var \Magento\Catalog\Pricing\Price\ConfiguredPrice $configuredPrice */
 $configuredPrice = $block->getPrice();
-/** @var \Magento\Framework\Pricing\Price\PriceInterface $regularPriceModel */
-$regularPriceModel = $block->getPriceType('regular_price');
 ?>
-<!-- if any of the options have special price -->
-<?php if ($block->hasSpecialPrice()
-    && $configuredPrice->getAmount()->getValue() !== $regularPriceModel->getValue()) : ?>
+<?php if ($block->hasSpecialPrice()) : ?>
+    <?php
+    //get total configured amount in case we have a configured price or not
+    if (!empty($configuredPrice->getOptions())) {
+        $finalPriceModelAmount = $configuredPrice->getConfiguredAmount();
+        $regularPriceAmount = $configuredPrice->getConfiguredAmount(0, true);
+    } else {
+        $finalPriceModelAmount = $block->getPriceType('final_price')->getAmount();
+        $regularPriceAmount = $block->getPriceType('regular_price')->getAmount();
+    }
+    ?>
     <p class="price-as-configured">
         <span class="special-price">
             <?= $block->renderAmount(
-                $configuredPrice->getAmount(),
+                $finalPriceModelAmount,
                 [
                     'display_label'     => $block->escapeHtml(__('Special Price')),
                     'price_id'          => $block->escapeHtml($block->getPriceId('product-price-' . $idSuffix)),
@@ -31,7 +37,7 @@ $regularPriceModel = $block->getPriceType('regular_price');
         </span>
         <span class="old-price">
             <?= $block->renderAmount(
-                $regularPriceModel->getAmount(),
+                $regularPriceAmount,
                 [
                     'display_label'     => $block->escapeHtml(__('Regular Price')),
                     'price_id'          => $block->escapeHtml($block->getPriceId('old-price-' . $idSuffix)),

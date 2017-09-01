@@ -25,11 +25,6 @@ class BundleOptionRegularPrice extends AbstractPrice implements BundleOptionPric
     protected $calculator;
 
     /**
-     * @var float|bool|null
-     */
-    private $maximalPrice;
-
-    /**
      * @var \Magento\Bundle\Pricing\Price\BundleOptions
      */
     private $bundleOptions;
