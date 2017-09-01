@@ -346,8 +346,8 @@ class PayflowproTest extends \PHPUnit\Framework\TestCase
             ->method('postRequest')
             ->with(
                 $this->callback(function ($request) use ($expectedResult) {
-                    return is_callable([$request, 'getAmt']) && $request->getAmt() == $expectedResult;}
-                ),
+                    return is_callable([$request, 'getAmt']) && $request->getAmt() == $expectedResult;
+                }),
                 $this->isInstanceOf(PayflowConfig::class)
             )
             ->willReturn($response);
