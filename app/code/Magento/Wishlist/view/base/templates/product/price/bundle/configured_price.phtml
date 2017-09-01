@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 ?>
@@ -24,7 +24,7 @@ $configuredPrice = $block->getPrice();
     ?>
     <p class="price-as-configured">
         <span class="special-price">
-            <?= $block->renderAmount(
+            <?= /* @noEscape */ $block->renderAmount(
                 $finalPriceModelAmount,
                 [
                     'display_label'     => $block->escapeHtml(__('Special Price')),
@@ -36,7 +36,7 @@ $configuredPrice = $block->getPrice();
             ); ?>
         </span>
         <span class="old-price">
-            <?= $block->renderAmount(
+            <?= /* @noEscape */ $block->renderAmount(
                 $regularPriceAmount,
                 [
                     'display_label'     => $block->escapeHtml(__('Regular Price')),
@@ -55,7 +55,7 @@ $configuredPrice = $block->getPrice();
         : '';
     ?>
     <p class="price-as-configured">
-        <?= $block->renderAmount(
+        <?= /* @noEscape */ $block->renderAmount(
             $configuredPrice->getAmount(),
             [
                 'display_label'     => $block->escapeHtml($priceLabel),
