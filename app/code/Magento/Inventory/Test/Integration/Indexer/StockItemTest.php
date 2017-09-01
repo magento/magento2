@@ -10,8 +10,13 @@ use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Indexer\Model\Indexer;
+use Magento\Inventory\Indexer\Alias;
+use Magento\Inventory\Indexer\IndexNameBuilder;
+use Magento\Inventory\Indexer\IndexStructureInterface;
 use Magento\Inventory\Indexer\StockItemIndexerInterface;
+use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\StockInterface;
+use Magento\InventoryApi\Api\SourceRepositoryInterface;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
@@ -44,7 +49,12 @@ class StockItemTest extends TestCase
     private $indexerChecker;
 
     /**
-     * @var @var StockInterface[]
+     * @var SourceInterface[]
+     */
+    private $sources;
+
+    /**
+     * @var StockInterface[]
      */
     private $stocks;
 
@@ -69,6 +79,67 @@ class StockItemTest extends TestCase
             ->addSortOrder($sortOrder)
             ->create();
         $this->stocks = array_values($stockRepository->getList($searchCriteria)->getItems());
+
+        /** @var SourceRepositoryInterface $sourceRepository */
+        $sourceRepository = Bootstrap::getObjectManager()->get(SourceRepositoryInterface::class);
+        $searchCriteria = $searchCriteriaBuilder
+            ->addFilter(SourceInterface::NAME, ['source-name-1'], 'in')
+            ->addSortOrder($sortOrder)
+            ->create();
+        $this->sources = array_values($sourceRepository->getList($searchCriteria)->getItems());
+    }
+
+    public function tearDown()
+    {
+        /** @var IndexNameBuilder $indexNameBuilder */
+        $indexNameBuilder = Bootstrap::getObjectManager()->get(IndexNameBuilder::class);
+        /** @var IndexStructureInterface $indexStructure */
+        $indexStructure = Bootstrap::getObjectManager()->get(IndexStructureInterface::class);
+
+        foreach ($this->stocks as $stock) {
+            $indexName = $indexNameBuilder
+                ->setIndexId(StockItemIndexerInterface::INDEXER_ID)
+                ->addDimension('stock_', $stock->getStockId())
+                ->setAlias(Alias::ALIAS_MAIN)
+                ->create();
+            $indexStructure->delete($indexName);
+        }
+    }
+
+    /**
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_link.php
+     */
+    public function testReindexRow()
+    {
+        self::assertEquals(0, $this->indexerChecker->execute($this->stocks[0]->getStockId(), 'SKU-1'));
+        self::assertEquals(0, $this->indexerChecker->execute($this->stocks[1]->getStockId(), 'SKU-2'));
+
+        $this->indexer->reindexRow($this->sources[0]->getSourceId());
+
+        self::assertEquals(8, $this->indexerChecker->execute($this->stocks[0]->getStockId(), 'SKU-1'));
+        self::assertEquals(0, $this->indexerChecker->execute($this->stocks[1]->getStockId(), 'SKU-2'));
+    }
+
+    /**
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_link.php
+     */
+    public function testReindexList()
+    {
+        self::assertEquals(0, $this->indexerChecker->execute($this->stocks[0]->getStockId(), 'SKU-1'));
+        self::assertEquals(0, $this->indexerChecker->execute($this->stocks[1]->getStockId(), 'SKU-2'));
+
+        $this->indexer->reindexList([$this->sources[0]->getSourceId()]);
+
+        self::assertEquals(8, $this->indexerChecker->execute($this->stocks[0]->getStockId(), 'SKU-1'));
+        self::assertEquals(0, $this->indexerChecker->execute($this->stocks[1]->getStockId(), 'SKU-2'));
     }
 
     /**

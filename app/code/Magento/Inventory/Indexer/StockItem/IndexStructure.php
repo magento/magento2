@@ -58,16 +58,6 @@ class IndexStructure implements IndexStructureInterface
         )->setComment(
             'Inventory Stock item Table'
         )->addColumn(
-            'stock_id',
-            Table::TYPE_INTEGER,
-            null,
-            [
-                Table::OPTION_PRIMARY => true,
-                Table::OPTION_UNSIGNED => true,
-                Table::OPTION_NULLABLE => false,
-            ],
-            'Stock ID'
-        )->addColumn(
             'sku',
             Table::TYPE_TEXT,
             64,

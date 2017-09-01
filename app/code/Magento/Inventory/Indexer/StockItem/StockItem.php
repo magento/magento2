@@ -10,7 +10,6 @@ use Magento\Inventory\Indexer\{
     Alias,
     IndexHandlerInterface,
     IndexNameBuilder,
-//    IndexStructureInterface,
     IndexTableSwitcherInterface,
     StockItemIndexerInterface
 };
@@ -118,21 +117,17 @@ class StockItem implements StockItemIndexerInterface
      */
     public function executeList(array $sourceIds)
     {
-//        $stockIds = $this->getAssignedStockIds->execute($sourceIds);
-//
-//        foreach ($stockIds as $stockId) {
-//            $dimensions = [$this->dimensionFactory->create(['name' => 'stock', 'value' => $stockId])];
-//            $this->indexScopeState->useMainIndex();
-////            $this->indexHandler->deleteIndex($dimensions);
-//            $this->indexHandler->saveIndex($dimensions, $this->indexDataProvider->getData($stockId, $sourceIds));
-//        }
-    }
+        $stockIds = $this->getAssignedStockIds->execute($sourceIds);
 
-    /**
-     * @inheritdoc
-     */
-    public function getName()
-    {
-        return self::INDEXER_ID;
+        foreach ($stockIds as $stockId) {
+            $mainIndexName = $this->indexNameBuilder
+                ->setIndexId(StockItemIndexerInterface::INDEXER_ID)
+                ->addDimension('stock_', $stockId)
+                ->setAlias(Alias::ALIAS_MAIN)
+                ->create();
+            // TODO: we do not need to clear index
+            $this->indexStructure->create($mainIndexName);
+            $this->indexHandler->saveIndex($mainIndexName, $this->indexDataProvider->getData($stockId));
+        }
     }
 }

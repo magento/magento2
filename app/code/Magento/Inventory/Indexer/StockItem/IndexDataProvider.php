@@ -53,7 +53,7 @@ class IndexDataProvider
             ->joinLeft(
                 ['stock_source_link' => $sourceStockLinkTable],
                 'source_item.' . SourceItemInterface::SOURCE_ID . ' = stock_source_link.' . StockSourceLink::SOURCE_ID,
-                [StockSourceLink::STOCK_ID]
+                []
             )
             ->where('stock_source_link.' . StockSourceLink::STOCK_ID . ' = ?', $stockId);
 
