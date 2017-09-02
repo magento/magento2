@@ -57,7 +57,7 @@ class IndexHandler implements IndexHandlerInterface
     /**
      * @inheritdoc
      */
-    public function saveIndex(IndexName $indexName, \Traversable $documents): void
+    public function saveIndex(IndexName $indexName, \Traversable $documents)
     {
         $tableName = $this->indexNameResolver->resolveName($indexName);
 
@@ -73,7 +73,7 @@ class IndexHandler implements IndexHandlerInterface
     /**
      * @inheritdoc
      */
-    public function deleteIndex(IndexName $indexName, \Traversable $documents): void
+    public function deleteIndex(IndexName $indexName, \Traversable $documents)
     {
         $tableName = $this->indexNameResolver->resolveName($indexName);
 

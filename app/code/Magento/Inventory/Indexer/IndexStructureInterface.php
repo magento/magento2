@@ -21,12 +21,12 @@ interface IndexStructureInterface
      * @param string $connectionName
      * @return void
      */
-    public function create(IndexName $indexName, string $connectionName = ResourceConnection::DEFAULT_CONNECTION): void;
+    public function create(IndexName $indexName, string $connectionName = ResourceConnection::DEFAULT_CONNECTION);
 
     /**
      * @param IndexName $indexName
      * @param string $connectionName
      * @return void
      */
-    public function delete(IndexName $indexName, string $connectionName = ResourceConnection::DEFAULT_CONNECTION): void;
+    public function delete(IndexName $indexName, string $connectionName = ResourceConnection::DEFAULT_CONNECTION);
 }

@@ -19,7 +19,7 @@ interface IndexHandlerInterface
      * @param \Traversable $documents
      * @return void
      */
-    public function saveIndex(IndexName $indexName, \Traversable $documents): void;
+    public function saveIndex(IndexName $indexName, \Traversable $documents);
 
     /**
      * Remove data from index
@@ -28,5 +28,5 @@ interface IndexHandlerInterface
      * @param \Traversable $documents
      * @return void
      */
-    public function deleteIndex(IndexName $indexName, \Traversable $documents): void;
+    public function deleteIndex(IndexName $indexName, \Traversable $documents);
 }
