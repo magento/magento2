@@ -5,16 +5,29 @@
  */
 namespace Magento\Sales\Model\Order\Payment\State;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order;
-use Magento\Sales\Model\Order\Payment;
+use Magento\Sales\Model\Order\StatusResolver;
 
 class RegisterCaptureNotificationCommand implements CommandInterface
 {
     /**
-     * Run command
-     *
+     * @var StatusResolver
+     */
+    private $statusResolver;
+
+    /**
+     * @param StatusResolver|null $statusResolver
+     */
+    public function __construct(StatusResolver $statusResolver = null)
+    {
+        $this->statusResolver = $statusResolver
+            ? : ObjectManager::getInstance()->get(StatusResolver::class);
+    }
+
+    /**
      * @param OrderPaymentInterface $payment
      * @param string|float|int $amount
      * @param OrderInterface $order
@@ -22,35 +35,34 @@ class RegisterCaptureNotificationCommand implements CommandInterface
      */
     public function execute(OrderPaymentInterface $payment, $amount, OrderInterface $order)
     {
-        /**
-         * @var $payment Payment
-         */
         $state = Order::STATE_PROCESSING;
-        $status = false;
-        $formattedAmount = $order->getBaseCurrency()->formatTxt($amount);
+        $status = null;
+        $message = 'Registered notification about captured amount of %1.';
+
         if ($payment->getIsTransactionPending()) {
-            $message = __(
-                'An amount of %1 will be captured after being approved at the payment gateway.',
-                $formattedAmount
-            );
             $state = Order::STATE_PAYMENT_REVIEW;
-        } else {
-            $message = __('Registered notification about captured amount of %1.', $formattedAmount);
+            $message = 'An amount of %1 will be captured after being approved at the payment gateway.';
         }
+
         if ($payment->getIsFraudDetected()) {
             $state = Order::STATE_PAYMENT_REVIEW;
-            $message = __(
-                'Order is suspended as its capture amount %1 is suspected to be fraudulent.',
-                $formattedAmount
-            );
             $status = Order::STATUS_FRAUD;
+            $message = 'Order is suspended as its capture amount %1 is suspected to be fraudulent.';
         }
-        $this->setOrderStateAndStatus($order, $status, $state);
 
-        return $message;
+        if (!isset($status)) {
+            $status = $this->statusResolver->getOrderStatusByState($order, $state);
+        }
+
+        $order->setState($state);
+        $order->setStatus($status);
+
+        return __($message, $order->getBaseCurrency()->formatTxt($amount));
     }
 
     /**
+     * @deprecated Replaced by a StatusResolver class call.
+     *
      * @param Order $order
      * @param string $status
      * @param string $state
