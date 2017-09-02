@@ -15,6 +15,8 @@ class FallbackContext extends Context
 {
     /**
      * Secure path
+     *
+     * @deprecated
      */
     const SECURE_PATH = 'secure';
 
@@ -35,6 +37,8 @@ class FallbackContext extends Context
 
     /**
      * @var bool
+     *
+     * @deprecated
      */
     private $isSecure;
 
@@ -103,6 +107,6 @@ class FallbackContext extends Context
      */
     public function getConfigPath()
     {
-        return $this->getPath() . ($this->isSecure ? '/' . self::SECURE_PATH : '');
+        return $this->getPath();
     }
 }

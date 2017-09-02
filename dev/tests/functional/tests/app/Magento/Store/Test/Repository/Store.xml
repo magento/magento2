@@ -52,5 +52,13 @@
             <field name="code" xsi:type="string">store_%isolation%</field>
             <field name="is_active" xsi:type="string">Enabled</field>
         </dataset>
+        <dataset name="custom_store_main_website">
+            <field name="group_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">custom</item>
+            </field>
+            <field name="name" xsi:type="string">Store_%isolation%</field>
+            <field name="code" xsi:type="string">store_%isolation%</field>
+            <field name="is_active" xsi:type="string">Enabled</field>
+        </dataset>
     </repository>
 </config>
