@@ -97,8 +97,8 @@ class Calendar extends \Magento\Framework\View\Element\Template
                     array_values(
                         iterator_to_array(
                             null !== $monthsData->get('format')->get('abbreviated')
-                             ? $monthsData['format']['abbreviated']
-                             : $monthsData['format']['wide']
+                            ? $monthsData['format']['abbreviated']
+                            : $monthsData['format']['wide']
                         )
                     )
                 ),
