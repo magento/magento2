@@ -8,14 +8,14 @@ namespace Magento\Sales\Test\Unit\Model\Order\Payment\State;
 use Magento\Directory\Model\Currency;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order;
-use Magento\Sales\Model\Order\Payment\State\AuthorizeCommand;
+use Magento\Sales\Model\Order\Payment\State\RegisterCaptureNotificationCommand;
 use Magento\Sales\Model\Order\StatusResolver;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
- * @see AuthorizeCommand
+ * @see RegisterCaptureNotificationCommand
  */
-class AuthorizeCommandTest extends \PHPUnit_Framework_TestCase
+class RegisterCaptureNotificationCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var float
@@ -28,7 +28,7 @@ class AuthorizeCommandTest extends \PHPUnit_Framework_TestCase
     private $newOrderStatus = 'custom_status';
 
     /**
-     * @see AuthorizeCommand::execute
+     * @see RegisterCaptureNotificationCommand::execute
      *
      * @param bool $isTransactionPending
      * @param bool $isFraudDetected
@@ -45,7 +45,7 @@ class AuthorizeCommandTest extends \PHPUnit_Framework_TestCase
         $expectedStatus,
         $expectedMessage
     ) {
-        $actualReturn = (new AuthorizeCommand($this->getStatusResolver()))->execute(
+        $actualReturn = (new RegisterCaptureNotificationCommand($this->getStatusResolver()))->execute(
             $this->getPayment($isTransactionPending, $isFraudDetected),
             $this->amount,
             $this->getOrder()
@@ -66,30 +66,28 @@ class AuthorizeCommandTest extends \PHPUnit_Framework_TestCase
                 false,
                 Order::STATE_PROCESSING,
                 $this->newOrderStatus,
-                'Authorized amount of %1.'
+                'Registered notification about captured amount of %1.'
             ],
             [
                 true,
                 false,
                 Order::STATE_PAYMENT_REVIEW,
                 $this->newOrderStatus,
-                'We will authorize %1 after the payment is approved at the payment gateway.'
+                'An amount of %1 will be captured after being approved at the payment gateway.'
             ],
             [
                 false,
                 true,
                 Order::STATE_PAYMENT_REVIEW,
                 Order::STATUS_FRAUD,
-                'Authorized amount of %1.' .
-                ' Order is suspended as its authorizing amount %1 is suspected to be fraudulent.'
+                'Order is suspended as its capture amount %1 is suspected to be fraudulent.'
             ],
             [
                 true,
                 true,
                 Order::STATE_PAYMENT_REVIEW,
                 Order::STATUS_FRAUD,
-                'We will authorize %1 after the payment is approved at the payment gateway.' .
-                ' Order is suspended as its authorizing amount %1 is suspected to be fraudulent.'
+                'Order is suspended as its capture amount %1 is suspected to be fraudulent.'
             ],
         ];
     }
