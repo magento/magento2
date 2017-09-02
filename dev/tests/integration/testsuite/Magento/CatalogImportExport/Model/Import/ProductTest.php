@@ -856,7 +856,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $this->_model->importData();
 
         /** @var \Magento\Catalog\Model\Product $product */
-        $product = $objectManager->create('Magento\Catalog\Model\Product');
+        $product = $objectManager->create(\Magento\Catalog\Model\Product::class);
         $id = $product->getIdBySku('Configurable 03');
         $product->load($id);
         $this->assertEquals('1', $product->getHasOptions());
@@ -1143,6 +1143,47 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     }
 
     /**
+     * Test import products without url keys will auto generate ones.
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
+     * @magentoAppIsolation enabled
+     */
+    public function testImportWithoutUrlKeys()
+    {
+        $products = [
+            'simple1' => 'simple-1',
+            'simple2' => 'simple-2',
+            'simple3' => 'simple-3'
+        ];
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create(\Magento\Framework\Filesystem::class);
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = $this->objectManager->create(
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
+            [
+                'file' => __DIR__ . '/_files/products_to_import_without_url_keys.csv',
+                'directory' => $directory
+            ]
+        );
+
+        $errors = $this->_model->setParameters(
+            ['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND, 'entity' => 'catalog_product']
+        )
+            ->setSource($source)
+            ->validateData();
+
+        $this->assertTrue($errors->getErrorsCount() == 0);
+        $this->_model->importData();
+
+        $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Catalog\Api\ProductRepositoryInterface::class
+        );
+        foreach ($products as $productSku => $productUrlKey) {
+            $this->assertEquals($productUrlKey, $productRepository->get($productSku)->getUrlKey());
+        }
+    }
+
+    /**
      * @return array
      */
     public function validateUrlKeysDataProvider()
@@ -1235,7 +1276,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $productId = $resource->getIdBySku('simple4');
         /** @var \Magento\Catalog\Model\Product $product */
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
         $product->load($productId);
         $productLinks = [
@@ -1285,7 +1326,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $this->_model->importData();
 
         $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Api\ProductRepositoryInterface'
+            \Magento\Catalog\Api\ProductRepositoryInterface::class
         );
         foreach ($products as $productSku => $productUrlKey) {
             $this->assertEquals($productUrlKey, $productRepository->get($productSku)->getUrlKey());
@@ -1325,7 +1366,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         foreach ($products as $sku => $manageStockUseConfig) {
             /** @var \Magento\CatalogInventory\Model\StockRegistry $stockRegistry */
             $stockRegistry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-                'Magento\CatalogInventory\Model\StockRegistry'
+                \Magento\CatalogInventory\Model\StockRegistry::class
             );
             $stockItem = $stockRegistry->getStockItemBySku($sku);
             $this->assertEquals($manageStockUseConfig, $stockItem->getUseConfigManageStock());

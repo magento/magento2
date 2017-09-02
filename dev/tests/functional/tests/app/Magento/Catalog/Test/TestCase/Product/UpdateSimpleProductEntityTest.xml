@@ -146,5 +146,21 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory" />
         </variation>
+        <variation name="UpdateSimpleProductEntityTestVariation12" summary="Correct scope filter caching in UI grids" ticketId="MAGETWO-64958">
+            <data name="initialProduct/dataset" xsi:type="string">product_with_category</data>
+            <data name="store/dataset" xsi:type="string">custom_store_main_website</data>
+            <data name="product/data/use_default_name" xsi:type="string">No</data>
+            <data name="product/data/name" xsi:type="string">Test simple product %isolation%</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductGridFilterCorrect" />
+        </variation>
+        <variation name="UpdateSimpleProductEntityTestVariation14" summary="Verify product date attributes are saved and displayed correctly." ticketId="MAGETWO-70929">
+            <data name="initialProduct/dataset" xsi:type="string">default</data>
+            <data name="product/data/sku" xsi:type="string">test_simple_product_%isolation%</data>
+            <data name="product/data/news_from_date" xsi:type="string">12/12/2018</data>
+            <data name="product/data/news_to_date" xsi:type="string">12/25/2018</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
+        </variation>
     </testCase>
 </config>

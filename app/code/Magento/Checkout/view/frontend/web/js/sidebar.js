@@ -224,7 +224,7 @@ define([
 
                         if (msg) {
                             alert({
-                                content: $.mage.__(msg)
+                                content: msg
                             });
                         }
                     }
