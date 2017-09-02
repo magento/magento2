@@ -142,10 +142,6 @@ class LinkedProductSelectBuilderBySpecialPrice implements LinkedProductSelectBui
             ->limit(1);
         $specialPrice = $this->baseSelectProcessor->process($specialPrice);
 
-        $specialPriceDefault = clone $specialPrice;
-        $specialPriceDefault->where('t.store_id = ?', Store::DEFAULT_STORE_ID);
-        $selects[] = $specialPriceDefault;
-
         if (!$this->catalogHelper->isPriceGlobal()) {
             $priceSelectStore = clone $specialPrice;
             $priceSelectStore->where('t.store_id = ?', $this->storeManager->getStore()->getId());
