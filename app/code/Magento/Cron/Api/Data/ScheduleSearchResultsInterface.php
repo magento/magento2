@@ -20,7 +20,7 @@ interface ScheduleSearchResultsInterface extends SearchResultsInterface
      * @return \Magento\Cron\Api\Data\ScheduleInterface[]
      */
     public function getItems();
-    
+
     /**
      * Set pages list.
      *

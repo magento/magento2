@@ -25,7 +25,7 @@ interface ScheduleInterface
      * @return int|null
      */
     public function getId();
-    
+
     /**
      * Set ID
      * @param int $id
@@ -38,20 +38,20 @@ interface ScheduleInterface
      * @return string|null
      */
     public function getJobCode();
-    
+
     /**
      * Set Job Code
-     * @param string $job_code
+     * @param string $jobCode
      * @return \Magento\Cron\Api\Data\ScheduleInterface
      */
-    public function setJobCode($job_code);
+    public function setJobCode($jobCode);
 
     /**
      * Get Status
      * @return string|null
      */
     public function getStatus();
-    
+
     /**
      * Set Status
      * @param string $status
@@ -64,7 +64,7 @@ interface ScheduleInterface
      * @return string|null
      */
     public function getMessages();
-    
+
     /**
      * Set messages
      * @param string $messages
@@ -77,13 +77,13 @@ interface ScheduleInterface
      * @return string|null
      */
     public function getCreatedAt();
-    
+
     /**
      * Set created at
-     * @param string $created_at
+     * @param string $createdAt
      * @return \Magento\Cron\Api\Data\ScheduleInterface
      */
-    public function setCreatedAt($created_at);
+    public function setCreatedAt($createdAt);
 
     /**
      * Get scheduled at
@@ -93,34 +93,34 @@ interface ScheduleInterface
 
     /**
      * Set scheduled at
-     * @param string $scheduled_at
+     * @param string $scheduledAt
      * @return \Magento\Cron\Api\Data\ScheduleInterface
      */
-    public function setScheduledAt($scheduled_at);
-    
+    public function setScheduledAt($scheduledAt);
+
     /**
      * Get executed at
      * @return string|null
      */
     public function getExecutedAt();
-    
+
     /**
      * Set executed at
-     * @param string $executed_at
+     * @param string $executedAt
      * @return \Magento\Cron\Api\Data\ScheduleInterface
      */
-    public function setExecutedAt($executed_at);
+    public function setExecutedAt($executedAt);
 
     /**
      * Get finished at
      * @return string|null
      */
     public function getFinishedAt();
-    
+
     /**
      * Set finished at
-     * @param string $finished_at
+     * @param string $finishedAt
      * @return \Magento\Cron\Api\Data\ScheduleInterface
      */
-    public function setFinishedAt($finished_at);
+    public function setFinishedAt($finishedAt);
 }

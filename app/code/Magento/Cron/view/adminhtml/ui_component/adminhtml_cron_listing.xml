@@ -137,7 +137,7 @@
                         <item name="caption" xsi:type="string" translate="true">Select...</item>
                         <item name="options" xsi:type="array">
                             <item name="all" xsi:type="array">
-                                <item name="value" xsi:type="string">all</item>
+                                <item name="value" xsi:type="string"></item>
                                 <item name="label" xsi:type="string" translate="true">all</item>
                             </item>
                             <item name="error" xsi:type="array">

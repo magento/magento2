@@ -23,7 +23,7 @@ abstract class Cron extends Action
      * @var \Magento\Framework\Registry
      */
     protected $coreRegistry;
-    
+
     /**
      * @var \Magento\Backend\Model\View\Result\ForwardFactory
      */

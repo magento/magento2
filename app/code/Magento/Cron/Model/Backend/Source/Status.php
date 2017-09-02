@@ -15,23 +15,23 @@ class Status implements \Magento\Framework\Data\OptionSourceInterface
     public function toOptionArray()
     {
         $availableOptions = array(
-            'all',
-            'error',
-            'missed',
-            'pending',
-            'running',
-            'success'
+            \Magento\Cron\Model\Schedule::STATUS_ERROR,
+            \Magento\Cron\Model\Schedule::STATUS_MISSED,
+            \Magento\Cron\Model\Schedule::STATUS_PENDING,
+            \Magento\Cron\Model\Schedule::STATUS_RUNNING,
+            \Magento\Cron\Model\Schedule::STATUS_SUCCESS
         );
-        
-        $options[] = array(
-            'label' => '',
+
+        $options[] = [
+            'label' => 'all',
             'value' => ''
-        );
+        ];
+
         foreach ($availableOptions as $value) {
-            $options[] = array(
+            $options[] = [
                 'label' => $value,
                 'value' => $value,
-            );
+            ];
         }
 
         return $options;
