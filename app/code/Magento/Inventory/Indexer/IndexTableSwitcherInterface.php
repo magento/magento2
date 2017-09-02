@@ -19,8 +19,5 @@ interface IndexTableSwitcherInterface
      * @param string $connectionName
      * @return void
      */
-    public function switch(
-        IndexName $indexName,
-        string $connectionName = ResourceConnection::DEFAULT_CONNECTION
-    ): void;
+    public function switch(IndexName $indexName, string $connectionName = ResourceConnection::DEFAULT_CONNECTION);
 }
