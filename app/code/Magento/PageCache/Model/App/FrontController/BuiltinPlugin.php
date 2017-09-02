@@ -64,10 +64,10 @@ class BuiltinPlugin
         \Closure $proceed,
         \Magento\Framework\App\RequestInterface $request
     ) {
+        $this->version->process();
         if (!$this->config->isEnabled() || $this->config->getType() != \Magento\PageCache\Model\Config::BUILT_IN) {
             return $proceed($request);
         }
-        $this->version->process();
         $result = $this->kernel->load();
         if ($result === false) {
             $result = $proceed($request);

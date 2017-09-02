@@ -53,7 +53,7 @@ class AbstractStorageTest extends \PHPUnit_Framework_TestCase
 
         $this->dataObjectHelper->expects($this->at(0))
             ->method('populateWithArray')
-            ->with($urlRewrites[0], $rows[0], '\Magento\UrlRewrite\Service\V1\Data\UrlRewrite')
+            ->with($urlRewrites[0], $rows[0], \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class)
             ->will($this->returnSelf());
 
         $this->urlRewriteFactory->expects($this->at(0))
@@ -62,7 +62,7 @@ class AbstractStorageTest extends \PHPUnit_Framework_TestCase
 
         $this->dataObjectHelper->expects($this->at(1))
             ->method('populateWithArray')
-            ->with($urlRewrites[1], $rows[1], '\Magento\UrlRewrite\Service\V1\Data\UrlRewrite')
+            ->with($urlRewrites[1], $rows[1], \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class)
             ->will($this->returnSelf());
 
         $this->urlRewriteFactory->expects($this->at(1))
@@ -97,7 +97,7 @@ class AbstractStorageTest extends \PHPUnit_Framework_TestCase
 
         $this->dataObjectHelper->expects($this->once())
             ->method('populateWithArray')
-            ->with($urlRewrite, $row, '\Magento\UrlRewrite\Service\V1\Data\UrlRewrite')
+            ->with($urlRewrite, $row, \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class)
             ->will($this->returnSelf());
 
         $this->urlRewriteFactory->expects($this->any())

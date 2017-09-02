@@ -14,6 +14,7 @@ use Magento\Framework\Api\SortOrder;
 
 /**
  * Customer repository.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInterface
@@ -131,15 +132,19 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
 
     /**
      * {@inheritdoc}
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function save(\Magento\Customer\Api\Data\CustomerInterface $customer, $passwordHash = null)
     {
         $prevCustomerData = null;
+        $prevCustomerDataArr = null;
+
         if ($customer->getId()) {
             $prevCustomerData = $this->getById($customer->getId());
+            $prevCustomerDataArr = $prevCustomerData->__toArray();
         }
+
+        /** @var $customer \Magento\Customer\Model\Data\Customer */
+        $customerArr = $customer->__toArray();
         $customer = $this->imageProcessor->save(
             $customer,
             CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
@@ -151,15 +156,17 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         $customerData = $this->extensibleDataObjectConverter->toNestedArray(
             $customer,
             [],
-            '\Magento\Customer\Api\Data\CustomerInterface'
+            \Magento\Customer\Api\Data\CustomerInterface::class
         );
 
         $customer->setAddresses($origAddresses);
         $customerModel = $this->customerFactory->create(['data' => $customerData]);
         $storeId = $customerModel->getStoreId();
+
         if ($storeId === null) {
             $customerModel->setStoreId($this->storeManager->getStore()->getId());
         }
+
         $customerModel->setId($customer->getId());
 
         // Need to use attribute set or future updates can cause data loss
@@ -169,19 +176,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
             );
         }
         // Populate model with secure data
-        if ($customer->getId()) {
-            $customerSecure = $this->customerRegistry->retrieveSecureData($customer->getId());
-            $customerModel->setRpToken($customerSecure->getRpToken());
-            $customerModel->setRpTokenCreatedAt($customerSecure->getRpTokenCreatedAt());
-            $customerModel->setPasswordHash($customerSecure->getPasswordHash());
-            $customerModel->setFailuresNum($customerSecure->getFailuresNum());
-            $customerModel->setFirstFailure($customerSecure->getFirstFailure());
-            $customerModel->setLockExpires($customerSecure->getLockExpires());
-        } else {
-            if ($passwordHash) {
-                $customerModel->setPasswordHash($passwordHash);
-            }
-        }
+        $this->populateCustomerModelWithSecureData($customer, $passwordHash, $customerModel);
 
         // If customer email was changed, reset RpToken info
         if ($prevCustomerData
@@ -190,36 +185,16 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
             $customerModel->setRpToken(null);
             $customerModel->setRpTokenCreatedAt(null);
         }
+
+        $this->setDefaultBilling($customerArr, $prevCustomerDataArr, $customerModel);
+
+        $this->setDefaultShipping($customerArr, $prevCustomerDataArr, $customerModel);
+
         $customerModel->save();
         $this->customerRegistry->push($customerModel);
         $customerId = $customerModel->getId();
 
-        if ($customer->getAddresses() !== null) {
-            if ($customer->getId()) {
-                $existingAddresses = $this->getById($customer->getId())->getAddresses();
-                $getIdFunc = function ($address) {
-                    return $address->getId();
-                };
-                $existingAddressIds = array_map($getIdFunc, $existingAddresses);
-            } else {
-                $existingAddressIds = [];
-            }
-
-            $savedAddressIds = [];
-            foreach ($customer->getAddresses() as $address) {
-                $address->setCustomerId($customerId)
-                    ->setRegion($address->getRegion());
-                $this->addressRepository->save($address);
-                if ($address->getId()) {
-                    $savedAddressIds[] = $address->getId();
-                }
-            }
-
-            $addressIdsToDelete = array_diff($existingAddressIds, $savedAddressIds);
-            foreach ($addressIdsToDelete as $addressId) {
-                $this->addressRepository->deleteById($addressId);
-            }
-        }
+        $this->updateAddresses($customer, $customerId);
 
         $savedCustomer = $this->get($customer->getEmail(), $customer->getWebsiteId());
         $this->eventManager->dispatch(
@@ -256,7 +231,10 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         $searchResults->setSearchCriteria($searchCriteria);
         /** @var \Magento\Customer\Model\ResourceModel\Customer\Collection $collection */
         $collection = $this->customerFactory->create()->getCollection();
-        $this->extensionAttributesJoinProcessor->process($collection, 'Magento\Customer\Api\Data\CustomerInterface');
+        $this->extensionAttributesJoinProcessor->process(
+            $collection,
+            \Magento\Customer\Api\Data\CustomerInterface::class
+        );
         // This is needed to make sure all the attributes are properly loaded
         foreach ($this->customerMetadata->getAllAttributesMetadata() as $metadata) {
             $collection->addAttributeToSelect($metadata->getAttributeCode());
@@ -334,6 +312,114 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         }
         if ($fields) {
             $collection->addFieldToFilter($fields);
+        }
+    }
+
+    /**
+     * Update customer addresses.
+     *
+     * @param \Magento\Framework\Api\CustomAttributesDataInterface $customer
+     * @param int $customerId
+     * @return void
+     * @throws \Magento\Framework\Exception\InputException
+     */
+    private function updateAddresses(\Magento\Framework\Api\CustomAttributesDataInterface $customer, $customerId)
+    {
+        if ($customer->getAddresses() !== null) {
+            if ($customer->getId()) {
+                $existingAddresses = $this->getById($customer->getId())->getAddresses();
+                $getIdFunc = function ($address) {
+                    return $address->getId();
+                };
+                $existingAddressIds = array_map($getIdFunc, $existingAddresses);
+            } else {
+                $existingAddressIds = [];
+            }
+
+            $savedAddressIds = [];
+            foreach ($customer->getAddresses() as $address) {
+                $address->setCustomerId($customerId)
+                    ->setRegion($address->getRegion());
+                $this->addressRepository->save($address);
+                if ($address->getId()) {
+                    $savedAddressIds[] = $address->getId();
+                }
+            }
+
+            $addressIdsToDelete = array_diff($existingAddressIds, $savedAddressIds);
+            foreach ($addressIdsToDelete as $addressId) {
+                $this->addressRepository->deleteById($addressId);
+            }
+        }
+    }
+
+    /**
+     * Populate customer model with secure data.
+     *
+     * @param \Magento\Framework\Api\CustomAttributesDataInterface $customer
+     * @param string $passwordHash
+     * @param \Magento\Customer\Model\Customer\Interceptor $customerModel
+     * @return void
+     */
+    private function populateCustomerModelWithSecureData(
+        \Magento\Framework\Api\CustomAttributesDataInterface $customer,
+        $passwordHash,
+        $customerModel
+    ) {
+        if ($customer->getId()) {
+            $customerSecure = $this->customerRegistry->retrieveSecureData($customer->getId());
+            $customerModel->setRpToken($customerSecure->getRpToken());
+            $customerModel->setRpTokenCreatedAt($customerSecure->getRpTokenCreatedAt());
+            $customerModel->setPasswordHash($customerSecure->getPasswordHash());
+            $customerModel->setFailuresNum($customerSecure->getFailuresNum());
+            $customerModel->setFirstFailure($customerSecure->getFirstFailure());
+            $customerModel->setLockExpires($customerSecure->getLockExpires());
+        } else {
+            if ($passwordHash) {
+                $customerModel->setPasswordHash($passwordHash);
+            }
+        }
+    }
+
+    /**
+     * Set default billing.
+     *
+     * @param array $customerArr
+     * @param array $prevCustomerDataArr
+     * @param \Magento\Customer\Model\Customer\Interceptor $customerModel
+     * @return void
+     */
+    private function setDefaultBilling(
+        $customerArr,
+        $prevCustomerDataArr,
+        $customerModel
+    ) {
+        if (!array_key_exists('default_billing', $customerArr) &&
+            null !== $prevCustomerDataArr &&
+            array_key_exists('default_billing', $prevCustomerDataArr)
+        ) {
+            $customerModel->setDefaultBilling($prevCustomerDataArr['default_billing']);
+        }
+    }
+
+    /**
+     * Set default shipping.
+     *
+     * @param array $customerArr
+     * @param array $prevCustomerDataArr
+     * @param \Magento\Customer\Model\Customer\Interceptor $customerModel
+     * @return void
+     */
+    private function setDefaultShipping(
+        $customerArr,
+        $prevCustomerDataArr,
+        $customerModel
+    ) {
+        if (!array_key_exists('default_shipping', $customerArr) &&
+            null !== $prevCustomerDataArr &&
+            array_key_exists('default_shipping', $prevCustomerDataArr)
+        ) {
+            $customerModel->setDefaultShipping($prevCustomerDataArr['default_shipping']);
         }
     }
 }

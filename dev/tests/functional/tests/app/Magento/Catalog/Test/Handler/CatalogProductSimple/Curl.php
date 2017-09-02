@@ -415,12 +415,25 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
     protected function prepareWebsites()
     {
         if (!empty($this->fields['product']['website_ids'])) {
-            foreach ($this->fields['product']['website_ids'] as $key => $website) {
-                $website = isset($this->mappingData['website_ids'][$website])
-                    ? $this->mappingData['website_ids'][$website]
-                    : $website;
-                $this->fields['product']['website_ids'][$key] = $website;
+            if (isset($this->fixture->getDataFieldConfig('website_ids')['source'])) {
+                $webSitesSource = $this->fixture->getDataFieldConfig('website_ids')['source'];
+
+                foreach ($webSitesSource->getWebsites() as $key => $website) {
+                    $this->fields['product']['website_ids'][$key] = $website->getWebsiteId();
+                }
+
+            } else {
+                foreach ($this->fields['product']['website_ids'] as $key => $website) {
+                    $website = isset($this->mappingData['website_ids'][$website])
+                        ? $this->mappingData['website_ids'][$website]
+                        : $website;
+                    $this->fields['product']['website_ids'][$key] = $website;
+                }
             }
+        } else {
+            $website = \Magento\Mtf\ObjectManagerFactory::getObjectManager()
+                ->create(\Magento\Store\Test\Fixture\Website::class, ['dataset' => 'default']);
+            $this->fields['product']['website_ids'][] = $website->getWebsiteId();
         }
     }
 
