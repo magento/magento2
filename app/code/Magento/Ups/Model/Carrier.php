@@ -739,9 +739,13 @@ XMLRequest;
                 curl_setopt($ch, CURLOPT_TIMEOUT, 30);
                 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, (bool)$this->getConfigFlag('mode_xml'));
                 $xmlResponse = curl_exec($ch);
-
-                $debugData['result'] = $xmlResponse;
-                $this->_setCachedQuotes($xmlRequest, $xmlResponse);
+                if ($xmlResponse !== false) {
+                    $debugData['result'] = $xmlResponse;
+                    $this->_setCachedQuotes($xmlRequest, $xmlResponse);
+                } else {
+                    $debugData['result'] = ['error' => curl_error($ch)];
+                }
+                curl_close($ch);
             } catch (\Exception $e) {
                 $debugData['result'] = ['error' => $e->getMessage(), 'code' => $e->getCode()];
                 $xmlResponse = '';
@@ -1002,7 +1006,11 @@ XMLAuth;
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $xmlRequest);
                 curl_setopt($ch, CURLOPT_TIMEOUT, 30);
                 $xmlResponse = curl_exec($ch);
-                $debugData['result'] = $xmlResponse;
+                if ($xmlResponse !== false) {
+                    $debugData['result'] = $xmlResponse;
+                } else {
+                    $debugData['result'] = ['error' => curl_error($ch)];
+                }
                 curl_close($ch);
             } catch (\Exception $e) {
                 $debugData['result'] = ['error' => $e->getMessage(), 'code' => $e->getCode()];

@@ -1277,6 +1277,8 @@ class Files
             '/dev/tests/static/framework',
             '/dev/tests/static/testsuite',
             '/dev/tests/functional/tests/app',
+            '/dev/tests/functional/lib',
+            '/dev/tests/functional/vendor/magento/mtf',
             '/setup/src'
         ];
         foreach ($directories as $key => $dir) {
@@ -1285,29 +1287,7 @@ class Files
 
         $directories = array_merge($directories, $this->getPaths());
 
-        foreach ($directories as $dir) {
-            $fullPath = $dir . '/' . $path;
-            if ($this->classFileExistsCheckContent($fullPath, $namespace, $className)) {
-                return true;
-            }
-            $classParts = explode('/', $path, 3);
-            if (count($classParts) >= 3) {
-                // Check if it's PSR-4 class with trimmed vendor and package name parts
-                $trimmedFullPath = $dir . '/' . $classParts[2];
-                if ($this->classFileExistsCheckContent($trimmedFullPath, $namespace, $className)) {
-                    return true;
-                }
-            }
-            $classParts = explode('/', $path, 4);
-            if (count($classParts) >= 4) {
-                // Check if it's a library under framework directory
-                $trimmedFullPath = $dir . '/' . $classParts[3];
-                if ($this->classFileExistsCheckContent($trimmedFullPath, $namespace, $className)) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        return $this->checkDirectories($path, $directories, $namespace, $className);
     }
 
     /**
@@ -1548,5 +1528,46 @@ class Files
             $fileSet = preg_grep($excludeRegex, $fileSet, PREG_GREP_INVERT);
         }
         return $fileSet;
+    }
+
+    /**
+     * Check class exists in searchable directories.
+     *
+     * @param string $path
+     * @param array $directories
+     * @param string $namespace
+     * @param string $className
+     * @return bool
+     */
+    private function checkDirectories(&$path, $directories, $namespace, $className)
+    {
+        foreach ($directories as $dir) {
+            $fullPath = $dir . '/' . $path;
+            if ($this->classFileExistsCheckContent($fullPath, $namespace, $className)) {
+                return true;
+            }
+            $classParts = explode('/', $path, 3);
+            if (count($classParts) >= 3) {
+                // Check if it's PSR-4 class with trimmed vendor and package name parts
+                $trimmedFullPath = $dir . '/' . $classParts[2];
+                if ($this->classFileExistsCheckContent($trimmedFullPath, $namespace, $className)) {
+                    return true;
+                }
+            }
+            $classParts = explode('/', $path, 4);
+            if (count($classParts) >= 4) {
+                // Check if it's a library under framework directory
+                $trimmedFullPath = $dir . '/' . $classParts[3];
+                if ($this->classFileExistsCheckContent($trimmedFullPath, $namespace, $className)) {
+                    return true;
+                }
+                $trimmedFullPath = $dir . '/' . $classParts[2] . '/' . $classParts[3];
+                if ($this->classFileExistsCheckContent($trimmedFullPath, $namespace, $className)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }

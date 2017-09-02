@@ -15,6 +15,9 @@ use Magento\Catalog\Model\Product;
 use Magento\Framework\Phrase;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 
+/**
+ * Product attributes block.
+ */
 class Attributes extends \Magento\Framework\View\Element\Template
 {
     /**
@@ -59,6 +62,7 @@ class Attributes extends \Magento\Framework\View\Element\Template
         if (!$this->_product) {
             $this->_product = $this->_coreRegistry->registry('product');
         }
+
         return $this->_product;
     }
 
@@ -96,6 +100,7 @@ class Attributes extends \Magento\Framework\View\Element\Template
                 }
             }
         }
+
         return $data;
     }
 }

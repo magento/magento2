@@ -54,8 +54,8 @@
             <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
             <data name="productVideo/dataset" xsi:type="string">product_with_video_vimeo</data>
             <data name="product/data/sku" xsi:type="string">simple_product_with_category_%isolation%</data>
-            <data name="product/data/media_gallery/images/0/video_url" xsi:type="string">https://vimeo.com/21776334</data>
-            <data name="video/video_title" xsi:type="string">Foo Fighters - "Walk" - Official Music Video (HD)</data>
+            <data name="product/data/media_gallery/images/0/video_url" xsi:type="string">https://vimeo.com/103756396</data>
+            <data name="video/video_title" xsi:type="string">XO Stereo - Show And Tell OFFICIAL MUSIC VIDEO</data>
             <data name="configData" xsi:type="string">play_if_base</data>
             <constraint name="Magento\ProductVideo\Test\Constraint\AssertGetVideoInfoDataIsCorrect" />
         </variation>

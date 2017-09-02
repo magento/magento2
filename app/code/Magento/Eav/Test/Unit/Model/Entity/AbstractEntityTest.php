@@ -317,8 +317,6 @@ class AbstractEntityTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $model->expects($this->any())->method('_getValue')->will($this->returnValue($eavConfig));
         $model->expects($this->any())->method('getConnection')->will($this->returnValue($this->_getConnectionMock()));
-
-
         $eavConfig->expects($this->any())->method('getAttribute')->will(
             $this->returnCallback(
                 function ($entityType, $attributeCode) use ($attributes) {
@@ -337,19 +335,29 @@ class AbstractEntityTest extends \PHPUnit_Framework_TestCase
             [
                 'test_attr',
                 $attributeSetId,
-                ['test_attr' => 'test_attr', 'attribute_set_id' => $attributeSetId, 'entity_id' => null],
+                [
+                    'test_attr' => 'test_attr',
+                    'attribute_set_id' => $attributeSetId,
+                    'entity_id' => null,
+                    'store_id' => 1
+                ],
                 null,
             ],
             [
                 'test_attr',
                 $attributeSetId,
-                ['test_attr' => 'test_attr', 'attribute_set_id' => $attributeSetId, 'entity_id' => 12345],
+                [
+                    'test_attr' => 'test_attr',
+                    'attribute_set_id' => $attributeSetId,
+                    'entity_id' => 12345,
+                    'store_id' => 1
+                ],
                 ['test_attr' => 'test_attr']
             ],
             [
                 'test_attr',
                 $attributeSetId,
-                ['test_attr' => '99.99', 'attribute_set_id' => $attributeSetId, 'entity_id' => 12345],
+                ['test_attr' => '99.99', 'attribute_set_id' => $attributeSetId, 'entity_id' => 12345, 'store_id' => 1],
                 ['test_attr' => '99.9900']
             ]
         ];

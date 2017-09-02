@@ -652,14 +652,16 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * Retrieve image URL
+     * Get image url by attribute code.
      *
+     * @param string $attributeCode
      * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getImageUrl()
+    public function getImageUrl($attributeCode = 'image')
     {
         $url = false;
-        $image = $this->getImage();
+        $image = $this->getData($attributeCode);
         if ($image) {
             if (is_string($image)) {
                 $url = $this->_storeManager->getStore()->getBaseUrl(
@@ -671,6 +673,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
                 );
             }
         }
+
         return $url;
     }
 

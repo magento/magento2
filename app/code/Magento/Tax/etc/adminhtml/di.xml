@@ -13,4 +13,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Tax\Model\System\Message\Notifications">
+        <arguments>
+            <argument name="notifications" xsi:type="array">
+                <item name="roundingErrors" xsi:type="object">Magento\Tax\Model\System\Message\Notification\RoundingErrors</item>
+                <item name="discountErrors" xsi:type="object">Magento\Tax\Model\System\Message\Notification\DiscountErrors</item>
+                <item name="applyDiscountOnPrices" xsi:type="object">Magento\Tax\Model\System\Message\Notification\ApplyDiscountOnPrices</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

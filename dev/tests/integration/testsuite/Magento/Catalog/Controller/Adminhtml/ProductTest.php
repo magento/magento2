@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml;
 
+use Magento\Catalog\Model\ProductRepository;
+
 /**
  * @magentoAppArea adminhtml
  */
@@ -27,7 +29,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
     public function testSaveActionAndNew()
     {
         $this->getRequest()->setPostValue(['back' => 'new']);
-        $repository = $this->_objectManager->create('Magento\Catalog\Model\ProductRepository');
+        $repository = $this->_objectManager->create(ProductRepository::class);
         $product = $repository->get('simple');
         $this->dispatch('backend/catalog/product/save/id/' . $product->getEntityId());
         $this->assertRedirect($this->stringStartsWith('http://localhost/index.php/backend/catalog/product/new/'));
@@ -43,7 +45,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
     public function testSaveActionAndDuplicate()
     {
         $this->getRequest()->setPostValue(['back' => 'duplicate']);
-        $repository = $this->_objectManager->create('Magento\Catalog\Model\ProductRepository');
+        $repository = $this->_objectManager->create(ProductRepository::class);
         $product = $repository->get('simple');
         $this->dispatch('backend/catalog/product/save/id/' . $product->getEntityId());
         $this->assertRedirect($this->stringStartsWith('http://localhost/index.php/backend/catalog/product/edit/'));
@@ -100,7 +102,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
      */
     public function testEditAction()
     {
-        $repository = $this->_objectManager->create('Magento\Catalog\Model\ProductRepository');
+        $repository = $this->_objectManager->create(ProductRepository::class);
         $product = $repository->get('simple');
         $this->dispatch('backend/catalog/product/edit/id/' . $product->getEntityId());
         $body = $this->getResponse()->getBody();
@@ -117,6 +119,33 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
             1,
             $body,
             '"Save & Duplicate" button isn\'t present on Edit Product page'
+        );
+    }
+
+    /**
+     * Tests Validate product action.
+     *
+     * @magentoDataFixture Magento/Catalog/_files/products_with_multiselect_attribute.php
+     *
+     * @return void
+     */
+    public function testValidateAction()
+    {
+        $expectedResult = json_encode(['error' => false]);
+
+        $repository = $this->_objectManager->create(ProductRepository::class);
+        $product = $repository->get('simple_ms_2');
+        $data = $product->getData();
+        unset($data['multiselect_attribute']);
+
+        $this->getRequest()->setPostValue(['product' => $data]);
+        $this->dispatch('backend/catalog/product/validate');
+        $response = $this->getResponse()->getBody();
+
+        $this->assertJsonStringEqualsJsonString(
+            $expectedResult,
+            $response,
+            'Validate action returned incorrect result.'
         );
     }
 }

@@ -523,7 +523,9 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * @param integer $modelId
      * @param null|string $field
      * @return $this
-     * @deprecated
+     * @deprecated because entities must not be responsible for their own loading.
+     * Service contracts should persist entities. Use resource model "load" or collections to implement
+     * service contract model loading operations.
      */
     public function load($modelId, $field = null)
     {
@@ -624,7 +626,9 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      *
      * @return $this
      * @throws \Exception
-     * @deprecated
+     * @deprecated because entities must not be responsible for their own persistence.
+     * Service contracts should persist entities. Use resource model "save" to implement
+     * service contract persistence operations.
      */
     public function save()
     {
@@ -809,7 +813,9 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      *
      * @return $this
      * @throws \Exception
-     * @deprecated
+     * @deprecated because entities must not be responsible for their own deletion.
+     * Service contracts should delete entities. Use resource model "delete" method to implement
+     * service contract persistence operations.
      */
     public function delete()
     {
