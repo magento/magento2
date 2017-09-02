@@ -45,7 +45,10 @@
             <visibility>
                 <input>select</input>
             </visibility>
-            <news_from_date />
+            <news_from_date>
+                <selector>[name="product[news_from_date]"]</selector>
+                <strategy>css selector</strategy>
+            </news_from_date>
             <news_to_date>
                 <selector>[name="product[news_to_date]"]</selector>
                 <strategy>css selector</strategy>
@@ -198,6 +201,10 @@
                 <selector>[data-index="type"]</selector>
                 <strategy>css selector</strategy>
             </type>
+            <custom_design_from>
+                <selector>[name="product[custom_design_from]"]</selector>
+                <strategy>css selector</strategy>
+            </custom_design_from>
         </fields>
     </customer-options>
     <gift-options>
