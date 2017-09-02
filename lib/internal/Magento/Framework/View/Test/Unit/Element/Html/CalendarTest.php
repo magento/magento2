@@ -15,7 +15,7 @@ use \PHPUnit_Framework_MockObject_MockObject as MockObject;
 /**
  * @see Calendar
  */
-class CalendarTest extends \PHPUnit\Framework\TestCase
+class CalendarTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @see MAGETWO-60828
