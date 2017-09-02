@@ -29,8 +29,8 @@
         <field name="country_of_manufacture" is_required="0" />
         <field name="created_at" is_required="1" />
         <field name="custom_design" is_required="0" />
-        <field name="custom_design_from" is_required="0" />
-        <field name="custom_design_to" is_required="0" />
+        <field name="custom_design_from" is_required="0" group="schedule-design-update" source="Magento\Backend\Test\Fixture\Source\Date" />
+        <field name="custom_design_to" is_required="0" group="schedule-design-update" source="Magento\Backend\Test\Fixture\Source\Date" />
         <field name="custom_layout_update" is_required="0" />
         <field name="description" is_required="0" group="content" />
         <field name="gallery" is_required="0" />
