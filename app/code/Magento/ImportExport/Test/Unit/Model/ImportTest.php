@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Test\Unit\Model;
+
+use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 /**
