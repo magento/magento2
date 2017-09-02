@@ -10,7 +10,7 @@
     <update handle="adminhtml_cron_block"/>
     <body>
         <referenceContainer name="content">
-            <block class="Magento\Cron\Block\Cron" name="adminhtml.cron.container"/>
+            <uiComponent name="adminhtml_cron_listing"/>
         </referenceContainer>
     </body>
 </page>
