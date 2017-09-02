@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Authorizenet\Test\Block\Form;
 
 use Magento\Mtf\Client\Locator;
-use Magento\Payment\Test\Block\Form\PaymentCc;
+use Magento\Payment\Test\Block\Form\Cc;
 
 /**
  * Form for credit card data for Authorize.net payment method.
  */
-class AuthorizenetCc extends PaymentCc
+class AuthorizenetCc extends Cc
 {
     /**
      * Authorizenet form locators.
