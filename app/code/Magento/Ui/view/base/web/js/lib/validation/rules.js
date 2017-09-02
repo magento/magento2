@@ -213,7 +213,7 @@ define([
         ],
         "mobileUK": [
             function(value) {
-                return value.length > 9 && value.match(/^((0|\+44)7(5|6|7|8|9){1}\d{2}\s?\d{6})$/);
+                return value.length > 9 && value.match(/^((0|\+44)7\d{3}\s?\d{6})$/);
             },
             $.mage.__('Please specify a valid mobile number')
         ],
@@ -572,6 +572,15 @@ define([
             },
             $.mage.__('Please enter a valid number in this field.')
         ],
+        "validate-integer": [
+            function(value) {
+                return (
+                     utils.isEmptyNoTrim(value)
+                      || (!isNaN(utils.parseNumber(value)) && /^\s*-?\d*\s*$/.test(value))
+               );
+             },
+            $.mage.__('Please enter a valid integer in this field.')
+         ],
         "validate-number-range": [
             function(value, param) {
                 if (utils.isEmptyNoTrim(value)) {

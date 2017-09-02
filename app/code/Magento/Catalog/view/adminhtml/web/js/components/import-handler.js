@@ -4,8 +4,9 @@
  */
 
 define([
+    'underscore',
     'Magento_Ui/js/form/element/textarea'
-], function (Textarea) {
+], function (_, Textarea) {
     'use strict';
 
     return Textarea.extend({
@@ -123,24 +124,21 @@ define([
          * Update field value, if it's allowed
          */
         updateValue: function () {
-            var str = this.mask,
+            var str = this.mask || '',
                 nonEmptyValueFlag = false,
-                placeholder,
-                property,
                 tmpElement;
 
             if (!this.allowImport) {
                 return;
             }
 
-            for (property in this.values) {
-                if (this.values.hasOwnProperty(property)) {
-                    placeholder = '';
-                    placeholder = placeholder.concat('{{', property, '}}');
-                    str = str.replace(placeholder, this.values[property]);
-                    nonEmptyValueFlag = nonEmptyValueFlag || !!this.values[property];
-                }
+            if (str) {
+                _.each(this.values, function (propertyValue, propertyName) {
+                    str = str.replace('{{' + propertyName + '}}', propertyValue);
+                    nonEmptyValueFlag = nonEmptyValueFlag || !!propertyValue;
+                });
             }
+
             // strip tags
             tmpElement = document.createElement('div');
             tmpElement.innerHTML = str;

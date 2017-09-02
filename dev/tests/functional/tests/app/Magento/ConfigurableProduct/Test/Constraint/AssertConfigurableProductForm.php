@@ -60,6 +60,7 @@ class AssertConfigurableProductForm extends AssertProductForm
      */
     protected $skippedVariationMatrixFields = [
         'configurable_attribute',
+        'special_price'
     ];
 
     /**

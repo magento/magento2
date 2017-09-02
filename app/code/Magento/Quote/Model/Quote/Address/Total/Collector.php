@@ -136,7 +136,7 @@ class Collector extends \Magento\Sales\Model\Config\Ordered
     }
 
     /**
-     * Initialize retrievers array
+     * Initialize retrievers array.
      *
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
@@ -148,6 +148,9 @@ class Collector extends \Magento\Sales\Model\Config\Ordered
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $this->_store
         );
+        if ($sorts === null) {
+            $sorts = [];
+        }
         foreach ($sorts as $code => $sortOrder) {
             if (isset($this->_models[$code])) {
                 // Reserve enough space for collisions
@@ -164,6 +167,7 @@ class Collector extends \Magento\Sales\Model\Config\Ordered
         foreach ($notSorted as $code) {
             $this->_retrievers[] = $this->_models[$code];
         }
+
         return $this;
     }
 }
