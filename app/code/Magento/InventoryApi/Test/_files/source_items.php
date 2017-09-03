@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SortOrder;
@@ -32,7 +33,7 @@ $sortOrder = $sortOrderBuilder
     ->setDirection(SortOrder::SORT_ASC)
     ->create();
 $searchCriteria = $searchCriteriaBuilder
-    ->addFilter(SourceInterface::NAME, ['source-name-1', 'source-name-2', 'source-name-3'], 'in')
+    ->addFilter(SourceInterface::NAME, ['source-name-1', 'source-name-2', 'source-name-3', 'source-name-4'], 'in')
     ->addSortOrder($sortOrder)
     ->create();
 /** @var \Magento\InventoryApi\Api\Data\SourceInterface[] $sources */
@@ -55,6 +56,11 @@ $sourcesItemsData = [
         SourceItemInterface::SOURCE_ID => $sources[2]->getSourceId(),
         SourceItemInterface::SKU => 'SKU-2',
         SourceItemInterface::QUANTITY => 5,
+        SourceItemInterface::STATUS => SourceItemInterface::STATUS_IN_STOCK,
+    ],[
+        SourceItemInterface::SOURCE_ID => $sources[3]->getSourceId(),
+        SourceItemInterface::SKU => 'SKU-2',
+        SourceItemInterface::QUANTITY => 10,
         SourceItemInterface::STATUS => SourceItemInterface::STATUS_IN_STOCK,
     ],
 ];

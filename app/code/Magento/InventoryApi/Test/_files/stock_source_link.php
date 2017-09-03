@@ -28,7 +28,7 @@ $sortOrder = $sortOrderBuilder
     ->setDirection(SortOrder::SORT_ASC)
     ->create();
 $searchCriteria = $searchCriteriaBuilder
-    ->addFilter(SourceInterface::NAME, ['source-name-1', 'source-name-2', 'source-name-3'], 'in')
+    ->addFilter(SourceInterface::NAME, ['source-name-1', 'source-name-2', 'source-name-3', 'source-name-4'], 'in')
     ->addSortOrder($sortOrder)
     ->create();
 /** @var \Magento\InventoryApi\Api\Data\SourceInterface[] $sources */
@@ -48,4 +48,4 @@ $stocks = array_values($stockRepository->getList($searchCriteria)->getItems());
 /** @var AssignSourcesToStockInterface $assignSourcesToStock */
 $assignSourcesToStock = Bootstrap::getObjectManager()->get(AssignSourcesToStockInterface::class);
 $assignSourcesToStock->execute([$sources[0]->getSourceId(), $sources[1]->getSourceId()], $stocks[0]->getStockId());
-$assignSourcesToStock->execute([$sources[2]->getSourceId()], $stocks[1]->getStockId());
+$assignSourcesToStock->execute([$sources[2]->getSourceId(), $sources[3]->getSourceId()], $stocks[1]->getStockId());

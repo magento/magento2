@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceInterfaceFactory;
@@ -34,7 +35,7 @@ $sourcesData = [
     ],
     [
         SourceInterface::NAME => 'source-name-3',
-        SourceInterface::ENABLED => false,
+        SourceInterface::ENABLED => true,
         SourceInterface::PRIORITY => 200,
         SourceInterface::POSTCODE => 'postcode',
         SourceInterface::COUNTRY_ID => 'US',
