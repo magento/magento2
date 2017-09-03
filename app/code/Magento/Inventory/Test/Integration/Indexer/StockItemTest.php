@@ -159,4 +159,22 @@ class StockItemTest extends TestCase
         self::assertEquals(8, $this->indexerChecker->execute($this->stocks[0]->getStockId(), 'SKU-1'));
         self::assertEquals(5, $this->indexerChecker->execute($this->stocks[1]->getStockId(), 'SKU-2'));
     }
+
+    /**
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items_out_stock.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_link.php
+     */
+    public function testReindexAllOneDisabled()
+    {
+        self::assertEquals(0, $this->indexerChecker->execute($this->stocks[0]->getStockId(), 'SKU-1'));
+        self::assertEquals(0, $this->indexerChecker->execute($this->stocks[1]->getStockId(), 'SKU-2'));
+
+        $this->indexer->reindexAll();
+
+        self::assertEquals(8, $this->indexerChecker->execute($this->stocks[0]->getStockId(), 'SKU-1'));
+        self::assertEquals(0, $this->indexerChecker->execute($this->stocks[1]->getStockId(), 'SKU-2'));
+    }
 }
