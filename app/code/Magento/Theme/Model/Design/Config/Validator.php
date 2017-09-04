@@ -66,7 +66,11 @@ class Validator
         foreach ($elements as $name => $data) {
             // Load template object by configured template id
             $template = $this->templateFactory->create();
-            $template->emulateDesign($designConfig->getScopeId());
+            $scopeId = false;
+            if ($designConfig->getScope() == 'stores') {
+                $scopeId = $designConfig->getScopeId();
+            }
+            $template->emulateDesign($scopeId);
             $templateId = $data['value'];
             if (is_numeric($templateId)) {
                 $template->load($templateId);
