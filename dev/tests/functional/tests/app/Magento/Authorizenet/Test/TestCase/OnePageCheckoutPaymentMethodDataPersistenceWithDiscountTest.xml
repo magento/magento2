@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\SalesRule\Test\TestCase\OnePageCheckoutPaymentMethodDataPersistenceWithDiscountTest" summary="Checkout with Authorize.net credit card on Storefront with discount applied during checkout">
+        <variation name="OnePageCheckoutPaymentMethodDataPersistWithDiscountTest1" summary="Checkout with Authorize.net credit card on Storefront with discount applied during checkout" ticketId="MAGETWO-69657">
+            <data name="description" xsi:type="string">Use saved for Authorize.net credit card on checkout</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
+            <data name="customer/dataset" xsi:type="string">default</data>
+            <data name="salesRule" xsi:type="string">active_sales_rule_for_all_groups</data>
+            <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
+            <data name="checkoutMethod" xsi:type="string">login</data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="payment/method" xsi:type="string">authorizenet_directpost</data>
+            <data name="paymentForm" xsi:type="string">default</data>
+            <data name="creditCard/dataset" xsi:type="string">visa_default</data>
+            <data name="creditCard/data/payment_code" xsi:type="string">authorizenet</data>
+            <data name="prices" xsi:type="array">
+                <item name="grandTotal" xsi:type="string">10.00</item>
+            </data>
+            <data name="creditCardSave" xsi:type="string">Yes</data>
+            <data name="configData" xsi:type="string">authorizenet</data>
+            <data name="status" xsi:type="string">Processing</data>
+            <data name="tag" xsi:type="string">severity:S1</data>
+            <constraint name="Magento\Authorizenet\Test\Constraint\AssertCreditCardNumberOnOnePageCheckout" />
+        </variation>
+    </testCase>
+</config>

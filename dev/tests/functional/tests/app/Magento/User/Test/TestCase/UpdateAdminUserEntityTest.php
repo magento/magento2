@@ -35,6 +35,7 @@ class UpdateAdminUserEntityTest extends Injectable
     /* tags */
     const MVP = 'no';
     const TEST_TYPE = 'acceptance_test, extended_acceptance_test';
+    const SEVERITY = 'S3';
     /* end tags */
 
     /**

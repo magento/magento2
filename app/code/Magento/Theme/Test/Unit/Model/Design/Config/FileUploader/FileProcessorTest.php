@@ -12,7 +12,7 @@ use Magento\Theme\Model\Design\Config\FileUploader\FileProcessor;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class FileProcessorTest extends \PHPUnit_Framework_TestCase
+class FileProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\MediaStorage\Model\File\UploaderFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $uploaderFactory;

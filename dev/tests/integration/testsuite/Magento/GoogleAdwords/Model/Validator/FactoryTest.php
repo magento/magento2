@@ -9,7 +9,7 @@ namespace Magento\GoogleAdwords\Model\Validator;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
-class FactoryTest extends \PHPUnit_Framework_TestCase
+class FactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test creation of conversion id validator

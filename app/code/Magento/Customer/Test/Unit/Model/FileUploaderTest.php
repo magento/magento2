@@ -9,7 +9,7 @@ use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Model\FileProcessor;
 use Magento\Customer\Model\FileUploader;
 
-class FileUploaderTest extends \PHPUnit_Framework_TestCase
+class FileUploaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CustomerMetadataInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -55,6 +55,11 @@ class FileUploaderTest extends \PHPUnit_Framework_TestCase
 
         $this->attributeMetadata = $this->getMockBuilder(\Magento\Customer\Api\Data\AttributeMetadataInterface::class)
             ->getMockForAbstractClass();
+    }
+
+    protected function tearDown()
+    {
+        $_FILES = [];
     }
 
     /**

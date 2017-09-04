@@ -14,6 +14,8 @@ use Magento\Ui\Component\MassAction\Filter;
 
 /**
  * Class AbstractMassStatus
+ * @deprecated 100.2.0
+ * Never extend from this action. Implement mass-action logic in the "execute" method of your controller.
  */
 abstract class AbstractMassAction extends \Magento\Backend\App\Action
 {
@@ -62,8 +64,8 @@ abstract class AbstractMassAction extends \Magento\Backend\App\Action
     }
 
     /**
-     * Return component referer url
-     * TODO: Technical dept referer url should be implement as a part of Action configuration in in appropriate way
+     * Return component referrer url
+     * TODO: Technical dept referrer url should be implement as a part of Action configuration in in appropriate way
      *
      * @return null|string
      */

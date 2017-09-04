@@ -11,6 +11,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 /**
  * Order item render block
  * @api
+ * @since 100.0.2
  */
 class Renderer extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
 {

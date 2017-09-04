@@ -8,6 +8,10 @@
 
 namespace Magento\Config\Model\Config\Structure\Element;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Group extends AbstractComposite
 {
     /**

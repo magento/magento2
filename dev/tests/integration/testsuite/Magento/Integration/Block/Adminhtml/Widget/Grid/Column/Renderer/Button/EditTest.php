@@ -12,7 +12,7 @@ use Magento\Integration\Model\Integration;
  * @magentoAppArea adminhtml
  * @magentoDataFixture Magento/Integration/_files/integration_all_permissions.php
  */
-class EditTest extends \PHPUnit_Framework_TestCase
+class EditTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Button\Edit

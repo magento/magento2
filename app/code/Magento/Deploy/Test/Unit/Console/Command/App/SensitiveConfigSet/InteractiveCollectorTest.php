@@ -13,7 +13,7 @@ use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Question\QuestionFactory;
 use Symfony\Component\Console\Helper\QuestionHelper;
 
-class InteractiveCollectorTest extends \PHPUnit_Framework_TestCase
+class InteractiveCollectorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var QuestionFactory|MockObject

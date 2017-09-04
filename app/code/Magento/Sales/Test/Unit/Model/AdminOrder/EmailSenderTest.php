@@ -7,7 +7,7 @@ namespace Magento\Sales\Test\Unit\Model\AdminOrder;
 
 use \Magento\Sales\Model\AdminOrder\EmailSender;
 
-class EmailSenderTest extends \PHPUnit_Framework_TestCase
+class EmailSenderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -36,34 +36,10 @@ class EmailSenderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->messageManagerMock = $this->getMock(
-            \Magento\Framework\Message\Manager::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->loggerMock = $this->getMock(
-            \Psr\Log\LoggerInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->orderMock = $this->getMock(
-            \Magento\Sales\Model\Order::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->orderSenderMock = $this->getMock(
-            \Magento\Sales\Model\Order\Email\Sender\OrderSender::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->messageManagerMock = $this->createMock(\Magento\Framework\Message\Manager::class);
+        $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $this->orderMock = $this->createMock(\Magento\Sales\Model\Order::class);
+        $this->orderSenderMock = $this->createMock(\Magento\Sales\Model\Order\Email\Sender\OrderSender::class);
 
         $this->emailSender = new EmailSender($this->messageManagerMock, $this->loggerMock, $this->orderSenderMock);
     }

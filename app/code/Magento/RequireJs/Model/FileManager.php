@@ -193,7 +193,7 @@ class FileManager
 
     /**
      * Remove all bundles from pool
-     * @deprecated
+     * @deprecated 100.1.1
      *
      * @return bool
      */

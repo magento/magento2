@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Cache\Test\Unit\Frontend\Decorator;
 
-class ProfilerTest extends \PHPUnit_Framework_TestCase
+class ProfilerTest extends \PHPUnit\Framework\TestCase
 {
     protected function setUp()
     {
@@ -37,14 +37,14 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
         $expectedResult
     ) {
         // Cache frontend setup
-        $frontendMock = $this->getMock(\Magento\Framework\Cache\FrontendInterface::class);
+        $frontendMock = $this->createMock(\Magento\Framework\Cache\FrontendInterface::class);
 
         $frontendMock->expects($this->any())->method('getBackend')->will($this->returnValue($cacheBackend));
 
         $frontendMock->expects($this->any())->method('getLowLevelFrontend')->will($this->returnValue($cacheFrontend));
 
         // Profiler setup
-        $driver = $this->getMock(\Magento\Framework\Profiler\DriverInterface::class);
+        $driver = $this->createMock(\Magento\Framework\Profiler\DriverInterface::class);
         $driver->expects($this->once())->method('start')->with($expectedProfileId, $expectedProfilerTags);
         $driver->expects($this->once())->method('stop')->with($expectedProfileId);
         \Magento\Framework\Profiler::add($driver);
@@ -62,7 +62,7 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
     public function proxyMethodDataProvider()
     {
         $backend = new \Zend_Cache_Backend_BlackHole();
-        $adaptee = $this->getMock(\Zend_Cache_Core::class, [], [], '', false);
+        $adaptee = $this->createMock(\Zend_Cache_Core::class);
         $lowLevelFrontend = new \Magento\Framework\Cache\Frontend\Adapter\Zend($adaptee);
 
         return [

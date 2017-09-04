@@ -17,6 +17,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @since 100.0.2
  */
 class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
 {
@@ -110,6 +111,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
      * Get cache key informative items.
      *
      * @return array
+     * @since 100.2.0
      */
     public function getCacheKeyInfo()
     {
@@ -240,12 +242,12 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
      * Get product images for configurable variations
      *
      * @return array
+     * @since 100.2.0
      */
     protected function getOptionImages()
     {
         $images = [];
         foreach ($this->getAllowProducts() as $product) {
-
             $productImages = $this->helper->getGalleryImages($product) ?: [];
             foreach ($productImages as $image) {
                 $images[$product->getId()][] =
@@ -256,6 +258,8 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
                         'caption' => $image->getLabel(),
                         'position' => $image->getPosition(),
                         'isMain' => $image->getFile() == $product->getImage(),
+                        'type' => str_replace('external-', '', $image->getMediaType()),
+                        'videoUrl' => $image->getVideoUrl(),
                     ];
             }
         }
@@ -310,7 +314,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     /**
      * Replace ',' on '.' for js
      *
-     * @deprecated Will be removed in major release
+     * @deprecated 100.2.0 Will be removed in major release
      * @param float $price
      * @return string
      */
@@ -323,6 +327,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
      * Should we generate "As low as" block or not
      *
      * @return bool
+     * @since 100.2.0
      */
     public function showMinimalPrice()
     {

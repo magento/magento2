@@ -6,7 +6,7 @@
 
 namespace Magento\Backend\Test\Unit\Block\Cache;
 
-class AdditionalTest extends \PHPUnit_Framework_TestCase
+class AdditionalTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Block\Cache\Additional
@@ -25,7 +25,7 @@ class AdditionalTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->urlBuilderMock = $this->getMock(\Magento\Framework\UrlInterface::class);
+        $this->urlBuilderMock = $this->createMock(\Magento\Framework\UrlInterface::class);
         $this->appStateMock = $this->getMockBuilder(\Magento\Framework\App\State::class)
             ->disableOriginalConstructor()
             ->getMock();

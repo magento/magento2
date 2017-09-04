@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\App\Test\Unit\ResourceConnection\Config;
 
-class ReaderTest extends \PHPUnit_Framework_TestCase
+class ReaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\ResourceConnection\Config\Reader
@@ -46,20 +46,15 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     {
         $this->_filePath = __DIR__ . '/_files/';
 
-        $this->_fileResolverMock = $this->getMock(\Magento\Framework\Config\FileResolverInterface::class);
-        $this->_validationStateMock = $this->getMock(\Magento\Framework\Config\ValidationStateInterface::class);
-        $this->_schemaLocatorMock = $this->getMock(
-            \Magento\Framework\App\ResourceConnection\Config\SchemaLocator::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->_fileResolverMock = $this->createMock(\Magento\Framework\Config\FileResolverInterface::class);
+        $this->_validationStateMock = $this->createMock(\Magento\Framework\Config\ValidationStateInterface::class);
+        $this->_schemaLocatorMock =
+            $this->createMock(\Magento\Framework\App\ResourceConnection\Config\SchemaLocator::class);
 
         $this->_converterMock =
-            $this->getMock(\Magento\Framework\App\ResourceConnection\Config\Converter::class, [], [], '', false);
+            $this->createMock(\Magento\Framework\App\ResourceConnection\Config\Converter::class);
 
-        $this->_configLocalMock = $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false);
+        $this->_configLocalMock = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
 
         $this->_model = new \Magento\Framework\App\ResourceConnection\Config\Reader(
             $this->_fileResolverMock,

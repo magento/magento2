@@ -17,16 +17,24 @@ class DataCategoryUrlRewriteDatabaseMap implements DatabaseMapInterface
 {
     const ENTITY_TYPE = 'category';
 
-    /** @var string[] */
+    /**
+     * @var string[]
+     */
     private $createdTableAdapters = [];
 
-    /** @var HashMapPool */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\Map\HashMapPool
+     */
     private $hashMapPool;
 
-    /** @var ResourceConnection */
+    /**
+     * @var \Magento\Framework\App\ResourceConnection
+     */
     private $connection;
 
-    /** @var TemporaryTableService */
+    /**
+     * @var \Magento\Framework\DB\TemporaryTableService
+     */
     private $temporaryTableService;
 
     /**

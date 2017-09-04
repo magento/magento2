@@ -11,7 +11,7 @@ use Magento\Sales\Model\Order;
  * Class CreditmemoServiceTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CreditmemoServiceTest extends \PHPUnit_Framework_TestCase
+class CreditmemoServiceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Api\CreditmemoRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -70,27 +70,15 @@ class CreditmemoServiceTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->searchCriteriaBuilderMock = $this->getMock(
+        $this->searchCriteriaBuilderMock = $this->createPartialMock(
             \Magento\Framework\Api\SearchCriteriaBuilder::class,
-            ['create', 'addFilters'],
-            [],
-            '',
-            false
+            ['create', 'addFilters']
         );
-        $this->filterBuilderMock = $this->getMock(
+        $this->filterBuilderMock = $this->createPartialMock(
             \Magento\Framework\Api\FilterBuilder::class,
-            ['setField', 'setValue', 'setConditionType', 'create'],
-            [],
-            '',
-            false
+            ['setField', 'setValue', 'setConditionType', 'create']
         );
-        $this->creditmemoNotifierMock = $this->getMock(
-            \Magento\Sales\Model\Order\CreditmemoNotifier::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->creditmemoNotifierMock = $this->createMock(\Magento\Sales\Model\Order\CreditmemoNotifier::class);
         $this->priceCurrencyMock = $this->getMockBuilder(\Magento\Framework\Pricing\PriceCurrencyInterface::class)
             ->getMockForAbstractClass();
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -126,20 +114,8 @@ class CreditmemoServiceTest extends \PHPUnit_Framework_TestCase
         $id = 25;
         $returnValue = 'return-value';
 
-        $filterMock = $this->getMock(
-            \Magento\Framework\Api\Filter::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $searchCriteriaMock = $this->getMock(
-            \Magento\Framework\Api\SearchCriteria::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $filterMock = $this->createMock(\Magento\Framework\Api\Filter::class);
+        $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
 
         $this->filterBuilderMock->expects($this->once())
             ->method('setField')

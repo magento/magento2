@@ -7,7 +7,7 @@ namespace Magento\Framework\View\Test\Unit\Layout\Argument\Interpreter;
 
 use \Magento\Framework\View\Layout\Argument\Interpreter\DataObject;
 
-class ObjectTest extends \PHPUnit_Framework_TestCase
+class ObjectTest extends \PHPUnit\Framework\TestCase
 {
     const EXPECTED_CLASS = \Magento\Framework\View\Test\Unit\Layout\Argument\Interpreter\ObjectTest::class;
 
@@ -28,7 +28,7 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->_objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_model = new DataObject($this->_objectManager, self::EXPECTED_CLASS);
     }
 
@@ -49,11 +49,11 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
      */
     public function testEvaluateWrongClass($input, $expectedException, $expectedExceptionMessage)
     {
-        $this->setExpectedException($expectedException, $expectedExceptionMessage);
+        $this->expectException($expectedException, $expectedExceptionMessage);
         $self = $this;
         $this->_objectManager->expects($this->any())->method('create')->willReturnCallback(
             function ($className) use ($self) {
-                return $self->getMock($className);
+                return $self->createMock($className);
             }
         );
 

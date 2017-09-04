@@ -22,7 +22,7 @@ use Magento\Framework\DB\Select;
  * Class CollectionTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var EntityFactoryInterface|\PHPUnit_Framework_MockObject_MockObject
