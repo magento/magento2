@@ -6,7 +6,7 @@
 
 namespace Magento\CatalogSearch\Test\Unit\Model\Search\QueryChecker;
 
-class FullTextSearchCheckTest extends \PHPUnit_Framework_TestCase
+class FullTextSearchCheckTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogSearch\Model\Search\QueryChecker\FullTextSearchCheck

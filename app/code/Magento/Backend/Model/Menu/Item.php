@@ -14,6 +14,7 @@ use Magento\Store\Model\ScopeInterface;
  *
  * @api
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @since 100.0.2
  */
 class Item
 {
@@ -132,7 +133,7 @@ class Item
      * Serialized submenu string
      *
      * @var string
-     * @deprecated
+     * @deprecated 100.2.0
      */
     protected $_serializedSubmenu;
 
@@ -213,6 +214,7 @@ class Item
      * Retrieve item target
      *
      * @return string|null
+     * @since 100.2.0
      */
     public function getTarget()
     {
@@ -459,20 +461,21 @@ class Item
      * Get menu item data represented as an array
      *
      * @return array
+     * @since 100.2.0
      */
     public function toArray()
     {
         return [
             'parent_id' => $this->_parentId,
-            'module_name' => $this->_moduleName,
+            'module' => $this->_moduleName,
             'sort_index' => $this->_sortIndex,
-            'depends_on_config' => $this->_dependsOnConfig,
+            'dependsOnConfig' => $this->_dependsOnConfig,
             'id' => $this->_id,
             'resource' => $this->_resource,
             'path' => $this->_path,
             'action' => $this->_action,
-            'depends_on_module' => $this->_dependsOnModule,
-            'tooltip' => $this->_tooltip,
+            'dependsOnModule' => $this->_dependsOnModule,
+            'toolTip' => $this->_tooltip,
             'title' => $this->_title,
             'target' => $this->target,
             'sub_menu' => isset($this->_submenu) ? $this->_submenu->toArray() : null
@@ -484,19 +487,20 @@ class Item
      *
      * @param array $data
      * @return void
+     * @since 100.2.0
      */
     public function populateFromArray(array $data)
     {
         $this->_parentId = $this->_getArgument($data, 'parent_id');
-        $this->_moduleName = $this->_getArgument($data, 'module_name', 'Magento_Backend');
+        $this->_moduleName = $this->_getArgument($data, 'module', 'Magento_Backend');
         $this->_sortIndex = $this->_getArgument($data, 'sort_index');
-        $this->_dependsOnConfig = $this->_getArgument($data, 'depends_on_config');
+        $this->_dependsOnConfig = $this->_getArgument($data, 'dependsOnConfig');
         $this->_id = $this->_getArgument($data, 'id');
         $this->_resource = $this->_getArgument($data, 'resource');
         $this->_path = $this->_getArgument($data, 'path', '');
         $this->_action = $this->_getArgument($data, 'action');
-        $this->_dependsOnModule = $this->_getArgument($data, 'depends_on_module');
-        $this->_tooltip = $this->_getArgument($data, 'tooltip', '');
+        $this->_dependsOnModule = $this->_getArgument($data, 'dependsOnModule');
+        $this->_tooltip = $this->_getArgument($data, 'toolTip');
         $this->_title = $this->_getArgument($data, 'title');
         $this->target = $this->_getArgument($data, 'target');
         if (isset($data['sub_menu'])) {

@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SendmailTest extends \PHPUnit_Framework_TestCase
+class SendmailTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\SendFriend\Controller\Product\Sendmail */
     protected $model;

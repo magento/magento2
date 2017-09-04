@@ -12,7 +12,7 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Framework\DB\Select as DbSelect;
 
-class ProductCustomOptionsDataProviderTest extends \PHPUnit_Framework_TestCase
+class ProductCustomOptionsDataProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerHelper

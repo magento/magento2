@@ -11,6 +11,7 @@ namespace Magento\Bundle\Block\Catalog\Product\View\Type\Bundle;
 /**
  * Bundle option renderer
  * @api
+ * @since 100.0.2
  */
 class Option extends \Magento\Bundle\Block\Catalog\Product\Price
 {
@@ -143,14 +144,16 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
     {
         if (is_null($this->_selectedOptions)) {
             $this->_selectedOptions = [];
+
+            /** @var \Magento\Bundle\Model\Option $option */
             $option = $this->getOption();
 
             if ($this->getProduct()->hasPreconfiguredValues()) {
-                $configValue = $this->getProduct()->getPreconfiguredValues()->getData(
+                $selectionId = $this->getProduct()->getPreconfiguredValues()->getData(
                     'bundle_option/' . $option->getId()
                 );
-                if ($configValue) {
-                    $this->_selectedOptions = $configValue;
+                if ($selectionId && $option->getSelectionById($selectionId)) {
+                    $this->_selectedOptions = $selectionId;
                 } elseif (!$option->getRequired()) {
                     $this->_selectedOptions = 'None';
                 }

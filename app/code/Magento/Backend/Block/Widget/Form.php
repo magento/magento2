@@ -8,7 +8,10 @@ namespace Magento\Backend\Block\Widget;
 /**
  * Backend form widget
  *
+ * @api
+ * @deprecated 100.2.0 in favour of UI component implementation
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @since 100.0.2
  */
 class Form extends \Magento\Backend\Block\Widget
 {

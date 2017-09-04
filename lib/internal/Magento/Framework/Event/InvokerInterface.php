@@ -7,6 +7,10 @@
  */
 namespace Magento\Framework\Event;
 
+/**
+ * Interface \Magento\Framework\Event\InvokerInterface
+ *
+ */
 interface InvokerInterface
 {
     /**

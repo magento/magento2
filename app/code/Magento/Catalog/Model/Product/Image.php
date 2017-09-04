@@ -496,7 +496,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * @deprecated
+     * @deprecated 101.1.0
      * @return bool|string
      */
     public function getNewFile()

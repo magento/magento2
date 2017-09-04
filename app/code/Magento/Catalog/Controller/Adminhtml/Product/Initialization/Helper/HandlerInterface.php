@@ -5,6 +5,10 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper;
 
+/**
+ * Interface \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\HandlerInterface
+ *
+ */
 interface HandlerInterface
 {
     /**

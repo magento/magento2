@@ -12,7 +12,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AddFieldsToResponseObserverTest extends \PHPUnit_Framework_TestCase
+class AddFieldsToResponseObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Core registry

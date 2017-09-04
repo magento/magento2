@@ -8,7 +8,7 @@ namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser;
 /**
  * @magentoAppArea adminhtml
  */
-class ContainerTest extends \PHPUnit_Framework_TestCase
+class ContainerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Container

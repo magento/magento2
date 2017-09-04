@@ -8,7 +8,7 @@ namespace Magento\Contact\Model;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ConfigInterface

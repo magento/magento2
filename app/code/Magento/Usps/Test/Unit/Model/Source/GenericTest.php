@@ -5,7 +5,7 @@
  */
 namespace Magento\Usps\Test\Unit\Model\Source;
 
-class GenericTest extends \PHPUnit_Framework_TestCase
+class GenericTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Usps\Model\Source\Generic

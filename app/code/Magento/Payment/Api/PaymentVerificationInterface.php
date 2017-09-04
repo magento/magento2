@@ -19,6 +19,7 @@ use Magento\Sales\Api\Data\OrderPaymentInterface;
  * depends on payment method integration specifics.
  *
  * @api
+ * @since 100.2.0
  */
 interface PaymentVerificationInterface
 {
@@ -29,6 +30,7 @@ interface PaymentVerificationInterface
      * @param OrderPaymentInterface $orderPayment
      * @return string
      * @throws \InvalidArgumentException
+     * @since 100.2.0
      */
     public function getCode(OrderPaymentInterface $orderPayment);
 }

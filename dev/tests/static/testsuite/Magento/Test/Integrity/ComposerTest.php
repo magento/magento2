@@ -12,7 +12,7 @@ use Magento\Framework\Composer\MagentoComponent;
 /**
  * A test that enforces validity of composer.json files and any other conventions in Magento components
  */
-class ComposerTest extends \PHPUnit_Framework_TestCase
+class ComposerTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
@@ -99,7 +99,12 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Framework\Composer\MagentoComposerApplicationFactory $appFactory */
         $appFactory = self::$objectManager->get(\Magento\Framework\Composer\MagentoComposerApplicationFactory::class);
         $app = $appFactory->create();
-        $app->runComposerCommand(['command' => 'validate'], $path);
+
+        try {
+            $app->runComposerCommand(['command' => 'validate'], $path);
+        } catch (\RuntimeException $exception) {
+            $this->fail($exception->getMessage());
+        }
     }
 
     /**

@@ -10,6 +10,7 @@ namespace Magento\CatalogInventory\Block\Stockqty;
  * Product stock qty default block
  *
  * @api
+ * @since 100.0.2
  */
 class DefaultStockqty extends AbstractStockqty implements \Magento\Framework\DataObject\IdentityInterface
 {

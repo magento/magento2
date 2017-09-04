@@ -11,6 +11,7 @@ use Magento\Store\Model\Store;
  * JSON products custom options
  *
  * @api
+ * @since 100.0.2
  */
 class Ajax extends \Magento\Backend\Block\AbstractBlock
 {

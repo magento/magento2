@@ -12,6 +12,10 @@
  */
 namespace Magento\Reports\Controller\Adminhtml\Report;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 abstract class Customer extends \Magento\Backend\App\Action
 {
     /**

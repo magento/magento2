@@ -8,6 +8,7 @@ namespace Magento\Framework\Config\Data;
 
 /**
  * Data transfer object to store config data for config options
+ * @api
  */
 class ConfigData
 {
@@ -67,6 +68,7 @@ class ConfigData
      *
      * @param bool $overrideWhenSave
      * @return void
+     * @since 100.0.5
      */
     public function setOverrideWhenSave($overrideWhenSave)
     {
@@ -77,6 +79,7 @@ class ConfigData
      * Gets override when save flag
      *
      * @return bool
+     * @since 100.0.5
      */
     public function isOverrideWhenSave()
     {

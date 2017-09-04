@@ -7,7 +7,7 @@
  */
 namespace Magento\Test\Legacy;
 
-class PhtmlTemplateTest extends \PHPUnit_Framework_TestCase
+class PhtmlTemplateTest extends \PHPUnit\Framework\TestCase
 {
     public function testBlockVariableInsteadOfThis()
     {
