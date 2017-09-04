@@ -9,22 +9,28 @@ namespace Magento\Inventory\Indexer;
  * Index Name builder. It is Facade for simplifying IndexName object creation
  * @api
  */
-class IndexNameBuilder// TODO: \Magento\Framework\Api\AbstractSimpleObjectBuilder
+class IndexNameBuilder
 {
     /**
-     * Index id parameter name
+     * Index id parameter name. Used internally in this object
+     *
+     * Can not replace on private constant (feature of PHP 7.1) because we need to support PHP 7.0
      */
-    /* TODO: private only 7.1 */ const INDEX_ID = 'indexId';
+    private static $indexId = 'indexId';
 
     /**
-     * Dimensions parameter name
+     * Dimensions parameter name. Used internally in this object
+     *
+     * Can not replace on private constant (feature of PHP 7.1) because we need to support PHP 7.0
      */
-    const DIMENSIONS = 'dimensions';
+    private static $dimensions = 'dimensions';
 
     /**
-     * Alias parameter name
+     * Alias parameter name. Used internally in this object
+     *
+     * Can not replace on private constant (feature of PHP 7.1) because we need to support PHP 7.0
      */
-    const ALIAS = 'alias';
+    private static $alias = 'alias';
 
     /**
      * @var IndexNameFactory
@@ -67,7 +73,7 @@ class IndexNameBuilder// TODO: \Magento\Framework\Api\AbstractSimpleObjectBuilde
      */
     public function setIndexId(string $indexId): self
     {
-        $this->data[self::INDEX_ID] = $indexId;
+        $this->data[self::$indexId] = $indexId;
         return $this;
     }
 
@@ -78,7 +84,7 @@ class IndexNameBuilder// TODO: \Magento\Framework\Api\AbstractSimpleObjectBuilde
      */
     public function addDimension(string $name, string $value): self
     {
-        $this->data[self::DIMENSIONS][] = $this->dimensionFactory->create([
+        $this->data[self::$dimensions][] = $this->dimensionFactory->create([
             'name' => $name,
             'value' => $value,
         ]);
@@ -91,7 +97,7 @@ class IndexNameBuilder// TODO: \Magento\Framework\Api\AbstractSimpleObjectBuilde
      */
     public function setAlias(string $alias): self
     {
-        $this->data[self::ALIAS] = $this->aliasFactory->create(['value' => $alias]);
+        $this->data[self::$alias] = $this->aliasFactory->create(['value' => $alias]);
         return $this;
     }
 

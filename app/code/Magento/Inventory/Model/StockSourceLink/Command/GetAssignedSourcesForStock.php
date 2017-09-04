@@ -5,12 +5,11 @@
  */
 namespace Magento\Inventory\Model\StockSourceLink\Command;
 
-use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Inventory\Model\ResourceModel\StockSourceLink\Collection;
-use Magento\Inventory\Model\ResourceModel\StockSourceLink\CollectionFactory;
+use Magento\Inventory\Model\ResourceModel\StockSourceLink as StockSourceLinkResourceModel;
 use Magento\Inventory\Model\StockSourceLink;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\GetAssignedSourcesForStockInterface;
@@ -23,14 +22,9 @@ use Psr\Log\LoggerInterface;
 class GetAssignedSourcesForStock implements GetAssignedSourcesForStockInterface
 {
     /**
-     * @var CollectionProcessorInterface
+     * @var ResourceConnection
      */
-    private $collectionProcessor;
-
-    /**
-     * @var CollectionFactory
-     */
-    private $stockLinkCollectionFactory;
+    private $resourceConnection;
 
     /**
      * @var SearchCriteriaBuilder
@@ -48,21 +42,18 @@ class GetAssignedSourcesForStock implements GetAssignedSourcesForStockInterface
     private $logger;
 
     /**
-     * @param CollectionProcessorInterface $collectionProcessor
-     * @param CollectionFactory $stockLinkCollectionFactory
+     * @param ResourceConnection $resourceConnection
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param SourceRepositoryInterface $sourceRepository
      * @param LoggerInterface $logger
      */
     public function __construct(
-        CollectionProcessorInterface $collectionProcessor,
-        CollectionFactory $stockLinkCollectionFactory,
+        ResourceConnection $resourceConnection,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         SourceRepositoryInterface $sourceRepository,
         LoggerInterface $logger
     ) {
-        $this->collectionProcessor = $collectionProcessor;
-        $this->stockLinkCollectionFactory = $stockLinkCollectionFactory;
+        $this->resourceConnection = $resourceConnection;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->sourceRepository = $sourceRepository;
         $this->logger = $logger;
@@ -91,21 +82,21 @@ class GetAssignedSourcesForStock implements GetAssignedSourcesForStockInterface
     }
 
     /**
-     * Get all linked SourceIds by given stockId.
+     * Get all linked SourceIds by given stockId
      *
      * @param int $stockId
      * @return array
      */
     private function getAssignedSourceIds($stockId)
     {
-        // TODO: replace on direct SQL query
-        $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter(StockSourceLink::STOCK_ID, (int)$stockId)
-            ->create();
-        /** @var Collection $collection */
-        $collection = $this->stockLinkCollectionFactory->create();
-        $this->collectionProcessor->process($searchCriteria, $collection);
-        $data = $collection->getData();
-        return $data ? array_column($data, 'source_id') : [];
+        $connection = $this->resourceConnection->getConnection();
+        $select = $connection
+            ->select()
+            ->from(
+                $connection->getTableName(StockSourceLinkResourceModel::TABLE_NAME_STOCK_SOURCE_LINK),
+                [StockSourceLink::SOURCE_ID]
+            )
+            ->where(StockSourceLink::STOCK_ID . ' = ?', $stockId);
+        return $connection->fetchCol($select);
     }
 }
