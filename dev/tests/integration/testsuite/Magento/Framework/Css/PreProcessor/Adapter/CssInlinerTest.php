@@ -75,13 +75,12 @@ class CssInlinerTest extends \PHPUnit\Framework\TestCase
         $emogrifier->setCss($css);
         $emogrifier->setHtml($html);
         $result = $emogrifier->emogrify();
+
         /**
-         * Tests a bug in the library where there's no spaces to CSS string before passing to Emogrifier
-         * to fix known parsing issue with library.
-         * This test should will fail when this bug is fixed in the library and we should fix the adapter.
-         * https://github.com/jjriv/emogrifier/issues/370
+         * This test was implemented for the issue which existed in the older version of Emogrifier.
+         * Test was updated, as the library got updated as well.
          */
-        $this->assertNotContains($cssExpected, $result);
+        $this->assertContains($cssExpected, $result);
     }
 
     /**
