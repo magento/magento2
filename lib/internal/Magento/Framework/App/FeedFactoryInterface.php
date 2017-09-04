@@ -8,6 +8,8 @@ namespace Magento\Framework\App;
 interface FeedFactoryInterface
 {
 
+    const DEFAULT_FORMAT = 'rss';
+
     /**
      * Returns FeedInterface object from a custom array
      * 
@@ -16,8 +18,8 @@ interface FeedFactoryInterface
      * @param  string $format
      * @return FeedInterface
      */
-    public function importArray(
+    public function create(
         array $data, 
-        $format = FeedFormatsInterface::DEFAULT_FORMAT
+        $format = self::DEFAULT_FORMAT
     );
 }

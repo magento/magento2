@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\App;
 
+use \Magento\Framework\App\FeedInterface;
+
 class Feed implements \Magento\Framework\App\FeedInterface
 {
     /**
@@ -26,9 +28,9 @@ class Feed implements \Magento\Framework\App\FeedInterface
      * @return string
      */
     public function getFormatedContentAs(
-        $format = FeedOutputFormatsInterface::DEFAULT_FORMAT
+        $format = FeedInterface::DEFAULT_FORMAT
     ) {
-        if ($format === FeedOutputFormatsInterface::DEFAULT_FORMAT) {
+        if ($format === FeedInterface::DEFAULT_FORMAT) {
             return $this->feed->saveXml();
         }
         throw new \Magento\Framework\Exception\RuntimeException(

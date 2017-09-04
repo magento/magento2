@@ -7,10 +7,12 @@ namespace Magento\Framework\App;
 
 interface FeedInterface
 {
+    const DEFAULT_FORMAT = 'xml';
+
     /**
      * @return string
      */
     public function getFormatedContentAs(
-        $format = FeedOutputFormatsInterface::DEFAULT_FORMAT
+        $format = self::DEFAULT_FORMAT
     );
 }
