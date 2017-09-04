@@ -6,10 +6,6 @@
 
 namespace Magento\Catalog\Model\ResourceModel\Product;
 
-/**
- * Class \Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderComposite
- *
- */
 class LinkedProductSelectBuilderComposite implements LinkedProductSelectBuilderInterface
 {
     /**

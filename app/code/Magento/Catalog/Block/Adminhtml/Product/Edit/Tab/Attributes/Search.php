@@ -11,10 +11,6 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attributes;
 
-/**
- * Class \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attributes\Search
- *
- */
 class Search extends \Magento\Backend\Block\Widget
 {
     /**

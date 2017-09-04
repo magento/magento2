@@ -6,10 +6,6 @@
  */
 namespace Magento\CheckoutAgreements\Controller\Adminhtml\Agreement;
 
-/**
- * Class \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement\NewAction
- *
- */
 class NewAction extends \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement
 {
     /**

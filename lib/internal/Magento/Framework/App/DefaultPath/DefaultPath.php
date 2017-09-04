@@ -7,10 +7,6 @@
  */
 namespace Magento\Framework\App\DefaultPath;
 
-/**
- * Class \Magento\Framework\App\DefaultPath\DefaultPath
- *
- */
 class DefaultPath implements \Magento\Framework\App\DefaultPathInterface
 {
     /**

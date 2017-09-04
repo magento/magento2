@@ -5,10 +5,6 @@
  */
 namespace Magento\Theme\Model\Design\Theme;
 
-/**
- * Class \Magento\Theme\Model\Design\Theme\Label
- *
- */
 class Label extends \Magento\Framework\View\Design\Theme\Label
 {
     /**

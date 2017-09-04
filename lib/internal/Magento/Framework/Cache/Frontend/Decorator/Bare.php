@@ -10,10 +10,6 @@
  */
 namespace Magento\Framework\Cache\Frontend\Decorator;
 
-/**
- * Class \Magento\Framework\Cache\Frontend\Decorator\Bare
- *
- */
 class Bare implements \Magento\Framework\Cache\FrontendInterface
 {
     /**

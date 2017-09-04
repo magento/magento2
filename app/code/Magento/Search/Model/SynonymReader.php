@@ -51,7 +51,6 @@ class SynonymReader extends AbstractModel
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param DbCollection $resourceCollection
      * @param array $data
-     * @since 100.1.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,

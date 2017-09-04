@@ -58,17 +58,18 @@ class IndexerSetModeCommandTest extends AbstractIndexerCommandCommonSetup
     public function testExecuteAll()
     {
         $this->configureAdminArea();
-        $collection = $this->createMock(\Magento\Indexer\Model\Indexer\Collection::class);
-        $indexerOne = $this->createMock(\Magento\Indexer\Model\Indexer::class);
+        $indexerOne = $this->getIndexerMock(
+            ['isScheduled', 'setScheduled'],
+            ['indexer_id' => 'indexer_1', 'title' => 'Title_indexerOne']
+        );
 
-        $indexerOne->expects($this->at(0))->method('isScheduled')->willReturn(true);
-        $indexerOne->expects($this->at(2))->method('isScheduled')->willReturn(false);
+        $indexerOne->expects($this->exactly(2))
+            ->method('isScheduled')
+            ->willReturnOnConsecutiveCalls([true, false]);
 
         $indexerOne->expects($this->once())->method('setScheduled')->with(false);
-        $indexerOne->expects($this->once())->method('getTitle')->willReturn('Title_indexerOne');
-        $collection->expects($this->once())->method('getItems')->willReturn([$indexerOne]);
 
-        $this->collectionFactory->expects($this->once())->method('create')->will($this->returnValue($collection));
+        $this->initIndexerCollectionByItems([$indexerOne]);
         $this->indexerFactory->expects($this->never())->method('create');
         $this->command = new IndexerSetModeCommand($this->objectManagerFactory);
         $commandTester = new CommandTester($this->command);
@@ -92,15 +93,15 @@ class IndexerSetModeCommandTest extends AbstractIndexerCommandCommonSetup
     public function testExecuteWithIndex($isScheduled, $previous, $current, $mode, $expectedValue)
     {
         $this->configureAdminArea();
-        $indexerOne = $this->createMock(\Magento\Indexer\Model\Indexer::class);
-        $indexerOne->expects($this->once())->method('getTitle')->willReturn('Title_indexerOne');
-        $indexerOne->expects($this->once())->method('load')->with('id_indexerOne')->willReturn($indexerOne);
+        $indexerOne = $this->getIndexerMock(
+            ['isScheduled', 'setScheduled'],
+            ['indexer_id' => 'id_indexerOne', 'title' => 'Title_indexerOne']
+        );
+        $this->initIndexerCollectionByItems([$indexerOne]);
         $indexerOne->expects($this->once())->method('setScheduled')->with($isScheduled);
-        $indexerOne->expects($this->at(1))->method('isScheduled')->willReturn($previous);
-        $indexerOne->expects($this->at(3))->method('isScheduled')->willReturn($current);
-
-        $this->collectionFactory->expects($this->never())->method('create');
-        $this->indexerFactory->expects($this->once())->method('create')->willReturn($indexerOne);
+        $indexerOne->expects($this->exactly(2))
+            ->method('isScheduled')
+            ->willReturnOnConsecutiveCalls($previous, $current);
 
         $this->command = new IndexerSetModeCommand($this->objectManagerFactory);
         $commandTester = new CommandTester($this->command);
@@ -153,11 +154,13 @@ class IndexerSetModeCommandTest extends AbstractIndexerCommandCommonSetup
     public function testExecuteWithLocalizedException()
     {
         $this->configureAdminArea();
-        $indexerOne = $this->createMock(\Magento\Indexer\Model\Indexer::class);
+        $indexerOne = $this->getIndexerMock(
+            ['isScheduled', 'setScheduled'],
+            ['indexer_id' => 'id_indexerOne']
+        );
         $localizedException = new \Magento\Framework\Exception\LocalizedException(__('Some Exception Message'));
         $indexerOne->expects($this->once())->method('setScheduled')->will($this->throwException($localizedException));
-        $this->collectionFactory->expects($this->never())->method('create');
-        $this->indexerFactory->expects($this->once())->method('create')->willReturn($indexerOne);
+        $this->initIndexerCollectionByItems([$indexerOne]);
         $this->command = new IndexerSetModeCommand($this->objectManagerFactory);
         $commandTester = new CommandTester($this->command);
         $commandTester->execute(['mode' => 'schedule', 'index' => ['id_indexerOne']]);
@@ -168,12 +171,13 @@ class IndexerSetModeCommandTest extends AbstractIndexerCommandCommonSetup
     public function testExecuteWithException()
     {
         $this->configureAdminArea();
-        $indexerOne = $this->createMock(\Magento\Indexer\Model\Indexer::class);
+        $indexerOne = $this->getIndexerMock(
+            ['isScheduled', 'setScheduled'],
+            ['indexer_id' => 'id_indexerOne', 'title' => 'Title_indexerOne']
+        );
         $exception = new \Exception();
         $indexerOne->expects($this->once())->method('setScheduled')->will($this->throwException($exception));
-        $indexerOne->expects($this->once())->method('getTitle')->willReturn('Title_indexerOne');
-        $this->collectionFactory->expects($this->never())->method('create');
-        $this->indexerFactory->expects($this->once())->method('create')->willReturn($indexerOne);
+        $this->initIndexerCollectionByItems([$indexerOne]);
         $this->command = new IndexerSetModeCommand($this->objectManagerFactory);
         $commandTester = new CommandTester($this->command);
         $commandTester->execute(['mode' => 'schedule', 'index' => ['id_indexerOne']]);

@@ -15,6 +15,7 @@ namespace Magento\Eav\Model\Form;
  * @method \Magento\Eav\Model\Form\Fieldset setCode(string $value)
  * @method int getSortOrder()
  * @method \Magento\Eav\Model\Form\Fieldset setSortOrder(int $value)
+ * @since 100.0.2
  */
 class Fieldset extends \Magento\Framework\Model\AbstractModel
 {

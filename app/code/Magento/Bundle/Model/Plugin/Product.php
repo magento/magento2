@@ -8,10 +8,6 @@ namespace Magento\Bundle\Model\Plugin;
 use Magento\Bundle\Model\Product\Type;
 use Magento\Catalog\Model\Product as CatalogProduct;
 
-/**
- * Class \Magento\Bundle\Model\Plugin\Product
- *
- */
 class Product
 {
     /**

@@ -10,10 +10,6 @@ use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
 
-/**
- * Class \Magento\Braintree\Setup\UpgradeData
- *
- */
 class UpgradeData implements UpgradeDataInterface
 {
     /**

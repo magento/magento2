@@ -84,7 +84,6 @@ class ConfigShowCommand extends Command
      * @param ConfigPathResolver $pathResolver
      * @param ValueProcessor $valueProcessor
      * @internal param ScopeConfigInterface $appConfig
-     * @since 100.2.0
      */
     public function __construct(
         ValidatorInterface $scopeValidator,

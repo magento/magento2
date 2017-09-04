@@ -8,10 +8,6 @@ namespace Magento\CatalogRule\Plugin\Indexer;
 use Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor;
 use Magento\ImportExport\Model\Import;
 
-/**
- * Class \Magento\CatalogRule\Plugin\Indexer\ImportExport
- *
- */
 class ImportExport
 {
     /**

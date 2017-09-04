@@ -31,6 +31,7 @@ use Magento\Sales\Model\AbstractModel;
  * @method \Magento\Sales\Model\Order\Invoice\Item setWeeeTaxApplied(string $value)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Item extends AbstractModel implements InvoiceItemInterface
 {

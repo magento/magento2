@@ -11,10 +11,6 @@
  */
 namespace Magento\Framework\Event\Observer;
 
-/**
- * Class \Magento\Framework\Event\Observer\Regex
- *
- */
 class Regex extends \Magento\Framework\Event\Observer
 {
     /**

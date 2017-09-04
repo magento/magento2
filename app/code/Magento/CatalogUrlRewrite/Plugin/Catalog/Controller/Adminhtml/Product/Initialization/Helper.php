@@ -5,10 +5,6 @@
  */
 namespace Magento\CatalogUrlRewrite\Plugin\Catalog\Controller\Adminhtml\Product\Initialization;
 
-/**
- * Class \Magento\CatalogUrlRewrite\Plugin\Catalog\Controller\Adminhtml\Product\Initialization\Helper
- *
- */
 class Helper
 {
     /**

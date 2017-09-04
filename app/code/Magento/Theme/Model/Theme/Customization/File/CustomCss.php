@@ -9,10 +9,6 @@
  */
 namespace Magento\Theme\Model\Theme\Customization\File;
 
-/**
- * Class \Magento\Theme\Model\Theme\Customization\File\CustomCss
- *
- */
 class CustomCss extends \Magento\Framework\View\Design\Theme\Customization\AbstractFile
 {
     /**#@+

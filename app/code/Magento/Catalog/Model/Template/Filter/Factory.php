@@ -9,10 +9,6 @@
  */
 namespace Magento\Catalog\Model\Template\Filter;
 
-/**
- * Class \Magento\Catalog\Model\Template\Filter\Factory
- *
- */
 class Factory
 {
     /**

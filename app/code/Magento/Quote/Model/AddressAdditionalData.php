@@ -8,10 +8,6 @@ namespace Magento\Quote\Model;
 use Magento\Quote\Api\Data\AddressAdditionalDataInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
 
-/**
- * Class \Magento\Quote\Model\AddressAdditionalData
- *
- */
 class AddressAdditionalData extends AbstractExtensibleModel implements AddressAdditionalDataInterface
 {
     /**

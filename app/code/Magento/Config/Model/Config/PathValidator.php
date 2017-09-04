@@ -23,7 +23,6 @@ class PathValidator
 
     /**
      * @param Structure $structure The config structure
-     * @since 100.2.0
      */
     public function __construct(Structure $structure)
     {

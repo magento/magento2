@@ -10,10 +10,6 @@ use Magento\Setup\Module\Di\App\Task\OperationInterface;
 use Magento\Setup\Module\Di\Code\Scanner;
 use Magento\Setup\Module\Di\Code\Reader\ClassesScanner;
 
-/**
- * Class \Magento\Setup\Module\Di\App\Task\Operation\RepositoryGenerator
- *
- */
 class RepositoryGenerator implements OperationInterface
 {
     /**

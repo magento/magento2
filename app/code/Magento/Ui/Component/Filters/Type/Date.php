@@ -10,6 +10,7 @@ use Magento\Ui\Component\Form\Element\DataType\Date as DataTypeDate;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Date extends AbstractFilter
 {

@@ -11,6 +11,7 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 /**
  * Class AbstractGrid
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractGrid extends AbstractDb implements GridInterface
 {

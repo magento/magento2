@@ -9,10 +9,6 @@ namespace Magento\Catalog\Model\Product;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
-/**
- * Class \Magento\Catalog\Model\Product\PriceModifier
- *
- */
 class PriceModifier
 {
     /**

@@ -7,10 +7,6 @@
  */
 namespace Magento\Framework\Mail\Template;
 
-/**
- * Class \Magento\Framework\Mail\Template\Factory
- *
- */
 class Factory implements \Magento\Framework\Mail\Template\FactoryInterface
 {
     /**

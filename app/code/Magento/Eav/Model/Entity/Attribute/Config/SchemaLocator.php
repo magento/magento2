@@ -9,10 +9,6 @@ namespace Magento\Eav\Model\Entity\Attribute\Config;
 
 use Magento\Framework\Module\Dir;
 
-/**
- * Class \Magento\Eav\Model\Entity\Attribute\Config\SchemaLocator
- *
- */
 class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {
     /**

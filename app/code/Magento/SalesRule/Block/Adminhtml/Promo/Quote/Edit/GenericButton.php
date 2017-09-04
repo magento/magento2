@@ -8,10 +8,6 @@ namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit;
 
 use Magento\SalesRule\Model\RegistryConstants;
 
-/**
- * Class \Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\GenericButton
- *
- */
 class GenericButton
 {
     /**

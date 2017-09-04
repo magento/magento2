@@ -79,10 +79,6 @@
  */
 namespace Magento\Framework\Filter;
 
-/**
- * Class \Magento\Framework\Filter\Input
- *
- */
 class Input implements \Zend_Filter_Interface
 {
     /**

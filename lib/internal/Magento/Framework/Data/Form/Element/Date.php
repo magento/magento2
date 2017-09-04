@@ -15,10 +15,6 @@ use Magento\Framework\Escaper;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
-/**
- * Class \Magento\Framework\Data\Form\Element\Date
- *
- */
 class Date extends AbstractElement
 {
     /**

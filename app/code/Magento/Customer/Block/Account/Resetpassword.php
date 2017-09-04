@@ -11,6 +11,7 @@ use Magento\Customer\Model\AccountManagement;
  * Customer reset password form
  *
  * @api
+ * @since 100.0.2
  */
 class Resetpassword extends \Magento\Framework\View\Element\Template
 {

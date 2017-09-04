@@ -5,10 +5,6 @@
  */
 namespace Magento\OfflinePayments\Block\Form;
 
-/**
- * Class \Magento\OfflinePayments\Block\Form\Purchaseorder
- *
- */
 class Purchaseorder extends \Magento\Payment\Block\Form
 {
     /**

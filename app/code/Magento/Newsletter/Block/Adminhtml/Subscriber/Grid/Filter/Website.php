@@ -11,10 +11,6 @@ namespace Magento\Newsletter\Block\Adminhtml\Subscriber\Grid\Filter;
 
 use Magento\Store\Model\ResourceModel\Website\Collection;
 
-/**
- * Class \Magento\Newsletter\Block\Adminhtml\Subscriber\Grid\Filter\Website
- *
- */
 class Website extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
 {
     /**

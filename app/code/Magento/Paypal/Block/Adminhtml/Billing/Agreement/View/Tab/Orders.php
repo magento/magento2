@@ -19,6 +19,7 @@ use Magento\Framework\Registry;
 /**
  * Adminhtml billing agreement related orders tab
  * @api
+ * @since 100.0.2
  */
 class Orders extends ExtendedGrid implements TabInterface
 {

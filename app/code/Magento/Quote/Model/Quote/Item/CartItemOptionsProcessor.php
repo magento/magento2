@@ -7,10 +7,6 @@ namespace Magento\Quote\Model\Quote\Item;
 
 use Magento\Quote\Api\Data\CartItemInterface;
 
-/**
- * Class \Magento\Quote\Model\Quote\Item\CartItemOptionsProcessor
- *
- */
 class CartItemOptionsProcessor
 {
     /**

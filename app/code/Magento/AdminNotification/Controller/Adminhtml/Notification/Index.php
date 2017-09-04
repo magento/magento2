@@ -6,10 +6,6 @@
  */
 namespace Magento\AdminNotification\Controller\Adminhtml\Notification;
 
-/**
- * Class \Magento\AdminNotification\Controller\Adminhtml\Notification\Index
- *
- */
 class Index extends \Magento\AdminNotification\Controller\Adminhtml\Notification
 {
     /**

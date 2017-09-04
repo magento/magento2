@@ -8,10 +8,6 @@ namespace Magento\Quote\Model;
 
 use Magento\Quote\Api\Data\ShippingAssignmentInterface;
 
-/**
- * Class \Magento\Quote\Model\ShippingAssignment
- *
- */
 class ShippingAssignment extends \Magento\Framework\Model\AbstractExtensibleModel implements ShippingAssignmentInterface
 {
     const SHIPPING = 'shipping';

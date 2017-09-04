@@ -7,10 +7,6 @@ namespace Magento\Sales\Controller\Adminhtml\Order\Create;
 
 use Magento\Backend\App\Action;
 
-/**
- * Class \Magento\Sales\Controller\Adminhtml\Order\Create\Start
- *
- */
 class Start extends \Magento\Sales\Controller\Adminhtml\Order\Create
 {
     /**

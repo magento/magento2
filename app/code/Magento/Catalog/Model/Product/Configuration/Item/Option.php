@@ -11,10 +11,6 @@
  */
 namespace Magento\Catalog\Model\Product\Configuration\Item;
 
-/**
- * Class \Magento\Catalog\Model\Product\Configuration\Item\Option
- *
- */
 class Option extends \Magento\Framework\DataObject implements
     \Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface
 {

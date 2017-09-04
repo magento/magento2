@@ -5,10 +5,6 @@
  */
 namespace Magento\Sales\Model\ResourceModel\Order\Collection;
 
-/**
- * Class \Magento\Sales\Model\ResourceModel\Order\Collection\Factory
- *
- */
 class Factory
 {
     /**

@@ -42,6 +42,7 @@ use Magento\Store\Model\StoreManagerInterface;
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @since 100.0.2
  */
 class Advanced extends \Magento\Framework\Model\AbstractModel
 {

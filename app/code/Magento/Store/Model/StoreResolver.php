@@ -7,10 +7,6 @@ namespace Magento\Store\Model;
 
 use Magento\Framework\Serialize\SerializerInterface;
 
-/**
- * Class \Magento\Store\Model\StoreResolver
- *
- */
 class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
 {
     /**

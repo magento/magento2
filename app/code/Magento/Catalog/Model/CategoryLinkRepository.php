@@ -9,10 +9,6 @@ namespace Magento\Catalog\Model;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\CouldNotSaveException;
 
-/**
- * Class \Magento\Catalog\Model\CategoryLinkRepository
- *
- */
 class CategoryLinkRepository implements \Magento\Catalog\Api\CategoryLinkRepositoryInterface
 {
     /**

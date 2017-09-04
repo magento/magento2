@@ -11,10 +11,6 @@
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\GroupPrice;
 
-/**
- * Class \Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\GroupPrice\AbstractGroupPrice
- *
- */
 abstract class AbstractGroupPrice extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**

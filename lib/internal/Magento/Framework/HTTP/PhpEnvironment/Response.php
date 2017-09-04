@@ -7,10 +7,6 @@
  */
 namespace Magento\Framework\HTTP\PhpEnvironment;
 
-/**
- * Class \Magento\Framework\HTTP\PhpEnvironment\Response
- *
- */
 class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Framework\App\Response\HttpInterface
 {
     /**

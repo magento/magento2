@@ -8,10 +8,6 @@ namespace Magento\Backend\Controller\Adminhtml\System\Store;
 
 use Magento\Framework\Controller\ResultFactory;
 
-/**
- * Class \Magento\Backend\Controller\Adminhtml\System\Store\DeleteGroupPost
- *
- */
 class DeleteGroupPost extends \Magento\Backend\Controller\Adminhtml\System\Store
 {
     /**

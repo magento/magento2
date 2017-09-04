@@ -34,7 +34,6 @@ class AllowedCountries
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @return void
-     * @since 100.1.2
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,

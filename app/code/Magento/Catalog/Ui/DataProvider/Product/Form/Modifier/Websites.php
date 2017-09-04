@@ -73,7 +73,6 @@ class Websites extends AbstractModifier
      * @param WebsiteRepositoryInterface $websiteRepository
      * @param GroupRepositoryInterface $groupRepository
      * @param StoreRepositoryInterface $storeRepository
-     * @since 101.0.0
      */
     public function __construct(
         LocatorInterface $locator,

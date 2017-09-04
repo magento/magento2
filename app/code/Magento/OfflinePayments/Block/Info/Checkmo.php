@@ -5,10 +5,6 @@
  */
 namespace Magento\OfflinePayments\Block\Info;
 
-/**
- * Class \Magento\OfflinePayments\Block\Info\Checkmo
- *
- */
 class Checkmo extends \Magento\Payment\Block\Info
 {
     /**

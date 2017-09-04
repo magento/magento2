@@ -13,6 +13,7 @@ namespace Magento\Customer\Model;
  * @method \Magento\Customer\Model\Group setCustomerGroupCode(string $value)
  * @method \Magento\Customer\Model\Group setTaxClassId(int $value)
  * @method Group setTaxClassName(string $value)
+ * @since 100.0.2
  */
 class Group extends \Magento\Framework\Model\AbstractModel
 {

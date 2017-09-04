@@ -12,10 +12,6 @@ namespace Magento\MediaStorage\Model\Config\Source\Storage\Media;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 
-/**
- * Class \Magento\MediaStorage\Model\Config\Source\Storage\Media\Database
- *
- */
 class Database implements \Magento\Framework\Option\ArrayInterface
 {
     /**

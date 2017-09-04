@@ -5,10 +5,6 @@
  */
 namespace Magento\CatalogUrlRewrite\Plugin\Catalog\Block\Adminhtml\Product\Edit\Tab;
 
-/**
- * Class \Magento\CatalogUrlRewrite\Plugin\Catalog\Block\Adminhtml\Product\Edit\Tab\Attributes
- *
- */
 class Attributes
 {
     /**

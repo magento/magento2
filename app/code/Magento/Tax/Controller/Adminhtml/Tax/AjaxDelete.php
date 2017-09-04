@@ -8,10 +8,6 @@ namespace Magento\Tax\Controller\Adminhtml\Tax;
 
 use Magento\Framework\Controller\ResultFactory;
 
-/**
- * Class \Magento\Tax\Controller\Adminhtml\Tax\AjaxDelete
- *
- */
 class AjaxDelete extends \Magento\Tax\Controller\Adminhtml\Tax
 {
     /**

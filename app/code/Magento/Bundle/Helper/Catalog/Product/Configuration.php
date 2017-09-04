@@ -12,6 +12,7 @@ use Magento\Framework\App\Helper\AbstractHelper;
 /**
  * Helper for fetching properties by product configuration item
  * @api
+ * @since 100.0.2
  */
 class Configuration extends AbstractHelper implements ConfigurationInterface
 {

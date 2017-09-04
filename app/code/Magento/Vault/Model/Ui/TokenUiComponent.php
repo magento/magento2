@@ -5,10 +5,6 @@
  */
 namespace Magento\Vault\Model\Ui;
 
-/**
- * Class \Magento\Vault\Model\Ui\TokenUiComponent
- *
- */
 class TokenUiComponent implements TokenUiComponentInterface
 {
     /**

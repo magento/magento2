@@ -5,10 +5,6 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
-/**
- * Class \Magento\Sales\Controller\Adminhtml\Order\Shipments
- *
- */
 class Shipments extends \Magento\Sales\Controller\Adminhtml\Order
 {
     /**

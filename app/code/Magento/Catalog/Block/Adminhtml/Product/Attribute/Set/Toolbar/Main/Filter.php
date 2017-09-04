@@ -11,10 +11,6 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Toolbar\Main;
 
 use Magento\Backend\Block\Widget\Form;
 
-/**
- * Class \Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Toolbar\Main\Filter
- *
- */
 class Filter extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
