@@ -1780,7 +1780,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Check order shipments availability
      *
-     * @return bool
+     * @return int
      */
     public function hasShipments()
     {
