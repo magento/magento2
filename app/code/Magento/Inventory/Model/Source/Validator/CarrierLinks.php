@@ -37,11 +37,11 @@ class CarrierLinks implements SourceValidatorInterface
         if (null !== $value) {
             if (!is_array($value)) {
                 $errors[] = __('"%field" must be list of SourceCarrierLinkInterface.', [
-                    'field' => SourceInterface::CARRIER_LINKS,
+                    'field' => SourceInterface::CARRIER_LINKS
                 ]);
             } else if (count($value) && $source->isUseDefaultCarrierConfig()) {
                 $errors[] = __('You can\'t configure "%field" because you have chosen Global Shipping configuration.', [
-                    'field' => SourceInterface::CARRIER_LINKS,
+                    'field' => SourceInterface::CARRIER_LINKS
                 ]);
             }
         }

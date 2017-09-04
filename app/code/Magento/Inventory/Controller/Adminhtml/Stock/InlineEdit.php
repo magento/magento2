@@ -75,7 +75,7 @@ class InlineEdit extends Action
                 } catch (CouldNotSaveException $e) {
                     $errorMessages[] = __('[ID: %value] %message', [
                         'value' => $itemData[StockInterface::STOCK_ID],
-                        'message' => $e->getMessage(),
+                        'message' => $e->getMessage()
                     ]);
                 }
             }

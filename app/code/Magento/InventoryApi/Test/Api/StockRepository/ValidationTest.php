@@ -124,9 +124,7 @@ class ValidationTest extends WebapiAbstract
         $data = $this->validData;
         $data[$field] = $value;
 
-        $stock = $this->getStockDataByName('stock-name-1');
-        $stockId = $stock[StockInterface::STOCK_ID];
-
+        $stockId = 1;
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/' . $stockId,
@@ -197,46 +195,5 @@ class ValidationTest extends WebapiAbstract
                 throw $e;
             }
         }
-    }
-
-    /**
-     * TODO: duplication
-     * @param string $name
-     * @return array
-     */
-    private function getStockDataByName($name)
-    {
-        $searchCriteria = [
-            'filter_groups' => [
-                [
-                    'filters' => [
-                        [
-                            'field' => StockInterface::NAME,
-                            'value' => $name,
-                            'condition_type' => 'eq',
-                        ],
-                    ],
-                ],
-                'page_size' => 1,
-            ],
-        ];
-        $requestData = ['searchCriteria' => $searchCriteria];
-        $serviceInfo = [
-            'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '?' . http_build_query($requestData),
-                'httpMethod' => Request::HTTP_METHOD_GET,
-            ],
-            'soap' => [
-                'service' => self::SERVICE_NAME,
-                'operation' => self::SERVICE_NAME . 'GetList',
-            ],
-        ];
-        $response = (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST)
-            ? $this->_webApiCall($serviceInfo)
-            : $this->_webApiCall($serviceInfo, $requestData);
-
-        self::assertArrayHasKey('items', $response);
-        self::assertCount(1, $response['items']);
-        return reset($response['items']);
     }
 }

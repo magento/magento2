@@ -10,5 +10,5 @@ use Magento\TestFramework\Helper\Bootstrap;
 /** @var ResourceConnection $connection */
 $connection = Bootstrap::getObjectManager()->get(ResourceConnection::class);
 $connection->getConnection()->delete('inventory_source', [
-    SourceInterface::NAME . ' IN (?)' => ['source-name-1', 'source-name-1-updated'],
+    SourceInterface::SOURCE_ID . ' = ?' => 1,
 ]);
