@@ -437,7 +437,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true));
 
         $this->flatIndexer->expects($this->exactly(1))->method('isScheduled')->will($this->returnValue($flatScheduled));
-        $this->flatIndexer->expects($this->exactly($expectedFlatReindexCalls))->method('reindexRow')->with('123');
+        $this->flatIndexer->expects($this->exactly($expectedFlatReindexCalls))->method('reindexList')->with(['123']);
 
         $this->productIndexer->expects($this->exactly(1))->method('isScheduled')->will($this->returnValue($productScheduled));
         $this->productIndexer->expects($this->exactly($expectedProductReindexCall))->method('reindexList')->with($pathIds);
