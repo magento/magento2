@@ -37,7 +37,7 @@ class Alias
     public function __construct(string $value)
     {
         if ($value !== self::ALIAS_REPLICA && $value !== self::ALIAS_MAIN) {
-            throw new LocalizedException(__('Wrong value %s for alias', $value));
+            throw new LocalizedException(__('Wrong value %value for alias', ['value' => $value]));
         }
         $this->value = $value;
     }
