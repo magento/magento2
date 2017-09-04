@@ -17,6 +17,11 @@ use Magento\InventoryApi\Api\Data\SourceInterface;
  */
 class Source extends AbstractDb
 {
+    /**
+     * Provide possibility of save entity with predefined id
+     */
+    use PredefinedId;
+
     /**#@+
      * Constants related to specific db layer
      */

@@ -5,19 +5,12 @@
  */
 namespace Magento\Inventory\Test\Integration\Indexer;
 
-use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\Api\SortOrder;
-use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Indexer\Model\Indexer;
 use Magento\Inventory\Indexer\Alias;
 use Magento\Inventory\Indexer\IndexNameBuilder;
 use Magento\Inventory\Indexer\IndexStructureInterface;
 use Magento\Inventory\Indexer\StockItemIndexerInterface;
-use Magento\InventoryApi\Api\Data\SourceInterface;
-use Magento\InventoryApi\Api\Data\StockInterface;
-use Magento\InventoryApi\Api\SourceRepositoryInterface;
-use Magento\InventoryApi\Api\StockRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -48,45 +41,12 @@ class StockItemTest extends TestCase
      */
     private $indexerChecker;
 
-    /**
-     * @var SourceInterface[]
-     */
-    private $sources;
-
-    /**
-     * @var StockInterface[]
-     */
-    private $stocks;
-
     protected function setUp()
     {
         $this->indexer = Bootstrap::getObjectManager()->create(Indexer::class);
         $this->indexer->load(StockItemIndexerInterface::INDEXER_ID);
         $this->indexerChecker = Bootstrap::getObjectManager()->create(Checker::class);
 
-        /** @var StockRepositoryInterface $stockRepository */
-        $stockRepository = Bootstrap::getObjectManager()->get(StockRepositoryInterface::class);
-        /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
-        $searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
-        /** @var SortOrderBuilder $sortOrderBuilder */
-        $sortOrderBuilder = Bootstrap::getObjectManager()->create(SortOrderBuilder::class);
-        $sortOrder = $sortOrderBuilder
-            ->setField(StockInterface::NAME)
-            ->setDirection(SortOrder::SORT_ASC)
-            ->create();
-        $searchCriteria = $searchCriteriaBuilder
-            ->addFilter(StockInterface::NAME, ['stock-name-1', 'stock-name-2'], 'in')
-            ->addSortOrder($sortOrder)
-            ->create();
-        $this->stocks = array_values($stockRepository->getList($searchCriteria)->getItems());
-
-        /** @var SourceRepositoryInterface $sourceRepository */
-        $sourceRepository = Bootstrap::getObjectManager()->get(SourceRepositoryInterface::class);
-        $searchCriteria = $searchCriteriaBuilder
-            ->addFilter(SourceInterface::NAME, ['source-name-1'], 'in')
-            ->addSortOrder($sortOrder)
-            ->create();
-        $this->sources = array_values($sourceRepository->getList($searchCriteria)->getItems());
     }
 
     public function tearDown()
@@ -96,10 +56,10 @@ class StockItemTest extends TestCase
         /** @var IndexStructureInterface $indexStructure */
         $indexStructure = Bootstrap::getObjectManager()->get(IndexStructureInterface::class);
 
-        foreach ($this->stocks as $stock) {
+        foreach ([1, 2] as $stockId) {
             $indexName = $indexNameBuilder
                 ->setIndexId(StockItemIndexerInterface::INDEXER_ID)
-                ->addDimension('stock_', $stock->getStockId())
+                ->addDimension('stock_', $stockId)
                 ->setAlias(Alias::ALIAS_MAIN)
                 ->create();
             $indexStructure->delete($indexName);
@@ -115,13 +75,13 @@ class StockItemTest extends TestCase
      */
     public function testReindexRow()
     {
-        self::assertEquals(0, $this->indexerChecker->execute($this->stocks[0]->getStockId(), 'SKU-1'));
-        self::assertEquals(0, $this->indexerChecker->execute($this->stocks[1]->getStockId(), 'SKU-2'));
+        self::assertEquals(0, $this->indexerChecker->execute(1, 'SKU-1'));
+        self::assertEquals(0, $this->indexerChecker->execute(2, 'SKU-2'));
 
-        $this->indexer->reindexRow($this->sources[0]->getSourceId());
+        $this->indexer->reindexRow(1);
 
-        self::assertEquals(8, $this->indexerChecker->execute($this->stocks[0]->getStockId(), 'SKU-1'));
-        self::assertEquals(0, $this->indexerChecker->execute($this->stocks[1]->getStockId(), 'SKU-2'));
+        self::assertEquals(8, $this->indexerChecker->execute(1, 'SKU-1'));
+        self::assertEquals(0, $this->indexerChecker->execute(2, 'SKU-2'));
     }
 
     /**
@@ -133,13 +93,13 @@ class StockItemTest extends TestCase
      */
     public function testReindexList()
     {
-        self::assertEquals(0, $this->indexerChecker->execute($this->stocks[0]->getStockId(), 'SKU-1'));
-        self::assertEquals(0, $this->indexerChecker->execute($this->stocks[1]->getStockId(), 'SKU-2'));
+        self::assertEquals(0, $this->indexerChecker->execute(1, 'SKU-1'));
+        self::assertEquals(0, $this->indexerChecker->execute(2, 'SKU-2'));
 
-        $this->indexer->reindexList([$this->sources[0]->getSourceId()]);
+        $this->indexer->reindexList([1]);
 
-        self::assertEquals(8, $this->indexerChecker->execute($this->stocks[0]->getStockId(), 'SKU-1'));
-        self::assertEquals(0, $this->indexerChecker->execute($this->stocks[1]->getStockId(), 'SKU-2'));
+        self::assertEquals(8, $this->indexerChecker->execute(1, 'SKU-1'));
+        self::assertEquals(0, $this->indexerChecker->execute(2, 'SKU-2'));
     }
 
     /**
@@ -151,12 +111,12 @@ class StockItemTest extends TestCase
      */
     public function testReindexAll()
     {
-        self::assertEquals(0, $this->indexerChecker->execute($this->stocks[0]->getStockId(), 'SKU-1'));
-        self::assertEquals(0, $this->indexerChecker->execute($this->stocks[1]->getStockId(), 'SKU-2'));
+        self::assertEquals(0, $this->indexerChecker->execute(1, 'SKU-1'));
+        self::assertEquals(0, $this->indexerChecker->execute(2, 'SKU-2'));
 
         $this->indexer->reindexAll();
 
-        self::assertEquals(8, $this->indexerChecker->execute($this->stocks[0]->getStockId(), 'SKU-1'));
-        self::assertEquals(5, $this->indexerChecker->execute($this->stocks[1]->getStockId(), 'SKU-2'));
+        self::assertEquals(8, $this->indexerChecker->execute(1, 'SKU-1'));
+        self::assertEquals(5, $this->indexerChecker->execute(2, 'SKU-2'));
     }
 }

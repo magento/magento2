@@ -12,11 +12,6 @@ $connection = Bootstrap::getObjectManager()->get(ResourceConnection::class);
 $connection->getConnection()->delete(
     'inventory_source',
     [
-        SourceInterface::NAME . ' IN (?)' => [
-            'source-name-1',
-            'source-name-2',
-            'source-name-3',
-            'source-name-4',
-        ],
+        SourceInterface::SOURCE_ID . ' IN (?)' => [1, 2, 3, 4, 5],
     ]
 );

@@ -12,6 +12,7 @@ use Magento\Framework\Exception\InputException;
 use Magento\Inventory\Model\ResourceModel\StockSourceLink as StockSourceLinkResourceModel;
 use Magento\Inventory\Model\ResourceModel\StockSourceLink\Collection;
 use Magento\Inventory\Model\ResourceModel\StockSourceLink\CollectionFactory;
+use Magento\Inventory\Model\StockSourceLink;
 use Magento\InventoryApi\Api\UnassignSourceFromStockInterface;
 use Psr\Log\LoggerInterface;
 
@@ -84,6 +85,10 @@ class UnassignSourceFromStock implements UnassignSourceFromStockInterface
         $collection = $this->stockLinkCollectionFactory->create();
         $this->collectionProcessor->process($searchCriteria, $collection);
         $items = $collection->getItems();
+
+        if (!count($items)) {
+            return;
+        }
 
         try {
             $stockSourceLink = reset($items);
