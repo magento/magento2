@@ -77,6 +77,26 @@ class Graph
     }
 
     /**
+     * Unset a relation between nodes
+     *
+     * @param string|int $fromNode
+     * @param string|int $toNode
+     * @return $this
+     * @throws \InvalidArgumentException
+     */
+    public function removeRelation($fromNode, $toNode)
+    {
+        if ($fromNode == $toNode) {
+            throw new \InvalidArgumentException("Graph node '{$fromNode}' is linked to itself.");
+        }
+        $this->_assertNode($fromNode, true);
+        $this->_assertNode($toNode, true);
+        unset($this->_from[$fromNode][$toNode]);
+        unset($this->_to[$toNode][$fromNode]);
+        return $this;
+    }
+
+    /**
      * Export relations between nodes. Can return inverse relations
      *
      * @param int $mode
@@ -179,6 +199,75 @@ class Graph
         $this->_assertNode($fromNode, true);
         $this->_assertNode($toNode, true);
         return $this->_dfs($fromNode, $toNode, $this->getRelations($mode));
+    }
+
+    /**
+     * Perform a topological sort on the graph. This algorithm is not possible if the graph contains a cycle.
+     *
+     * @return array
+     * @throws \Exception
+     */
+    public function topoSort()
+    {
+        $sortedElements = [];
+        $nodeSet = $this->findStartNodes();
+
+        while (!empty($nodeSet)) {
+            $cur = array_pop($nodeSet);
+            $sortedElements[] = $cur;
+            if (!isset($this->_from[$cur])) {
+                continue;
+            }
+            foreach ($this->_from[$cur] as $parent) {
+                $this->removeRelation($cur, $parent);
+                if (empty($this->_to[$parent])) {
+                    $nodeSet[] = $parent;
+                }
+            }
+        }
+
+        if ($this->hasEdges()) {
+            $cycle = $this->findCycle();
+            $message = "Dependency cycle detected: " . implode(" -> ", $cycle);
+            throw new \Exception($message);
+        }
+
+        return array_reverse($sortedElements);
+    }
+
+    /**
+     * Determines whether the graph has edges.
+     *
+     * Returns true if the graph has edges. Returns false otherwise.
+     *
+     * @return bool
+     */
+    public function hasEdges()
+    {
+        foreach ($this->_from as $from) {
+            if (count($from) > 0) {
+                return true;
+            }
+        }
+
+        foreach ($this->_to as $to) {
+            if (count($to) > 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Finds all graph nodes with no incoming edge
+     *
+     * @return array
+     */
+    public function findStartNodes()
+    {
+        $incomingEdgeNodes = array_keys($this->_to);
+        return array_diff($this->_nodes, $incomingEdgeNodes);
     }
 
     /**
