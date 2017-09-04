@@ -12,12 +12,19 @@
     <preference for="Magento\Framework\MessageQueue\Lock\ReaderInterface" type="Magento\MessageQueue\Model\ResourceModel\Lock" />
     <preference for="Magento\Framework\MessageQueue\EnvelopeInterface" type="Magento\Framework\MessageQueue\Envelope"/>
     <preference for="Magento\Framework\MessageQueue\ConsumerInterface" type="Magento\Framework\MessageQueue\Consumer"/>
+    <preference for="Magento\Framework\MessageQueue\MergedMessageInterface" type="Magento\Framework\MessageQueue\MergedMessage"/>
     <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="startConsumerCommand" xsi:type="object">Magento\MessageQueue\Console\StartConsumerCommand</item>
                 <item name="consumerListCommand" xsi:type="object">Magento\MessageQueue\Console\ConsumerListCommand</item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\MessageQueue\MessageProcessorLoader">
+        <arguments>
+            <argument name="mergedMessageProcessor" xsi:type="object">Magento\Framework\MessageQueue\MergedMessageProcessor</argument>
+            <argument name="defaultMessageProcessor" xsi:type="object">Magento\Framework\MessageQueue\MessageProcessor</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\App\MaintenanceMode">
