@@ -46,7 +46,6 @@ class StockItemTest extends TestCase
         $this->indexer = Bootstrap::getObjectManager()->create(Indexer::class);
         $this->indexer->load(StockItemIndexerInterface::INDEXER_ID);
         $this->indexerChecker = Bootstrap::getObjectManager()->create(Checker::class);
-
     }
 
     public function tearDown()
