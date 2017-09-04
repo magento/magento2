@@ -14,7 +14,7 @@ use Magento\InventoryApi\Api\Data\StockInterface;
 class Stock extends AbstractDb
 {
     /**
-     * Provide possibility of save entity with predefined id
+     * Provides possibility of saving entity with predefined/pre-generated id
      */
     use PredefinedId;
 

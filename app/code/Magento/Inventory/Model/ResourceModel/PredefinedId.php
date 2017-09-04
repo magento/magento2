@@ -9,13 +9,19 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
 
 /**
- * Provide possibility of save entity with predefined id
- * Use trait instead of extending for better reusability, also we don'nt want to hardcode hierarchy of inheritance
+ * Provides possibility of saving entity with predefined/pre-generated id
+ *
+ * The choice to use trait instead of inheritance was made to prevent the introduction of new layer super type on
+ * the module basis as well as better code reusability, as potentially current trait not coupled to Inventory module
+ * and other modules could re-use this approach.
  */
 trait PredefinedId
 {
     /**
-     * Check if object is new
+     * Overwrite default \Magento\Framework\Model\ResourceModel\Db\AbstractDb implementation of the isObjectNew
+     * @see \Magento\Framework\Model\ResourceModel\Db\AbstractDb::isObjectNew()
+     *
+     * Adding the possibility to check whether record already exists in DB or not
      *
      * @param AbstractModel $object
      * @return bool
@@ -32,6 +38,9 @@ trait PredefinedId
 
     /**
      * Save New Object
+     *
+     * Overwrite default \Magento\Framework\Model\ResourceModel\Db\AbstractDb implementation of the saveNewObject
+     * @see \Magento\Framework\Model\ResourceModel\Db\AbstractDb::saveNewObject()
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @throws LocalizedException
