@@ -5,10 +5,6 @@
  */
 namespace Magento\Checkout\Model;
 
-/**
- * Class \Magento\Checkout\Model\GuestTotalsInformationManagement
- *
- */
 class GuestTotalsInformationManagement implements \Magento\Checkout\Api\GuestTotalsInformationManagementInterface
 {
     /**

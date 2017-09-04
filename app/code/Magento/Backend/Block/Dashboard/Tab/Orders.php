@@ -11,10 +11,6 @@
  */
 namespace Magento\Backend\Block\Dashboard\Tab;
 
-/**
- * Class \Magento\Backend\Block\Dashboard\Tab\Orders
- *
- */
 class Orders extends \Magento\Backend\Block\Dashboard\Graph
 {
     /**

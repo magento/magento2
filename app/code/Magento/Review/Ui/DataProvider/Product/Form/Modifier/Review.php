@@ -49,7 +49,6 @@ class Review extends AbstractModifier
     /**
      * @param LocatorInterface $locator
      * @param UrlInterface $urlBuilder
-     * @since 100.1.0
      */
     public function __construct(
         LocatorInterface $locator,

@@ -11,10 +11,6 @@
  */
 namespace Magento\Framework\Event\Observer;
 
-/**
- * Class \Magento\Framework\Event\Observer\Cron
- *
- */
 class Cron extends \Magento\Framework\Event\Observer
 {
     /**

@@ -39,7 +39,6 @@ class Wysiwyg extends AbstractElement
      * @param array $components
      * @param array $data
      * @param array $config
-     * @since 100.1.0
      */
     public function __construct(
         ContextInterface $context,
@@ -56,7 +55,7 @@ class Wysiwyg extends AbstractElement
             \Magento\Framework\Data\Form\Element\Editor::class,
             [
                 'force_load' => true,
-                'rows' => 20,
+                'rows' => isset($config['rows']) ? $config['rows'] : 20,
                 'name' => $data['name'],
                 'config' => $wysiwygConfig->getConfig($wysiwygConfigData),
                 'wysiwyg' => isset($config['wysiwyg']) ? $config['wysiwyg'] : null,

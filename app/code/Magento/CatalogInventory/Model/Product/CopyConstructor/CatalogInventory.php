@@ -5,10 +5,6 @@
  */
 namespace Magento\CatalogInventory\Model\Product\CopyConstructor;
 
-/**
- * Class \Magento\CatalogInventory\Model\Product\CopyConstructor\CatalogInventory
- *
- */
 class CatalogInventory implements \Magento\Catalog\Model\Product\CopyConstructorInterface
 {
     /**

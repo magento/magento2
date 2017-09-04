@@ -11,10 +11,6 @@
  */
 namespace Magento\Framework\Validator;
 
-/**
- * Class \Magento\Framework\Validator\UniversalFactory
- *
- */
 class UniversalFactory
 {
     /**

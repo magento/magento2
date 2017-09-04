@@ -48,7 +48,6 @@ class GoogleOptimizer extends AbstractModifier
      * @param LocatorInterface $locator
      * @param DataHelper $dataHelper
      * @param CodeHelper $codeHelper
-     * @since 100.1.0
      */
     public function __construct(
         LocatorInterface $locator,

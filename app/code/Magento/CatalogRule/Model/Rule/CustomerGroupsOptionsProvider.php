@@ -5,10 +5,6 @@
  */
 namespace Magento\CatalogRule\Model\Rule;
 
-/**
- * Class \Magento\CatalogRule\Model\Rule\CustomerGroupsOptionsProvider
- *
- */
 class CustomerGroupsOptionsProvider implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**

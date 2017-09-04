@@ -9,10 +9,6 @@ namespace Magento\Paypal\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer as EventObserver;
 
-/**
- * Class \Magento\Paypal\Observer\RestrictAdminBillingAgreementUsageObserver
- *
- */
 class RestrictAdminBillingAgreementUsageObserver implements ObserverInterface
 {
     /**

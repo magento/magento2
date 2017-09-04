@@ -9,10 +9,6 @@ use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
 
-/**
- * Class \Magento\Wishlist\Controller\Shared\Index
- *
- */
 class Index extends Action
 {
     /**

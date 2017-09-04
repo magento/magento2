@@ -12,10 +12,6 @@ use Magento\Customer\Model\FileProcessorFactory;
 use Magento\Customer\Model\Metadata\ElementFactory;
 use Magento\Framework\Exception\LocalizedException;
 
-/**
- * Class \Magento\Customer\Model\FileUploader
- *
- */
 class FileUploader
 {
     /**

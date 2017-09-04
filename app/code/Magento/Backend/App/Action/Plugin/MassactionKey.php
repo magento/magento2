@@ -10,10 +10,6 @@ namespace Magento\Backend\App\Action\Plugin;
 use Magento\Framework\App\RequestInterface;
 use Magento\Backend\App\AbstractAction;
 
-/**
- * Class \Magento\Backend\App\Action\Plugin\MassactionKey
- *
- */
 class MassactionKey
 {
     /**

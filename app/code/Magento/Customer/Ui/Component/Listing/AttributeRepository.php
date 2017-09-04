@@ -13,10 +13,6 @@ use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Customer\Api\MetadataManagementInterface;
 use Magento\Customer\Model\Indexer\Attribute\Filter;
 
-/**
- * Class \Magento\Customer\Ui\Component\Listing\AttributeRepository
- *
- */
 class AttributeRepository
 {
     const BILLING_ADDRESS_PREFIX = 'billing_';

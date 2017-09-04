@@ -11,10 +11,6 @@ use Magento\Framework\App\ResourceConnection as AppResource;
 use Magento\Framework\Event\ManagerInterface as EventManager;
 use Magento\Sales\Model\AbstractModel;
 
-/**
- * Class \Magento\Sales\Model\ResourceModel\Attribute
- *
- */
 class Attribute
 {
     /**

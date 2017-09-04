@@ -20,6 +20,7 @@ use Magento\Framework\Model\AbstractModel;
  * @method \Magento\Catalog\Model\Product\Option\Value setOptionId(int $value)
  *
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @since 100.0.2
  */
 class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCustomOptionValuesInterface
 {

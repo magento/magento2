@@ -28,6 +28,7 @@ use Magento\Sitemap\Model\ResourceModel\Sitemap as SitemapResource;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @since 100.0.2
  * @codingStandardsIgnoreFile
  */
 class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\DataObject\IdentityInterface

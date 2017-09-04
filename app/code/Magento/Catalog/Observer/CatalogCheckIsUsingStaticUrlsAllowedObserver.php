@@ -7,10 +7,6 @@ namespace Magento\Catalog\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
-/**
- * Class \Magento\Catalog\Observer\CatalogCheckIsUsingStaticUrlsAllowedObserver
- *
- */
 class CatalogCheckIsUsingStaticUrlsAllowedObserver implements ObserverInterface
 {
     /**

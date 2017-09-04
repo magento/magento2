@@ -5,10 +5,6 @@
  */
 namespace Magento\Payment\Model\Config\Source;
 
-/**
- * Class \Magento\Payment\Model\Config\Source\Cctype
- *
- */
 class Cctype implements \Magento\Framework\Option\ArrayInterface
 {
     /**

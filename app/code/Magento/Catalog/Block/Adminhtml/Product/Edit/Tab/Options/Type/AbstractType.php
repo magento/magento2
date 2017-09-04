@@ -11,10 +11,6 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Type;
 
-/**
- * Class \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Type\AbstractType
- *
- */
 class AbstractType extends \Magento\Backend\Block\Widget
 {
     /**

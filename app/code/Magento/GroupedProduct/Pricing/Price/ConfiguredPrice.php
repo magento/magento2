@@ -12,10 +12,6 @@ use Magento\Catalog\Pricing\Price\ConfiguredPriceInterface;
 use Magento\Catalog\Pricing\Price\FinalPrice as CatalogFinalPrice;
 use Magento\Framework\Pricing\Amount\AmountInterface;
 
-/**
- * Class \Magento\GroupedProduct\Pricing\Price\ConfiguredPrice
- *
- */
 class ConfiguredPrice extends CatalogFinalPrice implements ConfiguredPriceInterface
 {
     /**

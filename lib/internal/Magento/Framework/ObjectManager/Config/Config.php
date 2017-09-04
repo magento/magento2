@@ -10,10 +10,6 @@ use Magento\Framework\ObjectManager\ConfigCacheInterface;
 use Magento\Framework\ObjectManager\DefinitionInterface;
 use Magento\Framework\ObjectManager\RelationsInterface;
 
-/**
- * Class \Magento\Framework\ObjectManager\Config\Config
- *
- */
 class Config implements \Magento\Framework\ObjectManager\ConfigInterface
 {
     /**

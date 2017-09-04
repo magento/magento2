@@ -6,10 +6,6 @@
 
 namespace Magento\Review\Block\Product\Compare\ListCompare\Plugin;
 
-/**
- * Class \Magento\Review\Block\Product\Compare\ListCompare\Plugin\Review
- *
- */
 class Review
 {
     /**

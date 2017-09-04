@@ -11,6 +11,7 @@ use Magento\Framework\App\ObjectManager;
  * Adminhtml dashboard helper for orders
  *
  * @api
+ * @since 100.0.2
  */
 class Order extends \Magento\Backend\Helper\Dashboard\AbstractDashboard
 {

@@ -9,10 +9,6 @@ namespace Magento\Bundle\Controller\Adminhtml\Bundle\Product\Edit;
 use Magento\Backend\App\Action;
 use Magento\Catalog\Controller\Adminhtml\Product;
 
-/**
- * Class \Magento\Bundle\Controller\Adminhtml\Bundle\Product\Edit\Form
- *
- */
 class Form extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**

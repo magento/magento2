@@ -9,10 +9,6 @@ namespace Magento\CatalogRuleConfigurable\Plugin\ConfigurableProduct\Model\Resou
 
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection;
 
-/**
- * Class \Magento\CatalogRuleConfigurable\Plugin\ConfigurableProduct\Model\ResourceModel\AddCatalogRulePrice
- *
- */
 class AddCatalogRulePrice
 {
     /**

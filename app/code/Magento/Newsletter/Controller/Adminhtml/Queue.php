@@ -11,10 +11,6 @@
  */
 namespace Magento\Newsletter\Controller\Adminhtml;
 
-/**
- * Class \Magento\Newsletter\Controller\Adminhtml\Queue
- *
- */
 abstract class Queue extends \Magento\Backend\App\Action
 {
     /**

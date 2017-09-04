@@ -9,10 +9,6 @@ namespace Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\App\RequestInterface;
 
-/**
- * Class \Magento\Catalog\Model\Product\Validator
- *
- */
 class Validator
 {
     /**

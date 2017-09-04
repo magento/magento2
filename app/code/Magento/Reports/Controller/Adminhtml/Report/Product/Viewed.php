@@ -8,10 +8,6 @@ namespace Magento\Reports\Controller\Adminhtml\Report\Product;
 
 use Magento\Reports\Model\Flag;
 
-/**
- * Class \Magento\Reports\Controller\Adminhtml\Report\Product\Viewed
- *
- */
 class Viewed extends \Magento\Reports\Controller\Adminhtml\Report\Product
 {
     /**

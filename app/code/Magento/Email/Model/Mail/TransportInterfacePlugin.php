@@ -11,16 +11,12 @@ use Magento\Framework\Mail\TransportInterface;
 use Magento\Store\Model\ScopeInterface;
 
 /**
- * Class \Magento\Email\Model\Mail\TransportInterfacePlugin
+ * Plugin over \Magento\Framework\Mail\TransportInterface
  *
+ * It disables email sending depending on the system configuration settings
  */
 class TransportInterfacePlugin
 {
-    /**
-     * Config path to mail sending setting that shows if email communications are disabled
-     */
-    const XML_PATH_SYSTEM_SMTP_DISABLE = 'system/smtp/disable';
-
     /**
      * @var ScopeConfigInterface
      */
@@ -36,7 +32,7 @@ class TransportInterfacePlugin
     }
 
     /**
-     * Omit email sending if disabled
+     * Omit email sending depending on the system configuration setting
      *
      * @param TransportInterface $subject
      * @param \Closure $proceed
@@ -48,7 +44,7 @@ class TransportInterfacePlugin
         TransportInterface $subject,
         \Closure $proceed
     ) {
-        if (!$this->scopeConfig->isSetFlag(self::XML_PATH_SYSTEM_SMTP_DISABLE, ScopeInterface::SCOPE_STORE)) {
+        if (!$this->scopeConfig->isSetFlag('system/smtp/disable', ScopeInterface::SCOPE_STORE)) {
             $proceed();
         }
     }

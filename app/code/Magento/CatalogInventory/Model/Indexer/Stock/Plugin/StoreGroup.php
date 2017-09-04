@@ -5,10 +5,6 @@
  */
 namespace Magento\CatalogInventory\Model\Indexer\Stock\Plugin;
 
-/**
- * Class \Magento\CatalogInventory\Model\Indexer\Stock\Plugin\StoreGroup
- *
- */
 class StoreGroup
 {
     /**

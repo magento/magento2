@@ -14,6 +14,7 @@ use Magento\Catalog\Model\Product;
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @since 100.0.2
  */
 class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
 {

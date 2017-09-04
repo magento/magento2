@@ -9,10 +9,6 @@
  */
 namespace Magento\Theme\Model\Theme\Customization;
 
-/**
- * Class \Magento\Theme\Model\Theme\Customization\Config
- *
- */
 class Config implements \Magento\Framework\View\Design\Theme\Customization\ConfigInterface
 {
     /**

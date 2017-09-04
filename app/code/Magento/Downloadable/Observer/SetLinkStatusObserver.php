@@ -8,10 +8,6 @@ namespace Magento\Downloadable\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Store\Model\ScopeInterface;
 
-/**
- * Class \Magento\Downloadable\Observer\SetLinkStatusObserver
- *
- */
 class SetLinkStatusObserver implements ObserverInterface
 {
     /**

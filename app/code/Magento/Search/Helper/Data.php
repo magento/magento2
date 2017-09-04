@@ -17,6 +17,7 @@ use Magento\Search\Model\QueryFactory;
 /**
  * Search helper
  * @api
+ * @since 100.0.2
  */
 class Data extends AbstractHelper
 {

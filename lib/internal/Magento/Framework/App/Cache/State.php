@@ -11,10 +11,6 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\Config\File\ConfigFilePool;
 
-/**
- * Class \Magento\Framework\App\Cache\State
- *
- */
 class State implements StateInterface
 {
     /**

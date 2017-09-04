@@ -6,10 +6,6 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Set;
 
-/**
- * Class \Magento\Catalog\Controller\Adminhtml\Product\Set\Save
- *
- */
 class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Set
 {
     /**

@@ -7,10 +7,6 @@ namespace Magento\CatalogUrlRewrite\Model;
 
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 
-/**
- * Class \Magento\CatalogUrlRewrite\Model\UrlRewriteBunchReplacer
- *
- */
 class UrlRewriteBunchReplacer
 {
     /**

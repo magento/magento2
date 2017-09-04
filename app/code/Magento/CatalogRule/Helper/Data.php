@@ -9,10 +9,6 @@
  */
 namespace Magento\CatalogRule\Helper;
 
-/**
- * Class \Magento\CatalogRule\Helper\Data
- *
- */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**

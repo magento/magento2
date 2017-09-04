@@ -10,10 +10,6 @@ use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\Exception\State\InitException;
 use Magento\Store\Model\StoreManagerInterface;
 
-/**
- * Class \Magento\Store\Model\Resolver\Group
- *
- */
 class Group implements ScopeResolverInterface
 {
     /**

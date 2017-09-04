@@ -128,6 +128,7 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
         );
         $customerServiceMock = $this->createMock(\Magento\Customer\Api\Data\CustomerInterface::class);
         $wishlistSharingUrl = 'wishlist/shared/index/1';
+        $locale = 'en_US';
         $productUrl = 'http://product.url/';
         $productName = 'Product name';
 
@@ -151,6 +152,26 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
         $this->urlBuilderMock->expects($this->once())
             ->method('getUrl')
             ->will($this->returnValue($wishlistSharingUrl));
+        $this->scopeConfig->expects($this->any())
+            ->method('getValue')
+            ->will(
+                $this->returnValueMap(
+                    [
+                        [
+                            'advanced/modules_disable_output/Magento_Rss',
+                            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                            null,
+                            null,
+                        ],
+                        [
+                            Data::XML_PATH_DEFAULT_LOCALE,
+                            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                            null,
+                            $locale
+                        ],
+                    ]
+                )
+            );
 
         $staticArgs = [
             'productName' => $productName,

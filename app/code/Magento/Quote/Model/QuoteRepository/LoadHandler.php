@@ -9,10 +9,6 @@ use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentProcessor;
 use Magento\Quote\Api\Data\CartExtensionFactory;
 
-/**
- * Class \Magento\Quote\Model\QuoteRepository\LoadHandler
- *
- */
 class LoadHandler
 {
     /**

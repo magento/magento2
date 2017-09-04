@@ -8,10 +8,6 @@ namespace Magento\Tax\Controller\Adminhtml\Rate;
 
 use Magento\Framework\Controller\ResultFactory;
 
-/**
- * Class \Magento\Tax\Controller\Adminhtml\Rate\AjaxSave
- *
- */
 class AjaxSave extends \Magento\Tax\Controller\Adminhtml\Rate
 {
     /**

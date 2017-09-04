@@ -5,10 +5,6 @@
  */
 namespace Magento\ImportExport\Model\Import\Config;
 
-/**
- * Class \Magento\ImportExport\Model\Import\Config\Reader
- *
- */
 class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {
     /**

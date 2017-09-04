@@ -7,10 +7,6 @@
  */
 namespace Magento\AdminNotification\Block\Grid\Renderer;
 
-/**
- * Class \Magento\AdminNotification\Block\Grid\Renderer\Notice
- *
- */
 class Notice extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**

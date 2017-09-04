@@ -6,10 +6,6 @@
  */
 namespace Magento\Store\App\Action\Plugin;
 
-/**
- * Class \Magento\Store\App\Action\Plugin\StoreCheck
- *
- */
 class StoreCheck
 {
     /**

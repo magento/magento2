@@ -7,10 +7,6 @@ namespace Magento\MediaStorage\Model\File\Storage;
 
 use Magento\Framework\HTTP\PhpEnvironment\Request as HttpRequest;
 
-/**
- * Class \Magento\MediaStorage\Model\File\Storage\Request
- *
- */
 class Request
 {
     /**

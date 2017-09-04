@@ -5,6 +5,7 @@
  */
 
 use Magento\Payment\Helper\Data;
+use Magento\Sales\Api\ShipmentCommentRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Shipment;
 use Magento\Sales\Model\Order\Shipment\Comment;
@@ -60,6 +61,9 @@ $comments = [
     ],
 ];
 
+/** @var ShipmentCommentRepositoryInterface $shipmentCommentRepository */
+$shipmentCommentRepository = Bootstrap::getObjectManager()->get(ShipmentCommentRepositoryInterface::class);
+
 foreach ($comments as $data) {
     /** @var $comment Comment */
     $comment = Bootstrap::getObjectManager()->create(Comment::class);
@@ -67,5 +71,5 @@ foreach ($comments as $data) {
     $comment->setComment($data['comment']);
     $comment->setIsVisibleOnFront($data['is_visible_on_front']);
     $comment->setIsCustomerNotified($data['is_customer_notified']);
-    $comment->save();
+    $shipmentCommentRepository->save($comment);
 }

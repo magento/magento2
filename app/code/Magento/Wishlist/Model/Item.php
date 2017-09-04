@@ -31,6 +31,7 @@ use Magento\Catalog\Model\Product\Exception as ProductException;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api
+ * @since 100.0.2
  */
 class Item extends AbstractModel implements ItemInterface
 {

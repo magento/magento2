@@ -8,10 +8,6 @@ namespace Magento\Paypal\Controller\Express\AbstractExpress;
 
 use Magento\Framework\Controller\ResultFactory;
 
-/**
- * Class \Magento\Paypal\Controller\Express\AbstractExpress\Cancel
- *
- */
 class Cancel extends \Magento\Paypal\Controller\Express\AbstractExpress
 {
     /**

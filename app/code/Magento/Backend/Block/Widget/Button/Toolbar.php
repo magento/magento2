@@ -8,10 +8,6 @@ namespace Magento\Backend\Block\Widget\Button;
 
 use Magento\Framework\View\LayoutInterface;
 
-/**
- * Class \Magento\Backend\Block\Widget\Button\Toolbar
- *
- */
 class Toolbar implements ToolbarInterface
 {
     /**

@@ -15,6 +15,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Matrix extends \Magento\Backend\Block\Template
 {

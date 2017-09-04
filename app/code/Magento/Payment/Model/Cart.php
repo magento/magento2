@@ -9,6 +9,7 @@ namespace Magento\Payment\Model;
  * Provide methods for collecting cart items information of specific sales model entity
  *
  * @api
+ * @since 100.0.2
  */
 class Cart
 {

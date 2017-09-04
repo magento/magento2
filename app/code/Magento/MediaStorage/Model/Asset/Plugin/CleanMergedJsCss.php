@@ -7,10 +7,6 @@ namespace Magento\MediaStorage\Model\Asset\Plugin;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-/**
- * Class \Magento\MediaStorage\Model\Asset\Plugin\CleanMergedJsCss
- *
- */
 class CleanMergedJsCss
 {
     /**
