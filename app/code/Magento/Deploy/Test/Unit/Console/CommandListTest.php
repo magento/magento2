@@ -40,12 +40,19 @@ class CommandListTest extends TestCase
 
     public function testGetCommands()
     {
+        $configImportCommand = $this->getMockBuilder(ConfigImportCommand::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->objectManagerMock->expects($this->once())
             ->method('get')
-            ->withConsecutive([
-                ConfigImportCommand::class,
+            ->willReturnMap([
+                [ConfigImportCommand::class, $configImportCommand],
             ]);
 
-        $this->model->getCommands();
+        $this->assertSame(
+            [$configImportCommand],
+            $this->model->getCommands()
+        );
     }
 }
