@@ -6,10 +6,6 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute;
 
-/**
- * Class \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute\Validate
- *
- */
 class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute
 {
     /**

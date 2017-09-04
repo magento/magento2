@@ -7,10 +7,6 @@ namespace Magento\Framework;
 
 use Magento\Framework\App\CacheInterface;
 
-/**
- * Class \Magento\Framework\Currency
- *
- */
 class Currency extends \Zend_Currency implements CurrencyInterface
 {
     /**

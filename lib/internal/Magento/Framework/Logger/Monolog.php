@@ -8,10 +8,6 @@ namespace Magento\Framework\Logger;
 
 use Monolog\Logger;
 
-/**
- * Class \Magento\Framework\Logger\Monolog
- *
- */
 class Monolog extends Logger
 {
     /**

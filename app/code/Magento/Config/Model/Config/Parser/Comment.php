@@ -36,7 +36,6 @@ class Comment implements CommentParserInterface
     /**
      * @param Filesystem $filesystem
      * @param PlaceholderInterface $placeholder
-     * @since 100.2.0
      */
     public function __construct(
         Filesystem $filesystem,

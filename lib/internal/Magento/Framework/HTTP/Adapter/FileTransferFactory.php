@@ -5,10 +5,6 @@
  */
 namespace Magento\Framework\HTTP\Adapter;
 
-/**
- * Class \Magento\Framework\HTTP\Adapter\FileTransferFactory
- *
- */
 class FileTransferFactory
 {
     /**

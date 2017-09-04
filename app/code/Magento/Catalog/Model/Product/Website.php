@@ -16,10 +16,6 @@
  */
 namespace Magento\Catalog\Model\Product;
 
-/**
- * Class \Magento\Catalog\Model\Product\Website
- *
- */
 class Website extends \Magento\Framework\Model\AbstractModel
 {
     /**

@@ -6,10 +6,6 @@
  */
 namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
 
-/**
- * Class \Magento\SalesRule\Controller\Adminhtml\Promo\Quote\NewActionHtml
- *
- */
 class NewActionHtml extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
 {
     /**

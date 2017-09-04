@@ -9,10 +9,6 @@ use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Payment\Helper\Data as PaymentHelper;
 
-/**
- * Class \Magento\Paypal\Model\IframeConfigProvider
- *
- */
 class IframeConfigProvider implements ConfigProviderInterface
 {
     /**

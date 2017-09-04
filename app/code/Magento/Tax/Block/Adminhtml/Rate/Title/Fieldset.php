@@ -11,10 +11,6 @@
  */
 namespace Magento\Tax\Block\Adminhtml\Rate\Title;
 
-/**
- * Class \Magento\Tax\Block\Adminhtml\Rate\Title\Fieldset
- *
- */
 class Fieldset extends \Magento\Framework\Data\Form\Element\Fieldset
 {
     /**

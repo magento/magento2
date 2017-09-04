@@ -18,10 +18,6 @@ use Magento\Catalog\Model\Product;
 use Magento\Eav\Model\Entity\Attribute;
 use Magento\Catalog\Api\Data\ProductInterface;
 
-/**
- * Class \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery
- *
- */
 class Gallery extends \Magento\Framework\View\Element\AbstractBlock
 {
     /**

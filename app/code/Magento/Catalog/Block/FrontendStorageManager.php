@@ -34,7 +34,6 @@ class FrontendStorageManager extends \Magento\Framework\View\Element\Template
      * @param FrontendStorageConfigurationPool $storageConfigurationPool
      * @param Config $appConfig
      * @param array $data
-     * @since 101.1.0
      */
     public function __construct(
         Context $context,

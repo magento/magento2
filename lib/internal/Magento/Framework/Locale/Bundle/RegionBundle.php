@@ -5,10 +5,6 @@
  */
 namespace Magento\Framework\Locale\Bundle;
 
-/**
- * Class \Magento\Framework\Locale\Bundle\RegionBundle
- *
- */
 class RegionBundle extends DataBundle
 {
     /**

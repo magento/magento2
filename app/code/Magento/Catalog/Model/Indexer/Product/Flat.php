@@ -7,10 +7,6 @@ namespace Magento\Catalog\Model\Indexer\Product;
 
 use Magento\Framework\Indexer\CacheContext;
 
-/**
- * Class \Magento\Catalog\Model\Indexer\Product\Flat
- *
- */
 class Flat implements \Magento\Framework\Indexer\ActionInterface, \Magento\Framework\Mview\ActionInterface
 {
     /**

@@ -11,10 +11,6 @@
  */
 namespace Magento\Eav\Model\ResourceModel\Form;
 
-/**
- * Class \Magento\Eav\Model\ResourceModel\Form\Attribute
- *
- */
 abstract class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**

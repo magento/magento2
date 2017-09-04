@@ -7,10 +7,6 @@
  */
 namespace Magento\Framework\Validator\File;
 
-/**
- * Class \Magento\Framework\Validator\File\IsImage
- *
- */
 class IsImage extends \Zend_Validate_File_IsImage implements \Magento\Framework\Validator\ValidatorInterface
 {
 }

@@ -5,10 +5,6 @@
  */
 namespace Magento\Sales\Block\Adminhtml\System\Config\Form\Fieldset\Order;
 
-/**
- * Class \Magento\Sales\Block\Adminhtml\System\Config\Form\Fieldset\Order\Statuses
- *
- */
 class Statuses extends \Magento\Config\Block\System\Config\Form\Fieldset
 {
     /**

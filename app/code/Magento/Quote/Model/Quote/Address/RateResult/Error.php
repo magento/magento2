@@ -5,10 +5,6 @@
  */
 namespace Magento\Quote\Model\Quote\Address\RateResult;
 
-/**
- * Class \Magento\Quote\Model\Quote\Address\RateResult\Error
- *
- */
 class Error extends AbstractResult
 {
     /**

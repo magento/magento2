@@ -5,10 +5,6 @@
  */
 namespace Magento\ConfigurableProduct\Model\Order\Admin\Item\Plugin;
 
-/**
- * Class \Magento\ConfigurableProduct\Model\Order\Admin\Item\Plugin\Configurable
- *
- */
 class Configurable
 {
     /**

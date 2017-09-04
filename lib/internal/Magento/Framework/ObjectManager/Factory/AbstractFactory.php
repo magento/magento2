@@ -7,10 +7,6 @@ namespace Magento\Framework\ObjectManager\Factory;
 
 use Magento\Framework\ObjectManagerInterface;
 
-/**
- * Class \Magento\Framework\ObjectManager\Factory\AbstractFactory
- *
- */
 abstract class AbstractFactory implements \Magento\Framework\ObjectManager\FactoryInterface
 {
     /**

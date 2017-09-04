@@ -7,10 +7,6 @@ namespace Magento\Framework\App\Response\HeaderProvider;
 
 use Magento\Framework\App\Response\HeaderProvider\AbstractHeaderProvider;
 
-/**
- * Class \Magento\Framework\App\Response\HeaderProvider\XContentTypeOptions
- *
- */
 class XContentTypeOptions extends AbstractHeaderProvider
 {
     /**

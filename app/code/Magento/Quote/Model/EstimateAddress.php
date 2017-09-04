@@ -9,10 +9,6 @@ namespace Magento\Quote\Model;
 use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Quote\Api\Data\EstimateAddressInterface;
 
-/**
- * Class \Magento\Quote\Model\EstimateAddress
- *
- */
 class EstimateAddress extends AbstractExtensibleModel implements EstimateAddressInterface
 {
     /**

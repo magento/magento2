@@ -8,10 +8,6 @@ namespace Magento\Downloadable\Model\File;
 use Magento\Downloadable\Api\Data\File\ContentInterface;
 use Magento\Framework\Exception\InputException;
 
-/**
- * Class \Magento\Downloadable\Model\File\ContentValidator
- *
- */
 class ContentValidator
 {
     /**

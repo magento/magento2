@@ -21,6 +21,7 @@ use Magento\Bundle\Model\ResourceModel\Selection\Collection\FilterApplier as Sel
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @since 100.0.2
  */
 class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 {

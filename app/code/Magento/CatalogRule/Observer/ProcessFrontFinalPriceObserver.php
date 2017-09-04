@@ -17,10 +17,6 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Customer\Model\Session as CustomerModelSession;
 use Magento\Framework\Event\Observer as EventObserver;
 
-/**
- * Class \Magento\CatalogRule\Observer\ProcessFrontFinalPriceObserver
- *
- */
 class ProcessFrontFinalPriceObserver implements ObserverInterface
 {
     /**

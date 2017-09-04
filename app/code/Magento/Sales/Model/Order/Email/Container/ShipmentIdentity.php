@@ -6,10 +6,6 @@
 
 namespace Magento\Sales\Model\Order\Email\Container;
 
-/**
- * Class \Magento\Sales\Model\Order\Email\Container\ShipmentIdentity
- *
- */
 class ShipmentIdentity extends Container implements IdentityInterface
 {
     /**

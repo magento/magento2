@@ -15,6 +15,7 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterfac
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Filter
 {

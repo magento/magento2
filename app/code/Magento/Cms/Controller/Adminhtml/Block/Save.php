@@ -12,10 +12,6 @@ use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\TestFramework\Inspection\Exception;
 
-/**
- * Class \Magento\Cms\Controller\Adminhtml\Block\Save
- *
- */
 class Save extends \Magento\Cms\Controller\Adminhtml\Block
 {
     /**

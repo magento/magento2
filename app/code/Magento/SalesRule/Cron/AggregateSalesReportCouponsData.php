@@ -5,10 +5,6 @@
  */
 namespace Magento\SalesRule\Cron;
 
-/**
- * Class \Magento\SalesRule\Cron\AggregateSalesReportCouponsData
- *
- */
 class AggregateSalesReportCouponsData
 {
     /**

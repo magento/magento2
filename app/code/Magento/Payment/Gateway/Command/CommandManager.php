@@ -33,7 +33,6 @@ class CommandManager implements CommandManagerInterface
      * CommandExecutor constructor.
      * @param CommandPoolInterface $commandPool
      * @param PaymentDataObjectFactoryInterface $paymentDataObjectFactory
-     * @since 100.1.0
      */
     public function __construct(
         CommandPoolInterface $commandPool,

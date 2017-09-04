@@ -14,6 +14,7 @@ use Magento\Sales\Model\Order\Address;
  * Class Info
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
 {

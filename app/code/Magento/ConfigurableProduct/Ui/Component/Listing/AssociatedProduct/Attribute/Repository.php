@@ -7,6 +7,7 @@ namespace Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct\Att
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Repository extends \Magento\Catalog\Ui\Component\Listing\Attribute\AbstractRepository
 {

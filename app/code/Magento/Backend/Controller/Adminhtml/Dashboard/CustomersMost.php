@@ -6,10 +6,6 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\Dashboard;
 
-/**
- * Class \Magento\Backend\Controller\Adminhtml\Dashboard\CustomersMost
- *
- */
 class CustomersMost extends AjaxBlock
 {
     /**

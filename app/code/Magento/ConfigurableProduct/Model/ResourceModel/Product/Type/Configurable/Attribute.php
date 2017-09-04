@@ -11,10 +11,6 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute as Con
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 
-/**
- * Class \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute
- *
- */
 class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**

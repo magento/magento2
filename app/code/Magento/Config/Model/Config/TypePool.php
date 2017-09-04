@@ -64,7 +64,6 @@ class TypePool
      * @param array $sensitive List of sensitive configuration fields paths
      * @param array $environment List of environment configuration fields paths
      * @param ExcludeList $excludeList Checks if the configuration path is contained in exclude list
-     * @since 100.2.0
      */
     public function __construct(array $sensitive = [], array $environment = [], ExcludeList $excludeList = null)
     {

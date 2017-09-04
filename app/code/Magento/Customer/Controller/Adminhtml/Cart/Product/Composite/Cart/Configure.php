@@ -6,10 +6,6 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\Cart\Product\Composite\Cart;
 
-/**
- * Class \Magento\Customer\Controller\Adminhtml\Cart\Product\Composite\Cart\Configure
- *
- */
 class Configure extends \Magento\Customer\Controller\Adminhtml\Cart\Product\Composite\Cart
 {
     /**

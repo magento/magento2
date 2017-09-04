@@ -6,10 +6,6 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\Auth;
 
-/**
- * Class \Magento\Backend\Controller\Adminhtml\Auth\DeniedJson
- *
- */
 class DeniedJson extends \Magento\Backend\Controller\Adminhtml\Auth
 {
     /**

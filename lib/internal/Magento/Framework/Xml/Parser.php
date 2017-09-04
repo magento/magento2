@@ -5,10 +5,6 @@
  */
 namespace Magento\Framework\Xml;
 
-/**
- * Class \Magento\Framework\Xml\Parser
- *
- */
 class Parser
 {
     /**

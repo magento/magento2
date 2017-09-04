@@ -5,10 +5,6 @@
  */
 namespace Magento\Framework\Indexer\Config;
 
-/**
- * Class \Magento\Framework\Indexer\Config\Reader
- *
- */
 class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {
     /**

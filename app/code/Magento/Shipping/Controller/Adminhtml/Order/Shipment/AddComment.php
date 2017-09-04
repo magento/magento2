@@ -10,10 +10,6 @@ use Magento\Sales\Model\Order\Email\Sender\ShipmentCommentSender;
 use Magento\Backend\App\Action;
 use Magento\Framework\View\Result\LayoutFactory;
 
-/**
- * Class \Magento\Shipping\Controller\Adminhtml\Order\Shipment\AddComment
- *
- */
 class AddComment extends \Magento\Backend\App\Action
 {
     /**

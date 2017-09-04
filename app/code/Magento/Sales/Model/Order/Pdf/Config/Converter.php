@@ -7,10 +7,6 @@
  */
 namespace Magento\Sales\Model\Order\Pdf\Config;
 
-/**
- * Class \Magento\Sales\Model\Order\Pdf\Config\Converter
- *
- */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**

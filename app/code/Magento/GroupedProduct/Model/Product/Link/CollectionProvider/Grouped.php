@@ -6,10 +6,6 @@
 
 namespace Magento\GroupedProduct\Model\Product\Link\CollectionProvider;
 
-/**
- * Class \Magento\GroupedProduct\Model\Product\Link\CollectionProvider\Grouped
- *
- */
 class Grouped implements \Magento\Catalog\Model\ProductLink\CollectionProviderInterface
 {
     /**

@@ -12,10 +12,6 @@ use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Eav\Setup\EavSetupFactory;
 use Magento\Eav\Setup\EavSetup;
 
-/**
- * Class \Magento\Bundle\Setup\UpgradeData
- *
- */
 class UpgradeData implements UpgradeDataInterface
 {
     /**

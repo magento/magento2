@@ -9,10 +9,6 @@ namespace Magento\GoogleAdwords\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
-/**
- * Class \Magento\GoogleAdwords\Observer\SetConversionValueObserver
- *
- */
 class SetConversionValueObserver implements ObserverInterface
 {
     /**

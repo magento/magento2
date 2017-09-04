@@ -9,10 +9,6 @@ namespace Magento\PageCache\Observer;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Event\ObserverInterface;
 
-/**
- * Class \Magento\PageCache\Observer\FlushAllCache
- *
- */
 class FlushAllCache implements ObserverInterface
 {
     /**

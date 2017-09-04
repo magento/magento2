@@ -9,10 +9,6 @@ namespace Magento\Setup\Mvc\View\Http;
 use Zend\Mvc\MvcEvent;
 use Zend\Mvc\View\Http\InjectTemplateListener as ZendInjectTemplateListener;
 
-/**
- * Class \Magento\Setup\Mvc\View\Http\InjectTemplateListener
- *
- */
 class InjectTemplateListener extends ZendInjectTemplateListener
 {
     /**

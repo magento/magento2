@@ -6,10 +6,6 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
 
-/**
- * Class \Magento\Sales\Controller\Adminhtml\Order\Invoice\Capture
- *
- */
 class Capture extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\View
 {
     /**

@@ -6,10 +6,6 @@
  */
 namespace Magento\Customer\Controller\Review;
 
-/**
- * Class \Magento\Customer\Controller\Review\View
- *
- */
 class View extends \Magento\Customer\Controller\Review
 {
 }

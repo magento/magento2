@@ -13,10 +13,6 @@ namespace Magento\Framework\Data\Form\Element;
 
 use Magento\Framework\Escaper;
 
-/**
- * Class \Magento\Framework\Data\Form\Element\Textarea
- *
- */
 class Textarea extends AbstractElement
 {
     /**

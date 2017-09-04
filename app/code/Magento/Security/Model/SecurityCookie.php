@@ -45,7 +45,6 @@ class SecurityCookie
      * @param \Magento\Framework\Stdlib\Cookie\PublicCookieMetadataFactory $cookieMetadataFactory
      * @param CookieReaderInterface $cookieReader
      * @param \Magento\Backend\Helper\Data $backendData
-     * @since 100.1.0
      */
     public function __construct(
         \Magento\Framework\Stdlib\Cookie\PhpCookieManager $phpCookieManager,

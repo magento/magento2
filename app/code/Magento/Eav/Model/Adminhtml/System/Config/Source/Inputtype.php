@@ -5,10 +5,6 @@
  */
 namespace Magento\Eav\Model\Adminhtml\System\Config\Source;
 
-/**
- * Class \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype
- *
- */
 class Inputtype implements \Magento\Framework\Option\ArrayInterface
 {
     /**

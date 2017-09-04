@@ -6,10 +6,6 @@
  */
 namespace Magento\Reports\Controller\Adminhtml\Report\Sales;
 
-/**
- * Class \Magento\Reports\Controller\Adminhtml\Report\Sales\RefreshStatistics
- *
- */
 class RefreshStatistics extends \Magento\Reports\Controller\Adminhtml\Report\Sales
 {
     /**
