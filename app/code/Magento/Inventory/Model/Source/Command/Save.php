@@ -58,7 +58,6 @@ class Save implements SaveInterface
             throw new ValidationException($validationResult);
         }
 
-        // TODO: check if exists?
         try {
             $this->sourceResource->save($source);
             return $source->getSourceId();

@@ -10,7 +10,6 @@ use Magento\Framework\Validation\ValidationResultFactory;
 use Magento\InventoryApi\Api\Data\StockInterface;
 
 /**
- * TODO: more clear description
  * Chain of validators. Extension point for new validators via di configuration
  */
 class ValidatorChain implements StockValidatorInterface

@@ -9,7 +9,7 @@ use Magento\Framework\Validation\ValidationResult;
 use Magento\InventoryApi\Api\Data\StockInterface;
 
 /**
- * TODO: more clear description
+ * Responsible for Stock validation
  * Extension point for base validation
  *
  * @api

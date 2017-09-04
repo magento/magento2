@@ -6,9 +6,8 @@
 namespace Magento\Inventory\Indexer\StockItem;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Inventory\Model\ResourceModel\StockSourceLink;
-use Magento\InventoryApi\Api\Data\SourceInterface;
-use Magento\InventoryApi\Api\Data\StockInterface;
+use Magento\Inventory\Model\ResourceModel\StockSourceLink as StockSourceLinkResourceModel;
+use Magento\Inventory\Model\StockSourceLink;
 
 /**
  * Returns all assigned stock ids by given sources ids
@@ -38,14 +37,14 @@ class GetAssignedStockIds
     {
         $connection = $this->resourceConnection->getConnection();
         $select = $connection->select()->from(
-            $connection->getTableName(StockSourceLink::TABLE_NAME_STOCK_SOURCE_LINK),
-            [StockInterface::STOCK_ID]
+            $connection->getTableName(StockSourceLinkResourceModel::TABLE_NAME_STOCK_SOURCE_LINK),
+            [StockSourceLink::STOCK_ID]
         );
 
         if (count($sourceIds)) {
-            $select->where(SourceInterface::SOURCE_ID . ' = ?', $sourceIds);
+            $select->where(StockSourceLink::SOURCE_ID . ' = ?', $sourceIds);
         }
-        $select->group(StockInterface::STOCK_ID);
+        $select->group(StockSourceLink::STOCK_ID);
         return $connection->fetchCol($select);
     }
 }

@@ -9,7 +9,7 @@ use Magento\Framework\Validation\ValidationResult;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 
 /**
- * TODO: more clear description
+ * Responsible for Source validation
  * Extension point for base validation
  *
  * @api
