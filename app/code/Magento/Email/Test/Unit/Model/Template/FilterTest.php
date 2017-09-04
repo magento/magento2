@@ -87,6 +87,11 @@ class FilterTest extends \PHPUnit\Framework\TestCase
      */
     private $emogrifier;
 
+    /**
+     * @var \Magento\Framework\Css\PreProcessor\Adapter\CssInliner
+     */
+    private $cssInliner;
+
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -140,6 +145,10 @@ class FilterTest extends \PHPUnit\Framework\TestCase
         $this->configVariables = $this->getMockBuilder(\Magento\Email\Model\Source\Variables::class)
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->cssInliner = $this->objectManager->getObject(
+            \Magento\Framework\Css\PreProcessor\Adapter\CssInliner::class
+        );
     }
 
     /**
@@ -164,6 +173,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
                 $this->emogrifier,
                 $this->configVariables,
                 [],
+                $this->cssInliner,
             ])
             ->setMethods($mockedMethods)
             ->getMock();
