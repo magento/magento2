@@ -57,7 +57,6 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
             ]
         ];
 
-
         $rule->loadPost($ruleConditionArray);
         $this->model->attachConditionToCollection($collection, $rule->getConditions());
 
