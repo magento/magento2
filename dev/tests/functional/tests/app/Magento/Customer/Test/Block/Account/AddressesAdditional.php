@@ -23,6 +23,13 @@ class AddressesAdditional extends Block
     protected $addressSelector = '//li[address[contains(.,"%s")]]';
 
     /**
+     * Selector for addresses block
+     *
+     * @var string
+     */
+    private $addressesSelector = '//li[address]';
+
+    /**
      * Selector for delete link
      *
      * @var string
@@ -55,8 +62,29 @@ class AddressesAdditional extends Block
             ->find($this->deleteAddressLink)->click();
         $element = $this->browser->find($this->confirmModal);
         /** @var \Magento\Ui\Test\Block\Adminhtml\Modal $modal */
-        $modal = $this->blockFactory->create('Magento\Ui\Test\Block\Adminhtml\Modal', ['element' => $element]);
+        $modal = $this->blockFactory->create(\Magento\Ui\Test\Block\Adminhtml\Modal::class, ['element' => $element]);
         $modal->acceptAlert();
+    }
+
+    /**
+     * Check if additional address exists.
+     *
+     * @param string $address
+     * @return boolean
+     */
+    public function isAdditionalAddressExists($address)
+    {
+        $additionalAddressExists = false;
+
+        $addresses = $this->_rootElement->getElements($this->addressesSelector, Locator::SELECTOR_XPATH);
+        foreach ($addresses as $addressBlock) {
+            if (strpos($addressBlock->getText(), $address) === 0) {
+                $additionalAddressExists = $addressBlock->isVisible();
+                break;
+            }
+        }
+        
+        return $additionalAddressExists;
     }
 
     /**
