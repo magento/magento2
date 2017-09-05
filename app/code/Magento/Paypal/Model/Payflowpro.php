@@ -392,7 +392,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * Get capture amount
      *
      * @param float $amount
-     * @return float
+     * @return string|int
      */
     protected function _getCaptureAmount($amount)
     {
@@ -512,7 +512,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
         $request = $this->buildBasicRequest();
         $request->setTrxtype(self::TRXTYPE_CREDIT);
         $request->setOrigid($payment->getParentTransactionId());
-        $request->setAmt(round($amount, 2));
+        $request->setAmt($this->formatPrice($amount));
         $response = $this->postRequest($request, $this->getConfig());
         $this->processErrors($response);
 
@@ -607,7 +607,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
     protected function _buildPlaceRequest(DataObject $payment, $amount)
     {
         $request = $this->buildBasicRequest();
-        $request->setAmt(round($amount, 2));
+        $request->setAmt($this->formatPrice($amount));
         $request->setAcct($payment->getCcNumber());
         $request->setExpdate(sprintf('%02d', $payment->getCcExpMonth()) . substr($payment->getCcExpYear(), -2, 2));
         $request->setCvv2($payment->getCcCid());
