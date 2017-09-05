@@ -40,7 +40,7 @@ class UpgradeData implements UpgradeDataInterface
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
-        if (version_compare($context->getVersion(), '2.0.4', '<')) {
+        if (version_compare($context->getVersion(), '2.0.6', '<')) {
             $quoteSetup = $this->quoteSetupFactory->create(['setup' => $setup]);
             $this->convertSerializedDataToJsonFactory->create(['quoteSetup' => $quoteSetup])
                 ->convert();
