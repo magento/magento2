@@ -23,12 +23,12 @@
     @_nav-level0-item-color: @navigation-level0-item__color,
     @_nav-level0-item-text-decoration: @navigation-level0-item__text-decoration,
 
-    @_nav-level0-item-background-color-active: @navigation-level0-item__active__background,
+    @_nav-level0-item__active__background-color: @navigation-level0-item__active__background,
     @_nav-level0-item__active__border-color: @navigation-level0-item__active__border-color,
     @_nav-level0-item__active__border-style: @navigation-level0-item__active__border-style,
     @_nav-level0-item__active__border-width: @navigation-level0-item__active__border-width,
-    @_nav-level0-item-color-active: @navigation-level0-item__active__color,
-    @_nav-level0-item-text-decoration-active: @navigation-level0-item__active__text-decoration,
+    @_nav-level0-item__active__color: @navigation-level0-item__active__color,
+    @_nav-level0-item__active__text-decoration: @navigation-level0-item__active__text-decoration,
 
     @_submenu-background-color: @submenu__background,
     @_submenu-border: @submenu__border,
@@ -45,13 +45,13 @@
     @_submenu-item-color: @submenu-item__color,
     @_submenu-item-text-decoration: @submenu-item__text-decoration,
 
-    @_submenu-item-background-color-active: @submenu-item__active__background,
+    @_submenu-item__active__background-color: @submenu-item__active__background,
     @_submenu-item__active__border: @submenu-item__active__border,
     @_submenu-item__active__border-color: @submenu-item__active__border-color,
     @_submenu-item__active__border-style: @submenu-item__active__border-style,
     @_submenu-item__active__border-width: @submenu-item__active__border-width,
-    @_submenu-item-color-active: @submenu-item__active__color,
-    @_submenu-item-text-decoration-active: @submenu-item__active__text-decoration
+    @_submenu-item__active__color: @submenu-item__active__color,
+    @_submenu-item__active__text-decoration: @submenu-item__active__text-decoration
 ) {
     .navigation {
         .lib-css(background, @_nav-background-color);
@@ -97,13 +97,13 @@
             &.active {
                 .all-category {
                     .ui-state-focus {
-                        .lib-css(background, @_nav-level0-item-background-color-active);
+                        .lib-css(background, @_nav-level0-item__active__background-color);
                         .lib-css(border-color, @_nav-level0-item__active__border-color);
                         .lib-css(border-style, @_nav-level0-item__active__border-style);
                         .lib-css(border-width, @_nav-level0-item__active__border-width);
-                        .lib-css(color, @_nav-level0-item-color-active);
+                        .lib-css(color, @_nav-level0-item__active__color);
                         .lib-css(padding-left, @_nav__indent-side - @_submenu-item__active__border);
-                        .lib-css(text-decoration, @_nav-level0-item-text-decoration-active);
+                        .lib-css(text-decoration, @_nav-level0-item__active__text-decoration);
                         display: inline-block;
                     }
                 }
@@ -116,12 +116,12 @@
             &.active,
             &.has-active { // ToDo UI: remove "has_active" here, when mobile navigation default open state is implemented
                 > a:not(.ui-state-active) {
-                    .lib-css(background, @_nav-level0-item-background-color-active);
+                    .lib-css(background, @_nav-level0-item__active__background-color);
                     .lib-css(border-color, @_nav-level0-item__active__border-color);
                     .lib-css(border-style, @_nav-level0-item__active__border-style);
                     .lib-css(border-width, @_nav-level0-item__active__border-width);
-                    .lib-css(color, @_nav-level0-item-color-active);
-                    .lib-css(text-decoration, @_nav-level0-item-text-decoration-active);
+                    .lib-css(color, @_nav-level0-item__active__color);
+                    .lib-css(text-decoration, @_nav-level0-item__active__text-decoration);
 
                     span:not(.ui-menu-icon) {
                         .lib-css(margin-left, -@_submenu-item__active__border);
@@ -190,13 +190,13 @@
 
                 .active {
                     > a {
-                        .lib-css(background, @_submenu-item-background-color-active);
+                        .lib-css(background, @_submenu-item__active__background-color);
                         .lib-css(border-color, @_submenu-item__active__border-color);
                         .lib-css(border-style, @_submenu-item__active__border-style);
                         .lib-css(border-width, @_submenu-item__active__border-width);
-                        .lib-css(color, @_submenu-item-color-active);
+                        .lib-css(color, @_submenu-item__active__color);
                         .lib-css(padding-left, @_nav__indent-side - @_submenu-item__active__border);
-                        .lib-css(text-decoration, @_submenu-item-text-decoration-active);
+                        .lib-css(text-decoration, @_submenu-item__active__text-decoration);
                     }
                 }
 
@@ -236,12 +236,12 @@
     @_nav-level0-item-color-hover: @navigation-desktop-level0-item__hover__color,
     @_nav-level0-item-text-decoration-hover: @navigation-desktop-level0-item__hover__text-decoration,
 
-    @_nav-level0-item-background-color-active: @navigation-desktop-level0-item__active__background,
+    @_nav-level0-item__active__background-color: @navigation-desktop-level0-item__active__background,
     @_nav-level0-item__active__border-color: @navigation-desktop-level0-item__active__border-color,
     @_nav-level0-item__active__border-style: @navigation-desktop-level0-item__active__border-style,
     @_nav-level0-item__active__border-width: @navigation-desktop-level0-item__active__border-width,
-    @_nav-level0-item-color-active: @navigation-desktop-level0-item__active__color,
-    @_nav-level0-item-text-decoration-active: @navigation-desktop-level0-item__active__text-decoration,
+    @_nav-level0-item__active__color: @navigation-desktop-level0-item__active__color,
+    @_nav-level0-item__active__text-decoration: @navigation-desktop-level0-item__active__text-decoration,
 
     @_submenu-background-color: @submenu-desktop__background,
     @_submenu-border-width: @submenu-desktop__border-width,
@@ -268,12 +268,12 @@
     @_submenu-item-color-hover: @submenu-desktop-item__hover__color,
     @_submenu-item-text-decoration-hover: @submenu-desktop-item__hover__text-decoration,
 
-    @_submenu-item-background-color-active: @submenu-desktop-item__active__background,
+    @_submenu-item__active__background-color: @submenu-desktop-item__active__background,
     @_submenu-item__active__border-color: @submenu-desktop-item__active__border-color,
     @_submenu-item__active__border-style: @submenu-desktop-item__active__border-style,
     @_submenu-item__active__border-width: @submenu-desktop-item__active__border-width,
-    @_submenu-item-color-active: @submenu-desktop-item__active__color,
-    @_submenu-item-text-decoration-active: @submenu-desktop-item__active__text-decoration
+    @_submenu-item__active__color: @submenu-desktop-item__active__color,
+    @_submenu-item__active__text-decoration: @submenu-desktop-item__active__text-decoration
 ) {
 
     .navigation {
@@ -336,12 +336,12 @@
             &.active,
             &.has-active {
                 > .level-top {
-                    .lib-css(background, @_nav-level0-item-background-color-active);
+                    .lib-css(background, @_nav-level0-item__active__background-color);
                     .lib-css(border-color, @_nav-level0-item__active__border-color);
                     .lib-css(border-style, @_nav-level0-item__active__border-style);
                     .lib-css(border-width, @_nav-level0-item__active__border-width);
-                    .lib-css(color, @_nav-level0-item-color-active);
-                    .lib-css(text-decoration, @_nav-level0-item-text-decoration-active);
+                    .lib-css(color, @_nav-level0-item__active__color);
+                    .lib-css(text-decoration, @_nav-level0-item__active__text-decoration);
                     display: inline-block;
                 }
             }
@@ -392,12 +392,12 @@
                 }
 
                 .active > a {
-                    .lib-css(background, @_submenu-item-background-color-active);
+                    .lib-css(background, @_submenu-item__active__background-color);
                     .lib-css(border-color, @_submenu-item__active__border-color);
                     .lib-css(border-style, @_submenu-item__active__border-style);
                     .lib-css(border-width, @_submenu-item__active__border-width);
-                    .lib-css(color, @_submenu-item-color-active);
-                    .lib-css(text-decoration, @_submenu-item-text-decoration-active);
+                    .lib-css(color, @_submenu-item__active__color);
+                    .lib-css(text-decoration, @_submenu-item__active__text-decoration);
                 }
 
                 .submenu {
