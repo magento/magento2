@@ -432,7 +432,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             \Magento\Customer\Model\Data\Customer::WEBSITE_ID => 1
         ];
     }
-    
+
     /**
      * Test to verify that disabled product cannot be added to cart.
      *
@@ -456,5 +456,24 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
 
         $quote = $objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->addProduct($product);
+    }
+
+    /**
+     * Test to verify that reserved_order_id will be changed if it already in used
+     *
+     * @magentoDataFixture Magento/Sales/_files/order.php
+     * @magentoDataFixture Magento/Quote/_files/empty_quote.php
+     */
+    public function testReserveOrderId()
+    {
+        $objectManager = Bootstrap::getObjectManager();
+        /** @var \Magento\Quote\Model\Quote $quote */
+        $quote = $objectManager->create(Quote::class);
+        $quote->load('reserved_order_id', 'reserved_order_id');
+        $quote->reserveOrderId();
+        $this->assertEquals('reserved_order_id', $quote->getReservedOrderId());
+        $quote->setReservedOrderId('100000001');
+        $quote->reserveOrderId();
+        $this->assertNotEquals('100000001', $quote->getReservedOrderId());
     }
 }
