@@ -25,5 +25,6 @@ class Sample
 
     public function variadic(... $values)
     {
+        $this->attribute = array_shift($values);
     }
 }
