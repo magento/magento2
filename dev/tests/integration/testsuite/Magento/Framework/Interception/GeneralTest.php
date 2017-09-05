@@ -14,17 +14,14 @@ class GeneralTest extends AbstractPlugin
     public function setUp()
     {
         $this->setUpInterceptionConfig(
-            [\Magento\Framework\Interception\Fixture\InterceptedInterface::class =>
-                    [
+            [\Magento\Framework\Interception\Fixture\InterceptedInterface::class => [
                         'plugins' => [
                             'first' => [
-                                'instance'  =>
-                                    \Magento\Framework\Interception\Fixture\Intercepted\InterfacePlugin::class,
+                                'instance'  => \Magento\Framework\Interception\Fixture\Intercepted\InterfacePlugin::class,
                                 'sortOrder' => 10,
                             ],
                         ],
-                    ], \Magento\Framework\Interception\Fixture\Intercepted::class  =>
-                    [
+                    ], \Magento\Framework\Interception\Fixture\Intercepted::class  => [
                         'plugins' => [
                             'second' => [
                                 'instance'  => \Magento\Framework\Interception\Fixture\Intercepted\Plugin::class,

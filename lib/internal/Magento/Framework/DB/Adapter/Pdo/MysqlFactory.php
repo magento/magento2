@@ -5,7 +5,6 @@
  */
 namespace Magento\Framework\DB\Adapter\Pdo;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\LoggerInterface;
 use Magento\Framework\DB\SelectFactory;
 use Magento\Framework\ObjectManagerInterface;

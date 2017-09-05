@@ -7,7 +7,6 @@
 namespace Magento\Framework\App\Test\Unit;
 
 use Magento\Framework\App\Bootstrap;
-use Magento\Framework\Filesystem;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

@@ -5,9 +5,9 @@
  */
 namespace Magento\Framework\EntityManager\Operation\Delete;
 
-use Magento\Framework\EntityManager\TypeResolver;
-use Magento\Framework\EntityManager\HydratorPool;
 use Magento\Framework\EntityManager\Db\DeleteRow;
+use Magento\Framework\EntityManager\HydratorPool;
+use Magento\Framework\EntityManager\TypeResolver;
 
 /**
  * Class DeleteMain

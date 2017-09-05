@@ -7,7 +7,6 @@
 namespace Magento\Integration\Block\Adminhtml\Integration\Edit;
 
 use Magento\Integration\Controller\Adminhtml\Integration;
-use Magento\Integration\Model\Integration as IntegrationModel;
 
 /**
  * Test for \Magento\Integration\Block\Adminhtml\Integration\Edit\Form

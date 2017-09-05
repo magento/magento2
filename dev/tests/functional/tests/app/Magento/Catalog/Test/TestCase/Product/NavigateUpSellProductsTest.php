@@ -6,8 +6,6 @@
 
 namespace Magento\Catalog\Test\TestCase\Product;
 
-use Magento\Mtf\Fixture\InjectableFixture;
-
 /**
  * Preconditions:
  * 1. Create products.

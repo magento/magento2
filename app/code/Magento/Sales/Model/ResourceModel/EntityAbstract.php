@@ -8,8 +8,8 @@ namespace Magento\Sales\Model\ResourceModel;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
-use Magento\SalesSequence\Model\Manager;
 use Magento\Sales\Model\EntityInterface;
+use Magento\SalesSequence\Model\Manager;
 
 /**
  * Abstract sales entity provides to its children knowledge about eventPrefix and eventObject

@@ -5,16 +5,15 @@
  */
 namespace Magento\Search\Model;
 
-use Magento\Framework\App\ResourceConnection;
-use Magento\Search\Model\ResourceModel\Query\Collection as QueryCollection;
-use Magento\Search\Model\ResourceModel\Query\CollectionFactory as QueryCollectionFactory;
-use Magento\Search\Model\SearchCollectionInterface as Collection;
-use Magento\Search\Model\SearchCollectionFactory as CollectionFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Data\Collection\AbstractDb as DbCollection;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
+use Magento\Search\Model\ResourceModel\Query\Collection as QueryCollection;
+use Magento\Search\Model\ResourceModel\Query\CollectionFactory as QueryCollectionFactory;
+use Magento\Search\Model\SearchCollectionFactory as CollectionFactory;
+use Magento\Search\Model\SearchCollectionInterface as Collection;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**

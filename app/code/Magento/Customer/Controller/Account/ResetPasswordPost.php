@@ -8,11 +8,11 @@ namespace Magento\Customer\Controller\Account;
 
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Model\Customer\CredentialsValidator;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
-use Magento\Framework\Exception\InputException;
-use Magento\Customer\Model\Customer\CredentialsValidator;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\InputException;
 
 class ResetPasswordPost extends \Magento\Customer\Controller\AbstractAccount
 {

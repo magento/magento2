@@ -6,11 +6,11 @@
 
 namespace Magento\Security\Test\TestCase;
 
-use Magento\Mtf\TestCase\Injectable;
+use Magento\Config\Test\Fixture\ConfigData;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\CustomerAccountLogin;
-use Magento\Config\Test\Fixture\ConfigData;
 use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Preconditions:

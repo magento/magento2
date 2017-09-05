@@ -5,11 +5,11 @@
  */
 namespace Magento\Integration\Controller\Adminhtml\Integration;
 
-use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
 use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Integration\Model\Integration as IntegrationModel;
 use Magento\Framework\Exception\State\UserLockedException;
+use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
+use Magento\Integration\Model\Integration as IntegrationModel;
 use Magento\Security\Model\SecurityCookie;
 
 /**

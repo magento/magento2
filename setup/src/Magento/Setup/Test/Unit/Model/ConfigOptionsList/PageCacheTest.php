@@ -6,9 +6,9 @@
 
 namespace Magento\Setup\Test\Unit\Model\ConfigOptionsList;
 
-use Magento\Setup\Model\ConfigOptionsList\PageCache;
-use Magento\Framework\Setup\Option\TextConfigOption;
 use Magento\Framework\Setup\Option\SelectConfigOption;
+use Magento\Framework\Setup\Option\TextConfigOption;
+use Magento\Setup\Model\ConfigOptionsList\PageCache;
 use Magento\Setup\Validator\RedisConnectionValidator;
 
 class PageCacheTest extends \PHPUnit\Framework\TestCase

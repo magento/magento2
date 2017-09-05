@@ -6,7 +6,7 @@
 
 namespace Magento\Bundle\Model\Product;
 
-use \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory;
+use Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory;
 
 /**
  * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/dynamic_bundle_product.php

@@ -6,7 +6,7 @@
 namespace Magento\Catalog\Test\Unit\Model\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use \Magento\Catalog\Model\Product\Copier;
+use Magento\Catalog\Model\Product\Copier;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -157,7 +157,8 @@ class CopierTest extends \PHPUnit\Framework\TestCase
 
         $duplicateMock->expects($this->any())->method('getData')->willReturnMap([
             ['linkField', null, '2'],
-        ]);        $this->optionRepositoryMock->expects($this->once())
+        ]);
+        $this->optionRepositoryMock->expects($this->once())
             ->method('duplicate')
             ->with($this->productMock, $duplicateMock);
         $resourceMock->expects($this->once())->method('duplicate')->with(1, 2);

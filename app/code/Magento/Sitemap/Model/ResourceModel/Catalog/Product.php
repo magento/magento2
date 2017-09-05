@@ -6,8 +6,8 @@
 namespace Magento\Sitemap\Model\ResourceModel\Catalog;
 
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
-use Magento\Store\Model\Store;
 use Magento\Framework\App\ObjectManager;
+use Magento\Store\Model\Store;
 
 /**
  * Sitemap resource product collection model
@@ -221,7 +221,7 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 []
             );
             // Store scope attribute value
-            $columnValue = $this->getConnection()->getIfNullSql('t2_'  . $attributeCode . '.value', $columnValue);
+            $columnValue = $this->getConnection()->getIfNullSql('t2_' . $attributeCode . '.value', $columnValue);
         }
 
         // Add attribute value to result set if needed

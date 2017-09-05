@@ -46,7 +46,7 @@ class DeviceDataBuilderTest extends \PHPUnit\Framework\TestCase
         $this->paymentDataObject = $this->createMock(PaymentDataObjectInterface::class);
 
         $this->paymentInfo = $this->createMock(InfoInterface::class);
-        
+
         $this->builder = new DeviceDataBuilder($this->subjectReader);
     }
 

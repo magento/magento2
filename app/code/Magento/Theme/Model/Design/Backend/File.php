@@ -5,8 +5,8 @@
  */
 namespace Magento\Theme\Model\Design\Backend;
 
-use Magento\Config\Model\Config\Backend\File\RequestData\RequestDataInterface;
 use Magento\Config\Model\Config\Backend\File as BackendFile;
+use Magento\Config\Model\Config\Backend\File\RequestData\RequestDataInterface;
 use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
@@ -89,7 +89,7 @@ class File extends BackendFile
         $values = $this->getValue();
         $value = reset($values) ?: [];
         if (!isset($value['file'])) {
-             throw new LocalizedException(
+            throw new LocalizedException(
                  __('%1 does not contain field \'file\'', $this->getData('field_config/field'))
              );
         }
@@ -188,7 +188,7 @@ class File extends BackendFile
             $urlType = ['_type' => empty($baseUrl['type']) ? 'link' : (string)$baseUrl['type']];
             $baseUrl = $baseUrl['value'] . '/';
         }
-        return $this->urlBuilder->getBaseUrl($urlType) . $baseUrl  . $fileName;
+        return $this->urlBuilder->getBaseUrl($urlType) . $baseUrl . $fileName;
     }
 
     /**

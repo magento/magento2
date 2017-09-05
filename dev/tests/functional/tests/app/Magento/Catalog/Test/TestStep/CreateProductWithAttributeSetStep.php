@@ -6,11 +6,11 @@
 
 namespace Magento\Catalog\Test\TestStep;
 
-use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
-use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Catalog\Test\Fixture\CatalogAttributeSet;
 use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
+use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
+use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
+use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestStep\TestStepInterface;
 
 /**

@@ -7,7 +7,6 @@ namespace Magento\Downloadable\Model;
 
 use Magento\Catalog\Api\Data\ProductOptionInterface;
 use Magento\Catalog\Model\ProductOptionProcessorInterface;
-use Magento\Downloadable\Model\DownloadableOptionFactory;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\Factory as DataObjectFactory;

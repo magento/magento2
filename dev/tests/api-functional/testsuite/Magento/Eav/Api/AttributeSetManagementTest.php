@@ -5,9 +5,9 @@
  */
 namespace Magento\Eav\Api;
 
+use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
-use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
 
 class AttributeSetManagementTest extends WebapiAbstract
 {

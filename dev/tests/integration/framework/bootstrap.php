@@ -9,7 +9,7 @@ require_once __DIR__ . '/../../../../app/bootstrap.php';
 require_once __DIR__ . '/autoload.php';
 
 $testsBaseDir = dirname(__DIR__);
-$fixtureBaseDir = $testsBaseDir. '/testsuite';
+$fixtureBaseDir = $testsBaseDir . '/testsuite';
 
 if (!defined('TESTS_TEMP_DIR')) {
     define('TESTS_TEMP_DIR', $testsBaseDir . '/tmp');

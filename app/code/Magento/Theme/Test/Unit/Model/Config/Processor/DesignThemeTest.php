@@ -5,7 +5,6 @@
  */
 namespace Magento\Theme\Test\Unit\Model\Config\Processor;
 
-use Magento\Config\App\Config\Source\DumpConfigSourceAggregated;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Framework\View\Design\Theme\ListInterface;
 use Magento\Theme\Model\Config\Processor\DesignTheme;

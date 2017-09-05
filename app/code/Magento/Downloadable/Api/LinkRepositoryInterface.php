@@ -5,8 +5,8 @@
  */
 namespace Magento\Downloadable\Api;
 
-use Magento\Downloadable\Api\Data\LinkInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Downloadable\Api\Data\LinkInterface;
 
 /**
  * Interface LinkRepositoryInterface

@@ -6,9 +6,9 @@
 
 namespace Magento\Sales\Test\Fixture\OrderInjectable;
 
-use Magento\SalesRule\Test\Fixture\SalesRule;
-use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Fixture\DataSource;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\SalesRule\Test\Fixture\SalesRule;
 
 /**
  * Coupon code data.

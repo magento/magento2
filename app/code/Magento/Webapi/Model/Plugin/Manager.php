@@ -5,8 +5,8 @@
  */
 namespace Magento\Webapi\Model\Plugin;
 
-use Magento\Integration\Model\ConfigBasedIntegrationManager;
 use Magento\Integration\Api\AuthorizationServiceInterface as IntegrationAuthorizationInterface;
+use Magento\Integration\Model\ConfigBasedIntegrationManager;
 use Magento\Integration\Model\IntegrationConfig;
 
 /**

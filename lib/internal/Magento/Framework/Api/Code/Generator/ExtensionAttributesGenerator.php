@@ -5,10 +5,10 @@
  */
 namespace Magento\Framework\Api\Code\Generator;
 
+use Magento\Framework\Api\ExtensionAttribute\Config\Converter;
+use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\Code\Generator\DefinedClasses;
 use Magento\Framework\Code\Generator\Io;
-use Magento\Framework\Api\SimpleDataObjectConverter;
-use Magento\Framework\Api\ExtensionAttribute\Config\Converter;
 
 /**
  * Code generator for data object extensions.

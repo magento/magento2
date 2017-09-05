@@ -6,11 +6,11 @@
 
 namespace Magento\Catalog\Test\TestCase\Product;
 
-use Magento\Config\Test\TestStep\SetupConfigurationStep;
+use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
+use Magento\Config\Test\TestStep\SetupConfigurationStep;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
-use Magento\Catalog\Test\Fixture\Category;
 
 /**
  * Preconditions:

@@ -7,8 +7,8 @@
 namespace Magento\ConfigurableProduct\Test\Constraint;
 
 use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
-use Magento\Wishlist\Test\Constraint\AssertProductInCustomerWishlistOnBackendGrid;
 use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Wishlist\Test\Constraint\AssertProductInCustomerWishlistOnBackendGrid;
 
 /**
  * Class AssertConfigurableProductInCustomerWishlistOnBackendGrid

@@ -18,12 +18,12 @@ use Magento\Sales\Api\ShipmentRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Config as OrderConfig;
 use Magento\Sales\Model\Order\OrderStateResolverInterface;
-use Magento\Sales\Model\Order\ShipmentDocumentFactory;
 use Magento\Sales\Model\Order\Shipment\NotifierInterface;
 use Magento\Sales\Model\Order\Shipment\OrderRegistrarInterface;
+use Magento\Sales\Model\Order\ShipmentDocumentFactory;
 use Magento\Sales\Model\Order\Validation\ShipOrderInterface;
-use Magento\Sales\Model\ValidatorResultInterface;
 use Magento\Sales\Model\ShipOrder;
+use Magento\Sales\Model\ValidatorResultInterface;
 use Psr\Log\LoggerInterface;
 
 /**

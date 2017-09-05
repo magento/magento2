@@ -5,8 +5,8 @@
  */
 namespace Magento\Catalog\CustomerData;
 
-use Magento\Catalog\Api\Data\ProductRenderInterface;
 use Magento\Catalog\Api\Data\ProductFrontendActionInterface;
+use Magento\Catalog\Api\Data\ProductRenderInterface;
 use Magento\Catalog\Model\Product\ProductFrontendAction\Synchronizer;
 use Magento\Catalog\Model\ProductRenderList;
 use Magento\Catalog\Model\ResourceModel\ProductFrontendAction\Collection;

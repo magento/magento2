@@ -6,10 +6,10 @@
 
 namespace Magento\Widget\Test\Constraint;
 
-use Magento\Mtf\Util\Command\Cli\Cache;
 use Magento\Cms\Test\Page\CmsIndex;
-use Magento\Widget\Test\Fixture\Widget;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Util\Command\Cli\Cache;
+use Magento\Widget\Test\Fixture\Widget;
 
 /**
  * Check that created widget displayed on frontent on Home page and on Advanced Search and

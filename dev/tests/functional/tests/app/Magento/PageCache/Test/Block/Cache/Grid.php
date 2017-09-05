@@ -6,8 +6,8 @@
 
 namespace Magento\PageCache\Test\Block\Cache;
 
-use Magento\Mtf\Client\Locator;
 use Magento\Backend\Test\Block\Widget\Grid as ParentGrid;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Backend Cache Management grid.

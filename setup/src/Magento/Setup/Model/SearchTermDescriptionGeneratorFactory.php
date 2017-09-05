@@ -7,11 +7,9 @@ namespace Magento\Setup\Model;
 
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Setup\Fixtures\FixtureConfig;
-use Magento\Setup\Model\Description\DescriptionSentenceGeneratorFactory;
-use Magento\Setup\Model\Description\DescriptionParagraphGeneratorFactory;
 use Magento\Setup\Model\Description\DescriptionGeneratorFactory;
-use Magento\Setup\Model\DictionaryFactory;
-use Magento\Setup\Model\SearchTermManagerFactory;
+use Magento\Setup\Model\Description\DescriptionParagraphGeneratorFactory;
+use Magento\Setup\Model\Description\DescriptionSentenceGeneratorFactory;
 
 /**
  * Search term description generator factory

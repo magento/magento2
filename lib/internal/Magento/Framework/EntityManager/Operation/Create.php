@@ -6,15 +6,15 @@
 namespace Magento\Framework\EntityManager\Operation;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\DuplicateException;
-use Magento\Framework\EntityManager\Sequence\SequenceApplier;
-use Magento\Framework\EntityManager\Operation\Create\CreateMain;
+use Magento\Framework\EntityManager\EventManager;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\EntityManager\Operation\Create\CreateAttributes;
 use Magento\Framework\EntityManager\Operation\Create\CreateExtensions;
-use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Framework\EntityManager\EventManager;
+use Magento\Framework\EntityManager\Operation\Create\CreateMain;
+use Magento\Framework\EntityManager\Sequence\SequenceApplier;
 use Magento\Framework\EntityManager\TypeResolver;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Phrase;
 

@@ -6,10 +6,10 @@
 
 namespace Magento\Install\Test\Constraint;
 
-use Magento\Cms\Test\Page\CmsIndex;
-use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\Mtf\Client\BrowserInterface;
 use Magento\Catalog\Test\Fixture\Category;
+use Magento\Cms\Test\Page\CmsIndex;
+use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Assert that apache redirect correct works.

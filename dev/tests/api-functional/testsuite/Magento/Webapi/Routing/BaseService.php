@@ -5,7 +5,6 @@
  */
 namespace Magento\Webapi\Routing;
 
-use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Webapi\Exception as WebapiException;
 
 /**

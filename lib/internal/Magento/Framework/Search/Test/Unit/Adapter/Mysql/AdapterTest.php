@@ -6,7 +6,6 @@
 
 namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql;
 
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Search\Request\BucketInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 

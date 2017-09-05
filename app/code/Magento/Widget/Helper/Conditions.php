@@ -5,8 +5,8 @@
  */
 namespace Magento\Widget\Helper;
 
-use Magento\Framework\Data\Wysiwyg\Normalizer;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Data\Wysiwyg\Normalizer;
 use Magento\Framework\Serialize\Serializer\Json;
 
 /**

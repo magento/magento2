@@ -6,8 +6,8 @@
 namespace Magento\Wishlist\Controller\Index;
 
 use Magento\Framework\App\Action;
-use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Exception\NotFoundException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

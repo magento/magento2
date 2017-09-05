@@ -6,8 +6,8 @@
 
 namespace Magento\Wishlist\Test\Block\Adminhtml\Customer\Edit\Tab\Wishlist;
 
-use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Class Grid

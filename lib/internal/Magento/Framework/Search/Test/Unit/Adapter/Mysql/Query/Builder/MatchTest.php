@@ -8,7 +8,7 @@ namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql\Query\Builder;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Request\Query\BoolExpression;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use \PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 class MatchTest extends \PHPUnit\Framework\TestCase
 {

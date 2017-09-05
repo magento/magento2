@@ -8,9 +8,9 @@
 
 namespace Magento\TestFramework\TestCase\Webapi\Adapter;
 
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\Webapi\Rest\Request;
 use Magento\TestFramework\Authentication\OauthHelper;
+use Magento\TestFramework\Helper\Bootstrap;
 
 class Rest implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
 {

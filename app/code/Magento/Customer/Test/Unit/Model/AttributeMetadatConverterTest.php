@@ -5,9 +5,9 @@
  */
 namespace Magento\Customer\Test\Unit\Model;
 
+use Magento\Customer\Api\Data\AttributeMetadataInterfaceFactory;
 use Magento\Customer\Api\Data\OptionInterfaceFactory;
 use Magento\Customer\Api\Data\ValidationRuleInterfaceFactory;
-use Magento\Customer\Api\Data\AttributeMetadataInterfaceFactory;
 use Magento\Customer\Model\AttributeMetadataConverter;
 
 /**

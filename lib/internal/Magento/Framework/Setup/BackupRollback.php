@@ -7,13 +7,12 @@
 namespace Magento\Framework\Setup;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Backup\Factory;
 use Magento\Framework\Backup\Exception\NotEnoughPermissions;
+use Magento\Framework\Backup\Factory;
 use Magento\Framework\Backup\Filesystem;
 use Magento\Framework\Backup\Filesystem\Helper;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem\Driver\File;
-use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
 
@@ -129,7 +128,7 @@ class BackupRollback
         $this->log->log($granularType . ' backup is starting...');
         $fsBackup->create();
         $this->log->log(
-            $granularType. ' backup filename: ' . $fsBackup->getBackupFilename()
+            $granularType . ' backup filename: ' . $fsBackup->getBackupFilename()
             . ' (The archive can be uncompressed with 7-Zip on Windows systems)'
         );
         $this->log->log($granularType . ' backup path: ' . $fsBackup->getBackupPath());

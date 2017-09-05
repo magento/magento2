@@ -5,7 +5,6 @@
  */
 namespace Magento\Customer\Block\Form;
 
-use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\AccountManagement;
 
 /**

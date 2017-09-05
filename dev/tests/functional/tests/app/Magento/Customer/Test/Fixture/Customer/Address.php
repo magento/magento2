@@ -6,9 +6,9 @@
 
 namespace Magento\Customer\Test\Fixture\Customer;
 
+use Magento\Customer\Test\Fixture\Address as AddressFixture;
 use Magento\Mtf\Fixture\DataSource;
 use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Customer\Test\Fixture\Address as AddressFixture;
 
 /**
  * Addresses source for customer fixture.

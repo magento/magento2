@@ -6,9 +6,9 @@
 
 namespace Magento\Sales\Model\Order\Payment;
 
-use Magento\Sales\Model\AbstractModel;
-use Magento\Payment\Model\Method\Substitution;
 use Magento\Payment\Model\InfoInterface;
+use Magento\Payment\Model\Method\Substitution;
+use Magento\Sales\Model\AbstractModel;
 
 /**
  *

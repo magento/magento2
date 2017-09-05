@@ -5,10 +5,10 @@
  */
 namespace Magento\Catalog\Helper\Product;
 
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Catalog\Helper\Product\Configuration\ConfigurationInterface;
 use Magento\Framework\App\Helper\AbstractHelper;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Helper for fetching properties by product configurational item

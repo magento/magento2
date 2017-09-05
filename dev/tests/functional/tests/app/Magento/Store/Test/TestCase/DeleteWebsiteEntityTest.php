@@ -10,8 +10,8 @@ use Magento\Backend\Test\Page\Adminhtml\DeleteWebsite;
 use Magento\Backend\Test\Page\Adminhtml\EditWebsite;
 use Magento\Backend\Test\Page\Adminhtml\StoreIndex;
 use Magento\Backup\Test\Page\Adminhtml\BackupIndex;
-use Magento\Store\Test\Fixture\Website;
 use Magento\Mtf\TestCase\Injectable;
+use Magento\Store\Test\Fixture\Website;
 
 /**
  * Delete Website (Store Management)

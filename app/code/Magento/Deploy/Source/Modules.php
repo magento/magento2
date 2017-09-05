@@ -5,8 +5,8 @@
  */
 namespace Magento\Deploy\Source;
 
-use Magento\Framework\App\Utility\Files;
 use Magento\Deploy\Package\PackageFileFactory;
+use Magento\Framework\App\Utility\Files;
 
 /**
  * Collect files eligible for deployment from  modules

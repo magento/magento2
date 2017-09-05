@@ -5,9 +5,9 @@
  */
 namespace Magento\CatalogSearch\Model\Search\BaseSelectStrategy;
 
-use Magento\CatalogSearch\Model\Search\SelectContainer\SelectContainer;
-use Magento\CatalogSearch\Model\Adapter\Mysql\BaseSelectStrategy\BaseSelectFullTextSearchStrategy;
 use Magento\CatalogSearch\Model\Adapter\Mysql\BaseSelectStrategy\BaseSelectAttributesSearchStrategy;
+use Magento\CatalogSearch\Model\Adapter\Mysql\BaseSelectStrategy\BaseSelectFullTextSearchStrategy;
+use Magento\CatalogSearch\Model\Search\SelectContainer\SelectContainer;
 
 /**
  * Class StrategyMapper

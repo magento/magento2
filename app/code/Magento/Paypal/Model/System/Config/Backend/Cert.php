@@ -5,7 +5,6 @@
  */
 namespace Magento\Paypal\Model\System\Config\Backend;
 
-use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\DirectoryList;
 
 /**

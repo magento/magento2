@@ -5,7 +5,6 @@
  */
 namespace Magento\Sales\Model\Order\Payment;
 
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SortOrderBuilder;

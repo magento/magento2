@@ -5,9 +5,9 @@
  */
 namespace Magento\Widget\Test\Unit\Model\ResourceModel\Widget\Instance\Options;
 
-use Magento\Widget\Model\ResourceModel\Widget\Instance\Options\Themes;
 use Magento\Theme\Model\ResourceModel\Theme\Collection as ThemeCollection;
 use Magento\Theme\Model\ResourceModel\Theme\CollectionFactory as ThemeCollectionFactory;
+use Magento\Widget\Model\ResourceModel\Widget\Instance\Options\Themes;
 
 /**
  * Test class for \Magento\Widget\Model\ResourceModel\Widget\Instance\Options\Themes

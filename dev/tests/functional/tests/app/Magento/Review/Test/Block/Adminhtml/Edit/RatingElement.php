@@ -6,8 +6,8 @@
 
 namespace Magento\Review\Test\Block\Adminhtml\Edit;
 
-use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Class RatingElement

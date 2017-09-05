@@ -7,8 +7,8 @@
 namespace Magento\Customer\Test\TestStep;
 
 use Magento\Cms\Test\Page\CmsIndex;
-use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Customer\Test\Page\CustomerAccountIndex;
+use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
  * Logout customer on frontend.

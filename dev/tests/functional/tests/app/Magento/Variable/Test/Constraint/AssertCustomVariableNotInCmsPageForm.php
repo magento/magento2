@@ -7,8 +7,8 @@
 namespace Magento\Variable\Test\Constraint;
 
 use Magento\Cms\Test\Page\Adminhtml\CmsPageNew;
-use Magento\Variable\Test\Fixture\SystemVariable;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Variable\Test\Fixture\SystemVariable;
 
 /**
  * Assert that custom system variable not in cms page form.

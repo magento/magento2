@@ -6,9 +6,9 @@
 
 namespace Magento\Framework\Reflection\Test\Unit;
 
-use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Reflection\MethodsMap;
 use Magento\Framework\Reflection\TypeProcessor;
+use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * MethodsMap test

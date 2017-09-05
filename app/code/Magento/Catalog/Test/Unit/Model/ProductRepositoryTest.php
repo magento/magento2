@@ -9,7 +9,6 @@
 
 namespace Magento\Catalog\Test\Unit\Model;
 
-use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\DB\Adapter\ConnectionException;

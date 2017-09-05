@@ -5,9 +5,9 @@
  */
 namespace Magento\Framework\EntityManager\Test\Unit;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\EntityManager\OperationPool;
+use Magento\Framework\ObjectManagerInterface;
+use PHPUnit\Framework\TestCase;
 
 class OperationPoolTest extends TestCase
 {

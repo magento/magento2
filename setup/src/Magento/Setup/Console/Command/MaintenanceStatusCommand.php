@@ -7,7 +7,6 @@
 namespace Magento\Setup\Console\Command;
 
 use Magento\Framework\App\MaintenanceMode;
-use Magento\Framework\Module\ModuleList;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 

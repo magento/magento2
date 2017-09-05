@@ -6,9 +6,9 @@
 
 namespace Magento\GroupedProduct\Test\Constraint;
 
+use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Sales\Test\Block\Adminhtml\Order\Create\Items;
 use Magento\Sales\Test\Page\Adminhtml\OrderCreateIndex;
-use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertGroupedProductInItemsOrderedGrid

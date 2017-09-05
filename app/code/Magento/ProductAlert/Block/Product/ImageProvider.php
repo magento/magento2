@@ -5,12 +5,12 @@
  */
 namespace Magento\ProductAlert\Block\Product;
 
-use Magento\Store\Model\App\Emulation;
+use Magento\Catalog\Block\Product\Image;
 use Magento\Catalog\Block\Product\ImageBuilder;
 use Magento\Catalog\Model\Product;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\Area;
-use Magento\Catalog\Block\Product\Image;
+use Magento\Store\Model\App\Emulation;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Provides product image to be used in the Product Alert Email.

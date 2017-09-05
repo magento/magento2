@@ -6,8 +6,8 @@
 
 namespace Magento\CatalogSearch\Test\Constraint;
 
-use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\CatalogSearch\Test\Page\CatalogsearchResult;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Assert search has no results.

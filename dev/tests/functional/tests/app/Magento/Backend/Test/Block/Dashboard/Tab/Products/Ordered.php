@@ -6,9 +6,9 @@
 
 namespace Magento\Backend\Test\Block\Dashboard\Tab\Products;
 
-use Magento\Mtf\Client\Locator;
 use Magento\Backend\Test\Block\Widget\Grid;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Ordered products grid on bestsellers tab on Dashboard

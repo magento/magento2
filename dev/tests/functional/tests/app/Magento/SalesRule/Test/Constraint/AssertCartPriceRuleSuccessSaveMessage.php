@@ -6,8 +6,8 @@
 
 namespace Magento\SalesRule\Test\Constraint;
 
-use Magento\SalesRule\Test\Page\Adminhtml\PromoQuoteIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\SalesRule\Test\Page\Adminhtml\PromoQuoteIndex;
 
 /**
  * Assert sales rule save message.

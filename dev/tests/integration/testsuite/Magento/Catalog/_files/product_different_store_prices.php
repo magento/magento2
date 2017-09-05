@@ -4,13 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\Product\Visibility;
-use Magento\Catalog\Model\Product\Attribute\Source\Status;
-use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\TestFramework\Helper\Bootstrap;
 
 require __DIR__ . '/../../Store/_files/core_fixturestore.php';
 

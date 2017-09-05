@@ -7,7 +7,6 @@
  */
 namespace Magento\Framework\Validator\Entity;
 
-use Magento\Framework\DataObject;
 use Magento\Framework\Model\AbstractModel;
 
 class Properties extends \Magento\Framework\Validator\AbstractValidator

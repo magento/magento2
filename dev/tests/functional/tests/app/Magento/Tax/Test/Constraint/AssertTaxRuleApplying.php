@@ -11,10 +11,10 @@ use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Checkout\Test\Page\CheckoutCart;
 use Magento\Customer\Test\Fixture\Address;
 use Magento\Customer\Test\Fixture\Customer;
-use Magento\Tax\Test\Fixture\TaxRule;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Tax\Test\Fixture\TaxRule;
 
 /**
  * Abstract class for implementing assert applying.

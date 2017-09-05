@@ -6,8 +6,8 @@
 namespace Magento\UrlRewrite\Test\Unit\Model\Message;
 
 use Magento\Framework\Message\MessageInterface;
-use Magento\UrlRewrite\Model\Message\UrlRewriteExceptionMessageFactory;
 use Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException;
+use Magento\UrlRewrite\Model\Message\UrlRewriteExceptionMessageFactory;
 
 class UrlRewriteExceptionMessageFactoryTest extends \PHPUnit\Framework\TestCase
 {

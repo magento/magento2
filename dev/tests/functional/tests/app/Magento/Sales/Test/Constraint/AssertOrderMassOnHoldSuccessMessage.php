@@ -6,8 +6,8 @@
 
 namespace Magento\Sales\Test\Constraint;
 
-use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 
 /**
  * Class AssertOrderMassOnHoldSuccessMessage

@@ -8,7 +8,7 @@
 namespace Magento\Customer\Model\Data;
 
 use Magento\Customer\Api\Data\RegionInterface;
-use \Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\AttributeValueFactory;
 
 /**
  * Class Address

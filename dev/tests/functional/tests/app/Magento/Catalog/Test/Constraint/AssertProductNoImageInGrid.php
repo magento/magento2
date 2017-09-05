@@ -6,9 +6,9 @@
 
 namespace Magento\Catalog\Test\Constraint;
 
-use Magento\Mtf\Fixture\InjectableFixture;
-use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
+use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
  * Assert that video is not displayed in admin product grid.

@@ -5,9 +5,9 @@
  */
 namespace Magento\GiftMessage\Test\Unit\Model;
 
+use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\State\InvalidTransitionException;
-use Magento\Framework\Exception\CouldNotSaveException;
 
 /**
  * Test class for \Magento\GiftMessage\Model\OrderItemRepository

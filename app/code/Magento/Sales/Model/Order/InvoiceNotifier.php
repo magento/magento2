@@ -6,9 +6,9 @@
 
 namespace Magento\Sales\Model\Order;
 
-use Psr\Log\LoggerInterface as Logger;
 use Magento\Sales\Model\Order\Email\Sender\InvoiceSender;
 use Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory;
+use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Class InvoiceNotifier

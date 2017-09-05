@@ -6,8 +6,8 @@
 
 namespace Magento\Widget\Test\Block\Adminhtml\Widget;
 
-use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Widget Chosen Option.

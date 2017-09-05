@@ -5,17 +5,17 @@
  */
 namespace Magento\Sales\Test\Unit\Model\Order;
 
+use Magento\Framework\EntityManager\HydratorInterface;
 use Magento\Framework\EntityManager\HydratorPool;
 use Magento\Sales\Api\Data\ShipmentCommentCreationInterface;
+use Magento\Sales\Api\Data\ShipmentInterface;
 use Magento\Sales\Api\Data\ShipmentItemCreationInterface;
 use Magento\Sales\Api\Data\ShipmentTrackCreationInterface;
-use Magento\Sales\Model\Order\ShipmentFactory;
-use Magento\Sales\Model\Order\ShipmentDocumentFactory;
 use Magento\Sales\Model\Order;
-use Magento\Sales\Api\Data\ShipmentInterface;
-use Magento\Sales\Model\Order\Shipment\TrackFactory;
 use Magento\Sales\Model\Order\Shipment\Track;
-use Magento\Framework\EntityManager\HydratorInterface;
+use Magento\Sales\Model\Order\Shipment\TrackFactory;
+use Magento\Sales\Model\Order\ShipmentDocumentFactory;
+use Magento\Sales\Model\Order\ShipmentFactory;
 
 /**
  * Class ShipmentDocumentFactoryTest

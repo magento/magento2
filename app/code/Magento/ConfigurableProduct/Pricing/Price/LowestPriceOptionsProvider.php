@@ -6,9 +6,9 @@
 namespace Magento\ConfigurableProduct\Pricing\Price;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderInterface;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 
 /**
  * Retrieve list of products where each product contains lower price than others at least for one possible price type

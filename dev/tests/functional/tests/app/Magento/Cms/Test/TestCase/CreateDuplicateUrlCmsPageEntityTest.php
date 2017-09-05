@@ -6,10 +6,9 @@
 
 namespace Magento\Cms\Test\TestCase;
 
-use Magento\Config\Test\Fixture\ConfigData;
-use Magento\Cms\Test\Fixture\CmsPage as CmsPageFixture;
 use Magento\Cms\Test\Page\Adminhtml\CmsPageIndex;
 use Magento\Cms\Test\Page\Adminhtml\CmsPageNew;
+use Magento\Config\Test\Fixture\ConfigData;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
 

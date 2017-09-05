@@ -5,9 +5,6 @@
  */
 namespace Magento\Store\Api;
 
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Store\Model\StoreIsInactiveException;
-
 /**
  * Store config manager interface
  *

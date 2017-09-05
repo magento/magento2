@@ -5,8 +5,6 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Transactions;
 
-use Magento\TestFramework\TestCase\AbstractBackendController;
-
 class FetchTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     public function setUp()

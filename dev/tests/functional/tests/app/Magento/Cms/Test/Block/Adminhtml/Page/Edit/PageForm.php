@@ -87,7 +87,7 @@ class PageForm extends FormTabs
         if ($tabHeader->isVisible() && !strpos($tabHeader->getAttribute('class'), '_show')) {
             $tabHeader->hover();
             $tabHeader->click();
-        };
+        }
         return $this;
     }
 

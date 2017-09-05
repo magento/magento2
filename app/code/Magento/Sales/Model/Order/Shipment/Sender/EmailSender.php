@@ -5,9 +5,9 @@
  */
 namespace Magento\Sales\Model\Order\Shipment\Sender;
 
+use Magento\Framework\DataObject;
 use Magento\Sales\Model\Order\Email\Sender;
 use Magento\Sales\Model\Order\Shipment\SenderInterface;
-use Magento\Framework\DataObject;
 
 /**
  * Email notification sender for Shipment.

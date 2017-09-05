@@ -9,12 +9,12 @@ use Magento\Directory\Model\CountryFactory;
 use Magento\Directory\Model\RegionFactory;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Json\Helper\Data;
+use Magento\Tax\Api\Data\TaxRateInterface;
 use Magento\Tax\Api\Data\TaxRateInterfaceFactory;
 use Magento\Tax\Api\TaxRateRepositoryInterface;
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Tax\Api\Data\TaxRateInterface;
-use Magento\Tax\Model\TaxRuleFixtureFactory;
 use Magento\Tax\Model\Rate\Provider as RatesProvider;
+use Magento\Tax\Model\TaxRuleFixtureFactory;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Tests for Tax Rules controllers.

@@ -5,16 +5,16 @@
  */
 namespace Magento\Sales\Model\Order\Email\Sender;
 
+use Magento\Framework\DataObject;
+use Magento\Framework\Event\ManagerInterface;
 use Magento\Payment\Helper\Data as PaymentHelper;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Address\Renderer;
 use Magento\Sales\Model\Order\Email\Container\InvoiceIdentity;
 use Magento\Sales\Model\Order\Email\Container\Template;
 use Magento\Sales\Model\Order\Email\Sender;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\ResourceModel\Order\Invoice as InvoiceResource;
-use Magento\Sales\Model\Order\Address\Renderer;
-use Magento\Framework\Event\ManagerInterface;
-use Magento\Framework\DataObject;
 
 /**
  * Class InvoiceSender

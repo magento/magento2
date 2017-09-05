@@ -11,12 +11,12 @@ use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndex;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndexEdit;
+use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\TestCase\Injectable;
 use Magento\Review\Test\Fixture\Review;
 use Magento\Review\Test\Page\Adminhtml\RatingEdit;
 use Magento\Review\Test\Page\Adminhtml\RatingIndex;
 use Magento\Review\Test\Page\Adminhtml\ReviewEdit;
-use Magento\Mtf\Client\BrowserInterface;
-use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Preconditions:

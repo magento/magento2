@@ -6,7 +6,6 @@
 
 namespace Magento\CurrencySymbol\Test\TestCase;
 
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\CurrencySymbol\Test\Fixture\CurrencySymbolEntity;
 
 /**

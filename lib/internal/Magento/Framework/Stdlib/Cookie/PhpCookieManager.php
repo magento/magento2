@@ -8,9 +8,9 @@ namespace Magento\Framework\Stdlib\Cookie;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
-use Magento\Framework\Stdlib\CookieManagerInterface;
-use Magento\Framework\Phrase;
 use Magento\Framework\HTTP\Header as HttpHeader;
+use Magento\Framework\Phrase;
+use Magento\Framework\Stdlib\CookieManagerInterface;
 use Psr\Log\LoggerInterface;
 
 /**

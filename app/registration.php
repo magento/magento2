@@ -26,7 +26,9 @@ function main()
         if ($files === false) {
             throw new RuntimeException("glob(): error with '$baseDir$globPattern'");
         }
-        array_map(function ($file) { require_once $file; }, $files);
+        array_map(function ($file) {
+            require_once $file;
+        }, $files);
     }
 }
 

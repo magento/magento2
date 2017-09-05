@@ -86,7 +86,7 @@ class JobDbRollbackTest extends \PHPUnit\Framework\TestCase
      */
     public function testExceptionOnExecute()
     {
-        $this->backupRollbackFactory->expects($this->once())->method('create')->willThrowException(new \Exception);
+        $this->backupRollbackFactory->expects($this->once())->method('create')->willThrowException(new \Exception());
         $this->jobDbRollback->execute();
     }
 }

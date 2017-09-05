@@ -6,14 +6,14 @@
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Websites;
-use Magento\Store\Api\WebsiteRepositoryInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\GroupRepositoryInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Store\Model\Website;
-use Magento\Store\Model\Store as StoreView;
+use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\Store\Model\Group;
+use Magento\Store\Model\Store as StoreView;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\Website;
 
 /**
  * Class WebsitesTest

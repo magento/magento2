@@ -5,10 +5,10 @@
  */
 namespace Magento\GroupedProduct\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Catalog\Model\Locator\LocatorInterface;
-use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\CustomOptions as CustomOptionsModifier;
+use Magento\Framework\Stdlib\ArrayManager;
 
 /**
  * Data provider that customizes Customizable Options for Grouped product

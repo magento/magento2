@@ -6,9 +6,9 @@
 
 namespace Magento\Customer\Test\Constraint;
 
-use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndex;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndexEdit;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Asserts that "Back" button works on customer edit page.

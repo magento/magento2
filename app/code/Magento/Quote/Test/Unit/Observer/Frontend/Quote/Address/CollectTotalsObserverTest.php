@@ -376,6 +376,5 @@ class CollectTotalsObserverTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($this->customerMock);
         $this->model->execute($this->observerMock);
-
     }
 }

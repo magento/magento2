@@ -7,7 +7,6 @@
 namespace Magento\Tax\Test\Handler\TaxClass;
 
 use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Mtf\Handler\Webapi as AbstractWebapi;
 
 /**

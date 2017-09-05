@@ -5,13 +5,13 @@
  */
 
 use Magento\Payment\Helper\Data;
+use Magento\Sales\Api\ShipmentItemRepositoryInterface;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Item as OrderItem;
 use Magento\Sales\Model\Order\Shipment;
 use Magento\Sales\Model\Order\Shipment\Item;
 use Magento\Sales\Model\Order\Shipment\ItemFactory;
-use Magento\Sales\Model\Order\Item as OrderItem;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Sales\Api\ShipmentItemRepositoryInterface;
 
 require 'default_rollback.php';
 require __DIR__ . '/order.php';

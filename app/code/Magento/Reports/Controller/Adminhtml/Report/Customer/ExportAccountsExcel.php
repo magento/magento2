@@ -7,8 +7,8 @@
 namespace Magento\Reports\Controller\Adminhtml\Report\Customer;
 
 use Magento\Backend\Block\Widget\Grid\ExportInterface;
-use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ResponseInterface;
 
 class ExportAccountsExcel extends \Magento\Reports\Controller\Adminhtml\Report\Customer
 {

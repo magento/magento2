@@ -5,8 +5,6 @@
  */
 namespace Magento\ImportExport\Block\Adminhtml\Grid\Column\Renderer;
 
-use Magento\ImportExport\Model\Import;
-
 /**
  * Backup grid item renderer
  */
@@ -20,7 +18,7 @@ class Download extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
      */
     public function _getValue(\Magento\Framework\DataObject $row)
     {
-        return '<p> ' . $row->getData('imported_file') .  '</p><a href="'
+        return '<p> ' . $row->getData('imported_file') . '</p><a href="'
         . $this->getUrl('*/*/download', ['filename' => $row->getData('imported_file')]) . '">'
         . __('Download')
         . '</a>';

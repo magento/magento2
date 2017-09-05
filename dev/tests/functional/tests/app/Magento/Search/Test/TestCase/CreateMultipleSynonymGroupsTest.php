@@ -6,8 +6,8 @@
 
 namespace Magento\Search\Test\TestCase;
 
-use Magento\Mtf\TestCase\Injectable;
 use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Steps:

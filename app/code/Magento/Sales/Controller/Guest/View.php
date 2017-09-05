@@ -6,9 +6,9 @@
 namespace Magento\Sales\Controller\Guest;
 
 use Magento\Framework\App\Action;
-use Magento\Sales\Helper\Guest as GuestHelper;
-use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\View\Result\PageFactory;
+use Magento\Sales\Helper\Guest as GuestHelper;
 
 class View extends Action\Action
 {

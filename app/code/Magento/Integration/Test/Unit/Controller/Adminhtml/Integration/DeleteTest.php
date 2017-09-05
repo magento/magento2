@@ -8,9 +8,9 @@
 
 namespace Magento\Integration\Test\Unit\Controller\Adminhtml\Integration;
 
+use Magento\Framework\Exception\IntegrationException;
 use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
 use Magento\Integration\Model\Integration as IntegrationModel;
-use Magento\Framework\Exception\IntegrationException;
 
 class DeleteTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\IntegrationTest
 {

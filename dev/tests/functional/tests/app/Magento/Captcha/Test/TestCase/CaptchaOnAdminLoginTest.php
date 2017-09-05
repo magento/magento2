@@ -7,12 +7,12 @@
 namespace Magento\Captcha\Test\TestCase;
 
 use Magento\Backend\Test\Page\AdminAuthLogin;
+use Magento\Backend\Test\Page\Adminhtml\SystemConfigEdit;
+use Magento\Captcha\Test\Constraint\AssertCaptchaFieldOnBackend;
+use Magento\Captcha\Test\Page\Captcha\AdminAuthLoginWithCaptcha;
 use Magento\Mtf\TestCase\Injectable;
 use Magento\Mtf\TestStep\TestStepFactory;
 use Magento\User\Test\Fixture\User;
-use Magento\Captcha\Test\Constraint\AssertCaptchaFieldOnBackend;
-use Magento\Captcha\Test\Page\Captcha\AdminAuthLoginWithCaptcha;
-use Magento\Backend\Test\Page\Adminhtml\SystemConfigEdit;
 
 /**
  * Check CAPTCHA on Admin Login Page.

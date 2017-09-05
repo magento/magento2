@@ -371,7 +371,7 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
                 ->getDataFieldConfig('attribute_set_id')['source']
                 ->getAttributeSet()
                 ->getAttributeSetId();
-        } else if ($this->fixture->hasData('attribute_set_id')
+        } elseif ($this->fixture->hasData('attribute_set_id')
             && !empty($this->fixture->getDataFieldConfig('attribute_set_id')['source'])
             && $this->fixture->getDataFieldConfig('attribute_set_id')['source']->getAttributeSet()
         ) {

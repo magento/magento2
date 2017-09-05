@@ -92,7 +92,7 @@ class DiscountErrors implements \Magento\Tax\Model\System\Message\NotificationIn
             );
             $messageDetails .= "</p>";
         }
-        
+
         return $messageDetails;
     }
 

@@ -8,8 +8,8 @@
 
 namespace Magento\TestModuleMSC\Model\Data;
 
-use Magento\TestModuleMSC\Api\Data\CustomAttributeDataObjectInterface;
 use Magento\Framework\Api\AbstractExtensibleObject;
+use Magento\TestModuleMSC\Api\Data\CustomAttributeDataObjectInterface;
 
 /**
  * Class CustomAttributeDataObject

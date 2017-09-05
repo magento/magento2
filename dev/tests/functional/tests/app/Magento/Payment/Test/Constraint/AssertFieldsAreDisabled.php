@@ -6,8 +6,8 @@
 
 namespace Magento\Payment\Test\Constraint;
 
-use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Backend\Test\Page\Adminhtml\SystemConfigEditSectionPayment;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertFieldsAreDisabled

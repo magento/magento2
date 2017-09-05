@@ -6,10 +6,10 @@
 namespace Magento\Braintree\Test\Unit\Gateway\Command;
 
 use Braintree\IsNode;
-use Braintree\MultipleValueNode;
-use Braintree\TextNode;
 use Magento\Braintree\Gateway\Command\CaptureStrategyCommand;
 use Magento\Braintree\Gateway\Helper\SubjectReader;
+use Magento\Braintree\Model\Adapter\BraintreeAdapter;
+use Magento\Braintree\Model\Adapter\BraintreeSearchAdapter;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\SearchCriteria;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -20,9 +20,6 @@ use Magento\Payment\Gateway\Data\PaymentDataObject;
 use Magento\Sales\Api\TransactionRepositoryInterface;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Order\Payment\Transaction;
-use Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\CollectionFactory;
-use Magento\Braintree\Model\Adapter\BraintreeAdapter;
-use Magento\Braintree\Model\Adapter\BraintreeSearchAdapter;
 
 /**
  * Class CaptureStrategyCommandTest

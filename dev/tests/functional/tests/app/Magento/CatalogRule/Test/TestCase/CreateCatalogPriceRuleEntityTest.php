@@ -6,10 +6,9 @@
 
 namespace Magento\CatalogRule\Test\TestCase;
 
-use Magento\Customer\Test\Fixture\Customer;
-use Magento\CatalogRule\Test\Fixture\CatalogRule;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
-use Magento\Customer\Test\Fixture\CustomerGroup;
+use Magento\CatalogRule\Test\Fixture\CatalogRule;
+use Magento\Customer\Test\Fixture\Customer;
 
 /**
  * Steps:

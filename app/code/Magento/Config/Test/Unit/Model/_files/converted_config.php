@@ -75,8 +75,7 @@ return [
                                                     'id' => 'field_3_1_1',
                                                     'translate' => 'label',
                                                     'showInWebsite' => '1',
-                                                    'backend_model' =>
-                                                        \Magento\Config\Model\Config\Backend\Encrypted::class,
+                                                    'backend_model' => \Magento\Config\Model\Config\Backend\Encrypted::class,
                                                     'type' => 'text',
                                                     'label' => 'Field 3.1.1',
                                                     '_elementType' => 'field',

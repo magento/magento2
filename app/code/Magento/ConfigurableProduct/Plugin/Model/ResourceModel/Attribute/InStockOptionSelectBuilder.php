@@ -20,7 +20,7 @@ class InStockOptionSelectBuilder
      * @var Status
      */
     private $stockStatusResource;
-    
+
     /**
      * @param Status $stockStatusResource
      */
@@ -48,7 +48,7 @@ class InStockOptionSelectBuilder
             'stock.stock_status = ?',
             \Magento\CatalogInventory\Model\Stock\Status::STATUS_IN_STOCK
         );
-        
+
         return $select;
     }
 }

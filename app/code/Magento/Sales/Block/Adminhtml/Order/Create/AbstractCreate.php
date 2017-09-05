@@ -5,9 +5,9 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create;
 
-use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Pricing\Price\FinalPrice;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * Adminhtml sales order create abstract block

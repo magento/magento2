@@ -5,7 +5,6 @@
  */
 namespace Magento\BundleImportExport\Model\Import\Product\Type;
 
-use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\ImportExport\Model\Import;
 

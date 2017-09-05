@@ -8,10 +8,10 @@
 
 namespace Magento\Sales\Test\Unit\Model\Order;
 
-use Magento\Sales\Model\ResourceModel\OrderFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item\CollectionFactory;
 use Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item\Collection as ItemCollection;
+use Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item\CollectionFactory;
+use Magento\Sales\Model\ResourceModel\OrderFactory;
 
 /**
  * Class CreditmemoTest

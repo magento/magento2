@@ -8,9 +8,9 @@ namespace Magento\Widget\Test\Constraint;
 
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 use Magento\Cms\Test\Page\CmsIndex;
-use Magento\Widget\Test\Fixture\Widget;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Util\Command\Cli\Cache;
+use Magento\Widget\Test\Fixture\Widget;
 
 /**
  * Check that created widget displayed on frontend in Catalog.

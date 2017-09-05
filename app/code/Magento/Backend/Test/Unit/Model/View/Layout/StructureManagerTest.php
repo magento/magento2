@@ -7,9 +7,9 @@
 namespace Magento\Backend\Test\Unit\Model\View\Layout;
 
 use Magento\Backend\Model\View\Layout\StructureManager;
-use Magento\Framework\View\Layout\ScheduledStructure;
-use Magento\Framework\View\Layout\Data\Structure;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Layout\Data\Structure;
+use Magento\Framework\View\Layout\ScheduledStructure;
 
 /**
  * Class StructureManagerTest

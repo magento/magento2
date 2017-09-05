@@ -6,10 +6,10 @@
 
 namespace Magento\Setup\Console\Command;
 
+use Magento\Framework\Setup\Lists;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Command\Command;
-use Magento\Framework\Setup\Lists;
 
 /**
  * Command prints list of available currencies

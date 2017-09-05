@@ -6,8 +6,8 @@
 
 namespace Magento\Variable\Test\Constraint;
 
-use Magento\Variable\Test\Page\Adminhtml\SystemVariableIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Variable\Test\Page\Adminhtml\SystemVariableIndex;
 
 /**
  * Assert that success delete message is correct after Custom System Variable deleted.

@@ -5,8 +5,8 @@
  */
 namespace Magento\Catalog\Model\Attribute\Backend;
 
-use Magento\Framework\View\Model\Layout\Update\ValidatorFactory;
 use Magento\Eav\Model\Entity\Attribute\Exception;
+use Magento\Framework\View\Model\Layout\Update\ValidatorFactory;
 
 /**
  * Layout update attribute backend

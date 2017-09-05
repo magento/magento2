@@ -6,11 +6,10 @@
 
 namespace Magento\Setup\Model;
 
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Magento\Setup\Module\ResourceFactory;
 use Magento\Framework\App\ErrorHandler;
-use Magento\Framework\App\State\CleanupFiles;
 use Magento\Framework\Setup\LoggerInterface;
+use Magento\Setup\Module\ResourceFactory;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

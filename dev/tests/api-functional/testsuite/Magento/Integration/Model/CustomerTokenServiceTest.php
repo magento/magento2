@@ -7,15 +7,14 @@
 namespace Magento\Integration\Model;
 
 use Magento\Customer\Api\AccountManagementInterface;
-use Magento\Framework\Exception\InputException;
+use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
+use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Integration\Model\Oauth\Token as TokenModel;
+use Magento\Integration\Model\Oauth\Token\RequestLog\Config as TokenThrottlerConfig;
+use Magento\Integration\Model\ResourceModel\Oauth\Token\CollectionFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\User\Model\User as UserModel;
-use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
-use Magento\Integration\Model\ResourceModel\Oauth\Token\CollectionFactory;
-use Magento\Integration\Model\Oauth\Token\RequestLog\Config as TokenThrottlerConfig;
-use Magento\Integration\Api\CustomerTokenServiceInterface;
 
 /**
  * api-functional test for \Magento\Integration\Model\CustomerTokenService.

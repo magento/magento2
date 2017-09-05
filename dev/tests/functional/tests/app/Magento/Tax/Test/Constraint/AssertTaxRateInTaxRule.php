@@ -6,10 +6,10 @@
 
 namespace Magento\Tax\Test\Constraint;
 
-use Magento\Tax\Test\Fixture\TaxRate;
 use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\Tax\Test\Page\Adminhtml\TaxRuleNew;
+use Magento\Tax\Test\Fixture\TaxRate;
 use Magento\Tax\Test\Page\Adminhtml\TaxRuleIndex;
+use Magento\Tax\Test\Page\Adminhtml\TaxRuleNew;
 
 /**
  * Assert that required tax rate is present in tax rule.

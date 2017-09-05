@@ -6,13 +6,13 @@
 
 namespace Magento\Sales\Test\TestCase;
 
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\TestCase\Injectable;
 use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Sales\Test\Fixture\OrderStatus;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Sales\Test\Page\Adminhtml\OrderStatusEdit;
 use Magento\Sales\Test\Page\Adminhtml\OrderStatusIndex;
-use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Preconditions:

@@ -7,7 +7,6 @@ namespace Magento\Deploy\Test\Unit\Console\Command;
 
 use Magento\Deploy\Console\Command\SetModeCommand;
 use Symfony\Component\Console\Tester\CommandTester;
-use Magento\Framework\App\State;
 
 /**
  * @package Magento\Deploy\Test\Unit\Console\Command

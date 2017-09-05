@@ -6,10 +6,10 @@
 namespace Magento\Indexer\Console\Command;
 
 use Magento\Backend\App\Area\FrontNameResolver;
+use Magento\Framework\App\ObjectManagerFactory;
+use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Symfony\Component\Console\Command\Command;
-use Magento\Framework\Indexer\IndexerInterface;
-use Magento\Framework\App\ObjectManagerFactory;
 
 /**
  * An Abstract class for Indexer related commands.

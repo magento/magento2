@@ -7,10 +7,10 @@
 namespace Magento\Quote\Model\Quote\Item;
 
 use Magento\Framework\DataObject\Copy;
-use Magento\Quote\Model\Quote\Item;
 use Magento\Quote\Model\Quote\Address\Item as AddressItem;
-use Magento\Sales\Api\Data\OrderItemInterfaceFactory as OrderItemFactory;
+use Magento\Quote\Model\Quote\Item;
 use Magento\Sales\Api\Data\OrderItemInterface;
+use Magento\Sales\Api\Data\OrderItemInterfaceFactory as OrderItemFactory;
 
 /**
  * Class ToOrderItem

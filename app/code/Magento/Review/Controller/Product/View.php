@@ -5,8 +5,8 @@
  */
 namespace Magento\Review\Controller\Product;
 
-use Magento\Review\Controller\Product as ProductController;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Review\Controller\Product as ProductController;
 use Magento\Review\Model\Review;
 
 class View extends ProductController

@@ -5,11 +5,11 @@
  */
 namespace Magento\Config\Test\Unit\App\Config\Type\System;
 
-use Magento\Framework\App\Config\ConfigSourceInterface;
-use Magento\Store\Model\Config\Processor\Fallback;
-use Magento\Framework\App\Config\Spi\PreProcessorInterface;
-use Magento\Framework\App\Config\Spi\PostProcessorInterface;
 use Magento\Config\App\Config\Type\System\Reader;
+use Magento\Framework\App\Config\ConfigSourceInterface;
+use Magento\Framework\App\Config\Spi\PostProcessorInterface;
+use Magento\Framework\App\Config\Spi\PreProcessorInterface;
+use Magento\Store\Model\Config\Processor\Fallback;
 
 class ReaderTest extends \PHPUnit\Framework\TestCase
 {

@@ -5,8 +5,8 @@
  */
 namespace Magento\Framework\Communication\Config;
 
-use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\Reflection\MethodsMap;
+use Magento\Framework\Reflection\TypeProcessor;
 
 /**
  * Communication configuration validator.

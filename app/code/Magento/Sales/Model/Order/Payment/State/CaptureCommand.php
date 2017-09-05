@@ -24,7 +24,7 @@ class CaptureCommand implements CommandInterface
     public function __construct(StatusResolver $statusResolver = null)
     {
         $this->statusResolver = $statusResolver
-            ? : ObjectManager::getInstance()->get(StatusResolver::class);
+            ?: ObjectManager::getInstance()->get(StatusResolver::class);
     }
 
     /**

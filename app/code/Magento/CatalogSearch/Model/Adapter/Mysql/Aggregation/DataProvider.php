@@ -16,7 +16,6 @@ use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderInterface;
 use Magento\Framework\Search\Request\BucketInterface;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

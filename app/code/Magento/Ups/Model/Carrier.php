@@ -8,14 +8,14 @@
 
 namespace Magento\Ups\Model;
 
-use Magento\Quote\Model\Quote\Address\RateResult\Error;
+use Magento\Framework\Xml\Security;
 use Magento\Quote\Model\Quote\Address\RateRequest;
+use Magento\Quote\Model\Quote\Address\RateResult\Error;
 use Magento\Shipping\Model\Carrier\AbstractCarrierOnline;
 use Magento\Shipping\Model\Carrier\CarrierInterface;
 use Magento\Shipping\Model\Rate\Result;
 use Magento\Shipping\Model\Simplexml\Element;
 use Magento\Ups\Helper\Config;
-use Magento\Framework\Xml\Security;
 
 /**
  * UPS shipping implementation

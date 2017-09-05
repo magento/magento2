@@ -7,7 +7,6 @@
 namespace Magento\Catalog\Api;
 
 use Magento\TestFramework\TestCase\WebapiAbstract;
-use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
 
 /**
  * BasePriceStorage test.
@@ -146,8 +145,7 @@ class BasePriceStorageTest extends WebapiAbstract
                 ]
             ],
             2 => [
-                'message' =>
-                    'Requested store is not found. Row ID: SKU = not_existing_sku, Store ID: 9999.',
+                'message' => 'Requested store is not found. Row ID: SKU = not_existing_sku, Store ID: 9999.',
                 'parameters' => [
                     'not_existing_sku',
                     '9999'

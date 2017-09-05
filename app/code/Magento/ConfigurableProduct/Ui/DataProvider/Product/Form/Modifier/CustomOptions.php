@@ -5,11 +5,11 @@
  */
 namespace Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Catalog\Model\Locator\LocatorInterface;
-use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\CustomOptions as CustomOptionsModifier;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableProductType;
+use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Ui\Component\Container;
 
 /**

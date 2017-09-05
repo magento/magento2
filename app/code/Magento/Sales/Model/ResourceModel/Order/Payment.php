@@ -5,7 +5,6 @@
  */
 namespace Magento\Sales\Model\ResourceModel\Order;
 
-use Magento\Framework\App\ResourceConnection;
 use Magento\Sales\Model\ResourceModel\EntityAbstract as SalesResource;
 
 /**

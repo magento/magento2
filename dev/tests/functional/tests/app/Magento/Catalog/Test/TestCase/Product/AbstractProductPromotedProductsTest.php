@@ -6,8 +6,8 @@
 
 namespace Magento\Catalog\Test\TestCase\Product;
 
-use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
+use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Fixture\FixtureFactory;

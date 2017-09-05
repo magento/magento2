@@ -5,8 +5,8 @@
  */
 namespace Magento\Framework\Data\Test\Unit;
 
-use \Magento\Framework\Data\Tree\Node;
-use \Magento\Framework\Data\Tree;
+use Magento\Framework\Data\Tree;
+use Magento\Framework\Data\Tree\Node;
 
 /**
  * Tests for \Magento\Framework\Data\FormFactory

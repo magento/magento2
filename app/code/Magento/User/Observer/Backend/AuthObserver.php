@@ -10,12 +10,12 @@ use Magento\Backend\Model\Auth\Session;
 use Magento\Backend\Model\UrlInterface;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Event\Observer as EventObserver;
+use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Exception\State\UserLockedException;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\User\Model\Backend\Config\ObserverConfig;
 use Magento\User\Model\ResourceModel\User as ResourceUser;
 use Magento\User\Model\User;
-use Magento\Framework\Event\ObserverInterface;
 use Magento\User\Model\UserFactory;
 
 /**
@@ -168,7 +168,7 @@ class AuthObserver implements ObserverInterface
 
         $newFirstFailureDate = false;
         $updateLockExpires = false;
-        $lockThreshInterval = new \DateInterval('PT' . $lockThreshold.'S');
+        $lockThreshInterval = new \DateInterval('PT' . $lockThreshold . 'S');
         // set first failure date when this is first failure or last first failure expired
         if (1 === $failuresNum || !$firstFailureDate || $now->diff($firstFailureDate) > $lockThreshInterval) {
             $newFirstFailureDate = $now;

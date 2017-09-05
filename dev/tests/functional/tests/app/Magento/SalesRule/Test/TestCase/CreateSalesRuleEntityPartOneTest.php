@@ -6,15 +6,7 @@
 
 namespace Magento\SalesRule\Test\TestCase;
 
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Customer\Test\Fixture\Customer;
-use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Mtf\TestCase\Injectable;
-use Magento\SalesRule\Test\Block\Adminhtml\Promo\Quote\Edit\Section\ManageCouponCode;
-use Magento\SalesRule\Test\Fixture\SalesRule;
-use Magento\SalesRule\Test\Page\Adminhtml\PromoQuoteEdit;
-use Magento\SalesRule\Test\Page\Adminhtml\PromoQuoteIndex;
-use Magento\SalesRule\Test\Page\Adminhtml\PromoQuoteNew;
 
 /**
  * Precondition:

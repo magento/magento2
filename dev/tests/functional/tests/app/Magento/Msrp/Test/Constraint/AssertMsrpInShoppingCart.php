@@ -6,13 +6,13 @@
 
 namespace Magento\Msrp\Test\Constraint;
 
-use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\Cms\Test\Page\CmsIndex;
+use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
-use Magento\Mtf\Fixture\InjectableFixture;
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Checkout\Test\Page\CheckoutCart;
+use Magento\Cms\Test\Page\CmsIndex;
+use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
  * Assert product MAP related data in Shopping Cart.

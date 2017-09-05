@@ -5,10 +5,10 @@
  */
 namespace Magento\Catalog\Model\Product\Attribute;
 
+use Magento\Catalog\Api\AttributeSetFinderInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
-use Magento\Catalog\Api\AttributeSetFinderInterface;
 use Magento\Framework\DB\Select;
 
 class AttributeSetFinder implements AttributeSetFinderInterface

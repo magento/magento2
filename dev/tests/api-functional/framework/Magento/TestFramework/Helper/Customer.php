@@ -8,8 +8,8 @@ namespace Magento\TestFramework\Helper;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Data\Customer as CustomerData;
 use Magento\Framework\Reflection\DataObjectProcessor;
-use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Framework\Webapi\Rest\Request as RestRequest;
+use Magento\TestFramework\TestCase\WebapiAbstract;
 
 class Customer extends WebapiAbstract
 {

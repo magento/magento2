@@ -5,14 +5,14 @@
  */
 namespace Magento\Bundle\Test\Unit\Model\ResourceModel\Selection;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Store\Api\Data\StoreInterface;
-use Magento\Framework\Validator\UniversalFactory;
+use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
 use Magento\Eav\Model\Entity\AbstractEntity;
 use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
 use Magento\Framework\DB\Select;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Validator\UniversalFactory;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class CollectionTest.

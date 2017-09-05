@@ -5,14 +5,14 @@
  */
 namespace Magento\CatalogSearch\Model\Search\SelectContainer;
 
-use Magento\CatalogSearch\Model\Search\QueryChecker\FullTextSearchCheck;
 use Magento\CatalogSearch\Model\Search\CustomAttributeFilterCheck;
-use Magento\CatalogSearch\Model\Search\FiltersExtractor;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Search\RequestInterface;
-use Magento\Framework\App\ResourceConnection;
-use Magento\Store\Model\ScopeInterface;
 use Magento\CatalogSearch\Model\Search\FilterMapper\VisibilityFilter;
+use Magento\CatalogSearch\Model\Search\FiltersExtractor;
+use Magento\CatalogSearch\Model\Search\QueryChecker\FullTextSearchCheck;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Search\RequestInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Class SelectContainerBuilder

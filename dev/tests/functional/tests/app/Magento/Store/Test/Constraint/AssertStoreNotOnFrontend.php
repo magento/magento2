@@ -7,8 +7,8 @@
 namespace Magento\Store\Test\Constraint;
 
 use Magento\Cms\Test\Page\CmsIndex;
-use Magento\Store\Test\Fixture\Store;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Store\Test\Fixture\Store;
 
 /**
  * Class AssertStoreNotOnFrontend

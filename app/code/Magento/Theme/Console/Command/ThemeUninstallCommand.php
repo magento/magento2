@@ -12,17 +12,17 @@ use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\App\State\CleanupFiles;
 use Magento\Framework\Composer\ComposerInformation;
 use Magento\Framework\Composer\DependencyChecker;
+use Magento\Framework\Setup\BackupRollbackFactory;
 use Magento\Theme\Model\Theme\Data\Collection;
+use Magento\Theme\Model\Theme\ThemeDependencyChecker;
 use Magento\Theme\Model\Theme\ThemePackageInfo;
 use Magento\Theme\Model\Theme\ThemeUninstaller;
-use Magento\Theme\Model\Theme\ThemeDependencyChecker;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputArgument;
-use Magento\Framework\Setup\BackupRollbackFactory;
 use Magento\Theme\Model\ThemeValidator;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Command for uninstalling theme and backup-code feature

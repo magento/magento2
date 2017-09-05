@@ -8,12 +8,11 @@ namespace Magento\Catalog\Model\ResourceModel\Attribute;
 
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\EntityManager\EntityMetadataInterface;
+use Magento\Framework\Model\Entity\ScopeInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Catalog\Model\ResourceModel\Eav\Attribute as CatalogEavAttribute;
 use Magento\Store\Model\Website;
-use Magento\Framework\Model\Entity\ScopeInterface;
 
 /**
  * Builds scope-related conditions for catalog attributes

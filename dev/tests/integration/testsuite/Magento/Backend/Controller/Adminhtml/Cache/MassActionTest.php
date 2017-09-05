@@ -6,10 +6,10 @@
 namespace Magento\Backend\Controller\Adminhtml\Cache;
 
 use Magento\Framework\App\Cache\State;
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\TestFramework\App\State as AppState;
+use Magento\TestFramework\Helper\Bootstrap;
 
 class MassActionTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
@@ -136,7 +136,7 @@ class MassActionTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
     protected function getCacheStates()
     {
         $configFilePool = new ConfigFilePool();
-        $configPath = Bootstrap::getInstance()->getAppTempDir() . '/'. DirectoryList::CONFIG .'/'
+        $configPath = Bootstrap::getInstance()->getAppTempDir() . '/' . DirectoryList::CONFIG . '/'
             . $configFilePool->getPath($configFilePool::APP_ENV);
         $configData = eval(str_replace('<?php', '', file_get_contents($configPath)));
         return $configData[State::CACHE_KEY];

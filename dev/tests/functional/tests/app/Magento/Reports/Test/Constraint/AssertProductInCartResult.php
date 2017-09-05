@@ -7,8 +7,8 @@
 namespace Magento\Reports\Test\Constraint;
 
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
-use Magento\Reports\Test\Page\Adminhtml\ShopCartProductReport;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Reports\Test\Page\Adminhtml\ShopCartProductReport;
 
 /**
  * Class AssertProductInCartResult

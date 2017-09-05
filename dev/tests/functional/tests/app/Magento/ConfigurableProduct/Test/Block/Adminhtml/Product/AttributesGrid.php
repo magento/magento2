@@ -7,7 +7,6 @@
 namespace Magento\ConfigurableProduct\Test\Block\Adminhtml\Product;
 
 use Magento\Ui\Test\Block\Adminhtml\DataGrid;
-use Magento\Mtf\Client\Locator;
 
 class AttributesGrid extends DataGrid
 {

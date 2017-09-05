@@ -5,8 +5,8 @@
  */
 namespace Magento\Indexer\Test\TestStep;
 
-use Magento\Mtf\Util\Command\Cli\Indexer;
 use Magento\Mtf\TestStep\TestStepInterface;
+use Magento\Mtf\Util\Command\Cli\Indexer;
 
 /**
  * Run reindex process step.

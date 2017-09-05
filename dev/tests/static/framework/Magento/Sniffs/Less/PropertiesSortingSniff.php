@@ -5,8 +5,8 @@
  */
 namespace Magento\Sniffs\Less;
 
-use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 
 /**
  * Class PropertiesSortingSniff
@@ -100,7 +100,6 @@ class PropertiesSortingSniff implements Sniff
      */
     private function validatePropertiesSorting(File $phpcsFile, $stackPtr, array $properties)
     {
-
         $originalProperties = $properties;
         sort($properties);
 

@@ -38,7 +38,6 @@ $payment->setMethod(Config::METHOD_PAYFLOWLINK)
         'secure_silent_post_hash' => 'cf7i85d01ed7c92223031afb4rdl2f1f'
     ]);
 
-
 /** @var OrderInterface $order */
 $order = $objManager->create(OrderInterface::class);
 $order->setIncrementId('000000045')

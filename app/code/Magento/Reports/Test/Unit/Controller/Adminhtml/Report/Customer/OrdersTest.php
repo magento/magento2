@@ -6,9 +6,9 @@
 
 namespace Magento\Reports\Test\Unit\Controller\Adminhtml\Report\Customer;
 
-use Magento\Reports\Controller\Adminhtml\Report\Customer\Orders;
 use Magento\Framework\DataObject;
 use Magento\Framework\Phrase;
+use Magento\Reports\Controller\Adminhtml\Report\Customer\Orders;
 
 class OrdersTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Report\AbstractControllerTest
 {

@@ -6,8 +6,8 @@
 
 namespace Magento\User\Test\Constraint;
 
-use Magento\User\Test\Page\Adminhtml\UserEdit;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\User\Test\Page\Adminhtml\UserEdit;
 
 /**
  * Class AssertUserDuplicateMessage

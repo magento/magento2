@@ -5,13 +5,12 @@
  */
 namespace Magento\Setup\Console\Command;
 
-use Magento\Framework\Code\GeneratedFiles;
-use Magento\Setup\Model\ObjectManagerProvider;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Code\GeneratedFiles;
 use Magento\Framework\Module\Status;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
 
 abstract class AbstractModuleManageCommand extends AbstractModuleCommand
 {

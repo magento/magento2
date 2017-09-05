@@ -6,11 +6,11 @@
 
 namespace Magento\Checkout\Test\Constraint;
 
-use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\Mtf\Fixture\InjectableFixture;
 use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 use Magento\Cms\Test\Page\CmsIndex;
+use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
  * Checks that "Add to Cart" button is visible on category page.

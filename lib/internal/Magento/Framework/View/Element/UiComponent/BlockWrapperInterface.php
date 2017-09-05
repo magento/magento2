@@ -5,8 +5,8 @@
  */
 namespace Magento\Framework\View\Element\UiComponent;
 
-use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\Element\BlockInterface;
+use Magento\Framework\View\Element\UiComponentInterface;
 
 /**
  * Interface BlockWrapperInterface

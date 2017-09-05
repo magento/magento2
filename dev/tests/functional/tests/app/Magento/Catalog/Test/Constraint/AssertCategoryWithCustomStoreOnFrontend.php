@@ -8,9 +8,9 @@ namespace Magento\Catalog\Test\Constraint;
 
 use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
+use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\Cms\Test\Page\CmsIndex;
 
 /**
  * Assert that category name is different on different store view.

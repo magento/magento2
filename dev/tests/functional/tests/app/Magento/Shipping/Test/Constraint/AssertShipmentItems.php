@@ -6,12 +6,12 @@
 
 namespace Magento\Shipping\Test\Constraint;
 
+use Magento\Mtf\ObjectManager;
+use Magento\Mtf\System\Event\EventManagerInterface;
 use Magento\Sales\Test\Constraint\AbstractAssertItems;
 use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Shipping\Test\Page\Adminhtml\SalesShipmentView;
 use Magento\Shipping\Test\Page\Adminhtml\ShipmentIndex;
-use Magento\Mtf\ObjectManager;
-use Magento\Mtf\System\Event\EventManagerInterface;
 
 /**
  * Assert shipment items on shipment view page.

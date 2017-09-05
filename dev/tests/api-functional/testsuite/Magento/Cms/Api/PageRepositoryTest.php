@@ -347,8 +347,7 @@ class PageRepositoryTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'Save',
             ],
         ];
-        $requestData = ['page' =>
-            [
+        $requestData = ['page' => [
                 PageInterface::IDENTIFIER => $identifier,
                 PageInterface::TITLE => 'Page title',
             ],

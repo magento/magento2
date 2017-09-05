@@ -9,7 +9,6 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Framework\Simplexml\Element;
 use Magento\Framework\Xml\Security;
-use Magento\Authorizenet\Model\Authorizenet;
 use Magento\Payment\Model\Method\Logger;
 
 /**
@@ -95,7 +94,6 @@ class TransactionService
      */
     protected function loadTransactionDetails(Authorizenet $context, $transactionId)
     {
-
         $requestBody = $this->getRequestBody(
             $context->getConfigData('login'),
             $context->getConfigData('trans_key'),

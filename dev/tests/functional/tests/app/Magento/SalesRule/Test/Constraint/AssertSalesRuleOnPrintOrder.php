@@ -6,8 +6,8 @@
 
 namespace Magento\SalesRule\Test\Constraint;
 
-use Magento\Sales\Test\Page\SalesGuestPrint;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Sales\Test\Page\SalesGuestPrint;
 
 /**
  * Assert that sales rule amount printed correctly on sales guest print page.

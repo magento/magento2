@@ -5,11 +5,11 @@
  */
 namespace Magento\Swatches\Block\LayeredNavigation;
 
-use Magento\Eav\Model\Entity\Attribute;
-use Magento\Catalog\Model\ResourceModel\Layer\Filter\AttributeFactory;
-use Magento\Framework\View\Element\Template;
-use Magento\Eav\Model\Entity\Attribute\Option;
 use Magento\Catalog\Model\Layer\Filter\Item as FilterItem;
+use Magento\Catalog\Model\ResourceModel\Layer\Filter\AttributeFactory;
+use Magento\Eav\Model\Entity\Attribute;
+use Magento\Eav\Model\Entity\Attribute\Option;
+use Magento\Framework\View\Element\Template;
 
 /**
  * Class RenderLayered Render Swatches at Layered Navigation

@@ -6,7 +6,7 @@
 
 namespace Magento\Wishlist\Test\Unit\Observer;
 
-use \Magento\Wishlist\Observer\CartUpdateBefore as Observer;
+use Magento\Wishlist\Observer\CartUpdateBefore as Observer;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

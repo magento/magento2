@@ -6,7 +6,6 @@
 
 namespace Magento\ConfigurableProduct\Test\Block\Adminhtml\Product;
 
-use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**

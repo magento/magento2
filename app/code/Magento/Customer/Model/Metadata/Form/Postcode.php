@@ -9,8 +9,8 @@ use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Customer\Model\Metadata\ElementFactory;
 use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\Locale\ResolverInterface;
-use Psr\Log\LoggerInterface as PsrLogger;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface as MagentoTimezone;
+use Psr\Log\LoggerInterface as PsrLogger;
 
 /**
  * Customer Address Postal/Zip Code Attribute Data Model

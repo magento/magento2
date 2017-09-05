@@ -331,7 +331,6 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
         $mappedItems = $this->mapToSitemapItem();
         $this->_sitemapItems = array_merge($sitemapItems, $mappedItems);
 
-
         $this->_tags = [
             self::TYPE_INDEX => [
                 self::OPEN_TAG_KEY => '<?xml version="1.0" encoding="UTF-8"?>' .

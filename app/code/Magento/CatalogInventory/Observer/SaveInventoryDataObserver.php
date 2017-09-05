@@ -6,13 +6,13 @@
 namespace Magento\CatalogInventory\Observer;
 
 use Magento\Catalog\Model\Product;
-use Magento\CatalogInventory\Model\Stock\Item;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Event\ObserverInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
+use Magento\CatalogInventory\Model\Stock\Item;
 use Magento\CatalogInventory\Model\StockItemValidator;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Event\Observer as EventObserver;
+use Magento\Framework\Event\ObserverInterface;
 
 /**
  * Saves stock data from a product to the Stock Item

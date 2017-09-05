@@ -6,10 +6,10 @@
 
 namespace Magento\Quote\Model;
 
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Quote\Model\Quote as QuoteEntity;
 use Magento\Directory\Model\AllowedCountries;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Quote\Model\Quote as QuoteEntity;
 use Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage as OrderAmountValidationMessage;
 
 /**

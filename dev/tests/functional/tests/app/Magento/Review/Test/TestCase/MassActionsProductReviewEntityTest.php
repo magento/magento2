@@ -6,11 +6,11 @@
 
 namespace Magento\Review\Test\TestCase;
 
+use Magento\Mtf\TestCase\Injectable;
 use Magento\Review\Test\Fixture\Review;
 use Magento\Review\Test\Page\Adminhtml\RatingEdit;
 use Magento\Review\Test\Page\Adminhtml\RatingIndex;
 use Magento\Review\Test\Page\Adminhtml\ReviewIndex;
-use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Preconditions:

@@ -6,7 +6,6 @@
 namespace Magento\Quote\Model;
 
 use Magento\Quote\Api\Data\AddressAdditionalDataInterface;
-use Magento\Framework\Model\AbstractExtensibleModel;
 
 class AddressAdditionalDataProcessor
 {

@@ -8,9 +8,9 @@
 
 namespace Magento\Webapi;
 
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Test REST schema generation mechanisms.
@@ -152,7 +152,7 @@ class JsonGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
             'swagger' => '2.0',
             'info' => [
                 'version' => $majorMinorVersion,
-                'title' => $this->productMetadata->getName() . ' ' .$this->productMetadata->getEdition(),
+                'title' => $this->productMetadata->getName() . ' ' . $this->productMetadata->getEdition(),
             ],
             'host' => $host,
             'basePath' => $basePath,

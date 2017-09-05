@@ -5,11 +5,11 @@
  */
 namespace Magento\Paypal\Block\Express\InContext;
 
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\Template\Context;
 use Magento\Paypal\Model\Config;
 use Magento\Paypal\Model\ConfigFactory;
-use Magento\Framework\View\Element\Template;
-use Magento\Framework\Locale\ResolverInterface;
-use Magento\Framework\View\Element\Template\Context;
 
 /**
  * Class Component

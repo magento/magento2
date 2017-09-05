@@ -7,8 +7,8 @@
 namespace Magento\Wishlist\Test\Constraint;
 
 use Magento\Cms\Test\Page\CmsIndex;
-use Magento\Wishlist\Test\Page\WishlistIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Wishlist\Test\Page\WishlistIndex;
 
 /**
  * Class AssertWishlistIsEmpty

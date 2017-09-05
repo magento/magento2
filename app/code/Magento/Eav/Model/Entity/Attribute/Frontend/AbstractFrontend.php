@@ -11,13 +11,13 @@
  */
 namespace Magento\Eav\Model\Entity\Attribute\Frontend;
 
-use Magento\Framework\App\CacheInterface;
-use Magento\Framework\Serialize\Serializer\Json as Serializer;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\App\ObjectManager;
 use Magento\Eav\Model\Cache\Type as CacheType;
 use Magento\Eav\Model\Entity\Attribute;
 use Magento\Eav\Model\Entity\Attribute\Source\BooleanFactory;
+use Magento\Framework\App\CacheInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\Serializer\Json as Serializer;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * @api

@@ -5,11 +5,11 @@
  */
 namespace Magento\Customer\Test\Unit\Block;
 
+use Magento\Customer\Block\CustomerScopeData;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Customer\Block\CustomerScopeData;
 
 class CustomerScopeDataTest extends \PHPUnit\Framework\TestCase
 {

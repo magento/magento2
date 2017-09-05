@@ -9,8 +9,8 @@ namespace Magento\Framework\ObjectManager\Code\Generator;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Zend\Code\Reflection\MethodReflection;
 use Zend\Code\Reflection\ParameterReflection;
 

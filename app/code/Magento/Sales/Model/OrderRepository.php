@@ -6,6 +6,7 @@
 namespace Magento\Sales\Model;
 
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Api\Data\OrderExtensionFactory;
@@ -15,7 +16,6 @@ use Magento\Sales\Api\Data\OrderSearchResultInterfaceFactory as SearchResultFact
 use Magento\Sales\Api\Data\ShippingAssignmentInterface;
 use Magento\Sales\Model\Order\ShippingAssignmentBuilder;
 use Magento\Sales\Model\ResourceModel\Metadata;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Repository class

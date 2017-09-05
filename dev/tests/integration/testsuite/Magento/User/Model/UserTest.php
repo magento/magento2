@@ -7,6 +7,7 @@
 // @codingStandardsIgnoreFile
 
 namespace Magento\User\Model;
+
 use Magento\Framework\Serialize\Serializer\Json;
 
 /**

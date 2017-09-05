@@ -5,8 +5,8 @@
  */
 namespace Magento\Payment\Model\Checks\CanUseForCountry;
 
-use Magento\Quote\Model\Quote;
 use Magento\Directory\Helper\Data as DirectoryHelper;
+use Magento\Quote\Model\Quote;
 
 /**
  * Select country which will be used for payment.
@@ -39,7 +39,7 @@ class CountryProvider
      */
     public function getCountry(Quote $quote)
     {
-        $address = $quote->getBillingAddress() ? : $quote->getShippingAddress();
+        $address = $quote->getBillingAddress() ?: $quote->getShippingAddress();
         return (!empty($address) && !empty($address->getCountry()))
             ? $address->getCountry()
             : $this->directoryHelper->getDefaultCountry();

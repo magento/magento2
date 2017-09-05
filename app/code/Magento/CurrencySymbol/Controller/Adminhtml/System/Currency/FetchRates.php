@@ -6,8 +6,8 @@
  */
 namespace Magento\CurrencySymbol\Controller\Adminhtml\System\Currency;
 
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Exception\LocalizedException;
 
 class FetchRates extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Currency
 {

@@ -6,12 +6,12 @@
 
 namespace Magento\Swatches\Test\TestStep;
 
-use Magento\Mtf\TestStep\TestStepInterface;
-use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Swatches\Test\Block\Product\ProductList\ProductItem;
-use Magento\Mtf\Fixture\InjectableFixture;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 use Magento\Cms\Test\Page\CmsIndex;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\Fixture\InjectableFixture;
+use Magento\Mtf\TestStep\TestStepInterface;
+use Magento\Swatches\Test\Block\Product\ProductList\ProductItem;
 
 /**
  * Add configurable product to cart.

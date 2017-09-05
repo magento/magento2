@@ -7,9 +7,9 @@
 namespace Magento\Bundle\Pricing\Adjustment;
 
 use Magento\Bundle\Model\Option;
+use Magento\Bundle\Model\Product\Price;
 use Magento\Bundle\Pricing\Price\BundleSelectionFactory;
 use Magento\Catalog\Model\Product;
-use Magento\Bundle\Model\Product\Price;
 
 /**
  * Provide lightweight implementation which uses price index

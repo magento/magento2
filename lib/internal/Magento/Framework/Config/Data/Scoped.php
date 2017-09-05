@@ -5,8 +5,8 @@
  */
 namespace Magento\Framework\Config\Data;
 
-use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Provides scoped configuration

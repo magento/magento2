@@ -5,10 +5,10 @@
  */
 namespace Magento\Quote\Model\Quote\Item;
 
-use Magento\Quote\Model\Quote\Item;
-use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\JsonValidator;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Quote\Model\Quote\Item;
 
 /**
  * Compare quote items

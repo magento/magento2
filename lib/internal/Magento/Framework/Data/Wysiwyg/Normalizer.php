@@ -10,7 +10,6 @@ namespace Magento\Framework\Data\Wysiwyg;
  */
 class Normalizer
 {
-
     const WYSIWYG_RESERVED_CHARACTERS_REPLACEMENT_MAP = [
         '{' => '^[',
         '}' => '^]',

@@ -8,8 +8,8 @@ namespace Magento\Customer\Test\Unit\Model\Metadata\Form;
 use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Model\FileProcessor;
-use Magento\MediaStorage\Model\File\Validator\NotProtectedExtension;
 use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
+use Magento\MediaStorage\Model\File\Validator\NotProtectedExtension;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

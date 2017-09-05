@@ -5,8 +5,8 @@
  */
 namespace Magento\TestFramework\Utility;
 
-use Magento\Framework\UrlFactory;
 use Magento\Catalog\Model\Product;
+use Magento\Framework\UrlFactory;
 
 /**
  * @codingStandardsIgnoreFile

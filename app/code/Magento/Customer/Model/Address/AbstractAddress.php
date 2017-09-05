@@ -575,7 +575,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
         if ($this->getShouldIgnoreValidation()) {
             return true;
         }
-        
+
         $errors = [];
         if (!\Zend_Validate::is($this->getFirstname(), 'NotEmpty')) {
             $errors[] = __('%fieldName is a required field.', ['fieldName' => 'firstname']);

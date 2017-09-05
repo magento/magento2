@@ -8,8 +8,6 @@
 
 namespace Magento\Catalog\Test\Unit\Model\ProductLink;
 
-use Magento\Framework\Exception\NoSuchEntityException;
-
 class ManagementTest extends \PHPUnit\Framework\TestCase
 {
     /**

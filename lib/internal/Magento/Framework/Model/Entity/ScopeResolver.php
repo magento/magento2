@@ -6,9 +6,9 @@
 
 namespace Magento\Framework\Model\Entity;
 
-use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Exception\ConfigurationMismatchException;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Exception\ConfigurationMismatchException;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
 
 /**

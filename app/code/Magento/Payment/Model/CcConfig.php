@@ -9,8 +9,8 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Asset\Repository;
-use Psr\Log\LoggerInterface;
 use Magento\Payment\Model\Config as PaymentConfig;
+use Psr\Log\LoggerInterface;
 
 /**
  * Credit card configuration model

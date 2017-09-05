@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\View\Test\Unit\Design\Fallback\Rule;
 
-use \Magento\Framework\View\Design\Fallback\Rule\Composite;
+use Magento\Framework\View\Design\Fallback\Rule\Composite;
 
 /**
  * Composite Test

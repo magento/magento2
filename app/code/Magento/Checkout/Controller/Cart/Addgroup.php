@@ -7,8 +7,8 @@
 namespace Magento\Checkout\Controller\Cart;
 
 use Magento\Checkout\Model\Cart as CustomerCart;
-use Magento\Framework\Escaper;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Escaper;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

@@ -6,9 +6,9 @@
 
 namespace Magento\Sales\Test\Constraint;
 
+use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
-use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Assert that transactions status is closed on order page in Admin.

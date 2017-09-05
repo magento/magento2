@@ -6,9 +6,9 @@
  */
 namespace Magento\Sales\Controller\Order;
 
-use Magento\Sales\Controller\OrderInterface;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
+use Magento\Sales\Controller\OrderInterface;
 
 class History extends \Magento\Framework\App\Action\Action implements OrderInterface
 {

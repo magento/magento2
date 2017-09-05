@@ -5,8 +5,8 @@
  */
 namespace Magento\Config\Test\Unit\Model\Config\Export;
 
-use Magento\Config\Model\Config\Export\Comment;
 use Magento\Config\App\Config\Source\DumpConfigSourceInterface;
+use Magento\Config\Model\Config\Export\Comment;
 use Magento\Config\Model\Config\TypePool;
 use Magento\Config\Model\Placeholder\PlaceholderFactory;
 use Magento\Config\Model\Placeholder\PlaceholderInterface;

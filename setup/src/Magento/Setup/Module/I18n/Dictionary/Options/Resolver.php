@@ -5,7 +5,6 @@
  */
 namespace Magento\Setup\Module\I18n\Dictionary\Options;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Component\ComponentRegistrar;
 
 /**

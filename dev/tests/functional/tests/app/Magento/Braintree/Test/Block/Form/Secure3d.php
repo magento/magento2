@@ -6,10 +6,10 @@
 
 namespace Magento\Braintree\Test\Block\Form;
 
-use Magento\Mtf\Client\Locator;
-use Magento\Mtf\Client\Element\SimpleElement;
-use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Block\Form;
+use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Form for filling 3D Secure password for Braintree payment method
@@ -37,8 +37,8 @@ class Secure3d extends Form
      */
     public function switchToFrame($locator)
     {
-         $this->browser->switchToFrame(new Locator($locator, Locator::SELECTOR_XPATH));
-         $this->browser->switchToFrame(new Locator($locator, Locator::SELECTOR_XPATH));
+        $this->browser->switchToFrame(new Locator($locator, Locator::SELECTOR_XPATH));
+        $this->browser->switchToFrame(new Locator($locator, Locator::SELECTOR_XPATH));
     }
 
     /**

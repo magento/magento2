@@ -5,11 +5,11 @@
  */
 namespace Magento\Search\Controller\Adminhtml\Term;
 
-use Magento\Search\Controller\Adminhtml\Term as TermController;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Response\Http\FileFactory;
 use Magento\Framework\Controller\ResultFactory;
-use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Search\Controller\Adminhtml\Term as TermController;
 
 class ExportSearchCsv extends TermController
 {

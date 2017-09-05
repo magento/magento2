@@ -6,7 +6,7 @@
 
 namespace Magento\Catalog\Test\Unit\Pricing\Price;
 
-use \Magento\Catalog\Pricing\Price\RegularPrice;
+use Magento\Catalog\Pricing\Price\RegularPrice;
 
 /**
  * Class RegularPriceTest

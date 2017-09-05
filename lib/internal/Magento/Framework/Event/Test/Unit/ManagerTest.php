@@ -5,10 +5,10 @@
  */
 namespace Magento\Framework\Event\Test\Unit;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Framework\Event\InvokerInterface;
 use Magento\Framework\Event\ConfigInterface;
+use Magento\Framework\Event\InvokerInterface;
 use Magento\Framework\Event\Manager as EventManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * Class ManagerTest

@@ -97,13 +97,11 @@ class BooleanTest extends \PHPUnit\Framework\TestCase
                 'expectedJoinCondition' => [
                     0 => [
                         'requisites' => ['code_t1' => "table"],
-                        'condition' =>
-                            "e.entity_id=code_t1.entity_id AND code_t1.attribute_id='123' AND code_t1.store_id='0'",
+                        'condition' => "e.entity_id=code_t1.entity_id AND code_t1.attribute_id='123' AND code_t1.store_id='0'",
                     ],
                     1 => [
                         'requisites' => ['code_t2' => "table"],
-                        'condition' =>
-                            "e.entity_id=code_t2.entity_id AND code_t2.attribute_id='123' AND code_t2.store_id='12'",
+                        'condition' => "e.entity_id=code_t2.entity_id AND code_t2.attribute_id='123' AND code_t2.store_id='12'",
                     ],
                 ],
                 'expectedOrder' => 'IF(code_t2.value_id > 0, code_t2.value, code_t1.value) ASC',
@@ -114,13 +112,11 @@ class BooleanTest extends \PHPUnit\Framework\TestCase
                 'expectedJoinCondition' => [
                     0 => [
                         'requisites' => ['code_t1' => "table"],
-                        'condition' =>
-                            "e.entity_id=code_t1.entity_id AND code_t1.attribute_id='123' AND code_t1.store_id='0'",
+                        'condition' => "e.entity_id=code_t1.entity_id AND code_t1.attribute_id='123' AND code_t1.store_id='0'",
                     ],
                     1 => [
                         'requisites' => ['code_t2' => "table"],
-                        'condition' =>
-                            "e.entity_id=code_t2.entity_id AND code_t2.attribute_id='123' AND code_t2.store_id='12'",
+                        'condition' => "e.entity_id=code_t2.entity_id AND code_t2.attribute_id='123' AND code_t2.store_id='12'",
                     ],
                 ],
                 'expectedOrder' => 'IF(code_t2.value_id > 0, code_t2.value, code_t1.value) DESC',
@@ -131,8 +127,7 @@ class BooleanTest extends \PHPUnit\Framework\TestCase
                 'expectedJoinCondition' => [
                     0 => [
                         'requisites' => ['code_t' => "table"],
-                        'condition' =>
-                            "e.entity_id=code_t.entity_id AND code_t.attribute_id='123' AND code_t.store_id='0'",
+                        'condition' => "e.entity_id=code_t.entity_id AND code_t.attribute_id='123' AND code_t.store_id='0'",
                     ],
                 ],
                 'expectedOrder' => 'code_t.value DESC',
@@ -143,8 +138,7 @@ class BooleanTest extends \PHPUnit\Framework\TestCase
                 'expectedJoinCondition' => [
                     0 => [
                         'requisites' => ['code_t' => "table"],
-                        'condition' =>
-                            "e.entity_id=code_t.entity_id AND code_t.attribute_id='123' AND code_t.store_id='0'",
+                        'condition' => "e.entity_id=code_t.entity_id AND code_t.attribute_id='123' AND code_t.store_id='0'",
                     ],
                 ],
                 'expectedOrder' => 'code_t.value ASC',

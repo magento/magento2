@@ -68,7 +68,7 @@ class CssInlinerTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetFilesEmogrifier($htmlFilePath, $cssFilePath, $cssExpected)
     {
-        $emogrifier = new \Pelago\Emogrifier;
+        $emogrifier = new \Pelago\Emogrifier();
 
         $html = file_get_contents($htmlFilePath);
         $css = file_get_contents($cssFilePath);

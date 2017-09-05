@@ -11,11 +11,11 @@ use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\CustomerAccountLogout;
-use Magento\Reports\Test\Page\Adminhtml\ProductReportReview;
-use Magento\Review\Test\Fixture\Review;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
+use Magento\Reports\Test\Page\Adminhtml\ProductReportReview;
+use Magento\Review\Test\Fixture\Review;
 
 /**
  * Preconditions:
@@ -146,7 +146,7 @@ class ReviewReportEntityTest extends Injectable
             $this->pageCatalogProductView->getReviewFormBlock()->fill($review);
             $this->pageCatalogProductView->getReviewFormBlock()->submit();
         }
-        
+
         return ['product' => $product];
     }
 

@@ -5,9 +5,9 @@
  */
 namespace Magento\Customer\Ui\Component\MassAction\Group;
 
+use Magento\Customer\Model\ResourceModel\Group\CollectionFactory;
 use Magento\Framework\Phrase;
 use Magento\Framework\UrlInterface;
-use Magento\Customer\Model\ResourceModel\Group\CollectionFactory;
 
 /**
  * Class Options

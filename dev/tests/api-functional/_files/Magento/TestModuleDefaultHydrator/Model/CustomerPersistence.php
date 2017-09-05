@@ -5,9 +5,9 @@
  */
 namespace Magento\TestModuleDefaultHydrator\Model;
 
-use Magento\TestModuleDefaultHydrator\Api\CustomerPersistenceInterface;
-use Magento\Framework\EntityManager\EntityManager;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
+use Magento\Framework\EntityManager\EntityManager;
+use Magento\TestModuleDefaultHydrator\Api\CustomerPersistenceInterface;
 
 class CustomerPersistence implements CustomerPersistenceInterface
 {

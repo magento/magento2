@@ -6,8 +6,8 @@
 
 namespace Magento\Bundle\Model\Product;
 
-use \Magento\Bundle\Api\Data\LinkInterface;
-use \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory;
+use Magento\Bundle\Api\Data\LinkInterface;
+use Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory;
 
 /**
  * Class FixedBundleWithTierPRiceCalculatorTest

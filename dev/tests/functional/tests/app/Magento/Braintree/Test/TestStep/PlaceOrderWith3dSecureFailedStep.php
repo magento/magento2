@@ -6,9 +6,9 @@
 
 namespace Magento\Braintree\Test\TestStep;
 
+use Magento\Braintree\Test\Fixture\Secure3dBraintree;
 use Magento\Checkout\Test\Page\CheckoutOnepage;
 use Magento\Mtf\TestStep\TestStepInterface;
-use Magento\Braintree\Test\Fixture\Secure3dBraintree;
 
 /**
  * Click 'Place order' button and submit 3D secure verification step.

@@ -5,8 +5,8 @@
  */
 namespace Magento\ProductAlert\Block\Email;
 
-use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\ProductAlert\Block\Product\ImageProvider;
 
 /**

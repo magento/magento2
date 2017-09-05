@@ -6,8 +6,8 @@
 
 namespace Magento\Directory\Test\Constraint;
 
-use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\CurrencySymbol\Test\Page\Adminhtml\SystemCurrencyIndex;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Assert that success message is displayed.

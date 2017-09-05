@@ -6,9 +6,9 @@
 
 namespace Magento\Tax\Test\Constraint;
 
+use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Tax\Test\Fixture\TaxRate;
 use Magento\Tax\Test\Page\Adminhtml\TaxRuleNew;
-use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertTaxRateNotInTaxRule

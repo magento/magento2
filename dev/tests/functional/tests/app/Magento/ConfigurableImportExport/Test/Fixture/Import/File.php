@@ -5,8 +5,8 @@
  */
 namespace Magento\ConfigurableImportExport\Test\Fixture\Import;
 
-use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Configurable product class file.

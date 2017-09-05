@@ -5,14 +5,14 @@
  */
 namespace Magento\PageCache\Model\Controller\Result;
 
-use Magento\PageCache\Model\Config;
 use Magento\Framework\App\PageCache\Kernel;
-use Magento\Framework\App\State as AppState;
-use Magento\Framework\Registry;
-use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\App\Response\Http as ResponseHttp;
-use Zend\Http\Header\HeaderInterface as HttpHeaderInterface;
+use Magento\Framework\App\State as AppState;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Registry;
 use Magento\PageCache\Model\Cache\Type as CacheType;
+use Magento\PageCache\Model\Config;
+use Zend\Http\Header\HeaderInterface as HttpHeaderInterface;
 
 /**
  * Plugin for processing builtin cache

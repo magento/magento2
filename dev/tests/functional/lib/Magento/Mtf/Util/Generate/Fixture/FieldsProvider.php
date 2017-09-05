@@ -6,10 +6,9 @@
 
 namespace Magento\Mtf\Util\Generate\Fixture;
 
-use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Eav\Model\Config;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Provider of fields from database.
@@ -56,7 +55,7 @@ class FieldsProvider
     {
         $this->connection = $this->getConnection('core');
         if (!$this->connection || $this->connection instanceof \Zend_Db_Adapter_Exception) {
-            echo ('Connection to Magento 2 database is absent. Fixture data has not been fetched.' . PHP_EOL);
+            echo('Connection to Magento 2 database is absent. Fixture data has not been fetched.' . PHP_EOL);
             return false;
         }
 

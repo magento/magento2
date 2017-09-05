@@ -5,13 +5,11 @@
  */
 
 return [
-    0 =>
-        [
+    0 => [
             'value' => '2',
             'is_active' => '1',
             'label' => 'Default Category',
-            'optgroup' =>
-                [
+            'optgroup' => [
                     0 => [
                         'value' => '3',
                         'is_active' => '1',
@@ -21,10 +19,8 @@ return [
                                 'value' => '4',
                                 'is_active' => '1',
                                 'label' => 'Category 1.1',
-                                'optgroup' =>
-                                    [
-                                        0 =>
-                                            [
+                                'optgroup' => [
+                                        0 => [
                                                 'value' => '5',
                                                 'is_active' => '1',
                                                 'label' => 'Category 1.1.1',

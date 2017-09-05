@@ -5,8 +5,8 @@
  */
 namespace Magento\Framework\Config\Test\Unit\Dom;
 
-use Magento\Framework\Config\Dom\UrnResolver;
 use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Config\Dom\UrnResolver;
 
 class UrnResolverTest extends \PHPUnit\Framework\TestCase
 {
@@ -45,7 +45,7 @@ class UrnResolverTest extends \PHPUnit\Framework\TestCase
     {
         $xsdUrn = 'urn:magento:module:Magento_Customer:etc/address_formats.xsd';
         $componentRegistrar = new ComponentRegistrar();
-                $xsdPath = $componentRegistrar->getPath(ComponentRegistrar::MODULE, 'Magento_Customer')
+        $xsdPath = $componentRegistrar->getPath(ComponentRegistrar::MODULE, 'Magento_Customer')
                     . '/etc/address_formats.xsd';
 
         $result = $this->urnResolver->getRealPath($xsdUrn);

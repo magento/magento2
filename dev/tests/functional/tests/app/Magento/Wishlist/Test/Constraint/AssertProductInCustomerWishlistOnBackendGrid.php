@@ -7,9 +7,9 @@
 namespace Magento\Wishlist\Test\Constraint;
 
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndexEdit;
-use Magento\Wishlist\Test\Block\Adminhtml\Customer\Edit\Tab\Wishlist\Grid;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Wishlist\Test\Block\Adminhtml\Customer\Edit\Tab\Wishlist\Grid;
 
 /**
  * Class AssertProductInCustomerWishlistOnBackendGrid

@@ -9,10 +9,10 @@ namespace Magento\Cms\Test\TestCase;
 use Magento\Backend\Test\Page\Adminhtml\StoreDelete;
 use Magento\Backend\Test\Page\Adminhtml\StoreIndex;
 use Magento\Backend\Test\Page\Adminhtml\StoreNew;
+use Magento\Mtf\TestCase\Injectable;
 use Magento\UrlRewrite\Test\Fixture\UrlRewrite;
 use Magento\UrlRewrite\Test\Page\Adminhtml\UrlRewriteEdit;
 use Magento\UrlRewrite\Test\Page\Adminhtml\UrlRewriteIndex;
-use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Preconditions:

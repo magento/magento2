@@ -7,8 +7,6 @@
  */
 namespace Magento\Theme\Model\Uploader;
 
-use Magento\Framework\Convert\DataSize;
-use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\DirectoryList;
 
 class Service

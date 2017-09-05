@@ -6,8 +6,8 @@
 
 namespace Magento\Setup\Test\Constraint;
 
-use Magento\Setup\Test\Page\Adminhtml\SetupWizard;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Setup\Test\Page\Adminhtml\SetupWizard;
 
 /**
  * Check upgrade is successfully

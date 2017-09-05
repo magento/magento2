@@ -6,8 +6,8 @@
 
 namespace Magento\Checkout\Model;
 
-use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Quote\Api\CartRepositoryInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

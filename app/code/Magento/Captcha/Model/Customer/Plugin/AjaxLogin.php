@@ -6,8 +6,8 @@
 namespace Magento\Captcha\Model\Customer\Plugin;
 
 use Magento\Captcha\Helper\Data as CaptchaHelper;
-use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Session\SessionManagerInterface;
 
 class AjaxLogin
 {

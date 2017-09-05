@@ -39,7 +39,6 @@ $requestInfo = new \Magento\Framework\DataObject(['qty' => 1, 'options' => $opti
 $validatorFile = (new ValidatorFileMock())->getInstance();
 $objectManager->addSharedInstance($validatorFile, \Magento\Catalog\Model\Product\Option\Type\File\ValidatorFile::class);
 
-
 $quote->setReservedOrderId('test_order_item_with_items_and_custom_options');
 $quote->addProduct($product, $requestInfo);
 $quote->collectTotals();

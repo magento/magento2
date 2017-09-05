@@ -200,7 +200,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetBaseUrlForCustomEntryPoint($type, $useCustomEntryPoint, $useStoreCode, $expected)
     {
-         /* config operations require store to be loaded */
+        /* config operations require store to be loaded */
         $this->model->load('default');
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class)

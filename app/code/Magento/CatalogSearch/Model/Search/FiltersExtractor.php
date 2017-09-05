@@ -5,9 +5,9 @@
  */
 namespace Magento\CatalogSearch\Model\Search;
 
-use Magento\Framework\Search\Request\QueryInterface;
-use Magento\Framework\Search\Request\FilterInterface;
 use Magento\Framework\Search\Request\Filter\BoolExpression;
+use Magento\Framework\Search\Request\FilterInterface;
+use Magento\Framework\Search\Request\QueryInterface;
 
 /**
  * Class FiltersExtractor

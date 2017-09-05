@@ -7,10 +7,10 @@
 namespace Magento\Framework\App\Test\Unit\PageCache;
 
 use Magento\Framework\App\PageCache\FormKey;
-use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\Cookie\PublicCookieMetadata;
+use Magento\Framework\Stdlib\CookieManagerInterface;
 
 /**
  * Class FormKeyTest

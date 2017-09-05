@@ -6,8 +6,7 @@
 return [
     'bool_query' => [
         'dimensions' => [
-            'scope' =>
-                [
+            'scope' => [
                     'name' => 'scope',
                     'value' => 'default_override',
                 ],
@@ -116,8 +115,7 @@ return [
                 'field' => 'field_1_override',
                 'method' => '$field_1_dynamic_algorithm_override$',
                 'metric' => [
-                    0 =>
-                        [
+                    0 => [
                             'type' => 'count',
                         ],
                 ],
@@ -127,8 +125,7 @@ return [
                 'name' => 'bucket_2',
                 'field' => 'field_2_override',
                 'metric' => [
-                    0 =>
-                        [
+                    0 => [
                             'type' => 'count',
                         ],
                 ],
@@ -138,8 +135,7 @@ return [
                 'name' => 'bucket_3',
                 'field' => 'field_2_override',
                 'range' => [
-                    0 =>
-                        [
+                    0 => [
                             'from' => '$value_2_override.from$',
                             'to' => 'value_2_override.to$',
                         ],
@@ -154,8 +150,7 @@ return [
     ],
     'filter_query' => [
         'dimensions' => [
-            'scope' =>
-                [
+            'scope' => [
                     'name' => 'scope',
                     'value' => 'default_override',
                 ],
@@ -164,8 +159,7 @@ return [
             'filter_query' => [
                 'name' => 'filter_query',
                 'filterReference' => [
-                    0 =>
-                        [
+                    0 => [
                             'clause' => 'must',
                             'ref' => 'bool_filter',
                         ],
@@ -220,8 +214,7 @@ return [
     ],
     'new_match_query' => [
         'dimensions' => [
-            'scope' =>
-                [
+            'scope' => [
                     'name' => 'scope',
                     'value' => 'new',
                 ],
@@ -231,8 +224,7 @@ return [
                 'value' => '$match_term$',
                 'name' => 'new_match_query',
                 'match' => [
-                    0 =>
-                        [
+                    0 => [
                             'field' => 'new_match_field',
                         ],
                 ],

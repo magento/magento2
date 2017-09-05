@@ -5,15 +5,14 @@
  */
 namespace Magento\Framework\EntityManager\Operation;
 
-use Magento\Framework\EntityManager\Operation\DeleteInterface;
-use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
-use Magento\Framework\EntityManager\Operation\Delete\DeleteMain;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\EntityManager\EventManager;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\EntityManager\Operation\Delete\DeleteAttributes;
 use Magento\Framework\EntityManager\Operation\Delete\DeleteExtensions;
-use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Framework\EntityManager\EventManager;
+use Magento\Framework\EntityManager\Operation\Delete\DeleteMain;
 use Magento\Framework\EntityManager\TypeResolver;
-use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
 
 /**
  * Class Delete
