@@ -748,7 +748,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
             $this->_fontSize,
             0,
             0,
-            $height - abs($boundingBox[1]),
+            $height,
             $black,
             $font,
             $text
