@@ -5,8 +5,6 @@
  */
 namespace Magento\Framework\Image\Adapter;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-
 /**
  * @magentoAppIsolation enabled
  */
@@ -547,9 +545,7 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreatePngFromString($pixel1, $expectedColor1, $pixel2, $expectedColor2, $adapterType)
     {
-        if (!function_exists('imagettfbbox')
-            || (getenv('TRAVIS') && getenv('TRAVIS_PHP_VERSION') == '7.1')
-        ) {
+        if (!function_exists('imagettfbbox')) {
             $this->markTestSkipped('Workaround for problem with imagettfbbox() function on Travis');
         }
         $adapter = $this->_getAdapter($adapterType);
