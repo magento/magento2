@@ -69,10 +69,10 @@ class ClassGeneratorTest extends \PHPUnit\Framework\TestCase
             'static' => true,
             'parameters' => [
                 [
-                    'name' => 'data', 
-                    'type' => 'array', 
-                    'defaultValue' => [], 
-                    'passedByReference' => true, 
+                    'name' => 'data',
+                    'type' => 'array',
+                    'defaultValue' => [],
+                    'passedByReference' => true,
                     'variadic' => false
                 ],
             ],
