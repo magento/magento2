@@ -22,4 +22,8 @@ class Sample
     public function & getReference()
     {
     }
+
+    public function variadic(... $values)
+    {
+    }
 }
