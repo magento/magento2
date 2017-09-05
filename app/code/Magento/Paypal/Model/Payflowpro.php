@@ -391,15 +391,15 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
     /**
      * Get capture amount
      *
-     * @param float $amount
+     * @param string $amount
      * @return string|int
      */
     protected function _getCaptureAmount($amount)
     {
         $infoInstance = $this->getInfoInstance();
-        $amountToPay = $this->formatPrice($amount);
-        $authorizedAmount = $this->formatPrice($infoInstance->getAmountAuthorized());
-        return $amountToPay != $authorizedAmount ? $amountToPay : 0;
+        $amountToPay = $amount;
+        $authorizedAmount = $infoInstance->getAmountAuthorized();
+        return abs($amountToPay - $authorizedAmount) < 0.00001 ? 0 : $amountToPay;
     }
 
     /**
@@ -424,7 +424,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
             $request->setOrigid($payment->getParentTransactionId());
             $captureAmount = $this->_getCaptureAmount($amount);
             if ($captureAmount) {
-                $request->setAmt($captureAmount);
+                $request->setAmt($this->formatPrice($captureAmount));
             }
             $trxType = $this->getInfoInstance()->hasAmountPaid() ? self::TRXTYPE_SALE : self::TRXTYPE_DELAYED_CAPTURE;
             $request->setTrxtype($trxType);
