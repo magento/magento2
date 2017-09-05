@@ -18,6 +18,23 @@ abstract class Category extends \Magento\Backend\App\Action
     const ADMIN_RESOURCE = 'Magento_Catalog::categories';
 
     /**
+     * @var \Magento\Framework\Stdlib\DateTime\Filter\Date
+     */
+    protected $dateFilter;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\Stdlib\DateTime\Filter\Date|null $dateFilter
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter = null
+    ) {
+        $this->dateFilter = $dateFilter;
+        parent::__construct($context);
+    }
+
+    /**
      * Initialize requested category and put it into registry.
      * Root category can be returned, if inappropriate store/category is specified
      *
@@ -118,5 +135,28 @@ abstract class Category extends \Magento\Backend\App\Action
         $resultJson->setHeader('Content-type', 'application/json', true);
         $resultJson->setData($eventResponse->getData());
         return $resultJson;
+    }
+
+    /**
+     * Datetime data preprocessing
+     *
+     * @param \Magento\Catalog\Model\Category $category
+     * @param array $postData
+     *
+     * @return array
+     */
+    protected function dateTimePreprocessing($category, $postData)
+    {
+        $dateFieldFilters = [];
+        $attributes = $category->getAttributes();
+        foreach ($attributes as $attrKey => $attribute) {
+            if ($attribute->getBackend()->getType() == 'datetime') {
+                if (array_key_exists($attrKey, $postData) && $postData[$attrKey] != '') {
+                    $dateFieldFilters[$attrKey] = $this->dateFilter;
+                }
+            }
+        }
+        $inputFilter = new \Zend_Filter_Input($dateFieldFilters, [], $postData);
+        return $inputFilter->getUnescaped();
     }
 }
