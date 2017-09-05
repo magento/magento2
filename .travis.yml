@@ -45,6 +45,7 @@ cache:
   directories:
     - $HOME/.composer/cache
     - $HOME/.nvm
+    - $HOME/.php-cs-fixer
     - $HOME/node_modules
     - $HOME/yarn.lock
 before_install: ./dev/travis/before_install.sh

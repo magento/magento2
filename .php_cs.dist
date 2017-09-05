@@ -24,7 +24,10 @@ $finder = PhpCsFixer\Finder::create()
     ->exclude('setup/vendor')
     ->exclude('var');
 
+$cacheDir = getenv('TRAVIS') ? getenv('HOME') . '/.php-cs-fixer' : __DIR__;
+
 return PhpCsFixer\Config::create()
+    ->setCacheFile($cacheDir . '/.php_cs.cache')
     ->setFinder($finder)
     ->setRules([
         '@PSR2' => true,
