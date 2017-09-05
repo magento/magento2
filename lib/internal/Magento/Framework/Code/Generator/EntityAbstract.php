@@ -313,7 +313,8 @@ abstract class EntityAbstract
         $parameterInfo = [
             'name' => $parameter->getName(),
             'passedByReference' => $parameter->isPassedByReference(),
-            'type' => $parameter->getType()
+            'type' => $parameter->getType(),
+            'variadic' => $parameter->isVariadic()
         ];
 
         if ($parameter->isArray()) {
