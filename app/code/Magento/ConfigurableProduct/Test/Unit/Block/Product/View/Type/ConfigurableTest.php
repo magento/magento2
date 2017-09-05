@@ -5,6 +5,9 @@
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Block\Product\View\Type;
 
+use Magento\Customer\Model\Session;
+use Magento\Framework\App\State;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -65,6 +68,11 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
      */
     private $storeManager;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $customerSession;
+
     protected function setUp()
     {
         $this->mockContextObject();
@@ -92,6 +100,28 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $appState = $this->getMockBuilder(State::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->context->expects($this->once())
+            ->method('getAppState')
+            ->willReturn($appState);
+        $appState->expects($this->any())
+            ->method('getAreaCode')
+            ->willReturn('frontend');
+        $urlBuilder = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->context->expects($this->once())
+            ->method('getUrlBuilder')
+            ->willReturn($urlBuilder);
+        $fileResolverMock = $this
+            ->getMockBuilder(\Magento\Framework\View\Element\Template\File\Resolver::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->context->expects($this->once())
+            ->method('getResolver')
+            ->willReturn($fileResolverMock);
         $this->configurableAttributeData = $this->getMockBuilder(
             \Magento\ConfigurableProduct\Model\ConfigurableAttributeData::class
         )
@@ -99,6 +129,10 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->localeFormat = $this->getMockBuilder(\Magento\Framework\Locale\Format::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->customerSession = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -112,8 +146,90 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             $this->priceCurrency,
             $this->configurableAttributeData,
             [],
-            $this->localeFormat
+            $this->localeFormat,
+            $this->customerSession
         );
+    }
+
+    /**
+     * Provide cache key info
+     *
+     * @return array
+     */
+    public function cacheKeyProvider() : array
+    {
+        return [
+            'without_currency_and_customer_group' => [
+                [
+                    0 => 'BLOCK_TPL',
+                    1 => 'default',
+                    2 => null,
+                    'base_url' => null,
+                    'template' => null,
+                    3 => null,
+                    4 => null,
+                ],
+                null,
+                null,
+            ],
+            'with_customer_group' => [
+                [
+                    0 => 'BLOCK_TPL',
+                    1 => 'default',
+                    2 => null,
+                    'base_url' => null,
+                    'template' => null,
+                    3 => null,
+                    4 => 1,
+                ],
+                null,
+                1,
+            ],
+            'with_price_currency' => [
+                [
+                    0 => 'BLOCK_TPL',
+                    1 => 'default',
+                    2 => null,
+                    'base_url' => null,
+                    'template' => null,
+                    3 => '$',
+                    4 => null,
+                ],
+                '$',
+                null,
+            ]
+        ];
+    }
+
+    /**
+     * Test cache Tags
+     * @dataProvider cacheKeyProvider
+     * @param array $expected
+     * @param string|null $priceCurrency
+     * @param string|null $customerGroupId
+     */
+    public function testGetCacheKeyInfo(array $expected, string $priceCurrency = null, string $customerGroupId = null)
+    {
+        $storeMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
+            ->setMethods([
+                'getCurrentCurrency',
+            ])
+            ->getMockForAbstractClass();
+        $storeMock->expects($this->any())
+            ->method('getCode')
+            ->willReturn('default');
+
+        $this->storeManager->expects($this->any())
+            ->method('getStore')
+            ->willReturn($storeMock);
+        $this->priceCurrency->expects($this->once())
+            ->method('getCurrencySymbol')
+            ->willReturn($priceCurrency);
+        $this->customerSession->expects($this->once())
+            ->method('getCustomerGroupId')
+            ->willReturn($customerGroupId);
+        $actual = $this->block->getCacheKeyInfo();
+        $this->assertEquals($expected, $actual);
     }
 
     /**
