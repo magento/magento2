@@ -228,10 +228,18 @@ define([
         },
 
         /**
-         * Update content after item remove.
+         * Update content after item remove
+         *
+         * @param elem
+         * @param response
          * @private
          */
-        _removeItemAfter: function () {
+        _removeItemAfter: function (elem, response) {
+            var productData = customerData.get('cart')().items.find(function (item) {
+                return Number(elem.data('cart-item')) === Number(item['item_id']);
+            });
+
+            $(document).trigger('ajax:removeFromCart', productData['product_sku']);
         },
 
         /**
