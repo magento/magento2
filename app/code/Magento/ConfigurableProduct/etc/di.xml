@@ -193,7 +193,7 @@
     </type>
     <type name="Magento\ConfigurableProduct\Plugin\Model\ResourceModel\Product">
         <arguments>
-            <argument name="indexerAction" xsi:type="object">Magento\Catalog\Model\Indexer\Product\Full</argument>
+            <argument name="productIndexer" xsi:type="object">Magento\Catalog\Model\Indexer\Product\Full</argument>
         </arguments>
     </type>
 </config>
