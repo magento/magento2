@@ -198,8 +198,9 @@ define([
          * @returns {Boolean}
          */
         _isSubtotalChanged: function (subtotal) {
-            var cached = this.get('totals').subtotal;
-            return subtotal != cached;
+            var cached = parseFloat(this.get('totals').subtotal);
+
+            return subtotal !== cached;
         }
     };
 });
