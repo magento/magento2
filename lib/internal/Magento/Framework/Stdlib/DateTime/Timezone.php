@@ -174,7 +174,7 @@ class Timezone implements TimezoneInterface
                     $timeType,
                     new \DateTimeZone($timezone)
                 );
-                $date = $formatter->parse($date);
+                $date = $formatter->parse($date) ?: (new \DateTime($date))->getTimestamp();
                 break;
         }
 
