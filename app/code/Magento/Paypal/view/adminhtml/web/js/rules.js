@@ -16,179 +16,179 @@ define([
      * @returns {Boolean}
      */
     var isSolutionEnabled = function (solution, enabler) {
-        return solution.find(enabler).val() === '1';
-    },
+            return solution.find(enabler).val() === '1';
+        },
 
-    /**
-     * Check is solution has related solutions enabled
-     *
-     * @param {Object} data
-     * @returns {Boolean}
-     */
-    hasRelationsEnabled = function (data) {
-        var name;
+        /**
+         * Check is solution has related solutions enabled
+         *
+         * @param {Object} data
+         * @returns {Boolean}
+         */
+        hasRelationsEnabled = function (data) {
+            var name;
 
-        for (name in data.argument) {
-            if (
-                data.solutionsElements[name] &&
-                isSolutionEnabled(data.solutionsElements[name], data.enableButton)
-            ) {
-                return true;
+            for (name in data.argument) {
+                if (
+                    data.solutionsElements[name] &&
+                    isSolutionEnabled(data.solutionsElements[name], data.enableButton)
+                ) {
+                    return true;
+                }
             }
-        }
 
-        return false;
-    },
+            return false;
+        },
 
-    /**
-     * Set solution select-enabler to certain option
-     *
-     * @param {*} solution
-     * @param {String} enabler
-     * @param {Boolean} enabled
-     */
-    setSolutionSelectEnabled = function (solution, enabler, enabled) {
-        enabled = !(enabled || typeof enabled === 'undefined') ? '0' : '1';
+        /**
+         * Set solution select-enabler to certain option
+         *
+         * @param {*} solution
+         * @param {String} enabler
+         * @param {Boolean} enabled
+         */
+        setSolutionSelectEnabled = function (solution, enabler, enabled) {
+            enabled = !(enabled || typeof enabled === 'undefined') ? '0' : '1';
 
-        solution.find(enabler + ' option[value=' + enabled + ']')
+            solution.find(enabler + ' option[value=' + enabled + ']')
             .prop('selected', true);
-    },
+        },
 
-    /**
-     * Set solution property 'disabled' value
-     *
-     * @param {*} solution
-     * @param {String} enabler
-     * @param {Boolean} enabled
-     */
-    setSolutionPropEnabled = function (solution, enabler, enabled) {
-        enabled = !(enabled || typeof enabled === 'undefined');
+        /**
+         * Set solution property 'disabled' value
+         *
+         * @param {*} solution
+         * @param {String} enabler
+         * @param {Boolean} enabled
+         */
+        setSolutionPropEnabled = function (solution, enabler, enabled) {
+            enabled = !(enabled || typeof enabled === 'undefined');
 
-        solution.find(enabler).prop('disabled', enabled);
-    },
+            solution.find(enabler).prop('disabled', enabled);
+        },
 
-    /**
-     * Set/unset solution select-enabler label
-     *
-     * @param {*} solution
-     * @param {String} enabler
-     * @param {Boolean} enabled
-     */
-    setSolutionMarkEnabled = function (solution, enabler, enabled) {
-        var solutionEnabler = solution.find('label[for="' + solution.find(enabler).attr('id') + '"]');
+        /**
+         * Set/unset solution select-enabler label
+         *
+         * @param {*} solution
+         * @param {String} enabler
+         * @param {Boolean} enabled
+         */
+        setSolutionMarkEnabled = function (solution, enabler, enabled) {
+            var solutionEnabler = solution.find('label[for="' + solution.find(enabler).attr('id') + '"]');
 
-        enabled || typeof enabled === 'undefined' ?
-            solutionEnabler.addClass('enabled') :
-            solutionEnabler.removeClass('enabled');
-    },
+            enabled || typeof enabled === 'undefined' ?
+                solutionEnabler.addClass('enabled') :
+                solutionEnabler.removeClass('enabled');
+        },
 
-    /**
-     * Set/unset solution section label
-     *
-     * @param {*} solution
-     * @param {Boolean} enabled
-     */
-    setSolutionSectionMarkEnabled = function (solution, enabled) {
-        var solutionSection = solution.find('.section-config');
+        /**
+         * Set/unset solution section label
+         *
+         * @param {*} solution
+         * @param {Boolean} enabled
+         */
+        setSolutionSectionMarkEnabled = function (solution, enabled) {
+            var solutionSection = solution.find('.section-config');
 
-        enabled || typeof enabled === 'undefined' ?
-            solutionSection.addClass('enabled') :
-            solutionSection.removeClass('enabled');
-    },
+            enabled || typeof enabled === 'undefined' ?
+                solutionSection.addClass('enabled') :
+                solutionSection.removeClass('enabled');
+        },
 
-    /**
-     * Set/unset solution section inner labels
-     *
-     * @param {*} solution
-     * @param {Boolean} enabled
-     */
-    setSolutionLabelsMarkEnabled = function (solution, enabled) {
-        var solutionLabels = solution.find('label.enabled');
+        /**
+         * Set/unset solution section inner labels
+         *
+         * @param {*} solution
+         * @param {Boolean} enabled
+         */
+        setSolutionLabelsMarkEnabled = function (solution, enabled) {
+            var solutionLabels = solution.find('label.enabled');
 
-        enabled || typeof enabled === 'undefined' ?
-            solutionLabels.addClass('enabled') :
-            solutionLabels.removeClass('enabled');
-    },
+            enabled || typeof enabled === 'undefined' ?
+                solutionLabels.addClass('enabled') :
+                solutionLabels.removeClass('enabled');
+        },
 
-    /**
-     * Set solution as disabled
-     *
-     * @param {*} solution
-     * @param {String} enabler
-     */
-    disableSolution = function (solution, enabler) {
-        setSolutionUsedefaultEnabled(solution, enabler);
-        setSolutionMarkEnabled(solution, enabler, false);
-        setSolutionSelectEnabled(solution, enabler, false);
-        setSolutionPropEnabled(solution, enabler, false);
-    },
+        /**
+         * Set/unset solution usedefault checkbox
+         *
+         * @param {*} solution
+         * @param {String} enabler
+         * @param {Boolean} checked
+         */
+        setSolutionUsedefaultEnabled = function (solution, enabler, checked) {
+            checked = !(checked || typeof checked === 'undefined');
 
-    /**
-     * Set solution as enabled
-     *
-     * @param {*} solution
-     * @param {String} enabler
-     */
-    enableSolution = function (solution, enabler) {
-        setSolutionUsedefaultEnabled(solution, enabler);
-        setSolutionPropEnabled(solution, enabler);
-        setSolutionSelectEnabled(solution, enabler);
-        setSolutionMarkEnabled(solution, enabler);
-    },
-
-    /**
-     * Lock/unlock solution configuration button
-     *
-     * @param {*} solution
-     * @param {String} buttonConfiguration
-     * @param {Boolean} unlock
-     */
-    setSolutionConfigurationUnlock = function (solution, buttonConfiguration, unlock) {
-        var solutionConfiguration = solution.find(buttonConfiguration);
-
-        unlock || typeof unlock === 'undefined' ?
-            solutionConfiguration.removeClass('disabled').removeAttr('disabled') :
-            solutionConfiguration.addClass('disabled').attr('disabled', 'disabled');
-    },
-
-    /**
-     * Set/unset solution usedefault checkbox
-     *
-     * @param {*} solution
-     * @param {String} enabler
-     * @param {Boolean} checked
-     */
-    setSolutionUsedefaultEnabled = function (solution, enabler, checked) {
-        checked = !(checked || typeof checked === 'undefined');
-
-        solution.find('input[id="' + solution.find(enabler).attr('id') + '_inherit"]')
+            solution.find('input[id="' + solution.find(enabler).attr('id') + '_inherit"]')
             .prop('checked', checked);
-    },
+        },
 
-    /**
-     * Forward solution select-enabler changes
-     *
-     * @param {*} solution
-     * @param {String} enabler
-     */
-    forwardSolutionChange = function (solution, enabler) {
-        solution.find(enabler).change();
-    },
+        /**
+         * Set solution as disabled
+         *
+         * @param {*} solution
+         * @param {String} enabler
+         */
+        disableSolution = function (solution, enabler) {
+            setSolutionUsedefaultEnabled(solution, enabler);
+            setSolutionMarkEnabled(solution, enabler, false);
+            setSolutionSelectEnabled(solution, enabler, false);
+            setSolutionPropEnabled(solution, enabler, false);
+        },
 
-    /**
-     * Show/hide dependent fields
-     *
-     * @param {*} solution
-     * @param {String} identifier
-     * @param {Boolean} show
-     */
-    showDependsField = function (solution, identifier, show) {
-        show = show || typeof show === 'undefined';
+        /**
+         * Set solution as enabled
+         *
+         * @param {*} solution
+         * @param {String} enabler
+         */
+        enableSolution = function (solution, enabler) {
+            setSolutionUsedefaultEnabled(solution, enabler);
+            setSolutionPropEnabled(solution, enabler);
+            setSolutionSelectEnabled(solution, enabler);
+            setSolutionMarkEnabled(solution, enabler);
+        },
 
-        solution.find(identifier).toggle(show);
-        solution.find(identifier).closest('tr').toggle(show);
-        solution.find(identifier).attr('disabled', !show);
-    };
+        /**
+         * Lock/unlock solution configuration button
+         *
+         * @param {*} solution
+         * @param {String} buttonConfiguration
+         * @param {Boolean} unlock
+         */
+        setSolutionConfigurationUnlock = function (solution, buttonConfiguration, unlock) {
+            var solutionConfiguration = solution.find(buttonConfiguration);
+
+            unlock || typeof unlock === 'undefined' ?
+                solutionConfiguration.removeClass('disabled').removeAttr('disabled') :
+                solutionConfiguration.addClass('disabled').attr('disabled', 'disabled');
+        },
+
+        /**
+         * Forward solution select-enabler changes
+         *
+         * @param {*} solution
+         * @param {String} enabler
+         */
+        forwardSolutionChange = function (solution, enabler) {
+            solution.find(enabler).change();
+        },
+
+        /**
+         * Show/hide dependent fields
+         *
+         * @param {*} solution
+         * @param {String} identifier
+         * @param {Boolean} show
+         */
+        showDependsField = function (solution, identifier, show) {
+            show = show || typeof show === 'undefined';
+
+            solution.find(identifier).toggle(show);
+            solution.find(identifier).closest('tr').toggle(show);
+            solution.find(identifier).attr('disabled', !show);
+        };
 
     return Class.extend({
         defaults: {
