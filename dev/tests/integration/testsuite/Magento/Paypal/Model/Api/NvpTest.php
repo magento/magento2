@@ -121,7 +121,7 @@ class NvpTest extends \PHPUnit\Framework\TestCase
     /**
      * Test that the refund request to Paypal sends the correct data
      *
-     * @magentoDataFixture Magento/Paypal/_files/order_standard_with_tax_and_invoice.php
+     * @magentoDataFixture Magento/Paypal/_files/order_express_with_tax.php
      */
     public function testCallRefundTransaction()
     {
