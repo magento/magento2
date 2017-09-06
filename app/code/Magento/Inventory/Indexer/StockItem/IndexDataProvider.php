@@ -66,7 +66,7 @@ class IndexDataProvider
                 'source_item.' . SourceItemInterface::SOURCE_ID . ' = stock_source_link.' . StockSourceLink::SOURCE_ID,
                 []
             )
-            ->where('source_item'.SourceItemInterface::STATUS. ' = ?',SourceItemInterface::STATUS_IN_STOCK)
+            ->where('source_item.'.SourceItemInterface::STATUS. ' = ?',SourceItemInterface::STATUS_IN_STOCK)
             ->where('stock_source_link.' . StockSourceLink::STOCK_ID . ' = ?', $stockId)
             ->where('stock_source_link.' . StockSourceLink::SOURCE_ID . ' in (?)', $sourceIds);
 

@@ -128,12 +128,12 @@ class StockItemTest extends TestCase
      */
     public function testReindexAllOneDisabled()
     {
-        self::assertEquals(0, $this->indexerChecker->execute($this->stocks[0]->getStockId(), 'SKU-1'));
-        self::assertEquals(0, $this->indexerChecker->execute($this->stocks[1]->getStockId(), 'SKU-2'));
+        self::assertEquals(0, $this->indexerChecker->execute(1, 'SKU-1'));
+        self::assertEquals(0, $this->indexerChecker->execute(2, 'SKU-2'));
 
         $this->indexer->reindexAll();
 
-        self::assertEquals(8, $this->indexerChecker->execute($this->stocks[0]->getStockId(), 'SKU-1'));
-        self::assertEquals(0, $this->indexerChecker->execute($this->stocks[1]->getStockId(), 'SKU-2'));
+        self::assertEquals(8, $this->indexerChecker->execute(1, 'SKU-1'));
+        self::assertEquals(0, $this->indexerChecker->execute(2, 'SKU-2'));
     }
 }
