@@ -9,9 +9,6 @@ namespace Magento\ConfigurableProduct\Test\Unit\Plugin\Model\ResourceModel;
 use Magento\Catalog\Model\Product\Type;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\Indexer\ActionInterface;
-use Magento\Framework\Indexer\IndexerInterface;
-use Magento\PageCache\Model\Config;
-use Magento\Framework\App\Cache\TypeListInterface;
 
 class ProductTest extends \PHPUnit\Framework\TestCase
 {
@@ -45,7 +42,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             \Magento\ConfigurableProduct\Plugin\Model\ResourceModel\Product::class,
             [
                 'configurable' => $this->configurableMock,
-                'indexerAction' => $this->actionMock,
+                'productIndexer' => $this->actionMock,
             ]
         );
     }
