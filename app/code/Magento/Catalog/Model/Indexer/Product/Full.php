@@ -8,8 +8,6 @@ namespace Magento\Catalog\Model\Indexer\Product;
 
 use Magento\Framework\Indexer\ActionInterface;
 use Magento\Framework\Indexer\IndexerRegistry;
-use Magento\PageCache\Model\Config;
-use Magento\Framework\App\Cache\TypeListInterface;
 
 /**
  * Reindex all relevant product indexers
@@ -22,16 +20,6 @@ class Full implements ActionInterface
     private $indexerRegistry;
 
     /**
-     * @var Config
-     */
-    private $pageCacheConfig;
-
-    /**
-     * @var TypeListInterface
-     */
-    private $cacheTypeList;
-
-    /**
      * @var string[]
      */
     private $indexerList;
@@ -40,19 +28,13 @@ class Full implements ActionInterface
      * Initialize dependencies
      *
      * @param IndexerRegistry $indexerRegistry
-     * @param Config $pageCacheConfig
-     * @param TypeListInterface $cacheTypeList
      * @param string[] $indexerList
      */
     public function __construct(
         IndexerRegistry $indexerRegistry,
-        Config $pageCacheConfig,
-        TypeListInterface $cacheTypeList,
         array $indexerList
     ) {
         $this->indexerRegistry = $indexerRegistry;
-        $this->pageCacheConfig = $pageCacheConfig;
-        $this->cacheTypeList = $cacheTypeList;
         $this->indexerList = $indexerList;
     }
 
