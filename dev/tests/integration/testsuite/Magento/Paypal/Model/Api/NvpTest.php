@@ -119,6 +119,49 @@ class NvpTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test that the refund request to Paypal sends the correct data
+     *
+     * @magentoDataFixture Magento/Paypal/_files/order_standard_with_tax_and_invoice.php
+     */
+    public function testCallRefundTransaction()
+    {
+        $this->assertTrue(true);
+        /** @var \Magento\Sales\Model\Order $order */
+        $order = $this->objectManager->create(\Magento\Sales\Model\Order::class);
+        $order->loadByIncrementId('100000001');
+
+        /** @var \Magento\Sales\Model\Order\Payment $payment */
+        $payment = $order->getPayment();
+
+        $this->nvpApi->setPayment(
+            $payment
+        )->setTransactionId(
+            'fooTransactionId'
+        )->setAmount(
+            $payment->formatAmount($order->getBaseGrandTotal())
+        )->setCurrencyCode(
+            $order->getBaseCurrencyCode()
+        )->setRefundType(
+            Config::REFUND_TYPE_PARTIAL
+        );
+
+        $httpQuery = 'TRANSACTIONID=fooTransactionId&REFUNDTYPE=Partial'
+            .'&CURRENCYCODE=USD&AMT=145.98&METHOD=RefundTransaction'
+            .'&VERSION=72.0&BUTTONSOURCE=Magento_Cart_';
+
+        $this->httpClient->expects($this->once())->method('write')
+            ->with(
+                'POST',
+                'https://api-3t.paypal.com/nvp',
+                '1.1',
+                [],
+                $httpQuery
+            );
+
+        $this->nvpApi->callRefundTransaction();
+    }
+
+    /**
      * Gets quote by reserved order id.
      *
      * @param string $reservedOrderId
