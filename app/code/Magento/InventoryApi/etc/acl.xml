@@ -14,7 +14,8 @@
                 </resource>
                 <resource id="Magento_InventoryApi::stock" title="Inventory Stocks" translate="title" sortOrder="20">
                     <resource id="Magento_InventoryApi::stock_edit" title="Edit Inventory Stocks" translate="title" sortOrder="10" />
-                    <resource id="Magento_InventoryApi::source_delete" title="Delete Inventory Stocks" translate="title" sortOrder="20" />
+                    <resource id="Magento_InventoryApi::stock_delete" title="Delete Inventory Stocks" translate="title" sortOrder="20" />
+                    <resource id="Magento_InventoryApi::source_stock_link" title="Source to Stock Assigning" translate="title" sortOrder="30" />
                 </resource>
             </resource>
         </resources>

@@ -6,7 +6,7 @@
 namespace Magento\InventoryApi\Api;
 
 /**
- * Interface to assign source id list by stock id
+ * Assign Sources to Stock
  *
  * Used fully qualified namespaces in annotations for proper work of WebApi request parser
  *
@@ -15,7 +15,9 @@ namespace Magento\InventoryApi\Api;
 interface AssignSourcesToStockInterface
 {
     /**
-     * Assign source id list by stock id
+     * Assign Sources to Stock
+     *
+     * If one of the Sources or Stock with given id don't exist then exception will be throw
      *
      * @param int[] $sourceIds
      * @param int $stockId
