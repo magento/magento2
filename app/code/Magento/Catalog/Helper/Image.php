@@ -600,7 +600,7 @@ class Image extends AbstractHelper
      * @param string $watermark
      * @return $this
      */
-    protected function setWatermark($watermark)
+    public function setWatermark($watermark)
     {
         $this->_watermark = $watermark;
         $this->_getModel()->setWatermarkFile($watermark);
@@ -612,7 +612,7 @@ class Image extends AbstractHelper
      *
      * @return string
      */
-    protected function getWatermark()
+    public function getWatermark()
     {
         return $this->_watermark;
     }
@@ -623,7 +623,7 @@ class Image extends AbstractHelper
      * @param string $position
      * @return $this
      */
-    protected function setWatermarkPosition($position)
+    public function setWatermarkPosition($position)
     {
         $this->_watermarkPosition = $position;
         $this->_getModel()->setWatermarkPosition($position);
@@ -635,7 +635,7 @@ class Image extends AbstractHelper
      *
      * @return string
      */
-    protected function getWatermarkPosition()
+    public function getWatermarkPosition()
     {
         return $this->_watermarkPosition;
     }
@@ -659,7 +659,7 @@ class Image extends AbstractHelper
      *
      * @return string
      */
-    protected function getWatermarkSize()
+    public function getWatermarkSize()
     {
         return $this->_watermarkSize;
     }
@@ -682,7 +682,7 @@ class Image extends AbstractHelper
      *
      * @return int
      */
-    protected function getWatermarkImageOpacity()
+    public function getWatermarkImageOpacity()
     {
         if ($this->_watermarkImageOpacity) {
             return $this->_watermarkImageOpacity;
@@ -697,7 +697,7 @@ class Image extends AbstractHelper
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
      */
-    protected function setProduct($product)
+    public function setProduct($product)
     {
         $this->_product = $product;
         return $this;
@@ -708,7 +708,7 @@ class Image extends AbstractHelper
      *
      * @return \Magento\Catalog\Model\Product
      */
-    protected function getProduct()
+    public function getProduct()
     {
         return $this->_product;
     }
@@ -730,7 +730,7 @@ class Image extends AbstractHelper
      *
      * @return string
      */
-    protected function getImageFile()
+    public function getImageFile()
     {
         return $this->_imageFile;
     }
@@ -786,7 +786,7 @@ class Image extends AbstractHelper
      *
      * @return \Magento\Framework\Config\View
      */
-    protected function getConfigView()
+    public function getConfigView()
     {
         if (!$this->configView) {
             $this->configView = $this->viewConfig->getViewConfig();
@@ -844,7 +844,7 @@ class Image extends AbstractHelper
      * @param string $name
      * @return string
      */
-    protected function getAttribute($name)
+    public function getAttribute($name)
     {
         return isset($this->attributes[$name]) ? $this->attributes[$name] : null;
     }
