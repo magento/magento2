@@ -129,7 +129,7 @@ class ValidationTest extends WebapiAbstract
      * @param string $value
      * @param array $expectedErrorData
      * @dataProvider failedValidationDataProvider
-     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source/source.php
+     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source.php
      */
     public function testFailedValidationOnUpdate($field, $value, array $expectedErrorData)
     {

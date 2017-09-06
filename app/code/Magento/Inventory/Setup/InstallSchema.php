@@ -12,6 +12,7 @@ use Magento\Inventory\Setup\Operation\CreateReservationTable;
 use Magento\Inventory\Setup\Operation\CreateSourceCarrierLinkTable;
 use Magento\Inventory\Setup\Operation\CreateSourceItemTable;
 use Magento\Inventory\Setup\Operation\CreateSourceTable;
+use Magento\Inventory\Setup\Operation\CreateStockItemIndexTable;
 use Magento\Inventory\Setup\Operation\CreateStockSourceLinkTable;
 use Magento\Inventory\Setup\Operation\CreateStockTable;
 

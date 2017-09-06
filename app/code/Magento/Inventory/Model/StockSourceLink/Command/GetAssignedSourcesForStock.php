@@ -11,6 +11,7 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Inventory\Model\ResourceModel\StockSourceLink\Collection;
 use Magento\Inventory\Model\ResourceModel\StockSourceLink\CollectionFactory;
+use Magento\Inventory\Model\StockSourceLink;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\GetAssignedSourcesForStockInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
@@ -90,6 +91,8 @@ class GetAssignedSourcesForStock implements GetAssignedSourcesForStockInterface
     }
 
     /**
+     * Get all linked SourceIds by given stockId.
+     *
      * @param int $stockId
      * @return array
      */
