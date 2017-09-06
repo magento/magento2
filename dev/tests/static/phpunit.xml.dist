@@ -12,6 +12,7 @@
          colors="true"
          beStrictAboutTestsThatDoNotTestAnything="false"
          bootstrap="./framework/bootstrap.php"
+         verbose="true"
 >
     <testsuites>
         <testsuite name="Less Static Code Analysis">

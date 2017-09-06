@@ -11,6 +11,7 @@
          beStrictAboutTestsThatDoNotTestAnything="false"
          bootstrap="./framework/bootstrap.php"
          stderr="true"
+         verbose="true"
 >
     <!-- Test suites definition -->
     <testsuites>
