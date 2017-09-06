@@ -1,0 +1,17 @@
+# behat.yml
+default:
+    paths:
+        features: features
+        bootstrap: %behat.paths.base%/bootstrap
+    extensions:
+        Behat\MinkExtension\Extension:
+            base_url: http://magento.vm
+            goutte: ~
+            # To run locally:
+            browser_name: firefox
+            selenium2:
+                 capabilities:
+                     "platform": "ANY"
+                     "version": ""
+    filters:
+        tags: "~@skip"
