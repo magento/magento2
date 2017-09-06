@@ -434,7 +434,7 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
             }
         }
 
-        $draw->setFontSize($this->_fontSize);
+        $draw->setFontSize($this->_fontSize * 4 / 3);
         $draw->setFillColor($color);
         $draw->setStrokeAntialias(true);
         $draw->setTextAntialias(true);
