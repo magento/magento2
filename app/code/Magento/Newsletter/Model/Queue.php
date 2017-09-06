@@ -34,6 +34,7 @@ use Magento\Framework\App\TemplateTypesInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api
+ * @since 100.0.2
  */
 class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTypesInterface
 {

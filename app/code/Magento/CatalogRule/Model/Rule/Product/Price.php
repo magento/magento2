@@ -28,10 +28,6 @@ namespace Magento\CatalogRule\Model\Rule\Product;
 
 use Magento\Framework\DB\Select;
 
-/**
- * Class \Magento\CatalogRule\Model\Rule\Product\Price
- *
- */
 class Price extends \Magento\Framework\Model\AbstractModel
 {
     /**

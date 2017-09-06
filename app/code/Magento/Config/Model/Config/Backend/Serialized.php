@@ -10,6 +10,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Serialized extends \Magento\Framework\App\Config\Value
 {
@@ -29,7 +30,6 @@ class Serialized extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      * @param Json|null $serializer
-     * @since 100.2.0
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,

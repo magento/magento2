@@ -7,14 +7,10 @@
 /**
  * Default converter for \Magento\Framework\DataObjects to arrays
  *
- * @author     Magento Extensibility Team <DL-X-Extensibility-Team@corp.ebay.com>
+ * @api
  */
 namespace Magento\Framework\Convert;
 
-/**
- * Class \Magento\Framework\Convert\DataObject
- *
- */
 class DataObject
 {
     /** Constant used to mark cycles in the input array/objects */

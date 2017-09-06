@@ -13,10 +13,6 @@ use Magento\Framework\Module\Manager;
 use Magento\PageCache\Model\Config;
 use Magento\Tax\Helper\Data;
 
-/**
- * Class \Magento\Tax\Observer\CustomerLoggedInObserver
- *
- */
 class CustomerLoggedInObserver implements ObserverInterface
 {
     /**

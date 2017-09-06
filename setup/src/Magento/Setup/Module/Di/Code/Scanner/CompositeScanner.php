@@ -5,10 +5,6 @@
  */
 namespace Magento\Setup\Module\Di\Code\Scanner;
 
-/**
- * Class \Magento\Setup\Module\Di\Code\Scanner\CompositeScanner
- *
- */
 class CompositeScanner implements ScannerInterface
 {
     /**

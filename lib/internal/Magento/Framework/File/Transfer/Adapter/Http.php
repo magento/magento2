@@ -6,10 +6,6 @@
 
 namespace Magento\Framework\File\Transfer\Adapter;
 
-/**
- * Class \Magento\Framework\File\Transfer\Adapter\Http
- *
- */
 class Http
 {
     /**

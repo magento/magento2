@@ -12,10 +12,6 @@ use Magento\Customer\Model\Session;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\App\Action\Context;
 
-/**
- * Class \Magento\Customer\Controller\Account\Edit
- *
- */
 class Edit extends \Magento\Customer\Controller\AbstractAccount
 {
     /**

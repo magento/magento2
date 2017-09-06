@@ -486,19 +486,19 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $expected = $item1BaseWeee + $item2BaseWeee;
         $itemProductSimple1 = $this->createPartialMock(
             \Magento\Quote\Model\Quote\Item::class,
-            ['getBaseWeeeTaxAppliedRowAmount']
+            ['getBaseWeeeTaxAppliedRowAmnt']
         );
         $itemProductSimple2 = $this->createPartialMock(
             \Magento\Quote\Model\Quote\Item::class,
-            ['getBaseWeeeTaxAppliedRowAmount']
+            ['getBaseWeeeTaxAppliedRowAmnt']
         );
         $items = [$itemProductSimple1, $itemProductSimple2];
 
         $itemProductSimple1->expects($this->any())
-            ->method('getBaseWeeeTaxAppliedRowAmount')
+            ->method('getBaseWeeeTaxAppliedRowAmnt')
             ->willReturn($item1BaseWeee);
         $itemProductSimple2->expects($this->any())
-            ->method('getBaseWeeeTaxAppliedRowAmount')
+            ->method('getBaseWeeeTaxAppliedRowAmnt')
             ->willReturn($item2BaseWeee);
 
         $this->assertEquals($expected, $this->helperData->getBaseTotalAmounts($items));

@@ -9,6 +9,7 @@ namespace Magento\ConfigurableProduct\Block\Product\View\Type;
 
 use Magento\ConfigurableProduct\Model\ConfigurableAttributeData;
 use Magento\Customer\Helper\Session\CurrentCustomer;
+use Magento\Customer\Model\Session;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Locale\Format;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
@@ -17,6 +18,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @since 100.0.2
  */
 class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
 {
@@ -30,6 +32,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     /**
      * Current customer
      *
+     * @deprecated, as unused property
      * @var CurrentCustomer
      */
     protected $currentCustomer;
@@ -67,6 +70,11 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     private $localeFormat;
 
     /**
+     * @var Session
+     */
+    private $customerSession;
+
+    /**
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Framework\Stdlib\ArrayUtils $arrayUtils
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
@@ -77,6 +85,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
      * @param ConfigurableAttributeData $configurableAttributeData
      * @param array $data
      * @param Format|null $localeFormat
+     * @param Session|null $customerSession
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -89,7 +98,8 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
         PriceCurrencyInterface $priceCurrency,
         ConfigurableAttributeData $configurableAttributeData,
         array $data = [],
-        Format $localeFormat = null
+        Format $localeFormat = null,
+        Session $customerSession = null
     ) {
         $this->priceCurrency = $priceCurrency;
         $this->helper = $helper;
@@ -98,6 +108,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
         $this->currentCustomer = $currentCustomer;
         $this->configurableAttributeData = $configurableAttributeData;
         $this->localeFormat = $localeFormat ?: ObjectManager::getInstance()->get(Format::class);
+        $this->customerSession = $customerSession ?: ObjectManager::getInstance()->get(Session::class);
 
         parent::__construct(
             $context,
@@ -116,6 +127,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     {
         $parentData = parent::getCacheKeyInfo();
         $parentData[] = $this->priceCurrency->getCurrencySymbol();
+        $parentData[] = $this->customerSession->getCustomerGroupId();
         return $parentData;
     }
 

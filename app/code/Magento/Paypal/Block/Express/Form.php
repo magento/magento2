@@ -14,10 +14,6 @@ use Magento\Paypal\Model\Config;
 use Magento\Paypal\Model\ConfigFactory;
 use Magento\Paypal\Model\Express\Checkout;
 
-/**
- * Class \Magento\Paypal\Block\Express\Form
- *
- */
 class Form extends \Magento\Payment\Block\Form
 {
     /**

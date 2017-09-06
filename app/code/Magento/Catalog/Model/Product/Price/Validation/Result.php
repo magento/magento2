@@ -28,7 +28,6 @@ class Result
 
     /**
      * @param \Magento\Catalog\Api\Data\PriceUpdateResultInterfaceFactory $priceUpdateResultFactory
-     * @since 101.1.0
      */
     public function __construct(
         \Magento\Catalog\Api\Data\PriceUpdateResultInterfaceFactory $priceUpdateResultFactory

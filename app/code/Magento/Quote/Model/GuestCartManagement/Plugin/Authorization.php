@@ -7,10 +7,6 @@ namespace Magento\Quote\Model\GuestCartManagement\Plugin;
 
 use Magento\Framework\Exception\StateException;
 
-/**
- * Class \Magento\Quote\Model\GuestCartManagement\Plugin\Authorization
- *
- */
 class Authorization
 {
     /**

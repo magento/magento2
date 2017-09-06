@@ -20,6 +20,7 @@ $sourceRepository = Bootstrap::getObjectManager()->get(SourceRepositoryInterface
 $sourcesData = [
     [
         // define only required and needed for tests fields
+        SourceInterface::SOURCE_ID => 1,
         SourceInterface::NAME => 'source-name-1',
         SourceInterface::ENABLED => true,
         SourceInterface::PRIORITY => 300,
@@ -27,6 +28,7 @@ $sourcesData = [
         SourceInterface::COUNTRY_ID => 'US',
     ],
     [
+        SourceInterface::SOURCE_ID => 2,
         SourceInterface::NAME => 'source-name-2',
         SourceInterface::ENABLED => true,
         SourceInterface::PRIORITY => 200,
@@ -34,6 +36,7 @@ $sourcesData = [
         SourceInterface::COUNTRY_ID => 'US',
     ],
     [
+        SourceInterface::SOURCE_ID => 3,
         SourceInterface::NAME => 'source-name-3',
         SourceInterface::ENABLED => true,
         SourceInterface::PRIORITY => 200,
@@ -41,6 +44,7 @@ $sourcesData = [
         SourceInterface::COUNTRY_ID => 'US',
     ],
     [
+        SourceInterface::SOURCE_ID => 4,
         SourceInterface::NAME => 'source-name-4',
         SourceInterface::ENABLED => false,
         SourceInterface::PRIORITY => 100,

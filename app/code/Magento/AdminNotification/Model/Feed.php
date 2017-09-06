@@ -13,6 +13,7 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @since 100.0.2
  */
 class Feed extends \Magento\Framework\Model\AbstractModel
 {

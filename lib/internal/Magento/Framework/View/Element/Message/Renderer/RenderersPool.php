@@ -5,10 +5,6 @@
  */
 namespace Magento\Framework\View\Element\Message\Renderer;
 
-/**
- * Class \Magento\Framework\View\Element\Message\Renderer\RenderersPool
- *
- */
 class RenderersPool implements PoolInterface
 {
     /**

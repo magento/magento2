@@ -5,10 +5,6 @@
  */
 namespace Magento\Widget\Model\Config;
 
-/**
- * Class \Magento\Widget\Model\Config\Data
- *
- */
 class Data extends \Magento\Framework\Config\Data\Scoped
 {
     /**

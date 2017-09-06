@@ -8,10 +8,6 @@ namespace Magento\Framework\Reflection;
 
 use Zend\Code\Reflection\ClassReflection;
 
-/**
- * Class \Magento\Framework\Reflection\NameFinder
- *
- */
 class NameFinder
 {
     /**
@@ -47,7 +43,7 @@ class NameFinder
     {
         return ucfirst(substr(strstr($shortDescription, " "), 1));
     }
-    
+
     /**
      * Find the getter method name for a property from the given class
      *

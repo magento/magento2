@@ -61,8 +61,7 @@ class IndexHandler implements IndexHandlerInterface
     {
         $tableName = $this->indexNameResolver->resolveName($indexName);
 
-        // TODO: stock item object for constants
-        $columns = ['sku', 'quantity', 'status'];
+        $columns = [IndexStructure::SKU, IndexStructure::QUANTITY, IndexStructure::STATUS];
         foreach ($this->batch->getItems($documents, $this->batchSize) as $batchDocuments) {
             $this->resourceConnection
                 ->getConnection()
@@ -75,12 +74,6 @@ class IndexHandler implements IndexHandlerInterface
      */
     public function deleteIndex(IndexName $indexName, \Traversable $documents)
     {
-        $tableName = $this->indexNameResolver->resolveName($indexName);
-
-        foreach ($this->batch->getItems($documents, $this->batchSize) as $batchDocuments) {
-            $this->resourceConnection
-                ->getConnection()
-                ->delete($tableName, ['stock_id IN (?)' => $batchDocuments]);
-        }
+        // TODO: implementation
     }
 }

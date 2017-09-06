@@ -8,10 +8,6 @@ namespace Magento\CatalogRule\Block\Adminhtml\Edit;
 
 use Magento\CatalogRule\Controller\RegistryConstants;
 
-/**
- * Class \Magento\CatalogRule\Block\Adminhtml\Edit\GenericButton
- *
- */
 class GenericButton
 {
     /**

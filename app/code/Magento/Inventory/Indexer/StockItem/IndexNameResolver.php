@@ -45,7 +45,6 @@ class IndexNameResolver implements IndexNameResolverInterface
     {
         $tableName = $this->indexScopeResolver->resolve($indexName->getIndexId(), $indexName->getDimensions());
 
-        // TODO: LoD phly phly
         if ($indexName->getAlias()->getValue() === Alias::ALIAS_REPLICA) {
             $tableName = $this->activeTableSwitcher->getAdditionalTableName($tableName);
         }

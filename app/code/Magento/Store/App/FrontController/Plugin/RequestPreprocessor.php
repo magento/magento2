@@ -5,10 +5,6 @@
  */
 namespace Magento\Store\App\FrontController\Plugin;
 
-/**
- * Class \Magento\Store\App\FrontController\Plugin\RequestPreprocessor
- *
- */
 class RequestPreprocessor
 {
     /**

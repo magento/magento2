@@ -31,6 +31,7 @@ use Magento\Framework\App\ObjectManager;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 abstract class AbstractEntity extends AbstractResource implements EntityInterface, DefaultAttributesProvider
 {
@@ -766,7 +767,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      */
     public function getValueEntityIdField()
     {
-        return $this->getEntityIdField();
+        return $this->getLinkField();
     }
 
     /**
@@ -884,28 +885,33 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     {
         $connection = $this->getConnection();
         $select = $connection->select();
-        if ($attribute->getBackend()->getType() === 'static') {
+
+        $entityIdField = $this->getEntityIdField();
+        $attributeBackend = $attribute->getBackend();
+        if ($attributeBackend->getType() === 'static') {
             $value = $object->getData($attribute->getAttributeCode());
             $bind = ['value' => trim($value)];
 
             $select->from(
                 $this->getEntityTable(),
-                $this->getEntityIdField()
+                $entityIdField
             )->where(
                 $attribute->getAttributeCode() . ' = :value'
             );
         } else {
             $value = $object->getData($attribute->getAttributeCode());
-            if ($attribute->getBackend()->getType() == 'datetime') {
+            if ($attributeBackend->getType() == 'datetime') {
                 $value = (new \DateTime($value))->format('Y-m-d H:i:s');
             }
             $bind = [
                 'attribute_id' => $attribute->getId(),
                 'value' => trim($value),
             ];
+
+            $entityIdField = $attributeBackend->getEntityIdField();
             $select->from(
-                $attribute->getBackend()->getTable(),
-                $object->getResource()->getLinkField()
+                $attributeBackend->getTable(),
+                $entityIdField
             )->where(
                 'attribute_id = :attribute_id'
             )->where(
@@ -920,9 +926,10 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
 
         $data = $connection->fetchCol($select, $bind);
 
-        if ($object->getId()) {
+        $objectId = $object->getData($entityIdField);
+        if ($objectId) {
             if (isset($data[0])) {
-                return $data[0] == $object->getId();
+                return $data[0] == $objectId;
             }
             return true;
         }

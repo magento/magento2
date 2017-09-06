@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Inventory\Indexer\StockItem;
 
 use Magento\Framework\App\ResourceConnection;
@@ -17,6 +16,14 @@ use Magento\Inventory\Indexer\IndexStructureInterface;
  */
 class IndexStructure implements IndexStructureInterface
 {
+    /**
+     * Constants for represent fields in index table. Only for internal module using
+     */
+    const SKU = 'sku';
+    const QUANTITY = 'quantity';
+    const STATUS = 'status';
+    /**#@-*/
+
     /**
      * @var ResourceConnection
      */
@@ -57,7 +64,7 @@ class IndexStructure implements IndexStructureInterface
         )->setComment(
             'Inventory Stock item Table'
         )->addColumn(
-            'sku',
+            self::SKU,
             Table::TYPE_TEXT,
             64,
             [
@@ -66,7 +73,7 @@ class IndexStructure implements IndexStructureInterface
             ],
             'Sku'
         )->addColumn(
-            'quantity',
+            self::QUANTITY,
             Table::TYPE_DECIMAL,
             null,
             [
@@ -78,7 +85,7 @@ class IndexStructure implements IndexStructureInterface
             ],
             'Quantity'
         )->addColumn(
-            'status',
+            self::STATUS,
             Table::TYPE_SMALLINT,
             null,
             [

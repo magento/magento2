@@ -5,10 +5,6 @@
  */
 namespace Magento\Framework\Url;
 
-/**
- * Class \Magento\Framework\Url\Encoder
- *
- */
 class Encoder implements EncoderInterface
 {
     /**

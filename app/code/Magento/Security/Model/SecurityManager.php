@@ -74,7 +74,6 @@ class SecurityManager
      * @param RemoteAddress $remoteAddress
      * @param array $securityCheckers
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 100.1.0
      */
     public function __construct(
         ConfigInterface $securityConfig,

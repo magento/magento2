@@ -13,10 +13,6 @@ use Magento\Ui\DataProvider\AbstractDataProvider;
 use Magento\Config\Model\Config\Reader\Source\Deployed\SettingChecker;
 use Magento\Framework\App\RequestInterface;
 
-/**
- * Class \Magento\Theme\Model\Design\Config\DataProvider
- *
- */
 class DataProvider extends AbstractDataProvider
 {
     /**

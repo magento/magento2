@@ -6,10 +6,6 @@
  */
 namespace Magento\Backend\Controller\Adminhtml;
 
-/**
- * Class \Magento\Backend\Controller\Adminhtml\Denied
- *
- */
 class Denied extends \Magento\Backend\App\Action
 {
     /**

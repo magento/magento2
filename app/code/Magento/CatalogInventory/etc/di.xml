@@ -71,9 +71,6 @@
     <type name="Magento\Catalog\Model\Product">
         <plugin name="catalogInventoryAfterLoad" type="Magento\CatalogInventory\Model\Plugin\AfterProductLoad"/>
     </type>
-    <type name="Magento\Catalog\Api\ProductRepositoryInterface">
-        <plugin name="catalogInventoryAroundSave" sortOrder="20" type="Magento\CatalogInventory\Model\Plugin\AroundProductRepositorySave"/>
-    </type>
     <type name="Magento\CatalogInventory\Setup\UpgradeData">
         <arguments>
             <argument name="indexerProcessor" xsi:type="object">Magento\CatalogInventory\Model\Indexer\Stock\Processor</argument>

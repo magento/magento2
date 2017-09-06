@@ -26,7 +26,6 @@ class Scope extends Template
     /**
      * @param Context $context
      * @param ScopeResolverPool $scopeResolverPool
-     * @since 100.1.0
      */
     public function __construct(
         Context $context,

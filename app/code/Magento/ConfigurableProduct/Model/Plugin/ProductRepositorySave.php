@@ -14,10 +14,6 @@ use Magento\ConfigurableProduct\Api\Data\OptionInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
-/**
- * Class \Magento\ConfigurableProduct\Model\Plugin\ProductRepositorySave
- *
- */
 class ProductRepositorySave
 {
     /**
@@ -85,9 +81,9 @@ class ProductRepositorySave
             $attributeCodes[] = $attributeCode;
         }
         $this->validateProductLinks($attributeCodes, $configurableLinks);
-        $product->getTypeInstance()->resetConfigurableAttributes($product);
+        $result->getTypeInstance()->resetConfigurableAttributes($product);
 
-        return $product;
+        return $result;
     }
 
     /**

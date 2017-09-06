@@ -5,10 +5,6 @@
  */
 namespace Magento\Setup\Module\Di\Compiler\Log;
 
-/**
- * Class \Magento\Setup\Module\Di\Compiler\Log\Log
- *
- */
 class Log
 {
     const GENERATION_ERROR = 1;

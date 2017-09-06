@@ -7,10 +7,6 @@ namespace Magento\User\Controller\Adminhtml\User;
 
 use Magento\Authorization\Model\Acl\Role\Group as RoleGroup;
 
-/**
- * Class \Magento\User\Controller\Adminhtml\User\Role
- *
- */
 abstract class Role extends \Magento\Backend\App\AbstractAction
 {
     /**

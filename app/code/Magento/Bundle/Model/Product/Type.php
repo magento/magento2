@@ -21,6 +21,7 @@ use Magento\Bundle\Model\ResourceModel\Selection\Collection\FilterApplier as Sel
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @since 100.0.2
  */
 class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 {
@@ -686,7 +687,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                         $options
                     );
 
-                    $optionsCollection->appendSelections($selections, false, $_appendAllSelections);
+                    $optionsCollection->appendSelections($selections, true, $_appendAllSelections);
 
                     $selections = $selections->getItems();
                 } else {
@@ -703,7 +704,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                     ->getOptionsIds($product);
                 $selectionCollection = $product->getTypeInstance()
                     ->getSelectionsCollection($optionIds, $product);
-                $options = $optionCollection->appendSelections($selectionCollection, false, $_appendAllSelections);
+                $options = $optionCollection->appendSelections($selectionCollection, true, $_appendAllSelections);
 
                 $selections = $this->mergeSelectionsWithOptions($options, $selections);
             }

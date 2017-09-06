@@ -11,10 +11,6 @@
  */
 namespace Magento\Customer\Model\Address;
 
-/**
- * Class \Magento\Customer\Model\Address\Form
- *
- */
 class Form extends \Magento\Customer\Model\Form
 {
     /**

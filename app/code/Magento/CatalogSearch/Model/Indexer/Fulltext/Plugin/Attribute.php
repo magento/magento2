@@ -7,10 +7,6 @@ namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin;
 
 use Magento\CatalogSearch\Model\Indexer\Fulltext;
 
-/**
- * Class \Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Attribute
- *
- */
 class Attribute extends AbstractPlugin
 {
     /**
@@ -60,10 +56,10 @@ class Attribute extends AbstractPlugin
     ) {
         $this->saveIsNew = $attribute->isObjectNew();
         $this->saveNeedInvalidation = (
-                $attribute->dataHasChangedFor('is_searchable')
-                || $attribute->dataHasChangedFor('is_filterable')
-                || $attribute->dataHasChangedFor('is_visible_in_advanced_search')
-            ) && ! $this->saveIsNew;
+            $attribute->dataHasChangedFor('is_searchable')
+            || $attribute->dataHasChangedFor('is_filterable')
+            || $attribute->dataHasChangedFor('is_visible_in_advanced_search')
+        );
     }
 
     /**

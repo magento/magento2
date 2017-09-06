@@ -6,10 +6,6 @@
  */
 namespace Magento\Multishipping\Controller\Checkout\Address;
 
-/**
- * Class \Magento\Multishipping\Controller\Checkout\Address\EditAddress
- *
- */
 class EditAddress extends \Magento\Multishipping\Controller\Checkout\Address
 {
     /**

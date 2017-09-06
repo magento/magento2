@@ -6,10 +6,6 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Set;
 
-/**
- * Class \Magento\Catalog\Controller\Adminhtml\Product\Set\SetGrid
- *
- */
 class SetGrid extends \Magento\Catalog\Controller\Adminhtml\Product\Set
 {
     /**

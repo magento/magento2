@@ -6,10 +6,6 @@
  */
 namespace Magento\Paypal\Controller\Express;
 
-/**
- * Class \Magento\Paypal\Controller\Express\PlaceOrder
- *
- */
 class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress\PlaceOrder
 {
     /**

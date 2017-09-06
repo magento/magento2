@@ -6,10 +6,6 @@
 
 namespace Magento\Paypal\Controller\Payflowbml;
 
-/**
- * Class \Magento\Paypal\Controller\Payflowbml\Start
- *
- */
 class Start extends \Magento\Framework\App\Action\Action
 {
     /**

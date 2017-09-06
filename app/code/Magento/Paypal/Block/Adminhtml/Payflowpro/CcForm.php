@@ -14,10 +14,6 @@ use Magento\Paypal\Model\Payflow\Transparent;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Vault\Model\VaultPaymentInterface;
 
-/**
- * Class \Magento\Paypal\Block\Adminhtml\Payflowpro\CcForm
- *
- */
 class CcForm extends \Magento\Payment\Block\Transparent\Form
 {
     /**

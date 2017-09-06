@@ -6,10 +6,6 @@
  */
 namespace Magento\Newsletter\Controller\Adminhtml\Queue;
 
-/**
- * Class \Magento\Newsletter\Controller\Adminhtml\Queue\Grid
- *
- */
 class Grid extends \Magento\Newsletter\Controller\Adminhtml\Queue
 {
     /**

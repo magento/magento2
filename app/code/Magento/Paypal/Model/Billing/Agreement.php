@@ -29,6 +29,7 @@ use Magento\Sales\Model\Order\Payment;
  * @method \Magento\Paypal\Model\Billing\Agreement setAgreementLabel(string $value)
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
 {

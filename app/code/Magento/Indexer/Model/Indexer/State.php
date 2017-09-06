@@ -7,10 +7,6 @@ namespace Magento\Indexer\Model\Indexer;
 
 use Magento\Framework\Indexer\StateInterface;
 
-/**
- * Class \Magento\Indexer\Model\Indexer\State
- *
- */
 class State extends \Magento\Framework\Model\AbstractModel implements StateInterface
 {
     /**

@@ -13,10 +13,6 @@ use Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface as AppliedTax;
 use Magento\Tax\Model\Sales\Order\Tax;
 use Magento\Sales\Model\Order\Tax\Item;
 
-/**
- * Class \Magento\Tax\Model\Sales\Order\TaxManagement
- *
- */
 class TaxManagement implements \Magento\Tax\Api\OrderTaxManagementInterface
 {
     /**

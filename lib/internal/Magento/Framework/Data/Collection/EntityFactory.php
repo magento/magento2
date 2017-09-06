@@ -5,10 +5,6 @@
  */
 namespace Magento\Framework\Data\Collection;
 
-/**
- * Class \Magento\Framework\Data\Collection\EntityFactory
- *
- */
 class EntityFactory implements EntityFactoryInterface
 {
     /**

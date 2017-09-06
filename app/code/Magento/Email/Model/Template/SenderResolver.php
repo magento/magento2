@@ -5,10 +5,6 @@
  */
 namespace Magento\Email\Model\Template;
 
-/**
- * Class \Magento\Email\Model\Template\SenderResolver
- *
- */
 class SenderResolver implements \Magento\Framework\Mail\Template\SenderResolverInterface
 {
     /**
