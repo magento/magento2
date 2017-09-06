@@ -16,12 +16,6 @@ use Magento\InventoryApi\Api\Data\ReservationInterface;
 interface ReservationBuilderInterface
 {
     /**
-     * @param int $reservationId
-     * @return ReservationBuilder
-     */
-    public function setReservationId($reservationId): ReservationBuilder;
-
-    /**
      * @param int $stockId
      * @return ReservationBuilder
      */

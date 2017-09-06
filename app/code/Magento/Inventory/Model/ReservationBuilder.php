@@ -17,11 +17,6 @@ class ReservationBuilder implements ReservationBuilderInterface
     /**
      * @var int
      */
-    private $reservationId;
-
-    /**
-     * @var int
-     */
     private $stockId;
 
     /**
@@ -71,15 +66,6 @@ class ReservationBuilder implements ReservationBuilderInterface
         $this->objectManager = $objectManager;
         $this->reservationBuilderValidator = $reservationBuilderValidator;
         $this->stringService = $stringService;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setReservationId($reservationId): ReservationBuilder
-    {
-        $this->reservationId = $reservationId;
-        return $this;
     }
 
     /**
@@ -154,7 +140,6 @@ class ReservationBuilder implements ReservationBuilderInterface
         }
 
         $data = [
-            ReservationInterface::RESERVATION_ID => $this->reservationId,
             ReservationInterface::STOCK_ID => $this->stockId,
             ReservationInterface::SKU => $this->sku,
             ReservationInterface::QUANTITY => $this->quantity,
@@ -172,7 +157,6 @@ class ReservationBuilder implements ReservationBuilderInterface
      */
     private function reset()
     {
-        $this->reservationId = null;
         $this->stockId = null;
         $this->sku = null;
         $this->quantity = null;
