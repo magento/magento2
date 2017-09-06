@@ -248,4 +248,18 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
     {
         return $this->_customerStorage;
     }
+
+    /**
+     * Returns id of option by value for select and multiselect attributes
+     *
+     * @param array $attributeParameters Parameters of an attribute
+     * @param int|string $value A value of an attribute
+     * @return int An option id of attribute
+     */
+    protected function getSelectAttrIdByValue(array $attributeParameters, $value)
+    {
+        return isset($attributeParameters['options'][strtolower($value)])
+            ? $attributeParameters['options'][strtolower($value)]
+            : 0;
+    }
 }

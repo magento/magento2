@@ -486,6 +486,7 @@ class Address extends AbstractCustomer
      */
     protected function _prepareDataForUpdate(array $rowData)
     {
+        $multiSeparator = $this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR];
         $email = strtolower($rowData[self::COLUMN_EMAIL]);
         $customerId = $this->_getCustomerId($email, $rowData[self::COLUMN_WEBSITE]);
         // entity table data
@@ -523,20 +524,17 @@ class Address extends AbstractCustomer
                         continue;
                     }
                 } elseif ($newAddress && !strlen($rowData[$attributeAlias])) {
-                } elseif ('select' == $attributeParams['type']) {
-                    $value = $attributeParams['options'][strtolower($rowData[$attributeAlias])];
+                } elseif (in_array($attributeParams['type'], ['select', 'boolean'])) {
+                    $value = $this->getSelectAttrIdByValue($attributeParams, mb_strtolower($rowData[$attributeAlias]));
                 } elseif ('datetime' == $attributeParams['type']) {
                     $value = (new \DateTime())->setTimestamp(strtotime($rowData[$attributeAlias]));
                     $value = $value->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
                 } elseif ('multiselect' == $attributeParams['type']) {
-                    $separator = isset($this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR]) ?
-                        $this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR] :
-                        Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR;
-                    $value = str_replace(
-                        $separator,
-                        Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR,
-                        $rowData[$attributeAlias]
-                    );
+                    $ids = [];
+                    foreach (explode($multiSeparator, mb_strtolower($rowData[$attributeAlias])) as $subValue) {
+                        $ids[] = $this->getSelectAttrIdByValue($attributeParams, $subValue);
+                    }
+                    $value = implode(',', $ids);
                 } else {
                     $value = $rowData[$attributeAlias];
                 }
