@@ -10,6 +10,7 @@
          colors="true"
          beStrictAboutTestsThatDoNotTestAnything="false"
          bootstrap="../../bootstrap.php"
+         verbose="true"
 >
     <testsuites>
         <testsuite name="Magento Unit Tests for Static Code Analysis Framework">

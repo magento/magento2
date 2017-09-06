@@ -11,6 +11,7 @@
          xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/4.1/phpunit.xsd"
          colors="true"
          bootstrap="./framework/bootstrap.php"
+         verbose="true"
 >
     <testsuites>
         <testsuite name="All Static Code Analysis Tests">

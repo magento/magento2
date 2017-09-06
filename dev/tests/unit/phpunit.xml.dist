@@ -10,6 +10,7 @@
          colors="true"
          beStrictAboutTestsThatDoNotTestAnything="false"
          bootstrap="./framework/bootstrap.php"
+         verbose="true"
         >
     <testsuite name="Magento Unit Tests">
         <directory suffix="Test.php">../../../app/code/*/*/Test/Unit</directory>
