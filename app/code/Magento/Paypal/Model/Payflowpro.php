@@ -391,8 +391,8 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
     /**
      * Get capture amount
      *
-     * @param string $amount
-     * @return string|int
+     * @param float $amount
+     * @return float|int
      */
     protected function _getCaptureAmount($amount)
     {
