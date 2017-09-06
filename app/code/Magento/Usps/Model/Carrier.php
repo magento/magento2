@@ -1795,10 +1795,10 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             }
             $individualItemWeight = $itemWeight / $ceiledQty;
             $itemDetail->addChild('Quantity', $ceiledQty);
-            $itemDetail->addChild('Value', $item->getCustomsValue() * $item->getQty());
+            $itemDetail->addChild('Value', sprintf('%.2F', $item->getCustomsValue() * $item->getQty()));
             list($individualPoundsWeight, $individualOuncesWeight) = $this->_convertPoundOunces($individualItemWeight);
             $itemDetail->addChild('NetPounds', $individualPoundsWeight);
-            $itemDetail->addChild('NetOunces', $individualOuncesWeight);
+            $itemDetail->addChild('NetOunces', sprintf('%.2F', $individualOuncesWeight));
             $itemDetail->addChild('HSTariffNumber', 0);
             $itemDetail->addChild('CountryOfOrigin', $countryOfManufacture);
 
@@ -1814,7 +1814,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         }
 
         $xml->addChild('GrossPounds', $packagePoundsWeight);
-        $xml->addChild('GrossOunces', $packageOuncesWeight);
+        $xml->addChild('GrossOunces', sprintf('%.2F', $packageOuncesWeight));
         if ($packageParams->getContentType() == 'OTHER' && $packageParams->getContentTypeOther() != null) {
             $xml->addChild('ContentType', $packageParams->getContentType());
             $xml->addChild('ContentTypeOther ', $packageParams->getContentTypeOther());
