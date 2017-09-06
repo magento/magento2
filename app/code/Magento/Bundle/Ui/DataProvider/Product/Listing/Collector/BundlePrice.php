@@ -10,9 +10,9 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\Data\ProductRender\PriceInfoInterface;
 use Magento\Catalog\Api\Data\ProductRender\PriceInfoInterfaceFactory;
 use Magento\Catalog\Api\Data\ProductRenderInterface;
+use Magento\Catalog\Model\ProductRender\FormattedPriceInfoBuilder;
 use Magento\Catalog\Ui\DataProvider\Product\ProductRenderCollectorInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\Catalog\Model\ProductRender\FormattedPriceInfoBuilder;
 
 /**
  * Collect information about bundle price

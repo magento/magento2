@@ -5,8 +5,8 @@
  */
 namespace Magento\Eav\Block\Adminhtml\Attribute;
 
-use Magento\Framework\Registry;
 use Magento\Eav\Model\Entity\Attribute\Config;
+use Magento\Framework\Registry;
 
 /**
  * Disable form fields

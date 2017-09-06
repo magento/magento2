@@ -6,6 +6,7 @@
 namespace Magento\CatalogSearch\Model\ResourceModel\Advanced;
 
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\Api\Search\SearchResultFactory;
@@ -14,7 +15,6 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Search\Adapter\Mysql\TemporaryStorage;
 use Magento\Framework\Search\Request\EmptyRequestDataException;
 use Magento\Framework\Search\Request\NonExistingRequestNameException;
-use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
 
 /**
  * Collection Advanced

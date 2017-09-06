@@ -5,10 +5,10 @@
  */
 namespace Magento\Braintree\Test\Unit\Gateway\Request;
 
+use Magento\Braintree\Gateway\Helper\SubjectReader;
 use Magento\Braintree\Gateway\Request\CaptureDataBuilder;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Sales\Model\Order\Payment;
-use Magento\Braintree\Gateway\Helper\SubjectReader;
 
 /**
  * Class CaptureDataBuilderTest

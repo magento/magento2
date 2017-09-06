@@ -5,8 +5,8 @@
  */
 namespace Magento\Checkout\Controller\Cart;
 
-use Magento\Framework;
 use Magento\Checkout\Model\Cart as CustomerCart;
+use Magento\Framework;
 
 class EstimatePost extends \Magento\Checkout\Controller\Cart
 {

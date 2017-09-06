@@ -38,7 +38,7 @@ class InputException extends AbstractAggregateException
      * @deprecated
      */
     const INVALID_FIELD_VALUE = 'Invalid value of "%value" provided for the %fieldName field.';
-    
+
     /**
      * @deprecated
      */

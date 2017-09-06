@@ -6,10 +6,10 @@
 namespace Magento\Cms\Test\Unit\Model;
 
 use Magento\Cms\Model\Page;
+use Magento\Cms\Model\ResourceModel\Page as PageResource;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Model\Context;
-use Magento\Cms\Model\ResourceModel\Page as PageResource;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 
 /**

@@ -5,11 +5,11 @@
  */
 namespace Magento\NewRelicReporting\Model\Cron;
 
-use Magento\NewRelicReporting\Model\Config;
+use Magento\Catalog\Api\CategoryManagementInterface;
 use Magento\Catalog\Api\ProductManagementInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\ConfigurableProduct\Api\ConfigurableProductManagementInterface;
-use Magento\Catalog\Api\CategoryManagementInterface;
+use Magento\NewRelicReporting\Model\Config;
 
 /**
  * Class ReportCounts

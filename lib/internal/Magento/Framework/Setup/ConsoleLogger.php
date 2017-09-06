@@ -6,8 +6,8 @@
 
 namespace Magento\Framework\Setup;
 
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Console Logger

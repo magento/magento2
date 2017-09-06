@@ -11,7 +11,7 @@
  */
 namespace Magento\Tax\Test\Unit\Model;
 
-use \Magento\Tax\Model\Config;
+use Magento\Tax\Model\Config;
 
 class ConfigTest extends \PHPUnit\Framework\TestCase
 {

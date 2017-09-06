@@ -6,9 +6,9 @@
 namespace Magento\Wishlist\Controller\Index;
 
 use Magento\Framework\App\Action;
+use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Exception\NotFoundException;
-use Magento\Framework\Controller\ResultFactory;
 use Magento\Wishlist\Controller\WishlistProviderInterface;
 
 /**

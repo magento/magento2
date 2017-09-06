@@ -5,9 +5,9 @@
  */
 namespace Magento\Captcha\Observer;
 
-use Magento\Framework\Event\ObserverInterface;
-use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\Request\DataPersistorInterface;
+use Magento\Framework\Event\ObserverInterface;
 
 class CheckContactUsFormObserver implements ObserverInterface
 {

@@ -7,15 +7,15 @@ namespace Magento\Catalog\Test\Unit\Model;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\CategorySearchResultsInterface;
+use Magento\Catalog\Api\Data\CategorySearchResultsInterfaceFactory;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\CategoryList;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
-use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
-use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
+use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
+use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Catalog\Api\Data\CategorySearchResultsInterfaceFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

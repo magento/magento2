@@ -5,12 +5,12 @@
  */
 namespace Magento\CatalogInventory\Ui\Component\Product\Form\Element;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\ValueSourceInterface;
+use Magento\Framework\Serialize\JsonValidator;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Ui\Component\Form\Element\Checkbox;
-use Magento\Framework\Serialize\JsonValidator;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Class UseConfigSettings sets default value from configuration

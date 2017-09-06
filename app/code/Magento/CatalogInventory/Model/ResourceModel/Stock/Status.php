@@ -5,9 +5,8 @@
  */
 namespace Magento\CatalogInventory\Model\ResourceModel\Stock;
 
-use Magento\CatalogInventory\Model\Stock;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
-use Magento\Framework\App\ObjectManager;
+use Magento\CatalogInventory\Model\Stock;
 
 /**
  * CatalogInventory Stock Status per website Resource Model

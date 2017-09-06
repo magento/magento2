@@ -7,8 +7,8 @@
 namespace Magento\Catalog\Model\Product\Option\Type\File;
 
 use Magento\Catalog\Model\Product;
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Catalog\Model\Product\Exception as ProductException;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
 
 /**

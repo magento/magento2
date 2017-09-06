@@ -8,10 +8,7 @@
 namespace Magento\ConfigurableProduct\Model\ResourceModel\Product\Indexer\Price;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
-use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Store\Api\StoreResolverInterface;
-use Magento\Store\Model\Store;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

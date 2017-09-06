@@ -6,7 +6,7 @@
 
 namespace Magento\Backend\Block\Store\Switcher\Form\Renderer;
 
-use \Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
+use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
 
 /**
  * Form fieldset renderer

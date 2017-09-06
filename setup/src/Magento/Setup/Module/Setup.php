@@ -5,8 +5,8 @@
  */
 namespace Magento\Setup\Module;
 
-use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Setup\SchemaSetupInterface;
 
 /**
  * @api

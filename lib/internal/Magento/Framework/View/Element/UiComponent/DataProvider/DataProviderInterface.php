@@ -5,8 +5,6 @@
  */
 namespace Magento\Framework\View\Element\UiComponent\DataProvider;
 
-use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
-
 /**
  * Interface DataProviderInterface
  *

@@ -6,9 +6,9 @@
 
 namespace Magento\Shipping\Test\Block\Order;
 
-use Magento\Shipping\Test\Block\Order\Shipment\Items;
 use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
+use Magento\Shipping\Test\Block\Order\Shipment\Items;
 
 /**
  * Class Shipment

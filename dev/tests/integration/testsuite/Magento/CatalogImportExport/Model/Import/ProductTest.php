@@ -22,11 +22,10 @@ use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Registry;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Registry;
 use Magento\ImportExport\Model\Import;
 use Magento\Store\Model\Store;
-use Magento\UrlRewrite\Model\UrlRewrite;
 
 /**
  * Class ProductTest

@@ -8,9 +8,9 @@ namespace Magento\Sales\Test\TestCase;
 
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndex;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndexEdit;
+use Magento\Mtf\TestCase\Injectable;
 use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Sales\Test\Page\Adminhtml\OrderCreateIndex;
-use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Preconditions:

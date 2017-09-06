@@ -10,9 +10,9 @@ use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Escaper;
 use Magento\Framework\Stdlib\StringUtils;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Search\Model\Query as SearchQuery;
 use Magento\Search\Model\QueryFactory;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Search helper

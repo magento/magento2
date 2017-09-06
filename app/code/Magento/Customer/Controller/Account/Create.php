@@ -8,8 +8,8 @@ namespace Magento\Customer\Controller\Account;
 
 use Magento\Customer\Model\Registration;
 use Magento\Customer\Model\Session;
-use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\View\Result\PageFactory;
 
 class Create extends \Magento\Customer\Controller\AbstractAccount
 {

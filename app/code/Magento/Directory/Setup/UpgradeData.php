@@ -6,10 +6,10 @@
 
 namespace Magento\Directory\Setup;
 
+use Magento\Directory\Helper\Data;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
-use Magento\Directory\Helper\Data;
 
 /**
  * Upgrade Data script for Directory module.

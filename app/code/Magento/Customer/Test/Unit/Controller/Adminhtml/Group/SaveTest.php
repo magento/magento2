@@ -7,8 +7,8 @@ namespace Magento\Customer\Test\Unit\Controller\Adminhtml\Group;
 
 use Magento\Customer\Api\Data\GroupInterfaceFactory;
 use Magento\Customer\Controller\Adminhtml\Group\Save;
-use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\Reflection\DataObjectProcessor;
 
 /**

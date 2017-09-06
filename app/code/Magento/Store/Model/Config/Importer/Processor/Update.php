@@ -5,6 +5,7 @@
  */
 namespace Magento\Store\Model\Config\Importer\Processor;
 
+use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\RuntimeException;
 use Magento\Store\Model\Config\Importer\DataDifferenceCalculator;
@@ -12,7 +13,6 @@ use Magento\Store\Model\GroupFactory;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreFactory;
 use Magento\Store\Model\WebsiteFactory;
-use Magento\Framework\Event\ManagerInterface;
 
 /**
  * The process for updating of existing entities.

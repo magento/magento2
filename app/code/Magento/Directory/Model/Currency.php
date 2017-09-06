@@ -6,8 +6,8 @@
 
 namespace Magento\Directory\Model;
 
-use Magento\Framework\Exception\InputException;
 use Magento\Directory\Model\Currency\Filter;
+use Magento\Framework\Exception\InputException;
 
 /**
  * Currency model
@@ -419,7 +419,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
     private function trimUnicodeDirectionMark($string)
     {
         if (preg_match('/^(\x{200E}|\x{200F})/u', $string, $match)) {
-            $string = preg_replace('/^'.$match[1].'/u', '', $string);
+            $string = preg_replace('/^' . $match[1] . '/u', '', $string);
         }
         return $string;
     }

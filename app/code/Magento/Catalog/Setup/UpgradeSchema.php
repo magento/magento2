@@ -8,10 +8,10 @@ namespace Magento\Catalog\Setup;
 
 use Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter;
 use Magento\Catalog\Model\ResourceModel\Product\Gallery;
+use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Framework\Setup\UpgradeSchemaInterface;
-use Magento\Framework\DB\Ddl\Table;
 
 /**
  * Upgrade the Catalog module DB scheme

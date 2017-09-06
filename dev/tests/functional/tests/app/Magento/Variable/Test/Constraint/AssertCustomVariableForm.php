@@ -6,11 +6,11 @@
 
 namespace Magento\Variable\Test\Constraint;
 
+use Magento\Mtf\Constraint\AbstractAssertForm;
+use Magento\Store\Test\Fixture\Store;
 use Magento\Variable\Test\Fixture\SystemVariable;
 use Magento\Variable\Test\Page\Adminhtml\SystemVariableIndex;
 use Magento\Variable\Test\Page\Adminhtml\SystemVariableNew;
-use Magento\Store\Test\Fixture\Store;
-use Magento\Mtf\Constraint\AbstractAssertForm;
 
 /**
  * Check that data at the form corresponds to the fixture data.

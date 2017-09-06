@@ -5,9 +5,7 @@
  */
 namespace Magento\Framework\App\Test\Unit\PageCache;
 
-use \Magento\Framework\App\PageCache\Version;
-
-use Magento\TestFramework\ObjectManager;
+use Magento\Framework\App\PageCache\Version;
 
 class VersionTest extends \PHPUnit\Framework\TestCase
 {
@@ -92,7 +90,7 @@ class VersionTest extends \PHPUnit\Framework\TestCase
                 ->method('setSecure')
                 ->with(false)
                 ->will($this->returnSelf());
-                
+
             $publicCookieMetadataMock->expects($this->once())
                 ->method('setHttpOnly')
                 ->with(false)

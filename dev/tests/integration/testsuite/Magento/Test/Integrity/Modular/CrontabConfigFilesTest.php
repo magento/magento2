@@ -25,7 +25,6 @@ class CrontabConfigFilesTest extends AbstractMergedConfigTest
      */
     protected function getMergedSchemaFile()
     {
-
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         return $objectManager->get(\Magento\Cron\Model\Config\SchemaLocator::class)->getSchema();
     }

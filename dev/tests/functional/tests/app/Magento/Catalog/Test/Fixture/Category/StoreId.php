@@ -9,7 +9,6 @@ namespace Magento\Catalog\Test\Fixture\Category;
 use Magento\Mtf\Fixture\DataSource;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Store\Test\Fixture\Store;
-use Magento\Store\Test\Fixture\StoreGroup;
 
 /**
  * Category store id scope.

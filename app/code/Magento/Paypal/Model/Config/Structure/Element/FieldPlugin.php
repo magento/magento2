@@ -5,8 +5,8 @@
  */
 namespace Magento\Paypal\Model\Config\Structure\Element;
 
-use Magento\Framework\App\RequestInterface;
 use Magento\Config\Model\Config\Structure\Element\Field as FieldConfigStructure;
+use Magento\Framework\App\RequestInterface;
 use Magento\Paypal\Model\Config\StructurePlugin as ConfigStructurePlugin;
 
 /**

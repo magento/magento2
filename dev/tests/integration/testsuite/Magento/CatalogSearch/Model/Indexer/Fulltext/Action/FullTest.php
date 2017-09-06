@@ -5,13 +5,13 @@
  */
 namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Action;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\CatalogSearch\Model\ResourceModel\Engine;
-use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
-use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Store\Model\Store;
-use Magento\Catalog\Model\Product;
 use Magento\TestFramework\Helper\Bootstrap;
 
 class FullTest extends \PHPUnit\Framework\TestCase

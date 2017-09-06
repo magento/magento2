@@ -6,9 +6,9 @@
 
 namespace Magento\ConfigurableProduct\Test\Unit\Pricing\Price;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class LowestPriceOptionsProviderTest extends \PHPUnit\Framework\TestCase
 {

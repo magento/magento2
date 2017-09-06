@@ -7,12 +7,12 @@
  */
 namespace Magento\MediaStorage\App;
 
-use Magento\Framework\Filesystem;
-use Magento\MediaStorage\Model\File\Storage\ConfigFactory;
-use Magento\MediaStorage\Model\File\Storage\Response;
 use Magento\Framework\App;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\AppInterface;
+use Magento\Framework\Filesystem;
+use Magento\MediaStorage\Model\File\Storage\ConfigFactory;
+use Magento\MediaStorage\Model\File\Storage\Response;
 use Magento\MediaStorage\Model\File\Storage\SynchronizationFactory;
 
 /**

@@ -7,8 +7,8 @@ namespace Magento\Quote\Model\Quote\ShippingAssignment;
 
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Api\Data\ShippingInterface;
-use Magento\Quote\Model\ShippingFactory;
 use Magento\Quote\Model\ShippingAddressManagement;
+use Magento\Quote\Model\ShippingFactory;
 use Magento\Quote\Model\ShippingMethodManagement;
 
 class ShippingProcessor

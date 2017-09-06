@@ -6,8 +6,8 @@
 namespace Magento\Framework\App;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\ObjectManager\ConfigLoaderInterface;
 use Magento\Framework\Filesystem;
+use Magento\Framework\ObjectManager\ConfigLoaderInterface;
 use Psr\Log\LoggerInterface;
 
 /**

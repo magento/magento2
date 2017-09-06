@@ -108,8 +108,7 @@ class RulePool
     protected function createTemplateFileRule()
     {
         return $this->modularSwitchFactory->create(
-            ['ruleNonModular' =>
-            $this->themeFactory->create(
+            ['ruleNonModular' => $this->themeFactory->create(
                 ['rule' => $this->simpleFactory->create(['pattern' => "<theme_dir>/templates"])]
             ),
             'ruleModular' => new Composite(
@@ -167,8 +166,7 @@ class RulePool
             ['ruleNonModular' => new Composite(
                 [
                     $this->themeFactory->create(
-                        ['rule' =>
-                        new Composite(
+                        ['rule' => new Composite(
                             [
                                 $this->simpleFactory
                                     ->create([
@@ -191,8 +189,7 @@ class RulePool
             'ruleModular' => new Composite(
                 [
                     $this->themeFactory->create(
-                        ['rule' =>
-                        new Composite(
+                        ['rule' => new Composite(
                             [
                                 $this->simpleFactory->create(
                                     [
@@ -245,8 +242,7 @@ class RulePool
         return new Composite(
             [
                 $this->themeFactory->create(
-                    ['rule' =>
-                    $this->simpleFactory->create(
+                    ['rule' => $this->simpleFactory->create(
                         ['pattern' => "<theme_dir>/<module_name>/email"]
                     )]
                 ),

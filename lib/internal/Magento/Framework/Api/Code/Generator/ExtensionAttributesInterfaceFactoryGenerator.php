@@ -6,10 +6,10 @@
 
 namespace Magento\Framework\Api\Code\Generator;
 
-use Magento\Framework\ObjectManager\Code\Generator\Factory;
+use Magento\Framework\Code\Generator\CodeGeneratorInterface;
 use Magento\Framework\Code\Generator\DefinedClasses;
 use Magento\Framework\Code\Generator\Io;
-use Magento\Framework\Code\Generator\CodeGeneratorInterface;
+use Magento\Framework\ObjectManager\Code\Generator\Factory;
 
 class ExtensionAttributesInterfaceFactoryGenerator extends Factory
 {

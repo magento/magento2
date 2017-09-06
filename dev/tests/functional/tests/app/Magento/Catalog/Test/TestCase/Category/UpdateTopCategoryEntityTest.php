@@ -9,8 +9,8 @@ namespace Magento\Catalog\Test\TestCase\Category;
 use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryEdit;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryIndex;
-use Magento\Mtf\TestCase\Injectable;
 use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Preconditions:

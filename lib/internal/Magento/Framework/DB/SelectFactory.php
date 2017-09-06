@@ -6,9 +6,8 @@
 
 namespace Magento\Framework\DB;
 
-use Magento\Framework\DB\Select;
-use Magento\Framework\DB\Select\SelectRenderer;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select\SelectRenderer;
 
 /**
  * Class SelectFactory

@@ -5,7 +5,6 @@
  */
 namespace Magento\Framework\Search\Dynamic\Algorithm;
 
-use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Search\Adapter\OptionsInterface;
 use Magento\Framework\Search\Dynamic\Algorithm;
 use Magento\Framework\Search\Dynamic\DataProviderInterface;

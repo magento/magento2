@@ -7,7 +7,6 @@ namespace Magento\CatalogUrlRewrite\Observer;
 
 use Magento\Catalog\Model\Product;
 use Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator;
-use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 
 class ProductUrlKeyAutogeneratorObserver implements ObserverInterface

@@ -6,7 +6,6 @@
 namespace Magento\CatalogSearch\Test\Unit\Model\ResourceModel;
 
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
-use PHPUnit\Framework\TestCase;
 
 class AdvancedTest extends \PHPUnit\Framework\TestCase
 {

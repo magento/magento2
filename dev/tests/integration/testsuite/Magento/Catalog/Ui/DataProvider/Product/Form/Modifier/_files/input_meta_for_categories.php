@@ -5,16 +5,11 @@
  */
 
 return [
-    'product-details' =>
-        [
-            'children' =>
-                ['container_category_ids' =>
-                    [
+    'product-details' => [
+            'children' => ['container_category_ids' => [
                         'arguments' => [
-                            'data' =>
-                                [
-                                    'config' =>
-                                        [
+                            'data' => [
+                                    'config' => [
                                             'formElement' => 'container',
                                             'componentType' => 'container',
                                             'breakLine' => false,
@@ -25,14 +20,10 @@ return [
                                 ],
                         ],
                         'children' => [
-                            'category_ids' =>
-                                [
-                                    'arguments' =>
-                                        [
-                                            'data' =>
-                                                [
-                                                    'config' =>
-                                                        [
+                            'category_ids' => [
+                                    'arguments' => [
+                                            'data' => [
+                                                    'config' => [
                                                             'dataType' => 'text',
                                                             'formElement' => 'input',
                                                             'visible' => '1',

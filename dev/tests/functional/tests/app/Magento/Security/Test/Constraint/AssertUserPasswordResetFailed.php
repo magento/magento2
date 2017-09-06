@@ -6,8 +6,8 @@
 
 namespace Magento\Security\Test\Constraint;
 
-use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Backend\Test\Page\AdminAuthLogin;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Assert that user reset password failed message is present on user login page.

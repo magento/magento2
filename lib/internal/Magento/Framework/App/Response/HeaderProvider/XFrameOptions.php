@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\App\Response\HeaderProvider;
 
-use \Magento\Framework\App\Response\Http;
+use Magento\Framework\App\Response\Http;
 
 /**
  * Adds an X-FRAME-OPTIONS header to HTTP responses to safeguard against click-jacking.

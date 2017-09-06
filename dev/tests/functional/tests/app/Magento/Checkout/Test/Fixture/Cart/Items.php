@@ -6,9 +6,9 @@
 
 namespace Magento\Checkout\Test\Fixture\Cart;
 
-use Magento\Mtf\ObjectManager;
 use Magento\Mtf\Fixture\DataSource;
 use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\ObjectManager;
 
 /**
  * Data for verify cart item block on checkout page.

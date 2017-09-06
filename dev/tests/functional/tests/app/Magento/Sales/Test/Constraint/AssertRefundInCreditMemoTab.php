@@ -6,11 +6,11 @@
 
 namespace Magento\Sales\Test\Constraint;
 
+use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\CreditMemos\Grid;
 use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
-use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Assert that refund is present in the tab with ID and refunded amount(depending on full/partial refund).

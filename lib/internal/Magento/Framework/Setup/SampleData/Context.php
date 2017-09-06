@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Setup\SampleData;
 
-use \Magento\Framework\File\Csv;
+use Magento\Framework\File\Csv;
 
 /**
  * Constructor modification point for Magento\Framework\Setup\SampleData.

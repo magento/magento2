@@ -5,8 +5,8 @@
  */
 namespace Magento\Deploy\Process;
 
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
 
 /**

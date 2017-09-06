@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-use Magento\Catalog\Api\Data\ProductInterface;
-
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
 /** @var \Magento\Framework\Registry $registry */

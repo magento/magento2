@@ -6,12 +6,11 @@
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Composite;
 
+use Magento\Backend\Test\Block\Template;
+use Magento\Catalog\Test\Block\AbstractConfigureBlock;
+use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Mtf\Fixture\InjectableFixture;
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
-use Magento\Catalog\Test\Block\AbstractConfigureBlock;
-use Magento\Backend\Test\Block\Template;
 
 /**
  * Adminhtml catalog product composite configure block.

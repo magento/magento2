@@ -8,9 +8,8 @@
 namespace Magento\GiftMessage\Model;
 
 use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Framework\Exception\InputException;
-use Magento\Framework\Exception\State\InvalidTransitionException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\State\InvalidTransitionException;
 
 /**
  * Shopping cart gift message item repository object for registered customer
@@ -86,7 +85,7 @@ class ItemRepository implements \Magento\GiftMessage\Api\ItemRepositoryInterface
         $quote = $this->quoteRepository->getActive($cartId);
         if (!$item = $quote->getItemById($itemId)) {
             throw new NoSuchEntityException(__('There is no item with provided id in the cart'));
-        };
+        }
         $messageId = $item->getGiftMessageId();
         if (!$messageId) {
             return null;
@@ -116,7 +115,7 @@ class ItemRepository implements \Magento\GiftMessage\Api\ItemRepositoryInterface
             throw new NoSuchEntityException(
                 __('There is no product with provided  itemId: %1 in the cart', $itemId)
             );
-        };
+        }
 
         if ($item->getIsVirtual()) {
             throw new InvalidTransitionException(__('Gift Messages are not applicable for virtual products'));

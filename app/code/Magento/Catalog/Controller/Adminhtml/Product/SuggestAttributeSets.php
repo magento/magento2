@@ -14,7 +14,7 @@ class SuggestAttributeSets extends \Magento\Backend\App\Action
      * @see _isAllowed()
      */
     const ADMIN_RESOURCE = 'Magento_Catalog::sets';
-    
+
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
      */

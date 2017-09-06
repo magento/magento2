@@ -6,10 +6,10 @@
 
 namespace Magento\CatalogSearch\Test\Constraint;
 
-use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\CatalogSearch\Test\Page\AdvancedResult;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery;
+use Magento\CatalogSearch\Test\Page\AdvancedResult;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Assert product can be added to cart from search results page.

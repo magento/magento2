@@ -6,9 +6,9 @@
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Action\Tab;
 
+use Magento\Backend\Test\Block\Widget\Tab;
 use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\Locator;
-use Magento\Backend\Test\Block\Widget\Tab;
 
 /**
  * Tab on Product update attributes Form.

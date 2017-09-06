@@ -5,11 +5,11 @@
  */
 namespace Magento\TestFramework;
 
-use Magento\Framework\Autoload\AutoloaderInterface;
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\App\DeploymentConfig\Reader;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Autoload\AutoloaderInterface;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Filesystem\Glob;
 
 /**
@@ -171,8 +171,8 @@ class Application
             \Magento\Framework\App\Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => $customDirs,
             \Magento\Framework\App\State::PARAM_MODE => $appMode
         ];
-        $driverPool = new \Magento\Framework\Filesystem\DriverPool;
-        $configFilePool = new \Magento\Framework\Config\File\ConfigFilePool;
+        $driverPool = new \Magento\Framework\Filesystem\DriverPool();
+        $configFilePool = new \Magento\Framework\Config\File\ConfigFilePool();
         $this->_factory = new \Magento\TestFramework\ObjectManagerFactory($this->dirList, $driverPool, $configFilePool);
 
         $this->_configDir = $this->dirList->getPath(DirectoryList::CONFIG);
@@ -338,10 +338,8 @@ class Application
         $objectManagerConfiguration = [
             'preferences' => [
                 \Magento\Framework\App\State::class => \Magento\TestFramework\App\State::class,
-                \Magento\Framework\Mail\TransportInterface::class =>
-                    \Magento\TestFramework\Mail\TransportInterfaceMock::class,
-                \Magento\Framework\Mail\Template\TransportBuilder::class
-                    => \Magento\TestFramework\Mail\Template\TransportBuilderMock::class,
+                \Magento\Framework\Mail\TransportInterface::class => \Magento\TestFramework\Mail\TransportInterfaceMock::class,
+                \Magento\Framework\Mail\Template\TransportBuilder::class => \Magento\TestFramework\Mail\Template\TransportBuilderMock::class,
             ]
         ];
         if ($this->loadTestExtensionAttributes) {

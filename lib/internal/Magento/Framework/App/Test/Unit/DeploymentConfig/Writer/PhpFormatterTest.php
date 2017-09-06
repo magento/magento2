@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\App\Test\Unit\DeploymentConfig\Writer;
 
-use \Magento\Framework\App\DeploymentConfig\Writer\PhpFormatter;
+use Magento\Framework\App\DeploymentConfig\Writer\PhpFormatter;
 
 class PhpFormatterTest extends \PHPUnit\Framework\TestCase
 {

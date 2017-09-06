@@ -15,7 +15,7 @@ class MarketplaceCredentials extends AbstractActionController
      */
     public function indexAction()
     {
-        $view = new ViewModel;
+        $view = new ViewModel();
         $view->setTerminal(true);
         return $view;
     }

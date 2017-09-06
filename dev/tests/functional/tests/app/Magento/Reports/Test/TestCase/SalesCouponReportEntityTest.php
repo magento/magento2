@@ -6,13 +6,13 @@
 
 namespace Magento\Reports\Test\TestCase;
 
+use Magento\Mtf\TestCase\Injectable;
 use Magento\Reports\Test\Page\Adminhtml\SalesCouponReportView;
 use Magento\Reports\Test\Page\Adminhtml\Statistics;
 use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Sales\Test\Page\Adminhtml\OrderInvoiceNew;
 use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
-use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Preconditions:

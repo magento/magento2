@@ -6,14 +6,13 @@
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section;
 
-use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Options\AbstractOptions;
+use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Options\Row;
 use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Options\Search\Grid;
-use Magento\Mtf\ObjectManager;
+use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\ElementInterface;
 use Magento\Mtf\Client\Locator;
 use Magento\Ui\Test\Block\Adminhtml\Section;
-use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Options\AbstractOptions;
-use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Options\Row;
 
 /**
  * Product custom options section.

@@ -8,8 +8,8 @@ namespace Magento\Store\Test\TestCase;
 
 use Magento\Backend\Test\Page\Adminhtml\NewWebsiteIndex;
 use Magento\Backend\Test\Page\Adminhtml\StoreIndex;
-use Magento\Store\Test\Fixture\Website;
 use Magento\Mtf\TestCase\Injectable;
+use Magento\Store\Test\Fixture\Website;
 
 /**
  * Create Website (Store Management)

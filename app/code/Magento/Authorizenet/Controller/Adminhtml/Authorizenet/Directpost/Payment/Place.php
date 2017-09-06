@@ -5,12 +5,12 @@
  */
 namespace Magento\Authorizenet\Controller\Adminhtml\Authorizenet\Directpost\Payment;
 
-use Magento\Framework\Escaper;
-use Magento\Catalog\Helper\Product;
-use Magento\Backend\App\Action\Context;
-use Magento\Framework\View\Result\PageFactory;
-use Magento\Backend\Model\View\Result\ForwardFactory;
 use Magento\Authorizenet\Helper\Backend\Data as DataHelper;
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\ForwardFactory;
+use Magento\Catalog\Helper\Product;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Result\PageFactory;
 
 /**
  * Class Place

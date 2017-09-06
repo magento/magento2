@@ -6,10 +6,10 @@
 
 namespace Magento\Checkout\Test\Constraint;
 
-use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Checkout\Test\Fixture\Cart;
 use Magento\Checkout\Test\Page\CheckoutOnepage;
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 class AssertVisibleItemsQtyInCheckoutSummaryBlock extends AbstractConstraint
 {

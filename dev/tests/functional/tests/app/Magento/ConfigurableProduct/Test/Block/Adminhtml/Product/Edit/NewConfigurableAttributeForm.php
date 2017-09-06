@@ -6,10 +6,10 @@
 
 namespace Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit;
 
-use Magento\Ui\Test\Block\Adminhtml\FormSections;
 use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Ui\Test\Block\Adminhtml\FormSections;
 
 /**
  * New attribute form on configurable product page.

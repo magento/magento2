@@ -6,8 +6,6 @@
  */
 namespace Magento\Catalog\Model\Product\Attribute;
 
-use Magento\Framework\Exception\InputException;
-
 class SetRepository implements \Magento\Catalog\Api\AttributeSetRepositoryInterface
 {
     /**

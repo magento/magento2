@@ -6,8 +6,8 @@
 
 namespace Magento\Cms\Test\Constraint;
 
-use Magento\Cms\Test\Page\CmsPage as FrontCmsPage;
 use Magento\Cms\Test\Page\CmsIndex;
+use Magento\Cms\Test\Page\CmsPage as FrontCmsPage;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Constraint\AbstractConstraint;
 

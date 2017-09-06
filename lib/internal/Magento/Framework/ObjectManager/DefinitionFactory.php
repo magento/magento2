@@ -5,12 +5,9 @@
  */
 namespace Magento\Framework\ObjectManager;
 
-use Magento\Framework\Filesystem\DriverInterface;
-use Magento\Framework\Interception\Code\Generator as InterceptionGenerator;
-use Magento\Framework\ObjectManager\Definition\Runtime;
-use Magento\Framework\ObjectManager\Profiler\Code\Generator as ProfilerGenerator;
-use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Code\Generator\Autoloader;
+use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\ObjectManager\Definition\Runtime;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

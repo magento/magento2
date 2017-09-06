@@ -5,9 +5,9 @@
  */
 namespace Magento\Config\App\Config\Type;
 
+use Magento\Config\App\Config\Type\System\Reader;
 use Magento\Framework\App\Config\ConfigTypeInterface;
 use Magento\Framework\App\ObjectManager;
-use Magento\Config\App\Config\Type\System\Reader;
 
 /**
  * System configuration type

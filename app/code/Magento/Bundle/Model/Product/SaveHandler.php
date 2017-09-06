@@ -5,9 +5,9 @@
  */
 namespace Magento\Bundle\Model\Product;
 
-use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Bundle\Api\ProductOptionRepositoryInterface as OptionRepository;
 use Magento\Bundle\Api\ProductLinkManagementInterface;
+use Magento\Bundle\Api\ProductOptionRepositoryInterface as OptionRepository;
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;

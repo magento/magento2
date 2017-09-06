@@ -5,8 +5,8 @@
  */
 namespace Magento\Search\Controller\Adminhtml\Term;
 
-use Magento\Search\Controller\Adminhtml\Term as TermController;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Search\Controller\Adminhtml\Term as TermController;
 
 class NewAction extends TermController
 {

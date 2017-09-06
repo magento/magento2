@@ -5,9 +5,8 @@
  */
 namespace Magento\Setup\Model\Cron;
 
-use Magento\Setup\Model\Updater;
-use Magento\Setup\Model\Cron\Queue;
 use Magento\Framework\Composer\ComposerInformation;
+use Magento\Setup\Model\Updater;
 
 /**
  * Job to remove a component. Run by Setup Cron Task

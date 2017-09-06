@@ -6,10 +6,10 @@
 
 namespace Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab;
 
-use Magento\Mtf\Client\Locator;
-use Magento\Mtf\Client\Element\SimpleElement;
-use Magento\Widget\Test\Fixture\Widget;
 use Magento\Backend\Test\Block\Widget\Tab;
+use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Client\Locator;
+use Magento\Widget\Test\Fixture\Widget;
 
 /**
  * Widget options form.

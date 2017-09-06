@@ -88,7 +88,7 @@ class ComposerLockTest extends \PHPUnit\Framework\TestCase
     {
         if (isset($lockData['content-hash'])) {
             $this->assertLockDataRelevantToMeaningfulComposerConfig($lockData, $composerFilePath);
-        } else if (isset($lockData['hash'])) {
+        } elseif (isset($lockData['hash'])) {
             $this->assertLockDataRelevantToFullComposerConfig($lockData, $composerFilePath);
         } else {
             $this->fail('composer.lock does not linked to composer.json data');

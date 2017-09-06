@@ -6,8 +6,8 @@
 
 namespace Magento\Customer\Test\Constraint;
 
-use Magento\Customer\Test\Fixture\CustomerGroup;
 use Magento\Customer\Test\Fixture\Customer;
+use Magento\Customer\Test\Fixture\CustomerGroup;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndex;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndexNew;
 use Magento\Mtf\Constraint\AbstractConstraint;

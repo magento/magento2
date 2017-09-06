@@ -186,7 +186,7 @@ class LinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAbstract
         ];
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => '/V1/configurable-products/'. $productSku .'/options',
+                'resourcePath' => '/V1/configurable-products/' . $productSku . '/options',
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
             'soap' => [
@@ -264,7 +264,7 @@ class LinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAbstract
     {
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '/' . $productSku  . '/children',
+                'resourcePath' => self::RESOURCE_PATH . '/' . $productSku . '/children',
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET
             ],
             'soap' => [

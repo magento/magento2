@@ -8,9 +8,9 @@ namespace Magento\ConfigurableProduct\Model\Product\Validator;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\DataObject;
 use Magento\Framework\Event\Manager;
 use Magento\Framework\Json\Helper\Data;
-use Magento\Framework\DataObject;
 
 /**
  * Configurable product validation

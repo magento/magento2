@@ -10,10 +10,10 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\OfflinePayments\Model\Banktransfer;
 use Magento\OfflinePayments\Model\Cashondelivery;
+use Magento\OfflinePayments\Model\Checkmo;
 use Magento\OfflinePayments\Observer\BeforeOrderPaymentSaveObserver;
 use Magento\Sales\Model\Order\Payment;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
-use Magento\OfflinePayments\Model\Checkmo;
 
 class BeforeOrderPaymentSaveObserverTest extends \PHPUnit\Framework\TestCase
 {

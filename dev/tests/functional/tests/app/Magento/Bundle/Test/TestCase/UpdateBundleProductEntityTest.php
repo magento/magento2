@@ -7,11 +7,11 @@
 namespace Magento\Bundle\Test\TestCase;
 
 use Magento\Bundle\Test\Fixture\BundleProduct;
-use Magento\Store\Test\Fixture\Store;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
-use Magento\Mtf\TestCase\Injectable;
 use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\TestCase\Injectable;
+use Magento\Store\Test\Fixture\Store;
 
 /**
  * Test Flow:

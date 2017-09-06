@@ -5,8 +5,6 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product\Flat;
 
-use Magento\Framework\App\ResourceConnection;
-
 /**
  * Class TableData
  */

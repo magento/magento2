@@ -6,11 +6,11 @@
 namespace Magento\Bundle\Setup;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Eav\Setup\EavSetup;
+use Magento\Eav\Setup\EavSetupFactory;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
-use Magento\Eav\Setup\EavSetupFactory;
-use Magento\Eav\Setup\EavSetup;
 
 class UpgradeData implements UpgradeDataInterface
 {

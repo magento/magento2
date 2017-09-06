@@ -10,8 +10,8 @@ use Magento\Mtf\Fixture\DataSource;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Util\Protocol\CurlInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport;
-use Magento\Tax\Test\Fixture\TaxClass as FixtureTaxClass;
 use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
+use Magento\Tax\Test\Fixture\TaxClass as FixtureTaxClass;
 
 /**
  * Tax class data source.

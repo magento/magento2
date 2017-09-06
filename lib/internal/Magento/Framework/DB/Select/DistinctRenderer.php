@@ -22,7 +22,7 @@ class DistinctRenderer implements RendererInterface
     public function render(Select $select, $sql = '')
     {
         if ($select->getPart(Select::DISTINCT)) {
-            $sql .= ' ' . Select::SQL_DISTINCT  . ' ';
+            $sql .= ' ' . Select::SQL_DISTINCT . ' ';
         }
         return $sql;
     }

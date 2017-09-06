@@ -6,9 +6,9 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
 
-use Magento\Framework\View\Result\PageFactory;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Registry;
+use Magento\Framework\View\Result\PageFactory;
 
 class View extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\View
 {

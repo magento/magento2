@@ -40,7 +40,7 @@ class SwitcherTest extends \PHPUnit\Framework\TestCase
         $storeRepository = $this->_objectManager->create(\Magento\Store\Api\StoreRepositoryInterface::class);
         $store = $storeRepository->get($storeCode);
         $result = json_decode($block->getTargetStorePostData($store), true);
-        
+
         $this->assertContains($storeCode, $result['action']);
     }
 }

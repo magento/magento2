@@ -7,7 +7,7 @@
  */
 namespace Magento\Framework\Exception\Test\Unit\State;
 
-use \Magento\Framework\Exception\State\ExpiredException;
+use Magento\Framework\Exception\State\ExpiredException;
 use Magento\Framework\Phrase;
 
 /**

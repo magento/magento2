@@ -8,7 +8,9 @@ namespace Magento\CatalogSearch\Model\Adapter\Mysql\Filter;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\CatalogSearch\Model\Search\FilterMapper\VisibilityFilter;
 use Magento\CatalogSearch\Model\Search\TableMapper;
+use Magento\Customer\Model\Session;
 use Magento\Eav\Model\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
@@ -20,8 +22,6 @@ use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
 use Magento\Framework\Search\Adapter\Mysql\Filter\PreprocessorInterface;
 use Magento\Framework\Search\Request\FilterInterface;
 use Magento\Store\Model\Store;
-use Magento\Customer\Model\Session;
-use Magento\CatalogSearch\Model\Search\FilterMapper\VisibilityFilter;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

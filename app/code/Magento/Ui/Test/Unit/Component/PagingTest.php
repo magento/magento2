@@ -5,10 +5,10 @@
  */
 namespace Magento\Ui\Test\Unit\Component;
 
-use Magento\Ui\Component\Paging;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
+use Magento\Ui\Component\Paging;
 
 /**
  * Class PagingTest

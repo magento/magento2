@@ -8,7 +8,6 @@ namespace Magento\UrlRewrite\Test\Block\Adminhtml\Catalog\Edit;
 
 use Magento\Mtf\Block\Form;
 use Magento\Mtf\Client\Element\SimpleElement;
-use Magento\Mtf\Client\Element;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**

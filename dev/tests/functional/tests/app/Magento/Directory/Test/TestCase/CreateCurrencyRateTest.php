@@ -8,9 +8,9 @@ namespace Magento\Directory\Test\TestCase;
 
 use Magento\Catalog\Test\TestStep\CreateProductsStep;
 use Magento\Config\Test\Fixture\ConfigData;
-use Magento\Mtf\TestCase\Injectable;
-use Magento\Directory\Test\Fixture\CurrencyRate;
 use Magento\CurrencySymbol\Test\Page\Adminhtml\SystemCurrencyIndex;
+use Magento\Directory\Test\Fixture\CurrencyRate;
+use Magento\Mtf\TestCase\Injectable;
 use Magento\Mtf\TestStep\TestStepFactory;
 
 /**

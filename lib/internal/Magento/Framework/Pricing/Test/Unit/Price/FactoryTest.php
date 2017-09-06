@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Pricing\Test\Unit\Price;
 
-use \Magento\Framework\Pricing\Price\Factory;
+use Magento\Framework\Pricing\Price\Factory;
 
 /**
  * Test class for \Magento\Framework\Pricing\Factory

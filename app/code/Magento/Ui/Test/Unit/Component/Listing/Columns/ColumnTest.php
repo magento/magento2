@@ -5,12 +5,12 @@
  */
 namespace Magento\Ui\Test\Unit\Component\Listing\Columns;
 
-use Magento\Ui\Component\Listing\Columns\Column;
-use Magento\Framework\View\Element\UiComponentFactory;
-use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
+use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Framework\View\Element\UiComponentInterface;
+use Magento\Ui\Component\Listing\Columns\Column;
 
 /**
  * Class ColumnTest

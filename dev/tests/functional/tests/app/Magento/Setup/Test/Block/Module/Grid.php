@@ -6,8 +6,8 @@
 namespace Magento\Setup\Test\Block\Module;
 
 use Magento\Mtf\Block\Block;
-use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Client\ElementInterface;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Class Grid

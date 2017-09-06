@@ -23,7 +23,7 @@ class FlushStaticFilesCacheButtonVisibilityTest extends Injectable
     const MVP = 'no';
     const SEVERITY = 'S2';
     /* end tags */
-    
+
     /**
      * Check 'Flush Static Files Cache' not visible in production mode.
      *

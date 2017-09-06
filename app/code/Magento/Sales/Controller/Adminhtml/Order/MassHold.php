@@ -5,11 +5,11 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
-use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Backend\App\Action\Context;
-use Magento\Ui\Component\MassAction\Filter;
-use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Sales\Api\OrderManagementInterface;
+use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
+use Magento\Ui\Component\MassAction\Filter;
 
 /**
  * Class MassHold

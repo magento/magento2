@@ -24,7 +24,7 @@ class CurrencyInformationAcquirer implements \Magento\Directory\Api\CurrencyInfo
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
-    
+
     /**
      * @param \Magento\Directory\Model\Data\CurrencyInformationFactory $currencyInformationFactory
      * @param \Magento\Directory\Model\Data\ExchangeRateFactory $exchangeRateFactory

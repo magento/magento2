@@ -48,8 +48,7 @@ return [
                         'origin' => 'title',
                         'dataType' => 'text',
                         'type' => 'searchable',
-                        'filters' =>
-                            [
+                        'filters' => [
                                 0 => \Magento\Framework\Search\Index\Filter\LowercaseFilter::class,
                             ],
                     ],
@@ -59,8 +58,7 @@ return [
                         'origin' => 'identifier',
                         'dataType' => null,
                         'type' => 'filterable',
-                        'filters' =>
-                            [],
+                        'filters' => [],
                     ],
                 ],
             ],
@@ -69,20 +67,17 @@ return [
                 'name' => 'second',
                 'provider' => null,
                 'fields' => [
-                    'title' =>
-                        [
+                    'title' => [
                             'name' => 'title',
                             'handler' => null,
                             'origin' => 'title',
                             'dataType' => null,
                             'type' => 'searchable',
-                            'filters' =>
-                                [],
+                            'filters' => [],
                         ],
                 ],
                 'references' => [
-                    'first' =>
-                        [
+                    'first' => [
                             'fieldset' => 'first',
                             'from' => 'id_field',
                             'to' => 'second_entity_id',

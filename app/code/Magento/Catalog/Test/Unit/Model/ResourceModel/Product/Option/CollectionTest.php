@@ -5,8 +5,8 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product\Option;
 
-use \Magento\Catalog\Model\ResourceModel\Product\Option\Collection;
-use \Magento\Catalog\Model\ResourceModel\Product\Option\Value;
+use Magento\Catalog\Model\ResourceModel\Product\Option\Collection;
+use Magento\Catalog\Model\ResourceModel\Product\Option\Value;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

@@ -8,7 +8,6 @@ namespace Magento\ConfigurableProduct\Model;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\CollectionFactory;
 
 class ConfigurableProductManagement implements \Magento\ConfigurableProduct\Api\ConfigurableProductManagementInterface

@@ -35,7 +35,7 @@ class LandingUpdater extends AbstractActionController
             . "Click 'Agree and Update Magento' or read ";
         $docRef = "http://devdocs.magento.com/guides/v1.0/install-gde/install/install-web.html";
         $agreeButtonText = "Agree and Update Magento";
-        $view = new ViewModel;
+        $view = new ViewModel();
         $view->setTerminal(true);
         $view->setTemplate('/magento/setup/landing.phtml');
         $view->setVariable('version', $this->productMetadata->getVersion());

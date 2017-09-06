@@ -6,9 +6,9 @@
 
 namespace Magento\Sales\Test\Constraint;
 
-use Magento\Sales\Test\Page\SalesGuestPrint;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Fixture\InjectableFixture;
+use Magento\Sales\Test\Page\SalesGuestPrint;
 
 /**
  * Assert that products printed correctly on sales guest print page.

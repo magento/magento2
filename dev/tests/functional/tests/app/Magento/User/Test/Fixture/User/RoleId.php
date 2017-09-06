@@ -7,8 +7,8 @@
 namespace Magento\User\Test\Fixture\User;
 
 use Magento\Mtf\Fixture\DataSource;
-use Magento\User\Test\Fixture\Role;
 use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\User\Test\Fixture\Role;
 
 /**
  * Source for Role of User.

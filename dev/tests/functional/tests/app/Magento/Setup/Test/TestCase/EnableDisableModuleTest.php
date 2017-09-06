@@ -5,10 +5,10 @@
  */
 namespace Magento\Setup\Test\TestCase;
 
-use Magento\Mtf\TestCase\Injectable;
 use Magento\Backend\Test\Page\Adminhtml\Dashboard;
-use Magento\Setup\Test\Constraint\Module\AssertModuleInGrid;
+use Magento\Mtf\TestCase\Injectable;
 use Magento\Setup\Test\Constraint\AssertSuccessfulReadinessCheck;
+use Magento\Setup\Test\Constraint\Module\AssertModuleInGrid;
 use Magento\Setup\Test\Constraint\Module\AssertSuccessMessage;
 use Magento\Setup\Test\Fixture\BackupOptions;
 use Magento\Setup\Test\Fixture\Module;

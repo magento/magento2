@@ -5,6 +5,7 @@
  */
 namespace Magento\Dhl\Test\Unit\Model;
 
+use Magento\Dhl\Model\Validator\XmlValidator;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\HTTP\ZendClient;
 use Magento\Framework\HTTP\ZendClientFactory;
@@ -12,7 +13,6 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Xml\Security;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
-use Magento\Dhl\Model\Validator\XmlValidator;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

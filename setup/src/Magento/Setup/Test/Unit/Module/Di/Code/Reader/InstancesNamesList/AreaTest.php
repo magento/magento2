@@ -5,7 +5,7 @@
  */
 namespace Magento\Setup\Test\Unit\Module\Di\Code\Reader\InstancesNamesList;
 
-use \Magento\Setup\Module\Di\Code\Reader\Decorator\Area;
+use Magento\Setup\Module\Di\Code\Reader\Decorator\Area;
 
 /**
  * Class AreaTest

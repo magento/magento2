@@ -48,8 +48,8 @@ class ParserTest extends \PHPUnit\Framework\TestCase
     public function testAddPhrase($options, $phpFiles, $jsFiles, $phpMap, $jsMap, $phraseFactoryMap, $expectedResult)
     {
         // 1. Create mocks
-        $phpAdapter = new AdapterStub;
-        $jsAdapter = new AdapterStub;
+        $phpAdapter = new AdapterStub();
+        $jsAdapter = new AdapterStub();
 
         // 2. Set mocks
         $this->parser->addAdapter('php', $phpAdapter);

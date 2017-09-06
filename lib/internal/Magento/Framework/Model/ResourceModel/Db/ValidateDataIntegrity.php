@@ -6,8 +6,8 @@
 
 namespace Magento\Framework\Model\ResourceModel\Db;
 
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\EntityManager\HydratorPool;
+use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Class ValidateDataIntegrity

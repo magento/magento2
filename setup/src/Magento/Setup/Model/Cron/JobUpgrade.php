@@ -5,11 +5,7 @@
  */
 namespace Magento\Setup\Model\Cron;
 
-use Magento\Setup\Console\Command\AbstractSetupCommand;
-use Magento\Setup\Model\ObjectManagerProvider;
 use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Setup\Model\Cron\Queue;
 
 /**
  * Upgrade job

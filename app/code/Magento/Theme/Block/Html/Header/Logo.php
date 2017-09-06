@@ -94,7 +94,7 @@ class Logo extends \Magento\Framework\View\Element\Template
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
         }
-        return (int)$this->_data['logo_width'] ? : (int)$this->getLogoImgWidth();
+        return (int)$this->_data['logo_width'] ?: (int)$this->getLogoImgWidth();
     }
 
     /**
@@ -110,7 +110,7 @@ class Logo extends \Magento\Framework\View\Element\Template
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
         }
-        return (int)$this->_data['logo_height'] ? : (int)$this->getLogoImgHeight();
+        return (int)$this->_data['logo_height'] ?: (int)$this->getLogoImgHeight();
     }
 
     /**

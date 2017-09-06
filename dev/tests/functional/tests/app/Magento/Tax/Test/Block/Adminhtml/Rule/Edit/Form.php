@@ -6,11 +6,11 @@
 
 namespace Magento\Tax\Test\Block\Adminhtml\Rule\Edit;
 
+use Magento\Mtf\Block\Form as FormInterface;
+use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Tax\Test\Fixture\TaxRule;
-use Magento\Mtf\Client\Element\SimpleElement;
-use Magento\Mtf\Block\Form as FormInterface;
 
 /**
  * Form for tax rule creation.

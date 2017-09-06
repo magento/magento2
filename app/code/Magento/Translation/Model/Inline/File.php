@@ -5,9 +5,9 @@
  */
 namespace Magento\Translation\Model\Inline;
 
-use Magento\Framework\Translate\ResourceInterface;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Translate\ResourceInterface;
 
 /**
  * Prepares content of inline translations file.

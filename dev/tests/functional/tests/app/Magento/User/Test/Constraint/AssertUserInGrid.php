@@ -6,9 +6,9 @@
 
 namespace Magento\User\Test\Constraint;
 
+use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\User\Test\Fixture\User;
 use Magento\User\Test\Page\Adminhtml\UserIndex;
-use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Asserts that user is present in User Grid.

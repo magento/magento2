@@ -6,8 +6,8 @@
 
 namespace Magento\CatalogUrlRewrite\Test\TestCase;
 
-use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
+use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductNew;
 use Magento\Mtf\TestCase\Injectable;

@@ -5,11 +5,10 @@
  */
 namespace Magento\Framework\Code;
 
-use Magento\Framework\Code\Generator;
+use Magento\Framework\Api\Code\Generator\ExtensionAttributesInterfaceFactoryGenerator;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Interception\Code\Generator as InterceptionGenerator;
 use Magento\Framework\ObjectManager\Code\Generator as DIGenerator;
-use Magento\Framework\Api\Code\Generator\ExtensionAttributesInterfaceFactoryGenerator;
 use Magento\TestFramework\Helper\Bootstrap;
 
 require_once __DIR__ . '/GeneratorTest/SourceClassWithNamespace.php';
@@ -56,12 +55,10 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
             [
                 'ioObject' => $this->_ioObject,
                 'generatedEntities' => [
-                    ExtensionAttributesInterfaceFactoryGenerator::ENTITY_TYPE =>
-                        ExtensionAttributesInterfaceFactoryGenerator::class,
+                    ExtensionAttributesInterfaceFactoryGenerator::ENTITY_TYPE => ExtensionAttributesInterfaceFactoryGenerator::class,
                     DIGenerator\Factory::ENTITY_TYPE => \Magento\Framework\ObjectManager\Code\Generator\Factory::class,
                     DIGenerator\Proxy::ENTITY_TYPE => \Magento\Framework\ObjectManager\Code\Generator\Proxy::class,
-                    InterceptionGenerator\Interceptor::ENTITY_TYPE =>
-                        \Magento\Framework\Interception\Code\Generator\Interceptor::class,
+                    InterceptionGenerator\Interceptor::ENTITY_TYPE => \Magento\Framework\Interception\Code\Generator\Interceptor::class,
                 ]
             ]
         );

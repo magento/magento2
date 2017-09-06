@@ -7,12 +7,12 @@
 namespace Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
 
 use Magento\Catalog\Test\Fixture\CatalogAttributeSet;
+use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Mtf\Fixture\DataSource;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Fixture\InjectableFixture;
 use Magento\Mtf\Repository\RepositoryFactory;
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 
 /**
  * Source configurable attributes data of the configurable products.

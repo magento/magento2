@@ -6,8 +6,8 @@
 namespace Magento\Catalog\Model\Layer;
 
 use Magento\Catalog\Model\Layer\Filter\Item;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Layered navigation state model

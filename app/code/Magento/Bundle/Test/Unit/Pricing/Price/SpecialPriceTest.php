@@ -5,7 +5,7 @@
  */
 namespace Magento\Bundle\Test\Unit\Pricing\Price;
 
-use \Magento\Bundle\Pricing\Price\SpecialPrice;
+use Magento\Bundle\Pricing\Price\SpecialPrice;
 
 class SpecialPriceTest extends \PHPUnit\Framework\TestCase
 {

@@ -5,10 +5,10 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Items\Column;
 
+use Magento\Quote\Model\Quote\Item\AbstractItem as QuoteItem;
 use Magento\Sales\Model\Order\Creditmemo\Item as CreditmemoItem;
 use Magento\Sales\Model\Order\Invoice\Item as InvoiceItem;
 use Magento\Sales\Model\Order\Item;
-use Magento\Quote\Model\Quote\Item\AbstractItem as QuoteItem;
 
 /**
  * Adminhtml sales order column renderer

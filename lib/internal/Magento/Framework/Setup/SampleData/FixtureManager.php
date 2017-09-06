@@ -6,7 +6,6 @@
 namespace Magento\Framework\Setup\SampleData;
 
 use Magento\Framework\Component\ComponentRegistrar;
-use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 
 class FixtureManager

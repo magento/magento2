@@ -93,8 +93,7 @@ class CacheIdentifierPluginTest extends \PHPUnit\Framework\TestCase
             'Varnish + PageCache enabled' => [Config::VARNISH, true, null, false, false],
             'Built-in + PageCache disabled' => [Config::BUILT_IN, false, null, false, false],
             'Built-in + PageCache enabled' => [Config::BUILT_IN, true, null, false, false],
-            'Built-in, PageCache enabled, no user-agent exceptions' =>
-                [Config::BUILT_IN, true, 'aa123aa', false, 'aa123aa'],
+            'Built-in, PageCache enabled, no user-agent exceptions' => [Config::BUILT_IN, true, 'aa123aa', false, 'aa123aa'],
             'Built-in, PageCache enabled, with design exception' => [Config::BUILT_IN, true, 'aa123aa', '7', '7aa123aa']
         ];
     }

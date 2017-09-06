@@ -5,16 +5,16 @@
  */
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AdvancedPricing;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\Data\GroupInterface as CustomerGroupInterface;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Customer\Api\GroupRepositoryInterface;
+use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Module\Manager as ModuleManager;
-use Magento\Directory\Helper\Data as DirectoryHelper;
-use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
-use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class AdvancedPricingTest

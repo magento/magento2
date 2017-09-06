@@ -5,10 +5,10 @@
  */
 namespace Magento\ConfigurableProduct\Controller\Adminhtml;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Registry;
 use Magento\TestFramework\ObjectManager;
-use Magento\Catalog\Api\ProductRepositoryInterface;
 
 /**
  * @magentoAppArea adminhtml

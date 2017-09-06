@@ -15,9 +15,9 @@ use Magento\Catalog\Block\Product\Context;
 use Magento\Catalog\Helper\Image;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Gallery\ImagesConfigFactoryInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Collection;
 use Magento\Framework\DataObject;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Json\EncoderInterface;
 use Magento\Framework\Stdlib\ArrayUtils;
 

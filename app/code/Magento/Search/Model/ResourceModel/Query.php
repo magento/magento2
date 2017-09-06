@@ -8,7 +8,6 @@
 
 namespace Magento\Search\Model\ResourceModel;
 
-use Magento\Framework\DB\Select;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Search\Model\Query as QueryModel;

@@ -5,8 +5,8 @@
  */
 namespace Magento\Customer\Helper;
 
-use Magento\Customer\Api\CustomerNameGenerationInterface;
 use Magento\Customer\Api\CustomerMetadataInterface;
+use Magento\Customer\Api\CustomerNameGenerationInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 
 /**

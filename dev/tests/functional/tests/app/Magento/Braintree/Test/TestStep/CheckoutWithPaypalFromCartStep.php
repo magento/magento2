@@ -5,8 +5,8 @@
  */
 namespace Magento\Braintree\Test\TestStep;
 
-use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Checkout\Test\Page\CheckoutCart;
+use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
  * Checkout with Braintree PayPal from Shopping Cart.

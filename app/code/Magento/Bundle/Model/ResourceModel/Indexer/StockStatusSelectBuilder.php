@@ -6,9 +6,9 @@
 
 namespace Magento\Bundle\Model\ResourceModel\Indexer;
 
-use Magento\Framework\DB\Select;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
+use Magento\Framework\DB\Select;
 
 /**
  * Class StockStatusSelectBuilder
@@ -76,7 +76,7 @@ class StockStatusSelectBuilder
                 []
             )->joinInner(
                 ['cpei' => $this->resourceConnection->getTableName('catalog_product_entity_int')],
-                'cpel.'. $linkField . ' = cpei.' . $linkField
+                'cpel.' . $linkField . ' = cpei.' . $linkField
                 . ' AND cpei.attribute_id = ' . $this->getAttribute('status')->getId()
                 . ' AND cpei.value = ' . ProductStatus::STATUS_ENABLED,
                 []

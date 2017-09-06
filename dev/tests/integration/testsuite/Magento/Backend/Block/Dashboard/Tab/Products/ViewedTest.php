@@ -5,12 +5,12 @@
  */
 namespace Magento\Backend\Block\Dashboard\Tab\Products;
 
-use Magento\TestFramework\Helper\Bootstrap as BootstrapHelper;
-use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\View\LayoutInterface;
 use Magento\Backend\Block\Dashboard\Tab\Products\Viewed as ViewedProductsTabBlock;
 use Magento\Catalog\Model\ProductRepository;
 use Magento\Framework\Event\ManagerInterface as EventManager;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\View\LayoutInterface;
+use Magento\TestFramework\Helper\Bootstrap as BootstrapHelper;
 
 /**
  * @magentoAppArea frontend

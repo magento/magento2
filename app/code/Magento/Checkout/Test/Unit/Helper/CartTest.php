@@ -8,11 +8,10 @@
 
 namespace Magento\Checkout\Test\Unit\Helper;
 
-use \Magento\Checkout\Helper\Cart;
+use Magento\Checkout\Helper\Cart;
 
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\DataObject;
-use Magento\Quote\Model\Quote\Item;
 
 class CartTest extends \PHPUnit\Framework\TestCase
 {

@@ -44,7 +44,7 @@ class Fulltext extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         MetadataPool $metadataPool = null
     ) {
         $this->_eventManager = $eventManager;
-        $this->metadataPool = $metadataPool ? : ObjectManager::getInstance()->get(MetadataPool::class);
+        $this->metadataPool = $metadataPool ?: ObjectManager::getInstance()->get(MetadataPool::class);
         parent::__construct($context, $connectionName);
     }
 

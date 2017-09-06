@@ -7,8 +7,8 @@
 namespace Magento\Newsletter\Test\Constraint;
 
 use Magento\Customer\Test\Fixture\Customer;
-use Magento\Newsletter\Test\Page\Adminhtml\SubscriberIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Newsletter\Test\Page\Adminhtml\SubscriberIndex;
 
 /**
  * Class AssertCustomerIsSubscribedToNewsletter

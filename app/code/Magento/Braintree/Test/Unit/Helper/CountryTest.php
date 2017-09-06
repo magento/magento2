@@ -6,8 +6,8 @@
 namespace Magento\Braintree\Test\Unit\Helper;
 
 use Magento\Braintree\Helper\Country;
-use Magento\Directory\Model\ResourceModel\Country\CollectionFactory;
 use Magento\Directory\Model\ResourceModel\Country\Collection;
+use Magento\Directory\Model\ResourceModel\Country\CollectionFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**

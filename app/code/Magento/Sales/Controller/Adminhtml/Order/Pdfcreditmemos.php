@@ -5,17 +5,16 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
-use Magento\Framework\App\ResponseInterface;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
-use Magento\Ui\Component\MassAction\Filter;
-use Magento\Sales\Model\Order\Pdf\Creditmemo;
-use Magento\Framework\Stdlib\DateTime\DateTime;
-use Magento\Framework\App\Response\Http\FileFactory;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\Response\Http\FileFactory;
+use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Sales\Model\Order\Pdf\Creditmemo;
 use Magento\Sales\Model\ResourceModel\Order\Creditmemo\CollectionFactory;
-use Magento\Sales\Model\ResourceModel\Order\Collection as OrderCollection;
+use Magento\Ui\Component\MassAction\Filter;
 
 /**
  * Class Pdfcreditmemos
@@ -74,7 +73,6 @@ class Pdfcreditmemos extends \Magento\Sales\Controller\Adminhtml\Order\PdfDocume
      */
     protected function massAction(AbstractCollection $collection)
     {
-
         $creditmemoCollection = $this->collectionFactory->create()->setOrderFilter(['in' => $collection->getAllIds()]);
         if (!$creditmemoCollection->getSize()) {
             $this->messageManager->addError(__('There are no printable documents related to selected orders.'));

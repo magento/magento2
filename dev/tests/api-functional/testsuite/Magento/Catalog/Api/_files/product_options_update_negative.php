@@ -5,8 +5,7 @@
  */
 
 return [
-    'missed_product_sku' =>
-        [
+    'missed_product_sku' => [
             [
                 'title' => 'title',
                 'type' => 'field',

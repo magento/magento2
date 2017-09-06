@@ -5,7 +5,6 @@
  */
 namespace Magento\SalesSequence\Model\ResourceModel;
 
-use Magento\SalesSequence\Model\Meta as ModelMeta;
 use Magento\Framework\Model\ResourceModel\Db\Context as DatabaseContext;
 use Magento\SalesSequence\Model\ProfileFactory;
 

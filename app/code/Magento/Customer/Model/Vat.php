@@ -8,10 +8,10 @@ namespace Magento\Customer\Model;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Store\Model\Store;
 use Magento\Store\Model\Information as StoreInformation;
-use Psr\Log\LoggerInterface as PsrLogger;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\Store;
+use Psr\Log\LoggerInterface as PsrLogger;
 
 /**
  * Customer VAT model

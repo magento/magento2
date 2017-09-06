@@ -139,7 +139,7 @@ class Server
             $this->_request->getHttpHost(),
             $this->generateUri()
         );
-        return 'data://text/plain;base64,'.base64_encode($wsdlBody);
+        return 'data://text/plain;base64,' . base64_encode($wsdlBody);
     }
 
     /**

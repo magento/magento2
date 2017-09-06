@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\View;
 
-use \Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Tests for the view layer fallback mechanism

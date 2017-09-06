@@ -8,14 +8,14 @@ namespace Magento\CatalogUrlRewrite\Observer;
 use Magento\Catalog\Model\Category;
 use Magento\CatalogUrlRewrite\Block\UrlKeyRenderer;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
-use Magento\CatalogUrlRewrite\Model\UrlRewriteBunchReplacer;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Store\Model\ScopeInterface;
-use Magento\UrlRewrite\Model\UrlPersistInterface;
-use Magento\Framework\Event\ObserverInterface;
 use Magento\CatalogUrlRewrite\Model\Map\DatabaseMapPool;
 use Magento\CatalogUrlRewrite\Model\Map\DataCategoryUrlRewriteDatabaseMap;
 use Magento\CatalogUrlRewrite\Model\Map\DataProductUrlRewriteDatabaseMap;
+use Magento\CatalogUrlRewrite\Model\UrlRewriteBunchReplacer;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Event\ObserverInterface;
+use Magento\Store\Model\ScopeInterface;
+use Magento\UrlRewrite\Model\UrlPersistInterface;
 
 /**
  * Generates Category Url Rewrites after move/save and Products Url Rewrites assigned to the category that's being saved

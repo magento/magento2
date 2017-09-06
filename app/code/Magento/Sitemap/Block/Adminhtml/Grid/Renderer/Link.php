@@ -10,7 +10,6 @@
  */
 namespace Magento\Sitemap\Block\Adminhtml\Grid\Renderer;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot;
 use Magento\Framework\App\ObjectManager;
 

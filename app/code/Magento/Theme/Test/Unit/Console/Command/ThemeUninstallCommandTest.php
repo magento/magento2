@@ -6,12 +6,12 @@
 
 namespace Magento\Theme\Test\Unit\Console\Command;
 
+use Magento\Framework\Setup\BackupRollbackFactory;
 use Magento\Theme\Console\Command\ThemeUninstallCommand;
+use Magento\Theme\Model\Theme\ThemeDependencyChecker;
 use Magento\Theme\Model\Theme\themePackageInfo;
 use Magento\Theme\Model\Theme\ThemeUninstaller;
-use Magento\Theme\Model\Theme\ThemeDependencyChecker;
 use Symfony\Component\Console\Tester\CommandTester;
-use Magento\Framework\Setup\BackupRollbackFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

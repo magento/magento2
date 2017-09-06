@@ -6,16 +6,15 @@
 namespace Magento\Sales\Model\Order;
 
 use Magento\Catalog\Api\Data\ProductOptionExtensionFactory;
-use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Catalog\Model\ProductOptionFactory;
 use Magento\Catalog\Model\ProductOptionProcessorInterface;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\Factory as DataObjectFactory;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Api\Data\OrderItemInterface;
-use Magento\Sales\Api\Data\OrderItemSearchResultInterface;
 use Magento\Sales\Api\Data\OrderItemSearchResultInterfaceFactory;
 use Magento\Sales\Api\OrderItemRepositoryInterface;
 use Magento\Sales\Model\ResourceModel\Metadata;

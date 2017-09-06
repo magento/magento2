@@ -7,8 +7,8 @@
 namespace Magento\CheckoutAgreements\Test\Fixture\CheckoutAgreement;
 
 use Magento\Mtf\Fixture\DataSource;
-use Magento\Store\Test\Fixture\Store;
 use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Store\Test\Fixture\Store;
 
 /**
  * Prepare Stores.

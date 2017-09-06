@@ -5,8 +5,8 @@
  */
 namespace Magento\BundleImportExport\Test\Fixture\Import;
 
-use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Bundle product class file.

@@ -5,12 +5,12 @@
  */
 namespace Magento\Catalog\Ui\DataProvider\Product;
 
-use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
-use Magento\Framework\App\RequestInterface;
-use Magento\Catalog\Model\Product\Option\Repository as ProductOptionRepository;
-use Magento\Catalog\Model\Product\Option\Value as ProductOptionValueModel;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product\Option as ProductOption;
+use Magento\Catalog\Model\Product\Option\Repository as ProductOptionRepository;
+use Magento\Catalog\Model\Product\Option\Value as ProductOptionValueModel;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\DataObject;
 
 /**

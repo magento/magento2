@@ -6,7 +6,6 @@
 namespace Magento\Setup\Test\Unit\Console\Command;
 
 use Magento\Setup\Console\Command\ModuleUninstallCommand;
-use Magento\Setup\Model\ModuleUninstaller;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**

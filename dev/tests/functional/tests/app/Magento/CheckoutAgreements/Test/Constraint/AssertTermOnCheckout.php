@@ -9,9 +9,9 @@ namespace Magento\CheckoutAgreements\Test\Constraint;
 use Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage;
 use Magento\Checkout\Test\Page\CheckoutOnepage;
 use Magento\Checkout\Test\Page\CheckoutOnepageSuccess;
+use Magento\CheckoutAgreements\Test\Fixture\CheckoutAgreement;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\ObjectManager;
-use Magento\CheckoutAgreements\Test\Fixture\CheckoutAgreement;
 
 /**
  * Class AssertTermOnCheckout

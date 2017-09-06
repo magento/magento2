@@ -5,11 +5,11 @@
  */
 namespace Magento\Ui\Component\MassAction\Columns;
 
-use Magento\Ui\Component\AbstractComponent;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
+use Magento\Ui\Component\AbstractComponent;
 use Magento\Ui\Component\Listing\Columns\ColumnInterface;
-use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
 /**
  * Class Column

@@ -8,9 +8,9 @@ namespace Magento\Customer\Test\Constraint;
 
 use Magento\Customer\Test\Fixture\Address;
 use Magento\Customer\Test\Fixture\Customer;
+use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Sales\Test\Page\Adminhtml\OrderCreateIndex;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
-use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertAddressDeletedBackend

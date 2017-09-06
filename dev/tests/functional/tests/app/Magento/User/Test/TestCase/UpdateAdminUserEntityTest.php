@@ -8,11 +8,11 @@ namespace Magento\User\Test\TestCase;
 
 use Magento\Backend\Test\Page\AdminAuthLogin;
 use Magento\Backend\Test\Page\Adminhtml\Dashboard;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\TestCase\Injectable;
 use Magento\User\Test\Fixture\User;
 use Magento\User\Test\Page\Adminhtml\UserEdit;
 use Magento\User\Test\Page\Adminhtml\UserIndex;
-use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Preconditions:

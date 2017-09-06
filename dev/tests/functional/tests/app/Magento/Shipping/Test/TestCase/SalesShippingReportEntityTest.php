@@ -6,9 +6,9 @@
 
 namespace Magento\Shipping\Test\TestCase;
 
+use Magento\Mtf\TestCase\Injectable;
 use Magento\Reports\Test\Page\Adminhtml\SalesShippingReport;
 use Magento\Sales\Test\Fixture\OrderInjectable;
-use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Preconditions:

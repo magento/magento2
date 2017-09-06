@@ -6,8 +6,8 @@
 
 namespace Magento\Swagger\Test\Page;
 
-use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Class SwaggerUiPage

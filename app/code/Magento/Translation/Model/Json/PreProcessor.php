@@ -5,13 +5,13 @@
  */
 namespace Magento\Translation\Model\Json;
 
+use Magento\Framework\App\AreaList;
+use Magento\Framework\TranslateInterface;
+use Magento\Framework\View\Asset\File\FallbackContext;
+use Magento\Framework\View\Asset\PreProcessor\Chain;
 use Magento\Framework\View\Asset\PreProcessorInterface;
 use Magento\Translation\Model\Js\Config;
 use Magento\Translation\Model\Js\DataProviderInterface;
-use Magento\Framework\View\Asset\PreProcessor\Chain;
-use Magento\Framework\View\Asset\File\FallbackContext;
-use Magento\Framework\App\AreaList;
-use Magento\Framework\TranslateInterface;
 
 /**
  * PreProcessor responsible for providing js translation dictionary

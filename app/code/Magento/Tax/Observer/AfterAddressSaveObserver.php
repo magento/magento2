@@ -79,7 +79,7 @@ class AfterAddressSaveObserver implements ObserverInterface
                     ]
                 );
             }
-            
+
             if ($this->isDefaultShipping($address)) {
                 $this->customerSession->setDefaultTaxShippingAddress(
                     [

@@ -6,8 +6,8 @@
 
 namespace Magento\Deploy\Console;
 
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 
 /**
  * Static Content Deployment Options helper

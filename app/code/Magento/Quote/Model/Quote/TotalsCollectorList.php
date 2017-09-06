@@ -9,7 +9,6 @@ namespace Magento\Quote\Model\Quote;
 
 use Magento\Quote\Model\Quote\Address\Total\Collector;
 use Magento\Quote\Model\Quote\Address\Total\CollectorFactory;
-use Magento\Quote\Model\Quote\Address\Total\CollectorInterface;
 
 class TotalsCollectorList
 {

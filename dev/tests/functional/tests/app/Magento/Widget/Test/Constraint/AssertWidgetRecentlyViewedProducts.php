@@ -6,14 +6,14 @@
 
 namespace Magento\Widget\Test\Constraint;
 
-use Magento\Mtf\Util\Command\Cli\Cache;
-use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
+use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Util\Command\Cli\Cache;
 
 /**
  * Check that that widget with type Recently Viewed Products is present on category page

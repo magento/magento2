@@ -14,8 +14,7 @@ return [
                 'plugins' => [
                     'simple_plugin' => [
                         'sortOrder' => 10,
-                        'instance' =>
-                            \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemPlugin\Simple::class,
+                        'instance' => \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemPlugin\Simple::class,
                     ],
                 ],
             ]
@@ -28,8 +27,7 @@ return [
                 'plugins' => [
                     'advanced_plugin' => [
                         'sortOrder' => 5,
-                        'instance' =>
-                            \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemPlugin\Advanced::class,
+                        'instance' => \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemPlugin\Advanced::class,
                     ],
                 ],
             ],
@@ -59,8 +57,7 @@ return [
                 'plugins' => [
                     'advanced_plugin' => [
                         'sortOrder' => 5,
-                        'instance' =>
-                            \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemPlugin\Advanced::class,
+                        'instance' => \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemPlugin\Advanced::class,
                     ],
                 ],
             ],

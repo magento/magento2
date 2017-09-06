@@ -5,12 +5,12 @@
  */
 namespace Magento\Setup\Test\Unit\Console\Command;
 
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Module\DbVersionInfo;
-use Magento\Setup\Console\Command\DbStatusCommand;
-use Magento\Framework\App\DeploymentConfig;
-use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Setup\Console\Command\DbStatusCommand;
+use Magento\Setup\Model\ObjectManagerProvider;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 use Symfony\Component\Console\Tester\CommandTester;
 

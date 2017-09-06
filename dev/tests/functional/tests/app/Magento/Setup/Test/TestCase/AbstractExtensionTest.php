@@ -6,16 +6,16 @@
 
 namespace Magento\Setup\Test\TestCase;
 
-use Magento\Mtf\TestCase\Injectable;
-use Magento\Setup\Test\Page\Adminhtml\SetupWizard;
 use Magento\Backend\Test\Page\Adminhtml\Dashboard;
-use Magento\Setup\Test\Fixture\Extension;
-use Magento\Setup\Test\Fixture\BackupOptions;
-use Magento\Setup\Test\Fixture\RepoCredentials;
+use Magento\Mtf\TestCase\Injectable;
+use Magento\Setup\Test\Constraint\AssertSuccessfulReadinessCheck;
+use Magento\Setup\Test\Constraint\Extension\AssertExtensionAndVersionCheck;
 use Magento\Setup\Test\Constraint\Extension\AssertFindExtensionOnGrid;
 use Magento\Setup\Test\Constraint\Extension\AssertSuccessMessage;
-use Magento\Setup\Test\Constraint\Extension\AssertExtensionAndVersionCheck;
-use Magento\Setup\Test\Constraint\AssertSuccessfulReadinessCheck;
+use Magento\Setup\Test\Fixture\BackupOptions;
+use Magento\Setup\Test\Fixture\Extension;
+use Magento\Setup\Test\Fixture\RepoCredentials;
+use Magento\Setup\Test\Page\Adminhtml\SetupWizard;
 
 /**
  * AbstractExtensionTest for testing of extension manager.

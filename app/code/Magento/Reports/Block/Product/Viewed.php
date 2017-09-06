@@ -6,7 +6,7 @@
 
 namespace Magento\Reports\Block\Product;
 
-use \Magento\Framework\DataObject\IdentityInterface;
+use Magento\Framework\DataObject\IdentityInterface;
 
 /**
  * Reports Recently Viewed Products Block

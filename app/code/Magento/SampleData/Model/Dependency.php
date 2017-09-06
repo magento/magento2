@@ -129,6 +129,6 @@ class Dependency
                 return $this->packageFactory->create(['json' => json_decode($directory->readFile('composer.json'))]);
             }
         }
-        return $this->packageFactory->create(['json' => new \stdClass]);
+        return $this->packageFactory->create(['json' => new \stdClass()]);
     }
 }

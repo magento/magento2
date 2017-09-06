@@ -6,13 +6,12 @@
 
 namespace Magento\Framework\EntityManager;
 
-use Magento\Framework\ObjectManagerInterface as ObjectManager;
-use Magento\Framework\EntityManager\OperationInterface;
 use Magento\Framework\EntityManager\Operation\CheckIfExists;
-use Magento\Framework\EntityManager\Operation\Read;
 use Magento\Framework\EntityManager\Operation\Create;
-use Magento\Framework\EntityManager\Operation\Update;
 use Magento\Framework\EntityManager\Operation\Delete;
+use Magento\Framework\EntityManager\Operation\Read;
+use Magento\Framework\EntityManager\Operation\Update;
+use Magento\Framework\ObjectManagerInterface as ObjectManager;
 
 /**
  * Class OperationPool

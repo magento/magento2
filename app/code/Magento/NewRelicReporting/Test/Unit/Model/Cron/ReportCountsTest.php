@@ -5,10 +5,10 @@
  */
 namespace Magento\NewRelicReporting\Test\Unit\Model\Cron;
 
-use Magento\NewRelicReporting\Model\Cron\ReportCounts;
+use Magento\Catalog\Api\CategoryManagementInterface;
 use Magento\Catalog\Api\ProductManagementInterface;
 use Magento\ConfigurableProduct\Api\ConfigurableProductManagementInterface;
-use Magento\Catalog\Api\CategoryManagementInterface;
+use Magento\NewRelicReporting\Model\Cron\ReportCounts;
 
 /**
  * Class ReportCountsTest

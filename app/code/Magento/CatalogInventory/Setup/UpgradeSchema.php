@@ -6,10 +6,10 @@
 
 namespace Magento\CatalogInventory\Setup;
 
-use Magento\Framework\Setup\UpgradeSchemaInterface;
+use Magento\CatalogInventory\Model\Stock\Item as StockItem;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
-use Magento\CatalogInventory\Model\Stock\Item as StockItem;
+use Magento\Framework\Setup\UpgradeSchemaInterface;
 
 class UpgradeSchema implements UpgradeSchemaInterface
 {

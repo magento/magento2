@@ -6,9 +6,9 @@
 namespace Magento\Tax\Model;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
-use Magento\Tax\Helper\Data as TaxHelper;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Checkout\Model\Session as CheckoutSession;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Tax\Helper\Data as TaxHelper;
 
 class TaxConfigProvider implements ConfigProviderInterface
 {

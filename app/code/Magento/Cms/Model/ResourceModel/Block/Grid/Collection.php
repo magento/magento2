@@ -5,9 +5,9 @@
  */
 namespace Magento\Cms\Model\ResourceModel\Block\Grid;
 
+use Magento\Cms\Model\ResourceModel\Block\Collection as BlockCollection;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Search\AggregationInterface;
-use Magento\Cms\Model\ResourceModel\Block\Collection as BlockCollection;
 
 /**
  * Collection for displaying grid of cms blocks

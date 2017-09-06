@@ -5,13 +5,13 @@
  */
 namespace Magento\Customer\Model;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\Mail\Template\TransportBuilder;
-use Magento\Customer\Helper\View as CustomerViewHelper;
 use Magento\Customer\Api\Data\CustomerInterface;
-use Magento\Framework\Reflection\DataObjectProcessor;
+use Magento\Customer\Helper\View as CustomerViewHelper;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Mail\Template\TransportBuilder;
+use Magento\Framework\Reflection\DataObjectProcessor;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

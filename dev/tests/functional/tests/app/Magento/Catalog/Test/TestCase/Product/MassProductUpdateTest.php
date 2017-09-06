@@ -6,12 +6,12 @@
 
 namespace Magento\Catalog\Test\TestCase\Product;
 
+use Magento\Catalog\Test\Fixture\CatalogProductSimple;
+use Magento\Catalog\Test\Page\Adminhtml\CatalogProductActionAttributeEdit;
+use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\TestCase\Injectable;
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
-use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
-use Magento\Catalog\Test\Page\Adminhtml\CatalogProductActionAttributeEdit;
 use Magento\Mtf\TestStep\TestStepFactory;
 
 /**
@@ -125,7 +125,7 @@ class MassProductUpdateTest extends Injectable
         $this->attributeMassActionPage->getAttributesBlockForm()->fill($product);
         $this->attributeMassActionPage->getFormPageActions()->save();
         $updatedProducts = $this->prepareUpdatedProducts($products, $product);
-        
+
         return ['products' => $updatedProducts];
     }
 

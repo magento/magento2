@@ -5,17 +5,17 @@
  */
 namespace Magento\Checkout\Model;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
-use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\StateException;
 use Magento\Quote\Api\Data\AddressInterface;
-use Magento\Quote\Api\Data\CartInterface;
-use Psr\Log\LoggerInterface as Logger;
-use Magento\Quote\Model\QuoteAddressValidator;
 use Magento\Quote\Api\Data\CartExtensionFactory;
+use Magento\Quote\Api\Data\CartInterface;
+use Magento\Quote\Model\QuoteAddressValidator;
 use Magento\Quote\Model\ShippingAssignmentFactory;
 use Magento\Quote\Model\ShippingFactory;
-use Magento\Framework\App\ObjectManager;
+use Psr\Log\LoggerInterface as Logger;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

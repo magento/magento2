@@ -8,7 +8,6 @@
 namespace Magento\SalesRule\Model\Data;
 
 use Magento\SalesRule\Api\Data\ConditionInterface;
-use Magento\SalesRule\Api\Data\RuleInterface;
 
 /**
  * Class Rule

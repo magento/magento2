@@ -7,7 +7,6 @@
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit;
 
 use Magento\Backend\Block\Template\Context;
-use Magento\Backend\Block\Widget\Accordion;
 use Magento\Backend\Block\Widget\Tabs as WigetTabs;
 use Magento\Backend\Model\Auth\Session;
 use Magento\Catalog\Helper\Catalog;

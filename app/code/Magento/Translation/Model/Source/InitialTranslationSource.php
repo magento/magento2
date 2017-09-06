@@ -5,12 +5,12 @@
  */
 namespace Magento\Translation\Model\Source;
 
-use Magento\Framework\App\DeploymentConfig;
-use Magento\Store\Model\StoreManager;
-use Magento\Translation\Model\ResourceModel\TranslateFactory;
-use Magento\Translation\Model\ResourceModel\Translate;
 use Magento\Framework\App\Config\ConfigSourceInterface;
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\DataObject;
+use Magento\Store\Model\StoreManager;
+use Magento\Translation\Model\ResourceModel\Translate;
+use Magento\Translation\Model\ResourceModel\TranslateFactory;
 
 /**
  * Class for reading translations from DB

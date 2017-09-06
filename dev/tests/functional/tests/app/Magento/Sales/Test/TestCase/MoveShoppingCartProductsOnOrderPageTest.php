@@ -11,9 +11,9 @@ use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndex;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndexEdit;
 use Magento\Customer\Test\Page\CustomerAccountLogout;
-use Magento\Sales\Test\Page\Adminhtml\OrderCreateIndex;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\TestCase\Injectable;
+use Magento\Sales\Test\Page\Adminhtml\OrderCreateIndex;
 
 /**
  * Preconditions:

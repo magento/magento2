@@ -5,7 +5,6 @@
  */
 namespace Magento\Eav\Test\Unit\Model\Entity;
 
-use Magento\Eav\Model\Attribute;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\AbstractEntity;
 use Magento\Eav\Model\Entity\AttributeLoader;

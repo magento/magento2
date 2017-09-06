@@ -8,16 +8,12 @@ namespace Magento\Customer\Api;
 use Magento\Customer\Api\Data\CustomerInterface as Customer;
 use Magento\Customer\Model\AccountManagement;
 use Magento\Framework\Exception\InputException;
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
+use Magento\Newsletter\Model\Subscriber;
+use Magento\Security\Model\Config;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Customer as CustomerHelper;
 use Magento\TestFramework\TestCase\WebapiAbstract;
-use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
-use Magento\Security\Model\Config;
-use Magento\Newsletter\Model\Plugin\CustomerPlugin;
-use Magento\Framework\Webapi\Rest\Request as RestRequest;
-use Magento\Newsletter\Model\Subscriber;
-use Magento\Customer\Model\Data\Customer as CustomerData;
 
 /**
  * Test class for Magento\Customer\Api\AccountManagementInterface

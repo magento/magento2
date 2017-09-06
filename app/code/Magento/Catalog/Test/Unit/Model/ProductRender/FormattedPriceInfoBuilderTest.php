@@ -6,11 +6,11 @@
 
 namespace Magento\Catalog\Test\Unit\Model\ProductRender;
 
-use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\Catalog\Api\Data\ProductRender\PriceInfoInterface;
 use Magento\Catalog\Api\Data\ProductRender\FormattedPriceInfoInterface;
 use Magento\Catalog\Api\Data\ProductRender\FormattedPriceInfoInterfaceFactory;
+use Magento\Catalog\Api\Data\ProductRender\PriceInfoInterface;
 use Magento\Catalog\Model\ProductRender\FormattedPriceInfoBuilder;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 class FormattedPriceInfoBuilderTest extends \PHPUnit\Framework\TestCase
 {

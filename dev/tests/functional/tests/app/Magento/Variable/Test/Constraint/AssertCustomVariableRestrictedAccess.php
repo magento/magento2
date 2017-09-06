@@ -6,8 +6,8 @@
 
 namespace Magento\Variable\Test\Constraint;
 
-use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Cms\Test\Page\Adminhtml\CmsPageNew;
+use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Variable\Test\Fixture\SystemVariable;
 
 /**

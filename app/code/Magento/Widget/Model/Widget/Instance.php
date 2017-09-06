@@ -6,8 +6,8 @@
 namespace Magento\Widget\Model\Widget;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Widget Instance Model

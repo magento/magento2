@@ -5,10 +5,10 @@
  */
 namespace Magento\Multishipping\Controller\Checkout;
 
-use Magento\Multishipping\Model\Checkout\Type\Multishipping\State;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Exception\PaymentException;
+use Magento\Multishipping\Model\Checkout\Type\Multishipping\State;
 
 /**
  * Class OverviewPost

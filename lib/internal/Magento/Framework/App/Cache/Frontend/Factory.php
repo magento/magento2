@@ -10,9 +10,7 @@
 namespace Magento\Framework\App\Cache\Frontend;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\DriverInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

@@ -5,9 +5,9 @@
  */
 namespace Magento\Framework\App\Interception\Cache;
 
+use Magento\Framework\App\Cache\Type\FrontendPool;
 use Magento\Framework\Cache\Frontend\Decorator\TagScope;
 use Magento\Framework\Config\CacheInterface;
-use Magento\Framework\App\Cache\Type\FrontendPool;
 
 class CompiledConfig extends TagScope implements CacheInterface
 {

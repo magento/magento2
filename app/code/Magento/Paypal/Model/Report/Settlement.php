@@ -9,7 +9,6 @@
 namespace Magento\Paypal\Model\Report;
 
 use DateTime;
-use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\DirectoryList;
 
 /**
@@ -416,7 +415,7 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
     {
         $bodyItem = [];
         for ($i = 1, $count = count($line); $i < $count; $i++) {
-            if(isset($rowMap[$sectionColumns[$i]])) {
+            if (isset($rowMap[$sectionColumns[$i]])) {
                 if (in_array($rowMap[$sectionColumns[$i]], $this->dateTimeColumns)) {
                     $line[$i] = $this->formatDateTimeColumns($line[$i]);
                 }

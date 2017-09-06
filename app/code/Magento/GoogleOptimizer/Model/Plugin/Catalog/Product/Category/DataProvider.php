@@ -6,7 +6,7 @@
 
 namespace Magento\GoogleOptimizer\Model\Plugin\Catalog\Product\Category;
 
-use \Magento\Catalog\Ui\DataProvider\Product\Form\NewCategoryDataProvider;
+use Magento\Catalog\Ui\DataProvider\Product\Form\NewCategoryDataProvider;
 
 class DataProvider
 {

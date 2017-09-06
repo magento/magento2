@@ -5,8 +5,8 @@
  */
 namespace Magento\Config\Test\Unit\Console\Command;
 
-use Magento\Config\Console\Command\ConfigSet\ProcessorFacadeFactory;
 use Magento\Config\Console\Command\ConfigSet\ProcessorFacade;
+use Magento\Config\Console\Command\ConfigSet\ProcessorFacadeFactory;
 use Magento\Config\Console\Command\ConfigSetCommand;
 use Magento\Config\Console\Command\EmulatedAdminhtmlAreaProcessor;
 use Magento\Deploy\Model\DeploymentConfig\ChangeDetector;

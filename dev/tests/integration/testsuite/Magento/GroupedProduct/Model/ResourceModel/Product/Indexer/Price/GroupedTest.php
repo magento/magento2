@@ -6,13 +6,13 @@
 
 namespace Magento\GroupedProduct\Model\ResourceModel\Product\Indexer\Price;
 
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Indexer\Product\Price\Processor;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Test class for Magento\GroupedProduct\Model\ResourceModel\Product\Indexer\Price\Grouped

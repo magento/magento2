@@ -6,8 +6,8 @@
 
 namespace Magento\Config\Test\TestCase;
 
-use Magento\Mtf\TestCase\Injectable;
 use Magento\Config\Test\Page\Adminhtml\AdminAccountSharing;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Steps:

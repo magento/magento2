@@ -5,7 +5,7 @@
  */
 namespace Magento\Quote\Model\ResourceModel\Quote\Item;
 
-use \Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
+use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 
 /**
  * Quote item resource collection

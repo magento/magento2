@@ -19,7 +19,6 @@ use Magento\Payment\Helper\Formatter;
  */
 class Config extends AbstractConfig
 {
-
     use Formatter;
 
     /**

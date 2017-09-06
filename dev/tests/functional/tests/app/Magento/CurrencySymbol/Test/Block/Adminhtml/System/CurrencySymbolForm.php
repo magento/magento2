@@ -7,9 +7,9 @@
 namespace Magento\CurrencySymbol\Test\Block\Adminhtml\System;
 
 use Magento\Mtf\Block\Form;
+use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
  * Class CurrencySymbolForm

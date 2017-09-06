@@ -270,7 +270,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         foreach ($result as $index => $appliedTax) {
             $expectedTax = $expectedResults[$index];
             foreach ($appliedTax as $attr => $value) {
-                $this->assertEquals($expectedTax[$attr], $value, "The ".$attr." of tax does not match");
+                $this->assertEquals($expectedTax[$attr], $value, "The " . $attr . " of tax does not match");
             }
         }
     }

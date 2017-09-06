@@ -6,11 +6,11 @@
 
 namespace Magento\Widget\Test\Constraint;
 
-use Magento\Mtf\Util\Command\Cli\Cache;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
-use Magento\Widget\Test\Fixture\Widget;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Util\Command\Cli\Cache;
+use Magento\Widget\Test\Fixture\Widget;
 
 /**
  * Check that created widget displayed on frontend on Product page.

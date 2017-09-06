@@ -5,8 +5,8 @@
  */
 namespace Magento\Sniffs\Less;
 
-use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 
 /**
  * Class CommentLevelsSniff

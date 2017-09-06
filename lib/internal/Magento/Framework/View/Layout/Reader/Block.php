@@ -8,8 +8,8 @@ namespace Magento\Framework\View\Layout\Reader;
 use Magento\Framework\Data\Argument\InterpreterInterface;
 use Magento\Framework\View\Layout;
 use Magento\Framework\View\Layout\Element;
-use Magento\Framework\View\Layout\ScheduledStructure;
 use Magento\Framework\View\Layout\Reader\Visibility\Condition;
+use Magento\Framework\View\Layout\ScheduledStructure;
 
 /**
  * Block structure reader

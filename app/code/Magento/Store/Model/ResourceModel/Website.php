@@ -53,7 +53,7 @@ class Website extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             ->select()
             ->from($this->getTable('store_website'));
 
-        foreach($this->getConnection()->fetchAll($select) as $websiteData) {
+        foreach ($this->getConnection()->fetchAll($select) as $websiteData) {
             $websites[$websiteData['code']] = $websiteData;
         }
 

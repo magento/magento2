@@ -7,13 +7,13 @@ namespace Magento\GoogleOptimizer\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
+use Magento\GoogleOptimizer\Helper\Code as CodeHelper;
+use Magento\GoogleOptimizer\Helper\Data as DataHelper;
 use Magento\Ui\Component\Form\Element\DataType\Text;
 use Magento\Ui\Component\Form\Element\Input;
 use Magento\Ui\Component\Form\Element\Textarea;
 use Magento\Ui\Component\Form\Field;
 use Magento\Ui\Component\Form\Fieldset;
-use Magento\GoogleOptimizer\Helper\Data as DataHelper;
-use Magento\GoogleOptimizer\Helper\Code as CodeHelper;
 
 /**
  * Class GoogleOptimizer adds Product View Optimization Panel

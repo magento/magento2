@@ -6,10 +6,10 @@
 
 namespace Magento\Sales\Test\Constraint;
 
+use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Sales\Test\Page\Adminhtml\OrderInvoiceNew;
 use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
-use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
-use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Assert message that invoice can be created only offline is present.

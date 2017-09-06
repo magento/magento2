@@ -6,9 +6,9 @@
 
 namespace Magento\Customer\Test\TestCase;
 
+use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\CustomerAccountCreate;
-use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Customer\Test\TestStep\LogoutCustomerOnFrontendStep;
 use Magento\Mtf\TestCase\Injectable;
 

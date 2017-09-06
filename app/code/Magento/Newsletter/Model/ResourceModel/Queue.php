@@ -86,7 +86,7 @@ class Queue extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $usedIds = array_flip($connection->fetchCol($select));
         $subscriberIds = array_flip($subscriberIds);
         $newIds = array_diff_key($subscriberIds, $usedIds);
-        
+
         $connection->beginTransaction();
         try {
             foreach (array_keys($newIds) as $subscriberId) {

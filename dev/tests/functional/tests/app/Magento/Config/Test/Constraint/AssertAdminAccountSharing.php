@@ -6,8 +6,8 @@
 
 namespace Magento\Config\Test\Constraint;
 
-use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Config\Test\Page\Adminhtml\AdminAccountSharing;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Assert Admin account sharing is available in Stores>Configuration>advanced>admin grid.

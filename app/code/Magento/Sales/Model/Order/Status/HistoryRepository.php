@@ -52,7 +52,6 @@ class HistoryRepository implements OrderStatusHistoryRepositoryInterface
         OrderStatusHistorySearchResultInterfaceFactory $searchResultFactory,
         CollectionProcessorInterface $collectionProcessor
     ) {
-
         $this->historyResource = $historyResource;
         $this->historyFactory = $historyFactory;
         $this->searchResultFactory = $searchResultFactory;

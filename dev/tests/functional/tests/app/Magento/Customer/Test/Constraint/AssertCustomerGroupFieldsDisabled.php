@@ -6,9 +6,8 @@
 
 namespace Magento\Customer\Test\Constraint;
 
-use Magento\Customer\Test\Fixture\CustomerGroup;
-use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Customer\Test\Page\Adminhtml\CustomerGroupEdit;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Assert that group fields are not available.

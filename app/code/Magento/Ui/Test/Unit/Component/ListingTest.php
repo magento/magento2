@@ -5,10 +5,9 @@
  */
 namespace Magento\Ui\Test\Unit\Component;
 
-use Magento\Ui\Component\Listing;
-use Magento\Ui\Component\Listing\Columns;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Ui\Component\Listing;
 
 /**
  * Class ListingTest

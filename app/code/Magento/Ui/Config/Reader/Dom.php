@@ -5,10 +5,10 @@
  */
 namespace Magento\Ui\Config\Reader;
 
+use Magento\Framework\Config\Dom as ConfigDom;
 use Magento\Framework\Config\SchemaLocatorInterface;
 use Magento\Framework\Config\ValidationStateInterface;
 use Magento\Ui\Config\Converter;
-use Magento\Framework\Config\Dom as ConfigDom;
 
 /**
  * UI Component configuration file DOM object representation

@@ -5,15 +5,15 @@
  */
 namespace Magento\ProductVideo\Test\TestCase;
 
+use Magento\Catalog\Test\Constraint\AssertProductSaveMessage;
+use Magento\Catalog\Test\Fixture\CatalogProductSimple;
+use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductNew;
-use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 use Magento\Config\Test\TestStep\SetupConfigurationStep;
 use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Mtf\TestCase\Injectable;
 use Magento\Mtf\TestStep\TestStepFactory;
-use Magento\Catalog\Test\Constraint\AssertProductSaveMessage;
 
 /**
  * Steps:

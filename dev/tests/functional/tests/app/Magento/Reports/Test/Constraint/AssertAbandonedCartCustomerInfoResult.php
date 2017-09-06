@@ -7,8 +7,8 @@
 namespace Magento\Reports\Test\Constraint;
 
 use Magento\Customer\Test\Fixture\Customer;
-use Magento\Reports\Test\Page\Adminhtml\AbandonedCarts;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Reports\Test\Page\Adminhtml\AbandonedCarts;
 
 /**
  * Class AssertAbandonedCartCustomerInfoResult

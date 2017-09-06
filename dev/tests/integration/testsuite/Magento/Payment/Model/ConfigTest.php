@@ -7,7 +7,6 @@
  */
 namespace Magento\Payment\Model;
 
-use Magento\Payment\Model\Config;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**

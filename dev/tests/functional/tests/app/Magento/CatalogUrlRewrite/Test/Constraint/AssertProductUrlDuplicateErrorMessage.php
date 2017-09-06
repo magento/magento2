@@ -6,10 +6,10 @@
 
 namespace Magento\CatalogUrlRewrite\Test\Constraint;
 
+use Magento\Catalog\Test\Fixture\CatalogProductSimple;
+use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\Catalog\Test\Fixture\Category;
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 
 /**
  * Class AssertProductUrlDuplicateErrorMessage

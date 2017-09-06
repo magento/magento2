@@ -5,7 +5,7 @@
  */
 namespace Magento\CatalogInventory\Test\Unit\Helper;
 
-use \Magento\CatalogInventory\Helper\Stock;
+use Magento\CatalogInventory\Helper\Stock;
 
 /**
  * Class StockTest

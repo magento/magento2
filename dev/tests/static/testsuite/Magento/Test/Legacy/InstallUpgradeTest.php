@@ -6,8 +6,8 @@
 
 namespace Magento\Test\Legacy;
 
-use Magento\Framework\App\Utility\Files;
 use Magento\Framework\App\Utility\AggregateInvoker;
+use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Component\ComponentRegistrar;
 
 /**

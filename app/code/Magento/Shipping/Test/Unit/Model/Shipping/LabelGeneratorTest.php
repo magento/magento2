@@ -5,8 +5,6 @@
  */
 namespace Magento\Shipping\Test\Unit\Model\Shipping;
 
-use Magento\Framework\DataObject;
-use Magento\Sales\Model\Order\Shipment;
 use Magento\Store\Model\ScopeInterface;
 
 /**

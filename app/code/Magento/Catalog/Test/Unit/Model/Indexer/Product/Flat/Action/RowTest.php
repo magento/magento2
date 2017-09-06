@@ -118,4 +118,3 @@ class RowTest extends \PHPUnit\Framework\TestCase
         $this->model->execute('product_id_1');
     }
 }
-

@@ -17,7 +17,6 @@ use Magento\Sales\Model\ResourceModel\Order\Collection;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
-use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -185,7 +184,7 @@ class GaTest extends \PHPUnit\Framework\TestCase
         ];
         $this->gaBlock->setData('page_name', $pageName);
         $this->googleAnalyticsDataMock->expects($this->once())->method('isAnonymizedIpActive')->willReturn(true);
-        
+
         $this->assertEquals($expectedResult, $this->gaBlock->getPageTrackingData($accountId));
     }
 

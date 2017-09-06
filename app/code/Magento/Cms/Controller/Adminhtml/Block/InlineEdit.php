@@ -7,8 +7,8 @@ namespace Magento\Cms\Controller\Adminhtml\Block;
 
 use Magento\Backend\App\Action\Context;
 use Magento\Cms\Api\BlockRepositoryInterface as BlockRepository;
-use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Cms\Api\Data\BlockInterface;
+use Magento\Framework\Controller\Result\JsonFactory;
 
 class InlineEdit extends \Magento\Backend\App\Action
 {

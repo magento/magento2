@@ -7,14 +7,14 @@
 namespace Magento\Catalog\Model\ResourceModel;
 
 use Magento\Catalog\Model\ResourceModel\Attribute\ConditionBuilder;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute as CatalogEavAttribute;
 use Magento\Eav\Api\AttributeRepositoryInterface;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\EntityMetadataInterface;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Locale\FormatInterface;
 use Magento\Framework\Model\Entity\ScopeInterface;
-use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
-use Magento\Catalog\Model\ResourceModel\Eav\Attribute as CatalogEavAttribute;
 
 class AttributePersistor extends \Magento\Eav\Model\ResourceModel\AttributePersistor
 {

@@ -8,13 +8,13 @@
 
 namespace Magento\CatalogInventory\Model\Indexer\Stock;
 
+use Magento\Catalog\Model\Product;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
+use Magento\CatalogInventory\Model\Stock;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Indexer\CacheContext;
-use Magento\CatalogInventory\Model\Stock;
-use Magento\Catalog\Model\Product;
 
 /**
  * Clean product cache only when stock status was updated

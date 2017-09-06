@@ -6,9 +6,9 @@
 
 namespace Magento\Security\Test\TestCase;
 
-use Magento\Mtf\TestCase\Injectable;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\CustomerAccountEdit;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Test Flow:

@@ -7,8 +7,8 @@
 namespace Magento\Reports\Test\Constraint;
 
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
-use Magento\Reports\Test\Page\Adminhtml\ProductLowStock;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Reports\Test\Page\Adminhtml\ProductLowStock;
 
 /**
  * Class AssertLowStockProductInGrid

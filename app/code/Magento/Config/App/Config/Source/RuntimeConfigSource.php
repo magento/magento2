@@ -5,12 +5,12 @@
  */
 namespace Magento\Config\App\Config\Source;
 
+use Magento\Config\Model\ResourceModel\Config\Data\CollectionFactory;
 use Magento\Framework\App\Config\ConfigSourceInterface;
+use Magento\Framework\App\Config\Scope\Converter;
 use Magento\Framework\App\Config\ScopeCodeResolver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
-use Magento\Config\Model\ResourceModel\Config\Data\CollectionFactory;
-use Magento\Framework\App\Config\Scope\Converter;
 
 /**
  * Class for retrieving runtime configuration from database.

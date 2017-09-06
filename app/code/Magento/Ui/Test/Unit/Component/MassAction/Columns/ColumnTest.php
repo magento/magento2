@@ -5,9 +5,9 @@
  */
 namespace Magento\Ui\Test\Unit\Component\MassAction\Columns;
 
-use Magento\Ui\Component\MassAction\Columns\Column;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Ui\Component\MassAction\Columns\Column;
 
 /**
  * Class ColumnTest

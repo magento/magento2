@@ -54,7 +54,7 @@ class Landing extends Block
     {
         $this->_rootElement->find($this->termsAndAgreement, Locator::SELECTOR_CSS)->click();
     }
-    
+
     /**
      * Click on link.
      *

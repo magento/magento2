@@ -6,10 +6,9 @@
 
 namespace Magento\Bundle\Test\Handler\BundleProduct;
 
-use Magento\Bundle\Test\Fixture\BundleProduct;
 use Magento\Catalog\Test\Handler\CatalogProductSimple\Curl as ProductCurl;
-use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Config\DataInterface;
+use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\System\Event\EventManagerInterface;
 
 /**

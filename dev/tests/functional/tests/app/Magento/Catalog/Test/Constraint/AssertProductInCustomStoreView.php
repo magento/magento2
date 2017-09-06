@@ -7,11 +7,11 @@
 namespace Magento\Catalog\Test\Constraint;
 
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
+use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Constraint\AbstractAssertForm;
-use Magento\Store\Test\Fixture\Store;
-use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Store\Test\Fixture\Store;
 
 /**
  * Assert that product name is correct in Custom and Default store views.
@@ -97,7 +97,7 @@ class AssertProductInCustomStoreView extends AbstractAssertForm
 
         $this->browser->open($_ENV['app_frontend_url'] . $updatedProduct->getUrlKey() . '.html');
 
-            \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
                 $updatedProduct->getName(),
                 $this->productViewPage->getViewBlock()->getProductName(),
                 'Product ' . $updatedProduct->getName() . ' is not available on ' . $store->getName() . ' store.'

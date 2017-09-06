@@ -5,8 +5,8 @@
  */
 namespace Magento\TestModuleJoinDirectives\Model;
 
-use Magento\TestModuleJoinDirectives\Api\TestRepositoryInterface;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
+use Magento\TestModuleJoinDirectives\Api\TestRepositoryInterface;
 
 /**
  * Model TestRepository

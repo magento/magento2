@@ -5,13 +5,13 @@
  */
 namespace Magento\PageCache\Model\App\FrontController;
 
-use Magento\PageCache\Model\Config;
-use Magento\Framework\App\PageCache\Version;
-use Magento\Framework\App\State as AppState;
 use Magento\Framework\App\FrontControllerInterface;
-use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\App\PageCache\Version;
 use Magento\Framework\App\Response\Http as ResponseHttp;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\App\State as AppState;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\PageCache\Model\Config;
 
 /**
  * Varnish for processing builtin cache

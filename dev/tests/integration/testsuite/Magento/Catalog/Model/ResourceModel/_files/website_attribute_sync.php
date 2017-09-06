@@ -4,18 +4,18 @@
  * See COPYING.txt for license details.
  */
 
-use \Magento\Store\Model\Website;
-use \Magento\Store\Model\ResourceModel\Website as WebsiteResourceModel;
-use \Magento\Store\Model\Group;
-use Magento\Store\Model\ResourceModel\Group as GroupResourceModel;
-use Magento\Store\Model\Store;
-use Magento\Store\Model\ResourceModel\Store as StoreResourceModel;
 use \Magento\Catalog\Api\ProductRepositoryInterface;
-use \Magento\Framework\App\ResourceConnection;
-use \Magento\Catalog\Model\Product\Attribute\Source\Status as AttributeStatus;
 use \Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\ResourceModel\Attribute\WebsiteAttributesSynchronizer;
+use \Magento\Catalog\Model\Product\Attribute\Source\Status as AttributeStatus;
+use \Magento\Framework\App\ResourceConnection;
+use \Magento\Store\Model\Group;
+use \Magento\Store\Model\ResourceModel\Website as WebsiteResourceModel;
+use \Magento\Store\Model\Website;
 use \Magento\TestFramework\Helper\Bootstrap;
+use Magento\Catalog\Model\ResourceModel\Attribute\WebsiteAttributesSynchronizer;
+use Magento\Store\Model\ResourceModel\Group as GroupResourceModel;
+use Magento\Store\Model\ResourceModel\Store as StoreResourceModel;
+use Magento\Store\Model\Store;
 
 /**
  * create whole website->storeGroup->[store1,store2] structure and add product to it with
@@ -47,7 +47,6 @@ $website->setName('custom website for av test')
     ->setCode('customwebsite1');
 $website->isObjectNew(true);
 $websiteResourceModel->save($website);
-
 
 /**
  * Create store group
@@ -130,7 +129,6 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setStockData(['use_config_manage_stock' => 1, 'qty' => 100, 'is_qty_decimal' => 0, 'is_in_stock' => 1]);
 
 $product = $productRepository->save($product);
-
 
 /**
  * createProductStoreValues

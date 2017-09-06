@@ -7,8 +7,8 @@ namespace Magento\Ui\Component\Form\Element\DataType;
 
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
-use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponentInterface;
 
 /**
  * Class Date

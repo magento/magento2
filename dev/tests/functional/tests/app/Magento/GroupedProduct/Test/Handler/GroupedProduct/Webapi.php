@@ -7,9 +7,7 @@
 namespace Magento\GroupedProduct\Test\Handler\GroupedProduct;
 
 use Magento\Catalog\Test\Handler\CatalogProductSimple\Webapi as SimpleProductWebapi;
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Mtf\Config\DataInterface;
-use Magento\Mtf\Fixture\InjectableFixture;
 use Magento\Mtf\System\Event\EventManagerInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport\WebapiDecorator;
 

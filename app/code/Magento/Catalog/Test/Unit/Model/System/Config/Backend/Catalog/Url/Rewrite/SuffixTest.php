@@ -20,37 +20,37 @@ class SuffixTest extends \PHPUnit\Framework\TestCase
      * @var \Magento\Framework\Event\ManagerInterface
      */
     protected $eventDispatcher;
-    
+
     /**
      * @var \Magento\Framework\Registry
      */
     protected $registry;
-    
+
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $config;
-    
+
     /**
      * @var \Magento\Framework\App\Cache\TypeListInterface
      */
     protected $cacheTypeList;
-    
+
     /**
      * @var \Magento\UrlRewrite\Helper\UrlRewrite
      */
     protected $urlRewriteHelper;
-    
+
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
-    
+
     /**
      * @var \Magento\Framework\App\ResourceConnection
      */
     protected $appResource;
-    
+
     /**
      * @var \Magento\UrlRewrite\Model\UrlFinderInterface
      */
@@ -73,7 +73,7 @@ class SuffixTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getEventDispatcher'])
             ->getMock();
         $this->context->method('getEventDispatcher')->willReturn($this->eventDispatcher);
-        
+
         $this->registry = $this->createMock(\Magento\Framework\Registry::class);
         $this->config = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $this->cacheTypeList = $this->getMockBuilder(\Magento\Framework\App\Cache\TypeList::class)
@@ -89,7 +89,7 @@ class SuffixTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getStores'])
             ->getMock();
         $this->storeManager->method('getStores')->willReturn([]);
-        
+
         $this->appResource =$this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -97,7 +97,7 @@ class SuffixTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['findAllByData', 'findOneByData'])
             ->getMock();
         $this->urlFinder->method('findAllByData')->willReturn([]);
-        
+
         $this->suffixModel = new \Magento\Catalog\Model\System\Config\Backend\Catalog\Url\Rewrite\Suffix(
             $this->context,
             $this->registry,
@@ -125,7 +125,7 @@ class SuffixTest extends \PHPUnit\Framework\TestCase
         );
         $this->suffixModel->afterSave();
     }
-    
+
     public function testAfterSaveWithoutChanges()
     {
         $this->suffixModel->setValue('');
@@ -135,7 +135,7 @@ class SuffixTest extends \PHPUnit\Framework\TestCase
         $this->cacheTypeList->expects($this->never())->method('invalidate');
         $this->suffixModel->afterSave();
     }
-    
+
     public function testAfterSaveProduct()
     {
         $this->suffixModel->setValue('new');

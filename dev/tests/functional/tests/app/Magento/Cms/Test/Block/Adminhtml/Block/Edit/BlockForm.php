@@ -6,9 +6,9 @@
 
 namespace Magento\Cms\Test\Block\Adminhtml\Block\Edit;
 
+use Magento\Cms\Test\Block\Adminhtml\Wysiwyg\Config;
 use Magento\Mtf\Block\Form;
 use Magento\Mtf\Client\Locator;
-use Magento\Cms\Test\Block\Adminhtml\Wysiwyg\Config;
 
 /**
  * Block adminhtml form.

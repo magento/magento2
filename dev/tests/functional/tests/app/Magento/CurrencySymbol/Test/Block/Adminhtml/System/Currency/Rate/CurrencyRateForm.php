@@ -7,8 +7,8 @@
 namespace Magento\CurrencySymbol\Test\Block\Adminhtml\System\Currency\Rate;
 
 use Magento\Mtf\Block\Form;
-use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Currency Rate form.

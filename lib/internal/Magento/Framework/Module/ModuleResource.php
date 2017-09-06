@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Module;
 
-use \Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
 /**
  * Resource Model

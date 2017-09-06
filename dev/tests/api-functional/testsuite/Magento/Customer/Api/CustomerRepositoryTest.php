@@ -5,15 +5,15 @@
  */
 namespace Magento\Customer\Api;
 
-use Magento\Customer\Api\Data\CustomerInterface as Customer;
 use Magento\Customer\Api\Data\AddressInterface as Address;
+use Magento\Customer\Api\Data\CustomerInterface as Customer;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Customer as CustomerHelper;
 use Magento\TestFramework\TestCase\WebapiAbstract;
-use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
-use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Test class for Magento\Customer\Api\CustomerRepositoryInterface

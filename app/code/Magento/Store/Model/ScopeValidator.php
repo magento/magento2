@@ -5,10 +5,10 @@
  */
 namespace Magento\Store\Model;
 
-use Magento\Framework\App\ScopeValidatorInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\App\ScopeResolverPool;
+use Magento\Framework\App\ScopeValidatorInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 class ScopeValidator implements ScopeValidatorInterface
 {
