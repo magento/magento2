@@ -288,6 +288,11 @@ class ProductsListTest extends \PHPUnit\Framework\TestCase
         $this->collectionFactory->expects($this->once())->method('create')->willReturn($collection);
         $this->productsList->setData('conditions_encoded', 'some_serialized_conditions');
 
+        $this->widgetConditionsHelper->expects($this->once())
+            ->method('decode')
+            ->with('some_serialized_conditions')
+            ->willReturn([]);
+
         $this->builder->expects($this->once())->method('attachConditionToCollection')
             ->with($collection, $this->getConditionsForCollection($collection))
             ->willReturnSelf();
