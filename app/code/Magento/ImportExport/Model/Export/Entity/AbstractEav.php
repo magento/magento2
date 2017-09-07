@@ -33,7 +33,7 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEn
      *
      * @var array
      */
-    protected $_attributeTypes = [];
+    protected $attributeTypes = [];
 
     /**
      * Entity type id.
@@ -105,7 +105,7 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEn
     {
         /** @var $attribute AbstractAttribute */
         foreach ($this->getAttributeCollection() as $attribute) {
-            $this->_attributeTypes[$attribute->getAttributeCode()] = $attribute->getFrontendInput();
+            $this->attributeTypes[$attribute->getAttributeCode()] = $attribute->getFrontendInput();
         }
         return $this;
     }
@@ -291,8 +291,8 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEn
      */
     private function isMultiselect($attributeCode)
     {
-        return isset($this->_attributeTypes[$attributeCode])
-            && $this->_attributeTypes[$attributeCode] === 'multiselect';
+        return isset($this->attributeTypes[$attributeCode])
+            && $this->attributeTypes[$attributeCode] === 'multiselect';
     }
 
     /**
