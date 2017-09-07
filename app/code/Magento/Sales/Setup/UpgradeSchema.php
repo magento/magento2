@@ -109,12 +109,11 @@ class UpgradeSchema implements UpgradeSchemaInterface
         if (version_compare($context->getVersion(), '2.0.8', '<')) {
             $connection = $installer->getConnection(self::$connectionName);
             $tableName = $installer->getTable('sales_shipment_track');
-            $connection->addColumn(
-                $tableName,
+            $connection->addColumn($tableName,
                 'track_url',
                 [
                     'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-                    'length' => 255,
+                    'length' => '64k',
                     'nullable' => true,
                     'default' => null,
                     'comment' => 'Tracking URL'

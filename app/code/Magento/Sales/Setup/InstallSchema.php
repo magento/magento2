@@ -2632,7 +2632,7 @@ class InstallSchema implements InstallSchemaInterface
         )->addColumn(
             'track_url',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            '64k',
             ['nullable' => true, 'default' => null],
             'Tracking URL'
         )->addColumn(
