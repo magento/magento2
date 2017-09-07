@@ -39,7 +39,11 @@
     </dl>
 </div>
     <script>
-        require(["Magento_Sales/order/create/form"], function(){
+        require([
+            'mage/apply/main',
+            'Magento_Sales/order/create/form'
+        ], function(mage) {
+            mage.apply();
         <?php if ($_methodsCount != 1):?>
             order.setPaymentMethod('<?= /* @escapeNotVerified */ $block->getSelectedMethodCode() ?>');
         <?php endif; ?>
