@@ -199,3 +199,4 @@ Magento/Framework/MessageQueue/Publisher/Config/PublisherConfigItem
 Magento/Framework/MessageQueue/Topology/Config/ExchangeConfigItem
 IntegrationConfig.php
 *Test.php
+setup/performance-toolkit/aggregate-report
