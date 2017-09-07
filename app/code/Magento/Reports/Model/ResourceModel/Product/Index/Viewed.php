@@ -11,6 +11,10 @@
  */
 namespace Magento\Reports\Model\ResourceModel\Product\Index;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Viewed extends \Magento\Reports\Model\ResourceModel\Product\Index\AbstractIndex
 {
     /**

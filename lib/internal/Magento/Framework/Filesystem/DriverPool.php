@@ -20,11 +20,7 @@ class DriverPool
     const ZLIB = 'compress.zlib';
     /**#@- */
 
-    /**
-     * Supported types
-     *
-     * @var string[]
-     */
+    /**#@- */
     protected $types = [
         self::FILE => \Magento\Framework\Filesystem\Driver\File::class,
         self::HTTP => \Magento\Framework\Filesystem\Driver\Http::class,

@@ -19,6 +19,7 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class QuantityValidator
 {
@@ -134,7 +135,7 @@ class QuantityValidator
         }
 
         if ($stockStatus) {
-            if ($stockStatus->getStockStatus() == Stock::STOCK_OUT_OF_STOCK
+            if ($stockStatus->getStockStatus() === Stock::STOCK_OUT_OF_STOCK
                     || $parentStockStatus && $parentStockStatus->getStockStatus() == Stock::STOCK_OUT_OF_STOCK
             ) {
                 $quoteItem->addErrorInfo(

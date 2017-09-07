@@ -153,26 +153,32 @@ class Timezone implements TimezoneInterface
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function date($date = null, $locale = null, $useTimezone = true)
+    public function date($date = null, $locale = null, $useTimezone = true, $includeTime = true)
     {
         $locale = $locale ?: $this->_localeResolver->getLocale();
         $timezone = $useTimezone
             ? $this->getConfigTimezone()
             : date_default_timezone_get();
 
-        if (empty($date)) {
-            return new \DateTime('now', new \DateTimeZone($timezone));
-        } elseif ($date instanceof \DateTime) {
-            return $date->setTimezone(new \DateTimeZone($timezone));
-        } elseif (!is_numeric($date)) {
-            $formatter = new \IntlDateFormatter(
-                $locale,
-                \IntlDateFormatter::SHORT,
-                \IntlDateFormatter::SHORT,
-                new \DateTimeZone($timezone)
-            );
-            $date = $formatter->parse($date) ?: (new \DateTime($date))->getTimestamp();
+        switch (true) {
+            case (empty($date)):
+                return new \DateTime('now', new \DateTimeZone($timezone));
+            case ($date instanceof \DateTime):
+                return $date->setTimezone(new \DateTimeZone($timezone));
+            case ($date instanceof \DateTimeImmutable):
+                return new \DateTime($date->format('Y-m-d H:i:s'), $date->getTimezone());
+            case (!is_numeric($date)):
+                $timeType = $includeTime ? \IntlDateFormatter::SHORT : \IntlDateFormatter::NONE;
+                $formatter = new \IntlDateFormatter(
+                    $locale,
+                    \IntlDateFormatter::SHORT,
+                    $timeType,
+                    new \DateTimeZone($timezone)
+                );
+                $date = $formatter->parse($date) ?: (new \DateTime($date))->getTimestamp();
+                break;
         }
+
         return (new \DateTime(null, new \DateTimeZone($timezone)))->setTimestamp($date);
     }
 
@@ -196,7 +202,7 @@ class Timezone implements TimezoneInterface
     {
         $formatTime = $showTime ? $format : \IntlDateFormatter::NONE;
 
-        if (!($date instanceof \DateTime)) {
+        if (!($date instanceof \DateTimeInterface)) {
             $date = new \DateTime($date);
         }
 
@@ -259,7 +265,7 @@ class Timezone implements TimezoneInterface
         $timezone = null,
         $pattern = null
     ) {
-        if (!($date instanceof \DateTime)) {
+        if (!($date instanceof \DateTimeInterface)) {
             $date = new \DateTime($date);
         }
 
@@ -295,8 +301,12 @@ class Timezone implements TimezoneInterface
      */
     public function convertConfigTimeToUtc($date, $format = 'Y-m-d H:i:s')
     {
-        if (!($date instanceof \DateTime)) {
-            $date = new \DateTime($date, new \DateTimeZone($this->getConfigTimezone()));
+        if (!($date instanceof \DateTimeInterface)) {
+            if ($date instanceof \DateTimeImmutable) {
+                $date = new \DateTime($date->format('Y-m-d H:i:s'), new \DateTimeZone($this->getConfigTimezone()));
+            } else {
+                $date = new \DateTime($date, new \DateTimeZone($this->getConfigTimezone()));
+            }
         } else {
             if ($date->getTimezone()->getName() !== $this->getConfigTimezone()) {
                 throw new LocalizedException(

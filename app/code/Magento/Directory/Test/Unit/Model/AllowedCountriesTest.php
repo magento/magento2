@@ -13,7 +13,7 @@ use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
-class AllowedCountriesTest extends \PHPUnit_Framework_TestCase
+class AllowedCountriesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject | ScopeConfigInterface
@@ -32,8 +32,8 @@ class AllowedCountriesTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->scopeConfigMock = $this->getMock(ScopeConfigInterface::class);
-        $this->storeManagerMock = $this->getMock(StoreManagerInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
 
         $this->allowedCountriesReader = new AllowedCountries(
             $this->scopeConfigMock,
@@ -43,7 +43,7 @@ class AllowedCountriesTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAllowedCountriesWithEmptyFilter()
     {
-        $website1 = $this->getMock(WebsiteInterface::class);
+        $website1 = $this->createMock(WebsiteInterface::class);
         $website1->expects($this->once())
             ->method('getId')
             ->willReturn(1);

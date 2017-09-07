@@ -9,6 +9,10 @@
  */
 namespace Magento\Config\Model\Config\Structure\Mapper\Attribute;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Inheritance implements \Magento\Config\Model\Config\Structure\MapperInterface
 {
     /**

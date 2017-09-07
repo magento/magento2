@@ -10,7 +10,7 @@ use Magento\Cms\Api\PageRepositoryInterface;
 /**
  * @magentoAppArea adminhtml
  */
-class PageTest extends \PHPUnit_Framework_TestCase
+class PageTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Cms\Model\Page

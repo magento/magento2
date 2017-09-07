@@ -8,7 +8,7 @@ namespace Magento\Sales\Test\Unit\Model\Order\Invoice;
 /**
  * Unit test for Invoice pay operation.
  */
-class PayOperationTest extends \PHPUnit_Framework_TestCase
+class PayOperationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\Order\Invoice\PayOperation
@@ -218,13 +218,7 @@ class PayOperationTest extends \PHPUnit_Framework_TestCase
             ->method('getBaseCost')
             ->willReturn(31);
 
-        $this->contextMock = $this->getMock(
-            \Magento\Framework\Model\Context::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->contextMock = $this->createMock(\Magento\Framework\Model\Context::class);
 
         $this->invoiceItemMock = $this->getMockForAbstractClass(
             \Magento\Sales\Api\Data\InvoiceItemInterface::class,

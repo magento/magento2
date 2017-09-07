@@ -9,7 +9,8 @@ use Magento\Ui\Component\AbstractComponent;
 use Magento\Framework\View\Element\UiComponentInterface;
 
 /**
- * Class Collection
+ * @api
+ * @since 100.0.2
  */
 class Collection extends AbstractComponent implements UiComponentInterface
 {

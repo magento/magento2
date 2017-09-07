@@ -13,7 +13,7 @@ use Magento\Reports\Model\ResourceModel\Product\Sold\Collection;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager
@@ -28,14 +28,16 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
-        $this->selectMock = $this->getMock(Select::class, [], [], '', false);
+        $this->selectMock = $this->createMock(Select::class);
     }
 
     public function testGetSelectCountSql()
     {
         /** @var $collection \PHPUnit_Framework_MockObject_MockObject */
-        $constructArgs = $this->objectManager->getConstructArguments(Collection::class);
-        $collection = $this->getMock(Collection::class, ['getSelect'], $constructArgs, '', false);
+        $collection = $this->getMockBuilder(Collection::class)
+            ->setMethods(['getSelect'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $collection->expects($this->atLeastOnce())->method('getSelect')->willReturn($this->selectMock);
 

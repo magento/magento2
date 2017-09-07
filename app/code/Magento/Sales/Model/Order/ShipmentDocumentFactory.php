@@ -19,6 +19,7 @@ use Magento\Sales\Api\Data\ShipmentCreationArgumentsInterface;
  * Class ShipmentDocumentFactory
  *
  * @api
+ * @since 100.1.2
  */
 class ShipmentDocumentFactory
 {
@@ -65,6 +66,7 @@ class ShipmentDocumentFactory
      * @param ShipmentPackageCreationInterface[] $packages
      * @param ShipmentCreationArgumentsInterface|null $arguments
      * @return ShipmentInterface
+     * @since 100.1.2
      */
     public function create(
         OrderInterface $order,

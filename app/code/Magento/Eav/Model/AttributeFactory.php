@@ -8,8 +8,9 @@ namespace Magento\Eav\Model;
 /**
  * EAV attribute model factory
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
  * @codeCoverageIgnore
+ * @since 100.0.2
  */
 class AttributeFactory
 {

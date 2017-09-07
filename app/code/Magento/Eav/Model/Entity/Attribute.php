@@ -16,14 +16,18 @@ use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
  * @method \Magento\Eav\Model\Entity\Attribute setOption($value)
  * @method \Magento\Eav\Api\Data\AttributeExtensionInterface getExtensionAttributes()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute implements
     \Magento\Framework\DataObject\IdentityInterface
 {
     /**
-     * Attribute code max length
+     * Attribute code max length.
+     *
+     * The value is defined as 60 because in the flat mode attribute code will be transformed into column name.
+     * MySQL allows only 64 symbols in column name.
      */
-    const ATTRIBUTE_CODE_MAX_LENGTH = 30;
+    const ATTRIBUTE_CODE_MAX_LENGTH = 60;
 
     /**
      * Cache tag
@@ -304,6 +308,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
 
     /**
      * @return $this
+     * @since 100.0.7
      */
     public function afterDelete()
     {
@@ -475,6 +480,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
 
     /**
      * @inheritdoc
+     * @since 100.0.7
      */
     public function __sleep()
     {
@@ -487,6 +493,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
 
     /**
      * @inheritdoc
+     * @since 100.0.7
      */
     public function __wakeup()
     {

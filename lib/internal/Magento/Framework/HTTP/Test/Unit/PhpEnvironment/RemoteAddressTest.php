@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\HTTP\Test\Unit\PhpEnvironment;
 
-class RemoteAddressTest extends \PHPUnit_Framework_TestCase
+class RemoteAddressTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Request\Http

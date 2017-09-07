@@ -16,6 +16,6 @@
 ?>
 <?php if ($_description = $block->getCurrentCategory()->getDescription()): ?>
     <div class="category-description">
-        <?php /* @escapeNotVerified */ echo $this->helper('Magento\Catalog\Helper\Output')->categoryAttribute($block->getCurrentCategory(), $_description, 'description') ?>
+        <?= /* @escapeNotVerified */ $this->helper('Magento\Catalog\Helper\Output')->categoryAttribute($block->getCurrentCategory(), $_description, 'description') ?>
     </div>
 <?php endif; ?>
