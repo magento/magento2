@@ -339,7 +339,9 @@ class Customer extends AbstractCustomer
      */
     protected function _prepareDataForUpdate(array $rowData)
     {
-        $multiSeparator = $this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR];
+        $multiSeparator = isset($this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR])
+            ? $this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR]
+            : Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR;
         $entitiesToCreate = [];
         $entitiesToUpdate = [];
         $attributesToSave = [];
@@ -546,7 +548,9 @@ class Customer extends AbstractCustomer
                         $attributeParams,
                         $rowData,
                         $rowNumber,
-                        $this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR]
+                        isset($this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR])
+                            ? $this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR]
+                            : Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR
                     );
                 } elseif ($attributeParams['is_required'] && !$this->_getCustomerId($email, $website)) {
                     $this->addRowError(self::ERROR_VALUE_IS_REQUIRED, $rowNumber, $attributeCode);

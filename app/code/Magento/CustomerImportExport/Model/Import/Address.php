@@ -486,7 +486,9 @@ class Address extends AbstractCustomer
      */
     protected function _prepareDataForUpdate(array $rowData)
     {
-        $multiSeparator = $this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR];
+        $multiSeparator = isset($this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR])
+            ? $this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR]
+            : Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR;
         $email = strtolower($rowData[self::COLUMN_EMAIL]);
         $customerId = $this->_getCustomerId($email, $rowData[self::COLUMN_WEBSITE]);
         // entity table data
@@ -738,9 +740,9 @@ class Address extends AbstractCustomer
                             continue;
                         }
                         if (isset($rowData[$attributeCode]) && strlen($rowData[$attributeCode])) {
-                            $multiSeparator = isset($this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR]) ?
-                                $this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR] :
-                                Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR;
+                            $multiSeparator = isset($this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR])
+                                ? $this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR]
+                                : Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR;
                             $this->isAttributeValid(
                                 $attributeCode,
                                 $attributeParams,
