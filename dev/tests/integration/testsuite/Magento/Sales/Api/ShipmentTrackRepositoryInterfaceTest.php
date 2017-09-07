@@ -42,7 +42,7 @@ class ShipmentTrackRepositoryInterfaceTest extends \PHPUnit\Framework\TestCase
             ->setValue('track number 4')
             ->create();
         $filter4 = $filterBuilder->setField(ShipmentTrackInterface::TRACK_URL)
-            ->setValue('http://track.url.5.com')
+            ->setValue('track url 5')
             ->create();
         $filter5 = $filterBuilder->setField(ShipmentTrackInterface::CARRIER_CODE)
             ->setValue('carrier code 6')
