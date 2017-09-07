@@ -8,7 +8,7 @@ namespace Magento\Inventory\Model\ReservationBuilder\Validator;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Validation\ValidationResult;
 use Magento\Framework\Validation\ValidationResultFactory;
-use Magento\Inventory\Model\ReservationBuilderInterface;
+use Magento\InventoryApi\Api\ReservationBuilderInterface;
 
 /**
  * Chain of validators. Extension point for new validators via di configuration

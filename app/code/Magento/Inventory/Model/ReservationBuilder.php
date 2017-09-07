@@ -7,7 +7,7 @@ namespace Magento\Inventory\Model;
 
 use Magento\Framework\Validation\ValidationException;
 use Magento\InventoryApi\Api\Data\ReservationInterface;
-use Zend\Filter\Word\UnderscoreToCamelCase;
+use Magento\InventoryApi\Api\ReservationBuilderInterface;
 
 /**
  * Used to instantiate ReservationInterface objects
@@ -39,7 +39,7 @@ class ReservationBuilder implements ReservationBuilderInterface
      *
      * @var \Magento\Framework\ObjectManagerInterface
      */
-    private $objectManager = null;
+    private $objectManager;
 
     /**
      * @var \Magento\Inventory\Model\ReservationBuilder\Validator\ReservationBuilderValidatorInterface
@@ -47,11 +47,9 @@ class ReservationBuilder implements ReservationBuilderInterface
     private $reservationBuilderValidator;
 
     /**
-     * String Service instance
-     *
-     * @var \Magento\Inventory\Model\String\Service
+     * @var \Magento\Inventory\Model\SnakeToCamelCaseConvertor
      */
-    private $stringService;
+    private $snakeToCamelCaseConvertor;
 
     /**
      * ReservationBuilder constructor.
@@ -61,11 +59,11 @@ class ReservationBuilder implements ReservationBuilderInterface
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Inventory\Model\ReservationBuilder\Validator\ReservationBuilderValidatorInterface $reservationBuilderValidator,
-        \Magento\Inventory\Model\String\Service $stringService
+        \Magento\Inventory\Model\SnakeToCamelCaseConvertor $snakeToCamelCaseConvertor
     ) {
         $this->objectManager = $objectManager;
         $this->reservationBuilderValidator = $reservationBuilderValidator;
-        $this->stringService = $stringService;
+        $this->snakeToCamelCaseConvertor = $snakeToCamelCaseConvertor;
     }
 
     /**
@@ -78,14 +76,6 @@ class ReservationBuilder implements ReservationBuilderInterface
     }
 
     /**
-     * @return int|null
-     */
-    public function getStockId()
-    {
-        return $this->stockId;
-    }
-
-    /**
      * @inheritdoc
      */
     public function setSku(string $sku): ReservationBuilder
@@ -95,28 +85,12 @@ class ReservationBuilder implements ReservationBuilderInterface
     }
 
     /**
-     * @return string|null
-     */
-    public function getSku()
-    {
-        return $this->sku;
-    }
-
-    /**
      * @inheritdoc
      */
     public function setQuantity(float $quantity): ReservationBuilder
     {
         $this->quantity = $quantity;
         return $this;
-    }
-
-    /**
-     * @return float|null
-     */
-    public function getQuantity()
-    {
-        return $this->quantity;
     }
 
     /**
@@ -146,7 +120,7 @@ class ReservationBuilder implements ReservationBuilderInterface
             ReservationInterface::METADATA => $this->metadata,
         ];
 
-        $arguments = $this->stringService->convertArrayKeysFromSnakeToCamelCase($data);
+        $arguments = $this->convertArrayKeysFromSnakeToCamelCase($data);
         $reservationInstance = $this->objectManager->create(ReservationInterface::class, $arguments);
         $this->reset();
         return $reservationInstance;
@@ -161,5 +135,18 @@ class ReservationBuilder implements ReservationBuilderInterface
         $this->sku = null;
         $this->quantity = null;
         $this->metadata = null;
+    }
+
+    /**
+     * Used to convert database field names (that use snake case) into constructor parameter names (that use camel case)
+     * to avoid to define them twice in domain model interface.
+     *
+     * @param array $array
+     * @return array
+     */
+    private function convertArrayKeysFromSnakeToCamelCase(array $array)
+    {
+        $convertedArrayKeys = $this->snakeToCamelCaseConvertor->convert(array_keys($array));
+        return array_combine($convertedArrayKeys, array_values($array));
     }
 }

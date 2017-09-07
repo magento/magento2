@@ -6,7 +6,7 @@
 namespace Magento\Inventory\Model\ReservationBuilder\Validator;
 
 use Magento\Framework\Validation\ValidationResult;
-use Magento\Inventory\Model\ReservationBuilderInterface;
+use Magento\InventoryApi\Api\ReservationBuilderInterface;
 
 /**
  * Extension point for base validation

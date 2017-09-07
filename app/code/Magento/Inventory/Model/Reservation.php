@@ -45,7 +45,7 @@ class Reservation implements ReservationInterface
         int $stockId,
         string $sku,
         float $quantity,
-        $metadata
+        $metadata = null
     ) {
         $this->reservationId = $reservationId;
         $this->stockId = $stockId;

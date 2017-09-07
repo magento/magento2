@@ -7,7 +7,7 @@ namespace Magento\Inventory\Model\ReservationBuilder\Validator;
 
 use Magento\Framework\Validation\ValidationResult;
 use Magento\Framework\Validation\ValidationResultFactory;
-use Magento\Inventory\Model\ReservationBuilderInterface;
+use Magento\InventoryApi\Api\ReservationBuilderInterface;
 
 /**
  * Check that stock ID is valid
@@ -27,6 +27,9 @@ class SkuValidator implements ReservationBuilderValidatorInterface
         $this->validationResultFactory = $validationResultFactory;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function validate(ReservationBuilderInterface $reservationBuilder): ValidationResult
     {
         $errors = [];

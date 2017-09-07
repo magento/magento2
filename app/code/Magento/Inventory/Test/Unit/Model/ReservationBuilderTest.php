@@ -6,13 +6,14 @@
 namespace Magento\Inventory\Test\Unit\Model;
 
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Validation\ValidationException;
 use Magento\Framework\Validation\ValidationResult;
 use Magento\Inventory\Model\ReservationBuilder;
 use Magento\Inventory\Model\ReservationBuilder\Validator\ReservationBuilderValidatorInterface;
-use Magento\Inventory\Model\ReservationBuilderInterface;
-use Magento\Inventory\Model\String\Service as StringService;
+use Magento\Inventory\Model\SnakeToCamelCaseConvertor;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\InventoryApi\Api\Data\ReservationInterface;
+use Magento\InventoryApi\Api\ReservationBuilderInterface;
 
 class ReservationBuilderTest extends \PHPUnit\Framework\TestCase
 {
@@ -28,18 +29,23 @@ class ReservationBuilderTest extends \PHPUnit\Framework\TestCase
     /** @var  ValidationResult */
     private $validationResult;
 
-    /** @var StringService */
-    private $stringService;
+    /** @var SnakeToCamelCaseConvertor */
+    private $snakeToCamelCaseConvertor;
 
     protected function setUp()
     {
         $this->objectManager = $this->getMockBuilder(ObjectManagerInterface::class)->getMock();
         $this->reservationBuilderValidator = $this->getMockBuilder(ReservationBuilderValidatorInterface::class)->getMock();
-        $this->stringService = $this->getMockBuilder(StringService::class)->getMock();
+        $this->snakeToCamelCaseConvertor = $this->getMockBuilder(SnakeToCamelCaseConvertor::class)->getMock();
         $this->reservation = $this->getMockBuilder(ReservationInterface::class)->getMock();
         $this->validationResult = $this->getMockBuilder(ValidationResult::class)->disableOriginalConstructor()->getMock();
     }
 
+    /**
+     * Return an instance of ReservationBuilder
+     *
+     * @return ReservationBuilder
+     */
     private function createReservationBuilder(): ReservationBuilder
     {
         return (new ObjectManager($this))->getObject(
@@ -47,7 +53,7 @@ class ReservationBuilderTest extends \PHPUnit\Framework\TestCase
             [
                 'objectManager' => $this->objectManager,
                 'reservationBuilderValidator' => $this->reservationBuilderValidator,
-                'stringService' => $this->stringService,
+                'snakeToCamelCaseConvertor' => $this->snakeToCamelCaseConvertor,
             ]
         );
     }
@@ -57,11 +63,11 @@ class ReservationBuilderTest extends \PHPUnit\Framework\TestCase
      */
     public function testBuildValidReservation($reservationData, $reservationMappedData)
     {
-        $this->stringService
+        $this->snakeToCamelCaseConvertor
             ->expects($this->once())
-            ->method('convertArrayKeysFromSnakeToCamelCase')
-            ->with($reservationData)
-            ->willReturn($reservationMappedData);
+            ->method('convert')
+            ->with(array_keys($reservationData))
+            ->willReturn(array_keys($reservationMappedData));
 
         $this->objectManager
             ->expects($this->once())

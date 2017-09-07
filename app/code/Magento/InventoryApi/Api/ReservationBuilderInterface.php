@@ -3,8 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Inventory\Model;
+namespace Magento\InventoryApi\Api;
 
+use Magento\Framework\Validation\ValidationException;
+use Magento\Inventory\Model\ReservationBuilder;
 use Magento\InventoryApi\Api\Data\ReservationInterface;
 
 /**

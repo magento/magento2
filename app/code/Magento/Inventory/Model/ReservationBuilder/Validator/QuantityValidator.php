@@ -7,7 +7,7 @@ namespace Magento\Inventory\Model\ReservationBuilder\Validator;
 
 use Magento\Framework\Validation\ValidationResult;
 use Magento\Framework\Validation\ValidationResultFactory;
-use Magento\Inventory\Model\ReservationBuilderInterface;
+use Magento\InventoryApi\Api\ReservationBuilderInterface;
 
 /**
  * Check that stock ID is valid
@@ -27,14 +27,17 @@ class QuantityValidator implements ReservationBuilderValidatorInterface
         $this->validationResultFactory = $validationResultFactory;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function validate(ReservationBuilderInterface $reservationBuilder): ValidationResult
     {
         $errors = [];
 
         $value = $reservationBuilder->getQuantity();
 
-        if (false === is_numeric($value)) {
-            $errors[] = __('"%field" is expected to be a number.', ['field' => 'quantity']);
+        if (null === $value) {
+            $errors[] = __('"%field" can not be null.', ['field' => 'quantity']);
         }
 
         return $this->validationResultFactory->create(['errors' => $errors]);
