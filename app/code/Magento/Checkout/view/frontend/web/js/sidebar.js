@@ -230,11 +230,10 @@ define([
         /**
          * Update content after item remove
          *
-         * @param elem
-         * @param response
+         * @param {Object} elem
          * @private
          */
-        _removeItemAfter: function (elem, response) {
+        _removeItemAfter: function (elem) {
             var productData = customerData.get('cart')().items.find(function (item) {
                 return Number(elem.data('cart-item')) === Number(item['item_id']);
             });
