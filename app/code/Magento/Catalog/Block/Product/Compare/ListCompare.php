@@ -14,6 +14,7 @@ use Magento\Framework\App\Action\Action;
  * Catalog products compare block
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
 {
@@ -205,7 +206,6 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
             ['select', 'boolean', 'multiselect']
         )
         ) {
-            //$value = $attribute->getSource()->getOptionText($product->getData($attribute->getAttributeCode()));
             $value = $attribute->getFrontend()->getValue($product);
         } else {
             $value = $product->getData($attribute->getAttributeCode());

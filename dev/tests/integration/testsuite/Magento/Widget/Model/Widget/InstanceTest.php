@@ -5,7 +5,7 @@
  */
 namespace Magento\Widget\Model\Widget;
 
-class InstanceTest extends \PHPUnit_Framework_TestCase
+class InstanceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Widget\Model\Widget\Instance

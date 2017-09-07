@@ -9,7 +9,7 @@
 
 namespace Magento\Customer\Test\Unit\Controller\Account;
 
-class CreateTest extends \PHPUnit_Framework_TestCase
+class CreateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Customer\Controller\Account\Create
@@ -59,30 +59,18 @@ class CreateTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->customerSession = $this->getMock(\Magento\Customer\Model\Session::class, [], [], '', false);
-        $this->registrationMock = $this->getMock(\Magento\Customer\Model\Registration::class, [], [], '', false);
-        $this->redirectMock = $this->getMock(\Magento\Framework\App\Response\RedirectInterface::class);
-        $this->response = $this->getMock(\Magento\Framework\App\ResponseInterface::class);
+        $this->customerSession = $this->createMock(\Magento\Customer\Model\Session::class);
+        $this->registrationMock = $this->createMock(\Magento\Customer\Model\Registration::class);
+        $this->redirectMock = $this->createMock(\Magento\Framework\App\Response\RedirectInterface::class);
+        $this->response = $this->createMock(\Magento\Framework\App\ResponseInterface::class);
         $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()->getMock();
-        $this->redirectResultMock = $this->getMock(
-            \Magento\Framework\Controller\Result\Redirect::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->redirectResultMock = $this->createMock(\Magento\Framework\Controller\Result\Redirect::class);
 
-        $this->redirectFactoryMock = $this->getMock(
-            \Magento\Framework\Controller\Result\RedirectFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
+        $this->redirectFactoryMock = $this->createPartialMock(\Magento\Framework\Controller\Result\RedirectFactory::class, ['create']);
 
-        $this->resultPageMock = $this->getMock(\Magento\Framework\View\Result\Page::class, [], [], '', false);
-        $this->pageFactoryMock = $this->getMock(\Magento\Framework\View\Result\PageFactory::class, [], [], '', false);
+        $this->resultPageMock = $this->createMock(\Magento\Framework\View\Result\Page::class);
+        $this->pageFactoryMock = $this->createMock(\Magento\Framework\View\Result\PageFactory::class);
 
         $this->object = $objectManager->getObject(
             \Magento\Customer\Controller\Account\Create::class,

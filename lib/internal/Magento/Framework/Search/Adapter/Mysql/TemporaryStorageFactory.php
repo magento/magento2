@@ -11,6 +11,7 @@ use Magento\Framework\ObjectManagerInterface;
  * TemporaryStorage Factory
  *
  * @codeCoverageIgnore
+ * @api
  */
 class TemporaryStorageFactory
 {

@@ -3,9 +3,6 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * jshint browser:true
- */
 define([
     'jquery',
     'Magento_Customer/js/zxcvbn',

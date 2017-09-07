@@ -24,7 +24,7 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
 
     /**
      * @var \Magento\Config\Model\Config\Source\Yesno
-     * @deprecated
+     * @deprecated 100.1.0
      */
     protected $_sourceYesno;
 

@@ -7,6 +7,8 @@ namespace Magento\Backend\Model\Menu\Config;
 
 /**
  * Class Converter converts xml to appropriate array
+ * @api
+ * @since 100.0.2
  */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {

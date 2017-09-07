@@ -3,14 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\ImportExport\Model\ResourceModel;
 
 /**
  * ImportExport MySQL resource helper model
  *
  * @api
+ * @since 100.0.2
  */
-namespace Magento\ImportExport\Model\ResourceModel;
-
 class Helper extends \Magento\Framework\DB\Helper
 {
     /**
