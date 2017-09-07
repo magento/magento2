@@ -5,7 +5,6 @@
  */
 namespace Magento\CustomerImportExport\Model\Import;
 
-use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 /**
@@ -486,9 +485,7 @@ class Address extends AbstractCustomer
      */
     protected function _prepareDataForUpdate(array $rowData)
     {
-        $multiSeparator = isset($this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR])
-            ? $this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR]
-            : Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR;
+        $multiSeparator = $this->getMultipleValueSeparator();
         $email = strtolower($rowData[self::COLUMN_EMAIL]);
         $customerId = $this->_getCustomerId($email, $rowData[self::COLUMN_WEBSITE]);
         // entity table data
@@ -722,6 +719,7 @@ class Address extends AbstractCustomer
      */
     protected function _validateRowForUpdate(array $rowData, $rowNumber)
     {
+        $multiSeparator = $this->getMultipleValueSeparator();
         if ($this->_checkUniqueKey($rowData, $rowNumber)) {
             $email = strtolower($rowData[self::COLUMN_EMAIL]);
             $website = $rowData[self::COLUMN_WEBSITE];
@@ -740,9 +738,6 @@ class Address extends AbstractCustomer
                             continue;
                         }
                         if (isset($rowData[$attributeCode]) && strlen($rowData[$attributeCode])) {
-                            $multiSeparator = isset($this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR])
-                                ? $this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR]
-                                : Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR;
                             $this->isAttributeValid(
                                 $attributeCode,
                                 $attributeParams,

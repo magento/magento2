@@ -5,6 +5,7 @@
  */
 namespace Magento\CustomerImportExport\Model\Import;
 
+use Magento\ImportExport\Model\Import;
 use Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\Storage;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
@@ -261,5 +262,17 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
         return isset($attributeParameters['options'][strtolower($value)])
             ? $attributeParameters['options'][strtolower($value)]
             : 0;
+    }
+
+    /**
+     * Returns multiple value separator
+     *
+     * @return string
+     */
+    protected function getMultipleValueSeparator()
+    {
+        return isset($this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR])
+            ? $this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR]
+            : Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR;
     }
 }

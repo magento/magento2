@@ -339,9 +339,7 @@ class Customer extends AbstractCustomer
      */
     protected function _prepareDataForUpdate(array $rowData)
     {
-        $multiSeparator = isset($this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR])
-            ? $this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR]
-            : Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR;
+        $multiSeparator = $this->getMultipleValueSeparator();
         $entitiesToCreate = [];
         $entitiesToUpdate = [];
         $attributesToSave = [];
