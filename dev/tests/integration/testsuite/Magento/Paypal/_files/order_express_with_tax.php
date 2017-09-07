@@ -4,7 +4,14 @@
  * See COPYING.txt for license details.
  */
 
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Sales\Model\OrderRepository;
+use Magento\TestFramework\Helper\Bootstrap;
+
 require __DIR__ . '/order_express.php';
+
+/** @var ObjectManagerInterface $objectManager */
+$objectManager = Bootstrap::getObjectManager();
 
 $subTotal = 121;
 $taxRate = .0825;
@@ -18,4 +25,6 @@ $order->setGrandTotal($totalAmount);
 $order->setBaseGrandTotal($totalAmount);
 $order->setTaxAmount($taxAmount);
 
-$order->save();
+/** @var OrderRepository $orderRepository */
+$orderRepository = $objectManager->get(OrderRepository::class);
+$orderRepository->save($order);

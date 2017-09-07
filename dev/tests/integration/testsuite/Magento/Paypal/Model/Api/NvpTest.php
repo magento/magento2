@@ -125,7 +125,6 @@ class NvpTest extends \PHPUnit\Framework\TestCase
      */
     public function testCallRefundTransaction()
     {
-        $this->assertTrue(true);
         /** @var \Magento\Sales\Model\Order $order */
         $order = $this->objectManager->create(\Magento\Sales\Model\Order::class);
         $order->loadByIncrementId('100000001');
