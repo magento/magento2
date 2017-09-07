@@ -11,10 +11,6 @@
  */
 namespace Magento\Catalog\Block\Product\Widget\Html;
 
-/**
- * Class \Magento\Catalog\Block\Product\Widget\Html\Pager
- *
- */
 class Pager extends \Magento\Theme\Block\Html\Pager
 {
     /**

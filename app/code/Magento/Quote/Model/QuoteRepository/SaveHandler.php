@@ -11,10 +11,6 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\InputException;
 
-/**
- * Class \Magento\Quote\Model\QuoteRepository\SaveHandler
- *
- */
 class SaveHandler
 {
     /**

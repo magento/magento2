@@ -12,10 +12,6 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ActionInterface;
 
-/**
- * Class \Magento\UrlRewrite\Block\Plugin\Store\Switcher\SetRedirectUrl
- *
- */
 class SetRedirectUrl
 {
     /**

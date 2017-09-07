@@ -6,10 +6,6 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\Auth;
 
-/**
- * Class \Magento\Backend\Controller\Adminhtml\Auth\Logout
- *
- */
 class Logout extends \Magento\Backend\Controller\Adminhtml\Auth
 {
     /**

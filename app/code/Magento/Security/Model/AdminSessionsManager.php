@@ -73,7 +73,6 @@ class AdminSessionsManager
      * @param CollectionFactory $adminSessionInfoCollectionFactory
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
      * @param RemoteAddress $remoteAddress
-     * @since 100.1.0
      */
     public function __construct(
         ConfigInterface $securityConfig,

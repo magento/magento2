@@ -12,10 +12,6 @@ use Magento\Tax\Api\TaxRateManagementInterface;
 use Magento\Tax\Api\TaxRateRepositoryInterface;
 use Magento\Tax\Api\TaxRuleRepositoryInterface;
 
-/**
- * Class \Magento\Tax\Model\TaxRateManagement
- *
- */
 class TaxRateManagement implements TaxRateManagementInterface
 {
     /**

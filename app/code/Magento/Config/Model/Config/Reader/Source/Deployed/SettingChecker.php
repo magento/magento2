@@ -38,7 +38,6 @@ class SettingChecker
      * @param DeploymentConfig $config
      * @param PlaceholderFactory $placeholderFactory
      * @param ScopeCodeResolver $scopeCodeResolver
-     * @since 100.1.2
      */
     public function __construct(
         DeploymentConfig $config,

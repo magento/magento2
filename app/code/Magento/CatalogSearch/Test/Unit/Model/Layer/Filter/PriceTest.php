@@ -225,6 +225,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
             ->with('price')
             ->will($this->returnSelf());
 
+        $this->target->setCurrencyRate(1);
         $this->target->apply($this->request);
     }
 

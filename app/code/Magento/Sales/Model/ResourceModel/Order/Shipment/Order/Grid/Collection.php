@@ -11,10 +11,6 @@ use Magento\Framework\Data\Collection\EntityFactoryInterface as EntityFactory;
 use Magento\Framework\Event\ManagerInterface as EventManager;
 use Psr\Log\LoggerInterface as Logger;
 
-/**
- * Class \Magento\Sales\Model\ResourceModel\Order\Shipment\Order\Grid\Collection
- *
- */
 class Collection extends \Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult
 {
     /**

@@ -7,10 +7,6 @@ namespace Magento\Framework\Indexer\SaveHandler;
 
 use Magento\Framework\Search\Request\Dimension;
 
-/**
- * Class \Magento\Framework\Indexer\SaveHandler\Grid
- *
- */
 class Grid extends IndexerHandler
 {
     /**

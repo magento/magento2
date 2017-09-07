@@ -7,10 +7,6 @@
  */
 namespace Magento\Framework\App\Config\Scope;
 
-/**
- * Class \Magento\Framework\App\Config\Scope\Converter
- *
- */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**

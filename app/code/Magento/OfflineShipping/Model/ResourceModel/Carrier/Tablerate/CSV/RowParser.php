@@ -9,10 +9,6 @@ namespace Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV;
 use Magento\Framework\Phrase;
 use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\LocationDirectory;
 
-/**
- * Class \Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV\RowParser
- *
- */
 class RowParser
 {
     /**

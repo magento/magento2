@@ -9,10 +9,6 @@ use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Url\Validator;
 
-/**
- * Class \Magento\CatalogImportExport\Model\Import\Product\Validator\Media
- *
- */
 class Media extends AbstractImportValidator implements RowValidatorInterface
 {
     /**

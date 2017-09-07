@@ -8,10 +8,6 @@ namespace Magento\Framework\Search\Adapter\Mysql\Aggregation;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Dynamic\IntervalInterface;
 
-/**
- * Class \Magento\Framework\Search\Adapter\Mysql\Aggregation\Interval
- *
- */
 class Interval implements IntervalInterface
 {
     /**

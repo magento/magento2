@@ -11,10 +11,6 @@
  */
 namespace Magento\Backup\Block\Adminhtml\Grid\Column\Renderer;
 
-/**
- * Class \Magento\Backup\Block\Adminhtml\Grid\Column\Renderer\Download
- *
- */
 class Download extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
 {
     /**

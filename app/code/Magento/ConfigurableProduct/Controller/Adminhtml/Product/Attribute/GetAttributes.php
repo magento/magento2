@@ -9,10 +9,6 @@ namespace Magento\ConfigurableProduct\Controller\Adminhtml\Product\Attribute;
 use Magento\Backend\App\Action;
 use Magento\ConfigurableProduct\Model\AttributesListInterface;
 
-/**
- * Class \Magento\ConfigurableProduct\Controller\Adminhtml\Product\Attribute\GetAttributes
- *
- */
 class GetAttributes extends Action
 {
     /**

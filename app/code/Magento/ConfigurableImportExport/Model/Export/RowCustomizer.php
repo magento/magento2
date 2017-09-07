@@ -11,16 +11,30 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableP
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 use Magento\ImportExport\Model\Import;
 
-/**
- * Class \Magento\ConfigurableImportExport\Model\Export\RowCustomizer
- *
- */
 class RowCustomizer implements RowCustomizerInterface
 {
+    /**
+     * Header column for Configurable Product variations
+     */
+    const CONFIGURABLE_VARIATIONS_COLUMN = 'configurable_variations';
+
+    /**
+     * Header column for Configurable Product variation labels
+     */
+    const CONFIGURABLE_VARIATIONS_LABELS_COLUMN = 'configurable_variation_labels';
+
     /**
      * @var array
      */
     protected $configurableData = [];
+
+    /**
+     * @var string[]
+     */
+    private $configurableColumns = [
+        self::CONFIGURABLE_VARIATIONS_COLUMN,
+        self::CONFIGURABLE_VARIATIONS_LABELS_COLUMN
+    ];
 
     /**
      * Prepare configurable data for export
@@ -58,8 +72,11 @@ class RowCustomizer implements RowCustomizerInterface
             }
 
             $this->configurableData[$product->getId()] = [
-                'configurable_variations' => implode(ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR, $variations),
-                'configurable_variation_labels' => implode(
+                self::CONFIGURABLE_VARIATIONS_COLUMN => implode(
+                    ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR,
+                    $variations
+                ),
+                self::CONFIGURABLE_VARIATIONS_LABELS_COLUMN => implode(
                     Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR,
                     $variationsLabels
                 )
@@ -75,17 +92,7 @@ class RowCustomizer implements RowCustomizerInterface
      */
     public function addHeaderColumns($columns)
     {
-        // have we merge configurable products data
-        if (!empty($this->configurableData)) {
-            $columns = array_merge(
-                $columns,
-                [
-                    'configurable_variations',
-                    'configurable_variation_labels',
-                ]
-            );
-        }
-        return $columns;
+        return array_merge($columns, $this->configurableColumns);
     }
 
     /**

@@ -110,7 +110,6 @@ class DataProvider
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
-     * @since 100.0.3
      */
     public function __construct(
         ResourceConnection $resource,

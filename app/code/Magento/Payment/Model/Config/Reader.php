@@ -7,10 +7,6 @@
  */
 namespace Magento\Payment\Model\Config;
 
-/**
- * Class \Magento\Payment\Model\Config\Reader
- *
- */
 class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {
     /**

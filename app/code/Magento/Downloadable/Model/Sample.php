@@ -13,6 +13,7 @@ use Magento\Downloadable\Api\Data\SampleInterface;
  * @method int getProductId()
  *
  * @api
+ * @since 100.0.2
  */
 class Sample extends \Magento\Framework\Model\AbstractExtensibleModel implements ComponentInterface, SampleInterface
 {

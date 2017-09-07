@@ -19,6 +19,7 @@ use Magento\Framework\Exception\LocalizedException;
  * @method \Magento\Eav\Model\Form\Element setAttributeId(int $value)
  * @method int getSortOrder()
  * @method \Magento\Eav\Model\Form\Element setSortOrder(int $value)
+ * @since 100.0.2
  */
 class Element extends \Magento\Framework\Model\AbstractModel
 {

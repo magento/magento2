@@ -5,10 +5,6 @@
  */
 namespace Magento\Setup\Controller;
 
-/**
- * Class \Magento\Setup\Controller\Session
- *
- */
 class Session extends \Zend\Mvc\Controller\AbstractActionController
 {
     /**

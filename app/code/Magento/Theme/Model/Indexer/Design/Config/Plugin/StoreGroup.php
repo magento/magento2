@@ -9,10 +9,6 @@ use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Store\Model\Group;
 use Magento\Theme\Model\Data\Design\Config;
 
-/**
- * Class \Magento\Theme\Model\Indexer\Design\Config\Plugin\StoreGroup
- *
- */
 class StoreGroup
 {
     /**

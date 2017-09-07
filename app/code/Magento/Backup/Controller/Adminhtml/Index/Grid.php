@@ -8,10 +8,6 @@ namespace Magento\Backup\Controller\Adminhtml\Index;
 
 use Magento\Framework\Controller\ResultFactory;
 
-/**
- * Class \Magento\Backup\Controller\Adminhtml\Index\Grid
- *
- */
 class Grid extends \Magento\Backup\Controller\Adminhtml\Index
 {
     /**

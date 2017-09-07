@@ -44,7 +44,6 @@ class ShipmentDocumentFactory
      * @param ShipmentFactory $shipmentFactory
      * @param HydratorPool $hydratorPool
      * @param TrackFactory $trackFactory
-     * @since 100.1.2
      */
     public function __construct(
         ShipmentFactory $shipmentFactory,

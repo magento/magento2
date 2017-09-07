@@ -6,6 +6,8 @@
 namespace Magento\Translation\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
+use Magento\Translation\Model\Inline\File as TranslationFile;
 
 /**
  * A service for handling Translation config files
@@ -33,18 +35,26 @@ class FileManager
     private $driverFile;
 
     /**
+     * @var TranslationFile
+     */
+    private $translationFile;
+
+    /**
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
-     * @param \Magento\Framework\App\Filesystem\DirectoryList $directoryList,
-     * @param \Magento\Framework\Filesystem\Driver\File $driverFile,
+     * @param \Magento\Framework\App\Filesystem\DirectoryList $directoryList
+     * @param \Magento\Framework\Filesystem\Driver\File $driverFile
+     * @param TranslationFile $translationFile
      */
     public function __construct(
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\App\Filesystem\DirectoryList $directoryList,
-        \Magento\Framework\Filesystem\Driver\File $driverFile
+        \Magento\Framework\Filesystem\Driver\File $driverFile,
+        \Magento\Translation\Model\Inline\File $translationFile = null
     ) {
         $this->assetRepo = $assetRepo;
         $this->directoryList = $directoryList;
         $this->driverFile = $driverFile;
+        $this->translationFile = $translationFile ?: ObjectManager::getInstance()->get(TranslationFile::class);
     }
 
     /**
@@ -109,5 +119,21 @@ class FileManager
             $this->driverFile->createDirectory($translationDir);
         }
         $this->driverFile->filePutContents($this->getTranslationFileFullPath(), $content);
+    }
+
+    /**
+     * Calculate translation file version hash.
+     *
+     * @return string
+     */
+    public function getTranslationFileVersion()
+    {
+        $translationFile = $this->getTranslationFileFullPath();
+        if (!$this->driverFile->isExists($translationFile)) {
+            $this->updateTranslationFileContent($this->translationFile->getTranslationFileContent());
+        }
+
+        $translationFileHash = sha1_file($translationFile);
+        return sha1($translationFileHash . $this->getTranslationFilePath());
     }
 }

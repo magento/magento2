@@ -6,10 +6,6 @@
  */
 namespace Magento\Multishipping\Controller\Checkout;
 
-/**
- * Class \Magento\Multishipping\Controller\Checkout\RemoveItem
- *
- */
 class RemoveItem extends \Magento\Multishipping\Controller\Checkout
 {
     /**

@@ -7,10 +7,6 @@
  */
 namespace Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin;
 
-/**
- * Class \Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin\UpdateConfigurations
- *
- */
 class UpdateConfigurations
 {
     /**

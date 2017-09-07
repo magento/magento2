@@ -10,10 +10,6 @@ namespace Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Serialize\Serializer\Serialize;
 
-/**
- * Class \Magento\Framework\App\ObjectManager\ConfigCache
- *
- */
 class ConfigCache implements \Magento\Framework\ObjectManager\ConfigCacheInterface
 {
     /**

@@ -10,6 +10,7 @@ namespace Magento\Sales\Api;
  *
  * A transaction is an interaction between a merchant and a customer such as a purchase, a credit, a refund, and so on.
  * @api
+ * @since 100.0.2
  */
 interface TransactionRepositoryInterface
 {

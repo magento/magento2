@@ -10,10 +10,6 @@ use Magento\Sales\Helper\Guest as GuestHelper;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\Controller\ResultInterface;
 
-/**
- * Class \Magento\Sales\Controller\Guest\View
- *
- */
 class View extends Action\Action
 {
     /**

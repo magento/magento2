@@ -6,10 +6,6 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Shipment;
 
-/**
- * Class \Magento\Sales\Controller\Adminhtml\Shipment\View
- *
- */
 class View extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShipment\View
 {
 }

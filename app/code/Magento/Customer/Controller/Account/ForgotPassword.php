@@ -10,10 +10,6 @@ use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 
-/**
- * Class \Magento\Customer\Controller\Account\ForgotPassword
- *
- */
 class ForgotPassword extends \Magento\Customer\Controller\AbstractAccount
 {
     /**

@@ -11,10 +11,6 @@ use Magento\Framework\Validator\Constraint\Option;
 use Magento\Framework\Validator\Constraint\Option\Callback;
 use Magento\Framework\Validator\Constraint\OptionInterface;
 
-/**
- * Class \Magento\Framework\Validator\Config
- *
- */
 class Config extends \Magento\Framework\Config\AbstractXml
 {
     /**#@+

@@ -11,10 +11,6 @@
  */
 namespace Magento\Cron\Model\Config\Backend\Product;
 
-/**
- * Class \Magento\Cron\Model\Config\Backend\Product\Alert
- *
- */
 class Alert extends \Magento\Framework\App\Config\Value
 {
     /**

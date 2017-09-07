@@ -27,7 +27,6 @@ abstract class AbstractOptionsField extends AbstractElement
      * @param array|OptionSourceInterface|null $options
      * @param array $components
      * @param array $data
-     * @since 100.1.0
      */
     public function __construct(
         ContextInterface $context,

@@ -118,7 +118,6 @@ class Vault implements VaultPaymentInterface
      * @param string $code
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @since 100.1.0
      */
     public function __construct(
         ConfigInterface $config,

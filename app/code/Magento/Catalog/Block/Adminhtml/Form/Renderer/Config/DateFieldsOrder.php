@@ -14,10 +14,6 @@ namespace Magento\Catalog\Block\Adminhtml\Form\Renderer\Config;
 use Magento\Config\Block\System\Config\Form\Field;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 
-/**
- * Class \Magento\Catalog\Block\Adminhtml\Form\Renderer\Config\DateFieldsOrder
- *
- */
 class DateFieldsOrder extends Field
 {
     /**

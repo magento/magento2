@@ -5,10 +5,6 @@
  */
 namespace Magento\UrlRewrite\Block;
 
-/**
- * Class \Magento\UrlRewrite\Block\Selector
- *
- */
 class Selector extends \Magento\Backend\Block\Template
 {
     /**

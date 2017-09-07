@@ -12,10 +12,6 @@ namespace Magento\Catalog\Controller\Adminhtml\Product;
 use Magento\Framework\Controller\Result;
 use Magento\Framework\View\Result\PageFactory;
 
-/**
- * Class \Magento\Catalog\Controller\Adminhtml\Product\Attribute
- *
- */
 abstract class Attribute extends \Magento\Backend\App\Action
 {
     /**

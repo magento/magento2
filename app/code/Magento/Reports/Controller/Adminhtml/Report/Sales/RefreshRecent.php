@@ -6,10 +6,6 @@
  */
 namespace Magento\Reports\Controller\Adminhtml\Report\Sales;
 
-/**
- * Class \Magento\Reports\Controller\Adminhtml\Report\Sales\RefreshRecent
- *
- */
 class RefreshRecent extends \Magento\Reports\Controller\Adminhtml\Report\Sales
 {
     /**

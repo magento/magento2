@@ -14,10 +14,6 @@ use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Payment\Helper\Formatter;
 use Magento\Paypal\Model\Payflow\Transparent;
 
-/**
- * Class \Magento\Paypal\Gateway\Payflowpro\Command\AuthorizationCommand
- *
- */
 class AuthorizationCommand implements CommandInterface
 {
     use Formatter;

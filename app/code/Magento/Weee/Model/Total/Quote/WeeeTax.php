@@ -9,10 +9,6 @@ use Magento\Quote\Model\Quote\Address\Total\AbstractTotal;
 use Magento\Store\Model\Store;
 use Magento\Tax\Model\Sales\Total\Quote\CommonTaxCollector;
 
-/**
- * Class \Magento\Weee\Model\Total\Quote\WeeeTax
- *
- */
 class WeeeTax extends Weee
 {
     /**
@@ -51,7 +47,7 @@ class WeeeTax extends Weee
             $this->processTotalAmount($total, $weeeTotal, $weeeBaseTotal, $weeeTotal, $weeeBaseTotal);
             return $this;
         }
-        
+
         $extraTaxableDetails = $total->getExtraTaxableDetails();
 
         if (isset($extraTaxableDetails[self::ITEM_TYPE])) {

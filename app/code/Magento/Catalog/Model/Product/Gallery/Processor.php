@@ -61,7 +61,6 @@ class Processor
      * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Catalog\Model\ResourceModel\Product\Gallery $resourceModel
-     * @since 101.0.0
      */
     public function __construct(
         \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository,
@@ -193,6 +192,7 @@ class Processor
         $mediaGalleryData['images'][] = [
             'file' => $fileName,
             'position' => $position,
+            'media_type' => 'image',
             'label' => '',
             'disabled' => (int)$exclude,
         ];

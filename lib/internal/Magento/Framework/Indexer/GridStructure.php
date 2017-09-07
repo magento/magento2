@@ -11,10 +11,6 @@ use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver;
 use Magento\Framework\Search\Request\Dimension;
 
-/**
- * Class \Magento\Framework\Indexer\GridStructure
- *
- */
 class GridStructure implements IndexStructureInterface
 {
     /**

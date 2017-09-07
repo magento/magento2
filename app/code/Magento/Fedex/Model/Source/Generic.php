@@ -5,10 +5,6 @@
  */
 namespace Magento\Fedex\Model\Source;
 
-/**
- * Class \Magento\Fedex\Model\Source\Generic
- *
- */
 class Generic implements \Magento\Framework\Option\ArrayInterface
 {
     /**
