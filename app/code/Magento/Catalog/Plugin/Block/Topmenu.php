@@ -93,12 +93,15 @@ class Topmenu
             $parentCategoryNode = $mapping[$categoryParentId];
 
             $categoryNode = new Node(
-                $this->getCategoryAsArray($category, $currentCategory),
+                $this->getCategoryAsArray(
+                    $category,
+                    $currentCategory,
+                    $category->getParentId() == $categoryParentId
+                ),
                 'id',
                 $parentCategoryNode->getTree(),
                 $parentCategoryNode
             );
-            $categoryNode->setData('is_parent_active', $category->getParentId() == $categoryParentId);
             $parentCategoryNode->addChild($categoryNode);
 
             $mapping[$category->getId()] = $categoryNode; //add node in stack
@@ -148,16 +151,18 @@ class Topmenu
      *
      * @param \Magento\Catalog\Model\Category $category
      * @param \Magento\Catalog\Model\Category $currentCategory
+     * @param bool $isParentActive
      * @return array
      */
-    private function getCategoryAsArray($category, $currentCategory)
+    private function getCategoryAsArray($category, $currentCategory, $isParentActive)
     {
         return [
             'name' => $category->getName(),
             'id' => 'category-node-' . $category->getId(),
             'url' => $this->catalogCategory->getCategoryUrl($category),
             'has_active' => in_array((string)$category->getId(), explode('/', $currentCategory->getPath()), true),
-            'is_active' => $category->getId() == $currentCategory->getId()
+            'is_active' => $category->getId() == $currentCategory->getId(),
+            'is_parent_active' => $isParentActive
         ];
     }
 

@@ -37,21 +37,21 @@ class SubcategoryNotIncludeInNavigationMenuTest extends Injectable
      *
      * @var CatalogCategoryIndex
      */
-    protected $catalogCategoryIndex;
+    private $catalogCategoryIndex;
 
     /**
      * Catalog category edit page.
      *
      * @var CatalogCategoryEdit
      */
-    protected $catalogCategoryEdit;
+    private $catalogCategoryEdit;
 
     /**
      * Fixture Factory.
      *
      * @var FixtureFactory
      */
-    protected $fixtureFactory;
+    private $fixtureFactory;
 
     /**
      * Inject pages.
