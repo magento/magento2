@@ -50,6 +50,11 @@ class IndexDataProvider
         }
         $sourceIds = $connection->fetchCol($select);
 
+        // no query need if all sources disabled
+        if (0 === count($sourceIds)) {
+            return new \ArrayIterator([]);
+        }
+
         // fetch the index data
         $select = $connection
             ->select()

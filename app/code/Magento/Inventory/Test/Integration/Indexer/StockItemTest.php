@@ -136,4 +136,22 @@ class StockItemTest extends TestCase
         self::assertEquals(8, $this->indexerChecker->execute(1, 'SKU-1'));
         self::assertEquals(0, $this->indexerChecker->execute(2, 'SKU-2'));
     }
+
+    /**
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources_disable.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items_out_stock.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_link.php
+     */
+    public function testReindexAllSourcesDisabled()
+    {
+        self::assertEquals(0, $this->indexerChecker->execute(1, 'SKU-1'));
+        self::assertEquals(0, $this->indexerChecker->execute(2, 'SKU-2'));
+
+        $this->indexer->reindexAll();
+
+        self::assertEquals(0, $this->indexerChecker->execute(1, 'SKU-1'));
+        self::assertEquals(0, $this->indexerChecker->execute(2, 'SKU-2'));
+    }
 }
