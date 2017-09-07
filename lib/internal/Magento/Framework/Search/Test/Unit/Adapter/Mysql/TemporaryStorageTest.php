@@ -26,6 +26,11 @@ class TemporaryStorageTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
+    /**
+     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $config;
+
     protected function setUp()
     {
         $this->tableName = 'some_table_name';
@@ -44,9 +49,13 @@ class TemporaryStorageTest extends \PHPUnit\Framework\TestCase
             ->method('getTableName')
             ->willReturn($this->tableName);
 
+        $this->config = $this->getMockBuilder(\Magento\Framework\App\DeploymentConfig::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->model = (new ObjectManager($this))->getObject(
             \Magento\Framework\Search\Adapter\Mysql\TemporaryStorage::class,
-            ['resource' => $resource]
+            ['resource' => $resource, 'config' => $this->config]
         );
     }
 
@@ -138,15 +147,38 @@ class TemporaryStorageTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($result, $table);
     }
 
+    public function testNoDropIfNotPersistent()
+    {
+        $this->createTemporaryTable(false);
+
+        $this->adapter->expects($this->never())
+            ->method('dropTemporaryTable');
+
+        // model->createTemporaryTable() is a private method; this will call it
+        $this->model->storeApiDocuments([]);
+    }
+
     /**
      * @return \Magento\Framework\DB\Ddl\Table|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createTemporaryTable()
+    private function createTemporaryTable($persistentConnection = true)
     {
+        $this->config->expects($this->any())
+            ->method('get')
+            ->with('db/connection/indexer/persistent')
+            ->willReturn($persistentConnection);
+
         $table = $this->getMockBuilder(\Magento\Framework\DB\Ddl\Table::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $table->expects($this->at(1))
+
+        $tableInteractionCount = 0;
+        if ($persistentConnection) {
+            $this->adapter->expects($this->once())
+                ->method('dropTemporaryTable');
+            $tableInteractionCount += 1;
+        }
+        $table->expects($this->at($tableInteractionCount))
             ->method('addColumn')
             ->with(
                 TemporaryStorage::FIELD_ENTITY_ID,
@@ -155,7 +187,8 @@ class TemporaryStorageTest extends \PHPUnit\Framework\TestCase
                 ['unsigned' => true, 'nullable' => false, 'primary' => true],
                 'Entity ID'
             );
-        $table->expects($this->at(2))
+        $tableInteractionCount += 1;
+        $table->expects($this->at($tableInteractionCount))
             ->method('addColumn')
             ->with(
                 'score',
@@ -172,8 +205,6 @@ class TemporaryStorageTest extends \PHPUnit\Framework\TestCase
             ->method('newTable')
             ->with($this->tableName)
             ->willReturn($table);
-        $this->adapter->expects($this->once())
-            ->method('dropTemporaryTable');
         $this->adapter->expects($this->once())
             ->method('createTemporaryTable')
             ->with($table);
