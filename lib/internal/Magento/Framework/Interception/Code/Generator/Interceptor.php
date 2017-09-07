@@ -135,7 +135,7 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
                         $output .= '... ';
                     }
 
-                    $output .="\${$item['name']}";
+                    $output .= "\${$item['name']}";
                     return $output;
                 },
                 $parameters
