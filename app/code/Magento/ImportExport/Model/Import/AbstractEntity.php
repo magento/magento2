@@ -8,6 +8,7 @@ namespace Magento\ImportExport\Model\Import;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
@@ -18,6 +19,7 @@ use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorI
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 abstract class AbstractEntity
 {
@@ -61,6 +63,9 @@ abstract class AbstractEntity
     const ERROR_INVALID_ATTRIBUTE_TYPE = 'invalidAttributeType';
     const ERROR_INVALID_ATTRIBUTE_OPTION = 'absentAttributeOption';
 
+    /**
+     * @var array
+     */
     protected $errorMessageTemplates = [
         self::ERROR_CODE_SYSTEM_EXCEPTION => 'General system exception happened',
         self::ERROR_CODE_COLUMN_NOT_FOUND => 'We can\'t find required columns: %s.',
@@ -74,17 +79,13 @@ abstract class AbstractEntity
         self::ERROR_CODE_COLUMNS_NUMBER => "Number of columns does not correspond to the number of rows in the header",
         self::ERROR_EXCEEDED_MAX_LENGTH => 'Attribute %s exceeded max length',
         self::ERROR_INVALID_ATTRIBUTE_TYPE => 'Value for \'%s\' attribute contains incorrect value',
-        self::ERROR_INVALID_ATTRIBUTE_OPTION =>
-            "Value for %s attribute contains incorrect value, see acceptable values on settings specified for Admin",
+        self::ERROR_INVALID_ATTRIBUTE_OPTION => "Value for %s attribute contains incorrect value"
+            . ", see acceptable values on settings specified for Admin",
     ];
 
     /**#@-*/
 
-    /**
-     * DB connection
-     *
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface
-     */
+    /**#@-*/
     protected $_connection;
 
     /**
@@ -490,7 +491,7 @@ abstract class AbstractEntity
      * Workaround. Only way to implement dependency and not to break inherited child classes
      *
      * @return Json
-     * @deprecated
+     * @deprecated 100.2.0
      */
     private function getSerializer()
     {
@@ -665,11 +666,17 @@ abstract class AbstractEntity
      * @param array $attributeParams Attribute params
      * @param array $rowData Row data
      * @param int $rowNumber
+     * @param string $multiSeparator
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function isAttributeValid($attributeCode, array $attributeParams, array $rowData, $rowNumber)
-    {
+    public function isAttributeValid(
+        $attributeCode,
+        array $attributeParams,
+        array $rowData,
+        $rowNumber,
+        $multiSeparator = Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR
+    ) {
         $message = '';
         switch ($attributeParams['type']) {
             case 'varchar':
@@ -684,7 +691,13 @@ abstract class AbstractEntity
                 break;
             case 'select':
             case 'multiselect':
-                $valid = isset($attributeParams['options'][strtolower($rowData[$attributeCode])]);
+                $valid = true;
+                foreach (explode($multiSeparator, strtolower($rowData[$attributeCode])) as $value) {
+                    $valid = isset($attributeParams['options'][$value]);
+                    if (!$valid) {
+                        break;
+                    }
+                }
                 $message = self::ERROR_INVALID_ATTRIBUTE_OPTION;
                 break;
             case 'int':

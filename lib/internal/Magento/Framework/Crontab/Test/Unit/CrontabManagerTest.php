@@ -15,7 +15,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\DriverPool;
 
-class CrontabManagerTest extends \PHPUnit_Framework_TestCase
+class CrontabManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ShellInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -326,6 +326,17 @@ class CrontabManagerTest extends \PHPUnit_Framework_TestCase
                     . CrontabManagerInterface::TASKS_BLOCK_START . PHP_EOL
                     . '* * * * * ' . PHP_BINARY . ' /var/www/magento2/run.php >>'
                     . ' /var/www/magento2/var/log/cron.log' . PHP_EOL
+                    . CrontabManagerInterface::TASKS_BLOCK_END . PHP_EOL,
+            ],
+            [
+                'tasks' => [
+                    ['command' => '{magentoRoot}run.php % cron:run | grep -v "Ran \'jobs\' by schedule"']
+                ],
+                'content' => $content,
+                'contentToSave' => '* * * * * /bin/php /var/www/cron.php' . PHP_EOL
+                    . CrontabManagerInterface::TASKS_BLOCK_START . PHP_EOL
+                    . '* * * * * ' . PHP_BINARY . ' /var/www/magento2/run.php'
+                    . ' %% cron:run | grep -v \"Ran \'jobs\' by schedule\"' . PHP_EOL
                     . CrontabManagerInterface::TASKS_BLOCK_END . PHP_EOL,
             ],
         ];

@@ -12,6 +12,7 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
  * Abstract rule action
  *
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractAction extends \Magento\Framework\DataObject implements ActionInterface
 {

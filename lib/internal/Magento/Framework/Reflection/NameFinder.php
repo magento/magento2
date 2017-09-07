@@ -43,7 +43,7 @@ class NameFinder
     {
         return ucfirst(substr(strstr($shortDescription, " "), 1));
     }
-    
+
     /**
      * Find the getter method name for a property from the given class
      *

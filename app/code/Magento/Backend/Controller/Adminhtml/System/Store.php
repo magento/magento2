@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Backend\Controller\Adminhtml\System;
 
 use Magento\Backend\App\Action;
@@ -129,7 +127,9 @@ abstract class Store extends Action
     {
         $this->messageManager->addNotice(
             __(
-                'Deleting a %1 will not delete the information associated with the %1 (e.g. categories, products, etc.), but the %1 will not be able to be restored. It is suggested that you create a database backup before deleting the %1.',
+                'Deleting a %1 will not delete the information associated with the %1 (e.g. categories, products, etc.)'
+                . ', but the %1 will not be able to be restored. It is suggested that you create a database backup '
+                . 'before deleting the %1.',
                 $typeTitle
             )
         );

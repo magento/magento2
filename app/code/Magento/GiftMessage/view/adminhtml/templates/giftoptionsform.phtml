@@ -11,7 +11,7 @@
 <?php if ($block->canDisplayGiftmessageForm()): ?>
 <div id="gift_options_giftmessage" class="giftcard-form giftcard-send-form fieldset admin__fieldset">
     <div class="field admin__field">
-        <label class="admin__field-label" for="current_item_giftmessage_sender"><?php /* @escapeNotVerified */ echo __('From'); ?></label>
+        <label class="admin__field-label" for="current_item_giftmessage_sender"><?= /* @escapeNotVerified */ __('From') ?></label>
         <div class="control admin__field-control">
             <input type="text" class="input-text admin__control-text"
                    name="current_item_giftmessage_sender"
@@ -19,7 +19,7 @@
         </div>
     </div>
     <div class="field admin__field">
-        <label class="admin__field-label" for="current_item_giftmessage_recipient"><?php /* @escapeNotVerified */ echo __('To'); ?></label>
+        <label class="admin__field-label" for="current_item_giftmessage_recipient"><?= /* @escapeNotVerified */ __('To') ?></label>
         <div class="control admin__field-control">
             <input type="text"
                    class="input-text admin__control-text"
@@ -28,7 +28,7 @@
         </div>
     </div>
     <div class="field admin__field">
-        <label class="admin__field-label" for="current_item_giftmessage_message"><?php /* @escapeNotVerified */ echo __('Message'); ?></label>
+        <label class="admin__field-label" for="current_item_giftmessage_message"><?= /* @escapeNotVerified */ __('Message') ?></label>
         <div class="control admin__field-control">
             <textarea class="textarea admin__control-textarea"
                       cols="15"

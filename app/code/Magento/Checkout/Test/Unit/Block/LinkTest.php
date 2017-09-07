@@ -5,7 +5,7 @@
  */
 namespace Magento\Checkout\Test\Unit\Block;
 
-class LinkTest extends \PHPUnit_Framework_TestCase
+class LinkTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager

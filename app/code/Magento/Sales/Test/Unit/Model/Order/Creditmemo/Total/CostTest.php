@@ -9,7 +9,7 @@ namespace Magento\Sales\Test\Unit\Model\Order\Creditmemo\Total;
 /**
  * Class CostTest
  */
-class CostTest extends \PHPUnit_Framework_TestCase
+class CostTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\Order\Creditmemo\Total\Cost
@@ -28,19 +28,13 @@ class CostTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->creditmemoMock = $this->getMock(
+        $this->creditmemoMock = $this->createPartialMock(
             \Magento\Sales\Model\Order\Creditmemo::class,
-            ['setBaseCost', 'getAllItems'],
-            [],
-            '',
-            false
+            ['setBaseCost', 'getAllItems']
         );
-        $this->creditmemoItemMock = $this->getMock(
+        $this->creditmemoItemMock = $this->createPartialMock(
             \Magento\Sales\Model\Order\Creditmemo\Item::class,
-            ['getHasChildren', 'getBaseCost', 'getQty'],
-            [],
-            '',
-            false
+            ['getHasChildren', 'getBaseCost', 'getQty']
         );
         $this->total = new \Magento\Sales\Model\Order\Creditmemo\Total\Cost();
     }

@@ -22,7 +22,7 @@ use Magento\Wishlist\Helper\Data as WishlistHelper;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class FromcartTest extends \PHPUnit_Framework_TestCase
+class FromcartTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Fromcart

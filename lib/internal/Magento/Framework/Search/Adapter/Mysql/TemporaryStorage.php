@@ -10,6 +10,9 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\DB\Select;
 
+/**
+ * @api
+ */
 class TemporaryStorage
 {
     const TEMPORARY_TABLE_PREFIX = 'search_tmp_';
@@ -35,7 +38,7 @@ class TemporaryStorage
      *
      * @param \Magento\Framework\Api\Search\DocumentInterface[] $documents
      * @return Table
-     * @deprecated
+     * @deprecated 100.1.0
      */
     public function storeDocuments($documents)
     {
@@ -47,6 +50,7 @@ class TemporaryStorage
      *
      * @param \Magento\Framework\Api\Search\DocumentInterface[] $documents
      * @return Table
+     * @since 100.1.0
      */
     public function storeApiDocuments($documents)
     {

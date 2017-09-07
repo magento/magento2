@@ -12,6 +12,7 @@ use Magento\Framework\ObjectManagerInterface;
  * Section pool
  *
  * @api
+ * @since 100.0.2
  */
 class SectionPool implements SectionPoolInterface
 {

@@ -10,7 +10,7 @@ namespace Magento\Catalog\Test\Unit\Model\Layer\Category;
 
 use \Magento\Catalog\Model\Layer\Category\AvailabilityFlag;
 
-class AvailabilityFlagTest extends \PHPUnit_Framework_TestCase
+class AvailabilityFlagTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var array
@@ -39,12 +39,10 @@ class AvailabilityFlagTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->filterMock = $this->getMock(
-            \Magento\Catalog\Model\Layer\Filter\AbstractFilter::class, [], [], '', false
-        );
+        $this->filterMock = $this->createMock(\Magento\Catalog\Model\Layer\Filter\AbstractFilter::class);
         $this->filters = [$this->filterMock];
-        $this->layerMock = $this->getMock(\Magento\Catalog\Model\Layer::class, [], [], '', false);
-        $this->stateMock = $this->getMock(\Magento\Catalog\Model\Layer\State::class, [], [], '', false);
+        $this->layerMock = $this->createMock(\Magento\Catalog\Model\Layer::class);
+        $this->stateMock = $this->createMock(\Magento\Catalog\Model\Layer\State::class);
         $this->model = new AvailabilityFlag();
     }
 

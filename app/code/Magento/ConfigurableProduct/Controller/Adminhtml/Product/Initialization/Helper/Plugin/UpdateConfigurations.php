@@ -9,13 +9,19 @@ namespace Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initializatio
 
 class UpdateConfigurations
 {
-    /** @var \Magento\Catalog\Api\ProductRepositoryInterface  */
+    /**
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     */
     protected $productRepository;
 
-    /** @var \Magento\Framework\App\RequestInterface */
+    /**
+     * @var \Magento\Framework\App\RequestInterface
+     */
     protected $request;
 
-    /** @var \Magento\ConfigurableProduct\Model\Product\VariationHandler */
+    /**
+     * @var \Magento\ConfigurableProduct\Model\Product\VariationHandler
+     */
     protected $variationHandler;
 
     /**

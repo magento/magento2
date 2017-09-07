@@ -11,6 +11,7 @@ namespace Magento\CustomerImportExport\Model\Export;
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
 {
@@ -51,11 +52,7 @@ class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
 
     /**#@-*/
 
-    /**
-     * Permanent entity columns
-     *
-     * @var string[]
-     */
+    /**#@-*/
     protected $_permanentAttributes = [self::COLUMN_WEBSITE, self::COLUMN_EMAIL, self::COLUMN_ADDRESS_ID];
 
     /**

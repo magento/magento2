@@ -12,6 +12,7 @@ use Magento\Payment\Gateway\CommandInterface;
  * Interface CommandPoolInterface
  * @package Magento\Payment\Gateway\Command
  * @api
+ * @since 100.0.2
  */
 interface CommandPoolInterface
 {

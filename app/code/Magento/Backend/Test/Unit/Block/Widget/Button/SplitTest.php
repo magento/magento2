@@ -5,7 +5,7 @@
  */
 namespace Magento\Backend\Test\Unit\Block\Widget\Button;
 
-class SplitTest extends \PHPUnit_Framework_TestCase
+class SplitTest extends \PHPUnit\Framework\TestCase
 {
     public function testHasSplit()
     {
