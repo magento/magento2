@@ -16,6 +16,7 @@ use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Framework\Pricing\Price\AbstractPrice;
 use Magento\Framework\Pricing\Price\BasePriceProviderInterface;
 use Magento\Framework\Pricing\PriceInfoInterface;
+use Magento\Customer\Model\Group\RetrieverInterface as CustomerGroupRetrieverInterface;
 
 /**
  * @api
@@ -30,6 +31,7 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
 
     /**
      * @var Session
+     * @deprecated
      */
     protected $customerSession;
 
@@ -58,12 +60,18 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
     protected $groupManagement;
 
     /**
+     * @var CustomerGroupRetrieverInterface
+     */
+    private $customerGroupRetriever;
+
+    /**
      * @param Product $saleableItem
      * @param float $quantity
      * @param CalculatorInterface $calculator
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param Session $customerSession
      * @param GroupManagementInterface $groupManagement
+     * @param CustomerGroupRetrieverInterface|null $customerGroupRetriever
      */
     public function __construct(
         Product $saleableItem,
@@ -71,16 +79,19 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
         CalculatorInterface $calculator,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         Session $customerSession,
-        GroupManagementInterface $groupManagement
+        GroupManagementInterface $groupManagement,
+        CustomerGroupRetrieverInterface $customerGroupRetriever = null
     ) {
         $quantity = $quantity ?: 1;
         parent::__construct($saleableItem, $quantity, $calculator, $priceCurrency);
         $this->customerSession = $customerSession;
         $this->groupManagement = $groupManagement;
+        $this->customerGroupRetriever = $customerGroupRetriever
+            ?? \Magento\Framework\App\ObjectManager::getInstance()->get(CustomerGroupRetrieverInterface::class);
         if ($saleableItem->hasCustomerGroupId()) {
             $this->customerGroup = (int) $saleableItem->getCustomerGroupId();
         } else {
-            $this->customerGroup = (int) $this->customerSession->getCustomerGroupId();
+            $this->customerGroup = (int) $this->customerGroupRetriever->getCustomerGroupId();
         }
     }
 

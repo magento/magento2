@@ -488,6 +488,47 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @magentoDbIsolation enabled
+     * @magentoDataFixture Magento/Catalog/_files/products_with_unique_input_attribute.php
+     */
+    public function testValidateUniqueInputAttributeOnTheSameProduct()
+    {
+        /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
+        $attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
+            ->loadByCode(\Magento\Catalog\Model\Product::ENTITY, 'unique_input_attribute');
+        $this->_model = $this->_model->loadByAttribute(
+            'sku',
+            'simple product with unique input attribute'
+        );
+        $this->_model->setTypeId(
+            'simple'
+        )->setAttributeSetId(
+            4
+        )->setName(
+            'Simple Product with non-unique value'
+        )->setSku(
+            'some product SKU'
+        )->setPrice(
+            10
+        )->setMetaTitle(
+            'meta title'
+        )->setData(
+            $attribute->getAttributeCode(),
+            'unique value'
+        )->setVisibility(
+            \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH
+        )->setStatus(
+            \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
+        )->setCollectExceptionMessages(
+            true
+        );
+
+        $validationResult = $this->_model->validate();
+        $this->assertTrue($validationResult);
+    }
+
+    /**
      * @magentoDataFixture Magento/Catalog/_files/product_simple_with_custom_options.php
      * @magentoAppIsolation enabled
      */
