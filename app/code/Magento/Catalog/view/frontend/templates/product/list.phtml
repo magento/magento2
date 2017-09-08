@@ -78,7 +78,7 @@ $_helper = $this->helper('Magento\Catalog\Helper\Output');
                                 <div class="actions-primary"<?= strpos($pos, $viewMode . '-primary') ? $position : '' ?>>
                                     <?php if ($_product->isSaleable()): ?>
                                         <?php $postParams = $block->getAddToCartPostParams($_product); ?>
-                                        <form data-role="tocart-form" data-product-sku="<?= $_product->getSku() ?>" action="<?= $postParams['action'] ?>" method="post">
+                                        <form data-role="tocart-form" data-product-sku="<?=  /* @NoEscape */ $_product->getSku() ?>" action="<?= /* @NoEscape */ $postParams['action'] ?>" method="post">
                                             <input type="hidden" name="product" value="<?= /* @escapeNotVerified */ $postParams['data']['product'] ?>">
                                             <input type="hidden" name="<?= /* @escapeNotVerified */ Action::PARAM_NAME_URL_ENCODED ?>" value="<?= /* @escapeNotVerified */ $postParams['data'][Action::PARAM_NAME_URL_ENCODED] ?>">
                                             <?= $block->getBlockHtml('formkey') ?>
@@ -122,7 +122,7 @@ $_helper = $this->helper('Magento\Catalog\Helper\Output');
         {
             "[data-role=tocart-form], .form.map.checkout": {
                 "catalogAddToCart": {
-                    "product_sku": "<?= $_product->getSku() ?>"
+                    "product_sku": "<?= /* @NoEscape */ $_product->getSku() ?>"
                 }
             }
         }
