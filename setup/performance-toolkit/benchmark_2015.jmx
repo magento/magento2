@@ -14,6 +14,11 @@
       <stringProp name="TestPlan.user_define_classpath"></stringProp>
       <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
         <collectionProp name="Arguments.arguments">
+          <elementProp name="request_protocol" elementType="Argument">
+            <stringProp name="Argument.name">request_protocol</stringProp>
+            <stringProp name="Argument.value">${__P(request_protocol,http)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
           <elementProp name="abandonedCartByGuest" elementType="Argument">
             <stringProp name="Argument.name">abandonedCartByGuest</stringProp>
             <stringProp name="Argument.value">${__P(abandonedCartByGuest,0)}</stringProp>
@@ -676,7 +681,7 @@
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol">http</stringProp>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding">utf-8</stringProp>
       <stringProp name="HTTPSampler.path"/>
       <stringProp name="HTTPSampler.implementation">Java</stringProp>
@@ -791,7 +796,7 @@ if (!slash.equals(path.substring(path.length() -1)) || !slash.equals(path.substr
         <stringProp name="HTTPSampler.port"/>
         <stringProp name="HTTPSampler.connect_timeout"/>
         <stringProp name="HTTPSampler.response_timeout"/>
-        <stringProp name="HTTPSampler.protocol"/>
+        <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
         <stringProp name="HTTPSampler.contentEncoding"/>
         <stringProp name="HTTPSampler.path">${base_path}${admin_path}</stringProp>
         <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -871,7 +876,7 @@ if (!slash.equals(path.substring(path.length() -1)) || !slash.equals(path.substr
         <stringProp name="HTTPSampler.port"/>
         <stringProp name="HTTPSampler.connect_timeout"/>
         <stringProp name="HTTPSampler.response_timeout"/>
-        <stringProp name="HTTPSampler.protocol"/>
+        <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
         <stringProp name="HTTPSampler.contentEncoding"/>
         <stringProp name="HTTPSampler.path">${base_path}${admin_path}/admin/dashboard/</stringProp>
         <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -925,7 +930,7 @@ if (!slash.equals(path.substring(path.length() -1)) || !slash.equals(path.substr
         <stringProp name="HTTPSampler.port"/>
         <stringProp name="HTTPSampler.connect_timeout"/>
         <stringProp name="HTTPSampler.response_timeout"/>
-        <stringProp name="HTTPSampler.protocol"/>
+        <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
         <stringProp name="HTTPSampler.contentEncoding"/>
         <stringProp name="HTTPSampler.path">${base_path}${admin_path}/admin/cache/massEnable</stringProp>
         <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -968,7 +973,7 @@ if (!slash.equals(path.substring(path.length() -1)) || !slash.equals(path.substr
         <stringProp name="HTTPSampler.port"/>
         <stringProp name="HTTPSampler.connect_timeout"/>
         <stringProp name="HTTPSampler.response_timeout"/>
-        <stringProp name="HTTPSampler.protocol"/>
+        <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
         <stringProp name="HTTPSampler.contentEncoding"/>
         <stringProp name="HTTPSampler.path">${base_path}${admin_path}/admin/cache/massRefresh</stringProp>
         <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -1011,7 +1016,7 @@ if (!slash.equals(path.substring(path.length() -1)) || !slash.equals(path.substr
           <stringProp name="HTTPSampler.port"/>
           <stringProp name="HTTPSampler.connect_timeout"/>
           <stringProp name="HTTPSampler.response_timeout"/>
-          <stringProp name="HTTPSampler.protocol"/>
+          <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"/>
           <stringProp name="HTTPSampler.path">${base_path}rest/V1/integration/admin/token</stringProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -1103,7 +1108,7 @@ if (!slash.equals(path.substring(path.length() -1)) || !slash.equals(path.substr
           <stringProp name="HTTPSampler.port"/>
           <stringProp name="HTTPSampler.connect_timeout"/>
           <stringProp name="HTTPSampler.response_timeout"/>
-          <stringProp name="HTTPSampler.protocol"/>
+          <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"/>
           <stringProp name="HTTPSampler.path">${base_path}rest/V1/categories/list</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -1240,7 +1245,7 @@ props.put("category_name", vars.get("category_name"));</stringProp>
           <stringProp name="HTTPSampler.port"/>
           <stringProp name="HTTPSampler.connect_timeout"/>
           <stringProp name="HTTPSampler.response_timeout"/>
-          <stringProp name="HTTPSampler.protocol"/>
+          <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"/>
           <stringProp name="HTTPSampler.path">${base_path}rest/V1/integration/admin/token</stringProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -1311,7 +1316,7 @@ props.put("category_name", vars.get("category_name"));</stringProp>
           <stringProp name="HTTPSampler.port"/>
           <stringProp name="HTTPSampler.connect_timeout"/>
           <stringProp name="HTTPSampler.response_timeout"/>
-          <stringProp name="HTTPSampler.protocol"/>
+          <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"/>
           <stringProp name="HTTPSampler.path">${base_path}rest/V1/products</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -1379,7 +1384,7 @@ if (1 == Integer.parseInt(vars.get("simple_products_counter"))) {
 } else {
     productList = props.get("simple_products_list");
 }
-String productUrl = "http://" + vars.get("host") + vars.get("base_path") + vars.get("simple_products_url_keys_" + vars.get("simple_products_counter"))+ vars.get("url_suffix");
+String productUrl = vars.get("request_protocol") + "://" + vars.get("host") + vars.get("base_path") + vars.get("simple_products_url_keys_" + vars.get("simple_products_counter"))+ vars.get("url_suffix");
 encodedUrl = Base64.encodeBase64(productUrl.getBytes());
 // Create product map
 Map productMap = new HashMap();
@@ -1426,7 +1431,7 @@ productList.add(productMap);</stringProp>
           <stringProp name="HTTPSampler.port"/>
           <stringProp name="HTTPSampler.connect_timeout"/>
           <stringProp name="HTTPSampler.response_timeout"/>
-          <stringProp name="HTTPSampler.protocol"/>
+          <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"/>
           <stringProp name="HTTPSampler.path">${base_path}rest/V1/integration/admin/token</stringProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -1497,7 +1502,7 @@ productList.add(productMap);</stringProp>
           <stringProp name="HTTPSampler.port"/>
           <stringProp name="HTTPSampler.connect_timeout"/>
           <stringProp name="HTTPSampler.response_timeout"/>
-          <stringProp name="HTTPSampler.protocol"/>
+          <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"/>
           <stringProp name="HTTPSampler.path">${base_path}rest/V1/products</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -1575,7 +1580,7 @@ if (1 == Integer.parseInt(vars.get("configurable_products_counter"))) {
     productList = props.get("configurable_products_list");
 }
 
-String productUrl = "http://" + vars.get("host") + vars.get("base_path") + vars.get("configurable_products_url_keys_" + vars.get("configurable_products_counter"))+ vars.get("url_suffix");
+String productUrl = vars.get("request_protocol") + "://" + vars.get("host") + vars.get("base_path") + vars.get("configurable_products_url_keys_" + vars.get("configurable_products_counter"))+ vars.get("url_suffix");
 encodedUrl = Base64.encodeBase64(productUrl.getBytes());
 // Create product map
 Map productMap = new HashMap();
@@ -1601,7 +1606,7 @@ productList.add(productMap);</stringProp>
         <stringProp name="HTTPSampler.port"/>
         <stringProp name="HTTPSampler.connect_timeout"/>
         <stringProp name="HTTPSampler.response_timeout"/>
-        <stringProp name="HTTPSampler.protocol"/>
+        <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
         <stringProp name="HTTPSampler.contentEncoding"/>
         <stringProp name="HTTPSampler.path">${base_path}${admin_path}/customer/index/</stringProp>
         <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -1701,7 +1706,7 @@ manager.add(cookie); </stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}${admin_path}/mui/index/render/</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -1894,7 +1899,7 @@ if ("${cache_indicator}" == "1") {
           <stringProp name="HTTPSampler.port"/>
           <stringProp name="HTTPSampler.connect_timeout"/>
           <stringProp name="HTTPSampler.response_timeout"/>
-          <stringProp name="HTTPSampler.protocol"/>
+          <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"/>
           <stringProp name="HTTPSampler.path">${base_path}${admin_path}/admin/cache/massDisable</stringProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -1930,7 +1935,7 @@ if ("${cache_indicator}" == "1") {
           <stringProp name="HTTPSampler.port"/>
           <stringProp name="HTTPSampler.connect_timeout"/>
           <stringProp name="HTTPSampler.response_timeout"/>
-          <stringProp name="HTTPSampler.protocol"/>
+          <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"/>
           <stringProp name="HTTPSampler.path">${base_path}${admin_path}/admin/cache/</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -1988,7 +1993,7 @@ if ("${cache_indicator}" == "1") {
           <stringProp name="HTTPSampler.port"/>
           <stringProp name="HTTPSampler.connect_timeout"/>
           <stringProp name="HTTPSampler.response_timeout"/>
-          <stringProp name="HTTPSampler.protocol"/>
+          <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"/>
           <stringProp name="HTTPSampler.path">${base_path}${admin_path}/admin/cache/</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -2046,7 +2051,7 @@ if ("${cache_indicator}" == "1") {
           <stringProp name="HTTPSampler.port"/>
           <stringProp name="HTTPSampler.connect_timeout"/>
           <stringProp name="HTTPSampler.response_timeout"/>
-          <stringProp name="HTTPSampler.protocol"/>
+          <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"/>
           <stringProp name="HTTPSampler.path">${base_path}${admin_path}/admin/cache/</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -2126,7 +2131,7 @@ if ("${cache_indicator}" == "1") {
         <stringProp name="HTTPSampler.port"/>
         <stringProp name="HTTPSampler.connect_timeout"/>
         <stringProp name="HTTPSampler.response_timeout"/>
-        <stringProp name="HTTPSampler.protocol"/>
+        <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
         <stringProp name="HTTPSampler.contentEncoding"/>
         <stringProp name="HTTPSampler.path">${base_path}page_cache/block/render/</stringProp>
         <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -2207,7 +2212,7 @@ if ("${cache_indicator}" == "1") {
         <stringProp name="HTTPSampler.port"/>
         <stringProp name="HTTPSampler.connect_timeout"/>
         <stringProp name="HTTPSampler.response_timeout"/>
-        <stringProp name="HTTPSampler.protocol"/>
+        <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
         <stringProp name="HTTPSampler.contentEncoding"/>
         <stringProp name="HTTPSampler.path">${base_path}checkout/cart/add</stringProp>
         <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -2280,7 +2285,7 @@ vars.put("testLabel", "CatProdBrows");</stringProp>
         <stringProp name="HTTPSampler.port"/>
         <stringProp name="HTTPSampler.connect_timeout"/>
         <stringProp name="HTTPSampler.response_timeout"/>
-        <stringProp name="HTTPSampler.protocol"/>
+        <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
         <stringProp name="HTTPSampler.contentEncoding"/>
         <stringProp name="HTTPSampler.path">${base_path}</stringProp>
         <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -2317,7 +2322,7 @@ vars.put("testLabel", "CatProdBrows");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}${category_url_key}${url_suffix}</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -2375,7 +2380,7 @@ vars.put("testLabel", "CatProdBrows");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}${simple_product_1_url_key}${url_suffix}</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -2426,7 +2431,7 @@ vars.put("testLabel", "CatProdBrows");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}review/product/listAjax/id/${product_id}/</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -2463,7 +2468,7 @@ vars.put("testLabel", "CatProdBrows");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}${simple_product_2_url_key}${url_suffix}</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -2514,7 +2519,7 @@ vars.put("testLabel", "CatProdBrows");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}review/product/listAjax/id/${product_id}/</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -2551,7 +2556,7 @@ vars.put("testLabel", "CatProdBrows");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}${configurable_product_1_url_key}${url_suffix}</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -2641,7 +2646,7 @@ vars.put("loadType", "Guest");</stringProp>
         <stringProp name="HTTPSampler.port"/>
         <stringProp name="HTTPSampler.connect_timeout"/>
         <stringProp name="HTTPSampler.response_timeout"/>
-        <stringProp name="HTTPSampler.protocol"/>
+        <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
         <stringProp name="HTTPSampler.contentEncoding"/>
         <stringProp name="HTTPSampler.path">${base_path}</stringProp>
         <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -2708,7 +2713,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}page_cache/block/render/</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -2767,7 +2772,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}${category_url_key}${url_suffix}</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -2825,7 +2830,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}${simple_product_1_url_key}${url_suffix}</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -2876,7 +2881,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}review/product/listAjax/id/${product_id}/</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -2942,7 +2947,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}checkout/cart/add/</stringProp>
       <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -2996,7 +3001,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}customer/section/load/</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -3061,7 +3066,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}${simple_product_2_url_key}${url_suffix}</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -3112,7 +3117,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}review/product/listAjax/id/${product_id}/</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -3178,7 +3183,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}checkout/cart/add/</stringProp>
       <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -3234,7 +3239,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}customer/section/load/</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -3299,7 +3304,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}${configurable_product_1_url_key}${url_suffix}</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -3372,7 +3377,7 @@ vars.put("loadType", "Guest");</stringProp>
         <stringProp name="HTTPSampler.port"/>
         <stringProp name="HTTPSampler.connect_timeout"/>
         <stringProp name="HTTPSampler.response_timeout"/>
-        <stringProp name="HTTPSampler.protocol"/>
+        <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
         <stringProp name="HTTPSampler.contentEncoding"/>
         <stringProp name="HTTPSampler.path">${base_path}rest/V1/integration/admin/token</stringProp>
         <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -3421,7 +3426,7 @@ vars.put("loadType", "Guest");</stringProp>
         <stringProp name="HTTPSampler.port"/>
         <stringProp name="HTTPSampler.connect_timeout"/>
         <stringProp name="HTTPSampler.response_timeout"/>
-        <stringProp name="HTTPSampler.protocol"/>
+        <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
         <stringProp name="HTTPSampler.contentEncoding"/>
         <stringProp name="HTTPSampler.path">${base_path}rest/V1/configurable-products/${configurable_product_sku}/options/all</stringProp>
         <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -3496,7 +3501,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}checkout/cart/add/</stringProp>
       <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -3582,7 +3587,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}customer/section/load/</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -3699,7 +3704,7 @@ vars.put("loadType", "Guest");</stringProp>
         <stringProp name="HTTPSampler.port"/>
         <stringProp name="HTTPSampler.connect_timeout"/>
         <stringProp name="HTTPSampler.response_timeout"/>
-        <stringProp name="HTTPSampler.protocol"/>
+        <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
         <stringProp name="HTTPSampler.contentEncoding"/>
         <stringProp name="HTTPSampler.path">${base_path}</stringProp>
         <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -3766,7 +3771,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}page_cache/block/render/</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -3825,7 +3830,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}${category_url_key}${url_suffix}</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -3883,7 +3888,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}${simple_product_1_url_key}${url_suffix}</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -3934,7 +3939,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}review/product/listAjax/id/${product_id}/</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -4000,7 +4005,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}checkout/cart/add/</stringProp>
       <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -4054,7 +4059,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}customer/section/load/</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -4119,7 +4124,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}${simple_product_2_url_key}${url_suffix}</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -4170,7 +4175,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}review/product/listAjax/id/${product_id}/</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -4236,7 +4241,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}checkout/cart/add/</stringProp>
       <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -4292,7 +4297,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}customer/section/load/</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -4357,7 +4362,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}${configurable_product_1_url_key}${url_suffix}</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -4430,7 +4435,7 @@ vars.put("loadType", "Guest");</stringProp>
         <stringProp name="HTTPSampler.port"/>
         <stringProp name="HTTPSampler.connect_timeout"/>
         <stringProp name="HTTPSampler.response_timeout"/>
-        <stringProp name="HTTPSampler.protocol"/>
+        <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
         <stringProp name="HTTPSampler.contentEncoding"/>
         <stringProp name="HTTPSampler.path">${base_path}rest/V1/integration/admin/token</stringProp>
         <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -4479,7 +4484,7 @@ vars.put("loadType", "Guest");</stringProp>
         <stringProp name="HTTPSampler.port"/>
         <stringProp name="HTTPSampler.connect_timeout"/>
         <stringProp name="HTTPSampler.response_timeout"/>
-        <stringProp name="HTTPSampler.protocol"/>
+        <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
         <stringProp name="HTTPSampler.contentEncoding"/>
         <stringProp name="HTTPSampler.path">${base_path}rest/V1/configurable-products/${configurable_product_sku}/options/all</stringProp>
         <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -4554,7 +4559,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}checkout/cart/add/</stringProp>
       <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -4640,7 +4645,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}customer/section/load/</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -4705,7 +4710,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}checkout/</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -4798,7 +4803,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}rest/default/V1/customers/isEmailAvailable</stringProp>
       <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -4863,7 +4868,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}rest/default/V1/guest-carts/${cart_id}/estimate-shipping-methods</stringProp>
       <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -4928,7 +4933,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}rest/default/V1/guest-carts/${cart_id}/shipping-information</stringProp>
       <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -4993,7 +4998,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}rest/default/V1/guest-carts/${cart_id}/payment-information</stringProp>
       <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -5064,7 +5069,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}checkout/onepage/success/</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -5174,7 +5179,7 @@ vars.put("loadType", "Customer");</stringProp>
         <stringProp name="HTTPSampler.port"/>
         <stringProp name="HTTPSampler.connect_timeout"/>
         <stringProp name="HTTPSampler.response_timeout"/>
-        <stringProp name="HTTPSampler.protocol"/>
+        <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
         <stringProp name="HTTPSampler.contentEncoding"/>
         <stringProp name="HTTPSampler.path">${base_path}</stringProp>
         <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -5211,7 +5216,7 @@ vars.put("loadType", "Customer");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}customer/account/login/</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -5278,7 +5283,7 @@ vars.put("loadType", "Customer");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}page_cache/block/render/</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -5366,7 +5371,7 @@ vars.put("loadType", "Customer");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}customer/account/loginPost/</stringProp>
       <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -5423,7 +5428,7 @@ vars.put("loadType", "Customer");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}${category_url_key}${url_suffix}</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -5481,7 +5486,7 @@ vars.put("loadType", "Customer");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}${simple_product_1_url_key}${url_suffix}</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -5532,7 +5537,7 @@ vars.put("loadType", "Customer");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}review/product/listAjax/id/${product_id}/</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -5598,7 +5603,7 @@ vars.put("loadType", "Customer");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}checkout/cart/add/</stringProp>
       <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -5652,7 +5657,7 @@ vars.put("loadType", "Customer");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}customer/section/load/</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -5717,7 +5722,7 @@ vars.put("loadType", "Customer");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}${simple_product_2_url_key}${url_suffix}</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -5768,7 +5773,7 @@ vars.put("loadType", "Customer");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}review/product/listAjax/id/${product_id}/</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -5834,7 +5839,7 @@ vars.put("loadType", "Customer");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}checkout/cart/add/</stringProp>
       <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -5890,7 +5895,7 @@ vars.put("loadType", "Customer");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}customer/section/load/</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -5955,7 +5960,7 @@ vars.put("loadType", "Customer");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}${configurable_product_1_url_key}${url_suffix}</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -6028,7 +6033,7 @@ vars.put("loadType", "Customer");</stringProp>
         <stringProp name="HTTPSampler.port"/>
         <stringProp name="HTTPSampler.connect_timeout"/>
         <stringProp name="HTTPSampler.response_timeout"/>
-        <stringProp name="HTTPSampler.protocol"/>
+        <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
         <stringProp name="HTTPSampler.contentEncoding"/>
         <stringProp name="HTTPSampler.path">${base_path}rest/V1/integration/admin/token</stringProp>
         <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -6077,7 +6082,7 @@ vars.put("loadType", "Customer");</stringProp>
         <stringProp name="HTTPSampler.port"/>
         <stringProp name="HTTPSampler.connect_timeout"/>
         <stringProp name="HTTPSampler.response_timeout"/>
-        <stringProp name="HTTPSampler.protocol"/>
+        <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
         <stringProp name="HTTPSampler.contentEncoding"/>
         <stringProp name="HTTPSampler.path">${base_path}rest/V1/configurable-products/${configurable_product_sku}/options/all</stringProp>
         <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -6152,7 +6157,7 @@ vars.put("loadType", "Customer");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}checkout/cart/add/</stringProp>
       <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -6238,7 +6243,7 @@ vars.put("loadType", "Customer");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}customer/section/load/</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -6303,7 +6308,7 @@ vars.put("loadType", "Customer");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}checkout/</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -6436,7 +6441,7 @@ vars.put("loadType", "Customer");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}rest/default/V1/carts/mine/estimate-shipping-methods-by-address-id</stringProp>
       <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -6501,7 +6506,7 @@ vars.put("loadType", "Customer");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}rest/default/V1/carts/mine/shipping-information</stringProp>
       <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -6566,7 +6571,7 @@ vars.put("loadType", "Customer");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}rest/default/V1/carts/mine/payment-information</stringProp>
       <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -6624,7 +6629,7 @@ vars.put("loadType", "Customer");</stringProp>
       <stringProp name="HTTPSampler.port"/>
       <stringProp name="HTTPSampler.connect_timeout"/>
       <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
       <stringProp name="HTTPSampler.contentEncoding"/>
       <stringProp name="HTTPSampler.path">${base_path}checkout/onepage/success/</stringProp>
       <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -6706,7 +6711,7 @@ vars.put("loadType", "Customer");</stringProp>
           <stringProp name="HTTPSampler.port"/>
           <stringProp name="HTTPSampler.connect_timeout"/>
           <stringProp name="HTTPSampler.response_timeout"/>
-          <stringProp name="HTTPSampler.protocol"/>
+          <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"/>
           <stringProp name="HTTPSampler.path">${base_path}DeploymentEvent.php</stringProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
