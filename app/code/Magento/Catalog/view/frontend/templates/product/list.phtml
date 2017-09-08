@@ -122,7 +122,7 @@ $_helper = $this->helper('Magento\Catalog\Helper\Output');
         {
             "[data-role=tocart-form], .form.map.checkout": {
                 "catalogAddToCart": {
-                    "product_sku": "<?= /* @escapeNotVerified */ $_product->getSku() ?>"
+                    "product_sku": "<?= $_product->getSku() ?>"
                 }
             }
         }
