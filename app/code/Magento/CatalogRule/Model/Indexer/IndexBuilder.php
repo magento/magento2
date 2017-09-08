@@ -10,12 +10,15 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
 use Magento\CatalogRule\Model\ResourceModel\Rule\CollectionFactory as RuleCollectionFactory;
 use Magento\CatalogRule\Model\Rule;
-use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class IndexBuilder
 {
@@ -96,6 +99,16 @@ class IndexBuilder
     protected $connection;
 
     /**
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
      * @param RuleCollectionFactory $ruleCollectionFactory
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\App\ResourceConnection $resource
@@ -106,6 +119,8 @@ class IndexBuilder
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param int $batchCount
+     * @param ProductRepositoryInterface|null $productRepository
+     * @param SearchCriteriaBuilder|null $searchCriteriaBuilder
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -118,7 +133,9 @@ class IndexBuilder
         \Magento\Framework\Stdlib\DateTime $dateFormat,
         \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
         \Magento\Catalog\Model\ProductFactory $productFactory,
-        $batchCount = 1000
+        $batchCount = 1000,
+        ProductRepositoryInterface $productRepository = null,
+        SearchCriteriaBuilder $searchCriteriaBuilder = null
     ) {
         $this->resource = $resource;
         $this->connection = $resource->getConnection();
@@ -131,6 +148,10 @@ class IndexBuilder
         $this->dateTime = $dateTime;
         $this->productFactory = $productFactory;
         $this->batchCount = $batchCount;
+        $this->productRepository = $productRepository ?:
+            ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder ?:
+            ObjectManager::getInstance()->get(SearchCriteriaBuilder::class);
     }
 
     /**
@@ -175,9 +196,10 @@ class IndexBuilder
     {
         $this->cleanByIds($ids);
 
+        $products = $this->getProducts($ids);
         foreach ($this->getActiveRules() as $rule) {
-            foreach ($ids as $productId) {
-                $this->applyRule($rule, $this->getProduct($productId));
+            foreach ($products as $product) {
+                $this->applyRule($rule, $product);
             }
         }
     }
@@ -708,6 +730,21 @@ class IndexBuilder
             $this->loadedProducts[$productId] = $this->productFactory->create()->load($productId);
         }
         return $this->loadedProducts[$productId];
+    }
+
+    /**
+     * Get products from product collection
+     *
+     * @param array $productIds
+     * @return ProductInterface[]
+     */
+    protected function getProducts($productIds)
+    {
+        $this->searchCriteriaBuilder->addFilter('entity_id', $productIds, 'in');
+        $searchCriteria = $this->searchCriteriaBuilder->create();
+        $products = $this->productRepository->getList($searchCriteria)->getItems();
+
+        return $products;
     }
 
     /**
