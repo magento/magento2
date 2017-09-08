@@ -15,8 +15,8 @@ $configuredPrice = $block->getPrice();
     <?php
     //get total configured amount in case we have a configured price or not
     if (!empty($configuredPrice->getOptions())) {
-        $finalPriceModelAmount = $configuredPrice->getConfiguredAmount();
-        $regularPriceAmount = $configuredPrice->getConfiguredAmount(0, true);
+        $finalPriceModelAmount = $block->getPriceType('configured_price')->getConfiguredAmount();
+        $regularPriceAmount = $block->getPriceType('configured_regular_price')->getConfiguredAmount();
     } else {
         $finalPriceModelAmount = $block->getPriceType('final_price')->getAmount();
         $regularPriceAmount = $block->getPriceType('regular_price')->getAmount();
