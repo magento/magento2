@@ -9,7 +9,7 @@ namespace Magento\SalesRule\Model\ResourceModel\Rule;
  * @magentoDbIsolation enabled
  * @magentoAppIsolation enabled
  */
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoDataFixture Magento/SalesRule/_files/rules.php
@@ -26,11 +26,19 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $items = array_values($collection->setValidationFilter(1, 0, $couponCode)->getItems());
 
         $ids = [];
+
+        $this->assertEquals(
+            count($expectedItems),
+            count($items),
+            'Invalid number of items in the result collection'
+        );
+
         foreach ($items as $key => $item) {
             $this->assertEquals($expectedItems[$key], $item->getName());
-            if (in_array($item->getId(), $ids)) {
-                $this->fail('Item should be unique in result collection');
-            }
+            $this->assertFalse(
+                in_array($item->getId(), $ids),
+                'Item should be unique in result collection'
+            );
             $ids[] = $item->getId();
         }
     }

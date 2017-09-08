@@ -8,7 +8,7 @@ namespace Magento\ProductAlert\Model;
 /**
  * @magentoAppIsolation enabled
  */
-class ObserverTest extends \PHPUnit_Framework_TestCase
+class ObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -56,7 +56,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertContains(
             'John Smith,',
-            $transportBuilder->getSentMessage()->getBodyHtml()->getRawContent()
+            $transportBuilder->getSentMessage()->getRawMessage()
         );
     }
 }

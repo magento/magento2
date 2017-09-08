@@ -12,7 +12,7 @@ use Magento\Framework\Api\SortOrder;
 /**
  * Integration test for \Magento\Customer\Model\ResourceModel\GroupRepository
  */
-class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
+class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /** The group id of the "NOT LOGGED IN" group */
     const NOT_LOGGED_IN_GROUP_ID = 0;

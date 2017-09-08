@@ -14,16 +14,19 @@ use Magento\Framework\Stdlib\ArrayManager;
  * Data provider for main panel of product page
  *
  * @api
+ * @since 101.0.0
  */
 class General extends AbstractModifier
 {
     /**
      * @var LocatorInterface
+     * @since 101.0.0
      */
     protected $locator;
 
     /**
      * @var ArrayManager
+     * @since 101.0.0
      */
     protected $arrayManager;
 
@@ -46,6 +49,7 @@ class General extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 101.0.0
      */
     public function modifyData(array $data)
     {
@@ -65,6 +69,7 @@ class General extends AbstractModifier
      *
      * @param array $data
      * @return array
+     * @since 101.0.0
      */
     protected function customizeWeightFormat(array $data)
     {
@@ -89,6 +94,7 @@ class General extends AbstractModifier
      *
      * @param array $data
      * @return array
+     * @since 101.0.0
      */
     protected function customizeAdvancedPriceFormat(array $data)
     {
@@ -109,6 +115,7 @@ class General extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 101.0.0
      */
     public function modifyMeta(array $meta)
     {
@@ -126,6 +133,7 @@ class General extends AbstractModifier
      *
      * @param array $meta
      * @return array
+     * @since 101.0.0
      */
     protected function prepareFirstPanel(array $meta)
     {
@@ -148,6 +156,7 @@ class General extends AbstractModifier
      *
      * @param array $meta
      * @return array
+     * @since 101.0.0
      */
     protected function customizeStatusField(array $meta)
     {
@@ -173,6 +182,7 @@ class General extends AbstractModifier
      *
      * @param array $meta
      * @return array
+     * @since 101.0.0
      */
     protected function customizeWeightField(array $meta)
     {
@@ -241,6 +251,7 @@ class General extends AbstractModifier
      *
      * @param array $meta
      * @return array
+     * @since 101.0.0
      */
     protected function customizeNewDateRangeField(array $meta)
     {
@@ -298,6 +309,7 @@ class General extends AbstractModifier
      *
      * @param array $meta
      * @return array
+     * @since 101.0.0
      */
     protected function customizeNameListeners(array $meta)
     {
@@ -352,7 +364,7 @@ class General extends AbstractModifier
      *
      * @return \Magento\Framework\Locale\CurrencyInterface
      *
-     * @deprecated
+     * @deprecated 101.0.0
      */
     private function getLocaleCurrency()
     {
@@ -368,6 +380,7 @@ class General extends AbstractModifier
      *
      * @param mixed $value
      * @return string
+     * @since 101.0.0
      */
     protected function formatPrice($value)
     {
@@ -387,6 +400,7 @@ class General extends AbstractModifier
      *
      * @param mixed $value
      * @return string
+     * @since 101.0.0
      */
     protected function formatNumber($value)
     {

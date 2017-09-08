@@ -62,9 +62,7 @@ class EmailNotification implements EmailNotificationInterface
 
     /**#@-*/
 
-    /**
-     * @var CustomerRegistry
-     */
+    /**#@-*/
     private $customerRegistry;
 
     /**
@@ -245,7 +243,6 @@ class EmailNotification implements EmailNotificationInterface
         if ($email === null) {
             $email = $customer->getEmail();
         }
-
         $transport = $this->transportBuilder->setTemplateIdentifier($templateId)
             ->setTemplateOptions(['area' => 'frontend', 'store' => $storeId])
             ->setTemplateVars($templateParams)

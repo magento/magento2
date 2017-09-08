@@ -5,6 +5,10 @@
  */
 namespace Magento\Config\Model\Config\Backend\Design;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Exception extends \Magento\Config\Model\Config\Backend\Serialized\ArraySerialized
 {
     /**

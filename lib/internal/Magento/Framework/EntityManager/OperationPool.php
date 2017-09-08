@@ -8,12 +8,28 @@ namespace Magento\Framework\EntityManager;
 
 use Magento\Framework\ObjectManagerInterface as ObjectManager;
 use Magento\Framework\EntityManager\OperationInterface;
+use Magento\Framework\EntityManager\Operation\CheckIfExists;
+use Magento\Framework\EntityManager\Operation\Read;
+use Magento\Framework\EntityManager\Operation\Create;
+use Magento\Framework\EntityManager\Operation\Update;
+use Magento\Framework\EntityManager\Operation\Delete;
 
 /**
  * Class OperationPool
  */
 class OperationPool
 {
+    /**
+     * @var array
+     */
+    private $defaultOperations = [
+        'checkIfExists' => CheckIfExists::class,
+        'read' => Read::class,
+        'create' => Create::class,
+        'update' => Update::class,
+        'delete' => Delete::class,
+    ];
+
     /**
      * @var array
      */
@@ -31,10 +47,13 @@ class OperationPool
      */
     public function __construct(
         ObjectManager $objectManager,
-        $operations
+        $operations = []
     ) {
         $this->objectManager = $objectManager;
-        $this->operations = $operations;
+        $this->operations = array_replace_recursive(
+            ['default' => $this->defaultOperations],
+            $operations
+        );
     }
 
     /**

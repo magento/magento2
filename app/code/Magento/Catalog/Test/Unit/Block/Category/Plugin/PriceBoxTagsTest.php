@@ -9,7 +9,7 @@ namespace Magento\Catalog\Test\Unit\Block\Category\Plugin;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PriceBoxTagsTest extends \PHPUnit_Framework_TestCase
+class PriceBoxTagsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Pricing\PriceCurrencyInterface | \PHPUnit_Framework_MockObject_MockObject

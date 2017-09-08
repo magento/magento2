@@ -5,7 +5,7 @@
  */
 namespace Magento\Customer\Test\Unit\Block\Account;
 
-class CustomerTest extends \PHPUnit_Framework_TestCase
+class CustomerTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Customer\Block\Account\Customer */
     private $block;

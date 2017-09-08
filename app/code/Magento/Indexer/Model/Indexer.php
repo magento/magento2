@@ -59,7 +59,6 @@ class Indexer extends \Magento\Framework\DataObject implements IdxInterface
     protected $indexersFactory;
 
     /**
-     * Indexer constructor.
      * @param ConfigInterface $config
      * @param ActionFactory $actionFactory
      * @param StructureFactory $structureFactory
@@ -411,10 +410,6 @@ class Indexer extends \Magento\Framework\DataObject implements IdxInterface
             }
             try {
                 $this->getActionInstance()->executeFull();
-                $tableSuffix = ($state->getTableSuffix() === '')
-                    ? StateInterface::ADDITIONAL_TABLE_SUFFIX
-                    : '';
-                $state->setTableSuffix($tableSuffix);
                 $state->setStatus(StateInterface::STATUS_VALID);
                 $state->save();
                 $this->getView()->resume();

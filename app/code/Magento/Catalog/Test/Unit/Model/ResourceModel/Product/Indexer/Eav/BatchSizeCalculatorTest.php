@@ -10,12 +10,12 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Indexer\BatchSizeManagement;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\BatchSizeCalculator;
 
-class BatchSizeCalculatorTest extends \PHPUnit_Framework_TestCase
+class BatchSizeCalculatorTest extends \PHPUnit\Framework\TestCase
 {
     public function testEstimateBatchSize()
     {
         $indexerId = 'default';
-        $batchManagerMock = $this->getMock(BatchSizeManagement::class, [], [], '', false);
+        $batchManagerMock = $this->createMock(BatchSizeManagement::class);
         $batchSizes = [
             $indexerId => 2000,
         ];
@@ -26,7 +26,7 @@ class BatchSizeCalculatorTest extends \PHPUnit_Framework_TestCase
             $batchSizes,
             $batchManagers
         );
-        $connectionMock = $this->getMock(AdapterInterface::class);
+        $connectionMock = $this->createMock(AdapterInterface::class);
 
         $batchManagerMock->expects($this->once())
             ->method('ensureBatchSize')
@@ -43,7 +43,7 @@ class BatchSizeCalculatorTest extends \PHPUnit_Framework_TestCase
             [],
             []
         );
-        $connectionMock = $this->getMock(AdapterInterface::class);
+        $connectionMock = $this->createMock(AdapterInterface::class);
 
         $model->estimateBatchSize($connectionMock, 'wrong_indexer_id');
     }

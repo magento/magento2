@@ -10,7 +10,7 @@ namespace Magento\Variable\Test\Unit\Controller\Adminhtml\System\Variable;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ValidateTest extends \PHPUnit_Framework_TestCase
+class ValidateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Variable\Model\Variable|\PHPUnit_Framework_MockObject_MockObject

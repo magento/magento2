@@ -9,8 +9,6 @@ namespace Magento\Directory\Model;
 /**
  * Region
  *
- * @method \Magento\Directory\Model\ResourceModel\Region _getResource()
- * @method \Magento\Directory\Model\ResourceModel\Region getResource()
  * @method string getRegionId()
  * @method string getCountryId()
  * @method \Magento\Directory\Model\Region setCountryId(string $value)
@@ -20,6 +18,7 @@ namespace Magento\Directory\Model;
  * @method \Magento\Directory\Model\Region setDefaultName(string $value)
  *
  * @api
+ * @since 100.0.2
  */
 class Region extends \Magento\Framework\Model\AbstractModel
 {

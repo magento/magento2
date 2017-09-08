@@ -7,7 +7,7 @@ namespace Magento\CacheInvalidate\Test\Unit\Model;
 
 use Zend\Uri\UriFactory;
 
-class PurgeCacheTest extends \PHPUnit_Framework_TestCase
+class PurgeCacheTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\CacheInvalidate\Model\PurgeCache */
     protected $model;
@@ -23,8 +23,8 @@ class PurgeCacheTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $socketFactoryMock = $this->getMock(\Magento\CacheInvalidate\Model\SocketFactory::class, [], [], '', false);
-        $this->socketAdapterMock = $this->getMock(\Zend\Http\Client\Adapter\Socket::class, [], [], '', false);
+        $socketFactoryMock = $this->createMock(\Magento\CacheInvalidate\Model\SocketFactory::class);
+        $this->socketAdapterMock = $this->createMock(\Zend\Http\Client\Adapter\Socket::class);
         $this->socketAdapterMock->expects($this->once())
             ->method('setOptions')
             ->with(['timeout' => 10]);
@@ -32,8 +32,8 @@ class PurgeCacheTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->socketAdapterMock);
 
-        $this->loggerMock = $this->getMock(\Magento\Framework\Cache\InvalidateLogger::class, [], [], '', false);
-        $this->cacheServer = $this->getMock(\Magento\PageCache\Model\Cache\Server::class, [], [], '', false);
+        $this->loggerMock = $this->createMock(\Magento\Framework\Cache\InvalidateLogger::class);
+        $this->cacheServer = $this->createMock(\Magento\PageCache\Model\Cache\Server::class);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(

@@ -335,14 +335,15 @@ abstract class AbstractConfig implements ConfigInterface
      */
     public function getBuildNotationCode()
     {
-        return sprintf(self::$bnCode, $this->getProductMetadata()->getEdition());
+        $notationCode = $this->_scopeConfig->getValue('paypal/notation_code', ScopeInterface::SCOPE_STORES);
+        return $notationCode ?: sprintf(self::$bnCode, $this->getProductMetadata()->getEdition());
     }
 
     /**
      * The getter function to get the ProductMetadata
      *
      * @return ProductMetadataInterface
-     * @deprecated
+     * @deprecated 100.1.0
      */
     protected function getProductMetadata()
     {

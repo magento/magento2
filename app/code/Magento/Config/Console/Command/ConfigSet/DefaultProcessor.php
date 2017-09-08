@@ -18,6 +18,8 @@ use Magento\Framework\App\Config\Value;
  * This processor saves the value of configuration into database.
  *
  * {@inheritdoc}
+ * @api
+ * @since 100.2.0
  */
 class DefaultProcessor implements ConfigSetProcessorInterface
 {
@@ -62,19 +64,10 @@ class DefaultProcessor implements ConfigSetProcessorInterface
      * Requires installed application.
      *
      * {@inheritdoc}
+     * @since 100.2.0
      */
     public function process($path, $value, $scope, $scopeCode)
     {
-        if (!$this->deploymentConfig->isAvailable()) {
-            throw new CouldNotSaveException(
-                __(
-                    'We can\'t save this option because Magento is not installed. '
-                    . 'To lock this value, enter the command again using the --%1 option.',
-                    ConfigSetCommand::OPTION_LOCK
-                )
-            );
-        }
-
         if ($this->isLocked($path, $scope, $scopeCode)) {
             throw new CouldNotSaveException(
                 __(

@@ -8,7 +8,7 @@
 
 namespace Magento\Paypal\Test\Unit\Block\Adminhtml\System\Config\Fieldset;
 
-class GroupTest extends \PHPUnit_Framework_TestCase
+class GroupTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Group
@@ -38,7 +38,7 @@ class GroupTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_group = $this->getMock(\Magento\Config\Model\Config\Structure\Element\Group::class, [], [], '', false);
+        $this->_group = $this->createMock(\Magento\Config\Model\Config\Structure\Element\Group::class);
         $this->_element = $this->getMockForAbstractClass(
             \Magento\Framework\Data\Form\Element\AbstractElement::class,
             [],
@@ -63,8 +63,8 @@ class GroupTest extends \PHPUnit_Framework_TestCase
         $this->_element->expects($this->any())
             ->method('getId')
             ->will($this->returnValue('id'));
-        $this->_user = $this->getMock(\Magento\User\Model\User::class, [], [], '', false);
-        $this->_authSession = $this->getMock(\Magento\Backend\Model\Auth\Session::class, [], [], '', false);
+        $this->_user = $this->createMock(\Magento\User\Model\User::class);
+        $this->_authSession = $this->createMock(\Magento\Backend\Model\Auth\Session::class);
         $this->_authSession->expects($this->any())
             ->method('__call')
             ->with('getUser')

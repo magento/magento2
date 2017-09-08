@@ -7,7 +7,7 @@ namespace Magento\Framework\Serialize\Test\Unit;
 
 use Magento\Framework\Serialize\JsonValidator;
 
-class JsonValidatorTest extends \PHPUnit_Framework_TestCase
+class JsonValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var JsonValidator

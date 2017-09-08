@@ -17,6 +17,7 @@ use Magento\Framework\Exception\LocalizedException;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 abstract class AbstractCollection extends AbstractDb implements SourceProviderInterface
 {
@@ -1421,6 +1422,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      *
      * @param \Magento\Eav\Model\Entity\AbstractEntity $entity
      * @return string
+     * @since 100.1.0
      */
     protected function getEntityPkName(\Magento\Eav\Model\Entity\AbstractEntity $entity)
     {

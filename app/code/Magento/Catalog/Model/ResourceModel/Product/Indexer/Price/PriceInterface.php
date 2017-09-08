@@ -11,6 +11,7 @@ namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Price;
  * @api
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 interface PriceInterface
 {

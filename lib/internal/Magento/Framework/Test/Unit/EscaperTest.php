@@ -11,7 +11,7 @@ use Magento\Framework\Escaper;
 /**
  * \Magento\Framework\Escaper test case
  */
-class EscaperTest extends \PHPUnit_Framework_TestCase
+class EscaperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Escaper
