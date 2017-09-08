@@ -296,8 +296,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
 
         $request->setRecipientAddressCountryCode('UK');
         $formattedValuesRegex = '(<Value>5.00<\/Value>).*';
-        $formattedValuesRegex .= '(<NetOunces>0.00<\/NetOunces>).*';
-        $formattedValuesRegex .= '(<GrossOunces>0.00<\/GrossOunces>)';
+        $formattedValuesRegex .= '(<NetOunces>0.00<\/NetOunces>)';
 
         $this->httpClient->expects($this->exactly(2))
             ->method('setParameterGet')
