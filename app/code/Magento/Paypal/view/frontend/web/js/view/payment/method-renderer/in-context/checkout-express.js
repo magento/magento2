@@ -78,7 +78,9 @@ define(
                                     $('body').trigger('processStop');
                                     customerData.invalidate(['cart']);
                                 });
-                            }.bind(this));
+                            }.bind(this)).fail(function() {
+                                paypalExpressCheckout.checkout.closeFlow();
+                            });
                         }
                     }
                 }
