@@ -126,8 +126,13 @@ define([
             return this;
         },
 
-        navigate: function () {
-            this.isVisible(true);
+        /**
+         * Navigator change hash handler.
+         *
+         * @param {Object} step - navigation step
+         */
+        navigate: function (step) {
+            step && step.isVisible(true);
         },
 
         /**
