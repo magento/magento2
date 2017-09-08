@@ -23,11 +23,15 @@ $_order = $block->getOrder();
         </tr>
     </thead>
     <tbody>
-    <?php foreach ($_shipment->getAllTracks() as $_item): ?>
+    <?php 
+    foreach ($_shipment->getAllTracks() as $_item): ?>
         <tr>
             <td><?= $block->escapeHtml($_item->getTitle()) ?>:</td>
             <td>
-            <?php if ($_item->getTrackUrl()): ?>
+            <?php if (
+                ($_item instanceof \Magento\Sales\Api\Data\TrackUrlInterface) && 
+                ($_item->getTrackUrl())
+            ): ?>
                 <a href="<?= $block->escapeUrl($_item->getTrackUrl()) ?>"
                    target="_blank"
                    rel="noreferrer nofollow noopener"
