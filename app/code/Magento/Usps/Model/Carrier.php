@@ -1814,7 +1814,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         }
 
         $xml->addChild('GrossPounds', $packagePoundsWeight);
-        $xml->addChild('GrossOunces', sprintf('%.2F', $packageOuncesWeight));
+        $xml->addChild('GrossOunces', $packageOuncesWeight);
         if ($packageParams->getContentType() == 'OTHER' && $packageParams->getContentTypeOther() != null) {
             $xml->addChild('ContentType', $packageParams->getContentType());
             $xml->addChild('ContentTypeOther ', $packageParams->getContentTypeOther());
