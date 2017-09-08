@@ -66,8 +66,7 @@ class ShipmentTrackRepositoryInterfaceTest extends \PHPUnit\Framework\TestCase
         /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
         $searchCriteriaBuilder =  Bootstrap::getObjectManager()->create(SearchCriteriaBuilder::class);
 
-        $searchCriteriaBuilder->addFilters([$filter1, $filter2, $filter3, $filter4]);
-        $searchCriteriaBuilder->addFilters([$filter5]);
+        $searchCriteriaBuilder->addFilters([$filter1, $filter2, $filter3, $filter4, $filter5]);
         $searchCriteriaBuilder->addFilters([$filter6]);
         $searchCriteriaBuilder->addFilters([$filter7]);
         $searchCriteriaBuilder->setSortOrders([$sortOrder]);
