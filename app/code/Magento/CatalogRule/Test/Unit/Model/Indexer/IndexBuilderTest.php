@@ -6,10 +6,7 @@
 
 namespace Magento\CatalogRule\Test\Unit\Model\Indexer;
 
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Catalog\Api\Data\ProductSearchResultsInterface;
-use Magento\Framework\Api\SearchCriteria;
+use Magento\CatalogRule\Model\Indexer\IndexBuilder\ProductLoader;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -118,30 +115,14 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
     protected $backend;
 
     /**
-     * @var ProductRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductLoader|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $productRepository;
-
-    /**
-     * @var SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $searchCriteriaBuilder;
-
-    /**
-     * @var ProductSearchResultsInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $productSearchResultsInterface;
-
-    /**
-     * @var \Magento\Framework\Api\SearchCriteria
-     */
-    private $searchCriteria;
+    private $productLoader;
 
     /**
      * Set up test
      *
      * @return void
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
     {
@@ -218,16 +199,7 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
         $this->attribute->expects($this->any())->method('getBackend')->will($this->returnValue($this->backend));
         $this->productFactory->expects($this->any())->method('create')->will($this->returnValue($this->product));
 
-        $this->productRepository = $this->getMockBuilder(ProductRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->searchCriteriaBuilder = $this->getMockBuilder(SearchCriteriaBuilder::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->productSearchResultsInterface = $this->getMockBuilder(ProductSearchResultsInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->searchCriteria = $this->getMockBuilder(SearchCriteria::class)
+        $this->productLoader = $this->getMockBuilder(ProductLoader::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -242,8 +214,7 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
             $this->dateTime,
             $this->productFactory,
             1000,
-            $this->productRepository,
-            $this->searchCriteriaBuilder
+            $this->productLoader
         );
 
         $this->setProperties($this->indexBuilder, [
@@ -294,19 +265,9 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
             ->with(\Magento\Catalog\Model\Product::ENTITY, 'price')
             ->will($this->returnValue($this->attribute));
 
-        $this->searchCriteriaBuilder->expects($this->once())
-            ->method('addFilter')
-            ->willReturnSelf();
-        $this->searchCriteriaBuilder->expects($this->once())
-            ->method('create')
-            ->willReturn($this->searchCriteria);
-        $this->productRepository->expects($this->once())
-            ->method('getList')
-            ->with($this->searchCriteria)
-            ->willReturn($this->productSearchResultsInterface);
         $iterator = new \ArrayIterator([$this->product]);
-        $this->productSearchResultsInterface->expects($this->once())
-            ->method('getItems')
+        $this->productLoader->expects($this->once())
+            ->method('getProducts')
             ->willReturn($iterator);
 
         $this->select->expects($this->once())->method('insertFromSelect')->with('catalogrule_group_website');
