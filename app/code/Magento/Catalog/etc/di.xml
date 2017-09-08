@@ -84,6 +84,16 @@
             <argument name="changelog" xsi:type="object" shared="false">Magento\Framework\Mview\View\ChangelogInterface</argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\Indexer\Product\Full">
+        <arguments>
+            <argument name="indexerList" xsi:type="array">
+                <item name="catalog_category_product" xsi:type="const">Magento\Catalog\Model\Indexer\Category\Product::INDEXER_ID</item>
+                <item name="catalog_product_category" xsi:type="const">Magento\Catalog\Model\Indexer\Product\Category::INDEXER_ID</item>
+                <item name="catalog_product_price" xsi:type="const">Magento\Catalog\Model\Indexer\Product\Price\Processor::INDEXER_ID</item>
+                <item name="catalog_product_attribute" xsi:type="const">Magento\Catalog\Model\Indexer\Product\Eav\Processor::INDEXER_ID</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Catalog\Model\Product\Attribute\Backend\Media\EntryConverterPool">
         <arguments>
             <argument name="mediaGalleryEntryConvertersCollection" xsi:type="array">
