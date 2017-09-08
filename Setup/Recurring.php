@@ -5,15 +5,15 @@
  */
 namespace Magento\MysqlMq\Setup;
 
-use Magento\Framework\Setup\InstallDataInterface;
+use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
-use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Framework\MessageQueue\ConfigInterface as MessageQueueConfig;
 
 /**
- * @codeCoverageIgnore
+ * Class Recurring
  */
-class InstallData implements InstallDataInterface
+class Recurring implements InstallSchemaInterface
 {
     /**
      * @var MessageQueueConfig
@@ -21,8 +21,6 @@ class InstallData implements InstallDataInterface
     private $messageQueueConfig;
 
     /**
-     * Initialize dependencies.
-     *
      * @param MessageQueueConfig $messageQueueConfig
      */
     public function __construct(MessageQueueConfig $messageQueueConfig)
@@ -33,18 +31,21 @@ class InstallData implements InstallDataInterface
     /**
      * {@inheritdoc}
      */
-    public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+    public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
         $setup->startSetup();
+
         $binds = $this->messageQueueConfig->getBinds();
         $queues = [];
         foreach ($binds as $bind) {
             $queues[] = $bind[MessageQueueConfig::BIND_QUEUE];
         }
-        $queues = array_unique($queues);
+        $connection = $setup->getConnection();
+        $existingQueues = $connection->fetchCol($connection->select()->from($setup->getTable('queue'), 'name'));
+        $queues = array_unique(array_diff($queues, $existingQueues));
         /** Populate 'queue' table */
-        foreach ($queues as $queueName) {
-            $setup->getConnection()->insert($setup->getTable('queue'), ['name' => $queueName]);
+        if (!empty($queues)) {
+            $connection->insertArray($setup->getTable('queue'), ['name'], $queues);
         }
 
         $setup->endSetup();
