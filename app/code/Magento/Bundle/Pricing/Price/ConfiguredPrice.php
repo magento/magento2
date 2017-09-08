@@ -109,16 +109,15 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
      * Option amount calculation for bundle product
      *
      * @param float $baseValue
-     * @param bool $useRegularPrice
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
      */
-    public function getConfiguredAmount($baseValue = 0., $useRegularPrice = false)
+    public function getConfiguredAmount($baseValue = 0.)
     {
         $selectionPriceList = [];
         foreach ($this->getOptions() as $option) {
             $selectionPriceList = array_merge(
                 $selectionPriceList,
-                $this->calculator->createSelectionPriceList($option, $this->product, $useRegularPrice)
+                $this->createSelectionPriceList($option)
             );
         }
         return $this->calculator->calculateBundleAmount(
@@ -154,5 +153,16 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
     public function getAmount()
     {
         return $this->item ? $this->getConfiguredAmount($this->getBasePrice()->getValue()) : parent::getAmount();
+    }
+
+    /**
+     * Create Selection Price List
+     *
+     * @param \Magento\Bundle\Model\Option $option
+     * @return BundleSelectionPrice[]
+     */
+    protected function createSelectionPriceList($option)
+    {
+        return $this->calculator->createSelectionPriceList($option, $this->product);
     }
 }
