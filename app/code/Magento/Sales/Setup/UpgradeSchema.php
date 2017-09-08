@@ -50,7 +50,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     self::$connectionName
                 )
             );
-
             //sales_bestsellers_aggregated_yearly
             $connection->dropForeignKey(
                 $installer->getTable('sales_bestsellers_aggregated_yearly', self::$connectionName),
@@ -62,7 +61,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     self::$connectionName
                 )
             );
-
             $installer->endSetup();
         }
         if (version_compare($context->getVersion(), '2.0.3', '<')) {
