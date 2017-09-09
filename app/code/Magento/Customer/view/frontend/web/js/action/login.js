@@ -37,8 +37,7 @@ define([
                         callback(loginData);
                     });
                     customerData.invalidate(['customer']);
-
-                   if (response.redirectUrl) {
+                    if (response.redirectUrl) {
                         window.location.href = response.redirectUrl;
                     } else if (redirectUrl) {
                         window.location.href = redirectUrl;
