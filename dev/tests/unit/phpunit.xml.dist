@@ -6,15 +6,13 @@
  */
 -->
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/6.1/phpunit.xsd"
+         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/6.2/phpunit.xsd"
          colors="true"
          beStrictAboutTestsThatDoNotTestAnything="false"
          bootstrap="./framework/bootstrap.php"
         >
     <testsuite name="Magento Unit Tests">
         <directory suffix="Test.php">../../../app/code/*/*/Test/Unit</directory>
-        <directory suffix="Test.php">../../../dev/tools/*/*/Test/Unit</directory>
-        <directory suffix="Test.php">../../../dev/tools/*/*/*/Test/Unit</directory>
         <directory suffix="Test.php">../../../lib/internal/*/*/Test/Unit</directory>
         <directory suffix="Test.php">../../../lib/internal/*/*/*/Test/Unit</directory>
         <directory suffix="Test.php">../../../setup/src/*/*/Test/Unit</directory>

@@ -111,7 +111,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $this->store = $this->createMock(\Magento\Store\Model\Store::class);
         $this->form = $this->createPartialMock(
             \Magento\Framework\Data\Form::class,
-            ['setForm', 'addFieldset', 'addField', 'setRenderer', 'getElement']
+            ['setForm', 'addFieldset', 'addField', 'setRenderer', 'getElement', 'setValues']
         );
         $this->directoryReadInterface = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
         $this->registry = $this->createMock(\Magento\Framework\Registry::class);
@@ -136,6 +136,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $this->form->expects($this->any())->method('addFieldset')->will($this->returnSelf());
         $this->form->expects($this->any())->method('addField')->will($this->returnSelf());
         $this->form->expects($this->any())->method('setRenderer')->will($this->returnSelf());
+        $this->form->expects($this->any())->method('setValues')->will($this->returnSelf());
         $this->optionFactory->expects($this->any())->method('create')->will($this->returnValue($this->optionRating));
         $this->systemStore->expects($this->any())->method('getStoreCollection')
             ->will($this->returnValue(['0' => $this->store]));
@@ -162,12 +163,11 @@ class FormTest extends \PHPUnit\Framework\TestCase
 
     public function testToHtmlSessionRatingData()
     {
-        $this->markTestSkipped('Test needs to be refactored.');
         $this->registry->expects($this->any())->method('registry')->will($this->returnValue($this->rating));
-        $this->form->expects($this->at(7))->method('getElement')->will($this->returnValue($this->element));
-        $this->form->expects($this->at(13))->method('getElement')->will($this->returnValue($this->element));
-        $this->form->expects($this->at(16))->method('getElement')->will($this->returnValue($this->element));
-        $this->form->expects($this->at(17))->method('getElement')->will($this->returnValue($this->element));
+        $this->form->expects($this->at(5))->method('getElement')->will($this->returnValue($this->element));
+        $this->form->expects($this->at(11))->method('getElement')->will($this->returnValue($this->element));
+        $this->form->expects($this->at(14))->method('getElement')->will($this->returnValue($this->element));
+        $this->form->expects($this->at(15))->method('getElement')->will($this->returnValue($this->element));
         $this->form->expects($this->any())->method('getElement')->will($this->returnValue(false));
         $ratingCodes = ['rating_codes' => ['0' => 'rating_code']];
         $this->session->expects($this->any())->method('getRatingData')->will($this->returnValue($ratingCodes));
@@ -177,12 +177,11 @@ class FormTest extends \PHPUnit\Framework\TestCase
 
     public function testToHtmlCoreRegistryRatingData()
     {
-        $this->markTestSkipped('Test needs to be refactored.');
         $this->registry->expects($this->any())->method('registry')->will($this->returnValue($this->rating));
-        $this->form->expects($this->at(7))->method('getElement')->will($this->returnValue($this->element));
-        $this->form->expects($this->at(13))->method('getElement')->will($this->returnValue($this->element));
-        $this->form->expects($this->at(16))->method('getElement')->will($this->returnValue($this->element));
-        $this->form->expects($this->at(17))->method('getElement')->will($this->returnValue($this->element));
+        $this->form->expects($this->at(5))->method('getElement')->will($this->returnValue($this->element));
+        $this->form->expects($this->at(11))->method('getElement')->will($this->returnValue($this->element));
+        $this->form->expects($this->at(14))->method('getElement')->will($this->returnValue($this->element));
+        $this->form->expects($this->at(15))->method('getElement')->will($this->returnValue($this->element));
         $this->form->expects($this->any())->method('getElement')->will($this->returnValue(false));
         $this->session->expects($this->any())->method('getRatingData')->will($this->returnValue(false));
         $ratingCodes = ['rating_codes' => ['0' => 'rating_code']];
@@ -192,9 +191,8 @@ class FormTest extends \PHPUnit\Framework\TestCase
 
     public function testToHtmlWithoutRatingData()
     {
-        $this->markTestSkipped('Test needs to be refactored.');
         $this->registry->expects($this->any())->method('registry')->will($this->returnValue(false));
-        $this->systemStore->expects($this->any())->method('getStoreCollection')
+        $this->systemStore->expects($this->atLeastOnce())->method('getStoreCollection')
             ->will($this->returnValue(['0' => $this->store]));
         $this->formFactory->expects($this->any())->method('create')->will($this->returnValue($this->form));
         $this->viewFileSystem->expects($this->any())->method('getTemplateFileName')
