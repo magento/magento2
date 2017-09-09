@@ -38,7 +38,6 @@ class ServiceCollectionTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->markTestSkipped('Test needs to be refactored');
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->filterBuilder = $this->objectManager->getObject(\Magento\Framework\Api\FilterBuilder::class);
         $filterGroupBuilder = $this->objectManager

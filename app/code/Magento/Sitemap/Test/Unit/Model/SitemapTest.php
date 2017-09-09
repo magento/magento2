@@ -227,9 +227,9 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
         ];
 
         return [
-            [50000, 10485760, $expectedSingleFile, 1],
-            [1, 10485760, $expectedMultiFile, 5],
-            [50000, 264, $expectedMultiFile, 5]
+            [50000, 10485760, $expectedSingleFile, 6],
+            [1, 10485760, $expectedMultiFile, 18],
+            [50000, 264, $expectedMultiFile, 18]
         ];
     }
 
@@ -289,7 +289,7 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
                 50000,
                 10485760,
                 $expectedSingleFile,
-                2,
+                6,
                 [
                     'robotsStart' => '',
                     'robotsFinish' => 'Sitemap: http://store.com/sitemap.xml',
@@ -300,7 +300,7 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
                 50000,
                 10485760,
                 $expectedSingleFile,
-                2,
+                6,
                 [
                     'robotsStart' => "User-agent: *",
                     'robotsFinish' => "User-agent: *" . PHP_EOL . 'Sitemap: http://store.com/sitemap.xml',
@@ -311,7 +311,7 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
                 1,
                 10485760,
                 $expectedMultiFile,
-                6,
+                18,
                 [
                     'robotsStart' => "User-agent: *\r\n",
                     'robotsFinish' => "User-agent: *\r\n\r\nSitemap: http://store.com/sitemap.xml",
@@ -322,7 +322,7 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
                 50000,
                 264,
                 $expectedMultiFile,
-                6,
+                18,
                 [
                     'robotsStart' => "User-agent: *\n",
                     'robotsFinish' => "User-agent: *\n\nSitemap: http://store.com/sitemap.xml",
@@ -333,7 +333,7 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
                 50000,
                 10485760,
                 $expectedSingleFile,
-                1,
+                6,
                 ['robotsStart' => '', 'robotsFinish' => '', 'pushToRobots' => 0]
             ] // empty robots file
         ];
@@ -351,7 +351,6 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
      */
     public function testAddSitemapToRobotsTxt($maxLines, $maxFileSize, $expectedFile, $expectedWrites, $robotsInfo)
     {
-        $this->markTestSkipped('Test needs to be refactored.');
         $actualData = [];
         $model = $this->_prepareSitemapModelMock(
             $actualData,
@@ -396,7 +395,7 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
 
         // Check that all expected lines were written
         $this->_fileMock->expects(
-            $this->any()
+            $this->exactly($expectedWrites)
         )->method(
             'write'
         )->will(
@@ -404,7 +403,7 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
         );
 
         // Check that all expected file descriptors were created
-        $this->_directoryMock->expects($this->exactly($expectedWrites))->method('openFile')->will(
+        $this->_directoryMock->expects($this->exactly(count($expectedFile)))->method('openFile')->will(
             $this->returnCallback(
                 function ($file) use (&$currentFile) {
                     $currentFile = $file;
