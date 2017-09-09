@@ -104,7 +104,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 ]
             );
         }
-        if (version_compare($context->getVersion(), '2.0.8', '<')) {
+        if (version_compare($context->getVersion(), '2.1.0', '<')) {
             $connection = $installer->getConnection(self::$connectionName);
             $tableName = $installer->getTable('sales_shipment_track');
             $connection->addColumn(
