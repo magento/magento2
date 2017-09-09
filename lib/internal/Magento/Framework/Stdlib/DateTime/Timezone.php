@@ -151,7 +151,6 @@ class Timezone implements TimezoneInterface
 
     /**
      * {@inheritdoc}
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function date($date = null, $locale = null, $useTimezone = true, $includeTime = true)
     {

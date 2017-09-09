@@ -6,48 +6,44 @@
 namespace Magento\Catalog\Model\Indexer\Product\Price\Plugin;
 
 use Magento\Customer\Api\GroupRepositoryInterface;
+use Magento\Customer\Api\Data\GroupInterface;
+use \Magento\Catalog\Model\Indexer\Product\Price\UpdateIndexInterface;
 
-class CustomerGroup extends AbstractPlugin
+class CustomerGroup
 {
     /**
-     * Invalidate the indexer after the group is saved.
-     *
-     * @param GroupRepositoryInterface $subject
-     * @param string                   $result
-     * @return string
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @var UpdateIndexInterface
      */
-    public function afterSave(GroupRepositoryInterface $subject, $result)
-    {
-        $this->invalidateIndexer();
-        return $result;
+    private $updateIndex;
+
+    /**
+     * Constructor
+     *
+     * @param UpdateIndexInterface $updateIndex
+     */
+    public function __construct(
+        UpdateIndexInterface $updateIndex
+    ) {
+        $this->updateIndex = $updateIndex;
     }
 
     /**
-     * Invalidate the indexer after the group is deleted.
+     * Update price index after customer group saved
      *
      * @param GroupRepositoryInterface $subject
-     * @param string                   $result
-     * @return string
+     * @param \Closure $proceed
+     * @param GroupInterface $result
+     * @return GroupInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterDelete(GroupRepositoryInterface $subject, $result)
-    {
-        $this->invalidateIndexer();
-        return $result;
-    }
-
-    /**
-     * Invalidate the indexer after the group is deleted.
-     *
-     * @param GroupRepositoryInterface $subject
-     * @param string                   $result
-     * @return string
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function afterDeleteById(GroupRepositoryInterface $subject, $result)
-    {
-        $this->invalidateIndexer();
-        return $result;
+    public function aroundSave(
+        GroupRepositoryInterface $subject,
+        \Closure $proceed,
+        GroupInterface $group
+    ) {
+        $isGroupNew = !$group->getId();
+        $group = $proceed($group);
+        $this->updateIndex->update($group, $isGroupNew);
+        return $group;
     }
 }
