@@ -38,10 +38,10 @@ define([
                     });
                     customerData.invalidate(['customer']);
 
-                    if (redirectUrl) {
-                        window.location.href = redirectUrl;
-                    } else if (response.redirectUrl) {
+                   if (response.redirectUrl) {
                         window.location.href = response.redirectUrl;
+                    } else if (redirectUrl) {
+                        window.location.href = redirectUrl;
                     } else {
                         location.reload();
                     }
