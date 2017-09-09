@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\CatalogWidget\Test\Unit\Model\Rule\Condition;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -29,11 +28,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
         $eavConfig = $this->createMock(\Magento\Eav\Model\Config::class);
         $this->attributeMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class);
-        $eavConfig->expects($this->once())->method('getAttribute')->willReturn($this->attributeMock);
+        $eavConfig->expects($this->any())->method('getAttribute')->willReturn($this->attributeMock);
         $ruleMock = $this->createMock(\Magento\SalesRule\Model\Rule::class);
         $storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $storeMock = $this->createMock(\Magento\Store\Api\Data\StoreInterface::class);
-        $storeManager->expects($this->once())->method('getStore')->willReturn($storeMock);
+        $storeManager->expects($this->any())->method('getStore')->willReturn($storeMock);
         $productResource = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product::class);
         $productResource->expects($this->once())->method('loadAllAttributes')->willReturnSelf();
         $productResource->expects($this->once())->method('getAttributesByCode')->willReturn([]);
@@ -73,7 +72,6 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
     public function testGetMappedSqlFieldSku()
     {
-        $this->markTestSkipped('Test needs to be refactored.');
         $this->model->setAttribute('sku');
         $this->assertEquals('e.sku', $this->model->getMappedSqlField());
     }
