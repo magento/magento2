@@ -17,6 +17,8 @@ interface GetAssignedSourcesForStockInterface
     /**
      * Get Sources assigned to Stock
      *
+     * If Stock with given id doesn't exist then return an empty array
+     *
      * @param int $stockId
      * @return \Magento\InventoryApi\Api\Data\SourceInterface[]
      * @throws \Magento\Framework\Exception\InputException
