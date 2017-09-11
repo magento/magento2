@@ -193,9 +193,8 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
                 'validate',
                 'save',
                 'getMediaGalleryEntries',
-                'setData',
-                'getStoreId'
-            ]);
+            ]
+        );
         $this->initializedProductMock->expects($this->any())
             ->method('hasGalleryAttribute')
             ->willReturn(true);
@@ -974,7 +973,6 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testSaveWithLinks(array $newLinks, array $existingLinks, array $expectedData)
     {
-        $this->markTestSkipped('Test needs to be refactored.');
         $this->storeManagerMock->expects($this->any())->method('getWebsites')->willReturn([1 => 'default']);
         $this->resourceModelMock->expects($this->any())->method('getIdBySku')->will($this->returnValue(100));
         $this->productFactoryMock->expects($this->any())
@@ -1022,7 +1020,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
 
             $this->productData['product_links'] = [];
 
-            $this->initializedProductMock->setData("ignore_links_flag", true);
+            $this->initializedProductMock->setData('ignore_links_flag', true);
             $this->initializedProductMock->expects($this->never())
                 ->method('getProductLinks')
                 ->willReturn([]);
@@ -1157,7 +1155,6 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
 
     public function testSaveExistingWithNewMediaGalleryEntries()
     {
-        $this->markTestSkipped('Test needs to be refactored.');
         $this->storeManagerMock->expects($this->any())->method('getWebsites')->willReturn([1 => 'default']);
         $newEntriesData = [
             'images' => [
@@ -1287,7 +1284,6 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
 
     public function testSaveExistingWithMediaGalleryEntries()
     {
-        $this->markTestSkipped('Test needs to be refactored.');
         $this->storeManagerMock->expects($this->any())->method('getWebsites')->willReturn([1 => 'default']);
         //update one entry, delete one entry
         $newEntries = [
