@@ -40,4 +40,9 @@
             <argument name="lock" xsi:type="object">RefreshLock</argument>
         </arguments>
     </type>
+    <type name="Magento\MessageQueue\Model\Cron\ConsumersRunner">
+        <arguments>
+            <argument name="shellBackground" xsi:type="object">shellBackground</argument>
+        </arguments>
+    </type>
 </config>

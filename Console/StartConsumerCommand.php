@@ -11,6 +11,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\MessageQueue\ConsumerFactory;
+use Magento\MessageQueue\Model\Cron\ConsumersRunner\PidConsumerManager;
 
 /**
  * Command for starting MessageQueue consumers.
@@ -21,6 +22,7 @@ class StartConsumerCommand extends Command
     const OPTION_NUMBER_OF_MESSAGES = 'max-messages';
     const OPTION_BATCH_SIZE = 'batch-size';
     const OPTION_AREACODE = 'area-code';
+    const PID_FILE_PATH = 'pid-file-path';
     const COMMAND_QUEUE_CONSUMERS_START = 'queue:consumers:start';
 
     /**
@@ -34,20 +36,29 @@ class StartConsumerCommand extends Command
     private $appState;
 
     /**
+     * @var PidConsumerManager
+     */
+    private $pidConsumerManager;
+
+    /**
      * StartConsumerCommand constructor.
      * {@inheritdoc}
      *
      * @param \Magento\Framework\App\State $appState
      * @param ConsumerFactory $consumerFactory
      * @param string $name
+     * @param PidConsumerManager $pidConsumerManager
      */
     public function __construct(
         \Magento\Framework\App\State $appState,
         ConsumerFactory $consumerFactory,
-        $name = null
+        $name = null,
+        PidConsumerManager $pidConsumerManager = null
     ) {
         $this->appState = $appState;
         $this->consumerFactory = $consumerFactory;
+        $this->pidConsumerManager = $pidConsumerManager ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(PidConsumerManager::class);
         parent::__construct($name);
     }
 
@@ -60,11 +71,18 @@ class StartConsumerCommand extends Command
         $numberOfMessages = $input->getOption(self::OPTION_NUMBER_OF_MESSAGES);
         $batchSize = (int)$input->getOption(self::OPTION_BATCH_SIZE);
         $areaCode = $input->getOption(self::OPTION_AREACODE);
+        $pidFilePath = $input->getOption(self::PID_FILE_PATH);
+
+        if ($pidFilePath) {
+            $this->pidConsumerManager->savePid($pidFilePath);
+        }
+
         if ($areaCode !== null) {
             $this->appState->setAreaCode($areaCode);
         } else {
             $this->appState->setAreaCode('global');
         }
+
         $consumer = $this->consumerFactory->get($consumerName, $batchSize);
         $consumer->process($numberOfMessages);
         return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
@@ -102,6 +120,12 @@ class StartConsumerCommand extends Command
             'The preferred area (global, adminhtml, etc...) '
             . 'default is global.'
         );
+        $this->addOption(
+            self::PID_FILE_PATH,
+            null,
+            InputOption::VALUE_REQUIRED,
+            'The file path for saving PID'
+        );
         $this->setHelp(
             <<<HELP
 This command starts MessageQueue consumer by its name.
@@ -121,6 +145,10 @@ To specify the number of messages per batch for the batch consumer:
 To specify the preferred area:
 
     <comment>%command.full_name% someConsumer --area-code='adminhtml'</comment>
+
+To save PID enter path:
+
+    <comment>%command.full_name% someConsumer --pid-file-path='/var/someConsumer.pid'</comment>
 HELP
         );
         parent::configure();
