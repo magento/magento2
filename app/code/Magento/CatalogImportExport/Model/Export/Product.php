@@ -782,7 +782,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             }
 
             // Tested one product to have up to such size
-            $memoryPerProduct = 100000;
+            $memoryPerProduct = 500000;
             // Decrease memory limit to have supply
             $memoryUsagePercent = 0.8;
             // Minimum Products limit

@@ -643,7 +643,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             'method' => [
                 '0_FCLE' => __('First-Class Mail Large Envelope'),
                 '0_FCL' => __('First-Class Mail Letter'),
-                '0_FCP' => __('First-Class Mail Parcel'),
+                '0_FCP' => __('First-Class Package Service - Retail'),
                 '0_FCPC' => __('First-Class Mail Postcards'),
                 '1' => __('Priority Mail'),
                 '2' => __('Priority Mail Express Hold For Pickup'),
@@ -795,7 +795,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             'method_to_code' => [
                 'First-Class Mail Large Envelope' => '0_FCLE',
                 'First-Class Mail Letter' => '0_FCL',
-                'First-Class Mail Parcel' => '0_FCP',
+                'First-Class Package Service - Retail' => '0_FCP',
             ],
             'first_class_mail_type' => ['LETTER' => __('Letter'), 'FLAT' => __('Flat'), 'PARCEL' => __('Parcel')],
             'container' => [
@@ -1795,10 +1795,10 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             }
             $individualItemWeight = $itemWeight / $ceiledQty;
             $itemDetail->addChild('Quantity', $ceiledQty);
-            $itemDetail->addChild('Value', $item->getCustomsValue() * $item->getQty());
+            $itemDetail->addChild('Value', sprintf('%.2F', $item->getCustomsValue() * $item->getQty()));
             list($individualPoundsWeight, $individualOuncesWeight) = $this->_convertPoundOunces($individualItemWeight);
             $itemDetail->addChild('NetPounds', $individualPoundsWeight);
-            $itemDetail->addChild('NetOunces', $individualOuncesWeight);
+            $itemDetail->addChild('NetOunces', sprintf('%.2F', $individualOuncesWeight));
             $itemDetail->addChild('HSTariffNumber', 0);
             $itemDetail->addChild('CountryOfOrigin', $countryOfManufacture);
 

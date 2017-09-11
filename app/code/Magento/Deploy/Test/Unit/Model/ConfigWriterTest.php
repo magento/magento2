@@ -168,4 +168,23 @@ class ConfigWriterTest extends \PHPUnit\Framework\TestCase
 
         $this->model->save($values);
     }
+
+    /**
+     * Save null (empty input) through CLI and assert it does not create backend model for validation
+     * @return void
+     */
+    public function testSavingNullValues()
+    {
+        $values = [
+            'some1/config1/path1' => null,
+        ];
+
+        $this->preparedValueFactoryMock->expects($this->never())->method('create');
+
+        $this->writerMock->expects($this->once())
+            ->method('saveConfig')
+            ->with([ConfigFilePool::APP_ENV => []]);
+
+        $this->model->save($values);
+    }
 }

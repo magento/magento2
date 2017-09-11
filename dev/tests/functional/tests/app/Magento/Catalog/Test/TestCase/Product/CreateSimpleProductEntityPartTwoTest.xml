@@ -159,5 +159,31 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteProductNotInGrid" />
         </variation>
+        <variation name="CreateSimpleProductEntityTestVariation30" summary="Addbefore for custom options price is changing depends on price type." ticketId="MAGETWO-71597">
+            <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
+            <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
+            <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
+            <data name="product/data/price/value" xsi:type="string">10017</data>
+            <data name="product/data/short_description" xsi:type="string">Simple Product short_description %isolation%</data>
+            <data name="product/data/description" xsi:type="string">Simple Product description %isolation%</data>
+            <data name="product/data/weight" xsi:type="string">67</data>
+            <data name="priceTypeSymbol" xsi:type="string">$</data>
+            <data name="product/data/custom_options/import_products" xsi:type="string">catalogProductSimple::with_fixed_custom_option_price_100</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertAddBeforeForPrice" />
+        </variation>
+        <variation name="CreateSimpleProductEntityTestVariation31" summary="Addbefore for custom options price is changing depends on price type." ticketId="MAGETWO-71597">
+            <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
+            <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
+            <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
+            <data name="product/data/price/value" xsi:type="string">10017</data>
+            <data name="product/data/short_description" xsi:type="string">Simple Product short_description %isolation%</data>
+            <data name="product/data/description" xsi:type="string">Simple Product description %isolation%</data>
+            <data name="product/data/weight" xsi:type="string">67</data>
+            <data name="priceTypeSymbol" xsi:type="string">%</data>
+            <data name="product/data/custom_options/import_products" xsi:type="string">catalogProductSimple::with_one_custom_option_and_category</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertAddBeforeForPrice" />
+        </variation>
     </testCase>
 </config>
