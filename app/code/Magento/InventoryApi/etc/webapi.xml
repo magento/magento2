@@ -63,4 +63,23 @@
             <resource ref="Magento_InventoryApi::stock_delete"/>
         </resources>
     </route>
+    <!-- StockSourceLink -->
+    <route url="/V1/inventory/stock/get-assigned-sources/:stockId" method="GET">
+        <service class="Magento\InventoryApi\Api\GetAssignedSourcesForStockInterface" method="execute"/>
+        <resources>
+            <resource ref="Magento_InventoryApi::source_stock_link"/>
+        </resources>
+    </route>
+    <route url="/V1/inventory/stock/assign-sources/:stockId" method="POST">
+        <service class="Magento\InventoryApi\Api\AssignSourcesToStockInterface" method="execute"/>
+        <resources>
+            <resource ref="Magento_InventoryApi::source_stock_link"/>
+        </resources>
+    </route>
+    <route url="/V1/inventory/stock/unassign-source/:stockId/:sourceId" method="DELETE">
+        <service class="Magento\InventoryApi\Api\UnassignSourceFromStockInterface" method="execute"/>
+        <resources>
+            <resource ref="Magento_InventoryApi::source_stock_link"/>
+        </resources>
+    </route>
 </routes>
