@@ -6,6 +6,7 @@
 namespace Magento\SalesRule\Test\Unit\Model;
 
 use Magento\Framework\Api\SortOrder;
+use Magento\SalesRule\Api\Data\CouponInterface;
 
 class CouponRepositoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -214,6 +215,11 @@ class CouponRepositoryTest extends \PHPUnit_Framework_TestCase
         $currentPage = 42;
         $pageSize = 4;
 
+        /** @var CouponInterface|\PHPUnit_Framework_MockObject_MockObject $couponMock */
+        $couponMock = $this->getMockBuilder(CouponInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         /**
          * @var \Magento\Framework\Api\SearchCriteriaInterface $searchCriteriaMock
          */
@@ -248,8 +254,8 @@ class CouponRepositoryTest extends \PHPUnit_Framework_TestCase
         $collectionMock->expects($this->once())->method('setCurPage')->with($currentPage);
         $searchCriteriaMock->expects($this->once())->method('getPageSize')->willReturn($pageSize);
         $collectionMock->expects($this->once())->method('setPageSize')->with($pageSize);
-        $collectionMock->expects($this->once())->method('getItems')->willReturn([]);
-        $this->searchResultsMock->expects($this->once())->method('setItems')->with([]);
+        $collectionMock->expects($this->once())->method('getItems')->willReturn([$couponMock]);
+        $this->searchResultsMock->expects($this->once())->method('setItems')->with([$couponMock]);
         $this->searchResultFactory->expects($this->once())->method('create')->willReturn($this->searchResultsMock);
 
         $this->assertEquals($this->searchResultsMock, $this->model->getList($searchCriteriaMock));

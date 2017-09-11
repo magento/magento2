@@ -350,7 +350,9 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     {
         /** @var \Magento\Framework\Indexer\IndexerInterface $indexer */
         $indexer = $this->indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
-        $indexer->reindexRow($this->getCustomerId());
+        if (!$indexer->isScheduled()) {
+            $indexer->reindexRow($this->getCustomerId());
+        }
     }
 
     /**

@@ -16,12 +16,16 @@ use Magento\Mtf\Fixture\FixtureInterface;
  */
 class ListProduct extends Block
 {
+    // @codingStandardsIgnoreStart
+
     /**
      * Locator for product item block.
      *
      * @var string
      */
     protected $productItem = './/*[contains(@class,"product-item-link") and normalize-space(text())="%s"]/ancestor::li';
+
+    // @codingStandardsIgnoreEnd
 
     /**
      * Locator for product item link.
@@ -78,6 +82,7 @@ class ListProduct extends Block
     public function getSortByValues()
     {
         $sortValues = $this->_rootElement->find($this->sorter)->getText();
+        
         return array_filter(array_map("trim", explode("\n", $sortValues)));
     }
 }

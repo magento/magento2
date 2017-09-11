@@ -652,14 +652,16 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * Retrieve image URL
+     * Get image url by attribute code.
      *
+     * @param string $attributeCode
      * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getImageUrl()
+    public function getImageUrl($attributeCode = 'image')
     {
         $url = false;
-        $image = $this->getImage();
+        $image = $this->getData($attributeCode);
         if ($image) {
             if (is_string($image)) {
                 $url = $this->_storeManager->getStore()->getBaseUrl(
@@ -671,6 +673,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
                 );
             }
         }
+
         return $url;
     }
 
@@ -1089,7 +1092,11 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         if ($this->flatState->isFlatEnabled()) {
             $flatIndexer = $this->indexerRegistry->get(Indexer\Category\Flat\State::INDEXER_ID);
             if (!$flatIndexer->isScheduled()) {
-                $flatIndexer->reindexRow($this->getId());
+                $idsList = [$this->getId()];
+                if ($this->dataHasChangedFor('url_key')) {
+                    $idsList = array_merge($idsList, explode(',', $this->getAllChildren()));
+                }
+                $flatIndexer->reindexList($idsList);
             }
         }
         $productIndexer = $this->indexerRegistry->get(Indexer\Category\Product::INDEXER_ID);

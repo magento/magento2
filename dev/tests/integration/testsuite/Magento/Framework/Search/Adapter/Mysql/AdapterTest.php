@@ -5,13 +5,15 @@
  */
 namespace Magento\Framework\Search\Adapter\Mysql;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogSearch\Model\ResourceModel\EngineInterface;
 use Magento\Search\Model\EngineResolver;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Class AdapterTest
+ * Class AdapterTest.
  *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @magentoDbIsolation disabled
  * @magentoAppIsolation enabled
  * @magentoDataFixture Magento/Framework/Search/_files/products.php
@@ -38,31 +40,40 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
      */
     protected $searchEngine = EngineResolver::CATALOG_SEARCH_MYSQL_ENGINE;
 
+    /**
+     * @var ProductRepositoryInterface
+     */
+    protected $productRepository;
+
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
 
         /** @var \Magento\Framework\Search\Request\Config\Converter $converter */
-        $converter = $this->objectManager->create('Magento\Framework\Search\Request\Config\Converter');
+        $converter = $this->objectManager->create(\Magento\Framework\Search\Request\Config\Converter::class);
 
         $document = new \DOMDocument();
         $document->load($this->getRequestConfigPath());
         $requestConfig = $converter->convert($document);
 
         /** @var \Magento\Framework\Search\Request\Config $config */
-        $config = $this->objectManager->create('Magento\Framework\Search\Request\Config');
+        $config = $this->objectManager->create(\Magento\Framework\Search\Request\Config::class);
         $config->merge($requestConfig);
 
         $this->requestBuilder = $this->objectManager->create(
-            'Magento\Framework\Search\Request\Builder',
+            \Magento\Framework\Search\Request\Builder::class,
             ['config' => $config]
         );
 
         $this->adapter = $this->createAdapter();
+        $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
     }
 
     /**
-     * Get request config path
+     * Get request config path.
      * 
      * @return string
      */
@@ -72,11 +83,13 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Make sure that correct engine is set
+     * Make sure that correct engine is set.
+     *
+     * @return void
      */
     protected function assertPreConditions()
     {
-        $currentEngine = $this->objectManager->get('Magento\Framework\App\Config\MutableScopeConfigInterface')
+        $currentEngine = $this->objectManager->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class)
             ->getValue(EngineInterface::CONFIG_ENGINE_PATH, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
         $this->assertEquals($this->searchEngine, $currentEngine);
     }
@@ -86,7 +99,7 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
      */
     protected function createAdapter()
     {
-        return $this->objectManager->create('Magento\Framework\Search\Adapter\Mysql\Adapter');
+        return $this->objectManager->create(\Magento\Framework\Search\Adapter\Mysql\Adapter::class);
     }
 
     /**
@@ -103,23 +116,42 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Assert response product Ids match expected.
+     *
      * @param \Magento\Framework\Search\Response\QueryResponse $queryResponse
      * @param array $expectedIds
+     * @return void
      */
     private function assertProductIds($queryResponse, $expectedIds)
     {
-        $actualIds = [];
-        foreach ($queryResponse as $document) {
-            /** @var \Magento\Framework\Api\Search\Document $document */
-            $actualIds[] = $document->getId();
-        }
+        $actualIds = $this->getProductIds($queryResponse);
         sort($actualIds);
         sort($expectedIds);
         $this->assertEquals($expectedIds, $actualIds);
     }
 
     /**
+     * Returns document ids from query response.
+     *
+     * @param \Magento\Framework\Search\Response\QueryResponse $queryResponse
+     * @return array
+     */
+    protected function getProductIds(\Magento\Framework\Search\Response\QueryResponse $queryResponse)
+    {
+        $actualIds = [];
+        foreach ($queryResponse as $document) {
+            /** @var \Magento\Framework\Api\Search\Document $document */
+            $actualIds[] = $document->getId();
+        }
+
+        return $actualIds;
+    }
+
+    /**
+     * Match query test.
+     *
      * @magentoConfigFixture current_store catalog/search/engine mysql
+     * @return void
      */
     public function testMatchQuery()
     {
@@ -132,7 +164,10 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Query aggregation test.
+     *
      * @magentoConfigFixture current_store catalog/search/engine mysql
+     * @return void
      */
     public function testAggregationsQuery()
     {
@@ -149,7 +184,10 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Match query filter test.
+     *
      * @magentoConfigFixture current_store catalog/search/engine mysql
+     * @return void
      */
     public function testMatchQueryFilters()
     {
@@ -164,9 +202,10 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Range filter test with all fields filled
+     * Range filter test with all fields filled.
      *
      * @magentoConfigFixture current_store catalog/search/engine mysql
+     * @return void
      */
     public function testRangeFilterWithAllFields()
     {
@@ -179,9 +218,10 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Range filter test with all fields filled
+     * Range filter test without from field filled.
      *
      * @magentoConfigFixture current_store catalog/search/engine mysql
+     * @return void
      */
     public function testRangeFilterWithoutFromField()
     {
@@ -193,9 +233,10 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Range filter test with all fields filled
+     * Range filter test without to field filled.
      *
      * @magentoConfigFixture current_store catalog/search/engine mysql
+     * @return void
      */
     public function testRangeFilterWithoutToField()
     {
@@ -207,9 +248,10 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Term filter test
+     * Term filter test.
      *
      * @magentoConfigFixture current_store catalog/search/engine mysql
+     * @return void
      */
     public function testTermFilter()
     {
@@ -222,9 +264,10 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Term filter test
+     * Term filter test.
      *
      * @magentoConfigFixture current_store catalog/search/engine mysql
+     * @return void
      */
     public function testTermFilterArray()
     {
@@ -236,9 +279,10 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Term filter test
+     * Wildcard filter test.
      *
      * @magentoConfigFixture current_store catalog/search/engine mysql
+     * @return void
      */
     public function testWildcardFilter()
     {
@@ -252,9 +296,10 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Request limits test
+     * Request limits test.
      *
      * @magentoConfigFixture current_store catalog/search/engine mysql
+     * @return void
      */
     public function testSearchLimit()
     {
@@ -268,9 +313,10 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Bool filter test
+     * Bool filter test.
      *
      * @magentoConfigFixture current_store catalog/search/engine mysql
+     * @return void
      */
     public function testBoolFilter()
     {
@@ -291,9 +337,10 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test bool filter with nested negative bool filter
+     * Test bool filter with nested negative bool filter.
      *
      * @magentoConfigFixture current_store catalog/search/engine mysql
+     * @return void
      */
     public function testBoolFilterWithNestedNegativeBoolFilter()
     {
@@ -309,9 +356,10 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test range inside nested negative bool filter
+     * Test range inside nested negative bool filter.
      *
      * @magentoConfigFixture current_store catalog/search/engine mysql
+     * @return void
      */
     public function testBoolFilterWithNestedRangeInNegativeBoolFilter()
     {
@@ -326,10 +374,11 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Sample Advanced search request test
+     * Sample Advanced search request test.
      *
      * @magentoConfigFixture current_store catalog/search/engine mysql
      * @dataProvider advancedSearchDataProvider
+     * @return void
      */
     public function testSimpleAdvancedSearch(
         $nameQuery,
@@ -364,23 +413,26 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Custom filterable attributes test.
+     *
      * @magentoDataFixture Magento/Framework/Search/_files/filterable_attribute.php
      * @magentoConfigFixture current_store catalog/search/engine mysql
+     * @return void
      */
     public function testCustomFilterableAttribute()
     {
         /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
-        $attribute = $this->objectManager->get('Magento\Catalog\Model\ResourceModel\Eav\Attribute')
+        $attribute = $this->objectManager->get(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
             ->loadByCode(\Magento\Catalog\Model\Product::ENTITY, 'select_attribute');
         /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection $selectOptions */
         $selectOptions = $this->objectManager
-            ->create('Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection')
+            ->create(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection::class)
             ->setAttributeFilter($attribute->getId());
 
         $attribute->loadByCode(\Magento\Catalog\Model\Product::ENTITY, 'multiselect_attribute');
         /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection $multiselectOptions */
         $multiselectOptions = $this->objectManager
-            ->create('Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection')
+            ->create(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection::class)
             ->setAttributeFilter($attribute->getId());
 
         $this->requestBuilder->bind('select_attribute', $selectOptions->getLastItem()->getId());
@@ -395,10 +447,11 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Advanced search request using date product attribute
+     * Advanced search request using date product attribute.
      *
      * @param $rangeFilter
      * @param $expectedRecordsCount
+     * @return void
      * @magentoDataFixture Magento/Framework/Search/_files/date_attribute.php
      * @magentoConfigFixture current_store catalog/search/engine mysql
      * @dataProvider dateDataProvider
@@ -413,6 +466,45 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedRecordsCount, $queryResponse->count());
     }
 
+    /**
+     * Tests configurable product search with out of stock option.
+     *
+     * @magentoDataFixture Magento/Framework/Search/_files/product_configurable.php
+     * @magentoConfigFixture current_store catalog/search/engine mysql
+     * @return void
+     */
+    public function testAdvancedSearchConfigProductWithOutOfStockOption()
+    {
+        /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
+        $attribute = $this->objectManager->get(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
+            ->loadByCode(\Magento\Catalog\Model\Product::ENTITY, 'test_configurable_searchable');
+        /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection $selectOptions */
+        $selectOptions = $this->objectManager
+            ->create(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection::class)
+            ->setAttributeFilter($attribute->getId());
+
+        $firstOption = $selectOptions->getFirstItem();
+        $firstOptionId = $firstOption->getId();
+        $this->requestBuilder->bind('test_configurable_searchable', $firstOptionId);
+        $this->requestBuilder->setRequestName('filter_out_of_stock_child');
+
+        $queryResponse = $this->executeQuery();
+
+        $this->assertEquals(0, $queryResponse->count());
+
+        $secondOption = $selectOptions->getLastItem();
+        $secondOptionId = $secondOption->getId();
+        $this->requestBuilder->bind('test_configurable_searchable', $secondOptionId);
+        $this->requestBuilder->setRequestName('filter_out_of_stock_child');
+
+        $queryResponse = $this->executeQuery();
+
+        $this->assertEquals(1, $queryResponse->count());
+    }
+
+    /**
+     * @return array
+     */
     public function dateDataProvider()
     {
         return [
@@ -421,5 +513,63 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
             [['from' => '1999-12-31T00:00:00Z', 'to' => '2000-01-01T00:00:00Z'], 1],
             [['from' => '2000-02-01T00:00:00Z', 'to' => ''], 0],
         ];
+    }
+
+    /**
+     * Search request using custom price attribute.
+     *
+     * @param $rangeFilter
+     * @param $expectedRecordsCount
+     * @return void
+     * @magentoDataFixture Magento/Framework/Search/_files/price_attribute.php
+     * @magentoConfigFixture current_store catalog/search/engine mysql
+     * @dataProvider priceDataProvider
+     */
+    public function testSearchCustomPriceField($rangeFilter, $expectedRecordsCount)
+    {
+        $this->requestBuilder->bind('price.from', $rangeFilter['from']);
+        $this->requestBuilder->bind('price.to', $rangeFilter['to']);
+        $this->requestBuilder->setRequestName('search_custom_price_field');
+
+        $queryResponse = $this->executeQuery();
+        $this->assertEquals($expectedRecordsCount, $queryResponse->count());
+    }
+
+    /**
+     * @return array
+     */
+    public function priceDataProvider()
+    {
+        return [
+            [['from' => '19.8900', 'to' => '19.8900'], 1],
+            [['from' => '19.8900', 'to' => ''], 1],
+            [['from' => '19.0000', 'to' => '19.8900'], 1],
+            [['from' => '', 'to' => '19.8900'], 1],
+        ];
+    }
+
+    /**
+     * Filter by tax class.
+     *
+     * @magentoDataFixture Magento/Framework/Search/_files/grouped_product.php
+     * @magentoConfigFixture current_store catalog/search/engine mysql
+     *
+     * @return void
+     */
+    public function testFilterByTaxClass()
+    {
+        $groupedProduct = $this->productRepository->get('grouped-product');
+        $simpleProduct = $this->productRepository->get('grouped-association-2');
+
+        $this->requestBuilder->bind('term', $simpleProduct->getTaxClassId());
+        $this->requestBuilder->setRequestName('tax_class_id_filter_query');
+
+        $queryResponse = $this->executeQuery();
+        $result = $this->getProductIds($queryResponse);
+
+        self::assertCount(2, $result);
+
+        self::assertContains($groupedProduct->getId(), $result, 'Grouped product not found by tax class.');
+        self::assertContains($simpleProduct->getId(), $result, 'Simple product not found by tax class.');
     }
 }
