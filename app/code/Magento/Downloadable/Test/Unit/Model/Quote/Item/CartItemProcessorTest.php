@@ -111,6 +111,20 @@ class CartItemProcessorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($buyRequestMock, $this->model->convertToBuyRequest($cartItemMock));
     }
 
+    public function testConvertToBuyRequestWithoutExtensionAttributes()
+    {
+        $cartItemMock = $this->createPartialMock(
+            \Magento\Quote\Model\Quote\Item::class,
+            ['getProductOption', 'setProductOption', 'getOptionByCode', 'getQty']
+        );
+        $productOptionMock = $this->createMock(\Magento\Quote\Api\Data\ProductOptionInterface::class);
+
+        $cartItemMock->expects($this->any())->method('getProductOption')->willReturn($productOptionMock);
+        $productOptionMock->expects($this->atLeastOnce())->method('getExtensionAttributes')->willReturn(null);
+
+        $this->assertNull($this->model->convertToBuyRequest($cartItemMock));
+    }
+
     public function testProcessProductOptions()
     {
         $downloadableLinks = [1, 2];
