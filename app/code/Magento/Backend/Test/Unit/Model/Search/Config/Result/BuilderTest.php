@@ -11,6 +11,9 @@ use Magento\Backend\Model\Search\Config\Result\Builder;
 use Magento\Config\Model\Config\StructureElementInterface;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.LongVariable)
+ */
 class BuilderTest extends TestCase
 {
     /**

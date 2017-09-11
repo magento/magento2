@@ -11,12 +11,14 @@ use Magento\Framework\App\Area;
 use Magento\Framework\App\AreaList;
 use Magento\Framework\App\Cache\State;
 use Magento\Framework\App\Config\FileResolver;
+use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Config\FileIteratorFactory;
 use Magento\Framework\Config\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * @magentoAppArea adminhtml
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConfigTest extends \PHPUnit\Framework\TestCase
 {
@@ -39,9 +41,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         foreach ($expectedResult as $itemIndex => $expectedItem) {
             /** Validate URL to item */
             $elementPathParts = explode('/', $expectedItem['id']);
-            array_filter($elementPathParts, function ($value) {
-                return $value !== '';
-            });
+            // filter empty values
+            $elementPathParts = array_values(array_filter($elementPathParts));
             foreach ($elementPathParts as $elementPathPart) {
                 $this->assertContains($elementPathPart, $searchResults[$itemIndex]['url'], 'Item URL is invalid.');
             }
@@ -66,6 +67,12 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         Bootstrap::getObjectManager()->get(AreaList::class)
             ->getArea(FrontNameResolver::AREA_CODE)
             ->load(Area::PART_CONFIG);
+
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->configure([
+            'preferences' => [
+                AuthorizationInterface::class => \Magento\Backend\Model\Search\AuthorizationMock::class
+            ]
+        ]);
 
         $fileResolverMock = $this->getMockBuilder(FileResolver::class)->disableOriginalConstructor()->getMock();
         $fileIteratorFactory = Bootstrap::getObjectManager()->get(FileIteratorFactory::class);
@@ -110,13 +117,13 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                         'id'          => 'test_section/test_group/test_field_1',
                         'type'        => null,
                         'name'        => 'Test Field',
-                        'description' => '/ Test Tab / Test Section / Test Group',
+                        'description' => ' / Test Tab / Test Section / Test Group',
                     ],
                     [
                         'id'          => 'test_section/test_group/test_field_2',
                         'type'        => null,
                         'name'        => 'Test Field',
-                        'description' => '/ Test Tab / Test Section / Test Group',
+                        'description' => ' / Test Tab / Test Section / Test Group',
                     ],
                 ],
             ],
@@ -127,7 +134,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                         'id'          => 'test_section/test_group',
                         'type'        => null,
                         'name'        => 'Test Group',
-                        'description' => '/ Test Tab / Test Section',
+                        'description' => ' / Test Tab / Test Section',
                     ],
                 ],
             ],
@@ -138,7 +145,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                         'id'          => '/test_section',
                         'type'        => null,
                         'name'        => 'Test Section',
-                        'description' => '/ Test Tab',
+                        'description' => ' / Test Tab',
                     ],
                 ],
             ],

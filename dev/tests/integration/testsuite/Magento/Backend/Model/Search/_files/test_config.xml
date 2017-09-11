@@ -13,7 +13,7 @@
         <section id="test_section" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" type="text" sortOrder="0">
             <label>Test Section</label>
             <tab>test</tab>
-
+            <resource>Magento_Backend::test</resource>
             <group id="test_group" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" type="text" sortOrder="10">
                 <label>Test Group</label>
                 <field id="test_field_1" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" type="text" sortOrder="20">
