@@ -8,7 +8,7 @@ namespace Magento\Framework\MessageQueue;
 use Magento\Framework\App\ResourceConnection;
 
 /**
- * Processing any type of messages except messages implementing MergedMessageInterface.
+ * Processes any type of messages except messages implementing MergedMessageInterface.
  */
 class MessageProcessor implements MessageProcessorInterface
 {
@@ -59,7 +59,7 @@ class MessageProcessor implements MessageProcessorInterface
     }
 
     /**
-     * Processing decoded messages, invoking callbacks, changing statuses for messages.
+     * Processes decoded messages, invokes callbacks, changes statuses for messages.
      *
      * @param ConsumerConfigurationInterface $configuration
      * @param array $messageList
