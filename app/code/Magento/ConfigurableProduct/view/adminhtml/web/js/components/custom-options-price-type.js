@@ -5,11 +5,11 @@
 
 define([
     'underscore',
-    'Magento_Ui/js/form/element/select'
-], function (_, Select) {
+    'Magento_Catalog/js/components/custom-options-price-type'
+], function (_, PriceType) {
     'use strict';
 
-    return Select.extend({
+    return PriceType.extend({
         defaults: {
             isConfigurable: false,
             isFiltered: null,
