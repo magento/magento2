@@ -35,7 +35,7 @@ interface ReservationBuilderInterface
     public function setQuantity(float $quantity): ReservationBuilderInterface;
 
     /**
-     * @param string $metadata
+     * @param string|null $metadata
      * @return self
      */
     public function setMetadata(string $metadata = null): ReservationBuilderInterface;
