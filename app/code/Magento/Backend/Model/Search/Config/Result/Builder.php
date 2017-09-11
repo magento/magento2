@@ -11,6 +11,7 @@ use Magento\Config\Model\Config\StructureElementInterface;
 
 /**
  * Config SearchResult Builder
+ * @SuppressWarnings(PHPMD.LongVariable)
  */
 class Builder
 {

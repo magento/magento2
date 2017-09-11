@@ -18,7 +18,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * @magentoAppArea adminhtml
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.StaticAccess)
  */
 class ConfigTest extends \PHPUnit\Framework\TestCase
 {
@@ -68,7 +68,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->getArea(FrontNameResolver::AREA_CODE)
             ->load(Area::PART_CONFIG);
 
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->configure([
+        Bootstrap::getObjectManager()->configure([
             'preferences' => [
                 AuthorizationInterface::class => \Magento\Backend\Model\Search\AuthorizationMock::class
             ]
