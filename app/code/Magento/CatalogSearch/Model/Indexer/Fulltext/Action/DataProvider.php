@@ -333,8 +333,7 @@ class DataProvider
                         'cpe.' . $linkField . ' IN (?)',
                         array_keys($productLinkFieldsToEntityIdMap)
                     )->where(
-                        'cpe_type.attribute_id IS NOT NULL OR cpe_type_default.attribute_id IS NOT NULL',
-                        array_keys($productLinkFieldsToEntityIdMap)
+                        'cpe_type.attribute_id IS NOT NULL OR cpe_type_default.attribute_id IS NOT NULL'
                     )->columns(
                         [
                             $linkField => 'cpe.' . $linkField,
