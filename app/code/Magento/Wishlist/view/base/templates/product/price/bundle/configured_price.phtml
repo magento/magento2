@@ -24,33 +24,27 @@ $configuredPrice = $block->getPrice();
     ?>
     <p class="price-as-configured">
         <span class="special-price">
-            <?= $block->escapeHtml(
-                $block->renderAmount(
-                    $finalPriceModelAmount,
-                    [
-                        'display_label'     => __('Special Price'),
-                        'price_id'          => $block->getPriceId('product-price-' . $idSuffix),
-                        'price_type'        => 'finalPrice',
-                        'include_container' => true,
-                        'schema' => $schema
-                    ]
-                ),
-                ['span']
+            <?= /* @noEscape */ $block->renderAmount(
+                $finalPriceModelAmount,
+                [
+                    'display_label'     => $block->escapeHtml(__('Special Price')),
+                    'price_id'          => $block->escapeHtml($block->getPriceId('product-price-' . $idSuffix)),
+                    'price_type'        => 'finalPrice',
+                    'include_container' => true,
+                    'schema' => $schema
+                ]
             ); ?>
         </span>
         <span class="old-price">
-            <?= $block->escapeHtml(
-                $block->renderAmount(
-                    $regularPriceAmount,
-                    [
-                        'display_label'     => __('Regular Price'),
-                        'price_id'          => $block->getPriceId('old-price-' . $idSuffix),
-                        'price_type'        => 'oldPrice',
-                        'include_container' => true,
-                        'skip_adjustments'  => true
-                    ]
-                ),
-                ['span']
+            <?= /* @noEscape */ $block->renderAmount(
+                $regularPriceAmount,
+                [
+                    'display_label'     => $block->escapeHtml(__('Regular Price')),
+                    'price_id'          => $block->escapeHtml($block->getPriceId('old-price-' . $idSuffix)),
+                    'price_type'        => 'oldPrice',
+                    'include_container' => true,
+                    'skip_adjustments'  => true
+                ]
             ); ?>
         </span>
     </p>
@@ -61,18 +55,15 @@ $configuredPrice = $block->getPrice();
         : '';
     ?>
     <p class="price-as-configured">
-        <?= $block->escapeHtml(
-            $block->renderAmount(
-                $configuredPrice->getAmount(),
-                [
-                    'display_label'     => $block->escapeHtml($priceLabel),
-                    'price_id'          => $block->escapeHtml($block->getPriceId('product-price-' . $idSuffix)),
-                    'price_type'        => 'finalPrice',
-                    'include_container' => true,
-                    'schema' => $schema
-                ]
-            ),
-            ['span']
+        <?= /* @noEscape */ $block->renderAmount(
+            $configuredPrice->getAmount(),
+            [
+                'display_label'     => $block->escapeHtml($priceLabel),
+                'price_id'          => $block->escapeHtml($block->getPriceId('product-price-' . $idSuffix)),
+                'price_type'        => 'finalPrice',
+                'include_container' => true,
+                'schema' => $schema
+            ]
         ); ?>
     </p>
 <?php endif; ?>
