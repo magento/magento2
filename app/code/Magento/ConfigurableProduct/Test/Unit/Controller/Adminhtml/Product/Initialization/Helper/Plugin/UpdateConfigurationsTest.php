@@ -210,4 +210,30 @@ class UpdateConfigurationsTest extends \PHPUnit\Framework\TestCase
         }
         return $productMock;
     }
+
+    /**
+     * Test for no exceptions if configurable matrix is empty string.
+     */
+    public function testAfterInitializeEmptyMatrix()
+    {
+        $productMock = $this->getProductMock();
+
+        $this->requestMock->expects(static::any())
+            ->method('getParam')
+            ->willReturnMap(
+                [
+                    ['store', 0, 0],
+                    ['configurable-matrix-serialized', null, ''],
+                ]
+            );
+
+        $this->variationHandlerMock->expects(static::once())
+            ->method('duplicateImagesForVariations')
+            ->with([])
+            ->willReturn([]);
+
+        $this->updateConfigurations->afterInitialize($this->subjectMock, $productMock);
+
+        $this->assertEmpty($productMock->getData());
+    }
 }
