@@ -38,7 +38,7 @@ interface ReservationBuilderInterface
      * @param string $metadata
      * @return self
      */
-    public function setMetadata($metadata): ReservationBuilderInterface;
+    public function setMetadata(string $metadata = null): ReservationBuilderInterface;
 
     /**
      * @return ReservationInterface

@@ -8,7 +8,7 @@ namespace Magento\Inventory\Model\Reservation;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Validation\ValidationException;
 use Magento\Inventory\Model\Reservation\Validator\ReservationValidatorInterface;
-use Magento\Inventory\Model\SnakeToCamelCaseConvertor;
+use Magento\Inventory\Model\SnakeToCamelCaseConverter;
 use Magento\InventoryApi\Api\Data\ReservationInterface;
 use Magento\InventoryApi\Api\ReservationBuilderInterface;
 
@@ -48,23 +48,23 @@ class ReservationBuilder implements ReservationBuilderInterface
     private $reservationValidator;
 
     /**
-     * @var SnakeToCamelCaseConvertor
+     * @var SnakeToCamelCaseConverter
      */
-    private $snakeToCamelCaseConvertor;
+    private $snakeToCamelCaseConverter;
 
     /**
      * @param ObjectManagerInterface $objectManager
      * @param ReservationValidatorInterface $reservationValidator
-     * @param SnakeToCamelCaseConvertor $snakeToCamelCaseConvertor
+     * @param SnakeToCamelCaseConverter $snakeToCamelCaseConverter
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
         ReservationValidatorInterface $reservationValidator,
-        SnakeToCamelCaseConvertor $snakeToCamelCaseConvertor
+        SnakeToCamelCaseConverter $snakeToCamelCaseConverter
     ) {
         $this->objectManager = $objectManager;
         $this->reservationValidator = $reservationValidator;
-        $this->snakeToCamelCaseConvertor = $snakeToCamelCaseConvertor;
+        $this->snakeToCamelCaseConverter = $snakeToCamelCaseConverter;
     }
 
     /**
@@ -97,7 +97,7 @@ class ReservationBuilder implements ReservationBuilderInterface
     /**
      * @inheritdoc
      */
-    public function setMetadata($metadata): ReservationBuilderInterface
+    public function setMetadata(string $metadata = null): ReservationBuilderInterface
     {
         $this->metadata = $metadata;
         return $this;
@@ -146,7 +146,7 @@ class ReservationBuilder implements ReservationBuilderInterface
      */
     private function convertArrayKeysFromSnakeToCamelCase(array $array)
     {
-        $convertedArrayKeys = $this->snakeToCamelCaseConvertor->convert(array_keys($array));
+        $convertedArrayKeys = $this->snakeToCamelCaseConverter->convert(array_keys($array));
         return array_combine($convertedArrayKeys, array_values($array));
     }
 }

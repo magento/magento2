@@ -9,7 +9,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Validation\ValidationResult;
 use Magento\Inventory\Model\Reservation\ReservationBuilder;
 use Magento\Inventory\Model\Reservation\Validator\ReservationValidatorInterface;
-use Magento\Inventory\Model\SnakeToCamelCaseConvertor;
+use Magento\Inventory\Model\SnakeToCamelCaseConverter;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\InventoryApi\Api\Data\ReservationInterface;
 use PHPUnit\Framework\TestCase;
@@ -37,9 +37,9 @@ class ReservationBuilderTest extends TestCase
     private $validationResult;
 
     /**
-     * @var SnakeToCamelCaseConvertor|\PHPUnit_Framework_MockObject_MockObject
+     * @var SnakeToCamelCaseConverter|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $snakeToCamelCaseConvertor;
+    private $snakeToCamelCaseConverter;
 
     /**
      * @var ReservationBuilder
@@ -50,7 +50,7 @@ class ReservationBuilderTest extends TestCase
     {
         $this->objectManager = $this->getMockBuilder(ObjectManagerInterface::class)->getMock();
         $this->reservationValidator = $this->getMockBuilder(ReservationValidatorInterface::class)->getMock();
-        $this->snakeToCamelCaseConvertor = $this->getMockBuilder(SnakeToCamelCaseConvertor::class)->getMock();
+        $this->snakeToCamelCaseConverter = $this->getMockBuilder(SnakeToCamelCaseConverter::class)->getMock();
         $this->reservation = $this->getMockBuilder(ReservationInterface::class)->getMock();
         $this->validationResult = $this->getMockBuilder(ValidationResult::class)
             ->disableOriginalConstructor()
@@ -61,7 +61,7 @@ class ReservationBuilderTest extends TestCase
             [
                 'objectManager' => $this->objectManager,
                 'reservationValidator' => $this->reservationValidator,
-                'snakeToCamelCaseConvertor' => $this->snakeToCamelCaseConvertor,
+                'snakeToCamelCaseConverter' => $this->snakeToCamelCaseConverter,
             ]
         );
     }
@@ -82,7 +82,7 @@ class ReservationBuilderTest extends TestCase
             'metadata' => 'some meta data',
         ];
 
-        $this->snakeToCamelCaseConvertor
+        $this->snakeToCamelCaseConverter
             ->expects($this->once())
             ->method('convert')
             ->with(array_keys($reservationData))

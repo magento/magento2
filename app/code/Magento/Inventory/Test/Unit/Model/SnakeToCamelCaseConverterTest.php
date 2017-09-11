@@ -6,19 +6,19 @@
 namespace Magento\Inventory\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Inventory\Model\SnakeToCamelCaseConvertor;
+use Magento\Inventory\Model\SnakeToCamelCaseConverter;
 use PHPUnit\Framework\TestCase;
 
-class SnakeToCamelCaseConvertorTest extends TestCase
+class SnakeToCamelCaseConverterTest extends TestCase
 {
     /**
-     * @var SnakeToCamelCaseConvertor
+     * @var SnakeToCamelCaseConverter
      */
-    private $snakeToCamelCaseConvertor;
+    private $snakeToCamelCaseConverter;
 
     protected function setUp()
     {
-        $this->snakeToCamelCaseConvertor = (new ObjectManager($this))->getObject(SnakeToCamelCaseConvertor::class);
+        $this->snakeToCamelCaseConverter = (new ObjectManager($this))->getObject(SnakeToCamelCaseConverter::class);
     }
 
     /**
@@ -28,7 +28,7 @@ class SnakeToCamelCaseConvertorTest extends TestCase
      */
     public function testArrayElementConversion(array $givenElements, array $expectedElements)
     {
-        self::assertEquals($expectedElements, $this->snakeToCamelCaseConvertor->convert($givenElements));
+        self::assertEquals($expectedElements, $this->snakeToCamelCaseConverter->convert($givenElements));
     }
 
     /**
