@@ -408,7 +408,7 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
         };
 
         // Check that all expected lines were written
-        $this->_fileMock->expects(
+        $this->fileMock->expects(
             $this->exactly($expectedWrites)
         )->method(
             'write'
@@ -420,8 +420,7 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
             $currentFile = $file;
         };// Check that all expected file descriptors were created
         $this->directoryMock->expects($this->exactly(count($expectedFile)))->method('openFile')
-            ->willReturnCallback($checkFileCallback
-        );
+            ->willReturnCallback($checkFileCallback);
 
         // Check that all file descriptors were closed
         $this->fileMock->expects($this->exactly(count($expectedFile)))
