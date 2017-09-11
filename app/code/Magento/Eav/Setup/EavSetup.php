@@ -771,19 +771,24 @@ class EavSetup
      */
     private function _validateAttributeData($data)
     {
-        $attributeCodeMaxLength = \Magento\Eav\Model\Entity\Attribute::ATTRIBUTE_CODE_MAX_LENGTH;
+        $minLength = \Magento\Eav\Model\Entity\Attribute::ATTRIBUTE_CODE_MIN_LENGTH;
+        $maxLength = \Magento\Eav\Model\Entity\Attribute::ATTRIBUTE_CODE_MAX_LENGTH;
+        $attributeCode = isset($data['attribute_code']) ? $data['attribute_code'] : '';
 
-        if (isset(
-            $data['attribute_code']
-        ) && !\Zend_Validate::is(
-            $data['attribute_code'],
+        $isAllowedLength = \Zend_Validate::is(
+            trim($attributeCode),
             'StringLength',
-            ['max' => $attributeCodeMaxLength]
-        )
-        ) {
-            throw new LocalizedException(
-                __('An attribute code must not be more than %1 characters.', $attributeCodeMaxLength)
+            ['min' => $minLength, 'max' => $maxLength]
+        );
+
+        if (!$isAllowedLength) {
+            $errorMessage = __(
+                'An attribute code must not be less than %1 and more than %2 characters.',
+                $minLength,
+                $maxLength
             );
+
+            throw new LocalizedException($errorMessage);
         }
 
         return true;

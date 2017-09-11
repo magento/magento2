@@ -169,7 +169,7 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
         $this->uploaderHelper->expects($this->any())->method('getUploader')->willReturn($this->uploaderMock);
         $this->downloadableHelper = $this->createPartialMock(
             \Magento\DownloadableImportExport\Helper\Data::class,
-            ['prepareDataForSave']
+            ['prepareDataForSave', 'fillExistOptions']
         );
         $this->downloadableHelper->expects($this->any())->method('prepareDataForSave')->willReturn([]);
     }
@@ -648,28 +648,18 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
     /**
      * @dataProvider dataForUploaderDir
      */
-    public function testSetUploaderDirFalse($newSku, $bunch, $allowImport)
+    public function testSetUploaderDirFalse($newSku, $bunch, $allowImport, $parsedOptions)
     {
-        $this->markTestSkipped('Test needs to be refactored.');
         $this->connectionMock->expects($this->any())->method('fetchAll')->with(
             $this->select
-        )->willReturnOnConsecutiveCalls(
-            [
-                [
-                    'attribute_set_name' => '1',
-                    'attribute_id' => '1',
-                ],
-                [
-                    'attribute_set_name' => '2',
-                    'attribute_id' => '2',
-                ],
-            ]
-        );
+        )->willReturn([]);
 
         $metadataPoolMock = $this
             ->createPartialMock(\Magento\Framework\EntityManager\MetadataPool::class, ['getLinkField', 'getMetadata']);
         $metadataPoolMock->expects($this->any())->method('getMetadata')->willReturnSelf();
         $metadataPoolMock->expects($this->any())->method('getLinkField')->willReturn('entity_id');
+        $this->downloadableHelper->expects($this->atLeastOnce())
+            ->method('fillExistOptions')->willReturn($parsedOptions['link']);
 
         $this->downloadableModelMock = $this->objectManagerHelper->getObject(
             \Magento\DownloadableImportExport\Model\Import\Product\Type\Downloadable::class,
@@ -688,9 +678,8 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
         $this->entityModelMock->expects($this->at(2))->method('getNextBunch')->will($this->returnValue(null));
         $this->entityModelMock->expects($this->any())->method('isRowAllowedToImport')->willReturn($allowImport);
         $exception = new \Magento\Framework\Exception\LocalizedException(new \Magento\Framework\Phrase('Error'));
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-        $this->expectException('\Exception');
         $this->uploaderMock->expects($this->any())->method('move')->will($this->throwException($exception));
+        $this->entityModelMock->expects($this->exactly(2))->method('addRowError');
         $result = $this->downloadableModelMock->saveData();
         $this->assertNotNull($result);
     }
@@ -725,6 +714,34 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                     ],
                 ],
                 'allowImport' => true,
+                'parsedOptions' => [
+                    'sample' => [
+                        'sample_id' => null,
+                        'product_id' => '25',
+                        'sample_url' => null,
+                        'sample_file' => 'media/file.mp4',
+                        'sample_type' => 'file',
+                        'sort_order' => '1',
+                        'group_title' => 'Group Title Samples',
+                        'title' => 'Title 1',
+                    ],
+                    'link' => [
+                        'link_id' => null,
+                        'product_id' => '25',
+                        'sort_order' => '1',
+                        'number_of_downloads' => 0,
+                        'is_shareable' => 2,
+                        'link_url' => null,
+                        'link_file' => '',
+                        'link_type' => 'file',
+                        'sample_url' => null,
+                        'sample_file' => null,
+                        'sample_type' => null,
+                        'group_title' => 'Group Title Links',
+                        'title' => 'Title 1',
+                        'price' => '10'
+                    ]
+                ]
             ],
         ];
     }

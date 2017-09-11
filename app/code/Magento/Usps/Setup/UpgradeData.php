@@ -6,19 +6,29 @@
 
 namespace Magento\Usps\Setup;
 
-use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\Setup\UpgradeDataInterface;
 
-/**
- * @codeCoverageIgnore
- */
-class InstallData implements InstallDataInterface
+class UpgradeData implements UpgradeDataInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+    public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+    {
+        if (version_compare($context->getVersion(), '2.0.1', '<')) {
+            $this->updateAllowedMethods($setup);
+        }
+    }
+
+    /**
+     * Replaces titles of allowed shipping methods to their codes.
+     *
+     * @param ModuleDataSetupInterface $setup
+     * @return void
+     */
+    private function updateAllowedMethods(ModuleDataSetupInterface $setup)
     {
         $installer = $setup;
         $configDataTable = $installer->getTable('core_config_data');
@@ -39,6 +49,7 @@ class InstallData implements InstallDataInterface
             'First-Class Mail Letter' => '0_FCL',
             'First-Class Mail Parcel' => '0_FCP',
             'First-Class Mail Package' => '0_FCP',
+            'First-Class Package Service - Retail' => '0_FCP',
             'Parcel Post' => '4',
             'Retail Ground' => '4',
             'Media Mail' => '6',
@@ -68,12 +79,12 @@ class InstallData implements InstallDataInterface
             'Priority Mail International Large Flat Rate Box' => 'INT_11',
         ];
 
-        $select = $connection->select()->from(
-            $configDataTable
-        )->where(
-            'path IN (?)',
-            ['carriers/usps/free_method', 'carriers/usps/allowed_methods']
-        );
+        $select = $connection->select()
+            ->from($configDataTable)
+            ->where(
+                'path IN (?)',
+                ['carriers/usps/free_method', 'carriers/usps/allowed_methods']
+            );
         $oldConfigValues = $connection->fetchAll($select);
 
         foreach ($oldConfigValues as $oldValue) {
