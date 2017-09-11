@@ -33,7 +33,7 @@ class SkuValidator implements ReservationValidatorInterface
     public function validate(ReservationInterface $reservation): ValidationResult
     {
         $errors = [];
-        $value = $reservation->getSku();
+        $value = (string)$reservation->getSku();
 
         if ('' === trim($value)) {
             $errors[] = __('"%field" can not be empty.', ['field' => ReservationInterface::SKU]);
