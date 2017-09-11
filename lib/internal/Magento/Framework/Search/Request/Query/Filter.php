@@ -9,6 +9,7 @@ use Magento\Framework\Search\Request\QueryInterface;
 
 /**
  * Term Query
+ * @api
  */
 class Filter implements QueryInterface
 {
@@ -21,9 +22,7 @@ class Filter implements QueryInterface
 
     /**#@-*/
 
-    /**
-     * @var string
-     */
+    /**#@-*/
     protected $name;
 
     /**

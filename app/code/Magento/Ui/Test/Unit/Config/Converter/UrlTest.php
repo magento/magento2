@@ -8,7 +8,7 @@ namespace Magento\Ui\Test\Unit\Config\Converter;
 use Magento\Ui\Config\Converter\Url;
 use Magento\Ui\Config\ConverterUtils;
 
-class UrlTest extends \PHPUnit_Framework_TestCase
+class UrlTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Url

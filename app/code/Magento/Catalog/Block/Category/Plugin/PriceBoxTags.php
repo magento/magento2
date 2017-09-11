@@ -121,7 +121,7 @@ class PriceBoxTags
      *
      * @return \Magento\Tax\Model\Calculation
      *
-     * @deprecated
+     * @deprecated 101.0.0
      */
     private function getTaxCalculation()
     {

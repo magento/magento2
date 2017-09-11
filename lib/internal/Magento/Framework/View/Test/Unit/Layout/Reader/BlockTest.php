@@ -15,7 +15,7 @@ use Magento\Framework\View\Layout\ConfigCondition;
 use Magento\Framework\View\Layout\Reader\Block;
 use Magento\Framework\View\Layout\Reader\Visibility\Condition;
 
-class BlockTest extends \PHPUnit_Framework_TestCase
+class BlockTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Layout\ScheduledStructure|\PHPUnit_Framework_MockObject_MockObject
@@ -82,15 +82,9 @@ class BlockTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->scheduledStructure = $this->getMock(
-            \Magento\Framework\View\Layout\ScheduledStructure::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->context = $this->getMock(\Magento\Framework\View\Layout\Reader\Context::class, [], [], '', false);
-        $this->readerPool = $this->getMock(\Magento\Framework\View\Layout\ReaderPool::class, [], [], '', false);
+        $this->scheduledStructure = $this->createMock(\Magento\Framework\View\Layout\ScheduledStructure::class);
+        $this->context = $this->createMock(\Magento\Framework\View\Layout\Reader\Context::class);
+        $this->readerPool = $this->createMock(\Magento\Framework\View\Layout\ReaderPool::class);
     }
 
     /**
@@ -146,7 +140,7 @@ class BlockTest extends \PHPUnit_Framework_TestCase
                 ]
             );
 
-        $helper = $this->getMock(\Magento\Framework\View\Layout\ScheduledStructure\Helper::class, [], [], '', false);
+        $helper = $this->createMock(\Magento\Framework\View\Layout\ScheduledStructure\Helper::class);
         $helper->expects($scheduleStructureCount)->method('scheduleStructure')->will($this->returnValue($literal));
 
         $this->prepareReaderPool(

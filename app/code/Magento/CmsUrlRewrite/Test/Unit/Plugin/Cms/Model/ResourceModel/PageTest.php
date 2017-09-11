@@ -8,7 +8,7 @@ namespace Magento\CmsUrlRewrite\Test\Unit\Plugin\Cms\Model\ResourceModel;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\CmsUrlRewrite\Model\CmsPageUrlRewriteGenerator;
 
-class PageTest extends \PHPUnit_Framework_TestCase
+class PageTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CmsUrlRewrite\Plugin\Cms\Model\ResourceModel\Page

@@ -6,7 +6,6 @@
 namespace Magento\Bundle\Test\Unit\Model\ResourceModel\Selection;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Indexer\Model\ResourceModel\FrontendResource;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Framework\Validator\UniversalFactory;
@@ -17,15 +16,9 @@ use Magento\Framework\DB\Select;
 
 /**
  * Class CollectionTest.
- * Unit test for \Magento\Indexer\Model\ResourceModel\FrontendResource.
  */
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $frontendResource;
-
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
@@ -64,9 +57,6 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->frontendResource = $this->getMockBuilder(FrontendResource::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -114,8 +104,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             [
                 'storeManager' => $this->storeManager,
                 'universalFactory' => $this->universalFactory,
-                'productLimitationFactory' => $factory,
-                'indexerStockFrontendResource' => $this->frontendResource
+                'productLimitationFactory' => $factory
             ]
         );
     }
@@ -123,8 +112,8 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     public function testAddQuantityFilter()
     {
         $tableName = 'cataloginventory_stock_status';
-        $this->frontendResource->expects($this->once())
-            ->method('getMainTable')
+        $this->entity->expects($this->once())
+            ->method('getTable')
             ->willReturn($tableName);
         $this->select->expects($this->once())
             ->method('joinInner')

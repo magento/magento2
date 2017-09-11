@@ -12,7 +12,9 @@ use Magento\Backend\App\Action\Context;
 
 class ShowUpdateResult extends \Magento\Catalog\Controller\Adminhtml\Product
 {
-    /** @var Composite */
+    /**
+     * @var \Magento\Catalog\Helper\Product\Composite
+     */
     protected $productCompositeHelper;
 
     /**

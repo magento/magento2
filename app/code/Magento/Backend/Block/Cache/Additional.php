@@ -7,6 +7,7 @@ namespace Magento\Backend\Block\Cache;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Additional extends \Magento\Backend\Block\Template
 {

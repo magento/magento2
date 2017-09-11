@@ -15,7 +15,7 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
  * @magentoDataFixture Magento/Customer/_files/customer.php
  * @magentoDataFixture Magento/Customer/_files/customer_address.php
  */
-class CalculationTest extends \PHPUnit_Framework_TestCase
+class CalculationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\TestFramework\ObjectManager
