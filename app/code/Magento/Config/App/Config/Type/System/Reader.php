@@ -60,11 +60,9 @@ class Reader
      */
     public function read()
     {
-        return $this->postProcessor->process(
-            $this->fallback->process(
-                $this->preProcessor->process(
-                    $this->source->get()
-                )
+        return $this->fallback->process(
+            $this->preProcessor->process(
+                $this->source->get()
             )
         );
     }

@@ -31,6 +31,13 @@ class System implements ConfigTypeInterface
     private $data = [];
 
     /**
+     * The freshly read data.
+     *
+     * @var array
+     */
+    private $rawData = [];
+
+    /**
      * @var \Magento\Framework\App\Config\Spi\PostProcessorInterface
      */
     private $postProcessor;
@@ -141,7 +148,7 @@ class System implements ConfigTypeInterface
         $pathParts = explode('/', $path);
         if (count($pathParts) === 1 && $pathParts[0] !== 'default') {
             if (!isset($this->data[$pathParts[0]])) {
-                $data = $this->reader->read();
+                $data = $this->readData();
                 $this->data = array_replace_recursive($data, $this->data);
             }
             return $this->data[$pathParts[0]];
@@ -171,7 +178,7 @@ class System implements ConfigTypeInterface
     {
         $cachedData = $this->cache->load($this->configType);
         if ($cachedData === false) {
-            $data = $this->reader->read();
+            $data = $this->readData();
         } else {
             $data = $this->serializer->unserialize($cachedData);
         }
@@ -188,7 +195,7 @@ class System implements ConfigTypeInterface
     {
         $cachedData = $this->cache->load($this->configType . '_' . $scopeType);
         if ($cachedData === false) {
-            $data = $this->reader->read();
+            $data = $this->readData();
             $this->cacheData($data);
         } else {
             $data = [$scopeType => $this->serializer->unserialize($cachedData)];
@@ -216,7 +223,7 @@ class System implements ConfigTypeInterface
             if (is_array($this->availableDataScopes) && !isset($this->availableDataScopes[$scopeType][$scopeId])) {
                 return [$scopeType => [$scopeId => []]];
             }
-            $data = $this->reader->read();
+            $data = $this->readData();
             $this->cacheData($data);
         } else {
             $data = [$scopeType => [$scopeId => $this->serializer->unserialize($cachedData)]];
@@ -283,6 +290,24 @@ class System implements ConfigTypeInterface
     }
 
     /**
+     * The freshly read data.
+     *
+     * @return array
+     */
+    private function readData(): array
+    {
+        if ([] === $this->rawData) {
+            $this->rawData = $this->reader->read();
+
+            $this->rawData = $this->postProcessor->process(
+                $this->rawData
+            );
+        }
+
+        return $this->rawData;
+    }
+
+    /**
      * Clean cache and global variables cache
      *
      * Next items cleared:
@@ -295,6 +320,7 @@ class System implements ConfigTypeInterface
     public function clean()
     {
         $this->data = [];
+        $this->rawData = [];
         $this->cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, [self::CACHE_TAG]);
     }
 }
