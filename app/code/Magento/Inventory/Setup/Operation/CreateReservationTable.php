@@ -8,13 +8,18 @@ namespace Magento\Inventory\Setup\Operation;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Setup\SchemaSetupInterface;
-use Magento\Inventory\Model\ResourceModel\Reservation as ReservationResourceModel;
 use Magento\Inventory\Model\ResourceModel\Stock as StockResourceModel;
 use Magento\InventoryApi\Api\Data\ReservationInterface;
 use Magento\InventoryApi\Api\Data\StockInterface;
 
 class CreateReservationTable
 {
+    /**#@+
+     * Reservation table name
+     */
+    const TABLE_NAME_RESERVATION = 'inventory_reservation';
+    /**#@-*/
+
     /**
      * @param SchemaSetupInterface $setup
      * @return void
@@ -32,7 +37,7 @@ class CreateReservationTable
      */
     private function createReservationTable(SchemaSetupInterface $setup)
     {
-        $reservationTable = $setup->getTable(ReservationResourceModel::TABLE_NAME_RESERVATION);
+        $reservationTable = $setup->getTable(self::TABLE_NAME_RESERVATION);
         $stockTable = $setup->getTable(StockResourceModel::TABLE_NAME_STOCK);
 
         return $setup->getConnection()->newTable(

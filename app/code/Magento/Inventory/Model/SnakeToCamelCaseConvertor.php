@@ -5,6 +5,9 @@
  */
 namespace Magento\Inventory\Model;
 
+/**
+ * Convert array elements from snake to camel case
+ */
 class SnakeToCamelCaseConvertor
 {
     /**

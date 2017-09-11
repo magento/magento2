@@ -5,7 +5,6 @@
  */
 namespace Magento\Inventory\Model;
 
-use Magento\Inventory\Model\ResourceModel\Reservation as ReservationResourceModel;
 use Magento\InventoryApi\Api\Data\ReservationInterface;
 
 /**

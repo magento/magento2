@@ -3,14 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Inventory\Model;
+namespace Magento\Inventory\Model\Reservation;
 
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Validation\ValidationException;
+use Magento\Inventory\Model\Reservation\Validator\ReservationValidatorInterface;
+use Magento\Inventory\Model\SnakeToCamelCaseConvertor;
 use Magento\InventoryApi\Api\Data\ReservationInterface;
 use Magento\InventoryApi\Api\ReservationBuilderInterface;
 
 /**
- * Used to instantiate ReservationInterface objects
+ * @inheritdoc
  */
 class ReservationBuilder implements ReservationBuilderInterface
 {
@@ -35,41 +38,39 @@ class ReservationBuilder implements ReservationBuilderInterface
     private $metadata;
 
     /**
-     * Object Manager instance
-     *
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     private $objectManager;
 
     /**
-     * @var \Magento\Inventory\Model\ReservationBuilder\Validator\ReservationBuilderValidatorInterface
+     * @var ReservationValidatorInterface
      */
-    private $reservationBuilderValidator;
+    private $reservationValidator;
 
     /**
-     * @var \Magento\Inventory\Model\SnakeToCamelCaseConvertor
+     * @var SnakeToCamelCaseConvertor
      */
     private $snakeToCamelCaseConvertor;
 
     /**
-     * ReservationBuilder constructor.
-     *
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param ObjectManagerInterface $objectManager
+     * @param ReservationValidatorInterface $reservationValidator
+     * @param SnakeToCamelCaseConvertor $snakeToCamelCaseConvertor
      */
     public function __construct(
-        \Magento\Framework\ObjectManagerInterface $objectManager,
-        \Magento\Inventory\Model\ReservationBuilder\Validator\ReservationBuilderValidatorInterface $reservationBuilderValidator,
-        \Magento\Inventory\Model\SnakeToCamelCaseConvertor $snakeToCamelCaseConvertor
+        ObjectManagerInterface $objectManager,
+        ReservationValidatorInterface $reservationValidator,
+        SnakeToCamelCaseConvertor $snakeToCamelCaseConvertor
     ) {
         $this->objectManager = $objectManager;
-        $this->reservationBuilderValidator = $reservationBuilderValidator;
+        $this->reservationValidator = $reservationValidator;
         $this->snakeToCamelCaseConvertor = $snakeToCamelCaseConvertor;
     }
 
     /**
      * @inheritdoc
      */
-    public function setStockId(int $stockId): ReservationBuilder
+    public function setStockId(int $stockId): ReservationBuilderInterface
     {
         $this->stockId = $stockId;
         return $this;
@@ -78,7 +79,7 @@ class ReservationBuilder implements ReservationBuilderInterface
     /**
      * @inheritdoc
      */
-    public function setSku(string $sku): ReservationBuilder
+    public function setSku(string $sku): ReservationBuilderInterface
     {
         $this->sku = $sku;
         return $this;
@@ -87,7 +88,7 @@ class ReservationBuilder implements ReservationBuilderInterface
     /**
      * @inheritdoc
      */
-    public function setQuantity(float $quantity): ReservationBuilder
+    public function setQuantity(float $quantity): ReservationBuilderInterface
     {
         $this->quantity = $quantity;
         return $this;
@@ -96,7 +97,7 @@ class ReservationBuilder implements ReservationBuilderInterface
     /**
      * @inheritdoc
      */
-    public function setMetadata($metadata): ReservationBuilder
+    public function setMetadata($metadata): ReservationBuilderInterface
     {
         $this->metadata = $metadata;
         return $this;
@@ -107,12 +108,6 @@ class ReservationBuilder implements ReservationBuilderInterface
      */
     public function build(): ReservationInterface
     {
-        $validationResult = $this->reservationBuilderValidator->validate($this);
-
-        if (!$validationResult->isValid()) {
-            throw new ValidationException($validationResult);
-        }
-
         $data = [
             ReservationInterface::STOCK_ID => $this->stockId,
             ReservationInterface::SKU => $this->sku,
@@ -121,9 +116,14 @@ class ReservationBuilder implements ReservationBuilderInterface
         ];
 
         $arguments = $this->convertArrayKeysFromSnakeToCamelCase($data);
-        $reservationInstance = $this->objectManager->create(ReservationInterface::class, $arguments);
+        $reservation = $this->objectManager->create(ReservationInterface::class, $arguments);
         $this->reset();
-        return $reservationInstance;
+
+        $validationResult = $this->reservationValidator->validate($reservation);
+        if (!$validationResult->isValid()) {
+            throw new ValidationException($validationResult);
+        }
+        return $reservation;
     }
 
     /**

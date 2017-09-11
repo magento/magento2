@@ -7,26 +7,28 @@ namespace Magento\Inventory\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Inventory\Model\SnakeToCamelCaseConvertor;
+use PHPUnit\Framework\TestCase;
 
-class SnakeToCamelCaseConvertorTest extends \PHPUnit\Framework\TestCase
+class SnakeToCamelCaseConvertorTest extends TestCase
 {
     /**
-     * Return an instance of SnakeToCamelCaseConvertor
-     *
-     * @return SnakeToCamelCaseConvertor
+     * @var SnakeToCamelCaseConvertor
      */
-    private function createSnakeToCamelCaseConvertor(): SnakeToCamelCaseConvertor
+    private $snakeToCamelCaseConvertor;
+
+    protected function setUp()
     {
-        return (new ObjectManager($this))->getObject(SnakeToCamelCaseConvertor::class);
+        $this->snakeToCamelCaseConvertor = (new ObjectManager($this))->getObject(SnakeToCamelCaseConvertor::class);
     }
 
     /**
      * @dataProvider getElementsToConvert
+     * @param array $givenElements
+     * @param array $expectedElements
      */
     public function testArrayElementConversion(array $givenElements, array $expectedElements)
     {
-        $convertor = $this->createSnakeToCamelCaseConvertor();
-        $this->assertEquals($expectedElements, $convertor->convert($givenElements));
+        self::assertEquals($expectedElements, $this->snakeToCamelCaseConvertor->convert($givenElements));
     }
 
     /**
@@ -35,9 +37,15 @@ class SnakeToCamelCaseConvertorTest extends \PHPUnit\Framework\TestCase
     public function getElementsToConvert(): array
     {
         return [
-            [[],[]],
-            [['one', 'Two', 'THREE'],['one', 'two', 'three']],
-            [['my_element_one', 'My_Element_Two', 'MY_ELEMENT_THREE'],['myElementOne', 'myElementTwo', 'myElementThree']],
+            'with_empty_data' => [[], []],
+            'to_lowercase' => [
+                ['one', 'Two', 'THREE'],
+                ['one', 'two', 'three']
+            ],
+            'underscore_to_camelcase' => [
+                ['my_element_one', 'My_Element_Two', 'MY_ELEMENT_THREE'],
+                ['myElementOne', 'myElementTwo', 'myElementThree']
+            ],
         ];
     }
 }

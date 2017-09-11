@@ -3,16 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Inventory\Model\ReservationBuilder\Validator;
+namespace Magento\Inventory\Model\Reservation\Validator;
 
 use Magento\Framework\Validation\ValidationResult;
 use Magento\Framework\Validation\ValidationResultFactory;
-use Magento\InventoryApi\Api\ReservationBuilderInterface;
+use Magento\InventoryApi\Api\Data\ReservationInterface;
 
 /**
  * Check that stock ID is valid
  */
-class StockIdValidator implements ReservationBuilderValidatorInterface
+class QuantityValidator implements ReservationValidatorInterface
 {
     /**
      * @var ValidationResultFactory
@@ -30,16 +30,14 @@ class StockIdValidator implements ReservationBuilderValidatorInterface
     /**
      * @inheritdoc
      */
-    public function validate(ReservationBuilderInterface $reservationBuilder): ValidationResult
+    public function validate(ReservationInterface $reservation): ValidationResult
     {
         $errors = [];
+        $value = $reservation->getQuantity();
 
-        $value = $reservationBuilder->getStockId();
-
-        if (false === is_numeric($value)) { // TODO should also check if it is positive?
-            $errors[] = __('"%field" is expected to be a number.', ['field' => 'stockId']);
+        if (null === $value) {
+            $errors[] = __('"%field" can not be null.', ['field' => ReservationInterface::QUANTITY]);
         }
-
         return $this->validationResultFactory->create(['errors' => $errors]);
     }
 }

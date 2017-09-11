@@ -3,17 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Inventory\Model\ReservationBuilder\Validator;
+namespace Magento\Inventory\Model\Reservation\Validator;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Validation\ValidationResult;
 use Magento\Framework\Validation\ValidationResultFactory;
-use Magento\InventoryApi\Api\ReservationBuilderInterface;
+use Magento\InventoryApi\Api\Data\ReservationInterface;
 
 /**
  * Chain of validators. Extension point for new validators via di configuration
  */
-class ValidatorChain implements ReservationBuilderValidatorInterface
+class ValidatorChain implements ReservationValidatorInterface
 {
     /**
      * @var ValidationResultFactory
@@ -21,13 +21,13 @@ class ValidatorChain implements ReservationBuilderValidatorInterface
     private $validationResultFactory;
 
     /**
-     * @var ReservationBuilderValidatorInterface[]
+     * @var ReservationValidatorInterface[]
      */
     private $validators;
 
     /**
      * @param ValidationResultFactory $validationResultFactory
-     * @param ReservationBuilderValidatorInterface[] $validators
+     * @param ReservationValidatorInterface[] $validators
      * @throws LocalizedException
      */
     public function __construct(
@@ -37,9 +37,9 @@ class ValidatorChain implements ReservationBuilderValidatorInterface
         $this->validationResultFactory = $validationResultFactory;
 
         foreach ($validators as $validator) {
-            if (!$validator instanceof ReservationBuilderValidatorInterface) {
+            if (!$validator instanceof ReservationValidatorInterface) {
                 throw new LocalizedException(
-                    __('ReservationBuilder Validator must implement ReservationBuilderValidatorInterface.')
+                    __('Reservation Validator must implement ReservationValidatorInterface.')
                 );
             }
         }
@@ -49,11 +49,11 @@ class ValidatorChain implements ReservationBuilderValidatorInterface
     /**
      * @inheritdoc
      */
-    public function validate(ReservationBuilderInterface $reservationBuilder): ValidationResult
+    public function validate(ReservationInterface $reservation): ValidationResult
     {
         $errors = [];
         foreach ($this->validators as $validator) {
-            $validationResult = $validator->validate($reservationBuilder);
+            $validationResult = $validator->validate($reservation);
 
             if (!$validationResult->isValid()) {
                 $errors = array_merge($errors, $validationResult->getErrors());

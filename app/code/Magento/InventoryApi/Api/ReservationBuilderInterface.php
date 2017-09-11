@@ -6,7 +6,6 @@
 namespace Magento\InventoryApi\Api;
 
 use Magento\Framework\Validation\ValidationException;
-use Magento\Inventory\Model\ReservationBuilder;
 use Magento\InventoryApi\Api\Data\ReservationInterface;
 
 /**
@@ -19,27 +18,27 @@ interface ReservationBuilderInterface
 {
     /**
      * @param int $stockId
-     * @return ReservationBuilder
+     * @return self
      */
-    public function setStockId(int $stockId): ReservationBuilder;
+    public function setStockId(int $stockId): ReservationBuilderInterface;
 
     /**
      * @param string $sku
-     * @return ReservationBuilder
+     * @return self
      */
-    public function setSku(string $sku): ReservationBuilder;
+    public function setSku(string $sku): ReservationBuilderInterface;
 
     /**
      * @param float $quantity
-     * @return ReservationBuilder
+     * @return self
      */
-    public function setQuantity(float $quantity): ReservationBuilder;
+    public function setQuantity(float $quantity): ReservationBuilderInterface;
 
     /**
      * @param string $metadata
-     * @return ReservationBuilder
+     * @return self
      */
-    public function setMetadata($metadata): ReservationBuilder;
+    public function setMetadata($metadata): ReservationBuilderInterface;
 
     /**
      * @return ReservationInterface

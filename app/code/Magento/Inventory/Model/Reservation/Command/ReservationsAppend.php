@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Inventory\Model;
+namespace Magento\Inventory\Model\Reservation\Command;
 
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
@@ -47,7 +47,12 @@ class ReservationsAppend implements ReservationsAppendInterface
         /** @var ReservationInterface $reservation */
         foreach ($reservations as $reservation) {
             if (null !== $reservation->getReservationId()) {
-                throw new InputException(__('Cannot update Reservation %1', $reservation->getReservationId()));
+                $message =  __(
+                    'Cannot update Reservation %reservation',
+                    ['reservation' => $reservation->getReservationId()]
+                );
+                $this->logger->error($message);
+                throw new InputException($message);
             }
         }
         try {

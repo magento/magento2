@@ -6,9 +6,13 @@
 namespace Magento\Inventory\Model\ResourceModel\Reservation;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Inventory\Model\ResourceModel\Reservation as ReservationResourceModel;
+use Magento\Inventory\Setup\Operation\CreateReservationTable;
 use Magento\InventoryApi\Api\Data\ReservationInterface;
 
+/**
+ * Implementation of Reservation save multiple operation for specific db layer
+ * Save Multiple used here for performance efficient purposes over single save operation
+ */
 class SaveMultiple
 {
     /**
@@ -17,8 +21,6 @@ class SaveMultiple
     private $resource;
 
     /**
-     * SaveMultiple constructor
-     *
      * @param ResourceConnection $resource
      */
     public function __construct(
@@ -34,7 +36,7 @@ class SaveMultiple
     public function execute(array $reservations)
     {
         $connection = $this->resource->getConnection();
-        $tableName = $connection->getTableName(ReservationResourceModel::TABLE_NAME_RESERVATION);
+        $tableName = $connection->getTableName(CreateReservationTable::TABLE_NAME_RESERVATION);
 
         $columns = [
             ReservationInterface::STOCK_ID,
