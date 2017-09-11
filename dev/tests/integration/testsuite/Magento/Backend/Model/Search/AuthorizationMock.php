@@ -6,6 +6,9 @@
 
 namespace Magento\Backend\Model\Search;
 
+/**
+ * @SuppressWarnings("unused")
+ */
 class AuthorizationMock extends \Magento\Framework\Authorization
 {
     /**
