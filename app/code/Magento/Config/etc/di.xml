@@ -80,7 +80,7 @@
     <type name="Magento\Config\App\Config\Type\System">
         <arguments>
             <argument name="source" xsi:type="object">systemConfigSourceAggregatedProxy</argument>
-            <argument name="postProcessor" xsi:type="object">systemConfigPostProcessorComposite</argument>
+            <argument name="postProcessor" xsi:type="object">systemConfigPostProcessorCompositeProxy</argument>
             <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
             <argument name="preProcessor" xsi:type="object">Magento\Framework\App\Config\PreProcessorComposite</argument>
             <argument name="serializer" xsi:type="object">Magento\Framework\Serialize\Serializer\Serialize</argument>

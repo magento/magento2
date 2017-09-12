@@ -89,6 +89,11 @@ class System implements ConfigTypeInterface
     private $availableDataScopes = null;
 
     /**
+     * @var bool
+     */
+    private $postProcessed = false;
+
+    /**
      * @param \Magento\Framework\App\Config\ConfigSourceInterface $source
      * @param \Magento\Framework\App\Config\Spi\PostProcessorInterface $postProcessor
      * @param \Magento\Store\Model\Config\Processor\Fallback $fallback
@@ -213,7 +218,7 @@ class System implements ConfigTypeInterface
     private function loadScopeData($scopeType, $scopeId)
     {
         $cachedData = $this->cache->load($this->configType . '_' . $scopeType . '_' . $scopeId);
-        if ($cachedData === false) {
+        if ($cachedData === false || !$this->postProcessed) {
             if ($this->availableDataScopes === null) {
                 $cachedScopeData = $this->cache->load($this->configType . '_scopes');
                 if ($cachedScopeData !== false) {
@@ -302,6 +307,7 @@ class System implements ConfigTypeInterface
             $this->rawData = $this->postProcessor->process(
                 $this->rawData
             );
+            $this->postProcessed = true;
         }
 
         return $this->rawData;
@@ -321,6 +327,7 @@ class System implements ConfigTypeInterface
     {
         $this->data = [];
         $this->rawData = [];
+        $this->postProcessed = false;
         $this->cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, [self::CACHE_TAG]);
     }
 }
