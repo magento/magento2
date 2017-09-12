@@ -381,7 +381,10 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
             $attributeId
         )->willReturnSelf();
         $this->select->expects($this->at(5))->method('where')->with('main.disabled = 0')->willReturnSelf();
-        $this->select->expects($this->at(7))->method('where')
+        $this->select->expects($this->at(6))->method('where')->with(
+            'value.value_id IS NOT NULL OR default_value.value_id IS NOT NULL'
+        )->willReturnSelf();
+        $this->select->expects($this->at(8))->method('where')
                      ->with('entity.entity_id = ?', $productId)
                      ->willReturnSelf();
         $this->select->expects($this->once())->method('order')

@@ -142,7 +142,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * @param int $storeId
+     * @param int|int[] $storeId
      * @param int $attributeId
      * @return \Magento\Framework\DB\Select
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -158,6 +158,12 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         );
 
         $mainTableAlias = $this->getMainTableAlias();
+
+        if (is_array($storeId)) {
+            $storeCondition = $this->getConnection()->quoteInto('value.store_id IN (?)', $storeId);
+        } else {
+            $storeCondition = $this->getConnection()->quoteInto('value.store_id = ?', (int)$storeId);
+        }
 
         $select = $this->getConnection()->select()->from(
             [$mainTableAlias => $this->getMainTable()],
@@ -176,7 +182,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 ' AND ',
                 [
                     $mainTableAlias . '.value_id = value.value_id',
-                    $this->getConnection()->quoteInto('value.store_id = ?', (int)$storeId),
+                    $storeCondition,
                 ]
             ),
             ['label', 'position', 'disabled']
@@ -195,6 +201,8 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $attributeId
         )->where(
             $mainTableAlias . '.disabled = 0'
+        )->where(
+            'value.value_id IS NOT NULL OR default_value.value_id IS NOT NULL'
         )->order(
             $positionCheckSql . ' ' . \Magento\Framework\DB\Select::SQL_ASC
         );
@@ -216,7 +224,6 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             if (!isset($fileToId[$result[$index]['file']])) {
                 $fileToId[$result[$index]['file']] = $result[$index]['value_id'];
             } elseif ($fileToId[$result[$index]['file']] != $result[$index]['value_id']) {
-                $this->deleteGallery($result[$index]['value_id']);
                 unset($result[$index]);
             }
         }
@@ -466,5 +473,34 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             ->where('value = ?', $image);
 
         return $this->getConnection()->fetchOne($select);
+    }
+
+    /**
+     * Returns product gallery of given attribute in specific stores.
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @param int $attributeId
+     * @param int|array $storeIds
+     *
+     * @return array
+     */
+    public function getProductGallery($product, $attributeId, $storeIds)
+    {
+        if (!is_array($storeIds)) {
+            $storeIds = [$storeIds];
+        }
+
+        $select = $this->createBatchBaseSelect($storeIds, $attributeId);
+
+        $select = $select->where(
+            'entity.' . $this->metadata->getLinkField() .' = ?',
+            $product->getData($this->metadata->getLinkField())
+        );
+
+        $result = $this->getConnection()->fetchAll($select);
+
+        $this->removeDuplicates($result);
+
+        return $result;
     }
 }
