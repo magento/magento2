@@ -140,13 +140,11 @@ class Ga extends \Magento\Framework\View\Element\Template
             $result[] = sprintf(
                 "ga('ec:setAction', 'purchase', {
                     'id': '%s',
-                    'affiliation': '%s',
                     'revenue': '%s',
                     'tax': '%s',
                     'shipping': '%s'
                 });",
                 $order->getIncrementId(),
-                $this->escapeJs($this->_storeManager->getStore()->getFrontendName()),
                 $order->getGrandTotal(),
                 $order->getTaxAmount(),
                 $order->getShippingAmount()
