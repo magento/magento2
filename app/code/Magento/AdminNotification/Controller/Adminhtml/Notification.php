@@ -10,10 +10,7 @@ namespace Magento\AdminNotification\Controller\Adminhtml;
 abstract class Notification extends \Magento\Backend\App\AbstractAction
 {
     /**
-     * @return bool
+     * {@inheritdoc}
      */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_AdminNotification::show_list');
-    }
+    const ADMIN_RESOURCE = 'Magento_AdminNotification::show_list';
 }

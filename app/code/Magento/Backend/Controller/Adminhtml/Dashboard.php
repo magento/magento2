@@ -14,10 +14,7 @@ namespace Magento\Backend\Controller\Adminhtml;
 abstract class Dashboard extends \Magento\Backend\App\Action
 {
     /**
-     * @return bool
+     * {@inheritdoc}
      */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Backend::dashboard');
-    }
+    const ADMIN_RESOURCE = 'Magento_Backend::dashboard';
 }

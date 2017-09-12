@@ -12,16 +12,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class ExportLowstockCsv extends \Magento\Reports\Controller\Adminhtml\Report\Product
 {
     /**
-     * Check is allowed for report
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Reports::report_products');
-    }
-
-    /**
      * Export low stock products report to CSV format
      *
      * @return ResponseInterface

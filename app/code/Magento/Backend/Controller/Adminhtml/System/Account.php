@@ -15,10 +15,7 @@ use Magento\Backend\App\Action;
 abstract class Account extends Action
 {
     /**
-     * @return bool
+     * {@inheritdoc}
      */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Backend::myaccount');
-    }
+    const ADMIN_RESOURCE = 'Magento_Backend::myaccount';
 }

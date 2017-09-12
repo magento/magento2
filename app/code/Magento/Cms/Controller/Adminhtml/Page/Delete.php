@@ -11,10 +11,7 @@ class Delete extends \Magento\Backend\App\Action
     /**
      * {@inheritdoc}
      */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Cms::page_delete');
-    }
+    const ADMIN_RESOURCE = 'Magento_Cms::page_delete';
 
     /**
      * Delete action

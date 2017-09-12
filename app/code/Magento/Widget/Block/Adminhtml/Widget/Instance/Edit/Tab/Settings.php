@@ -170,7 +170,12 @@ class Settings extends \Magento\Backend\Block\Widget\Form\Generic implements
     {
         return $this->getUrl(
             'adminhtml/*/*',
-            ['_current' => true, 'code' => '<%- data.code %>', 'theme_id' => '<%- data.theme_id %>']
+            [
+                '_current' => true,
+                'code' => '<%- data.code %>',
+                'theme_id' => '<%- data.theme_id %>',
+                '_escape_params' => false,
+            ]
         );
     }
 

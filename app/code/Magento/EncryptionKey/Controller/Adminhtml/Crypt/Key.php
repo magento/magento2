@@ -13,12 +13,7 @@ namespace Magento\EncryptionKey\Controller\Adminhtml\Crypt;
 abstract class Key extends \Magento\Backend\App\Action
 {
     /**
-     * Check whether current administrator session allows this controller
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_EncryptionKey::crypt_key');
-    }
+    const ADMIN_RESOURCE = 'Magento_EncryptionKey::crypt_key';
 }

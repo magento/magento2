@@ -12,6 +12,11 @@ use Magento\ConfigurableProduct\Model\AttributesListInterface;
 class GetAttributes extends Action
 {
     /**
+     * {@inheritdoc}
+     */
+    const ADMIN_RESOURCE = 'Magento_Catalog::attributes_attributes';
+
+    /**
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
@@ -39,16 +44,6 @@ class GetAttributes extends Action
         $this->jsonHelper = $jsonHelper;
         $this->attributesList = $attributesList;
         parent::__construct($context);
-    }
-
-    /**
-     * ACL check
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Catalog::attributes_attributes');
     }
 
     /**

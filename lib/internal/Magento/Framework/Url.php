@@ -8,6 +8,9 @@
 
 namespace Magento\Framework;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Url\HostChecker;
+
 /**
  * URL
  *
@@ -57,6 +60,7 @@ namespace Magento\Framework;
  * - H: route_url
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class Url extends \Magento\Framework\DataObject implements \Magento\Framework\UrlInterface
 {
@@ -163,6 +167,16 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
     protected $_scopeConfig;
 
     /**
+     * @var HostChecker
+     */
+    private $hostChecker;
+
+    /**
+     * @var \Magento\Framework\Url\ParamEncoder
+     */
+    private $paramEncoder;
+
+    /**
      * @param \Magento\Framework\App\Route\ConfigInterface $routeConfig
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\Url\SecurityInfoInterface $urlSecurityInfo
@@ -174,6 +188,8 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param string $scopeType
      * @param array $data
+     * @param HostChecker|null $hostChecker
+     * @param \Magento\Framework\Url\ParamEncoder $paramEncoder
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -187,7 +203,9 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
         \Magento\Framework\Url\QueryParamsResolverInterface $queryParamsResolver,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         $scopeType,
-        array $data = []
+        array $data = [],
+        HostChecker $hostChecker = null,
+        \Magento\Framework\Url\ParamEncoder $paramEncoder = null
     ) {
         $this->_request = $request;
         $this->_routeConfig = $routeConfig;
@@ -199,6 +217,11 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
         $this->_queryParamsResolver = $queryParamsResolver;
         $this->_scopeConfig = $scopeConfig;
         $this->_scopeType = $scopeType;
+        $this->hostChecker = $hostChecker ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(HostChecker::class);
+        $this->paramEncoder = $paramEncoder ?: ObjectManager::getInstance()->get(
+            \Magento\Framework\Url\ParamEncoder::class
+        );
         parent::__construct($data);
     }
 
@@ -432,9 +455,11 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
         }
 
         $result = $this->_getScope()->getBaseUrl($this->_getType(), $this->_isSecure());
+
         // setting back the original scope
         $this->setScope($origScope);
         $this->getRouteParamsResolver()->setType(self::DEFAULT_URL_TYPE);
+
         return $result;
     }
 
@@ -834,6 +859,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
     private function createUrl($routePath = null, array $routeParams = null)
     {
         $escapeQuery = false;
+        $escapeParams = true;
 
         /**
          * All system params should be unset before we call getRouteUrl
@@ -852,6 +878,12 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
             unset($routeParams['_escape']);
         }
 
+        if (isset($routeParams['_escape_params'])) {
+            $escapeParams = $routeParams['_escape_params'];
+            unset($routeParams['_escape_params']);
+        }
+        $this->getRouteParamsResolver()->setData('escape_params', $escapeParams);
+
         $query = null;
         if (isset($routeParams['_query'])) {
             $this->_queryParamsResolver->setQueryParams([]);
@@ -865,6 +897,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
             unset($routeParams['_nosid']);
         }
         $url = $this->getRouteUrl($routePath, $routeParams);
+
         /**
          * Apply query params, need call after getRouteUrl for rewrite _current values
          */
@@ -892,11 +925,12 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
         }
 
         if (!is_null($fragment)) {
-            $url .= '#' . $fragment;
+            $url .= '#' . $this->paramEncoder->encode($fragment);
         }
         $this->getRouteParamsResolver()->unsetData('secure');
+        $this->getRouteParamsResolver()->unsetData('escape_params');
 
-        return $this->escape($url);
+        return $url;
     }
 
     /**
@@ -946,10 +980,10 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
 
         $fragment = $this->_getFragment();
         if ($fragment) {
-            $url .= '#' . $fragment;
+            $url .= '#' . $this->paramEncoder->encode($fragment);
         }
 
-        return $this->escape($url);
+        return $url;
     }
 
     /**
@@ -1043,17 +1077,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      */
     public function isOwnOriginUrl()
     {
-        $scopeDomains = [];
-        $referer = parse_url($this->_request->getServer('HTTP_REFERER'), PHP_URL_HOST);
-        foreach ($this->_scopeResolver->getScopes() as $scope) {
-            $scopeDomains[] = parse_url($scope->getBaseUrl(), PHP_URL_HOST);
-            $scopeDomains[] = parse_url($scope->getBaseUrl(UrlInterface::URL_TYPE_LINK, true), PHP_URL_HOST);
-        }
-        $scopeDomains = array_unique($scopeDomains);
-        if (empty($referer) || in_array($referer, $scopeDomains)) {
-            return true;
-        }
-        return false;
+        return $this->hostChecker->isOwnOrigin($this->_request->getServer('HTTP_REFERER'));
     }
 
     /**

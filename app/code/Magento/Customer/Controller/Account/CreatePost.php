@@ -26,6 +26,7 @@ use Magento\Framework\Escaper;
 use Magento\Customer\Model\CustomerExtractor;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Data\Form\FormKey\Validator;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -88,6 +89,13 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
     private $scopeConfig;
 
     /**
+     * Form key validator.
+     *
+     * @var Validator
+     */
+    private $formKeyValidator;
+
+    /**
      * @param Context $context
      * @param Session $customerSession
      * @param ScopeConfigInterface $scopeConfig
@@ -106,6 +114,7 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
      * @param CustomerExtractor $customerExtractor
      * @param DataObjectHelper $dataObjectHelper
      * @param AccountRedirect $accountRedirect
+     * @param Validator $formKeyValidator
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -127,8 +136,11 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
         Escaper $escaper,
         CustomerExtractor $customerExtractor,
         DataObjectHelper $dataObjectHelper,
-        AccountRedirect $accountRedirect
+        AccountRedirect $accountRedirect,
+        Validator $formKeyValidator = null
     ) {
+        parent::__construct($context);
+        
         $this->session = $customerSession;
         $this->scopeConfig = $scopeConfig;
         $this->storeManager = $storeManager;
@@ -146,7 +158,7 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
         $this->urlModel = $urlFactory->create();
         $this->dataObjectHelper = $dataObjectHelper;
         $this->accountRedirect = $accountRedirect;
-        parent::__construct($context);
+        $this->formKeyValidator = $formKeyValidator ?: $this->_objectManager->get(Validator::class);
     }
 
     /**
@@ -187,7 +199,7 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
         $this->dataObjectHelper->populateWithArray(
             $addressDataObject,
             $addressData,
-            '\Magento\Customer\Api\Data\AddressInterface'
+            \Magento\Customer\Api\Data\AddressInterface::class
         );
         $addressDataObject->setRegion($regionDataObject);
 
@@ -196,13 +208,14 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
         )->setIsDefaultShipping(
             $this->getRequest()->getParam('default_shipping', false)
         );
+
         return $addressDataObject;
     }
 
     /**
      * Create customer account action
      *
-     * @return void
+     * @return \Magento\Framework\App\ResponseInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -212,12 +225,14 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($this->session->isLoggedIn() || !$this->registration->isAllowed()) {
             $resultRedirect->setPath('*/*/');
+
             return $resultRedirect;
         }
 
-        if (!$this->getRequest()->isPost()) {
+        if (!$this->getRequest()->isPost() || !$this->formKeyValidator->validate($this->getRequest())) {
             $url = $this->urlModel->getUrl('*/*/create', ['_secure' => true]);
             $resultRedirect->setUrl($this->_redirect->error($url));
+
             return $resultRedirect;
         }
 
@@ -268,10 +283,12 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
                 if (!$this->scopeConfig->getValue('customer/startup/redirect_dashboard') && $requestedRedirect) {
                     $resultRedirect->setUrl($this->_redirect->success($requestedRedirect));
                     $this->accountRedirect->clearRedirectCookie();
+
                     return $resultRedirect;
                 }
                 $resultRedirect = $this->accountRedirect->getRedirect();
             }
+
             return $resultRedirect;
         } catch (StateException $e) {
             $url = $this->urlModel->getUrl('customer/account/forgotpassword');
@@ -294,6 +311,7 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
         $this->session->setCustomerFormData($this->getRequest()->getPostValue());
         $defaultUrl = $this->urlModel->getUrl('*/*/create', ['_secure' => true]);
         $resultRedirect->setUrl($this->_redirect->error($defaultUrl));
+
         return $resultRedirect;
     }
 

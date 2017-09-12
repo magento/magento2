@@ -52,13 +52,25 @@ class FeedTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->inboxFactory = $this->getMock('Magento\AdminNotification\Model\InboxFactory', ['create'], [], '', false);
-        $this->curlFactory = $this->getMock('Magento\Framework\HTTP\Adapter\CurlFactory', ['create'], [], '', false);
-        $this->curl = $this->getMockBuilder('Magento\Framework\HTTP\Adapter\Curl')
+        $this->inboxFactory = $this->getMock(
+            \Magento\AdminNotification\Model\InboxFactory::class,
+            ['create'],
+            [],
+            '',
+            false
+        );
+        $this->curlFactory = $this->getMock(
+            \Magento\Framework\HTTP\Adapter\CurlFactory::class,
+            ['create'],
+            [],
+            '',
+            false
+        );
+        $this->curl = $this->getMockBuilder(\Magento\Framework\HTTP\Adapter\Curl::class)
             ->disableOriginalConstructor()->getMock();
-        $this->appState = $this->getMock('Magento\Framework\App\State', ['getInstallDate'], [], '', false);
+        $this->appState = $this->getMock(\Magento\Framework\App\State::class, ['getInstallDate'], [], '', false);
         $this->inboxModel = $this->getMock(
-            'Magento\AdminNotification\Model\Inbox',
+            \Magento\AdminNotification\Model\Inbox::class,
             [
                 '__wakeup',
                 'parse'
@@ -68,7 +80,7 @@ class FeedTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->backendConfig = $this->getMock(
-            'Magento\Backend\App\ConfigInterface',
+            \Magento\Backend\App\ConfigInterface::class,
             [
                 'getValue',
                 'setValue',
@@ -76,7 +88,7 @@ class FeedTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $this->cacheManager = $this->getMock(
-            'Magento\Framework\App\CacheInterface',
+            \Magento\Framework\App\CacheInterface::class,
             [
                 'load',
                 'getFrontend',
@@ -86,15 +98,15 @@ class FeedTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->deploymentConfig = $this->getMockBuilder('Magento\Framework\App\DeploymentConfig')
+        $this->deploymentConfig = $this->getMockBuilder(\Magento\Framework\App\DeploymentConfig::class)
             ->disableOriginalConstructor()->getMock();
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->productMetadata = $this->getMock('Magento\Framework\App\ProductMetadata');
-        $this->urlBuilder = $this->getMock('Magento\Framework\UrlInterface');
+        $this->productMetadata = $this->getMock(\Magento\Framework\App\ProductMetadata::class);
+        $this->urlBuilder = $this->getMock(\Magento\Framework\UrlInterface::class);
 
         $this->feed = $this->objectManagerHelper->getObject(
-            'Magento\AdminNotification\Model\Feed',
+            \Magento\AdminNotification\Model\Feed::class,
             [
                 'backendConfig' => $this->backendConfig,
                 'cacheManager' => $this->cacheManager,
@@ -145,8 +157,27 @@ class FeedTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('Sat, 6 Sep 2014 16:46:11 UTC'));
         if ($callInbox) {
             $this->inboxFactory->expects($this->once())->method('create')
-                ->will(($this->returnValue($this->inboxModel)));
-            $this->inboxModel->expects($this->once())->method('parse')->will($this->returnSelf());
+                ->will($this->returnValue($this->inboxModel));
+            $this->inboxModel->expects($this->once())
+                ->method('parse')
+                ->with(
+                    $this->callback(
+                        function ($data) {
+                            $fieldsToCheck = ['title', 'description', 'url'];
+                            return array_reduce(
+                                $fieldsToCheck,
+                                function ($initialValue, $item) use ($data) {
+                                    $haystack = (isset($data[0][$item]) ? $data[0][$item] : false);
+                                    return $haystack
+                                        ? $initialValue && !strpos($haystack, '<') && !strpos($haystack, '>')
+                                        : true;
+                                },
+                                true
+                            );
+                        }
+                    )
+                )
+                ->will($this->returnSelf());
         } else {
             $this->inboxFactory->expects($this->never())->method('create');
             $this->inboxModel->expects($this->never())->method('parse');
@@ -196,7 +227,27 @@ class FeedTest extends \PHPUnit_Framework_TestCase
                                 </item>
                             </channel>
                         </rss>'
-            ]
+            ],
+            [
+                true,
+                // @codingStandardsIgnoreStart
+                'HEADER
+
+                <?xml version="1.0" encoding="utf-8" ?>
+                        <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+                            <channel>
+                                <title>MagentoCommerce</title>
+                                <item>
+                                    <title><![CDATA[<script>alert("Hello!");</script>Test Title]]></title>
+                                    <link><![CDATA[http://magento.com/feed_url<script>alert("Hello!");</script>]]></link>
+                                    <severity>4</severity>
+                                    <description><![CDATA[Test <script>alert("Hello!");</script>Description]]></description>
+                                    <pubDate>Tue, 20 Jun 2017 13:14:47 UTC</pubDate>
+                                </item>
+                            </channel>
+                        </rss>'
+                // @codingStandardsIgnoreEnd
+            ],
         ];
     }
 }

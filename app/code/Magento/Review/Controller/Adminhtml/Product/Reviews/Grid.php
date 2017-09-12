@@ -13,6 +13,13 @@ use Magento\Framework\Controller\ResultFactory;
 class Grid extends Action
 {
     /**
+     * Authorization level of a basic admin session.
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Review::reviews_all';
+
+    /**
      * @var \Magento\Catalog\Controller\Adminhtml\Product\Builder
      */
     protected $productBuilder;
@@ -42,6 +49,7 @@ class Grid extends Action
         $resultLayout->getLayout()->getBlock('admin.product.reviews')
             ->setProductId($product->getId())
             ->setUseAjax(true);
+
         return $resultLayout;
     }
 }

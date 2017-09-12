@@ -124,3 +124,5 @@ Blocks,Blocks
 Widgets,Widgets
 Themes,Themes
 Schedule,Schedule
+"Delete %1","Delete %1"
+"Are you sure you wan\'t to delete a %1 record?","Are you sure you wan\'t to delete a %1 record?"

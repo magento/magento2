@@ -14,6 +14,11 @@ use Magento\Framework\Controller\ResultFactory;
 class Fetch extends \Magento\Paypal\Controller\Adminhtml\Paypal\Reports
 {
     /**
+     * {@inheritdoc}
+     */
+    const ADMIN_RESOURCE = 'Magento_Paypal::fetch';
+
+    /**
      * Forced fetch reports action
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
@@ -51,15 +56,5 @@ class Fetch extends \Magento\Paypal\Controller\Adminhtml\Paypal\Reports
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         return $resultRedirect->setPath('*/*/index');
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Paypal::fetch');
     }
 }

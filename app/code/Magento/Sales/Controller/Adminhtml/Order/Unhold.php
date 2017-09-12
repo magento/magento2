@@ -8,6 +8,11 @@ namespace Magento\Sales\Controller\Adminhtml\Order;
 class Unhold extends \Magento\Sales\Controller\Adminhtml\Order
 {
     /**
+     * {@inheritdoc}
+     */
+    const ADMIN_RESOURCE = 'Magento_Sales::unhold';
+
+    /**
      * Unhold order
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
@@ -37,13 +42,5 @@ class Unhold extends \Magento\Sales\Controller\Adminhtml\Order
         }
         $resultRedirect->setPath('sales/*/');
         return $resultRedirect;
-    }
-
-    /**
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Sales::unhold');
     }
 }

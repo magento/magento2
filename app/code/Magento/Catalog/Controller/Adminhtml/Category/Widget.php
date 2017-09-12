@@ -15,6 +15,13 @@ use Magento\Framework\View\Element\BlockInterface;
 abstract class Widget extends \Magento\Backend\App\Action
 {
     /**
+     * Authorization level of a basic admin session.
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Catalog::categories';
+
+    /**
      * @var \Magento\Framework\View\LayoutFactory
      */
     protected $layoutFactory;
@@ -37,7 +44,7 @@ abstract class Widget extends \Magento\Backend\App\Action
     protected function _getCategoryTreeBlock()
     {
         return $this->layoutFactory->create()->createBlock(
-            'Magento\Catalog\Block\Adminhtml\Category\Widget\Chooser',
+            \Magento\Catalog\Block\Adminhtml\Category\Widget\Chooser::class,
             '',
             [
                 'data' => [

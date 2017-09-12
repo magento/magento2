@@ -17,6 +17,11 @@ use Magento\Framework\Controller\ResultFactory;
 abstract class Rule extends \Magento\Backend\App\Action
 {
     /**
+     * {@inheritdoc}
+     */
+    const ADMIN_RESOURCE = 'Magento_Tax::manage_tax';
+
+    /**
      * Core registry
      *
      * @var \Magento\Framework\Registry
@@ -59,16 +64,6 @@ abstract class Rule extends \Magento\Backend\App\Action
             ->addBreadcrumb(__('Tax'), __('Tax'))
             ->addBreadcrumb(__('Tax Rules'), __('Tax Rules'));
         return $resultPage;
-    }
-
-    /**
-     * Check if sales rule is allowed
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Tax::manage_tax');
     }
 
     /**

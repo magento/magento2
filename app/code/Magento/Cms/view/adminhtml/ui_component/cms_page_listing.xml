@@ -182,7 +182,7 @@
             </argument>
         </paging>
     </container>
-    <columns name="cms_page_columns">
+    <columns name="cms_page_columns" class="Magento\Cms\Ui\Component\Listing\Columns">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
                 <item name="storageConfig" xsi:type="array">

@@ -11,6 +11,13 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class ExportVarnishConfig extends \Magento\Backend\App\Action
 {
     /**
+     * Authorization level of a basic admin session.
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Backend::system';
+
+    /**
      * @var \Magento\Backend\App\Response\Http\FileFactory
      */
     protected $fileFactory;
@@ -52,6 +59,7 @@ class ExportVarnishConfig extends \Magento\Backend\App\Action
                 $content = $this->config->getVclFile(\Magento\PageCache\Model\Config::VARNISH_4_CONFIGURATION_PATH);
                 break;
         }
+
         return $this->fileFactory->create($fileName, $content, DirectoryList::VAR_DIR);
     }
 }

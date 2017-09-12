@@ -13,18 +13,18 @@ $params = $block->getParams();
     <head>
         <script>
         <?php if (isset($params['redirect'])): ?>
-            window.location="<?php echo $block->escapeXssInUrl($params['redirect']); ?>";
+        window.location="<?php echo $block->escapeUrl($params['redirect']); ?>";
         <?php elseif (isset($params['redirect_parent'])): ?>
-            window.top.location="<?php echo $block->escapeXssInUrl($params['redirect_parent']); ?>";
+            window.top.location="<?php echo $block->escapeUrl($params['redirect_parent']); ?>";
         <?php elseif (isset($params['error_msg'])): ?>
-            window.top.alert(<?php /* @noEscape */ echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($params['error_msg']); ?>);
+            window.top.alert(<?php /* @noEscape */ echo $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($params['error_msg']); ?>);
             var require = window.top.require;
             require(['Magento_Checkout/js/model/full-screen-loader', 'jquery'], function(fullScreenLoader, $) {
                 fullScreenLoader.stopLoader();
                 $('[data-role="review-save"]').removeClass('disabled');
             });
         <?php elseif (isset($params['order_success'])): ?>
-            window.top.location = "<?php echo $block->escapeXssInUrl($params['order_success']); ?>";
+            window.top.location = "<?php echo $block->escapeUrl($params['order_success']); ?>";
         <?php else: ?>
             var require = window.top.require;
             require(

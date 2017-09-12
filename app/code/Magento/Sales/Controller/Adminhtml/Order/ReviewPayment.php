@@ -10,6 +10,11 @@ use Magento\Backend\App\Action;
 class ReviewPayment extends \Magento\Sales\Controller\Adminhtml\Order
 {
     /**
+     * {@inheritdoc}
+     */
+    const ADMIN_RESOURCE = 'Magento_Sales::review_payment';
+
+    /**
      * Manage payment state
      *
      * Either denies or approves a payment that is in "review" state
@@ -59,13 +64,5 @@ class ReviewPayment extends \Magento\Sales\Controller\Adminhtml\Order
         }
         $resultRedirect->setPath('sales/order/view', ['order_id' => $order->getEntityId()]);
         return $resultRedirect;
-    }
-
-    /**
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Sales::review_payment');
     }
 }

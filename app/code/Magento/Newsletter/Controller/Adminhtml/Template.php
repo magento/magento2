@@ -13,12 +13,7 @@ namespace Magento\Newsletter\Controller\Adminhtml;
 abstract class Template extends \Magento\Backend\App\Action
 {
     /**
-     * Check is allowed access
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Newsletter::template');
-    }
+    const ADMIN_RESOURCE = 'Magento_Newsletter::template';
 }

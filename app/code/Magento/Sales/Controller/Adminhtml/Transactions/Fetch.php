@@ -13,6 +13,11 @@ use Magento\Framework\Controller\ResultFactory;
 class Fetch extends \Magento\Sales\Controller\Adminhtml\Transactions
 {
     /**
+     * {@inheritdoc}
+     */
+    const ADMIN_RESOURCE = 'Magento_Sales::transactions_fetch';
+
+    /**
      * Fetch transaction details action
      *
      * @return Redirect
@@ -37,13 +42,5 @@ class Fetch extends \Magento\Sales\Controller\Adminhtml\Transactions
         }
 
         return $resultRedirect->setPath('sales/transactions/view', ['_current' => true]);
-    }
-
-    /**
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Sales::transactions_fetch');
     }
 }

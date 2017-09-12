@@ -16,6 +16,11 @@ use Magento\Sales\Model\Order\Shipment\Validation\QuantityValidator;
 class Save extends \Magento\Backend\App\Action
 {
     /**
+     * {@inheritdoc}
+     */
+    const ADMIN_RESOURCE = 'Magento_Sales::shipment';
+
+    /**
      * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader
      */
     protected $shipmentLoader;
@@ -51,14 +56,6 @@ class Save extends \Magento\Backend\App\Action
         $this->labelGenerator = $labelGenerator;
         $this->shipmentSender = $shipmentSender;
         parent::__construct($context);
-    }
-
-    /**
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Sales::shipment');
     }
 
     /**
