@@ -7,6 +7,8 @@ namespace Magento\Sales\Api\Data;
 
 /**
  * Shipment Track Creation interface.
+ *
+ * @api
  */
 interface TrackUrlInterface
 {
