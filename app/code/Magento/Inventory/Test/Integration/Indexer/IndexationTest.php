@@ -17,19 +17,31 @@ use PHPUnit\Framework\TestCase;
 /**
  * Preconditions:
  *
- * SourceItems:
- *   SKU-1 - Source-1 - 5qty
- *   SKU-1 - Source-2 - 3qty
- *   SKU-2 - Source-3 - 5qty
+ * Products to Sources links:
+ *   SKU-1 - EU-source-1(id:1) - 5.5qty
+ *   SKU-1 - EU-source-2(id:2) - 3qty
+ *   SKU-1 - EU-source-3(id:3) - 10qty (out of stock)
+ *   SKU-1 - EU-source-4(id:4) - 10qty (disabled source)
  *
- * Sources to Stock links:
- *   Source-1 - Stock-1
- *   Source-2 - Stock-1
- *   Source-3 - Stock-2
+ *   SKU-2 - US-source-1(id:3) - 5qty
+ *
+ * Sources to Stocks links:
+ *   EU-source-1(id:1) - EU-stock(id:1)
+ *   EU-source-2(id:2) - EU-stock(id:1)
+ *   EU-source-3(id:3) - EU-stock(id:1)
+ *   EU-source-disabled(id:4) - EU-stock(id:1)
+ *
+ *   US-source-1(id:5) - US-stock(id:2)
+ *
+ *   EU-source-1(id:1) - Global-stock(id:3)
+ *   EU-source-2(id:2) - Global-stock(id:3)
+ *   EU-source-3(id:3) - Global-stock(id:3)
+ *   EU-source-disabled(id:4) - Global-stock(id:3)
+ *   US-source-1(id:5) - Global-stock(id:3)
  *
  * TODO: fixture via composer
  */
-class StockItemTest extends TestCase
+class IndexationTest extends TestCase
 {
     /**
      * @var IndexerInterface
@@ -55,7 +67,7 @@ class StockItemTest extends TestCase
         /** @var IndexStructureInterface $indexStructure */
         $indexStructure = Bootstrap::getObjectManager()->get(IndexStructureInterface::class);
 
-        foreach ([1, 2] as $stockId) {
+        foreach ([1, 2, 3] as $stockId) {
             $indexName = $indexNameBuilder
                 ->setIndexId(StockItemIndexerInterface::INDEXER_ID)
                 ->addDimension('stock_', $stockId)
@@ -74,13 +86,11 @@ class StockItemTest extends TestCase
      */
     public function testReindexRow()
     {
-        self::assertEquals(0, $this->indexerChecker->execute(1, 'SKU-1'));
-        self::assertEquals(0, $this->indexerChecker->execute(2, 'SKU-2'));
-
         $this->indexer->reindexRow(1);
 
-        self::assertEquals(8, $this->indexerChecker->execute(1, 'SKU-1'));
-        self::assertEquals(0, $this->indexerChecker->execute(2, 'SKU-2'));
+        self::assertEquals(8.5, $this->indexerChecker->execute(1, 'SKU-1'));
+        self::assertEquals(0, $this->indexerChecker->execute(2, 'SKU-1'));
+        self::assertEquals(8.5, $this->indexerChecker->execute(3, 'SKU-1'));
     }
 
     /**
@@ -92,13 +102,15 @@ class StockItemTest extends TestCase
      */
     public function testReindexList()
     {
-        self::assertEquals(0, $this->indexerChecker->execute(1, 'SKU-1'));
-        self::assertEquals(0, $this->indexerChecker->execute(2, 'SKU-2'));
+        $this->indexer->reindexList([1, 5]);
 
-        $this->indexer->reindexList([1]);
+        self::assertEquals(8.5, $this->indexerChecker->execute(1, 'SKU-1'));
+        self::assertEquals(0, $this->indexerChecker->execute(2, 'SKU-1'));
+        self::assertEquals(8.5, $this->indexerChecker->execute(3, 'SKU-1'));
 
-        self::assertEquals(8, $this->indexerChecker->execute(1, 'SKU-1'));
-        self::assertEquals(0, $this->indexerChecker->execute(2, 'SKU-2'));
+        self::assertEquals(0, $this->indexerChecker->execute(1, 'SKU-2'));
+        self::assertEquals(5, $this->indexerChecker->execute(2, 'SKU-2'));
+        self::assertEquals(5, $this->indexerChecker->execute(3, 'SKU-2'));
     }
 
     /**
@@ -110,48 +122,14 @@ class StockItemTest extends TestCase
      */
     public function testReindexAll()
     {
-        self::assertEquals(0, $this->indexerChecker->execute(1, 'SKU-1'));
-        self::assertEquals(0, $this->indexerChecker->execute(2, 'SKU-2'));
-
         $this->indexer->reindexAll();
 
-        self::assertEquals(8, $this->indexerChecker->execute(1, 'SKU-1'));
+        self::assertEquals(8.5, $this->indexerChecker->execute(1, 'SKU-1'));
+        self::assertEquals(0, $this->indexerChecker->execute(2, 'SKU-1'));
+        self::assertEquals(8.5, $this->indexerChecker->execute(3, 'SKU-1'));
+
+        self::assertEquals(0, $this->indexerChecker->execute(1, 'SKU-2'));
         self::assertEquals(5, $this->indexerChecker->execute(2, 'SKU-2'));
-    }
-
-    /**
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items_out_stock.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_link.php
-     */
-    public function testReindexAllOneDisabled()
-    {
-        self::assertEquals(0, $this->indexerChecker->execute(1, 'SKU-1'));
-        self::assertEquals(0, $this->indexerChecker->execute(2, 'SKU-2'));
-
-        $this->indexer->reindexAll();
-
-        self::assertEquals(8, $this->indexerChecker->execute(1, 'SKU-1'));
-        self::assertEquals(0, $this->indexerChecker->execute(2, 'SKU-2'));
-    }
-
-    /**
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources_disable.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items_out_stock.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_link.php
-     */
-    public function testReindexAllSourcesDisabled()
-    {
-        self::assertEquals(0, $this->indexerChecker->execute(1, 'SKU-1'));
-        self::assertEquals(0, $this->indexerChecker->execute(2, 'SKU-2'));
-
-        $this->indexer->reindexAll();
-
-        self::assertEquals(0, $this->indexerChecker->execute(1, 'SKU-1'));
-        self::assertEquals(0, $this->indexerChecker->execute(2, 'SKU-2'));
+        self::assertEquals(5, $this->indexerChecker->execute(3, 'SKU-2'));
     }
 }

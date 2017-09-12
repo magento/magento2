@@ -40,7 +40,7 @@ class GetAssignedSourcesForStockTest extends WebapiAbstract
         $response = (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST)
             ? $this->_webApiCall($serviceInfo)
             : $this->_webApiCall($serviceInfo, ['stockId' => $stockId]);
-        self::assertEquals([1, 2], array_column($response, SourceInterface::SOURCE_ID));
+        self::assertEquals([1, 2, 3, 4], array_column($response, SourceInterface::SOURCE_ID));
     }
 
     /**

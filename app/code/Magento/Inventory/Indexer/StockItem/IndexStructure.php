@@ -21,7 +21,6 @@ class IndexStructure implements IndexStructureInterface
      */
     const SKU = 'sku';
     const QUANTITY = 'quantity';
-    const STATUS = 'status';
     /**#@-*/
 
     /**
@@ -84,15 +83,6 @@ class IndexStructure implements IndexStructureInterface
                 Table::OPTION_SCALE => 4,
             ],
             'Quantity'
-        )->addColumn(
-            self::STATUS,
-            Table::TYPE_SMALLINT,
-            null,
-            [
-                Table::OPTION_NULLABLE => true,
-                Table::OPTION_UNSIGNED => true,
-            ],
-            'Status'
         );
         $connection->createTable($table);
     }
