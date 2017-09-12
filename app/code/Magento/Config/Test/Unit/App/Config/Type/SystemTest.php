@@ -176,5 +176,6 @@ class SystemTest extends \PHPUnit\Framework\TestCase
             ->willReturn($data);
 
         $this->assertEquals($url, $this->configType->get($path));
+        $this->assertEquals($url, $this->configType->get($path));
     }
 }
