@@ -11,6 +11,13 @@ use Magento\Backend\App\Action;
 class Directive extends \Magento\Backend\App\Action
 {
     /**
+     * Authorization level of a basic admin session.
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Cms::media_gallery';
+
+    /**
      * @var \Magento\Framework\Url\DecoderInterface
      */
     protected $urlDecoder;

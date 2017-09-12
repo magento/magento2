@@ -33,7 +33,8 @@
                         <form
                             name="auth"
                             role="form"
-                            >
+                            autocomplete="off"
+                        >
                             <fieldset class="fieldset">
                                 <legend ng-show="errors==false" class="legend">
                                     <span>To upgrade or install purchases, enter your access keys</span>
@@ -59,11 +60,12 @@
                                                ng-model="user.username"
                                                ng-maxlength="40"
                                                ng-class="{ 'invalid' : (auth.username.$error.required
-                                               && !auth.username.$pristine)
-                                               || (auth.username.$error.required && user.submitted) }"
+                                                   && !auth.username.$pristine)
+                                                   || (auth.username.$error.required && user.submitted) }"
                                                autofocus
                                                required
-                                            >
+                                               autocomplete="off"
+                                        >
                                         <div class="error-container">
                                             This is a required field.
                                         </div>
@@ -81,10 +83,11 @@
                                                ng-model="user.password"
                                                ng-maxlength="40"
                                                ng-class="{ 'invalid' : (auth.password.$error.required
-                                               && !auth.password.$pristine)
-                                               || (auth.password.$error.required && user.submitted) }"
+                                                   && !auth.password.$pristine)
+                                                   || (auth.password.$error.required && user.submitted) }"
                                                required
-                                            >
+                                               autocomplete="new-password"
+                                        >
                                         <div class="error-container">
                                             This is a required field.
                                         </div>

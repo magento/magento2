@@ -5,8 +5,6 @@
  */
 namespace Magento\Framework\Image\Adapter;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-
 /**
  * @magentoAppIsolation enabled
  */
@@ -116,7 +114,7 @@ class InterfaceTest extends \PHPUnit_Framework_TestCase
     {
         try {
             $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-            $adapter = $objectManager->get('Magento\Framework\Image\AdapterFactory')->create($adapterType);
+            $adapter = $objectManager->get(\Magento\Framework\Image\AdapterFactory::class)->create($adapterType);
             return $adapter;
         } catch (\Exception $e) {
             $this->markTestSkipped($e->getMessage());
@@ -547,15 +545,11 @@ class InterfaceTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreatePngFromString($pixel1, $expectedColor1, $pixel2, $expectedColor2, $adapterType)
     {
-        if (!function_exists('imagettfbbox')) {
-            $this->markTestSkipped('Workaround of problem with imagettfbbox function on Travis');
-        }
-
         $adapter = $this->_getAdapter($adapterType);
 
         /** @var \Magento\Framework\Filesystem\Directory\ReadFactory readFactory */
         $readFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Filesystem\Directory\ReadFactory'
+            \Magento\Framework\Filesystem\Directory\ReadFactory::class
         );
         $reader = $readFactory->create(BP);
         $path = $reader->getAbsolutePath('lib/internal/LinLibertineFont/LinLibertine_Re-4.4.1.ttf');
@@ -563,9 +557,11 @@ class InterfaceTest extends \PHPUnit_Framework_TestCase
         $adapter->refreshImageDimensions();
 
         $color1 = $adapter->getColorAt($pixel1['x'], $pixel1['y']);
+        unset($color1['alpha']);
         $this->assertEquals($expectedColor1, $color1);
 
         $color2 = $adapter->getColorAt($pixel2['x'], $pixel2['y']);
+        unset($color2['alpha']);
         $this->assertEquals($expectedColor2, $color2);
     }
 
@@ -579,30 +575,30 @@ class InterfaceTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 ['x' => 5, 'y' => 8],
-                'expectedColor1' => ['red' => 0, 'green' => 0, 'blue' => 0, 'alpha' => 0],
-                ['x' => 0, 'y' => 15],
-                'expectedColor2' => ['red' => 255, 'green' => 255, 'blue' => 255, 'alpha' => 127],
+                'expectedColor1' => ['red' => 0, 'green' => 0, 'blue' => 0],
+                ['x' => 0, 'y' => 14],
+                'expectedColor2' => ['red' => 255, 'green' => 255, 'blue' => 255],
                 \Magento\Framework\Image\Adapter\AdapterInterface::ADAPTER_GD2,
             ],
             [
-                ['x' => 4, 'y' => 7],
-                'expectedColor1' => ['red' => 0, 'green' => 0, 'blue' => 0, 'alpha' => 0],
-                ['x' => 0, 'y' => 15],
-                'expectedColor2' => ['red' => 255, 'green' => 255, 'blue' => 255, 'alpha' => 127],
+                ['x' => 5, 'y' => 12],
+                'expectedColor1' => ['red' => 0, 'green' => 0, 'blue' => 0],
+                ['x' => 0, 'y' => 20],
+                'expectedColor2' => ['red' => 255, 'green' => 255, 'blue' => 255],
                 \Magento\Framework\Image\Adapter\AdapterInterface::ADAPTER_IM
             ],
             [
                 ['x' => 1, 'y' => 14],
-                'expectedColor1' => ['red' => 255, 'green' => 255, 'blue' => 255, 'alpha' => 127],
+                'expectedColor1' => ['red' => 255, 'green' => 255, 'blue' => 255],
                 ['x' => 5, 'y' => 12],
-                'expectedColor2' => ['red' => 0, 'green' => 0, 'blue' => 0, 'alpha' => 0],
+                'expectedColor2' => ['red' => 0, 'green' => 0, 'blue' => 0],
                 \Magento\Framework\Image\Adapter\AdapterInterface::ADAPTER_GD2
             ],
             [
-                ['x' => 1, 'y' => 14],
-                'expectedColor1' => ['red' => 255, 'green' => 255, 'blue' => 255, 'alpha' => 127],
-                ['x' => 4, 'y' => 10],
-                'expectedColor2' => ['red' => 0, 'green' => 0, 'blue' => 0, 'alpha' => 0],
+                ['x' => 1, 'y' => 20],
+                'expectedColor1' => ['red' => 255, 'green' => 255, 'blue' => 255],
+                ['x' => 5, 'y' => 16],
+                'expectedColor2' => ['red' => 0, 'green' => 0, 'blue' => 0],
                 \Magento\Framework\Image\Adapter\AdapterInterface::ADAPTER_IM
             ]
         ];
@@ -611,7 +607,7 @@ class InterfaceTest extends \PHPUnit_Framework_TestCase
     public function testValidateUploadFile()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $imageAdapter = $objectManager->get('Magento\Framework\Image\AdapterFactory')->create();
+        $imageAdapter = $objectManager->get(\Magento\Framework\Image\AdapterFactory::class)->create();
         $this->assertTrue($imageAdapter->validateUploadFile($this->_getFixture('magento_thumbnail.jpg')));
     }
 
@@ -621,7 +617,7 @@ class InterfaceTest extends \PHPUnit_Framework_TestCase
     public function testValidateUploadFileException()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $imageAdapter = $objectManager->get('Magento\Framework\Image\AdapterFactory')->create();
+        $imageAdapter = $objectManager->get(\Magento\Framework\Image\AdapterFactory::class)->create();
         $imageAdapter->validateUploadFile(__FILE__);
     }
 }

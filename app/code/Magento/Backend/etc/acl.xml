@@ -22,6 +22,7 @@
                     <resource id="Magento_Backend::design"  title="Design" translate="title" sortOrder="20">
                         <resource id="Magento_Backend::schedule" title="Schedule" translate="title" sortOrder="30" />
                     </resource>
+                    <resource id="Magento_Backend::content_translation" title="Content translation" translate="title" sortOrder="40" />
                 </resource>
                 <resource id="Magento_Backend::stores" title="Stores" translate="title" sortOrder="80">
                     <resource id="Magento_Backend::stores_settings" title="Settings" translate="title" sortOrder="10">
