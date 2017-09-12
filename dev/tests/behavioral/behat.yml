@@ -8,7 +8,7 @@ default:
             base_url: http://magento.vm
             goutte: ~
             # To run locally:
-            browser_name: firefox
+            browser_name: chrome
             selenium2:
                  capabilities:
                      "platform": "ANY"
