@@ -31,13 +31,6 @@ class System implements ConfigTypeInterface
     private $data = [];
 
     /**
-     * The freshly read data.
-     *
-     * @var array
-     */
-    private $rawData = [];
-
-    /**
      * @var \Magento\Framework\App\Config\Spi\PostProcessorInterface
      */
     private $postProcessor;
@@ -87,11 +80,6 @@ class System implements ConfigTypeInterface
      * @var array
      */
     private $availableDataScopes = null;
-
-    /**
-     * @var bool
-     */
-    private $postProcessed = false;
 
     /**
      * @param \Magento\Framework\App\Config\ConfigSourceInterface $source
@@ -218,7 +206,7 @@ class System implements ConfigTypeInterface
     private function loadScopeData($scopeType, $scopeId)
     {
         $cachedData = $this->cache->load($this->configType . '_' . $scopeType . '_' . $scopeId);
-        if ($cachedData === false || !$this->postProcessed) {
+        if ($cachedData === false) {
             if ($this->availableDataScopes === null) {
                 $cachedScopeData = $this->cache->load($this->configType . '_scopes');
                 if ($cachedScopeData !== false) {
@@ -301,16 +289,15 @@ class System implements ConfigTypeInterface
      */
     private function readData(): array
     {
-        if ([] === $this->rawData) {
-            $this->rawData = $this->reader->read();
+        if ([] === $this->data) {
+            $this->data = $this->reader->read();
 
-            $this->rawData = $this->postProcessor->process(
-                $this->rawData
+            $this->data = $this->postProcessor->process(
+                $this->data
             );
-            $this->postProcessed = true;
         }
 
-        return $this->rawData;
+        return $this->data;
     }
 
     /**
@@ -326,8 +313,6 @@ class System implements ConfigTypeInterface
     public function clean()
     {
         $this->data = [];
-        $this->rawData = [];
-        $this->postProcessed = false;
         $this->cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, [self::CACHE_TAG]);
     }
 }
