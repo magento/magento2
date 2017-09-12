@@ -1,0 +1,13 @@
+<?php
+/** @var \Magento\OneTouchOrdering\Block\Button $block */
+?>
+<div id="one-touch-order" data-bind="scope:'one-touch-order'">
+    <!-- ko template: getTemplate() --><!-- /ko -->
+</div>
+<script type="text/x-magento-init">
+    {
+        "#one-touch-order": {
+            "Magento_Ui/js/core/app": <?= /* @escapeNotVerified */ $block->getJsLayout();?>
+        }
+    }
+</script>
