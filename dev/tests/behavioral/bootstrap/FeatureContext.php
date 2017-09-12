@@ -47,6 +47,15 @@ class FeatureContext extends MinkContext
     }
 
     /**
+     * @BeforeScenario
+     */
+    public function beforeScenario()
+    {
+        // $this->getSession()->getDriver()->resizeWindow(1280, 768);
+        $this->getSession()->maximizeWindow();
+    }
+
+    /**
      * @Then /^I wait for the suggestion box to appear$/
      */
     public function iWaitForTheSuggestionBoxToAppear()
