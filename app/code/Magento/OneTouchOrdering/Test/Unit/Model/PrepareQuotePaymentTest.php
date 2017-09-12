@@ -5,10 +5,10 @@
  */
 namespace Magento\OneTouchOrdering\Test\Unit\Model;
 
-use Magento\Customer\Model\Session;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\OneTouchOrdering\Model\CustomerBrainTreeManager;
+use Magento\OneTouchOrdering\Model\CustomerData;
 use Magento\OneTouchOrdering\Model\PrepareQuote;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Payment;
@@ -23,11 +23,7 @@ class PrepareQuotePaymentTest extends TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $customerSession;
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $customer;
+    protected $customerData;
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
@@ -57,7 +53,7 @@ class PrepareQuotePaymentTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->customerSession = $this->createMock(Session::class);
+        $this->customerData = $this->createMock(CustomerData::class);
         $this->quoteFactory = $this->createMock(QuoteFactory::class);
         $this->quote = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
@@ -71,7 +67,7 @@ class PrepareQuotePaymentTest extends TestCase
         $this->prepareQuote = $objectManager->getObject(
             PrepareQuote::class,
             [
-                'customerSession' => $this->customerSession,
+                'customerData' => $this->customerData,
                 'quoteFactory' => $this->quoteFactory,
                 'storeManager' => $this->storeManager,
                 'customerBrainTreeManager' => $this->customerBrainTreeManager
@@ -110,7 +106,7 @@ class PrepareQuotePaymentTest extends TestCase
             ->method('importData')
             ->with(['method' => BrainTreeConfigProvider::CC_VAULT_CODE])
             ->willReturnSelf();
-        $this->customerSession->expects($this->once())->method('getCustomerId')->willReturn($customerId);
+        $this->customerData->expects($this->once())->method('getCustomerId')->willReturn($customerId);
         $cc = $this->createMock(PaymentTokenInterface::class);
         $this->customerBrainTreeManager->expects($this->once())
             ->method('getCustomerBrainTreeCard')

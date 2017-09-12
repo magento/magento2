@@ -10,10 +10,6 @@ use Magento\Braintree\Model\Ui\ConfigProvider as BrainTreeConfigProvider;
 class PrepareQuote
 {
     /**
-     * @var \Magento\Customer\Model\Session
-     */
-    protected $customerSession;
-    /**
      * @var \Magento\Quote\Model\QuoteFactory
      */
     protected $quoteFactory;
@@ -25,18 +21,21 @@ class PrepareQuote
      * @var \Magento\OneTouchOrdering\Model\CustomerBrainTreeManager
      */
     protected $customerBrainTreeManager;
+    /**
+     * @var CustomerData
+     */
+    protected $customerData;
 
     public function __construct(
-        \Magento\Customer\Model\Session $customerSession,
+        \Magento\OneTouchOrdering\Model\CustomerData $customerData,
         \Magento\Quote\Model\QuoteFactory $quoteFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\OneTouchOrdering\Model\CustomerBrainTreeManager $customerBrainTreeManager
     ) {
-
-        $this->customerSession = $customerSession;
         $this->quoteFactory = $quoteFactory;
         $this->storeManager = $storeManager;
         $this->customerBrainTreeManager = $customerBrainTreeManager;
+        $this->customerData = $customerData;
     }
 
     /**
@@ -46,16 +45,15 @@ class PrepareQuote
     {
         $store = $this->storeManager->getStore();
         $quote = $this->quoteFactory->create();
-        $customer = $this->customerSession->getCustomer();
 
         $quote->setStore($store);
         $quote->setCurrency();
-        $quote->assignCustomer($customer->getDataModel());
+        $quote->assignCustomer($this->customerData->getCustomerDataModel());
         $quote->getBillingAddress()->importCustomerAddressData(
-            $customer->getDefaultBillingAddress()->getDataModel()
+            $this->customerData->getDefaultBillingAddressDataModel()
         );
         $quote->getShippingAddress()->importCustomerAddressData(
-            $customer->getDefaultShippingAddress()->getDataModel()
+            $this->customerData->getDefaultShippingAddressDataModel()
         );
         $quote->setInventoryProcessed(false);
 
@@ -68,7 +66,7 @@ class PrepareQuote
      */
     public function preparePayment(\Magento\Quote\Model\Quote $quote)
     {
-        $customerId = $this->customerSession->getCustomerId();
+        $customerId = $this->customerData->getCustomerId();
         $cc = $this->customerBrainTreeManager->getCustomerBrainTreeCard($customerId);
 
         if (!$cc) {
