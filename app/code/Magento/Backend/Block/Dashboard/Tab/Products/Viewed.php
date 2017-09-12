@@ -13,6 +13,7 @@ use Magento\Catalog\Pricing\Price\FinalPrice;
  *
  * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 100.0.2
  */
 class Viewed extends \Magento\Backend\Block\Dashboard\Grid
 {

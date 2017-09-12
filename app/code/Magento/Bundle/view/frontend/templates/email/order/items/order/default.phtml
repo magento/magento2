@@ -39,19 +39,19 @@
         <tr class="bundle-item bundle-parent">
             <td class="item-info">
                 <p class="product-name"><?= $block->escapeHtml($_item->getName()) ?></p>
-                <p class="sku"><?= /* @escapeNotVerified */  __('SKU'); ?>: <?= $block->escapeHtml($block->getSku($_item)) ?></p>
+                <p class="sku"><?= /* @escapeNotVerified */  __('SKU') ?>: <?= $block->escapeHtml($block->getSku($_item)) ?></p>
             </td>
             <td class="item-qty">
                 <?= /* @escapeNotVerified */  $_item->getQtyOrdered() * 1 ?>
             </td>
             <td class="item-price">
-                <?= /* @escapeNotVerified */  $block->getItemPrice($_item); ?>
+                <?= /* @escapeNotVerified */  $block->getItemPrice($_item) ?>
             </td>
         </tr>
     <?php else: ?>
         <tr class="bundle-item bundle-option-value">
             <td class="item-info" colspan="3">
-                <p><?= $block->getValueHtml($_item)?></p>
+                <p><?= $block->getValueHtml($_item) ?></p>
             </td>
         </tr>
     <?php endif; ?>
@@ -74,9 +74,9 @@
                     <tr>
                         <td>
                             <h3><?= /* @escapeNotVerified */  __('Gift Message') ?></h3>
-                            <strong><?= /* @escapeNotVerified */  __('From:'); ?></strong> <?= $block->escapeHtml($_giftMessage->getSender()) ?>
-                            <br /><strong><?= /* @escapeNotVerified */  __('To:'); ?></strong> <?= $block->escapeHtml($_giftMessage->getRecipient()) ?>
-                            <br /><strong><?= /* @escapeNotVerified */  __('Message:'); ?></strong>
+                            <strong><?= /* @escapeNotVerified */  __('From:') ?></strong> <?= $block->escapeHtml($_giftMessage->getSender()) ?>
+                            <br /><strong><?= /* @escapeNotVerified */  __('To:') ?></strong> <?= $block->escapeHtml($_giftMessage->getRecipient()) ?>
+                            <br /><strong><?= /* @escapeNotVerified */  __('Message:') ?></strong>
                             <br /><?= $block->escapeHtml($_giftMessage->getMessage()) ?>
                         </td>
                     </tr>

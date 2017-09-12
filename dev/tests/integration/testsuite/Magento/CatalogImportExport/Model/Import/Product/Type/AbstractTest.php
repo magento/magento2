@@ -5,7 +5,7 @@
  */
 namespace Magento\CatalogImportExport\Model\Import\Product\Type;
 
-class AbstractTest extends \PHPUnit_Framework_TestCase
+class AbstractTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType

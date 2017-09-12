@@ -12,7 +12,7 @@ namespace Magento\Theme\Test\Unit\Model;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Theme\Model\Design;
 
-class DesignTest extends \PHPUnit_Framework_TestCase
+class DesignTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Design
@@ -64,7 +64,7 @@ class DesignTest extends \PHPUnit_Framework_TestCase
             ->method('getCacheManager')
             ->willReturn($this->cacheManager);
 
-        $this->serializerMock = $this->getMock(SerializerInterface::class);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(

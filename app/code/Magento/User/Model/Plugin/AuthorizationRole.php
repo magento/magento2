@@ -13,7 +13,9 @@ use Magento\Authorization\Model\Role;
  */
 class AuthorizationRole
 {
-    /** @var \Magento\User\Model\ResourceModel\User */
+    /**
+     * @var \Magento\User\Model\ResourceModel\User
+     */
     protected $userResourceModel;
 
     /**

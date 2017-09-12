@@ -17,7 +17,7 @@ use Magento\Customer\Block\Widget\Name;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class NameTest extends \PHPUnit_Framework_TestCase
+class NameTest extends \PHPUnit\Framework\TestCase
 {
     /**#@+
      * Constant values used throughout the various unit tests.
@@ -74,13 +74,13 @@ class NameTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_escaper = $this->getMock(\Magento\Framework\Escaper::class, [], [], '', false);
-        $context = $this->getMock(\Magento\Framework\View\Element\Template\Context::class, [], [], '', false);
+        $this->_escaper = $this->createMock(\Magento\Framework\Escaper::class);
+        $context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
         $context->expects($this->any())->method('getEscaper')->will($this->returnValue($this->_escaper));
 
-        $addressHelper = $this->getMock(\Magento\Customer\Helper\Address::class, [], [], '', false);
+        $addressHelper = $this->createMock(\Magento\Customer\Helper\Address::class);
 
-        $this->_options = $this->getMock(\Magento\Customer\Model\Options::class, [], [], '', false);
+        $this->_options = $this->createMock(\Magento\Customer\Model\Options::class);
 
         $this->attribute = $this->getMockBuilder(\Magento\Customer\Api\Data\AttributeMetadataInterface::class)
             ->getMockForAbstractClass();

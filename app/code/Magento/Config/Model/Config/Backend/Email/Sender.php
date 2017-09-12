@@ -11,6 +11,10 @@
  */
 namespace Magento\Config\Model\Config\Backend\Email;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Sender extends \Magento\Framework\App\Config\Value
 {
     /**

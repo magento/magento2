@@ -11,7 +11,7 @@ use \Magento\Framework\App\Language\Config;
 /**
  * Test for configuration of language
  */
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\Config\Dom\UrnResolver */
     protected $urnResolver;
@@ -25,21 +25,15 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
-        $this->urnResolverMock = $this->getMock(\Magento\Framework\Config\Dom\UrnResolver::class, [], [], '', false);
+        $this->urnResolverMock = $this->createMock(\Magento\Framework\Config\Dom\UrnResolver::class);
         $this->urnResolverMock->expects($this->any())
             ->method('getRealPath')
             ->with('urn:magento:framework:App/Language/package.xsd')
             ->willReturn($this->urnResolver->getRealPath('urn:magento:framework:App/Language/package.xsd'));
-        $validationStateMock = $this->getMock(
-            \Magento\Framework\Config\ValidationStateInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $validationStateMock = $this->createMock(\Magento\Framework\Config\ValidationStateInterface::class);
         $validationStateMock->method('isValidationRequired')
             ->willReturn(true);
-        $domFactoryMock = $this->getMock(\Magento\Framework\Config\DomFactory::class, [], [], '', false);
+        $domFactoryMock = $this->createMock(\Magento\Framework\Config\DomFactory::class);
         $domFactoryMock->expects($this->once())
             ->method('createDom')
             ->willReturnCallback(

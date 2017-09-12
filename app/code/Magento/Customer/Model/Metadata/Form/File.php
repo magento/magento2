@@ -55,7 +55,7 @@ class File extends AbstractData
 
     /**
      * @var FileProcessorFactory
-     * @deprecated
+     * @deprecated 100.2.0
      */
     protected $fileProcessorFactory;
 
@@ -386,7 +386,7 @@ class File extends AbstractData
      * Get file processor
      *
      * @return FileProcessor
-     * @deprecated
+     * @deprecated 100.1.3
      */
     protected function getFileProcessor()
     {

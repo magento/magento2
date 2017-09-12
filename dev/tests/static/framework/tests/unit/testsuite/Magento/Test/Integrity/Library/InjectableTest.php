@@ -9,7 +9,7 @@ use Magento\TestFramework\Integrity\Library\Injectable;
 
 /**
  */
-class InjectableTest extends \PHPUnit_Framework_TestCase
+class InjectableTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Injectable

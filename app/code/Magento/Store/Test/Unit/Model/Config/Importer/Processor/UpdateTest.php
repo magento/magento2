@@ -26,7 +26,7 @@ use Magento\Framework\Event\ManagerInterface;
  * @see Update
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class UpdateTest extends \PHPUnit_Framework_TestCase
+class UpdateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Update
@@ -298,7 +298,6 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
     {
         $data = [
             ScopeInterface::SCOPE_GROUPS => [],
-            ScopeInterface::SCOPE_WEBSITES => [],
             ScopeInterface::SCOPE_STORES => []
         ];
 

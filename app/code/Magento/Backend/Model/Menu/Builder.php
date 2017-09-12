@@ -8,6 +8,8 @@ namespace Magento\Backend\Model\Menu;
 /**
  * Menu builder object. Retrieves commands (\Magento\Backend\Model\Menu\Builder\AbstractCommand)
  * to build menu (\Magento\Backend\Model\Menu)
+ * @api
+ * @since 100.0.2
  */
 class Builder
 {

@@ -9,6 +9,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
  * Order history tab
  *
  * @api
+ * @since 100.0.2
  */
 class History extends \Magento\Backend\Block\Template implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
@@ -207,7 +208,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
      *
      * @param string $label
      * @param bool $notified
-     * @param \DateTime $created
+     * @param \DateTimeInterface $created
      * @param string $comment
      * @return array
      */

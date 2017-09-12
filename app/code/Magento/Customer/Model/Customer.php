@@ -27,7 +27,6 @@ use Magento\Store\Model\ScopeInterface;
  * @method Customer setWebsiteId($value)
  * @method int getStoreId() getStoreId()
  * @method string getEmail() getEmail()
- * @method ResourceCustomer _getResource()
  * @method mixed getDisableAutoGroupChange()
  * @method Customer setDisableAutoGroupChange($value)
  * @method Customer setGroupId($value)
@@ -40,6 +39,7 @@ use Magento\Store\Model\ScopeInterface;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Customer extends \Magento\Framework\Model\AbstractModel
 {
@@ -968,7 +968,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     /**
      * Validate customer attribute values.
      *
-     * @deprecated
+     * @deprecated 100.1.0
      * @return bool
      */
     public function validate()
@@ -1077,9 +1077,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     {
         /** @var \Magento\Framework\Indexer\IndexerInterface $indexer */
         $indexer = $this->indexerRegistry->get(self::CUSTOMER_GRID_INDEXER_ID);
-        if (!$indexer->isScheduled()) {
-            $indexer->reindexRow($this->getId());
-        }
+        $indexer->reindexRow($this->getId());
     }
 
     /**
@@ -1320,6 +1318,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Check if customer is locked
      *
      * @return boolean
+     * @since 100.1.0
      */
     public function isCustomerLocked()
     {
@@ -1336,6 +1335,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Return Password Confirmation
      *
      * @return string
+     * @since 100.1.0
      */
     public function getPasswordConfirm()
     {
@@ -1346,6 +1346,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Return Password
      *
      * @return string
+     * @since 100.1.0
      */
     public function getPassword()
     {

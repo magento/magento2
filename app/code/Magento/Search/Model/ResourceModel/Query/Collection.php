@@ -10,6 +10,8 @@ use Magento\Store\Model\Store;
 /**
  * Search query collection
  *
+ * @api
+ * @since 100.0.2
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {

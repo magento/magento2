@@ -120,7 +120,7 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
     /**
      * Retrieve entity type code from search criteria
      *
-     * @deprecated
+     * @deprecated 100.2.0
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return null|string
      */
@@ -177,7 +177,7 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
     /**
      * Retrieve collection processor
      *
-     * @deprecated
+     * @deprecated 100.2.0
      * @return CollectionProcessorInterface
      */
     private function getCollectionProcessor()

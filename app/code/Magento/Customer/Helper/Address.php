@@ -14,8 +14,9 @@ use Magento\Framework\Exception\NoSuchEntityException;
 /**
  * Customer address helper
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Address extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -65,23 +66,31 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected $_formatTemplate = [];
 
-    /** @var \Magento\Framework\View\Element\BlockFactory */
+    /**
+     * @var \Magento\Framework\View\Element\BlockFactory
+     */
     protected $_blockFactory;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface */
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
     protected $_storeManager;
 
     /**
      * @var CustomerMetadataInterface
      *
-     * @deprecated
+     * @deprecated 100.2.0
      */
     protected $_customerMetadataService;
 
-    /** @var AddressMetadataInterface */
+    /**
+     * @var \Magento\Customer\Api\AddressMetadataInterface
+     */
     protected $_addressMetadataService;
 
-    /** @var \Magento\Customer\Model\Address\Config*/
+    /**
+     * @var \Magento\Customer\Model\Address\Config
+     */
     protected $_addressConfig;
 
     /**
@@ -372,6 +381,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $code
      * @return bool
+     * @since 100.2.0
      */
     public function isAttributeVisible($code)
     {

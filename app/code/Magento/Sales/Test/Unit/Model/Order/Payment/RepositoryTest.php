@@ -9,7 +9,7 @@ namespace Magento\Sales\Test\Unit\Model\Order\Payment;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RepositoryTest extends \PHPUnit_Framework_TestCase
+class RepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -59,61 +59,18 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->metaData = $this->getMock(
-            \Magento\Sales\Model\ResourceModel\Metadata::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->searchResultFactory = $this->getMock(
+        $this->metaData = $this->createMock(\Magento\Sales\Model\ResourceModel\Metadata::class);
+        $this->searchResultFactory = $this->createPartialMock(
             \Magento\Sales\Api\Data\OrderPaymentSearchResultInterfaceFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->searchCriteria = $this->getMock(
-            \Magento\Framework\Api\SearchCriteria::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->collection = $this->getMock(
-            \Magento\Sales\Model\ResourceModel\Order\Payment\Collection::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->paymentResource = $this->getMock(
-            \Magento\Sales\Model\ResourceModel\Order\Payment::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->filterGroup = $this->getMock(
-            \Magento\Framework\Api\Search\FilterGroup::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->filter = $this->getMock(
-            \Magento\Framework\Api\Filter::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->collectionProcessor = $this->getMock(
-            \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class,
-            [],
-            [],
-            '',
-            false
+        $this->searchCriteria = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
+        $this->collection = $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Payment\Collection::class);
+        $this->paymentResource = $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Payment::class);
+        $this->filterGroup = $this->createMock(\Magento\Framework\Api\Search\FilterGroup::class);
+        $this->filter = $this->createMock(\Magento\Framework\Api\Filter::class);
+        $this->collectionProcessor = $this->createMock(
+            \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class
         );
         $this->repository = $objectManager->getObject(
             \Magento\Sales\Model\Order\Payment\Repository::class,
@@ -194,13 +151,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
 
     protected function mockPayment($id = false)
     {
-        $payment = $this->getMock(
-            \Magento\Sales\Model\Order\Payment::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $payment = $this->createMock(\Magento\Sales\Model\Order\Payment::class);
 
         if ($id !== false) {
             $payment->expects($this->once())->method('getId')->willReturn($id);
