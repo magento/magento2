@@ -9,7 +9,7 @@ namespace Magento\Store\Model;
 use Magento\Directory\Model\CountryFactory;
 use Magento\Directory\Model\RegionFactory;
 use Magento\Framework\DataObject;
-use Magento\Store\Model\Address\Renderer;
+use Magento\Store\Model\Address\RendererInterface;
 
 /**
  * Store information class used to retrieve and format store information as set in store config
@@ -44,6 +44,10 @@ class Information
     /**#@-*/
 
     /**#@-*/
+
+    /**
+     * @var RendererInterface
+     */
     protected $renderer;
 
     /**
@@ -57,12 +61,12 @@ class Information
     protected $regionFactory;
 
     /**
-     * @param Renderer $renderer
+     * @param RendererInterface $renderer
      * @param RegionFactory $regionFactory
      * @param CountryFactory $countryFactory
      */
     public function __construct(
-        Renderer $renderer,
+        RendererInterface $renderer,
         RegionFactory $regionFactory,
         CountryFactory $countryFactory
     ) {
