@@ -66,7 +66,7 @@ class EavSetupTest extends \PHPUnit\Framework\TestCase
      *
      * @dataProvider addAttributeThrowExceptionDataProvider
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage An attribute code must not be less than 1 and more than 30 characters.
+     * @expectedExceptionMessage An attribute code must not be less than 1 and more than 60 characters.
      */
     public function testAddAttributeThrowException($attributeCode)
     {
@@ -86,7 +86,7 @@ class EavSetupTest extends \PHPUnit\Framework\TestCase
             [null],
             [''],
             [' '],
-            ['more_than_60_characters_more_than_more_than_60_characters'],
+            ['more_than_60_characters_more_than_more_than_60_characters_more'],
         ];
     }
 
