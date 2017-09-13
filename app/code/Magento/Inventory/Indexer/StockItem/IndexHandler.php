@@ -61,7 +61,7 @@ class IndexHandler implements IndexHandlerInterface
     {
         $tableName = $this->indexNameResolver->resolveName($indexName);
 
-        $columns = [IndexStructure::SKU, IndexStructure::QUANTITY, IndexStructure::STATUS];
+        $columns = [IndexStructure::SKU, IndexStructure::QUANTITY];
         foreach ($this->batch->getItems($documents, $this->batchSize) as $batchDocuments) {
             $this->resourceConnection
                 ->getConnection()

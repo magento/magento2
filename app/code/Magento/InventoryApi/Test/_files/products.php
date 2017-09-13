@@ -11,11 +11,11 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 $objectManager = Bootstrap::getObjectManager();
 /** @var ProductInterfaceFactory $productFactory */
-$productFactory = $objectManager->create(ProductInterfaceFactory::class);
+$productFactory = $objectManager->get(ProductInterfaceFactory::class);
 /** @var ProductRepositoryInterface $productRepository */
-$productRepository = $objectManager->create(ProductRepositoryInterface::class);
+$productRepository = $objectManager->get(ProductRepositoryInterface::class);
 
-for ($i = 1; $i < 4; $i++) {
+for ($i = 1; $i <= 3; $i++) {
     $product = $productFactory->create();
     $product->setTypeId(Type::TYPE_SIMPLE)
         ->setAttributeSetId(4)

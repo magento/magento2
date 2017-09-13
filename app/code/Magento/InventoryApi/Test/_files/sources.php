@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceInterfaceFactory;
@@ -20,32 +21,40 @@ $sourcesData = [
     [
         // define only required and needed for tests fields
         SourceInterface::SOURCE_ID => 1,
-        SourceInterface::NAME => 'source-name-1',
+        SourceInterface::NAME => 'EU-source-1',
         SourceInterface::ENABLED => true,
-        SourceInterface::PRIORITY => 300,
+        SourceInterface::PRIORITY => 100,
         SourceInterface::POSTCODE => 'postcode',
-        SourceInterface::COUNTRY_ID => 'US',
+        SourceInterface::COUNTRY_ID => 'FR',
     ],
     [
         SourceInterface::SOURCE_ID => 2,
-        SourceInterface::NAME => 'source-name-2',
+        SourceInterface::NAME => 'EU-source-2',
         SourceInterface::ENABLED => true,
         SourceInterface::PRIORITY => 200,
         SourceInterface::POSTCODE => 'postcode',
-        SourceInterface::COUNTRY_ID => 'US',
+        SourceInterface::COUNTRY_ID => 'FR',
     ],
     [
         SourceInterface::SOURCE_ID => 3,
-        SourceInterface::NAME => 'source-name-3',
-        SourceInterface::ENABLED => false,
-        SourceInterface::PRIORITY => 200,
+        SourceInterface::NAME => 'EU-source-3',
+        SourceInterface::ENABLED => true,
+        SourceInterface::PRIORITY => 300,
         SourceInterface::POSTCODE => 'postcode',
-        SourceInterface::COUNTRY_ID => 'US',
+        SourceInterface::COUNTRY_ID => 'DE',
     ],
     [
         SourceInterface::SOURCE_ID => 4,
-        SourceInterface::NAME => 'source-name-4',
+        SourceInterface::NAME => 'EU-source-disabled',
         SourceInterface::ENABLED => false,
+        SourceInterface::PRIORITY => 10,
+        SourceInterface::POSTCODE => 'postcode',
+        SourceInterface::COUNTRY_ID => 'DE',
+    ],
+    [
+        SourceInterface::SOURCE_ID => 5,
+        SourceInterface::NAME => 'US-source-1',
+        SourceInterface::ENABLED => true,
         SourceInterface::PRIORITY => 100,
         SourceInterface::POSTCODE => 'postcode',
         SourceInterface::COUNTRY_ID => 'US',

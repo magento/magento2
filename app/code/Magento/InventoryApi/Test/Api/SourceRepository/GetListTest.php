@@ -3,8 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\InventoryApi\Test\Api\SourceRepository;
 
+use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Webapi\Rest\Request;
 use Magento\InventoryApi\Api\Data\SourceInterface;
@@ -22,13 +24,50 @@ class GetListTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
-     * @param array $searchCriteria
-     * @param array $expectedItemsData
-     * @dataProvider dataProviderGetList
      */
-    public function testGetList(array $searchCriteria, array $expectedItemsData)
+    public function testGetList()
     {
-        $requestData = ['searchCriteria' => $searchCriteria];
+        $requestData = [
+            'searchCriteria' => [
+                SearchCriteria::FILTER_GROUPS => [
+                    [
+                        'filters' => [
+                            [
+                                'field' => SourceInterface::ENABLED,
+                                'value' => 1,
+                                'condition_type' => 'eq',
+                            ],
+                        ],
+                    ],
+                ],
+                SearchCriteria::SORT_ORDERS => [
+                    [
+                        'field' => SourceInterface::PRIORITY,
+                        'direction' => SortOrder::SORT_DESC,
+                    ],
+                    [
+                        'field' => SourceInterface::NAME,
+                        'direction' => SortOrder::SORT_DESC,
+                    ],
+                ],
+                SearchCriteria::CURRENT_PAGE => 2,
+                SearchCriteria::PAGE_SIZE => 2,
+            ],
+        ];
+        $expectedTotalCount = 4;
+        $expectedItemsData = [
+            [
+                SourceInterface::ENABLED => true,
+                SourceInterface::PRIORITY => 100,
+                SourceInterface::NAME => 'US-source-1',
+            ],
+            [
+                SourceInterface::ENABLED => true,
+                SourceInterface::PRIORITY => 100,
+                SourceInterface::NAME => 'EU-source-1',
+            ],
+        ];
+
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '?' . http_build_query($requestData),
@@ -43,75 +82,8 @@ class GetListTest extends WebapiAbstract
             ? $this->_webApiCall($serviceInfo)
             : $this->_webApiCall($serviceInfo, $requestData);
 
-        self::assertEquals(count($expectedItemsData), $response['total_count']);
-        AssertArrayContains::assert($searchCriteria, $response['search_criteria']);
+        AssertArrayContains::assert($requestData['searchCriteria'], $response['search_criteria']);
+        self::assertEquals($expectedTotalCount, $response['total_count']);
         AssertArrayContains::assert($expectedItemsData, $response['items']);
-    }
-
-    /**
-     * @return array
-     */
-    public function dataProviderGetList()
-    {
-        return [
-            'filtering_by_field' => [
-                [
-                    'filter_groups' => [
-                        [
-                            'filters' => [
-                                [
-                                    'field' => SourceInterface::ENABLED,
-                                    'value' => 0,
-                                    'condition_type' => 'eq',
-                                ],
-                            ],
-                        ],
-                    ],
-                    'sort_orders' => [
-                        [
-                            'field' => SourceInterface::PRIORITY,
-                            'direction' => SortOrder::SORT_DESC,
-                        ],
-                    ],
-                ],
-                [
-                    [
-                        SourceInterface::NAME => 'source-name-3',
-                    ],
-                    [
-                        SourceInterface::NAME => 'source-name-4',
-                    ],
-                ],
-            ],
-            'ordering_by_field' => [
-                [
-                    'filter_groups' => [], // It is need for soap mode
-                    'sort_orders' => [
-                        [
-                            'field' => SourceInterface::PRIORITY,
-                            'direction' => SortOrder::SORT_DESC,
-                        ],
-                        [
-                            'field' => SourceInterface::NAME,
-                            'direction' => SortOrder::SORT_DESC,
-                        ],
-                    ],
-                ],
-                [
-                    [
-                        SourceInterface::NAME => 'source-name-1',
-                    ],
-                    [
-                        SourceInterface::NAME => 'source-name-3',
-                    ],
-                    [
-                        SourceInterface::NAME => 'source-name-2',
-                    ],
-                    [
-                        SourceInterface::NAME => 'source-name-4',
-                    ],
-                ],
-            ],
-        ];
     }
 }

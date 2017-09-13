@@ -24,14 +24,18 @@ class UnassignSourceFromStockTest extends WebapiAbstract
     /**
      * Preconditions:
      * Sources to Stock links:
-     *   Source-1 - Stock-1
-     *   Source-2 - Stock-1
+     *   EU-source-1(id:1) - EU-stock(id:1)
+     *   EU-source-2(id:2) - EU-stock(id:1)
+     *   EU-source-3(id:3) - EU-stock(id:1)
+     *   EU-source-disabled(id:4) - EU-stock(id:1)
      *
      * Test case:
-     *   Unassign Source-1 from Stock-1
+     *   Unassign EU-source-1(id:1) from EU-stock(id:1)
      *
      * Expected data:
-     *  Only Source-2 is assigned on Stock-1
+     *   EU-source-2(id:2) - EU-stock(id:1)
+     *   EU-source-3(id:3) - EU-stock(id:1)
+     *   EU-source-disabled(id:4) - EU-stock(id:1)
      *
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
@@ -56,7 +60,7 @@ class UnassignSourceFromStockTest extends WebapiAbstract
             : $this->_webApiCall($serviceInfo, ['sourceId' => $sourceId, 'stockId' => $stockId]);
 
         $assignedSourcesForStock = $this->getAssignedSourcesForStock($stockId);
-        self::assertEquals([2], array_column($assignedSourcesForStock, SourceInterface::SOURCE_ID));
+        self::assertEquals([2, 3, 4], array_column($assignedSourcesForStock, SourceInterface::SOURCE_ID));
     }
 
     /**
@@ -88,7 +92,7 @@ class UnassignSourceFromStockTest extends WebapiAbstract
             $this->fail('Expected throwing exception');
         } catch (\Exception $e) {
             $errorData = $this->processRestExceptionResult($e);
-            self::assertEquals($expectedErrorData['rest_message'], $errorData['message']);
+            self::assertEquals($expectedErrorData['message'], $errorData['message']);
             self::assertEquals(Exception::HTTP_BAD_REQUEST, $e->getCode());
         }
     }

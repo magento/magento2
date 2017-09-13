@@ -42,7 +42,7 @@ class GetAssignedStockIds
         );
 
         if (count($sourceIds)) {
-            $select->where(StockSourceLink::SOURCE_ID . ' = ?', $sourceIds);
+            $select->where(StockSourceLink::SOURCE_ID . ' IN (?)', $sourceIds);
         }
         $select->group(StockSourceLink::STOCK_ID);
         return $connection->fetchCol($select);

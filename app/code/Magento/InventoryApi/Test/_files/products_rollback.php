@@ -17,7 +17,7 @@ $currentArea = $registry->registry('isSecureArea');
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
-for ($i = 1; $i < 4; $i++) {
+for ($i = 1; $i <= 3; $i++) {
     $productRepository->deleteById('SKU-' . $i);
 }
 
