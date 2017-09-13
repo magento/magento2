@@ -101,13 +101,13 @@ class Rss
      */
     public function createRssXml()
     {
-        $feed = $this->feedFactory->importArray(
+        $feed = $this->feedFactory->create(
             $this->getFeeds(),
-            \Magento\Framework\App\FeedFormatsInterface::DEFAULT_FORMAT
+            \Magento\Framework\App\FeedFactoryInterface::DEFAULT_FORMAT
         );
 
         return $feed->getFormatedContentAs(
-            \Magento\Framework\App\FeedOutputFormatsInterface::DEFAULT_FORMAT
+            \Magento\Framework\App\FeedInterface::DEFAULT_FORMAT
         );
     }
 }
