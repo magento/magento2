@@ -427,4 +427,41 @@ class HttpTest extends \PHPUnit\Framework\TestCase
             'HTTPS off with HTTP_ prefixed proxy set to https' => [true, 'off', 'HTTP_HEADER_FROM_PROXY', 'https', 1],
         ];
     }
+    
+    /**
+     * @dataProvider setPathInfoDataProvider
+     * @param string $requestUri
+     * @param string $basePath$
+     * @param string $expected
+     */
+    public function testSetPathInfo($requestUri, $basePath, $expected)
+    {
+        $this->_model = $this->getModel($requestUri);
+        $this->_model->setBaseUrl($basePath);
+        $this->_model->setPathInfo();
+        $this->assertEquals($expected, $this->_model->getPathInfo());
+    }
+
+    public function setPathInfoDataProvider()
+    {
+        return [
+            ['http://svr.com/', '', ''],
+            ['http://svr.com', '', ''],
+            ['http://svr.com?param1=1', '', ''],
+            ['http://svr.com/?param1=1', '', '/'],
+            ['http://svr.com?param1=1&param2=2', '', ''],
+            ['http://svr.com/?param1=1&param2=2', '', '/'],
+            ['http://svr.com/module', '', '/module'],
+            ['http://svr.com/module/', '', '/module/'],
+            ['http://svr.com/module/route', '', '/module/route'],
+            ['http://svr.com/module/route/', '', '/module/route/'],
+            ['http://svr.com/index.php', '/index.php', ''],
+            ['http://svr.com/index.php/', '/index.php', '/'],
+            ['http://svr.com/index.phpmodule', '/index.php', 'noroute'],
+            ['http://svr.com/index.phpmodule/contact', '/index.php/', 'noroute'],
+            ['http://svr.com//index.phpmodule/contact', 'index.php', 'noroute'],
+            ['http://svr.com/index.phpmodule/contact/', '/index.php/', 'noroute'],
+            ['http://svr.com//index.phpmodule/contact/', 'index.php', 'noroute'],
+        ];
+    }
 }
