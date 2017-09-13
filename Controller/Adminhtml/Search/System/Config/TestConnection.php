@@ -15,6 +15,13 @@ use Magento\Framework\Filter\StripTags;
 class TestConnection extends Action
 {
     /**
+     * Authorization level of a basic admin session.
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_CatalogSearch::config_catalog_search';
+
+    /**
      * @var ClientResolver
      */
     private $clientResolver;
