@@ -56,7 +56,7 @@ $configuredPrice = $block->getPrice();
     ?>
     <p class="price-as-configured">
         <?= /* @noEscape */ $block->renderAmount(
-            $configuredPrice->getAmount(),
+            $block->getPriceType('configured_price')->getAmount(),
             [
                 'display_label'     => $block->escapeHtml($priceLabel),
                 'price_id'          => $block->escapeHtml($block->getPriceId('product-price-' . $idSuffix)),
