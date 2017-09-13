@@ -95,6 +95,7 @@ class CustomerDataTest extends TestCase
         $result = $this->customerData->getDefaultShippingAddressDataModel();
         $this->assertSame($result, $this->customerAddressDataModel);
     }
+
     public function testShippingAddressDataModel()
     {
         $addressId = 123;

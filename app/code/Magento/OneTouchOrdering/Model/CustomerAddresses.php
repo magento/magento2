@@ -14,6 +14,10 @@ class CustomerAddresses
      */
     protected $customerSession;
 
+    /**
+     * CustomerAddresses constructor.
+     * @param CustomerSession $customerSession
+     */
     public function __construct(
         CustomerSession $customerSession
     ) {
@@ -39,7 +43,7 @@ class CustomerAddresses
                 $address->getCity(),
                 $address->getRegion(),
                 $address->getPostcode(),
-                $address->getCountry()
+                $address->getCountryModel()->getName()
             );
             $addressesFormatted[] = [
                 'address' => $addressString,
