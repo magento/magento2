@@ -5,6 +5,7 @@
  */
 namespace Magento\InventoryApi\Test\Api\StockRepository;
 
+use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Webapi\Rest\Request;
 use Magento\InventoryApi\Api\Data\StockInterface;
@@ -23,10 +24,11 @@ class GetListTest extends WebapiAbstract
     /**
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
      * @param array $searchCriteria
+     * @param int $expectedTotalCount
      * @param array $expectedItemsData
      * @dataProvider dataProviderGetList
      */
-    public function testGetList(array $searchCriteria, array $expectedItemsData)
+    public function testGetList(array $searchCriteria, int $expectedTotalCount, array $expectedItemsData)
     {
         $requestData = ['searchCriteria' => $searchCriteria];
         $serviceInfo = [
@@ -43,8 +45,8 @@ class GetListTest extends WebapiAbstract
             ? $this->_webApiCall($serviceInfo)
             : $this->_webApiCall($serviceInfo, $requestData);
 
-        self::assertEquals(count($expectedItemsData), $response['total_count']);
         AssertArrayContains::assert($searchCriteria, $response['search_criteria']);
+        self::assertEquals($expectedTotalCount, $response['total_count']);
         AssertArrayContains::assert($expectedItemsData, $response['items']);
     }
 
@@ -54,48 +56,43 @@ class GetListTest extends WebapiAbstract
     public function dataProviderGetList()
     {
         return [
-            'filtering_by_field' => [
+            'filtering' => [
                 [
-                    'filter_groups' => [
+                    SearchCriteria::FILTER_GROUPS => [
                         [
                             'filters' => [
                                 [
                                     'field' => StockInterface::NAME,
-                                    'value' => 'stock-name-2',
+                                    'value' => 'EU-stock',
                                     'condition_type' => 'eq',
                                 ],
                             ],
                         ],
                     ],
                 ],
+                1,
                 [
                     [
-                        StockInterface::NAME => 'stock-name-2',
+                        StockInterface::NAME => 'EU-stock',
                     ],
                 ],
             ],
-            'ordering_by_field' => [
+            'ordering_paging' => [
                 [
-                    'filter_groups' => [], // It is need for soap mode
-                    'sort_orders' => [
+                    SearchCriteria::FILTER_GROUPS => [], // It is need for soap mode
+                    SearchCriteria::SORT_ORDERS => [
                         [
                             'field' => StockInterface::NAME,
                             'direction' => SortOrder::SORT_DESC,
                         ],
                     ],
+                    SearchCriteria::CURRENT_PAGE => 2,
+                    SearchCriteria::PAGE_SIZE => 2,
                 ],
+                3,
                 [
                     [
-                        StockInterface::NAME => 'stock-name-4',
-                    ],
-                    [
-                        StockInterface::NAME => 'stock-name-3',
-                    ],
-                    [
-                        StockInterface::NAME => 'stock-name-2',
-                    ],
-                    [
-                        StockInterface::NAME => 'stock-name-1',
+                        StockInterface::NAME => 'EU-stock',
                     ],
                 ],
             ],
