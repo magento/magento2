@@ -1,33 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Block\Plugin\Product\Media;
 
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Catalog\Model\Product;
-use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Provides a serialized media gallery data for configurable product options.
  */
 class Gallery
 {
-    /**
-     * @var Json
-     */
-    private $json;
-
-    /**
-     * @param Json $json
-     */
-    public function __construct(
-        Json $json
-    ) {
-        $this->json = $json;
-    }
-
     /**
      * @param \Magento\Catalog\Block\Product\View\Gallery $subject
      * @param string $result
@@ -37,7 +22,7 @@ class Gallery
         \Magento\Catalog\Block\Product\View\Gallery $subject,
         $result
     ) {
-        $result = $this->json->unserialize($result);
+        $result = json_decode($result, true);
         $parentProduct = $subject->getProduct();
         if ($parentProduct->getTypeId() == Configurable::TYPE_CODE) {
             /** @var Configurable $productType */
@@ -49,7 +34,7 @@ class Gallery
                 $result[$key] = $this->getProductGallery($product);
             }
         }
-        return $this->json->serialize($result);
+        return json_encode($result);
     }
 
     /**
