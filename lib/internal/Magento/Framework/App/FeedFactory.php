@@ -5,8 +5,6 @@
  */
 namespace Magento\Framework\App;
 
-use Magento\Framework\App\FeedFactory;
-use Magento\Framework\App\FeedFactoryInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -40,12 +38,12 @@ class FeedFactory implements FeedFactoryInterface
      * Get a new \Magento\Framework\App\Feed object from a custom array
      *
      * @throws \Magento\Framework\Exception\InputException
-     * @param  array  $data
-     * @param  string $format
+     * @param array $data
+     * @param string $format
      * @return \Magento\Framework\App\FeedInterface
      */
     public function create(
-        array $data, 
+        array $data,
         $format = FeedFactoryInterface::DEFAULT_FORMAT
     ) {
         try {

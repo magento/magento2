@@ -102,7 +102,7 @@ class Rss
     public function createRssXml()
     {
         $feed = $this->feedFactory->importArray(
-            $this->getFeeds(), 
+            $this->getFeeds(),
             \Magento\Framework\App\FeedFormatsInterface::DEFAULT_FORMAT
         );
 
