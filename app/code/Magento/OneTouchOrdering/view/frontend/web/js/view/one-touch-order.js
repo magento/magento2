@@ -6,6 +6,7 @@ define(
         'ko',
         'Magento_Ui/js/modal/confirm',
         'jquery',
+        'Magento_Customer/js/customer-data',
         'mage/url',
         'jquery/ui',
         'mage/translate'
@@ -14,6 +15,7 @@ define(
         ko,
         confirm,
         $,
+        customerData,
         urlBuilder
     ) {
         'use strict';
@@ -26,7 +28,9 @@ define(
             },
             options: {
                 message: $.mage.__('Are you sure you want to place order and pay?'),
-                formSelector: '#product_addtocart_form'
+                formSelector: '#product_addtocart_form',
+                addresses: ko.observable([]),
+                defaultAddress: ko.observable(0)
             },
 
             /** @inheritdoc */
@@ -37,6 +41,11 @@ define(
                 $.get(urlBuilder.build('onetouchorder/button/available')).done(function (data) {
                     if (typeof data.available !== 'undefined') {
                         self.showButton(data.available);
+                    }
+
+                    if(typeof data.addresses !== 'undefined' && typeof data.defaultAddress !== 'undefined') {
+                        self.options.addresses(data.addresses);
+                        self.options.defaultAddress(data.defaultAddress);
                     }
                 });
             },

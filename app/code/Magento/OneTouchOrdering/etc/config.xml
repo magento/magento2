@@ -11,6 +11,7 @@
             <one_touch>
                 <active>1</active>
                 <button_text>One Touch Ordering</button_text>
+                <address_select>0</address_select>
             </one_touch>
         </sales>
     </default>

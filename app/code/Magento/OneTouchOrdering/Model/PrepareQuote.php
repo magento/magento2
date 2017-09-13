@@ -41,7 +41,7 @@ class PrepareQuote
     /**
      * @return \Magento\Quote\Model\Quote
      */
-    public function prepare()
+    public function prepare($params)
     {
         $store = $this->storeManager->getStore();
         $quote = $this->quoteFactory->create();
@@ -52,8 +52,15 @@ class PrepareQuote
         $quote->getBillingAddress()->importCustomerAddressData(
             $this->customerData->getDefaultBillingAddressDataModel()
         );
+
+        if ($addressId = $params->getCustomerAddress()) {
+            $shippingAddressData = $this->customerData->getShippingAddressDataModel($addressId);
+        } else {
+            $shippingAddressData = $this->customerData->getDefaultShippingAddressDataModel();
+        }
+
         $quote->getShippingAddress()->importCustomerAddressData(
-            $this->customerData->getDefaultShippingAddressDataModel()
+            $shippingAddressData
         );
         $quote->setInventoryProcessed(false);
 

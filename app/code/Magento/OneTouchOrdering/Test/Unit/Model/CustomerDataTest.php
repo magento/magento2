@@ -95,6 +95,27 @@ class CustomerDataTest extends TestCase
         $result = $this->customerData->getDefaultShippingAddressDataModel();
         $this->assertSame($result, $this->customerAddressDataModel);
     }
+    public function testShippingAddressDataModel()
+    {
+        $addressId = 123;
+
+        $this->customerSession
+            ->expects($this->once())
+            ->method('getCustomer')
+            ->willReturn($this->customer);
+        $this->customer
+            ->expects($this->once())
+            ->method('getAddressById')
+            ->with($addressId)
+            ->willReturn($this->customerAddressMock);
+        $this->customerAddressMock
+            ->expects($this->once())
+            ->method('getDataModel')
+            ->willReturn($this->customerAddressDataModel);
+
+        $result = $this->customerData->getShippingAddressDataModel($addressId);
+        $this->assertSame($result, $this->customerAddressDataModel);
+    }
 
     public function testGetCustomerDataModel()
     {

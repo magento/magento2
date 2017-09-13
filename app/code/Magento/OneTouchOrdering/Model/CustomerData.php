@@ -35,6 +35,15 @@ class CustomerData
     }
 
     /**
+     * @param $addressId
+     * @return \Magento\Customer\Api\Data\AddressInterface
+     */
+    public function getShippingAddressDataModel($addressId)
+    {
+        return $this->getCustomer()->getAddressById($addressId)->getDataModel();
+    }
+
+    /**
      * @return \Magento\Customer\Api\Data\CustomerInterface
      */
     public function getCustomerDataModel()

@@ -25,6 +25,10 @@ class PlaceOrder
      * @var PrepareQuote
      */
     protected $prepareQuote;
+    /**
+     * @var \Magento\OneTouchOrdering\Helper\Data
+     */
+    private $oneTouchOrderingHelper;
 
     /**
      * PlaceOrder constructor.
@@ -37,12 +41,14 @@ class PlaceOrder
         \Magento\Quote\Model\ResourceModel\Quote $quoteRepository,
         \Magento\Quote\Api\CartManagementInterface $cartManagementInterface,
         \Magento\OneTouchOrdering\Model\CustomerBrainTreeManager $customerBrainTreeManager,
-        \Magento\OneTouchOrdering\Model\PrepareQuote $prepareQuote
+        \Magento\OneTouchOrdering\Model\PrepareQuote $prepareQuote,
+        \Magento\OneTouchOrdering\Helper\Data $oneTouchOrderingHelper
     ) {
         $this->cartManagementInterface = $cartManagementInterface;
         $this->customerBrainTreeManager = $customerBrainTreeManager;
         $this->quoteRepository = $quoteRepository;
         $this->prepareQuote = $prepareQuote;
+        $this->oneTouchOrderingHelper = $oneTouchOrderingHelper;
     }
 
     /**
@@ -53,8 +59,8 @@ class PlaceOrder
      */
     public function placeOrder(\Magento\Catalog\Model\Product $product, array $params)
     {
-        $quote = $this->prepareQuote->prepare();
         $paramsObject = $this->_getProductRequest($params);
+        $quote = $this->prepareQuote->prepare($paramsObject);
         $quote->addProduct($product, $paramsObject);
         $this->selectCheapestShippingRate($quote);
         $this->prepareQuote->preparePayment($quote);
@@ -115,7 +121,9 @@ class PlaceOrder
                 __('We found an invalid request for adding product to quote.')
             );
         }
-
+        if (!$this->oneTouchOrderingHelper->isSelectAddressEnabled()) {
+            $request->unsetData('customer_address');
+        }
         return $request;
     }
 }

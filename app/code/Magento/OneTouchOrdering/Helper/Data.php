@@ -12,6 +12,8 @@ class Data
 {
     const ONE_TOUCH_ORDERING_MODULE_ACTIVE = 'sales/one_touch/active';
     const ONE_TOUCH_ORDERING_MODULE_BUTTON_TEXT = 'sales/one_touch/button_text';
+    const ONE_TOUCH_ORDERING_MODULE_ADDRESS_SELECT = 'sales/one_touch/address_select';
+
     /**
      * @var StoreManagerInterface
      */
@@ -39,11 +41,15 @@ class Data
      */
     public function isModuleEnabled()
     {
-        return $this->scopeConfig->isSetFlag(
-            self::ONE_TOUCH_ORDERING_MODULE_ACTIVE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            $this->storeManager->getStore()->getId()
-        );
+        return $this->isSetFlag(self::ONE_TOUCH_ORDERING_MODULE_ACTIVE);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSelectAddressEnabled()
+    {
+        return $this->isSetFlag(self::ONE_TOUCH_ORDERING_MODULE_ADDRESS_SELECT);
     }
 
     /**
@@ -51,8 +57,30 @@ class Data
      */
     public function getButtonText()
     {
+        return $this->getValue(self::ONE_TOUCH_ORDERING_MODULE_BUTTON_TEXT);
+    }
+
+    /**
+     * @param $path
+     * @return mixed
+     */
+    protected function getValue($path)
+    {
         return $this->scopeConfig->getValue(
-            self::ONE_TOUCH_ORDERING_MODULE_BUTTON_TEXT,
+            $path,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $this->storeManager->getStore()->getId()
+        );
+    }
+
+    /**
+     * @param $path
+     * @return bool
+     */
+    protected function isSetFlag($path)
+    {
+        return $this->scopeConfig->isSetFlag(
+            $path,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $this->storeManager->getStore()->getId()
         );

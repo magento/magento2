@@ -1,11 +1,20 @@
 <!-- ko if: showButton -->
+<div>
+    <button type="button"
+            class="action primary onetouch"
+            id="product-onetouch-button"
+            data-bind="click: oneTouchOrder, attr:{title: buttonText}">
+        <span data-bind="text: buttonText"></span>
+    </button>
+</div>
 
-<button type="button"
-        class="action primary onetouch"
-        id="product-onetouch-button"
-        data-bind="click: oneTouchOrder, attr:{title: buttonText}"
->
-    <span data-bind="text: buttonText"></span>
-</button>
+<!-- ko if: options.addresses().length > 0 -->
+<div>
+    <label for="address-selector">Select address:</label>
+    <select name="customer_address" id="address-selector"
+            data-bind="options: options.addresses, optionsText: 'address', optionsValue: 'id', value: options.defaultAddress">
+    </select>
+</div>
+<!-- /ko -->
 
 <!-- /ko -->
