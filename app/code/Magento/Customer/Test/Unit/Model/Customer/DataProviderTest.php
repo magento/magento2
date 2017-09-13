@@ -547,6 +547,20 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetData()
     {
+        $customerData = [
+            'email' => 'test@test.ua',
+            'default_billing' => 2,
+            'default_shipping' => 2,
+            'password_hash' => 'password_hash',
+            'rp_token' => 'rp_token',
+            'confirmation' => 'confirmation',
+        ];
+        $addressData = [
+            'firstname' => 'firstname',
+            'lastname' => 'lastname',
+            'street' => "street\nstreet",
+        ];
+
         $customer = $this->getMockBuilder(\Magento\Customer\Model\Customer::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -570,11 +584,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
             ->willReturn([$customer]);
         $customer->expects($this->once())
             ->method('getData')
-            ->willReturn([
-                'email' => 'test@test.ua',
-                'default_billing' => 2,
-                'default_shipping' => 2,
-            ]);
+            ->willReturn($customerData);
         $customer->expects($this->once())
             ->method('getAddresses')
             ->willReturn([$address]);
@@ -591,11 +601,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
         $address->expects($this->once())
             ->method('getData')
-            ->willReturn([
-                'firstname' => 'firstname',
-                'lastname' => 'lastname',
-                'street' => "street\nstreet",
-            ]);
+            ->willReturn($addressData);
         $address->expects($this->once())
             ->method('getAttributes')
             ->willReturn([]);
