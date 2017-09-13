@@ -289,13 +289,10 @@ class System implements ConfigTypeInterface
      */
     private function readData(): array
     {
-        if ([] === $this->data) {
-            $this->data = $this->reader->read();
-
-            $this->data = $this->postProcessor->process(
-                $this->data
-            );
-        }
+        $this->data = $this->reader->read();
+        $this->data = $this->postProcessor->process(
+            $this->data
+        );
 
         return $this->data;
     }
