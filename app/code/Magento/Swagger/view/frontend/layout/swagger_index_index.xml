@@ -19,11 +19,15 @@
         <link src='Magento_Swagger::swagger-ui/js/lib/jquery.slideto.min.js' type='text/javascript'/>
         <link src='Magento_Swagger::swagger-ui/js/lib/jquery.wiggle.min.js' type='text/javascript'/>
         <link src='Magento_Swagger::swagger-ui/js/lib/jquery.ba-bbq.min.js' type='text/javascript'/>
-        <link src='Magento_Swagger::swagger-ui/js/lib/handlebars-2.0.0.js' type='text/javascript'/>
+        <link src='Magento_Swagger::swagger-ui/js/lib/handlebars.min-v4.0.10.js' type='text/javascript'/>
         <link src='Magento_Swagger::swagger-ui/js/lib/underscore-min.js' type='text/javascript'/>
         <link src='Magento_Swagger::swagger-ui/js/lib/backbone-min.js' type='text/javascript'/>
+        <link src='Magento_Swagger::swagger-ui/js/lib/jsoneditor.min.js' type='text/javascript'/>
         <link src='Magento_Swagger::swagger-ui/js/swagger-ui.js' type='text/javascript'/>
-        <link src='Magento_Swagger::swagger-ui/js/lib/highlight.7.3.pack.js' type='text/javascript'/>
+        <link src='Magento_Swagger::swagger-ui/js/lib/highlight.9.1.0.pack.js' type='text/javascript'/>
+        <link src='Magento_Swagger::swagger-ui/js/lib/highlight.9.1.0.pack_extended.js' type='text/javascript'/>
+        <link src='Magento_Swagger::swagger-ui/js/lib/lodash.min.js' type='text/javascript'/>
+        <link src='Magento_Swagger::swagger-ui/js/lib/object-assign-pollyfill.js' type='text/javascript'/>
         <link src='Magento_Swagger::swagger-ui/js/lib/marked.js' type='text/javascript'/>
         <link src='Magento_Swagger::swagger-ui/js/lib/swagger-oauth.js' type='text/javascript'/>
         <link src='Magento_Swagger::swagger-ui/js/lang/translator.js' type='text/javascript'/>

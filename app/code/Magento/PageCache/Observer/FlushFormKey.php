@@ -6,22 +6,29 @@
 namespace Magento\PageCache\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Framework\App\PageCache\FormKey;
+use Magento\Framework\App\PageCache\FormKey as CookieFormKey;
+use Magento\Framework\Data\Form\FormKey as DataFormKey;
 
-class FlushFormKeyOnLogout implements ObserverInterface
+class FlushFormKey implements ObserverInterface
 {
     /**
-     * @var FormKey
+     * @var CookieFormKey
      */
     private $cookieFormKey;
 
     /**
-     * @param FormKey $cookieFormKey
+     * @var DataFormKey
      */
-    public function __construct(
-        FormKey $cookieFormKey
-    ) {
+    private $dataFormKey;
+
+    /**
+     * @param CookieFormKey $cookieFormKey
+     * @param DataFormKey $dataFormKey
+     */
+    public function __construct(CookieFormKey $cookieFormKey, DataFormKey $dataFormKey)
+    {
         $this->cookieFormKey = $cookieFormKey;
+        $this->dataFormKey = $dataFormKey;
     }
 
     /**
@@ -32,5 +39,6 @@ class FlushFormKeyOnLogout implements ObserverInterface
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
         $this->cookieFormKey->delete();
+        $this->dataFormKey->set(null);
     }
 }
