@@ -361,8 +361,8 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
 
         if (is_array($attribute)) {
             $sqlArr = [];
-            foreach ($attribute as $condition) {
-                $sqlArr[] = $this->_getAttributeConditionSql($condition['attribute'], $condition, $joinType);
+            foreach ($attribute as $key => $name) {
+                $sqlArr[] = $this->_getAttributeConditionSql($name, $condition[$key], $joinType);
             }
             $conditionSql = '(' . implode(') OR (', $sqlArr) . ')';
         } elseif (is_string($attribute)) {
