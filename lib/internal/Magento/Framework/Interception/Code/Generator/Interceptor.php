@@ -130,7 +130,13 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
             ', ',
             array_map(
                 function ($item) {
-                    return "$" . $item['name'];
+                    $output = '';
+                    if ($item['variadic']) {
+                        $output .= '... ';
+                    }
+
+                    $output .= "\${$item['name']}";
+                    return $output;
                 },
                 $parameters
             )

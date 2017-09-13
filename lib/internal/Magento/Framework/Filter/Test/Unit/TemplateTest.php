@@ -140,16 +140,23 @@ EXPECTED_RESULT;
 
     public function varDirectiveDataProvider()
     {
-        /* @var $stub \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject */
-        $stub = $this->getMockBuilder(\Magento\Framework\DataObject::class)
+        /* @var $dataObjectVariable \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject */
+        $dataObjectVariable = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->disableOriginalConstructor()
             ->disableProxyingToOriginalMethods()
             ->setMethods(['bar'])
             ->getMock();
-
-        $stub->expects($this->once())
+        $dataObjectVariable->expects($this->once())
             ->method('bar')
-            ->willReturn('Mocked Method Return');
+            ->willReturn('DataObject Method Return');
+
+        /* @var $nonDataObjectVariable \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject */
+        $nonDataObjectVariable = $this->getMockBuilder(\Magento\Framework\Escaper::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $nonDataObjectVariable->expects($this->once())
+            ->method('escapeHtml')
+            ->willReturnArgument(0);
 
         return [
             'no variables' => [
@@ -170,12 +177,28 @@ EXPECTED_RESULT;
             'array argument to method' => [
                 '{{var foo.bar([param_1:value_1, param_2:$value_2, param_3:[a:$b, c:$d]])}}',
                 [
-                    'foo' => $stub,
+                    'foo' => $dataObjectVariable,
                     'value_2' => 'lorem',
                     'b' => 'bee',
                     'd' => 'dee',
                 ],
-                'Mocked Method Return'
+                'DataObject Method Return'
+            ],
+            'non DataObject method call' => [
+                '{{var foo.escapeHtml($value)}}',
+                [
+                    'foo' => $nonDataObjectVariable,
+                    'value' => 'lorem'
+                ],
+                'lorem'
+            ],
+            'non DataObject undefined method call' => [
+                '{{var foo.undefinedMethod($value)}}',
+                [
+                    'foo' => $nonDataObjectVariable,
+                    'value' => 'lorem'
+                ],
+                ''
             ],
         ];
     }

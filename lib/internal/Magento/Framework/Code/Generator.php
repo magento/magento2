@@ -199,7 +199,7 @@ class Generator
     {
         if (!$resultEntityType || !$sourceClassName) {
             return self::GENERATION_ERROR;
-        } elseif ($this->definedClasses->isClassLoadableFromDisc($resultClass)) {
+        } elseif ($this->definedClasses->isClassLoadableFromDisk($resultClass)) {
             $generatedFileName = $this->_ioObject->generateResultFileName($resultClass);
             /**
              * Must handle two edge cases: a competing process has generated the class and written it to disc already,
