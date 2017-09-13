@@ -10,9 +10,8 @@ interface FeedInterface
     const DEFAULT_FORMAT = 'xml';
 
     /**
+     * @param string $format
      * @return string
      */
-    public function getFormatedContentAs(
-        $format = self::DEFAULT_FORMAT
-    );
+    public function getFormattedContentAs(string $format = self::DEFAULT_FORMAT): string;
 }

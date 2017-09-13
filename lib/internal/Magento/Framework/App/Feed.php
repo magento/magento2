@@ -5,7 +5,8 @@
  */
 namespace Magento\Framework\App;
 
-use \Magento\Framework\App\FeedInterface;
+use Magento\Framework\Phrase;
+use Magento\Framework\Exception\InputException;
 
 class Feed implements \Magento\Framework\App\FeedInterface
 {
@@ -25,17 +26,17 @@ class Feed implements \Magento\Framework\App\FeedInterface
     /**
      * Get the xml from Zend_Feed_Abstract object
      *
+     * @param string $format
      * @return string
+     * @throws InputException
      */
-    public function getFormatedContentAs(
-        $format = FeedInterface::DEFAULT_FORMAT
-    ) {
+    public function getFormattedContentAs(string $format = FeedInterface::DEFAULT_FORMAT): string
+    {
         if ($format === FeedInterface::DEFAULT_FORMAT) {
             return $this->feed->saveXml();
         }
-        throw new \Magento\Framework\Exception\RuntimeException(
-            __('Given feed format is not supported'),
-            $e
+        throw new InputException(
+            new Phrase('Given feed format is not supported')
         );
     }
 }
