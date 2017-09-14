@@ -34,7 +34,7 @@ class NoRouteHandler implements \Magento\Framework\App\Router\NoRouteHandlerInte
         $noRoutePath = $this->_config->getValue('web/default/no_route', 'default');
 
         if ($noRoutePath) {
-            $noRoute = explode('/', $noRoutePath);
+            $noRoute = explode('/', $noRoutePath, 4);
         } else {
             $noRoute = [];
         }
@@ -42,8 +42,17 @@ class NoRouteHandler implements \Magento\Framework\App\Router\NoRouteHandlerInte
         $moduleName = isset($noRoute[0]) ? $noRoute[0] : 'core';
         $actionPath = isset($noRoute[1]) ? $noRoute[1] : 'index';
         $actionName = isset($noRoute[2]) ? $noRoute[2] : 'index';
+        $params = isset($noRoute[3]) ? explode('/', $noRoute[3]) : [];
 
-        $request->setModuleName($moduleName)->setControllerName($actionPath)->setActionName($actionName);
+        $actionParams = [];
+        for ($i = 0, $l = sizeof($params); $i < $l; $i += 2) {
+            $actionParams[$params[$i]] = isset($params[$i + 1]) ? urldecode($params[$i + 1]) : '';
+        }
+
+        $request->setModuleName($moduleName);
+        $request->setControllerName($actionPath);
+        $request->setActionName($actionName);
+        $request->setParams($actionParams);
 
         return true;
     }
