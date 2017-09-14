@@ -13,7 +13,6 @@ use Magento\Catalog\Model\Product;
  */
 class GalleryTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testAfterGetOptions()
     {
         $jsonMock = $this->createJsonMock();
