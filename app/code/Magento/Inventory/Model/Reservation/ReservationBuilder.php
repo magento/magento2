@@ -109,6 +109,7 @@ class ReservationBuilder implements ReservationBuilderInterface
     public function build(): ReservationInterface
     {
         $data = [
+            ReservationInterface::RESERVATION_ID => null,
             ReservationInterface::STOCK_ID => $this->stockId,
             ReservationInterface::SKU => $this->sku,
             ReservationInterface::QUANTITY => $this->quantity,
