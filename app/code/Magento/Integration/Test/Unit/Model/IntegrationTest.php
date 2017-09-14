@@ -8,7 +8,7 @@ namespace Magento\Integration\Test\Unit\Model;
 /**
  * Unit test for \Magento\Integration\Model\Integration
  */
-class IntegrationTest extends \PHPUnit_Framework_TestCase
+class IntegrationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Integration\Model\Integration
@@ -37,13 +37,7 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->contextMock = $this->getMock(
-            \Magento\Framework\Model\Context::class,
-            ['getEventDispatcher'],
-            [],
-            '',
-            false
-        );
+        $this->contextMock = $this->createPartialMock(\Magento\Framework\Model\Context::class, ['getEventDispatcher']);
         $eventManagerMock = $this->getMockForAbstractClass(
             \Magento\Framework\Event\ManagerInterface::class,
             [],
@@ -56,13 +50,7 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
         $this->contextMock->expects($this->once())
             ->method('getEventDispatcher')
             ->will($this->returnValue($eventManagerMock));
-        $this->registryMock = $this->getMock(
-            \Magento\Framework\Registry::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->registryMock = $this->createMock(\Magento\Framework\Registry::class);
         $this->resourceMock = $this->getMockForAbstractClass(
             \Magento\Framework\Model\ResourceModel\AbstractResource::class,
             [],
@@ -72,13 +60,7 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
             true,
             ['getIdFieldName', 'load', 'selectActiveIntegrationByConsumerId']
         );
-        $this->resourceCollectionMock = $this->getMock(
-            \Magento\Framework\Data\Collection\AbstractDb::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->resourceCollectionMock = $this->createMock(\Magento\Framework\Data\Collection\AbstractDb::class);
         $this->integrationModel = new \Magento\Integration\Model\Integration(
             $this->contextMock,
             $this->registryMock,

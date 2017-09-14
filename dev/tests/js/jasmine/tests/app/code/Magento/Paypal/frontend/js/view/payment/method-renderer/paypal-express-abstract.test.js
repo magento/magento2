@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -20,7 +20,9 @@ define([
                 'Magento_Checkout/js/model/quote': {
                     billingAddress: ko.observable(),
                     shippingAddress: ko.observable(),
-                    paymentMethod: ko.observable()
+                    paymentMethod: ko.observable(),
+                    totals: ko.observable({})
+
                 }
             },
             paypalExpressAbstract,

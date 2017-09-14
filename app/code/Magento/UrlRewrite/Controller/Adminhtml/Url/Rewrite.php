@@ -30,9 +30,7 @@ abstract class Rewrite extends Action
     const ENTITY_TYPE_CMS_PAGE = 'cms-page';
     /**#@-*/
 
-    /**
-     * @var Product
-     */
+    /**#@-*/
     protected $_product;
 
     /**

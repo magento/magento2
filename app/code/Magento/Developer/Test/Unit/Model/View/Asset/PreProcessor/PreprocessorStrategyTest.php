@@ -20,7 +20,7 @@ use Magento\Framework\View\Asset\PreProcessor\Chain;
  * @see \Magento\Developer\Model\View\Asset\PreProcessor\PreprocessorStrategy
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PreprocessorStrategyTest extends \PHPUnit_Framework_TestCase
+class PreprocessorStrategyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var PreprocessorStrategy

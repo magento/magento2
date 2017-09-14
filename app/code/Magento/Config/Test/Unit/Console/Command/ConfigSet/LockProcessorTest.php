@@ -23,7 +23,7 @@ use PHPUnit_Framework_MockObject_MockObject as Mock;
  * @see LockProcessor
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class LockProcessorTest extends \PHPUnit_Framework_TestCase
+class LockProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var LockProcessor

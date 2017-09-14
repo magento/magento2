@@ -12,6 +12,8 @@ namespace Magento\Config\Block\System\Config\Form\Field\FieldArray;
  * Backend system config array field renderer
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
 abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Form\Field
 {
@@ -282,6 +284,7 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
 
     /**
      * @return string
+     * @since 100.2.0
      */
     public function getAddButtonLabel()
     {

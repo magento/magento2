@@ -16,7 +16,7 @@ use Magento\Eav\Model\Entity\Attribute;
 /**
  * @magentoAppIsolation enabled
  */
-class DefaultFrontendTest extends \PHPUnit_Framework_TestCase
+class DefaultFrontendTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DefaultFrontend

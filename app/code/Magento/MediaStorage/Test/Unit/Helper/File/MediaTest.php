@@ -8,7 +8,7 @@ namespace Magento\MediaStorage\Test\Unit\Helper\File;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\MediaStorage\Helper\File\Media;
 
-class MediaTest extends \PHPUnit_Framework_TestCase
+class MediaTest extends \PHPUnit\Framework\TestCase
 {
     const UPDATE_TIME = 'update_time';
 

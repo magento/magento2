@@ -9,6 +9,10 @@ namespace Magento\Backend\Console\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 abstract class AbstractCacheManageCommand extends AbstractCacheCommand
 {
     /**

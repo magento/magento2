@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  * Class CategoryTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CategoryTest extends \PHPUnit_Framework_TestCase
+class CategoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Block\Rss\Category
@@ -91,33 +91,30 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->request = $this->getMock(\Magento\Framework\App\RequestInterface::class);
+        $this->request = $this->createMock(\Magento\Framework\App\RequestInterface::class);
         $this->request->expects($this->at(0))->method('getParam')->with('cid')->will($this->returnValue(1));
         $this->request->expects($this->at(1))->method('getParam')->with('store_id')->will($this->returnValue(null));
 
-        $this->httpContext = $this->getMock(\Magento\Framework\App\Http\Context::class, [], [], '', false);
-        $this->catalogHelper = $this->getMock(\Magento\Catalog\Helper\Data::class, [], [], '', false);
+        $this->httpContext = $this->createMock(\Magento\Framework\App\Http\Context::class);
+        $this->catalogHelper = $this->createMock(\Magento\Catalog\Helper\Data::class);
         $this->categoryFactory = $this->getMockBuilder(\Magento\Catalog\Model\CategoryFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()->getMock();
-        $this->rssModel = $this->getMock(
+        $this->rssModel = $this->createPartialMock(
             \Magento\Catalog\Model\Rss\Category::class,
-            ['getProductCollection'],
-            [],
-            '',
-            false
+            ['getProductCollection']
         );
-        $this->rssUrlBuilder = $this->getMock(\Magento\Framework\App\Rss\UrlBuilderInterface::class);
-        $this->imageHelper = $this->getMock(\Magento\Catalog\Helper\Image::class, [], [], '', false);
-        $this->customerSession = $this->getMock(\Magento\Customer\Model\Session::class, ['getId'], [], '', false);
+        $this->rssUrlBuilder = $this->createMock(\Magento\Framework\App\Rss\UrlBuilderInterface::class);
+        $this->imageHelper = $this->createMock(\Magento\Catalog\Helper\Image::class);
+        $this->customerSession = $this->createPartialMock(\Magento\Customer\Model\Session::class, ['getId']);
         $this->customerSession->expects($this->any())->method('getId')->will($this->returnValue(1));
-        $this->storeManager = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $store = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->setMethods(['getId', '__wakeup'])->disableOriginalConstructor()->getMock();
         $store->expects($this->any())->method('getId')->will($this->returnValue(1));
         $this->storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
-        $this->scopeConfig = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $this->categoryRepository = $this->getMock(\Magento\Catalog\Api\CategoryRepositoryInterface::class);
+        $this->scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->categoryRepository = $this->createMock(\Magento\Catalog\Api\CategoryRepositoryInterface::class);
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->block = $objectManagerHelper->getObject(
             \Magento\Catalog\Block\Rss\Category::class,

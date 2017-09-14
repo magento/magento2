@@ -21,11 +21,6 @@ class CompositeProductRowSizeEstimator implements IndexTableRowSizeEstimatorInte
     const MEMORY_SIZE_FOR_ONE_ROW = 200;
 
     /**
-     * @var DefaultPrice
-     */
-    private $indexerResource;
-
-    /**
      * @var WebsiteManagementInterface
      */
     private $websiteManagement;
@@ -36,18 +31,25 @@ class CompositeProductRowSizeEstimator implements IndexTableRowSizeEstimatorInte
     private $collectionFactory;
 
     /**
-     * @param DefaultPrice $indexerResource
+     * @var CompositeProductRelationsCalculator
+     * @since 2.2.0
+     */
+    private $compositeProductRelationsCalculator;
+
+    /**
      * @param WebsiteManagementInterface $websiteManagement
      * @param CollectionFactory $collectionFactory
+     * @param CompositeProductRelationsCalculator $compositeProductRelationsCalculator
+     * @since 2.2.0
      */
     public function __construct(
-        DefaultPrice $indexerResource,
         WebsiteManagementInterface $websiteManagement,
-        CollectionFactory $collectionFactory
+        CollectionFactory $collectionFactory,
+        CompositeProductRelationsCalculator $compositeProductRelationsCalculator
     ) {
-        $this->indexerResource = $indexerResource;
         $this->websiteManagement = $websiteManagement;
         $this->collectionFactory = $collectionFactory;
+        $this->compositeProductRelationsCalculator = $compositeProductRelationsCalculator;
     }
 
     /**
@@ -59,21 +61,7 @@ class CompositeProductRowSizeEstimator implements IndexTableRowSizeEstimatorInte
     {
         $websitesCount = $this->websiteManagement->getCount();
         $customerGroupCount = $this->collectionFactory->create()->getSize();
-
-        $connection = $this->indexerResource->getConnection();
-        $relationSelect = $connection->select();
-        $relationSelect->from(
-            ['relation' => $this->indexerResource->getTable('catalog_product_relation')],
-            ['count' => new \Zend_Db_Expr('count(relation.child_id)')]
-        );
-        $relationSelect->group('parent_id');
-
-        $maxSelect = $connection->select();
-        $maxSelect->from(
-            ['max_value' => $relationSelect],
-            ['count' => new \Zend_Db_Expr('MAX(count)')]
-        );
-        $maxRelatedProductCount = $connection->fetchOne($maxSelect);
+        $maxRelatedProductCount = $this->compositeProductRelationsCalculator->getMaxRelationsCount();
 
         /**
          * Calculate memory size for largest composite product in database.

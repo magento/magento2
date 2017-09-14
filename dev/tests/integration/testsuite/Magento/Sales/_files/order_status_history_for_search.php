@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 
+use Magento\Sales\Api\OrderStatusHistoryRepositoryInterface;
 use Magento\Sales\Model\Order\Status\History;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -38,6 +39,9 @@ $comments = [
     ],
 ];
 
+/** @var OrderStatusHistoryRepositoryInterface $historyRepository */
+$historyRepository = Bootstrap::getObjectManager()->get(OrderStatusHistoryRepositoryInterface::class);
+
 foreach ($comments as $data) {
     /** @var $comment History */
     $comment = Bootstrap::getObjectManager()->create(History::class);
@@ -45,5 +49,5 @@ foreach ($comments as $data) {
     $comment->setComment($data['comment']);
     $comment->setIsVisibleOnFront($data['is_visible_on_front']);
     $comment->setIsCustomerNotified($data['is_customer_notified']);
-    $comment->save();
+    $historyRepository->save($comment);
 }
