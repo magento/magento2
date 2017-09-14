@@ -12,6 +12,7 @@ namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Coupons;
  * Coupon codes grid
  *
  * @api
+ * @since 100.0.2
  */
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {

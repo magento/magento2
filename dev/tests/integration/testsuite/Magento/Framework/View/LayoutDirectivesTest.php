@@ -9,7 +9,7 @@ namespace Magento\Framework\View;
 
 use Magento\Framework\App\State;
 
-class LayoutDirectivesTest extends \PHPUnit_Framework_TestCase
+class LayoutDirectivesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\LayoutFactory
@@ -254,7 +254,7 @@ class LayoutDirectivesTest extends \PHPUnit_Framework_TestCase
     public function testRemoveBroken()
     {
         if ($this->state->getMode() === State::MODE_DEVELOPER) {
-            $this->setExpectedException('OutOfBoundsException');
+            $this->expectException('OutOfBoundsException');
         }
         $this->_getLayoutModel('remove_broken.xml');
     }

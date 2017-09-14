@@ -7,6 +7,9 @@
  */
 namespace Magento\Framework\Acl;
 
+/**
+ * @api
+ */
 class RootResource
 {
     /**

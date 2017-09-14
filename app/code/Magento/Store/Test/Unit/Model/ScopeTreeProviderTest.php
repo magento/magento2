@@ -16,7 +16,7 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\Website;
 
-class ScopeTreeProviderTest extends \PHPUnit_Framework_TestCase
+class ScopeTreeProviderTest extends \PHPUnit\Framework\TestCase
 {
     /** @var ScopeTreeProvider */
     protected $model;

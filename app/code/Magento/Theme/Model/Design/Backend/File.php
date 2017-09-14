@@ -221,7 +221,7 @@ class File extends BackendFile
      *
      * @return Mime
      *
-     * @deprecated
+     * @deprecated 100.2.0
      */
     private function getMime()
     {

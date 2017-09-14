@@ -40,6 +40,31 @@ class UpgradeSchema implements UpgradeSchemaInterface
             }
         }
 
+        if (version_compare($context->getVersion(), '2.1.0', '<')) {
+            $connection = $setup->getConnection();
+            $connection->dropForeignKey(
+                $setup->getTable('catalogrule_group_website'),
+                $setup->getFkName(
+                    'catalogrule_group_website',
+                    'customer_group_id',
+                    'customer_group',
+                    'customer_group_id'
+                )
+            );
+            $connection->dropForeignKey(
+                $setup->getTable('catalogrule_group_website'),
+                $setup->getFkName('catalogrule_group_website', 'rule_id', 'catalogrule', 'rule_id')
+            );
+            $connection->dropForeignKey(
+                $setup->getTable('catalogrule_group_website'),
+                $setup->getFkName('catalogrule_group_website', 'website_id', 'store_website', 'website_id')
+            );
+
+            $this->addReplicaTable($setup, 'catalogrule_product', 'catalogrule_product_replica');
+            $this->addReplicaTable($setup, 'catalogrule_product_price', 'catalogrule_product_price_replica');
+            $this->addReplicaTable($setup, 'catalogrule_group_website', 'catalogrule_group_website_replica');
+        }
+
         $setup->endSetup();
     }
 
@@ -68,5 +93,23 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 $connection->dropColumn($setup->getTable($table), $field);
             }
         }
+    }
+
+    /**
+     * Add the replica table for existing one.
+     *
+     * @param SchemaSetupInterface $setup
+     * @param string $existingTable
+     * @param string $replicaTable
+     * @return void
+     */
+    private function addReplicaTable(SchemaSetupInterface $setup, $existingTable, $replicaTable)
+    {
+        $sql = sprintf(
+            'CREATE TABLE IF NOT EXISTS %s LIKE %s',
+            $setup->getTable($replicaTable),
+            $setup->getTable($existingTable)
+        );
+        $setup->getConnection()->query($sql);
     }
 }

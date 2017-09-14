@@ -22,7 +22,7 @@ use Magento\Ui\Component\Wrapper\UiComponent;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ReloadTest extends \PHPUnit_Framework_TestCase
+class ReloadTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Reload

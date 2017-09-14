@@ -5,13 +5,13 @@
  */
 namespace Magento\OfflinePayments\Test\Unit\Model;
 
-use Magento\OfflinePayments\Model\InstructionsConfigProvider;
+use Magento\Framework\Escaper;
 use Magento\OfflinePayments\Model\Banktransfer;
 use Magento\OfflinePayments\Model\Cashondelivery;
-use Magento\Framework\Escaper;
+use Magento\OfflinePayments\Model\InstructionsConfigProvider;
 use Magento\Payment\Model\Method\AbstractMethod;
 
-class InstructionsConfigProviderTest extends \PHPUnit_Framework_TestCase
+class InstructionsConfigProviderTest extends \PHPUnit\Framework\TestCase
 {
     /** @var InstructionsConfigProvider */
     protected $model;
@@ -27,22 +27,16 @@ class InstructionsConfigProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->methodOneMock = $this->getMock(
+        $this->methodOneMock = $this->createPartialMock(
             \Magento\Payment\Model\Method\AbstractMethod::class,
-            ['isAvailable', 'getInstructions'],
-            [],
-            '',
-            false
+            ['isAvailable', 'getInstructions']
         );
-        $this->methodTwoMock = $this->getMock(
+        $this->methodTwoMock = $this->createPartialMock(
             \Magento\Payment\Model\Method\AbstractMethod::class,
-            ['isAvailable', 'getInstructions'],
-            [],
-            '',
-            false
+            ['isAvailable', 'getInstructions']
         );
 
-        $paymentHelperMock = $this->getMock(\Magento\Payment\Helper\Data::class, [], [], '', false);
+        $paymentHelperMock = $this->createMock(\Magento\Payment\Helper\Data::class);
         $paymentHelperMock->expects($this->exactly(2))
             ->method('getMethodInstance')
             ->willReturnMap([
@@ -50,7 +44,7 @@ class InstructionsConfigProviderTest extends \PHPUnit_Framework_TestCase
                 [Cashondelivery::PAYMENT_METHOD_CASHONDELIVERY_CODE, $this->methodTwoMock],
             ]);
 
-        $this->escaperMock = $this->getMock(\Magento\Framework\Escaper::class);
+        $this->escaperMock = $this->createMock(\Magento\Framework\Escaper::class);
         $this->escaperMock->expects($this->any())
             ->method('escapeHtml')
             ->willReturnArgument(0);

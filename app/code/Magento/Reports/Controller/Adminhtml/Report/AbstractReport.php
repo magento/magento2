@@ -13,6 +13,10 @@ namespace Magento\Reports\Controller\Adminhtml\Report;
 
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 abstract class AbstractReport extends \Magento\Backend\App\Action
 {
     /**

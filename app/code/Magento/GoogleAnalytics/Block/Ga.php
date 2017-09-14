@@ -14,6 +14,7 @@ use Magento\Framework\App\ObjectManager;
  * GoogleAnalytics Page Block
  *
  * @api
+ * @since 100.0.2
  */
 class Ga extends \Magento\Framework\View\Element\Template
 {
@@ -83,7 +84,7 @@ class Ga extends \Magento\Framework\View\Element\Template
      * @return string
      * @link https://developers.google.com/analytics/devguides/collection/analyticsjs/method-reference#set
      * @link https://developers.google.com/analytics/devguides/collection/analyticsjs/method-reference#gaObjectMethods
-     * @deprecated please use getPageTrackingData method
+     * @deprecated 100.2.0 please use getPageTrackingData method
      */
     public function getPageTrackingCode($accountId)
     {
@@ -104,7 +105,7 @@ class Ga extends \Magento\Framework\View\Element\Template
      * @link https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#transaction
      *
      * @return string|void
-     * @deprecated please use getOrdersTrackingData method
+     * @deprecated 100.2.0 please use getOrdersTrackingData method
      */
     public function getOrdersTrackingCode()
     {
@@ -120,6 +121,7 @@ class Ga extends \Magento\Framework\View\Element\Template
         $result[] = "ga('require', 'ec', 'ec.js');";
 
         foreach ($collection as $order) {
+            $result[] = "ga('set', 'currencyCode', '" . $order->getOrderCurrencyCode() . "');";
             foreach ($order->getAllVisibleItems() as $item) {
                 $result[] = sprintf(
                     "ga('ec:addProduct', {
@@ -130,7 +132,7 @@ class Ga extends \Magento\Framework\View\Element\Template
                     });",
                     $this->escapeJs($item->getSku()),
                     $this->escapeJs($item->getName()),
-                    $item->getBasePrice(),
+                    $item->getPrice(),
                     $item->getQtyOrdered()
                 );
             }
@@ -145,9 +147,9 @@ class Ga extends \Magento\Framework\View\Element\Template
                 });",
                 $order->getIncrementId(),
                 $this->escapeJs($this->_storeManager->getStore()->getFrontendName()),
-                $order->getBaseGrandTotal(),
-                $order->getBaseTaxAmount(),
-                $order->getBaseShippingAmount()
+                $order->getGrandTotal(),
+                $order->getTaxAmount(),
+                $order->getShippingAmount()
             );
 
             $result[] = "ga('send', 'pageview');";
@@ -173,6 +175,7 @@ class Ga extends \Magento\Framework\View\Element\Template
      * Return cookie restriction mode value.
      *
      * @return bool
+     * @since 100.2.0
      */
     public function isCookieRestrictionModeEnabled()
     {
@@ -183,6 +186,7 @@ class Ga extends \Magento\Framework\View\Element\Template
      * Return current website id.
      *
      * @return int
+     * @since 100.2.0
      */
     public function getCurrentWebsiteId()
     {
@@ -197,6 +201,7 @@ class Ga extends \Magento\Framework\View\Element\Template
      *
      * @param string $accountId
      * @return array
+     * @since 100.2.0
      */
     public function getPageTrackingData($accountId)
     {
@@ -215,6 +220,7 @@ class Ga extends \Magento\Framework\View\Element\Template
      * @link https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#transaction
      *
      * @return array
+     * @since 100.2.0
      */
     public function getOrdersTrackingData()
     {
@@ -232,17 +238,18 @@ class Ga extends \Magento\Framework\View\Element\Template
                 $result['products'][] = [
                     'id' => $this->escapeJs($item->getSku()),
                     'name' =>  $this->escapeJs($item->getName()),
-                    'price' => $item->getBasePrice(),
+                    'price' => $item->getPrice(),
                     'quantity' => $item->getQtyOrdered(),
                 ];
             }
             $result['orders'][] = [
                 'id' =>  $order->getIncrementId(),
                 'affiliation' => $this->escapeJs($this->_storeManager->getStore()->getFrontendName()),
-                'revenue' => $order->getBaseGrandTotal(),
-                'tax' => $order->getBaseTaxAmount(),
-                'shipping' => $order->getBaseShippingAmount(),
+                'revenue' => $order->getGrandTotal(),
+                'tax' => $order->getTaxAmount(),
+                'shipping' => $order->getShippingAmount(),
             ];
+            $result['currency'] = $order->getOrderCurrencyCode();
         }
         return $result;
     }

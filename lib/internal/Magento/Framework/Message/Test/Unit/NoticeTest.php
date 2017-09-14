@@ -10,7 +10,7 @@ use Magento\Framework\Message\MessageInterface;
 /**
  * \Magento\Framework\Message\Notice test case
  */
-class NoticeTest extends \PHPUnit_Framework_TestCase
+class NoticeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Message\Notice

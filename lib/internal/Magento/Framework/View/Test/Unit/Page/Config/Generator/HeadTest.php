@@ -6,15 +6,17 @@
 
 namespace Magento\Framework\View\Test\Unit\Page\Config\Generator;
 
-use \Magento\Framework\View\Page\Config\Generator\Head;
-
+use Magento\Framework\View\Page\Config\Generator\Head;
 use Magento\Framework\View\Page\Config as PageConfig;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\View\Layout\Generator\Context;
+use Magento\Framework\View\Page\Config\Structure;
+use Magento\Framework\View\Layout\Reader\Context as ReaderContext;
 
 /**
  * Test for page config generator model
  */
-class HeadTest extends \PHPUnit_Framework_TestCase
+class HeadTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Head
@@ -25,6 +27,11 @@ class HeadTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\View\Page\Config|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $pageConfigMock;
+
+    /**
+     * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $urlMock;
 
     /**
      * @var \Magento\Framework\View\Page\Title|\PHPUnit_Framework_MockObject_MockObject
@@ -39,47 +46,70 @@ class HeadTest extends \PHPUnit_Framework_TestCase
         $this->title = $this->getMockBuilder(\Magento\Framework\View\Page\Title::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->urlMock = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->headGenerator = $objectManagerHelper->getObject(
             \Magento\Framework\View\Page\Config\Generator\Head::class,
             [
                 'pageConfig' => $this->pageConfigMock,
+                'url' => $this->urlMock,
             ]
         );
     }
 
     public function testProcess()
     {
-        $generatorContextMock = $this->getMockBuilder(\Magento\Framework\View\Layout\Generator\Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $generatorContextMock = $this->createMock(Context::class);
         $this->title->expects($this->any())->method('set')->with()->will($this->returnSelf());
-        $structureMock = $this->getMockBuilder(\Magento\Framework\View\Page\Config\Structure::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $readerContextMock = $this->getMockBuilder(\Magento\Framework\View\Layout\Reader\Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $readerContextMock->expects($this->any())
-            ->method('getPageConfigStructure')
-            ->willReturn($structureMock);
+        $structureMock = $this->createMock(Structure::class);
+        $readerContextMock = $this->createMock(ReaderContext::class);
+        $readerContextMock->expects($this->any())->method('getPageConfigStructure')->willReturn($structureMock);
 
         $structureMock->expects($this->once())->method('processRemoveAssets');
         $structureMock->expects($this->once())->method('processRemoveElementAttributes');
+        $this->urlMock->expects($this->once())
+            ->method('getUrl')
+            ->with('customcss/render/css')
+            ->willReturn('http://magento.dev/customcss/render/css');
 
         $assets = [
-            'remoteCss' => ['src' => 'file-url', 'src_type' => 'url', 'media' => "all", 'content_type' => 'css'],
-            'remoteLink' => ['src' => 'file-url', 'src_type' => 'url', 'media' => "all"],
-            'name' => ['src' => 'file-path', 'ie_condition' => 'lt IE 7', 'media' => "print", 'content_type' => 'css'],
+            'remoteCss' => [
+                'src' => 'file-url-css',
+                'src_type' => 'url',
+                'content_type' => 'css',
+                'media' => 'all',
+            ],
+            'remoteLink' => [
+                'src' => 'file-url-link',
+                'src_type' => 'url',
+                'media' => 'all',
+            ],
+            'controllerCss' => [
+                'src' => 'customcss/render/css',
+                'src_type' => 'controller',
+                'content_type' => 'css',
+                'media' => 'all',
+            ],
+            'name' => [
+                'src' => 'file-path',
+                'ie_condition' => 'lt IE 7',
+                'content_type' => 'css',
+                'media' => 'print',
+            ],
         ];
+
         $this->pageConfigMock->expects($this->at(0))
             ->method('addRemotePageAsset')
-            ->with('remoteCss', 'css', ['attributes' => ['media' => 'all']]);
+            ->with('file-url-css', 'css', ['attributes' => ['media' => 'all']]);
         $this->pageConfigMock->expects($this->at(1))
             ->method('addRemotePageAsset')
-            ->with('remoteLink', Head::VIRTUAL_CONTENT_TYPE_LINK, ['attributes' => ['media' => 'all']]);
+            ->with('file-url-link', Head::VIRTUAL_CONTENT_TYPE_LINK, ['attributes' => ['media' => 'all']]);
+        $this->pageConfigMock->expects($this->at(2))
+            ->method('addRemotePageAsset')
+            ->with('http://magento.dev/customcss/render/css', 'css', ['attributes' => ['media' => 'all']]);
         $this->pageConfigMock->expects($this->once())
             ->method('addPageAsset')
             ->with('name', ['attributes' => ['media' => 'print'], 'ie_condition' => 'lt IE 7']);
@@ -121,9 +151,7 @@ class HeadTest extends \PHPUnit_Framework_TestCase
                 [PageConfig::ELEMENT_TYPE_HTML, 'html_attr_1', 'html_attr_1']
             );
 
-        $this->assertEquals(
-            $this->headGenerator,
-            $this->headGenerator->process($readerContextMock, $generatorContextMock)
-        );
+        $result = $this->headGenerator->process($readerContextMock, $generatorContextMock);
+        $this->assertEquals($this->headGenerator, $result);
     }
 }

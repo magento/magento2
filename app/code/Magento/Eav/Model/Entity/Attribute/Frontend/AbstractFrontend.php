@@ -21,6 +21,7 @@ use Magento\Eav\Model\Entity\Attribute\Source\BooleanFactory;
 
 /**
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\Frontend\FrontendInterface
 {
@@ -66,10 +67,10 @@ abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\F
     /**
      * @param BooleanFactory $attrBooleanFactory
      * @param CacheInterface $cache
-     * @param $storeResolver @deprecated
+     * @param null $storeResolver @deprecated
      * @param array $cacheTags
-     * @param Serializer $serializer
      * @param StoreManagerInterface $storeManager
+     * @param Serializer $serializer
      * @codeCoverageIgnore
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -78,8 +79,8 @@ abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\F
         CacheInterface $cache = null,
         $storeResolver = null,
         array $cacheTags = null,
-        Serializer $serializer = null,
-        StoreManagerInterface $storeManager = null
+        StoreManagerInterface $storeManager = null,
+        Serializer $serializer = null
     ) {
         $this->_attrBooleanFactory = $attrBooleanFactory;
         $this->cache = $cache ?: ObjectManager::getInstance()->get(CacheInterface::class);
