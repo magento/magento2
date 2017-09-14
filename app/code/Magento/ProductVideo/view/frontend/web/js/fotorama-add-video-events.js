@@ -94,16 +94,26 @@ define([
         options: {
             videoData: '',
             videoSettings: '',
-            optionsVideoData: ''
+            optionsVideoData: '',
+            dataMergeStrategy: 'replace',
+            vimeoJSFrameworkLoaded: false
         },
 
+        /**
+         * @private
+         */
+        onVimeoJSFramework: function () {},
+        defaultVideoData: [],
         PV: 'product-video', // [CONST]
         VU: 'video-unplayed',
         PVLOADED: 'fotorama__product-video--loaded', // [CONST]
+        PVLOADING: 'fotorama__product-video--loading', // [CONST]
         VID: 'video', // [CONST]
         VI: 'vimeo', // [CONST]
         FTVC: 'fotorama__video-close',
         FTAR: 'fotorama__arr',
+        fotoramaSpinner: 'fotorama__spinner',
+        fotoramaSpinnerShow: 'fotorama__spinner--show',
         TI: 'video-thumb-icon',
         isFullscreen: false,
         FTCF: '[data-gallery-role="fotorama__fullscreen-icon"]',
@@ -111,13 +121,18 @@ define([
         MobileMaxWidth: 767,
         GP: 'gallery-placeholder', //gallery placeholder class is needed to find and erase <script> tag
         videoData: null,
+        videoDataPlaceholder: [{
+            id: '',
+            isBase: true,
+            mediaType: 'image',
+            provider: ''
+        }],
 
         /**
          * Creates widget
          * @private
          */
         _create: function () {
-
             $(this.element).on('gallery:loaded',  $.proxy(function () {
                 this.fotoramaItem = $(this.element).find('.fotorama-item');
                 this._initialize();
@@ -129,7 +144,17 @@ define([
          * @private
          */
         _initialize: function () {
-            this._loadVideoData();
+            if (!this.defaultVideoData.length) {
+                this.defaultVideoData = this.options.videoData;
+            }
+
+            // If product does not have images, no video data generated,
+            // but for configurable product we still need a video data, in case of 'prepend' gallery strategy.
+            if (!this.defaultVideoData.length && !this.options.videoData.length) {
+                this.defaultVideoData = this.options.videoData = this.videoDataPlaceholder;
+            }
+
+            this.clearEvents();
 
             if (this._checkForVideoExist()) {
                 this._checkFullscreen();
@@ -142,41 +167,51 @@ define([
         },
 
         /**
+         * Clear gallery events to prevent duplicated calls.
+         *
+         * @private
+         */
+        clearEvents: function () {
+            this.fotoramaItem.off(
+                'fotorama:show ' +
+                'fotorama:showend ' +
+                'fotorama:fullscreenenter ' +
+                'fotorama:fullscreenexit'
+            );
+        },
+
+        /**
          *
          * @param {Object} options
          * @private
          */
         _setOptions: function (options) {
-
             if (options.videoData && options.videoData.length) {
                 this.options.videoData = options.videoData;
             }
+
+            this._loadVideoData(options);
             this._initialize();
         },
 
         /**
+         * Set video data for configurable product.
          *
+         * @param {Object} options
          * @private
          */
-        _loadVideoData: function () {
-            var $widget = this;
-
-            if (!$widget.videoData) {
-                $widget.videoData = $widget.options.VideoData;
-            }
-
-            $('#product-options-wrapper').find('[option-selected]').each(function () {
-                var key = $(this).attr('attribute-code') + '_' + $(this).attr('option-selected');
-
-                if ($widget.options.optionsVideoData && $widget.options.optionsVideoData[key]) {
-                    $widget.options.VideoData = $widget.options.optionsVideoData[key];
+        _loadVideoData: function (options) {
+            if (options.selectedOption) {
+                if (options.dataMergeStrategy === 'prepend') {
+                    this.options.videoData = [].concat(
+                        this.options.optionsVideoData[options.selectedOption],
+                        this.options.videoData
+                    );
                 } else {
-                    $widget.options.VideoData = $widget.videoData;
+                    this.options.videoData = this.options.optionsVideoData[options.selectedOption];
                 }
-            });
-
-            if (!$('#product-options-wrapper').find('[option-selected]').length) {
-                $widget.options.VideoData = $widget.videoData;
+            } else {
+                this.options.videoData = this.defaultVideoData;
             }
         },
 
@@ -195,14 +230,13 @@ define([
          * @private
          */
         _listenForFullscreen: function () {
-            var self = this;
-
             this.fotoramaItem.on('fotorama:fullscreenenter', $.proxy(function () {
                 this.isFullscreen = true;
             }, this));
+
             this.fotoramaItem.on('fotorama:fullscreenexit', $.proxy(function () {
                 this.isFullscreen = false;
-                self._hideVideoArrows();
+                this._hideVideoArrows();
             }, this));
         },
 
@@ -241,7 +275,7 @@ define([
 
                 tmpVideoData.isBase = tmpInputData.isBase;
 
-                if (tmpInputData.videoUrl != null) {
+                if (tmpInputData.videoUrl && tmpInputData.videoUrl !== null) {
                     dataUrl = tmpInputData.videoUrl;
                     dataUrl = parseURL(dataUrl);
                     tmpVideoData.id = dataUrl.id;
@@ -326,8 +360,9 @@ define([
             if (!this.options.videoSettings) {
                 return false;
             }
-            result = this._createVideoData(this.options.videoData, false),
-                checker = false;
+
+            result = this._createVideoData(this.options.videoData, false);
+            checker = false;
             videoSettings = this.options.videoSettings[0];
             videoSettings.playIfBase = parseInt(videoSettings.playIfBase, 10);
             videoSettings.showRelated = parseInt(videoSettings.showRelated, 10);
@@ -354,9 +389,15 @@ define([
             var allVideoData = this.options.videoData,
                 videoItem;
 
+            if (window.Froogaloop) { // prevent duplicated initialization
+                return;
+            }
+
             for (videoItem in allVideoData) {
                 if (allVideoData[videoItem].provider === this.VI) {
                     this._loadVimeoJSFramework();
+
+                    return;
                 }
             }
         },
@@ -402,6 +443,14 @@ define([
 
             element.async = true;
             element.src = 'https://secure-a.vimeocdn.com/js/froogaloop2.min.js';
+
+            /**
+             * Vimeo js framework on load callback.
+             */
+            element.onload = function () {
+                this.onVimeoJSFramework();
+                this.vimeoJSFrameworkLoaded = true;
+            }.bind(this);
             scriptTag.parentNode.insertBefore(element, scriptTag);
         },
 
@@ -425,8 +474,8 @@ define([
 
                 return null;
             }
-            fotorama.data.map($.proxy(this._setItemType, this));
 
+            fotorama.data.map($.proxy(this._setItemType, this));
             thumbsParent = fotorama.activeFrame.$navThumbFrame.parent();
             thumbs = thumbsParent.find('.fotorama__nav__frame:visible');
 
@@ -480,6 +529,7 @@ define([
             this.fotoramaItem.on('fotorama:showend', $.proxy(function (e, fotorama) {
                 this._startPrepareForPlayer(e, fotorama);
             }, this));
+
             this.fotoramaItem.on('fotorama:show', $.proxy(function (e, fotorama) {
                 this._unloadVideoPlayer(fotorama.activeFrame.$stageFrame.parent(), fotorama, true);
             }, this));
@@ -514,11 +564,9 @@ define([
          */
         _checkForVideo: function (e, fotorama, number) {
             var videoData = this.options.videoData[number - 1],
-                $image = fotorama.data[number - 1],
-                videoEventIsSet = false;
+                $image = fotorama.data[number - 1];
 
             if ($image) {
-
                 !$image.type && this._setItemType($image, number - 1);
 
                 if ($image.type === 'image') {
@@ -531,13 +579,9 @@ define([
                 }
 
                 $image = $image.$stageFrame;
-
-                if ($image) {
-                    videoEventIsSet = $image.hasClass(this.VU);
-                }
             }
 
-            if ($image && videoData && videoData.mediaType === this.VID && !videoEventIsSet) {
+            if ($image && videoData && videoData.mediaType === this.VID) {
                 $(fotorama.activeFrame.$stageFrame).removeAttr('href');
                 this._prepareForVideoContainer($image, videoData, fotorama, number);
             }
@@ -572,11 +616,8 @@ define([
         _createVideoContainer: function (videoData, $image) {
             var videoSettings;
 
-            if ($image.find('.' + this.PV).length !== 0) {
-                return;
-            }
-
             videoSettings = this.options.videoSettings[0];
+            $image.find('.' + this.PV).remove();
             $image.append(
                 '<div class="' +
                 this.PV +
@@ -620,15 +661,47 @@ define([
         },
 
         /**
-         *
+         * @private
+         */
+        _showLoader: function () {
+            var spinner = this.fotoramaItem.find('.' + this.fotoramaSpinner);
+
+            spinner.addClass(this.fotoramaSpinnerShow);
+            this.fotoramaItem.data('fotorama').activeFrame.$stageFrame.addClass(this.PVLOADING);
+        },
+
+        /**
+         * @private
+         */
+        _hideLoader: function () {
+            var spinner = this.fotoramaItem.find('.' + this.fotoramaSpinner);
+
+            spinner.removeClass(this.fotoramaSpinnerShow);
+            this.fotoramaItem.data('fotorama').activeFrame.$stageFrame.removeClass(this.PVLOADING);
+        },
+
+        /**
          * @param {Event} event
          * @private
          */
         _clickHandler: function (event) {
-            if ($(event.target).hasClass(this.VU) && $(event.target).find('iframe').length === 0) {
+            var type;
 
+            if ($(event.target).hasClass(this.VU) && $(event.target).find('iframe').length === 0) {
                 $(event.target).removeClass(this.VU);
-                $(event.target).find('.' + this.PV).productVideoLoader();
+                type = $(event.target).find('.' + this.PV).data('type');
+
+                if (this.vimeoJSFrameworkLoaded && type === this.VI) {
+                    $(event.target).find('.' + this.PV).productVideoLoader();
+                } else if (type === this.VI) {
+                    this._showLoader();
+                    this.onVimeoJSFramework = function () {
+                        $(event.target).find('.' + this.PV).productVideoLoader();
+                        this._hideLoader();
+                    }.bind(this);
+                } else {
+                    $(event.target).find('.' + this.PV).productVideoLoader();
+                }
 
                 $('.' + this.FTAR).addClass(this.isFullscreen ? 'fotorama__arr--shown' : 'fotorama__arr--hidden');
             }
@@ -686,6 +759,7 @@ define([
             }
 
             $wrapper.find('.' + this.PVLOADED).removeClass(this.PVLOADED);
+            this._hideLoader();
 
             $wrapper.find('.' + this.PV).each(function () {
                 var $item = $(this).parent(),

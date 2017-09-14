@@ -35,6 +35,3 @@ if (file_exists($vendorAutoload)) {
 }
 
 AutoloaderRegistry::registerAutoloader(new ClassLoaderWrapper($composerAutoloader));
-
-// Sets default autoload mappings, may be overridden in Bootstrap::create
-\Magento\Framework\App\Bootstrap::populateAutoloader(BP, []);

@@ -13,8 +13,10 @@ define([
     '../model/address-converter',
     '../action/select-shipping-address',
     './postcode-validator',
+    './default-validator',
     'mage/translate',
     'uiRegistry',
+    'Magento_Checkout/js/model/shipping-address/form-popup-state',
     'Magento_Checkout/js/model/quote'
 ], function (
     $,
@@ -23,8 +25,10 @@ define([
     addressConverter,
     selectShippingAddress,
     postcodeValidator,
+    defaultValidator,
     $t,
-    uiRegistry
+    uiRegistry,
+    formPopUpState
 ) {
     'use strict';
 
@@ -33,6 +37,8 @@ define([
         observedElements = [],
         postcodeElement = null,
         postcodeElementName = 'postcode';
+
+    validators.push(defaultValidator);
 
     return {
         validateAddressTimeout: 0,
@@ -127,11 +133,13 @@ define([
                 });
             } else {
                 element.on('value', function () {
-                    clearTimeout(self.validateAddressTimeout);
-                    self.validateAddressTimeout = setTimeout(function () {
-                        self.postcodeValidation();
-                        self.validateFields();
-                    }, delay);
+                    if (!formPopUpState.isVisible()) {
+                        clearTimeout(self.validateAddressTimeout);
+                        self.validateAddressTimeout = setTimeout(function () {
+                            self.postcodeValidation();
+                            self.validateFields();
+                        }, delay);
+                    }
                 });
                 observedElements.push(element);
             }

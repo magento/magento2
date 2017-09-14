@@ -5,14 +5,12 @@
  */
 namespace Magento\Downloadable\Controller\Adminhtml\Product\Initialization\Helper\Plugin;
 
-use Magento\Downloadable\Api\Data\SampleInterfaceFactory as SampleFactory;
-use Magento\Downloadable\Api\Data\LinkInterfaceFactory as LinkFactory;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\RequestInterface;
+use Magento\Downloadable\Model\Link\Builder as LinkBuilder;
+use Magento\Downloadable\Model\Sample\Builder as SampleBuilder;
+use Magento\Downloadable\Api\Data\SampleInterfaceFactory;
+use Magento\Downloadable\Api\Data\LinkInterfaceFactory;
 
-/**
- * Class Downloadable
- */
 class Downloadable
 {
     /**
@@ -21,32 +19,46 @@ class Downloadable
     protected $request;
 
     /**
-     * @var SampleFactory
+     * @var SampleInterfaceFactory
      */
     private $sampleFactory;
 
     /**
-     * @var LinkFactory
+     * @var LinkInterfaceFactory
      */
     private $linkFactory;
 
     /**
-     * @var \Magento\Downloadable\Model\Sample\Builder
+     * @var SampleBuilder
      */
     private $sampleBuilder;
 
     /**
-     * @var \Magento\Downloadable\Model\Link\Builder
+     * @var LinkBuilder
      */
     private $linkBuilder;
 
     /**
+     * Constructor
+     *
      * @param RequestInterface $request
+     * @param LinkBuilder $linkBuilder
+     * @param SampleBuilder $sampleBuilder
+     * @param SampleInterfaceFactory $sampleFactory
+     * @param LinkInterfaceFactory $linkFactory
      */
     public function __construct(
-        RequestInterface $request
+        RequestInterface $request,
+        LinkBuilder $linkBuilder,
+        SampleBuilder $sampleBuilder,
+        SampleInterfaceFactory $sampleFactory,
+        LinkInterfaceFactory $linkFactory
     ) {
         $this->request = $request;
+        $this->linkBuilder = $linkBuilder;
+        $this->sampleBuilder = $sampleBuilder;
+        $this->sampleFactory = $sampleFactory;
+        $this->linkFactory = $linkFactory;
     }
 
     /**
@@ -54,7 +66,6 @@ class Downloadable
      *
      * @param \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $subject
      * @param \Magento\Catalog\Model\Product $product
-     *
      * @return \Magento\Catalog\Model\Product
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -73,10 +84,10 @@ class Downloadable
                     if (!$linkData || (isset($linkData['is_delete']) && $linkData['is_delete'])) {
                         continue;
                     } else {
-                        $links[] = $this->getLinkBuilder()->setData(
+                        $links[] = $this->linkBuilder->setData(
                             $linkData
                         )->build(
-                            $this->getLinkFactory()->create()
+                            $this->linkFactory->create()
                         );
                     }
                 }
@@ -88,10 +99,10 @@ class Downloadable
                     if (!$sampleData || (isset($sampleData['is_delete']) && (bool)$sampleData['is_delete'])) {
                         continue;
                     } else {
-                        $samples[] = $this->getSampleBuilder()->setData(
+                        $samples[] = $this->sampleBuilder->setData(
                             $sampleData
                         )->build(
-                            $this->getSampleFactory()->create()
+                            $this->sampleFactory->create()
                         );
                     }
                 }
@@ -105,67 +116,5 @@ class Downloadable
             }
         }
         return $product;
-    }
-
-    /**
-     * Get LinkBuilder instance
-     *
-     * @deprecated
-     * @return \Magento\Downloadable\Model\Link\Builder
-     */
-    private function getLinkBuilder()
-    {
-        if (!$this->linkBuilder) {
-            $this->linkBuilder = ObjectManager::getInstance()->get(\Magento\Downloadable\Model\Link\Builder::class);
-        }
-
-        return $this->linkBuilder;
-    }
-
-    /**
-     * Get SampleBuilder instance
-     *
-     * @deprecated
-     * @return \Magento\Downloadable\Model\Sample\Builder
-     */
-    private function getSampleBuilder()
-    {
-        if (!$this->sampleBuilder) {
-            $this->sampleBuilder = ObjectManager::getInstance()->get(
-                \Magento\Downloadable\Model\Sample\Builder::class
-            );
-        }
-
-        return $this->sampleBuilder;
-    }
-
-    /**
-     * Get LinkFactory instance
-     *
-     * @deprecated
-     * @return LinkFactory
-     */
-    private function getLinkFactory()
-    {
-        if (!$this->linkFactory) {
-            $this->linkFactory = ObjectManager::getInstance()->get(LinkFactory::class);
-        }
-
-        return $this->linkFactory;
-    }
-
-    /**
-     * Get Sample Factory
-     *
-     * @deprecated
-     * @return SampleFactory
-     */
-    private function getSampleFactory()
-    {
-        if (!$this->sampleFactory) {
-            $this->sampleFactory = ObjectManager::getInstance()->get(SampleFactory::class);
-        }
-
-        return $this->sampleFactory;
     }
 }

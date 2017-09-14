@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Cache\Test\Unit\Frontend\Adapter;
 
-class ZendTest extends \PHPUnit_Framework_TestCase
+class ZendTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param string $method
@@ -16,7 +16,7 @@ class ZendTest extends \PHPUnit_Framework_TestCase
      */
     public function testProxyMethod($method, $params, $expectedParams, $expectedResult)
     {
-        $frontendMock = $this->getMock(\Zend_Cache_Core::class);
+        $frontendMock = $this->createMock(\Zend_Cache_Core::class);
         $object = new \Magento\Framework\Cache\Frontend\Adapter\Zend($frontendMock);
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ProxyTesting();
         $result = $helper->invokeWithExpectations(
@@ -68,7 +68,7 @@ class ZendTest extends \PHPUnit_Framework_TestCase
                 'getBackend',
                 [],
                 [],
-                $this->getMock(\Zend_Cache_Backend::class),
+                $this->createMock(\Zend_Cache_Backend::class),
             ]
         ];
     }
@@ -80,8 +80,8 @@ class ZendTest extends \PHPUnit_Framework_TestCase
      */
     public function testCleanException($cleaningMode, $expectedErrorMessage)
     {
-        $this->setExpectedException('InvalidArgumentException', $expectedErrorMessage);
-        $object = new \Magento\Framework\Cache\Frontend\Adapter\Zend($this->getMock(\Zend_Cache_Core::class));
+        $this->expectException('InvalidArgumentException', $expectedErrorMessage);
+        $object = new \Magento\Framework\Cache\Frontend\Adapter\Zend($this->createMock(\Zend_Cache_Core::class));
         $object->clean($cleaningMode);
     }
 
@@ -105,7 +105,7 @@ class ZendTest extends \PHPUnit_Framework_TestCase
 
     public function testGetLowLevelFrontend()
     {
-        $frontendMock = $this->getMock(\Zend_Cache_Core::class);
+        $frontendMock = $this->createMock(\Zend_Cache_Core::class);
         $object = new \Magento\Framework\Cache\Frontend\Adapter\Zend($frontendMock);
         $this->assertSame($frontendMock, $object->getLowLevelFrontend());
     }

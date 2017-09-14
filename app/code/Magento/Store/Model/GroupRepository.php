@@ -62,18 +62,8 @@ class GroupRepository implements \Magento\Store\Api\GroupRepositoryInterface
             return $this->entities[$id];
         }
 
-        $groupData = [];
-        $groups = $this->getAppConfig()->get('scopes', 'groups', []);
-        if ($groups) {
-            foreach ($groups as $data) {
-                if (isset($data['group_id']) && $data['group_id'] == $id) {
-                    $groupData = $data;
-                    break;
-                }
-            }
-        }
         $group = $this->groupFactory->create([
-            'data' => $groupData
+            'data' => $this->getAppConfig()->get('scopes', "groups/$id", [])
         ]);
 
         if (null === $group->getId()) {
@@ -114,7 +104,7 @@ class GroupRepository implements \Magento\Store\Api\GroupRepositoryInterface
     /**
      * Retrieve application config.
      *
-     * @deprecated
+     * @deprecated 100.1.3
      * @return Config
      */
     private function getAppConfig()

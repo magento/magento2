@@ -18,6 +18,7 @@ use Magento\Framework\View\Element\Template;
  * @api
  * @method string getPriceRender()
  * @method string getPriceTypeCode()
+ * @since 100.0.2
  */
 class Render extends Template
 {

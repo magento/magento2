@@ -31,7 +31,7 @@
         <dataProvider class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider" name="sales_order_grid_data_source">
             <settings>
                 <requestFieldName>id</requestFieldName>
-                <primaryFieldName>entity_id</primaryFieldName>
+                <primaryFieldName>main_table.entity_id</primaryFieldName>
             </settings>
         </dataProvider>
     </dataSource>
@@ -56,7 +56,7 @@
                 </settings>
             </filterSelect>
         </filters>
-        <massaction name="listing_massaction">
+        <massaction name="listing_massaction" component="Magento_Ui/js/grid/tree-massactions">
             <action name="cancel">
                 <settings>
                     <url path="sales/order/massCancel"/>
@@ -151,7 +151,6 @@
         <column name="created_at" class="Magento\Ui\Component\Listing\Columns\Date" component="Magento_Ui/js/grid/columns/date">
             <settings>
                 <filter>dateRange</filter>
-                <dateFormat>MMM dd, YYYY, H:mm:ss A</dateFormat>
                 <dataType>date</dataType>
                 <label translate="true">Purchase Date</label>
             </settings>

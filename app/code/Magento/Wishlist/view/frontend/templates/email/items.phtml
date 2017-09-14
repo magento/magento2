@@ -20,7 +20,7 @@
             <td class="col product">
                 <p>
                     <a href="<?= $block->escapeUrl($block->getProductUrl($_product)) ?>">
-                        <?php /* @noEscape */ echo $block->getImage($_product, 'product_small_image')->toHtml(); ?>
+                        <?= /* @noEscape */ $block->getImage($_product, 'product_small_image')->toHtml() ?>
                     </a>
                 </p>
 

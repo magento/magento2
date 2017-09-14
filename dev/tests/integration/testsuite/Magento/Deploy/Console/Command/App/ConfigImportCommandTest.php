@@ -25,7 +25,7 @@ use Magento\Framework\App\Config\ReinitableConfigInterface;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
+class ConfigImportCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerInterface
@@ -227,6 +227,33 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @magentoDbIsolation disabled
+     */
+    public function testImportStoresWithWrongConfiguration()
+    {
+        $this->assertEmpty($this->hash->get());
+
+        $dumpCommand = $this->objectManager->create(ApplicationDumpCommand::class);
+        $dumpCommandTester = new CommandTester($dumpCommand);
+        $dumpCommandTester->execute([]);
+        $dumpedData = $this->reader->load(ConfigFilePool::APP_CONFIG);
+
+        unset($dumpedData['scopes']['websites']['base']);
+
+        $this->writeConfig($dumpedData, []);
+
+        $importCommand = $this->objectManager->create(ConfigImportCommand::class);
+        $importCommandTester = new CommandTester($importCommand);
+        $importCommandTester->execute([]);
+
+        $this->assertContains(
+            'Scopes data should have at least one not admin website, group and store.',
+            $importCommandTester->getDisplay()
+        );
+        $this->assertSame(Cli::RETURN_FAILURE, $importCommandTester->getStatusCode());
+    }
+
+    /**
      * @magentoDbIsolation enabled
      */
     public function testImportConfig()
@@ -239,6 +266,12 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
                             'base_url' => 'http://magento2.local/',
                         ],
                     ],
+                    'currency' => [
+                        'options' => [
+                            'base' => 'USD',
+                            'default' => 'EUR',
+                        ],
+                    ],
                 ],
             ],
         ];
@@ -248,6 +281,17 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
                     'web' => [
                         'secure' => [
                             'base_url' => 'wrong_url',
+                        ],
+                    ],
+                ],
+            ],
+        ];
+        $wrongCurrency = [
+            'system' => [
+                'default' => [
+                    'currency' => [
+                        'options' => [
+                            'default' => 'GBP',
                         ],
                     ],
                 ],
@@ -270,7 +314,20 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
 
         $commandTester->execute([]);
 
-        $this->assertContains('Import failed: Invalid value. Value must be', $commandTester->getDisplay());
+        $this->assertContains(
+            'Invalid Secure Base URL. Value must be a URL or one of placeholders: {{base_url}},{{unsecure_base_url}}',
+            $commandTester->getDisplay()
+        );
+        $this->assertSame(Cli::RETURN_FAILURE, $commandTester->getStatusCode());
+
+        $this->writeConfig($this->config, $wrongCurrency);
+
+        $commandTester->execute([]);
+
+        $this->assertContains(
+            'Import failed: Sorry, the default display currency you selected is not available in allowed currencies.',
+            $commandTester->getDisplay()
+        );
         $this->assertSame(Cli::RETURN_FAILURE, $commandTester->getStatusCode());
 
         $this->writeConfig(

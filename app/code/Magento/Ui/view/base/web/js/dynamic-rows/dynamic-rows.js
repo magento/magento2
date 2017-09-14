@@ -167,8 +167,7 @@ define([
          * Sets record data to cache
          */
         setRecordDataToCache: function (data) {
-            this.recordDataCache = this.recordDataCache && data.length > this.recordDataCache.length ?
-                data : this.recordDataCache;
+            this.recordDataCache = data;
         },
 
         /**
@@ -270,10 +269,13 @@ define([
          * @param {Number|String} id
          */
         deleteHandler: function (index, id) {
+            var defaultState;
+
             this.setDefaultState();
+            defaultState = this.defaultPagesState[this.currentPage()];
             this.processingDeleteRecord(index, id);
             this.pagesChanged[this.currentPage()] =
-                !compareArrays(this.defaultPagesState[this.currentPage()], this.arrayFilter(this.getChildItems()));
+                !compareArrays(defaultState, this.arrayFilter(this.getChildItems()));
             this.changed(_.some(this.pagesChanged));
         },
 
@@ -327,7 +329,7 @@ define([
         },
 
         /**
-         * Set default dynamic-rows state
+         * Set default dynamic-rows state or state before changing data
          *
          * @param {Array} data - defaultState data
          */
@@ -557,7 +559,7 @@ define([
          * @param {Object} elem - instance
          */
         setMaxPosition: function (position, elem) {
-            if (position) {
+            if (position || position === 0) {
                 this.checkMaxPosition(position);
                 this.sort(position, elem);
             } else {
@@ -577,7 +579,7 @@ define([
                 updatedCollection;
 
             if (this.elems().filter(function (el) {
-                    return el.position;
+                    return el.position || el.position === 0;
                 }).length !== this.getChildItems().length) {
 
                 return false;
@@ -623,6 +625,19 @@ define([
 
             pages = Math.ceil(this.relatedData.length / this.pageSize) || 1;
             this.pages(pages);
+        },
+
+        /**
+         * Reinit record data in order to remove deleted values
+         *
+         * @return void
+         */
+        reinitRecordData: function () {
+            this.recordData(
+                _.filter(this.recordData(), function (elem) {
+                    return elem && elem[this.deleteProperty] !== this.deleteValue;
+                }, this)
+            );
         },
 
         /**
@@ -672,9 +687,8 @@ define([
             this.bubble('addChild', false);
 
             if (this.relatedData.length && this.relatedData.length % this.pageSize === 0) {
-                this.clear();
                 this.pages(this.pages() + 1);
-                this.currentPage(this.pages());
+                this.nextPage();
             } else if (~~this.currentPage() !== this.pages()) {
                 this.currentPage(this.pages());
             }
@@ -690,11 +704,6 @@ define([
          */
         processingDeleteRecord: function (index, recordId) {
             this.deleteRecord(index, recordId);
-
-            if (this.getChildItems().length <= 0 && this.pages() !== 1) {
-                this.pages(this.pages() - 1);
-                this.currentPage(this.pages());
-            }
         },
 
         /**
@@ -717,8 +726,9 @@ define([
                 return false;
             }
 
-            this.clear();
             this.initChildren();
+
+            return true;
         },
 
         /**
@@ -743,6 +753,7 @@ define([
          * Change page to next
          */
         nextPage: function () {
+            this.clear();
             this.currentPage(this.currentPage() + 1);
         },
 
@@ -750,6 +761,7 @@ define([
          * Change page to previous
          */
         previousPage: function () {
+            this.clear();
             this.currentPage(this.currentPage() - 1);
         },
 
@@ -827,10 +839,10 @@ define([
         deleteRecord: function (index, recordId) {
             var recordInstance,
                 lastRecord,
-                recordsData,
-                childs;
+                recordsData;
 
             if (this.deleteProperty) {
+                recordsData = this.recordData();
                 recordInstance = _.find(this.elems(), function (elem) {
                     return elem.index === index;
                 });
@@ -838,13 +850,10 @@ define([
                 this.elems([]);
                 this._updateCollection();
                 this.removeMaxPosition();
-                this.recordData()[recordInstance.index][this.deleteProperty] = this.deleteValue;
-                this.recordData.valueHasMutated();
-                childs = this.getChildItems();
-
-                if (childs.length > this.elems().length) {
-                    this.addChild(false, childs[childs.length - 1][this.identificationProperty], false);
-                }
+                recordsData[recordInstance.index][this.deleteProperty] = this.deleteValue;
+                this.recordData(recordsData);
+                this.reinitRecordData();
+                this.reload();
             } else {
                 this.update = true;
 
@@ -866,11 +875,20 @@ define([
                 this.update = false;
             }
 
+            this._reducePages();
+            this._sort();
+        },
+
+        /**
+         * Reduce the number of pages
+         *
+         * @private
+         * @return void
+         */
+        _reducePages: function () {
             if (this.pages() < ~~this.currentPage()) {
                 this.currentPage(this.pages());
             }
-
-            this._sort();
         },
 
         /**

@@ -11,6 +11,7 @@
             <data name="attributeTypeAction" xsi:type="string">addOptions</data>
             <data name="product/dataset" xsi:type="string">product_with_text_swatch</data>
             <data name="addToCart" xsi:type="boolean">true</data>
+            <constraint name="Magento\Swatches\Test\Constraint\AssertProductPriceWithSelectedSwatchOnCategoryPage" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertCartItemsOptions" />
         </variation>
         <variation name="AddConfigurableProductWithSwatchToShoppingCartTest2" summary="Add configurable product to cart with mixed option types" ticketId="MAGETWO-59979">

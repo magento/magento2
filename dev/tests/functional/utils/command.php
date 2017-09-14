@@ -5,8 +5,9 @@
  */
 
 if (isset($_GET['command'])) {
+    $php = PHP_BINARY ?: (PHP_BINDIR ? PHP_BINDIR . '/php' : 'php');
     $command = urldecode($_GET['command']);
-    exec('php -f ../../../../bin/magento ' . $command);
+    exec($php . ' -f ../../../../bin/magento ' . $command);
 } else {
     throw new \InvalidArgumentException("Command GET parameter is not set.");
 }

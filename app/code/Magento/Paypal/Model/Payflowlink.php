@@ -11,6 +11,7 @@ namespace Magento\Paypal\Model;
 use Magento\Payment\Model\Method\AbstractMethod;
 use Magento\Payment\Model\Method\ConfigInterfaceFactory;
 use Magento\Paypal\Model\Payflow\Service\Response\Handler\HandlerInterface;
+use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 
 /**
@@ -46,7 +47,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
     /**
      * @var string
      */
-    protected $_infoBlockType = \Magento\Paypal\Block\Payflow\Link\Info::class;
+    protected $_infoBlockType = \Magento\Paypal\Block\Payment\Info::class;
 
     /**
      * Availability option
@@ -308,8 +309,9 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
         $response = $this->getResponse();
         $payment = $order->getPayment();
         $payment->setTransactionId($response->getPnref())->setIsTransactionClosed(0);
-        $canSendNewOrderEmail = true;
+        $payment->setCcType($response->getData(OrderPaymentInterface::CC_TYPE));
 
+        $canSendNewOrderEmail = true;
         if ($response->getResult() == self::RESPONSE_CODE_FRAUDSERVICE_FILTER ||
             $response->getResult() == self::RESPONSE_CODE_DECLINED_BY_FILTER
         ) {

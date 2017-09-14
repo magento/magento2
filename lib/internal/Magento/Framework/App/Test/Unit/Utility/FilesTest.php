@@ -7,59 +7,25 @@ namespace Magento\Framework\App\Test\Unit\Utility;
 
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Component\ComponentRegistrar;
-use Magento\Framework\Serialize\Serializer\Json;
 
-class FilesTest extends \PHPUnit_Framework_TestCase
+class FilesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Component\DirSearch|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $dirSearch;
-
-    /**
-     * @var ComponentRegistrar
-     */
-    private $componentRegistrar;
-
-    /**
-     * @var Json|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $serializerMock;
+    private $dirSearchMock;
 
     protected function setUp()
     {
-        $this->componentRegistrar = new ComponentRegistrar();
-        $this->dirSearch = $this->getMock(\Magento\Framework\Component\DirSearch::class, [], [], '', false);
-
-        $this->serializerMock = $this->getMockBuilder(Json::class)
-            ->setMethods(['serialize'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->serializerMock->expects($this->any())
-            ->method('serialize')
-            ->will(
-                $this->returnCallback(
-                    function ($value) {
-                        return json_encode($value);
-                    }
-                )
-            );
-
-        $themePackageList = $this->getMock(
-            \Magento\Framework\View\Design\Theme\ThemePackageList::class,
-            [],
-            [],
-            '',
-            false
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->dirSearchMock = $this->createMock(\Magento\Framework\Component\DirSearch::class);
+        $fileUtilities = $objectManager->getObject(
+            Files::class,
+            [
+                'dirSearch' => $this->dirSearchMock
+            ]
         );
-        Files::setInstance(
-            new Files(
-                $this->componentRegistrar,
-                $this->dirSearch,
-                $themePackageList,
-                $this->serializerMock
-            )
-        );
+        Files::setInstance($fileUtilities);
     }
 
     protected function tearDown()
@@ -69,7 +35,7 @@ class FilesTest extends \PHPUnit_Framework_TestCase
 
     public function testGetConfigFiles()
     {
-        $this->dirSearch->expects($this->once())
+        $this->dirSearchMock->expects($this->once())
             ->method('collectFiles')
             ->with(ComponentRegistrar::MODULE, '/etc/some.file')
             ->willReturn(['/one/some.file', '/two/some.file', 'some.other.file']);
@@ -83,7 +49,7 @@ class FilesTest extends \PHPUnit_Framework_TestCase
 
     public function testGetLayoutConfigFiles()
     {
-        $this->dirSearch->expects($this->once())
+        $this->dirSearchMock->expects($this->once())
             ->method('collectFiles')
             ->with(ComponentRegistrar::THEME, '/etc/some.file')
             ->willReturn(['/one/some.file', '/two/some.file']);

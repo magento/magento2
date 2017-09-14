@@ -5,6 +5,7 @@
  */
 namespace Magento\Paypal\Test\Unit\Model\Payflow;
 
+use Magento\Paypal\Block\Payment\Info;
 use Magento\Paypal\Model\Payflowpro;
 use Magento\Paypal\Model\Payflow\Transparent;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
@@ -16,7 +17,7 @@ use Magento\Vault\Model\CreditCardTokenFactory;
  * Test class for \Magento\Paypal\Model\Payflow\Transparent
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TransparentTest extends \PHPUnit_Framework_TestCase
+class TransparentTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Transparent|\PHPUnit_Framework_MockObject_MockObject */
     protected $object;
@@ -79,8 +80,7 @@ class TransparentTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getStore', 'getId'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->storeManagerMock->expects($this->once())
-            ->method('getStore')
+        $this->storeManagerMock->method('getStore')
             ->willReturnSelf();
         $this->configMock = $this->getMockBuilder(\Magento\Paypal\Model\PayflowConfig::class)
             ->disableOriginalConstructor()
@@ -89,8 +89,7 @@ class TransparentTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->configFactoryMock->expects($this->once())
-            ->method('create')
+        $this->configFactoryMock->method('create')
             ->willReturn($this->configMock);
         $this->responseMock = new \Magento\Framework\DataObject();
         $this->responseValidator = $this->getMockBuilder(
@@ -366,11 +365,11 @@ class TransparentTest extends \PHPUnit_Framework_TestCase
         $this->initializationAuthorizeMock();
         $this->buildRequestData();
 
-        $paymentTokenMock = $this->getMock(PaymentTokenInterface::class);
+        $paymentTokenMock = $this->createMock(PaymentTokenInterface::class);
         $extensionAttributes = $this->getMockBuilder(\Magento\Sales\Api\Data\OrderPaymentExtensionInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['setVaultPaymentToken'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $ccDetails = [
             'cc_type' => 'VI',
             'cc_number' => '1111'
@@ -436,5 +435,13 @@ class TransparentTest extends \PHPUnit_Framework_TestCase
             ->with(Transparent::PNREF);
 
         $this->assertSame($this->object, $this->object->authorize($this->paymentMock, 33));
+    }
+
+    /**
+     * @covers \Magento\Paypal\Model\Payflow\Transparent::getInfoBlockType()
+     */
+    public function testGetInfoBlockType()
+    {
+        static::assertEquals(Info::class, $this->object->getInfoBlockType());
     }
 }

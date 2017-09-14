@@ -1,7 +1,5 @@
 <?php
 /**
- * Form Element File Data Model
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -57,10 +55,13 @@ class File extends AbstractData
 
     /**
      * @var FileProcessorFactory
+     * @deprecated 100.2.0
      */
     protected $fileProcessorFactory;
 
     /**
+     * Constructor
+     *
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Customer\Api\Data\AttributeMetadataInterface $attribute
@@ -72,6 +73,7 @@ class File extends AbstractData
      * @param \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $fileValidator
      * @param Filesystem $fileSystem
      * @param UploaderFactory $uploaderFactory
+     * @param \Magento\Customer\Model\FileProcessorFactory|null $fileProcessorFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -85,13 +87,17 @@ class File extends AbstractData
         \Magento\Framework\Url\EncoderInterface $urlEncoder,
         \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $fileValidator,
         Filesystem $fileSystem,
-        UploaderFactory $uploaderFactory
+        UploaderFactory $uploaderFactory,
+        \Magento\Customer\Model\FileProcessorFactory $fileProcessorFactory = null
     ) {
         parent::__construct($localeDate, $logger, $attribute, $localeResolver, $value, $entityTypeCode, $isAjax);
         $this->urlEncoder = $urlEncoder;
         $this->_fileValidator = $fileValidator;
         $this->_fileSystem = $fileSystem;
         $this->uploaderFactory = $uploaderFactory;
+        $this->fileProcessorFactory = $fileProcessorFactory ?: ObjectManager::getInstance()
+            ->get(\Magento\Customer\Model\FileProcessorFactory::class);
+        $this->fileProcessor = $this->fileProcessorFactory->create(['entityTypeCode' => $this->_entityTypeCode]);
     }
 
     /**
@@ -218,7 +224,7 @@ class File extends AbstractData
 
         // This case is required for file uploader UI component
         $temporaryFile = FileProcessor::TMP_DIR . '/' . pathinfo($filename)['basename'];
-        if ($this->getFileProcessor()->isExist($temporaryFile)) {
+        if ($this->fileProcessor->isExist($temporaryFile)) {
             return true;
         }
 
@@ -279,7 +285,7 @@ class File extends AbstractData
 
         // Remove outdated file (in the case of file uploader UI component)
         if (empty($value) && !empty($this->_value)) {
-            $this->getFileProcessor()->removeUploadedFile($this->_value);
+            $this->fileProcessor->removeUploadedFile($this->_value);
             return $value;
         }
 
@@ -303,7 +309,7 @@ class File extends AbstractData
      */
     protected function processUiComponentValue(array $value)
     {
-        $result = $this->getFileProcessor()->moveTemporaryFile($value['file']);
+        $result = $this->fileProcessor->moveTemporaryFile($value['file']);
         return $result;
     }
 
@@ -377,35 +383,13 @@ class File extends AbstractData
     }
 
     /**
-     * Get FileProcessor instance
+     * Get file processor
      *
      * @return FileProcessor
-     *
-     * @deprecated
+     * @deprecated 100.1.3
      */
     protected function getFileProcessor()
     {
-        if ($this->fileProcessor === null) {
-            $this->fileProcessor = $this->getFileProcessorFactory()->create([
-                'entityTypeCode' => $this->_entityTypeCode,
-            ]);
-        }
         return $this->fileProcessor;
-    }
-
-    /**
-     * Get FileProcessorFactory instance
-     *
-     * @return FileProcessorFactory
-     *
-     * @deprecated
-     */
-    protected function getFileProcessorFactory()
-    {
-        if ($this->fileProcessorFactory === null) {
-            $this->fileProcessorFactory = ObjectManager::getInstance()
-                ->get(\Magento\Customer\Model\FileProcessorFactory::class);
-        }
-        return $this->fileProcessorFactory;
     }
 }

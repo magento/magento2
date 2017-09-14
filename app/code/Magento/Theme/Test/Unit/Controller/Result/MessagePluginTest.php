@@ -20,7 +20,7 @@ use Magento\Theme\Controller\Result\MessagePlugin;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class MessagePluginTest extends \PHPUnit_Framework_TestCase
+class MessagePluginTest extends \PHPUnit\Framework\TestCase
 {
     /** @var MessagePlugin */
     protected $model;
@@ -118,8 +118,7 @@ class MessagePluginTest extends \PHPUnit_Framework_TestCase
         $this->cookieManagerMock->expects($this->once())
             ->method('getCookie')
             ->with(
-                MessagePlugin::MESSAGES_COOKIES_NAME,
-                json_encode([])
+                MessagePlugin::MESSAGES_COOKIES_NAME
             )
             ->willReturn(json_encode($existingMessages));
 
@@ -130,7 +129,7 @@ class MessagePluginTest extends \PHPUnit_Framework_TestCase
                     return json_decode($data, true);
                 }
             );
-        $this->serializerMock->expects($this->exactly(2))
+        $this->serializerMock->expects($this->once())
             ->method('serialize')
             ->willReturnCallback(
                 function ($data) {
@@ -176,8 +175,7 @@ class MessagePluginTest extends \PHPUnit_Framework_TestCase
         $this->cookieManagerMock->expects($this->once())
             ->method('getCookie')
             ->with(
-                MessagePlugin::MESSAGES_COOKIES_NAME,
-                json_encode([])
+                MessagePlugin::MESSAGES_COOKIES_NAME
             )
             ->willReturn(json_encode([]));
 
@@ -188,13 +186,8 @@ class MessagePluginTest extends \PHPUnit_Framework_TestCase
                     return json_decode($data, true);
                 }
             );
-        $this->serializerMock->expects($this->once())
-            ->method('serialize')
-            ->willReturnCallback(
-                function ($data) {
-                    return json_encode($data);
-                }
-            );
+        $this->serializerMock->expects($this->never())
+            ->method('serialize');
 
         /** @var Collection|\PHPUnit_Framework_MockObject_MockObject $collectionMock */
         $collectionMock = $this->getMockBuilder(Collection::class)
@@ -251,8 +244,7 @@ class MessagePluginTest extends \PHPUnit_Framework_TestCase
         $this->cookieManagerMock->expects($this->once())
             ->method('getCookie')
             ->with(
-                MessagePlugin::MESSAGES_COOKIES_NAME,
-                json_encode([])
+                MessagePlugin::MESSAGES_COOKIES_NAME
             )
             ->willReturn(json_encode([]));
 
@@ -263,7 +255,7 @@ class MessagePluginTest extends \PHPUnit_Framework_TestCase
                     return json_decode($data, true);
                 }
             );
-        $this->serializerMock->expects($this->exactly(2))
+        $this->serializerMock->expects($this->once())
             ->method('serialize')
             ->willReturnCallback(
                 function ($data) {
@@ -334,19 +326,14 @@ class MessagePluginTest extends \PHPUnit_Framework_TestCase
         $this->cookieManagerMock->expects($this->once())
             ->method('getCookie')
             ->with(
-                MessagePlugin::MESSAGES_COOKIES_NAME,
-                json_encode([])
+                MessagePlugin::MESSAGES_COOKIES_NAME
             )
-            ->willReturn(json_encode([]));
+            ->willReturn(null);
+
+        $this->serializerMock->expects($this->never())
+            ->method('unserialize');
 
         $this->serializerMock->expects($this->once())
-            ->method('unserialize')
-            ->willReturnCallback(
-                function ($data) {
-                    return json_decode($data, true);
-                }
-            );
-        $this->serializerMock->expects($this->exactly(2))
             ->method('serialize')
             ->willReturnCallback(
                 function ($data) {
@@ -417,8 +404,7 @@ class MessagePluginTest extends \PHPUnit_Framework_TestCase
         $this->cookieManagerMock->expects($this->once())
             ->method('getCookie')
             ->with(
-                MessagePlugin::MESSAGES_COOKIES_NAME,
-                json_encode([])
+                MessagePlugin::MESSAGES_COOKIES_NAME
             )
             ->willReturn(json_encode('string'));
 
@@ -429,7 +415,7 @@ class MessagePluginTest extends \PHPUnit_Framework_TestCase
                     return json_decode($data, true);
                 }
             );
-        $this->serializerMock->expects($this->exactly(2))
+        $this->serializerMock->expects($this->once())
             ->method('serialize')
             ->willReturnCallback(
                 function ($data) {

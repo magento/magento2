@@ -19,6 +19,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Command provides possibility to show saved system configuration.
+ *
+ * @api
+ * @since 100.2.0
  */
 class ConfigShowCommand extends Command
 {
@@ -30,11 +33,7 @@ class ConfigShowCommand extends Command
     const INPUT_ARGUMENT_PATH = 'path';
     /**#@-*/
 
-    /**
-     * Scope validator.
-     *
-     * @var ValidatorInterface
-     */
+    /**#@-*/
     private $scopeValidator;
 
     /**
@@ -101,6 +100,7 @@ class ConfigShowCommand extends Command
 
     /**
      * @inheritdoc
+     * @since 100.2.0
      */
     protected function configure()
     {
@@ -137,6 +137,7 @@ class ConfigShowCommand extends Command
      * or scope/scope-code doesn't pass validation.
      *
      * {@inheritdoc}
+     * @since 100.2.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

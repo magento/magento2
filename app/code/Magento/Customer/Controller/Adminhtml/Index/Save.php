@@ -301,7 +301,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
      * Get email notification
      *
      * @return EmailNotificationInterface
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getEmailNotification()
     {

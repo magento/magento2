@@ -80,10 +80,13 @@ class Config implements ConfigInterface
             return $this->_routes[$scope];
         }
         $cacheId = $scope . '::' . $this->_cacheId;
-        $cachedRoutes = $this->getSerializer()->unserialize($this->_cache->load($cacheId));
-        if (is_array($cachedRoutes)) {
-            $this->_routes[$scope] = $cachedRoutes;
-            return $cachedRoutes;
+        $cachedRoutes = $this->_cache->load($cacheId);
+        if ($cachedRoutes) {
+            $cachedRoutes = $this->getSerializer()->unserialize($cachedRoutes);
+            if (is_array($cachedRoutes)) {
+                $this->_routes[$scope] = $cachedRoutes;
+                return $cachedRoutes;
+            }
         }
 
         $routers = $this->_reader->read($scope);
@@ -146,7 +149,7 @@ class Config implements ConfigInterface
      * Get serializer
      *
      * @return \Magento\Framework\Serialize\SerializerInterface
-     * @deprecated
+     * @deprecated 100.2.0
      */
     private function getSerializer()
     {

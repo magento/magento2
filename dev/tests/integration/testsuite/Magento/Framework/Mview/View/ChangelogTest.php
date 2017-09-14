@@ -10,7 +10,7 @@ use Magento\Framework\App\ResourceConnection;
 /**
  * Test Class for \Magento\Framework\Mview\View\Changelog
  */
-class ChangelogTest extends \PHPUnit_Framework_TestCase
+class ChangelogTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface

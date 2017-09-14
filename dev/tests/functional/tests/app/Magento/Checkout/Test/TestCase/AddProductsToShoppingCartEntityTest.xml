@@ -61,7 +61,7 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInMiniShoppingCart" />
         </variation>
         <variation name="AddProductsToShoppingCartEntityTestVariation5">
-            <data name="tag" xsi:type="string">to_maintain:yes, severity:S0</data>
+            <data name="tag" xsi:type="string">severity:S0</data>
             <data name="productsData/0" xsi:type="string">configurableProduct::default</data>
             <data name="cart/data/grand_total" xsi:type="string">135</data>
             <data name="cart/data/subtotal" xsi:type="string">120</data>
@@ -74,7 +74,6 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInMiniShoppingCart" />
         </variation>
         <variation name="AddProductsToShoppingCartEntityTestVariation6">
-            <data name="issue" xsi:type="string">MAGETWO-64874: Eternal loader in shipping and tax block</data>
             <data name="tag" xsi:type="string">severity:S2</data>
             <data name="productsData/0" xsi:type="string">downloadableProduct::with_two_separately_links</data>
             <data name="cart/data/grand_total" xsi:type="string">22.43</data>
@@ -88,7 +87,7 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInMiniShoppingCart" />
         </variation>
         <variation name="AddProductsToShoppingCartEntityTestVariation7">
-            <data name="tag" xsi:type="string">to_maintain:yes, severity:S2</data>
+            <data name="tag" xsi:type="string">severity:S2</data>
             <data name="productsData/0" xsi:type="string">groupedProduct::three_simple_products</data>
             <data name="cart/data/grand_total" xsi:type="string">1950</data>
             <data name="cart/data/subtotal" xsi:type="string">1920</data>
@@ -264,6 +263,30 @@
             <data name="cart/data/subtotal" xsi:type="string">6160.00</data>
             <data name="isValidationFailed" xsi:type="boolean">true</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertCartItemsOptions" />
+        </variation>
+        <variation name="AddProductsToShoppingCartEntityTestVariation13" summary="Check Bundle on Cart Configuration Page." ticketId="MAGETWO-71634">
+            <data name="productsData/0" xsi:type="string">bundleProduct::bundle_with_multiselect_option_one_selection</data>
+            <data name="cart/data/grand_total" xsi:type="string">105</data>
+            <data name="cart/data/subtotal" xsi:type="string">100</data>
+            <data name="expectedItemsQty" xsi:type="number">1</data>
+            <constraint name="Magento\Bundle\Test\Constraint\AssertBundleProductOnConfigureCartPage" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertPriceInShoppingCart" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInShoppingCart" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInShoppingCart" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertCartItemsOptions" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertGrandTotalInShoppingCart" />
+        </variation>
+        <variation name="AddProductsToShoppingCartEntityTestVariation14" summary="Check Bundle on Cart Configuration Page." ticketId="MAGETWO-71634">
+            <data name="productsData/0" xsi:type="string">bundleProduct::bundle_with_multiselect_option_two_selections</data>
+            <data name="cart/data/grand_total" xsi:type="string">665</data>
+            <data name="cart/data/subtotal" xsi:type="string">660</data>
+            <data name="expectedItemsQty" xsi:type="number">1</data>
+            <constraint name="Magento\Bundle\Test\Constraint\AssertBundleProductOnConfigureCartPage" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertPriceInShoppingCart" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInShoppingCart" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInShoppingCart" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertCartItemsOptions" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertGrandTotalInShoppingCart" />
         </variation>
     </testCase>
 </config>

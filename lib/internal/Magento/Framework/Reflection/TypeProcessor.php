@@ -39,26 +39,7 @@ class TypeProcessor
     const NORMALIZED_ANY_TYPE = 'anyType';
     /**#@-*/
 
-    /**
-     * Array of types data.
-     * <pre>array(
-     *     $complexTypeName => array(
-     *         'documentation' => $typeDocumentation
-     *         'parameters' => array(
-     *             $firstParameter => array(
-     *                 'type' => $type,
-     *                 'required' => $isRequired,
-     *                 'default' => $defaultValue,
-     *                 'documentation' => $parameterDocumentation
-     *             ),
-     *             ...
-     *         )
-     *     ),
-     *     ...
-     * )</pre>
-     *
-     * @var array
-     */
+    /**#@-*/
     protected $_types = [];
 
     /**
@@ -71,7 +52,7 @@ class TypeProcessor
      *
      * @return NameFinder
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getNameFinder()
     {
@@ -260,7 +241,7 @@ class TypeProcessor
      * @param string $getterName
      * @return string
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     public function dataObjectGetterNameToFieldName($getterName)
     {
@@ -273,7 +254,7 @@ class TypeProcessor
      * @param string $shortDescription
      * @return string
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     protected function dataObjectGetterDescriptionToFieldDescription($shortDescription)
     {
@@ -288,6 +269,7 @@ class TypeProcessor
      *     'type' => <string>$type,
      *     'isRequired' => $isRequired,
      *     'description' => $description
+     *     'parameterCount' => $numberOfRequiredParameters
      * )</pre>
      * @throws \InvalidArgumentException
      */
@@ -309,23 +291,13 @@ class TypeProcessor
         }
         /** @var \Zend\Code\Reflection\DocBlock\Tag\ReturnTag $returnAnnotation */
         $returnAnnotation = current($returnAnnotations);
-        $returnType = $returnAnnotation->getType();
-        /*
-         * Adding this code as a workaround since \Zend\Code\Reflection\DocBlock\Tag\ReturnTag::initialize does not
-         * detect and return correct type for array of objects in annotation.
-         * eg @return \Magento\Webapi\Service\Entity\SimpleData[] is returned with type
-         * \Magento\Webapi\Service\Entity\SimpleData instead of \Magento\Webapi\Service\Entity\SimpleData[]
-         */
-        $escapedReturnType = str_replace('[]', '\[\]', $returnType);
-        $escapedReturnType = str_replace('\\', '\\\\', $escapedReturnType);
+        $types = $returnAnnotation->getTypes();
+        $returnType = current($types);
+        $nullable = in_array('null', $types);
 
-        if (preg_match("/.*\\@return\\s+({$escapedReturnType}).*/i", $methodDocBlock->getContents(), $matches)) {
-            $returnType = $matches[1];
-        }
-        $isNotRequired = (bool)preg_match("/.*\@return\s+\S+\|null.*/i", $methodDocBlock->getContents(), $matches);
         return [
             'type' => $returnType,
-            'isRequired' => !$isNotRequired,
+            'isRequired' => !$nullable,
             'description' => $returnAnnotation->getDescription(),
             'parameterCount' => $methodReflection->getNumberOfRequiredParameters()
         ];
@@ -542,8 +514,8 @@ class TypeProcessor
      */
     public function getParamType(ParameterReflection $param)
     {
-        $type = $param->getType();
-        if ($param->getType() == 'null') {
+        $type = $param->detectType();
+        if ($type == 'null') {
             throw new \LogicException(sprintf(
                 '@param annotation is incorrect for the parameter "%s" in the method "%s:%s".'
                 . ' First declared type should not be null. E.g. string|null',
@@ -593,7 +565,7 @@ class TypeProcessor
      * @return string processed method name
      * @throws \Exception If $camelCaseProperty has no corresponding getter method
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     public function findGetterMethodName(ClassReflection $class, $camelCaseProperty)
     {
@@ -631,7 +603,7 @@ class TypeProcessor
      * @return string processed method name
      * @throws \Exception If $camelCaseProperty has no corresponding setter method
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     public function findSetterMethodName(ClassReflection $class, $camelCaseProperty)
     {
@@ -648,7 +620,7 @@ class TypeProcessor
      * @return string processed method name
      * @throws \Exception If $camelCaseProperty has no corresponding setter method
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     protected function findAccessorMethodName(
         ClassReflection $class,
@@ -669,7 +641,7 @@ class TypeProcessor
      * @param string $methodName
      * @return bool
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     protected function classHasMethod(ClassReflection $class, $methodName)
     {

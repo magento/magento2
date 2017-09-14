@@ -248,6 +248,9 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             $product->load($productId);
             $this->cacheProduct($cacheKey, $product);
         }
+        if (!isset($this->instances[$sku])) {
+            $sku = trim($sku);
+        }
         return $this->instances[$sku][$cacheKey];
     }
 
@@ -291,7 +294,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             }
         }
         $serializeData = $this->serializer->serialize($serializeData);
-        return md5($serializeData);
+        return sha1($serializeData);
     }
 
     /**
@@ -308,7 +311,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
 
         if ($this->cacheLimit && count($this->instances) > $this->cacheLimit) {
             $offset = round($this->cacheLimit / -2);
-            $this->instancesById = array_slice($this->instancesById, $offset);
+            $this->instancesById = array_slice($this->instancesById, $offset, null, true);
             $this->instances = array_slice($this->instances, $offset);
         }
     }
@@ -564,6 +567,9 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 $this->resourceModel->getLinkField(),
                 $existingProduct->getData($this->resourceModel->getLinkField())
             );
+            if (!$product->hasData(Product::STATUS)) {
+                $product->setStatus($existingProduct->getStatus());
+            }
         } catch (NoSuchEntityException $e) {
             $existingProduct = null;
         }
@@ -631,11 +637,11 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         } catch (LocalizedException $e) {
             throw $e;
         } catch (\Exception $e) {
-            throw new \Magento\Framework\Exception\CouldNotSaveException(__('Unable to save product'));
+            throw new \Magento\Framework\Exception\CouldNotSaveException(__('Unable to save product'), $e);
         }
         unset($this->instances[$product->getSku()]);
         unset($this->instancesById[$product->getId()]);
-        return $this->get($product->getSku());
+        return $this->get($product->getSku(), false, $product->getStoreId());
     }
 
     /**
@@ -679,9 +685,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $collection = $this->collectionFactory->create();
         $this->extensionAttributesJoinProcessor->process($collection);
 
-        foreach ($this->metadataService->getList($this->searchCriteriaBuilder->create())->getItems() as $metadata) {
-            $collection->addAttributeToSelect($metadata->getAttributeCode());
-        }
+        $collection->addAttributeToSelect('*');
         $collection->joinAttribute('status', 'catalog_product/status', 'entity_id', null, 'inner');
         $collection->joinAttribute('visibility', 'catalog_product/visibility', 'entity_id', null, 'inner');
 
@@ -713,7 +717,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     /**
      * Helper function that adds a FilterGroup to the collection.
      *
-     * @deprecated
+     * @deprecated 101.1.0
      * @param \Magento\Framework\Api\Search\FilterGroup $filterGroup
      * @param Collection $collection
      * @return void
@@ -769,7 +773,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     /**
      * Retrieve collection processor
      *
-     * @deprecated
+     * @deprecated 101.1.0
      * @return CollectionProcessorInterface
      */
     private function getCollectionProcessor()

@@ -3,9 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Setup\Mvc\Bootstrap;
 
+use Interop\Container\ContainerInterface;
+use Interop\Container\Exception\ContainerException;
 use Magento\Framework\App\Bootstrap as AppBootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Request\Http;
@@ -17,13 +18,15 @@ use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
 use Zend\Mvc\Application;
 use Zend\Mvc\MvcEvent;
-use Zend\Mvc\Router\Http\RouteMatch;
+use Zend\Router\Http\RouteMatch;
+use Zend\ServiceManager\Exception\ServiceNotCreatedException;
+use Zend\ServiceManager\Exception\ServiceNotFoundException;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\Stdlib\RequestInterface;
 
 /**
- * A listener that injects relevant Magento initialization parameters and initializes Magento\Filesystem component.
+ * A listener that injects relevant Magento initialization parameters and initializes filesystem
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -35,8 +38,6 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
     const BOOTSTRAP_PARAM = 'magento-init-params';
 
     /**
-     * List of ZF event listeners
-     *
      * @var \Zend\Stdlib\CallbackHandler[]
      */
     private $listeners = [];
@@ -53,14 +54,19 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
 
     /**
      * {@inheritdoc}
+     *
+     * The $priority argument is added to support latest versions of Zend Event Manager.
+     * Starting from Zend Event Manager 3.0.0 release the ListenerAggregateInterface::attach()
+     * supports the `priority` argument.
      */
-    public function attach(EventManagerInterface $events)
+    public function attach(EventManagerInterface $events, $priority = 1)
     {
         $sharedEvents = $events->getSharedManager();
         $this->listeners[] = $sharedEvents->attach(
-            \Zend\Mvc\Application::class,
+            Application::class,
             MvcEvent::EVENT_BOOTSTRAP,
-            [$this, 'onBootstrap']
+            [$this, 'onBootstrap'],
+            $priority
         );
     }
 
@@ -173,9 +179,9 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
         /** @var \Magento\Backend\App\BackendAppList $backendAppList */
         $backendAppList = $objectManager->get(\Magento\Backend\App\BackendAppList::class);
         $backendApp = $backendAppList->getBackendApp('setup');
-        /** @var \Magento\Backend\Model\UrlFactory $backendUrlFactory */
-        $backendUrlFactory = $objectManager->get(\Magento\Backend\Model\UrlFactory::class);
-        $baseUrl = parse_url($backendUrlFactory->create()->getBaseUrl(), PHP_URL_PATH);
+        /** @var \Magento\Backend\Model\Url $url */
+        $url = $objectManager->create(\Magento\Backend\Model\Url::class);
+        $baseUrl = parse_url($url->getBaseUrl(), PHP_URL_PATH);
         $baseUrl = \Magento\Framework\App\Request\Http::getUrlNoScript($baseUrl);
         $cookiePath = $baseUrl . $backendApp->getCookiePath();
         return $cookiePath;

@@ -8,7 +8,7 @@ namespace Magento\Framework\Serialize\Test\Unit\Serializer;
 use Magento\Framework\DataObject;
 use Magento\Framework\Serialize\Serializer\Json;
 
-class JsonTest extends \PHPUnit_Framework_TestCase
+class JsonTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
@@ -73,6 +73,35 @@ class JsonTest extends \PHPUnit_Framework_TestCase
             ['123', 123],
             ['10.56', 10.56],
             ['{}', []],
+        ];
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Unable to serialize value.
+     */
+    public function testSerializeException()
+    {
+        $this->json->serialize(STDOUT);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Unable to unserialize value.
+     * @dataProvider unserializeExceptionDataProvider
+     */
+    public function testUnserializeException($value)
+    {
+        $this->json->unserialize($value);
+    }
+
+    public function unserializeExceptionDataProvider()
+    {
+        return [
+            [''],
+            [false],
+            [null],
+            ['{']
         ];
     }
 }

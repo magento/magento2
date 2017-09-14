@@ -28,6 +28,9 @@ HTML;
 }
 
 require_once __DIR__ . '/autoload.php';
+// Sets default autoload mappings, may be overridden in Bootstrap::create
+\Magento\Framework\App\Bootstrap::populateAutoloader(BP, []);
+
 require_once BP . '/app/functions.php';
 
 /* Custom umask value may be provided in optional mage_umask file in root */
@@ -60,5 +63,5 @@ if (!empty($_SERVER['MAGE_PROFILER'])
 date_default_timezone_set('UTC');
 
 /*  Adjustment of precision value for several versions of PHP */
-ini_set('precision', 17);
-ini_set('serialize_precision', 17);
+ini_set('precision', 15);
+ini_set('serialize_precision', 15);

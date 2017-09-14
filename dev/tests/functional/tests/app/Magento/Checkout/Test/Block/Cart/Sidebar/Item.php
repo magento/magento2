@@ -101,6 +101,13 @@ class Item extends Sidebar
      */
     public function getQty()
     {
+        $rootElement = $this->_rootElement;
+        $qtySelector = $this->qty;
+        $this->browser->waitUntil(
+            function () use ($rootElement, $qtySelector) {
+                return $rootElement->find($qtySelector)->isVisible() ? true : null;
+            }
+        );
         return $this->_rootElement->find($this->qty)->getValue();
     }
 

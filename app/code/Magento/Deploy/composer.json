@@ -3,14 +3,14 @@
     "description": "N/A",
     "require": {
         "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
-        "magento/framework": "100.*.*",
-        "magento/module-store": "100.2.*",
-        "magento/module-require-js": "100.2.*",
-        "magento/module-user": "100.2.*",
-        "magento/module-config": "100.2.*"
+        "magento/framework": "100.3.*",
+        "magento/module-store": "100.3.*",
+        "magento/module-require-js": "100.3.*",
+        "magento/module-user": "100.3.*",
+        "magento/module-config": "100.3.*"
     },
     "type": "magento2-module",
-    "version": "100.2.0-dev",
+    "version": "100.3.0-dev",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

@@ -886,6 +886,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
 
     /**
      * @inheritdoc
+     * @since 100.0.11
      */
     public function __sleep()
     {
@@ -897,13 +898,14 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
 
     /**
      * @inheritdoc
+     * @since 100.0.11
      */
     public function __wakeup()
     {
         parent::__wakeup();
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $this->_fetchStrategy = $objectManager->get(Logger::class);
-        $this->_logger = $objectManager->get(FetchStrategyInterface::class);
+        $this->_logger = $objectManager->get(Logger::class);
+        $this->_fetchStrategy = $objectManager->get(FetchStrategyInterface::class);
         $this->_conn = $objectManager->get(ResourceConnection::class)->getConnection();
     }
 }

@@ -9,7 +9,7 @@ use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Search\Adapter\Mysql\TemporaryStorage;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class TemporaryStorageTest extends \PHPUnit_Framework_TestCase
+class TemporaryStorageTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject

@@ -68,7 +68,7 @@ class View extends AbstractConfigureBlock
      *
      * @var string
      */
-    protected $inContextPaypalCheckout = '#paypal-express-in-context-mini-cart';
+    protected $inContextPaypalCheckout = 'ul.checkout-methods-items a[data-action="paypal-in-context-checkout"]';
 
     /**
      * Product name element.
@@ -207,6 +207,11 @@ class View extends AbstractConfigureBlock
      * @var string
      */
     private $videoContainer = 'div.fotorama-video-container';
+
+    /**
+     * @var string
+     */
+    private $productVideo = '.product-video';
 
     /**
      * Threshold message selector.
@@ -646,5 +651,17 @@ class View extends AbstractConfigureBlock
     public function isVideoVisible()
     {
         return $this->_rootElement->find($this->videoContainer)->isVisible();
+    }
+
+    /**
+     * Check definite video data is presented on product page
+     *
+     * @param string $videoData
+     * @return bool
+     */
+    public function checkVideoDataPresence($videoData)
+    {
+        $dataVideoSelector = $this->productVideo . '[data-code="' . $videoData. '"]';
+        return $this->_rootElement->find($dataVideoSelector)->isPresent();
     }
 }

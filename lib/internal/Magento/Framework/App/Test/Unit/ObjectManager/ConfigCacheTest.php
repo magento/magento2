@@ -7,7 +7,7 @@ namespace Magento\Framework\App\Test\Unit\ObjectManager;
 
 use Magento\Framework\Serialize\SerializerInterface;
 
-class ConfigCacheTest extends \PHPUnit_Framework_TestCase
+class ConfigCacheTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\ObjectManager\ConfigCache
@@ -27,13 +27,13 @@ class ConfigCacheTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->cacheFrontendMock = $this->getMock(\Magento\Framework\Cache\FrontendInterface::class);
+        $this->cacheFrontendMock = $this->createMock(\Magento\Framework\Cache\FrontendInterface::class);
         $this->configCache = $objectManagerHelper->getObject(
             \Magento\Framework\App\ObjectManager\ConfigCache::class,
             ['cacheFrontend' => $this->cacheFrontendMock]
         );
 
-        $this->serializerMock = $this->getMock(SerializerInterface::class);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
         $objectManagerHelper->setBackwardCompatibleProperty(
             $this->configCache,
             'serializer',
@@ -47,31 +47,32 @@ class ConfigCacheTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param $data
+     * @param $expectedResult
+     * @param $unserializeCalledNum
      * @dataProvider getDataProvider
      */
-    public function testGet($loadData, $expectedResult)
+    public function testGet($data, $expectedResult, $unserializeCalledNum = 1)
     {
         $key = 'key';
-        $this->cacheFrontendMock->expects(
-            $this->once()
-        )->method(
-            'load'
-        )->with(
-            'diConfig' . $key
-        )->will(
-            $this->returnValue($loadData)
-        );
-        $this->serializerMock->expects($this->once())
+        $this->cacheFrontendMock->expects($this->once())
+            ->method('load')
+            ->with('diConfig' . $key)
+            ->willReturn($data);
+        $this->serializerMock->expects($this->exactly($unserializeCalledNum))
             ->method('unserialize')
-            ->with($loadData)
+            ->with($data)
             ->willReturn($expectedResult);
         $this->assertEquals($expectedResult, $this->configCache->get($key));
     }
 
+    /**
+     * @return array
+     */
     public function getDataProvider()
     {
         return [
-            [false, false],
+            [false, false, 0],
             ['serialized data', ['some data']],
         ];
     }

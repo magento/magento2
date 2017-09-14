@@ -88,7 +88,7 @@ class CommandList
 
         foreach ($this->getCommandsClasses() as $class) {
             if (class_exists($class)) {
-                $commands[] = $this->serviceManager->create($class);
+                $commands[] = $this->serviceManager->get($class);
             } else {
                 throw new \Exception('Class ' . $class . ' does not exist');
             }

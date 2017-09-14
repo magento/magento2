@@ -6,6 +6,7 @@
 namespace Magento\Config\Test\Unit\Model\Config;
 
 use Magento\Config\Model\Config\Importer;
+use Magento\Config\Model\Config\Importer\SaveProcessor;
 use Magento\Config\Model\PreparedValueFactory;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -13,8 +14,7 @@ use Magento\Framework\App\Config\Value;
 use Magento\Framework\App\State;
 use Magento\Framework\Config\ScopeInterface;
 use Magento\Framework\Flag;
-use Magento\Framework\Flag\FlagResource;
-use Magento\Framework\FlagFactory;
+use Magento\Framework\FlagManager;
 use Magento\Framework\Stdlib\ArrayUtils;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 
@@ -24,7 +24,7 @@ use PHPUnit_Framework_MockObject_MockObject as Mock;
  * @see Importer
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ImporterTest extends \PHPUnit_Framework_TestCase
+class ImporterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Importer
@@ -32,19 +32,14 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
     private $model;
 
     /**
-     * @var FlagFactory|Mock
+     * @var FlagManager|Mock
      */
-    private $flagFactoryMock;
+    private $flagManagerMock;
 
     /**
      * @var Flag|Mock
      */
     private $flagMock;
-
-    /**
-     * @var FlagResource|Mock
-     */
-    private $flagResourceMock;
 
     /**
      * @var ArrayUtils|Mock
@@ -77,17 +72,20 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
     private $valueMock;
 
     /**
+     * @var SaveProcessor|Mock
+     */
+    private $saveProcessorMock;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
     {
-        $this->flagFactoryMock = $this->getMockBuilder(FlagFactory::class)
+        $this->flagManagerMock = $this->getMockBuilder(FlagManager::class)
+            ->setMethods(['create', 'getFlagData', 'saveFlag'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->flagMock = $this->getMockBuilder(Flag::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->flagResourceMock = $this->getMockBuilder(FlagResource::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->arrayUtilsMock = $this->getMockBuilder(ArrayUtils::class)
@@ -106,16 +104,18 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->scopeMock = $this->getMockBuilder(ScopeInterface::class)
             ->getMockForAbstractClass();
+        $this->saveProcessorMock = $this->getMockBuilder(SaveProcessor::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->flagFactoryMock->expects($this->any())
+        $this->flagManagerMock->expects($this->any())
             ->method('create')
             ->willReturn($this->flagMock);
 
         $this->model = new Importer(
-            $this->flagFactoryMock,
-            $this->flagResourceMock,
+            $this->flagManagerMock,
             $this->arrayUtilsMock,
-            $this->valueFactoryMock,
+            $this->saveProcessorMock,
             $this->scopeConfigMock,
             $this->stateMock,
             $this->scopeMock
@@ -127,14 +127,9 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
         $data = [];
         $currentData = ['current' => '2'];
 
-        $reflection = new \ReflectionClass($this->model);
-        $closure = $reflection->getMethod('invokeSaveAll')->getClosure($this->model);
-
-        $this->flagResourceMock->expects($this->once())
-            ->method('load')
-            ->with($this->flagMock, Importer::FLAG_CODE, 'flag_code');
-        $this->flagMock->expects($this->once())
+        $this->flagManagerMock->expects($this->once())
             ->method('getFlagData')
+            ->with(Importer::FLAG_CODE)
             ->willReturn($currentData);
         $this->arrayUtilsMock->expects($this->exactly(2))
             ->method('recursiveDiff')
@@ -147,16 +142,23 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
             ->willReturn('oldScope');
         $this->stateMock->expects($this->once())
             ->method('emulateAreaCode')
-            ->with(Area::AREA_ADMINHTML, $closure);
-        $this->scopeMock->expects($this->once())
+            ->with(Area::AREA_ADMINHTML, $this->anything())
+            ->willReturnCallback(function ($area, $function) {
+                $this->assertEquals(Area::AREA_ADMINHTML, $area);
+                return $function();
+            });
+        $this->saveProcessorMock->expects($this->once())
+            ->method('process')
+            ->with([]);
+        $this->scopeMock->expects($this->at(1))
+            ->method('setCurrentScope')
+            ->with(Area::AREA_ADMINHTML);
+        $this->scopeMock->expects($this->at(2))
             ->method('setCurrentScope')
             ->with('oldScope');
-        $this->flagMock->expects($this->once())
-            ->method('setFlagData')
-            ->with($data);
-        $this->flagResourceMock->expects($this->once())
-            ->method('save')
-            ->with($this->flagMock);
+        $this->flagManagerMock->expects($this->once())
+            ->method('saveFlag')
+            ->with(Importer::FLAG_CODE, $data);
 
         $this->assertSame(['System config was processed'], $this->model->import($data));
     }
@@ -170,10 +172,7 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
         $data = [];
         $currentData = ['current' => '2'];
 
-        $this->flagResourceMock->expects($this->once())
-            ->method('load')
-            ->with($this->flagMock, Importer::FLAG_CODE, 'flag_code');
-        $this->flagMock->expects($this->once())
+        $this->flagManagerMock->expects($this->once())
             ->method('getFlagData')
             ->willReturn($currentData);
         $this->arrayUtilsMock->expects($this->exactly(2))
@@ -193,54 +192,5 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
             ->with('oldScope');
 
         $this->model->import($data);
-    }
-
-    public function testInvokeSaveAll()
-    {
-        $reflection = new \ReflectionClass($this->model);
-        $closure = $reflection->getMethod('invokeSaveAll')->getClosure($this->model);
-        $data = [
-            'default' => ['web' => ['unsecure' => ['base_url' => 'http://magento2.local/']]],
-            'websites' => ['base' => ['web' => ['unsecure' => ['base_url' => 'http://magento2.local/']]]],
-        ];
-
-        $this->valueMock->expects($this->exactly(2))
-            ->method('beforeSave');
-        $this->valueMock->expects($this->exactly(2))
-            ->method('afterSave');
-
-        $value1 = clone $this->valueMock;
-        $value2 = clone $this->valueMock;
-
-        $this->arrayUtilsMock->expects($this->exactly(2))
-            ->method('flatten')
-            ->willReturnMap([
-                [
-                    ['web' => ['unsecure' => ['base_url' => 'http://magento2.local/']]],
-                    '',
-                    '/',
-                    ['web/unsecure/base_url' => 'http://magento2.local/']
-                ],
-                [
-                    ['base' => ['web' => ['unsecure' => ['base_url' => 'http://magento23.local/']]]],
-                    '',
-                    '/',
-                    ['base/web/unsecure/base_url' => 'http://magento23.local/']
-                ]
-            ]);
-        $this->scopeConfigMock->expects($this->exactly(2))
-            ->method('getValue')
-            ->willReturnMap([
-                ['web/unsecure/base_url', 'default', null, 'http://magento2.local/'],
-                ['web/unsecure/base_url', 'websites', 'base', 'http://magento23.local/']
-            ]);
-        $this->valueFactoryMock->expects($this->exactly(2))
-            ->method('create')
-            ->willReturnMap([
-                ['web/unsecure/base_url', 'http://magento2.local/', 'default', null, $value1],
-                ['web/unsecure/base_url', 'http://magento23.local/', 'websites', 'base', $value2]
-            ]);
-
-        $this->assertSame(null, $closure($data));
     }
 }

@@ -31,7 +31,7 @@ define(
              * @returns {Object}
              */
             initEvents: function () {
-                $('#' + this.id).off('click.' + this.id)
+                $('a[data-action="' + this.linkDataAction + '"]').off('click.' + this.id)
                     .on('click.' + this.id, this.click.bind(this));
 
                 return this;

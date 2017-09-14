@@ -5,6 +5,10 @@
  */
 namespace Magento\AdminNotification\Model\ResourceModel\System\Message\Collection;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Synchronized extends \Magento\AdminNotification\Model\ResourceModel\System\Message\Collection
 {
     /**

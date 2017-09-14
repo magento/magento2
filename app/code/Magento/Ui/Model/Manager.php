@@ -22,7 +22,7 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * Class Manager
- * @deprecated
+ * @deprecated 100.2.0
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Manager implements ManagerInterface

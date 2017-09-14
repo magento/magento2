@@ -168,6 +168,20 @@ class Attribute extends Form
     private $wizardImagesStep = '#variation-steps-wizard_step3';
 
     /**
+     * Attributes grid spinner selector
+     *
+     * @var string
+     */
+    private $attributesGridSpinner = '.productFormConfigurable [data-role="spinner"]';
+
+    /**
+     * CSS Selector for attribute grid.
+     *
+     * @var string
+     */
+    private $attributesGridSelector = '#variation-steps-wizard_step1 .admin__data-grid-outer-wrap';
+
+    /**
      * Fill attributes
      *
      * @param array $attributes
@@ -185,10 +199,13 @@ class Attribute extends Form
         }
 
         //select attributes
+        $this->waitAttributesGridLoad();
         $this->getAttributesGrid()->resetFilter();
+        $this->getAttributesGrid()->waitForElementNotVisible($this->attributesGridSpinner);
         $this->getTemplateBlock()->waitLoader();
+
         $attributesList = $this->browser->find($this->selectedAttributes)->getText();
-        if ($attributesList != '--') {
+        if (!$attributesList || $attributesList !== '--') {
             $this->getAttributesGrid()->deselectAttributes();
         }
 
@@ -212,13 +229,24 @@ class Attribute extends Form
     }
 
     /**
+     * Wait for 'Attributes Grid' loaded.
+     *
+     * @return void
+     */
+    private function waitAttributesGridLoad()
+    {
+        $this->waitForElementVisible($this->attributesGridSelector);
+        $this->waitForElementNotVisible($this->attributesGridSpinner);
+    }
+
+    /**
      * @return \Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\AttributesGrid
      */
     public function getAttributesGrid()
     {
         return $this->blockFactory->create(
             \Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\AttributesGrid::class,
-            ['element' => $this->browser->find('#variation-steps-wizard_step1 .admin__data-grid-outer-wrap')]
+            ['element' => $this->browser->find($this->attributesGridSelector)]
         );
     }
 
@@ -233,6 +261,14 @@ class Attribute extends Form
         $attributeFixture = ObjectManager::getInstance()->create(
             \Magento\Catalog\Test\Fixture\CatalogProductAttribute::class,
             ['data' => $attribute]
+        );
+
+        $browser = $this->browser;
+        $createSetSelector = $this->createNewVariationSet;
+        $browser->waitUntil(
+            function () use ($browser, $createSetSelector) {
+                return $browser->find($createSetSelector)->isVisible() ? true : null;
+            }
         );
 
         $this->browser->find($this->createNewVariationSet)->click();

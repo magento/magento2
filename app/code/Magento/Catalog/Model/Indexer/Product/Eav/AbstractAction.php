@@ -28,24 +28,16 @@ abstract class AbstractAction
     protected $_eavDecimalFactory;
 
     /**
-     * @var array
-     */
-    private $frontendResources;
-
-    /**
      * AbstractAction constructor.
      * @param \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\DecimalFactory $eavDecimalFactory
      * @param \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\SourceFactory $eavSourceFactory
-     * @param array $frontendResources
      */
     public function __construct(
         \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\DecimalFactory $eavDecimalFactory,
-        \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\SourceFactory $eavSourceFactory,
-        $frontendResources = []
+        \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\SourceFactory $eavSourceFactory
     ) {
         $this->_eavDecimalFactory = $eavDecimalFactory;
         $this->_eavSourceFactory = $eavSourceFactory;
-        $this->frontendResources = $frontendResources;
     }
 
     /**
@@ -98,7 +90,7 @@ abstract class AbstractAction
      */
     public function reindex($ids = null)
     {
-        foreach ($this->getIndexers() as $type => $indexer) {
+        foreach ($this->getIndexers() as $indexer) {
             if ($ids === null) {
                 $indexer->reindexAll();
             } else {
@@ -107,10 +99,7 @@ abstract class AbstractAction
                 }
                 $ids = $this->processRelations($indexer, $ids);
                 $indexer->reindexEntities($ids);
-                $resource = isset($this->frontendResources[$type])
-                    ? $this->frontendResources[$type]
-                    : $this->frontendResources['default'];
-                $destinationTable = $resource->getMainTable();
+                $destinationTable = $indexer->getMainTable();
                 $this->syncData($indexer, $destinationTable, $ids);
             }
         }
@@ -148,12 +137,13 @@ abstract class AbstractAction
      * @param \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\AbstractEav $indexer
      * @param array $ids
      *
-     * @return $ids
+     * @param bool $onlyParents
+     * @return array $ids
      */
-    protected function processRelations($indexer, $ids)
+    protected function processRelations($indexer, $ids, $onlyParents = false)
     {
         $parentIds = $indexer->getRelationsByChild($ids);
-        $childIds = $indexer->getRelationsByParent($ids);
+        $childIds = $onlyParents ? [] : $indexer->getRelationsByParent($ids);
         return array_unique(array_merge($ids, $childIds, $parentIds));
     }
 }
