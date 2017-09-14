@@ -5,7 +5,11 @@
  */
 namespace Magento\Sales\Api;
 
-/** @api */
+/**
+ * @api
+ *
+ * @since 100.0.2
+ */
 interface OrderCustomerManagementInterface
 {
     /**

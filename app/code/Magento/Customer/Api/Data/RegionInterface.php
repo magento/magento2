@@ -11,6 +11,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 /**
  * Customer address region interface.
  * @api
+ * @since 100.0.2
  */
 interface RegionInterface extends ExtensibleDataInterface
 {

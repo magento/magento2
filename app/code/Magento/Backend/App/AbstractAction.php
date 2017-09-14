@@ -8,8 +8,10 @@ namespace Magento\Backend\App;
 /**
  * Generic backend controller
  *
+ * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 abstract class AbstractAction extends \Magento\Framework\App\Action\Action
 {

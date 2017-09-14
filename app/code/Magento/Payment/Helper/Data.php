@@ -20,6 +20,7 @@ use Magento\Payment\Model\MethodInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api
+ * @since 100.0.2
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -119,7 +120,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param null|string|bool|int $store
      * @param Quote|null $quote
      * @return AbstractMethod[]
-     * @deprecated
+     * @deprecated 100.1.3
      * @see \Magento\Payment\Api\PaymentMethodListInterface
      */
     public function getStoreMethods($store = null, $quote = null)

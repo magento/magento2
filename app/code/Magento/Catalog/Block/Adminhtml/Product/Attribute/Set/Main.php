@@ -15,6 +15,7 @@ use Magento\Catalog\Model\Entity\Product\Attribute\Group\AttributeMapperInterfac
 /**
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Main extends \Magento\Backend\Block\Template
 {

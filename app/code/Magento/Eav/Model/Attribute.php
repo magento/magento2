@@ -19,6 +19,7 @@ use Magento\Store\Model\Website;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Attribute extends \Magento\Eav\Model\Entity\Attribute
 {
@@ -29,9 +30,8 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
     //const MODULE_NAME = 'Magento_Eav';
 
     /**
-     * Prefix of model events object
-     *
-     * @var string
+     * Name of the module
+     * Override it
      */
     protected $_eventObject = 'attribute';
 

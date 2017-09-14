@@ -37,20 +37,28 @@ class UpgradeData implements UpgradeDataInterface
     private $upgradeWidgetData;
 
     /**
+     * @var UpgradeWebsiteAttributes
+     */
+    private $upgradeWebsiteAttributes;
+
+    /**
      * Constructor
      *
      * @param CategorySetupFactory $categorySetupFactory
      * @param \Magento\Eav\Setup\EavSetupFactory $eavSetupFactory
      * @param UpgradeWidgetData $upgradeWidgetData
+     * @param UpgradeWebsiteAttributes $upgradeWebsiteAttributes
      */
     public function __construct(
         CategorySetupFactory $categorySetupFactory,
         \Magento\Eav\Setup\EavSetupFactory $eavSetupFactory,
-        UpgradeWidgetData $upgradeWidgetData
+        UpgradeWidgetData $upgradeWidgetData,
+        UpgradeWebsiteAttributes $upgradeWebsiteAttributes
     ) {
         $this->categorySetupFactory = $categorySetupFactory;
         $this->eavSetupFactory = $eavSetupFactory;
         $this->upgradeWidgetData = $upgradeWidgetData;
+        $this->upgradeWebsiteAttributes = $upgradeWebsiteAttributes;
     }
 
     /**
@@ -373,12 +381,17 @@ class UpgradeData implements UpgradeDataInterface
         }
 
         if (version_compare($context->getVersion(), '2.1.5') < 0) {
-            $this->dissallowUsingHtmlForProductName($setup);
+            $this->disallowUsingHtmlForProductName($setup);
         }
 
         if ($context->getVersion() && version_compare($context->getVersion(), '2.2.1') < 0) {
             $this->upgradeWidgetData->upgrade();
         }
+
+        if (version_compare($context->getVersion(), '2.2.2') < 0) {
+            $this->upgradeWebsiteAttributes->upgrade($setup);
+        }
+
         $setup->endSetup();
     }
 
@@ -389,7 +402,7 @@ class UpgradeData implements UpgradeDataInterface
      * @param ModuleDataSetupInterface $setup
      * @return void
      */
-    private function dissallowUsingHtmlForProductName(ModuleDataSetupInterface $setup)
+    private function disallowUsingHtmlForProductName(ModuleDataSetupInterface $setup)
     {
         /** @var CategorySetup $categorySetup */
         $categorySetup = $this->categorySetupFactory->create(['setup' => $setup]);

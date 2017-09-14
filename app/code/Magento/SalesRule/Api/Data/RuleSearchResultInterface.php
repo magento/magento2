@@ -8,6 +8,7 @@ namespace Magento\SalesRule\Api\Data;
 
 /**
  * @api
+ * @since 100.0.2
  */
 interface RuleSearchResultInterface extends \Magento\Framework\Api\SearchResultsInterface
 {

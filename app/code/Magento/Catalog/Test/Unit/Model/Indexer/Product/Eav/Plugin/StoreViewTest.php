@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Eav\Plugin;
 
-class StoreViewTest extends \PHPUnit_Framework_TestCase
+class StoreViewTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param array $data

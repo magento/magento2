@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\Data\Form\FormKey;
 
+/**
+ * @api
+ */
 class Validator
 {
     /**

@@ -15,10 +15,10 @@ $helpLink = $block->escapeUrl($block->getHelpLink());
 if ($helpLink):
 ?>
     <div class="paypal-payment-notice">
-        <?php echo $block->escapeHtml(__('Not sure what PayPal payment method to use? Click ')); ?>
+        <?= $block->escapeHtml(__('Not sure what PayPal payment method to use? Click ')) ?>
         <a href="<?php /* @noEscape */
-        echo $helpLink; ?>" target="_blank"><?php echo $block->escapeHtml(__('here')); ?></a>
-        <?php echo $block->escapeHtml(__(' to learn more.')); ?>
+        echo $helpLink; ?>" target="_blank"><?= $block->escapeHtml(__('here')) ?></a>
+        <?= $block->escapeHtml(__(' to learn more.')) ?>
     </div>
 <?php
 endif;

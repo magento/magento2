@@ -10,7 +10,7 @@ use Magento\Framework\Component\ComponentRegistrar;
 /**
  * Tests to find usage of restricted code
  */
-class RestrictedCodeTest extends \PHPUnit_Framework_TestCase
+class RestrictedCodeTest extends \PHPUnit\Framework\TestCase
 {
     /**@#+
      * Lists of restricted entities from fixtures

@@ -14,6 +14,7 @@ namespace Magento\Backend\Block\Widget\Button;
  * @method int getLevel()
  * @method int getSortOrder()
  * @method string getTitle()
+ * @since 100.0.2
  */
 class Item extends \Magento\Framework\DataObject
 {

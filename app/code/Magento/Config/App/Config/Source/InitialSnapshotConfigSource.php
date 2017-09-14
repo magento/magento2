@@ -11,6 +11,8 @@ use Magento\Framework\FlagManager;
 
 /**
  * The source with previously imported configuration.
+ * @api
+ * @since 100.2.0
  */
 class InitialSnapshotConfigSource implements ConfigSourceInterface
 {
@@ -43,6 +45,7 @@ class InitialSnapshotConfigSource implements ConfigSourceInterface
      * Snapshots are stored in flags.
      *
      * {@inheritdoc}
+     * @since 100.2.0
      */
     public function get($path = '')
     {

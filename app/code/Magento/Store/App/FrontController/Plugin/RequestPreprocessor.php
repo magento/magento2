@@ -98,7 +98,7 @@ class RequestPreprocessor
      * Gets base URL checker.
      *
      * @return \Magento\Store\Model\BaseUrlChecker
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getBaseUrlChecker()
     {

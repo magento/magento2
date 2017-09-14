@@ -13,6 +13,8 @@ use Magento\Framework\DB\Select;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
+ * @since 100.0.2
  */
 class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
 {

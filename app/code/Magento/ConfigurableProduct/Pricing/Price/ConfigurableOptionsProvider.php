@@ -15,7 +15,9 @@ use Magento\Framework\App\RequestSafetyInterface;
 
 class ConfigurableOptionsProvider implements ConfigurableOptionsProviderInterface
 {
-    /** @var Configurable */
+    /**
+     * @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable
+     */
     private $configurable;
 
     /**

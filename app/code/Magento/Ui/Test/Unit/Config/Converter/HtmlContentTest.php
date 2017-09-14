@@ -10,7 +10,7 @@ use Magento\Ui\Config\Converter\HtmlContent;
 /**
  * Class HtmlContentTest
  */
-class HtmlContentTest extends \PHPUnit_Framework_TestCase
+class HtmlContentTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var HtmlContent

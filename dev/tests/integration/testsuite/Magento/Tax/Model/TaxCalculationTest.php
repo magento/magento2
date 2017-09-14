@@ -13,7 +13,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * @magentoDbIsolation enabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TaxCalculationTest extends \PHPUnit_Framework_TestCase
+class TaxCalculationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Object Manager
