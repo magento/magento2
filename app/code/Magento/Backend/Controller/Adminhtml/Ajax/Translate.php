@@ -21,6 +21,11 @@ class Translate extends \Magento\Backend\App\Action
     protected $resultJsonFactory;
 
     /**
+     * Authorization level of a basic admin session
+     */
+    const ADMIN_RESOURCE = 'Magento_Backend::content_translation';
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Framework\Translate\Inline\ParserInterface $inlineParser
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
