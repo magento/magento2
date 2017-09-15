@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/TestCase/etc/testcase.xsd">
+    <scenario name="AnalyticsSubscriptionCheckPermissionsTest" firstStep="createUser">
+        <step name="createUser" module="Magento_User" next="loginUserOnBackend" />
+        <step name="loginUserOnBackend" module="Magento_User" next="openDashboard" />
+        <step name="openDashboard" module="Magento_Backend" />
+    </scenario>
+</config>
