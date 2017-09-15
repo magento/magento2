@@ -121,7 +121,7 @@ class ReservationBuilder implements ReservationBuilderInterface
 
         $validationResult = $this->reservationValidator->validate($reservation);
         if (!$validationResult->isValid()) {
-            throw new ValidationException($validationResult);
+            throw new ValidationException(__('Validation Failed'), null, 0, $validationResult);
         }
         return $reservation;
     }

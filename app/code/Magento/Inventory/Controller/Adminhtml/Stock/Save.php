@@ -87,7 +87,9 @@ class Save extends Action
                 $this->messageManager->addErrorMessage(__('The Stock does not exist.'));
                 $this->processRedirectAfterFailureSave($resultRedirect);
             } catch (ValidationException $e) {
-                $this->messageManager->addErrorMessage($e->getMessage());
+                foreach ($e->getErrors() as $localizedError) {
+                    $this->messageManager->addErrorMessage($localizedError->getMessage());
+                }
                 $this->processRedirectAfterFailureSave($resultRedirect, $stockId);
             } catch (CouldNotSaveException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());

@@ -117,9 +117,14 @@ class CarrierLinkManagementTest extends WebapiAbstract
         ];
 
         $expectedErrorData = [
-            'message' => 'You can\'t configure "%field" because you have chosen Global Shipping configuration.',
-            'parameters' => [
-                'field' => SourceInterface::CARRIER_LINKS,
+            'message' => 'Validation Failed',
+            'errors' => [
+                [
+                    'message' => 'You can\'t configure "%field" because you have chosen Global Shipping configuration.',
+                    'parameters' => [
+                        'field' => SourceInterface::CARRIER_LINKS,
+                    ],
+                ],
             ],
         ];
 
@@ -128,17 +133,16 @@ class CarrierLinkManagementTest extends WebapiAbstract
             $this->fail('Expected throwing exception');
         } catch (\Exception $e) {
             if (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) {
-                $errorData = $this->processRestExceptionResult($e);
-                self::assertEquals($expectedErrorData, $errorData);
+                self::assertEquals($expectedErrorData, $this->processRestExceptionResult($e));
                 self::assertEquals(Exception::HTTP_BAD_REQUEST, $e->getCode());
             } elseif (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
                 $this->assertInstanceOf('SoapFault', $e);
-                $this->checkSoapFault(
-                    $e,
-                    $expectedErrorData['message'],
-                    'env:Sender',
-                    $expectedErrorData['parameters']
-                );
+                // @see \Magento\TestFramework\TestCase\WebapiAbstract::getActualWrappedErrors()
+                $expectedWrappedErrors = $expectedErrorData['errors'];
+                $expectedWrappedErrors[0]['params'] = $expectedWrappedErrors[0]['parameters'];
+                unset($expectedWrappedErrors[0]['parameters']);
+
+                $this->checkSoapFault($e, $expectedErrorData['message'], 'env:Sender', [], $expectedWrappedErrors);
             } else {
                 throw $e;
             }
