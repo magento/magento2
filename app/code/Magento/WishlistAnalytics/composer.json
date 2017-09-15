@@ -1,0 +1,23 @@
+{
+    "name": "magento/module-wishlist-analytics",
+    "description": "N/A",
+    "require": {
+        "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
+        "magento/framework": "100.2.*",
+        "magento/module-wishlist": "100.2.*"
+    },
+    "type": "magento2-module",
+    "version": "100.2.0-dev",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\WishlistAnalytics\\": ""
+        }
+    }
+}
