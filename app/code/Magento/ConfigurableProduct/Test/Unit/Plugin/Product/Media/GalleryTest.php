@@ -3,7 +3,7 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\ConfigurableProduct\Test\Unit\Block\Plugin\Product\Media;
+namespace Magento\ConfigurableProduct\Test\Unit\Plugin\Product\Media;
 
 use Magento\ConfigurableProduct\Block\Plugin\Product\Media\Gallery;
 use Magento\Catalog\Model\Product;
@@ -15,7 +15,6 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
 {
     public function testAfterGetOptions()
     {
-        $jsonMock = $this->createJsonMock();
         $productMock = $this->createProductMock();
         $galleryMock = $this->createGalleryMock();
         $variationProductMock = $this->createProductMock();
@@ -49,16 +48,6 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
         $plugin = $helper->getObject(Gallery::class);
         $result = $plugin->afterGetOptionsMediaGalleryDataJson($galleryMock, $resultJson);
         $this->assertEquals(json_encode($expectedGalleryJson), $result);
-    }
-
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    private function createJsonMock()
-    {
-        return $this->getMockBuilder(Json::class)
-            ->disableOriginalConstructor()
-            ->getMock();
     }
 
     /**
