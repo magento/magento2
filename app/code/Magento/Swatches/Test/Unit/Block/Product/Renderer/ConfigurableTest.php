@@ -7,9 +7,12 @@ namespace Magento\Swatches\Test\Unit\Block\Product\Renderer;
 
 use Magento\Swatches\Block\Product\Renderer\Configurable;
 use Magento\Swatches\Model\Swatch;
+use Magento\Swatches\Model\SwatchAttributesProvider;
+use Magento\Framework\Locale\Format;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class ConfigurableTest extends \PHPUnit_Framework_TestCase
 {
@@ -58,6 +61,12 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject  */
     private $urlBuilder;
 
+    /** @var \Magento\Framework\Locale\Format|\PHPUnit_Framework_MockObject_MockObject  */
+    private $localeFormat;
+
+    /** @var \Magento\Swatches\Model\SwatchAttributesProvider |\PHPUnit_Framework_MockObject_MockObject  */
+    private $swatchAttributesProvider;
+
     protected function setUp()
     {
         $this->arrayUtils = $this->getMock('\Magento\Framework\Stdlib\ArrayUtils', [], [], '', false);
@@ -68,6 +77,8 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $this->catalogProduct = $this->getMock('\Magento\Catalog\Helper\Product', [], [], '', false);
         $this->currentCustomer = $this->getMock('\Magento\Customer\Helper\Session\CurrentCustomer', [], [], '', false);
         $this->priceCurrency = $this->getMock('\Magento\Framework\Pricing\PriceCurrencyInterface', [], [], '', false);
+        $this->swatchAttributesProvider = $this->getMock(SwatchAttributesProvider::class, [], [], '', false);
+        $this->localeFormat = $this->getMock(Format::class, [], [], '', false);
         $this->configurableAttributeData = $this->getMock(
             'Magento\ConfigurableProduct\Model\ConfigurableAttributeData',
             [],
@@ -98,6 +109,8 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 'priceCurrency' => $this->priceCurrency,
                 'configurableAttributeData' => $this->configurableAttributeData,
                 'data' => [],
+                'swatchAttributesProvider' => $this->swatchAttributesProvider,
+                'format' => $this->localeFormat
             ]
         );
     }
@@ -154,9 +167,11 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     private function prepareGetJsonSwatchConfig()
     {
         $product1 = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
+        $product1->expects($this->atLeastOnce())->method('isSaleable')->willReturn(true);
         $product1->expects($this->atLeastOnce())->method('getData')->with('code')->willReturn(1);
 
         $product2 = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
+        $product2->expects($this->atLeastOnce())->method('isSaleable')->willReturn(true);
         $product2->expects($this->atLeastOnce())->method('getData')->with('code')->willReturn(3);
 
         $simpleProducts = [$product1, $product2];
@@ -167,7 +182,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $configurableType->expects($this->atLeastOnce())->method('getSalableUsedProducts')->with($this->product, null)
+        $configurableType->expects($this->atLeastOnce())->method('getUsedProducts')->with($this->product, null)
             ->willReturn($simpleProducts);
         $this->product->expects($this->any())->method('getTypeInstance')->willReturn($configurableType);
 
