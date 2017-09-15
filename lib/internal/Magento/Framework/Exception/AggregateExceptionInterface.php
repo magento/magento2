@@ -6,14 +6,18 @@
 namespace Magento\Framework\Exception;
 
 /**
- * Exception with possibility to set several error messages
+ * AggregateExceptionInterface Extension Point introduced to support Multiple Errors returned as a result of Validation
+ * not mandating to inherit from AbstractAggregateException class
  *
  * @api
  */
 interface AggregateExceptionInterface
 {
     /**
-     * Get the array of LocalizedException objects. Get an empty array if no errors were added
+     * Returns LocalizedException[] array to be compatible with current Implementation in Web API which relies on
+     * this behavior
+     *
+     * @see the \Magento\Framework\Webapi\Exception which receives $errors as a set of Localized Exceptions
      *
      * @return LocalizedException[]
      */
