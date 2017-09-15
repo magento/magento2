@@ -14,7 +14,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * Class SignupTest
  */
-class SignUpTest extends \PHPUnit_Framework_TestCase
+class SignUpTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerHelper

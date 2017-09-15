@@ -12,7 +12,7 @@ use Magento\Analytics\Model\Connector\Http\ResponseResolver;
 /**
  * Class ResponseResolverTest
  */
-class ResponseResolverTest extends \PHPUnit_Framework_TestCase
+class ResponseResolverTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetResultHandleResponseSuccess()
     {

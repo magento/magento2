@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * Class NameResolverTest
  */
-class NameResolverTest extends \PHPUnit_Framework_TestCase
+class NameResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var NameResolver|\PHPUnit_Framework_MockObject_MockObject

@@ -8,7 +8,7 @@ namespace Magento\Analytics\Test\Unit\Model\Config\Backend;
 /**
  * A unit test for testing of the backend model for verticals configuration.
  */
-class VerticalTest extends \PHPUnit_Framework_TestCase
+class VerticalTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Analytics\Model\Config\Backend\Vertical

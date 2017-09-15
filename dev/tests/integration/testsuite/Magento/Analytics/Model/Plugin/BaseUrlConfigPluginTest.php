@@ -18,7 +18,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * @magentoAppArea adminhtml
  */
-class BaseUrlConfigPluginTest extends \PHPUnit_Framework_TestCase
+class BaseUrlConfigPluginTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var PreparedValueFactory

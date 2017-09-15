@@ -13,7 +13,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * Class NotificationTimeTest
  */
-class NotificationTimeTest extends \PHPUnit_Framework_TestCase
+class NotificationTimeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var FlagManager|\PHPUnit_Framework_MockObject_MockObject

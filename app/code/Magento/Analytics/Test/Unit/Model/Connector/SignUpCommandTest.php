@@ -18,7 +18,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Class SignUpCommandTest
  */
-class SignUpCommandTest extends \PHPUnit_Framework_TestCase
+class SignUpCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SignUpCommand

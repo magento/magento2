@@ -11,7 +11,7 @@ use Magento\Framework\Data\Form;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
-class CollectionTimeLabelTest extends \PHPUnit_Framework_TestCase
+class CollectionTimeLabelTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CollectionTimeLabel

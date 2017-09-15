@@ -16,7 +16,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DummyDataProviderTest extends \PHPUnit_Framework_TestCase
+class DummyDataProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SearchResultInterface|\PHPUnit_Framework_MockObject_MockObject
