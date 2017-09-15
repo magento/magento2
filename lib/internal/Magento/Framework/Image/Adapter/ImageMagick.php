@@ -434,7 +434,8 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
             }
         }
 
-        $draw->setFontSize($this->_fontSize);
+        // Font size for ImageMagick is set in pixels, while the for GD2 it is in points. 3/4 is ratio between them
+        $draw->setFontSize($this->_fontSize * 4 / 3);
         $draw->setFillColor($color);
         $draw->setStrokeAntialias(true);
         $draw->setTextAntialias(true);

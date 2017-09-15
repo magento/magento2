@@ -11,6 +11,13 @@ use Magento\Backend\App\Action;
 class Chooser extends \Magento\Backend\App\Action
 {
     /**
+     * Authorization level of a basic admin session.
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Widget::widget_instance';
+
+    /**
      * @var \Magento\Framework\View\LayoutFactory
      */
     protected $layoutFactory;

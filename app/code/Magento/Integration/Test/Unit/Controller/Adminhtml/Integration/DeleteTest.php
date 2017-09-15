@@ -12,6 +12,9 @@ use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
 use Magento\Integration\Model\Integration as IntegrationModel;
 use Magento\Framework\Exception\IntegrationException;
 
+/**
+ * Class DeleteTest.
+ */
 class DeleteTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\IntegrationTest
 {
     /**
@@ -25,7 +28,7 @@ class DeleteTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Int
 
         $this->integrationController = $this->_createIntegrationController('Delete');
 
-        $resultRedirect = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
+        $resultRedirect = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
         $resultRedirect->expects($this->any())
@@ -60,6 +63,10 @@ class DeleteTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Int
             ->method('addSuccess')
             ->with(__('The integration \'%1\' has been deleted.', $intData[Info::DATA_NAME]));
 
+        $this->_escaper->expects($this->once())
+            ->method('escapeHtml')
+            ->willReturnArgument(0);
+
         $this->integrationController->execute();
     }
 
@@ -89,6 +96,10 @@ class DeleteTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Int
             ->method('addSuccess')
             ->with(__('The integration \'%1\' has been deleted.', $intData[Info::DATA_NAME]));
 
+        $this->_escaper->expects($this->once())
+            ->method('escapeHtml')
+            ->willReturnArgument(0);
+
         $this->integrationController->execute();
     }
 
@@ -116,6 +127,10 @@ class DeleteTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Int
         $this->_translateModelMock = null;
         // verify success message
         $this->_messageManager->expects($this->never())->method('addSuccess');
+
+        $this->_escaper->expects($this->once())
+            ->method('escapeHtml')
+            ->willReturnArgument(0);
 
         $this->integrationController->execute();
     }
