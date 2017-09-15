@@ -118,6 +118,7 @@ class ContentUploader extends Uploader implements \Magento\Downloadable\Api\Data
         $this->setAllowRenameFiles(true);
         $this->setFilesDispersion(true);
         $result = $this->save($this->getDestinationDirectory($contentType));
+        unset($result['path']);
         $result['status'] = 'new';
         $result['name'] = substr($result['file'], strrpos($result['file'], '/') + 1);
         return $result;

@@ -14,6 +14,13 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class ExportCsv extends \Magento\Backend\App\Action
 {
     /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Customer::manage';
+
+    /**
      * @var \Magento\Framework\App\Response\Http\FileFactory
      */
     protected $_fileFactory;
