@@ -62,6 +62,6 @@ if (!empty($_SERVER['MAGE_PROFILER'])
 
 date_default_timezone_set('UTC');
 
-/*  Adjustment of precision value for several versions of PHP */
-ini_set('precision', 15);
-ini_set('serialize_precision', 15);
+/*  For data consistency between displaying (printing) and serialization a float number */
+ini_set('precision', 14);
+ini_set('serialize_precision', 14);

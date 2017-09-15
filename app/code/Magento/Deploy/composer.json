@@ -17,6 +17,7 @@
     ],
     "autoload": {
         "files": [
+            "cli_commands.php",
             "registration.php"
         ],
         "psr-4": {

@@ -1586,6 +1586,9 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     public function setAccountData($accountData)
     {
         $customer = $this->getQuote()->getCustomer();
+        if (empty($accountData['email'])) {
+            $accountData['email'] = $customer->getEmail();
+        }
         $form = $this->_createCustomerForm($customer);
 
         // emulate request
