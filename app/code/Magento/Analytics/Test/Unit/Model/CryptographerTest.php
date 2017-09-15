@@ -14,7 +14,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * Class CryptographerTest
  */
-class CryptographerTest extends \PHPUnit_Framework_TestCase
+class CryptographerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var AnalyticsToken|\PHPUnit_Framework_MockObject_MockObject

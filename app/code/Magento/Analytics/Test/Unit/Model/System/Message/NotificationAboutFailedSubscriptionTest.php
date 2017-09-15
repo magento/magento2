@@ -13,7 +13,7 @@ use Magento\Framework\UrlInterface;
 /**
  * Class NotificationAboutFailedSubscriptionTest
  */
-class NotificationAboutFailedSubscriptionTest extends \PHPUnit_Framework_TestCase
+class NotificationAboutFailedSubscriptionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|SubscriptionStatusProvider

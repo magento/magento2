@@ -14,7 +14,7 @@ use Magento\Framework\Intl\DateTimeFactory;
 /**
  * Class CanViewNotificationTest
  */
-class CanViewNotificationTest extends \PHPUnit_Framework_TestCase
+class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var NotificationTime|\PHPUnit_Framework_MockObject_MockObject

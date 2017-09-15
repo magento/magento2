@@ -13,7 +13,7 @@ use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\FlagManager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class SubscriptionUpdateHandlerTest extends \PHPUnit_Framework_TestCase
+class SubscriptionUpdateHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var AnalyticsToken|\PHPUnit_Framework_MockObject_MockObject

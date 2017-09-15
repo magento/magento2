@@ -16,7 +16,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * Class SelectHydratorTest
  */
-class SelectHydratorTest extends \PHPUnit_Framework_TestCase
+class SelectHydratorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SelectHydrator

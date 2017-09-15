@@ -14,7 +14,7 @@ use Psr\Log\LoggerInterface;
 use Magento\Analytics\Model\Connector\NotifyDataChangedCommand;
 use Magento\Analytics\Model\Connector\Http\ClientInterface;
 
-class NotifyDataChangedCommandTest extends \PHPUnit_Framework_TestCase
+class NotifyDataChangedCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var NotifyDataChangedCommand

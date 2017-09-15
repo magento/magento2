@@ -8,7 +8,7 @@ namespace Magento\Analytics\Test\Unit\ReportXml\DB\Assembler;
 /**
  * A unit test for testing of the 'filter' assembler.
  */
-class FilterAssemblerTest extends \PHPUnit_Framework_TestCase
+class FilterAssemblerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Analytics\ReportXml\DB\Assembler\FilterAssembler
