@@ -232,6 +232,7 @@ define([
             if (typeof elem === 'undefined') {
                 return;
             }
+
             if (typeof elem.validate === 'function') {
                 this.valid = this.valid & elem.validate().valid;
             } else if (elem.elems) {
