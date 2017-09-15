@@ -91,8 +91,7 @@ class UnassignSourceFromStockTest extends WebapiAbstract
             $this->_webApiCall($serviceInfo);
             $this->fail('Expected throwing exception');
         } catch (\Exception $e) {
-            $errorData = $this->processRestExceptionResult($e);
-            self::assertEquals($expectedErrorData['message'], $errorData['message']);
+            self::assertEquals($expectedErrorData, $this->processRestExceptionResult($e));
             self::assertEquals(Exception::HTTP_BAD_REQUEST, $e->getCode());
         }
     }
