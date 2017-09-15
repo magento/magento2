@@ -43,7 +43,7 @@ class ValidationException extends LocalizedException implements AggregateExcepti
     public function getErrors()
     {
         $localizedErrors = [];
-        if ((null !== $this->validationResult)) {
+        if (null !== $this->validationResult) {
             foreach ($this->validationResult->getErrors() as $error) {
                 $localizedErrors[] = new LocalizedException($error);
             }
