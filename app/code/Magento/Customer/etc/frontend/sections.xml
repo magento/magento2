@@ -15,4 +15,8 @@
         <section name="checkout-data"/>
         <section name="cart"/>
     </action>
+    <action name="customer/address/formPost">
+        <section name="cart"/>
+        <section name="checkout-data"/>
+    </action>
 </config>
