@@ -10,6 +10,7 @@ use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\RegionInterfaceFactory;
 use Magento\Framework\Indexer\StateInterface;
+use Magento\Checkout\Model\Session;
 
 /**
  * Customer address model
@@ -53,6 +54,11 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      * @var \Magento\Customer\Model\Address\CustomAttributeListInterface
      */
     private $attributeList;
+    
+    /**
+    * @var \Magento\Checkout\Model\Session
+    */
+    private $checkoutSession;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -96,6 +102,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
         \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        Session $checkoutSession,
         array $data = []
     ) {
         $this->dataProcessor = $dataProcessor;
@@ -117,6 +124,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
             $dataObjectHelper,
             $resource,
             $resourceCollection,
+            $checkoutSession,
             $data
         );
     }
@@ -329,6 +337,9 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
         if ($indexer->getState()->getStatus() == StateInterface::STATUS_VALID) {
             $this->_getResource()->addCommitCallback([$this, 'reindex']);
         }
+        $quote = $this->checkoutSession->getQuote();
+        $quote->setTriggerRecollect(true);
+        $quote->getResource()->save($quote);
         return parent::afterSave();
     }
 
