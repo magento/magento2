@@ -79,6 +79,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
+     * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -108,6 +109,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
         $this->dataProcessor = $dataProcessor;
         $this->_customerFactory = $customerFactory;
         $this->indexerRegistry = $indexerRegistry;
+        $this->checkoutSession = $checkoutSession;
         parent::__construct(
             $context,
             $registry,
@@ -124,7 +126,6 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
             $dataObjectHelper,
             $resource,
             $resourceCollection,
-            $checkoutSession,
             $data
         );
     }
