@@ -199,7 +199,7 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
         return Files::init()->readLists(__DIR__ . '/_files/whitelist/common.txt');
     }
 
-    public function testCodeStyle()
+    public function testCodeStyleWithPhpCodeSniffer()
     {
         $reportFile = self::$reportDir . '/phpcs_report.txt';
         $codeSniffer = new CodeSniffer('Magento', $reportFile, new Wrapper());
@@ -207,6 +207,26 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
             0,
             $result = $codeSniffer->run($this->getFullWhitelist()),
             "PHP Code Sniffer detected {$result} violation(s): " . PHP_EOL . file_get_contents($reportFile)
+        );
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
+    public function testCodeStyleWithPhpCsFixer()
+    {
+        $fixCommand = './vendor/bin/php-cs-fixer fix . --config=.php_cs.dist';
+        $checkCommand = $fixCommand . ' --dry-run 2> /dev/null';
+
+        exec($checkCommand, $output, $exitCode);
+
+        $this->assertEquals(
+            0,
+            $exitCode,
+            sprintf(
+                'php-cs-fixer detected violations, please run "%s"',
+                $fixCommand
+            )
         );
     }
 

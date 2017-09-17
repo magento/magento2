@@ -63,6 +63,8 @@ case $TEST_SUITE in
         cd ../../..
         ;;
     static)
+        mkdir -p "$HOME/.php-cs-fixer"
+
         cd dev/tests/static
 
         echo "==> preparing changed files list"
