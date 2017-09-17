@@ -33,6 +33,33 @@ class PageTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests the get by identifier functionality
+     * @magentoDbIsolation enabled
+     * @dataProvider testGetByIdentifierDataProvider
+     * @param array $pageData
+     */
+    public function testGetByIdentifier(array $pageData)
+    {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        /** @var \Magento\Cms\Model\PageManagment $pageManagment */
+        /** @var \Magento\Cms\Model\ResourceModel\Page $pageResource */
+        /** @var \Magento\Cms\Model\PageFactory $pageFactory */
+        $pageFactory = $objectManager->create(\Magento\Cms\Model\PageFactory::class);
+        $pageResource = $objectManager->create(\Magento\Cms\Model\ResourceModel\Page::class);
+        $pageManagment = $objectManager->create(\Magento\Cms\Model\PageManagment::class);
+
+        # Prepare and save the temporary page
+        $tempPage = $pageFactory->create();
+        $tempPage->setData($pageData);
+        $pageResource->save($tempPage);
+
+        # Load previously created block and compare identifiers
+        $page = $pageManagment->getByIdentifier($pageData['identifier']);
+        $this->assertEquals($pageData['identifier'], $page->getIdentifier());
+    }
+
+    /**
      * @magentoDbIsolation enabled
      * @dataProvider generateIdentifierFromTitleDataProvider
      */
@@ -75,5 +102,24 @@ class PageTest extends \PHPUnit\Framework\TestCase
                 'expectedIdentifier' => 'custom-identifier'
             ]
         ];
+    }
+
+    /**
+     * Data provider for "testGetByIdentifier" method
+     * @return array
+     */
+    public function testGetByIdentifierDataProvider() : array
+    {
+        return [
+            ['data' => [
+                'title' => 'Test title',
+                'identifier' => 'test-title',
+                'page_layout' => '1column',
+                'stores' => [1],
+                'content' => 'Test content',
+                'is_active' => 1
+            ]]
+        ];
+
     }
 }
