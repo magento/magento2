@@ -13,6 +13,7 @@ use Magento\Framework\View\Asset\Minification;
  * Block responsible for including RequireJs config on the page
  *
  * @api
+ * @since 100.0.2
  */
 class Config extends \Magento\Framework\View\Element\AbstractBlock
 {

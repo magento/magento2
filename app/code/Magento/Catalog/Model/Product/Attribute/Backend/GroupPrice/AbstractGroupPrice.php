@@ -479,7 +479,7 @@ abstract class AbstractGroupPrice extends Price
         }
 
         if (!empty($update)) {
-            $isChanged = $this->updateValues($update, $old);
+            $isChanged |= $this->updateValues($update, $old);
         }
 
         if ($isChanged) {

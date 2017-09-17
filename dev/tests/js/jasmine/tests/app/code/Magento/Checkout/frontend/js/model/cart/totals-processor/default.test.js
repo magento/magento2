@@ -50,6 +50,9 @@ define([
                     'method_code': 'flatrate',
                     'carrier_code': 'flatrate'
                 }),
+                totals: ko.observable({
+                    'subtotal': 4
+                }),
                 setTotals: jasmine.createSpy()
             },
             'mage/storage': {

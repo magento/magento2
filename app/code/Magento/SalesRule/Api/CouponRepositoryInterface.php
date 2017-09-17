@@ -9,6 +9,7 @@ namespace Magento\SalesRule\Api;
  * Coupon CRUD interface
  *
  * @api
+ * @since 100.0.2
  */
 interface CouponRepositoryInterface
 {

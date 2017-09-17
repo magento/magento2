@@ -14,7 +14,7 @@ use Magento\Catalog\Pricing\Price\RegularPrice;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class BundleSelectionPriceTest extends \PHPUnit_Framework_TestCase
+class BundleSelectionPriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Bundle\Pricing\Price\BundleSelectionPrice
@@ -76,63 +76,27 @@ class BundleSelectionPriceTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->productMock = $this->getMock(
+        $this->productMock = $this->createPartialMock(
             \Magento\Catalog\Model\Product::class,
-            ['__wakeup', 'getPriceInfo', 'getSelectionPriceType', 'getSelectionPriceValue'],
-            [],
-            '',
-            false
+            ['__wakeup', 'getPriceInfo', 'getSelectionPriceType', 'getSelectionPriceValue']
         );
 
-        $this->bundleMock = $this->getMock(
+        $this->bundleMock = $this->createPartialMock(
             \Magento\Catalog\Model\Product::class,
-            ['__wakeup', 'getPriceType', 'getPriceInfo', 'setFinalPrice', 'getData'],
-            [],
-            '',
-            false
+            ['__wakeup', 'getPriceType', 'getPriceInfo', 'setFinalPrice', 'getData']
         );
         $this->calculatorMock = $this->getMockBuilder(\Magento\Framework\Pricing\Adjustment\CalculatorInterface::class)
             ->getMockForAbstractClass();
-        $this->eventManagerMock = $this->getMock(
-            \Magento\Framework\Event\Manager::class,
-            ['dispatch'],
-            [],
-            '',
-            false
-        );
-        $this->priceInfoMock = $this->getMock(
-            \Magento\Framework\Pricing\PriceInfo\Base::class,
-            ['getPrice'],
-            [],
-            '',
-            false
-        );
-        $this->discountCalculatorMock = $this->getMock(
-            \Magento\Bundle\Pricing\Price\DiscountCalculator::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->finalPriceMock = $this->getMock(
-            \Magento\Catalog\Pricing\Price\FinalPrice::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->regularPriceMock = $this->getMock(
-            \Magento\Catalog\Pricing\Price\RegularPrice::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->eventManagerMock = $this->createPartialMock(\Magento\Framework\Event\Manager::class, ['dispatch']);
+        $this->priceInfoMock = $this->createPartialMock(\Magento\Framework\Pricing\PriceInfo\Base::class, ['getPrice']);
+        $this->discountCalculatorMock = $this->createMock(\Magento\Bundle\Pricing\Price\DiscountCalculator::class);
+        $this->finalPriceMock = $this->createMock(\Magento\Catalog\Pricing\Price\FinalPrice::class);
+        $this->regularPriceMock = $this->createMock(\Magento\Catalog\Pricing\Price\RegularPrice::class);
         $this->productMock->expects($this->atLeastOnce())
             ->method('getPriceInfo')
             ->will($this->returnValue($this->priceInfoMock));
 
-        $this->priceCurrencyMock = $this->getMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
+        $this->priceCurrencyMock = $this->createMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
 
         $this->quantity = 1;
 

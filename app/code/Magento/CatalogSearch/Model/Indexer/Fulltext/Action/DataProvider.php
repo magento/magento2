@@ -10,6 +10,8 @@ use Magento\Framework\App\ResourceConnection;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
+ * @since 100.0.3
  */
 class DataProvider
 {
@@ -150,6 +152,7 @@ class DataProvider
      * @param int $lastProductId
      * @param int $limit
      * @return array
+     * @since 100.0.3
      */
     public function getSearchableProducts(
         $storeId,
@@ -187,6 +190,7 @@ class DataProvider
      *
      * @param string $backendType
      * @return \Magento\Eav\Model\Entity\Attribute[]
+     * @since 100.0.3
      */
     public function getSearchableAttributes($backendType = null)
     {
@@ -233,6 +237,7 @@ class DataProvider
      *
      * @param int|string $attribute
      * @return \Magento\Eav\Model\Entity\Attribute
+     * @since 100.0.3
      */
     public function getSearchableAttribute($attribute)
     {
@@ -276,6 +281,7 @@ class DataProvider
      * @param array $productIds
      * @param array $attributeTypes
      * @return array
+     * @since 100.0.3
      */
     public function getProductAttributes($storeId, array $productIds, array $attributeTypes)
     {
@@ -354,6 +360,7 @@ class DataProvider
      * @param int $productId Product Entity Id
      * @param string $typeId Super Product Link Type
      * @return array|null
+     * @since 100.0.3
      */
     public function getProductChildIds($productId, $typeId)
     {
@@ -408,6 +415,7 @@ class DataProvider
      * @param int $storeId
      * @return string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 100.0.3
      */
     public function prepareProductIndex($indexData, $productData, $storeId)
     {

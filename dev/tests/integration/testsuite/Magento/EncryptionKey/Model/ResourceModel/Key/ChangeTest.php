@@ -6,7 +6,7 @@
 
 namespace Magento\EncryptionKey\Model\ResourceModel\Key;
 
-class ChangeTest extends \PHPUnit_Framework_TestCase
+class ChangeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -24,7 +24,7 @@ class ChangeTest extends \PHPUnit_Framework_TestCase
      */
     public function testChangeEncryptionKeyConfigNotWritable()
     {
-        $writerMock = $this->getMock(\Magento\Framework\App\DeploymentConfig\Writer::class, [], [], '', false);
+        $writerMock = $this->createMock(\Magento\Framework\App\DeploymentConfig\Writer::class);
         $writerMock->expects($this->once())->method('checkIfWritable')->will($this->returnValue(false));
 
         /** @var \Magento\EncryptionKey\Model\ResourceModel\Key\Change $keyChangeModel */
@@ -44,10 +44,10 @@ class ChangeTest extends \PHPUnit_Framework_TestCase
         $testPath = 'test/config';
         $testValue = 'test';
 
-        $writerMock = $this->getMock(\Magento\Framework\App\DeploymentConfig\Writer::class, [], [], '', false);
+        $writerMock = $this->createMock(\Magento\Framework\App\DeploymentConfig\Writer::class);
         $writerMock->expects($this->once())->method('checkIfWritable')->will($this->returnValue(true));
 
-        $structureMock = $this->getMock(\Magento\Config\Model\Config\Structure::class, [], [], '', false);
+        $structureMock = $this->createMock(\Magento\Config\Model\Config\Structure::class);
         $structureMock->expects($this->once())
             ->method('getFieldPathsByAttribute')
             ->will($this->returnValue([$testPath]));

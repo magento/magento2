@@ -6,8 +6,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Validator;
 
 use Magento\Framework\Validator\Constraint\OptionInterface;
@@ -257,7 +255,11 @@ class Builder
         }
 
         if (\Magento\Framework\Validator\Config::CONSTRAINT_TYPE_PROPERTY == $data['type']) {
-            $result = new \Magento\Framework\Validator\Constraint\Property($validator, $data['property'], $data['alias']);
+            $result = new \Magento\Framework\Validator\Constraint\Property(
+                $validator,
+                $data['property'],
+                $data['alias']
+            );
         } else {
             $result = $this->_constraintFactory->create(['validator' => $validator, 'alias' => $data['alias']]);
         }
@@ -286,7 +288,10 @@ class Builder
         // Check validator type
         if (!$validator instanceof \Magento\Framework\Validator\ValidatorInterface) {
             throw new \InvalidArgumentException(
-                sprintf('Constraint class "%s" must implement \Magento\Framework\Validator\ValidatorInterface', $data['class'])
+                sprintf(
+                    'Constraint class "%s" must implement \Magento\Framework\Validator\ValidatorInterface',
+                    $data['class']
+                )
             );
         }
 
@@ -300,8 +305,10 @@ class Builder
      * @param array $options
      * @return void
      */
-    protected function _configureConstraintValidator(\Magento\Framework\Validator\ValidatorInterface $validator, array $options)
-    {
+    protected function _configureConstraintValidator(
+        \Magento\Framework\Validator\ValidatorInterface $validator,
+        array $options
+    ) {
         // Call all validator methods according to configuration
         if (isset($options['methods'])) {
             foreach ($options['methods'] as $methodData) {

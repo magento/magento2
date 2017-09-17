@@ -6,7 +6,7 @@
 
 namespace Magento\Customer\Model;
 
-class CustomerTest extends \PHPUnit_Framework_TestCase
+class CustomerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Customer\Model\Customer

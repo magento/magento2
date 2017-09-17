@@ -5,7 +5,7 @@
  */
 namespace Magento\TaxImportExport\Model\Rate;
 
-class CsvImportHandlerTest extends \PHPUnit_Framework_TestCase
+class CsvImportHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\TaxImportExport\Model\Rate\CsvImportHandler

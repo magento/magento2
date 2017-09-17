@@ -7,6 +7,10 @@
  */
 namespace Magento\Framework\Validator\Constraint;
 
+/**
+ * Interface \Magento\Framework\Validator\Constraint\OptionInterface
+ *
+ */
 interface OptionInterface
 {
     /**

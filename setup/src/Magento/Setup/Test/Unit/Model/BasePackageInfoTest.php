@@ -12,7 +12,7 @@ use \Magento\Setup\Model\BasePackageInfo;
  * Tests BasePackageInfo
  *
  */
-class BasePackageInfoTest extends \PHPUnit_Framework_TestCase
+class BasePackageInfoTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\FileSystem\Directory\ReadFactory
@@ -31,13 +31,7 @@ class BasePackageInfoTest extends \PHPUnit_Framework_TestCase
 
     public function setup()
     {
-        $this->readFactoryMock = $this->getMock(
-            \Magento\Framework\Filesystem\Directory\ReadFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->readFactoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadFactory::class);
         $this->readerMock = $this->getMockForAbstractClass(
             \Magento\Framework\Filesystem\Directory\ReadInterface::class,
             [],
@@ -54,7 +48,7 @@ class BasePackageInfoTest extends \PHPUnit_Framework_TestCase
         $this->readerMock->expects($this->once())->method('isExist')->willReturn(false);
         $this->readerMock->expects($this->never())->method('isReadable');
         $this->readerMock->expects($this->never())->method('readFile');
-        $this->setExpectedException(
+        $this->expectException(
             \Magento\Setup\Exception::class,
             sprintf('Could not locate %s file.', BasePackageInfo::MAGENTO_BASE_PACKAGE_COMPOSER_JSON_FILE)
         );
@@ -67,7 +61,7 @@ class BasePackageInfoTest extends \PHPUnit_Framework_TestCase
         $this->readerMock->expects($this->once())->method('isExist')->willReturn(true);
         $this->readerMock->expects($this->once())->method('isReadable')->willReturn(false);
         $this->readerMock->expects($this->never())->method('readFile');
-        $this->setExpectedException(
+        $this->expectException(
             \Magento\Setup\Exception::class,
             sprintf('Could not read %s file.', BasePackageInfo::MAGENTO_BASE_PACKAGE_COMPOSER_JSON_FILE)
         );

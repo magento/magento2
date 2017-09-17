@@ -5,12 +5,14 @@
  */
 namespace Magento\Ui\Test\Unit\Controller\Adminhtml\Index;
 
-use \Magento\Ui\Controller\Adminhtml\Index\Render;
+use Magento\Ui\Controller\Adminhtml\Index\Render;
+use Magento\Ui\Model\UiComponentTypeResolver;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
 /**
  * Class RenderTest
  */
-class RenderTest extends \PHPUnit_Framework_TestCase
+class RenderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Render
@@ -31,6 +33,11 @@ class RenderTest extends \PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $uiFactoryMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|UiComponentTypeResolver
+     */
+    private $uiComponentTypeResolverMock;
 
     protected function setUp()
     {
@@ -53,7 +60,11 @@ class RenderTest extends \PHPUnit_Framework_TestCase
         $this->uiFactoryMock = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponentFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->render = new Render($contextMock, $this->uiFactoryMock);
+
+        $this->uiComponentTypeResolverMock = $this->getMockBuilder(UiComponentTypeResolver::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->render = new Render($contextMock, $this->uiFactoryMock, $this->uiComponentTypeResolverMock);
     }
 
     public function testExecuteAjaxRequest()
@@ -84,15 +95,22 @@ class RenderTest extends \PHPUnit_Framework_TestCase
             true,
             ['render']
         );
+        $contextMock = $this->createMock(ContextInterface::class);
+
         $viewMock->expects($this->once())
             ->method('render')
             ->willReturn($renderedData);
         $viewMock->expects($this->once())
             ->method('getChildComponents')
             ->willReturn([]);
+        $viewMock->expects($this->atLeastOnce())->method('getContext')->willReturn($contextMock);
         $this->uiFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($viewMock);
+        $this->uiComponentTypeResolverMock->expects($this->once())->method('resolve')->with($contextMock)
+            ->willReturn('application/json');
+        $this->responseMock->expects($this->once())->method('setHeader')
+            ->with('Content-Type', 'application/json', true);
 
         $this->render->executeAjaxRequest();
     }

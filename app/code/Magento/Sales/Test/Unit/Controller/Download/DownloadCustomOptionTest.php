@@ -13,7 +13,7 @@ use Magento\Framework\Unserialize\Unserialize;
  * Class DownloadCustomOptionTest
  * @package Magento\Sales\Controller\Adminhtml\Order
  */
-class DownloadCustomOptionTest extends \PHPUnit_Framework_TestCase
+class DownloadCustomOptionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Option ID Test Value
@@ -154,7 +154,7 @@ class DownloadCustomOptionTest extends \PHPUnit_Framework_TestCase
                     'context'              => $contextMock,
                     'resultForwardFactory' => $resultForwardFactoryMock,
                     'download'             => $this->downloadMock,
-                    'unserialize'          => $this->getMock(Unserialize::class, [], [], '', false),
+                    'unserialize'          => $this->createMock(Unserialize::class),
                     'serializer'           => $this->serializerMock
                 ]
             )

@@ -5,7 +5,7 @@
  */
 namespace Magento\SalesRule\Test\Unit\Model;
 
-class RuleTest extends \PHPUnit_Framework_TestCase
+class RuleTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\SalesRule\Model\Rule

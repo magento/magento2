@@ -14,13 +14,18 @@ use Magento\ImportExport\Model\Import;
  * ImportExport history reports helper
  *
  * @api
+ * @since 100.0.2
  */
 class Report extends \Magento\Framework\App\Helper\AbstractHelper
 {
-    /** @var \Magento\Framework\Stdlib\DateTime\Timezone */
+    /**
+     * @var \Magento\Framework\Stdlib\DateTime\Timezone
+     */
     protected $timeZone;
 
-    /** @var \Magento\Framework\Filesystem\Directory\WriteInterface */
+    /**
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
+     */
     protected $varDirectory;
 
     /**

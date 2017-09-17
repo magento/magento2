@@ -15,6 +15,7 @@ use Magento\Security\Model\SecurityChecker\SecurityCheckerInterface;
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.1.0
  */
 class SecurityManager
 {
@@ -25,21 +26,25 @@ class SecurityManager
 
     /**
      * @var ConfigInterface
+     * @since 100.1.0
      */
     protected $securityConfig;
 
     /**
      * @var \Magento\Security\Model\PasswordResetRequestEventFactory
+     * @since 100.1.0
      */
     protected $passwordResetRequestEventFactory;
 
     /**
      * @var ResourceModel\PasswordResetRequestEvent\CollectionFactory
+     * @since 100.1.0
      */
     protected $passwordResetRequestEventCollectionFactory;
 
     /**
      * @var SecurityCheckerInterface[]
+     * @since 100.1.0
      */
     protected $securityCheckers;
 
@@ -104,6 +109,7 @@ class SecurityManager
      * @param int|null $longIp
      * @return $this
      * @throws SecurityViolationException
+     * @since 100.1.0
      */
     public function performSecurityCheck($requestType, $accountReference = null, $longIp = null)
     {
@@ -123,6 +129,7 @@ class SecurityManager
      * Clean expired Admin Sessions
      *
      * @return $this
+     * @since 100.1.0
      */
     public function cleanExpiredRecords()
     {
@@ -140,6 +147,7 @@ class SecurityManager
      * @param string|null $accountReference
      * @param int $longIp
      * @return PasswordResetRequestEvent
+     * @since 100.1.0
      */
     protected function createNewPasswordResetRequestEventRecord($requestType, $accountReference, $longIp)
     {
