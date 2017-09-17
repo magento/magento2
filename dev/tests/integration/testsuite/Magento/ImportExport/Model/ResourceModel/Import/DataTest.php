@@ -17,13 +17,28 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
+    /**
+     * @var \Magento\TestFramework\ObjectManager
+     */
+    protected $objectManager;
+
+    /**
+     * @var array
+     */
+    protected $expectedBunches;
+
     protected function setUp()
     {
         parent::setUp();
 
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\ImportExport\Model\ResourceModel\Import\Data::class
-        );
+        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create(\Magento\ImportExport\Model\ResourceModel\Import\Data::class);
+
+        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        $this->expectedBunches = $this->objectManager
+            ->get(\Magento\Framework\Registry::class)
+            ->registry('_fixture/Magento_ImportExport_Import_Data');
     }
 
     /**
@@ -31,16 +46,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetUniqueColumnData()
     {
-        /** @var $objectManager \Magento\TestFramework\ObjectManager */
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-
-        $expectedBunches = $objectManager->get(
-            \Magento\Framework\Registry::class
-        )->registry(
-            '_fixture/Magento_ImportExport_Import_Data'
-        );
-
-        $this->assertEquals($expectedBunches[0]['entity'], $this->_model->getUniqueColumnData('entity'));
+        $this->assertEquals($this->expectedBunches[0]['entity'], $this->_model->getUniqueColumnData('entity'));
     }
 
     /**
@@ -58,16 +64,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetBehavior()
     {
-        /** @var $objectManager \Magento\TestFramework\ObjectManager */
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-
-        $expectedBunches = $objectManager->get(
-            \Magento\Framework\Registry::class
-        )->registry(
-            '_fixture/Magento_ImportExport_Import_Data'
-        );
-
-        $this->assertEquals($expectedBunches[0]['behavior'], $this->_model->getBehavior());
+        $this->assertEquals($this->expectedBunches[0]['behavior'], $this->_model->getBehavior());
     }
 
     /**
@@ -75,15 +72,24 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetEntityTypeCode()
     {
-        /** @var $objectManager \Magento\TestFramework\ObjectManager */
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->assertEquals($this->expectedBunches[0]['entity'], $this->_model->getEntityTypeCode());
+    }
 
-        $expectedBunches = $objectManager->get(
-            \Magento\Framework\Registry::class
-        )->registry(
-            '_fixture/Magento_ImportExport_Import_Data'
-        );
+    /**
+     * Test successful getNextBunch()
+     */
+    public function testGetNextBunch()
+    {
+        $firstBunch = $this->_model->getNextBunch();
+        $secondBunch = $this->_model->getNextBunch();
+        $thirdBunch = $this->_model->getNextBunch();
 
-        $this->assertEquals($expectedBunches[0]['entity'], $this->_model->getEntityTypeCode());
+        $this->assertCount(2, $firstBunch);
+        $this->assertCount(1, $secondBunch);
+
+        $this->assertEquals($this->expectedBunches[0]['data'], $firstBunch);
+        $this->assertEquals($this->expectedBunches[1]['data'], $secondBunch);
+
+        $this->assertNull($thirdBunch);
     }
 }
