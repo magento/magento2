@@ -8,20 +8,8 @@ namespace Magento\ImportExport\Model\ResourceModel\Import\Data;
 /**
  * Import data iterator
  */
-class Iterator extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Iterator implements \Iterator
 {
-    /**
-     * Ids of rows in table
-     * @var array
-     */
-    protected $rowsIds = [];
-
-    /**
-     * Count of all rows in table
-     * @var int
-     */
-    protected $rowsCount = 0;
-
     /**
      * Current iterator index
      * @var int
@@ -29,41 +17,21 @@ class Iterator extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $currentIndex = 0;
 
     /**
+     * @var DataProvider
+     */
+    protected $importDataProvider = null;
+
+    /**
+     * @var DataProviderFactory
+     */
+    protected $importDataProviderFactory;
+
+    /**
      * Iterator constructor.
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param null $connectionName
+     * @param DataProvider $importDataProvider
      */
-    public function __construct(
-        \Magento\Framework\Model\ResourceModel\Db\Context $context,
-        $connectionName = null
-    ) {
-        parent::__construct($context, $connectionName);
-
-        $this->rowsIds = $this->getRowsIds();
-        $this->rowsCount = count($this->rowsIds);
-    }
-
-    /**
-     * Resource initialization
-     */
-    protected function _construct()
-    {
-        $this->_init('importexport_importdata', 'id');
-    }
-
-    /**
-     * Get all existing rows ids to use them later for efficient iteration
-     * @return array
-     */
-    protected function getRowsIds() {
-        $connection = $this->getConnection();
-
-        $select = $connection
-            ->select()
-            ->from('importexport_importdata', ['id'])
-            ->order('id ASC');
-
-        return $connection->fetchCol($select);
+    public function __construct(DataProviderFactory $importDataProviderFactory) {
+        $this->importDataProviderFactory = $importDataProviderFactory;
     }
 
     /**
@@ -73,19 +41,11 @@ class Iterator extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function current()
     {
-        $connection = $this->getConnection();
+        if($this->importDataProvider == null) {
+            $this->importDataProvider = $this->importDataProviderFactory->create();
+        }
 
-        $select = $connection
-            ->select()
-            ->from('importexport_importdata', ['data'])
-            ->order('id ASC')
-            ->where('id = ?', $this->rowsIds[$this->currentIndex]);
-
-        $statement = $connection->query($select);
-
-        $row = $statement->fetch();
-
-        return [$row['data']];
+        return $this->importDataProvider->getImportDataRow($this->currentIndex);
     }
 
     /**
@@ -102,7 +62,7 @@ class Iterator extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function key()
     {
-        return $this->rowsIds[$this->currentIndex];
+        return $this->currentIndex;
     }
 
     /**
@@ -111,7 +71,7 @@ class Iterator extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function valid()
     {
-        return $this->currentIndex < $this->rowsCount;
+        return $this->current() !== null;
     }
 
     /**
