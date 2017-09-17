@@ -9,6 +9,7 @@ namespace Magento\Sales\Model\Order;
  * Order configuration model
  *
  * @api
+ * @since 100.0.2
  */
 class Config
 {
@@ -269,6 +270,7 @@ class Config
      * @param string $state
      * @param string $status
      * @return \Magento\Framework\Phrase|string
+     * @since 100.2.0
      */
     public function getStateLabelByStateAndStatus($state, $status)
     {

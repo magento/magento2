@@ -451,5 +451,64 @@
                 </item>
             </field>
         </dataset>
+
+        <dataset name="default_with_one_simple_product_and_custom_option">
+            <field name="options" xsi:type="array">
+                <item name="custom_options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">attribute_key_0</item>
+                        <item name="value" xsi:type="string">option_key_0</item>
+                    </item>
+                </item>
+            </field>
+        </dataset>
+
+        <dataset name="bundle_multiselect_one_option">
+            <field name="options" xsi:type="array">
+                <item name="bundle_options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">Multiple Select Option</item>
+                        <item name="type" xsi:type="string">Multiple Select</item>
+                        <item name="frontend_type" xsi:type="string">Multiple</item>
+                        <item name="value" xsi:type="array">
+                            <item name="name" xsi:type="string">product_100_dollar</item>
+                        </item>
+                    </item>
+                </item>
+            </field>
+            <field name="cartItem" xsi:type="array">
+                <item name="price" xsi:type="string">100</item>
+                <item name="qty" xsi:type="string">1</item>
+                <item name="subtotal" xsi:type="string">100</item>
+            </field>
+        </dataset>
+
+        <dataset name="bundle_multiselect_two_options">
+            <field name="options" xsi:type="array">
+                <item name="bundle_options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">Multiple Select Option</item>
+                        <item name="type" xsi:type="string">Multiple Select</item>
+                        <item name="frontend_type" xsi:type="string">Multiple</item>
+                        <item name="value" xsi:type="array">
+                            <item name="name" xsi:type="string">Simple Product</item>
+                        </item>
+                    </item>
+                    <item name="1" xsi:type="array">
+                        <item name="title" xsi:type="string">Multiple Select Option</item>
+                        <item name="type" xsi:type="string">Multiple Select</item>
+                        <item name="frontend_type" xsi:type="string">Multiple</item>
+                        <item name="value" xsi:type="array">
+                            <item name="name" xsi:type="string">product_100_dollar</item>
+                        </item>
+                    </item>
+                </item>
+            </field>
+            <field name="cartItem" xsi:type="array">
+                <item name="price" xsi:type="string">660</item>
+                <item name="qty" xsi:type="string">1</item>
+                <item name="subtotal" xsi:type="string">660</item>
+            </field>
+        </dataset>
     </repository>
 </config>

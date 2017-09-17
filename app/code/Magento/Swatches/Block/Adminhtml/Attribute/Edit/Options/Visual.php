@@ -9,6 +9,7 @@ namespace Magento\Swatches\Block\Adminhtml\Attribute\Edit\Options;
  * Block Class for Visual Swatch
  *
  * @api
+ * @since 100.0.2
  */
 class Visual extends AbstractSwatch
 {
@@ -60,6 +61,7 @@ class Visual extends AbstractSwatch
      * Return json config for visual option JS initialization
      *
      * @return array
+     * @since 100.1.0
      */
     public function getJsonConfig()
     {

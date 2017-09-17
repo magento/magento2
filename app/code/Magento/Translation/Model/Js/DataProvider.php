@@ -103,7 +103,6 @@ class DataProvider implements DataProviderInterface
 
         $dictionary = [];
         foreach ($files as $filePath) {
-            /** @var \Magento\Framework\Filesystem\File\Read $read */
             $read = $this->fileReadFactory->create($filePath[0], \Magento\Framework\Filesystem\DriverPool::FILE);
             $content = $read->readAll();
             foreach ($this->getPhrases($content) as $phrase) {
@@ -134,12 +133,13 @@ class DataProvider implements DataProviderInterface
     {
         $phrases = [];
         foreach ($this->config->getPatterns() as $pattern) {
-            $result = preg_match_all($pattern, $content, $matches);
+            $concatenatedContent = preg_replace('~(["\'])\s*?\+\s*?\1~', '', $content);
+            $result = preg_match_all($pattern, $concatenatedContent, $matches);
 
             if ($result) {
                 if (isset($matches[2])) {
                     foreach ($matches[2] as $match) {
-                        $phrases[] = str_replace('\\\'', '\'', $match);
+                        $phrases[] = str_replace(["\'", '\"'], ["'", '"'], $match);
                     }
                 }
             }

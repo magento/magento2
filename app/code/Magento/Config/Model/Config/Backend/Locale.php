@@ -11,6 +11,10 @@ namespace Magento\Config\Model\Config\Backend;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Locale extends \Magento\Framework\App\Config\Value
 {
     /**

@@ -12,6 +12,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
 {

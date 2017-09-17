@@ -12,7 +12,7 @@ use Magento\Integration\Model\Cache\TypeIntegration;
 /**
  * Unit test for \Magento\Integration\Model\IntegrationConfig
  */
-class IntegrationConfigTest extends \PHPUnit_Framework_TestCase
+class IntegrationConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var IntegrationConfig

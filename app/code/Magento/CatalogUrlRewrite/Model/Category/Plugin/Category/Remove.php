@@ -9,16 +9,24 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
 class Remove
 {
-    /** @var \Magento\UrlRewrite\Model\UrlPersistInterface */
+    /**
+     * @var \Magento\UrlRewrite\Model\UrlPersistInterface
+     */
     protected $urlPersist;
 
-    /** @var \Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator
+     */
     protected $productUrlRewriteGenerator;
 
-    /** @var \Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider
+     */
     protected $childrenCategoriesProvider;
 
-    /** @var \Magento\Framework\Serialize\Serializer\Json */
+    /**
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
     private $serializer;
 
     /**

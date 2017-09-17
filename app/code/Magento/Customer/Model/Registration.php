@@ -7,6 +7,7 @@ namespace Magento\Customer\Model;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Registration
 {

@@ -90,7 +90,7 @@ class CategoryList implements CategoryListInterface
     /**
      * Retrieve collection processor
      *
-     * @deprecated
+     * @deprecated 101.1.0
      * @return CollectionProcessorInterface
      */
     private function getCollectionProcessor()

@@ -6,6 +6,9 @@
 
 namespace Magento\Framework\Backup\Db;
 
+/**
+ * @api
+ */
 class BackupFactory
 {
     /**

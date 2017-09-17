@@ -16,6 +16,7 @@ use Magento\Theme\Helper\Storage;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 100.0.2
  */
 class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\AbstractTab
 {

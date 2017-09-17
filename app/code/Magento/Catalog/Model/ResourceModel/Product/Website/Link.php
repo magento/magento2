@@ -11,7 +11,9 @@ use Magento\Framework\EntityManager\MetadataPool;
 
 class Link
 {
-    /** @var  ResourceConnection */
+    /**
+     * @var \Magento\Framework\App\ResourceConnection
+     */
     private $resourceConnection;
 
     /**

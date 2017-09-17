@@ -6,7 +6,7 @@
 
 namespace Magento\Store\Test\Unit\Ui\Component\Listing\Column;
 
-class StoreTest extends \PHPUnit_Framework_TestCase
+class StoreTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Store\Ui\Component\Listing\Column\Store

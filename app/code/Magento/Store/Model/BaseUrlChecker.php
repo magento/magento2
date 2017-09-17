@@ -34,17 +34,10 @@ class BaseUrlChecker
     public function execute($uri, $request)
     {
         $requestUri = $request->getRequestUri() ? $request->getRequestUri() : '/';
-
-        return (!isset(
-            $uri['scheme']
-        ) || $uri['scheme'] === $request->getScheme()) && (!isset(
-            $uri['host']
-        ) || $uri['host'] === $request->getHttpHost()) && (!isset(
-            $uri['path']
-        ) || strpos(
-            $requestUri,
-            $uri['path']
-        ) !== false);
+        $isValidSchema = !isset($uri['scheme']) || $uri['scheme'] === $request->getScheme();
+        $isValidHost = !isset($uri['host']) || $uri['host'] === $request->getHttpHost();
+        $isValidPath = !isset($uri['path']) || strpos($requestUri, $uri['path']) !== false;
+        return $isValidSchema && $isValidHost && $isValidPath;
     }
 
     /**

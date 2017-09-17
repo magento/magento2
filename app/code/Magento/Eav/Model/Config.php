@@ -13,6 +13,7 @@ use Magento\Framework\Serialize\SerializerInterface;
 /**
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Config
 {
@@ -24,11 +25,7 @@ class Config
     const ATTRIBUTES_CODES_CACHE_ID = 'EAV_ENTITY_ATTRIBUTES_CODES';
     /**#@-*/
 
-    /**
-     * Entity types data
-     *
-     * @var array
-     */
+    /**#@-*/
     protected $_entityTypeData;
 
     /**
@@ -89,7 +86,9 @@ class Config
      */
     protected $_cache;
 
-    /** @var \Magento\Framework\App\Cache\StateInterface */
+    /**
+     * @var \Magento\Framework\App\Cache\StateInterface
+     */
     protected $_cacheState;
 
     /**
@@ -470,11 +469,12 @@ class Config
     /**
      * Get attributes by entity type
      *
-     * @deprecated
+     * @deprecated 100.2.0
      * @see \Magento\Eav\Model\Config::getEntityAttributes
      *
      * @param string $entityType
      * @return AbstractAttribute[]
+     * @since 100.2.0
      */
     public function getAttributes($entityType)
     {
@@ -539,7 +539,7 @@ class Config
     /**
      * Get codes of all entity type attributes
      *
-     * @deprecated
+     * @deprecated 100.2.0
      * @see \Magento\Eav\Model\Config::getEntityAttributes
      *
      * @param mixed $entityType
@@ -560,6 +560,7 @@ class Config
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 100.2.0
      */
     public function getEntityAttributes($entityType, $object = null)
     {

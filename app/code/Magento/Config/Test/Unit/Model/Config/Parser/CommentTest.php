@@ -12,7 +12,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
-class CommentTest extends \PHPUnit_Framework_TestCase
+class CommentTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var PlaceholderInterface|MockObject
