@@ -188,7 +188,6 @@ class DocumentTest extends \PHPUnit_Framework_TestCase
         static::assertEquals('Confirmed', (string)$value);
     }
 
-
     /**
      * @covers \Magento\Customer\Ui\Component\DataProvider\Document::getCustomAttribute
      */
