@@ -123,15 +123,18 @@ class ProductUrlRewriteGenerator
      *
      * @param \Magento\Catalog\Model\Product $product
      * @param int|null $rootCategoryId
+     * @param int|null $storeId
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
      */
-    public function generate(Product $product, $rootCategoryId = null)
+    public function generate(Product $product, $rootCategoryId = null,$storeId = null)
     {
-        if ($product->getVisibility() == Visibility::VISIBILITY_NOT_VISIBLE) {
-            return [];
+        if (is_null($storeId)) {
+            if ($product->getVisibility() == Visibility::VISIBILITY_NOT_VISIBLE) {
+                return [];
+            }
+            $storeId = $product->getStoreId();
         }
-
-        $storeId = $product->getStoreId();
+        
 
         $productCategories = $product->getCategoryCollection()
             ->addAttributeToSelect('url_key')
