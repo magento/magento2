@@ -13,6 +13,9 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Module\Dir;
 use Magento\Framework\Module\ModuleListInterface;
 
+/**
+ * @api
+ */
 class Reader
 {
     /**

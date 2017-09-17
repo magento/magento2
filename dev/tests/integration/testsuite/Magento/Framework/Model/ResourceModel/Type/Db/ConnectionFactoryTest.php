@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Model\ResourceModel\Type\Db;
 
-class ConnectionFactoryTest extends \PHPUnit_Framework_TestCase
+class ConnectionFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ConnectionFactory

@@ -8,7 +8,7 @@ namespace Magento\Catalog\Test\Unit\Model\Product;
 use \Magento\Catalog\Model\Product\Option;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class OptionTest extends \PHPUnit_Framework_TestCase
+class OptionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Product\Option
@@ -22,7 +22,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $this->productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(\Magento\Catalog\Model\Product\Option::class);
         $this->model->setProduct($this->productMock);

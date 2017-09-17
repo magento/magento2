@@ -169,7 +169,7 @@ class Translate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb imp
     }
 
     /**
-     * @deprecated
+     * @deprecated 100.1.2
      * @return DeploymentConfig
      */
     private function getDeployedConfig()
@@ -181,7 +181,7 @@ class Translate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb imp
     }
 
     /**
-     * @deprecated
+     * @deprecated 100.1.2
      * @return Config
      */
     private function getAppConfig()

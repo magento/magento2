@@ -5,6 +5,10 @@
  */
 namespace Magento\Config\Model\Config\Source\Locale\Currency;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class All implements \Magento\Framework\Option\ArrayInterface
 {
     /**

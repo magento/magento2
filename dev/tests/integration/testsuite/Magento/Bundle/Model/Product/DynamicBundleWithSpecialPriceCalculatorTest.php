@@ -65,7 +65,6 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
         $this->assertEquals($expectedResults['indexerMinimalPrice'], $priceInfoFromIndexer->getMinimalPrice());
 
         $this->assertEquals($expectedResults['indexerMaximumPrice'], $priceInfoFromIndexer->getMaxPrice());
-
     }
 
     /**

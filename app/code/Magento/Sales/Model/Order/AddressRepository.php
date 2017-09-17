@@ -35,7 +35,9 @@ class AddressRepository implements \Magento\Sales\Api\OrderAddressRepositoryInte
      */
     protected $registry = [];
 
-    /** @var  CollectionProcessorInterface */
+    /**
+     * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
+     */
     private $collectionProcessor;
 
     /**
@@ -162,7 +164,7 @@ class AddressRepository implements \Magento\Sales\Api\OrderAddressRepositoryInte
     /**
      * Retrieve collection processor
      *
-     * @deprecated
+     * @deprecated 100.2.0
      * @return CollectionProcessorInterface
      */
     private function getCollectionProcessor()

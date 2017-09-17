@@ -7,6 +7,9 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 
 /**
  * Backend grid item renderer line to wrap
+ *
+ * @api
+ * @since 100.0.2
  */
 class Wrapline extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {

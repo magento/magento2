@@ -5,10 +5,6 @@
  */
 namespace Magento\User\Block\Role\Tab;
 
-/**
- * Class \Magento\User\Block\Role\Tab\Users
- *
- */
 class Users extends \Magento\Backend\Block\Widget\Tabs
 {
     /**

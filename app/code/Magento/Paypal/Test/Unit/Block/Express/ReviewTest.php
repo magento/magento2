@@ -3,14 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Paypal\Test\Unit\Block\Express;
 
 use Magento\Paypal\Block\Express\Review;
+use Magento\Quote\Model\Quote\Address\Rate;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ReviewTest extends \PHPUnit_Framework_TestCase
+class ReviewTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
@@ -34,25 +36,31 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $layout = $this->getMock(\Magento\Framework\View\LayoutInterface::class, [], [], '', false);
-        $eventManager = $this->getMock(\Magento\Framework\Event\ManagerInterface::class, [], [], '', false);
+        $layout = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
+        $eventManager = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
+        $scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
 
-        $urlBuilder = $this->getMock(\Magento\Framework\UrlInterface::class);
+        $scopeConfig->expects($this->any())
+            ->method('getValue')
+            ->with(
+                $this->stringContains('advanced/modules_disable_output/'),
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            )->will($this->returnValue(false));
+
+        $urlBuilder = $this->createMock(\Magento\Framework\UrlInterface::class);
         $urlBuilder->expects($this->any())->method('getUrl')->will($this->returnArgument(0));
 
-        $context = $this->getMock(
+        $context = $this->createPartialMock(
             \Magento\Framework\View\Element\Template\Context::class,
-            ['getLayout', 'getEventManager', 'getScopeConfig', 'getRequest', 'getAssetRepository', 'getUrlBuilder'],
-            [],
-            '',
-            false
+            ['getLayout', 'getEventManager', 'getScopeConfig', 'getRequest', 'getAssetRepository', 'getUrlBuilder']
         );
 
-        $this->request = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
-        $this->assetRepo = $this->getMock(\Magento\Framework\View\Asset\Repository::class, [], [], '', false);
+        $this->request = $this->createMock(\Magento\Framework\App\Request\Http::class);
+        $this->assetRepo = $this->createMock(\Magento\Framework\View\Asset\Repository::class);
 
         $context->expects($this->any())->method('getLayout')->will($this->returnValue($layout));
         $context->expects($this->any())->method('getEventManager')->will($this->returnValue($eventManager));
+        $context->expects($this->any())->method('getScopeConfig')->will($this->returnValue($scopeConfig));
         $context->expects($this->any())->method('getRequest')->will($this->returnValue($this->request));
         $context->expects($this->any())->method('getAssetRepository')->will($this->returnValue($this->assetRepo));
         $context->expects($this->any())->method('getUrlBuilder')->will($this->returnValue($urlBuilder));
@@ -140,10 +148,10 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
     protected function _getQuoteMock()
     {
         $methodInstance = new \Magento\Framework\DataObject(['title' => 'Payment Method']);
-        $payment = $this->getMock(\Magento\Quote\Model\Quote\Payment::class, [], [], '', false);
+        $payment = $this->createMock(\Magento\Quote\Model\Quote\Payment::class);
         $payment->expects($this->any())->method('getMethodInstance')->will($this->returnValue($methodInstance));
 
-        $quote = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
+        $quote = $this->createMock(\Magento\Quote\Model\Quote::class);
         $quote->expects($this->any())->method('getPayment')->will($this->returnValue($payment));
         $quote->setPayment($payment);
 
@@ -158,8 +166,8 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
 
     public function testGetEmail()
     {
-        $quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
-        $billingAddressMock = $this->getMock(\Magento\Quote\Model\Quote\Address::class, [], [], '', false);
+        $quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
+        $billingAddressMock = $this->createMock(\Magento\Quote\Model\Quote\Address::class);
         $quoteMock->expects($this->once())->method('getBillingAddress')->willReturn($billingAddressMock);
         $billingAddressMock->expects($this->once())->method('getEmail')->willReturn('test@example.com');
         $this->model->setQuote($quoteMock);
@@ -168,7 +176,7 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
 
     public function testGetEmailWhenBillingAddressNotExist()
     {
-        $quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
+        $quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
         $quoteMock->expects($this->once())->method('getBillingAddress')->willReturn(null);
         $this->model->setQuote($quoteMock);
         $this->assertEquals('', $this->model->getEmail());

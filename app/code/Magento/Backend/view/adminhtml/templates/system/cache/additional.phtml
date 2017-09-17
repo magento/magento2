@@ -8,31 +8,31 @@
 ?>
 <div class="additional-cache-management">
     <h2>
-        <span><?php /* @escapeNotVerified */ echo __('Additional Cache Management') ?></span>
+        <span><?= /* @escapeNotVerified */ __('Additional Cache Management') ?></span>
     </h2>
     <p>
-        <button onclick="setLocation('<?php /* @escapeNotVerified */ echo $block->getCleanImagesUrl() ?>')" type="button">
-            <?php /* @escapeNotVerified */ echo __('Flush Catalog Images Cache') ?>
+        <button onclick="setLocation('<?= /* @escapeNotVerified */ $block->getCleanImagesUrl() ?>')" type="button">
+            <?= /* @escapeNotVerified */ __('Flush Catalog Images Cache') ?>
         </button>
-        <span><?php /* @escapeNotVerified */ echo __('Pregenerated product images files') ?></span>
+        <span><?= /* @escapeNotVerified */ __('Pregenerated product images files') ?></span>
     </p>
     <p>
-        <button onclick="setLocation('<?php /* @escapeNotVerified */ echo $block->getCleanMediaUrl() ?>')" type="button">
-            <?php /* @escapeNotVerified */ echo __('Flush JavaScript/CSS Cache') ?>
+        <button onclick="setLocation('<?= /* @escapeNotVerified */ $block->getCleanMediaUrl() ?>')" type="button">
+            <?= /* @escapeNotVerified */ __('Flush JavaScript/CSS Cache') ?>
         </button>
-        <span><?php /* @escapeNotVerified */ echo __('Themes JavaScript and CSS files combined to one file') ?></span>
+        <span><?= /* @escapeNotVerified */ __('Themes JavaScript and CSS files combined to one file') ?></span>
     </p>
     <?php
     if (!$block->isInProductionMode()):
         ?>
         <p>
-            <button onclick="setLocation('<?php /* @escapeNotVerified */ echo $block->getCleanStaticFilesUrl() ?>')" type="button">
-                <?php /* @escapeNotVerified */ echo __('Flush Static Files Cache') ?>
+            <button onclick="setLocation('<?= /* @escapeNotVerified */ $block->getCleanStaticFilesUrl() ?>')" type="button">
+                <?= /* @escapeNotVerified */ __('Flush Static Files Cache') ?>
             </button>
-            <span><?php /* @escapeNotVerified */ echo __('Preprocessed view files and static files') ?></span>
+            <span><?= /* @escapeNotVerified */ __('Preprocessed view files and static files') ?></span>
         </p>
     <?php
     endif;
     ?>
-    <?php echo $block->getChildHtml(); ?>
+    <?= $block->getChildHtml() ?>
 </div>

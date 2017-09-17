@@ -10,6 +10,7 @@ use Magento\Framework\Api\Search\BucketInterface;
 
 /**
  * Faceted data
+ * @api
  */
 class Aggregation implements AggregationInterface, \IteratorAggregate
 {

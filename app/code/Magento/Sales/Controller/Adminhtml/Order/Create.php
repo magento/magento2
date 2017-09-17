@@ -154,7 +154,7 @@ abstract class Create extends \Magento\Backend\App\Action
         $this->_eventManager->dispatch('adminhtml_sales_order_create_process_data_before', $eventData);
 
         /**
-         * Saving order data
+         * Import post data, in order to make order quote valid
          */
         if ($data = $this->getRequest()->getPost('order')) {
             $this->_getOrderCreateModel()->importPostData($data);
@@ -210,6 +210,8 @@ abstract class Create extends \Magento\Backend\App\Action
             $this->_getOrderCreateModel()->applySidebarData($data);
         }
 
+        $this->_eventManager->dispatch('adminhtml_sales_order_create_process_item_before', $eventData);
+
         /**
          * Adding product to quote from shopping cart, wishlist etc.
          */
@@ -255,6 +257,8 @@ abstract class Create extends \Magento\Backend\App\Action
         if ($moveItemId && $moveTo) {
             $this->_getOrderCreateModel()->moveQuoteItem($moveItemId, $moveTo, $moveQty);
         }
+
+        $this->_eventManager->dispatch('adminhtml_sales_order_create_process_item_after', $eventData);
 
         if ($paymentData = $this->getRequest()->getPost('payment')) {
             $this->_getOrderCreateModel()->getQuote()->getPayment()->addData($paymentData);

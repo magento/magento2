@@ -7,7 +7,7 @@ namespace Magento\Bundle\Test\Unit\Pricing\Price;
 
 use \Magento\Bundle\Pricing\Price\SpecialPrice;
 
-class SpecialPriceTest extends \PHPUnit_Framework_TestCase
+class SpecialPriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SpecialPrice
@@ -40,14 +40,14 @@ class SpecialPriceTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->localeDate = $this->getMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
-        $this->priceInfo = $this->getMock(\Magento\Framework\Pricing\PriceInfo\Base::class, [], [], '', false);
+        $this->localeDate = $this->createMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
+        $this->priceInfo = $this->createMock(\Magento\Framework\Pricing\PriceInfo\Base::class);
 
         $this->saleable->expects($this->once())
             ->method('getPriceInfo')
             ->will($this->returnValue($this->priceInfo));
 
-        $this->priceCurrencyMock = $this->getMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
+        $this->priceCurrencyMock = $this->createMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
 
         $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectHelper->getObject(
@@ -99,7 +99,7 @@ class SpecialPriceTest extends \PHPUnit_Framework_TestCase
             ->method('convertAndRound');
 
         if ($isScopeDateInInterval) {
-            $price = $this->getMock(\Magento\Framework\Pricing\Price\PriceInterface::class);
+            $price = $this->createMock(\Magento\Framework\Pricing\Price\PriceInterface::class);
             $this->priceInfo->expects($this->once())
                 ->method('getPrice')
                 ->with(\Magento\Catalog\Pricing\Price\RegularPrice::PRICE_CODE)

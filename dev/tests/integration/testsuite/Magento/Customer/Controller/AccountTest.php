@@ -65,6 +65,38 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
+     * Test that forgot password email message displays special characters correctly.
+     *
+     * @magentoConfigFixture current_store customer/password/limit_password_reset_requests_method 0
+     * @magentoConfigFixture current_store customer/password/forgot_email_template customer_password_forgot_email_template
+     * @magentoConfigFixture current_store customer/password/forgot_email_identity support
+     * @magentoConfigFixture current_store general/store_information/name Test special' characters
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     */
+    public function testForgotPasswordEmailMessageWithSpecialCharacters()
+    {
+        $email = 'customer@example.com';
+
+        $this->getRequest()
+            ->setPostValue([
+                'email' => $email,
+            ]);
+
+        $this->dispatch('customer/account/forgotPasswordPost');
+        $this->assertRedirect($this->stringContains('customer/account/'));
+
+        /** @var \Magento\TestFramework\Mail\Template\TransportBuilderMock $transportBuilder */
+        $transportBuilder = $this->_objectManager->get(
+            \Magento\TestFramework\Mail\Template\TransportBuilderMock::class
+        );
+        $subject = $transportBuilder->getSentMessage()->getSubject();
+        $this->assertContains(
+            'Test special\' characters',
+            $subject
+        );
+    }
+
+    /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
      */
     public function testCreatepasswordActionWithDirectLink()
@@ -272,8 +304,8 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertSessionMessages(
             $this->equalTo([
                 'You must confirm your account. Please check your email for the confirmation link or '
-                    . '<a href="http://localhost/index.php/customer/account/confirmation/email/'
-                    . 'test2%40email.com/">click here</a> for a new link.'
+                    . '<a href="http://localhost/index.php/customer/account/confirmation/'
+                    . '?email=test2%40email.com">click here</a> for a new link.'
             ]),
             MessageInterface::TYPE_SUCCESS
         );

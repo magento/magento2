@@ -15,7 +15,7 @@ use \Magento\Sales\Model\Order;
  *
  * @package Magento\Sales\Model\Order
  */
-class ItemTest extends \PHPUnit_Framework_TestCase
+class ItemTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\Order\Item
@@ -41,9 +41,11 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->orderFactory = $this->getMock(\Magento\Sales\Model\OrderFactory::class, ['create'], [], '', false);
+        $this->orderFactory = $this->createPartialMock(\Magento\Sales\Model\OrderFactory::class, ['create']);
 
-        $this->serializerMock = $this->getMock(Json::class, [], ['unserialize'], '', false);
+        $this->serializerMock = $this->getMockBuilder(Json::class)
+            ->setMethods(['unserialize'])
+            ->getMock();
 
         $arguments = [
             'orderFactory' => $this->orderFactory,
@@ -77,7 +79,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     public function testSetOrder()
     {
         $orderId = 123;
-        $order = $this->getMock(\Magento\Sales\Model\Order::class, [], [], '', false);
+        $order = $this->createMock(\Magento\Sales\Model\Order::class);
         $order->expects($this->once())
             ->method('getId')
             ->willReturn($orderId);
@@ -92,7 +94,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
         //set order_id and get order by id
         $orderId = 123;
-        $order = $this->getMock(\Magento\Sales\Model\Order::class, [], [], '', false);
+        $order = $this->createMock(\Magento\Sales\Model\Order::class);
         $order->expects($this->once())
             ->method('load')
             ->with($orderId)

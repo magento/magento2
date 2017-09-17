@@ -10,7 +10,7 @@ use Magento\Framework\App\View\Deployment\Version;
 /**
  * Class VersionTest
  */
-class VersionTest extends \PHPUnit_Framework_TestCase
+class VersionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Version
@@ -35,11 +35,11 @@ class VersionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->appStateMock = $this->getMock(\Magento\Framework\App\State::class, [], [], '', false);
-        $this->versionStorageMock = $this->getMock(
+        $this->appStateMock = $this->createMock(\Magento\Framework\App\State::class);
+        $this->versionStorageMock = $this->createMock(
             \Magento\Framework\App\View\Deployment\Version\StorageInterface::class
         );
-        $this->loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class);
+        $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
         $this->object = new Version($this->appStateMock, $this->versionStorageMock);
         $objectManager->setBackwardCompatibleProperty($this->object, 'logger', $this->loggerMock);
     }
