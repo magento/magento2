@@ -55,7 +55,7 @@ class PageManagment implements PageManagmentInterface
      * @return \Magento\Cms\Api\Data\PageInterface
      * @throws NoSuchEntityException
      */
-    public function getByIdentifier($identifier, $storeId = null) : \Magento\Cms\Api\Data\PageInterface
+    public function getByIdentifier(string $identifier, $storeId = null) : \Magento\Cms\Api\Data\PageInterface
     {
         if ($storeId === null) {
             $storeId = $this->storeManager->getStore()->getId();

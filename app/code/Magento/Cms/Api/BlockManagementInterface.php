@@ -19,5 +19,5 @@ interface BlockManagementInterface
      * @param int|null $storeId
      * @return \Magento\Cms\Api\Data\BlockInterface
      */
-    public function getByIdentifier($identifier, $storeId = null) : \Magento\Cms\Api\Data\BlockInterface;
+    public function getByIdentifier(string $identifier, $storeId = null) : \Magento\Cms\Api\Data\BlockInterface;
 }

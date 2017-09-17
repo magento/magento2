@@ -55,7 +55,7 @@ class BlockManagment implements BlockManagementInterface
      * @return \Magento\Cms\Api\Data\BlockInterface
      * @throws NoSuchEntityException
      */
-    public function getByIdentifier($identifier, $storeId = null) : \Magento\Cms\Api\Data\BlockInterface
+    public function getByIdentifier(string $identifier, $storeId = null) : \Magento\Cms\Api\Data\BlockInterface
     {
         if ($storeId === null) {
             $storeId = $this->storeManager->getStore()->getId();
