@@ -6,9 +6,12 @@
 namespace Magento\Customer\Ui\Component\DataProvider;
 
 use Magento\Customer\Api\CustomerMetadataInterface;
+use Magento\Customer\Model\AccountManagement;
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Customer\Api\GroupRepositoryInterface;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -32,6 +35,21 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
     private static $websiteAttributeCode = 'website_id';
 
     /**
+     * @var string
+     */
+    private static $websiteIdAttributeCode = 'original_website_id';
+
+    /**
+     * @var string
+     */
+    private static $confirmationAttributeCode = 'confirmation';
+
+    /**
+     * @var string
+     */
+    private static $accountLockAttributeCode = 'lock_expires';
+
+    /**
      * @var CustomerMetadataInterface
      */
     private $customerMetadata;
@@ -47,22 +65,30 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
     private $storeManager;
 
     /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
      * Document constructor.
      * @param AttributeValueFactory $attributeValueFactory
      * @param GroupRepositoryInterface $groupRepository
      * @param CustomerMetadataInterface $customerMetadata
      * @param StoreManagerInterface $storeManager
+     * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         AttributeValueFactory $attributeValueFactory,
         GroupRepositoryInterface $groupRepository,
         CustomerMetadataInterface $customerMetadata,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        ScopeConfigInterface $scopeConfig
     ) {
         parent::__construct($attributeValueFactory);
         $this->customerMetadata = $customerMetadata;
         $this->groupRepository = $groupRepository;
         $this->storeManager = $storeManager;
+        $this->scopeConfig = $scopeConfig;
     }
 
     /**
@@ -79,6 +105,12 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
                 break;
             case self::$websiteAttributeCode:
                 $this->setWebsiteValue();
+                break;
+            case self::$confirmationAttributeCode:
+                $this->setConfirmationValue();
+                break;
+            case self::$accountLockAttributeCode:
+                $this->setAccountLockValue();
                 break;
         }
         return parent::getCustomAttribute($attributeCode);
@@ -133,5 +165,47 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
         $value = $this->getData(self::$websiteAttributeCode);
         $list = $this->storeManager->getWebsites();
         $this->setCustomAttribute(self::$websiteAttributeCode, $list[$value]->getName());
+        $this->setCustomAttribute(self::$websiteIdAttributeCode, $value);
+    }
+
+    /**
+     * Update confirmation value
+     * Method set confirmation text value to match what is shown in grid
+     * @return void
+     */
+    private function setConfirmationValue()
+    {
+        $value = $this->getData(self::$confirmationAttributeCode);
+        $websiteId = $this->getData(self::$websiteIdAttributeCode) ?: $this->getData(self::$websiteAttributeCode);
+        $isConfirmationRequired = (bool)$this->scopeConfig->getValue(
+            AccountManagement::XML_PATH_IS_CONFIRM,
+            ScopeInterface::SCOPE_WEBSITES,
+            $websiteId);
+
+        $valueText = !$isConfirmationRequired ?
+            __('Confirmation Not Required')
+            : ($value === null ?  __('Confirmed') : __('Confirmation Required'));
+
+        $this->setCustomAttribute(self::$confirmationAttributeCode, $valueText);
+    }
+
+    /**
+     * Update lock expires value
+     * Method set account lock text value to match what is shown in grid
+     * @return void
+     */
+    private function setAccountLockValue()
+    {
+        $value = $this->getDataByPath(self::$accountLockAttributeCode);
+
+        $valueText = __('Unlocked');
+        if ($value !== null) {
+            $lockExpires = new \DateTime($value);
+            if ($lockExpires > new \DateTime()) {
+                $valueText = __('Locked');
+            }
+        }
+
+        $this->setCustomAttribute(self::$accountLockAttributeCode, $valueText);
     }
 }
