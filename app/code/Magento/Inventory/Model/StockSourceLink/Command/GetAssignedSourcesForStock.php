@@ -62,11 +62,8 @@ class GetAssignedSourcesForStock implements GetAssignedSourcesForStockInterface
     /**
      * @inheritdoc
      */
-    public function execute($stockId)
+    public function execute(int $stockId)
     {
-        if (!is_numeric($stockId)) {
-            throw new InputException(__('Input data is invalid'));
-        }
         try {
             $sourceIds = $this->getAssignedSourceIds($stockId);
 
