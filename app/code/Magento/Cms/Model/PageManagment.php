@@ -10,7 +10,7 @@ use Magento\Cms\Api\PageManagmentInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
- * @api
+ * Class PageManagment
  */
 
 class PageManagment implements PageManagmentInterface
@@ -18,17 +18,17 @@ class PageManagment implements PageManagmentInterface
     /**
      * @var \Magento\Cms\Model\PageFactory
      */
-    protected $pageFactory;
+    private $pageFactory;
 
     /**
      * @var ResourceModel\Page
      */
-    protected $pageResource;
+    private $pageResource;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
-    protected $storeManager;
+    private $storeManager;
 
     /**
      * PageManagment constructor.
@@ -55,7 +55,7 @@ class PageManagment implements PageManagmentInterface
      * @return \Magento\Cms\Api\Data\PageInterface
      * @throws NoSuchEntityException
      */
-    public function getByIdentifier($identifier, $storeId = null)
+    public function getByIdentifier($identifier, $storeId = null) : \Magento\Cms\Api\Data\PageInterface
     {
         if ($storeId === null) {
             $storeId = $this->storeManager->getStore()->getId();

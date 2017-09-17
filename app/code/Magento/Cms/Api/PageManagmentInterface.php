@@ -6,6 +6,7 @@
 namespace Magento\Cms\Api;
 
 /**
+ * CMS Page management interface
  * @api
  */
 
@@ -18,5 +19,5 @@ interface PageManagmentInterface
      * @param int|null $storeId
      * @return \Magento\Cms\Api\Data\PageInterface
      */
-    public function getByIdentifier($identifier, $storeId = null);
+    public function getByIdentifier($identifier, $storeId = null) : \Magento\Cms\Api\Data\PageInterface;
 }

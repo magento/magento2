@@ -6,6 +6,7 @@
 namespace Magento\Cms\Api;
 
 /**
+ * CMS Block management interface
  * @api
  */
 
@@ -18,5 +19,5 @@ interface BlockManagementInterface
      * @param int|null $storeId
      * @return \Magento\Cms\Api\Data\BlockInterface
      */
-    public function getByIdentifier($identifier, $storeId = null);
+    public function getByIdentifier($identifier, $storeId = null) : \Magento\Cms\Api\Data\BlockInterface;
 }

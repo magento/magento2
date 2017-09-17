@@ -10,7 +10,7 @@ use Magento\Cms\Api\Data\BlockInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
- * @api
+ * Class BlockManagment
  */
 
 class BlockManagment implements BlockManagementInterface
@@ -18,22 +18,23 @@ class BlockManagment implements BlockManagementInterface
     /**
      * @var \Magento\Cms\Model\BlockFactory
      */
-    protected $blockFactory;
+    private $blockFactory;
 
     /**
      * @var ResourceModel\Block
      */
-    protected $blockResource;
+    private $blockResource;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
-    protected $storeManager;
+    private $storeManager;
 
     /**
      * BlockManagment constructor.
-     * @param \Magento\Cms\Model\BlockFactory $blockFactory
+     * @param BlockFactory $blockFactory
      * @param ResourceModel\Block $blockResource
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Cms\Model\BlockFactory $blockFactory,
@@ -54,7 +55,7 @@ class BlockManagment implements BlockManagementInterface
      * @return \Magento\Cms\Api\Data\BlockInterface
      * @throws NoSuchEntityException
      */
-    public function getByIdentifier($identifier, $storeId = null)
+    public function getByIdentifier($identifier, $storeId = null) : \Magento\Cms\Api\Data\BlockInterface
     {
         if ($storeId === null) {
             $storeId = $this->storeManager->getStore()->getId();
