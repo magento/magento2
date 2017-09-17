@@ -11,6 +11,7 @@ use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Customer\Api\GroupRepositoryInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -82,13 +83,13 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
         GroupRepositoryInterface $groupRepository,
         CustomerMetadataInterface $customerMetadata,
         StoreManagerInterface $storeManager,
-        ScopeConfigInterface $scopeConfig
+        ScopeConfigInterface $scopeConfig = null
     ) {
         parent::__construct($attributeValueFactory);
         $this->customerMetadata = $customerMetadata;
         $this->groupRepository = $groupRepository;
         $this->storeManager = $storeManager;
-        $this->scopeConfig = $scopeConfig;
+        $this->scopeConfig = $scopeConfig ? $scopeConfig : ObjectManager::getInstance()->create(ScopeConfigInterface::class);
     }
 
     /**
@@ -182,9 +183,10 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
             ScopeInterface::SCOPE_WEBSITES,
             $websiteId);
 
-        $valueText = !$isConfirmationRequired ?
-            __('Confirmation Not Required')
-            : ($value === null ?  __('Confirmed') : __('Confirmation Required'));
+        $valueText = __('Confirmation Not Required');
+        if ($isConfirmationRequired) {
+            $valueText = $value === null ? __('Confirmed') : __('Confirmation Required');
+        }
 
         $this->setCustomAttribute(self::$confirmationAttributeCode, $valueText);
     }
