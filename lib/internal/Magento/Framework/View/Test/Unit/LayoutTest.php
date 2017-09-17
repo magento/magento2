@@ -706,15 +706,15 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param string $xmlString
-     * @param bool $hasNonCacheableElement
+     * @param bool $nonCacheableElement
      * @param bool $result
      * @dataProvider isCacheableDataProvider
      */
-    public function testIsCacheable($xmlString, $hasNonCacheableElement, $result)
+    public function testIsCacheable($xmlString, $nonCacheableElement, $result)
     {
         $this->structureMock->method('hasElement')
             ->with($this->equalTo('non_cacheable_block'))
-            ->willReturn($hasNonCacheableElement);
+            ->willReturn($nonCacheableElement);
         $xml = simplexml_load_string($xmlString, \Magento\Framework\View\Layout\Element::class);
         $this->assertSame($this->model, $this->model->setXml($xml));
         $this->assertSame($result, $this->model->isCacheable());
