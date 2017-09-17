@@ -5,7 +5,7 @@
  */
 namespace Magento\GiftMessage\Model;
 
-class OrderItemRepositoryTest extends \PHPUnit_Framework_TestCase
+class OrderItemRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\ObjectManagerInterface */
     protected $objectManager;

@@ -15,6 +15,7 @@ use Magento\Framework\ObjectManager\Helper\Composite as CompositeHelper;
  * Instead, it will try to find the first suitable child and return its result.
  *
  * @api
+ * @since 100.0.2
  */
 class CompositeUserContext implements \Magento\Authorization\Model\UserContextInterface
 {

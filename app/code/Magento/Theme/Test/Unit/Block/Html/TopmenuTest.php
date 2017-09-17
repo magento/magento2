@@ -6,16 +6,16 @@
 
 namespace Magento\Theme\Test\Unit\Block\Html;
 
-use Magento\Theme\Block\Html\Topmenu;
+use Magento\Framework\Data\Tree\NodeFactory;
+use Magento\Framework\Data\TreeFactory;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Element\Template\Context;
-use Magento\Framework\Data\TreeFactory;
-use Magento\Framework\Data\Tree\NodeFactory;
+use Magento\Theme\Block\Html\Topmenu;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TopmenuTest extends \PHPUnit_Framework_TestCase
+class TopmenuTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -182,8 +182,8 @@ HTML;
 
     public function testGetCacheKeyInfo()
     {
-        $nodeFactory = $this->getMock(\Magento\Framework\Data\Tree\NodeFactory::class, [], [], '', false);
-        $treeFactory = $this->getMock(\Magento\Framework\Data\TreeFactory::class, [], [], '', false);
+        $nodeFactory = $this->createMock(\Magento\Framework\Data\Tree\NodeFactory::class);
+        $treeFactory = $this->createMock(\Magento\Framework\Data\TreeFactory::class);
 
         $topmenu =  new Topmenu($this->context, $nodeFactory, $treeFactory);
         $this->urlBuilder->expects($this->once())->method('getUrl')->with('*/*/*')->willReturn('123');
@@ -215,22 +215,18 @@ HTML;
             ->disableOriginalConstructor()
             ->getMock();
 
-        $container = $this->getMock(\Magento\Catalog\Model\ResourceModel\Category\Tree::class, [], [], '', false);
+        $container = $this->createMock(\Magento\Catalog\Model\ResourceModel\Category\Tree::class);
 
-        $children = $this->getMock(
-            \Magento\Framework\Data\Tree\Node\Collection::class,
-            ['count'],
-            ['container' => $container]
-        );
+        $children = $this->getMockBuilder(\Magento\Framework\Data\Tree\Node\Collection::class)
+            ->setMethods(['count'])
+            ->setConstructorArgs(['container' => $container])
+            ->getMock();
 
         for ($i = 0; $i < 10; $i++) {
             $id = "category-node-$i";
-            $categoryNode = $this->getMock(
+            $categoryNode = $this->createPartialMock(
                 \Magento\Framework\Data\Tree\Node::class,
-                ['getId', 'hasChildren'],
-                [],
-                '',
-                false
+                ['getId', 'hasChildren']
             );
             $categoryNode->expects($this->once())->method('getId')->willReturn($id);
             $categoryNode->expects($this->atLeastOnce())->method('hasChildren')->willReturn(false);
@@ -251,12 +247,16 @@ HTML;
 
         $nodeMock = $this->getMockBuilder(\Magento\Framework\Data\Tree\Node::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getChildren'])
+            ->setMethods(['getChildren', '__call'])
             ->getMock();
         $nodeMock->expects($this->once())
             ->method('getChildren')
             ->willReturn($children);
-        $nodeMock->expects($this->any())
+        $nodeMock->expects($this->at(0))
+            ->method('__call')
+            ->with('setOutermostClass')
+            ->willReturn(null);
+        $nodeMock->expects($this->at(3))
             ->method('__call')
             ->with('getLevel', [])
             ->willReturn(null);

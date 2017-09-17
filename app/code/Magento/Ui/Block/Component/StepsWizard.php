@@ -9,6 +9,7 @@ namespace Magento\Ui\Block\Component;
  * Multi steps wizard block
  *
  * @api
+ * @since 100.0.2
  */
 class StepsWizard extends \Magento\Framework\View\Element\Template
 {

@@ -12,6 +12,7 @@ use Magento\Catalog\Model\Product;
  * Class Data
  * Helper class for getting options
  * @api
+ * @since 100.0.2
  */
 class Data
 {

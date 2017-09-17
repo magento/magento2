@@ -44,7 +44,7 @@ class Forgotpassword extends \Magento\User\Controller\Adminhtml\Auth
         $resultRedirect = $this->resultRedirectFactory->create();
         if (!empty($email) && !empty($params)) {
             // Validate received data to be an email address
-            if (\Zend_Validate::is($email, 'EmailAddress')) {
+            if (\Zend_Validate::is($email, \Magento\Framework\Validator\EmailAddress::class)) {
                 try {
                     $this->securityManager->performSecurityCheck(
                         \Magento\Security\Model\PasswordResetRequestEvent::ADMIN_PASSWORD_RESET_REQUEST,

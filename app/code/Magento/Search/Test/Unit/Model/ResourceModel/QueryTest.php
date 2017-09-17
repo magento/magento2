@@ -7,7 +7,7 @@ namespace Magento\Search\Test\Unit\Model\ResourceModel;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class QueryTest extends \PHPUnit_Framework_TestCase
+class QueryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Search\Model\ResourceModel\Query
@@ -70,6 +70,7 @@ class QueryTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Search\Model\Query|\PHPUnit_Framework_MockObject_MockObject $model */
         $model = $this->getMockBuilder(\Magento\Search\Model\Query::class)
+            ->setMethods(['getNumResults', 'getStoreId', 'getQueryText'])
             ->disableOriginalConstructor()
             ->getMock();
         $model->expects($this->any())

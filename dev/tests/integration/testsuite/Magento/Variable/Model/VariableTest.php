@@ -5,7 +5,7 @@
  */
 namespace Magento\Variable\Model;
 
-class VariableTest extends \PHPUnit_Framework_TestCase
+class VariableTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Variable\Model\Variable

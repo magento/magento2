@@ -14,6 +14,7 @@ class AjaxSave extends \Magento\Tax\Controller\Adminhtml\Rate
      * Save Tax Rate via AJAX
      *
      * @return \Magento\Framework\Controller\Result\Json
+     * @throws \InvalidArgumentException
      */
     public function execute()
     {

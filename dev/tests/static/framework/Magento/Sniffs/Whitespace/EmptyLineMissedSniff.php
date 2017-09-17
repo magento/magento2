@@ -5,13 +5,13 @@
  */
 namespace Magento\Sniffs\Whitespace;
 
-use PHP_CodeSniffer_File;
-use PHP_CodeSniffer_Sniff;
+use PHP_CodeSniffer\Sniffs\Sniff;
+use PHP_CodeSniffer\Files\File;
 
 /**
  * Class EmptyLineMissedSniff
  */
-class EmptyLineMissedSniff implements PHP_CodeSniffer_Sniff
+class EmptyLineMissedSniff implements Sniff
 {
     /**
      * {@inheritdoc}
@@ -24,7 +24,7 @@ class EmptyLineMissedSniff implements PHP_CodeSniffer_Sniff
     /**
      * {@inheritdoc}
      */
-    public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
+    public function process(File $phpcsFile, $stackPtr)
     {
         $tokens = $phpcsFile->getTokens();
         if ($this->doCheck($phpcsFile, $stackPtr, $tokens)) {
@@ -37,12 +37,12 @@ class EmptyLineMissedSniff implements PHP_CodeSniffer_Sniff
     }
 
     /**
-     * @param PHP_CodeSniffer_File $phpcsFile
+     * @param File $phpcsFile
      * @param int $stackPtr
      * @param array $tokens
      * @return bool
      */
-    private function doCheck(PHP_CodeSniffer_File $phpcsFile, $stackPtr, $tokens)
+    private function doCheck(File $phpcsFile, $stackPtr, $tokens)
     {
         $result = false;
         if ($phpcsFile->hasCondition($stackPtr, T_CLASS) || $phpcsFile->hasCondition($stackPtr, T_INTERFACE)) {

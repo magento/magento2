@@ -9,6 +9,7 @@ namespace Magento\Widget\Block\Adminhtml\Widget;
  * WYSIWYG widget options form
  *
  * @api
+ * @since 100.0.2
  */
 class Options extends \Magento\Backend\Block\Widget\Form\Generic
 {
@@ -162,7 +163,11 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
             }
         }
 
-        if (is_scalar($data['value'])) {
+        if (is_array($data['value'])) {
+            foreach ($data['value'] as &$value) {
+                $value = html_entity_decode($value);
+            }
+        } else {
             $data['value'] = html_entity_decode($data['value']);
         }
 

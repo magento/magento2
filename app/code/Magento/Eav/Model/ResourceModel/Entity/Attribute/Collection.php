@@ -12,6 +12,7 @@ use Magento\Eav\Model\Entity\Type;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -489,6 +490,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param string $cond
      * @param string $cols
      * @return $this
+     * @since 100.1.0
      */
     public function joinLeft($table, $cond, $cols = '*')
     {

@@ -17,7 +17,7 @@ use Magento\Ui\Component\Form\Element\DataType\Date as FormDate;
 /**
  * Class DateTest
  */
-class DateTest extends \PHPUnit_Framework_TestCase
+class DateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -169,7 +169,7 @@ class DateTest extends \PHPUnit_Framework_TestCase
             ->with($expectedDate)
             ->willReturnSelf();
 
-        $filterMock = $this->getMock(Filter::class);
+        $filterMock = $this->createMock(Filter::class);
         $this->filterBuilderMock->expects(static::at($i++))
             ->method('create')
             ->willReturn($filterMock);
@@ -228,10 +228,12 @@ class DateTest extends \PHPUnit_Framework_TestCase
                 ->with($filterData[$name])
                 ->willReturn(new \DateTime($filterData[$name]));
         } else {
+            $from = new \DateTime($filterData[$name]['from']);
+            $to = new \DateTime($filterData[$name]['to'] . ' 23:59:59');
             $uiComponent->method('convertDate')
                 ->willReturnMap([
-                    [$filterData[$name]['from'], 0, 0, 0, new \DateTime($filterData[$name]['from'])],
-                    [$filterData[$name]['to'], 23, 59, 59, new \DateTime($filterData[$name]['to'] . ' 23:59:59')],
+                    [$filterData[$name]['from'], 0, 0, 0, true, $from],
+                    [$filterData[$name]['to'], 23, 59, 59, true, $to],
                 ]);
         }
 

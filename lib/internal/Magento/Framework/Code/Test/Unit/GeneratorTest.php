@@ -4,15 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Code\Test\Unit;
 
 use Magento\Framework\Code\Generator;
 use Magento\Framework\Code\Generator\DefinedClasses;
 use Magento\Framework\Code\Generator\Io;
 
-class GeneratorTest extends \PHPUnit_Framework_TestCase
+class GeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Class name parameter value
@@ -45,7 +43,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->definedClassesMock = $this->getMock(\Magento\Framework\Code\Generator\DefinedClasses::class);
+        $this->definedClassesMock = $this->createMock(\Magento\Framework\Code\Generator\DefinedClasses::class);
         $this->ioObjectMock = $this->getMockBuilder(\Magento\Framework\Code\Generator\Io::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -76,7 +74,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testGenerateClass($className, $entityType)
     {
-        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $fullClassName = $className . $entityType;
         $entityGeneratorMock = $this->getMockBuilder(\Magento\Framework\Code\Generator\EntityAbstract::class)
             ->disableOriginalConstructor()
@@ -101,7 +99,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $expectedEntities = array_values($this->expectedEntities);
         $resultClassName = self::SOURCE_CLASS . ucfirst(array_shift($expectedEntities));
-        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $entityGeneratorMock = $this->getMockBuilder(\Magento\Framework\Code\Generator\EntityAbstract::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -116,7 +114,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     public function testGenerateClassWithExistName($fileExists)
     {
         $this->definedClassesMock->expects($this->any())
-            ->method('isClassLoadableFromDisc')
+            ->method('isClassLoadableFromDisk')
             ->willReturn(true);
 
         $resultClassFileName = '/Magento/Path/To/Class.php';

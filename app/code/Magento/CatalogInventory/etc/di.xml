@@ -60,6 +60,13 @@
     <type name="Magento\Store\Model\ResourceModel\Group">
         <plugin name="storeGroupResourceAroundBeforeSave" type="Magento\CatalogInventory\Model\Indexer\Stock\Plugin\StoreGroup"/>
     </type>
+    <type name="Magento\Catalog\Model\Indexer\Product\Full">
+        <arguments>
+            <argument name="indexerList" xsi:type="array">
+                <item name="cataloginventory_stock" xsi:type="const">Magento\CatalogInventory\Model\Indexer\Stock\Processor::INDEXER_ID</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Catalog\Block\Product\View">
         <plugin name="quantityValidators" type="Magento\CatalogInventory\Block\Plugin\ProductView" />
     </type>
@@ -70,9 +77,6 @@
     </type>
     <type name="Magento\Catalog\Model\Product">
         <plugin name="catalogInventoryAfterLoad" type="Magento\CatalogInventory\Model\Plugin\AfterProductLoad"/>
-    </type>
-    <type name="Magento\Catalog\Api\ProductRepositoryInterface">
-        <plugin name="catalogInventoryAroundSave" sortOrder="20" type="Magento\CatalogInventory\Model\Plugin\AroundProductRepositorySave"/>
     </type>
     <type name="Magento\CatalogInventory\Setup\UpgradeData">
         <arguments>
@@ -104,41 +108,11 @@
             <argument name="batchSizeManagement" xsi:type="object">Magento\CatalogInventory\Model\Indexer\Stock\BatchSizeManagement</argument>
         </arguments>
     </type>
-    <virtualType name="Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource" type="Magento\Indexer\Model\ResourceModel\FrontendResource">
+    <type name="\Magento\Framework\Data\CollectionModifier">
         <arguments>
-            <argument name="indexerId" xsi:type="const">Magento\CatalogInventory\Model\Indexer\Stock\Processor::INDEXER_ID</argument>
-            <argument name="indexerBaseTable" xsi:type="string">cataloginventory_stock_status</argument>
-            <argument name="idFieldName" xsi:type="string">product_id</argument>
-        </arguments>
-    </virtualType>
-    <type name="Magento\CatalogInventory\Model\Indexer\Stock\AbstractAction">
-        <arguments>
-            <argument name="indexerStockFrontendResource" xsi:type="object">Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource</argument>
-        </arguments>
-    </type>
-    <type name="Magento\CatalogInventory\Model\Indexer\Stock\CacheCleaner">
-        <arguments>
-            <argument name="indexerStockFrontendResource" xsi:type="object">Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource</argument>
-        </arguments>
-    </type>
-    <type name="Magento\CatalogInventory\Model\ResourceModel\Product\StockStatusBaseSelectProcessor">
-        <arguments>
-            <argument name="indexerStockFrontendResource" xsi:type="object">Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource</argument>
-        </arguments>
-    </type>
-    <type name="Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\DefaultStock">
-        <arguments>
-            <argument name="indexerStockFrontendResource" xsi:type="object">Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource</argument>
-        </arguments>
-    </type>
-    <type name="Magento\CatalogInventory\Model\ResourceModel\Stock\Status">
-        <arguments>
-            <argument name="indexerStockFrontendResource" xsi:type="object">Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource</argument>
-        </arguments>
-    </type>
-    <type name="Magento\CatalogInventory\Model\ResourceModel\Stock\Item\StockItemCriteriaMapper">
-        <arguments>
-            <argument name="indexerStockFrontendResource" xsi:type="object">Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource</argument>
+            <argument name="conditions" xsi:type="array">
+                <item name="stockStatusCondition" xsi:type="object">Magento\CatalogInventory\Model\ProductCollectionStockCondition</item>
+            </argument>
         </arguments>
     </type>
 </config>
