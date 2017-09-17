@@ -10,7 +10,7 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterfac
 /**
  * Class DateRangeTest
  */
-class FilterModifierTest extends \PHPUnit_Framework_TestCase
+class FilterModifierTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -41,13 +41,7 @@ class FilterModifierTest extends \PHPUnit_Framework_TestCase
         $this->dataProvider = $this->getMockForAbstractClass(
             \Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface::class
         );
-        $this->filterBuilder = $this->getMock(
-            \Magento\Framework\Api\FilterBuilder::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->filterBuilder = $this->createMock(\Magento\Framework\Api\FilterBuilder::class);
         $this->unit = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
             ->getObject(
                 \Magento\Ui\Component\Filters\FilterModifier::class,
@@ -97,7 +91,7 @@ class FilterModifierTest extends \PHPUnit_Framework_TestCase
      */
     public function testApplyFilterModifierWith($filterModifier, $filterName, $conditionType, $value)
     {
-        $filter = $this->getMock(\Magento\Framework\Api\Filter::class);
+        $filter = $this->createMock(\Magento\Framework\Api\Filter::class);
 
         $this->request->expects($this->once())->method('getParam')
             ->with(\Magento\Ui\Component\Filters\FilterModifier::FILTER_MODIFIER)

@@ -7,6 +7,10 @@ namespace Magento\Reports\Model\Grouped;
 
 use Magento\Framework\Data\Collection\AbstractDb as DbCollection;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Collection extends \Magento\Framework\Data\Collection
 {
     /**

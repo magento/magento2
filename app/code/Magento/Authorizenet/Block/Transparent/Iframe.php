@@ -9,6 +9,7 @@ use Magento\Payment\Block\Transparent\Iframe as TransparentIframe;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Iframe extends TransparentIframe
 {

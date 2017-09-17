@@ -9,6 +9,9 @@
  */
 namespace Magento\Framework\Config;
 
+/**
+ * @api
+ */
 abstract class AbstractXml
 {
     /**

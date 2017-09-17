@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\File\Test\Unit;
 
-class MimeTest extends \PHPUnit_Framework_TestCase
+class MimeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\File\Mime

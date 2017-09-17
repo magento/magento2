@@ -12,6 +12,7 @@ use Magento\Store\Model\StoreIsInactiveException;
  * Store config manager interface
  *
  * @api
+ * @since 100.0.2
  */
 interface StoreConfigManagerInterface
 {

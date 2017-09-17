@@ -7,6 +7,8 @@ namespace Magento\Framework\View\Layout;
 
 /**
  * Layout structure model
+ *
+ * @api
  */
 class ScheduledStructure
 {
@@ -19,11 +21,7 @@ class ScheduledStructure
     const ELEMENT_IS_AFTER = 'isAfter';
     /**#@-*/
 
-    /**
-     * Map of class properties.
-     *
-     * @var array
-     */
+    /**#@-*/
     private $serializableProperties = [
         'scheduledStructure',
         'scheduledData',
@@ -491,6 +489,7 @@ class ScheduledStructure
      * Reformat 'Layout scheduled structure' to array.
      *
      * @return array
+     * @since 100.2.0
      */
     public function __toArray()
     {
@@ -507,6 +506,7 @@ class ScheduledStructure
      *
      * @param array $data
      * @return void
+     * @since 100.2.0
      */
     public function populateWithArray(array $data)
     {

@@ -6,8 +6,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Validator\Constraint;
 
 class Property extends \Magento\Framework\Validator\Constraint
@@ -33,8 +31,8 @@ class Property extends \Magento\Framework\Validator\Constraint
     }
 
     /**
-     * Get value that should be validated. Tries to extract value's property if \Magento\Framework\DataObject or \ArrayAccess or array
-     * is passed
+     * Get value that should be validated. Tries to extract value's property if \Magento\Framework\DataObject or
+     * \ArrayAccess or array is passed
      *
      * @param mixed $value
      * @return mixed

@@ -13,7 +13,7 @@ use Magento\PageCache\Model\Config;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
  */
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\PageCache\Model\Config
@@ -46,23 +46,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $readFactoryMock = $this->getMock(
-            \Magento\Framework\Filesystem\Directory\ReadFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->coreConfigMock = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $readFactoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadFactory::class);
+        $this->coreConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $this->cacheState = $this->getMockForAbstractClass(\Magento\Framework\App\Cache\StateInterface::class);
 
-        $modulesDirectoryMock = $this->getMock(
-            \Magento\Framework\Filesystem\Directory\Write::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $modulesDirectoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\Write::class);
         $readFactoryMock->expects(
             $this->any()
         )->method(
@@ -124,8 +112,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $this->moduleReader = $this->getMock(\Magento\Framework\Module\Dir\Reader::class, [], [], '', false);
-        $this->serializerMock = $this->getMock(Json::class, [], [], '', false);
+        $this->moduleReader = $this->createMock(\Magento\Framework\Module\Dir\Reader::class);
+        $this->serializerMock = $this->createMock(Json::class);
 
         /** @var \PHPUnit_Framework_MockObject_MockObject $vclTemplateLocator */
         $vclTemplateLocator = $this->getMockBuilder(\Magento\PageCache\Model\Varnish\VclTemplateLocator::class)

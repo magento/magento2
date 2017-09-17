@@ -10,7 +10,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFact
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -63,7 +63,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $entityFactory = $this->getMock(\Magento\Framework\Data\Collection\EntityFactory::class, [], [], '', false);
+        $entityFactory = $this->createMock(\Magento\Framework\Data\Collection\EntityFactory::class);
         $logger = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -121,6 +121,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
 
         $this->connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+            ->setMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -154,7 +155,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->entityMock->expects($this->any())->method('getTable')->willReturnArgument(0);
         $this->connectionMock->expects($this->atLeastOnce())->method('select')->willReturn($this->selectMock);
 
-        $productLimitationMock = $this->getMock(
+        $productLimitationMock = $this->createMock(
             \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation::class
         );
         $productLimitationFactoryMock = $this->getMockBuilder(

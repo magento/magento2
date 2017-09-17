@@ -426,4 +426,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Ui\Model\UiComponentTypeResolver">
+        <arguments>
+            <argument name="uiComponentTypeMap" xsi:type="array">
+                <item name="html" xsi:type="string">text/html</item>
+                <item name="json" xsi:type="string">application/json</item>
+                <item name="xml" xsi:type="string">application/xml</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

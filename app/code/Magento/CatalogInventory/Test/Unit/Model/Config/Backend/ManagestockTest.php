@@ -5,7 +5,7 @@
  */
 namespace Magento\CatalogInventory\Test\Unit\Model\Config\Backend;
 
-class ManagestockTest extends \PHPUnit_Framework_TestCase
+class ManagestockTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  \Magento\CatalogInventory\Model\Indexer\Stock\Processor|\PHPUnit_Framework_MockObject_MockObject */
     protected $stockIndexerProcessor;

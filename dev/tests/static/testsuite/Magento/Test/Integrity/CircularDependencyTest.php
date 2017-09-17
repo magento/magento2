@@ -10,7 +10,7 @@ namespace Magento\Test\Integrity;
 use Magento\Framework\App\Utility\Files;
 use Magento\Setup\Module\Dependency\Circular;
 
-class CircularDependencyTest extends \PHPUnit_Framework_TestCase
+class CircularDependencyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Modules dependencies map

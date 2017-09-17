@@ -26,11 +26,11 @@
                 $.initNamespaceStorage('mage-translation-file-version');
                 versionObj = $.localStorage.get('mage-translation-file-version');
 
-                <?php $version = sha1($block->getTranslationFileTimestamp() . $block->getTranslationFilePath()); ?>
+                <?php $version = $block->getTranslationFileVersion(); ?>
 
-                if (versionObj.version !== '<?php /* @noEscape */ echo $version ?>') {
+                if (versionObj.version !== '<?php $block->escapeJsQuote($version) ?>') {
                     dependencies.push(
-                        'text!<?php /* @noEscape */ echo Magento\Translation\Model\Js\Config::DICTIONARY_FILE_NAME ?>'
+                        'text!<?= /* @noEscape */ Magento\Translation\Model\Js\Config::DICTIONARY_FILE_NAME ?>'
                     );
 
                 }
@@ -44,7 +44,7 @@
                             $.localStorage.set(
                                 'mage-translation-file-version',
                                 {
-                                    version: '<?php /* @noEscape */ echo $version ?>'
+                                    version: '<?php $block->escapeJsQuote($version) ?>'
                                 }
                             );
                         } else {
