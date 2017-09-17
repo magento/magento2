@@ -29,6 +29,7 @@ class ProductList
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $scopeConfig;
+    protected $coreRegistry;
 
     /**
      * Default limits per page
@@ -41,9 +42,11 @@ class ProductList
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\Registry $coreRegistry
     ) {
         $this->scopeConfig = $scopeConfig;
+        $this->coreRegistry = $coreRegistry;
     }
 
     /**
@@ -97,6 +100,12 @@ class ProductList
      */
     public function getDefaultSortField()
     {
+        $currentCategory = $this->coreRegistry->registry('current_category');
+        if($currentCategory){
+            $currentCategorySortBy = $currentCategory->getDefaultSortBy();
+            return $currentCategorySortBy;
+        }
+
         return $this->scopeConfig->getValue(
             \Magento\Catalog\Model\Config::XML_PATH_LIST_DEFAULT_SORT_BY,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
