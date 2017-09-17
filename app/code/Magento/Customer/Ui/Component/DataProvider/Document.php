@@ -89,7 +89,7 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
         $this->customerMetadata = $customerMetadata;
         $this->groupRepository = $groupRepository;
         $this->storeManager = $storeManager;
-        $this->scopeConfig = $scopeConfig ? $scopeConfig : ObjectManager::getInstance()->create(ScopeConfigInterface::class);
+        $this->scopeConfig = $scopeConfig ?: ObjectManager::getInstance()->create(ScopeConfigInterface::class);
     }
 
     /**
@@ -181,7 +181,8 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
         $isConfirmationRequired = (bool)$this->scopeConfig->getValue(
             AccountManagement::XML_PATH_IS_CONFIRM,
             ScopeInterface::SCOPE_WEBSITES,
-            $websiteId);
+            $websiteId
+        );
 
         $valueText = __('Confirmation Not Required');
         if ($isConfirmationRequired) {
