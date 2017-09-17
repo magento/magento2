@@ -26,9 +26,9 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
+        $this->filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
         $this->directoryRead = $this->getMockForAbstractClass(
-            'Magento\Framework\Filesystem\Directory\ReadInterface',
+            \Magento\Framework\Filesystem\Directory\ReadInterface::class,
             [],
             '',
             false

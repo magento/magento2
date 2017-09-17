@@ -48,6 +48,7 @@ class Renderer
      */
     public function format(Address $address, $type)
     {
+        $this->addressConfig->setStore($address->getOrder()->getStoreId());
         $formatType = $this->addressConfig->getFormatByCode($type);
         if (!$formatType || !$formatType->getRenderer()) {
             return null;
