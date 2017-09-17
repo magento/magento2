@@ -10,9 +10,16 @@
         <variation name="CustomerGridSorting">
             <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="description" xsi:type="string">Verify customer page grid sorting</data>
+            <data name="itemsCount" xsi:type="string">2</data>
+            <data name="fixtureName" xsi:type="string">customer</data>
+            <data name="fixtureDataSet" xsi:type="string">default</data>
             <data name="columnsForSorting" xsi:type="array">
                 <item name="id" xsi:type="string">ID</item>
                 <item name="date" xsi:type="string">Customer Since</item>
+            </data>
+            <data name="steps" xsi:type="array">
+                <item name="0" xsi:type="string">-</item>
+                <item name="1" xsi:type="string">-</item>
             </data>
             <data name="pageClass" xsi:type="string">Magento\Customer\Test\Page\Adminhtml\CustomerIndex</data>
             <data name="gridRetriever" xsi:type="string">getCustomerGridBlock</data>

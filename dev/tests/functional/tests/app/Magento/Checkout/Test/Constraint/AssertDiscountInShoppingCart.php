@@ -8,6 +8,7 @@ namespace Magento\Checkout\Test\Constraint;
 
 use Magento\Checkout\Test\Fixture\Cart;
 use Magento\Checkout\Test\Page\CheckoutCart;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
@@ -20,12 +21,21 @@ class AssertDiscountInShoppingCart extends AbstractConstraint
     /**
      * Assert that discount is equal to expected.
      *
+     * @param Customer $customer
      * @param CheckoutCart $checkoutCart
      * @param Cart $cart
      * @return void
      */
-    public function processAssert(CheckoutCart $checkoutCart, Cart $cart)
-    {
+    public function processAssert(
+        Customer $customer,
+        CheckoutCart $checkoutCart,
+        Cart $cart
+    ) {
+        $loginStep = $this->objectManager->create(
+            \Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep::class,
+            ['customer' => $customer]
+        );
+        $loginStep->run();
         $checkoutCart->open();
         $checkoutCart->getTotalsBlock()->waitForUpdatedTotals();
         \PHPUnit_Framework_Assert::assertEquals(
@@ -33,6 +43,7 @@ class AssertDiscountInShoppingCart extends AbstractConstraint
             $checkoutCart->getTotalsBlock()->getDiscount(),
             'Discount amount in the shopping cart not equals to discount amount from fixture.'
         );
+        $loginStep->cleanUp();
     }
 
     /**

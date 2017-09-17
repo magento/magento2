@@ -85,4 +85,21 @@
         <step name="saveCreditCardOnBackend" module="Magento_Vault" next="submitOrderNegative" />
         <step name="submitOrderNegative" module="Magento_Sales" />
     </scenario>
+    <scenario name="CreatePayFlowOrderCustomStoreTest" firstStep="createProducts">
+        <step name="createProducts" module="Magento_Catalog" next="createCustomStore" />
+        <step name="createCustomStore" module="Magento_Store" next="setupConfiguration" />
+        <step name="setupConfiguration" module="Magento_Config" next="applyStoreConfig" />
+        <step name="applyStoreConfig" module="Magento_Store" next="selectStoreFrontend" />
+        <step name="selectStoreFrontend" module="Magento_Sales" next="addProductsToTheCart" />
+        <step name="addProductsToTheCart" module="Magento_Checkout" next="estimateShippingAndTax" />
+        <step name="estimateShippingAndTax" module="Magento_Checkout" next="clickProceedToCheckout" />
+        <step name="clickProceedToCheckout" module="Magento_Checkout" next="selectCheckoutMethod" />
+        <step name="selectCheckoutMethod" module="Magento_Checkout" next="fillShippingAddress" />
+        <step name="fillShippingAddress" module="Magento_Checkout" next="fillShippingMethod" />
+        <step name="fillShippingMethod" module="Magento_Checkout" next="selectPaymentMethod" />
+        <step name="selectPaymentMethod" module="Magento_Checkout" next="fillBillingInformation" />
+        <step name="fillBillingInformation" module="Magento_Checkout" next="placeOrder" />
+        <step name="placeOrder" module="Magento_Checkout" next="openOrder" />
+        <step name="openOrder" module="Magento_Sales" />
+    </scenario>
 </config>

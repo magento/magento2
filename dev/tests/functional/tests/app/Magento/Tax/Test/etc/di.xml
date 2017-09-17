@@ -81,4 +81,14 @@
             <argument name="severity" xsi:type="string">middle</argument>
         </arguments>
     </type>
+    <type name="Magento\Tax\Test\Constraint\AssertTaxConfigurationNotificationMessage">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Tax\Test\Constraint\AssertTaxConfigurationSuccessSaveMessage">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+        </arguments>
+    </type>
 </config>

@@ -487,7 +487,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     protected function _construct()
     {
-        $this->_init('Magento\Quote\Model\ResourceModel\Quote');
+        $this->_init(\Magento\Quote\Model\ResourceModel\Quote::class);
     }
 
     /**
@@ -962,7 +962,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             $this->extensibleDataObjectConverter->toFlatArray(
                 $customer,
                 [],
-                '\Magento\Customer\Api\Data\CustomerInterface'
+                \Magento\Customer\Api\Data\CustomerInterface::class
             )
         );
         $customer->setAddresses($origAddresses);
@@ -1570,6 +1570,11 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
                 __('We found an invalid request for adding product to quote.')
             );
         }
+        if (!$product->isSalable()) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Product that you are trying to add is not available.')
+            );
+        }
 
         $cartCandidates = $product->getTypeInstance()->prepareForCartAdvanced($request, $product, $processMode);
 
@@ -2156,6 +2161,12 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     {
         if (!$this->getReservedOrderId()) {
             $this->setReservedOrderId($this->_getResource()->getReservedOrderId($this));
+        } else {
+            //checking if reserved order id was already used for some order
+            //if yes reserving new one if not using old one
+            if ($this->_getResource()->isOrderIncrementIdUsed($this->getReservedOrderId())) {
+                $this->setReservedOrderId($this->_getResource()->getReservedOrderId($this));
+            }
         }
         return $this;
     }

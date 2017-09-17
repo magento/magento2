@@ -6,6 +6,7 @@
 namespace Magento\Catalog\Controller\Adminhtml\Category;
 
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Catalog\Api\Data\CategoryAttributeInterface;
 
 /**
  * Class Save
@@ -49,6 +50,13 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
     private $storeManager;
 
     /**
+     * Config instance holder.
+     *
+     * @var \Magento\Eav\Model\Config
+     */
+    private $eavConfig;
+
+    /**
      * Constructor
      *
      * @param \Magento\Backend\App\Action\Context $context
@@ -72,8 +80,9 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
     }
 
     /**
-     * Filter category data
+     * Filter category data.
      *
+     * @deprecated
      * @param array $rawData
      * @return array
      */
@@ -126,7 +135,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
         $this->storeManager->setCurrentStore($store->getCode());
         $parentId = isset($categoryPostData['parent']) ? $categoryPostData['parent'] : null;
         if ($categoryPostData) {
-            $category->addData($this->_filterCategoryPostData($categoryPostData));
+            $category->addData($categoryPostData);
             if ($isNewCategory) {
                 $parentCategory = $this->getParentCategory($parentId, $storeId);
                 $category->setPath($parentCategory->getPath());
@@ -248,19 +257,46 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
     }
 
     /**
-     * Image data preprocessing
+     * Sets image attribute data to false, if image was removed.
      *
      * @param array $data
      *
      * @return array
      */
-    public function imagePreprocessing($data)
+    public function imagePreprocessing(array $data)
     {
-        if (empty($data['image'])) {
-            unset($data['image']);
-            $data['image']['delete'] = true;
+        $emptyImageAttributes = $this->getEmptyImageAttributes($data);
+        $attributeCodes = array_keys($emptyImageAttributes);
+        foreach ($attributeCodes as $attributeCode) {
+            $data[$attributeCode] = false;
         }
+
         return $data;
+    }
+
+    /**
+     * Get image attributes without value.
+     *
+     * @param array $data
+     * @return array
+     */
+    private function getEmptyImageAttributes(array $data)
+    {
+        $result = [];
+        $entityType = $this->getConfig()->getEntityType(CategoryAttributeInterface::ENTITY_TYPE_CODE);
+        foreach ($entityType->getAttributeCollection() as $attribute) {
+            $attributeCode = $attribute->getAttributeCode();
+            $backendModel = $attribute->getBackend();
+            if (isset($data[$attributeCode])) {
+                continue;
+            }
+            if (!$backendModel instanceof \Magento\Catalog\Model\Category\Attribute\Backend\Image) {
+                continue;
+            }
+            $result[$attributeCode] = $attribute;
+        }
+
+        return $result;
     }
 
     /**
@@ -345,5 +381,21 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
 
         }
         return ['path' => $path, 'params' => $params];
+    }
+
+    /**
+     * Get Config instance.
+     *
+     * @return \Magento\Eav\Model\Config
+     */
+    private function getConfig()
+    {
+        if (null === $this->eavConfig) {
+            $this->eavConfig = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                \Magento\Eav\Model\Config::class
+            );
+        }
+
+        return $this->eavConfig;
     }
 }

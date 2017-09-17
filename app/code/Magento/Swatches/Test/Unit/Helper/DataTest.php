@@ -552,7 +552,10 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $storeMock->method('getId')->willReturn($storeId);
         $this->storeManagerMock->method('getStore')->willReturn($storeMock);
 
-        $this->attributeMock->method('getData')->with('')->willReturn($attributeData);
+        $this->attributeMock
+            ->method('getData')
+            ->withConsecutive(['additional_data'], [''])
+            ->will($this->onConsecutiveCalls('', $attributeData));
 
         $sourceMock = $this->getMock(
             \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource::class,

@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Config\Test\Repository\ConfigData">
+        <dataset name="checkout_max_items_display_count_to_2">
+            <field name="checkout/options/max_items_display_count" xsi:type="array">
+                <item name="scope" xsi:type="string">checkout</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string"/>
+                <item name="value" xsi:type="string">2</item>
+            </field>
+        </dataset>
+
+        <dataset name="checkout_max_items_display_count_to_2_rollback">
+            <field name="checkout/options/max_items_display_count" xsi:type="array">
+                <item name="scope" xsi:type="string">checkout</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string"/>
+                <item name="value" xsi:type="string">10</item>
+            </field>
+        </dataset>
+
+        <dataset name="minicart_max_items_display_count_to_3">
+            <field name="checkout/sidebar/max_items_display_count" xsi:type="array">
+                <item name="scope" xsi:type="string">checkout</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string"/>
+                <item name="value" xsi:type="string">3</item>
+            </field>
+        </dataset>
+
+        <dataset name="minicart_max_items_display_count_to_3_rollback">
+            <field name="checkout/sidebar/max_items_display_count" xsi:type="array">
+                <item name="scope" xsi:type="string">checkout</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string"/>
+                <item name="value" xsi:type="string">10</item>
+            </field>
+        </dataset>
+
+        <dataset name="one_item_per_page_on_shopping_cart">
+            <field name="checkout/cart/number_items_to_display_pager" xsi:type="array">
+                <item name="scope" xsi:type="string">checkout</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string"/>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+        </dataset>
+        <dataset name="one_item_per_page_on_shopping_cart_rollback">
+            <field name="checkout/cart/number_items_to_display_pager" xsi:type="array">
+                <item name="scope" xsi:type="string">checkout</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string"/>
+                <item name="value" xsi:type="number">20</item>
+            </field>
+        </dataset>
+
+        <dataset name="default_number_of_items_per_page_on_shopping_cart">
+            <field name="checkout/cart/number_items_to_display_pager" xsi:type="array">
+                <item name="scope" xsi:type="string">checkout</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string"/>
+                <item name="value" xsi:type="number">20</item>
+            </field>
+        </dataset>
+    </repository>
+</config>

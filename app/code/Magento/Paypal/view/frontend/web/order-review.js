@@ -132,7 +132,7 @@ define([
                                 }
                             }
                             alert({
-                                content: $.mage.__(msg)
+                                content: msg
                             });
                             return false;
                         }
