@@ -109,7 +109,7 @@ abstract class AbstractStorage implements StorageInterface
         $this->dataObjectHelper->populateWithArray(
             $dataObject,
             $data,
-            '\Magento\UrlRewrite\Service\V1\Data\UrlRewrite'
+            \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class
         );
         return $dataObject;
     }

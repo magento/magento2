@@ -173,6 +173,25 @@ class Quote extends AbstractDb
     }
 
     /**
+     * Check is order increment id use in sales/order table
+     *
+     * @param int $orderIncrementId
+     * @return bool
+     */
+    public function isOrderIncrementIdUsed($orderIncrementId)
+    {
+        /** @var \Magento\Framework\DB\Adapter\AdapterInterface $adapter */
+        $adapter = $this->getConnection();
+        $bind = [':increment_id' => $orderIncrementId];
+        /** @var \Magento\Framework\DB\Select $select */
+        $select = $adapter->select()
+            ->from($this->getTable('sales_order'), 'entity_id')
+            ->where('increment_id = :increment_id');
+        $entity_id = $adapter->fetchOne($select, $bind);
+        return ($entity_id > 0);
+    }
+
+    /**
      * Mark quotes - that depend on catalog price rules - to be recollected on demand
      *
      * @return $this
