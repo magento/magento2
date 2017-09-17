@@ -11,7 +11,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Wishlist\Model\Wishlist;
 use Magento\Catalog\Model\Attribute\Config;
 
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager

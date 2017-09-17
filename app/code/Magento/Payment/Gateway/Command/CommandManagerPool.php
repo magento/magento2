@@ -13,6 +13,7 @@ use Magento\Framework\ObjectManager\TMapFactory;
  * Class CommandManagerPool
  * @package Magento\Payment\Gateway\Command
  * @api
+ * @since 100.1.0
  */
 class CommandManagerPool implements CommandManagerPoolInterface
 {
@@ -43,6 +44,7 @@ class CommandManagerPool implements CommandManagerPoolInterface
      * @param string $paymentProviderCode
      * @return CommandManagerInterface
      * @throws NotFoundException
+     * @since 100.1.0
      */
     public function get($paymentProviderCode)
     {

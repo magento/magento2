@@ -10,7 +10,7 @@ namespace Magento\Catalog\Block\Product\ProductList;
  *
  * @magentoDataFixture Magento/Catalog/_files/products_related.php
  */
-class RelatedTest extends \PHPUnit_Framework_TestCase
+class RelatedTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Block\Product\ProductList\Related

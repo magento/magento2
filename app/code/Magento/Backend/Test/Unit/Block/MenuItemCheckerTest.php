@@ -9,7 +9,7 @@ use Magento\Backend\Model\Menu\Item;
 use Magento\Backend\Model\Menu;
 use Magento\Backend\Block\MenuItemChecker;
 
-class MenuItemCheckerTest extends \PHPUnit_Framework_TestCase
+class MenuItemCheckerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Item|\PHPUnit_Framework_MockObject_MockObject

@@ -17,7 +17,7 @@ use Zend\Stdlib\Parameters;
  * Test CookieScope
  *
  */
-class CookieScopeTest extends \PHPUnit_Framework_TestCase
+class CookieScopeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerInterface

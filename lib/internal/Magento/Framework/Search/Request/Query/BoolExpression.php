@@ -9,6 +9,7 @@ use Magento\Framework\Search\Request\QueryInterface;
 
 /**
  * Bool Query
+ * @api
  */
 class BoolExpression implements QueryInterface
 {

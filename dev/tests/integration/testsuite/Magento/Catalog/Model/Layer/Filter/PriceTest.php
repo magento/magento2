@@ -12,7 +12,7 @@ namespace Magento\Catalog\Model\Layer\Filter;
  * @magentoDbIsolation enabled
  * @magentoAppIsolation enabled
  */
-class PriceTest extends \PHPUnit_Framework_TestCase
+class PriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Layer\Filter\Price

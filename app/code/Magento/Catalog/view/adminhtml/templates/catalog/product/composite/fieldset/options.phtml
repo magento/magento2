@@ -12,14 +12,14 @@
 <?php $options = $block->decorateArray($block->getOptions()); ?>
 <?php if (count($options)): ?>
 
-<?php echo $block->getChildHtml('options_js') ?>
+<?= $block->getChildHtml('options_js') ?>
 
-<fieldset id="product_composite_configure_fields_options" class="fieldset admin__fieldset <?php echo $block->getIsLastFieldset() ? 'last-fieldset' : '' ?>">
+<fieldset id="product_composite_configure_fields_options" class="fieldset admin__fieldset <?= $block->getIsLastFieldset() ? 'last-fieldset' : '' ?>">
     <legend class="legend admin__legend">
-        <span><?php /* @escapeNotVerified */ echo __('Custom Options') ?></span>
+        <span><?= /* @escapeNotVerified */ __('Custom Options') ?></span>
     </legend><br>
     <?php foreach ($options as $option): ?>
-        <?php echo $block->getOptionHtml($option); ?>
+        <?= $block->getOptionHtml($option) ?>
     <?php endforeach;?>
 </fieldset>
 

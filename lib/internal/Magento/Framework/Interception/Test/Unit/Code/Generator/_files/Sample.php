@@ -8,6 +8,7 @@ namespace Magento\Framework\Interception\Code\Generator;
 class Sample
 {
     private $attribute;
+    private $variadicAttribute;
 
     public function getValue()
     {
@@ -21,6 +22,21 @@ class Sample
 
     public function & getReference()
     {
+    }
 
+    public function firstVariadicParameter(...$variadicValue)
+    {
+        $this->variadicAttribute = $variadicValue;
+    }
+
+    public function secondVariadicParameter($value, ...$variadicValue)
+    {
+        $this->attribute = $value;
+        $this->variadicAttribute = $variadicValue;
+    }
+
+    public function byRefVariadic(& ...$variadicValue)
+    {
+        $this->variadicAttribute = $variadicValue;
     }
 }

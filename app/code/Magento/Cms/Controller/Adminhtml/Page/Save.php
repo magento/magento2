@@ -106,16 +106,16 @@ class Save extends \Magento\Backend\App\Action
 
             try {
                 $this->pageRepository->save($model);
-                $this->messageManager->addSuccess(__('You saved the page.'));
+                $this->messageManager->addSuccessMessage(__('You saved the page.'));
                 $this->dataPersistor->clear('cms_page');
                 if ($this->getRequest()->getParam('back')) {
                     return $resultRedirect->setPath('*/*/edit', ['page_id' => $model->getId(), '_current' => true]);
                 }
                 return $resultRedirect->setPath('*/*/');
             } catch (LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addExceptionMessage($e->getPrevious() ?:$e);
             } catch (\Exception $e) {
-                $this->messageManager->addException($e, __('Something went wrong while saving the page.'));
+                $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving the page.'));
             }
 
             $this->dataPersistor->set('cms_page', $data);

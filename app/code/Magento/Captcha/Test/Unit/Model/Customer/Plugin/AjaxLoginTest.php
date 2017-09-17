@@ -5,7 +5,7 @@
  */
 namespace Magento\Captcha\Test\Unit\Model\Customer\Plugin;
 
-class AjaxLoginTest extends \PHPUnit_Framework_TestCase
+class AjaxLoginTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -59,38 +59,23 @@ class AjaxLoginTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->sessionManagerMock = $this->getMock(
-            \Magento\Checkout\Model\Session::class,
-            ['setUsername'],
-            [],
-            '',
-            false
-        );
-        $this->captchaHelperMock = $this->getMock(\Magento\Captcha\Helper\Data::class, [], [], '', false);
-        $this->captchaMock = $this->getMock(\Magento\Captcha\Model\DefaultModel::class, [], [], '', false);
-        $this->jsonFactoryMock = $this->getMock(
+        $this->sessionManagerMock = $this->createPartialMock(\Magento\Checkout\Model\Session::class, ['setUsername']);
+        $this->captchaHelperMock = $this->createMock(\Magento\Captcha\Helper\Data::class);
+        $this->captchaMock = $this->createMock(\Magento\Captcha\Model\DefaultModel::class);
+        $this->jsonFactoryMock = $this->createPartialMock(
             \Magento\Framework\Controller\Result\JsonFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->resultJsonMock = $this->getMock(\Magento\Framework\Controller\Result\Json::class, [], [], '', false);
-        $this->requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
-        $this->loginControllerMock = $this->getMock(\Magento\Customer\Controller\Ajax\Login::class, [], [], '', false);
+        $this->resultJsonMock = $this->createMock(\Magento\Framework\Controller\Result\Json::class);
+        $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
+        $this->loginControllerMock = $this->createMock(\Magento\Customer\Controller\Ajax\Login::class);
 
         $this->loginControllerMock->expects($this->any())->method('getRequest')
             ->will($this->returnValue($this->requestMock));
         $this->captchaHelperMock->expects($this->once())->method('getCaptcha')
             ->with('user_login')->will($this->returnValue($this->captchaMock));
         $this->formIds = ['user_login'];
-        $this->serializerMock = $this->getMock(
-            \Magento\Framework\Serialize\Serializer\Json::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->serializerMock = $this->createMock(\Magento\Framework\Serialize\Serializer\Json::class);
 
         $this->model = new \Magento\Captcha\Model\Customer\Plugin\AjaxLogin(
             $this->captchaHelperMock,

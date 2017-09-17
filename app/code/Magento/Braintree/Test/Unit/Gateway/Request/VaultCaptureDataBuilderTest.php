@@ -12,7 +12,7 @@ use Magento\Sales\Api\Data\OrderPaymentExtension;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Vault\Model\PaymentToken;
 
-class VaultCaptureDataBuilderTest extends \PHPUnit_Framework_TestCase
+class VaultCaptureDataBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var VaultCaptureDataBuilder
@@ -36,7 +36,7 @@ class VaultCaptureDataBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->paymentDO = $this->getMock(PaymentDataObjectInterface::class);
+        $this->paymentDO = $this->createMock(PaymentDataObjectInterface::class);
         $this->payment = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
             ->getMock();

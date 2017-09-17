@@ -5,6 +5,10 @@
  */
 namespace Magento\Backend\Block\Widget\Grid\Column\Renderer\Options;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Converter
 {
     /**

@@ -11,7 +11,7 @@ namespace Magento\Framework\View\Test\Unit\Element\Text\TextList;
 
 use \Magento\Framework\View\Element\Text\TextList\Link;
 
-class LinkTest extends \PHPUnit_Framework_TestCase
+class LinkTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Link
@@ -47,19 +47,11 @@ class LinkTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider toHtmlDataProvider
      */
-    public function testToHtml($liParams, $liAttr, $aParams, $aAttr, $innerText, $afterText)
+    public function testToHtml($liParams, $aParams, $innerText, $afterText, $expectedHtml)
     {
         $this->link->setLink($liParams, $aParams, $innerText, $afterText);
-        $this->assertTag([
-            'tag' => 'li',
-            'attributes' => [$liAttr['name'] => $liAttr['value']],
-            'child' => [
-                'tag' => 'a',
-                'attributes' => [$aAttr['name'] => $aAttr['value']],
-                'content' => $innerText,
-            ],
-            'content' => $afterText,
-        ], $this->link->toHtml());
+
+        $this->assertEquals($expectedHtml, $this->link->toHtml());
     }
 
     public function toHtmlDataProvider()
@@ -67,19 +59,17 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 'liParams' => ['class' => 'some-css-class'],
-                'liAttr' => ['name' => 'class', 'value' => 'some-css-class'],
                 'aParams' => ['href' => 'url'],
-                'aAttr' => ['name' => 'href', 'value' => 'url'],
                 'innerText' => 'text',
                 'afterText' => 'afterText',
+                'expectedHtml' => '<li class="some-css-class"><a href="url">text</a>afterText</li>' . "\r\n"
             ],
             [
                 'liParams' => 'class="some-css-class"',
-                'liAttr' => ['name' => 'class', 'value' => 'some-css-class'],
                 'aParams' => 'href="url"',
-                'aAttr' => ['name' => 'href', 'value' => 'url'],
                 'innerText' => 'text',
                 'afterText' => 'afterText',
+                'expectedHtml' => '<li class="some-css-class"><a href="url">text</a>afterText</li>' . "\r\n"
             ]
         ];
     }
