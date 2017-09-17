@@ -35,10 +35,8 @@ var config = {
     },
     deps: [
         "jquery/jquery.mobile.custom",
-        "js/responsive",
         "mage/common",
         "mage/dataPost",
-        "js/theme",
         "mage/bootstrap"
     ]
 };
