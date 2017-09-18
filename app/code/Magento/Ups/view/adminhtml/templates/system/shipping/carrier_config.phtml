@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -84,13 +84,13 @@ require(["prototype"], function(){
                 'carriers_ups_mode_xml'];
             this.onlyUpsElements = ['carriers_ups_gateway_url'];
 
-            this.storedOriginShipment = '<?php /* @noEscape */ echo $storedOriginShipment ?>';
-            this.storedFreeShipment = '<?php /* @noEscape */ echo $storedFreeShipment ?>';
-            this.storedUpsType = '<?php /* @noEscape */ echo $storedUpsType ?>';
+            this.storedOriginShipment = '<?= /* @noEscape */ $storedOriginShipment ?>';
+            this.storedFreeShipment = '<?= /* @noEscape */ $storedFreeShipment ?>';
+            this.storedUpsType = '<?= /* @noEscape */ $storedUpsType ?>';
             <?php /** @var $jsonHelper \Magento\Framework\Json\Helper\Data */ $jsonHelper = $this->helper('Magento\Framework\Json\Helper\Data'); ?>
-            this.storedAllowedMethods = <?php /* @noEscape */ echo $jsonHelper->jsonEncode($storedAllowedMethods) ?>;
-            this.originShipmentObj = <?php /* @noEscape */ echo $jsonHelper->jsonEncode($orShipArr) ?>;
-            this.originShipmentObj['default'] = <?php /* @noEscape */ echo $jsonHelper->jsonEncode($defShipArr) ?>;
+            this.storedAllowedMethods = <?= /* @noEscape */ $jsonHelper->jsonEncode($storedAllowedMethods) ?>;
+            this.originShipmentObj = <?= /* @noEscape */ $jsonHelper->jsonEncode($orShipArr) ?>;
+            this.originShipmentObj['default'] = <?= /* @noEscape */ $jsonHelper->jsonEncode($defShipArr) ?>;
 
             this.setFormValues();
             Event.observe($(this.carriersUpsTypeId), 'change', this.setFormValues.bind(this));
@@ -108,7 +108,7 @@ require(["prototype"], function(){
             while (freeMethod.length > 0) {
                 freeMethod.remove(0);
             }
-            freeMethod.insert(new Element('option', {value:''}).update('<?php echo $block->escapeHtml(__('None')); ?>'));
+            freeMethod.insert(new Element('option', {value:''}).update('<?= $block->escapeHtml(__('None')) ?>'));
 
             var code, option;
             for (code in originShipment) {

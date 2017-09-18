@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,7 @@ namespace Magento\Catalog\Api;
 /**
  * Special prices resource model.
  * @api
+ * @since 101.1.0
  */
 interface SpecialPriceInterface
 {
@@ -28,6 +29,7 @@ interface SpecialPriceInterface
      *      'price_from' => (string) Special price from date value in UTC.
      *      'price_to' => (string) Special price to date value in UTC.
      * ]
+     * @since 101.1.0
      */
     public function get(array $skus);
 
@@ -45,6 +47,7 @@ interface SpecialPriceInterface
      *      ];
      * @return bool
      * @throws \Magento\Framework\Exception\CouldNotSaveException Thrown if error occurred during price save.
+     * @since 101.1.0
      */
     public function update(array $prices);
 
@@ -62,6 +65,7 @@ interface SpecialPriceInterface
      *      ];
      * @return bool
      * @throws \Magento\Framework\Exception\CouldNotDeleteException Thrown if error occurred during price delete.
+     * @since 101.1.0
      */
     public function delete(array $prices);
 }

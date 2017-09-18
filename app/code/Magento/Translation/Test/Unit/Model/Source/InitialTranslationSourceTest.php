@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Translation\Test\Unit\Model\Source;
@@ -19,7 +19,7 @@ use Magento\Translation\Model\Source\InitialTranslationSource;
  * @package Magento\Translation\Test\Unit\Model\Source
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class InitialTranslationSourceTest extends \PHPUnit_Framework_TestCase
+class InitialTranslationSourceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var TranslateFactory|\PHPUnit_Framework_MockObject_MockObject

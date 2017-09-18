@@ -1,23 +1,23 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
-        <block class="Magento\Weee\Block\Item\Price\Renderer" name="item_unit_price" template="order/create/items/price/unit.phtml">
+        <block class="Magento\Weee\Block\Item\Price\Renderer" name="item_unit_price" template="Magento_Weee::order/create/items/price/unit.phtml">
             <arguments>
                 <argument name="zone" xsi:type="string">cart</argument>
             </arguments>
         </block>
-        <block class="Magento\Weee\Block\Item\Price\Renderer" name="item_row_total" template="order/create/items/price/row.phtml">
+        <block class="Magento\Weee\Block\Item\Price\Renderer" name="item_row_total" template="Magento_Weee::order/create/items/price/row.phtml">
             <arguments>
                 <argument name="zone" xsi:type="string">cart</argument>
             </arguments>
         </block>
-        <block class="Magento\Weee\Block\Item\Price\Renderer" name="item_row_total_with_discount" template="order/create/items/price/total.phtml">
+        <block class="Magento\Weee\Block\Item\Price\Renderer" name="item_row_total_with_discount" template="Magento_Weee::order/create/items/price/total.phtml">
             <arguments>
                 <argument name="zone" xsi:type="string">cart</argument>
             </arguments>

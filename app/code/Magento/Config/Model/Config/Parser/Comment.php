@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Model\Config\Parser;
@@ -18,6 +18,8 @@ use Magento\Framework\Filesystem;
  *
  * It is used to parse config paths from
  * comment section in provided configuration file.
+ * @api
+ * @since 100.2.0
  */
 class Comment implements CommentParserInterface
 {
@@ -55,7 +57,6 @@ class Comment implements CommentParserInterface
      *      //...
      *  ],
      * // ...
-     * // The configuration file doesn't contain sensitive data for security reasons.
      * // Sensitive data can be stored in the following environment variables:
      * // CONFIG__DEFAULT__SOME__CONF__PATH_ONE for some/conf/path_one
      *  'system' => [],
@@ -83,6 +84,7 @@ class Comment implements CommentParserInterface
      * @param string $fileName the basename of file
      * @return array
      * @throws FileSystemException
+     * @since 100.2.0
      */
     public function execute($fileName)
     {

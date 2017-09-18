@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Test\Unit\Block;
@@ -17,7 +17,7 @@ use Magento\Backend\Block\MenuItemChecker;
 use Magento\Backend\Block\AnchorRenderer;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class MenuTest extends \PHPUnit_Framework_TestCase
+class MenuTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Item|\PHPUnit_Framework_MockObject_MockObject

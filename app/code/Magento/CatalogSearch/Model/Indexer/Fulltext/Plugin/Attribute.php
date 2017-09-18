@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin;
@@ -56,10 +56,10 @@ class Attribute extends AbstractPlugin
     ) {
         $this->saveIsNew = $attribute->isObjectNew();
         $this->saveNeedInvalidation = (
-                $attribute->dataHasChangedFor('is_searchable')
-                || $attribute->dataHasChangedFor('is_filterable')
-                || $attribute->dataHasChangedFor('is_visible_in_advanced_search')
-            ) && ! $this->saveIsNew;
+            $attribute->dataHasChangedFor('is_searchable')
+            || $attribute->dataHasChangedFor('is_filterable')
+            || $attribute->dataHasChangedFor('is_visible_in_advanced_search')
+        );
     }
 
     /**

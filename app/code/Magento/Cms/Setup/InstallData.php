@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -106,7 +106,7 @@ class InstallData implements InstallDataInterface
 <div class="privacy-policy cms-content">
     <div class="message info">
         <span>
-            Please replace this text with you Privacy Policy.
+            Please replace this text with your Privacy Policy.
             Please add any additional cookies your website uses below (e.g. Google Analytics).
         </span>
     </div>

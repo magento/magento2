@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Tax\Test\Unit\Model\Plugin;
 
 use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class OrderSaveTest extends \PHPUnit_Framework_TestCase
+class OrderSaveTest extends \PHPUnit\Framework\TestCase
 {
     const ORDERID = 123;
     const ITEMID = 151;

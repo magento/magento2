@@ -2,24 +2,24 @@
     "name": "magento/module-swatches",
     "description": "Add Swatches to Products",
     "require": {
-        "php": "~5.6.5|7.0.2|7.0.4|~7.0.6",
-        "magento/module-catalog": "101.1.*",
-        "magento/module-configurable-product": "100.2.*",
-        "magento/module-eav": "100.2.*",
-        "magento/module-customer": "100.2.*",
-        "magento/module-store": "100.2.*",
-        "magento/module-backend": "100.2.*",
-        "magento/module-media-storage": "100.2.*",
-        "magento/module-config": "100.2.*",
-        "magento/module-theme": "100.2.*",
-        "magento/framework": "100.2.*"
+        "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
+        "magento/module-catalog": "101.2.*",
+        "magento/module-configurable-product": "100.3.*",
+        "magento/module-eav": "100.3.*",
+        "magento/module-customer": "100.3.*",
+        "magento/module-store": "100.3.*",
+        "magento/module-backend": "100.3.*",
+        "magento/module-media-storage": "100.3.*",
+        "magento/module-config": "100.3.*",
+        "magento/module-theme": "100.3.*",
+        "magento/framework": "100.3.*"
     },
     "suggest": {
-        "magento/module-layered-navigation": "100.2.*",
-        "magento/module-swatches-sample-data": "Sample Data version:100.2.*"
+        "magento/module-layered-navigation": "100.3.*",
+        "magento/module-swatches-sample-data": "Sample Data version:100.3.*"
     },
     "type": "magento2-module",
-    "version": "100.2.0-dev",
+    "version": "100.3.0-dev",
     "license": [
         "proprietary"
     ],

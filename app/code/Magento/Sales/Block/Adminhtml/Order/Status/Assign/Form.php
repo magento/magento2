@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Status\Assign;
@@ -107,7 +107,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $fieldset->addField(
             'visible_on_front',
             'checkbox',
-            ['name' => 'visible_on_front', 'label' => __('Visible On Storefront'), 'value' => 1]
+            ['name' => 'visible_on_front', 'label' => __('Visible On Storefront'), 'checked' => true, 'value' => 1]
         );
 
         $form->setAction($this->getUrl('sales/order_status/assignPost'));

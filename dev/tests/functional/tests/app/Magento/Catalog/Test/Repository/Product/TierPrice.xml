@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -96,6 +96,27 @@
                 <item name="percentage_value" xsi:type="string">3</item>
                 <item name="website" xsi:type="string">All Websites [USD]</item>
                 <item name="price_qty" xsi:type="string">10</item>
+                <item name="customer_group" xsi:type="array">
+                    <item name="dataset" xsi:type="string">ALL_GROUPS</item>
+                </item>
+            </field>
+        </dataset>
+
+        <dataset name="custom_for_qty_1">
+            <field name="0" xsi:type="array">
+                <item name="price" xsi:type="string">5</item>
+                <item name="website" xsi:type="string">All Websites [USD]</item>
+                <item name="price_qty" xsi:type="string">1</item>
+                <item name="customer_group" xsi:type="array">
+                    <item name="dataset" xsi:type="string">ALL_GROUPS</item>
+                </item>
+            </field>
+        </dataset>
+        <dataset name="high_cost">
+            <field name="0" xsi:type="array">
+                <item name="price" xsi:type="string">500000</item>
+                <item name="website" xsi:type="string">All Websites [USD]</item>
+                <item name="price_qty" xsi:type="string">1</item>
                 <item name="customer_group" xsi:type="array">
                     <item name="dataset" xsi:type="string">ALL_GROUPS</item>
                 </item>

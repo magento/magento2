@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,29 +11,29 @@
     <div class="middle" id="anchor-content">
         <div id="page:main-container">
         <?php if ($block->getChildHtml('left')): ?>
-            <div class="columns <?php /* @escapeNotVerified */ echo $block->getContainerCssClass() ?>" id="page:container">
+            <div class="columns <?= /* @escapeNotVerified */ $block->getContainerCssClass() ?>" id="page:container">
                 <div id="page:left" class="side-col">
-                    <?php echo $block->getChildHtml('left') ?>
+                    <?= $block->getChildHtml('left') ?>
                 </div>
                 <div class="main-col" id="content">
                     <div class="main-col-inner">
                         <div id="messages" class="messages" data-container-for="messages">
-                            <?php echo $block->getLayout()->getMessagesBlock()->getGroupedHtml() ?>
+                            <?= $block->getLayout()->getMessagesBlock()->getGroupedHtml() ?>
                         </div>
-                        <?php echo $block->getChildHtml('content') ?>
+                        <?= $block->getChildHtml('content') ?>
                     </div>
                 </div>
             </div>
       <?php else: ?>
-          <div id="messages" data-container-for="messages"><?php echo $block->getLayout()->getMessagesBlock()->getGroupedHtml() ?></div>
-          <?php echo $block->getChildHtml('content') ?>
+          <div id="messages" data-container-for="messages"><?= $block->getLayout()->getMessagesBlock()->getGroupedHtml() ?></div>
+          <?= $block->getChildHtml('content') ?>
       <?php endif; ?>
          </div>
     </div>
     <?php if ($block->getChildHtml('footer')): ?>
     <div class="footer">
-        <?php echo $block->getChildHtml('footer') ?>
+        <?= $block->getChildHtml('footer') ?>
     </div>
     <?php endif; ?>
-    <?php echo $block->getChildHtml('js') ?>
+    <?= $block->getChildHtml('js') ?>
 </div>

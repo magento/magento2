@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,7 @@ namespace Magento\CatalogSearch\Model\Search\FilterMapper;
 
 use Magento\CatalogSearch\Model\Adapter\Mysql\Filter\AliasResolver;
 use Magento\Eav\Model\Config as EavConfig;
+use Magento\Framework\DB\Select;
 
 /**
  * This strategy handles static attributes
@@ -53,12 +54,15 @@ class StaticAttributeStrategy implements FilterStrategyInterface
     ) {
         $attribute = $this->getAttributeByCode($filter->getField());
         $alias = $this->aliasResolver->getAlias($filter);
+        $mainTableAlias = $this->extractTableAliasFromSelect($select);
+
         $select->joinInner(
             [$alias => $attribute->getBackendTable()],
-            'search_index.entity_id = '
+            sprintf('%s.entity_id = ', $mainTableAlias)
             . $this->resourceConnection->getConnection()->quoteIdentifier("$alias.entity_id"),
             []
         );
+
         return true;
     }
 
@@ -70,5 +74,23 @@ class StaticAttributeStrategy implements FilterStrategyInterface
     private function getAttributeByCode($field)
     {
         return $this->eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $field);
+    }
+
+    /**
+     * Extracts alias for table that is used in FROM clause in Select
+     *
+     * @param Select $select
+     * @return string|null
+     */
+    private function extractTableAliasFromSelect(Select $select)
+    {
+        $fromArr = array_filter(
+            $select->getPart(Select::FROM),
+            function ($fromPart) {
+                return $fromPart['joinType'] === Select::FROM;
+            }
+        );
+
+        return $fromArr ? array_keys($fromArr)[0] : null;
     }
 }

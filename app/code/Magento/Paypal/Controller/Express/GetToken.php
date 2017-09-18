@@ -1,22 +1,23 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Controller\Express;
 
 use Magento\Checkout\Helper\Data;
-use Magento\Framework\Webapi\Exception;
-use Magento\Checkout\Model\Type\Onepage;
-use Magento\Paypal\Model\Express\Checkout;
 use Magento\Checkout\Helper\ExpressRedirect;
+use Magento\Checkout\Model\Type\Onepage;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Paypal\Controller\Express\AbstractExpress;
+use Magento\Framework\Webapi\Exception;
+use Magento\Paypal\Model\Express\Checkout;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Class GetToken
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class GetToken extends AbstractExpress
 {
@@ -42,6 +43,46 @@ class GetToken extends AbstractExpress
     protected $_checkoutType = \Magento\Paypal\Model\Express\Checkout::class;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * @param \Magento\Framework\App\Action\Context $context
+     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Sales\Model\OrderFactory $orderFactory
+     * @param \Magento\Paypal\Model\Express\Checkout\Factory $checkoutFactory
+     * @param \Magento\Framework\Session\Generic $paypalSession
+     * @param \Magento\Framework\Url\Helper\Data $urlHelper
+     * @param \Magento\Customer\Model\Url $customerUrl
+     * @param \Psr\Log\LoggerInterface|null $logger
+     */
+    public function __construct(
+        \Magento\Framework\App\Action\Context $context,
+        \Magento\Customer\Model\Session $customerSession,
+        \Magento\Checkout\Model\Session $checkoutSession,
+        \Magento\Sales\Model\OrderFactory $orderFactory,
+        \Magento\Paypal\Model\Express\Checkout\Factory $checkoutFactory,
+        \Magento\Framework\Session\Generic $paypalSession,
+        \Magento\Framework\Url\Helper\Data $urlHelper,
+        \Magento\Customer\Model\Url $customerUrl,
+        \Psr\Log\LoggerInterface $logger = null
+    ) {
+        $this->logger = $logger ?: ObjectManager::getInstance()->get(\Psr\Log\LoggerInterface::class);
+        parent::__construct(
+            $context,
+            $customerSession,
+            $checkoutSession,
+            $orderFactory,
+            $checkoutFactory,
+            $paypalSession,
+            $urlHelper,
+            $customerUrl
+        );
+    }
+
+    /**
      * @inheritdoc
      */
     public function execute()
@@ -57,10 +98,13 @@ class GetToken extends AbstractExpress
             $this->_initToken($token);
             $controllerResult->setData(['url' => $url]);
         } catch (LocalizedException $exception) {
-            $this->messageManager->addExceptionMessage(
-                $exception,
-                $exception->getMessage()
-            );
+            $this->logger->critical($exception);
+            $controllerResult->setData([
+                'message' => [
+                    'text' => $exception->getMessage(),
+                    'type' => 'error'
+                ]
+            ]);
         } catch (\Exception $exception) {
             $this->messageManager->addExceptionMessage(
                 $exception,
@@ -99,8 +143,7 @@ class GetToken extends AbstractExpress
                 $quote->getBillingAddress(),
                 $quote->getShippingAddress()
             );
-        } else if (
-            (!$quoteCheckoutMethod || $quoteCheckoutMethod !== Onepage::METHOD_REGISTER)
+        } elseif ((!$quoteCheckoutMethod || $quoteCheckoutMethod !== Onepage::METHOD_REGISTER)
                 && !$checkoutHelper->isAllowedGuestCheckout($quote, $quote->getStoreId())
         ) {
             $expressRedirect = $this->_objectManager->get(ExpressRedirect::class);

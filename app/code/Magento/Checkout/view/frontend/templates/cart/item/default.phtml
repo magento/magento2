@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -17,16 +17,16 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
 ?>
 <tbody class="cart item">
     <tr class="item-info">
-        <td data-th="<?php echo $block->escapeHtml(__('Item')); ?>" class="col item">
+        <td data-th="<?= $block->escapeHtml(__('Item')) ?>" class="col item">
             <?php if ($block->hasProductUrl()):?>
-                <a href="<?php /* @escapeNotVerified */ echo $block->getProductUrl() ?>"
-                   title="<?php echo $block->escapeHtml($block->getProductName()) ?>"
+                <a href="<?= /* @escapeNotVerified */ $block->getProductUrl() ?>"
+                   title="<?= $block->escapeHtml($block->getProductName()) ?>"
                    tabindex="-1"
                    class="product-item-photo">
             <?php else:?>
                 <span class="product-item-photo">
             <?php endif;?>
-            <?php echo $block->getImage($block->getProductForThumbnail(), 'cart_page_product_thumbnail')->toHtml(); ?>
+            <?= $block->getImage($block->getProductForThumbnail(), 'cart_page_product_thumbnail')->toHtml() ?>
             <?php if ($block->hasProductUrl()):?>
                 </a>
             <?php else: ?>
@@ -35,21 +35,21 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
             <div class="product-item-details">
                 <strong class="product-item-name">
                     <?php if ($block->hasProductUrl()):?>
-                        <a href="<?php /* @escapeNotVerified */ echo $block->getProductUrl() ?>"><?php echo $block->escapeHtml($block->getProductName()) ?></a>
+                        <a href="<?= /* @escapeNotVerified */ $block->getProductUrl() ?>"><?= $block->escapeHtml($block->getProductName()) ?></a>
                     <?php else: ?>
-                        <?php echo $block->escapeHtml($block->getProductName()) ?>
+                        <?= $block->escapeHtml($block->getProductName()) ?>
                     <?php endif; ?>
                 </strong>
                 <?php if ($_options = $block->getOptionList()):?>
                     <dl class="item-options">
                         <?php foreach ($_options as $_option) : ?>
                             <?php $_formatedOptionValue = $block->getFormatedOptionValue($_option) ?>
-                            <dt><?php echo $block->escapeHtml($_option['label']) ?></dt>
+                            <dt><?= $block->escapeHtml($_option['label']) ?></dt>
                             <dd>
                                 <?php if (isset($_formatedOptionValue['full_view'])): ?>
-                                    <?php /* @escapeNotVerified */ echo $_formatedOptionValue['full_view'] ?>
+                                    <?= /* @escapeNotVerified */ $_formatedOptionValue['full_view'] ?>
                                 <?php else: ?>
-                                    <?php /* @escapeNotVerified */ echo $_formatedOptionValue['value'] ?>
+                                    <?= /* @escapeNotVerified */ $_formatedOptionValue['value'] ?>
                                 <?php endif; ?>
                             </dd>
                         <?php endforeach; ?>
@@ -57,44 +57,44 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
                 <?php endif;?>
                 <?php if ($messages = $block->getMessages()): ?>
                     <?php foreach ($messages as $message): ?>
-                        <div class="cart item message <?php /* @escapeNotVerified */ echo $message['type'] ?>"><div><?php echo $block->escapeHtml($message['text']) ?></div></div>
+                        <div class="cart item message <?= /* @escapeNotVerified */ $message['type'] ?>"><div><?= $block->escapeHtml($message['text']) ?></div></div>
                     <?php endforeach; ?>
                 <?php endif; ?>
                 <?php $addInfoBlock = $block->getProductAdditionalInformationBlock(); ?>
                 <?php if ($addInfoBlock): ?>
-                    <?php echo $addInfoBlock->setItem($_item)->toHtml() ?>
+                    <?= $addInfoBlock->setItem($_item)->toHtml() ?>
                 <?php endif;?>
             </div>
         </td>
 
         <?php if ($canApplyMsrp): ?>
-            <td class="col msrp" data-th="<?php echo $block->escapeHtml(__('Price')); ?>">
+            <td class="col msrp" data-th="<?= $block->escapeHtml(__('Price')) ?>">
                 <span class="pricing msrp">
-                    <span class="msrp notice"><?php /* @escapeNotVerified */ echo __('See price before order confirmation.'); ?></span>
+                    <span class="msrp notice"><?= /* @escapeNotVerified */ __('See price before order confirmation.') ?></span>
                     <?php $helpLinkId = 'cart-msrp-help-' . $_item->getId(); ?>
-                    <a href="#" class="action help map" id="<?php /* @escapeNotVerified */ echo($helpLinkId); ?>" data-mage-init='{"addToCart":{"helpLinkId": "#<?php /* @escapeNotVerified */ echo $helpLinkId;?>","productName": "<?php /* @escapeNotVerified */ echo $product->getName(); ?>","showAddToCart": false}}'>
-                        <span><?php /* @escapeNotVerified */ echo __("What's this?"); ?></span>
+                    <a href="#" class="action help map" id="<?= /* @escapeNotVerified */ ($helpLinkId) ?>" data-mage-init='{"addToCart":{"helpLinkId": "#<?= /* @escapeNotVerified */ $helpLinkId ?>","productName": "<?= /* @escapeNotVerified */ $product->getName() ?>","showAddToCart": false}}'>
+                        <span><?= /* @escapeNotVerified */ __("What's this?") ?></span>
                     </a>
                 </span>
             </td>
         <?php else: ?>
-            <td class="col price" data-th="<?php echo $block->escapeHtml(__('Price')); ?>">
-                <?php echo $block->getUnitPriceHtml($_item); ?>
+            <td class="col price" data-th="<?= $block->escapeHtml(__('Price')) ?>">
+                <?= $block->getUnitPriceHtml($_item) ?>
             </td>
         <?php endif; ?>
-        <td class="col qty" data-th="<?php echo $block->escapeHtml(__('Qty')); ?>">
+        <td class="col qty" data-th="<?= $block->escapeHtml(__('Qty')) ?>">
             <div class="field qty">
-                <label class="label" for="cart-<?php /* @escapeNotVerified */ echo $_item->getId() ?>-qty">
-                    <span><?php /* @escapeNotVerified */ echo __('Qty') ?></span>
+                <label class="label" for="cart-<?= /* @escapeNotVerified */ $_item->getId() ?>-qty">
+                    <span><?= /* @escapeNotVerified */ __('Qty') ?></span>
                 </label>
                 <div class="control qty">
-                    <input id="cart-<?php /* @escapeNotVerified */ echo $_item->getId() ?>-qty"
-                           name="cart[<?php /* @escapeNotVerified */ echo $_item->getId() ?>][qty]"
-                           data-cart-item-id="<?php /* @escapeNotVerified */ echo $_item->getSku() ?>"
-                           value="<?php /* @escapeNotVerified */ echo $block->getQty() ?>"
+                    <input id="cart-<?= /* @escapeNotVerified */ $_item->getId() ?>-qty"
+                           name="cart[<?= /* @escapeNotVerified */ $_item->getId() ?>][qty]"
+                           data-cart-item-id="<?= /* @escapeNotVerified */ $_item->getSku() ?>"
+                           value="<?= /* @escapeNotVerified */ $block->getQty() ?>"
                            type="number"
                            size="4"
-                           title="<?php echo $block->escapeHtml(__('Qty')); ?>"
+                           title="<?= $block->escapeHtml(__('Qty')) ?>"
                            class="input-text qty"
                            data-validate="{required:true,'validate-greater-than-zero':true}"
                            data-role="cart-item-qty"/>
@@ -102,18 +102,18 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
             </div>
         </td>
 
-        <td class="col subtotal" data-th="<?php echo $block->escapeHtml(__('Subtotal'));?>">
+        <td class="col subtotal" data-th="<?= $block->escapeHtml(__('Subtotal')) ?>">
             <?php if ($canApplyMsrp): ?>
                 <span class="cart msrp subtotal">--</span>
             <?php else: ?>
-                <?php echo $block->getRowTotalHtml($_item); ?>
+                <?= $block->getRowTotalHtml($_item) ?>
             <?php endif; ?>
         </td>
     </tr>
     <tr class="item-actions">
         <td colspan="100">
             <div class="actions-toolbar">
-                <?php /* @escapeNotVerified */ echo $block->getActions($_item) ?>
+                <?= /* @escapeNotVerified */ $block->getActions($_item) ?>
             </div>
         </td>
     </tr>

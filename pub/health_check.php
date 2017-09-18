@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -70,7 +70,7 @@ if ($cacheConfigs) {
 function fatalErrorHandler()
 {
     $error = error_get_last();
-    if ($error !== NULL) {
+    if ($error !== null) {
         http_response_code(500);
     }
 }

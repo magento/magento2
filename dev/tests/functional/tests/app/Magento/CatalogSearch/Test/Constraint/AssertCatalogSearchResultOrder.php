@@ -1,7 +1,7 @@
 <?php
 /**
  * *
- *  * Copyright © 2013-2017 Magento. All rights reserved.
+ *  * Copyright © Magento, Inc. All rights reserved.
  *  * See COPYING.txt for license details.
  *
  */
@@ -43,7 +43,6 @@ class AssertCatalogSearchResultOrder extends AbstractConstraint
             $productNamesOnPage = $resultPage->getListProductBlock()->getProductNames();
 
             foreach ($productNamesOnPage as $productOnPage) {
-
                 $idxInArray = array_search($productOnPage, $productsOrder, true);
                 if (false !== $idxInArray) {
                     if (0 !== $idxInArray) {

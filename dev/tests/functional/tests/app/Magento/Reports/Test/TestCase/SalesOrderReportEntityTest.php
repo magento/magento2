@@ -1,14 +1,15 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Reports\Test\TestCase;
 
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\TestCase\Injectable;
 use Magento\Reports\Test\Page\Adminhtml\SalesReport;
 use Magento\Sales\Test\Fixture\OrderInjectable;
-use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Preconditions:
@@ -47,14 +48,23 @@ class SalesOrderReportEntityTest extends Injectable
     protected $salesReport;
 
     /**
+     * Fixture factory.
+     *
+     * @var FixtureFactory
+     */
+    private $fixtureFactory;
+
+    /**
      * Inject page.
      *
+     * @param FixtureFactory $fixtureFactory
      * @param SalesReport $salesReport
      * @return void
      */
-    public function __inject(SalesReport $salesReport)
+    public function __inject(FixtureFactory $fixtureFactory, SalesReport $salesReport)
     {
         $this->salesReport = $salesReport;
+        $this->fixtureFactory = $fixtureFactory;
     }
 
     /**
@@ -75,9 +85,12 @@ class SalesOrderReportEntityTest extends Injectable
         $initialSalesTotalResult = $this->salesReport->getGridBlock()->getTotalResult();
 
         $order->persist();
+        $products = $order->getEntityId()['products'];
+        $cart['data']['items'] = ['products' => $products];
+        $cart = $this->fixtureFactory->createByCode('cart', $cart);
         $invoice = $this->objectManager->create(
             \Magento\Sales\Test\TestStep\CreateInvoiceStep::class,
-            ['order' => $order]
+            ['order' => $order, 'cart' => $cart]
         );
         $invoice->run();
 

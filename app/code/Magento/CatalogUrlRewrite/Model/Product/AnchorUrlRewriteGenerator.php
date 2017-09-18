@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Model\Product;
@@ -16,13 +16,19 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 
 class AnchorUrlRewriteGenerator
 {
-    /** @var ProductUrlPathGenerator */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator
+     */
     protected $urlPathGenerator;
 
-    /** @var UrlRewriteFactory */
+    /**
+     * @var \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory
+     */
     protected $urlRewriteFactory;
 
-    /** @var CategoryRepositoryInterface */
+    /**
+     * @var \Magento\Catalog\Api\CategoryRepositoryInterface
+     */
     private $categoryRepository;
 
     /**
@@ -41,7 +47,7 @@ class AnchorUrlRewriteGenerator
     }
 
     /**
-     * Generate list based on categories
+     * Generate product rewrites for anchor categories
      *
      * @param int $storeId
      * @param Product $product

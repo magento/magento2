@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,23 +11,23 @@
     case 'fieldset': ?>
 
     <fieldset>
-        <legend><?php /* @escapeNotVerified */ echo $element->getLegend() ?></legend><br />
+        <legend><?= /* @escapeNotVerified */ $element->getLegend() ?></legend><br />
         <?php foreach ($element->getElements() as $_element): ?>
-            <?php /* @escapeNotVerified */ echo $formBlock->drawElement($_element) ?>
+            <?= /* @escapeNotVerified */ $formBlock->drawElement($_element) ?>
         <?php endforeach; ?>
     </fieldset>
       <?php break;
     case 'column': ?>
       <?php break;
     case 'hidden': ?>
-    <input type="<?php /* @escapeNotVerified */ echo $element->getType() ?>" name="<?php /* @escapeNotVerified */ echo $element->getName() ?>" id="<?php echo $element->getHtmlId() ?>" value="<?php /* @escapeNotVerified */ echo $element->getValue() ?>">
+    <input type="<?= /* @escapeNotVerified */ $element->getType() ?>" name="<?= /* @escapeNotVerified */ $element->getName() ?>" id="<?= $element->getHtmlId() ?>" value="<?= /* @escapeNotVerified */ $element->getValue() ?>">
       <?php break;
     case 'select': ?>
     <span class="form_row">
-        <?php if ($element->getLabel()): ?><label for="<?php echo $element->getHtmlId() ?>"><?php /* @escapeNotVerified */ echo $element->getLabel() ?>:</label><?php endif; ?>
-        <select name="<?php /* @escapeNotVerified */ echo $element->getName() ?>" id="<?php echo $element->getHtmlId() ?>" class="select<?php /* @escapeNotVerified */ echo $element->getClass() ?>" title="<?php /* @escapeNotVerified */ echo $element->getTitle() ?>">
+        <?php if ($element->getLabel()): ?><label for="<?= $element->getHtmlId() ?>"><?= /* @escapeNotVerified */ $element->getLabel() ?>:</label><?php endif; ?>
+        <select name="<?= /* @escapeNotVerified */ $element->getName() ?>" id="<?= $element->getHtmlId() ?>" class="select<?= /* @escapeNotVerified */ $element->getClass() ?>" title="<?= /* @escapeNotVerified */ $element->getTitle() ?>">
         <?php foreach ($element->getValues() as $_value): ?>
-            <option <?php /* @escapeNotVerified */ echo $_value->serialize() ?><?php if ($_value->getValue() == $element->getValue()): ?> selected="selected"<?php endif; ?>><?php /* @escapeNotVerified */ echo $_value->getLabel() ?></option>
+            <option <?= /* @escapeNotVerified */ $_value->serialize() ?><?php if ($_value->getValue() == $element->getValue()): ?> selected="selected"<?php endif; ?>><?= /* @escapeNotVerified */ $_value->getLabel() ?></option>
         <?php endforeach; ?>
         </select>
     </span>
@@ -36,30 +36,30 @@
     case 'button':
     case 'password': ?>
     <span class="form_row">
-        <?php if ($element->getLabel()): ?><label for="<?php echo $element->getHtmlId() ?>" <?php /* @escapeNotVerified */ echo $block->getUiId('label') ?>><?php /* @escapeNotVerified */ echo $element->getLabel() ?>:</label><?php endif; ?>
-        <input type="<?php /* @escapeNotVerified */ echo $element->getType() ?>" name="<?php /* @escapeNotVerified */ echo $element->getName() ?>" id="<?php echo $element->getHtmlId() ?>" value="<?php /* @escapeNotVerified */ echo $element->getValue() ?>" class="input-text <?php /* @escapeNotVerified */ echo $element->getClass() ?>" title="<?php /* @escapeNotVerified */ echo $element->getTitle() ?>" <?php echo($element->getOnClick() ? 'onClick="' . $element->getOnClick() . '"' : '') ?>/>
+        <?php if ($element->getLabel()): ?><label for="<?= $element->getHtmlId() ?>" <?= /* @escapeNotVerified */ $block->getUiId('label') ?>><?= /* @escapeNotVerified */ $element->getLabel() ?>:</label><?php endif; ?>
+        <input type="<?= /* @escapeNotVerified */ $element->getType() ?>" name="<?= /* @escapeNotVerified */ $element->getName() ?>" id="<?= $element->getHtmlId() ?>" value="<?= /* @escapeNotVerified */ $element->getValue() ?>" class="input-text <?= /* @escapeNotVerified */ $element->getClass() ?>" title="<?= /* @escapeNotVerified */ $element->getTitle() ?>" <?= ($element->getOnClick() ? 'onClick="' . $element->getOnClick() . '"' : '') ?>/>
     </span>
       <?php break;
     case 'radio': ?>
     <span class="form_row">
-        <?php if ($element->getLabel()): ?><label for="<?php echo $element->getHtmlId() ?>"><?php /* @escapeNotVerified */ echo $element->getLabel() ?>:</label><?php endif; ?>
-        <input type="<?php /* @escapeNotVerified */ echo $element->getType() ?>" name="<?php /* @escapeNotVerified */ echo $element->getName() ?>" id="<?php echo $element->getHtmlId() ?>" value="<?php /* @escapeNotVerified */ echo $element->getValue() ?>" class="input-text <?php /* @escapeNotVerified */ echo $element->getClass() ?>" title="<?php /* @escapeNotVerified */ echo $element->getTitle() ?>"/>
+        <?php if ($element->getLabel()): ?><label for="<?= $element->getHtmlId() ?>"><?= /* @escapeNotVerified */ $element->getLabel() ?>:</label><?php endif; ?>
+        <input type="<?= /* @escapeNotVerified */ $element->getType() ?>" name="<?= /* @escapeNotVerified */ $element->getName() ?>" id="<?= $element->getHtmlId() ?>" value="<?= /* @escapeNotVerified */ $element->getValue() ?>" class="input-text <?= /* @escapeNotVerified */ $element->getClass() ?>" title="<?= /* @escapeNotVerified */ $element->getTitle() ?>"/>
     </span>
       <?php break;
     case 'hidden': ?>
-        <input type="<?php /* @escapeNotVerified */ echo $element->getType() ?>" name="<?php /* @escapeNotVerified */ echo $element->getName() ?>" id="<?php echo $element->getHtmlId() ?>" value="<?php /* @escapeNotVerified */ echo $element->getValue() ?>">
+        <input type="<?= /* @escapeNotVerified */ $element->getType() ?>" name="<?= /* @escapeNotVerified */ $element->getName() ?>" id="<?= $element->getHtmlId() ?>" value="<?= /* @escapeNotVerified */ $element->getValue() ?>">
       <?php break;
     case 'radios': ?>
     <span class="form_row">
-        <label for="<?php echo $element->getHtmlId() ?>"><?php /* @escapeNotVerified */ echo $element->getLabel() ?>:</label>
+        <label for="<?= $element->getHtmlId() ?>"><?= /* @escapeNotVerified */ $element->getLabel() ?>:</label>
     <?php foreach ($element->getRadios() as $_radio): ?>
-    <input type="radio" name="<?php /* @escapeNotVerified */ echo $_radio->getName() ?>" id="<?php echo $_radio->getHtmlId() ?>" value="<?php /* @escapeNotVerified */ echo $_radio->getValue() ?>" class="input-radio <?php /* @escapeNotVerified */ echo $_radio->getClass() ?>" title="<?php /* @escapeNotVerified */ echo $_radio->getTitle() ?>" <?php echo($_radio->getValue() == $element->getChecked()) ? 'checked="true"' : '' ?> >&nbsp;<?php /* @escapeNotVerified */ echo $_radio->getLabel() ?>
+    <input type="radio" name="<?= /* @escapeNotVerified */ $_radio->getName() ?>" id="<?= $_radio->getHtmlId() ?>" value="<?= /* @escapeNotVerified */ $_radio->getValue() ?>" class="input-radio <?= /* @escapeNotVerified */ $_radio->getClass() ?>" title="<?= /* @escapeNotVerified */ $_radio->getTitle() ?>" <?= ($_radio->getValue() == $element->getChecked()) ? 'checked="true"' : '' ?> >&nbsp;<?= /* @escapeNotVerified */ $_radio->getLabel() ?>
     <?php endforeach; ?>
     </span>
       <?php break;
     case 'wysiwyg': ?>
     <span class="form_row">
-      <label for="<?php echo $element->getHtmlId() ?>"><?php /* @escapeNotVerified */ echo $element->getLabel() ?>:</label>
+      <label for="<?= $element->getHtmlId() ?>"><?= /* @escapeNotVerified */ $element->getLabel() ?>:</label>
         <script>
         require([
             'tinymce'
@@ -67,7 +67,7 @@
             tinyMCE.init({
                 mode : "exact",
                 theme : "advanced",
-                elements : "<?php /* @escapeNotVerified */ echo $element->getName(); ?>",
+                elements : "<?= /* @escapeNotVerified */ $element->getName() ?>",
                 plugins : "inlinepopups,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,insertdatetime,preview,zoom,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras",
                 theme_advanced_buttons1 : "newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,styleselect,formatselect,fontselect,fontsizeselect",
                 theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,code,|,insertdate,inserttime,preview,|,forecolor,backcolor",
@@ -86,13 +86,13 @@
             });
         });
 </script>
-      <textarea name="<?php /* @escapeNotVerified */ echo $element->getName() ?>" title="<?php /* @escapeNotVerified */ echo $element->getTitle() ?>" id="<?php echo $element->getHtmlId() ?>" class="textarea <?php /* @escapeNotVerified */ echo $element->getClass() ?>" cols="80" rows="20"><?php /* @escapeNotVerified */ echo $element->getValue(); ?></textarea>
+      <textarea name="<?= /* @escapeNotVerified */ $element->getName() ?>" title="<?= /* @escapeNotVerified */ $element->getTitle() ?>" id="<?= $element->getHtmlId() ?>" class="textarea <?= /* @escapeNotVerified */ $element->getClass() ?>" cols="80" rows="20"><?= /* @escapeNotVerified */ $element->getValue() ?></textarea>
     </span>
       <?php break;
         case 'textarea': ?>
             <span class="form_row">
-                    <label for="<?php echo $element->getHtmlId() ?>"><?php /* @escapeNotVerified */ echo $element->getLabel() ?>:</label>
-                    <textarea name="<?php /* @escapeNotVerified */ echo $element->getName() ?>" title="<?php /* @escapeNotVerified */ echo $element->getTitle() ?>" id="<?php echo $element->getHtmlId() ?>" class="textarea <?php /* @escapeNotVerified */ echo $element->getClass() ?>" cols="15" rows="2"><?php /* @escapeNotVerified */ echo $element->getValue(); ?></textarea>
+                    <label for="<?= $element->getHtmlId() ?>"><?= /* @escapeNotVerified */ $element->getLabel() ?>:</label>
+                    <textarea name="<?= /* @escapeNotVerified */ $element->getName() ?>" title="<?= /* @escapeNotVerified */ $element->getTitle() ?>" id="<?= $element->getHtmlId() ?>" class="textarea <?= /* @escapeNotVerified */ $element->getClass() ?>" cols="15" rows="2"><?= /* @escapeNotVerified */ $element->getValue() ?></textarea>
             </span>
       <?php break;
     case 'editor': ?>
@@ -104,6 +104,6 @@
 } ?>
 <?php if ($element->getScript()): ?>
 <script>
-    <?php /* @escapeNotVerified */ echo $element->getScript() ?>
+    <?= /* @escapeNotVerified */ $element->getScript() ?>
 </script>
 <?php endif; ?>

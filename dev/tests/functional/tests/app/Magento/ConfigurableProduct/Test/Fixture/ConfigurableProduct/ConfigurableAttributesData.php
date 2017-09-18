@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -34,11 +34,25 @@ class ConfigurableAttributesData extends DataSource
     protected $attributesData = [];
 
     /**
+     * Temporary media path.
+     *
+     * @var string
+     */
+    protected $mediaPathTmp = '/pub/media/tmp/catalog/product/';
+
+    /**
      * Prepared variation matrix.
      *
      * @var array
      */
     protected $variationsMatrix = [];
+
+    /**
+     * Add media gallery.
+     *
+     * @var bool
+     */
+    private $addMediaGallery = false;
 
     /**
      * Prepared attributes.
@@ -62,6 +76,13 @@ class ConfigurableAttributesData extends DataSource
     protected $products = [];
 
     /**
+     * Values for Bulk Images Price and Quantity step.
+     *
+     * @var array
+     */
+    private $bulkImagesPriceQuantity = [];
+
+    /**
      * @constructor
      * @param RepositoryFactory $repositoryFactory
      * @param FixtureFactory $fixtureFactory
@@ -82,6 +103,11 @@ class ConfigurableAttributesData extends DataSource
             unset($data['dataset']);
         }
 
+        if (isset($data['media_gallery'])) {
+            $this->addMediaGallery = true;
+            unset($data['media_gallery']);
+        }
+
         $data = array_replace_recursive($data, $dataset);
 
         if (!empty($data)) {
@@ -90,6 +116,7 @@ class ConfigurableAttributesData extends DataSource
             $this->prepareProducts($data);
             $this->prepareVariationsMatrix($data);
             $this->prepareData();
+            $this->prepareBulkImagesPriceQuantity($data);
         }
     }
 
@@ -347,18 +374,68 @@ class ConfigurableAttributesData extends DataSource
             $rowName = $row['name'];
             $rowSku = $row['sku'];
             $index = 1;
-            foreach ($attribute['options'] as $optionKey => $option) {
-                $compositeKey = "{$attributeKey}:{$optionKey}";
-                $row['name'] = $rowName . ' ' . $randIsolation . ' ' . $index;
-                $row['sku'] = $rowSku . '_' . $randIsolation . '_' . $index;
-                $row['price'] = $option['pricing_value'];
-                $newRowKey = $rowKey ? "{$rowKey} {$compositeKey}" : $compositeKey;
-                $result[$newRowKey] = $row;
-                $index++;
+
+            if (isset($attribute['options'])) {
+                foreach ($attribute['options'] as $optionKey => $option) {
+                    $compositeKey = "{$attributeKey}:{$optionKey}";
+                    $row['name'] = $rowName . ' ' . $randIsolation . ' ' . $index;
+                    $row['sku'] = $rowSku . '_' . $randIsolation . '_' . $index;
+                    $row['price'] = $option['pricing_value'];
+                    if ($this->addMediaGallery) {
+                        $row['media_gallery'] = $this->prepareMediaGallery();
+                    }
+                    $newRowKey = $rowKey ? "{$rowKey} {$compositeKey}" : $compositeKey;
+                    $result[$newRowKey] = $row;
+                    $index++;
+                }
             }
         }
 
         return $result;
+    }
+
+    /**
+     * Create test image file.
+     *
+     * @param string $filename
+     * @return array
+     */
+    protected function prepareMediaGallery($filename = 'option_image.jpg')
+    {
+        $filePath = $this->getFullPath($filename);
+        if (!file_exists($filePath)) {
+            $optionImage = imagecreate(300, 200);
+            $colorYellow = imagecolorallocate($optionImage, 255, 255, 0);
+            imagefilledrectangle($optionImage, 50, 50, 250, 150, $colorYellow);
+            $directory = dirname($filePath);
+            if (!file_exists($directory)) {
+                mkdir($directory, 0777, true);
+            }
+            imagejpeg($optionImage, $filePath);
+            imagedestroy($optionImage);
+        }
+
+        return [
+            'images' => [
+                0 => [
+                    'position' => 1,
+                    'file' => $filename,
+                    'disabled' => 0,
+                    'label' => '1231414',
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Gets full path based on filename.
+     *
+     * @param string $filename
+     * @return string
+     */
+    private function getFullPath($filename)
+    {
+        return BP . $this->mediaPathTmp . $filename;
     }
 
     /**
@@ -390,6 +467,7 @@ class ConfigurableAttributesData extends DataSource
             'price',
             'qty',
             'weight',
+            'media_gallery'
         ];
 
         $this->data = [
@@ -415,6 +493,19 @@ class ConfigurableAttributesData extends DataSource
     }
 
     /**
+     * Prepare Bulk Image Price and Quantity value.
+     *
+     * @param array $data
+     * @return void
+     */
+    private function prepareBulkImagesPriceQuantity(array $data)
+    {
+        if (isset($data['bulk_images_price_quantity'])) {
+            $this->bulkImagesPriceQuantity = $data['bulk_images_price_quantity'];
+        }
+    }
+
+    /**
      * Get prepared attributes data.
      *
      * @return array
@@ -432,6 +523,16 @@ class ConfigurableAttributesData extends DataSource
     public function getVariationsMatrix()
     {
         return $this->variationsMatrix;
+    }
+
+    /**
+     * Bulk Image Price and Quantity value.
+     *
+     * @return array
+     */
+    public function getBulkImagesPriceQuantity()
+    {
+        return $this->bulkImagesPriceQuantity;
     }
 
     /**

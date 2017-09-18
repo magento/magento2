@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -43,5 +43,6 @@
         <field name="store_labels" group="labels" />
         <field name="coupon_code" group="rule_information" />
         <field name="rule" />
+        <field name="qty" />
     </fixture>
 </config>

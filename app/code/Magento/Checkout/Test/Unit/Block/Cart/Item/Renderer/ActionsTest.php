@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Test\Unit\Block\Cart\Item\Renderer;
@@ -9,7 +9,7 @@ use Magento\Checkout\Block\Cart\Item\Renderer\Actions;
 use Magento\Checkout\Block\Cart\Item\Renderer\Actions\Generic;
 use Magento\Quote\Model\Quote\Item;
 
-class ActionsTest extends \PHPUnit_Framework_TestCase
+class ActionsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Actions
@@ -67,6 +67,10 @@ class ActionsTest extends \PHPUnit_Framework_TestCase
         $childNameTextOne = 'child.1 text';
         $childNameTwo = 'child.2';
         $childNames = [$childNameOne, $childNameTwo];
+
+        $this->scopeConfigMock->expects($this->once())
+            ->method('getValue')
+            ->willReturn(false);
 
         /**
          * @var Item|\PHPUnit_Framework_MockObject_MockObject $itemMock

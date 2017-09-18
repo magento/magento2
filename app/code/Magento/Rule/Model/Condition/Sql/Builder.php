@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,8 +12,6 @@ use Magento\Rule\Model\Condition\Combine;
 
 /**
  * Class SQL Builder
- *
- * @package Magento\Rule\Model\Condition\Sql
  */
 class Builder
 {
@@ -110,6 +108,8 @@ class Builder
     }
 
     /**
+     * Returns sql expression based on rule condition.
+     *
      * @param AbstractCondition $condition
      * @param string $value
      * @return string
@@ -118,24 +118,27 @@ class Builder
     protected function _getMappedSqlCondition(AbstractCondition $condition, $value = '')
     {
         $argument = $condition->getMappedSqlField();
-        if ($argument) {
-            $conditionOperator = $condition->getOperatorForValidate();
 
-            if (!isset($this->_conditionOperatorMap[$conditionOperator])) {
-                throw new \Magento\Framework\Exception\LocalizedException(__('Unknown condition operator'));
-            }
-
-            $sql = str_replace(
-                ':field',
-                $this->_connection->getIfNullSql($this->_connection->quoteIdentifier($argument), 0),
-                $this->_conditionOperatorMap[$conditionOperator]
-            );
-
-            return $this->_expressionFactory->create(
-                ['expression' => $value . $this->_connection->quoteInto($sql, $condition->getBindArgumentValue())]
-            );
+        // If rule hasn't valid argument - create negative expression to prevent incorrect rule behavior.
+        if (empty($argument)) {
+            return $this->_expressionFactory->create(['expression' => '1 = -1']);
         }
-        return '';
+
+        $conditionOperator = $condition->getOperatorForValidate();
+
+        if (!isset($this->_conditionOperatorMap[$conditionOperator])) {
+            throw new \Magento\Framework\Exception\LocalizedException(__('Unknown condition operator'));
+        }
+
+        $sql = str_replace(
+            ':field',
+            $this->_connection->getIfNullSql($this->_connection->quoteIdentifier($argument), 0),
+            $this->_conditionOperatorMap[$conditionOperator]
+        );
+
+        return $this->_expressionFactory->create(
+            ['expression' => $value . $this->_connection->quoteInto($sql, $condition->getBindArgumentValue())]
+        );
     }
 
     /**

@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Controller\Adminhtml\Rate;
@@ -14,6 +14,7 @@ class AjaxSave extends \Magento\Tax\Controller\Adminhtml\Rate
      * Save Tax Rate via AJAX
      *
      * @return \Magento\Framework\Controller\Result\Json
+     * @throws \InvalidArgumentException
      */
     public function execute()
     {

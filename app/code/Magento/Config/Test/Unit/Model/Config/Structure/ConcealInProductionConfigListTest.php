@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Model\Config\Structure;
@@ -8,7 +8,7 @@ namespace Magento\Config\Test\Unit\Model\Config\Structure;
 use Magento\Config\Model\Config\Structure\ConcealInProductionConfigList;
 use Magento\Framework\App\State;
 
-class ConcealInProductionConfigListTest extends \PHPUnit_Framework_TestCase
+class ConcealInProductionConfigListTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var State|\PHPUnit_Framework_MockObject_MockObject

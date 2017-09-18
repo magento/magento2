@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\ResourceModel\Order;
@@ -17,7 +17,7 @@ use \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Status extends \Magento\Framework\Model\ResourceModel\Db\VersionControl\AbstractDb
+class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Status labels table

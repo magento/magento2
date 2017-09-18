@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -116,7 +116,7 @@ class ConfigGenerator
      *
      * @param array $data
      * @return ConfigData
-     * @deprecated
+     * @deprecated 2.2.0
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function createDefinitionsConfig(array $data)

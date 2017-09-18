@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -46,7 +46,6 @@ class AssertGlobalSearchCustomerName extends AbstractConstraint
             $customerIndex->getCustomerGridBlock()->getAllIds(),
             'Customer grid does not have ' . $customerName . ' in search results'
         );
-
     }
 
     /**

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,7 +9,7 @@
     <update handle="msrp_popup"/>
     <body>
         <referenceContainer name="checkout.cart.totals.container">
-            <block name="checkout.cart.totals.msrp" before="checkout.cart.totals" class="Magento\Msrp\Block\Total" template="cart/totals.phtml">
+            <block name="checkout.cart.totals.msrp" before="checkout.cart.totals" class="Magento\Msrp\Block\Total" template="Magento_Msrp::cart/totals.phtml">
                 <arguments>
                     <argument name="original_block_name" xsi:type="string">checkout.cart.totals</argument>
                 </arguments>

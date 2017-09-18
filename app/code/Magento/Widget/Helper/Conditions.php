@@ -1,10 +1,11 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Widget\Helper;
 
+use Magento\Framework\Data\Wysiwyg\Normalizer;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
 
@@ -14,19 +15,25 @@ use Magento\Framework\Serialize\Serializer\Json;
 class Conditions
 {
     /**
-     * Instance of serializer interface.
-     *
      * @var Json
      */
     private $serializer;
 
     /**
+     * @var Normalizer
+     */
+    private $normalizer;
+
+    /**
      * @param Json $serializer
+     * @param Normalizer $normalizer
      */
     public function __construct(
-        Json $serializer = null
+        Json $serializer = null,
+        Normalizer $normalizer = null
     ) {
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
+        $this->normalizer = $normalizer ?: ObjectManager::getInstance()->get(Normalizer::class);
     }
 
     /**
@@ -37,8 +44,7 @@ class Conditions
      */
     public function encode(array $value)
     {
-        $value = str_replace(['{', '}', '"', '\\\\'], ['[', ']', '`', '|'], $this->serializer->serialize($value));
-        return $value;
+        return $this->normalizer->replaceReservedCharacters($this->serializer->serialize($value));
     }
 
     /**
@@ -49,8 +55,8 @@ class Conditions
      */
     public function decode($value)
     {
-        $value = str_replace(['[', ']', '`', '|'], ['{', '}', '"', '\\\\'], $value);
-        $value = $this->serializer->unserialize($value);
-        return $value;
+        return $this->serializer->unserialize(
+            $this->normalizer->restoreReservedCharacters($value)
+        );
     }
 }

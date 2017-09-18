@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -17,7 +17,7 @@ require([
 <!--
 <?php $myBlock = $block->getLayout()->getBlock('roleUsersGrid'); ?>
 <?php if (is_object($myBlock) && $myBlock->getJsObjectName()): ?>
-    var checkBoxes = $H(<?php /* @escapeNotVerified */ echo $myBlock->getUsers(true) ?>);
+    var checkBoxes = $H(<?= /* @escapeNotVerified */ $myBlock->getUsers(true) ?>);
     var warning = false;
     if (checkBoxes.size() > 0) {
         warning = true;
@@ -46,7 +46,7 @@ require([
 
                 if (checked) {
                     confirm({
-                        content: "<?php /* @escapeNotVerified */ echo __('Warning!\r\nThis action will remove this user from already assigned role\r\nAre you sure?') ?>",
+                        content: "<?= /* @escapeNotVerified */ __('Warning!\r\nThis action will remove this user from already assigned role\r\nAre you sure?') ?>",
                         actions: {
                             confirm: function () {
                                 checkbox[0].checked = false;
@@ -95,7 +95,7 @@ require([
         if (!allCheckbox.checked && _.size(checkBoxes._object) > 0) {
             allCheckbox.checked = true;
             confirm({
-                content: "<?php /* @escapeNotVerified */ echo __('Warning!\r\nThis action will remove those users from already assigned roles\r\nAre you sure?') ?>",
+                content: "<?= /* @escapeNotVerified */ __('Warning!\r\nThis action will remove those users from already assigned roles\r\nAre you sure?') ?>",
                 actions: {
                     confirm: function () {
                         allCheckbox.checked = false;
@@ -108,25 +108,25 @@ require([
         }
     }
     function markCheckboxes(value) {
-        <?php /* @escapeNotVerified */ echo $myBlock->getJsObjectName() ?>.rows.each(function(row)
+        <?= /* @escapeNotVerified */ $myBlock->getJsObjectName() ?>.rows.each(function(row)
         {
             $(row).getElementsByClassName('checkbox')[0].checked = value;
-            roleUsersRowInit(<?php /* @escapeNotVerified */ echo $myBlock->getJsObjectName() ?>, row);
+            roleUsersRowInit(<?= /* @escapeNotVerified */ $myBlock->getJsObjectName() ?>, row);
         });
     }
     function onLoad() {
-        if (typeof <?php /* @escapeNotVerified */ echo $myBlock->getJsObjectName() ?> !== 'undefined') {
-            <?php /* @escapeNotVerified */ echo $myBlock->getJsObjectName() ?>.
+        if (typeof <?= /* @escapeNotVerified */ $myBlock->getJsObjectName() ?> !== 'undefined') {
+            <?= /* @escapeNotVerified */ $myBlock->getJsObjectName() ?>.
             rowClickCallback = roleUsersRowClick;
-            <?php /* @escapeNotVerified */ echo $myBlock->getJsObjectName() ?>.
+            <?= /* @escapeNotVerified */ $myBlock->getJsObjectName() ?>.
             initRowCallback = roleUsersRowInit;
-            <?php /* @escapeNotVerified */ echo $myBlock->getJsObjectName() ?>.
+            <?= /* @escapeNotVerified */ $myBlock->getJsObjectName() ?>.
             checkboxCheckCallback = registerUserRole;
-            <?php /* @escapeNotVerified */ echo $myBlock->getJsObjectName() ?>.
+            <?= /* @escapeNotVerified */ $myBlock->getJsObjectName() ?>.
             checkCheckboxes = massSelectUsers;
-            <?php /* @escapeNotVerified */ echo $myBlock->getJsObjectName() ?>.
+            <?= /* @escapeNotVerified */ $myBlock->getJsObjectName() ?>.
             rows.each(function (row) {
-                roleUsersRowInit(<?php /* @escapeNotVerified */ echo $myBlock->getJsObjectName() ?>, row)
+                roleUsersRowInit(<?= /* @escapeNotVerified */ $myBlock->getJsObjectName() ?>, row)
             });
             $('in_role_user_old').value = $('in_role_user').value;
         } else {

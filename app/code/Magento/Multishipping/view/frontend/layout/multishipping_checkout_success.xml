@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -16,7 +16,7 @@
             </action>
         </referenceBlock>
         <referenceContainer name="content">
-            <block class="Magento\Multishipping\Block\Checkout\Success" name="checkout_success" template="checkout/success.phtml" cacheable="false"/>
+            <block class="Magento\Multishipping\Block\Checkout\Success" name="checkout_success" template="Magento_Multishipping::checkout/success.phtml" cacheable="false"/>
         </referenceContainer>
     </body>
 </page>

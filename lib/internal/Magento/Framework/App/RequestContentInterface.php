@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App;
@@ -11,6 +11,7 @@ namespace Magento\Framework\App;
  * Direct usage of RequestInterface and PlainTextRequestInterface is preferable.
  *
  * @api
+ * @since 100.2.0
  */
 interface RequestContentInterface extends RequestInterface, PlainTextRequestInterface
 {

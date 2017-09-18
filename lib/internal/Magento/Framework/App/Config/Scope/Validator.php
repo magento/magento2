@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Config\Scope;
@@ -14,7 +14,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Phrase;
 
 /**
- * @deprecated Added in order to avoid backward incompatibility because class was moved to another directory.
+ * @deprecated 100.2.0 Added in order to avoid backward incompatibility because class was moved to another directory.
  * @see \Magento\Framework\App\Scope\Validator
  */
 class Validator implements ValidatorInterface

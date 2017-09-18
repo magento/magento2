@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -17,7 +17,6 @@ define([
     return function (messageContainer) {
         var serviceUrl,
             payload,
-            method = 'put',
             paymentData = quote.paymentMethod();
 
         /**
@@ -32,23 +31,21 @@ define([
                 email: quote.guestEmail,
                 paymentMethod: paymentData
             };
-            method = 'post';
         } else {
-            serviceUrl = urlBuilder.createUrl('/carts/mine/selected-payment-method', {});
+            serviceUrl = urlBuilder.createUrl('/carts/mine/set-payment-information', {});
             payload = {
                 cartId: quote.getQuoteId(),
-                method: paymentData
+                paymentMethod: paymentData
             };
         }
         fullScreenLoader.startLoader();
 
-        return storage[method](
+        return storage.post(
             serviceUrl, JSON.stringify(payload)
-        ).fail(
-            function (response) {
-                errorProcessor.process(response, messageContainer);
-                fullScreenLoader.stopLoader();
-            }
-        );
+        ).fail(function (response) {
+            errorProcessor.process(response, messageContainer);
+        }).always(function () {
+            fullScreenLoader.stopLoader();
+        });
     };
 });

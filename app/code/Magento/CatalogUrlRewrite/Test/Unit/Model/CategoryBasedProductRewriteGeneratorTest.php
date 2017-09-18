@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model;
@@ -13,7 +13,7 @@ use Magento\CatalogUrlRewrite\Model\ProductScopeRewriteGenerator;
 /**
  * Class CategoryBasedProductRewriteGeneratorTest
  */
-class CategoryBasedProductRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
+class CategoryBasedProductRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ProductScopeRewriteGenerator|\PHPUnit_Framework_MockObject_MockObject

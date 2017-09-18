@@ -1,15 +1,17 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Deploy\Test\Unit\Model\DeploymentConfig;
 
 use Magento\Deploy\Model\DeploymentConfig\ImporterPool;
-use Magento\Framework\App\DeploymentConfig\ImporterInterface;
+use Magento\Deploy\Model\DeploymentConfig\ValidatorFactory;
+use Magento\Framework\App\DeploymentConfig\ValidatorInterface;
 use Magento\Framework\ObjectManagerInterface;
+use PHPUnit_Framework_MockObject_MockObject as Mock;
 
-class ImporterPoolTest extends \PHPUnit_Framework_TestCase
+class ImporterPoolTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ImporterPool
@@ -17,39 +19,36 @@ class ImporterPoolTest extends \PHPUnit_Framework_TestCase
     private $configImporterPool;
 
     /**
-     * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|Mock
      */
     private $objectManagerMock;
 
     /**
-     * @var ImporterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ValidatorFactory|Mock
      */
-    private $importerMock;
-
-    /**
-     * @var \StdClass
-     */
-    private $wrongImporter;
+    private $validatorFactoryMock;
 
     /**
      * @return void
      */
     protected function setUp()
     {
-        $this->importerMock = $this->getMockBuilder(ImporterInterface::class)
-            ->getMockForAbstractClass();
-        $this->wrongImporter = new \StdClass();
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->getMockForAbstractClass();
-        $this->objectManagerMock->expects($this->any())
-            ->method('get')
-            ->willReturnMap([
-                ['Magento\Importer\SomeSection', $this->importerMock],
-                ['Magento\Importer\WrongSection', $this->wrongImporter],
-            ]);
+        $this->validatorFactoryMock = $this->getMockBuilder(ValidatorFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->configImporterPool = new ImporterPool(
             $this->objectManagerMock,
-            ['someSection' => 'Magento\Importer\SomeSection']
+            $this->validatorFactoryMock,
+            [
+                'firstSection' => ['importer_class' => 'Magento\Importer\SomeImporter', 'sort_order' => 20],
+                'secondSection' => [
+                    'importer_class' => 'Magento\Importer\SomeImporter',
+                    'validator_class' => 'Validator\SomeValidator\Class'
+                ],
+                'thirdSection' => ['importer_class' => 'Magento\Importer\SomeImporter', 'sort_order' => 10]
+            ]
         );
     }
 
@@ -58,22 +57,25 @@ class ImporterPoolTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetImporters()
     {
-        $expectedResult = ['someSection' => $this->importerMock];
+        $expectedResult = [
+            'secondSection' => 'Magento\Importer\SomeImporter',
+            'thirdSection' => 'Magento\Importer\SomeImporter',
+            'firstSection' => 'Magento\Importer\SomeImporter',
+        ];
         $this->assertSame($expectedResult, $this->configImporterPool->getImporters());
     }
 
     /**
      * @return void
      * @expectedException \Magento\Framework\Exception\ConfigurationMismatchException
-     * @codingStandardsIgnoreStart
-     * @expectedExceptionMessage wrongSection: Instance of Magento\Framework\App\DeploymentConfig\ImporterInterface is expected, got stdClass instead
-     * @codingStandardsIgnoreEnd
+     * @expectedExceptionMessage Parameter "importer_class" must be present.
      */
-    public function testGetImportersWithException()
+    public function testGetImportersEmptyParameterClass()
     {
         $this->configImporterPool = new ImporterPool(
             $this->objectManagerMock,
-            ['wrongSection' => 'Magento\Importer\WrongSection']
+            $this->validatorFactoryMock,
+            ['wrongSection' => ['class' => '']]
         );
 
         $this->configImporterPool->getImporters();
@@ -84,6 +86,26 @@ class ImporterPoolTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetSections()
     {
-        $this->assertSame(['someSection'], $this->configImporterPool->getSections());
+        $this->assertSame(
+            ['firstSection', 'secondSection', 'thirdSection'],
+            $this->configImporterPool->getSections()
+        );
+    }
+
+    public function testGetValidator()
+    {
+        $validatorMock = $this->getMockBuilder(ValidatorInterface::class)
+            ->getMockForAbstractClass();
+        $this->validatorFactoryMock->expects($this->once())
+            ->method('create')
+            ->with('Validator\SomeValidator\Class')
+            ->willReturn($validatorMock);
+
+        $this->assertNull($this->configImporterPool->getValidator('firstSection'));
+        $this->assertNull($this->configImporterPool->getValidator('thirdSection'));
+        $this->assertInstanceOf(
+            ValidatorInterface::class,
+            $this->configImporterPool->getValidator('secondSection')
+        );
     }
 }

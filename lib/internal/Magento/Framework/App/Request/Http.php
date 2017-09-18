@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Request;
@@ -100,7 +100,7 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
      * @param ConfigInterface $routeConfig
      * @param PathInfoProcessorInterface $pathInfoProcessor
      * @param ObjectManagerInterface  $objectManager
-     * @param string|null $uri
+     * @param \Zend\Uri\UriInterface|string|null $uri
      * @param array $directFrontNames
      */
     public function __construct(

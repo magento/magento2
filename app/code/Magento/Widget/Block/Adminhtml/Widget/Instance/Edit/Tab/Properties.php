@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,7 +12,9 @@
 namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab;
 
 /**
+ * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 100.0.2
  */
 class Properties extends \Magento\Widget\Block\Adminhtml\Widget\Options implements
     \Magento\Backend\Block\Widget\Tab\TabInterface

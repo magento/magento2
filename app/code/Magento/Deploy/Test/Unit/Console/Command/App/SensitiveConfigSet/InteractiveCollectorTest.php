@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Deploy\Test\Unit\Console\Command\App\SensitiveConfigSet;
@@ -13,7 +13,7 @@ use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Question\QuestionFactory;
 use Symfony\Component\Console\Helper\QuestionHelper;
 
-class InteractiveCollectorTest extends \PHPUnit_Framework_TestCase
+class InteractiveCollectorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var QuestionFactory|MockObject

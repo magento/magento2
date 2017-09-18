@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Deploy\Console\Command\App\SensitiveConfigSet;
@@ -10,12 +10,12 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Interface for collection values from user input.
+ * Interface for collection values from user input
  */
 interface CollectorInterface
 {
     /**
-     * Collects values from user input and return result as array.
+     * Collects values from user input and return result as array
      *
      * @param InputInterface $input
      * @param OutputInterface $output

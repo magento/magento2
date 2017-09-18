@@ -1,19 +1,18 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Setup\Controller;
 
+use Magento\Framework\Module\Status;
 use Magento\Setup\Model\DependencyReadinessCheck;
+use Magento\Setup\Model\ModuleStatusFactory;
 use Magento\Setup\Model\UninstallDependencyCheck;
 use Zend\Json\Json;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
-use Magento\Framework\Filesystem;
-use Magento\Setup\Model\ModuleStatusFactory;
-use Magento\Framework\Module\Status;
 
 /**
  * Class DependencyCheck
@@ -147,7 +146,6 @@ class DependencyCheck extends AbstractActionController
                     . implode("<br>", $constraints);
                 $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
             }
-
         } catch (\Exception $e) {
             $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
             $data['errorMessage'] = $e->getMessage();

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,9 +9,9 @@
     <acl>
         <resources>
             <resource id="Magento_Backend::admin">
-                <resource id="Magento_Catalog::catalog" title="Products" translate="title" sortOrder="30">
+                <resource id="Magento_Catalog::catalog" title="Catalog" translate="title" sortOrder="30">
                     <resource id="Magento_Catalog::catalog_inventory" title="Inventory" translate="title" sortOrder="10">
-                        <resource id="Magento_Catalog::products" title="Catalog" translate="title" sortOrder="10" />
+                        <resource id="Magento_Catalog::products" title="Products" translate="title" sortOrder="10" />
                         <resource id="Magento_Catalog::categories" title="Categories" translate="title" sortOrder="20" />
                     </resource>
                 </resource>

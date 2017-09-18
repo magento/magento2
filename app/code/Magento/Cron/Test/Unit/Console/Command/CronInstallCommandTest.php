@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cron\Test\Unit\Console\Command;
@@ -13,7 +13,7 @@ use Magento\Framework\Console\Cli;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 
-class CronInstallCommandTest extends \PHPUnit_Framework_TestCase
+class CronInstallCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CrontabManagerInterface|\PHPUnit_Framework_MockObject_MockObject

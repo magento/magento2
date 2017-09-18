@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TestModule2\Service\V1\Entity;
@@ -24,7 +24,6 @@ class Item extends \Magento\Framework\Api\AbstractExtensibleObject
         return $this->setData('id', $id);
     }
 
-
     /**
      * @return string
      */
@@ -32,6 +31,7 @@ class Item extends \Magento\Framework\Api\AbstractExtensibleObject
     {
         return $this->_data['name'];
     }
+
     /**
      * @param string $name
      * @return $this

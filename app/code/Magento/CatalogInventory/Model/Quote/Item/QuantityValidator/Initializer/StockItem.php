@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer;
@@ -58,6 +58,7 @@ class StockItem
         \Magento\Quote\Model\Quote\Item $quoteItem,
         $qty
     ) {
+        $product = $quoteItem->getProduct();
         /**
          * When we work with subitem
          */
@@ -67,19 +68,19 @@ class StockItem
              * we are using 0 because original qty was processed
              */
             $qtyForCheck = $this->quoteItemQtyList
-                ->getQty($quoteItem->getProduct()->getId(), $quoteItem->getId(), $quoteItem->getQuoteId(), 0);
+                ->getQty($product->getId(), $quoteItem->getId(), $quoteItem->getQuoteId(), 0);
         } else {
             $increaseQty = $quoteItem->getQtyToAdd() ? $quoteItem->getQtyToAdd() : $qty;
             $rowQty = $qty;
             $qtyForCheck = $this->quoteItemQtyList->getQty(
-                $quoteItem->getProduct()->getId(),
+                $product->getId(),
                 $quoteItem->getId(),
                 $quoteItem->getQuoteId(),
                 $increaseQty
             );
         }
 
-        $productTypeCustomOption = $quoteItem->getProduct()->getCustomOption('product_type');
+        $productTypeCustomOption = $product->getCustomOption('product_type');
         if ($productTypeCustomOption !== null) {
             // Check if product related to current item is a part of product that represents product set
             if ($this->typeConfig->isProductSet($productTypeCustomOption->getValue())) {
@@ -87,14 +88,14 @@ class StockItem
             }
         }
 
-        $stockItem->setProductName($quoteItem->getProduct()->getName());
+        $stockItem->setProductName($product->getName());
 
         $result = $this->stockState->checkQuoteItemQty(
-            $quoteItem->getProduct()->getId(),
+            $product->getId(),
             $rowQty,
             $qtyForCheck,
             $qty,
-            $quoteItem->getProduct()->getStore()->getWebsiteId()
+            $product->getStore()->getWebsiteId()
         );
 
         if ($stockItem->hasIsChildItem()) {

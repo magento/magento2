@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Captcha\Model;
@@ -8,7 +8,8 @@ namespace Magento\Captcha\Model;
 /**
  * Implementation of \Zend\Captcha\Image
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
 class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model\CaptchaInterface
 {
@@ -29,12 +30,14 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
 
     /**
      * @var \Magento\Captcha\Helper\Data
+     * @since 100.2.0
      */
     protected $captchaData;
 
     /**
      * Captcha expire time
      * @var int
+     * @since 100.2.0
      */
     protected $expiration;
 
@@ -42,17 +45,20 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      * Override default value to prevent a captcha cut off
      * @var int
      * @see \Zend\Captcha\Image::$fsize
+     * @since 100.2.0
      */
     protected $fsize = 22;
 
     /**
      * Captcha form id
      * @var string
+     * @since 100.2.0
      */
     protected $formId;
 
     /**
      * @var \Magento\Captcha\Model\ResourceModel\LogFactory
+     * @since 100.2.0
      */
     protected $resLogFactory;
 
@@ -60,11 +66,13 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      * Overrides parent parameter as session comes in constructor.
      *
      * @var bool
+     * @since 100.2.0
      */
     protected $keepSession = true;
 
     /**
      * @var \Magento\Framework\Session\SessionManagerInterface
+     * @since 100.2.0
      */
     protected $session;
 
@@ -117,8 +125,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      */
     public function isRequired($login = null)
     {
-        if (
-            $this->isUserAuth()
+        if ($this->isUserAuth()
             && !$this->isShownToLoggedInUser()
             || !$this->isEnabled()
             || !in_array(
@@ -348,6 +355,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      *
      * @param bool $value
      * @return void
+     * @since 100.1.0
      */
     public function setShowCaptchaInSession($value = true)
     {
@@ -363,6 +371,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      *
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 100.2.0
      */
     protected function generateWord()
     {
@@ -390,6 +399,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      *
      * @return int
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 100.2.0
      */
     public function getWordLen()
     {
@@ -425,8 +435,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
             return true;
         }
 
-        if (
-            (string)$this->captchaData->getConfig('mode') == \Magento\Captcha\Helper\Data::MODE_AFTER_FAIL
+        if ((string)$this->captchaData->getConfig('mode') == \Magento\Captcha\Helper\Data::MODE_AFTER_FAIL
             && $this->getAllowedAttemptsForSameLogin() == 0
         ) {
             return true;
@@ -481,6 +490,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      *
      * @param  string $word
      * @return $this
+     * @since 100.2.0
      */
     protected function setWord($word)
     {
@@ -510,6 +520,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      * @see \Zend\Captcha\Image::_randomSize()
      * @return int
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 100.2.0
      */
     protected function randomSize()
     {
@@ -526,6 +537,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      *
      * Added SuppressWarnings since this method is declared in parent class and we can not use other method name.
      * @SuppressWarnings(PHPMD.ShortMethodName)
+     * @since 100.2.0
      */
     protected function gc()
     {

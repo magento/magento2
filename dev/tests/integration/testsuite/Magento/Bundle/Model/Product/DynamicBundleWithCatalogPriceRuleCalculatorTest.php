@@ -1,13 +1,15 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Bundle\Model\Product;
 
 /**
- * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/dynamic_bundle_product_with_catalog_rule.php
+ * @codingStandardsIgnoreStart
+ * @magentoDataFixtureBeforeTransaction Magento/Bundle/_files/PriceCalculator/dynamic_bundle_product_with_catalog_rule.php
+ * @codingStandardsIgnoreEnd
  * @magentoAppArea frontend
  */
 class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract

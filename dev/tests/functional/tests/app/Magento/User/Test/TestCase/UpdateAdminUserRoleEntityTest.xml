@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -17,6 +17,7 @@
             <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogin" />
         </variation>
         <variation name="UpdateAdminUserRoleEntityTestVariation2">
+            <data name="issue" xsi:type="string">MAGETWO-65658: [FT] User with restricted access can't log in to Admin in UpdateAdminUserEntityTest</data>
             <data name="user/dataset" xsi:type="string">default</data>
             <data name="role/data/resource_access" xsi:type="string">Custom</data>
             <data name="role/data/roles_resources" xsi:type="string">Sales</data>

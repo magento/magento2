@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,7 +9,7 @@
     <update handle="customer_account"/>
     <body>
         <referenceContainer name="content">
-            <block class="Magento\Downloadable\Block\Customer\Products\ListProducts" name="downloadable_customer_products_list" template="customer/products/list.phtml" cacheable="false"/>
+            <block class="Magento\Downloadable\Block\Customer\Products\ListProducts" name="downloadable_customer_products_list" template="Magento_Downloadable::customer/products/list.phtml" cacheable="false"/>
         </referenceContainer>
         <referenceBlock name="root">
             <action method="setHeaderTitle">

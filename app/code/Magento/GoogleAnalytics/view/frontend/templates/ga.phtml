@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,20 +8,19 @@
 
 ?>
 <?php /** @var $block \Magento\GoogleAnalytics\Block\Ga */ ?>
-<?php if (!$this->helper('Magento\Cookie\Helper\Cookie')->isUserNotAllowSaveCookie()): ?>
 <?php $accountId = $block->getConfig(\Magento\GoogleAnalytics\Helper\Data::XML_PATH_ACCOUNT) ?>
 <!-- BEGIN GOOGLE ANALYTICS CODE -->
-<script>
-//<![CDATA[
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-    <?php /* @escapeNotVerified */ echo $block->getPageTrackingCode($accountId) ?>
-    <?php /* @escapeNotVerified */ echo $block->getOrdersTrackingCode() ?>
-
-//]]>
+<script type="text/x-magento-init">
+{
+    "*": {
+        "Magento_GoogleAnalytics/js/google-analytics": {
+            "isCookieRestrictionModeEnabled": <?= (int)$block->isCookieRestrictionModeEnabled() ?>,
+            "currentWebsite": <?= (int)$block->getCurrentWebsiteId() ?>,
+            "cookieName": "<?= /* @escapeNotVerified */ \Magento\Cookie\Helper\Cookie::IS_USER_ALLOWED_SAVE_COOKIE ?>",
+            "ordersTrackingData": <?= /* @escapeNotVerified */ json_encode($block->getOrdersTrackingData()) ?>,
+            "pageTrackingData": <?= /* @escapeNotVerified */ json_encode($block->getPageTrackingData($accountId)) ?>
+        }
+    }
+}
 </script>
 <!-- END GOOGLE ANALYTICS CODE -->
-<?php endif; ?>

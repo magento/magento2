@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -29,7 +29,7 @@ class BatchRangeIterator implements BatchIteratorInterface
     private $currentSelect;
 
     /**
-     * @var string
+     * @var string|array
      */
     private $rangeField;
 
@@ -46,7 +46,7 @@ class BatchRangeIterator implements BatchIteratorInterface
     /**
      * @var int
      */
-    private $currentBatch = 0;
+    private $currentOffset = 0;
 
     /**
      * @var int
@@ -79,7 +79,7 @@ class BatchRangeIterator implements BatchIteratorInterface
      * @param Select $select
      * @param int $batchSize
      * @param string $correlationName
-     * @param string $rangeField
+     * @param string|array $rangeField
      * @param string $rangeFieldAlias
      */
     public function __construct(
@@ -107,7 +107,7 @@ class BatchRangeIterator implements BatchIteratorInterface
     public function current()
     {
         if (null === $this->currentSelect) {
-            $this->isValid = ($this->currentBatch + $this->batchSize) < $this->totalItemCount;
+            $this->isValid = ($this->currentOffset + $this->batchSize) <= $this->totalItemCount;
             $this->currentSelect = $this->initSelectObject();
         }
         return $this->currentSelect;
@@ -138,7 +138,7 @@ class BatchRangeIterator implements BatchIteratorInterface
         if (null === $this->currentSelect) {
             $this->current();
         }
-        $this->isValid = ($this->batchSize + $this->currentBatch) < $this->totalItemCount;
+        $this->isValid = ($this->batchSize + $this->currentOffset) <= $this->totalItemCount;
         $select = $this->initSelectObject();
         if ($this->isValid) {
             $this->iteration++;
@@ -197,12 +197,17 @@ class BatchRangeIterator implements BatchIteratorInterface
 
             $this->totalItemCount = intval($row['cnt']);
         }
+
+        $rangeField = is_array($this->rangeField) ? $this->rangeField : [$this->rangeField];
+
         /**
          * Reset sort order section from origin select object
          */
-        $object->order($this->correlationName . '.' . $this->rangeField . ' ' . \Magento\Framework\DB\Select::SQL_ASC);
-        $object->limit($this->currentBatch, $this->batchSize);
-        $this->currentBatch += $this->batchSize;
+        foreach ($rangeField as $field) {
+            $object->order($this->correlationName . '.' . $field . ' ' . \Magento\Framework\DB\Select::SQL_ASC);
+        }
+        $object->limit($this->batchSize, $this->currentOffset);
+        $this->currentOffset += $this->batchSize;
 
         return $object;
     }

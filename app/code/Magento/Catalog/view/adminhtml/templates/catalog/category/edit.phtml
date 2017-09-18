@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,13 +10,13 @@
 ?>
 <div data-id="information-dialog-category" class="messages" style="display: none;">
     <div class="message message-notice">
-        <div><?php /* @escapeNotVerified */ echo __('This operation can take a long time'); ?></div>
+        <div><?= /* @escapeNotVerified */ __('This operation can take a long time') ?></div>
     </div>
 </div>
 <script type="text/x-magento-init">
     {
         "*": {
-            "categoryForm": {"refreshUrl": "<?php /* @escapeNotVerified */ echo $block->getRefreshPathUrl() ?>"}
+            "categoryForm": {"refreshUrl": "<?= /* @escapeNotVerified */ $block->getRefreshPathUrl() ?>"}
         }
     }
 </script>

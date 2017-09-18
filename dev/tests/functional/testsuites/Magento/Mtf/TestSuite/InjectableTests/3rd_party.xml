@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -16,5 +16,8 @@
         <allow>
             <tag group="test_type" value="3rd_party_test" />
         </allow>
+        <deny>
+            <tag group="test_type" value="3rd_party_test_single_flow" />
+        </deny>
     </rule>
 </config>

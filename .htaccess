@@ -222,7 +222,7 @@
         order allow,deny
         deny from all
     </Files>
-    <Files .php_cs>
+    <Files .php_cs.dist>
         order allow,deny
         deny from all
     </Files>
@@ -231,10 +231,6 @@
         deny from all
     </Files>
     <Files CHANGELOG.md>
-        order allow,deny
-        deny from all
-    </Files>
-    <Files CONTRIBUTING.md>
         order allow,deny
         deny from all
     </Files>

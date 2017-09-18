@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Crontab;
@@ -168,7 +168,7 @@ class CrontabManager implements CrontabManagerInterface
      */
     private function save($content)
     {
-        $content = str_replace('%', '%%', $content);
+        $content = str_replace(['%', '"'], ['%%', '\"'], $content);
 
         try {
             $this->shell->execute('echo "' . $content . '" | crontab -');

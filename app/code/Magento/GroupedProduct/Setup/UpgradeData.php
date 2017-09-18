@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GroupedProduct\Setup;
@@ -46,7 +46,8 @@ class UpgradeData implements UpgradeDataInterface
 
             $connection->query(
                 $connection->insertFromSelect(
-                    $select, $this->relationProcessor->getMainTable(),
+                    $select,
+                    $this->relationProcessor->getMainTable(),
                     ['parent_id', 'child_id'],
                     AdapterInterface::INSERT_IGNORE
                 )

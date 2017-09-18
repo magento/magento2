@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,21 +13,21 @@
 <?php if ($block->isMsgVisible()): ?>
     <div class="availability only">
         <a href="#"
-           data-mage-init='{"toggleAdvanced": {"selectorsToggleClass": "active", "baseToggleClass": "expanded", "toggleContainers": "#<?php /* @escapeNotVerified */ echo $block->getDetailsPlaceholderId() ?>"}}'
-           id="<?php /* @escapeNotVerified */ echo $block->getPlaceholderId() ?>"
-           title="<?php /* @escapeNotVerified */ echo __('Only %1 left', ($block->getStockQtyLeft())) ?>"
+           data-mage-init='{"toggleAdvanced": {"selectorsToggleClass": "active", "baseToggleClass": "expanded", "toggleContainers": "#<?= /* @escapeNotVerified */ $block->getDetailsPlaceholderId() ?>"}}'
+           id="<?= /* @escapeNotVerified */ $block->getPlaceholderId() ?>"
+           title="<?= /* @escapeNotVerified */ __('Only %1 left', ($block->getStockQtyLeft())) ?>"
            class="action show">
-            <?php /* @escapeNotVerified */ echo __('Only %1 left', "<strong>{$block->getStockQtyLeft()}</strong>") ?>
+            <?= /* @escapeNotVerified */ __('Only %1 left', "<strong>{$block->getStockQtyLeft()}</strong>") ?>
         </a>
     </div>
-    <div class="availability only detailed" id="<?php /* @escapeNotVerified */ echo $block->getDetailsPlaceholderId() ?>">
+    <div class="availability only detailed" id="<?= /* @escapeNotVerified */ $block->getDetailsPlaceholderId() ?>">
         <div class="table-wrapper">
             <table class="data table">
-                <caption class="table-caption"><?php /* @escapeNotVerified */ echo __('Product availability'); ?></caption>
+                <caption class="table-caption"><?= /* @escapeNotVerified */ __('Product availability') ?></caption>
                 <thead>
                 <tr>
-                    <th class="col item" scope="col"><?php /* @escapeNotVerified */ echo __('Product Name') ?></th>
-                    <th class="col qty" scope="col"><?php /* @escapeNotVerified */ echo __('Qty') ?></th>
+                    <th class="col item" scope="col"><?= /* @escapeNotVerified */ __('Product Name') ?></th>
+                    <th class="col qty" scope="col"><?= /* @escapeNotVerified */ __('Qty') ?></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -35,8 +35,8 @@
                     <?php $childProductStockQty = $block->getProductStockQty($childProduct); ?>
                     <?php if ($childProductStockQty > 0) : ?>
                         <tr>
-                            <td data-th="<?php echo $block->escapeHtml(__('Product Name')); ?>" class="col item"><?php /* @escapeNotVerified */ echo $childProduct->getName() ?></td>
-                            <td data-th="<?php echo $block->escapeHtml(__('Qty')); ?>" class="col qty"><?php /* @escapeNotVerified */ echo $childProductStockQty ?></td>
+                            <td data-th="<?= $block->escapeHtml(__('Product Name')) ?>" class="col item"><?= /* @escapeNotVerified */ $childProduct->getName() ?></td>
+                            <td data-th="<?= $block->escapeHtml(__('Qty')) ?>" class="col qty"><?= /* @escapeNotVerified */ $childProductStockQty ?></td>
                         </tr>
                     <?php endif ?>
                 <?php endforeach ?>

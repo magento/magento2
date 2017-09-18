@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,13 +11,13 @@ $code = $block->escapeHtml($block->getMethodCode());
 ?>
 <fieldset data-mage-init='{
         "Magento_Vault/js/vault": {
-            "code": "<?php /* @noEscape */ echo $code; ?>",
-            "fieldset": "payment_form_<?php /* @noEscape */ echo $code; ?>"
+            "code": "<?= /* @noEscape */ $code ?>",
+            "fieldset": "payment_form_<?= /* @noEscape */ $code ?>"
         }
     }' class="admin__fieldset payment-method"
-          id="payment_form_<?php /* @noEscape */ echo $code; ?>"
+          id="payment_form_<?= /* @noEscape */ $code ?>"
           style="display:none"
               >
-    <input type="hidden" name="payment[public_hash]" id="<?php /* @noEscape */ echo $code; ?>_public_hash" value="" />
-    <?php echo $block->getChildHtml(); ?>
+    <input type="hidden" name="payment[public_hash]" id="<?= /* @noEscape */ $code ?>_public_hash" value="" />
+    <?= $block->getChildHtml() ?>
 </fieldset>

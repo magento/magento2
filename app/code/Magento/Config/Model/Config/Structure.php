@@ -1,12 +1,48 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Model\Config;
 
+use Magento\Framework\Exception\LocalizedException;
+
 /**
  * System configuration structure.
+ *
+ * All paths are declared in module's system.xml.
+ *
+ * ```xml
+ * <section id="section_id">
+ *      <group id="group_id" ...>
+ *          <field id="field_one_id" ...>
+ *              <label>Field One</label>
+ *              ...
+ *          </field>
+ *          <field id="field_two_id" ...>
+ *              <label>Field Two</label>
+ *              <config_path>section/group/field</config_path>
+ *              ...
+ *          </field>
+ *      </group>
+ * </section>
+ * ```
+ *
+ * Structure path is the nested path of node ids (section, group, field).
+ *
+ * Config path is the path which is declared in <config_path> node.
+ * If this node is not provided then config path is the same as structure path.
+ *
+ * With the example above you can see that the field <field id="field_one_id"> has the next paths:
+ *  - the structure path section_id/group_id/field_one_id
+ *  - the configuration path section_id/group_id/field_one_id
+ *
+ * Also you can see that the field <field id="field_two_id"> has the next paths:
+ * - the structure path section_id/group_id/field_two_id
+ * - the configuration path section/group/field
+ *
+ * @api
+ * @since 100.0.2
  */
 class Structure implements \Magento\Config\Model\Config\Structure\SearchInterface
 {
@@ -54,8 +90,27 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
      * List of config sections
      *
      * @var array
+     * @since 100.1.0
      */
     protected $sectionList;
+
+    /**
+     * Collects config paths and their structure paths from configuration files
+     *
+     * For example:
+     * ```php
+     * [
+     *  'section_id/group_id/field_one_id' => [
+     *      'section_id/group_id/field_one_id'
+     *  ],
+     * 'section/group/field' => [
+     *      'section_id/group_id/field_two_id'
+     * ]
+     * ```
+     *
+     * @var array
+     */
+    private $mappedPaths;
 
     /**
      * @param \Magento\Config\Model\Config\Structure\Data $structureData
@@ -98,6 +153,7 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
      *
      * @return array
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @since 100.1.0
      */
     public function getSectionList()
     {
@@ -114,9 +170,9 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
     }
 
     /**
-     * Find element by path
+     * Find element by structure path
      *
-     * @param string $path
+     * @param string $path The structure path
      * @return \Magento\Config\Model\Config\Structure\ElementInterface|null
      */
     public function getElement($path)
@@ -125,9 +181,28 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
     }
 
     /**
+     * Find element by config path
+     *
+     * @param string $path The configuration path
+     * @return \Magento\Config\Model\Config\Structure\ElementInterface|null
+     * @since 100.2.0
+     */
+    public function getElementByConfigPath($path)
+    {
+        $allPaths = $this->getFieldPaths();
+
+        if (isset($allPaths[$path])) {
+            $path = array_shift($allPaths[$path]);
+        }
+
+        return $this->getElementByPathParts(explode('/', $path));
+    }
+
+    /**
      * Retrieve first available section in config structure
      *
-     * @return \Magento\Config\Model\Config\Structure\ElementInterface
+     * @return Structure\ElementInterface
+     * @throws LocalizedException
      */
     public function getFirstSection()
     {
@@ -136,6 +211,10 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
         /** @var $tab \Magento\Config\Model\Config\Structure\Element\Tab */
         $tab = $tabs->current();
         $tab->getChildren()->rewind();
+        if (!$tab->getChildren()->current()->isVisible()) {
+            throw new LocalizedException(__('Visible section not found.'));
+        }
+
         return $tab->getChildren()->current();
     }
 
@@ -283,15 +362,20 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
      * 'section/group/field' => [
      *      'section_id/group_id/field_two_id'
      * ]
-     *```
+     * ```
      *
      * @return array An array of config path to config structure path map
+     * @since 100.2.0
      */
     public function getFieldPaths()
     {
         $sections = !empty($this->_data['sections']) ? $this->_data['sections'] : [];
 
-        return $this->getFieldsRecursively($sections);
+        if (!$this->mappedPaths) {
+            $this->mappedPaths = $this->getFieldsRecursively($sections);
+        }
+
+        return $this->mappedPaths;
     }
 
     /**

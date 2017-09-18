@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,6 +13,8 @@ use Magento\Framework\Controller\AbstractResult;
 /**
  * In many cases controller actions may result in a redirect
  * so this is a result object that implements all necessary properties of a HTTP redirect
+ *
+ * @api
  */
 class Redirect extends AbstractResult
 {

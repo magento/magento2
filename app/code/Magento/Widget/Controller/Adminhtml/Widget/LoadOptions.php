@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Widget\Controller\Adminhtml\Widget;
@@ -53,7 +53,7 @@ class LoadOptions extends \Magento\Backend\App\Action
 
     /**
      * @return \Magento\Widget\Helper\Conditions
-     * @deprecated
+     * @deprecated 100.1.4
      */
     private function getConditionsHelper()
     {

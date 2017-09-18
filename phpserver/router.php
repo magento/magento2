@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -20,7 +20,6 @@
 define('DEBUG_ROUTER', false);
 
 $debug = function ($val) {
-
     if (!DEBUG_ROUTER) {
         return;
     }
@@ -29,7 +28,7 @@ $debug = function ($val) {
         $val = json_encode($val);
     }
 
-    echo 'debug: '.$val.PHP_EOL.'<br/>'.PHP_EOL;
+    echo 'debug: ' . $val . PHP_EOL . '<br/>' . PHP_EOL;
 };
 
 /**
@@ -62,17 +61,24 @@ if (php_sapi_name() === 'cli-server') {
     }
 
     $debug($route);
+    
+    if (strpos($route, 'static/version') === 0) {
+        $redirectRoute = preg_replace("/version\d+\//", "", $route, 1);
+        $redirectDebugInfo = "redirect static version string to: " . $redirectRoute;
+        $debug($redirectDebugInfo);
+        header('Location: /' . $redirectRoute);
+        exit;
+    }
 
-    if (
-        strpos($route, 'media/') === 0 ||
+    if (strpos($route, 'media/') === 0 ||
         strpos($route, 'opt/') === 0 ||
         strpos($route, 'static/') === 0 ||
         strpos($route, 'errors/default/css/') === 0 ||
         strpos($route, 'errors/default/images/') === 0
     ) {
-        $magentoPackagePubDir = __DIR__."/../pub";
+        $magentoPackagePubDir = __DIR__ . "/../pub";
 
-        $file = $magentoPackagePubDir.'/'.$route;
+        $file = $magentoPackagePubDir . '/' . $route;
         $debug($file);
         if (file_exists($file)) {
             $debug('file exists');
@@ -82,10 +88,10 @@ if (php_sapi_name() === 'cli-server') {
             if (strpos($route, 'static/') === 0) {
                 $route = preg_replace('#static/#', '', $route, 1);
                 $_GET['resource'] = $route;
-                include($magentoPackagePubDir.'/static.php');
+                include $magentoPackagePubDir . '/static.php';
                 exit;
             } elseif (strpos($route, 'media/') === 0) {
-                include($magentoPackagePubDir.'/get.php');
+                include $magentoPackagePubDir . '/get.php';
                 exit;
             }
         }

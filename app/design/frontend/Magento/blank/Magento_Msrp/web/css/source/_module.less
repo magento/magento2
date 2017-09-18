@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -40,6 +40,12 @@
                 }
             }
         }
+
+        .regular-price {
+            .price-label {
+                display: none;
+            }
+        }
     }
 
     .map-old-price,
@@ -66,6 +72,11 @@
             margin: 0 auto;
         }
     }
+
+    button.map-show-info {
+        .lib-button-reset();
+        .lib-button-as-link();
+    }
 }
 
 //
@@ -74,7 +85,7 @@
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .map-popup {
-        max-width: 100%; 
+        max-width: 100%;
     }
 
     .map-old-price,

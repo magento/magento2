@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Dhl\Block\Adminhtml;
@@ -71,14 +71,12 @@ class Unitofmeasure extends Field
             )
         );
 
-        $weight = round(
-            $this->carrierHelper->convertMeasureWeight(
-                $kgWeight,
-                \Zend_Measure_Weight::KILOGRAM,
-                \Zend_Measure_Weight::POUND
-            ),
-            3
+        $convertedWeight = $this->carrierHelper->convertMeasureWeight(
+            $kgWeight,
+            \Zend_Measure_Weight::KILOGRAM,
+            \Zend_Measure_Weight::POUND
         );
+        $weight = sprintf('%.3f', $convertedWeight);
 
         $this->setDivideOrderWeightNoteLbp(
             __(

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Braintree\Model\Adminhtml\System\Config;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
-class CountryCreditCardTest extends \PHPUnit_Framework_TestCase
+class CountryCreditCardTest extends \PHPUnit\Framework\TestCase
 {
     /** @var CountryCreditCard */
     private $countryCreditCardConfig;

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -38,10 +38,10 @@
         <xs:attribute name="value" type="xs:string"/>
     </xs:complexType>
     <xs:complexType name="mediaType" mixed="true">
-        <xs:all>
-            <xs:element name="images" type="imageType" minOccurs="0"/>
-            <xs:element name="videos" type="videoType" minOccurs="0"/>
-        </xs:all>
+        <xs:sequence>
+            <xs:element name="images" type="imageType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="videos" type="videoType" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
     </xs:complexType>
 
     <xs:complexType name="imageType">

@@ -1,19 +1,17 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model\Quote;
 
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\ExtensionAttributesFactory;
-use Magento\Quote\Api\Data\CartItemInterface;
 
 /**
  * Sales Quote Item Model
  *
- * @method \Magento\Quote\Model\ResourceModel\Quote\Item _getResource()
- * @method \Magento\Quote\Model\ResourceModel\Quote\Item getResource()
+ * @api
  * @method string getCreatedAt()
  * @method \Magento\Quote\Model\Quote\Item setCreatedAt(string $value)
  * @method string getUpdatedAt()
@@ -95,6 +93,7 @@ use Magento\Quote\Api\Data\CartItemInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @since 100.0.2
  */
 class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Magento\Quote\Api\Data\CartItemInterface
 {
@@ -172,6 +171,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
 
     /**
      * @var \Magento\CatalogInventory\Api\StockRegistryInterface
+     * @deprecated 100.2.0
      */
     protected $stockRegistry;
 
@@ -434,8 +434,8 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
             ->setTaxClassId($product->getTaxClassId())
             ->setBaseCost($product->getCost());
 
-        $stockItem = $this->stockRegistry->getStockItem($product->getId(), $product->getStore()->getWebsiteId());
-        $this->setIsQtyDecimal($stockItem->getIsQtyDecimal());
+        $stockItem = $product->getExtensionAttributes()->getStockItem();
+        $this->setIsQtyDecimal($stockItem ? $stockItem->getIsQtyDecimal() : false);
 
         $this->_eventManager->dispatch(
             'sales_quote_item_set_product',
@@ -615,8 +615,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     {
         if (is_array($option)) {
             $option = $this->_itemOptionFactory->create()->setData($option)->setItem($this);
-        } elseif (
-            $option instanceof \Magento\Framework\DataObject &&
+        } elseif ($option instanceof \Magento\Framework\DataObject &&
             !$option instanceof \Magento\Quote\Model\Quote\Item\Option
         ) {
             $option = $this->_itemOptionFactory->create()->setData(
@@ -671,7 +670,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     }
 
     /**
-     *Remove option from item options
+     * Remove option from item options
      *
      * @param string $code
      * @return $this
@@ -1045,6 +1044,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     {
         return $this->setData(self::KEY_PRODUCT_OPTION, $productOption);
     }
+
     //@codeCoverageIgnoreEnd
 
     /**

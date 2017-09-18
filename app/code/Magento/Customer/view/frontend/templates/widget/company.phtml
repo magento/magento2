@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,10 +8,10 @@
 
 /** @var \Magento\Customer\Block\Widget\Company $block */
 ?>
-<div class="field company <?php echo $block->isRequired() ? 'required' : '' ?>">
+<div class="field company <?= $block->isRequired() ? 'required' : '' ?>">
     <label for="company" class="label">
         <span>
-            <?php echo $block->escapeHtml(__('Company')) ?>
+            <?= $block->escapeHtml(__('Company')) ?>
         </span>
     </label>
     <div class="control">
@@ -24,9 +24,9 @@
         <input type="text"
                name="company"
                id="company"
-               value="<?php echo $block->escapeHtmlAttr($block->getCompany()) ?>"
-               title="<?php echo $block->escapeHtmlAttr(__('Company')) ?>"
-               class="input-text <?php echo $_validationClass ?: '' ?>"
+               value="<?= $block->escapeHtmlAttr($block->getCompany()) ?>"
+               title="<?= $block->escapeHtmlAttr(__('Company')) ?>"
+               class="input-text <?= $_validationClass ?: '' ?>"
          >
     </div>
 </div>

@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="product.composite.fieldset">
-            <block class="Magento\Downloadable\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Downloadable" name="product.composite.fieldset.downloadable" before="product.composite.fieldset.options" template="product/composite/fieldset/downloadable.phtml"/>
+            <block class="Magento\Downloadable\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Downloadable" name="product.composite.fieldset.downloadable" before="product.composite.fieldset.options" template="Magento_Downloadable::product/composite/fieldset/downloadable.phtml"/>
         </referenceBlock>
     </body>
 </page>

@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model\Cart\Totals;
 
 use Magento\Catalog\Helper\Product\ConfigurationPool;
-use Magento\Framework\Event\ManagerInterface as EventManager;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Api\ExtensibleDataInterface;
+use Magento\Framework\Event\ManagerInterface as EventManager;
 
 /**
  * Cart item totals converter.
@@ -38,23 +38,33 @@ class ItemConverter
     private $dataObjectHelper;
 
     /**
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
+
+    /**
      * Constructs a totals item converter object.
      *
      * @param ConfigurationPool $configurationPool
      * @param EventManager $eventManager
      * @param \Magento\Quote\Api\Data\TotalsItemInterfaceFactory $totalsItemFactory
      * @param DataObjectHelper $dataObjectHelper
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @throws \RuntimeException
      */
     public function __construct(
         ConfigurationPool $configurationPool,
         EventManager $eventManager,
         \Magento\Quote\Api\Data\TotalsItemInterfaceFactory $totalsItemFactory,
-        DataObjectHelper $dataObjectHelper
+        DataObjectHelper $dataObjectHelper,
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->configurationPool = $configurationPool;
         $this->eventManager = $eventManager;
         $this->totalsItemFactory = $totalsItemFactory;
         $this->dataObjectHelper = $dataObjectHelper;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
     }
 
     /**
@@ -103,6 +113,6 @@ class ItemConverter
             $optionsData[$index] = $option;
             $optionsData[$index]['label'] = $optionValue['label'];
         }
-        return \Zend_Json::encode($optionsData);
+        return $this->serializer->serialize($optionsData);
     }
 }

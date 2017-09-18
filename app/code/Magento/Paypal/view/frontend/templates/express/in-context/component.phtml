@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 use Magento\Paypal\Block\Express\InContext\Minicart\Button;
@@ -31,7 +31,7 @@ $configuration = [
 ];
 
 ?>
-<div style="display: none;" id="<?php /* @noEscape */ echo Button::PAYPAL_BUTTON_ID; ?>"></div>
+<div style="display: none;" id="<?= /* @noEscape */ Button::PAYPAL_BUTTON_ID ?>"></div>
 <script type="text/x-magento-init">
-    <?php /* @noEscape */ echo json_encode($configuration); ?>
+    <?= /* @noEscape */ json_encode($configuration) ?>
 </script>

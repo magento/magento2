@@ -1,19 +1,17 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model\Express;
 
 use Magento\Customer\Api\Data\CustomerInterface as CustomerDataObject;
 use Magento\Customer\Model\AccountManagement;
-use Magento\Framework\App\ObjectManager;
-use Magento\Paypal\Model\Config as PaypalConfig;
-use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\Sales\Model\Order\Email\Sender\OrderSender;
-use Magento\Quote\Model\Quote\Address;
 use Magento\Framework\DataObject;
 use Magento\Paypal\Model\Cart as PaypalCart;
+use Magento\Paypal\Model\Config as PaypalConfig;
+use Magento\Quote\Model\Quote\Address;
+use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 
 /**
  * Wrapper that performs Paypal Express and Checkout communication
@@ -269,11 +267,6 @@ class Checkout
      * @var \Magento\Quote\Model\Quote\TotalsCollector
      */
     protected $totalsCollector;
-
-    /**
-     * @var OrderRepositoryInterface
-     */
-    private $orderRepository;
 
     /**
      * @param \Psr\Log\LoggerInterface $logger
@@ -543,7 +536,6 @@ class Checkout
             }
             $this->_getApi()->setSuppressShipping(true);
         } else {
-
             $this->_getApi()->setBillingAddress($this->_quote->getBillingAddress());
 
             $address = $this->_quote->getShippingAddress();
@@ -797,8 +789,7 @@ class Checkout
 
         $this->ignoreAddressValidation();
         $this->_quote->collectTotals();
-        $orderId = $this->quoteManagement->placeOrder($this->_quote->getId());
-        $order = $this->getOrderRepository()->get($orderId);
+        $order = $this->quoteManagement->submit($this->_quote);
 
         if (!$order) {
             return;
@@ -901,35 +892,19 @@ class Checkout
      * @param Address $address
      * @param array $exportedAddress
      * @return void
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _setExportedAddressData($address, $exportedAddress)
     {
         // Exported data is more priority if we came from Express Checkout button
-        $isButton  = (bool)$this->_quote->getPayment()->getAdditionalInformation(self::PAYMENT_INFO_BUTTON);
+        $isButton = (bool)$this->_quote->getPayment()->getAdditionalInformation(self::PAYMENT_INFO_BUTTON);
         if (!$isButton) {
-            foreach ($exportedAddress->getExportedKeys() as $key) {
-                $oldData = $address->getDataUsingMethod($key);
-                $isEmpty = null;
-                if (is_array($oldData)) {
-                    foreach ($oldData as $val) {
-                        if (!empty($val)) {
-                            $isEmpty = false;
-                            break;
-                        }
-                        $isEmpty = true;
-                    }
-                }
-                if (empty($oldData) || $isEmpty === true) {
-                    $address->setDataUsingMethod($key, $exportedAddress->getData($key));
-                }
-            }
-        } else {
-            foreach ($exportedAddress->getExportedKeys() as $key) {
-                $data = $exportedAddress->getData($key);
-                if (!empty($data)) {
-                    $address->setDataUsingMethod($key, $data);
-                }
+            return;
+        }
+
+        foreach ($exportedAddress->getExportedKeys() as $key) {
+            $data = $exportedAddress->getData($key);
+            if (!empty($data)) {
+                $address->setDataUsingMethod($key, $data);
             }
         }
     }
@@ -1165,21 +1140,5 @@ class Checkout
             ->setCustomerIsGuest(true)
             ->setCustomerGroupId(\Magento\Customer\Model\Group::NOT_LOGGED_IN_ID);
         return $this;
-    }
-
-    /**
-     * Returns order repository instance
-     *
-     * @return OrderRepositoryInterface
-     * @deprecated
-     */
-    private function getOrderRepository()
-    {
-        if ($this->orderRepository === null) {
-            $this->orderRepository = ObjectManager::getInstance()
-                ->get(OrderRepositoryInterface::class);
-        }
-
-        return $this->orderRepository;
     }
 }

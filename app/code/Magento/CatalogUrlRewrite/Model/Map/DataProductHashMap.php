@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Model\Map;
@@ -13,16 +13,24 @@ use Magento\Framework\App\ResourceConnection;
  */
 class DataProductHashMap implements HashMapInterface
 {
-    /** @var int[] */
+    /**
+     * @var int[]
+     */
     private $hashMap = [];
 
-    /** @var CollectionFactory */
+    /**
+     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
+     */
     private $collectionFactory;
 
-    /** @var HashMapPool */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\Map\HashMapPool
+     */
     private $hashMapPool;
 
-    /** @var ResourceConnection */
+    /**
+     * @var \Magento\Framework\App\ResourceConnection
+     */
     private $connection;
 
     /**

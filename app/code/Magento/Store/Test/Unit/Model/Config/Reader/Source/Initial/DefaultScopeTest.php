@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Test\Unit\Model\Config\Reader\Source\Initial;
@@ -9,7 +9,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\Config\Reader\Source\Initial\DefaultScope;
 use Magento\Framework\App\Config\Scope\Converter;
 
-class DefaultScopeTest extends \PHPUnit_Framework_TestCase
+class DefaultScopeTest extends \PHPUnit\Framework\TestCase
 {
     public function testGet()
     {

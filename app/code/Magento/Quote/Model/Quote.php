@@ -1,19 +1,19 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model;
 
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\GroupInterface;
+use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Model\Quote\Address;
-use Magento\Sales\Model\ResourceModel;
+use Magento\Quote\Model\Quote\Address\Total as AddressTotal;
 use Magento\Sales\Model\Status;
-use Magento\Framework\Api\AttributeValueFactory;
-use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 
 /**
  * Quote model
@@ -25,6 +25,7 @@ use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
  *  sales_quote_delete_before
  *  sales_quote_delete_after
  *
+ * @api
  * @method int getIsMultiShipping()
  * @method Quote setIsMultiShipping(int $value)
  * @method float getStoreToBaseRate()
@@ -100,6 +101,7 @@ use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\CartInterface
 {
@@ -330,7 +332,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     protected $totalsCollector;
 
     /**
-     * @var \\Magento\Quote\Model\Quote\TotalsReader
+     * @var \Magento\Quote\Model\Quote\TotalsReader
      */
     protected $totalsReader;
 
@@ -508,6 +510,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
                 ->setStoreToQuoteRate($this->getStoreToQuoteRate())
                 ->setBaseToGlobalRate($this->getBaseToGlobalRate())
                 ->setBaseToQuoteRate($this->getBaseToQuoteRate());
+            $this->setData(self::KEY_CURRENCY, $currency);
         }
         return $currency;
     }
@@ -719,6 +722,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     {
         return $this->setData(self::KEY_CUSTOMER_NOTE_NOTIFY, $customerNoteNotify);
     }
+
     //@codeCoverageIgnoreEnd
 
     /**
@@ -834,6 +838,10 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         //mark quote if it has virtual products only
         $this->setIsVirtual($this->getIsVirtual());
 
+        if ($this->hasDataChanges()) {
+            $this->setUpdatedAt(null);
+        }
+
         parent::beforeSave();
     }
 
@@ -841,7 +849,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * Loading quote data by customer
      *
      * @param \Magento\Customer\Model\Customer|int $customer
-     * @deprecated 
+     * @deprecated 100.2.0
      * @return $this
      */
     public function loadByCustomer($customer)
@@ -1025,7 +1033,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         $addresses = (array)$this->getCustomer()->getAddresses();
         $addresses[] = $address;
         $this->getCustomer()->setAddresses($addresses);
-        $this->updateCustomerData($this->customerRepository->save($this->getCustomer()));
+        $this->updateCustomerData($this->getCustomer());
         return $this;
     }
 
@@ -1438,11 +1446,17 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * Retrieve item model object by item identifier
      *
      * @param   int $itemId
-     * @return  \Magento\Quote\Model\Quote\Item
+     * @return  \Magento\Quote\Model\Quote\Item|false
      */
     public function getItemById($itemId)
     {
-        return $this->getItemsCollection()->getItemById($itemId);
+        foreach ($this->getItemsCollection() as $item) {
+            if ($item->getId() == $itemId) {
+                return $item;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -1606,6 +1620,9 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             $item = $this->getItemByProduct($candidate);
             if (!$item) {
                 $item = $this->itemProcessor->init($candidate, $request);
+                $item->setQuote($this);
+                $item->setOptions($candidate->getCustomOptions());
+                $item->setProduct($candidate);
                 // Add only item that is not in quote already
                 $this->addItem($item);
             }
@@ -1625,10 +1642,11 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
 
             // collect errors instead of throwing first one
             if ($item->getHasError()) {
-                $message = $item->getMessage();
-                if (!in_array($message, $errors)) {
-                    // filter duplicate messages
-                    $errors[] = $message;
+                foreach ($item->getMessage(false) as $message) {
+                    if (!in_array($message, $errors)) {
+                        // filter duplicate messages
+                        $errors[] = $message;
+                    }
                 }
             }
         }
@@ -1937,7 +1955,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     /**
      * Get all quote totals (sorted by priority)
      *
-     * @return array
+     * @return AddressTotal[]
      */
     public function getTotals()
     {
@@ -2359,8 +2377,9 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     protected function _afterLoad()
     {
         // collect totals and save me, if required
-        if (1 == $this->getData('trigger_recollect')) {
+        if (1 == $this->getTriggerRecollect()) {
             $this->collectTotals()->save();
+            $this->setTriggerRecollect(0);
         }
         return parent::_afterLoad();
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Security\Model\Plugin;
@@ -81,7 +81,7 @@ class AuthSession
             $this->securityCookie->setLogoutReasonCookie(
                 $this->sessionsManager->getCurrentSession()->getStatus()
             );
-        } else if ($message = $this->sessionsManager->getLogoutReasonMessage()) {
+        } elseif ($message = $this->sessionsManager->getLogoutReasonMessage()) {
             $this->messageManager->addError($message);
         }
 

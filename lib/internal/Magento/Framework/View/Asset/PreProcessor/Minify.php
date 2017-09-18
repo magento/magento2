@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Asset\PreProcessor;
@@ -43,8 +43,7 @@ class Minify implements PreProcessorInterface
      */
     public function process(PreProcessor\Chain $chain)
     {
-        if (
-            $this->minification->isEnabled(pathinfo($chain->getTargetAssetPath(), PATHINFO_EXTENSION)) &&
+        if ($this->minification->isEnabled(pathinfo($chain->getTargetAssetPath(), PATHINFO_EXTENSION)) &&
             $this->minification->isMinifiedFilename($chain->getTargetAssetPath()) &&
             !$this->minification->isMinifiedFilename($chain->getOrigAssetPath())
         ) {

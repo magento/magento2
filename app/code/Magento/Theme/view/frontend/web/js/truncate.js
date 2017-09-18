@@ -1,8 +1,13 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
+/**
+ * JQuery UI Widget declaration: 'mage.truncateOptions'
+ *
+ * @deprecated since version 2.2.0
+ */
 define([
     'jquery',
     'jquery/ui'

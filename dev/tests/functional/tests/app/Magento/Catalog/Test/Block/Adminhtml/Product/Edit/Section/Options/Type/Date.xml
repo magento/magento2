@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -17,5 +17,8 @@
         <sku>
             <selector>[name$='[sku]']</selector>
         </sku>
+        <add_before>
+            <selector>[class*="admin__addon-prefix"]</selector>
+        </add_before>
     </fields>
 </mapping>

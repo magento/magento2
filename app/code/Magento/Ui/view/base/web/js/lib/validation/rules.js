@@ -1,8 +1,11 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
+/**
+ * @api
+ */
 define([
     'jquery',
     'underscore',
@@ -235,7 +238,7 @@ define([
         ],
         'mobileUK': [
             function (value) {
-                return value.length > 9 && value.match(/^((0|\+44)7(5|6|7|8|9){1}\d{2}\s?\d{6})$/);
+                return value.length > 9 && value.match(/^((0|\+44)7\d{3}\s?\d{6})$/);
             },
             $.mage.__('Please specify a valid mobile number')
         ],

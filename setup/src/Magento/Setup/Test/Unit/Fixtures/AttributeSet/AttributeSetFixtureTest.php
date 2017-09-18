@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@ namespace Magento\Setup\Test\Unit\Fixtures\AttributeSet;
 /**
  * @SuppressWarnings(PHPMD)
  */
-class AttributeSetFixtureTest extends \PHPUnit_Framework_TestCase
+class AttributeSetFixtureTest extends \PHPUnit\Framework\TestCase
 {
     public function testExecute()
     {

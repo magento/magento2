@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Action\Attribute\Tab;
 
 /**
  * Products mass update inventory tab
+ *
+ * @api
+ * @since 100.0.2
  */
 class Inventory extends \Magento\Backend\Block\Widget implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
@@ -22,6 +25,7 @@ class Inventory extends \Magento\Backend\Block\Widget implements \Magento\Backen
 
     /**
      * @var array
+     * @since 101.0.0
      */
     protected $disabledFields = [];
 
@@ -122,6 +126,7 @@ class Inventory extends \Magento\Backend\Block\Widget implements \Magento\Backen
      * @param string $fieldName
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 101.0.0
      */
     public function isAvailable($fieldName)
     {

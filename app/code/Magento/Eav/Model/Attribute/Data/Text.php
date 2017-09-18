@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\Attribute\Data;
@@ -61,7 +61,6 @@ class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
     {
         $errors = [];
         $attribute = $this->getAttribute();
-        $label = __($attribute->getStoreLabel());
 
         if ($value === false) {
             // try to load original value and validate it
@@ -69,6 +68,7 @@ class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
         }
 
         if ($attribute->getIsRequired() && empty($value) && $value !== '0') {
+            $label = __($attribute->getStoreLabel());
             $errors[] = __('"%1" is a required value.', $label);
         }
 
@@ -81,10 +81,12 @@ class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
 
         $validateRules = $attribute->getValidateRules();
         if (!empty($validateRules['min_text_length']) && $length < $validateRules['min_text_length']) {
+            $label = __($attribute->getStoreLabel());
             $v = $validateRules['min_text_length'];
             $errors[] = __('"%1" length must be equal or greater than %2 characters.', $label, $v);
         }
         if (!empty($validateRules['max_text_length']) && $length > $validateRules['max_text_length']) {
+            $label = __($attribute->getStoreLabel());
             $v = $validateRules['max_text_length'];
             $errors[] = __('"%1" length must be equal or less than %2 characters.', $label, $v);
         }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -20,7 +20,9 @@ class SynonymActions extends Column
     const SYNONYM_URL_PATH_DELETE = 'search/synonyms/delete';
     const SYNONYM_URL_PATH_EDIT = 'search/synonyms/edit';
 
-    /** @var UrlInterface */
+    /**
+     * @var \Magento\Framework\UrlInterface
+     */
     protected $urlBuilder;
 
     /**

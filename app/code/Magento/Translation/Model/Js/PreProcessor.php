@@ -1,16 +1,15 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Translation\Model\Js;
 
-use Magento\Framework\View\Asset\PreProcessorInterface;
-use Magento\Framework\View\Asset\PreProcessor\Chain;
-use Magento\Framework\Filesystem;
-use Magento\Framework\View\Asset\File\FallbackContext;
 use Magento\Framework\App\AreaList;
 use Magento\Framework\TranslateInterface;
+use Magento\Framework\View\Asset\File\FallbackContext;
+use Magento\Framework\View\Asset\PreProcessor\Chain;
+use Magento\Framework\View\Asset\PreProcessorInterface;
 
 /**
  * PreProcessor responsible for replacing translation calls in js files to translated strings
@@ -33,7 +32,7 @@ class PreProcessor implements PreProcessorInterface
      * @var TranslateInterface
      */
     protected $translate;
-    
+
     /**
      * @param Config $config
      * @param AreaList $areaList
@@ -55,7 +54,6 @@ class PreProcessor implements PreProcessorInterface
     public function process(Chain $chain)
     {
         if ($this->config->isEmbeddedStrategy()) {
-
             $context = $chain->getAsset()->getContext();
 
             $areaCode = \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE;

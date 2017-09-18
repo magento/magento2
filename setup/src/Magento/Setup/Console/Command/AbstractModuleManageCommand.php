@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Console\Command;
@@ -178,7 +178,7 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
      * Get deployment config
      *
      * @return DeploymentConfig
-     * @deprecated
+     * @deprecated 2.0.6
      */
     private function getDeploymentConfig()
     {
@@ -192,7 +192,7 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
      * Get deployment config
      *
      * @return GeneratedFiles
-     * @deprecated
+     * @deprecated 2.1.0
      */
     private function getGeneratedFiles()
     {

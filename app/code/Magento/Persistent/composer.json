@@ -2,17 +2,17 @@
     "name": "magento/module-persistent",
     "description": "N/A",
     "require": {
-        "php": "~5.6.5|7.0.2|7.0.4|~7.0.6",
-        "magento/module-store": "100.2.*",
-        "magento/module-checkout": "100.2.*",
-        "magento/module-customer": "100.2.*",
-        "magento/module-cron": "100.2.*",
-        "magento/module-page-cache": "100.2.*",
-        "magento/module-quote": "100.2.*",
-        "magento/framework": "100.2.*"
+        "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
+        "magento/module-store": "100.3.*",
+        "magento/module-checkout": "100.3.*",
+        "magento/module-customer": "100.3.*",
+        "magento/module-cron": "100.3.*",
+        "magento/module-page-cache": "100.3.*",
+        "magento/module-quote": "100.3.*",
+        "magento/framework": "100.3.*"
     },
     "type": "magento2-module",
-    "version": "100.2.0-dev",
+    "version": "100.3.0-dev",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

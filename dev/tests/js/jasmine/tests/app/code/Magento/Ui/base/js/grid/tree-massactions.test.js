@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -98,7 +98,7 @@ define([
         });
         it('check getAction', function () {
             expect(model.getAction('availability')).toBe(model.actions()[0]);
-            expect(model.getAction('enable')).toBe(model.actions()[0].actions[0]);
+            expect(model.getAction('availability.enable')).toBe(model.actions()[0].actions[0]);
             expect(model.getAction('absent')).toBeFalsy();
         });
         describe('check hideSubmenus', function () {

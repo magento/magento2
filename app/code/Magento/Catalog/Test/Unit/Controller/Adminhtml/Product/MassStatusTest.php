@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product;
@@ -123,7 +123,7 @@ class MassStatusTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Pro
 
     public function testMassStatusAction()
     {
-        $storeId = 1;
+        $storeId = 2;
         $status = \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED;
         $filters = [
             'store_id' => 2,
@@ -138,7 +138,7 @@ class MassStatusTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Pro
         $this->request->expects($this->exactly(3))
             ->method('getParam')
             ->willReturnMap([
-                ['store', 0, $storeId],
+                ['store', null, $storeId],
                 ['status', null, $status],
                 ['filters', [], $filters]
             ]);

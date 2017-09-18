@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+// @codingStandardsIgnoreFile
 ?>
 
 <h1>There has been an error processing your request</h1>
@@ -24,37 +25,37 @@
     </div>
 </div>
     <?php endif; ?>
-<form action="<?php echo "{$this->getBaseUrl(true)}errors/report.php?id={$this->reportId}" ?>" method="post" id="form-validate" class="form">
+<form action="<?= "{$this->getBaseUrl(true)}errors/report.php?id={$this->reportId}" ?>" method="post" id="form-validate" class="form">
     <fieldset class="fieldset" data-hasrequired="* Required Fields">
         <legend class="legend"><span>Personal Information</span></legend><br />
         <div class="field firstname required">
             <label for="firstname" class="label">First Name</label>
             <div class="control">
-                <input type="text" name="firstname" id="firstname" value="<?php echo $this->postData['firstName'] ?>" title="First Name" class="required-entry input-text" />
+                <input type="text" name="firstname" id="firstname" value="<?= $this->postData['firstName'] ?>" title="First Name" class="required-entry input-text" />
             </div>
         </div>
         <div class="field lastname required">
             <label for="lastname" class="label">Last Name</label>
             <div class=control">
-                <input type="text" name="lastname" id="lastname" value="<?php echo $this->postData['lastName'] ?>" title="Last Name" class="required-entry input-text" />
+                <input type="text" name="lastname" id="lastname" value="<?= $this->postData['lastName'] ?>" title="Last Name" class="required-entry input-text" />
             </div>
         </div>
         <div class="field email required">
             <label for="email_address" class="label">Email Address</label>
             <div class=control">
-                <input type="text" name="email" id="email_address" value="<?php echo $this->postData['email'] ?>" title="Email Address" class="validate-email required-entry input-text" />
+                <input type="text" name="email" id="email_address" value="<?= $this->postData['email'] ?>" title="Email Address" class="validate-email required-entry input-text" />
             </div>
         </div>
         <div class="field telephone">
             <label for="telephone" class="label">Telephone</label>
             <div class=control">
-                <input type="text" name="telephone" id="telephone" value="<?php echo $this->postData['telephone'] ?>" title="Telephone" class="input-text" />
+                <input type="text" name="telephone" id="telephone" value="<?= $this->postData['telephone'] ?>" title="Telephone" class="input-text" />
             </div>
         </div>
         <div class="field comment">
             <label for="comment" class="label">Comment</label>
             <div class=control">
-                <textarea name="comment" cols="5" rows="3" class="textarea"><?php echo $this->postData['comment'] ?></textarea>
+                <textarea name="comment" cols="5" rows="3" class="textarea"><?= $this->postData['comment'] ?></textarea>
             </div>
         </div>
     </fieldset>
@@ -69,10 +70,10 @@
 <?php if ($this->reportAction == 'print'): ?>
 <div class="trace-container">
     <div class="trace">
-        <pre><?php echo htmlspecialchars($this->reportData[0]) ?></pre>
+        <pre><?= htmlspecialchars($this->reportData[0]) ?></pre>
     </div>
 </div>
 <?php endif; ?>
 <?php if ($this->reportId): ?>
-    <p>Error log record number: <?php echo $this->reportId ?></p>
+    <p>Error log record number: <?= $this->reportId ?></p>
 <?php endif; ?>

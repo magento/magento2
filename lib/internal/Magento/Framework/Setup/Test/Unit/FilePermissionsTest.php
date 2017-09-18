@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Setup\Test\Unit;
@@ -8,7 +8,7 @@ namespace Magento\Framework\Setup\Test\Unit;
 use \Magento\Framework\Setup\FilePermissions;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-class FilePermissionsTest extends \PHPUnit_Framework_TestCase
+class FilePermissionsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem\Directory\Write
@@ -32,26 +32,14 @@ class FilePermissionsTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->directoryWriteMock = $this->getMock(
-            \Magento\Framework\Filesystem\Directory\Write::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->filesystemMock = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
+        $this->directoryWriteMock = $this->createMock(\Magento\Framework\Filesystem\Directory\Write::class);
+        $this->filesystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
 
         $this->filesystemMock
             ->expects($this->any())
             ->method('getDirectoryWrite')
             ->will($this->returnValue($this->directoryWriteMock));
-        $this->directoryListMock = $this->getMock(
-            \Magento\Framework\App\Filesystem\DirectoryList::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->directoryListMock = $this->createMock(\Magento\Framework\App\Filesystem\DirectoryList::class);
 
         $this->filePermissions = new FilePermissions(
             $this->filesystemMock,
@@ -170,6 +158,18 @@ class FilePermissionsTest extends \PHPUnit_Framework_TestCase
             $expected,
             array_values($this->filePermissions->getMissingWritablePathsForInstallation())
         );
+    }
+
+    public function testGetMissingWritableDirectoriesForDbUpgrade()
+    {
+        $directoryMethods = ['isExist', 'isDirectory', 'isReadable', 'isWritable'];
+        foreach ($directoryMethods as $method) {
+            $this->directoryWriteMock->expects($this->exactly(2))
+                ->method($method)
+                ->willReturn(true);
+        }
+
+        $this->assertEmpty($this->filePermissions->getMissingWritableDirectoriesForDbUpgrade());
     }
 
     /**

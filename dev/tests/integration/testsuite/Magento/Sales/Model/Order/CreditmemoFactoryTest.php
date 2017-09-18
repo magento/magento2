@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order;
@@ -9,7 +9,7 @@ namespace Magento\Sales\Model\Order;
  * Test for CreditmemoFactory class.
  * @magentoDbIsolation enabled
  */
-class CreditmemoFactoryTest extends \PHPUnit_Framework_TestCase
+class CreditmemoFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Placeholder for order item id field.

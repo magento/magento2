@@ -1,24 +1,12 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Quote\Model\Quote\Address\RateCollectorInterface" type="Magento\Shipping\Model\Shipping" />
     <preference for="Magento\Shipping\Model\CarrierFactoryInterface" type="Magento\Shipping\Model\CarrierFactory" />
-    <preference for="Magento\Shipping\Model\Carrier\Source\GenericInterface" type="\Magento\Shipping\Model\Carrier\Source\GenericDefault" />
-    <type name="Magento\Config\Model\Config\Export\ExcludeList">
-        <arguments>
-            <argument name="configs" xsi:type="array">
-                <item name="shipping/origin/country_id" xsi:type="string">1</item>
-                <item name="shipping/origin/region_id" xsi:type="string">1</item>
-                <item name="shipping/origin/postcode" xsi:type="string">1</item>
-                <item name="shipping/origin/city" xsi:type="string">1</item>
-                <item name="shipping/origin/street_line1" xsi:type="string">1</item>
-                <item name="shipping/origin/street_line2" xsi:type="string">1</item>
-            </argument>
-        </arguments>
-    </type>
+    <preference for="Magento\Shipping\Model\Carrier\Source\GenericInterface" type="Magento\Shipping\Model\Carrier\Source\GenericDefault" />
 </config>

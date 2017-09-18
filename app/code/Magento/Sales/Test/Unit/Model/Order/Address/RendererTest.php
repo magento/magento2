@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Address;
@@ -14,7 +14,7 @@ use Magento\Sales\Model\Order;
 use Magento\Customer\Block\Address\Renderer\RendererInterface as CustomerAddressBlockRenderer;
 use Magento\Framework\DataObject;
 
-class RendererTest extends \PHPUnit_Framework_TestCase
+class RendererTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var OrderAddressRenderer

@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Media;
 
 /**
  * Adminhtml media library uploader
+ * @api
+ * @since 100.0.2
  */
 class Uploader extends \Magento\Backend\Block\Widget
 {

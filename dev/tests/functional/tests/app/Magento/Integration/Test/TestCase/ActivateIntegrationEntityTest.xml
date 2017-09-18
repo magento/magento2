@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -14,6 +14,7 @@
             <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationResourcesPopup" />
             <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationTokensPopup" />
             <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationSuccessActivationMessage" />
+            <data name="issue" xsi:type="string">MAGETWO-66745: Magento\Integration\Test\TestCase\ActivateIntegrationEntityTest with ActivateIntegrationEntityTestVariation1 fails randomly</data>
         </variation>
     </testCase>
 </config>

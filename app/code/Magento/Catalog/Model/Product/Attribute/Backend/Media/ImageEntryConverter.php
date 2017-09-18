@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -100,16 +100,16 @@ class ImageEntryConverter implements EntryConverterInterface
     protected function convertFromMediaGalleryEntryContentInterface(
         ImageContentInterface $content = null
     ) {
-        if ($content == null) {
+        if ($content === null) {
             return null;
-        } else {
-            return [
-                'data' => [
-                    ImageContentInterface::BASE64_ENCODED_DATA => $content->getBase64EncodedData(),
-                    ImageContentInterface::TYPE => $content->getType(),
-                    ImageContentInterface::NAME => $content->getName(),
-                ],
-            ];
         }
+
+        return [
+            'data' => [
+                ImageContentInterface::BASE64_ENCODED_DATA => $content->getBase64EncodedData(),
+                ImageContentInterface::TYPE => $content->getType(),
+                ImageContentInterface::NAME => $content->getName(),
+            ],
+        ];
     }
 }

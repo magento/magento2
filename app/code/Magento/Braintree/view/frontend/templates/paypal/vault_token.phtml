@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,40 +9,39 @@ use Magento\Vault\Api\Data\PaymentTokenInterface;
 
 /** @var VaultTokenRenderer $block */
 
-$payerEmail = $block->escapeHtml($block->getPayerEmail());
+$payerEmail = $block->getPayerEmail();
+$confirmDeleteMessage = sprintf('%s: %s?', __('Are you sure you want to delete this PayPal account'), $payerEmail);
 ?>
 <tr>
-    <td data-th="<?php echo $block->escapeHtml(__('PayPal Account')); ?>" class="col paypal-account">
-        <img src="<?php /* @noEscape */ echo $block->getIconUrl(); ?>"
-             width="<?php /* @noEscape */ echo $block->getIconWidth(); ?>"
-             height="<?php /* @noEscape */ echo $block->getIconHeight(); ?>"
-             alt="<?php echo $block->escapeHtml(__('PayPal Logo')); ?>"
-        >
-        <span><?php /* @noEscape */ echo $payerEmail; ?></span>
+    <td data-th="<?= $block->escapeHtml(__('PayPal Account')) ?>" class="col paypal-account">
+        <img src="<?= /* @noEscape */ $block->getIconUrl() ?>"
+             width="<?= /* @noEscape */ $block->getIconWidth() ?>"
+             height="<?= /* @noEscape */ $block->getIconHeight() ?>"
+             alt="<?= $block->escapeHtml(__('PayPal Logo')) ?>">
+        <span><?= $block->escapeHtml($payerEmail) ?></span>
     </td>
-    <td data-th="<?php echo $block->escapeHtml(__('Actions')); ?>" class="col actions">
+    <td data-th="<?= $block->escapeHtml(__('Actions')) ?>" class="col actions">
         <form
             class="form"
-            action="<?php echo $block->escapeUrl($block->getUrl('vault/cards/deleteaction')); ?>"
-            method="post"
-        >
-            <?php echo $block->getBlockHtml('formkey'); ?>
+            action="<?= $block->escapeUrl($block->getUrl('vault/cards/deleteaction')) ?>"
+            method="post">
+            <?= $block->getBlockHtml('formkey') ?>
             <input
-                name="<?php /* @noEscape */ echo PaymentTokenInterface::PUBLIC_HASH; ?>"
-                value="<?php /* @noEscape */ echo $block->getToken()->getPublicHash(); ?>"
+                name="<?= /* @noEscape */ PaymentTokenInterface::PUBLIC_HASH ?>"
+                value="<?= /* @noEscape */ $block->getToken()->getPublicHash() ?>"
                 type="hidden"/>
             <button type="submit"
                     class="action delete"
                     data-mage-init='{
-                                    "Magento_Vault/js/customer_account/deleteWidget":{
-                                        "type": "popup",
-                                        "modalClass": "my-credit-cards-popup",
-                                        "toggleEvent": "click",
-                                        "title": "<?php echo $block->escapeHtml(__('Delete')); ?>",
-                                        "content": "Are you sure you want to delete this PayPal account: <?php /* @noEscape */ echo $payerEmail; ?>?"
-                                    }
-                                }'>
-                <span><?php echo $block->escapeHtml(__('Delete')); ?></span>
+                        "Magento_Vault/js/customer_account/deleteWidget":{
+                            "type": "popup",
+                            "modalClass": "my-credit-cards-popup",
+                            "toggleEvent": "click",
+                            "title": "<?= $block->escapeHtml(__('Delete')) ?>",
+                            "content":"<?= $block->escapeHtml($confirmDeleteMessage) ?>"
+                        }
+                    }'>
+                <span><?= $block->escapeHtml(__('Delete')) ?></span>
             </button>
         </form>
     </td>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -114,18 +114,17 @@ class EavVariationsFixture extends Fixture
      */
     private function generateAttribute($optionCount)
     {
-        $stores = $this->storeManager->getStores();
-        $storeViewsCount = count($stores);
+        $storeIds = array_keys($this->storeManager->getStores(true));
         $options = [];
 
         for ($option = 1; $option <= $optionCount; $option++) {
             $options['order']['option_' . $option] = $option;
-            $options['value']['option_' . $option] = array_fill(0, $storeViewsCount + 1, 'option ' . $option);
+            $options['value']['option_' . $option] = array_fill_keys($storeIds, 'option ' . $option);
             $options['delete']['option_' . $option] = '';
         }
 
         $data = [
-            'frontend_label' => array_fill(0, $storeViewsCount + 1, 'configurable variations'),
+            'frontend_label' => array_fill_keys($storeIds, 'configurable variations'),
             'frontend_input' => 'select',
             'is_required' => '0',
             'option' => $options,

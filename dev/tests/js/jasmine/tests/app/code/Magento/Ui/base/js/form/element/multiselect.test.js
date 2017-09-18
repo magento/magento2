@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -49,6 +49,12 @@ define([
         describe('"setPrepareToSendData" method', function () {
             it('Check method call with empty array as parameter.', function () {
                 expect(obj.setPrepareToSendData([])).toBeUndefined();
+                expect(obj.source.set).toHaveBeenCalledWith(dataScope + '-prepared-for-send', '');
+            });
+
+            it('Check method call with undefined as parameter.', function () {
+
+                expect(obj.setPrepareToSendData(undefined)).toBeUndefined();
                 expect(obj.source.set).toHaveBeenCalledWith(dataScope + '-prepared-for-send', '');
             });
 

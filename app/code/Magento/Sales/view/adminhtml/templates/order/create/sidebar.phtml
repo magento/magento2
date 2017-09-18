@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,19 +9,19 @@
 /** @var $block \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar */
 ?>
 <div class="customer-current-activity-inner">
-    <h4 class="customer-activity-title"><?php /* @escapeNotVerified */ echo __('Customer\'s Activities') ?></h4>
+    <h4 class="customer-activity-title"><?= /* @escapeNotVerified */ __('Customer\'s Activities') ?></h4>
     <div class="create-order-sidebar-container">
-    <?php echo $block->getChildHtml('top_button'); ?>
+    <?= $block->getChildHtml('top_button') ?>
     <?php foreach ($block->getLayout()->getChildBlocks($block->getNameInLayout()) as $_alias => $_child): ?>
         <?php if ($_alias != 'top_button' && $_alias != 'bottom_button'): ?>
             <?php if ($block->canDisplay($_child)): ?>
-                <div class="order-sidebar-block" id="order-sidebar_<?php /* @escapeNotVerified */ echo $_alias ?>">
-                    <?php echo $block->getChildHtml($_alias) ?>
+                <div class="order-sidebar-block" id="order-sidebar_<?= /* @escapeNotVerified */ $_alias ?>">
+                    <?= $block->getChildHtml($_alias) ?>
                 </div>
             <?php endif; ?>
         <?php endif; ?>
     <?php endforeach; ?>
-    <?php echo $block->getChildHtml('bottom_button'); ?>
+    <?= $block->getChildHtml('bottom_button') ?>
     </div>
 </div>
 <script>
@@ -32,12 +32,12 @@ require([
 
     function addSidebarCompositeListType() {
         productConfigure.addListType('sidebar', {
-            urlFetch: '<?php /* @escapeNotVerified */ echo $block->getUrl('sales/order_create/configureProductToAdd') ?>',
-            urlConfirm: '<?php /* @escapeNotVerified */ echo $block->getUrl('sales/order_create/addConfigured') ?>'
+            urlFetch: '<?= /* @escapeNotVerified */ $block->getUrl('sales/order_create/configureProductToAdd') ?>',
+            urlConfirm: '<?= /* @escapeNotVerified */ $block->getUrl('sales/order_create/addConfigured') ?>'
         });
         productConfigure.addListType('sidebar_wishlist', {
-            urlFetch: '<?php /* @escapeNotVerified */ echo $block->getUrl('customer/wishlist_product_composite_wishlist/configure') ?>',
-            urlConfirm: '<?php /* @escapeNotVerified */ echo $block->getUrl('sales/order_create/addConfigured') ?>'
+            urlFetch: '<?= /* @escapeNotVerified */ $block->getUrl('customer/wishlist_product_composite_wishlist/configure') ?>',
+            urlConfirm: '<?= /* @escapeNotVerified */ $block->getUrl('sales/order_create/addConfigured') ?>'
         });
     }
 

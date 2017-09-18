@@ -1,23 +1,23 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Test\Unit\Pricing\Render;
 
 use Magento\Catalog\Model\Product\Pricing\Renderer\SalableResolverInterface;
+use Magento\Catalog\Pricing\Price\FinalPrice;
 use Magento\Catalog\Pricing\Price\MinimalPriceCalculatorInterface;
 use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Framework\Pricing\Render\Amount;
-use Magento\Catalog\Pricing\Price\FinalPrice;
 
 /**
  * Class FinalPriceBoxTest
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
+class FinalPriceBoxTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Pricing\Render\FinalPriceBox
@@ -76,23 +76,20 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->product = $this->getMock(
+        $this->product = $this->createPartialMock(
             \Magento\Catalog\Model\Product::class,
-            ['getPriceInfo', '__wakeup', 'getCanShowPrice', 'isSalable'],
-            [],
-            '',
-            false
+            ['getPriceInfo', '__wakeup', 'getCanShowPrice', 'isSalable', 'getId']
         );
-        $this->priceInfo = $this->getMock(\Magento\Framework\Pricing\PriceInfoInterface::class);
+        $this->priceInfo = $this->createMock(\Magento\Framework\Pricing\PriceInfoInterface::class);
         $this->product->expects($this->any())
             ->method('getPriceInfo')
             ->will($this->returnValue($this->priceInfo));
 
-        $eventManager = $this->getMock(\Magento\Framework\Event\Test\Unit\ManagerStub::class, [], [], '', false);
-        $this->layout = $this->getMock(\Magento\Framework\View\Layout::class, [], [], '', false);
+        $eventManager = $this->createMock(\Magento\Framework\Event\Test\Unit\ManagerStub::class);
+        $this->layout = $this->createMock(\Magento\Framework\View\Layout::class);
 
-        $this->priceBox = $this->getMock(\Magento\Framework\Pricing\Render\PriceBox::class, [], [], '', false);
-        $this->logger = $this->getMock(\Psr\Log\LoggerInterface::class);
+        $this->priceBox = $this->createMock(\Magento\Framework\Pricing\Render\PriceBox::class);
+        $this->logger = $this->createMock(\Psr\Log\LoggerInterface::class);
 
         $this->layout->expects($this->any())->method('getBlock')->willReturn($this->priceBox);
 
@@ -116,7 +113,7 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
         $storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
 
         $scopeConfigMock = $this->getMockForAbstractClass(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $context = $this->getMock(\Magento\Framework\View\Element\Template\Context::class, [], [], '', false);
+        $context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
         $context->expects($this->any())
             ->method('getEventManager')
             ->will($this->returnValue($eventManager));
@@ -149,7 +146,7 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->price = $this->getMock(\Magento\Framework\Pricing\Price\PriceInterface::class);
+        $this->price = $this->createMock(\Magento\Framework\Pricing\Price\PriceInterface::class);
         $this->price->expects($this->any())
             ->method('getPriceCode')
             ->will($this->returnValue(\Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE));
@@ -176,7 +173,7 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
 
     public function testRenderMsrpDisabled()
     {
-        $priceType = $this->getMock(\Magento\Msrp\Pricing\Price\MsrpPrice::class, [], [], '', false);
+        $priceType = $this->createMock(\Magento\Msrp\Pricing\Price\MsrpPrice::class);
         $this->priceInfo->expects($this->once())
             ->method('getPrice')
             ->with($this->equalTo('msrp_price'))
@@ -211,7 +208,7 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
 
     public function testRenderMsrpEnabled()
     {
-        $priceType = $this->getMock(\Magento\Msrp\Pricing\Price\MsrpPrice::class, [], [], '', false);
+        $priceType = $this->createMock(\Magento\Msrp\Pricing\Price\MsrpPrice::class);
         $this->priceInfo->expects($this->once())
             ->method('getPrice')
             ->with($this->equalTo('msrp_price'))
@@ -297,7 +294,7 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
             'skip_adjustments' => true,
         ];
 
-        $amountRender = $this->getMock(Amount::class, ['toHtml'], [], '', false);
+        $amountRender = $this->createPartialMock(Amount::class, ['toHtml']);
         $amountRender->expects($this->once())
             ->method('toHtml')
             ->willReturn($html);
@@ -318,8 +315,8 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
      */
     public function testHasSpecialPrice($regularPrice, $finalPrice, $expectedResult)
     {
-        $regularPriceType = $this->getMock(\Magento\Catalog\Pricing\Price\RegularPrice::class, [], [], '', false);
-        $finalPriceType = $this->getMock(\Magento\Catalog\Pricing\Price\FinalPrice::class, [], [], '', false);
+        $regularPriceType = $this->createMock(\Magento\Catalog\Pricing\Price\RegularPrice::class);
+        $finalPriceType = $this->createMock(\Magento\Catalog\Pricing\Price\FinalPrice::class);
         $regularPriceAmount = $this->getMockForAbstractClass(\Magento\Framework\Pricing\Amount\AmountInterface::class);
         $finalPriceAmount = $this->getMockForAbstractClass(\Magento\Framework\Pricing\Amount\AmountInterface::class);
 
@@ -372,7 +369,7 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->will($this->returnValue($finalPrice));
 
-        $finalPriceType = $this->getMock(FinalPrice::class, [], [], '', false);
+        $finalPriceType = $this->createMock(FinalPrice::class);
         $finalPriceType->expects($this->once())
             ->method('getAmount')
             ->will($this->returnValue($finalPriceAmount));
@@ -401,8 +398,63 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
         $this->assertStringEndsWith('list-category-page', $result);
     }
 
-    public function testGetCacheKeyInfo()
+    public function testGetCacheKeyInfoContainsDisplayMinimalPrice()
     {
         $this->assertArrayHasKey('display_minimal_price', $this->object->getCacheKeyInfo());
+    }
+
+    /**
+     * Test when is_product_list flag is not specified
+     */
+    public function testGetCacheKeyInfoContainsIsProductListFlagByDefault()
+    {
+        $cacheInfo = $this->object->getCacheKeyInfo();
+        self::assertArrayHasKey('is_product_list', $cacheInfo);
+        self::assertFalse($cacheInfo['is_product_list']);
+    }
+
+    /**
+     * Test when is_product_list flag is specified
+     *
+     * @param bool $flag
+     * @dataProvider isProductListDataProvider
+     */
+    public function testGetCacheKeyInfoContainsIsProductListFlag($flag)
+    {
+        $this->object->setData('is_product_list', $flag);
+        $cacheInfo = $this->object->getCacheKeyInfo();
+        self::assertArrayHasKey('is_product_list', $cacheInfo);
+        self::assertEquals($flag, $cacheInfo['is_product_list']);
+    }
+
+    /**
+     * Test when is_product_list flag is not specified
+     */
+    public function testIsProductListByDefault()
+    {
+        self::assertFalse($this->object->isProductList());
+    }
+
+    /**
+     * Test when is_product_list flag is specified
+     *
+     * @param bool $flag
+     * @dataProvider isProductListDataProvider
+     */
+    public function testIsProductList($flag)
+    {
+        $this->object->setData('is_product_list', $flag);
+        self::assertEquals($flag, $this->object->isProductList());
+    }
+
+    /**
+     * @return array
+     */
+    public function isProductListDataProvider()
+    {
+        return [
+            'is_not_product_list' => [false],
+            'is_product_list' => [true],
+        ];
     }
 }

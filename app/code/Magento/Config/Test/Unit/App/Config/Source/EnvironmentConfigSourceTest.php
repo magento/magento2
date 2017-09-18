@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\App\Config\Source;
@@ -10,7 +10,7 @@ use Magento\Config\Model\Placeholder\PlaceholderFactory;
 use Magento\Config\Model\Placeholder\PlaceholderInterface;
 use Magento\Framework\Stdlib\ArrayManager;
 
-class EnvironmentConfigSourceTest extends \PHPUnit_Framework_TestCase
+class EnvironmentConfigSourceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ArrayManager|\PHPUnit_Framework_MockObject_MockObject

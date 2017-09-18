@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,8 +11,8 @@
  */
 ?>
 <dl class="payment-method">
-    <dt class="title"><?php echo $block->escapeHtml($block->getMethod()->getTitle()) ?></dt>
+    <dt class="title"><?= $block->escapeHtml($block->getMethod()->getTitle()) ?></dt>
 <?php if ($block->getInstructions()): ?>
-    <dd class="content"><?php /* @noEscape */ echo nl2br($block->escapeHtml($block->getInstructions())); ?></dd>
+    <dd class="content"><?= /* @noEscape */ nl2br($block->escapeHtml($block->getInstructions())) ?></dd>
 <?php endif; ?>
 </dl>

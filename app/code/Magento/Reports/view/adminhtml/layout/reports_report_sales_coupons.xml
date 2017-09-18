@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -22,7 +22,7 @@
             </block>
         </referenceContainer>
         <referenceContainer name="content">
-            <block class="Magento\Reports\Block\Adminhtml\Sales\Coupons" template="report/grid/container.phtml" name="sales.report.grid.container">
+            <block class="Magento\Reports\Block\Adminhtml\Sales\Coupons" template="Magento_Reports::report/grid/container.phtml" name="sales.report.grid.container">
                 <block class="Magento\Sales\Block\Adminhtml\Report\Filter\Form\Coupon" name="grid.filter.form">
                     <action method="addReportTypeOption">
                         <argument name="key" xsi:type="string">created_at_order</argument>

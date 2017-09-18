@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,10 @@ namespace Magento\Framework\App\View\Asset\MaterializationStrategy;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\View\Asset;
 
+/**
+ * Interface \Magento\Framework\App\View\Asset\MaterializationStrategy\StrategyInterface
+ *
+ */
 interface StrategyInterface
 {
     /**

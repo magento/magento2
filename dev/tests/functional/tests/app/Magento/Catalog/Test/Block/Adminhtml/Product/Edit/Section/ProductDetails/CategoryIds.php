@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -86,9 +86,17 @@ class CategoryIds extends MultisuggestElement
                 if ($value == '') {
                     continue;
                 }
+
                 $this->keys([$value]);
                 $searchedItem = $this->find(sprintf($this->resultItem, $value), Locator::SELECTOR_XPATH);
+                $searchedCountElements = $this->find($this->searchedCount);
+                $this->waitUntil(
+                    function () use ($searchedCountElements) {
+                        return $searchedCountElements->isVisible() ? true : null;
+                    }
+                );
                 $searchedItem->click();
+
                 $closeButton = $this->find($this->closeButton);
                 if ($closeButton->isVisible()) {
                     $closeButton->click();

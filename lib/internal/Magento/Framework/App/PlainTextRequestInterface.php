@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App;
@@ -13,6 +13,7 @@ namespace Magento\Framework\App;
  * To read already parsed request data use \Magento\Framework\App\RequestInterface.
  *
  * @api
+ * @since 100.2.0
  */
 interface PlainTextRequestInterface
 {
@@ -20,6 +21,7 @@ interface PlainTextRequestInterface
      * Returns textual representation of request to Magento.
      *
      * @return string
+     * @since 100.2.0
      */
     public function getContent();
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -68,12 +68,20 @@ class AddProductsToTheCartStep implements TestStepInterface
     private $loadingSelector = '.loading-mask';
 
     /**
+     * Flag for validation result after add product to cart.
+     *
+     * @var bool
+     */
+    private $isValidationFailed;
+
+    /**
      * @param CatalogProductView $catalogProductView
      * @param CheckoutCart $checkoutCart
      * @param CmsIndex $cmsIndex
      * @param BrowserInterface $browser
      * @param FixtureFactory $fixtureFactory
      * @param array $products
+     * @param bool $isValidationFailed
      */
     public function __construct(
         CatalogProductView $catalogProductView,
@@ -81,7 +89,8 @@ class AddProductsToTheCartStep implements TestStepInterface
         CmsIndex $cmsIndex,
         BrowserInterface $browser,
         FixtureFactory $fixtureFactory,
-        array $products
+        array $products,
+        $isValidationFailed = false
     ) {
         $this->catalogProductView = $catalogProductView;
         $this->checkoutCart = $checkoutCart;
@@ -89,6 +98,7 @@ class AddProductsToTheCartStep implements TestStepInterface
         $this->browser = $browser;
         $this->fixtureFactory = $fixtureFactory;
         $this->products = $products;
+        $this->isValidationFailed = $isValidationFailed;
     }
 
     /**
@@ -105,7 +115,12 @@ class AddProductsToTheCartStep implements TestStepInterface
             $this->browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
             $this->catalogProductView->getViewBlock()->waitForElementNotVisible($this->loadingSelector);
             $this->catalogProductView->getViewBlock()->addToCart($product);
-            $this->catalogProductView->getMessagesBlock()->waitSuccessMessage();
+
+            if ($this->isValidationFailed) {
+                $this->catalogProductView->getCustomOptionsBlock()->waitValidationErrorMessage();
+            } else {
+                $this->catalogProductView->getMessagesBlock()->waitSuccessMessage();
+            }
         }
         $cart['data']['items'] = ['products' => $this->products];
         return ['cart' => $this->fixtureFactory->createByCode('cart', $cart)];

@@ -1,11 +1,11 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
     <!--Configurable product creation takes too long time via Web API-->
-    <!--<preference for="Magento\ConfigurableProduct\Test\Handler\ConfigurableProduct\ConfigurableProductInterface" type="\Magento\ConfigurableProduct\Test\Handler\ConfigurableProduct\Webapi" />-->
+    <!--<preference for="Magento\ConfigurableProduct\Test\Handler\ConfigurableProduct\ConfigurableProductInterface" type="Magento\ConfigurableProduct\Test\Handler\ConfigurableProduct\Webapi" />-->
 </config>

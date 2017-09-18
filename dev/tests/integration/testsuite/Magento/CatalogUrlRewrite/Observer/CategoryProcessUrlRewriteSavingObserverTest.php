@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Observer;
@@ -21,7 +21,7 @@ use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
  * - has rewrites history
  * @magentoAppArea adminhtml
  */
-class CategoryProcessUrlRewriteSavingObserverTest extends \PHPUnit_Framework_TestCase
+class CategoryProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\ObjectManagerInterface */
     protected $objectManager;

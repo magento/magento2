@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,24 +10,24 @@
 <?php if (($_products = $block->getProductCollection()) && $_products->getSize()): ?>
     <div class="block widget block-new-products-names">
         <div class="block-title">
-            <strong><?php /* @escapeNotVerified */ echo __('New Products') ?></strong>
+            <strong><?= /* @escapeNotVerified */ __('New Products') ?></strong>
         </div>
         <div class="block-content">
             <?php $suffix = $block->getNameInLayout(); ?>
-            <ol id="widget-new-products-<?php /* @escapeNotVerified */ echo $suffix; ?>" class="product-items product-items-names">
+            <ol id="widget-new-products-<?= /* @escapeNotVerified */ $suffix ?>" class="product-items product-items-names">
                 <?php foreach ($_products->getItems() as $_product): ?>
                     <li class="product-item">
                         <strong class="product-item-name">
-                            <a href="<?php /* @escapeNotVerified */ echo $_product->getProductUrl() ?>"
-                               title="<?php /* @escapeNotVerified */ echo $block->stripTags($_product->getName(), null, true) ?>)"
+                            <a href="<?= /* @escapeNotVerified */ $_product->getProductUrl() ?>"
+                               title="<?= /* @escapeNotVerified */ $block->stripTags($_product->getName(), null, true) ?>)"
                                class="product-item-link">
-                                <?php /* @escapeNotVerified */ echo $this->helper('Magento\Catalog\Helper\Output')->productAttribute($_product, $_product->getName(), 'name') ?>
+                                <?= /* @escapeNotVerified */ $this->helper('Magento\Catalog\Helper\Output')->productAttribute($_product, $_product->getName(), 'name') ?>
                             </a>
                         </strong>
                     </li>
                 <?php endforeach; ?>
             </ol>
-            <?php echo $block->getPagerHtml() ?>
+            <?= $block->getPagerHtml() ?>
         </div>
     </div>
 <?php endif; ?>

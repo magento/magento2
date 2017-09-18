@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -344,6 +344,10 @@ class InstallSchema implements InstallSchemaInterface
                 $installer->getIdxName('cataloginventory_stock_status', ['website_id']),
                 ['website_id']
             )
+            ->addIndex(
+                $installer->getIdxName('cataloginventory_stock_status', ['stock_status']),
+                ['stock_status']
+            )
             ->setComment('Cataloginventory Stock Status');
         $installer->getConnection()
             ->createTable($table);
@@ -457,6 +461,5 @@ class InstallSchema implements InstallSchemaInterface
             ->createTable($table);
 
         $installer->endSetup();
-
     }
 }

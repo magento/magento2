@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,6 +13,8 @@ use Magento\Framework\Translate\InlineInterface;
 /**
  * A possible implementation of JSON response type (instead of hardcoding json_encode() all over the place)
  * Actual for controller actions that serve ajax requests
+ *
+ * @api
  */
 class Json extends AbstractResult
 {

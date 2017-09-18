@@ -1,17 +1,17 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Component\Layout;
 
 use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\UiComponent\BlockWrapperInterface;
 use Magento\Framework\View\Element\UiComponent\DataSourceInterface;
-use Magento\Ui\Component\Layout\Tabs\TabInterface;
+use Magento\Framework\View\Element\UiComponent\LayoutInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
-use Magento\Framework\View\Element\UiComponent\LayoutInterface;
-use Magento\Framework\View\Element\UiComponent\BlockWrapperInterface;
+use Magento\Ui\Component\Layout\Tabs\TabInterface;
 
 /**
  * Class Tabs
@@ -85,7 +85,7 @@ class Tabs extends \Magento\Framework\View\Layout\Generic implements LayoutInter
             if ($childComponent instanceof DataSourceInterface) {
                 continue;
             }
-            if ($childComponent instanceof \Magento\Ui\Component\Wrapper\Block) {
+            if ($childComponent instanceof BlockWrapperInterface) {
                 $this->addWrappedBlock($childComponent, $childrenAreas);
                 continue;
             }
@@ -183,13 +183,16 @@ class Tabs extends \Magento\Framework\View\Layout\Generic implements LayoutInter
         if (!$block->canShowTab()) {
             return;
         }
+        if (!$block instanceof TabInterface) {
+            parent::addWrappedBlock($childComponent, $areas);
+        }
         $block->setData('target_form', $this->namespace);
 
         $config = [];
         if ($block->isAjaxLoaded()) {
             $config['url'] = $block->getTabUrl();
         } else {
-            $config['content'] = $block->toHtml();
+            $config['content'] = $childComponent->getData('config/content') ?: $block->toHtml();
         }
 
         $tabComponent = $this->createTabComponent($childComponent, $name);
@@ -300,7 +303,7 @@ class Tabs extends \Magento\Framework\View\Layout\Generic implements LayoutInter
         if (isset($config['dataScope'])) {
             $dataScope = $config['dataScope'];
             unset($config['dataScope']);
-        } else if ($name !== $parentName) {
+        } elseif ($name !== $parentName) {
             $dataScope = $name;
         }
 

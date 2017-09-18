@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Element\UiComponent\DataProvider;
@@ -123,7 +123,7 @@ class DataProvider implements DataProviderInterface
             }
             if ($paramValue) {
                 $this->data['config']['update_url'] = sprintf(
-                    '%s%s/%s',
+                    '%s%s/%s/',
                     $this->data['config']['update_url'],
                     $paramName,
                     $paramValue

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -33,7 +33,7 @@ class UseSavedPaymentMethodStep implements TestStepInterface
      * @param CheckoutOnepage $checkoutOnepage
      * @param array $vault
      */
-    public function __construct (CheckoutOnepage $checkoutOnepage, array $vault)
+    public function __construct(CheckoutOnepage $checkoutOnepage, array $vault)
     {
         $this->checkoutOnepage = $checkoutOnepage;
         $this->vault = $vault;

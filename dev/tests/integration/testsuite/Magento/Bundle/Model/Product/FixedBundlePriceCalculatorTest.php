@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -29,6 +29,11 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
         $priceInfo = $bundleProduct->getPriceInfo();
         $priceCode = \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE;
 
+        $priceInfoFromIndexer = $this->productCollectionFactory->create()
+            ->addIdFilter([42])
+            ->addPriceData()
+            ->load()
+            ->getFirstItem();
         $this->assertEquals(
             $expectedResults['minimalPrice'],
             $priceInfo->getPrice($priceCode)->getMinimalPrice()->getValue(),
@@ -40,6 +45,7 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
             $priceInfo->getPrice($priceCode)->getMaximalPrice()->getValue(),
             'Failed to check maximal price on product'
         );
+        $this->assertEquals($expectedResults['indexerMinimalPrice'], $priceInfoFromIndexer->getMinimalPrice());
     }
 
     /**
@@ -58,6 +64,11 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
         $priceInfo = $bundleProduct->getPriceInfo();
         $priceCode = \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE;
 
+        $priceInfoFromIndexer = $this->productCollectionFactory->create()
+            ->addFieldToFilter('sku', 'bundle_product')
+            ->addPriceData()
+            ->load()
+            ->getFirstItem();
         $this->assertEquals(
             $expectedResults['minimalPrice'],
             $priceInfo->getPrice($priceCode)->getMinimalPrice()->getValue(),
@@ -69,6 +80,7 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
             $priceInfo->getPrice($priceCode)->getMaximalPrice()->getValue(),
             'Failed to check maximal price on product'
         );
+        $this->assertEquals($expectedResults['indexerMinimalPrice'], $priceInfoFromIndexer->getMinimalPrice());
     }
 
     /**
@@ -85,7 +97,8 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
                     //  110 + 10 (price from simple1)
                     'minimalPrice' => 120,
                     // 110 + 10 (sum of simple price)
-                    'maximalPrice' => 120
+                    'maximalPrice' => 120,
+                    'indexerMinimalPrice' => 120
                 ]
             ],
 
@@ -95,7 +108,8 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
                     // 110 + 10 (min price from simples)
                     'minimalPrice' => 120,
                     //  110 + (3 * 10) + (2 * 10) + 10
-                    'maximalPrice' => 170
+                    'maximalPrice' => 170,
+                    'indexerMinimalPrice' => 120
                 ]
             ],
 
@@ -105,7 +119,8 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
                     //  110 + 10
                     'minimalPrice' => 120,
                     // 110 + 60
-                    'maximalPrice' => 170
+                    'maximalPrice' => 170,
+                    'indexerMinimalPrice' => 120
                 ]
             ],
 
@@ -115,7 +130,8 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
                     //  110 + 10
                     'minimalPrice' => 120,
                     // 110 + 30
-                    'maximalPrice' => 140
+                    'maximalPrice' => 140,
+                    'indexerMinimalPrice' => 120
                 ]
             ],
 
@@ -132,7 +148,8 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
                     'minimalPrice' => 230,
 
                     // 110 + 1 * 20 + 100
-                    'maximalPrice' => 230
+                    'maximalPrice' => 230,
+                    'indexerMinimalPrice' => 130
                 ]
             ],
 
@@ -149,7 +166,8 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
                     'minimalPrice' => 242,
 
                     // 110 + 110 * 0.2 + 110 * 1
-                    'maximalPrice' => 242
+                    'maximalPrice' => 242,
+                    'indexerMinimalPrice' => 132
                 ]
             ],
 
@@ -166,7 +184,8 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
                     'minimalPrice' => 240,
 
                     // 110 + 1 * 20 + 110 * 1
-                    'maximalPrice' => 240
+                    'maximalPrice' => 240,
+                    'indexerMinimalPrice' => 130
                 ]
             ],
 
@@ -183,7 +202,8 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
                     'minimalPrice' => 232,
 
                     // 110 + 110 * 0.2 + 100
-                    'maximalPrice' => 232
+                    'maximalPrice' => 232,
+                    'indexerMinimalPrice' => 132
                 ]
             ],
         ];

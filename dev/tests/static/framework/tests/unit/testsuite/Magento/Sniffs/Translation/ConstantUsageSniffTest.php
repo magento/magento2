@@ -1,14 +1,16 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sniffs\Translation;
 
-class ConstantUsageSniffTest extends \PHPUnit_Framework_TestCase
+use PHP_CodeSniffer\Files\File;
+
+class ConstantUsageSniffTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHP_CodeSniffer_File|\PHPUnit_Framework_MockObject_MockObject
+     * @var File|\PHPUnit_Framework_MockObject_MockObject
      */
     private $fileMock;
 
@@ -19,7 +21,7 @@ class ConstantUsageSniffTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->fileMock = $this->getMock(\PHP_CodeSniffer_File::class, [], [], '', false);
+        $this->fileMock = $this->createMock(File::class);
         $this->constantUsageSniff = new ConstantUsageSniff();
     }
 

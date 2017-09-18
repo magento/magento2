@@ -1,20 +1,20 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Setup\Fixtures;
 
-use \Magento\Catalog\Model\Category;
-use \Magento\Catalog\Model\CategoryFactory;
-use \Magento\Framework\App\Config\Storage\Writer;
-use \Magento\Framework\Event\ManagerInterface;
-use \Magento\Framework\Locale\Config;
-use \Magento\Store\Model\Group;
-use \Magento\Store\Model\StoreManager;
-use \Magento\Store\Model\Website;
-use \Magento\Store\Api\Data\StoreInterface;
+use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\CategoryFactory;
+use Magento\Framework\App\Config\Storage\Writer;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Locale\Config;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\Group;
+use Magento\Store\Model\StoreManager;
+use Magento\Store\Model\Website;
 
 /**
  * Generate websites, store groups and store views based on profile configuration
@@ -33,7 +33,7 @@ use \Magento\Store\Api\Data\StoreInterface;
  * <assign_entities_to_all_websites>1<assign_entities_to_all_websites/>
  * means that all stores will have the same root category
  *
- * <assign_entities_to_all_websites>1<assign_entities_to_all_websites/>
+ * <assign_entities_to_all_websites>0<assign_entities_to_all_websites/>
  * means that all stores will have unique root category
  *
  * @see setup/performance-toolkit/profiles/ce/small.xml
@@ -41,7 +41,6 @@ use \Magento\Store\Api\Data\StoreInterface;
  */
 class StoresFixture extends Fixture
 {
-
     const DEFAULT_WEBSITE_COUNT = 1;
 
     const DEFAULT_STORE_COUNT = 1;
@@ -185,8 +184,7 @@ class StoresFixture extends Fixture
         $this->storesCount = $this->fixtureModel->getValue('store_views', self::DEFAULT_STORE_VIEW_COUNT);
         $this->singleRootCategory = (bool)$this->fixtureModel->getValue('assign_entities_to_all_websites', false);
 
-        if (
-            $this->websitesCount <= self::DEFAULT_WEBSITE_COUNT
+        if ($this->websitesCount <= self::DEFAULT_WEBSITE_COUNT
             && $this->storeGroupsCount <= self::DEFAULT_STORE_COUNT
             && $this->storesCount <= self::DEFAULT_STORE_VIEW_COUNT
         ) {
@@ -256,6 +254,7 @@ class StoresFixture extends Fixture
         while ($existedStoreGroupCount < $this->storeGroupsCount) {
             $websiteId = $this->websiteIds[$existedStoreGroupCount % $existedWebsitesCount];
             $storeGroupName = sprintf('Store Group %d - website_id_%d', ++$existedStoreGroupCount, $websiteId);
+            $storeGroupCode = sprintf('store_group_%d', $existedStoreGroupCount);
 
             $storeGroup = clone $this->defaultStoreGroup;
             $storeGroup->addData(
@@ -263,6 +262,7 @@ class StoresFixture extends Fixture
                     'group_id' => null,
                     'website_id' => $websiteId,
                     'name' => $storeGroupName,
+                    'code' => $storeGroupCode,
                     'root_category_id' => $this->getStoreCategoryId($storeGroupName),
                 ]
             );

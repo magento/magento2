@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -510,6 +510,7 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
             'Tax rates were updated incorrectly.'
         );
     }
+
     public function testUpdateTaxRuleNotExisting()
     {
         $requestData = [

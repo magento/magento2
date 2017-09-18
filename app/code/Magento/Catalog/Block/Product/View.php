@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Block\Product;
@@ -10,7 +10,9 @@ use Magento\Catalog\Model\Category;
 
 /**
  * Product View block
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class View extends AbstractProduct implements \Magento\Framework\DataObject\IdentityInterface
 {
@@ -28,7 +30,7 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
 
     /**
      * @var \Magento\Framework\Pricing\PriceCurrencyInterface
-     * @deprecated
+     * @deprecated 101.1.0
      */
     protected $priceCurrency;
 
@@ -104,13 +106,14 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
             $data
         );
     }
+
     // @codingStandardsIgnoreEnd
 
     /**
      * Return wishlist widget options
      *
      * @return array
-     * @deprecated
+     * @deprecated 101.0.1
      */
     public function getWishlistOptions()
     {

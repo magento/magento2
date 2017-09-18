@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -37,6 +37,11 @@
         </arguments>
     </type>
     <type name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal">
+        <arguments>
+            <argument name="severity" xsi:type="string">S0</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Test\Constraint\AssertOrderTotalPaid">
         <arguments>
             <argument name="severity" xsi:type="string">S0</argument>
         </arguments>
@@ -112,6 +117,11 @@
         </arguments>
     </type>
     <type name="Magento\Sales\Test\Constraint\AssertOrderBillingAndShippingAddressesAreDifferent">
+        <arguments>
+            <argument name="severity" xsi:type="string">S1</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Test\Constraint\AssertCancelInCommentsHistory">
         <arguments>
             <argument name="severity" xsi:type="string">S1</argument>
         </arguments>

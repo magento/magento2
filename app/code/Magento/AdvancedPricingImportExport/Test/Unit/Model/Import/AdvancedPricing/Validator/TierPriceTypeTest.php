@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ use \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing as Advance
 /**
  * Class TierPriceTypeTest.
  */
-class TierPriceTypeTest extends \PHPUnit_Framework_TestCase
+class TierPriceTypeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var  AdvancedPricing\Validator\TierPriceType

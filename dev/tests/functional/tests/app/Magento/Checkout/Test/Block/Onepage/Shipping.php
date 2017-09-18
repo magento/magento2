@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,6 +21,13 @@ class Shipping extends Form
      * @var string
      */
     private $newAddressButton = '[data-bind*="isNewAddressAdded"]';
+
+    /**
+     * CSS Selector for "Edit" button.
+     *
+     * @var string
+     */
+    private $editAddressButton = '.edit-address-link';
 
     /**
      * Wait element.
@@ -168,6 +175,22 @@ class Shipping extends Form
     public function getSelectedAddress()
     {
         return $this->_rootElement->find($this->selectedAddress, Locator::SELECTOR_CSS)->getText();
+    }
+
+    /**
+     * Get address block.
+     *
+     * @param String $address
+     */
+    public function editAddress($address)
+    {
+        $addresses = $this->_rootElement->getElements($this->shippingAddressBlock);
+        foreach ($addresses as $addressBlock) {
+            if (strpos($addressBlock->getText(), $address) === 0) {
+                $addressBlock->find($this->editAddressButton)->click();
+                break;
+            }
+        }
     }
 
     /**

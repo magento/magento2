@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Helper;
@@ -152,7 +152,7 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
         $resultPage = $this->resultPageFactory->create();
         $this->setLayoutType($inRange, $resultPage);
         $resultPage->addHandle('cms_page_view');
-        $resultPage->addPageLayoutHandles(['id' => $this->_page->getIdentifier()]);
+        $resultPage->addPageLayoutHandles(['id' => str_replace('/', '_', $this->_page->getIdentifier())]);
 
         $this->_eventManager->dispatch(
             'cms_page_render',

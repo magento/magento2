@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,304 +9,355 @@
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
             <item name="provider" xsi:type="string">catalog_rule_form.catalog_rule_form_data_source</item>
-            <item name="deps" xsi:type="string">catalog_rule_form.catalog_rule_form_data_source</item>
         </item>
         <item name="label" xsi:type="string" translate="true">Catalog Price Rule</item>
-        <item name="config" xsi:type="array">
-            <item name="dataScope" xsi:type="string">data</item>
-            <item name="namespace" xsi:type="string">catalog_rule_form</item>
-        </item>
         <item name="template" xsi:type="string">templates/form/collapsible</item>
-        <item name="buttons" xsi:type="array">
-            <item name="back" xsi:type="array">
-                <item name="name" xsi:type="string">back</item>
-                <item name="label" xsi:type="string" translate="true">Back</item>
-                <item name="class" xsi:type="string">back</item>
-                <item name="url" xsi:type="string">*/*/</item>
-            </item>
-            <item name="save" xsi:type="string">Magento\CatalogRule\Block\Adminhtml\Edit\SaveButton</item>
-            <item name="reset" xsi:type="string">Magento\CatalogRule\Block\Adminhtml\Edit\ResetButton</item>
-            <item name="save_and_continue" xsi:type="string">Magento\CatalogRule\Block\Adminhtml\Edit\SaveAndContinueButton</item>
-            <item name="save_and_apply" xsi:type="string">Magento\CatalogRule\Block\Adminhtml\Edit\SaveAndApplyButton</item>
-            <item name="delete" xsi:type="string">Magento\CatalogRule\Block\Adminhtml\Edit\DeleteButton</item>
-        </item>
     </argument>
+    <settings>
+        <buttons>
+            <button name="delete" class="Magento\CatalogRule\Block\Adminhtml\Edit\DeleteButton"/>
+            <button name="save_and_apply" class="Magento\CatalogRule\Block\Adminhtml\Edit\SaveAndApplyButton"/>
+            <button name="save_and_continue" class="Magento\CatalogRule\Block\Adminhtml\Edit\SaveAndContinueButton"/>
+            <button name="reset" class="Magento\CatalogRule\Block\Adminhtml\Edit\ResetButton"/>
+            <button name="save" class="Magento\CatalogRule\Block\Adminhtml\Edit\SaveButton"/>
+            <button name="back">
+                <url path="*/*/"/>
+                <class>back</class>
+                <label translate="true">Back</label>
+            </button>
+        </buttons>
+        <namespace>catalog_rule_form</namespace>
+        <dataScope>data</dataScope>
+        <deps>
+            <dep>catalog_rule_form.catalog_rule_form_data_source</dep>
+        </deps>
+    </settings>
     <dataSource name="catalog_rule_form_data_source">
-        <argument name="dataProvider" xsi:type="configurableObject">
-            <argument name="class" xsi:type="string">Magento\CatalogRule\Model\Rule\DataProvider</argument>
-            <argument name="name" xsi:type="string">catalog_rule_form_data_source</argument>
-            <argument name="primaryFieldName" xsi:type="string">rule_id</argument>
-            <argument name="requestFieldName" xsi:type="string">id</argument>
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="submit_url" xsi:type="url" path="catalog_rule/promo_catalog/save"/>
-                </item>
-            </argument>
-        </argument>
         <argument name="data" xsi:type="array">
             <item name="js_config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
             </item>
         </argument>
+        <settings>
+            <submitUrl path="catalog_rule/promo_catalog/save"/>
+        </settings>
+        <dataProvider class="Magento\CatalogRule\Model\Rule\DataProvider" name="catalog_rule_form_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>rule_id</primaryFieldName>
+            </settings>
+        </dataProvider>
     </dataSource>
-    <fieldset name="rule_information">
-        <argument name="data" xsi:type="array">
-            <item name="config" xsi:type="array">
-                <item name="label" xsi:type="string" translate="true">Rule Information</item>
-                <item name="collapsible" xsi:type="boolean">true</item>
-                <item name="sortOrder" xsi:type="number">10</item>
-                <item name="opened" xsi:type="boolean">true</item>
-            </item>
-        </argument>
-        <field name="rule_id">
+    <fieldset name="rule_information" sortOrder="10">
+        <settings>
+            <collapsible>true</collapsible>
+            <opened>true</opened>
+            <label translate="true">Rule Information</label>
+        </settings>
+        <field name="rule_id" formElement="input">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="visible" xsi:type="boolean">false</item>
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="formElement" xsi:type="string">input</item>
                     <item name="source" xsi:type="string">catalog_rule</item>
-                    <item name="dataScope" xsi:type="string">rule_id</item>
                 </item>
             </argument>
+            <settings>
+                <dataType>text</dataType>
+                <visible>false</visible>
+                <dataScope>rule_id</dataScope>
+            </settings>
         </field>
-        <field name="name">
+        <field name="name" formElement="input">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string">Rule Name</item>
-                    <item name="visible" xsi:type="boolean">true</item>
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="formElement" xsi:type="string">input</item>
                     <item name="source" xsi:type="string">catalog_rule</item>
-                    <item name="dataScope" xsi:type="string">name</item>
-                    <item name="validation" xsi:type="array">
-                        <item name="required-entry" xsi:type="boolean">true</item>
-                    </item>
                 </item>
             </argument>
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
+                <label translate="true">Rule Name</label>
+                <visible>true</visible>
+                <dataScope>name</dataScope>
+            </settings>
         </field>
-        <field name="description">
+        <field name="description" formElement="textarea">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string">Description</item>
-                    <item name="visible" xsi:type="boolean">true</item>
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="formElement" xsi:type="string">textarea</item>
                     <item name="source" xsi:type="string">catalog_rule</item>
-                    <item name="dataScope" xsi:type="string">description</item>
                 </item>
             </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Description</label>
+                <visible>true</visible>
+                <dataScope>description</dataScope>
+            </settings>
         </field>
-        <field name="is_active">
+        <field name="is_active" formElement="select">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string">Status</item>
-                    <item name="visible" xsi:type="boolean">true</item>
-                    <item name="dataType" xsi:type="string">number</item>
-                    <item name="formElement" xsi:type="string">select</item>
                     <item name="source" xsi:type="string">catalog_rule</item>
-                    <item name="dataScope" xsi:type="string">is_active</item>
-                </item>
-                <item name="options" xsi:type="array">
-                    <item name="0" xsi:type="array">
-                        <item name="value" xsi:type="number">1</item>
-                        <item name="label" xsi:type="string" translate="true">Active</item>
-                    </item>
-                    <item name="1" xsi:type="array">
-                        <item name="value" xsi:type="number">0</item>
-                        <item name="label" xsi:type="string" translate="true">Inactive</item>
-                    </item>
                 </item>
             </argument>
+            <settings>
+                <dataType>number</dataType>
+                <label translate="true">Status</label>
+                <visible>true</visible>
+                <dataScope>is_active</dataScope>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options>
+                            <option name="0" xsi:type="array">
+                                <item name="value" xsi:type="number">1</item>
+                                <item name="label" xsi:type="string" translate="true">Active</item>
+                            </option>
+                            <option name="1" xsi:type="array">
+                                <item name="value" xsi:type="number">0</item>
+                                <item name="label" xsi:type="string" translate="true">Inactive</item>
+                            </option>
+                        </options>
+                    </settings>
+                </select>
+            </formElements>
         </field>
-        <field name="website_ids">
+        <field name="website_ids" formElement="multiselect">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string">Websites</item>
-                    <item name="dataType" xsi:type="string">number</item>
-                    <item name="formElement" xsi:type="string">multiselect</item>
-                    <item name="validation" xsi:type="array">
-                        <item name="required-entry" xsi:type="boolean">true</item>
-                    </item>
                     <item name="source" xsi:type="string">catalog_rule</item>
-                    <item name="dataScope" xsi:type="string">website_ids</item>
-                    <item name="tooltip" xsi:type="array">
-                        <item name="link" xsi:type="string">http://docs.magento.com/m2/ce/user_guide/configuration/scope.html</item>
-                        <item name="description" xsi:type="string">What is this?</item>
-                    </item>
                 </item>
-                <item name="options" xsi:type="object">Magento\CatalogRule\Model\Rule\WebsitesOptionsProvider</item>
             </argument>
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>number</dataType>
+                <tooltip>
+                    <link>http://docs.magento.com/m2/ce/user_guide/configuration/scope.html</link>
+                    <description>What is this?</description>
+                </tooltip>
+                <label translate="true">Websites</label>
+                <dataScope>website_ids</dataScope>
+            </settings>
+            <formElements>
+                <multiselect>
+                    <settings>
+                        <options class="Magento\CatalogRule\Model\Rule\WebsitesOptionsProvider"/>
+                    </settings>
+                </multiselect>
+            </formElements>
         </field>
-        <field name="customer_group_ids">
+        <field name="customer_group_ids" formElement="multiselect">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string">Customer Groups</item>
-                    <item name="dataType" xsi:type="string">number</item>
-                    <item name="formElement" xsi:type="string">multiselect</item>
-                    <item name="validation" xsi:type="array">
-                        <item name="required-entry" xsi:type="boolean">true</item>
-                    </item>
                     <item name="source" xsi:type="string">catalog_rule</item>
-                    <item name="dataScope" xsi:type="string">customer_group_ids</item>
                 </item>
-                <item name="options" xsi:type="object">\Magento\CatalogRule\Model\Rule\CustomerGroupsOptionsProvider</item>
             </argument>
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>number</dataType>
+                <label translate="true">Customer Groups</label>
+                <dataScope>customer_group_ids</dataScope>
+            </settings>
+            <formElements>
+                <multiselect>
+                    <settings>
+                        <options class="Magento\CatalogRule\Model\Rule\CustomerGroupsOptionsProvider"/>
+                    </settings>
+                </multiselect>
+            </formElements>
         </field>
-        <field name="from_date">
+        <field name="from_date" formElement="date">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string">From</item>
-                    <item name="visible" xsi:type="boolean">true</item>
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="formElement" xsi:type="string">date</item>
-                    <item name="validation" xsi:type="array">
-                        <item name="validate-date" xsi:type="boolean">true</item>
-                    </item>
                     <item name="source" xsi:type="string">catalog_rule</item>
-                    <item name="dataScope" xsi:type="string">from_date</item>
                 </item>
             </argument>
+            <settings>
+                <validation>
+                    <rule name="validate-date" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
+                <label translate="true">From</label>
+                <visible>true</visible>
+                <dataScope>from_date</dataScope>
+            </settings>
         </field>
-        <field name="to_date">
+        <field name="to_date" formElement="date">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string">To</item>
-                    <item name="visible" xsi:type="boolean">true</item>
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="formElement" xsi:type="string">date</item>
                     <item name="source" xsi:type="string">catalog_rule</item>
-                    <item name="dataScope" xsi:type="string">to_date</item>
-                    <item name="validation" xsi:type="array">
-                        <item name="validate-date" xsi:type="boolean">true</item>
-                    </item>
                 </item>
             </argument>
+            <settings>
+                <validation>
+                    <rule name="validate-date" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
+                <label translate="true">To</label>
+                <visible>true</visible>
+                <dataScope>to_date</dataScope>
+            </settings>
         </field>
-        <field name="sort_order">
+        <field name="sort_order" formElement="input">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string">Priority</item>
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="formElement" xsi:type="string">input</item>
                     <item name="source" xsi:type="string">catalog_rule</item>
-                    <item name="dataScope" xsi:type="string">sort_order</item>
                 </item>
             </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Priority</label>
+                <dataScope>sort_order</dataScope>
+            </settings>
         </field>
     </fieldset>
-    <fieldset name="actions">
-        <argument name="data" xsi:type="array">
-            <item name="config" xsi:type="array">
-                <item name="label" xsi:type="string" translate="true">Actions</item>
-                <item name="collapsible" xsi:type="boolean">true</item>
-                <item name="sortOrder" xsi:type="number">30</item>
-            </item>
-        </argument>
-        <field name="simple_action">
+    <fieldset name="actions" sortOrder="30">
+        <settings>
+            <collapsible>true</collapsible>
+            <label translate="true">Actions</label>
+        </settings>
+        <field name="simple_action" formElement="select">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string">Apply</item>
-                    <item name="dataType" xsi:type="string">number</item>
-                    <item name="formElement" xsi:type="string">select</item>
                     <item name="source" xsi:type="string">catalog_rule</item>
-                    <item name="dataScope" xsi:type="string">simple_action</item>
-                    <item name="switcherConfig" xsi:type="array">
-                        <item name="enabled" xsi:type="boolean">true</item>
-                        <item name="rules" xsi:type="array">
-                            <item name="0" xsi:type="array">
-                                <item name="value" xsi:type="string">by_percent</item>
-                                <item name="actions" xsi:type="array">
-                                    <item name="0" xsi:type="array">
-                                        <item name="target" xsi:type="string">catalog_rule_form.catalog_rule_form.actions.discount_amount</item>
-                                        <item name="callback" xsi:type="string">setValidation</item>
-                                        <item name="params" xsi:type="array">
-                                            <item name="0" xsi:type="string">validate-number-range</item>
-                                            <item name="1" xsi:type="string">0.00-100.00</item>
-                                        </item>
-                                    </item>
-                                </item>
-                            </item>
-                            <item name="1" xsi:type="array">
-                                <item name="value" xsi:type="string">to_percent</item>
-                                <item name="actions" xsi:type="array">
-                                    <item name="0" xsi:type="array">
-                                        <item name="target" xsi:type="string">catalog_rule_form.catalog_rule_form.actions.discount_amount</item>
-                                        <item name="callback" xsi:type="string">setValidation</item>
-                                        <item name="params" xsi:type="array">
-                                            <item name="0" xsi:type="string">validate-number-range</item>
-                                            <item name="1" xsi:type="string">0.00-100.00</item>
-                                        </item>
-                                    </item>
-                                </item>
-                            </item>
-                            <item name="2" xsi:type="array">
-                                <item name="value" xsi:type="string">by_fixed</item>
-                                <item name="actions" xsi:type="array">
-                                    <item name="0" xsi:type="array">
-                                        <item name="target" xsi:type="string">catalog_rule_form.catalog_rule_form.actions.discount_amount</item>
-                                        <item name="callback" xsi:type="string">setValidation</item>
-                                        <item name="params" xsi:type="array">
-                                            <item name="0" xsi:type="string">validate-number-range</item>
-                                            <item name="1" xsi:type="string">false</item>
-                                        </item>
-                                    </item>
-                                </item>
-                            </item>
-                            <item name="3" xsi:type="array">
-                                <item name="value" xsi:type="string">to_fixed</item>
-                                <item name="actions" xsi:type="array">
-                                    <item name="0" xsi:type="array">
-                                        <item name="target" xsi:type="string">catalog_rule_form.catalog_rule_form.actions.discount_amount</item>
-                                        <item name="callback" xsi:type="string">setValidation</item>
-                                        <item name="params" xsi:type="array">
-                                            <item name="0" xsi:type="string">validate-number-range</item>
-                                            <item name="1" xsi:type="string">false</item>
-                                        </item>
-                                    </item>
-                                </item>
-                            </item>
-                        </item>
-                    </item>
-                </item>
-                <item name="options" xsi:type="object">Magento\CatalogRule\Model\Rule\Action\SimpleActionOptionsProvider</item>
-            </argument>
-        </field>
-        <field name="discount_amount">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string">Discount Amount</item>
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="formElement" xsi:type="string">input</item>
-                    <item name="source" xsi:type="string">catalog_rule</item>
-                    <item name="dataScope" xsi:type="string">discount_amount</item>
-                    <item name="validation" xsi:type="array">
-                        <item name="required-entry" xsi:type="boolean">true</item>
-                    </item>
                 </item>
             </argument>
+            <settings>
+                <switcherConfig>
+                    <rules>
+                        <rule name="0">
+                            <value>by_percent</value>
+                            <actions>
+                                <action name="0">
+                                    <target>catalog_rule_form.catalog_rule_form.actions.discount_amount</target>
+                                    <callback>setValidation</callback>
+                                    <params>
+                                        <param name="0" xsi:type="string">validate-number-range</param>
+                                        <param name="1" xsi:type="string">0.00-100.00</param>
+                                    </params>
+                                </action>
+                            </actions>
+                        </rule>
+                        <rule name="1">
+                            <value>to_percent</value>
+                            <actions>
+                                <action name="0">
+                                    <target>catalog_rule_form.catalog_rule_form.actions.discount_amount</target>
+                                    <callback>setValidation</callback>
+                                    <params>
+                                        <param name="0" xsi:type="string">validate-number-range</param>
+                                        <param name="1" xsi:type="string">0.00-100.00</param>
+                                    </params>
+                                </action>
+                            </actions>
+                        </rule>
+                        <rule name="2">
+                            <value>by_fixed</value>
+                            <actions>
+                                <action name="0">
+                                    <target>catalog_rule_form.catalog_rule_form.actions.discount_amount</target>
+                                    <callback>setValidation</callback>
+                                    <params>
+                                        <param name="0" xsi:type="string">validate-number-range</param>
+                                        <param name="1" xsi:type="string">false</param>
+                                    </params>
+                                </action>
+                            </actions>
+                        </rule>
+                        <rule name="3">
+                            <value>to_fixed</value>
+                            <actions>
+                                <action name="0">
+                                    <target>catalog_rule_form.catalog_rule_form.actions.discount_amount</target>
+                                    <callback>setValidation</callback>
+                                    <params>
+                                        <param name="0" xsi:type="string">validate-number-range</param>
+                                        <param name="1" xsi:type="string">false</param>
+                                    </params>
+                                </action>
+                            </actions>
+                        </rule>
+                    </rules>
+                    <enabled>true</enabled>
+                </switcherConfig>
+                <dataType>number</dataType>
+                <label translate="true">Apply</label>
+                <dataScope>simple_action</dataScope>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="Magento\CatalogRule\Model\Rule\Action\SimpleActionOptionsProvider"/>
+                    </settings>
+                </select>
+            </formElements>
         </field>
-        <field name="stop_rules_processing">
+        <field name="discount_amount" formElement="input">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string">Discard subsequent rules</item>
+                    <item name="source" xsi:type="string">catalog_rule</item>
+                </item>
+            </argument>
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
+                <label translate="true">Discount Amount</label>
+                <dataScope>discount_amount</dataScope>
+            </settings>
+        </field>
+        <field name="stop_rules_processing" formElement="select">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
                     <item name="fieldGroup" xsi:type="string">bool</item>
-                    <item name="dataType" xsi:type="string">number</item>
-                    <item name="formElement" xsi:type="string">select</item>
                     <item name="value" xsi:type="string">0</item>
                     <item name="source" xsi:type="string">catalog_rule</item>
-                    <item name="dataScope" xsi:type="string">stop_rules_processing</item>
-                </item>
-                <item name="options" xsi:type="array">
-                    <item name="0" xsi:type="array">
-                        <item name="value" xsi:type="number">1</item>
-                        <item name="label" xsi:type="string" translate="true">Yes</item>
-                    </item>
-                    <item name="1" xsi:type="array">
-                        <item name="value" xsi:type="number">0</item>
-                        <item name="label" xsi:type="string" translate="true">No</item>
-                    </item>
                 </item>
             </argument>
+            <settings>
+                <dataType>number</dataType>
+                <label translate="true">Discard subsequent rules</label>
+                <dataScope>stop_rules_processing</dataScope>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options>
+                            <option name="0" xsi:type="array">
+                                <item name="value" xsi:type="number">1</item>
+                                <item name="label" xsi:type="string" translate="true">Yes</item>
+                            </option>
+                            <option name="1" xsi:type="array">
+                                <item name="value" xsi:type="number">0</item>
+                                <item name="label" xsi:type="string" translate="true">No</item>
+                            </option>
+                        </options>
+                    </settings>
+                </select>
+            </formElements>
         </field>
     </fieldset>
+    <htmlContent name="block_promo_catalog_edit_tab_conditions" sortOrder="20">
+        <argument name="data" xsi:type="array">
+            <item name="wrapper" xsi:type="array">
+                <item name="label" xsi:type="string" translate="true">Conditions</item>
+                <item name="collapsible" xsi:type="boolean">true</item>
+                <item name="opened" xsi:type="boolean">false</item>
+            </item>
+        </argument>
+        <settings>
+            <wrapper>
+                <canShow>true</canShow>
+                <componentType>fieldset</componentType>
+            </wrapper>
+        </settings>
+        <block class="Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Tab\Conditions" name="promo_catalog_edit_tab"/>
+    </htmlContent>
 </form>

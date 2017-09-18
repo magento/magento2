@@ -1,11 +1,13 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Weee\Api\Data\ProductRender\WeeeAdjustmentAttributeInterface"
+                type="Magento\Weee\Model\ProductRender\WeeeAdjustmentAttribute"/>
     <type name="Magento\Weee\Helper\Data">
         <arguments>
             <argument name="weeeTax" xsi:type="object">Magento\Weee\Model\Tax\Proxy</argument>
@@ -48,6 +50,31 @@
             <argument name="excludeAdjustment" xsi:type="array">
                 <item name="weee" xsi:type="const">Magento\Weee\Pricing\Adjustment::ADJUSTMENT_CODE</item>
                 <item name="weee_tax" xsi:type="const">Magento\Weee\Pricing\TaxAdjustment::ADJUSTMENT_CODE</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Ui\DataProvider\Product\ProductRenderCollectorComposite">
+        <arguments>
+            <argument name="productProviders" xsi:type="array">
+                <item name="weee" xsi:type="object">\Magento\Weee\Ui\DataProvider\Product\Listing\Collector\Weee</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Ui\DataProvider\Product\Listing\Collector\Price">
+        <arguments>
+            <argument name="excludeAdjustments" xsi:type="array">
+                <item name="weee" xsi:type="string">weee</item>
+                <item name="weee_tax" xsi:type="string">weee_tax</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Ui\DataProvider\Product\Listing\DataProvider">
+        <plugin name="weeeSettingsProvider" type="Magento\Weee\Plugin\Ui\DataProvider\WeeeSettings"/>
+    </type>
+    <type name="Magento\Catalog\Model\ProductRender\FormattedPriceInfoBuilder">
+        <arguments>
+            <argument name="formattedPriceTypesPool" xsi:type="array">
+                <item name="catalog_prices" xsi:type="string">Magento\Catalog\Api\Data\ProductRender\FormattedPriceInfoInterface</item>
             </argument>
         </arguments>
     </type>

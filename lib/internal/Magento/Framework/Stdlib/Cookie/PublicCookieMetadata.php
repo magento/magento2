@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,7 @@ namespace Magento\Framework\Stdlib\Cookie;
 /**
  * Class PublicCookieMetadata
  *
+ * @api
  */
 class PublicCookieMetadata extends CookieMetadata
 {
@@ -41,7 +42,6 @@ class PublicCookieMetadata extends CookieMetadata
      * The cookie duration can be translated into an expiration date at the time the cookie is sent.
      *
      * @return int|null Time in seconds.
-     * @api
      */
     public function getDuration()
     {
@@ -53,7 +53,6 @@ class PublicCookieMetadata extends CookieMetadata
      *
      * @param bool $httpOnly
      * @return $this
-     * @api
      */
     public function setHttpOnly($httpOnly)
     {
@@ -65,7 +64,6 @@ class PublicCookieMetadata extends CookieMetadata
      *
      * @param bool $secure
      * @return $this
-     * @api
      */
     public function setSecure($secure)
     {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@
 
 ?>
 <?php if ($block->getChildHtml()):?>
-    <div data-mage-init='{"floatingHeader": {}}' class="page-actions" <?php /* @escapeNotVerified */ echo $block->getUiId('content-header') ?>>
-        <?php echo $block->getChildHtml(); ?>
+    <div data-mage-init='{"floatingHeader": {}}' class="page-actions" <?= /* @escapeNotVerified */ $block->getUiId('content-header') ?>>
+        <?= $block->getChildHtml() ?>
     </div>
 <?php endif; ?>

@@ -1,14 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Deploy\Model\DeploymentConfig;
 
+use Magento\Framework\App\DeploymentConfig\ValidatorInterface;
 use Magento\Framework\Exception\ConfigurationMismatchException;
-use Magento\Framework\Phrase;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\App\DeploymentConfig\ImporterInterface;
 
 /**
  * Pool of all deployment configuration importers.
@@ -20,13 +19,21 @@ class ImporterPool
     /**
      * List of sections and their importers.
      *
-     * Sections are defined with importers in di.xml
+     * Sections are defined with importers in di.xml. Every section may have data validator
      * E.g.
      * ```xml
      * <type name="Magento\Deploy\Model\DeploymentConfig\ImporterPool">
      *     <arguments>
      *          <argument name="importers" xsi:type="array">
-     *               <item name="scopes" xsi:type="string">Magento\Store\Model\StoreImporter</item>
+     *               <item name="scopes" xsi:type="array">
+     *                   <item name="sort_order" xsi:type="number">20</item>
+     *                   <item name="importer_class" xsi:type="string">Magento\Store\Model\StoreImporter</item>
+     *                   <item name="validator_class" xsi:type="string">Magento\Store\Model\Config\StoreValidator</item>
+     *               </item>
+     *               <item name="themes" xsi:type="array">
+     *                   <item name="sort_order" xsi:type="number">10</item>
+     *                   <item name="importer_class" xsi:type="string">Magento\Theme\Model\ThemeImporter</item>
+     *               </item>
      *          </argument>
      *     </arguments>
      * </type>
@@ -55,6 +62,23 @@ class ImporterPool
     private $importers = [];
 
     /**
+     * Sorted list of importers class names.
+     *
+     * This list sorted by parameter "sort_order", that defined in di.xml
+     *
+     * ```php
+     * [
+     *     'themes' => 'Magento\Theme\Model\ThemeImporter',
+     *     'scopes' => 'Magento\Store\Model\StoreImporter',
+     *     ...
+     * ]
+     * ```
+     *
+     * @var array
+     */
+    private $sortedImporters = [];
+
+    /**
      * Magento object manager.
      *
      * @var ObjectManagerInterface
@@ -62,12 +86,25 @@ class ImporterPool
     private $objectManager;
 
     /**
+     * Factory that creates validator objects by class name.
+     * Validators should be instances of Magento\Framework\App\DeploymentConfig\ValidatorInterface
+     *
+     * @var ValidatorFactory
+     */
+    private $validatorFactory;
+
+    /**
      * @param ObjectManagerInterface $objectManager the Magento object manager
+     * @param ValidatorFactory $validatorFactory the validator factory
      * @param array $importers the list of sections and their importers
      */
-    public function __construct(ObjectManagerInterface $objectManager, array $importers = [])
-    {
+    public function __construct(
+        ObjectManagerInterface $objectManager,
+        ValidatorFactory $validatorFactory,
+        array $importers = []
+    ) {
         $this->objectManager = $objectManager;
+        $this->validatorFactory = $validatorFactory;
         $this->importers = $importers;
     }
 
@@ -91,34 +128,83 @@ class ImporterPool
     }
 
     /**
-     * Retrieves list of all sections with their importer instances.
+     * Retrieves list of all sections with their importer class names, sorted by sort_order.
      *
      * E.g.
      * ```php
      * [
-     *     'scopes' => SomeScopeImporter(),
+     *     'scopes' => Magento\Store\Model\StoreImporter,
      *     ...
      * ]
      * ```
      *
-     * @return array the list of all sections with their importer instances
-     * @throws ConfigurationMismatchException is thrown when instance of importer implements a wrong interface
+     * @return array the list of all sections with their importer class names
+     * @throws ConfigurationMismatchException is thrown when parameter class is empty
      */
     public function getImporters()
     {
-        $result = [];
+        if (!$this->sortedImporters) {
+            $sortedImporters = [];
 
-        foreach ($this->importers as $section => $importer) {
-            $importerObj = $this->objectManager->get($importer);
-            if (!$importerObj instanceof ImporterInterface) {
-                throw new ConfigurationMismatchException(new Phrase(
-                    '%1: Instance of %2 is expected, got %3 instead',
-                    [$section, ImporterInterface::class, get_class($importerObj)]
-                ));
+            foreach ($this->sort($this->importers) as $section => $importer) {
+                if (empty($importer['importer_class'])) {
+                    throw new ConfigurationMismatchException(__('Parameter "importer_class" must be present.'));
+                }
+
+                $sortedImporters[$section] = $importer['importer_class'];
             }
-            $result[$section] = $importerObj;
+
+            $this->sortedImporters = $sortedImporters;
         }
 
-        return $result;
+        return $this->sortedImporters;
+    }
+
+    /**
+     * Returns validator object for section if it was declared, otherwise returns null.
+     *
+     * @param string $section Section name
+     * @return ValidatorInterface|null
+     * @throws \InvalidArgumentException
+     */
+    public function getValidator($section)
+    {
+        if (isset($this->importers[$section]) && !empty($this->importers[$section]['validator_class'])) {
+            return $this->validatorFactory->create($this->importers[$section]['validator_class']);
+        }
+        return null;
+    }
+
+    /**
+     * Sorts importers according to sort order.
+     *
+     * @param array $data
+     * @return array
+     */
+    private function sort(array $data)
+    {
+        uasort($data, function (array $a, array $b) {
+            $a['sort_order'] = $this->getSortOrder($a);
+            $b['sort_order'] = $this->getSortOrder($b);
+
+            if ($a['sort_order'] == $b['sort_order']) {
+                return 0;
+            }
+
+            return ($a['sort_order'] < $b['sort_order']) ? -1 : 1;
+        });
+
+        return $data;
+    }
+
+    /**
+     * Retrieves sort order from array.
+     *
+     * @param array $variable
+     * @return int
+     */
+    private function getSortOrder(array $variable)
+    {
+        return !empty($variable['sort_order']) ? $variable['sort_order'] : 0;
     }
 }

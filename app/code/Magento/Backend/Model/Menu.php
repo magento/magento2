@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Model;
@@ -13,6 +13,9 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Backend menu model
+ *
+ * @api
+ * @since 100.0.2
  */
 class Menu extends \ArrayObject
 {
@@ -273,6 +276,7 @@ class Menu extends \ArrayObject
      * Get menu data represented as an array
      *
      * @return array
+     * @since 100.2.0
      */
     public function toArray()
     {
@@ -288,6 +292,7 @@ class Menu extends \ArrayObject
      *
      * @param string $serialized
      * @return void
+     * @since 100.2.0
      */
     public function unserialize($serialized)
     {
@@ -300,6 +305,7 @@ class Menu extends \ArrayObject
      *
      * @param array $data
      * @return void
+     * @since 100.2.0
      */
     public function populateFromArray(array $data)
     {

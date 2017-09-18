@@ -1,20 +1,20 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="order_item_extra_info">
-            <block class="Magento\GiftMessage\Block\Adminhtml\Sales\Order\Create\Giftoptions" name="gift_options_link" template="sales/order/create/giftoptions.phtml">
-                <block class="Magento\GiftMessage\Block\Adminhtml\Sales\Order\Create\Items" name="gift_options_item_data" template="sales/order/create/items.phtml"/>
+            <block class="Magento\GiftMessage\Block\Adminhtml\Sales\Order\Create\Giftoptions" name="gift_options_link" template="Magento_GiftMessage::sales/order/create/giftoptions.phtml">
+                <block class="Magento\GiftMessage\Block\Adminhtml\Sales\Order\Create\Items" name="gift_options_item_data" template="Magento_GiftMessage::sales/order/create/items.phtml"/>
             </block>
         </referenceBlock>
         <referenceBlock name="items_grid">
             <block class="Magento\Backend\Block\Template" name="popup_window" template="Magento_GiftMessage::popup.phtml">
-                <block class="Magento\GiftMessage\Block\Adminhtml\Sales\Order\Create\Form" name="gift_options_form" template="giftoptionsform.phtml"/>
+                <block class="Magento\GiftMessage\Block\Adminhtml\Sales\Order\Create\Form" name="gift_options_form" template="Magento_GiftMessage::giftoptionsform.phtml"/>
             </block>
         </referenceBlock>
     </body>

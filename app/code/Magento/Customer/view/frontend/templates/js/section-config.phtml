@@ -1,14 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 /** @var \Magento\Customer\Block\SectionConfig $block */
 ?>
 <script type="text/x-magento-init">
-<?php
-    /* @noEscape */ echo $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonEncode([
+<?= /* @noEscape */ $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonEncode([
         '*' => ['Magento_Customer/js/section-config' => [
             'sections' => $block->getSections(),
             'clientSideSections' => $block->getClientSideSections(),

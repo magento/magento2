@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -24,7 +24,7 @@
             <field name="cartItem" xsi:type="array">
                 <item name="price" xsi:type="string">42</item>
                 <item name="qty" xsi:type="string">1</item>
-                <item name="subtotal" xsi:type="string">47</item>
+                <item name="subtotal" xsi:type="string">48</item>
             </field>
         </dataset>
         <dataset name="swatches_with_dropdown">

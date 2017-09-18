@@ -1,21 +1,21 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Setup\Test\Unit\Fixtures;
 
-use \Magento\Setup\Fixtures\CustomerGroupsFixture;
-use \Magento\Customer\Api\Data\GroupInterface;
-use \Magento\Customer\Api\Data\GroupInterfaceFactory;
-use \Magento\Customer\Api\GroupRepositoryInterface;
-use \Magento\Customer\Model\ResourceModel\Group\CollectionFactory;
+use Magento\Customer\Api\Data\GroupInterface;
+use Magento\Customer\Api\Data\GroupInterfaceFactory;
+use Magento\Customer\Api\GroupRepositoryInterface;
+use Magento\Customer\Model\ResourceModel\Group\CollectionFactory;
+use Magento\Setup\Fixtures\CustomerGroupsFixture;
 
 /**
  * Test Customer Groups generation
  */
-class CustomerGroupsFixtureTest extends \PHPUnit_Framework_TestCase
+class CustomerGroupsFixtureTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Fixtures\FixtureModel

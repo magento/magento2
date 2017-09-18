@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,9 +9,9 @@
 ?>
 <a href="#"
    class="action tocompare"
-   title="<?php echo $block->escapeHtml(__('Add to Compare')); ?>"
-   aria-label="<?php echo $block->escapeHtml(__('Add to Compare')); ?>"
-   data-post='<?php /* @escapeNotVerified */ echo $block->getCompareHelper()->getPostDataParams($block->getProduct()); ?>'
+   title="<?= $block->escapeHtml(__('Add to Compare')) ?>"
+   aria-label="<?= $block->escapeHtml(__('Add to Compare')) ?>"
+   data-post='<?= /* @escapeNotVerified */ $block->getCompareHelper()->getPostDataParams($block->getProduct()) ?>'
    role="button">
-    <span><?php /* @escapeNotVerified */ echo __('Add to Compare') ?></span>
+    <span><?= /* @escapeNotVerified */ __('Add to Compare') ?></span>
 </a>

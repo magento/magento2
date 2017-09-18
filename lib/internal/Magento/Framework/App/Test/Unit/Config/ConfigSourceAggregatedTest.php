@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit\Config;
@@ -8,7 +8,7 @@ namespace Magento\Framework\App\Test\Unit\Config;
 use Magento\Framework\App\Config\ConfigSourceAggregated;
 use Magento\Framework\App\Config\ConfigSourceInterface;
 
-class ConfigSourceAggregatedTest extends \PHPUnit_Framework_TestCase
+class ConfigSourceAggregatedTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ConfigSourceInterface|\PHPUnit_Framework_MockObject_MockObject

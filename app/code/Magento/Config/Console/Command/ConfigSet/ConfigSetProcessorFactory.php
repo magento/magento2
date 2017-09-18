@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Console\Command\ConfigSet;
@@ -14,6 +14,9 @@ use Magento\Framework\ObjectManagerInterface;
  *
  * @see ConfigSetProcessorInterface
  * @see ConfigSetCommand
+ *
+ * @api
+ * @since 100.2.0
  */
 class ConfigSetProcessorFactory
 {
@@ -27,9 +30,7 @@ class ConfigSetProcessorFactory
     const TYPE_LOCK = 'lock';
     /**#@-*/
 
-    /**
-     * @var ObjectManagerInterface
-     */
+    /**#@-*/
     private $objectManager;
 
     /**
@@ -59,6 +60,7 @@ class ConfigSetProcessorFactory
      * @return ConfigSetProcessorInterface New processor instance
      * @throws ConfigurationMismatchException If processor type is not exists in processors array
      * or declared class has wrong implementation
+     * @since 100.2.0
      */
     public function create($processorName)
     {

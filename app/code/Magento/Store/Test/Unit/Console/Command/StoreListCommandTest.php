@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Test\Unit\Console\Command;
@@ -15,7 +15,7 @@ use Magento\Framework\Console\Cli;
 /**
  * @package Magento\Store\Test\Unit\Console\Command
  */
-class StoreListCommandTest extends \PHPUnit_Framework_TestCase
+class StoreListCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var StoreListCommand

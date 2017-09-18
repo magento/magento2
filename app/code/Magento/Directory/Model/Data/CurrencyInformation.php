@@ -2,7 +2,7 @@
 /**
  * Data Model implementing the Address interface
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Directory\Model\Data;
@@ -117,7 +117,6 @@ class CurrencyInformation extends \Magento\Framework\Api\AbstractExtensibleObjec
     {
         return $this->setData(self::KEY_EXCHANGE_RATES, $exchangeRates);
     }
-
 
     /**
      * @inheritDoc

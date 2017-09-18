@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Test\Block\Adminhtml\Import\Frame;
@@ -13,11 +13,11 @@ use Magento\Mtf\Block\Block;
 class Result extends Block
 {
     /**
-     * CSS selector for error message block.
+     * CSS selector for import button.
      *
      * @var string
      */
-    private $errorMessage = '.message-error';
+    private $importButton = 'div > .success > div > button';
 
     /**
      * CSS selector for validation errors list block.
@@ -27,19 +27,13 @@ class Result extends Block
     private $validationErrorList = '.import-error-list';
 
     /**
-     * Get error message text.
+     * Click import button.
      *
-     * @return string|bool
+     * @return void
      */
-    public function getErrorMessage()
+    public function clickImportButton()
     {
-        $element = $this->_rootElement->find($this->errorMessage);
-
-        if (!$element->isVisible()) {
-            return false;
-        }
-
-        return (string) $this->_rootElement->find($this->errorMessage)->getText();
+        $this->_rootElement->find($this->importButton)->click();
     }
 
     /**

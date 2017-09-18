@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit\Config;
 
 use Magento\Framework\App\Config\ScopeCodeResolver;
 use Magento\Framework\App\Config\ConfigPathResolver;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use \PHPUnit_Framework_MockObject_MockObject as Mock;
 
 /**
  * {@inheritdoc}
  */
-class ConfigPathResolverTest extends \PHPUnit_Framework_TestCase
+class ConfigPathResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ConfigPathResolver

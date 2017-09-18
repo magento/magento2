@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Directory\Model\ResourceModel;
 
 /**
- * Directory Country Resource Model
+ * Country Resource Model
+ *
+ * @api
+ * @since 100.0.2
  */
 class Country extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

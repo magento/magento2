@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,7 +18,6 @@ try {
     $product = $productRepository->get('simple_dropdown_option', false, null, true);
     $product->delete();
 } catch (NoSuchEntityException $e) {
-
 }
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);

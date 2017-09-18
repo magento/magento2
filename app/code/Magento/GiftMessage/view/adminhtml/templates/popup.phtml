@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,11 +12,11 @@
 <div id="gift_options_configure_new" class="gift-options-popup product-configure-popup" style="display: none;">
     <div id="gift_options_form_contents">
         <div class="content">
-            <?php echo $block->getChildHtml();?>
+            <?= $block->getChildHtml() ?>
         </div>
         <div class="ui-dialog-buttonset">
-            <button type="button" class="action-close" id="gift_options_cancel_button"><span><?php /* @escapeNotVerified */ echo __('Cancel'); ?></span></button>
-            <button type="button" class="action-primary" id="gift_options_ok_button"><span><?php /* @escapeNotVerified */ echo __('OK'); ?></span></button>
+            <button type="button" class="action-close" id="gift_options_cancel_button"><span><?= /* @escapeNotVerified */ __('Cancel') ?></span></button>
+            <button type="button" class="action-primary" id="gift_options_ok_button"><span><?= /* @escapeNotVerified */ __('OK') ?></span></button>
         </div>
     </div>
 </div>

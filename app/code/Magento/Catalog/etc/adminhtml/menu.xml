@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
-        <add id="Magento_Catalog::catalog" title="Products" translate="title" module="Magento_Catalog" sortOrder="20" dependsOnModule="Magento_Catalog" resource="Magento_Catalog::catalog"/>
-        <add id="Magento_Catalog::catalog_products" title="Catalog" translate="title" module="Magento_Catalog" sortOrder="10" parent="Magento_Catalog::inventory" action="catalog/product/" resource="Magento_Catalog::products"/>
+        <add id="Magento_Catalog::catalog" title="Catalog" translate="title" module="Magento_Catalog" sortOrder="20" dependsOnModule="Magento_Catalog" resource="Magento_Catalog::catalog"/>
+        <add id="Magento_Catalog::catalog_products" title="Products" translate="title" module="Magento_Catalog" sortOrder="10" parent="Magento_Catalog::inventory" action="catalog/product/" resource="Magento_Catalog::products"/>
         <add id="Magento_Catalog::catalog_categories" title="Categories" translate="title" module="Magento_Catalog" sortOrder="20" parent="Magento_Catalog::inventory" action="catalog/category/" resource="Magento_Catalog::categories"/>
         <add id="Magento_Catalog::catalog_attributes_attributes" title="Product" translate="title" module="Magento_Catalog" sortOrder="30" parent="Magento_Backend::stores_attributes" action="catalog/product_attribute/" resource="Magento_Catalog::attributes_attributes"/>
         <add id="Magento_Catalog::catalog_attributes_sets" title="Attribute Set" translate="title" module="Magento_Catalog" sortOrder="40" parent="Magento_Backend::stores_attributes" action="catalog/product_set/" resource="Magento_Catalog::sets"/>

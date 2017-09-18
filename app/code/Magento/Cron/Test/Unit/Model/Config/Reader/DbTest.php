@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cron\Test\Unit\Model\Config\Reader;
@@ -13,7 +13,7 @@ use Magento\GoogleAdwords\Block\Code;
  *
  * @package Magento\Cron\Test\Unit\Model\Config\Reader
  */
-class DbTest extends \PHPUnit_Framework_TestCase
+class DbTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Config | \PHPUnit_Framework_MockObject_MockObject

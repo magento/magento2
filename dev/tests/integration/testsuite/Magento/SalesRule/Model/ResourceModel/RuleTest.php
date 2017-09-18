@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Model\ResourceModel;
@@ -9,9 +9,8 @@ namespace Magento\SalesRule\Model\ResourceModel;
  * @magentoDbIsolation enabled
  * @magentoAppIsolation enabled
  */
-class RuleTest extends \PHPUnit_Framework_TestCase
+class RuleTest extends \PHPUnit\Framework\TestCase
 {
-
     /**
      * @magentoDataFixture Magento/SalesRule/_files/rule_custom_product_attribute.php
      */

@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,10 +11,14 @@ use Magento\Framework\Exception\CouldNotSaveException;
 
 class OrderSave
 {
-    /** @var \Magento\GiftMessage\Api\OrderRepositoryInterface */
+    /**
+     * @var \Magento\GiftMessage\Api\OrderRepositoryInterface
+     */
     protected $giftMessageOrderRepository;
 
-    /** @var \Magento\GiftMessage\Api\OrderItemRepositoryInterface */
+    /**
+     * @var \Magento\GiftMessage\Api\OrderItemRepositoryInterface
+     */
     protected $giftMessageOrderItemRepository;
 
     /**
@@ -61,8 +65,7 @@ class OrderSave
     protected function saveOrderGiftMessage(\Magento\Sales\Api\Data\OrderInterface $order)
     {
         $extensionAttributes = $order->getExtensionAttributes();
-        if (
-            null !== $extensionAttributes &&
+        if (null !== $extensionAttributes &&
             null !== $extensionAttributes->getGiftMessage()
         ) {
             /* @var \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage */
@@ -93,8 +96,7 @@ class OrderSave
             /** @var \Magento\Sales\Api\Data\OrderItemInterface $orderItem */
             foreach ($items as $orderItem) {
                 $extensionAttribute = $orderItem->getExtensionAttributes();
-                if (
-                    null !== $extensionAttribute &&
+                if (null !== $extensionAttribute &&
                     null !== $extensionAttribute->getGiftMessage()
                 ) {
                     /* @var \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage */

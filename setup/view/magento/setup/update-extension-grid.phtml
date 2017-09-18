@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 ?>
@@ -23,7 +23,7 @@
                 </div>
             </div>
             <div class="col-xs-9 admin__data-grid-pager-wrap"
-                 ng-include="'<?php echo $this->basePath();?>/pub/magento/setup/view/pagination.html'">
+                 ng-include="'<?= $this->basePath() ?>/pub/magento/setup/view/pagination.html'">
             </div>
         </div>
     </div>
@@ -146,7 +146,7 @@
 <div ng-show="!isHiddenSpinner" class="loading-mask ng-scope" data-role="loader">
     <div class="popup popup-loading">
         <div class="popup-inner">
-            <img alt="Loading..." src="<?php echo $this->basePath() ?>/pub/images/loader-1.gif">
+            <img alt="Loading..." src="<?= $this->basePath() ?>/pub/images/loader-1.gif">
             Please wait...
         </div>
     </div>

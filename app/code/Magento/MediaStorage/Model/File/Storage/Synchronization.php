@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\MediaStorage\Model\File\Storage;
 
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\Directory\WriteInterface as DirectoryWrite;
 use Magento\Framework\Filesystem\File\Write;
-use Magento\Framework\Exception\FileSystemException;
 
 /**
  * Class Synchronization
@@ -56,7 +56,7 @@ class Synchronization
         } catch (\Exception $e) {
         }
         if ($storage->getId()) {
-            /** @var Write $file */
+            /** @var \Magento\Framework\Filesystem\File\WriteInterface $file */
             $file = $this->mediaDirectory->openFile($relativeFileName, 'w');
             try {
                 $file->lock();

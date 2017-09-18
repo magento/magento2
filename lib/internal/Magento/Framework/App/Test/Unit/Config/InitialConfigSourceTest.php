@@ -1,16 +1,15 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\App\Test\Unit\Config;
 
-
 use Magento\Framework\App\Config\InitialConfigSource;
 use Magento\Framework\App\DeploymentConfig\Reader;
 
-class InitialConfigSourceTest extends \PHPUnit_Framework_TestCase
+class InitialConfigSourceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Reader|\PHPUnit_Framework_MockObject_MockObject

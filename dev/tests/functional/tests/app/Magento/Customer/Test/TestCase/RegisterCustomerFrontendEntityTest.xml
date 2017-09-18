@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -32,7 +32,7 @@
             <constraint name="Magento\Newsletter\Test\Constraint\AssertCustomerIsSubscribedToNewsletter" />
         </variation>
         <variation name="RegisterCustomerFrontendEntityTestVariation3" summary="Register Customer" ticketId="MAGETWO-12394">
-            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test, stable:no</data>
+            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test</data>
             <data name="customer/data/firstname" xsi:type="string">john</data>
             <data name="customer/data/lastname" xsi:type="string">doe</data>
             <data name="customer/data/email" xsi:type="string">johndoe%isolation%@example.com</data>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -808,7 +808,7 @@ class InstallData implements InstallDataInterface
             ['BR', 'SP', 'São Paulo'],
             ['BR', 'SE', 'Sergipe'],
             ['BR', 'TO', 'Tocantins'],
-            ['BR', 'DF', 'Distrito Federal']
+            ['BR', 'DF', 'Distrito Federal'],
         ];
 
         foreach ($data as $row) {

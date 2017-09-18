@@ -1,12 +1,16 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Api/etc/extension_attributes.xsd">
     <extension_attributes for="Magento\Quote\Api\Data\CartInterface">
         <attribute code="shipping_assignments" type="Magento\Quote\Api\Data\ShippingAssignmentInterface[]" />
+    </extension_attributes>
+
+    <extension_attributes for="Magento\Quote\Api\Data\TotalsInterface">
+        <attribute code="coupon_label" type="string" />
     </extension_attributes>
 </config>

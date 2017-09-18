@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,11 +10,11 @@
 ?>
 
 <meta property="og:type" content="og:product" />
-<meta property="og:title" content="<?php echo $block->escapeHtml($block->getProduct()->getName()); ?>" />
-<meta property="og:image" content="<?php echo $block->escapeUrl($block->getImage($block->getProduct(), 'product_base_image')->getImageUrl()); ?>" />
-<meta property="og:description" content="<?php echo $block->escapeHtml($block->getProduct()->getShortDescription()); ?>" />
-<meta property="og:url" content="<?php echo $block->escapeUrl($block->getProduct()->getProductUrl()); ?>" />
+<meta property="og:title" content="<?= $block->escapeHtmlAttr($block->stripTags($block->getProduct()->getName())) ?>" />
+<meta property="og:image" content="<?= $block->escapeUrl($block->getImage($block->getProduct(), 'product_base_image')->getImageUrl()) ?>" />
+<meta property="og:description" content="<?= $block->escapeHtmlAttr($block->stripTags($block->getProduct()->getShortDescription())) ?>" />
+<meta property="og:url" content="<?= $block->escapeUrl($block->getProduct()->getProductUrl()) ?>" />
 <?php if ($priceAmount = $block->getProduct()->getFinalPrice()):?>
-    <meta property="product:price:amount" content="<?php /* @escapeNotVerified */ echo $priceAmount; ?>"/>
-    <?php echo $block->getChildHtml('meta.currency'); ?>
+    <meta property="product:price:amount" content="<?= /* @escapeNotVerified */ $priceAmount ?>"/>
+    <?= $block->getChildHtml('meta.currency') ?>
 <?php endif;?>

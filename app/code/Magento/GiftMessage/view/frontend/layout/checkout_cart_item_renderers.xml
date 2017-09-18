@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="checkout.cart.item.renderers.default.actions">
-            <block class="Magento\GiftMessage\Block\Cart\Item\Renderer\Actions\GiftOptions" name="checkout.cart.item.renderers.default.actions.gift_options" template="cart/item/renderer/actions/gift_options.phtml" before="-" cacheable="false">
+            <block class="Magento\GiftMessage\Block\Cart\Item\Renderer\Actions\GiftOptions" name="checkout.cart.item.renderers.default.actions.gift_options" template="Magento_GiftMessage::cart/item/renderer/actions/gift_options.phtml" before="-" cacheable="false">
                 <arguments>
                     <argument name="jsLayout" xsi:type="array">
                         <item name="types" xsi:type="array"/>
@@ -26,7 +26,7 @@
             </block>
         </referenceBlock>
         <referenceBlock name="checkout.cart.item.renderers.simple.actions">
-            <block class="Magento\GiftMessage\Block\Cart\Item\Renderer\Actions\GiftOptions" name="checkout.cart.item.renderers.simple.actions.gift_options" template="cart/item/renderer/actions/gift_options.phtml" before="-" cacheable="false">
+            <block class="Magento\GiftMessage\Block\Cart\Item\Renderer\Actions\GiftOptions" name="checkout.cart.item.renderers.simple.actions.gift_options" template="Magento_GiftMessage::cart/item/renderer/actions/gift_options.phtml" before="-" cacheable="false">
                 <arguments>
                     <argument name="jsLayout" xsi:type="array">
                         <item name="types" xsi:type="array"/>
@@ -44,7 +44,7 @@
             </block>
         </referenceBlock>
         <referenceBlock name="checkout.cart.item.renderers.bundle.actions">
-            <block class="Magento\GiftMessage\Block\Cart\Item\Renderer\Actions\GiftOptions" name="checkout.cart.item.renderers.bundle.actions.gift_options" template="cart/item/renderer/actions/gift_options.phtml" before="-" cacheable="false">
+            <block class="Magento\GiftMessage\Block\Cart\Item\Renderer\Actions\GiftOptions" name="checkout.cart.item.renderers.bundle.actions.gift_options" template="Magento_GiftMessage::cart/item/renderer/actions/gift_options.phtml" before="-" cacheable="false">
                 <arguments>
                     <argument name="jsLayout" xsi:type="array">
                         <item name="types" xsi:type="array"/>
@@ -62,7 +62,7 @@
             </block>
         </referenceBlock>
         <referenceBlock name="checkout.cart.item.renderers.grouped.actions">
-            <block class="Magento\GiftMessage\Block\Cart\Item\Renderer\Actions\GiftOptions" name="checkout.cart.item.renderers.grouped.actions.gift_options" template="cart/item/renderer/actions/gift_options.phtml" before="-" cacheable="false">
+            <block class="Magento\GiftMessage\Block\Cart\Item\Renderer\Actions\GiftOptions" name="checkout.cart.item.renderers.grouped.actions.gift_options" template="Magento_GiftMessage::cart/item/renderer/actions/gift_options.phtml" before="-" cacheable="false">
                 <arguments>
                     <argument name="jsLayout" xsi:type="array">
                         <item name="types" xsi:type="array"/>
@@ -80,7 +80,7 @@
             </block>
         </referenceBlock>
         <referenceBlock name="checkout.cart.item.renderers.configurable.actions">
-            <block class="Magento\GiftMessage\Block\Cart\Item\Renderer\Actions\GiftOptions" name="checkout.cart.item.renderers.configurable.actions.gift_options" template="cart/item/renderer/actions/gift_options.phtml" before="-" cacheable="false">
+            <block class="Magento\GiftMessage\Block\Cart\Item\Renderer\Actions\GiftOptions" name="checkout.cart.item.renderers.configurable.actions.gift_options" template="Magento_GiftMessage::cart/item/renderer/actions/gift_options.phtml" before="-" cacheable="false">
                 <arguments>
                     <argument name="jsLayout" xsi:type="array">
                         <item name="types" xsi:type="array"/>
@@ -98,7 +98,7 @@
             </block>
         </referenceBlock>
         <referenceBlock name="checkout.cart.item.renderers.gift-card.actions">
-            <block class="Magento\GiftMessage\Block\Cart\Item\Renderer\Actions\GiftOptions" name="checkout.cart.item.renderers.gift-card.actions.gift_options" template="cart/item/renderer/actions/gift_options.phtml" before="-" cacheable="false">
+            <block class="Magento\GiftMessage\Block\Cart\Item\Renderer\Actions\GiftOptions" name="checkout.cart.item.renderers.gift-card.actions.gift_options" template="Magento_GiftMessage::cart/item/renderer/actions/gift_options.phtml" before="-" cacheable="false">
                 <arguments>
                     <argument name="jsLayout" xsi:type="array">
                         <item name="types" xsi:type="array"/>

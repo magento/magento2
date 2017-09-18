@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 return [
@@ -13,7 +13,7 @@ return [
         'dest_postcode' => '90032',
         'package_value' => '5',
         'package_value_with_discount' => '5',
-        'package_weight' => '5',
+        'package_weight' => '4.2657',
         'package_qty' => '1',
         'package_physical_value' => '5',
         'free_method_weight' => '5',
@@ -38,7 +38,7 @@ return [
         'dest_country_id' => 'CA',
         'dest_postcode' => 'M5V 3G5',
         'dest_country_name' => 'Canada',
-        'package_value' => '5',
+        'package_value' => '3.2568',
         'package_value_with_discount' => '5',
         'package_weight' => '5',
         'package_qty' => '1',

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Asset\File;
@@ -8,7 +8,7 @@ namespace Magento\Framework\View\Test\Unit\Asset\File;
 /**
  * @covers \Magento\Framework\View\Asset\File\FallbackContext
  */
-class FallbackContextTest extends \PHPUnit_Framework_TestCase
+class FallbackContextTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager

@@ -1,13 +1,13 @@
 <?php
 /**
- * Test object manager
- *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\TestFramework;
 
+/**
+ * ObjectManager for integration test framework.
+ */
 class ObjectManager extends \Magento\Framework\App\ObjectManager
 {
     /**
@@ -35,7 +35,7 @@ class ObjectManager extends \Magento\Framework\App\ObjectManager
     ];
 
     /**
-     * Clear InstanceManager cache
+     * Clear InstanceManager cache.
      *
      * @return \Magento\TestFramework\ObjectManager
      */
@@ -59,15 +59,33 @@ class ObjectManager extends \Magento\Framework\App\ObjectManager
         }
         $this->_sharedInstances = $sharedInstances;
         $this->_config->clean();
+        $this->clearMappedTableNames();
 
         return $this;
     }
 
     /**
-     * Add shared instance
+     * Clear mapped table names list.
+     *
+     * @return void
+     */
+    private function clearMappedTableNames()
+    {
+        $resourceConnection = $this->get(\Magento\Framework\App\ResourceConnection::class);
+        if ($resourceConnection) {
+            $reflection = new \ReflectionClass($resourceConnection);
+            $dataProperty = $reflection->getProperty('mappedTableNames');
+            $dataProperty->setAccessible(true);
+            $dataProperty->setValue($resourceConnection, null);
+        }
+    }
+
+    /**
+     * Add shared instance.
      *
      * @param mixed $instance
      * @param string $className
+     * @return void
      */
     public function addSharedInstance($instance, $className)
     {
@@ -75,9 +93,10 @@ class ObjectManager extends \Magento\Framework\App\ObjectManager
     }
 
     /**
-     * Remove shared instance
+     * Remove shared instance.
      *
      * @param string $className
+     * @return void
      */
     public function removeSharedInstance($className)
     {
@@ -85,7 +104,7 @@ class ObjectManager extends \Magento\Framework\App\ObjectManager
     }
 
     /**
-     * Set objectManager
+     * Set objectManager.
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @return \Magento\Framework\ObjectManagerInterface

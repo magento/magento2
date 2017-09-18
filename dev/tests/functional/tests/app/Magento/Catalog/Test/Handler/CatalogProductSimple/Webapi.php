@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -63,6 +63,13 @@ class Webapi extends AbstractWebApi implements CatalogProductSimpleInterface
         'extension_attributes',
         'custom_attributes'
     ];
+
+    /**
+     * Temporary media path.
+     *
+     * @var string
+     */
+    private $mediaPathTmp = '/pub/media/tmp/catalog/product/';
 
     /**
      * @constructor
@@ -153,6 +160,8 @@ class Webapi extends AbstractWebApi implements CatalogProductSimpleInterface
         $this->prepareAdvancedInventory();
         $this->prepareTierPrice();
         $this->prepareCustomOptions();
+        $this->prepareMediaGallery();
+        $this->prepareSpecialPrice();
     }
 
     /**
@@ -279,11 +288,36 @@ class Webapi extends AbstractWebApi implements CatalogProductSimpleInterface
                 $priceInfo['qty'] = $priceInfo['price_qty'];
                 unset($priceInfo['price_qty']);
 
-                unset($priceInfo['website_id']);
+                if (isset($priceInfo['website_id'])) {
+                    $priceInfo['extension_attributes']['website_id'] = $priceInfo['website_id'];
+                    unset($priceInfo['website_id']);
+                }
+
                 unset($priceInfo['delete']);
 
                 $this->fields['product']['tier_prices'][$key] = $priceInfo;
             }
+        }
+    }
+
+    /**
+     * Preparation of product special price data.
+     *
+     * @return void
+     */
+    protected function prepareSpecialPrice()
+    {
+        if (isset($this->fields['product']['special_from_date'])) {
+            $this->fields['product']['special_from_date'] = date(
+                'n/j/Y',
+                strtotime($this->fields['product']['special_from_date'])
+            );
+        }
+        if (isset($this->fields['product']['special_to_date'])) {
+            $this->fields['product']['special_to_date'] = date(
+                'n/j/Y',
+                strtotime($this->fields['product']['special_to_date'])
+            );
         }
     }
 
@@ -311,5 +345,44 @@ class Webapi extends AbstractWebApi implements CatalogProductSimpleInterface
                 $this->fields['product']['options'][$ko] = $option;
             }
         }
+    }
+
+    /**
+     * Create test image file.
+     *
+     * @return void
+     */
+    protected function prepareMediaGallery()
+    {
+        if (isset($this->fields['product']['media_gallery'])) {
+            foreach ($this->fields['product']['media_gallery']['images'] as $galleryItem) {
+                $filename = $galleryItem['file'];
+                $this->fields['product']['media_gallery_entries'][] = $this->getImageData($filename);
+            }
+            unset($this->fields['product']['media_gallery']);
+        }
+    }
+
+    /**
+     * Get media gallery data.
+     *
+     * @param $filename
+     * @return array
+     */
+    private function getImageData($filename)
+    {
+        return
+            [
+                'position' => 1,
+                'media_type' => 'image',
+                'disabled' => false,
+                'label' => $filename,
+                'types' => [],
+                'content' => [
+                    'type' => 'image/jpeg',
+                    'name' => $filename,
+                    'base64_encoded_data' => base64_encode(file_get_contents(BP . $this->mediaPathTmp . $filename)),
+                ]
+            ];
     }
 }

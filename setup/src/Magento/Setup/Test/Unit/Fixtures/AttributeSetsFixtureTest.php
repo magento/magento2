@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Setup\Test\Unit\Fixtures;
 
 use Magento\Setup\Fixtures\AttributeSet\AttributeSetFixture;
-use \Magento\Setup\Fixtures\AttributeSetsFixture;
+use Magento\Setup\Fixtures\AttributeSetsFixture;
 
 /**
  * @SuppressWarnings(PHPMD)
  */
-class AttributeSetsFixtureTest extends \PHPUnit_Framework_TestCase
+class AttributeSetsFixtureTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Fixtures\FixtureModel

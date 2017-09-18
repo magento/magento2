@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Utility\File;
 
 use Magento\TestFramework\Utility\CodeCheck;
 
-class CodeCheckTest extends \PHPUnit_Framework_TestCase
+class CodeCheckTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CodeCheck

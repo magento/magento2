@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -11,6 +11,10 @@
             <navigation>
                 <max_depth>0</max_depth>
             </navigation>
+            <recently_products>
+                <recently_viewed_lifetime>1000</recently_viewed_lifetime>
+                <recently_compared_lifetime>1000</recently_compared_lifetime>
+            </recently_products>
             <fields_masks>
                 <sku>{{name}}</sku>
                 <meta_title>{{name}}</meta_title>

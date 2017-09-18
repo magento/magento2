@@ -1,23 +1,35 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <mapping strict="0">
-    <fields>
-        <firstname />
-        <lastname />
-        <change_email>
-            <input>checkbox</input>
-        </change_email>
-        <change_password>
-            <input>checkbox</input>
-        </change_password>
-        <email />
-        <current_password />
-        <password />
-        <confirmation />
-    </fields>
+<fields>
+    <customer composite="1">
+        <firstname>
+            <selector>input[name*=firstname]</selector>
+        </firstname>
+        <lastname>
+            <selector>input[name*=lastname]</selector>
+        </lastname>
+        <email>
+            <selector>input[id=email]</selector>
+        </email>
+        <current_password>
+            <selector>input[name*=current-password]</selector>
+        </current_password>>
+        <password>
+            <selector>input[name*=current-password]</selector>
+        </password>
+    </customer>
+    <change_password>
+        <input>checkbox</input>
+    </change_password>
+    <change_email>
+        <input>checkbox</input>
+    </change_email>
+    <confirmation />
+</fields>
 </mapping>

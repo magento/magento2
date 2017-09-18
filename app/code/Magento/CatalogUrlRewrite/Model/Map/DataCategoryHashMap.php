@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Model\Map;
@@ -14,13 +14,19 @@ use Magento\Catalog\Api\Data\CategoryInterface;
  */
 class DataCategoryHashMap implements HashMapInterface
 {
-    /** @var int[] */
+    /**
+     * @var int[]
+     */
     private $hashMap = [];
 
-    /** @var CategoryRepository */
+    /**
+     * @var \Magento\Catalog\Model\CategoryRepository
+     */
     private $categoryRepository;
 
-    /** @var CategoryFactory */
+    /**
+     * @var \Magento\Catalog\Model\ResourceModel\CategoryFactory
+     */
     private $categoryResourceFactory;
 
     /**

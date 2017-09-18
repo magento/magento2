@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,7 +13,9 @@ use Magento\Framework\Controller\ResultFactory;
 
 class Sendmail extends \Magento\SendFriend\Controller\Product
 {
-    /** @var  \Magento\Catalog\Api\CategoryRepositoryInterface */
+    /**
+     * @var \Magento\Catalog\Api\CategoryRepositoryInterface
+     */
     protected $categoryRepository;
 
     /**

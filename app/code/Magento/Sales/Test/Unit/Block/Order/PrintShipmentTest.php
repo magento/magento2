@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Block\Order;
 
 use Magento\Sales\Model\ResourceModel\Order\Item\Collection as ItemCollection;
 
-class PrintShipmentTest extends \PHPUnit_Framework_TestCase
+class PrintShipmentTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

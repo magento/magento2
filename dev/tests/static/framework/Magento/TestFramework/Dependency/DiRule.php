@@ -2,7 +2,7 @@
 /**
  * Rule for searching php file dependency
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TestFramework\Dependency;
@@ -69,6 +69,7 @@ class DiRule implements RuleInterface
      * @param string $contents
      * @return array
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getDependencyInfo($currentModule, $fileType, $file, &$contents)
     {
@@ -81,7 +82,6 @@ class DiRule implements RuleInterface
         foreach ($this->fetchPossibleDependencies($contents) as $type => $deps) {
             foreach ($deps as $dep) {
                 $dep = $this->mapper->getType($dep, $scope);
-
                 if (preg_match($this->getPattern(), $dep, $matches)) {
                     $referenceModule = str_replace('_', '\\', $matches['module']);
                     if ($currentModule === $referenceModule) {
@@ -106,7 +106,6 @@ class DiRule implements RuleInterface
     {
         $doc = new DOMDocument();
         $doc->loadXML($contents);
-
         return [
             RuleInterface::TYPE_SOFT => $this->getSoftDependencies($doc),
             RuleInterface::TYPE_HARD => $this->getHardDependencies($doc)
@@ -122,7 +121,7 @@ class DiRule implements RuleInterface
         $result = [];
         foreach (self::$tagNameMap as $tagName => $attributeNames) {
             $nodes = $doc->getElementsByTagName($tagName);
-            /** @var \DOMElement $node */
+        /** @var \DOMElement $node */
             foreach ($nodes as $node) {
                 foreach ($attributeNames as $attributeName) {
                     $result[] = $node->getAttribute($attributeName);

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,7 +18,7 @@ $numColumns = sizeof($block->getColumns());
     <?php
     /* This part is commented to remove all <col> tags from the code. */
     /* foreach ($block->getColumns() as $_column): ?>
-        <col <?php echo $_column->getHtmlProperty() ?> />
+        <col <?= $_column->getHtmlProperty() ?> />
     <?php endforeach; */ ?>
     <?php if ($block->isHeaderVisible()): ?>
         <thead>
@@ -27,10 +27,10 @@ $numColumns = sizeof($block->getColumns());
                 <?php foreach ($block->getColumns() as $_column): ?>
                 <?php /* @var $_column \Magento\Backend\Block\Widget\Grid\Column */ ?>
                     <?php if ($_column->getHeaderHtml() == '&nbsp;'):?>
-                        <th class="data-grid-th" data-column="<?php /* @escapeNotVerified */ echo $_column->getId() ?>"
-                            <?php echo $_column->getHeaderHtmlProperty() ?>>&nbsp;</th>
+                        <th class="data-grid-th" data-column="<?= /* @escapeNotVerified */ $_column->getId() ?>"
+                            <?= $_column->getHeaderHtmlProperty() ?>>&nbsp;</th>
                     <?php else: ?>
-                        <?php echo $_column->getHeaderHtml()?>
+                        <?= $_column->getHeaderHtml() ?>
                     <?php endif; ?>
                 <?php endforeach; ?>
                 </tr>
@@ -38,8 +38,8 @@ $numColumns = sizeof($block->getColumns());
             <?php if ($block->isFilterVisible()): ?>
                 <tr class="data-grid-filters" data-role="filter-form">
                     <?php $i = 0; foreach ($block->getColumns() as $_column): ?>
-                        <td data-column="<?php /* @escapeNotVerified */ echo $_column->getId() ?>" <?php echo $_column->getHeaderHtmlProperty() ?>>
-                            <?php echo $_column->getFilterHtml() ?>
+                        <td data-column="<?= /* @escapeNotVerified */ $_column->getId() ?>" <?= $_column->getHeaderHtmlProperty() ?>>
+                            <?= $_column->getFilterHtml() ?>
                         </td>
                     <?php endforeach; ?>
                 </tr>
@@ -53,20 +53,20 @@ $numColumns = sizeof($block->getColumns());
         <?php foreach ($block->getCollection() as $_index => $_item): ?>
             <?php if ($block->hasMultipleRows($_item)) :?>
                 <?php $block->updateItemByFirstMultiRow($_item); ?>
-                <tr title="<?php /* @escapeNotVerified */ echo $block->getRowUrl($_item) ?>" data-role="row"
-                    <?php if ($_class = $block->getRowClass($_item)):?> class="<?php /* @escapeNotVerified */ echo $_class; ?>"<?php endif;?>
+                <tr title="<?= /* @escapeNotVerified */ $block->getRowUrl($_item) ?>" data-role="row"
+                    <?php if ($_class = $block->getRowClass($_item)):?> class="<?= /* @escapeNotVerified */ $_class ?>"<?php endif;?>
                 ><?php $i = 0; foreach ($block->getColumns() as $_column):
                       if ($block->shouldRenderCell($_item, $_column)):
                             $_rowspan = $block->getRowspan($_item, $_column);
-                          ?><td data-column="<?php /* @escapeNotVerified */ echo $_column->getId() ?>"
-                                <?php echo($_rowspan ? 'rowspan="' . $_rowspan . '" ' : '') ?>
-                                class="<?php /* @escapeNotVerified */ echo $_column->getCssProperty() ?> <?php /* @escapeNotVerified */ echo $_column->getId() == 'massaction' ? 'data-grid-checkbox-cell': ''?> <?php echo ++$i == $numColumns ? 'last' : '' ?>"
+                          ?><td data-column="<?= /* @escapeNotVerified */ $_column->getId() ?>"
+                                <?= ($_rowspan ? 'rowspan="' . $_rowspan . '" ' : '') ?>
+                                class="<?= /* @escapeNotVerified */ $_column->getCssProperty() ?> <?= /* @escapeNotVerified */ $_column->getId() == 'massaction' ? 'data-grid-checkbox-cell': '' ?> <?= ++$i == $numColumns ? 'last' : '' ?>"
                             >
-                                <?php echo(($_html = $_column->getRowField($_item)) != '' ? $_html : '&nbsp;') ?>
+                                <?= (($_html = $_column->getRowField($_item)) != '' ? $_html : '&nbsp;') ?>
                             </td><?php
                             if ($block->shouldRenderEmptyCell($_item, $_column)):?>
-                                <td colspan="<?php /* @escapeNotVerified */ echo $block->getEmptyCellColspan($_item)?>" class="last">
-                                <?php /* @escapeNotVerified */ echo $block->getEmptyCellLabel()?>
+                                <td colspan="<?= /* @escapeNotVerified */ $block->getEmptyCellColspan($_item) ?>" class="last">
+                                <?= /* @escapeNotVerified */ $block->getEmptyCellLabel() ?>
                                 </td><?php
                             endif;
                         endif;
@@ -79,10 +79,10 @@ $numColumns = sizeof($block->getColumns());
                     <?php endif; ?>
                     <tr data-role="row">
                         <?php $i = 0; foreach ($block->getMultipleRowColumns($_i) as $_column):
-                            ?><td data-column="<?php /* @escapeNotVerified */ echo $_column->getId() ?>"
-                            class="<?php /* @escapeNotVerified */ echo $_column->getCssProperty() ?> <?php /* @escapeNotVerified */ echo $_column->getId() == 'massaction' ? 'data-grid-checkbox-cell': ''?> <?php echo ++$i == $numColumns-1 ? 'last' : '' ?>"
+                            ?><td data-column="<?= /* @escapeNotVerified */ $_column->getId() ?>"
+                            class="<?= /* @escapeNotVerified */ $_column->getCssProperty() ?> <?= /* @escapeNotVerified */ $_column->getId() == 'massaction' ? 'data-grid-checkbox-cell': '' ?> <?= ++$i == $numColumns-1 ? 'last' : '' ?>"
                         >
-                            <?php echo(($_html = $_column->getRowField($_i)) != '' ? $_html : '&nbsp;') ?>
+                            <?= (($_html = $_column->getRowField($_i)) != '' ? $_html : '&nbsp;') ?>
                         </td><?php
                         endforeach; ?>
                     </tr>
@@ -91,8 +91,8 @@ $numColumns = sizeof($block->getColumns());
                 <?php if ($block->shouldRenderSubTotal($_item)): ?>
                     <tr class="subtotals">
                         <?php $i = 0; foreach ($block->getMultipleRowColumns() as $_column): ?>
-                            <td data-column="<?php /* @escapeNotVerified */ echo $_column->getId() ?>"
-                                class="<?php /* @escapeNotVerified */ echo $_column->getCssProperty() ?> <?php /* @escapeNotVerified */ echo $_column->getId() == 'massaction' ? 'data-grid-checkbox-cell': ''?> <?php echo ++$i == $numColumns ? 'last' : '' ?>"
+                            <td data-column="<?= /* @escapeNotVerified */ $_column->getId() ?>"
+                                class="<?= /* @escapeNotVerified */ $_column->getCssProperty() ?> <?= /* @escapeNotVerified */ $_column->getId() == 'massaction' ? 'data-grid-checkbox-cell': '' ?> <?= ++$i == $numColumns ? 'last' : '' ?>"
                             >
                                 <?php /* @escapeNotVerified */ echo $_column->hasSubtotalsLabel() ? $_column->getSubtotalsLabel()
                                     : $_column->getRowField($block->getSubTotals($_item));
@@ -102,22 +102,22 @@ $numColumns = sizeof($block->getColumns());
                     </tr>
                 <?php endif; ?>
             <?php else: ?>
-                <tr data-role="row" title="<?php /* @escapeNotVerified */ echo $block->getRowUrl($_item) ?>"<?php if ($_class = $block->getRowClass($_item)):?>
-                    class="<?php /* @escapeNotVerified */ echo $_class; ?>"<?php endif;?>
+                <tr data-role="row" title="<?= /* @escapeNotVerified */ $block->getRowUrl($_item) ?>"<?php if ($_class = $block->getRowClass($_item)):?>
+                    class="<?= /* @escapeNotVerified */ $_class ?>"<?php endif;?>
                 >
                     <?php $i = 0; foreach ($block->getColumns() as $_column): ?>
                         <?php if ($block->shouldRenderCell($_item, $_column)):?>
-                            <td data-column="<?php /* @escapeNotVerified */ echo $_column->getId() ?>"
-                                class="<?php /* @escapeNotVerified */ echo $_column->getCssProperty() ?> <?php /* @escapeNotVerified */ echo $_column->getId() == 'massaction' ? 'data-grid-checkbox-cell': ''?> <?php echo ++$i == $numColumns ? 'last' : '' ?>"
+                            <td data-column="<?= /* @escapeNotVerified */ $_column->getId() ?>"
+                                class="<?= /* @escapeNotVerified */ $_column->getCssProperty() ?> <?= /* @escapeNotVerified */ $_column->getId() == 'massaction' ? 'data-grid-checkbox-cell': '' ?> <?= ++$i == $numColumns ? 'last' : '' ?>"
                             >
-                                <?php echo(($_html = $_column->getRowField($_item)) != '' ? $_html : '&nbsp;') ?>
+                                <?= (($_html = $_column->getRowField($_item)) != '' ? $_html : '&nbsp;') ?>
                             </td>
                             <?php if ($block->shouldRenderEmptyCell($_item, $_column)):?>
-                                <td data-column="<?php /* @escapeNotVerified */ echo $_column->getId() ?>"
-                                    colspan="<?php /* @escapeNotVerified */ echo $block->getEmptyCellColspan($_item)?>"
-                                    class="col-no-records <?php /* @escapeNotVerified */ echo $block->getEmptyTextClass() ?> last"
+                                <td data-column="<?= /* @escapeNotVerified */ $_column->getId() ?>"
+                                    colspan="<?= /* @escapeNotVerified */ $block->getEmptyCellColspan($_item) ?>"
+                                    class="col-no-records <?= /* @escapeNotVerified */ $block->getEmptyTextClass() ?> last"
                                 >
-                                    <?php /* @escapeNotVerified */ echo $block->getEmptyCellLabel()?>
+                                    <?= /* @escapeNotVerified */ $block->getEmptyCellLabel() ?>
                                 </td>
                             <?php endif;?>
                         <?php endif;?>
@@ -127,8 +127,8 @@ $numColumns = sizeof($block->getColumns());
         <?php endforeach; ?>
         <?php elseif ($block->getEmptyText()): ?>
             <tr class="data-grid-tr-no-data" data-role="row">
-                <td class="<?php /* @escapeNotVerified */ echo $block->getEmptyTextClass() ?>"
-                    colspan="<?php /* @escapeNotVerified */ echo $numColumns ?>"><?php /* @escapeNotVerified */ echo $block->getEmptyText() ?></td>
+                <td class="<?= /* @escapeNotVerified */ $block->getEmptyTextClass() ?>"
+                    colspan="<?= /* @escapeNotVerified */ $numColumns ?>"><?= /* @escapeNotVerified */ $block->getEmptyText() ?></td>
             </tr>
         <?php endif; ?>
     </tbody>
@@ -137,8 +137,8 @@ $numColumns = sizeof($block->getColumns());
     <tfoot>
         <tr class="totals" data-role="row">
             <?php foreach ($block->getColumns() as $_column): ?>
-                <th data-column="<?php /* @escapeNotVerified */ echo $_column->getId() ?>"
-                    class="<?php /* @escapeNotVerified */ echo $_column->getCssProperty() ?>"
+                <th data-column="<?= /* @escapeNotVerified */ $_column->getId() ?>"
+                    class="<?= /* @escapeNotVerified */ $_column->getCssProperty() ?>"
                 >
                     <?php /* @escapeNotVerified */ echo($_column->hasTotalsLabel()) ? $_column->getTotalsLabel()
                         : $_column->getRowField($block->getTotals()) ?>

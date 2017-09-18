@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Test\Unit\Model\QuoteRepository;
@@ -18,7 +18,7 @@ use Magento\Quote\Api\Data\CartExtensionInterface;
 use Magento\Quote\Model\Quote\Item as QuoteItem;
 use Magento\Framework\Exception\NoSuchEntityException;
 
-class SaveHandlerTest extends \PHPUnit_Framework_TestCase
+class SaveHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SaveHandler
@@ -96,9 +96,11 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
             )
             ->getMock();
         $this->billingAddressMock = $this->getMockBuilder(QuoteAddress::class)
+            ->setMethods(['getCustomerAddress', 'getCustomerAddressId', 'setCustomerAddressId'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->extensionAttributesMock = $this->getMockBuilder(CartExtensionInterface::class)
+            ->setMethods(['getShippingAssignments'])
             ->getMockForAbstractClass();
 
         $this->quoteMock->expects(static::any())

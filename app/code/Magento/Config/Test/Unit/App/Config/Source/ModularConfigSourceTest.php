@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\App\Config\Source;
@@ -13,7 +13,7 @@ use Magento\Framework\App\Config\Initial\Reader;
  *
  * @package Magento\Config\Test\Unit\App\Config\Source
  */
-class ModularConfigSourceTest extends \PHPUnit_Framework_TestCase
+class ModularConfigSourceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Reader|\PHPUnit_Framework_MockObject_MockObject

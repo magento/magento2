@@ -1,8 +1,11 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
+/**
+ * @api
+ */
 define([
     'uiElement',
     'underscore',
@@ -124,7 +127,7 @@ define([
              */
             afterSubmit: function () {
                 window.location.href = url.build('checkout/cart/updatePost') +
-                    '?form_key=' + window.giftOptionsConfig.giftMessage.formKey +
+                    '?form_key=' + window.checkoutConfig.formKey +
                     '&cart[]';
             },
 

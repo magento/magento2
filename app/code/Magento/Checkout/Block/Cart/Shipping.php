@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Block\Cart;
 
 /**
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
@@ -89,6 +90,7 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
 
     /**
      * @return bool|string
+     * @since 100.2.0
      */
     public function getSerializedCheckoutConfig()
     {

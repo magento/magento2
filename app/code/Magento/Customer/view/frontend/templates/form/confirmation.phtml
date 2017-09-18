@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,21 +9,21 @@
 /** @var \Magento\Framework\View\Element\Template $block */
 ?>
 <form action="" method="post" id="form-validate" class="form send confirmation" data-mage-init='{"validation":{}}'>
-    <fieldset class="fieldset" data-hasrequired="<?php echo $block->escapeHtmlAttr(__('* Required Fields')) ?>">
-        <p class="field note"><?php echo $block->escapeHtml(__('Please enter your email below and we will send you the confirmation link.')) ?></p>
+    <fieldset class="fieldset" data-hasrequired="<?= $block->escapeHtmlAttr(__('* Required Fields')) ?>">
+        <p class="field note"><?= $block->escapeHtml(__('Please enter your email below and we will send you the confirmation link.')) ?></p>
         <div class="field email required">
-            <label for="email_address" class="label"><span><?php echo $block->escapeHtml(__('Email')) ?></span></label>
+            <label for="email_address" class="label"><span><?= $block->escapeHtml(__('Email')) ?></span></label>
             <div class="control">
-                <input type="email" name="email" id="email_address" class="input-text" value="<?php echo $block->escapeHtmlAttr($block->getEmail()) ?>" data-validate="{required:true, 'validate-email':true}">
+                <input type="email" name="email" id="email_address" class="input-text" value="<?= $block->escapeHtmlAttr($block->getEmail()) ?>" data-validate="{required:true, 'validate-email':true}">
             </div>
         </div>
     </fieldset>
     <div class="actions-toolbar">
         <div class="primary">
-            <button type="submit" class="action send primary"><span><?php echo $block->escapeHtml(__('Send confirmation link')) ?></span></button>
+            <button type="submit" class="action send primary"><span><?= $block->escapeHtml(__('Send confirmation link')) ?></span></button>
         </div>
         <div class="secondary">
-            <a href="<?php echo $block->escapeUrl($block->getLoginUrl()) ?>" class="action back"><span><?php echo $block->escapeHtml(__('Back to Sign In')) ?></span></a>
+            <a href="<?= $block->escapeUrl($block->getLoginUrl()) ?>" class="action back"><span><?= $block->escapeHtml(__('Back to Sign In')) ?></span></a>
         </div>
     </div>
 </form>

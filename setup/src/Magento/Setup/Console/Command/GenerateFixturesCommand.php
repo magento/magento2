@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,12 +8,12 @@ namespace Magento\Setup\Console\Command;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Mview\View\CollectionInterface;
+use Magento\Setup\Fixtures\FixtureModel;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Setup\Fixtures\FixtureModel;
 
 /**
  * Command generates fixtures for performance tests

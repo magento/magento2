@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -58,6 +58,10 @@ define([
 
             this.prefer = typeMap[type];
             this.elementTmpl(this.templates[typeMap[type]]);
+
+            if (this.prefer === 'radio' && this.checked()) {
+                this.clearValues();
+            }
         },
 
         /**

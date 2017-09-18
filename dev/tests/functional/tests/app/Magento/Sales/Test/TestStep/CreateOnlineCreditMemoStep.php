@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,12 +13,15 @@ use Magento\Sales\Test\Page\Adminhtml\OrderCreditMemoNew;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Sales\Test\Page\Adminhtml\OrderInvoiceView;
 use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
+use Magento\Sales\Test\TestStep\Utils\CompareQtyTrait;
 
 /**
  * Create credit memo for order placed using online payment methods.
  */
 class CreateOnlineCreditMemoStep implements TestStepInterface
 {
+    use CompareQtyTrait;
+
     /**
      * Orders Page.
      *
@@ -48,13 +51,6 @@ class CreateOnlineCreditMemoStep implements TestStepInterface
     private $order;
 
     /**
-     * Credit memo data.
-     *
-     * @var array|null
-     */
-    private $refundData;
-
-    /**
      * Order invoice view page.
      *
      * @var OrderInvoiceView
@@ -75,7 +71,6 @@ class CreateOnlineCreditMemoStep implements TestStepInterface
      * @param OrderInjectable $order
      * @param OrderInvoiceView $orderInvoiceView
      * @param OrderCreditMemoNew $orderCreditMemoNew
-     * @param array|null refundData [optional]
      */
     public function __construct(
         Cart $cart,
@@ -83,8 +78,7 @@ class CreateOnlineCreditMemoStep implements TestStepInterface
         SalesOrderView $salesOrderView,
         OrderInjectable $order,
         OrderInvoiceView $orderInvoiceView,
-        OrderCreditMemoNew $orderCreditMemoNew,
-        $refundData = null
+        OrderCreditMemoNew $orderCreditMemoNew
     ) {
         $this->cart = $cart;
         $this->orderIndex = $orderIndex;
@@ -92,7 +86,6 @@ class CreateOnlineCreditMemoStep implements TestStepInterface
         $this->order = $order;
         $this->orderInvoiceView = $orderInvoiceView;
         $this->orderCreditMemoNew = $orderCreditMemoNew;
-        $this->refundData = $refundData;
     }
 
     /**
@@ -111,11 +104,13 @@ class CreateOnlineCreditMemoStep implements TestStepInterface
             $this->salesOrderView->getOrderForm()->openTab('invoices');
             $invoicesGrid->viewInvoice();
             $this->salesOrderView->getPageActions()->orderInvoiceCreditMemo();
-            $this->orderCreditMemoNew->getFormBlock()->fillProductData(
-                $refundData,
-                $this->cart->getItems()
-            );
-            $this->orderCreditMemoNew->getFormBlock()->updateQty();
+
+            $items = $this->cart->getItems();
+            $this->orderCreditMemoNew->getFormBlock()->fillProductData($refundData, $items);
+            if ($this->compare($items, $refundData)) {
+                $this->orderCreditMemoNew->getFormBlock()->updateQty();
+            }
+
             $this->orderCreditMemoNew->getFormBlock()->submit();
         }
 

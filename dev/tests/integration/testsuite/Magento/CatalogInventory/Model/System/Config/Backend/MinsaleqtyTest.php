@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@ namespace Magento\CatalogInventory\Model\System\Config\Backend;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Customer\Api\GroupManagementInterface;
 
-class MinsaleqtyTest extends \PHPUnit_Framework_TestCase
+class MinsaleqtyTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Minsaleqty */
     private $minSaleQtyConfig;

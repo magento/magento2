@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -58,7 +58,10 @@ abstract class Fixture
             $generationCount = is_array($configValue) === true
                 ? count($configValue[array_keys($configValue)[0]])
                 : $configValue;
-            $output->writeln('<info> |- ' . $label . ': ' . $generationCount .'</info>');
+
+            if (!empty($generationCount)) {
+                $output->writeln('<info> |- ' . $label . ': ' . $generationCount . '</info>');
+            }
         }
     }
 

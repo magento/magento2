@@ -1,15 +1,15 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 define([
     'underscore',
-    'Magento_Ui/js/form/element/select'
-], function (_, Select) {
+    'Magento_Catalog/js/components/custom-options-price-type'
+], function (_, PriceType) {
     'use strict';
 
-    return Select.extend({
+    return PriceType.extend({
         defaults: {
             isConfigurable: false,
             isFiltered: null,

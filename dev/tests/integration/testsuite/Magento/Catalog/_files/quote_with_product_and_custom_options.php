@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 require __DIR__ . '/product_simple.php';
@@ -47,7 +47,6 @@ foreach ($product->getOptions() as $option) {
     $customOption->setOptionValue($optionValue[$option->getType()]);
     $options[] = $customOption;
 }
-
 
 $quote->load('test_order_1', 'reserved_order_id');
 $cartItem->setQty(1);

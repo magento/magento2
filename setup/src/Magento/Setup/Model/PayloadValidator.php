@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -34,7 +34,7 @@ class PayloadValidator
     {
         $jobType = $postPayload[UpdaterTaskCreator::KEY_POST_JOB_TYPE];
         $errorMessage = '';
-        switch($jobType) {
+        switch ($jobType) {
             case 'uninstall':
                 $errorMessage = $this->validateUninstallPayload($postPayload);
                 break;

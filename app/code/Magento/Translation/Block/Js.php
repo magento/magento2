@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,10 @@ namespace Magento\Translation\Block;
 use Magento\Framework\View\Element\Template;
 use Magento\Translation\Model\Js\Config;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Js extends Template
 {
     /**
@@ -64,6 +68,15 @@ class Js extends Template
     public function getTranslationFilePath()
     {
         return $this->fileManager->getTranslationFilePath();
+    }
 
+    /**
+     * Gets current version of the translation file.
+     *
+     * @return string
+     */
+    public function getTranslationFileVersion()
+    {
+        return $this->fileManager->getTranslationFileVersion();
     }
 }

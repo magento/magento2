@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Model\Config\Processor;
@@ -11,7 +11,7 @@ use Magento\Config\Model\Placeholder\PlaceholderInterface;
 use Magento\Framework\Stdlib\ArrayManager;
 use \PHPUnit_Framework_MockObject_MockObject as Mock;
 
-class EnvironmentPlaceholderTest extends \PHPUnit_Framework_TestCase
+class EnvironmentPlaceholderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var EnvironmentPlaceholder

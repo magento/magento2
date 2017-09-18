@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,16 +13,13 @@ use Magento\Framework\Serialize\Serializer\Json;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class UserTest extends \PHPUnit_Framework_TestCase
+class UserTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\User\Model\ResourceModel\User */
     protected $model;
 
-    /** @var \Magento\User\Model\User|\PHPUnit_framework_MockObject_MockObject */
+    /** @var \Magento\User\Model\User|\PHPUnit_Framework_MockObject_MockObject */
     protected $userMock;
-
-    /** @var \Magento\Framework\Acl\CacheInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $aclCacheMock;
 
     /** @var \Magento\Framework\Model\ResourceModel\Db\Context|\PHPUnit_Framework_MockObject_MockObject */
     protected $contextMock;
@@ -62,11 +59,6 @@ class UserTest extends \PHPUnit_Framework_TestCase
             ->setMethods([])
             ->getMock();
 
-        $this->aclCacheMock = $this->getMockBuilder(\Magento\Framework\Acl\CacheInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-
         $this->roleFactoryMock = $this->getMockBuilder(\Magento\Authorization\Model\RoleFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
@@ -102,7 +94,6 @@ class UserTest extends \PHPUnit_Framework_TestCase
             \Magento\User\Model\ResourceModel\User::class,
             [
                 'resource' => $this->resourceMock,
-                'aclCache' => $this->aclCacheMock,
                 'roleFactory' => $this->roleFactoryMock,
                 'dateTime' => $this->dateTimeMock,
                 'aclDataCache' => $this->aclDataCacheMock,
@@ -422,7 +413,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $methodUserMock->expects($this->once())->method('getRoleId')->willReturn($roleId);
         $extraData = ['user', 'extra', 'data'];
 
-        $serializerMock = $this->getMock(Json::class, ['serialize', 'unserialize'], [], '', false);
+        $serializerMock = $this->createPartialMock(Json::class, ['serialize', 'unserialize']);
         $serializerMock->expects($this->once())
             ->method('unserialize')
             ->with(json_encode($extraData))
@@ -460,7 +451,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $extraData = ['user', 'extra', 'data'];
 
-        $serializerMock = $this->getMock(Json::class, ['serialize', 'unserialize'], [], '', false);
+        $serializerMock = $this->createPartialMock(Json::class, ['serialize', 'unserialize']);
         $serializerMock->expects($this->once())
             ->method('unserialize')
             ->with(json_encode($extraData))
@@ -492,7 +483,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $extraData = null;
 
-        $serializerMock = $this->getMock(Json::class, ['serialize', 'unserialize'], [], '', false);
+        $serializerMock = $this->createPartialMock(Json::class, ['serialize', 'unserialize']);
         $serializerMock->expects($this->never())
             ->method('unserialize');
 

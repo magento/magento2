@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Model\Adminhtml\System\Config;
@@ -89,10 +89,11 @@ class CountryCreditCard extends Value
      */
     public function afterLoad()
     {
-        $value = $this->serializer->unserialize($this->getValue());
-        if (is_array($value)) {
-            $value = $this->encodeArrayFieldValue($value);
-            $this->setValue($value);
+        if ($this->getValue()) {
+            $value = $this->serializer->unserialize($this->getValue());
+            if (is_array($value)) {
+                $this->setValue($this->encodeArrayFieldValue($value));
+            }
         }
         return $this;
     }

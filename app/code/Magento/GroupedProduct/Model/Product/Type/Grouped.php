@@ -2,7 +2,7 @@
 /**
  * Grouped product type implementation
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GroupedProduct\Model\Product\Type;
@@ -11,6 +11,8 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
+ * @since 100.0.2
  */
 class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
 {
@@ -77,7 +79,9 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     protected $_appState;
 
-    /** @var \Magento\Msrp\Helper\Data  */
+    /**
+     * @var \Magento\Msrp\Helper\Data
+     */
     protected $msrpData;
 
     /**
@@ -224,6 +228,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
     /**
      * @param \Magento\Catalog\Model\Product $product
      * @return \Magento\Catalog\Model\Product
+     * @since 100.1.0
      */
     public function flushAssociatedProductsCache($product)
     {

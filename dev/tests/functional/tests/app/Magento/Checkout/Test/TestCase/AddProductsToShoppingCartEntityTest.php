@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Checkout\Test\TestCase;
 
+use Magento\Backend\Test\Page\Adminhtml\SystemConfigEdit;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Checkout\Test\Page\CheckoutCart;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
 use Magento\Mtf\TestStep\TestStepFactory;
-use Magento\Backend\Test\Page\Adminhtml\SystemConfigEdit;
 use Magento\Mtf\Util\Command\Cli\Cache;
 
 /**
@@ -26,7 +26,7 @@ use Magento\Mtf\Util\Command\Cli\Cache;
  * 4. Perform all asserts
  *
  * @group Shopping_Cart
- * @ZephyrId MAGETWO-25382, MAGETWO-42677
+ * @ZephyrId MAGETWO-25382, MAGETWO-42677, MAGETWO-45389
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AddProductsToShoppingCartEntityTest extends Injectable
@@ -133,10 +133,16 @@ class AddProductsToShoppingCartEntityTest extends Injectable
      * @param array $cart
      * @param string|null $configData [optional]
      * @param bool $flushCache [optional]
+     * @param bool $isValidationFailed
      * @return array
      */
-    public function test(array $productsData, array $cart, $configData = null, $flushCache = false)
-    {
+    public function test(
+        array $productsData,
+        array $cart,
+        $configData = null,
+        $flushCache = false,
+        $isValidationFailed = false
+    ) {
         // Preconditions
         $this->configData = $configData;
         $this->flushCache = $flushCache;
@@ -153,10 +159,13 @@ class AddProductsToShoppingCartEntityTest extends Injectable
         $products = $this->prepareProducts($productsData);
 
         // Steps
-        $this->addToCart($products);
+        $this->addToCart($products, $isValidationFailed);
 
         $cart['data']['items'] = ['products' => $products];
-        return ['cart' => $this->fixtureFactory->createByCode('cart', $cart)];
+        return [
+            'cart' => $this->fixtureFactory->createByCode('cart', $cart),
+            'products' => $products
+        ];
     }
 
     /**
@@ -180,13 +189,14 @@ class AddProductsToShoppingCartEntityTest extends Injectable
      * Add products to cart.
      *
      * @param array $products
+     * @param bool $isValidationFailed
      * @return void
      */
-    protected function addToCart(array $products)
+    protected function addToCart(array $products, $isValidationFailed)
     {
         $addToCartStep = $this->testStepFactory->create(
             \Magento\Checkout\Test\TestStep\AddProductsToTheCartStep::class,
-            ['products' => $products]
+            ['products' => $products, 'isValidationFailed' => $isValidationFailed]
         );
         $addToCartStep->run();
     }
@@ -219,7 +229,6 @@ class AddProductsToShoppingCartEntityTest extends Injectable
             \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => $this->configData, 'rollback' => true, 'flushCache' => $this->flushCache]
         )->run();
-
     }
 
     /**
