@@ -47,7 +47,7 @@ class DataProvider extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
             $select = $connection
                 ->select()
-                ->from('importexport_importdata', ['id'])
+                ->from($this->getMainTable(), ['id'])
                 ->order('id ASC');
 
             $this->rowsIds = $connection->fetchCol($select);
@@ -74,7 +74,7 @@ class DataProvider extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         $select = $connection
             ->select()
-            ->from('importexport_importdata', ['data'])
+            ->from($this->getMainTable(), ['data'])
             ->order('id ASC')
             ->where('id = ?', $rowsIds[$index]);
 
