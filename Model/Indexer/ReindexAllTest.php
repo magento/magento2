@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Elasticsearch\Model\Indexer\ConfigurableProduct;
+namespace Magento\Elasticsearch\Model\Indexer;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Indexer\Model\Indexer;
@@ -22,7 +22,6 @@ use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
  *
  * @magentoDbIsolation disabled
  * @magentoAppIsolation enabled
- * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_products.php
  */
 class ReindexAllTest extends \PHPUnit\Framework\TestCase
 {
@@ -64,12 +63,6 @@ class ReindexAllTest extends \PHPUnit\Framework\TestCase
         $this->clientConfig = Bootstrap::getObjectManager()->create(Config::class);
         $this->searchIndexNameResolver = Bootstrap::getObjectManager()->create(SearchIndexNameResolver::class);
         $this->productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
-
-        // Perform full reindex
-        /** @var Indexer $indexer */
-        $indexer = Bootstrap::getObjectManager()->create(Indexer::class);
-        $indexer->load('catalogsearch_fulltext');
-        $indexer->reindexAll();
     }
 
     /**
@@ -77,9 +70,11 @@ class ReindexAllTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoConfigFixture current_store catalog/search/engine elasticsearch
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix indexerhandlertest_configurable
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_products.php
      */
     public function testSearchAll()
     {
+        $this->reindexAll();
         $result = $this->searchByName('Configurable Product');
         self::assertGreaterThanOrEqual(2, $result);
     }
@@ -89,14 +84,32 @@ class ReindexAllTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoConfigFixture current_store catalog/search/engine elasticsearch
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix indexerhandlertest_configurable
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_products.php
      */
     public function testSearchSpecificProduct()
     {
+        $this->reindexAll();
         $result = $this->searchByName('12345');
         self::assertCount(1, $result);
 
         $specificProduct = $this->productRepository->get('configurable_12345');
         self::assertEquals($specificProduct->getId(), $result[0]['_id']);
+    }
+
+    /**
+     * Test search of grouped product after full reindex
+     *
+     * @magentoDataFixture Magento/GroupedProduct/_files/product_grouped_with_simple.php
+     * @magentoConfigFixture current_store catalog/search/engine elasticsearch
+     * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix indexerhandlertest_grouped
+     */
+    public function testSearchGroupedProduct()
+    {
+        $expectedProductName = 'Grouped Product Simple 11 Simple 22';
+        $this->reindexAll();
+        $result = $this->searchByName('Grouped Product');
+        self::assertCount(1, $result);
+        self::assertEquals($expectedProductName, $result[0]['_source']['name']);
     }
 
     /**
@@ -126,5 +139,19 @@ class ReindexAllTest extends \PHPUnit\Framework\TestCase
         ];
         $queryResult = $this->client->query($searchQuery);
         return isset($queryResult['hits']['hits']) ? $queryResult['hits']['hits'] : [];
+    }
+
+    /**
+     * Make fulltext catalog search reindex
+     *
+     * @return void
+     */
+    private function reindexAll()
+    {
+        // Perform full reindex
+        /** @var Indexer $indexer */
+        $indexer = Bootstrap::getObjectManager()->create(Indexer::class);
+        $indexer->load('catalogsearch_fulltext');
+        $indexer->reindexAll();
     }
 }
