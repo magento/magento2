@@ -101,7 +101,7 @@ class ProductList
     public function getDefaultSortField()
     {
         $currentCategory = $this->coreRegistry->registry('current_category');
-        if($currentCategory){
+        if ($currentCategory) {
             $currentCategorySortBy = $currentCategory->getDefaultSortBy();
             return $currentCategorySortBy;
         }
