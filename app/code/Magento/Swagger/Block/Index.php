@@ -10,7 +10,7 @@ use Magento\Framework\View\Element\Template;
 /**
  * Class Index
  *
- * @package Magento\Swagger\Block
+ * @api
  */
 class Index extends Template
 {
