@@ -41,7 +41,7 @@
                                 <item name="total" xsi:type="string" translate="true">Row Total</item>
                             </argument>
                         </arguments>
-                        <block class="Magento\Sales\Block\Adminhtml\Order\View\Items\Renderer\DefaultRenderer" as="default" template="Magento_Sales::order/view/items/renderer/default.phtml">
+                        <block class="Magento\Sales\Block\Adminhtml\Order\View\Items\Renderer\DefaultRenderer" as="default" name="item_renderer" template="Magento_Sales::order/view/items/renderer/default.phtml">
                         <arguments>
                             <argument name="columns" xsi:type="array">
                                 <item name="product" xsi:type="string" translate="false">col-product</item>
