@@ -11,11 +11,13 @@ use Magento\Catalog\Api\Data\ProductInterface;
  * Downloadable Product  Samples resource model
  *
  * @api
+ * @since 100.0.2
  */
 class Sample extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
+     * @since 100.1.0
      */
     protected $metadataPool;
 

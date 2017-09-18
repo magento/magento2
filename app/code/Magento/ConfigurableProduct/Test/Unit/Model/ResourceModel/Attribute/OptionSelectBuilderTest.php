@@ -17,7 +17,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * Class OptionSelectBuilderTest
  */
-class OptionSelectBuilderTest extends \PHPUnit_Framework_TestCase
+class OptionSelectBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var OptionSelectBuilder

@@ -52,12 +52,9 @@ class ValidateTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Produ
      */
     protected function setUp()
     {
-        $this->productBuilder = $this->getMock(
+        $this->productBuilder = $this->createPartialMock(
             \Magento\Catalog\Controller\Adminhtml\Product\Builder::class,
-            ['build'],
-            [],
-            '',
-            false
+            ['build']
         );
         $this->product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)->disableOriginalConstructor()
             ->setMethods([
@@ -91,28 +88,15 @@ class ValidateTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Produ
             ->method('create')
             ->willReturn($this->resultForward);
         $this->resultPage->expects($this->any())->method('getLayout')->willReturn($this->layout);
-        $this->resultRedirectFactory = $this->getMock(
+        $this->resultRedirectFactory = $this->createPartialMock(
             \Magento\Backend\Model\View\Result\RedirectFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->resultRedirect = $this->getMock(
-            \Magento\Backend\Model\View\Result\Redirect::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->resultRedirect = $this->createMock(\Magento\Backend\Model\View\Result\Redirect::class);
         $this->resultRedirectFactory->expects($this->any())->method('create')->willReturn($this->resultRedirect);
 
-        $this->initializationHelper = $this->getMock(
-            \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper::class,
-            [],
-            [],
-            '',
-            false
+        $this->initializationHelper = $this->createMock(
+            \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper::class
         );
 
         $this->productFactory = $this->getMockBuilder(\Magento\Catalog\Model\ProductFactory::class)
@@ -121,7 +105,7 @@ class ValidateTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Produ
             ->getMock();
         $this->productFactory->expects($this->any())->method('create')->willReturn($this->product);
 
-        $this->resultJson = $this->getMock(\Magento\Framework\Controller\Result\Json::class, [], [], '', false);
+        $this->resultJson = $this->createMock(\Magento\Framework\Controller\Result\Json::class);
         $this->resultJsonFactory = $this->getMockBuilder(\Magento\Framework\Controller\Result\JsonFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])

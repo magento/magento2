@@ -172,7 +172,9 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
             $originalValues = $persistedOption->getValues();
             $newValues = $option->getData('values');
             if ($newValues) {
-                $newValues = $this->markRemovedValues($newValues, $originalValues);
+                if (isset($originalValues)) {
+                    $newValues = $this->markRemovedValues($newValues, $originalValues);
+                }
                 $option->setData('values', $newValues);
             }
         }
@@ -232,7 +234,7 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
 
     /**
      * @return \Magento\Framework\EntityManager\HydratorPool
-     * @deprecated
+     * @deprecated 101.0.0
      */
     private function getHydratorPool()
     {

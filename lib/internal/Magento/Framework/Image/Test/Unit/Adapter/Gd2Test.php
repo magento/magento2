@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * \Magento\Framework\Image\Adapter\Gd2 class test
  */
-class Gd2Test extends \PHPUnit_Framework_TestCase
+class Gd2Test extends \PHPUnit\Framework\TestCase
 {
     /**
      * Value to mock ini_get('memory_limit')
@@ -67,7 +67,7 @@ class Gd2Test extends \PHPUnit_Framework_TestCase
         self::$imageData = $fileData;
 
         if (!empty($exception)) {
-            $this->setExpectedException($exception);
+            $this->expectException($exception);
         }
 
         $this->adapter->open('file');

@@ -51,7 +51,7 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
      * Get security cookie
      *
      * @return SecurityCookie
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getSecurityCookie()
     {

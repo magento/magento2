@@ -11,7 +11,8 @@ namespace Magento\Backend\Block\Widget\Grid;
  *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @api
- * @deprecated
+ * @deprecated 100.2.0 in favour of UI component implementation
+ * @since 100.0.2
  */
 class Container extends \Magento\Backend\Block\Widget\Container
 {
@@ -26,9 +27,7 @@ class Container extends \Magento\Backend\Block\Widget\Container
 
     /**#@-*/
 
-    /**
-     * @var string
-     */
+    /**#@-*/
     protected $_addButtonLabel;
 
     /**

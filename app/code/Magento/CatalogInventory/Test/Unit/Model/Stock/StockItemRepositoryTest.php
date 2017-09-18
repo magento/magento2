@@ -5,17 +5,16 @@
  */
 namespace Magento\CatalogInventory\Test\Unit\Model\Stock;
 
-use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
-use Magento\CatalogInventory\Model\Stock\StockItemRepository;
 use Magento\CatalogInventory\Api\Data as InventoryApiData;
+use Magento\CatalogInventory\Model\Stock\StockItemRepository;
 use Magento\CatalogInventory\Model\StockRegistryStorage;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class StockItemRepositoryTest extends \PHPUnit_Framework_TestCase
+class StockItemRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var StockItemRepository
@@ -166,20 +165,11 @@ class StockItemRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->localeDateMock = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->indexProcessorMock = $this->getMock(
+        $this->indexProcessorMock = $this->createPartialMock(
             \Magento\CatalogInventory\Model\Indexer\Stock\Processor::class,
-            ['reindexRow'],
-            [],
-            '',
-            false
+            ['reindexRow']
         );
-        $this->dateTime = $this->getMock(
-            \Magento\Framework\Stdlib\DateTime\DateTime::class,
-            ['gmtDate'],
-            [],
-            '',
-            false
-        );
+        $this->dateTime = $this->createPartialMock(\Magento\Framework\Stdlib\DateTime\DateTime::class, ['gmtDate']);
         $this->stockRegistryStorage = $this->getMockBuilder(StockRegistryStorage::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -314,7 +304,6 @@ class StockItemRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('save')
             ->with($this->stockItemMock)
             ->willReturnSelf();
-        $this->indexProcessorMock->expects($this->once())->method('reindexRow')->with($productId);
 
         $this->assertEquals($this->stockItemMock, $this->model->save($this->stockItemMock));
     }

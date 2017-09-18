@@ -10,8 +10,6 @@ use Magento\ProductAlert\Model\ResourceModel\Price\Customer\Collection;
 /**
  * ProductAlert for changed price model
  *
- * @method \Magento\ProductAlert\Model\ResourceModel\Price _getResource()
- * @method \Magento\ProductAlert\Model\ResourceModel\Price getResource()
  * @method int getCustomerId()
  * @method \Magento\ProductAlert\Model\Price setCustomerId(int $value)
  * @method int getProductId()
@@ -32,6 +30,7 @@ use Magento\ProductAlert\Model\ResourceModel\Price\Customer\Collection;
  * @author      Magento Core Team <core@magentocommerce.com>
  *
  * @api
+ * @since 100.0.2
  */
 class Price extends \Magento\Framework\Model\AbstractModel
 {

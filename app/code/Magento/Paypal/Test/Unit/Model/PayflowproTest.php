@@ -26,7 +26,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PayflowproTest extends \PHPUnit_Framework_TestCase
+class PayflowproTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Payflowpro
@@ -163,7 +163,7 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
         $this->initStoreMock();
         $this->configMock->expects($this->once())->method('getBuildNotationCode')
             ->will($this->returnValue('BNCODE'));
-        $payment = $this->getMock(\Magento\Payment\Model\Info::class, ['setTransactionId', '__wakeup'], [], '', false);
+        $payment = $this->createPartialMock(\Magento\Payment\Model\Info::class, ['setTransactionId', '__wakeup']);
         $payment->expects($this->once())->method('setTransactionId')->will($this->returnSelf());
         $this->payflowpro->fetchTransactionInfo($payment, 'AD49G8N825');
     }
@@ -265,6 +265,97 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
         $this->payflowpro->capture($paymentMock, $amount);
         static::assertEquals($response['pnref'], $paymentMock->getTransactionId());
         static::assertFalse((bool)$paymentMock->getIsTransactionPending());
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderCaptureAmountRounding()
+    {
+        return [
+            [
+                'amount' => 14.13999999999999999999999999999999999999999999999999,
+                'setAmount' => 49.99,
+                'expectedResult' => 14.14
+            ],
+            [
+                'amount' => 14.13199999999999999999999999999999999999999999999999,
+                'setAmount' => 49.99,
+                'expectedResult' => 14.13,
+            ],
+            [
+                'amount' => 14.14,
+                'setAmount' => 49.99,
+                'expectedResult' => 14.14,
+            ],
+            [
+                'amount' => 14.13999999999999999999999999999999999999999999999999,
+                'setAmount' => 14.14,
+                'expectedResult' => 0,
+            ]
+        ];
+    }
+
+    /**
+     * @param float $amount
+     * @param float $setAmount
+     * @param float $expectedResult
+     * @dataProvider dataProviderCaptureAmountRounding
+     */
+    public function testCaptureAmountRounding($amount, $setAmount, $expectedResult)
+    {
+        $paymentMock = $this->getPaymentMock();
+        $orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $infoInstanceMock = $this->getMockForAbstractClass(
+            InfoInterface::class,
+            [],
+            '',
+            false,
+            false,
+            false,
+            ['getAmountAuthorized','hasAmountPaid']
+        );
+
+        $infoInstanceMock->expects($this->once())
+            ->method('getAmountAuthorized')
+            ->willReturn($setAmount);
+        $infoInstanceMock->expects($this->once())
+            ->method('hasAmountPaid')
+            ->willReturn(true);
+        $this->payflowpro->setData('info_instance', $infoInstanceMock);
+
+        // test case to build basic request
+        $paymentMock->expects($this->once())
+            ->method('getAdditionalInformation')
+            ->with('pnref')
+            ->willReturn(false);
+        $paymentMock->expects($this->any())
+            ->method('getParentTransactionId')
+            ->willReturn(true);
+
+        $paymentMock->expects($this->once())
+            ->method('getOrder')
+            ->willReturn($orderMock);
+
+        $this->initStoreMock();
+        $response = $this->getGatewayResponseObject();
+        $this->gatewayMock->expects($this->once())
+            ->method('postRequest')
+            ->with(
+                $this->callback(function ($request) use ($expectedResult) {
+                    return is_callable([$request, 'getAmt']) && $request->getAmt() == $expectedResult;
+                }),
+                $this->isInstanceOf(PayflowConfig::class)
+            )
+            ->willReturn($response);
+
+        $this->payflowpro->capture($paymentMock, $amount);
+
+        $this->assertEquals($response['pnref'], $paymentMock->getTransactionId());
+        $this->assertFalse((bool)$paymentMock->getIsTransactionPending());
     }
 
     /**
@@ -457,7 +548,7 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
         $request = new DataObject();
 
         /** @var ConfigInterface $config */
-        $config = $this->getMock(ConfigInterface::class);
+        $config = $this->createMock(ConfigInterface::class);
 
         $this->gatewayMock->expects(static::once())
             ->method('postRequest')
@@ -467,17 +558,16 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
         static::assertSame($expectedResult, $this->payflowpro->postRequest($request, $config));
     }
 
+    /**
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Payment Gateway is unreachable at the moment. Please use another payment option.
+     */
     public function testPostRequestException()
     {
-        $this->setExpectedException(
-            LocalizedException::class,
-            __('Payment Gateway is unreachable at the moment. Please use another payment option.')
-        );
-
         $request = new DataObject();
 
         /** @var ConfigInterface $config */
-        $config = $this->getMock(ConfigInterface::class);
+        $config = $this->createMock(ConfigInterface::class);
 
         $this->gatewayMock->expects(static::once())
             ->method('postRequest')

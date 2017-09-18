@@ -8,7 +8,8 @@ namespace Magento\Ui\Component\Listing\Columns;
 use Magento\Framework\View\Element\UiComponentInterface;
 
 /**
- * Interface ColumnInterface
+ * @api
+ * @since 100.0.2
  */
 interface ColumnInterface extends UiComponentInterface
 {

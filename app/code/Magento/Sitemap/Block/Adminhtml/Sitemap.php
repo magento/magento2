@@ -9,6 +9,7 @@ namespace Magento\Sitemap\Block\Adminhtml;
  * Adminhtml catalog (google) sitemaps block
  *
  * @api
+ * @since 100.0.2
  */
 class Sitemap extends \Magento\Backend\Block\Widget\Grid\Container
 {

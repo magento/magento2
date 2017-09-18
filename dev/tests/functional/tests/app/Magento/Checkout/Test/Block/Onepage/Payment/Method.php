@@ -110,6 +110,7 @@ class Method extends Block
      */
     public function inContextPaypalCheckout()
     {
+        $this->waitForElementNotVisible($this->waitElement);
         $this->_rootElement->find($this->placeOrderButton)->click();
         $this->browser->selectWindow();
         $this->waitForFormLoaded();
