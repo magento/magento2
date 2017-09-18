@@ -117,10 +117,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->product = self::getMockBuilder(\Magento\Catalog\Model\Product::class)
-            ->setMethods(['getTypeInstance', 'getUsedProducts', 'isSaleable'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->product = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
         $this->typeInstance = $this->getMock(
             \Magento\Catalog\Model\Product\Type\AbstractType::class,
             [],
@@ -206,7 +203,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Swatches\Block\Product\Renderer\Listing\Configurable::getSwatchAttributesData
+     * @covers Magento\Swatches\Block\Product\Renderer\Listing\Configurable::getSwatchAttributesData
      */
     public function testGetJsonSwatchConfigWithoutSwatches()
     {
@@ -222,7 +219,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Swatches\Block\Product\Renderer\Listing\Configurable::getSwatchAttributesData
+     * @covers Magento\Swatches\Block\Product\Renderer\Listing\Configurable::getSwatchAttributesData
      */
     public function testGetJsonSwatchNotUsedInProductListing()
     {
@@ -245,7 +242,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Swatches\Block\Product\Renderer\Listing\Configurable::getSwatchAttributesData
+     * @covers Magento\Swatches\Block\Product\Renderer\Listing\Configurable::getSwatchAttributesData
      */
     public function testGetJsonSwatchUsedInProductListing()
     {
@@ -280,14 +277,15 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $this->configurable->getJsonSwatchConfig();
     }
 
+    /**
+     * @return void
+     */
     private function prepareGetJsonSwatchConfig()
     {
         $product1 = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
-        $product1->expects($this->atLeastOnce())->method('isSaleable')->willReturn(true);
         $product1->expects($this->any())->method('getData')->with('code')->willReturn(1);
 
         $product2 = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
-        $product2->expects($this->atLeastOnce())->method('isSaleable')->willReturn(true);
         $product2->expects($this->any())->method('getData')->with('code')->willReturn(3);
 
         $simpleProducts = [$product1, $product2];
@@ -298,23 +296,10 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $configurableType->expects($this->any())->method('getSalableUsedProducts')
+        $configurableType->expects($this->atLeastOnce())->method('getSalableUsedProducts')
             ->with($this->product, null)
             ->willReturn($simpleProducts);
-        $productCollection = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Collection::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getIterator'])
-            ->getMock();
-
-        $configurableType->expects($this->any())->method('getUsedProducts')
-            ->with($this->product, null)
-            ->willReturn($productCollection);
-
-        $productCollection->expects($this->once())->method('getIterator')
-            ->willReturn(new \ArrayIterator($simpleProducts));
-
-        $this->product->expects($this->any())->method('getTypeInstance')
-            ->willReturn($configurableType);
+        $this->product->expects($this->any())->method('getTypeInstance')->willReturn($configurableType);
 
         $productAttribute1 = $this->getMock(
             \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
