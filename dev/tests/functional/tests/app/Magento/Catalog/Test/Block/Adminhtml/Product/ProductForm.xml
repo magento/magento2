@@ -181,6 +181,12 @@
         <class>\Magento\Ui\Test\Block\Adminhtml\Section</class>
         <selector>[data-index='schedule-design-update']</selector>
         <strategy>css selector</strategy>
+        <fields>
+            <custom_design_from>
+                <selector>[name="product[custom_design_from]"]</selector>
+                <strategy>css selector</strategy>
+            </custom_design_from>
+        </fields>
     </schedule-design-update>
     <customer-options>
         <class>\Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Options</class>
