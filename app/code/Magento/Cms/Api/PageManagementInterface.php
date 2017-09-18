@@ -9,8 +9,7 @@ namespace Magento\Cms\Api;
  * CMS Page management interface
  * @api
  */
-
-interface PageManagmentInterface
+interface PageManagementInterface
 {
     /**
      * Load page data by given page identifier.

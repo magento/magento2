@@ -6,14 +6,13 @@
 namespace Magento\Cms\Model;
 
 use Magento\Cms\Api\Data\PageInterface;
-use Magento\Cms\Api\PageManagmentInterface;
+use Magento\Cms\Api\PageManagementInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
- * Class PageManagment
+ * Class PageManagement
  */
-
-class PageManagment implements PageManagmentInterface
+class PageManagement implements PageManagementInterface
 {
     /**
      * @var \Magento\Cms\Model\PageFactory
@@ -31,7 +30,7 @@ class PageManagment implements PageManagmentInterface
     private $storeManager;
 
     /**
-     * PageManagment constructor.
+     * PageManagement constructor.
      * @param PageFactory $pageFactory
      * @param ResourceModel\Page $pageResource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -40,8 +39,7 @@ class PageManagment implements PageManagmentInterface
         \Magento\Cms\Model\PageFactory $pageFactory,
         \Magento\Cms\Model\ResourceModel\Page $pageResource,
         \Magento\Store\Model\StoreManagerInterface $storeManager
-    )
-    {
+    ) {
         $this->pageFactory = $pageFactory;
         $this->pageResource = $pageResource;
         $this->storeManager = $storeManager;
@@ -52,10 +50,10 @@ class PageManagment implements PageManagmentInterface
      *
      * @param string $identifier
      * @param int|null $storeId
-     * @return \Magento\Cms\Api\Data\PageInterface
+     * @return PageInterface
      * @throws NoSuchEntityException
      */
-    public function getByIdentifier(string $identifier, $storeId = null) : \Magento\Cms\Api\Data\PageInterface
+    public function getByIdentifier(string $identifier, $storeId = null) : PageInterface
     {
         if ($storeId === null) {
             $storeId = $this->storeManager->getStore()->getId();

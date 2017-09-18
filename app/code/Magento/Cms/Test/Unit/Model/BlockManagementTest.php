@@ -5,57 +5,57 @@
  */
 namespace Magento\Cms\Test\Unit\Model;
 
-use Magento\Cms\Model\BlockManagment;
+use Magento\Cms\Model\BlockManagement;
 
 /**
  * Test for Magento\Cms\Model\BlockManagment
  */
 
-class BlockManagmentTest extends \PHPUnit\Framework\TestCase
+class BlockManagementTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var BlockManagment
+     * @var BlockManagement
      */
-    protected $blockManagment;
+    private $blockManagement;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Model\Block
      */
-    protected $block;
+    private $block;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Model\BlockFactory
      */
-    protected $blockFactory;
+    private $blockFactory;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Model\ResourceModel\Block
      */
-    protected $blockResource;
+    private $blockResource;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\StoreManagerInterface
      */
-    protected $storeManager;
+    private $storeManager;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Api\Data\StoreInterface
      */
-    protected $store;
+    private $store;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->blockFactory = $this->getMockBuilder(\Magento\Cms\Model\BlockFactory::class)
-            ->disableOriginalConstructor(true)
+            ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
         $this->blockResource = $this->getMockBuilder(\Magento\Cms\Model\ResourceModel\Block::class)
-            ->disableOriginalConstructor(true)
+            ->disableOriginalConstructor()
             ->getMock();
 
         $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
-            ->disableOriginalConstructor(true)
+            ->disableOriginalConstructor()
             ->getMock();
 
         $this->store = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
@@ -67,7 +67,7 @@ class BlockManagmentTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['setStoreId', 'getId'])
             ->getMock();
 
-        $this->blockManagment = new BlockManagment($this->blockFactory, $this->blockResource, $this->storeManager);
+        $this->blockManagement = new BlockManagement($this->blockFactory, $this->blockResource, $this->storeManager);
     }
 
     /**
@@ -103,6 +103,6 @@ class BlockManagmentTest extends \PHPUnit\Framework\TestCase
             ->with($this->block, $identifier)
             ->willReturn($this->block);
 
-        $this->blockManagment->getByIdentifier($identifier, $storeId);
+        $this->blockManagement->getByIdentifier($identifier, $storeId);
     }
 }

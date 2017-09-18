@@ -12,11 +12,6 @@ use Magento\Cms\Api\PageRepositoryInterface;
  */
 class PageTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var \Magento\Cms\Model\Page
-     */
-    protected $model;
-
     protected function setUp()
     {
         $user = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
@@ -42,12 +37,12 @@ class PageTest extends \PHPUnit\Framework\TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        /** @var \Magento\Cms\Model\PageManagment $pageManagment */
+        /** @var \Magento\Cms\Model\PageManagement $pageManagement */
         /** @var \Magento\Cms\Model\ResourceModel\Page $pageResource */
         /** @var \Magento\Cms\Model\PageFactory $pageFactory */
         $pageFactory = $objectManager->create(\Magento\Cms\Model\PageFactory::class);
         $pageResource = $objectManager->create(\Magento\Cms\Model\ResourceModel\Page::class);
-        $pageManagment = $objectManager->create(\Magento\Cms\Model\PageManagment::class);
+        $pageManagement = $objectManager->create(\Magento\Cms\Model\PageManagementInterface::class);
 
         # Prepare and save the temporary page
         $tempPage = $pageFactory->create();
@@ -55,11 +50,13 @@ class PageTest extends \PHPUnit\Framework\TestCase
         $pageResource->save($tempPage);
 
         # Load previously created block and compare identifiers
-        $page = $pageManagment->getByIdentifier($pageData['identifier']);
+        $page = $pageManagement->getByIdentifier($pageData['identifier']);
         $this->assertEquals($pageData['identifier'], $page->getIdentifier());
     }
 
     /**
+     * @param array $data
+     * @param string $expectedIdentifier
      * @magentoDbIsolation enabled
      * @dataProvider generateIdentifierFromTitleDataProvider
      */
@@ -89,7 +86,7 @@ class PageTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($updateTime, $page->getUpdateTime());
     }
 
-    public function generateIdentifierFromTitleDataProvider()
+    public function generateIdentifierFromTitleDataProvider() : array
     {
         return [
             ['data' => ['title' => 'Test title', 'stores' => [1]], 'expectedIdentifier' => 'test-title'],
@@ -120,6 +117,5 @@ class PageTest extends \PHPUnit\Framework\TestCase
                 'is_active' => 1
             ]]
         ];
-
     }
 }

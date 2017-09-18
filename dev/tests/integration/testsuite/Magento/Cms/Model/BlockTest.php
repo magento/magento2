@@ -22,10 +22,10 @@ class BlockTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\Cms\Model\BlockFactory $blockFactory */
         /** @var \Magento\Cms\Model\ResourceModel\Block $blockResource */
-        /** @var \Magento\Cms\Model\BlockManagment $blockManagment */
+        /** @var \Magento\Cms\Model\BlockManagement $blockManagement */
         $blockResource = $objectManager->create(\Magento\Cms\Model\ResourceModel\Block::class);
         $blockFactory = $objectManager->create(\Magento\Cms\Model\BlockFactory::class);
-        $blockManagment = $objectManager->create(\Magento\Cms\Model\BlockManagment::class);
+        $blockManagement = $objectManager->create(\Magento\Cms\Api\BlockManagementInterface::class);
 
         # Prepare and save the temporary block
         $tempBlock = $blockFactory->create();
@@ -33,7 +33,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
         $blockResource->save($tempBlock);
 
         # Load previously created block and compare identifiers
-        $block = $blockManagment->getByIdentifier($blockData['identifier']);
+        $block = $blockManagement->getByIdentifier($blockData['identifier']);
         $this->assertEquals($blockData['identifier'], $block->getIdentifier());
     }
 
@@ -52,6 +52,5 @@ class BlockTest extends \PHPUnit\Framework\TestCase
                 'is_active' => 1
             ]]
         ];
-
     }
 }

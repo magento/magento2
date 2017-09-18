@@ -9,7 +9,6 @@ namespace Magento\Cms\Api;
  * CMS Block management interface
  * @api
  */
-
 interface BlockManagementInterface
 {
     /**

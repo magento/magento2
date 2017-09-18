@@ -5,16 +5,16 @@
  */
 namespace Magento\Cms\Test\Unit\Model;
 
-use Magento\Cms\Model\PageManagment;
+use Magento\Cms\Model\PageManagement;
 
 /**
  * Test for Magento\Cms\Model\PageManagment
  */
 
-class PageManagmentTest extends \PHPUnit\Framework\TestCase
+class PageManagementTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var PageManagment
+     * @var PageManagement
      */
     protected $pageManagment;
 
@@ -67,7 +67,7 @@ class PageManagmentTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['setStoreId', 'getId'])
             ->getMock();
 
-        $this->pageManagment = new PageManagment($this->pageFactory, $this->pageResource, $this->storeManager);
+        $this->pageManagment = new PageManagement($this->pageFactory, $this->pageResource, $this->storeManager);
     }
 
     /**
