@@ -60,6 +60,13 @@
     <type name="Magento\Store\Model\ResourceModel\Group">
         <plugin name="storeGroupResourceAroundBeforeSave" type="Magento\CatalogInventory\Model\Indexer\Stock\Plugin\StoreGroup"/>
     </type>
+    <type name="Magento\Catalog\Model\Indexer\Product\Full">
+        <arguments>
+            <argument name="indexerList" xsi:type="array">
+                <item name="cataloginventory_stock" xsi:type="const">Magento\CatalogInventory\Model\Indexer\Stock\Processor::INDEXER_ID</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Catalog\Block\Product\View">
         <plugin name="quantityValidators" type="Magento\CatalogInventory\Block\Plugin\ProductView" />
     </type>
