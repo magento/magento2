@@ -56,7 +56,7 @@ class PlaceOrder extends \Magento\Framework\App\Action\Action
 
     public function execute()
     {
-        $product = $this->_initProduct();
+        $product = $this->initProduct();
         /** @var \Magento\Framework\Controller\Result\Json $result */
         $result = $this->resultFactory->create(ResultFactory::TYPE_JSON);
 
@@ -87,7 +87,7 @@ class PlaceOrder extends \Magento\Framework\App\Action\Action
         return $result;
     }
 
-    private function _initProduct()
+    private function initProduct()
     {
         $productId = (int)$this->getRequest()->getParam('product');
         if ($productId) {

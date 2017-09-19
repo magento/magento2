@@ -51,7 +51,7 @@ class PlaceOrder
     public function placeOrder(Product $product, array $params): int
     {
         $quote = $this->prepareQuote->prepare();
-        $paramsObject = $this->_getProductRequest($params);
+        $paramsObject = $this->getProductRequest($params);
         $quote->addProduct($product, $paramsObject);
         $this->selectCheapestShippingRate($quote);
         $this->prepareQuote->preparePayment($quote);
@@ -99,7 +99,7 @@ class PlaceOrder
      * @return DataObject
      * @throws LocalizedException
      */
-    private function _getProductRequest($requestInfo): DataObject
+    private function getProductRequest($requestInfo): DataObject
     {
         if ($requestInfo instanceof DataObject) {
             $request = $requestInfo;
