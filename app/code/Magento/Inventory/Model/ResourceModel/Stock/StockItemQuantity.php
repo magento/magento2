@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Inventory\Model\Stock\Command;
+namespace Magento\Inventory\Model\ResourceModel\Stock;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Inventory\Indexer\Alias;
@@ -11,17 +11,12 @@ use Magento\Inventory\Indexer\IndexNameBuilder;
 use Magento\Inventory\Indexer\IndexNameResolverInterface;
 use Magento\Inventory\Indexer\StockItem\IndexStructure as StockItemIndex;
 use Magento\Inventory\Indexer\StockItemIndexerInterface;
-use Magento\Inventory\Setup\Operation\CreateReservationTable;
-use Magento\InventoryApi\Api\Data\ReservationInterface;
-use Magento\InventoryApi\Api\GetProductQuantityInStockInterface;
 
 /**
- * Return Quantity of products available to be sold by Product SKU and Stock Id
- *
- * @see \Magento\InventoryApi\Api\GetProductQuantityInStockInterface
- * @api
+ * The resource model responsible for retrieving StockItem Quantity.
+ * Used by Service Contracts that are agnostic to the Data Access Layer.
  */
-class GetProductQuantityInStock implements GetProductQuantityInStockInterface
+class StockItemQuantity
 {
     /**
      * @var ResourceConnection
@@ -39,7 +34,7 @@ class GetProductQuantityInStock implements GetProductQuantityInStockInterface
     private $indexNameResolver;
 
     /**
-     * GetProductQuantityInStock constructor.
+     * StockItemQuantity constructor.
      *
      * @param ResourceConnection $resource
      * @param IndexNameBuilder $indexNameBuilder
@@ -56,22 +51,13 @@ class GetProductQuantityInStock implements GetProductQuantityInStockInterface
     }
 
     /**
-     * @inheritdoc
-     */
-    public function execute(string $sku, int $stockId): float
-    {
-        $productQtyInStock = $this->getStockItemQty($sku, $stockId) - $this->getReservationQty($sku, $stockId);
-        return (float) $productQtyInStock;
-    }
-
-    /**
-     * Return product quantity in stock.
+     * Given a product sku and a stock id, return stock item quantity.
      *
      * @param string $sku
      * @param int $stockId
      * @return float
      */
-    private function getStockItemQty(string $sku, int $stockId): float
+    public function execute(string $sku, int $stockId): float
     {
         $indexName = $this->indexNameBuilder
             ->setIndexId(StockItemIndexerInterface::INDEXER_ID)
@@ -94,32 +80,5 @@ class GetProductQuantityInStock implements GetProductQuantityInStockInterface
         }
 
         return (float) $stockItemQty;
-    }
-
-    /**
-     * Return the sum of all product reservations in stock.
-     *
-     * @param string $sku
-     * @param int $stockId
-     * @return float
-     */
-    private function getReservationQty(string $sku, int $stockId): float
-    {
-        $connection = $this->resource->getConnection();
-
-        $reservationTableName = $connection->getTableName(CreateReservationTable::TABLE_NAME_RESERVATION);
-
-        $select = $connection->select()
-            ->from($reservationTableName, [ReservationInterface::QUANTITY => 'sum(' . ReservationInterface::QUANTITY . ')'])
-            ->where(ReservationInterface::SKU . '=?', $sku)
-            ->where(ReservationInterface::STOCK_ID . '=?', $stockId)
-            ->limit(1);
-
-        $reservationQty = $connection->fetchOne($select);
-        if (false === $reservationQty) {
-            $reservationQty = 0;
-        }
-
-        return (float) $reservationQty;
     }
 }
