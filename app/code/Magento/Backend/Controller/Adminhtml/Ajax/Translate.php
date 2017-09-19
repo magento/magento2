@@ -11,6 +11,13 @@ use Magento\Backend\App\Action;
 class Translate extends \Magento\Backend\App\Action
 {
     /**
+     * Authorization level of a basic admin session.
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Backend::content_translation';
+
+    /**
      * @var \Magento\Framework\Translate\Inline\ParserInterface
      */
     protected $inlineParser;

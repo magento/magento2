@@ -6,6 +6,7 @@
 namespace Magento\Cms\Test\Unit\Ui\Component\Listing\Column;
 
 use Magento\Cms\Ui\Component\Listing\Column\PageActions;
+use Magento\Framework\Escaper;
 
 class PageActionsTest extends \PHPUnit_Framework_TestCase
 {
@@ -34,20 +35,29 @@ class PageActionsTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
+        $escaper = $this->getMockBuilder(Escaper::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['escapeHtml'])
+            ->getMock();
+        $objectManager->setBackwardCompatibleProperty($model, 'escaper', $escaper);
+
         // Define test input and expectations
+        $title = 'page title';
         $items = [
             'data' => [
                 'items' => [
                     [
-                        'page_id' => $pageId
-                    ]
-                ]
-            ]
+                        'page_id' => $pageId,
+                        'title' => $title,
+                    ],
+                ],
+            ],
         ];
         $name = 'item_name';
         $expectedItems = [
             [
                 'page_id' => $pageId,
+                'title' => $title,
                 $name => [
                     'edit' => [
                         'href' => 'test/url/edit',
@@ -57,14 +67,19 @@ class PageActionsTest extends \PHPUnit_Framework_TestCase
                         'href' => 'test/url/delete',
                         'label' => __('Delete'),
                         'confirm' => [
-                            'title' => __('Delete ${ $.$data.title }'),
-                            'message' => __('Are you sure you wan\'t to delete a ${ $.$data.title } record?')
+                            'title' => __('Delete %1', $title),
+                            'message' => __('Are you sure you wan\'t to delete a %1 record?', $title),
                         ],
-                    ]
+                    ],
                 ],
-            ]
+            ],
         ];
 
+        $escaper->expects(static::once())
+            ->method('escapeHtml')
+            ->with($title)
+            ->willReturn($title);
+        
         // Configure mocks and object data
         $urlBuilderMock->expects($this->any())
             ->method('getUrl')
