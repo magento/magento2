@@ -259,7 +259,7 @@
                                             }
 
                                             var newNode = new Ext.tree.TreeNode({
-                                                text : group_name.escapeHTML(),
+                                                text : group_name,
                                                 cls : 'folder',
                                                 allowDrop : true,
                                                 allowDrag : true
@@ -287,16 +287,21 @@
                         },
 
                         validateGroupName : function(name, exceptNodeId) {
+                            var textNode,
+                                result = true;
+                            
                             name = name.strip();
-                            var result = true;
                             if (name === '') {
                                 result = false;
                             }
                             for (var i=0; i < TreePanels.root.childNodes.length; i++) {
                                 if (TreePanels.root.childNodes[i].text.toLowerCase() == name.toLowerCase() && TreePanels.root.childNodes[i].id != exceptNodeId) {
                                     errorText = '<?php /* @escapeNotVerified */ echo __('An attribute group named "/name/" already exists".') ?>';
+                                    errorText = errorText.replace("/name/", name);
+                                    textNode = jQuery('<span></span>')[0];
+                                    textNode.textContent = errorText;
                                     alert({
-                                        content: errorText.replace("/name/",name)
+                                        content: textNode
                                     });
                                     result =  false;
                                 }

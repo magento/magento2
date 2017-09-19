@@ -19,6 +19,11 @@ use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
 abstract class AbstractMassAction extends \Magento\Backend\App\Action
 {
     /**
+     * {@inheritdoc}
+     */
+    const ADMIN_RESOURCE = 'Magento_Customer::manage';
+
+    /**
      * @var string
      */
     protected $redirectUrl = '*/*/index';
@@ -62,16 +67,6 @@ abstract class AbstractMassAction extends \Magento\Backend\App\Action
             $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
             return $resultRedirect->setPath($this->redirectUrl);
         }
-    }
-
-    /**
-     * Check the permission to Manage Customers
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Customer::manage');
     }
 
     /**

@@ -17,6 +17,11 @@ use Magento\Backend\Model\Session;
 abstract class Statistics extends \Magento\Backend\App\Action
 {
     /**
+     * {@inheritdoc}
+     */
+    const ADMIN_RESOURCE = 'Magento_Reports::statistics';
+
+    /**
      * Admin session model
      *
      * @var null|AuthSession
@@ -87,16 +92,6 @@ abstract class Statistics extends \Magento\Backend\App\Action
             $out[] = $this->reportTypes[$code];
         }
         return $out;
-    }
-
-    /**
-     * Determine if action is allowed for reports module
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Reports::statistics');
     }
 
     /**

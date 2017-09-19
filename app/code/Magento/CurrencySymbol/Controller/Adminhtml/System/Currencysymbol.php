@@ -14,12 +14,7 @@ namespace Magento\CurrencySymbol\Controller\Adminhtml\System;
 abstract class Currencysymbol extends \Magento\Backend\App\Action
 {
     /**
-     * Check the permission to run it
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_CurrencySymbol::symbols');
-    }
+    const ADMIN_RESOURCE = 'Magento_CurrencySymbol::symbols';
 }

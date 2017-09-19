@@ -16,6 +16,13 @@ use Magento\Cms\Model\ResourceModel\Page\CollectionFactory;
 class MassEnable extends \Magento\Backend\App\Action
 {
     /**
+     * Authorization level of a basic admin session.
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Cms::save';
+
+    /**
      * @var Filter
      */
     protected $filter;
@@ -56,6 +63,7 @@ class MassEnable extends \Magento\Backend\App\Action
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+
         return $resultRedirect->setPath('*/*/');
     }
 }

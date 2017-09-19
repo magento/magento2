@@ -39,7 +39,7 @@ class InvalidateTokenTest extends \Magento\TestFramework\TestCase\AbstractBacken
         $this->getRequest()->setParam('user_id', $adminUserId);
         $this->dispatch('backend/admin/user/invalidateToken');
         $token = $tokenModel->loadByAdminId($adminUserId);
-        $this->assertEquals(1, $token->getRevoked());
+        $this->assertEquals(null, $token->getId());
     }
 
     /**
@@ -92,8 +92,8 @@ class InvalidateTokenTest extends \Magento\TestFramework\TestCase\AbstractBacken
         $this->getRequest()->setParam('user_id', $adminUserId);
         $this->dispatch('backend/admin/user/invalidateToken');
         $this->assertSessionMessages(
-            $this->equalTo(['This user has no tokens.']),
-            MessageInterface::TYPE_ERROR
+            $this->equalTo(['You have revoked the user\'s tokens.']),
+            MessageInterface::TYPE_SUCCESS
         );
     }
 
@@ -113,8 +113,8 @@ class InvalidateTokenTest extends \Magento\TestFramework\TestCase\AbstractBacken
         $this->getRequest()->setParam('user_id', $adminUserId);
         $this->dispatch('backend/admin/user/invalidateToken');
         $this->assertSessionMessages(
-            $this->equalTo(['This user has no tokens.']),
-            MessageInterface::TYPE_ERROR
+            $this->equalTo(['You have revoked the user\'s tokens.']),
+            MessageInterface::TYPE_SUCCESS
         );
     }
 }

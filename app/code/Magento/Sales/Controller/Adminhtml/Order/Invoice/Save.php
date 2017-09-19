@@ -21,6 +21,11 @@ use Magento\Sales\Model\Service\InvoiceService;
 class Save extends \Magento\Backend\App\Action
 {
     /**
+     * {@inheritdoc}
+     */
+    const ADMIN_RESOURCE = 'Magento_Sales::sales_invoice';
+
+    /**
      * @var InvoiceSender
      */
     protected $invoiceSender;
@@ -67,14 +72,6 @@ class Save extends \Magento\Backend\App\Action
         $this->shipmentFactory = $shipmentFactory;
         $this->invoiceService = $invoiceService;
         parent::__construct($context);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Sales::sales_invoice');
     }
 
     /**

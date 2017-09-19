@@ -78,6 +78,7 @@ class View extends \Magento\Catalog\Test\Block\Product\View
     {
         $options = [
             'configurable_options' => $this->getConfigurableOptionsBlock()->getOptions($product),
+            'matrix' => $this->getConfigurableOptionsBlock()->getOptionsPrices($product)
         ];
         $options += parent::getOptions($product);
 

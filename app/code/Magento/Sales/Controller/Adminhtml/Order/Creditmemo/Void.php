@@ -10,6 +10,11 @@ use Magento\Backend\App\Action;
 class Void extends \Magento\Backend\App\Action
 {
     /**
+     * {@inheritdoc}
+     */
+    const ADMIN_RESOURCE = 'Magento_Sales::sales_creditmemo';
+
+    /**
      * @var \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader
      */
     protected $creditmemoLoader;
@@ -32,14 +37,6 @@ class Void extends \Magento\Backend\App\Action
         $this->creditmemoLoader = $creditmemoLoader;
         $this->resultForwardFactory = $resultForwardFactory;
         parent::__construct($context);
-    }
-
-    /**
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Sales::sales_creditmemo');
     }
 
     /**

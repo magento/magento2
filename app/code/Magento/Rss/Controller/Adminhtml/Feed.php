@@ -12,6 +12,13 @@ namespace Magento\Rss\Controller\Adminhtml;
 abstract class Feed extends \Magento\Backend\App\Action
 {
     /**
+     * Authorization level of a basic admin session.
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Rss::rss';
+    
+    /**
      * @var \Magento\Rss\Model\RssManager
      */
     protected $rssManager;

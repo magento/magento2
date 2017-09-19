@@ -14,6 +14,11 @@ namespace Magento\Reports\Controller\Adminhtml\Report;
 abstract class Product extends AbstractReport
 {
     /**
+     * {@inheritdoc}
+     */
+    const ADMIN_RESOURCE = 'Magento_Reports::report_products';
+
+    /**
      * Add report/products breadcrumbs
      *
      * @return $this

@@ -13,12 +13,7 @@ use Magento\Backend\App\Action;
 abstract class Export extends Action
 {
     /**
-     * Check access (in the ACL) for current user
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_ImportExport::export');
-    }
+    const ADMIN_RESOURCE = 'Magento_ImportExport::export';
 }

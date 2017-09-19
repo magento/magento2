@@ -49,6 +49,21 @@
             </conditions_serialized>
         </fields>
     </conditions>
+    <coupons>
+        <class>Magento\SalesRule\Test\Block\Adminhtml\Promo\Quote\Edit\Tab\Coupons</class>
+        <selector>#promo_catalog_edit_tabs_coupons_section</selector>
+        <strategy>css selector</strategy>
+        <fields>
+            <qty />
+            <length />
+            <format>
+                <input>select</input>
+            </format>
+            <prefix />
+            <suffix />
+            <dash />
+        </fields>
+    </coupons>
     <actions>
         <class>\Magento\Backend\Test\Block\Widget\Tab</class>
         <selector>#promo_catalog_edit_tabs_actions_section</selector>

@@ -14,6 +14,13 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class ExportCsv extends \Magento\Backend\App\Action
 {
     /**
+     * Authorization level of a basic admin session.
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Customer::manage';
+
+    /**
      * @var \Magento\Framework\App\Response\Http\FileFactory
      */
     protected $_fileFactory;
@@ -43,6 +50,7 @@ class ExportCsv extends \Magento\Backend\App\Action
         $fileName = 'customers.csv';
         /** @var \Magento\Backend\Block\Widget\Grid\ExportInterface $exportBlock  */
         $exportBlock = $this->_view->getLayout()->getChildBlock('admin.block.customer.grid', 'grid.export');
+
         return $this->_fileFactory->create(
             $fileName,
             $exportBlock->getCsvFile(),

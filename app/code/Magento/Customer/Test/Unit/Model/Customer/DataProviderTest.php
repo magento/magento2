@@ -17,7 +17,7 @@ use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
 /**
  * Class DataProviderTest
  *
- * Test for class \Magento\Customer\Model\Customer\DataProvider
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DataProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -56,26 +56,26 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->eavConfigMock = $this->getMockBuilder('Magento\Eav\Model\Config')
+        $this->eavConfigMock = $this->getMockBuilder(\Magento\Eav\Model\Config::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->customerCollectionFactoryMock = $this->getMock(
-            'Magento\Customer\Model\ResourceModel\Customer\CollectionFactory',
+            \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory::class,
             ['create'],
             [],
             '',
             false
         );
         $this->eavValidationRulesMock = $this
-            ->getMockBuilder('Magento\Ui\DataProvider\EavValidationRules')
+            ->getMockBuilder(\Magento\Ui\DataProvider\EavValidationRules::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->fileProcessor = $this->getMockBuilder('Magento\Customer\Model\FileProcessor')
+        $this->fileProcessor = $this->getMockBuilder(\Magento\Customer\Model\FileProcessor::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->fileProcessorFactory = $this->getMockBuilder('Magento\Customer\Model\FileProcessorFactory')
+        $this->fileProcessorFactory = $this->getMockBuilder(\Magento\Customer\Model\FileProcessorFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -159,7 +159,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
      */
     protected function getCustomerCollectionFactoryMock()
     {
-        $collectionMock = $this->getMockBuilder('Magento\Customer\Model\ResourceModel\Customer\Collection')
+        $collectionMock = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Customer\Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -196,7 +196,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
      */
     protected function getTypeCustomerMock()
     {
-        $typeCustomerMock = $this->getMockBuilder('Magento\Eav\Model\Entity\Type')
+        $typeCustomerMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Type::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -212,7 +212,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
      */
     protected function getTypeAddressMock()
     {
-        $typeAddressMock = $this->getMockBuilder('Magento\Eav\Model\Entity\Type')
+        $typeAddressMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Type::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -228,11 +228,11 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
      */
     protected function getAttributeMock()
     {
-        $attributeMock = $this->getMockBuilder('Magento\Eav\Model\Entity\Attribute\AbstractAttribute')
+        $attributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
             ->setMethods(['getAttributeCode', 'getDataUsingMethod', 'usesSource', 'getSource'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $sourceMock = $this->getMockBuilder('Magento\Eav\Model\Entity\Attribute\Source\AbstractSource')
+        $sourceMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\Source\AbstractSource::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -267,13 +267,48 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testGetData()
     {
-        $customer = $this->getMockBuilder('Magento\Customer\Model\Customer')
+        $customerId  = 1;
+        $addressId = 2;
+        $customerData = [
+            'email' => 'test@test.ua',
+            'default_billing' => $addressId,
+            'default_shipping' => $addressId,
+            'password_hash' => 'password_hash',
+            'rp_token' => 'rp_token',
+            'confirmation' => 'confirmation',
+        ];
+        $customerDataFiltered = [
+            'email' => 'test@test.ua',
+            'default_billing' => $addressId,
+            'default_shipping' => $addressId
+        ];
+        $addressData = [
+            'firstname' => 'firstname',
+            'lastname' => 'lastname',
+            'street' => "street\nstreet",
+        ];
+        $expectedAddressData = [
+            $addressId => [
+                'firstname' => 'firstname',
+                'lastname' => 'lastname',
+                'street' => [
+                    'street',
+                    'street',
+                ],
+                'default_billing' => $addressId,
+                'default_shipping' => $addressId,
+            ]
+        ];
+        $customer = $this->getMockBuilder(\Magento\Customer\Model\Customer::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $address = $this->getMockBuilder('Magento\Customer\Model\Address')
+        $customer = $this->getMockBuilder(\Magento\Customer\Model\Customer::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $collectionMock = $this->getMockBuilder('Magento\Customer\Model\ResourceModel\Customer\Collection')
+        $address = $this->getMockBuilder(\Magento\Customer\Model\Address::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $collectionMock = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Customer\Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -290,24 +325,23 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->willReturn([$customer]);
         $customer->expects($this->once())
             ->method('getData')
-            ->willReturn([
-                'email' => 'test@test.ua',
-                'default_billing' => 2,
-                'default_shipping' => 2,
-            ]);
+            ->willReturn($customerData);
         $customer->expects($this->once())
             ->method('getAddresses')
             ->willReturn([$address]);
         $customer->expects($this->once())
             ->method('getAttributes')
             ->willReturn([]);
+        $customer->expects($this->once())
+            ->method('getId')
+            ->willReturn($customerId);
 
         $address->expects($this->atLeastOnce())
             ->method('getId')
-            ->willReturn(2);
+            ->willReturn($addressId);
         $address->expects($this->once())
             ->method('load')
-            ->with(2)
+            ->with($addressId)
             ->willReturnSelf();
         $address->expects($this->once())
             ->method('getData')
@@ -330,29 +364,18 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             $this->fileProcessorFactory
         );
 
+        $result = $dataProvider->getData();
+        $this->assertArrayHasKey($customerId, $result);
+        $this->assertArrayHasKey('customer', $result[$customerId]);
+        $this->assertArrayHasKey('address', $result[$customerId]);
+        // assert that filtered fields are removed from the customer
         $this->assertEquals(
-            [
-                '' => [
-                    'customer' => [
-                        'email' => 'test@test.ua',
-                        'default_billing' => 2,
-                        'default_shipping' => 2,
-                    ],
-                    'address' => [
-                        2 => [
-                            'firstname' => 'firstname',
-                            'lastname' => 'lastname',
-                            'street' => [
-                                'street',
-                                'street',
-                            ],
-                            'default_billing' => 2,
-                            'default_shipping' => 2,
-                        ]
-                    ]
-                ]
-            ],
-            $dataProvider->getData()
+            $customerDataFiltered,
+            $result[$customerId]['customer']
+        );
+        $this->assertEquals(
+            $expectedAddressData,
+            $result[$customerId]['address']
         );
     }
 
@@ -378,7 +401,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $attributeMock = $this->getMockBuilder('Magento\Customer\Model\Attribute')
+        $attributeMock = $this->getMockBuilder(\Magento\Customer\Model\Attribute::class)
             ->disableOriginalConstructor()
             ->getMock();
         $attributeMock->expects($this->any())
@@ -388,14 +411,14 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getAttributeCode')
             ->willReturn('img1');
 
-        $entityTypeMock = $this->getMockBuilder('Magento\Eav\Model\Entity\Type')
+        $entityTypeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Type::class)
             ->disableOriginalConstructor()
             ->getMock();
         $entityTypeMock->expects($this->once())
             ->method('getEntityTypeCode')
             ->willReturn(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
 
-        $customerMock = $this->getMockBuilder('Magento\Customer\Model\Customer')
+        $customerMock = $this->getMockBuilder(\Magento\Customer\Model\Customer::class)
             ->disableOriginalConstructor()
             ->getMock();
         $customerMock->expects($this->once())
@@ -417,7 +440,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getEntityType')
             ->willReturn($entityTypeMock);
 
-        $collectionMock = $this->getMockBuilder('Magento\Customer\Model\ResourceModel\Customer\Collection')
+        $collectionMock = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Customer\Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $collectionMock->expects($this->once())
@@ -468,7 +491,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $attributeMock = $this->getMockBuilder('Magento\Customer\Model\Attribute')
+        $attributeMock = $this->getMockBuilder(\Magento\Customer\Model\Attribute::class)
             ->disableOriginalConstructor()
             ->getMock();
         $attributeMock->expects($this->once())
@@ -478,11 +501,11 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getAttributeCode')
             ->willReturn('img1');
 
-        $entityTypeMock = $this->getMockBuilder('Magento\Eav\Model\Entity\Type')
+        $entityTypeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Type::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $customerMock = $this->getMockBuilder('Magento\Customer\Model\Customer')
+        $customerMock = $this->getMockBuilder(\Magento\Customer\Model\Customer::class)
             ->disableOriginalConstructor()
             ->getMock();
         $customerMock->expects($this->once())
@@ -503,7 +526,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getEntityType')
             ->willReturn($entityTypeMock);
 
-        $collectionMock = $this->getMockBuilder('Magento\Customer\Model\ResourceModel\Customer\Collection')
+        $collectionMock = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Customer\Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $collectionMock->expects($this->once())
@@ -516,7 +539,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new ObjectManager($this);
         $dataProvider = $objectManager->getObject(
-            '\Magento\Customer\Model\Customer\DataProvider',
+            \Magento\Customer\Model\Customer\DataProvider::class,
             [
                 'name' => 'test-name',
                 'primaryFieldName' => 'primary-field-name',
@@ -538,7 +561,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         $allowedExtension = 'ext1 ext2';
         $attributeCode = 'img1';
 
-        $collectionMock = $this->getMockBuilder('Magento\Customer\Model\ResourceModel\Customer\Collection')
+        $collectionMock = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Customer\Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $collectionMock->expects($this->once())
@@ -549,7 +572,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($collectionMock);
 
-        $attributeMock = $this->getMockBuilder('Magento\Eav\Model\Entity\Attribute\AbstractAttribute')
+        $attributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
             ->setMethods([
                 'getAttributeCode',
                 'getFrontendInput',
@@ -571,7 +594,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
                 }
             );
 
-        $typeCustomerMock = $this->getMockBuilder('Magento\Eav\Model\Entity\Type')
+        $typeCustomerMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Type::class)
             ->disableOriginalConstructor()
             ->getMock();
         $typeCustomerMock->expects($this->once())
@@ -581,7 +604,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getEntityTypeCode')
             ->willReturn(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
 
-        $typeAddressMock = $this->getMockBuilder('Magento\Eav\Model\Entity\Type')
+        $typeAddressMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Type::class)
             ->disableOriginalConstructor()
             ->getMock();
         $typeAddressMock->expects($this->once())

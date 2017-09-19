@@ -4,8 +4,9 @@
  */
 define([
     'jquery',
+    'uiRegistry',
     'Magento_Catalog/js/product/weight-handler'
-], function ($, weight) {
+], function ($, registry, weight) {
     'use strict';
 
     return {
@@ -30,6 +31,7 @@ define([
             this.type.current = this.$type.val();
 
             this.bindAll();
+            registry.set('typeSwitcher', this);
         },
 
         /**

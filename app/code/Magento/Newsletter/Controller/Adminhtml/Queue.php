@@ -14,12 +14,7 @@ namespace Magento\Newsletter\Controller\Adminhtml;
 abstract class Queue extends \Magento\Backend\App\Action
 {
     /**
-     * Check if user has enough privileges
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Newsletter::queue');
-    }
+    const ADMIN_RESOURCE = 'Magento_Newsletter::queue';
 }

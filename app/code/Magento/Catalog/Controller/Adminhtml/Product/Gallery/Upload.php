@@ -11,6 +11,11 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class Upload extends \Magento\Backend\App\Action
 {
     /**
+     * {@inheritdoc}
+     */
+    const ADMIN_RESOURCE = 'Magento_Catalog::products';
+
+    /**
      * @var \Magento\Framework\Controller\Result\RawFactory
      */
     protected $resultRawFactory;
@@ -25,14 +30,6 @@ class Upload extends \Magento\Backend\App\Action
     ) {
         parent::__construct($context);
         $this->resultRawFactory = $resultRawFactory;
-    }
-
-    /**
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Catalog::products');
     }
 
     /**

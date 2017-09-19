@@ -40,7 +40,7 @@
                     <input name="product[options][<%- data.option_id %>][sku]" class="input-text" type="text" value="<%- data.sku %>">
                 </td>
                 <td>
-                    <input name="product[options][<%- data.option_id %>][file_extension]" class="input-text" type="text" value="<%- data.file_extension %>">
+                    <input name="product[options][<%- data.option_id %>][file_extension]" class="input-text required-entry" type="text" value="<%- data.file_extension %>">
                 </td>
                 <td class="col-file"><?php /* @escapeNotVerified */ echo __('%1 <span>x</span> %2 <span>px.</span>',
                     '<input class="input-text" type="text" name="product[options][<%- data.option_id %>][image_size_x]" value="<%- data.image_size_x %>">',

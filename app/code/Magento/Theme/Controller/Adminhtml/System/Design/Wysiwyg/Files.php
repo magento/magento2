@@ -12,6 +12,13 @@ namespace Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg;
 abstract class Files extends \Magento\Backend\App\Action
 {
     /**
+     * Authorization level of a basic admin session.
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Theme::theme';
+
+    /**
      * @var \Magento\Framework\App\Response\Http\FileFactory
      */
     protected $_fileFactory;
@@ -43,6 +50,6 @@ abstract class Files extends \Magento\Backend\App\Action
      */
     protected function _getStorage()
     {
-        return $this->_objectManager->get('Magento\Theme\Model\Wysiwyg\Storage');
+        return $this->_objectManager->get(\Magento\Theme\Model\Wysiwyg\Storage::class);
     }
 }

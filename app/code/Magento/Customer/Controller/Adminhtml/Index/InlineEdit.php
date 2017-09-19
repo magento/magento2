@@ -15,6 +15,11 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
  */
 class InlineEdit extends \Magento\Backend\App\Action
 {
+    /**
+     * {@inheritdoc}
+     */
+    const ADMIN_RESOURCE = 'Magento_Customer::manage';
+
     /** @var CustomerInterface */
     private $customer;
 
@@ -249,15 +254,5 @@ class InlineEdit extends \Magento\Backend\App\Action
     protected function getErrorWithCustomerId($errorText)
     {
         return '[Customer ID: ' . $this->getCustomer()->getId() . '] ' . __($errorText);
-    }
-
-    /**
-     * Customer access rights checking
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Customer::manage');
     }
 }

@@ -14,6 +14,11 @@ namespace Magento\Reports\Controller\Adminhtml;
 abstract class Index extends \Magento\Backend\App\Action
 {
     /**
+     * {@inheritdoc}
+     */
+    const ADMIN_RESOURCE = 'Magento_Reports::report';
+
+    /**
      * @var \Magento\Framework\App\Response\Http\FileFactory
      */
     protected $_fileFactory;
@@ -28,15 +33,5 @@ abstract class Index extends \Magento\Backend\App\Action
     ) {
         $this->_fileFactory = $fileFactory;
         parent::__construct($context);
-    }
-
-    /**
-     * Determine if action is allowed for reports module
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Reports::report');
     }
 }

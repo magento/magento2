@@ -16,6 +16,13 @@ use Magento\Framework\Model\AbstractModel;
 class Instance extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
+     * Fields that should be serialized before persistence
+     *
+     * @var array
+     */
+    protected $_serializableFields = ['widget_parameters' => [[], []]];
+
+    /**
      * Define main table
      *
      * @return void

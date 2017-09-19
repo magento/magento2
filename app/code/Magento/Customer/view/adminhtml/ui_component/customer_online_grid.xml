@@ -12,6 +12,7 @@
             <item name="deps" xsi:type="string">customer_online_grid.customer_online_grid_data_source</item>
         </item>
         <item name="spinner" xsi:type="string">customer_online_columns</item>
+        <item name="acl" xsi:type="string">Magento_Customer::online</item>
     </argument>
     <dataSource name="customer_online_grid_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">

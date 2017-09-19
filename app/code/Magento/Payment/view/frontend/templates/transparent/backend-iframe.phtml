@@ -1,0 +1,40 @@
+<?php
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var \Magento\Payment\Block\Transparent\Iframe $block */
+$params = $block->getParams();
+?>
+<html>
+    <script>
+        <?php if (isset($params['order_success'])): ?>
+            //URL Required in script for authorize.net relay.
+            "<?php echo $block->escapeUrl($params['order_success']); ?>";
+        <?php elseif (isset($params['error_msg'])): ?>
+            var require = window.top.require;
+            require(
+                [
+                    'jquery',
+                    'Magento_Ui/js/model/messageList',
+                    'mage/translate'
+                ],
+                function($, globalMessageList, $t) {
+                    var parent = window.top;
+                    $(parent).trigger('clearTimeout');
+                    globalMessageList.addErrorMessage({
+                        message: $t('An error occurred on the server. Please try to place the order again.')
+                    });
+                }
+            );
+        <?php endif; ?>
+    </script>
+    <body>
+        <?php if (isset($params['order_success'])): ?>
+            <h1 style="color: #79a22e;">Order is successfully processed.</h1>
+        <?php endif; ?>
+    </body>
+</html>

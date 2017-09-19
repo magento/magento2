@@ -77,6 +77,7 @@ class Http extends Request implements RequestInterface, RequestSafetyInterface
 
     /**
      * @var ObjectManagerInterface
+     * @deprecated
      */
     protected $objectManager;
 
@@ -145,25 +146,50 @@ class Http extends Request implements RequestInterface, RequestSafetyInterface
                 return $this;
             }
 
-            // Remove the query string from REQUEST_URI
-            $pos = strpos($requestUri, '?');
-            if ($pos) {
-                $requestUri = substr($requestUri, 0, $pos);
-            }
-
+            $requestUri = $this->removeRepeatedSlashes($requestUri);
+            $parsedRequestUri = explode('?', $requestUri, 2);
+            $queryString = !isset($parsedRequestUri[1]) ? '' : '?' . $parsedRequestUri[1];
             $baseUrl = $this->getBaseUrl();
-            $pathInfo = substr($requestUri, strlen($baseUrl));
-            if (!empty($baseUrl) && false === $pathInfo) {
-                $pathInfo = '';
-            } elseif (null === $baseUrl) {
-                $pathInfo = $requestUri;
+            $pathInfo = (string)substr($parsedRequestUri[0], (int)strlen($baseUrl));
+
+            if ($this->isNoRouteUri($baseUrl, $pathInfo)) {
+                $pathInfo = 'noroute';
             }
             $pathInfo = $this->pathInfoProcessor->process($this, $pathInfo);
             $this->originalPathInfo = (string)$pathInfo;
-            $this->requestString = $pathInfo . ($pos !== false ? substr($requestUri, $pos) : '');
+            $this->requestString = $pathInfo . $queryString;
         }
         $this->pathInfo = (string)$pathInfo;
         return $this;
+    }
+
+    /**
+     * Remove repeated slashes from the start of the path.
+     *
+     * @param string $pathInfo
+     * @return string
+     */
+    private function removeRepeatedSlashes($pathInfo)
+    {
+        $firstChar = (string)substr($pathInfo, 0, 1);
+        if ($firstChar == '/') {
+            $pathInfo = '/' . ltrim($pathInfo, '/');
+        }
+
+        return $pathInfo;
+    }
+
+    /**
+     * Check is URI should be marked as no route, helps to route 404 for incorrect URI.
+     *
+     * @param string $baseUrl
+     * @param string $pathInfo
+     * @return bool
+     */
+    private function isNoRouteUri($baseUrl, $pathInfo)
+    {
+        $firstChar = (string)substr($pathInfo, 0, 1);
+        return $baseUrl !== '' && !in_array($firstChar, ['/', '']);
     }
 
     /**
@@ -332,7 +358,7 @@ class Http extends Request implements RequestInterface, RequestSafetyInterface
             $hostArr = explode(':', $headerHttpHost);
             $host = $hostArr[0];
             $port = isset($hostArr[1])
-                && (!$secure && $hostArr[1] != 80 || $secure && $hostArr[1] != 443) ? ':' . $hostArr[1] : '';
+            && (!$secure && $hostArr[1] != 80 || $secure && $hostArr[1] != 443) ? ':' . $hostArr[1] : '';
             $path = $this->getBasePath();
 
             return $scheme . $host . $port . rtrim($path, '/') . '/';
@@ -416,7 +442,7 @@ class Http extends Request implements RequestInterface, RequestSafetyInterface
         /* TODO: Untangle Config dependence on Scope, so that this class can be instantiated even if app is not
         installed MAGETWO-31756 */
         // Check if a proxy sent a header indicating an initial secure request
-        $config = $this->objectManager->get('Magento\Framework\App\Config');
+        $config = $this->objectManager->get(\Magento\Framework\App\Config::class);
         $offLoaderHeader = trim(
             (string)$config->getValue(
                 self::XML_PATH_OFFLOADER_HEADER,

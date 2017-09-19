@@ -26,7 +26,7 @@ class FileTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $this->dispatch('backend/admin/downloadable_file/upload/type/samples');
         $body = $this->getResponse()->getBody();
         $result = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Json\Helper\Data'
+            \Magento\Framework\Json\Helper\Data::class
         )->jsonDecode(
             $body
         );

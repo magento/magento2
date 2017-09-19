@@ -6,12 +6,14 @@
 
 namespace Magento\SalesRule\Test\TestCase;
 
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\TestCase\Injectable;
+use Magento\Mtf\TestStep\TestStepFactory;
 use Magento\SalesRule\Test\Fixture\SalesRule;
 use Magento\SalesRule\Test\Page\Adminhtml\PromoQuoteEdit;
 use Magento\SalesRule\Test\Page\Adminhtml\PromoQuoteIndex;
 use Magento\SalesRule\Test\Page\Adminhtml\PromoQuoteNew;
-use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Mtf\TestCase\Injectable;
+use Magento\SalesRule\Test\TestStep\GenerateCouponCodeStep;
 
 /**
  * Precondition:
@@ -64,21 +66,41 @@ class CreateSalesRuleEntityTest extends Injectable
     protected $salesRuleName;
 
     /**
+     * Factory for creating GenerateCouponCodeStep.
+     *
+     * @var TestStepFactory
+     */
+    protected $testStepFactory;
+
+    /**
+     * Factory for creating SalesRule fixture.
+     *
+     * @var FixtureFactory
+     */
+    protected $fixtureFactory;
+
+    /**
      * Inject pages.
      *
      * @param PromoQuoteNew $promoQuoteNew
      * @param PromoQuoteIndex $promoQuoteIndex
      * @param PromoQuoteEdit $promoQuoteEdit
+     * @param TestStepFactory $testStepFactory
+     * @param FixtureFactory $fixtureFactory
      * @return void
      */
     public function __inject(
         PromoQuoteNew $promoQuoteNew,
         PromoQuoteIndex $promoQuoteIndex,
-        PromoQuoteEdit $promoQuoteEdit
+        PromoQuoteEdit $promoQuoteEdit,
+        TestStepFactory $testStepFactory,
+        FixtureFactory $fixtureFactory
     ) {
         $this->promoQuoteNew = $promoQuoteNew;
         $this->promoQuoteIndex = $promoQuoteIndex;
         $this->promoQuoteEdit = $promoQuoteEdit;
+        $this->testStepFactory = $testStepFactory;
+        $this->fixtureFactory = $fixtureFactory;
     }
 
     /**
@@ -115,9 +137,10 @@ class CreateSalesRuleEntityTest extends Injectable
      * Create Sales Rule Entity.
      *
      * @param SalesRule $salesRule
-     * @return void
+     * @param array $coupon
+     * @return array
      */
-    public function testCreateSalesRule(SalesRule $salesRule)
+    public function testCreateSalesRule(SalesRule $salesRule, $coupon = [])
     {
         // Preconditions
         $this->salesRuleName = $salesRule->getName();
@@ -125,7 +148,21 @@ class CreateSalesRuleEntityTest extends Injectable
         // Steps
         $this->promoQuoteNew->open();
         $this->promoQuoteNew->getSalesRuleForm()->fill($salesRule);
+        if ($salesRule->getCouponType() == 'Auto') {
+            $this->promoQuoteNew->getFormPageActions()->saveAndContinue();
+            if ($coupon) {
+                $couponCode = $this->testStepFactory->create(GenerateCouponCodeStep::class, ['coupon' => $coupon])
+                    ->run();
+                $data = array_merge(
+                    $salesRule->getData(),
+                    ['coupon_code' => $couponCode]
+                );
+                $salesRule = $this->fixtureFactory->create(SalesRule::class, ['data' => $data]);
+            }
+        }
         $this->promoQuoteNew->getFormPageActions()->save();
+
+        return ['salesRule' => $salesRule];
     }
 
     /**

@@ -14,6 +14,11 @@ use Magento\Customer\Api\GroupRepositoryInterface;
 abstract class Group extends \Magento\Backend\App\Action
 {
     /**
+     * {@inheritdoc}
+     */
+    const ADMIN_RESOURCE = 'Magento_Customer::group';
+
+    /**
      * Core registry
      *
      * @var \Magento\Framework\Registry
@@ -64,15 +69,5 @@ abstract class Group extends \Magento\Backend\App\Action
         parent::__construct($context);
         $this->resultForwardFactory = $resultForwardFactory;
         $this->resultPageFactory = $resultPageFactory;
-    }
-
-    /**
-     * Determine if authorized to perform group actions.
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Customer::group');
     }
 }

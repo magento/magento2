@@ -22,6 +22,13 @@ use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 class Pdfshipments extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
     /**
+     * Authorization level of a basic admin session.
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Sales::ship';
+
+    /**
      * @var FileFactory
      */
     protected $fileFactory;
@@ -80,8 +87,10 @@ class Pdfshipments extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMas
             ->setOrderFilter(['in' => $collection->getAllIds()]);
         if (!$shipmentsCollection->getSize()) {
             $this->messageManager->addError(__('There are no printable documents related to selected orders.'));
+
             return $this->resultRedirectFactory->create()->setPath($this->getComponentRefererUrl());
         }
+
         return $this->fileFactory->create(
             sprintf('packingslip%s.pdf', $this->dateTime->date('Y-m-d_H-i-s')),
             $this->pdfShipment->getPdf($shipmentsCollection->getItems())->render(),

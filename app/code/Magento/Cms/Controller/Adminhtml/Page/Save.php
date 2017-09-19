@@ -11,26 +11,34 @@ use Magento\Backend\App\Action;
 class Save extends \Magento\Backend\App\Action
 {
     /**
+     * {@inheritdoc}
+     */
+    const ADMIN_RESOURCE = 'Magento_Cms::save';
+
+    /**
      * @var PostDataProcessor
      */
     protected $dataProcessor;
 
     /**
-     * @param Action\Context $context
-     * @param PostDataProcessor $dataProcessor
+     * @var \Magento\Cms\Model\PageFactory
      */
-    public function __construct(Action\Context $context, PostDataProcessor $dataProcessor)
-    {
-        $this->dataProcessor = $dataProcessor;
-        parent::__construct($context);
-    }
+    private $pageFactory;
 
     /**
-     * {@inheritdoc}
+     * @param Action\Context $context
+     * @param PostDataProcessor $dataProcessor
+     * @param \Magento\Cms\Model\PageFactory $pageFactory
      */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Cms::save');
+    public function __construct(
+        Action\Context $context,
+        PostDataProcessor $dataProcessor,
+        \Magento\Cms\Model\PageFactory $pageFactory = null
+    ) {
+        parent::__construct($context);
+        $this->dataProcessor = $dataProcessor;
+        $this->pageFactory = $pageFactory ?: $this->_objectManager->get(\Magento\Cms\Model\PageFactory::class);
+
     }
 
     /**
@@ -45,11 +53,18 @@ class Save extends \Magento\Backend\App\Action
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($data) {
             $data = $this->dataProcessor->filter($data);
-            $model = $this->_objectManager->create('Magento\Cms\Model\Page');
+
+            /** @var \Magento\Cms\Model\Page $model */
+            $model = $this->pageFactory->create();
 
             $id = $this->getRequest()->getParam('page_id');
             if ($id) {
                 $model->load($id);
+                if (!$model->getId()) {
+                    $this->messageManager->addErrorMessage(__('This page no longer exists.'));
+
+                    return $resultRedirect->setPath('*/*/');
+                }
             }
 
             $model->setData($data);

@@ -164,6 +164,7 @@ class Config extends \Magento\Framework\DataObject
                 ),
                 'width' => '100%',
                 'plugins' => [],
+                'add_directives' => true,
             ]
         );
 
