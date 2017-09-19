@@ -52,6 +52,7 @@
                 <item name="show-mode" xsi:type="object">Magento\Indexer\Console\Command\IndexerShowModeCommand</item>
                 <item name="status" xsi:type="object">Magento\Indexer\Console\Command\IndexerStatusCommand</item>
                 <item name="reset" xsi:type="object">Magento\Indexer\Console\Command\IndexerResetStateCommand</item>
+                <item name="triggers" xsi:type="object">Magento\Indexer\Console\Command\RebuildTriggersCommand</item>
             </argument>
         </arguments>
     </type>
