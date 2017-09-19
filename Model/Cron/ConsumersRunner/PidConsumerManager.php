@@ -78,7 +78,7 @@ class PidConsumerManager
     }
 
     /**
-     * Checks that process is run
+     * Checks that process is running
      *
      * If php function exec is not available throws RuntimeException
      * If shell command returns non-zero code and this code is not 1 throws RuntimeException
