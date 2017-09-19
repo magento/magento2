@@ -12,19 +12,19 @@ class PlaceOrder
     /**
      * @var \Magento\Quote\Api\CartManagementInterface
      */
-    protected $cartManagementInterface;
+    private $cartManagementInterface;
     /**
      * @var CustomerBrainTreeManager
      */
-    protected $customerBrainTreeManager;
+    private $customerBrainTreeManager;
     /**
      * @var Quote
      */
-    protected $quoteRepository;
+    private $quoteRepository;
     /**
      * @var PrepareQuote
      */
-    protected $prepareQuote;
+    private $prepareQuote;
 
     /**
      * PlaceOrder constructor.
@@ -67,7 +67,7 @@ class PlaceOrder
      * @return \Magento\Quote\Model\Quote
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function selectCheapestShippingRate(\Magento\Quote\Model\Quote $quote)
+    private function selectCheapestShippingRate(\Magento\Quote\Model\Quote $quote)
     {
         if ($quote->isVirtual()) {
             return $quote;
@@ -102,7 +102,7 @@ class PlaceOrder
      * @return \Magento\Framework\DataObject
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function _getProductRequest($requestInfo)
+    private function _getProductRequest($requestInfo)
     {
         if ($requestInfo instanceof \Magento\Framework\DataObject) {
             $request = $requestInfo;

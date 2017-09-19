@@ -22,31 +22,31 @@ class PrepareQuoteTest extends TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $customerData;
+    private $customerData;
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $quoteFactory;
+    private $quoteFactory;
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $quote;
+    private $quote;
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $storeManager;
+    private $storeManager;
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $store;
+    private $store;
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $customerBrainTreeManager;
+    private $customerBrainTreeManager;
     /**
      * @var PrepareQuote
      */
-    protected $prepareQuote;
+    private $prepareQuote;
 
     public function setUp()
     {

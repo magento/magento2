@@ -21,19 +21,19 @@ class CustomerBrainTreeManagerTest extends TestCase
     /**
      * @var FilterBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $filterBuilder;
+    private $filterBuilder;
     /**
      * @var  PaymentTokenRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $paymentTokenRepository;
+    private $paymentTokenRepository;
     /**
      * @var  SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $searchCriteriaBuilder;
+    private $searchCriteriaBuilder;
     /**
      * @var  CustomerBrainTreeManager|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $customerBrainTreeManager;
+    private $customerBrainTreeManager;
 
     public function setUp()
     {

@@ -19,27 +19,27 @@ class CustomerDataTest extends TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $customerSession;
+    private $customerSession;
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $customer;
+    private $customer;
     /**
      * @var CustomerData
      */
-    protected $customerData;
+    private $customerData;
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $customerDataModel;
+    private $customerDataModel;
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $customerAddressMock;
+    private $customerAddressMock;
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $customerAddressDataModel;
+    private $customerAddressDataModel;
 
     public function setUp()
     {

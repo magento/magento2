@@ -77,7 +77,7 @@ class PlaceOrder extends \Magento\Framework\App\Action\Action
         return $result;
     }
 
-    protected function _initProduct()
+    private function _initProduct()
     {
         $productId = (int)$this->getRequest()->getParam('product');
         if ($productId) {

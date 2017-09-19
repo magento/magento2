@@ -14,7 +14,7 @@ class Available extends \Magento\Framework\App\Action\Action
     /**
      * @var OneTouchOrdering
      */
-    protected $oneTouchOrdering;
+    private $oneTouchOrdering;
 
     public function __construct(
         Context $context,

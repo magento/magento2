@@ -15,35 +15,35 @@ class PlaceOrderTest extends TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $cartManagementInterface;
+    private $cartManagementInterface;
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $customerBrainTreeManager;
+    private $customerBrainTreeManager;
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $quoteRepository;
+    private $quoteRepository;
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $quote;
+    private $quote;
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $product;
+    private $product;
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $shippingAddress;
+    private $shippingAddress;
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $prepareQuote;
+    private $prepareQuote;
     /**
      * @var \Magento\OneTouchOrdering\Model\PlaceOrder
      */
-    protected $placeOrder;
+    private $placeOrder;
 
     public function setUp()
     {

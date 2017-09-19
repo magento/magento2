@@ -19,23 +19,23 @@ class CustomerBrainTreeManager
     /**
      * @var PaymentTokenRepositoryInterface
      */
-    protected $repository;
+    private $repository;
     /**
      * @var FilterBuilder
      */
-    protected $filterBuilder;
+    private $filterBuilder;
     /**
      * @var SearchCriteriaBuilder
      */
-    protected $searchCriteriaBuilder;
+    private $searchCriteriaBuilder;
     /**
      * @var DateTimeFactory
      */
-    protected $dateTimeFactory;
+    private $dateTimeFactory;
     /**
      * @var GetPaymentNonceCommand
      */
-    protected $getNonce;
+    private $getNonce;
 
     /**
      * CustomerBrainTreeManager constructor.
@@ -120,7 +120,7 @@ class CustomerBrainTreeManager
         return $this->repository->getList($searchCriteria)->getItems();
     }
 
-    protected function getFilter($field, $value)
+    private function getFilter($field, $value)
     {
         return [
             $this->filterBuilder->setField($field)

@@ -14,31 +14,31 @@ class OneTouchOrderingTest extends TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $customerSession;
+    private $customerSession;
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $customer;
+    private $customer;
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $oneTouchConfig;
+    private $oneTouchConfig;
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $brainTreeConfig;
+    private $brainTreeConfig;
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $rateCheck;
+    private $rateCheck;
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $customerBrainTreeManager;
+    private $customerBrainTreeManager;
     /**
      * @var \Magento\OneTouchOrdering\Model\OneTouchOrdering
      */
-    protected $oneTouchOrdering;
+    private $oneTouchOrdering;
 
     public function setUp()
     {

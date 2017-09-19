@@ -15,11 +15,11 @@ class Config
     /**
      * @var StoreManagerInterface
      */
-    protected $storeManager;
+    private $storeManager;
     /**
      * @var ScopeConfigInterface
      */
-    protected $scopeConfig;
+    private $scopeConfig;
 
     /**
      * Data constructor.

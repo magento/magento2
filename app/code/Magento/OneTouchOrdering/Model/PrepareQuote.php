@@ -12,19 +12,19 @@ class PrepareQuote
     /**
      * @var \Magento\Quote\Model\QuoteFactory
      */
-    protected $quoteFactory;
+    private $quoteFactory;
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
-    protected $storeManager;
+    private $storeManager;
     /**
      * @var \Magento\OneTouchOrdering\Model\CustomerBrainTreeManager
      */
-    protected $customerBrainTreeManager;
+    private $customerBrainTreeManager;
     /**
      * @var CustomerData
      */
-    protected $customerData;
+    private $customerData;
 
     public function __construct(
         \Magento\OneTouchOrdering\Model\CustomerData $customerData,

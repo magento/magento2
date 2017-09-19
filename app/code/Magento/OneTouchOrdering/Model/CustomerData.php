@@ -10,7 +10,7 @@ class CustomerData
     /**
      * @var \Magento\Customer\Model\Session
      */
-    protected $customerSession;
+    private $customerSession;
 
     public function __construct(
         \Magento\Customer\Model\Session $customerSession
@@ -53,7 +53,7 @@ class CustomerData
     /**
      * @return \Magento\Customer\Model\Customer
      */
-    protected function getCustomer()
+    private function getCustomer()
     {
         return $this->customerSession->getCustomer();
     }

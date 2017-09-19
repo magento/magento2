@@ -18,23 +18,23 @@ class RateCheckTest extends TestCase
     /**
      * @var  RateRequest|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $request;
+    private $request;
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $store;
+    private $store;
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $website;
+    private $website;
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $rateCollector;
+    private $rateCollector;
     /**
      * @var RateCheck
      */
-    protected $rateCheck;
+    private $rateCheck;
 
     public function setUp()
     {
