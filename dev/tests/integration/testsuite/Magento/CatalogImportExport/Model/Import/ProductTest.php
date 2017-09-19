@@ -1438,7 +1438,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 
 
     /**
-     * Import and check data from file
+     * Import and check data from file.
      *
      * @param string $fileName
      */
@@ -1451,14 +1451,14 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             \Magento\ImportExport\Model\Import\Source\Csv::class,
             [
                 'file' => __DIR__ . '/_files/' . $fileName,
-                'directory' => $directory
+                'directory' => $directory,
             ]
         );
         $this->_model->setParameters(
             [
                 'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
                 'entity' => 'catalog_product',
-                'import_images_file_dir' => 'pub/media/import'
+                'import_images_file_dir' => 'pub/media/import',
             ]
         );
         $appParams = \Magento\TestFramework\Helper\Bootstrap::getInstance()
@@ -1484,7 +1484,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     }
 
     /**
-     * Load product by given product sku
+     * Load product by given product sku.
      *
      * @param string $sku
      * @return \Magento\Catalog\Model\Product

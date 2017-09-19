@@ -1297,24 +1297,24 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         return [
             [
                 [],
-                [[], []]
+                [[], []],
             ],
             [
                 [
                     'image' => 'image3.jpg',
                     '_media_image' => 'image1.jpg,image2.png',
-                    '_media_image_label' => 'label1,label2'
+                    '_media_image_label' => 'label1,label2',
                 ],
                 [
                     [
                         'image' => ['image3.jpg'],
-                        '_media_image' => ['image1.jpg', 'image2.png']
+                        '_media_image' => ['image1.jpg', 'image2.png'],
                     ],
                     [
-                        '_media_image' => ['label1', 'label2']
+                        '_media_image' => ['label1', 'label2'],
                     ],
-                ]
-            ]
+                ],
+            ],
         ];
     }
     

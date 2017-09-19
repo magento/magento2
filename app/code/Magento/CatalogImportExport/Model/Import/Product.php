@@ -1440,7 +1440,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             '(mg.value_id = mgvte.value_id)',
             [
                 $this->getProductEntityLinkField() => 'mgvte.' . $this->getProductEntityLinkField(),
-                'value_id' => 'mgvte.value_id'
+                'value_id' => 'mgvte.value_id',
             ]
         )->joinLeft(
             ['mgv' => $this->mediaGalleryValueTableName],
@@ -1451,7 +1451,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 \Magento\Store\Model\Store::DEFAULT_STORE_ID
             ),
             [
-                'label' => 'mgv.label'
+                'label' => 'mgv.label',
             ]
         )->joinInner(
             ['pe' => $this->productEntityTableName],
@@ -2796,7 +2796,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         }
     }
 
-
     /**
      * Update media gallery labels.
      *
@@ -2818,18 +2817,18 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     'label' => $label['label'],
                     $this->getProductEntityLinkField() => $imageData[$this->getProductEntityLinkField()],
                     'value_id' => $imageData['value_id'],
-                    'store_id' => \Magento\Store\Model\Store::DEFAULT_STORE_ID
+                    'store_id' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
                 ];
             } else {
                 $this->_connection->update(
                     $this->mediaGalleryValueTableName,
                     [
-                        'label' => $label['label']
+                        'label' => $label['label'],
                     ],
                     [
                         $this->getProductEntityLinkField() . ' = ?' => $imageData[$this->getProductEntityLinkField()],
                         'value_id = ?' => $imageData['value_id'],
-                        'store_id = ?' => \Magento\Store\Model\Store::DEFAULT_STORE_ID
+                        'store_id = ?' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
                     ]
                 );
             }

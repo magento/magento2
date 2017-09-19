@@ -25,9 +25,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->media = $this->objectManagerHelper->getObject(
             Media::class,
-            [
-                
-            ]
+            []
         );
     }
 
@@ -96,12 +94,12 @@ class MediaTest extends \PHPUnit_Framework_TestCase
             ],
             'additional_images' => [
                 ['additional_images' => 'image1.png,image2.jpg'],
-                ['result' => true, 'messages' => []]
+                ['result' => true, 'messages' => []],
             ],
             'additional_images_fail' => [
                 ['additional_images' => 'image1.png|image2.jpg|image3.gif'],
-                ['result' => false, 'messages' => [0 => 'additional_images']]
-            ]
+                ['result' => false, 'messages' => [0 => 'additional_images']],
+            ],
         ];
     }
 }
