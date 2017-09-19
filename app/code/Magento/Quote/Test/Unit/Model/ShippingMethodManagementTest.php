@@ -149,20 +149,10 @@ class ShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
                 'methodDataFactory' => $this->methodDataFactoryMock,
                 'converter' => $this->converter,
                 'totalsCollector' => $this->totalsCollector,
-                'addressRepository' => $this->addressRepository
+                'addressRepository' => $this->addressRepository,
+                'dataProcessor' => $this->dataProcessor,
+                'addressFactory' => $this->addressFactory
             ]
-        );
-
-        $this->objectManager->setBackwardCompatibleProperty(
-            $this->model,
-            'addressFactory',
-            $this->addressFactory
-        );
-
-        $this->objectManager->setBackwardCompatibleProperty(
-            $this->model,
-            'dataProcessor',
-            $this->dataProcessor
         );
     }
 

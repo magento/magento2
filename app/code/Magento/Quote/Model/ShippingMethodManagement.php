@@ -78,12 +78,16 @@ class ShippingMethodManagement implements
         \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         Cart\ShippingMethodConverter $converter,
         \Magento\Customer\Api\AddressRepositoryInterface $addressRepository,
-        \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector
+        \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector,
+        DataObjectProcessor $dataProcessor = null,
+        AddressInterfaceFactory $addressFactory = null
     ) {
         $this->quoteRepository = $quoteRepository;
         $this->converter = $converter;
         $this->addressRepository = $addressRepository;
         $this->totalsCollector = $totalsCollector;
+        $this->dataProcessor = $dataProcessor ?: ObjectManager::getInstance()->get(DataObjectProcessor::class);
+        $this->addressFactory = $addressFactory ?: ObjectManager::getInstance()->get(AddressInterfaceFactory::class);
     }
 
     /**
@@ -263,7 +267,7 @@ class ShippingMethodManagement implements
         $address = null
     ) {
         if (!$address) {
-            $address = $this->getAddressFactory()->create()
+            $address = $this->addressFactory->create()
                 ->setCountryId($country)
                 ->setPostcode($postcode)
                 ->setRegionId($regionId)
@@ -311,41 +315,9 @@ class ShippingMethodManagement implements
             $className = EstimateAddressInterface::class;
         }
 
-        return $this->getDataObjectProcessor()->buildOutputDataArray(
+        return $this->dataProcessor->buildOutputDataArray(
             $address,
             $className
         );
-    }
-
-    /**
-     * Gets the data object processor.
-     *
-     * @return \Magento\Framework\Reflection\DataObjectProcessor
-     * @deprecated
-     */
-    private function getDataObjectProcessor()
-    {
-        if ($this->dataProcessor === null) {
-            $this->dataProcessor = ObjectManager::getInstance()
-                ->get(DataObjectProcessor::class);
-        }
-
-        return $this->dataProcessor;
-    }
-
-    /**
-     * Gets the address factory.
-     *
-     * @return AddressInterfaceFactory
-     * @deprecated
-     */
-    private function getAddressFactory()
-    {
-        if ($this->addressFactory === null) {
-            $this->addressFactory = ObjectManager::getInstance()
-                ->get(AddressInterfaceFactory::class);
-        }
-
-        return $this->addressFactory;
     }
 }
