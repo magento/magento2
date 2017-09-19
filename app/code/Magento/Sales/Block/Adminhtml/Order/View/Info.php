@@ -225,7 +225,8 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
                 $label = __('Edit');
             }
             $url = $this->getUrl('sales/order/address', ['address_id' => $address->getId()]);
-            return '<a href="' . $url . '">' . $label . '</a>';
+            
+            return '<a href="' . $this->escapeUrl($url) . '">' . $this->escapeHtml($label) . '</a>';
         }
 
         return '';
