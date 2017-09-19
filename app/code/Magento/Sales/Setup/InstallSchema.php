@@ -2630,6 +2630,12 @@ class InstallSchema implements InstallSchemaInterface
             [],
             'Number'
         )->addColumn(
+            'track_url',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            '64k',
+            ['nullable' => true, 'default' => null],
+            'Tracking URL'
+        )->addColumn(
             'description',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
             '64k',
