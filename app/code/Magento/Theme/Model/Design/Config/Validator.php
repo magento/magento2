@@ -86,22 +86,26 @@ class Validator
     }
 
     /**
-     * @param $designConfig
-     * @return mixed
+     * Returns store identifier if is store scope
+     *
+     * @param DesignConfigInterface $designConfig
+     * @return string|bool
      */
-    private function getScopeId($designConfig)
+    private function getScopeId(DesignConfigInterface $designConfig)
     {
         if ($designConfig->getScope() == 'stores') {
             return $designConfig->getScopeId();
         }
         return false;
     }
-
     /**
-     * @param $designConfig
-     * @return mixed
+     * Load template text in configured scope
+     *
+     * @param integer|string $templateId
+     * @param DesignConfigInterface $designConfig
+     * @return string
      */
-    private function getTemplateText($templateId, $designConfig)
+    private function getTemplateText($templateId, DesignConfigInterface $designConfig)
     {
         // Load template object by configured template id
         $template = $this->templateFactory->create();

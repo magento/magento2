@@ -8,9 +8,9 @@ namespace Magento\Swagger\Block;
 use Magento\Framework\View\Element\Template;
 
 /**
- * Class Index
+ * Block for swagger index page
  *
- * @package Magento\Swagger\Block
+ * @api
  */
 class Index extends Template
 {
