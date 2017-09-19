@@ -33,6 +33,38 @@ class ShipOrderTest extends \Magento\TestFramework\TestCase\WebapiAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/Sales/_files/order_configurable_product.php
+     */
+    public function testConfigurableShipOrder()
+    {
+        /** @var \Magento\Sales\Model\Order $existingOrder */
+        $existingOrder = $this->objectManager->create(\Magento\Sales\Model\Order::class)
+            ->loadByIncrementId('100000001');
+
+        $shipmentId = $this->sendOrderShipRequest($existingOrder);
+
+        try {
+            $shipment = $this->shipmentRepository->get($shipmentId);
+        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+            $this->fail('Failed asserting that Shipment was created');
+        }
+
+        $orderedQty = 0;
+        foreach ($existingOrder->getItems() as $item) {
+            if ($item->isDummy()) {
+                continue;
+            }
+            $orderedQty += $item->getQtyOrdered();
+        }
+
+        $this->assertEquals(
+            (int)$shipment->getTotalQty(),
+            (int)$orderedQty,
+            'Failed asserting that quantity of ordered and shipped items are equal'
+        );
+    }
+
+    /**
      * @magentoApiDataFixture Magento/Sales/_files/order_new.php
      */
     public function testShipOrder()
@@ -41,6 +73,33 @@ class ShipOrderTest extends \Magento\TestFramework\TestCase\WebapiAbstract
         $existingOrder = $this->objectManager->create(\Magento\Sales\Model\Order::class)
             ->loadByIncrementId('100000001');
 
+        $shipmentId = $this->sendOrderShipRequest($existingOrder);
+
+        try {
+            $this->shipmentRepository->get($shipmentId);
+        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+            $this->fail('Failed asserting that Shipment was created');
+        }
+
+        /** @var \Magento\Sales\Model\Order $updatedOrder */
+        $updatedOrder = $this->objectManager->create(\Magento\Sales\Model\Order::class)
+            ->loadByIncrementId('100000001');
+
+        $this->assertNotEquals(
+            $existingOrder->getStatus(),
+            $updatedOrder->getStatus(),
+            'Failed asserting that Order status was changed'
+        );
+    }
+
+    /**
+     * Sends API request for creation shipment by order.
+     *
+     * @param \Magento\Sales\Model\Order $existingOrder
+     * @return int
+     */
+    private function sendOrderShipRequest(\Magento\Sales\Model\Order $existingOrder)
+    {
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/order/' . $existingOrder->getId() . '/ship',
@@ -73,28 +132,13 @@ class ShipOrderTest extends \Magento\TestFramework\TestCase\WebapiAbstract
         foreach ($existingOrder->getAllItems() as $item) {
             $requestData['items'][] = [
                 'order_item_id' => $item->getItemId(),
-                'qty' => $item->getQtyOrdered(),
+                'qty'           => $item->getQtyOrdered(),
             ];
         }
 
-        $result = $this->_webApiCall($serviceInfo, $requestData);
+        $shipmentId = (int)$this->_webApiCall($serviceInfo, $requestData);
+        $this->assertNotEmpty($shipmentId);
 
-        $this->assertNotEmpty($result);
-
-        try {
-            $this->shipmentRepository->get($result);
-        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-            $this->fail('Failed asserting that Shipment was created');
-        }
-
-        /** @var \Magento\Sales\Model\Order $updatedOrder */
-        $updatedOrder = $this->objectManager->create(\Magento\Sales\Model\Order::class)
-            ->loadByIncrementId('100000001');
-
-        $this->assertNotEquals(
-            $existingOrder->getStatus(),
-            $updatedOrder->getStatus(),
-            'Failed asserting that Order status was changed'
-        );
+        return $shipmentId;
     }
 }

@@ -22,6 +22,9 @@ class OrderRegistrarTest extends \PHPUnit_Framework_TestCase
      */
     private $shipmentMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->orderMock = $this->getMockBuilder(\Magento\Sales\Api\Data\OrderInterface::class)
@@ -34,26 +37,19 @@ class OrderRegistrarTest extends \PHPUnit_Framework_TestCase
         $this->model = new \Magento\Sales\Model\Order\Shipment\OrderRegistrar();
     }
 
-    public function testRegister()
+    /**
+     * @dataProvider itemQuantities
+     */
+    public function testRegister($quantity, $reqisterCallsCount, $isDeletedCallsCount)
     {
-        $item1 = $this->getShipmentItemMock();
-        $item1->expects($this->once())
-            ->method('getQty')
-            ->willReturn(0);
-        $item1->expects($this->never())
-            ->method('register');
+        $item = $this->getShipmentItemMock();
 
-        $item2 = $this->getShipmentItemMock();
-        $item2->expects($this->once())
-            ->method('getQty')
-            ->willReturn(0.5);
-        $item2->expects($this->once())
-            ->method('register');
+        $item->expects($this->once())->method('getQty')->willReturn($quantity);
+        $item->expects($this->exactly($reqisterCallsCount))->method('register');
+        $item->expects($this->exactly($isDeletedCallsCount))->method('isDeleted');
 
-        $items = [$item1, $item2];
-        $this->shipmentMock->expects($this->once())
-            ->method('getItems')
-            ->willReturn($items);
+        $items = [$item];
+        $this->shipmentMock->expects($this->once())->method('getItems')->willReturn($items);
         $this->assertEquals(
             $this->orderMock,
             $this->model->register($this->orderMock, $this->shipmentMock)
@@ -67,7 +63,31 @@ class OrderRegistrarTest extends \PHPUnit_Framework_TestCase
     {
         return $this->getMockBuilder(\Magento\Sales\Api\Data\ShipmentItemInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['register'])
+            ->setMethods(['register', 'isDeleted'])
             ->getMockForAbstractClass();
+    }
+
+    /**
+     * @return array
+     */
+    public function itemQuantities()
+    {
+        return [
+            [
+                'quantity' => 0,
+                'reqisterCallsCount' => 0,
+                'isDeletedCallsCount' => 1,
+            ],
+            [
+                'quantity' => 0.5,
+                'reqisterCallsCount' => 1,
+                'isDeletedCallsCount' => 0,
+            ],
+            [
+                'quantity' => 1,
+                'reqisterCallsCount' => 1,
+                'isDeletedCallsCount' => 0,
+            ],
+        ];
     }
 }
