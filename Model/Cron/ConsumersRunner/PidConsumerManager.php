@@ -91,7 +91,7 @@ class PidConsumerManager
     private function checkIsProcessExists($pid)
     {
         if (!function_exists('exec')) {
-            throw new \RuntimeException('Function exec does not available');
+            throw new \RuntimeException('Function exec is not available');
         }
 
         exec(escapeshellcmd('ps -p ' . $pid), $output, $code);
