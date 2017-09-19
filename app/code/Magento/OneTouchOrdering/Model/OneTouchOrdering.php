@@ -31,6 +31,10 @@ class OneTouchOrdering
      * @var CustomerBrainTreeManager
      */
     private $customerBrainTreeManager;
+    /**
+     * @var Customer
+     */
+    private $customer;
 
     /**
      * OneTouchOrdering constructor.
@@ -58,10 +62,10 @@ class OneTouchOrdering
     /**
      * @return bool
      */
-    public function isOneTouchOrderingAvailable(): bool
+    public function isAvailableForCustomer($customer): bool
     {
-        return $this->isCustomerLoggedIn()
-            && $this->isOneTouchButtonEnabled()
+        $this->customer = $customer;
+        return $this->isOneTouchButtonEnabled()
             && $this->isBrainTreeAvailable()
             && $this->customerHasDefaultAddresses()
             && $this->isAnyShippingMethodAvailable()
@@ -80,14 +84,6 @@ class OneTouchOrdering
     /**
      * @return bool
      */
-    private function isCustomerLoggedIn(): bool
-    {
-        return $this->customerSession->isLoggedIn();
-    }
-
-    /**
-     * @return bool
-     */
     private function isOneTouchButtonEnabled(): bool
     {
         return $this->oneTouchHelper->isModuleEnabled();
@@ -98,7 +94,7 @@ class OneTouchOrdering
      */
     private function customerHasBrainTreeCreditCard(): bool
     {
-        $customerId = $this->customerSession->getCustomerId();
+        $customerId = $this->getCustomer()->getId();
         $ccTokens = $this->customerBrainTreeManager->getVisibleAvailableTokens($customerId);
 
         return !empty($ccTokens);
@@ -126,6 +122,6 @@ class OneTouchOrdering
      */
     private function getCustomer(): Customer
     {
-        return $this->customerSession->getCustomer();
+        return $this->customer;
     }
 }

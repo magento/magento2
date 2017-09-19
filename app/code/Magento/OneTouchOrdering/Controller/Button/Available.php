@@ -9,6 +9,7 @@ use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\OneTouchOrdering\Model\OneTouchOrdering;
+use Magento\Customer\Model\Session;
 
 class Available extends Action
 {
@@ -16,6 +17,10 @@ class Available extends Action
      * @var OneTouchOrdering
      */
     private $oneTouchOrdering;
+    /**
+     * @var Session
+     */
+    private $customerSession;
 
     /**
      * Available constructor.
@@ -24,18 +29,25 @@ class Available extends Action
      */
     public function __construct(
         Context $context,
-        OneTouchOrdering $oneTouchOrdering
+        OneTouchOrdering $oneTouchOrdering,
+        Session $customerSession
     ) {
         parent::__construct($context);
         $this->oneTouchOrdering = $oneTouchOrdering;
+        $this->customerSession = $customerSession;
     }
 
     public function execute()
     {
+        $available = false;
+
         /** @var \Magento\Framework\Controller\Result\Json $result */
         $result = $this->resultFactory->create(ResultFactory::TYPE_JSON);
+        if ($this->customerSession->isLoggedIn()) {
+            $available = $this->oneTouchOrdering->isAvailableForCustomer($this->customerSession->getCustomer());
+        }
         $result->setData([
-            'available' => $this->oneTouchOrdering->isOneTouchOrderingAvailable()
+            'available' => $available
         ]);
 
         return $result;
