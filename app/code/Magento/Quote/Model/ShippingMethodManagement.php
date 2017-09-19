@@ -73,6 +73,8 @@ class ShippingMethodManagement implements
      * @param Cart\ShippingMethodConverter $converter
      * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
      * @param Quote\TotalsCollector $totalsCollector
+     * @param DataObjectProcessor|null $dataProcessor
+     * @param AddressInterfaceFactory|null $addressFactory
      */
     public function __construct(
         \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
