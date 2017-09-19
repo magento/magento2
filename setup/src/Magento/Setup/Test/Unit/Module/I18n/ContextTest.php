@@ -130,7 +130,6 @@ class ContextTest extends \PHPUnit_Framework_TestCase
                 [Context::CONTEXT_TYPE_THEME, 'frontend/Magento/luma'],
                 [[ComponentRegistrar::THEME, 'frontend/Magento/luma', BP . '/app/design/frontend/Magento/luma']],
             ],
-
             [
                 null,
                 [Context::CONTEXT_TYPE_MODULE, 'Unregistered_Module'],
