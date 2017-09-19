@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -60,6 +60,7 @@ class WebsiteCategoryProvider
      *
      * @param int $productIndex Index of generated product
      * @return array
+     * @throws \Exception
      */
     public function getWebsiteIds($productIndex)
     {
@@ -67,6 +68,9 @@ class WebsiteCategoryProvider
             return $this->getAllWebsites();
         } else {
             $categoriesPerWebsite = $this->getCategoriesAndWebsites();
+            if (!count($categoriesPerWebsite)) {
+                throw new \Exception('Cannot find categories. Please, be sure that you have generated categories');
+            }
             return [$categoriesPerWebsite[$productIndex % count($categoriesPerWebsite)]['website']];
         }
     }

@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -15,7 +15,7 @@
                 </item>
             </field>
         </dataset>
-        
+
         <dataset name="partial_capture">
             <field name="0" xsi:type="array">
                 <item name="items_data" xsi:type="array">
@@ -60,12 +60,6 @@
                 <item name="form_data" xsi:type="array">
                     <item name="do_shipment" xsi:type="string">No</item>
                     <item name="comment_text" xsi:type="string">Partial Invoice with changed qty = 0</item>
-                </item>
-            </field>
-            <field name="1" xsi:type="array">
-                <item name="form_data" xsi:type="array">
-                    <item name="do_shipment" xsi:type="string">No</item>
-                    <item name="comment_text" xsi:type="string">Partial Invoice to the rest of order items</item>
                 </item>
             </field>
         </dataset>

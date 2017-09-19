@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model;
@@ -60,6 +60,11 @@ abstract class AbstractConfig implements ConfigInterface
      * @var string
      */
     private static $bnCode = 'Magento_Cart_%s';
+
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    protected $_scopeConfig;
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -335,14 +340,15 @@ abstract class AbstractConfig implements ConfigInterface
      */
     public function getBuildNotationCode()
     {
-        return sprintf(self::$bnCode, $this->getProductMetadata()->getEdition());
+        $notationCode = $this->_scopeConfig->getValue('paypal/notation_code', ScopeInterface::SCOPE_STORES);
+        return $notationCode ?: sprintf(self::$bnCode, $this->getProductMetadata()->getEdition());
     }
 
     /**
      * The getter function to get the ProductMetadata
      *
      * @return ProductMetadataInterface
-     * @deprecated
+     * @deprecated 100.1.0
      */
     protected function getProductMetadata()
     {

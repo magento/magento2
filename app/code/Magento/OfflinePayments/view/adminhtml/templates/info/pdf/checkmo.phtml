@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,18 +9,18 @@
  * @var $block \Magento\OfflinePayments\Block\Info\Checkmo
  */
 ?>
-<?php echo $block->escapeHtml($block->getMethod()->getTitle()) ?>
+<?= $block->escapeHtml($block->getMethod()->getTitle()) ?>
     {{pdf_row_separator}}
 <?php if ($block->getInfo()->getAdditionalInformation()): ?>
     {{pdf_row_separator}}
     <?php if ($block->getPayableTo()): ?>
-        <?php echo $block->escapeHtml(__('Make Check payable to: %1', $block->getPayableTo())) ?>
+        <?= $block->escapeHtml(__('Make Check payable to: %1', $block->getPayableTo())) ?>
         {{pdf_row_separator}}
     <?php endif; ?>
     <?php if ($block->getMailingAddress()): ?>
-        <?php echo $block->escapeHtml(__('Send Check to:')) ?>
+        <?= $block->escapeHtml(__('Send Check to:')) ?>
         {{pdf_row_separator}}
-        <?php /* @noEscape */ echo nl2br($block->escapeHtml($block->getMailingAddress())) ?>
+        <?= /* @noEscape */ nl2br($block->escapeHtml($block->getMailingAddress())) ?>
         {{pdf_row_separator}}
     <?php endif; ?>
 <?php endif; ?>

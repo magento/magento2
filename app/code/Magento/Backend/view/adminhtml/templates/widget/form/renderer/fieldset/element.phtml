@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -28,18 +28,18 @@ $fieldAttributes = $fieldId . ' class="' . $fieldClass . '" '
 
 <?php if (!$element->getNoDisplay()): ?>
     <?php if ($element->getType() == 'hidden'): ?>
-        <?php echo $element->getElementHtml() ?>
+        <?= $element->getElementHtml() ?>
     <?php else: ?>
-    <div<?php /* @escapeNotVerified */ echo $fieldAttributes ?>>
+    <div<?= /* @escapeNotVerified */ $fieldAttributes ?>>
         <?php if ($elementBeforeLabel): ?>
-            <?php echo $element->getElementHtml() ?>
-            <?php echo $element->getLabelHtml('', $element->getScopeLabel()) ?>
-            <?php /* @escapeNotVerified */ echo $note ?>
+            <?= $element->getElementHtml() ?>
+            <?= $element->getLabelHtml('', $element->getScopeLabel()) ?>
+            <?= /* @escapeNotVerified */ $note ?>
         <?php else: ?>
-            <?php echo $element->getLabelHtml('', $element->getScopeLabel()) ?>
+            <?= $element->getLabelHtml('', $element->getScopeLabel()) ?>
             <div class="admin__field-control control">
-                <?php /* @escapeNotVerified */ echo($addOn) ? '<div class="admin__field">' . $element->getElementHtml() . '</div>' : $element->getElementHtml(); ?>
-                <?php /* @escapeNotVerified */ echo $note ?>
+                <?= /* @escapeNotVerified */ ($addOn) ? '<div class="admin__field">' . $element->getElementHtml() . '</div>' : $element->getElementHtml() ?>
+                <?= /* @escapeNotVerified */ $note ?>
             </div>
         <?php endif; ?>
     </div>

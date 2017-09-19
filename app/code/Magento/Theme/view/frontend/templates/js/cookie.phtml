@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 ?>
@@ -17,10 +17,10 @@
         "*": {
             "mage/cookies": {
                 "expires": null,
-                "path": "<?php /* @escapeNotVerified */ echo $block->getPath()?>",
-                "domain": "<?php /* @escapeNotVerified */ echo $block->getDomain()?>",
+                "path": "<?= /* @escapeNotVerified */ $block->getPath() ?>",
+                "domain": "<?= /* @escapeNotVerified */ $block->getDomain() ?>",
                 "secure": false,
-                "lifetime": "<?php /* @escapeNotVerified */ echo $block->getLifetime()?>"
+                "lifetime": "<?= /* @escapeNotVerified */ $block->getLifetime() ?>"
             }
         }
     }

@@ -2,18 +2,24 @@
     "host": "http://localhost:<%= port %>",
     "port": 8000,
     "root": "dev/tests/js/jasmine",
+    "static": "pub/static",
 
     /**
      * Path to themes configuration module. Relative to Magento root.
      * This node is replaced by formatted theme configuration by 'dev/tests/jasmine/spec_runner' module
      */
     "themes": "dev/tools/grunt/configs/themes",
-    
+
     "files": {
+        "requireBaseUrl": "<%= static %>/<%= area %>/<%= name %>/<%= locale %>",
+        "compactMap" : "<%= static %>/<%= area %>/<%= name %>/<%= locale %>/requirejs-map.js",
         /**
          * Path to RequireJS library. Relative to "server.base" config.
          */
-        "requireJs": "requirejs/require.js",
+        "requireJs": {
+            "quick": "<%= static %>/<%= area %>/<%= name %>/<%= locale %>/requirejs/require.js",
+            "compact": "<%= static %>/base/Magento/base/default/requirejs/require.js"
+        },
 
         /**
          * Overridden "grunt-contrib-jasmine" SpecRunner template.
@@ -23,14 +29,26 @@
         /**
          * These files are included to the page in <head> right after "require.js" in declared sequence.
          */
-        "requirejsConfigs": [
-            "pub/static/_requirejs/<%= area %>/<%= name %>/<%= locale %>/requirejs-config.js",
-            "<%= root %>/require.conf.js",
-            "<%= root %>/tests/lib/**/*.conf.js",
-            "<%= root %>/tests/app/code/**/base/**/*.conf.js",
-            "<%= root %>/tests/app/code/**/<%= area %>/**/*.conf.js",
-            "<%= root %>/tests/app/design/<%= area %>/<%= name %>/**/*.conf.js"
-        ],
+        "requirejsConfigs": {
+            "quick": [
+                "<%= static %>/<%= area %>/<%= name %>/<%= locale %>/requirejs-config.js",
+                "<%= root %>/require.conf.js",
+                "<%= root %>/tests/lib/**/*.conf.js",
+                "<%= root %>/tests/app/code/**/base/**/*.conf.js",
+                "<%= root %>/tests/app/code/**/<%= area %>/**/*.conf.js",
+                "<%= root %>/tests/app/design/<%= area %>/<%= name %>/**/*.conf.js"
+            ],
+            "compact": [
+                "<%= static %>/<%= area %>/<%= name %>/<%= locale %>/requirejs-map.js",
+                "<%= static %>/base/Magento/base/default/mage/requirejs/baseUrlResolver.js",
+                "<%= static %>/<%= area %>/<%= name %>/<%= locale %>/requirejs-config.js",
+                "<%= root %>/require.conf.js",
+                "<%= root %>/tests/lib/**/*.conf.js",
+                "<%= root %>/tests/app/code/**/base/**/*.conf.js",
+                "<%= root %>/tests/app/code/**/<%= area %>/**/*.conf.js",
+                "<%= root %>/tests/app/design/<%= area %>/<%= name %>/**/*.conf.js"
+            ]
+        },
 
         /**
          * Files that contain tests. These are loaded to the page via RequireJS after all RequireJS configuration files have been loaded to the page.
@@ -47,7 +65,7 @@
         /**
          * Directory to serve files from
          */
-        "base": "pub/static/<%= area %>/<%= name %>/<%= locale %>",
+        "base": "./",
 
         /**
          * Strings, mentioned here are interpreted as regular expressions. Use this option to override server's

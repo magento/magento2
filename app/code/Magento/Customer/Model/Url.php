@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model;
@@ -237,7 +237,7 @@ class Url
      */
     public function getEmailConfirmationUrl($email = null)
     {
-        return $this->urlBuilder->getUrl('customer/account/confirmation', ['email' => $email]);
+        return $this->urlBuilder->getUrl('customer/account/confirmation', ['_query' => ['email' => $email]]);
     }
 
     /**

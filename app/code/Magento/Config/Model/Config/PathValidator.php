@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Model\Config;
@@ -9,6 +9,8 @@ use Magento\Framework\Exception\ValidatorException;
 
 /**
  * Validates the config path by config structure schema.
+ * @api
+ * @since 100.2.0
  */
 class PathValidator
 {
@@ -33,6 +35,7 @@ class PathValidator
      * @param string $path The config path
      * @return true The result of validation
      * @throws ValidatorException If provided path is not valid
+     * @since 100.2.0
      */
     public function validate($path)
     {

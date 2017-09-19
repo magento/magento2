@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Block\Account;
@@ -21,6 +21,13 @@ class AddressesAdditional extends Block
      * @var string
      */
     protected $addressSelector = '//li[address[contains(.,"%s")]]';
+
+    /**
+     * Selector for addresses block
+     *
+     * @var string
+     */
+    protected $addressesSelector = '//li[address]';
 
     /**
      * Selector for delete link
@@ -57,6 +64,26 @@ class AddressesAdditional extends Block
         /** @var \Magento\Ui\Test\Block\Adminhtml\Modal $modal */
         $modal = $this->blockFactory->create(\Magento\Ui\Test\Block\Adminhtml\Modal::class, ['element' => $element]);
         $modal->acceptAlert();
+    }
+
+    /**
+     * Check if additional address exists.
+     *
+     * @param string $address
+     * @return boolean
+     */
+    public function isAdditionalAddressExists($address)
+    {
+        $additionalAddressExists = false;
+
+        $addresses = $this->_rootElement->getElements($this->addressesSelector, Locator::SELECTOR_XPATH);
+        foreach ($addresses as $addressBlock) {
+            if (strpos($addressBlock->getText(), $address) === 0) {
+                $additionalAddressExists = $addressBlock->isVisible();
+                break;
+            }
+        }
+        return $additionalAddressExists;
     }
 
     /**

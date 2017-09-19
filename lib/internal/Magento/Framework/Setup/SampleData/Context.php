@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Setup\SampleData;
@@ -8,7 +8,15 @@ namespace Magento\Framework\Setup\SampleData;
 use \Magento\Framework\File\Csv;
 
 /**
- * Class Context
+ * Constructor modification point for Magento\Framework\Setup\SampleData.
+ *
+ * All context classes were introduced to allow for backwards compatible constructor modifications
+ * of classes that were supposed to be extended by extension developers.
+ *
+ * Do not call methods of this class directly.
+ *
+ * As Magento moves from inheritance-based APIs all such classes will be deprecated together with
+ * the classes they were introduced for.
  */
 class Context
 {

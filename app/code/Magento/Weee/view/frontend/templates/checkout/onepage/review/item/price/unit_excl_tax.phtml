@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,27 +11,27 @@
 $_item = $block->getItem();
 ?>
 <?php if ($block->displayPriceWithWeeeDetails()): ?>
-    <span class="cart-tax-total" data-mage-init='{"taxToggle": {"itemTaxId" : "#eunit-item-tax-details<?php /* @escapeNotVerified */ echo $_item->getId(); ?>"}}'>
+    <span class="cart-tax-total" data-mage-init='{"taxToggle": {"itemTaxId" : "#eunit-item-tax-details<?= /* @escapeNotVerified */ $_item->getId() ?>"}}'>
 <?php else: ?>
     <span class="cart-price">
 <?php endif; ?>
 
-<?php /* @escapeNotVerified */ echo $block->formatPrice($block->getUnitDisplayPriceExclTax()); ?>
+<?= /* @escapeNotVerified */ $block->formatPrice($block->getUnitDisplayPriceExclTax()) ?>
     </span>
 
 <?php if ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item)): ?>
-    <span class="cart-tax-info" id="eunit-item-tax-details<?php /* @escapeNotVerified */ echo $_item->getId(); ?>" style="display:none;">
+    <span class="cart-tax-info" id="eunit-item-tax-details<?= /* @escapeNotVerified */ $_item->getId() ?>" style="display:none;">
     <?php if ($block->displayPriceWithWeeeDetails()): ?>
         <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item) as $tax): ?>
-            <span class="weee" data-label="<?php /* @escapeNotVerified */ echo $tax['title']; ?>"><?php /* @escapeNotVerified */ echo $block->formatPrice($tax['amount'], true, true); ?></span>
+            <span class="weee" data-label="<?= /* @escapeNotVerified */ $tax['title'] ?>"><?= /* @escapeNotVerified */ $block->formatPrice($tax['amount'], true, true) ?></span>
         <?php endforeach; ?>
     <?php endif; ?>
     </span>
 
     <?php if ($block->displayFinalPrice()): ?>
-        <span class="cart-tax-total" data-mage-init='{"taxToggle": {"itemTaxId" : "#eunit-item-tax-details<?php /* @escapeNotVerified */ echo $_item->getId(); ?>"}}'>
-            <span class="weee" data-label="<?php /* @escapeNotVerified */ echo __('Total'); ?>">
-                <?php /* @escapeNotVerified */ echo $block->formatPrice($block->getFinalUnitDisplayPriceExclTax()); ?>
+        <span class="cart-tax-total" data-mage-init='{"taxToggle": {"itemTaxId" : "#eunit-item-tax-details<?= /* @escapeNotVerified */ $_item->getId() ?>"}}'>
+            <span class="weee" data-label="<?= /* @escapeNotVerified */ __('Total') ?>">
+                <?= /* @escapeNotVerified */ $block->formatPrice($block->getFinalUnitDisplayPriceExclTax()) ?>
             </span>
         </span>
     <?php endif; ?>

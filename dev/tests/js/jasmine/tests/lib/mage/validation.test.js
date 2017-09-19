@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -161,6 +161,26 @@ define([
             expect($.validator.methods.mobileUK.call(
                 $.validator.prototype, element.val(), element.get(0)
             )).toBeFalsy();
+        });
+    });
+
+    describe('Validation of the password against the user name', function () {
+        it('rejects data, if password is the same as user name', function () {
+            var password = $('<input id="password" type="password" value="EmailPasswordTheSame" />'),
+                email = $('<input id="email" type="email" value="EmailPasswordTheSame" />');
+
+            expect($.validator.methods['password-not-equal-to-user-name'].call(
+                $.validator.prototype, password.val(), null, email.val()
+            )).toEqual(false);
+        });
+
+        it('approves data, if password is different from user name', function () {
+            var password = $('<input id="password" type="password" value="SomePassword" />'),
+                email = $('<input id="email" type="email" value="SomeEmail" />');
+
+            expect($.validator.methods['password-not-equal-to-user-name'].call(
+                $.validator.prototype, password.val(), null, email.val()
+            )).toEqual(true);
         });
     });
 });

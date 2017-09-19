@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -270,7 +270,12 @@ class Bundle extends Block
         $count = $firstOption;
         $selectOption = $element->find(sprintf($this->option, $count), Locator::SELECTOR_XPATH);
         while ($selectOption->isVisible()) {
-            $listOptions[] = $this->parseOptionText($selectOption->getText());
+            $option = $this->parseOptionText($selectOption->getText());
+            $selected = $selectOption->getAttribute('selected');
+            if ($selected) {
+                $option['selected'] = $selected;
+            }
+            $listOptions[] = $option;
             ++$count;
             $selectOption = $element->find(sprintf($this->option, $count), Locator::SELECTOR_XPATH);
         }

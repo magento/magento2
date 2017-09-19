@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -384,7 +384,7 @@ class SimpleProductsFixture extends Fixture
     {
         /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection $sets */
         $sets = $this->attributeSetCollectionFactory->create();
-        $sets->addFieldToFilter('attribute_set_name', ['like' => AttributeSetsFixture::PRODUCT_SET_NAME .'%']);
+        $sets->addFieldToFilter('attribute_set_name', ['like' => AttributeSetsFixture::PRODUCT_SET_NAME . '%']);
 
         return $sets->getData();
     }

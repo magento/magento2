@@ -1,46 +1,44 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Setup\Model;
 
-use Magento\Framework\App\DeploymentConfig\Writer;
+use Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
 use Magento\Framework\App\DeploymentConfig\Reader;
+use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\App\ResourceConnection\Config;
+use Magento\Framework\App\State\CleanupFiles;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Config\Data\ConfigData;
-use Magento\Framework\Filesystem;
+use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Filesystem;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Module\ModuleList\Loader as ModuleLoader;
 use Magento\Framework\Module\ModuleListInterface;
-use Magento\Framework\Shell;
+use Magento\Framework\Setup\FilePermissions;
+use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\LoggerInterface;
-use Magento\Framework\Setup\UpgradeSchemaInterface;
-use Magento\Framework\Setup\InstallDataInterface;
-use Magento\Framework\Setup\UpgradeDataInterface;
-use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\Setup\SchemaSetupInterface;
+use Magento\Framework\Setup\UpgradeDataInterface;
+use Magento\Framework\Setup\UpgradeSchemaInterface;
+use Magento\Setup\Console\Command\InstallCommand;
 use Magento\Setup\Controller\ResponseTypeInterface;
 use Magento\Setup\Model\ConfigModel as SetupConfigModel;
-use Magento\Setup\Module\DataSetupFactory;
-use Magento\Setup\Module\SetupFactory;
-use Magento\Store\Model\Store;
 use Magento\Setup\Module\ConnectionFactory;
+use Magento\Setup\Module\DataSetupFactory;
 use Magento\Setup\Module\Setup;
-use Magento\Framework\Config\File\ConfigFilePool;
-use Magento\Framework\App\State\CleanupFiles;
-use Magento\Setup\Console\Command\InstallCommand;
+use Magento\Setup\Module\SetupFactory;
 use Magento\Setup\Validator\DbValidator;
-use \Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
-use Magento\SampleData;
-use Magento\Framework\Setup\FilePermissions;
+use Magento\Store\Model\Store;
 
 /**
  * Class Installer contains the logic to install Magento application.
@@ -386,7 +384,7 @@ class Installer
         $all = array_keys($this->moduleLoader->load());
         $deploymentConfig = $this->deploymentConfigReader->load();
         $currentModules = isset($deploymentConfig[ConfigOptionsListConstants::KEY_MODULES])
-            ? $deploymentConfig[ConfigOptionsListConstants::KEY_MODULES] : [] ;
+            ? $deploymentConfig[ConfigOptionsListConstants::KEY_MODULES] : [];
         $enable = $this->readListOfModules($all, $request, self::ENABLE_MODULES);
         $disable = $this->readListOfModules($all, $request, self::DISABLE_MODULES);
         $result = [];
@@ -460,11 +458,9 @@ class Installer
      */
     public function checkInstallationFilePermissions()
     {
-        $results = $this->filePermissions->getMissingWritablePathsForInstallation();
-        if ($results) {
-            $errorMsg = "Missing write permissions to the following paths:" . PHP_EOL . implode(PHP_EOL, $results);
-            throw new \Exception($errorMsg);
-        }
+        $this->throwExceptionForNotWritablePaths(
+            $this->filePermissions->getMissingWritablePathsForInstallation()
+        );
     }
 
     /**
@@ -790,9 +786,37 @@ class Installer
         $this->assertDbConfigExists();
         $this->assertDbAccessible();
         $setup = $this->dataSetupFactory->create();
-        $this->checkInstallationFilePermissions();
+        $this->checkFilePermissionsForDbUpgrade();
         $this->log->log('Data install/update:');
         $this->handleDBSchemaData($setup, 'data');
+    }
+
+    /**
+     * Check permissions of directories that are expected to be writable for database upgrade
+     *
+     * @return void
+     * @throws \Exception If some of the required directories isn't writable
+     */
+    public function checkFilePermissionsForDbUpgrade()
+    {
+        $this->throwExceptionForNotWritablePaths(
+            $this->filePermissions->getMissingWritableDirectoriesForDbUpgrade()
+        );
+    }
+
+    /**
+     * Throws exception with appropriate message if given not empty array of paths that requires writing permission
+     *
+     * @param array $paths List of not writable paths
+     * @return void
+     * @throws \Exception If given not empty array of not writable paths
+     */
+    private function throwExceptionForNotWritablePaths(array $paths)
+    {
+        if ($paths) {
+            $errorMsg = "Missing write permissions to the following paths:" . PHP_EOL . implode(PHP_EOL, $paths);
+            throw new \Exception($errorMsg);
+        }
     }
 
     /**
@@ -987,7 +1011,7 @@ class Installer
     {
         $this->assertDbConfigExists();
         $setup = $this->setupFactory->create($this->context->getResources());
-        $adminAccount = $this->adminAccountFactory->create($setup, (array)$data);
+        $adminAccount = $this->adminAccountFactory->create($setup->getConnection(), (array)$data);
         $adminAccount->save();
     }
 
@@ -1033,7 +1057,7 @@ class Installer
                 . 'To fully clean up your uninstallation, you must manually clear your cache.'
             );
         }
-        
+
         $this->cleanupDb();
 
         $this->log->log('File system cleanup:');
@@ -1273,7 +1297,7 @@ class Installer
 
         // unload Magento autoloader because it may be using compiled definition
         foreach (spl_autoload_functions() as $autoloader) {
-            if ($autoloader[0] instanceof \Magento\Framework\Code\Generator\Autoloader) {
+            if (is_array($autoloader) && $autoloader[0] instanceof \Magento\Framework\Code\Generator\Autoloader) {
                 spl_autoload_unregister([$autoloader[0], $autoloader[1]]);
                 break;
             }

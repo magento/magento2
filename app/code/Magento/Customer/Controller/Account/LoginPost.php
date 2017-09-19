@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Account;
@@ -22,10 +22,14 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
  */
 class LoginPost extends \Magento\Customer\Controller\AbstractAccount
 {
-    /** @var AccountManagementInterface */
+    /**
+     * @var \Magento\Customer\Api\AccountManagementInterface
+     */
     protected $customerAccountManagement;
 
-    /** @var Validator */
+    /**
+     * @var \Magento\Framework\Data\Form\FormKey\Validator
+     */
     protected $formKeyValidator;
 
     /**
@@ -81,7 +85,7 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
      * Get scope config
      *
      * @return ScopeConfigInterface
-     * @deprecated
+     * @deprecated 100.0.10
      */
     private function getScopeConfig()
     {
@@ -97,7 +101,7 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
     /**
      * Retrieve cookie manager
      *
-     * @deprecated
+     * @deprecated 100.1.0
      * @return \Magento\Framework\Stdlib\Cookie\PhpCookieManager
      */
     private function getCookieManager()
@@ -113,7 +117,7 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
     /**
      * Retrieve cookie metadata factory
      *
-     * @deprecated
+     * @deprecated 100.1.0
      * @return \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
      */
     private function getCookieMetadataFactory()

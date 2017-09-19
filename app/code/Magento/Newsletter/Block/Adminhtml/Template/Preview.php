@@ -1,14 +1,16 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
- */
-
-/**
- * Newsletter template preview block
  */
 namespace Magento\Newsletter\Block\Adminhtml\Template;
 
+/**
+ * Newsletter template preview block
+ *
+ * @api
+ * @since 100.0.2
+ */
 class Preview extends \Magento\Backend\Block\Widget
 {
     /**

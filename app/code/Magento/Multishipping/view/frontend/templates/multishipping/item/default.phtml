@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,18 +8,18 @@
 
 ?>
 <div class="product details">
-    <strong class="product name"><a href="<?php /* @escapeNotVerified */ echo $block->getProductUrl() ?>"><?php echo $block->escapeHtml($block->getProductName()) ?></a></strong>
+    <strong class="product name"><a href="<?= /* @escapeNotVerified */ $block->getProductUrl() ?>"><?= $block->escapeHtml($block->getProductName()) ?></a></strong>
     <?php if ($_options = $block->getOptionList()): ?>
         <dl class="item options">
             <?php foreach ($_options as $_option) : ?>
                 <?php $_formatedOptionValue = $block->getFormatedOptionValue($_option) ?>
-                <dt><?php echo $block->escapeHtml($_option['label']) ?></dt>
+                <dt><?= $block->escapeHtml($_option['label']) ?></dt>
                 <dd<?php if (isset($_formatedOptionValue['full_view'])): ?> class="tooltip wrapper"<?php endif; ?>>
-                    <?php /* @escapeNotVerified */ echo $_formatedOptionValue['value'] ?>
+                    <?= /* @escapeNotVerified */ $_formatedOptionValue['value'] ?>
                     <?php if (isset($_formatedOptionValue['full_view'])): ?>
                         <dl class="item options tooltip content">
-                            <dt><?php echo $block->escapeHtml($_option['label']) ?></dt>
-                            <dd><?php /* @escapeNotVerified */ echo $_formatedOptionValue['full_view'] ?></dd>
+                            <dt><?= $block->escapeHtml($_option['label']) ?></dt>
+                            <dd><?= /* @escapeNotVerified */ $_formatedOptionValue['full_view'] ?></dd>
                         </dl>
                     <?php endif; ?>
                 </dd>
@@ -27,6 +27,6 @@
         </dl>
     <?php endif; ?>
     <?php if ($addtInfoBlock = $block->getProductAdditionalInformationBlock()): ?>
-        <?php echo $addtInfoBlock->setItem($block->getItem())->toHtml() ?>
+        <?= $addtInfoBlock->setItem($block->getItem())->toHtml() ?>
     <?php endif; ?>
 </div>

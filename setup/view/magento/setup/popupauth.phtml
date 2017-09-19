@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 ?>
@@ -17,7 +17,7 @@
                 <div class="sync-login-wrap">
                     <div class="login-header">
                         <img class="logo-img"
-                             src="<?php echo $this->basePath();?>/pub/images//magento-logo.svg" alt="Magento"/>
+                             src="<?= $this->basePath() ?>/pub/images//magento-logo.svg" alt="Magento"/>
                         <span>Marketplace</span>
                     </div>
                     <div class="messages">
@@ -32,6 +32,7 @@
                     <form
                         name="auth"
                         role="form"
+                        autocomplete="off"
                     >
                         <fieldset class="fieldset">
                             <legend ng-show="errors==false" class="legend">
@@ -62,6 +63,7 @@
                                                || (auth.username.$error.required && user.submitted) }"
                                            autofocus
                                            required
+                                           autocomplete="off"
                                     >
                                     <div class="error-container">
                                         This is a required field.
@@ -83,6 +85,7 @@
                                                && !auth.password.$pristine)
                                                || (auth.password.$error.required && user.submitted) }"
                                            required
+                                           autocomplete="new-password"
                                     >
                                     <div class="error-container">
                                         This is a required field.

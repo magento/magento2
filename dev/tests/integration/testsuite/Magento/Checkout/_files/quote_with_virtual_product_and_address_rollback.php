@@ -2,7 +2,7 @@
 /**
  * Rollback for quote_with_virtual_product_and_address.php fixture.
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /** @var $objectManager \Magento\TestFramework\ObjectManager */

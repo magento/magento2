@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Model\Config;
@@ -12,7 +12,7 @@ use Magento\Paypal\Helper\Backend as BackendHelper;
 use Magento\Config\Model\Config\Structure as ConfigStructure;
 use Magento\Config\Model\Config\Structure\ElementInterface as ElementConfigStructure;
 
-class StructurePluginTest extends \PHPUnit_Framework_TestCase
+class StructurePluginTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ConfigStructurePlugin

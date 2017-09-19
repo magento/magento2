@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ use Magento\Framework\UrlInterface;
 use Magento\Checkout\Model\Cart\CheckoutSummaryConfigProvider;
 use Magento\Store\Model\ScopeInterface;
 
-class CheckoutSummaryConfigProviderTest extends \PHPUnit_Framework_TestCase
+class CheckoutSummaryConfigProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\UrlInterface

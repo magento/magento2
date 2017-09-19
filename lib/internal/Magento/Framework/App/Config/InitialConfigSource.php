@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Config;
@@ -25,7 +25,7 @@ class InitialConfigSource implements ConfigSourceInterface
 
     /**
      * @var string
-     * @deprecated Initial configs can not be separated since 2.2.0 version
+     * @deprecated 100.2.0 Initial configs can not be separated since 2.2.0 version
      */
     private $fileKey;
 

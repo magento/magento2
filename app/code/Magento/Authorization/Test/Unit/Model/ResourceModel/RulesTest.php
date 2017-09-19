@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,7 +14,7 @@ namespace Magento\Authorization\Test\Unit\Model\ResourceModel;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RulesTest extends \PHPUnit_Framework_TestCase
+class RulesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test constants

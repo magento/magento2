@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Test\Unit\Model\Config\Reader\Source\Dynamic;
@@ -11,7 +11,7 @@ use Magento\Framework\DataObject;
 use Magento\Store\Model\Config\Reader\Source\Dynamic\DefaultScope;
 use Magento\Store\Model\ResourceModel\Config\Collection\ScopedFactory;
 
-class DefaultScopeTest extends \PHPUnit_Framework_TestCase
+class DefaultScopeTest extends \PHPUnit\Framework\TestCase
 {
     public function testGet()
     {

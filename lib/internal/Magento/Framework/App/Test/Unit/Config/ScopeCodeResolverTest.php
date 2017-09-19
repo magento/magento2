@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit\Config;
@@ -10,7 +10,7 @@ use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\App\ScopeResolverPool;
 
-class ScopeCodeResolverTest extends \PHPUnit_Framework_TestCase
+class ScopeCodeResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ScopeResolverPool|\PHPUnit_Framework_MockObject_MockObject

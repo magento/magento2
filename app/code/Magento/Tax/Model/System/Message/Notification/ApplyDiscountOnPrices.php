@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Model\System\Message\Notification;
@@ -82,7 +82,8 @@ class ApplyDiscountOnPrices implements \Magento\Tax\Model\System\Message\Notific
 
         if ($this->isDisplayed()) {
             $messageDetails .= '<strong>';
-            $messageDetails .= __('To apply the discount on prices including tax and apply the tax after discount, set Catalog Prices to “Including Tax”. ');
+            $messageDetails .= __('To apply the discount on prices including tax and apply the tax after discount,'
+                . ' set Catalog Prices to “Including Tax”. ');
             $messageDetails .= '</strong><p>';
             $messageDetails .= __('Store(s) affected: ');
             $messageDetails .= implode(', ', $this->getStoresWithWrongSettings());

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,10 +8,10 @@ namespace Magento\Reports\Test\TestCase;
 
 use Magento\Customer\Test\Page\CustomerAccountIndex;
 use Magento\Downloadable\Test\Page\DownloadableCustomerProducts;
-use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Mtf\Client\BrowserInterface;
-use Magento\Mtf\TestCase\Injectable;
 use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\TestCase\Injectable;
+use Magento\Sales\Test\Fixture\OrderInjectable;
 
 /**
  * Preconditions:

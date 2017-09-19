@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Ajax;
@@ -10,7 +10,7 @@ use Magento\Framework\View\Element\Template;
 /**
  * Class Serializer
  * @package Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Ajax
- * @deprecated
+ * @deprecated 101.1.0
  */
 class Serializer extends \Magento\Framework\View\Element\Template
 {
@@ -47,7 +47,7 @@ class Serializer extends \Magento\Framework\View\Element\Template
 
     /**
      * @return string
-     * @deprecated
+     * @deprecated 101.1.0
      */
     public function getProductsJSON()
     {

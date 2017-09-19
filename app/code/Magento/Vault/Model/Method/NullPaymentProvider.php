@@ -1,12 +1,11 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Vault\Model\Method;
 
 use Magento\Framework\DataObject;
-use Magento\Payment\Gateway\Command;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Quote\Api\Data\CartInterface;
@@ -29,7 +28,7 @@ class NullPaymentProvider implements MethodInterface
      *
      * @return string
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     public function getFormBlockType()
     {
@@ -271,7 +270,7 @@ class NullPaymentProvider implements MethodInterface
      *
      * @return string
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     public function getInfoBlockType()
     {
@@ -284,7 +283,7 @@ class NullPaymentProvider implements MethodInterface
      * @return InfoInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     public function getInfoInstance()
     {
@@ -297,7 +296,7 @@ class NullPaymentProvider implements MethodInterface
      * @param InfoInterface $info
      * @return void
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     public function setInfoInstance(InfoInterface $info)
     {
@@ -485,7 +484,7 @@ class NullPaymentProvider implements MethodInterface
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     public function initialize($paymentAction, $stateObject)
     {

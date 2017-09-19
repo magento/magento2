@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity;
@@ -10,7 +10,7 @@ use Magento\Framework\App\Utility\Files;
 /**
  * PAY ATTENTION: Current implementation does not support of virtual types
  */
-class ObserverImplementationTest extends \PHPUnit_Framework_TestCase
+class ObserverImplementationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Observer interface

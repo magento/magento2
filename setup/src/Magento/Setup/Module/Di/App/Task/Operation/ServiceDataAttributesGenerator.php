@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -54,8 +54,8 @@ class ServiceDataAttributesGenerator implements OperationInterface
     public function doOperation()
     {
         $files = $this->configurationScanner->scan('extension_attributes.xml');
-        $repositories = $this->serviceDataAttributesScanner->collectEntities($files);
-        foreach ($repositories as $entityName) {
+        $entities = $this->serviceDataAttributesScanner->collectEntities($files);
+        foreach ($entities as $entityName) {
             class_exists($entityName);
         }
     }

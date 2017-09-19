@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order\Creditmemo;
@@ -10,8 +10,8 @@ use Magento\Sales\Api\Data\CreditmemoCommentInterface;
 use Magento\Sales\Model\AbstractModel;
 
 /**
- * @method \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Comment _getResource()
- * @method \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Comment getResource()
+ * @api
+ * @since 100.0.2
  */
 class Comment extends AbstractModel implements CreditmemoCommentInterface
 {

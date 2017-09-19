@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Model\ResourceModel\Attribute;
@@ -10,7 +10,7 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionProvider;
 use Magento\Framework\EntityManager\EntityMetadataInterface;
 
-class OptionProviderTest extends \PHPUnit_Framework_TestCase
+class OptionProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var OptionProvider

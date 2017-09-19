@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,7 +10,7 @@ use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Webapi\Controller\Rest\ParamOverriderCustomerId;
 
-class ParamOverriderCustomerIdTest extends \PHPUnit_Framework_TestCase
+class ParamOverriderCustomerIdTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ParamOverriderCustomerId

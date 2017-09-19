@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Api;
@@ -8,6 +8,7 @@ namespace Magento\Quote\Api;
 /**
  * Interface CartRepositoryInterface
  * @api
+ * @since 100.0.2
  */
 interface CartRepositoryInterface
 {
@@ -28,10 +29,10 @@ interface CartRepositoryInterface
      * which call to use to get detailed information about all attributes for an object.
      *
      *
-     * @param \Magento\Framework\Api\SearchCriteria $searchCriteria
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\Quote\Api\Data\CartSearchResultsInterface
      */
-    public function getList(\Magento\Framework\Api\SearchCriteria $searchCriteria);
+    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 
     /**
      * Get quote by customer Id

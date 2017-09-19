@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -22,7 +22,9 @@ $rule->setName(
     '1'
 )->setCustomerGroupIds(
     '0'
-)->setDiscountStep(0)
+)->setDiscountStep(
+    0
+)->setSortOrder(1)
     ->save();
 
 /** @var \Magento\SalesRule\Model\Rule $rule */
@@ -43,7 +45,9 @@ $rule->setName(
     '1'
 )->setCustomerGroupIds(
     '0'
-)->setDiscountStep(0)
+)->setDiscountStep(
+    0
+)->setSortOrder(2)
     ->save();
 
 /** @var \Magento\SalesRule\Model\Rule $rule */
@@ -64,7 +68,9 @@ $rule->setName(
     '1'
 )->setCustomerGroupIds(
     '0'
-)->setDiscountStep(0)
+)->setDiscountStep(
+    0
+)->setSortOrder(3)
     ->save();
 
 /** @var \Magento\SalesRule\Model\Rule $rule */
@@ -85,7 +91,9 @@ $rule->setName(
     '1'
 )->setCustomerGroupIds(
     '0'
-)->setDiscountStep(0)
+)->setDiscountStep(
+    0
+)->setSortOrder(4)
     ->save();
 
 /** @var \Magento\SalesRule\Model\Rule $rule */
@@ -106,5 +114,7 @@ $rule->setName(
     '1'
 )->setCustomerGroupIds(
     '0'
-)->setDiscountStep(0)
+)->setDiscountStep(
+    0
+)->setSortOrder(5)
     ->save();

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -265,6 +265,7 @@ class ProductRepositoryTest extends WebapiAbstract
         ];
 
         $response = $this->saveProduct($response);
+
         $currentOptions = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['configurable_product_options'];
 
         $this->assertEquals($options, $currentOptions);

@@ -1,20 +1,15 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-/**
- * Preconfigured widget
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Widget\Model\ResourceModel;
 
 /**
  * Resource model for widget.
  *
- * @deprecated Data from this table was moved to xml(widget.xml).
+ * @deprecated 100.2.0 Data from this table was moved to xml(widget.xml).
  */
 class Widget extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

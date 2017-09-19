@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\Config\Source\Group;
@@ -10,7 +10,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * Class \Magento\Customer\Model\Config\Source\Group\Multiselect
  */
-class MultiselectTest extends \PHPUnit_Framework_TestCase
+class MultiselectTest extends \PHPUnit\Framework\TestCase
 {
     public function testToOptionArray()
     {

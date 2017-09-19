@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\Entity\Attribute\Source;
@@ -8,6 +8,10 @@ namespace Magento\Eav\Model\Entity\Attribute\Source;
 use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 {
     /**
@@ -90,7 +94,7 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      * Get StoreManager dependency
      *
      * @return StoreManagerInterface
-     * @deprecated
+     * @deprecated 100.1.6
      */
     private function getStoreManager()
     {

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -29,6 +29,7 @@ define([
                 recordIndex;
 
             this.parsePagesData(data);
+            this.templates.record.bundleOptionsDataScope = this.dataScope;
 
             if (newData.length) {
                 if (this.insertData().length) {

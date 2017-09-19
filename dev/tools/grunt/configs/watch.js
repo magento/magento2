@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,6 +13,9 @@ var themeOptions = {};
 
 _.each(themes, function(theme, name) {
     themeOptions[name] = {
+        'options': {
+            livereload: true
+        },
         'files': [
             '<%= combo.autopath(\''+name+'\', path.pub) %>/**/*.less'
         ],

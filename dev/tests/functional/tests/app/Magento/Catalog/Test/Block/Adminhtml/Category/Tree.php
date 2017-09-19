@@ -1,17 +1,16 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Category;
 
+use Magento\Backend\Test\Block\Template;
 use Magento\Catalog\Test\Fixture\Category;
 use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Mtf\Fixture\InjectableFixture;
-use Magento\Backend\Test\Block\Template;
 
 /**
  * Categories tree block.
@@ -170,7 +169,7 @@ class Tree extends Block
      */
     public function assignCategory($parentCategoryName, $childCategoryName)
     {
-        $this->_rootElement->find(sprintf($this->categoryInTree, $childCategoryName), Locator::SELECTOR_XPATH)->click();
+        $this->_rootElement->find(sprintf($this->categoryInTree, $childCategoryName), Locator::SELECTOR_XPATH)->hover();
         $this->getTemplateBlock()->waitLoader();
         $targetElement = $this->_rootElement->find(
             sprintf($this->categoryInTree, $parentCategoryName),

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -13,7 +13,7 @@
             </action>
         </referenceBlock>
         <referenceContainer name="content">
-            <block class="Magento\Checkout\Block\Onepage\Failure" name="checkout.failure" template="onepage/failure.phtml"/>
+            <block class="Magento\Checkout\Block\Onepage\Failure" name="checkout.failure" template="Magento_Checkout::onepage/failure.phtml"/>
         </referenceContainer>
     </body>
 </page>

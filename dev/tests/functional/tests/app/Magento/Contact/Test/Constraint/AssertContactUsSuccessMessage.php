@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Contact\Test\Constraint;
 
-use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Contact\Test\Page\ContactIndex;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Assert that success message is present on "Contact Us" page.

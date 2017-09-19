@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Test\Unit\Console\Command;
@@ -16,7 +16,7 @@ use Magento\Store\Api\WebsiteRepositoryInterface;
 /**
  * @package Magento\Store\Test\Unit\Console\Command
  */
-class WebsiteListCommandTest extends \PHPUnit_Framework_TestCase
+class WebsiteListCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var WebsiteListCommand

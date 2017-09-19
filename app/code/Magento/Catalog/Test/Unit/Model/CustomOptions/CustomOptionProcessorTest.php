@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\CustomOptions;
@@ -10,7 +10,7 @@ use Magento\Catalog\Model\CustomOptions\CustomOptionProcessor;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CustomOptionProcessorTest extends \PHPUnit_Framework_TestCase
+class CustomOptionProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\DataObject\Factory|\PHPUnit_Framework_MockObject_MockObject
@@ -41,7 +41,7 @@ class CustomOptionProcessorTest extends \PHPUnit_Framework_TestCase
 
     /** @var \Magento\Quote\Model\Quote\ProductOption|\PHPUnit_Framework_MockObject_MockObject */
     protected $productOption;
-    
+
     /** @var \Magento\Catalog\Model\CustomOptions\CustomOption|\PHPUnit_Framework_MockObject_MockObject */
     protected $customOption;
 

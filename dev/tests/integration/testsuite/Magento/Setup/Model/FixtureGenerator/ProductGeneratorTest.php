@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,7 +15,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * @magentoAppArea adminhtml
  * @magentoDataFixture Magento/Catalog/_files/category.php
  */
-class ProductGeneratorTest extends \PHPUnit_Framework_TestCase
+class ProductGeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ProductGenerator

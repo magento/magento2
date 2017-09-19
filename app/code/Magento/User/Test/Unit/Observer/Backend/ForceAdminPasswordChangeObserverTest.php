@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,7 +10,7 @@ namespace Magento\User\Test\Unit\Observer\Backend;
  * Test class for Magento\User\Observer\Backend\ForceAdminPasswordChangeObserver
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ForceAdminPasswordChangeObserverTest extends \PHPUnit_Framework_TestCase
+class ForceAdminPasswordChangeObserverTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\AuthorizationInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $authMock;

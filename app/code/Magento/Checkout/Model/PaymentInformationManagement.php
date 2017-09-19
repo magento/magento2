@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Model;
@@ -14,7 +14,7 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
 {
     /**
      * @var \Magento\Quote\Api\BillingAddressManagementInterface
-     * @deprecated This call was substituted to eliminate extra quote::save call
+     * @deprecated 100.2.0 This call was substituted to eliminate extra quote::save call
      */
     protected $billingAddressManagement;
 
@@ -139,7 +139,7 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
      * Get logger instance
      *
      * @return \Psr\Log\LoggerInterface
-     * @deprecated
+     * @deprecated 100.2.0
      */
     private function getLogger()
     {
@@ -153,7 +153,7 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
      * Get Cart repository
      *
      * @return \Magento\Quote\Api\CartRepositoryInterface
-     * @deprecated
+     * @deprecated 100.2.0
      */
     private function getCartRepository()
     {

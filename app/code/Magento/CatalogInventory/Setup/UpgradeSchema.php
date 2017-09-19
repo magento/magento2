@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -27,6 +27,11 @@ class UpgradeSchema implements UpgradeSchemaInterface
 
         if (version_compare($context->getVersion(), $this->productCompositeKeyVersion, '<')) {
             $this->upgradeProductCompositeKey($setup);
+        }
+
+        if (version_compare($context->getVersion(), '2.3.0', '<')) {
+            $this->addCatalogInventoryStockStatusIndexOnStockStatus($setup);
+            $this->addReplicaTable($setup, 'cataloginventory_stock_status', 'cataloginventory_stock_status_replica');
         }
 
         $setup->endSetup();
@@ -119,5 +124,44 @@ class UpgradeSchema implements UpgradeSchemaInterface
         }
 
         return $foreignKeys;
+    }
+
+    /**
+     * Creates index for `stock_status` field in `cataloginventory_stock_status` table
+     *
+     * @param SchemaSetupInterface $setup
+     * @return void
+     */
+    private function addCatalogInventoryStockStatusIndexOnStockStatus(SchemaSetupInterface $setup)
+    {
+        $table = $setup->getTable('cataloginventory_stock_status');
+        $indexesList = $setup->getConnection()->getIndexList($table);
+        $indexName = $setup->getIdxName($table, ['stock_status']);
+
+        if (!array_key_exists(strtoupper($indexName), $indexesList)) {
+            $setup->getConnection()->addIndex(
+                $table,
+                $indexName,
+                ['stock_status']
+            );
+        }
+    }
+
+    /**
+     * Add replica table for existing one.
+     *
+     * @param SchemaSetupInterface $setup
+     * @param string $existingTable
+     * @param string $replicaTable
+     * @return void
+     */
+    private function addReplicaTable(SchemaSetupInterface $setup, $existingTable, $replicaTable)
+    {
+        $sql = sprintf(
+            'CREATE TABLE IF NOT EXISTS %s LIKE %s',
+            $setup->getConnection()->quoteIdentifier($setup->getTable($replicaTable)),
+            $setup->getConnection()->quoteIdentifier($setup->getTable($existingTable))
+        );
+        $setup->getConnection()->query($sql);
     }
 }

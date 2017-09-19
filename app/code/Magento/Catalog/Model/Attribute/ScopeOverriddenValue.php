@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -96,7 +96,7 @@ class ScopeOverriddenValue
      * @param \Magento\Catalog\Model\AbstractModel $entity
      * @return array
      *
-     * @deprecated
+     * @deprecated 101.0.0
      */
     public function getDefaultValues($entityType, $entity)
     {

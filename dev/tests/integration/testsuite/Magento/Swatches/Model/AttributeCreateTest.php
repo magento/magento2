@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Swatches\Model;
@@ -13,7 +13,7 @@ use Magento\Eav\Api\Data\AttributeOptionInterfaceFactory;
  * Test save of swatch attribute
  *
  */
-class AttributeCreateTest extends \PHPUnit_Framework_TestCase
+class AttributeCreateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoAppArea adminhtml

@@ -1,15 +1,15 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\CodeMessDetector\Test\Unit\Rule\Design;
 
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase as TestCase;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use PHPUnit_Framework_MockObject_Matcher_InvokedRecorder as InvokedRecorder;
-use PHPUnit_Framework_MockObject_Builder_InvocationMocker as InvocationMocker;
+use PHPUnit\Framework\MockObject_Builder_InvocationMocker as InvocationMocker;
 use Magento\CodeMessDetector\Rule\Design\FinalImplementation;
 use PHPMD\Report;
 use PHPMD\AbstractNode;

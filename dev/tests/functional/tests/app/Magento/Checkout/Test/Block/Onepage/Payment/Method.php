@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -110,6 +110,7 @@ class Method extends Block
      */
     public function inContextPaypalCheckout()
     {
+        $this->waitForElementNotVisible($this->waitElement);
         $this->_rootElement->find($this->placeOrderButton)->click();
         $this->browser->selectWindow();
         $this->waitForFormLoaded();

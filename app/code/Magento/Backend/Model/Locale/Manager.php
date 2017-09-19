@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Model\Locale;
@@ -9,6 +9,8 @@ namespace Magento\Backend\Model\Locale;
  * Locale manager model
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
 class Manager
 {
@@ -26,9 +28,10 @@ class Manager
      * @var \Magento\Framework\TranslateInterface
      */
     protected $_translator;
-    
+
     /**
      * @var \Magento\Backend\App\ConfigInterface
+     * @since 100.1.0
      */
     protected $_backendConfig;
 
@@ -61,11 +64,11 @@ class Manager
     public function switchBackendInterfaceLocale($localeCode)
     {
         $this->_session->setSessionLocale(null);
-        
+
         $this->_authSession->getUser()->setInterfaceLocale($localeCode);
-        
+
         $this->_translator->setLocale($localeCode)->loadData(null, true);
-        
+
         return $this;
     }
 
@@ -73,6 +76,7 @@ class Manager
      * Get general interface locale
      *
      * @return string
+     * @since 100.1.0
      */
     public function getGeneralLocale()
     {
@@ -88,13 +92,13 @@ class Manager
     {
         $userData = $this->_authSession->getUser();
         $interfaceLocale = \Magento\Framework\Locale\Resolver::DEFAULT_LOCALE;
-        
+
         if ($userData && $userData->getInterfaceLocale()) {
             $interfaceLocale = $userData->getInterfaceLocale();
         } elseif ($this->getGeneralLocale()) {
             $interfaceLocale = $this->getGeneralLocale();
         }
-        
+
         return $interfaceLocale;
     }
 }

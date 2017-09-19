@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -102,8 +102,8 @@ class PriceBoxTags
 
         if (!empty($billingAddress) || !empty($shippingAddress)) {
             $rateRequest = $this->getTaxCalculation()->getRateRequest(
-                $billingAddress,
                 $shippingAddress,
+                $billingAddress,
                 $customerTaxClassId,
                 $this->scopeResolver->getScope()->getId(),
                 $this->customerSession->getCustomerId()
@@ -121,7 +121,7 @@ class PriceBoxTags
      *
      * @return \Magento\Tax\Model\Calculation
      *
-     * @deprecated
+     * @deprecated 101.0.0
      */
     private function getTaxCalculation()
     {

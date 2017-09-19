@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Model\Placeholder;
@@ -8,6 +8,10 @@ namespace Magento\Config\Model\Placeholder;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
 
+/**
+ * @api
+ * @since 100.1.2
+ */
 class PlaceholderFactory
 {
     /**
@@ -41,6 +45,7 @@ class PlaceholderFactory
      * @param string $type
      * @return PlaceholderInterface
      * @throws LocalizedException
+     * @since 100.1.2
      */
     public function create($type)
     {

@@ -2,7 +2,7 @@
 /**
  * Google Optmizer Product Block
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,6 +10,10 @@
 
 namespace Magento\GoogleOptimizer\Block\Code;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Product extends \Magento\GoogleOptimizer\Block\AbstractCode implements \Magento\Framework\DataObject\IdentityInterface
 {
     /**

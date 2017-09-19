@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Filesystem;
@@ -114,6 +114,10 @@ class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
      */
     const TMP_MATERIALIZATION_DIR = 'view_preprocessed';
 
+    /**
+     * A suffix for temporary materialization directory where minified templates will be written (if necessary)
+     * @deprecated since 2.2.0
+     */
     const TEMPLATE_MINIFICATION_DIR = 'html';
 
     /**
@@ -153,8 +157,8 @@ class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
             self::LIB_WEB => [parent::PATH => 'lib/web'],
             self::TMP => [parent::PATH => 'var/tmp'],
             self::UPLOAD => [parent::PATH => 'pub/media/upload', parent::URL_PATH => 'pub/media/upload'],
-            self::TMP_MATERIALIZATION_DIR => [parent::PATH => 'var/view_preprocessed'],
-            self::TEMPLATE_MINIFICATION_DIR => [parent::PATH => 'var/view_preprocessed/html'],
+            self::TMP_MATERIALIZATION_DIR => [parent::PATH => 'var/view_preprocessed/pub/static'],
+            self::TEMPLATE_MINIFICATION_DIR => [parent::PATH => 'var/view_preprocessed'],
             self::SETUP => [parent::PATH => 'setup/src'],
             self::COMPOSER_HOME => [parent::PATH => 'var/composer_home'],
             self::GENERATED => [parent::PATH => 'generated'],

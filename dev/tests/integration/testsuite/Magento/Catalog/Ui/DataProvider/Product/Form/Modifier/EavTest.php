@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
@@ -10,7 +10,7 @@ namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
  * @magentoAppIsolation enabled
  * @magentoAppArea adminhtml
  */
-class EavTest extends \PHPUnit_Framework_TestCase
+class EavTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -39,7 +39,7 @@ class EavTest extends \PHPUnit_Framework_TestCase
             "gallery" => "image"
         ];
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->locatorMock = $this->getMock(\Magento\Catalog\Model\Locator\LocatorInterface::class, [], [], "", false);
+        $this->locatorMock = $this->createMock(\Magento\Catalog\Model\Locator\LocatorInterface::class);
         $store = $this->objectManager->get(\Magento\Store\Api\Data\StoreInterface::class);
         $this->locatorMock->expects($this->any())->method('getStore')->willReturn($store);
         $this->eavModifier = $this->objectManager->create(
@@ -69,7 +69,7 @@ class EavTest extends \PHPUnit_Framework_TestCase
         $this->prepareDataForComparison($actualMeta, $expectedMeta);
         $this->assertEquals($expectedMeta, $actualMeta);
     }
-    
+
     public function testModifyMetaNewProduct()
     {
         /** @var \Magento\Catalog\Model\Product $product */

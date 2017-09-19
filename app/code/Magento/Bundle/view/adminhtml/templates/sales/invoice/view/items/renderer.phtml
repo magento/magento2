@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -33,7 +33,7 @@
         <?php $attributes = $block->getSelectionAttributes($_item) ?>
         <?php if ($_prevOptionId != $attributes['option_id']): ?>
         <tr>
-            <td class="col-product"><div class="option-label"><?php /* @escapeNotVerified */ echo $attributes['option_label'] ?></div></td>
+            <td class="col-product"><div class="option-label"><?= /* @escapeNotVerified */ $attributes['option_label'] ?></div></td>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
@@ -44,57 +44,57 @@
         <?php $_prevOptionId = $attributes['option_id'] ?>
         <?php endif; ?>
     <?php endif; ?>
-    <tr<?php echo(++$_index == $_count && !$_showlastRow) ? ' class="border"' : '' ?>>
+    <tr<?= (++$_index == $_count && !$_showlastRow) ? ' class="border"' : '' ?>>
         <?php if (!$_item->getOrderItem()->getParentItem()): ?>
         <td class="col-product">
-            <div class="product-title"><?php echo $block->escapeHtml($_item->getName()) ?></div>
+            <div class="product-title"><?= $block->escapeHtml($_item->getName()) ?></div>
             <div class="product-sku-block">
-                <span><?php /* @escapeNotVerified */ echo __('SKU') ?>:</span>
-                <?php echo implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($block->escapeHtml($_item->getSku()))); ?>
+                <span><?= /* @escapeNotVerified */ __('SKU') ?>:</span>
+                <?= implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($block->escapeHtml($_item->getSku()))) ?>
             </div>
         <?php else: ?>
         <td class="col-product">
-            <div class="option-value"><?php echo $block->getValueHtml($_item)?></div>
+            <div class="option-value"><?= $block->getValueHtml($_item) ?></div>
         </td>
         <?php endif; ?>
         <td class="col-price">
             <?php if ($block->canShowPriceInfo($_item)): ?>
-                <?php echo $block->getColumnHtml($_item, 'price'); ?>
+                <?= $block->getColumnHtml($_item, 'price') ?>
             <?php else: ?>
                 &nbsp;
             <?php endif; ?>
         </td>
         <td class="col-qty">
             <?php if ($block->canShowPriceInfo($_item)): ?>
-                <?php /* @escapeNotVerified */ echo $_item->getQty()*1 ?>
+                <?= /* @escapeNotVerified */ $_item->getQty()*1 ?>
             <?php else: ?>
                 &nbsp;
             <?php endif; ?>
         </td>
         <td class="col-subtotal">
             <?php if ($block->canShowPriceInfo($_item)): ?>
-                <?php echo $block->getColumnHtml($_item, 'subtotal'); ?>
+                <?= $block->getColumnHtml($_item, 'subtotal') ?>
             <?php else: ?>
                 &nbsp;
             <?php endif; ?>
         </td>
         <td class="col-tax">
             <?php if ($block->canShowPriceInfo($_item)): ?>
-                <?php /* @escapeNotVerified */ echo $block->displayPriceAttribute('tax_amount') ?>
+                <?= /* @escapeNotVerified */ $block->displayPriceAttribute('tax_amount') ?>
             <?php else: ?>
                 &nbsp;
             <?php endif; ?>
         </td>
         <td class="col-discount">
             <?php if ($block->canShowPriceInfo($_item)): ?>
-                <?php /* @escapeNotVerified */ echo $block->displayPriceAttribute('discount_amount') ?>
+                <?= /* @escapeNotVerified */ $block->displayPriceAttribute('discount_amount') ?>
             <?php else: ?>
                 &nbsp;
             <?php endif; ?>
         </td>
         <td class="col-total last">
             <?php if ($block->canShowPriceInfo($_item)): ?>
-                <?php echo $block->getColumnHtml($_item, 'total'); ?>
+                <?= $block->getColumnHtml($_item, 'total') ?>
              <?php else: ?>
                  &nbsp;
             <?php endif; ?>
@@ -107,20 +107,20 @@
             <?php if ($block->getOrderOptions()): ?>
                 <dl class="item-options">
                 <?php foreach ($block->getOrderOptions() as $option): ?>
-                    <dt><?php /* @escapeNotVerified */ echo $option['label'] ?></dt>
+                    <dt><?= /* @escapeNotVerified */ $option['label'] ?></dt>
                     <dd>
                     <?php if (isset($option['custom_view']) && $option['custom_view']): ?>
-                        <?php /* @escapeNotVerified */ echo $option['value'];?>
+                        <?= /* @escapeNotVerified */ $option['value'] ?>
                     <?php else: ?>
-                        <?php echo $block->truncateString($option['value'], 55, '', $_remainder);?>
+                        <?= $block->truncateString($option['value'], 55, '', $_remainder) ?>
                         <?php if ($_remainder):?>
-                            ... <span id="<?php /* @escapeNotVerified */ echo $_id = 'id' . uniqid()?>"><?php /* @escapeNotVerified */ echo $_remainder ?></span>
+                            ... <span id="<?= /* @escapeNotVerified */ $_id = 'id' . uniqid() ?>"><?= /* @escapeNotVerified */ $_remainder ?></span>
                             <script>
 require(['protoype'], function(){
 
-    $('<?php /* @escapeNotVerified */ echo $_id ?>').hide();
-    $('<?php /* @escapeNotVerified */ echo $_id ?>').up().observe('mouseover', function(){$('<?php /* @escapeNotVerified */ echo $_id ?>').show();});
-    $('<?php /* @escapeNotVerified */ echo $_id ?>').up().observe('mouseout',  function(){$('<?php /* @escapeNotVerified */ echo $_id ?>').hide();});
+    $('<?= /* @escapeNotVerified */ $_id ?>').hide();
+    $('<?= /* @escapeNotVerified */ $_id ?>').up().observe('mouseover', function(){$('<?= /* @escapeNotVerified */ $_id ?>').show();});
+    $('<?= /* @escapeNotVerified */ $_id ?>').up().observe('mouseout',  function(){$('<?= /* @escapeNotVerified */ $_id ?>').hide();});
 
 });
 </script>
@@ -130,7 +130,7 @@ require(['protoype'], function(){
                 <?php endforeach; ?>
                 </dl>
             <?php endif; ?>
-            <?php echo $block->escapeHtml($block->getItem()->getDescription()) ?>
+            <?= $block->escapeHtml($block->getItem()->getDescription()) ?>
         </td>
         <td>&nbsp;</td>
         <td>&nbsp;</td>

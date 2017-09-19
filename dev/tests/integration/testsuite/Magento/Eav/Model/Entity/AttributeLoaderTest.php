@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\Entity;
@@ -13,7 +13,7 @@ use Magento\TestFramework\Helper\CacheCleaner;
  * @magentoAppIsolation enabled
  * @magentoDataFixture Magento/Eav/_files/attribute_for_search.php
  */
-class AttributeLoaderTest extends \PHPUnit_Framework_TestCase
+class AttributeLoaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var AttributeLoader

@@ -3,7 +3,7 @@
 /**
  * Layout instructions merged from sibling XML files. To be used as an expectation for a test.
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -30,7 +30,7 @@
     </handle>
     <handle id="fixture_handle_one">
         <body>
-            <block class="Magento\Framework\View\Element\Template" template="fixture_template_one.phtml"/>
+            <block class="Magento\Framework\View\Element\Template" template="Magento_Framework::fixture_template_one.phtml"/>
         </body>
     </handle>
     <layout id="fixture_handle_page_layout">
@@ -38,13 +38,13 @@
     </layout>
     <handle id="fixture_handle_two">
         <body>
-            <block class="Magento\Framework\View\Element\Template" template="fixture_template_two.phtml"/>
+            <block class="Magento\Framework\View\Element\Template" template="Magento_Framework::fixture_template_two.phtml"/>
         </body>
     </handle>
     <handle id="fixture_handle_with_page_layout" layout="fixture_handle_page_layout">
         <body>
             <referenceContainer name="main.container">
-                <block class="Magento\Framework\View\Element\Template" template="fixture_template_one.phtml"/>
+                <block class="Magento\Framework\View\Element\Template" template="Magento_Framework::fixture_template_one.phtml"/>
             </referenceContainer>
         </body>
     </handle>

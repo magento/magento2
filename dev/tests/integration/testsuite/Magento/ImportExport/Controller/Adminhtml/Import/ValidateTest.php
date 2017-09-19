@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Controller\Adminhtml\Import;
 
 use Magento\Framework\Filesystem\DirectoryList;
+use Magento\ImportExport\Model\Import;
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 /**
  * @magentoAppArea adminhtml
@@ -21,6 +23,8 @@ class ValidateTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
      */
     public function testValidationReturn($fileName, $message)
     {
+        $validationStrategy = ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_STOP_ON_ERROR;
+
         $this->getRequest()->setParam('isAjax', true);
         $this->getRequest()->setMethod('POST');
         $_SERVER['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
@@ -30,6 +34,8 @@ class ValidateTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
         $this->getRequest()->setPostValue('form_key', $formKey->getFormKey());
         $this->getRequest()->setPostValue('entity', 'catalog_product');
         $this->getRequest()->setPostValue('behavior', 'append');
+        $this->getRequest()->setPostValue(Import::FIELD_NAME_VALIDATION_STRATEGY, $validationStrategy);
+        $this->getRequest()->setPostValue(Import::FIELD_NAME_ALLOWED_ERROR_COUNT, 0);
         $this->getRequest()->setPostValue('_import_field_separator', ',');
 
         /** @var \Magento\TestFramework\App\Filesystem $filesystem */

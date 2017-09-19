@@ -1,17 +1,17 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-/**
- * System / Cache Management / Cache type "Configuration"
- */
 namespace Magento\Framework\App\Cache\Type;
 
 use Magento\Framework\Cache\Frontend\Decorator\TagScope;
 use Magento\Framework\Config\CacheInterface;
 
+/**
+ * System / Cache Management / Cache type "Configuration"
+ */
 class Config extends TagScope implements CacheInterface
 {
     /**

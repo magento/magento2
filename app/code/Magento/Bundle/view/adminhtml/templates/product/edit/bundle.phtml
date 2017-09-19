@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -19,14 +19,14 @@ if(typeof Bundle=='undefined') {
 <div id="bundle_product_container" class="entry-edit form-inline">
     <fieldset class="fieldset">
         <div class="field field-ship-bundle-items">
-            <label for="shipment_type" class="label"><?php /* @escapeNotVerified */ echo __('Ship Bundle Items') ?></label>
+            <label for="shipment_type" class="label"><?= /* @escapeNotVerified */ __('Ship Bundle Items') ?></label>
             <div class="control">
                 <select <?php if ($block->isReadonly()): ?>disabled="disabled" <?php endif;?>
                         id="shipment_type"
-                        name="<?php /* @escapeNotVerified */ echo $block->getFieldSuffix() ?>[shipment_type]"
+                        name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[shipment_type]"
                         class="select">
-                    <option value="1"><?php /* @escapeNotVerified */ echo __('Separately') ?></option>
-                    <option value="0"<?php if ($block->getProduct()->getShipmentType() == 0): ?> selected="selected"<?php endif; ?>><?php /* @escapeNotVerified */ echo __('Together') ?></option>
+                    <option value="1"><?= /* @escapeNotVerified */ __('Separately') ?></option>
+                    <option value="0"<?php if ($block->getProduct()->getShipmentType() == 0): ?> selected="selected"<?php endif; ?>><?= /* @escapeNotVerified */ __('Together') ?></option>
                 </select>
             </div>
         </div>
@@ -34,10 +34,10 @@ if(typeof Bundle=='undefined') {
         <div
             id="product_bundle_container"
             class="entry-edit custom-options bundle sortable-wrapper">
-            <?php echo $block->getOptionsBoxHtml() ?>
+            <?= $block->getOptionsBoxHtml() ?>
         </div>
 
-        <?php echo $block->getAddButtonHtml() ?>
+        <?= $block->getAddButtonHtml() ?>
     </fieldset>
 </div>
 

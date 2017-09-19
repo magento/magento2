@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Plugin\Model\ResourceModel\Entity;
 
-use Magento\Framework\App\CacheInterface;
-use Magento\Framework\App\Cache\StateInterface;
-use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Eav\Model\ResourceModel\Entity\Attribute as AttributeResource;
 use Magento\Eav\Model\Cache\Type;
 use Magento\Eav\Model\Entity\Attribute as EntityAttribute;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute as AttributeResource;
+use Magento\Framework\App\Cache\StateInterface;
+use Magento\Framework\App\CacheInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 
 class Attribute
 {

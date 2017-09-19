@@ -1,17 +1,15 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\CatalogSearch\Model\Indexer;
 
-use Magento\CatalogSearch\Model\Indexer\IndexSwitcherInterface;
-
 /**
  * The proxy class around index switcher which allows to ensure that the IndexSwitcher was actually used
  */
-class IndexSwitcherMock extends \PHPUnit_Framework_Assert implements IndexSwitcherInterface
+class IndexSwitcherMock extends \PHPUnit\Framework\Assert implements IndexSwitcherInterface
 {
     private $isSwitched = false;
 

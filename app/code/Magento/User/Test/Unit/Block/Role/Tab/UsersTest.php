@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@ namespace Magento\User\Test\Unit\Block\Role\Tab;
 use Magento\User\Model\ResourceModel\User\CollectionFactory;
 use Magento\User\Model\ResourceModel\User\Collection;
 
-class UsersTest extends \PHPUnit_Framework_TestCase
+class UsersTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\User\Block\Role\Tab\Users

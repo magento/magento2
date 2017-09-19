@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -46,12 +46,19 @@
 
     <type name="Magento\Braintree\Block\Paypal\Button">
         <arguments>
+            <argument name="localeResolver" xsi:type="object">Magento\Braintree\Model\LocaleResolver</argument>
             <argument name="data" xsi:type="array">
                 <item name="template" xsi:type="string">Magento_Braintree::paypal/button.phtml</item>
                 <item name="alias" xsi:type="string">braintree.paypal.mini-cart</item>
                 <item name="button_id" xsi:type="string">braintree-paypal-mini-cart</item>
             </argument>
             <argument name="payment" xsi:type="object">BraintreePayPalFacade</argument>
+        </arguments>
+    </type>
+    
+    <type name="Magento\Braintree\Model\Ui\PayPal\ConfigProvider">
+        <arguments>
+            <argument name="resolver" xsi:type="object">Magento\Braintree\Model\LocaleResolver</argument>
         </arguments>
     </type>
 </config>

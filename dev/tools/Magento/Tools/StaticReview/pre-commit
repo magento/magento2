@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @see http://github.com/sjparkinson/static-review/blob/master/LICENSE.md
+ * @see https://github.com/sjparkinson/static-review/blob/master/LICENSE
  */
 $included = include __DIR__ . '/../../../../../vendor/autoload.php';
 if (!$included) {
@@ -30,7 +30,6 @@ use StaticReview\Review\General\LineEndingsReview;
 use StaticReview\Review\General\NoCommitTagReview;
 use StaticReview\Review\PHP\PhpLeadingLineReview;
 use StaticReview\Review\PHP\PhpLintReview;
-use StaticReview\Review\PHP\PhpCodeSnifferReview;
 use Magento\Tools\StaticReview\PhpCsFixerReview;
 use StaticReview\StaticReview;
 use StaticReview\VersionControl\GitVersionControl;
@@ -62,11 +61,11 @@ if ($reporter->hasIssues()) {
         $climate->red($issue);
     }
 
-    $climate->out('')->red('вњ Please fix the errors above.');
+    $climate->out('')->red('✘ Please fix the errors above.');
 
     exit(1);
 } else {
-    $climate->out('')->green('вњ” Looking good.')->white('Have you tested everything?');
+    $climate->out('')->green('✔ Looking good.')->white('Have you tested everything?');
 
     exit(0);
 }

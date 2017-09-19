@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product;
@@ -105,13 +105,7 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
          * If there is not price skip saving price
          */
 
-        if ($object->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_FIELD ||
-            $object->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_AREA ||
-            $object->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_FILE ||
-            $object->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_DATE ||
-            $object->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_DATE_TIME ||
-            $object->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_TIME
-        ) {
+        if (in_array($object->getType(), $this->getPriceTypes())) {
             //save for store_id = 0
             if (!$object->getData('scope', 'price')) {
                 $statement = $connection->select()->from(
@@ -568,6 +562,23 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
 
         return $searchData;
+    }
+
+    /**
+     * All Option Types that support price and price_type
+     *
+     * @return string[]
+     */
+    public function getPriceTypes()
+    {
+        return [
+            \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_FIELD,
+            \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_AREA,
+            \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_FILE,
+            \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_DATE,
+            \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_DATE_TIME,
+            \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_TIME,
+        ];
     }
 
     /**

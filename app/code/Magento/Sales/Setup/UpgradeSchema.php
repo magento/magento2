@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Setup;
@@ -92,6 +92,17 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 [
                     'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
                     'length' => 128
+                ]
+            );
+        }
+        if (version_compare($context->getVersion(), '2.0.7', '<')) {
+            $connection = $installer->getConnection(self::$connectionName);
+            $connection->modifyColumn(
+                $installer->getTable('sales_order', self::$connectionName),
+                'shipping_method',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                    'length' => 120
                 ]
             );
         }

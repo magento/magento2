@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Model\Search;
@@ -19,6 +19,8 @@ namespace Magento\Backend\Model\Search;
  * @method bool hasLimit()
  * @method Customer setResults(array $results)
  * @method array getResults()
+ * @api
+ * @since 100.0.2
  */
 class Customer extends \Magento\Framework\DataObject
 {

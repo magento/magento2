@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product;
@@ -15,13 +15,19 @@ use Magento\Framework\App\ResourceConnection;
  */
 class CategoryLink
 {
-    /** @var  \Magento\Framework\EntityManager\MetadataPool */
+    /**
+     * @var \Magento\Framework\EntityManager\MetadataPool
+     */
     private $metadataPool;
 
-    /** @var  ResourceConnection */
+    /**
+     * @var \Magento\Framework\App\ResourceConnection
+     */
     private $resourceConnection;
 
-    /** @var \Magento\Framework\EntityManager\EntityMetadataInterface */
+    /**
+     * @var \Magento\Framework\EntityManager\EntityMetadataInterface
+     */
     private $categoryLinkMetadata;
 
     /**
@@ -217,8 +223,8 @@ class CategoryLink
      */
     private function analyseUpdatedLinks($deleteUpdate, $insertUpdate)
     {
-        $delete = $deleteUpdate['changed'] ? : [];
-        $insert = $insertUpdate['changed'] ? : [];
+        $delete = $deleteUpdate['changed'] ?: [];
+        $insert = $insertUpdate['changed'] ?: [];
         $insert = array_merge_recursive($insert, $deleteUpdate['updated']);
         $insert = array_merge_recursive($insert, $insertUpdate['updated']);
 

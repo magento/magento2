@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,11 +8,11 @@ namespace Magento\Sales\Test\TestStep;
 
 use Magento\Customer\Test\Fixture\Address;
 use Magento\Customer\Test\Fixture\Customer;
-use Magento\Sales\Test\Page\Adminhtml\OrderCreateIndex;
-use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Sales\Test\Fixture\OrderInjectable;
+use Magento\Sales\Test\Page\Adminhtml\OrderCreateIndex;
+use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 
 /**
  * Submit Order step.
@@ -107,7 +107,7 @@ class SubmitOrderStep implements TestStepInterface
         $orderId = trim($this->salesOrderView->getTitleBlock()->getTitle(), '#');
         $data = [
             'id' => $orderId,
-            'customer_id' => ['customer' => $this->customer->getData()],
+            'customer_id' => ['customer' => $this->customer],
             'entity_id' => ['products' => $this->products],
             'billing_address_id' => ['billingAddress' => $this->billingAddress],
         ];

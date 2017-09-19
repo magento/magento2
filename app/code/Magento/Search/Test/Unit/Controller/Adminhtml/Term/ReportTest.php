@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Search\Test\Unit\Controller\Adminhtml\Term;
@@ -15,7 +15,7 @@ use Magento\Framework\Event\ManagerInterface;
 use Magento\Backend\App\Action\Context;
 use Magento\Search\Controller\Adminhtml\Term\Report;
 
-class ReportTest extends \PHPUnit_Framework_TestCase
+class ReportTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerHelper

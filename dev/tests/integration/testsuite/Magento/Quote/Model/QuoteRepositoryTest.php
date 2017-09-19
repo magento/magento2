@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model;
@@ -20,7 +20,7 @@ use Magento\Quote\Model\Quote\Address as QuoteAddress;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
+class QuoteRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerInterface

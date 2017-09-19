@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Block\Adminhtml\Form\Field;
@@ -31,7 +31,7 @@ class Countries extends Select
         parent::__construct($context, $data);
         $this->countryHelper = $countryHelper;
     }
-    
+
     /**
      * Render block HTML
      *

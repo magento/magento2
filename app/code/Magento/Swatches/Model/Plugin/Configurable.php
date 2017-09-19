@@ -1,10 +1,11 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Swatches\Model\Plugin;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableProductType;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection;
 
@@ -21,11 +22,6 @@ class Configurable
     private $swatchHelper;
 
     /**
-     * @var array
-     */
-    private $swatchAttributes;
-
-    /**
      * @param \Magento\Swatches\Model\SwatchFactory $eavConfig
      * @param \Magento\Swatches\Helper\Data $swatchHelper
      */
@@ -38,33 +34,29 @@ class Configurable
     }
 
     /**
-     * Returns Configurable Products Collection with added swatch attributes
+     * Add swatch attributes to Configurable Products Collection
      *
-     * @param ConfigurableProduct $subject
+     * @param ConfigurableProductType $subject
      * @param Collection $result
+     * @param ProductInterface $product
      * @return Collection
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterGetUsedProductCollection(
         ConfigurableProductType $subject,
-        Collection $result
+        Collection $result,
+        ProductInterface $product
     ) {
-        if (!$this->swatchAttributes) {
-            $this->swatchAttributes = ['image'];
-            $entityType = $result->getEntity()->getType();
-            foreach ($this->eavConfig->getEntityAttributeCodes($entityType) as $code) {
-                $attribute = $this->eavConfig->getAttribute($entityType, $code);
-                if ($attribute->getData('additional_data')
-                    && (
-                        $this->swatchHelper->isVisualSwatch($attribute) || $this->swatchHelper->isTextSwatch($attribute)
-                    )
-                ) {
-                    $this->swatchAttributes[] = $code;
-                }
+        $swatchAttributes = ['image'];
+        foreach ($subject->getUsedProductAttributes($product) as $code => $attribute) {
+            if ($attribute->getData('additional_data')
+                && (
+                    $this->swatchHelper->isVisualSwatch($attribute) || $this->swatchHelper->isTextSwatch($attribute)
+                )
+            ) {
+                $swatchAttributes[] = $code;
             }
         }
-        $result->addAttributeToSelect($this->swatchAttributes);
+        $result->addAttributeToSelect($swatchAttributes);
         return $result;
     }
 }

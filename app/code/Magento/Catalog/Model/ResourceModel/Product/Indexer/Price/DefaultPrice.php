@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Price;
@@ -11,7 +11,11 @@ use Magento\Catalog\Model\ResourceModel\Product\Indexer\AbstractIndexer;
  * Default Product Type Price Indexer Resource model
  * For correctly work need define product type id
  *
+ * @api
+ *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class DefaultPrice extends AbstractIndexer implements PriceInterface
 {
@@ -44,14 +48,20 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
     protected $_eventManager = null;
 
     /**
-     * Class constructor
+     * @var bool|null
+     */
+    private $hasEntity = null;
+
+    /**
+     * DefaultPrice constructor.
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Module\Manager $moduleManager
-     * @param string $connectionName
+     * @param string|null $connectionName
+     * @param null|\Magento\Indexer\Model\Indexer\StateFactory $stateFactory
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -256,6 +266,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      * @return \Magento\Framework\DB\Select
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @since 101.0.8
      */
     protected function getSelect($entityIds = null, $type = null)
     {
@@ -677,16 +688,19 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      */
     protected function hasEntity()
     {
-        $reader = $this->getConnection();
+        if ($this->hasEntity === null) {
+            $reader = $this->getConnection();
 
-        $select = $reader->select()->from(
-            [$this->getTable('catalog_product_entity')],
-            ['count(entity_id)']
-        )->where(
-            'type_id=?',
-            $this->getTypeId()
-        );
+            $select = $reader->select()->from(
+                [$this->getTable('catalog_product_entity')],
+                ['count(entity_id)']
+            )->where(
+                'type_id=?',
+                $this->getTypeId()
+            );
+            $this->hasEntity = (int)$reader->fetchOne($select) > 0;
+        }
 
-        return (int)$reader->fetchOne($select) > 0;
+        return $this->hasEntity;
     }
 }

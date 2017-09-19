@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 ?>
 <script>
-    var BASE_URL = '<?php /* @escapeNotVerified */ echo $block->getUrl('*') ?>';
-    var FORM_KEY = '<?php /* @escapeNotVerified */ echo $block->getFormKey() ?>';
+    var BASE_URL = '<?= /* @escapeNotVerified */ $block->getUrl('*') ?>';
+    var FORM_KEY = '<?= /* @escapeNotVerified */ $block->getFormKey() ?>';
     var require = {
-        "baseUrl": "<?php /* @escapeNotVerified */ echo $block->getViewFileUrl('/') ?>"
+        "baseUrl": "<?= /* @escapeNotVerified */ $block->getViewFileUrl('/') ?>"
     };
 </script>

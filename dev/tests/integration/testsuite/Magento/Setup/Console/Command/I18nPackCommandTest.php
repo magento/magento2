@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Console\Command;
@@ -10,7 +10,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 /**
  * @magentoComponentsDir Magento/Setup/Console/Command/_files/root/app/code
  */
-class I18nPackCommandTest extends \PHPUnit_Framework_TestCase
+class I18nPackCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var I18nCollectPhrasesCommand

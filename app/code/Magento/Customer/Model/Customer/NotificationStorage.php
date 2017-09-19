@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\Customer;
@@ -22,7 +22,7 @@ class NotificationStorage
      */
 
     /**
-     * @var SerializerInterface
+     * @param FrontendInterface $cache
      */
     private $serializer;
 
@@ -93,7 +93,7 @@ class NotificationStorage
      * Get serializer
      *
      * @return SerializerInterface
-     * @deprecated
+     * @deprecated 100.2.0
      */
     private function getSerializer()
     {

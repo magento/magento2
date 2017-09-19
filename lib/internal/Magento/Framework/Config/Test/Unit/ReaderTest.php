@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Config\Test\Unit;
@@ -10,7 +10,7 @@ use Magento\Framework\App\Config\Scope\Converter;
 use Magento\Framework\Config\Reader;
 use Magento\Framework\Stdlib\ArrayUtils;
 
-class ReaderTest extends \PHPUnit_Framework_TestCase
+class ReaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SourceInterface|\PHPUnit_Framework_MockObject_MockObject

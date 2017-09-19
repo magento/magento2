@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,11 +10,11 @@
 <div class="block block-banner">
     <div class="block-content">
         <?php if (strtolower(substr($block->getLinkUrl(), 0, 4)) === 'http'): ?>
-            <a href="<?php /* @escapeNotVerified */ echo $block->getLinkUrl() ?>" title="<?php /* @escapeNotVerified */ echo __($block->getImgAlt()) ?>">
+            <a href="<?= /* @escapeNotVerified */ $block->getLinkUrl() ?>" title="<?= /* @escapeNotVerified */ __($block->getImgAlt()) ?>">
         <?php elseif ($block->getLinkUrl()): ?>
-            <a href="<?php /* @escapeNotVerified */ echo $block->getUrl($block->getLinkUrl()) ?>" title="<?php /* @escapeNotVerified */ echo __($block->getImgAlt()) ?>">
+            <a href="<?= /* @escapeNotVerified */ $block->getUrl($block->getLinkUrl()) ?>" title="<?= /* @escapeNotVerified */ __($block->getImgAlt()) ?>">
         <?php endif; ?>
-            <img src="<?php /* @escapeNotVerified */ echo $block->getViewFileUrl($block->getImgSrc()) ?>"<?php if (!$block->getLinkUrl()): ?> title="<?php /* @escapeNotVerified */ echo __($block->getImgAlt()) ?>"<?php endif; ?> alt="<?php /* @escapeNotVerified */ echo __($block->getImgAlt()) ?>" />
+            <img src="<?= /* @escapeNotVerified */ $block->getViewFileUrl($block->getImgSrc()) ?>"<?php if (!$block->getLinkUrl()): ?> title="<?= /* @escapeNotVerified */ __($block->getImgAlt()) ?>"<?php endif; ?> alt="<?= /* @escapeNotVerified */ __($block->getImgAlt()) ?>" />
         <?php if ($block->getLinkUrl()): ?>
         </a>
         <?php endif ?>

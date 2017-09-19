@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Model;
@@ -11,6 +11,7 @@ use Magento\Quote\Api\Data\CartInterface;
 /**
  * Payment interface
  * @api
+ * @since 100.0.2
  */
 interface MethodInterface
 {
@@ -27,7 +28,7 @@ interface MethodInterface
      *
      * @return string
      *
-     * @deprecated
+     * @deprecated 100.0.2
      */
     public function getFormBlockType();
 
@@ -203,7 +204,7 @@ interface MethodInterface
      *
      * @return string
      *
-     * @deprecated
+     * @deprecated 100.0.2
      */
     public function getInfoBlockType();
 
@@ -213,7 +214,7 @@ interface MethodInterface
      * @return InfoInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      *
-     * @deprecated
+     * @deprecated 100.0.2
      */
     public function getInfoInstance();
 
@@ -223,7 +224,7 @@ interface MethodInterface
      * @param InfoInterface $info
      * @return void
      *
-     * @deprecated
+     * @deprecated 100.0.2
      */
     public function setInfoInstance(InfoInterface $info);
 

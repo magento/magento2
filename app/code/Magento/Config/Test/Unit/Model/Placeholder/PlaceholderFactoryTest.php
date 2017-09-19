@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Model\Placeholder;
@@ -9,7 +9,7 @@ use Magento\Config\Model\Placeholder\Environment;
 use Magento\Config\Model\Placeholder\PlaceholderFactory;
 use Magento\Framework\ObjectManagerInterface;
 
-class PlaceholderFactoryTest extends \PHPUnit_Framework_TestCase
+class PlaceholderFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var PlaceholderFactory

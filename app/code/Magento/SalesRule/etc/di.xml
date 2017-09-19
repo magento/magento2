@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -177,5 +177,9 @@
                 <item name="Magento\SalesRule\Api\Data\CouponInterface" xsi:type="string">Magento\Framework\EntityManager\AbstractModelHydrator</item>
             </argument>
         </arguments>
+    </type>
+
+    <type name="\Magento\Quote\Model\Cart\CartTotalRepository">
+        <plugin name="coupon_label_plugin" type="Magento\SalesRule\Plugin\CartTotalRepository" />
     </type>
 </config>

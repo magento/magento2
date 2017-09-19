@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Captcha\Test\Block\Adminhtml;
 
-use Magento\Mtf\Client\Locator;
 use Magento\Backend\Test\Block\Admin\Login;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Login form for backend user.

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 ?>
@@ -10,8 +10,8 @@ if ($block->hasRequiredOptions()) {
     $required = ' data-hasrequired="' . __('* Required Fields') . '"';
 }
 ?>
-<div class="product-options-wrapper" id="product-options-wrapper"<?php /* @escapeNotVerified */ echo $required; ?>>
+<div class="product-options-wrapper" id="product-options-wrapper"<?= /* @escapeNotVerified */ $required ?>>
     <div class="fieldset" tabindex="0">
-        <?php echo $block->getChildHtml('', true);?>
+        <?= $block->getChildHtml('', true) ?>
     </div>
 </div>

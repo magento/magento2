@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,9 +8,9 @@
 
 namespace Magento\Weee\Test\Unit\Pricing;
 
-use \Magento\Weee\Pricing\TaxAdjustment;
+use Magento\Weee\Pricing\TaxAdjustment;
 
-class TaxAdjustmentTest extends \PHPUnit_Framework_TestCase
+class TaxAdjustmentTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var TaxAdjustment
@@ -39,9 +39,9 @@ class TaxAdjustmentTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->weeeHelperMock = $this->getMock(\Magento\Weee\Helper\Data::class, [], [], '', false);
-        $this->taxHelperMock = $this->getMock(\Magento\Tax\Helper\Data::class, [], [], '', false);
-        $this->priceCurrencyMock = $this->getMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
+        $this->weeeHelperMock = $this->createMock(\Magento\Weee\Helper\Data::class);
+        $this->taxHelperMock = $this->createMock(\Magento\Tax\Helper\Data::class);
+        $this->priceCurrencyMock = $this->createMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
         $this->priceCurrencyMock->expects($this->any())
             ->method('convertAndRound')
             ->will($this->returnCallback(
@@ -89,8 +89,7 @@ class TaxAdjustmentTest extends \PHPUnit_Framework_TestCase
         $isWeeeTaxable,
         $weeeDisplayConfig,
         $expectedResult
-    )
-    {
+    ) {
         $this->weeeHelperMock->expects($this->any())
             ->method('isEnabled')
             ->willReturn(true);

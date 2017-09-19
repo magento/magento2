@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,9 @@ namespace Magento\Wishlist\Block\Customer\Wishlist\Item;
 /**
  * Wishlist block customer items
  *
+ * @api
  * @method \Magento\Wishlist\Model\Item getItem()
+ * @since 100.0.2
  */
 class Options extends \Magento\Wishlist\Block\AbstractBlock
 {

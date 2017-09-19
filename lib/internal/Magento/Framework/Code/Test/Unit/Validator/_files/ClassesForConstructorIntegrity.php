@@ -1,11 +1,13 @@
 <?php
 /**
- *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
+/**
+ * @codingStandardsIgnoreFile
+ * Coding Standards have to be ignored in this file, as it is just a data source for tests.
+ */
 
 class ClassA
 {
@@ -16,16 +18,16 @@ class ClassB
 class ClassC
 {
 }
-interface InterfaceA
+interface FirstInterface
 {
 }
-class ImplementationOfInterfaceA implements InterfaceA
+class ImplementationOfFirstInterface implements FirstInterface
 {
 }
-interface InterfaceB
+interface SecondInterface
 {
 }
-class ImplementationOfInterfaceB implements InterfaceB
+class ImplementationOfSecondInterface implements SecondInterface
 {
 }
 class Context implements \Magento\Framework\ObjectManager\ContextInterface
@@ -46,12 +48,12 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     protected $_exC;
 
     /**
-     * @var InterfaceA
+     * @var FirstInterface
      */
     protected $_interfaceA;
 
     /**
-     * @var ImplementationOfInterfaceB
+     * @var ImplementationOfSecondInterface
      */
     protected $_implOfBInterface;
 
@@ -59,8 +61,8 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
         \ClassA $exA,
         \ClassB $exB,
         \ClassC $exC,
-        \InterfaceA $interfaceA,
-        \ImplementationOfInterfaceB $implOfBInterface
+        \FirstInterface $interfaceA,
+        \ImplementationOfSecondInterface $implOfBInterface
     ) {
         $this->_exA = $exA;
         $this->_exB = $exB;

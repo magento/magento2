@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,6 +12,6 @@
 $item = $block->getItem();
 $product = $item->getProduct();
 ?>
-<a class="product-item-photo" href="<?php echo $block->escapeUrl($block->getProductUrl($item)) ?>" title="<?php echo $block->escapeHtmlAttr($product->getName()) ?>">
-    <?php echo $block->getImage($product, 'wishlist_thumbnail')->toHtml(); ?>
+<a class="product-item-photo" tabindex="-1" href="<?= $block->escapeUrl($block->getProductUrl($item)) ?>" title="<?= $block->escapeHtmlAttr($product->getName()) ?>">
+    <?= $block->getImage($product, 'wishlist_thumbnail')->toHtml() ?>
 </a>

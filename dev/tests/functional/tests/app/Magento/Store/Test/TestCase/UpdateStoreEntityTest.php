@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,6 +10,7 @@ use Magento\Backend\Test\Page\Adminhtml\EditStore;
 use Magento\Backend\Test\Page\Adminhtml\StoreIndex;
 use Magento\Store\Test\Fixture\Store;
 use Magento\Mtf\TestCase\Injectable;
+use Magento\Store\Test\TestStep\RestoreDefaultStoreViewStep;
 
 /**
  * Test Creation for UpdateStoreEntity (Store Management)
@@ -51,16 +52,35 @@ class UpdateStoreEntityTest extends Injectable
     protected $editStore;
 
     /**
+     * Restore Default Store View step.
+     *
+     * @var RestoreDefaultStoreViewStep
+     */
+    private $restoreDefaultStoreViewStep;
+
+    /**
+     * Initial store fixture.
+     *
+     * @var Store
+     */
+    private $storeInitial;
+
+    /**
      * Preparing pages for test
      *
      * @param StoreIndex $storeIndex
      * @param EditStore $editStore
+     * @param RestoreDefaultStoreViewStep $restoreDefaultStoreViewStep
      * @return void
      */
-    public function __inject(StoreIndex $storeIndex, EditStore $editStore)
-    {
+    public function __inject(
+        StoreIndex $storeIndex,
+        EditStore $editStore,
+        RestoreDefaultStoreViewStep $restoreDefaultStoreViewStep
+    ) {
         $this->storeIndex = $storeIndex;
         $this->editStore = $editStore;
+        $this->restoreDefaultStoreViewStep = $restoreDefaultStoreViewStep;
     }
 
     /**
@@ -73,6 +93,7 @@ class UpdateStoreEntityTest extends Injectable
     public function test(Store $storeInitial, Store $store)
     {
         // Preconditions:
+        $this->storeInitial = $storeInitial;
         $storeInitial->persist();
 
         // Steps:
@@ -80,5 +101,15 @@ class UpdateStoreEntityTest extends Injectable
         $this->storeIndex->getStoreGrid()->searchAndOpenStore($storeInitial);
         $this->editStore->getStoreForm()->fill($store);
         $this->editStore->getFormPageActions()->save();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function tearDown()
+    {
+        if ($this->storeInitial->getCode() == 'default') {
+            $this->restoreDefaultStoreViewStep->run();
+        }
     }
 }

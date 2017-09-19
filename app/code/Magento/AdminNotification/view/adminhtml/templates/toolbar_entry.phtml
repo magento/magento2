@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,70 +15,70 @@
 <div
     data-mage-init='{"toolbarEntry": {}}'
     class="notifications-wrapper admin__action-dropdown-wrap"
-    data-notification-count="<?php /* @escapeNotVerified */ echo $notificationCount; ?>">
+    data-notification-count="<?= /* @escapeNotVerified */ $notificationCount ?>">
     <?php if ($notificationCount > 0) : ?>
         <a
-            href="<?php /* @escapeNotVerified */ echo $block->getUrl('adminhtml/notification/index'); ?>"
+            href="<?= /* @escapeNotVerified */ $block->getUrl('adminhtml/notification/index') ?>"
             class="notifications-action admin__action-dropdown"
             data-mage-init='{"dropdown":{}}'
-            title="<?php /* @escapeNotVerified */ echo __('Notifications'); ?>"
+            title="<?= /* @escapeNotVerified */ __('Notifications') ?>"
             data-toggle="dropdown">
             <span class="notifications-counter">
-                <?php /* @escapeNotVerified */ echo ($notificationCount > $notificationCounterMax) ? $notificationCounterMax . '+' : $notificationCount; ?>
+                <?= /* @escapeNotVerified */ ($notificationCount > $notificationCounterMax) ? $notificationCounterMax . '+' : $notificationCount ?>
             </span>
         </a>
         <ul
             class="admin__action-dropdown-menu"
-            data-mark-as-read-url="<?php /* @escapeNotVerified */ echo $block->getUrl('adminhtml/notification/ajaxMarkAsRead'); ?>">
+            data-mark-as-read-url="<?= /* @escapeNotVerified */ $block->getUrl('adminhtml/notification/ajaxMarkAsRead') ?>">
             <?php foreach ($block->getLatestUnreadNotifications() as $notification) : ?>
             <?php /** @var $notification \Magento\AdminNotification\Model\Inbox*/ ?>
             <li class="notifications-entry<?php if ($notification->getSeverity() == 1): ?> notifications-critical<?php endif; ?>"
-                data-notification-id="<?php /* @escapeNotVerified */ echo $notification->getId(); ?>"
+                data-notification-id="<?= /* @escapeNotVerified */ $notification->getId() ?>"
                 data-notification-severity="<?php if ($notification->getSeverity() == 1): ?>1<?php endif; ?>">
                 <?php
                     $notificationDescription = $block->escapeHtml($notification->getDescription());
                     $notificationDescriptionLength = $block->getNotificationDescriptionLength();
                 ?>
                 <strong class="notifications-entry-title">
-                    <?php echo $block->escapeHtml($notification->getTitle()); ?>
+                    <?= $block->escapeHtml($notification->getTitle()) ?>
                 </strong>
                 <?php if (strlen($notificationDescription) > $notificationDescriptionLength) : ?>
                     <p class="notifications-entry-description _cutted">
                         <span class="notifications-entry-description-start">
-                            <?php /* @escapeNotVerified */ echo substr($notificationDescription, 0, $notificationDescriptionLength); ?>
+                            <?= /* @escapeNotVerified */ substr($notificationDescription, 0, $notificationDescriptionLength) ?>
                         </span>
                         <span class="notifications-entry-description-end">
-                            <?php /* @escapeNotVerified */ echo substr($notificationDescription, $notificationDescriptionLength); ?>
+                            <?= /* @escapeNotVerified */ substr($notificationDescription, $notificationDescriptionLength) ?>
                         </span>
                     </p>
                 <?php else : ?>
                     <p class="notifications-entry-description">
-                        <?php /* @escapeNotVerified */ echo $notificationDescription; ?>
+                        <?= /* @escapeNotVerified */ $notificationDescription ?>
                     </p>
                 <?php endif; ?>
                 <time class="notifications-entry-time">
-                    <?php /* @escapeNotVerified */ echo $block->formatNotificationDate($notification->getDateAdded()); ?>
+                    <?= /* @escapeNotVerified */ $block->formatNotificationDate($notification->getDateAdded()) ?>
                 </time>
                 <button
                     type="button"
                     class="notifications-close"
-                    title="<?php /* @escapeNotVerified */ echo __('Close'); ?>"
+                    title="<?= /* @escapeNotVerified */ __('Close') ?>"
                     ></button>
             </li>
             <?php endforeach; ?>
             <li class="notifications-entry notifications-entry-last">
                 <a
-                    href="<?php /* @escapeNotVerified */ echo $block->getUrl('adminhtml/notification/index'); ?>"
+                    href="<?= /* @escapeNotVerified */ $block->getUrl('adminhtml/notification/index') ?>"
                     class="action-tertiary action-more">
-                    <?php /* @escapeNotVerified */ echo __('See All (') ?><span class="notifications-counter"><?php /* @escapeNotVerified */ echo $notificationCount ?></span><?php /* @escapeNotVerified */ echo __(' unread)'); ?>
+                    <?= /* @escapeNotVerified */ __('See All (') ?><span class="notifications-counter"><?= /* @escapeNotVerified */ $notificationCount ?></span><?= /* @escapeNotVerified */ __(' unread)') ?>
                 </a>
             </li>
         </ul>
     <?php else : ?>
         <a
             class="notifications-action admin__action-dropdown"
-            href="<?php /* @escapeNotVerified */ echo $block->getUrl('adminhtml/notification/index'); ?>"
-            title="<?php /* @escapeNotVerified */ echo __('Notifications'); ?>">
+            href="<?= /* @escapeNotVerified */ $block->getUrl('adminhtml/notification/index') ?>"
+            title="<?= /* @escapeNotVerified */ __('Notifications') ?>">
         </a>
     <?php endif; ?>
 </div>

@@ -1,19 +1,17 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\App;
 
-use Magento\Framework\AppInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\AppInterface;
 use Magento\Framework\Autoload\AutoloaderRegistry;
 use Magento\Framework\Autoload\Populator;
-use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Filesystem\DriverPool;
-use Magento\Framework\Profiler;
 
 /**
  * A bootstrap of Magento application
@@ -21,6 +19,7 @@ use Magento\Framework\Profiler;
  * Performs basic initialization root function: injects init parameters and creates object manager
  * Can create/run applications
  *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Bootstrap
@@ -180,7 +179,7 @@ class Bootstrap
         $extraDrivers = [];
         if (isset($initParams[Bootstrap::INIT_PARAM_FILESYSTEM_DRIVERS])) {
             $extraDrivers = $initParams[Bootstrap::INIT_PARAM_FILESYSTEM_DRIVERS];
-        };
+        }
         return new DriverPool($extraDrivers);
     }
 
@@ -206,6 +205,7 @@ class Bootstrap
         $this->factory = $factory;
         $this->rootDir = $rootDir;
         $this->server = $initParams;
+        $this->objectManager = $this->factory->create($this->server);
     }
 
     /**
@@ -229,7 +229,6 @@ class Bootstrap
     public function createApplication($type, $arguments = [])
     {
         try {
-            $this->initObjectManager();
             $application = $this->objectManager->create($type, $arguments);
             if (!($application instanceof AppInterface)) {
                 throw new \InvalidArgumentException("The provided class doesn't implement AppInterface: {$type}");
@@ -252,7 +251,6 @@ class Bootstrap
             try {
                 \Magento\Framework\Profiler::start('magento');
                 $this->initErrorHandler();
-                $this->initObjectManager();
                 $this->assertMaintenance();
                 $this->assertInstalled();
                 $response = $application->launch();
@@ -281,7 +279,6 @@ class Bootstrap
         if (null === $isExpected) {
             return;
         }
-        $this->initObjectManager();
         /** @var \Magento\Framework\App\MaintenanceMode $maintenance */
         $this->maintenance = $this->objectManager->get(\Magento\Framework\App\MaintenanceMode::class);
 
@@ -314,7 +311,6 @@ class Bootstrap
         if (null === $isExpected) {
             return;
         }
-        $this->initObjectManager();
         $isInstalled = $this->isInstalled();
         if (!$isInstalled && $isExpected) {
             $this->errorCode = self::ERR_IS_INSTALLED;
@@ -353,7 +349,6 @@ class Bootstrap
      */
     private function isInstalled()
     {
-        $this->initObjectManager();
         /** @var \Magento\Framework\App\DeploymentConfig $deploymentConfig */
         $deploymentConfig = $this->objectManager->get(\Magento\Framework\App\DeploymentConfig::class);
         return $deploymentConfig->isAvailable();
@@ -366,7 +361,6 @@ class Bootstrap
      */
     public function getObjectManager()
     {
-        $this->initObjectManager();
         return $this->objectManager;
     }
 
@@ -380,20 +374,7 @@ class Bootstrap
         $handler = new ErrorHandler();
         set_error_handler([$handler, 'handler']);
     }
-
-    /**
-     * Initializes object manager
-     *
-     * @return void
-     */
-    private function initObjectManager()
-    {
-        if (!$this->objectManager) {
-            $this->objectManager = $this->factory->create($this->server);
-            $this->maintenance = $this->objectManager->get(\Magento\Framework\App\MaintenanceMode::class);
-        }
-    }
-
+    
     /**
      * Getter for error code
      *

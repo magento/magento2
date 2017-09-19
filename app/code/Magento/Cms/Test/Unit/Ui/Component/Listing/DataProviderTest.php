@@ -1,20 +1,20 @@
 <?php
 /***
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Test\Unit\Ui\Component\Listing;
 
 use Magento\Cms\Ui\Component\DataProvider;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Authorization;
-use Magento\Framework\View\Element\UiComponent\DataProvider\Reporting;
-use Magento\Framework\Api\Search\SearchCriteriaBuilder;
-use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\Search\SearchCriteriaBuilder;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Authorization;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\View\Element\UiComponent\DataProvider\Reporting;
 
-class DataProviderTest extends \PHPUnit_Framework_TestCase
+class DataProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Authorization|\PHPUnit_Framework_MockObject_MockObject
@@ -84,7 +84,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         /** @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject $objectManagerMock */
-        $objectManagerMock = $this->getMock(ObjectManagerInterface::class);
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $objectManagerMock->expects($this->once())
             ->method('get')
             ->willReturn($this->authorizationMock);

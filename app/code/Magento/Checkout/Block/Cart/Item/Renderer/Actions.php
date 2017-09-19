@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Block\Cart\Item\Renderer;
@@ -9,6 +9,9 @@ use Magento\Checkout\Block\Cart\Item\Renderer\Actions\Generic;
 use Magento\Framework\View\Element\Text;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
 
+/**
+ * @api
+ */
 class Actions extends Text
 {
     /**

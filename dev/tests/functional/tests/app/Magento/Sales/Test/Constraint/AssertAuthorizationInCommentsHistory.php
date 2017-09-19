@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Sales\Test\Constraint;
 
+use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
-use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Assert that comment about authorized amount exists in Comments History section on order page in Admin.
@@ -18,7 +18,7 @@ class AssertAuthorizationInCommentsHistory extends AbstractConstraint
     /**
      * Pattern of message about authorized amount in order.
      */
-    const AUTHORIZED_AMOUNT_PATTERN = '/(IPN "Pending" )*Authorized amount of \w*\W{1,2}%s. Transaction ID: "[\w\-]*"/';
+    const AUTHORIZED_AMOUNT_PATTERN = '/(IPN "Pending" )*Authorized amount of .+?%s. Transaction ID: "[\w\-]*"/';
 
     /**
      * Assert that comment about authorized amount exists in Comments History section on order page in Admin.

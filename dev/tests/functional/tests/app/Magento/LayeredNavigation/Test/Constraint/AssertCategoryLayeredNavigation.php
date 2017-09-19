@@ -1,15 +1,15 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\LayeredNavigation\Test\Constraint;
 
-use Magento\Mtf\Client\BrowserInterface;
 use Magento\Catalog\Test\Fixture\Category;
-use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
+use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Assert that category is present in layered navigation and product is visible in product grid.

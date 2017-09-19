@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -84,6 +84,7 @@ class Curl extends AbstractCurl implements StoreGroupInterface
                 'root_category_id' => $categoryId,
                 'website_id' => $websiteId,
                 'group_id' => $fixture->hasData('group_id') ? $fixture->getGroupId() : '',
+                'code' => $fixture->hasData('code') ? $fixture->getCode() : '',
             ],
             'store_action' => 'add',
             'store_type' => 'group',

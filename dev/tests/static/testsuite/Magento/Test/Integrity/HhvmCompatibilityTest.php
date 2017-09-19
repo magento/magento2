@@ -2,7 +2,7 @@
 /**
  * Hhvm ini_get/ini_set compatibility test
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  *
  */
@@ -10,7 +10,7 @@ namespace Magento\Test\Integrity;
 
 use Magento\Framework\App\Utility\Files;
 
-class HhvmCompatibilityTest extends \PHPUnit_Framework_TestCase
+class HhvmCompatibilityTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var array

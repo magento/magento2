@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Controller;
@@ -13,7 +13,9 @@ class PathProcessor
     /**  Store code alias to indicate that all stores should be affected by action */
     const ALL_STORE_CODE = 'all';
 
-    /**  @var \Magento\Store\Model\StoreManagerInterface */
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
     private $storeManager;
 
     /**

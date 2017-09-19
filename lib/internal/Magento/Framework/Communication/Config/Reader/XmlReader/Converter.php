@@ -1,16 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Communication\Config\Reader\XmlReader;
 
-use Magento\Framework\Communication\ConfigInterface as Config;
-use Magento\Framework\Phrase;
-use Magento\Framework\Communication\Config\ReflectionGenerator;
-use Magento\Framework\Stdlib\BooleanUtils;
 use Magento\Framework\Communication\Config\ConfigParser;
-use Magento\Framework\Communication\Config\Reader\XmlReader\Validator;
+use Magento\Framework\Communication\Config\ReflectionGenerator;
+use Magento\Framework\Communication\ConfigInterface as Config;
+use Magento\Framework\Stdlib\BooleanUtils;
 
 /**
  * Converts Communication config from \DOMDocument to array
@@ -64,7 +62,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * The getter function to get the new ConfigParser dependency.
      *
      * @return \Magento\Framework\Communication\Config\ConfigParser
-     * @deprecated
+     * @deprecated 100.2.0
      */
     private function getConfigParser()
     {

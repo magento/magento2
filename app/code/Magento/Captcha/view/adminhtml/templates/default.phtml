@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,18 +13,18 @@ $captcha = $block->getCaptchaModel();
 ?>
 <div class="admin__field _required">
     <label for="captcha" class="admin__field-label">
-        <span><?php echo $block->escapeHtml(__('Please enter the letters from the image')) ?></span>
+        <span><?= $block->escapeHtml(__('Please enter the letters from the image')) ?></span>
     </label>
     <div class="admin__field-control">
         <input
             id="captcha"
             class="admin__control-text"
             type="text"
-            name="<?php echo $block->escapeHtmlAttr(\Magento\Captcha\Helper\Data::INPUT_NAME_FIELD_VALUE) ?>[<?php echo $block->escapeHtml($block->getFormId())?>]"
+            name="<?= $block->escapeHtmlAttr(\Magento\Captcha\Helper\Data::INPUT_NAME_FIELD_VALUE) ?>[<?= $block->escapeHtml($block->getFormId()) ?>]"
             data-validate="{required:true}"/>
         <?php if ($captcha->isCaseSensitive()) :?>
             <div class="admin__field-note">
-                <span><?php echo $block->escapeHtml(__('<strong>Attention</strong>: Captcha is case sensitive.'), ['strong']) ?></span>
+                <span><?= $block->escapeHtml(__('<strong>Attention</strong>: Captcha is case sensitive.'), ['strong']) ?></span>
             </div>
         <?php endif; ?>
     </div>
@@ -33,19 +33,19 @@ $captcha = $block->getCaptchaModel();
     <img
         id="captcha-reload"
         class="captcha-reload"
-        src="<?php echo $block->escapeUrl($block->getViewFileUrl('Magento_Captcha::reload.png')) ?>"
-        alt="<?php echo $block->escapeHtmlAttr(__('Reload captcha')) ?>"/>
+        src="<?= $block->escapeUrl($block->getViewFileUrl('Magento_Captcha::reload.png')) ?>"
+        alt="<?= $block->escapeHtmlAttr(__('Reload captcha')) ?>"/>
     <img
-        id="<?php echo $block->escapeHtmlAttr($block->getFormId()) ?>"
-        width="<?php /* @noEscape */ echo (float) $block->getImgWidth() ?>"
-        height="<?php /* @noEscape */ echo (float) $block->getImgHeight() ?>"
-        src="<?php echo $block->escapeUrl($captcha->getImgSrc()) ?>" />
+        id="<?= $block->escapeHtmlAttr($block->getFormId()) ?>"
+        width="<?= /* @noEscape */ (float) $block->getImgWidth() ?>"
+        height="<?= /* @noEscape */ (float) $block->getImgHeight() ?>"
+        src="<?= $block->escapeUrl($captcha->getImgSrc()) ?>" />
 </div>
 <script>
     require(["prototype", "mage/captcha"], function(){
 
 //<![CDATA[
-        var captcha = new Captcha('<?php echo $block->escapeJs($block->escapeUrl($block->getRefreshUrl())) ?>', '<?php echo $block->escapeJs($block->escapeHtml($block->getFormId())) ?>');
+        var captcha = new Captcha('<?= $block->escapeJs($block->escapeUrl($block->getRefreshUrl())) ?>', '<?= $block->escapeJs($block->escapeHtml($block->getFormId())) ?>');
 
         $('captcha-reload').observe('click', function () {
             captcha.refresh(this);

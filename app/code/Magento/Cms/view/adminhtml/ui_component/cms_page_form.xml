@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,294 +9,329 @@
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
             <item name="provider" xsi:type="string">cms_page_form.page_form_data_source</item>
-            <item name="deps" xsi:type="string">cms_page_form.page_form_data_source</item>
         </item>
         <item name="label" xsi:type="string" translate="true">Page Information</item>
-        <item name="config" xsi:type="array">
-            <item name="dataScope" xsi:type="string">data</item>
-            <item name="namespace" xsi:type="string">cms_page_form</item>
-        </item>
         <item name="template" xsi:type="string">templates/form/collapsible</item>
-        <item name="buttons" xsi:type="array">
-            <item name="back" xsi:type="string">Magento\Cms\Block\Adminhtml\Page\Edit\BackButton</item>
-            <item name="delete" xsi:type="string">Magento\Cms\Block\Adminhtml\Page\Edit\DeleteButton</item>
-            <item name="reset" xsi:type="string">Magento\Cms\Block\Adminhtml\Page\Edit\ResetButton</item>
-            <item name="save" xsi:type="string">Magento\Cms\Block\Adminhtml\Page\Edit\SaveButton</item>
-            <item name="save_and_continue" xsi:type="string">Magento\Cms\Block\Adminhtml\Page\Edit\SaveAndContinueButton</item>
-        </item>
     </argument>
+    <settings>
+        <buttons>
+            <button name="save_and_continue" class="Magento\Cms\Block\Adminhtml\Page\Edit\SaveAndContinueButton"/>
+            <button name="save" class="Magento\Cms\Block\Adminhtml\Page\Edit\SaveButton"/>
+            <button name="reset" class="Magento\Cms\Block\Adminhtml\Page\Edit\ResetButton"/>
+            <button name="delete" class="Magento\Cms\Block\Adminhtml\Page\Edit\DeleteButton"/>
+            <button name="back" class="Magento\Cms\Block\Adminhtml\Page\Edit\BackButton"/>
+        </buttons>
+        <namespace>cms_page_form</namespace>
+        <dataScope>data</dataScope>
+        <deps>
+            <dep>cms_page_form.page_form_data_source</dep>
+        </deps>
+    </settings>
     <dataSource name="page_form_data_source">
-        <argument name="dataProvider" xsi:type="configurableObject">
-            <argument name="class" xsi:type="string">Magento\Cms\Model\Page\DataProvider</argument>
-            <argument name="name" xsi:type="string">page_form_data_source</argument>
-            <argument name="primaryFieldName" xsi:type="string">page_id</argument>
-            <argument name="requestFieldName" xsi:type="string">page_id</argument>
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="submit_url" xsi:type="url" path="cms/page/save"/>
-                </item>
-            </argument>
-        </argument>
         <argument name="data" xsi:type="array">
             <item name="js_config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
             </item>
         </argument>
+        <settings>
+            <submitUrl path="cms/page/save"/>
+        </settings>
+        <dataProvider class="Magento\Cms\Model\Page\DataProvider" name="page_form_data_source">
+            <settings>
+                <requestFieldName>page_id</requestFieldName>
+                <primaryFieldName>page_id</primaryFieldName>
+            </settings>
+        </dataProvider>
     </dataSource>
     <fieldset name="general">
-        <argument name="data" xsi:type="array">
-            <item name="config" xsi:type="array">
-                <item name="label" xsi:type="string"/>
-            </item>
-        </argument>
-        <field name="page_id">
+        <settings>
+            <label/>
+        </settings>
+        <field name="page_id" formElement="input">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="visible" xsi:type="boolean">false</item>
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="formElement" xsi:type="string">input</item>
                     <item name="source" xsi:type="string">page</item>
-                    <item name="dataScope" xsi:type="string">page_id</item>
                 </item>
             </argument>
+            <settings>
+                <dataType>text</dataType>
+                <visible>false</visible>
+                <dataScope>page_id</dataScope>
+            </settings>
         </field>
-        <field name="is_active">
+        <field name="is_active" sortOrder="10" formElement="checkbox">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="dataType" xsi:type="string">boolean</item>
-                    <item name="label" xsi:type="string" translate="true">Enable Page</item>
-                    <item name="formElement" xsi:type="string">checkbox</item>
-                    <item name="prefer" xsi:type="string">toggle</item>
                     <item name="source" xsi:type="string">page</item>
-                    <item name="sortOrder" xsi:type="number">10</item>
-                    <item name="dataScope" xsi:type="string">is_active</item>
-                    <item name="valueMap" xsi:type="array">
-                        <item name="true" xsi:type="number">1</item>
-                        <item name="false" xsi:type="number">0</item>
-                    </item>
                     <item name="default" xsi:type="number">1</item>
                 </item>
             </argument>
+            <settings>
+                <dataType>boolean</dataType>
+                <label translate="true">Enable Page</label>
+                <dataScope>is_active</dataScope>
+            </settings>
+            <formElements>
+                <checkbox>
+                    <settings>
+                        <valueMap>
+                            <map name="false" xsi:type="number">0</map>
+                            <map name="true" xsi:type="number">1</map>
+                        </valueMap>
+                        <prefer>toggle</prefer>
+                    </settings>
+                </checkbox>
+            </formElements>
         </field>
-        <field name="title">
+        <field name="title" sortOrder="20" formElement="input">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="label" xsi:type="string" translate="true">Page Title</item>
-                    <item name="formElement" xsi:type="string">input</item>
                     <item name="source" xsi:type="string">page</item>
-                    <item name="sortOrder" xsi:type="number">20</item>
-                    <item name="dataScope" xsi:type="string">title</item>
-                    <item name="validation" xsi:type="array">
-                        <item name="required-entry" xsi:type="boolean">true</item>
-                    </item>
                 </item>
             </argument>
-        </field>
-    </fieldset>
-    <fieldset name="content">
-        <argument name="data" xsi:type="array">
-            <item name="config" xsi:type="array">
-                <item name="collapsible" xsi:type="boolean">true</item>
-                <item name="label" xsi:type="string" translate="true">Content</item>
-                <item name="sortOrder" xsi:type="number">10</item>
-            </item>
-        </argument>
-        <field name="content_heading">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="label" xsi:type="string" translate="true">Content Heading</item>
-                    <item name="formElement" xsi:type="string">input</item>
-                    <item name="source" xsi:type="string">page</item>
-                    <item name="dataScope" xsi:type="string">content_heading</item>
-                </item>
-            </argument>
-        </field>
-        <field name="content">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string"/>
-                    <item name="formElement" xsi:type="string">wysiwyg</item>
-                    <item name="source" xsi:type="string">page</item>
-                    <item name="wysiwyg" xsi:type="boolean">true</item>
-                    <item name="dataScope" xsi:type="string">content</item>
-                    <item name="additionalClasses" xsi:type="string">admin__field-wide</item>
-                </item>
-            </argument>
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
+                <label translate="true">Page Title</label>
+                <dataScope>title</dataScope>
+            </settings>
         </field>
     </fieldset>
-    <fieldset name="search_engine_optimisation">
-        <argument name="data" xsi:type="array">
-            <item name="config" xsi:type="array">
-                <item name="collapsible" xsi:type="boolean">true</item>
-                <item name="label" xsi:type="string" translate="true">Search Engine Optimisation</item>
-                <item name="sortOrder" xsi:type="number">20</item>
-            </item>
-        </argument>
-        <field name="identifier">
+    <fieldset name="content" sortOrder="10">
+        <settings>
+            <collapsible>true</collapsible>
+            <label translate="true">Content</label>
+        </settings>
+        <field name="content_heading" formElement="input">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="label" xsi:type="string" translate="true">URL Key</item>
-                    <item name="formElement" xsi:type="string">input</item>
                     <item name="source" xsi:type="string">page</item>
-                    <item name="dataScope" xsi:type="string">identifier</item>
                 </item>
             </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Content Heading</label>
+                <dataScope>content_heading</dataScope>
+            </settings>
         </field>
-        <field name="meta_title">
+        <field name="content" formElement="wysiwyg">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="label" xsi:type="string" translate="true">Meta Title</item>
-                    <item name="formElement" xsi:type="string">input</item>
                     <item name="source" xsi:type="string">page</item>
-                    <item name="dataScope" xsi:type="string">meta_title</item>
                 </item>
             </argument>
-        </field>
-        <field name="meta_keywords">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="label" xsi:type="string" translate="true">Meta Keywords</item>
-                    <item name="formElement" xsi:type="string">textarea</item>
-                    <item name="source" xsi:type="string">page</item>
-                    <item name="dataScope" xsi:type="string">meta_keywords</item>
-                </item>
-            </argument>
-        </field>
-        <field name="meta_description">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="label" xsi:type="string" translate="true">Meta Description</item>
-                    <item name="formElement" xsi:type="string">textarea</item>
-                    <item name="source" xsi:type="string">page</item>
-                    <item name="dataScope" xsi:type="string">meta_description</item>
-                </item>
-            </argument>
+            <settings>
+                <additionalClasses>
+                    <class name="admin__field-wide">true</class>
+                </additionalClasses>
+                <label/>
+                <dataScope>content</dataScope>
+            </settings>
+            <formElements>
+                <wysiwyg>
+                    <settings>
+                        <wysiwyg>true</wysiwyg>
+                    </settings>
+                </wysiwyg>
+            </formElements>
         </field>
     </fieldset>
-    <fieldset name="websites" class="Magento\Store\Ui\Component\Form\Fieldset\Websites">
-        <argument name="data" xsi:type="array">
-            <item name="config" xsi:type="array">
-                <item name="collapsible" xsi:type="boolean">true</item>
-                <item name="label" xsi:type="string" translate="true">Page in Websites</item>
-                <item name="sortOrder" xsi:type="number">30</item>
-            </item>
-        </argument>
-        <field name="storeviews">
+    <fieldset name="search_engine_optimisation" sortOrder="20">
+        <settings>
+            <collapsible>true</collapsible>
+            <label translate="true">Search Engine Optimisation</label>
+        </settings>
+        <field name="identifier" formElement="input">
             <argument name="data" xsi:type="array">
-                <item name="options" xsi:type="object">Magento\Cms\Ui\Component\Listing\Column\Cms\Options</item>
                 <item name="config" xsi:type="array">
-                    <item name="dataType" xsi:type="string">int</item>
-                    <item name="label" xsi:type="string" translate="true">Store View</item>
-                    <item name="formElement" xsi:type="string">multiselect</item>
                     <item name="source" xsi:type="string">page</item>
-                    <item name="dataScope" xsi:type="string">store_id</item>
-                    <item name="default" xsi:type="string">0</item>
-                    <item name="validation" xsi:type="array">
-                        <item name="required-entry" xsi:type="boolean">true</item>
-                    </item>
                 </item>
             </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">URL Key</label>
+                <dataScope>identifier</dataScope>
+            </settings>
+        </field>
+        <field name="meta_title" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">page</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Meta Title</label>
+                <dataScope>meta_title</dataScope>
+            </settings>
+        </field>
+        <field name="meta_keywords" formElement="textarea">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">page</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Meta Keywords</label>
+                <dataScope>meta_keywords</dataScope>
+            </settings>
+        </field>
+        <field name="meta_description" formElement="textarea">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">page</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Meta Description</label>
+                <dataScope>meta_description</dataScope>
+            </settings>
         </field>
     </fieldset>
-    <fieldset name="design">
-        <argument name="data" xsi:type="array">
-            <item name="config" xsi:type="array">
-                <item name="collapsible" xsi:type="boolean">true</item>
-                <item name="label" xsi:type="string" translate="true">Design</item>
-                <item name="sortOrder" xsi:type="number">50</item>
-            </item>
-        </argument>
-        <field name="page_layout">
-            <argument name="data" xsi:type="array">
-                <item name="options" xsi:type="object">Magento\Cms\Model\Page\Source\PageLayout</item>
-                <item name="config" xsi:type="array">
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="label" xsi:type="string" translate="true">Layout</item>
-                    <item name="formElement" xsi:type="string">select</item>
-                    <item name="source" xsi:type="string">page</item>
-                    <item name="dataScope" xsi:type="string">page_layout</item>
-                </item>
-            </argument>
-        </field>
-        <field name="layout_update_xml">
+    <fieldset name="websites" class="Magento\Store\Ui\Component\Form\Fieldset\Websites" sortOrder="30">
+        <settings>
+            <collapsible>true</collapsible>
+            <label translate="true">Page in Websites</label>
+        </settings>
+        <field name="storeviews" formElement="multiselect">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="label" xsi:type="string" translate="true">Layout Update XML</item>
-                    <item name="formElement" xsi:type="string">textarea</item>
                     <item name="source" xsi:type="string">page</item>
-                    <item name="dataScope" xsi:type="string">layout_update_xml</item>
+                    <item name="default" xsi:type="number">0</item>
                 </item>
             </argument>
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>int</dataType>
+                <label translate="true">Store View</label>
+                <dataScope>store_id</dataScope>
+            </settings>
+            <formElements>
+                <multiselect>
+                    <settings>
+                        <options class="Magento\Cms\Ui\Component\Listing\Column\Cms\Options"/>
+                    </settings>
+                </multiselect>
+            </formElements>
         </field>
     </fieldset>
-    <fieldset name="custom_design_update">
-        <argument name="data" xsi:type="array">
-            <item name="config" xsi:type="array">
-                <item name="collapsible" xsi:type="boolean">true</item>
-                <item name="label" xsi:type="string" translate="true">Custom Design Update</item>
-                <item name="sortOrder" xsi:type="number">60</item>
-            </item>
-        </argument>
-        <field name="custom_theme_from">
+    <fieldset name="design" sortOrder="50">
+        <settings>
+            <collapsible>true</collapsible>
+            <label translate="true">Design</label>
+        </settings>
+        <field name="page_layout" formElement="select">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string" translate="true">From</item>
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="formElement" xsi:type="string">date</item>
                     <item name="source" xsi:type="string">page</item>
-                    <item name="dataScope" xsi:type="string">custom_theme_from</item>
-                    <item name="validation" xsi:type="array">
-                        <item name="validate-date" xsi:type="boolean">true</item>
-                    </item>
                 </item>
             </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Layout</label>
+                <dataScope>page_layout</dataScope>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="Magento\Cms\Model\Page\Source\PageLayout"/>
+                    </settings>
+                </select>
+            </formElements>
         </field>
-        <field name="custom_theme_to">
+        <field name="layout_update_xml" formElement="textarea">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string" translate="true">To</item>
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="formElement" xsi:type="string">date</item>
                     <item name="source" xsi:type="string">page</item>
-                    <item name="dataScope" xsi:type="string">custom_theme_to</item>
-                    <item name="validation" xsi:type="array">
-                        <item name="validate-date" xsi:type="boolean">true</item>
-                    </item>
                 </item>
             </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Layout Update XML</label>
+                <dataScope>layout_update_xml</dataScope>
+            </settings>
         </field>
-        <field name="custom_theme">
+    </fieldset>
+    <fieldset name="custom_design_update" sortOrder="60">
+        <settings>
+            <collapsible>true</collapsible>
+            <label translate="true">Custom Design Update</label>
+        </settings>
+        <field name="custom_theme_from" formElement="date">
             <argument name="data" xsi:type="array">
-                <item name="options" xsi:type="object">Magento\Cms\Model\Page\Source\Theme</item>
                 <item name="config" xsi:type="array">
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="label" xsi:type="string" translate="true">New Theme</item>
-                    <item name="formElement" xsi:type="string">select</item>
                     <item name="source" xsi:type="string">page</item>
-                    <item name="dataScope" xsi:type="string">custom_theme</item>
-                    <item name="caption" xsi:type="string" translate="true">-- Please Select --</item>
                 </item>
             </argument>
+            <settings>
+                <validation>
+                    <rule name="validate-date" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
+                <label translate="true">From</label>
+                <dataScope>custom_theme_from</dataScope>
+            </settings>
         </field>
-        <field name="custom_root_template">
+        <field name="custom_theme_to" formElement="date">
             <argument name="data" xsi:type="array">
-                <item name="options" xsi:type="object">Magento\Cms\Model\Page\Source\PageLayout</item>
                 <item name="config" xsi:type="array">
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="label" xsi:type="string" translate="true">New Layout</item>
-                    <item name="formElement" xsi:type="string">select</item>
                     <item name="source" xsi:type="string">page</item>
-                    <item name="dataScope" xsi:type="string">custom_root_template</item>
-                    <item name="caption" xsi:type="string" translate="true">-- Please Select --</item>
                 </item>
             </argument>
+            <settings>
+                <validation>
+                    <rule name="validate-date" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
+                <label translate="true">To</label>
+                <dataScope>custom_theme_to</dataScope>
+            </settings>
+        </field>
+        <field name="custom_theme" formElement="select">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">page</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">New Theme</label>
+                <dataScope>custom_theme</dataScope>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="Magento\Cms\Model\Page\Source\Theme"/>
+                        <caption translate="true">-- Please Select --</caption>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+        <field name="custom_root_template" formElement="select">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">page</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">New Layout</label>
+                <dataScope>custom_root_template</dataScope>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="Magento\Cms\Model\Page\Source\PageLayout"/>
+                        <caption translate="true">-- Please Select --</caption>
+                    </settings>
+                </select>
+            </formElements>
         </field>
     </fieldset>
 </form>

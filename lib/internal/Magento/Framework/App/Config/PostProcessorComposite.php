@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Config;
@@ -13,7 +13,9 @@ use Magento\Framework\App\Config\Spi\PostProcessorInterface;
  */
 class PostProcessorComposite implements PostProcessorInterface
 {
-    /** @var  PostProcessorInterface[] */
+    /**
+     * @var \Magento\Framework\App\Config\Spi\PostProcessorInterface[]
+     */
     private $processors;
 
     /**

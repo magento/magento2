@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Model\Config\Processor;
@@ -12,6 +12,8 @@ use Magento\Framework\Stdlib\ArrayManager;
 
 /**
  * Allows to extract configurations from environment variables.
+ * @api
+ * @since 100.1.2
  */
 class EnvironmentPlaceholder implements PreProcessorInterface
 {
@@ -48,6 +50,7 @@ class EnvironmentPlaceholder implements PreProcessorInterface
      * If environment variable is matching the desired rule - it's being used as value.
      *
      * {@inheritdoc}
+     * @since 100.1.2
      */
     public function process(array $config)
     {

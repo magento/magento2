@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="form">
-            <block class="Magento\Shipping\Block\Adminhtml\Order\Tracking\Invoice" name="tracking" template="order/tracking.phtml"/>
+            <block class="Magento\Shipping\Block\Adminhtml\Order\Tracking\Invoice" name="tracking" template="Magento_Shipping::order/tracking.phtml"/>
         </referenceBlock>
     </body>
 </page>

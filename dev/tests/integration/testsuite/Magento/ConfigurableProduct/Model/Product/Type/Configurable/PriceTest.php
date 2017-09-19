@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Model\Product\Type\Configurable;
@@ -11,7 +11,7 @@ use Magento\Catalog\Model\Product\Type\AbstractType;
 /**
  * Class PriceTest
  */
-class PriceTest extends \PHPUnit_Framework_TestCase
+class PriceTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  \Magento\Framework\ObjectManagerInterface */
     protected $objectManager;

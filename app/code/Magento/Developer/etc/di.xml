@@ -1,14 +1,11 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\Framework\View\Asset\PreProcessor\ChainFactoryInterface" type="Magento\Framework\View\Asset\PreProcessor\ChainFactory"/>
-    <preference for="Magento\Framework\Css\PreProcessor\ErrorHandlerInterface" type="Magento\Framework\Css\PreProcessor\ErrorHandler" />
-    <preference for="Magento\Framework\View\Asset\PreProcessor\Helper\SortInterface" type="Magento\Framework\View\Asset\PreProcessor\Helper\Sort"/>
     <preference for="Magento\Framework\Logger\Handler\Debug" type="Magento\Developer\Model\Logger\Handler\Debug"/>
 
     <type name="Magento\Framework\View\Result\Page">
@@ -100,6 +97,11 @@
                 <item name="dev_source_theme_deploy" xsi:type="object">Magento\Developer\Console\Command\SourceThemeDeployCommand</item>
                 <item name="xml_converter" xsi:type="object">Magento\Developer\Console\Command\XmlConverterCommand</item>
                 <item name="xml_catalog_generator" xsi:type="object">Magento\Developer\Console\Command\XmlCatalogGenerateCommand</item>
+                <item name="dev_di_info" xsi:type="object">Magento\Developer\Console\Command\DiInfoCommand</item>
+                <item name="dev_query_log_enable" xsi:type="object">Magento\Developer\Console\Command\QueryLogEnableCommand</item>
+                <item name="dev_query_log_disable" xsi:type="object">Magento\Developer\Console\Command\QueryLogDisableCommand</item>
+                <item name="dev_template_hints_disable" xsi:type="object">Magento\Developer\Console\Command\TemplateHintsDisableCommand</item>
+                <item name="dev_template_hints_enable" xsi:type="object">Magento\Developer\Console\Command\TemplateHintsEnableCommand</item>
             </argument>
         </arguments>
     </type>
@@ -115,27 +117,6 @@
             <argument name="adapter" xsi:type="object">jsMinificationAdapter</argument>
         </arguments>
     </virtualType>
-
-    <virtualType name="viewFileFallbackResolver" type="Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Alternative"/>
-
-    <virtualType name="AlternativeSourceProcessors" type="Magento\Framework\View\Asset\PreProcessor\AlternativeSource">
-        <arguments>
-            <argument name="filenameResolver" xsi:type="object">Magento\Framework\View\Asset\PreProcessor\MinificationFilenameResolver</argument>
-            <argument name="lockName" xsi:type="string">alternative-source-css</argument>
-            <argument name="lockerProcess" xsi:type="object">Magento\Framework\View\Asset\LockerProcess</argument>
-            <argument name="alternatives" xsi:type="array">
-                <item name="less" xsi:type="array">
-                    <item name="class" xsi:type="string">Magento\Framework\Css\PreProcessor\Adapter\Less\Processor</item>
-                </item>
-            </argument>
-        </arguments>
-    </virtualType>
-
-    <type name="Magento\Framework\View\Asset\PreProcessor\Pool">
-        <arguments>
-            <argument name="defaultPreprocessor" xsi:type="string">Magento\Framework\View\Asset\PreProcessor\Passthrough</argument>
-        </arguments>
-    </type>
 
     <!-- Configuration for Magento\Framework\Css\PreProcessor\Instruction\Import base flow -->
     <virtualType name="FileGeneratorPublicationDecoratorForBaseFlow" type="Magento\Developer\Model\Css\PreProcessor\FileGenerator\PublicationDecorator">
@@ -164,6 +145,7 @@
         </arguments>
     </type>
 
+    <!-- @api -->
     <virtualType name="AssetPreProcessorPool" type="Magento\Framework\View\Asset\PreProcessor\Pool">
         <arguments>
             <argument name="preprocessors" xsi:type="array">
@@ -243,18 +225,12 @@
         </arguments>
     </virtualType>
 
-    <type name="Magento\Framework\View\Asset\PreProcessor\Chain">
+    <type name="Magento\Config\Model\Config\TypePool">
         <arguments>
-            <argument name="compatibleTypes" xsi:type="array">
-                <item name="css" xsi:type="array">
-                    <item name="less" xsi:type="boolean">true</item>
-                </item>
+            <argument name="sensitive" xsi:type="array">
+                <item name="dev/restrict/allow_ips" xsi:type="string">1</item>
             </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Config\Model\Config\Export\ExcludeList">
-        <arguments>
-            <argument name="configs" xsi:type="array">
+            <argument name="environment" xsi:type="array">
                 <item name="dev/restrict/allow_ips" xsi:type="string">1</item>
             </argument>
         </arguments>

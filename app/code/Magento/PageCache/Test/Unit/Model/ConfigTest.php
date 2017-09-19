@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\PageCache\Test\Unit\Model;
@@ -9,7 +9,11 @@ use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\PageCache\Model\Config;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+ */
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\PageCache\Model\Config
@@ -42,23 +46,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $readFactoryMock = $this->getMock(
-            \Magento\Framework\Filesystem\Directory\ReadFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->coreConfigMock = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $readFactoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadFactory::class);
+        $this->coreConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $this->cacheState = $this->getMockForAbstractClass(\Magento\Framework\App\Cache\StateInterface::class);
 
-        $modulesDirectoryMock = $this->getMock(
-            \Magento\Framework\Filesystem\Directory\Write::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $modulesDirectoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\Write::class);
         $readFactoryMock->expects(
             $this->any()
         )->method(
@@ -120,8 +112,42 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $this->moduleReader = $this->getMock(\Magento\Framework\Module\Dir\Reader::class, [], [], '', false);
-        $this->serializerMock = $this->getMock(Json::class, [], [], '', false);
+        $this->moduleReader = $this->createMock(\Magento\Framework\Module\Dir\Reader::class);
+        $this->serializerMock = $this->createMock(Json::class);
+
+        /** @var \PHPUnit_Framework_MockObject_MockObject $vclTemplateLocator */
+        $vclTemplateLocator = $this->getMockBuilder(\Magento\PageCache\Model\Varnish\VclTemplateLocator::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getTemplate'])
+            ->getMock();
+        $vclTemplateLocator->expects($this->any())
+            ->method('getTemplate')
+            ->will($this->returnValue(file_get_contents(__DIR__ . '/_files/test.vcl')));
+        /** @var \PHPUnit_Framework_MockObject_MockObject $vclTemplateLocator */
+        $vclGeneratorFactory = $this->getMockBuilder(\Magento\PageCache\Model\Varnish\VclGeneratorFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $expectedParams = [
+            'backendHost' => 'example.com',
+            'backendPort' => '8080',
+            'accessList' =>  explode(',', '127.0.0.1, 192.168.0.1,127.0.0.2'),
+            'designExceptions' => [['regexp' => '(?i)pattern', 'value' => 'value_for_pattern']],
+            'sslOffloadedHeader' => 'X_Forwarded_Proto: https',
+            'gracePeriod' => 120
+        ];
+        $vclGeneratorFactory->expects($this->any())
+            ->method('create')
+            ->with($expectedParams)
+            ->will($this->returnValue(new \Magento\PageCache\Model\Varnish\VclGenerator(
+                $vclTemplateLocator,
+                'example.com',
+                '8080',
+                explode(',', '127.0.0.1,192.168.0.1,127.0.0.2'),
+                120,
+                'X_Forwarded_Proto: https',
+                [['regexp' => '(?i)pattern', 'value' => 'value_for_pattern']]
+            )));
         $this->config = $objectManager->getObject(
             \Magento\PageCache\Model\Config::class,
             [
@@ -130,6 +156,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 'cacheState' => $this->cacheState,
                 'reader' => $this->moduleReader,
                 'serializer' => $this->serializerMock,
+                'vclGeneratorFactory' => $vclGeneratorFactory
             ]
         );
     }
@@ -139,9 +166,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetVcl()
     {
-        $this->moduleReader->expects($this->once())
-            ->method('getModuleDir')
-            ->willReturn('/magento/app/code/Magento/PageCache');
         $this->serializerMock->expects($this->once())
             ->method('unserialize')
             ->with('serializedConfig')

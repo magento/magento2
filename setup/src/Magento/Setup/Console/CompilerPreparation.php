@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Console;
 
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Console\Exception\GenerationDirectoryAccessException;
 use Magento\Framework\Console\GenerationDirectoryAccess;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\Driver\File;
@@ -59,37 +60,53 @@ class CompilerPreparation
     /**
      * Determine whether a CLI command is for compilation, and if so, clear the directory.
      *
-     * @throws FileSystemException if generation directory is read-only
+     * @throws GenerationDirectoryAccessException If generation directory is read-only
      * @return void
      */
     public function handleCompilerEnvironment()
     {
-        $compilationCommands = [DiCompileCommand::NAME];
+        $compilationCommands = $this->getCompilerInvalidationCommands();
         $cmdName = $this->input->getFirstArgument();
         $isHelpOption = $this->input->hasParameterOption('--help') || $this->input->hasParameterOption('-h');
         if (!in_array($cmdName, $compilationCommands) || $isHelpOption) {
             return;
         }
-        $compileDirList = [];
+
+        if (!$this->getGenerationDirectoryAccess()->check()) {
+            throw new GenerationDirectoryAccessException();
+        }
+
         $mageInitParams = $this->serviceManager->get(InitParamListener::BOOTSTRAP_PARAM);
         $mageDirs = isset($mageInitParams[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS])
             ? $mageInitParams[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS]
             : [];
         $directoryList = new DirectoryList(BP, $mageDirs);
-        $compileDirList[] = $directoryList->getPath(DirectoryList::GENERATED_CODE);
-        $compileDirList[] = $directoryList->getPath(DirectoryList::GENERATED_METADATA);
-
-        if (!$this->getGenerationDirectoryAccess()->check()) {
-            throw new FileSystemException(
-                new Phrase('Generation directory can not be written.')
-            );
-        }
+        $compileDirList = [
+            $directoryList->getPath(DirectoryList::GENERATED_CODE),
+            $directoryList->getPath(DirectoryList::GENERATED_METADATA),
+        ];
 
         foreach ($compileDirList as $compileDir) {
             if ($this->filesystemDriver->isExists($compileDir)) {
                 $this->filesystemDriver->deleteDirectory($compileDir);
             }
         }
+    }
+
+    /**
+     * Retrieves command list with commands which invalidates compiler
+     *
+     * @return array
+     */
+    private function getCompilerInvalidationCommands()
+    {
+        return [
+            DiCompileCommand::NAME,
+            'module:disable',
+            'module:enable',
+            'module:uninstall',
+            'deploy:mode:set'
+        ];
     }
 
     /**

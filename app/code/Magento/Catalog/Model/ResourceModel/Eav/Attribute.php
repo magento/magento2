@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,8 +15,7 @@ use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
 /**
  * Catalog attribute model
  *
- * @method \Magento\Catalog\Model\ResourceModel\Attribute _getResource()
- * @method \Magento\Catalog\Model\ResourceModel\Attribute getResource()
+ * @api
  * @method \Magento\Catalog\Model\ResourceModel\Eav\Attribute getFrontendInputRenderer()
  * @method string setFrontendInputRenderer(string $value)
  * @method int setIsGlobal(int $value)
@@ -30,9 +29,11 @@ use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @since 100.0.2
  */
 class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
-    \Magento\Catalog\Api\Data\ProductAttributeInterface, \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface
+    \Magento\Catalog\Api\Data\ProductAttributeInterface,
+    \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface
 {
     const MODULE_NAME = 'Magento_Catalog';
 
@@ -822,6 +823,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
 
     /**
      * @inheritdoc
+     * @since 100.0.9
      */
     public function __sleep()
     {
@@ -834,6 +836,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
 
     /**
      * @inheritdoc
+     * @since 100.0.9
      */
     public function __wakeup()
     {
@@ -845,5 +848,35 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
         );
         $this->_productFlatIndexerHelper = $objectManager->get(\Magento\Catalog\Helper\Product\Flat\Indexer::class);
         $this->attrLockValidator = $objectManager->get(LockValidatorInterface::class);
+    }
+
+    /**
+     * @inheritdoc
+     * @since 101.1.0
+     */
+    public function setIsUsedInGrid($isUsedInGrid)
+    {
+        $this->setData(self::IS_USED_IN_GRID, $isUsedInGrid);
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     * @since 101.1.0
+     */
+    public function setIsVisibleInGrid($isVisibleInGrid)
+    {
+        $this->setData(self::IS_VISIBLE_IN_GRID, $isVisibleInGrid);
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     * @since 101.1.0
+     */
+    public function setIsFilterableInGrid($isFilterableInGrid)
+    {
+        $this->setData(self::IS_FILTERABLE_IN_GRID, $isFilterableInGrid);
+        return $this;
     }
 }

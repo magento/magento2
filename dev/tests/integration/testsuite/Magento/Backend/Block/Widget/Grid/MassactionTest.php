@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Widget\Grid;
@@ -12,7 +12,7 @@ use Magento\TestFramework\App\State;
  * @magentoComponentsDir Magento/Backend/Block/_files/design
  * @magentoDbIsolation enabled
  */
-class MassactionTest extends \PHPUnit_Framework_TestCase
+class MassactionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Block\Widget\Grid\Massaction

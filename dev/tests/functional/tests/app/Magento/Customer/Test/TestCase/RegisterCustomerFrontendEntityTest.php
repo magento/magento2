@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -57,7 +57,6 @@ class RegisterCustomerFrontendEntityTest extends Injectable
      * @param CustomerAccountCreate $customerAccountCreate
      * @param CmsIndex $cmsIndex
      * @param LogoutCustomerOnFrontendStep $logoutCustomerOnFrontendStep
-     * @return void
      */
     public function __inject(
         CustomerAccountCreate $customerAccountCreate,
@@ -77,9 +76,10 @@ class RegisterCustomerFrontendEntityTest extends Injectable
      */
     public function test(Customer $customer)
     {
+        $this->logoutCustomerOnFrontendStep->run();
         // Steps
         $this->cmsIndex->open();
-        $this->cmsIndex->getLinksBlock()->openLink('Create an Account');
+        $this->cmsIndex->getLinksBlock()->openCustomerCreateLink();
         $this->customerAccountCreate->getRegisterForm()->registerCustomer($customer);
     }
 

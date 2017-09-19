@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -20,9 +20,9 @@ $attributes = $block->getProductAttributes();
 <script>
     require(['jquery', 'uiRegistry', 'underscore'], function ($, registry, _) {
         $('body').trigger('contentUpdated');
-        $('.<?= /* @noEscape */ $block->getData('config/dataScope')?>[data-role=steps-wizard-main]').applyBindings();
+        $('.<?= /* @noEscape */ $block->getData('config/dataScope') ?>[data-role=steps-wizard-main]').applyBindings();
 
-        registry.async('<?= /* @noEscape */ $block->getData('config/nameStepWizard')?>')(function (component) {
+        registry.async('<?= /* @noEscape */ $block->getData('config/nameStepWizard') ?>')(function (component) {
             _.delay(component.open.bind(component), 500); // TODO: MAGETWO-50246
         })
     });

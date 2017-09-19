@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Indexer;
@@ -16,7 +16,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * @magentoDataFixture Magento/CatalogSearch/_files/indexer_fulltext.php
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SwitcherUsedInFulltextTest extends \PHPUnit_Framework_TestCase
+class SwitcherUsedInFulltextTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var IndexSwitcherInterface

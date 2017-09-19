@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -42,9 +42,9 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Config\Model\Config\Export\ExcludeList">
+    <type name="Magento\Config\Model\Config\TypePool">
         <arguments>
-            <argument name="configs" xsi:type="array">
+            <argument name="sensitive" xsi:type="array">
                 <item name="checkout/payment_failed/copy_to" xsi:type="string">1</item>
             </argument>
         </arguments>

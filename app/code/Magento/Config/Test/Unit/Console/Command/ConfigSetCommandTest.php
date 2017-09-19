@@ -1,15 +1,16 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Console\Command;
 
-use Magento\Config\Console\Command\ConfigSet\ProcessorFacade;
 use Magento\Config\Console\Command\ConfigSet\ProcessorFacadeFactory;
+use Magento\Config\Console\Command\ConfigSet\ProcessorFacade;
 use Magento\Config\Console\Command\ConfigSetCommand;
-use Magento\Framework\App\State;
-use Magento\Framework\Config\ScopeInterface;
+use Magento\Config\Console\Command\EmulatedAdminhtmlAreaProcessor;
+use Magento\Deploy\Model\DeploymentConfig\ChangeDetector;
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Exception\ValidatorException;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
@@ -20,7 +21,7 @@ use Symfony\Component\Console\Tester\CommandTester;
  *
  * @see ConfigSetCommand
  */
-class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
+class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ConfigSetCommand
@@ -28,19 +29,24 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
     private $command;
 
     /**
-     * @var ScopeInterface|Mock
+     * @var EmulatedAdminhtmlAreaProcessor|Mock
      */
-    private $scopeMock;
+    private $emulatedAreProcessorMock;
 
     /**
-     * @var State|Mock
+     * @var ChangeDetector|Mock
      */
-    private $stateMock;
+    private $changeDetectorMock;
 
     /**
      * @var ProcessorFacadeFactory|Mock
      */
     private $processorFacadeFactoryMock;
+
+    /**
+     * @var DeploymentConfig|Mock
+     */
+    private $deploymentConfigMock;
 
     /**
      * @var ProcessorFacade|Mock
@@ -52,9 +58,10 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->scopeMock = $this->getMockBuilder(ScopeInterface::class)
-            ->getMockForAbstractClass();
-        $this->stateMock = $this->getMockBuilder(State::class)
+        $this->emulatedAreProcessorMock = $this->getMockBuilder(EmulatedAdminhtmlAreaProcessor::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->changeDetectorMock = $this->getMockBuilder(ChangeDetector::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->processorFacadeFactoryMock = $this->getMockBuilder(ProcessorFacadeFactory::class)
@@ -63,25 +70,107 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
         $this->processorFacadeMock = $this->getMockBuilder(ProcessorFacade::class)
             ->disableOriginalConstructor()
             ->getMock();
-
-        $this->processorFacadeFactoryMock->expects($this->any())
-            ->method('create')
-            ->willReturn($this->processorFacadeMock);
+        $this->deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->command = new ConfigSetCommand(
-            $this->scopeMock,
-            $this->stateMock,
-            $this->processorFacadeFactoryMock
+            $this->emulatedAreProcessorMock,
+            $this->changeDetectorMock,
+            $this->processorFacadeFactoryMock,
+            $this->deploymentConfigMock
         );
+    }
+
+    public function testExecute()
+    {
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('isAvailable')
+            ->willReturn(true);
+        $this->changeDetectorMock->expects($this->once())
+            ->method('hasChanges')
+            ->willReturn(false);
+        $this->processorFacadeFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->processorFacadeMock);
+        $this->processorFacadeMock->expects($this->once())
+            ->method('process')
+            ->willReturn('Some message');
+        $this->emulatedAreProcessorMock->expects($this->once())
+            ->method('process')
+            ->willReturnCallback(function ($function) {
+                return $function();
+            });
+
+        $tester = new CommandTester($this->command);
+        $tester->execute([
+            ConfigSetCommand::ARG_PATH => 'test/test/test',
+            ConfigSetCommand::ARG_VALUE => 'value'
+        ]);
+
+        $this->assertContains(
+            __('Some message')->render(),
+            $tester->getDisplay()
+        );
+        $this->assertSame(Cli::RETURN_SUCCESS, $tester->getStatusCode());
+    }
+
+    public function testExecuteMagentoUninstalled()
+    {
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('isAvailable')
+            ->willReturn(false);
+        $this->emulatedAreProcessorMock->expects($this->never())
+            ->method('process');
+
+        $tester = new CommandTester($this->command);
+        $tester->execute([
+            ConfigSetCommand::ARG_PATH => 'test/test/test',
+            ConfigSetCommand::ARG_VALUE => 'value'
+        ]);
+
+        $this->assertContains(
+            __('You cannot run this command because the Magento application is not installed.')->render(),
+            $tester->getDisplay()
+        );
+        $this->assertSame(Cli::RETURN_FAILURE, $tester->getStatusCode());
+    }
+
+    public function testExecuteNeedsRegeneration()
+    {
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('isAvailable')
+            ->willReturn(true);
+        $this->changeDetectorMock->expects($this->once())
+            ->method('hasChanges')
+            ->willReturn(true);
+        $this->emulatedAreProcessorMock->expects($this->never())
+            ->method('process');
+
+        $tester = new CommandTester($this->command);
+        $tester->execute([
+            ConfigSetCommand::ARG_PATH => 'test/test/test',
+            ConfigSetCommand::ARG_VALUE => 'value'
+        ]);
+
+        $this->assertContains(
+            __('This command is unavailable right now.')->render(),
+            $tester->getDisplay()
+        );
+        $this->assertSame(Cli::RETURN_FAILURE, $tester->getStatusCode());
     }
 
     public function testExecuteWithException()
     {
-        $this->stateMock->expects($this->once())
-            ->method('emulateAreaCode')
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('isAvailable')
+            ->willReturn(true);
+        $this->changeDetectorMock->expects($this->once())
+            ->method('hasChanges')
+            ->willReturn(false);
+        $this->emulatedAreProcessorMock->expects($this->once())
+            ->method('process')
             ->willThrowException(new ValidatorException(__('The "test/test/test" path does not exists')));
-        $this->processorFacadeFactoryMock->expects($this->never())
-            ->method('create');
 
         $tester = new CommandTester($this->command);
         $tester->execute([

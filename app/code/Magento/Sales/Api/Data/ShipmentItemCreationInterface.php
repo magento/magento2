@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,6 +12,7 @@ namespace Magento\Sales\Api\Data;
  * Interface ShipmentItemCreationInterface
  *
  * @api
+ * @since 100.1.2
  */
 interface ShipmentItemCreationInterface extends
     LineItemInterface,
@@ -21,6 +22,7 @@ interface ShipmentItemCreationInterface extends
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Sales\Api\Data\ShipmentItemCreationExtensionInterface|null
+     * @since 100.1.2
      */
     public function getExtensionAttributes();
 
@@ -29,6 +31,7 @@ interface ShipmentItemCreationInterface extends
      *
      * @param \Magento\Sales\Api\Data\ShipmentItemCreationExtensionInterface $extensionAttributes
      * @return $this
+     * @since 100.1.2
      */
     public function setExtensionAttributes(
         \Magento\Sales\Api\Data\ShipmentItemCreationExtensionInterface $extensionAttributes

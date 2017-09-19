@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Locale;
@@ -31,6 +31,7 @@ class Config implements \Magento\Framework\Locale\ConfigInterface
         'de_AT', /*German (Austria)*/
         'de_CH', /*German (Switzerland)*/
         'de_DE', /*German (Germany)*/
+        'de_LU', /*German (Luxembourg)*/
         'el_GR', /*Greek (Greece)*/
         'en_AU', /*English (Australian)*/
         'en_CA', /*English (Canadian)*/
@@ -54,6 +55,7 @@ class Config implements \Magento\Framework\Locale\ConfigInterface
         'fr_CA', /*French (Canada)*/
         'fr_CH', /*French (Switzerland)*/
         'fr_FR', /*French (France)*/
+        'fr_LU', /*French (Luxembourg)*/
         'gu_IN', /*Gujarati (India)*/
         'he_IL', /*Hebrew (Israel)*/
         'hi_IN', /*Hindi (India)*/

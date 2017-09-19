@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -57,17 +57,16 @@
                             <argument name="options" xsi:type="options" model="Magento\Tax\Model\TaxClass\Source\Product"/>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="tax_rates">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="tax_rates_codes">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Tax Rate</argument>
                             <argument name="sortable" xsi:type="string">0</argument>
-                            <argument name="index" xsi:type="string">tax_rates</argument>
-                            <argument name="filter_index" xsi:type="string">rate.tax_calculation_rate_id</argument>
-                            <argument name="show_missing_option_values" xsi:type="string">1</argument>
-                            <argument name="type" xsi:type="string">options</argument>
-                            <argument name="options" xsi:type="options" model="Magento\Tax\Model\Rate\Source"/>
+                            <argument name="index" xsi:type="string">tax_rates_codes</argument>
+                            <argument name="filter_index" xsi:type="string">rc.code</argument>
+                            <argument name="type" xsi:type="string">text</argument>
                             <argument name="column_css_class" xsi:type="string">col-title</argument>
                             <argument name="header_css_class" xsi:type="string">col-title</argument>
+                            <argument name="renderer" xsi:type="string">Magento\Tax\Block\Grid\Renderer\Codes</argument>
                         </arguments>
                     </block>
                     <block class="Magento\Backend\Block\Widget\Grid\Column" as="priority">

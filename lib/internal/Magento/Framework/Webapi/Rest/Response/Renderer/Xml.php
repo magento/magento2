@@ -2,7 +2,7 @@
 /**
  *  XML Renderer allows to format array or object as valid XML document.
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Webapi\Rest\Response\Renderer;
@@ -24,7 +24,9 @@ class Xml implements \Magento\Framework\Webapi\Rest\Response\RendererInterface
      */
     const DEFAULT_ENTITY_ITEM_NAME = 'item';
 
-    /** @var \Magento\Framework\Xml\Generator */
+    /**
+     * @var \Magento\Framework\Xml\Generator
+     */
     protected $_xmlGenerator;
 
     /**

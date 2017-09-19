@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Model\Storage;
@@ -15,7 +15,7 @@ class DbStorage extends BaseDbStorage
      * @param array $data
      * @return \Magento\Framework\DB\Select
      */
-    protected function prepareSelect($data)
+    protected function prepareSelect(array $data)
     {
         $select = $this->connection->select();
         $select->from(['url_rewrite' => $this->resource->getTableName('url_rewrite')])

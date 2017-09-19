@@ -1,13 +1,12 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\TestFramework\Utility;
 
 use Magento\Framework\App\Utility\Files;
-use Magento\TestFramework\Utility\File\RegexIteratorFactory;
 
 /**
  * A helper to gather various changed files
@@ -25,11 +24,12 @@ class ChangedFiles
      * Returns array of PHP-files, that use or declare Magento application classes and Magento libs
      *
      * @param string $changedFilesList
+     * @param int $fileTypes
      * @return array
      */
-    public static function getPhpFiles($changedFilesList)
+    public static function getPhpFiles($changedFilesList, $fileTypes = 0)
     {
-        $fileUtilities = new File(Files::init(), new RegexIteratorFactory());
+        $fileUtilities = Files::init();
         if (isset($_ENV['INCREMENTAL_BUILD'])) {
             $phpFiles = [];
             foreach (glob($changedFilesList) as $listFile) {
@@ -43,10 +43,10 @@ class ChangedFiles
             );
             if (!empty($phpFiles)) {
                 $phpFiles = Files::composeDataSets($phpFiles);
-                $phpFiles = array_intersect_key($phpFiles, $fileUtilities->getPhpFiles());
+                $phpFiles = array_intersect_key($phpFiles, $fileUtilities->getPhpFiles($fileTypes));
             }
         } else {
-            $phpFiles = $fileUtilities->getPhpFiles();
+            $phpFiles = $fileUtilities->getPhpFiles($fileTypes);
         }
 
         return $phpFiles;

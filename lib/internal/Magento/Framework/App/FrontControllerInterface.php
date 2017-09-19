@@ -1,12 +1,17 @@
 <?php
 /**
- * Application front controller responsible for dispatching application requests
- *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App;
 
+/**
+ * Application front controller responsible for dispatching application requests.
+ * Front controller contains logic common for all actions.
+ * Evary application area has own front controller
+ *
+ * @api
+ */
 interface FrontControllerInterface
 {
     /**

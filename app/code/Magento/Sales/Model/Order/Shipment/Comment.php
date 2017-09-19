@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order\Shipment;
@@ -9,10 +9,6 @@ use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Sales\Api\Data\ShipmentCommentInterface;
 use Magento\Sales\Model\AbstractModel;
 
-/**
- * @method \Magento\Sales\Model\ResourceModel\Order\Shipment\Comment _getResource()
- * @method \Magento\Sales\Model\ResourceModel\Order\Shipment\Comment getResource()
- */
 class Comment extends AbstractModel implements ShipmentCommentInterface
 {
     /**

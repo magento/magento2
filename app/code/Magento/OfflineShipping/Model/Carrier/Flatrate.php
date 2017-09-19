@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\OfflineShipping\Model\Carrier;
@@ -13,6 +13,9 @@ use Magento\Shipping\Model\Rate\Result;
 
 /**
  * Flat rate shipping model
+ *
+ * @api
+ * @since 100.0.2
  */
 class Flatrate extends AbstractCarrier implements CarrierInterface
 {
@@ -144,10 +147,7 @@ class Flatrate extends AbstractCarrier implements CarrierInterface
 
         $shippingPrice = $this->getFinalPriceWithHandlingFee($shippingPrice);
 
-        if ($shippingPrice !== false && (
-                $request->getFreeShipping() === true || $request->getPackageQty() == $freeBoxes
-            )
-        ) {
+        if ($shippingPrice !== false && $request->getPackageQty() == $freeBoxes) {
             $shippingPrice = '0.00';
         }
         return $shippingPrice;

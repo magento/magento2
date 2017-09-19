@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Api;
@@ -609,9 +609,9 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
             'sku' => $productSku,
         ];
         if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
-            $this->setExpectedException('SoapFault', 'Requested product doesn\'t exist');
+            $this->expectException('SoapFault', 'Requested product doesn\'t exist');
         } else {
-            $this->setExpectedException('Exception', '', 404);
+            $this->expectException('Exception', '', 404);
         }
         $this->_webApiCall($serviceInfo, $requestData);
     }

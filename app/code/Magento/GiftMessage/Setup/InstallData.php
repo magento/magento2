@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -67,9 +67,9 @@ class InstallData implements InstallDataInterface
          */
         $options = ['type' => \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER, 'visible' => false, 'required' => false];
         $entities = ['quote', 'quote_address', 'quote_item', 'quote_address_item'];
+        /** @var \Magento\Quote\Setup\QuoteSetup $quoteSetup */
+        $quoteSetup = $this->quoteSetupFactory->create(['setup' => $setup]);
         foreach ($entities as $entity) {
-            /** @var \Magento\Quote\Setup\QuoteSetup $quoteSetup */
-            $quoteSetup = $this->quoteSetupFactory->create(['setup' => $setup]);
             $quoteSetup->addAttribute($entity, 'gift_message_id', $options);
         }
 

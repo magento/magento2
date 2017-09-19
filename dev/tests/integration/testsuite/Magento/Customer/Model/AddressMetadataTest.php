@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model;
@@ -9,7 +9,7 @@ use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\TestFramework\Helper\CacheCleaner;
 
-class AddressMetadataTest extends \PHPUnit_Framework_TestCase
+class AddressMetadataTest extends \PHPUnit\Framework\TestCase
 {
     /** @var AddressMetadataInterface */
     private $service;

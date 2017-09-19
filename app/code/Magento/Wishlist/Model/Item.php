@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Wishlist\Model;
 
@@ -20,7 +18,6 @@ use Magento\Catalog\Model\Product\Exception as ProductException;
 /**
  * Wishlist item model
  *
- * @method \Magento\Wishlist\Model\ResourceModel\Item getResource()
  * @method int getWishlistId()
  * @method \Magento\Wishlist\Model\Item setWishlistId(int $value)
  * @method int getProductId()
@@ -32,6 +29,9 @@ use Magento\Catalog\Model\Product\Exception as ProductException;
  * @method string getDescription()
  * @method \Magento\Wishlist\Model\Item setDescription(string $value)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @api
+ * @since 100.0.2
  */
 class Item extends AbstractModel implements ItemInterface
 {
@@ -193,16 +193,6 @@ class Item extends AbstractModel implements ItemInterface
     }
 
     /**
-     * Retrieve resource instance wrapper
-     *
-     * @return \Magento\Wishlist\Model\ResourceModel\Item
-     */
-    protected function _getResource()
-    {
-        return parent::_getResource();
-    }
-
-    /**
      * Check if two options array are identical
      *
      * @param array $options1
@@ -343,12 +333,12 @@ class Item extends AbstractModel implements ItemInterface
         $this->validate();
 
         // set current store id if it is not defined
-        if (is_null($this->getStoreId())) {
+        if ($this->getStoreId() === null) {
             $this->setStoreId($this->_storeManager->getStore()->getId());
         }
 
         // set current date if added at data is not defined
-        if (is_null($this->getAddedAt())) {
+        if ($this->getAddedAt() === null) {
             $this->setAddedAt($this->_date->gmtDate());
         }
 
@@ -381,7 +371,7 @@ class Item extends AbstractModel implements ItemInterface
     public function getProduct()
     {
         $product = $this->_getData('product');
-        if (is_null($product)) {
+        if ($product === null) {
             if (!$this->getProductId()) {
                 throw new \Magento\Framework\Exception\LocalizedException(__('Cannot specify product.'));
             }

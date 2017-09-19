@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@
 ?>
 
 <section class="page-partners">
-    <h2 class="page-sub-title"><?php /* @escapeNotVerified */ echo __('Platinum Partners'); ?></h2>
+    <h2 class="page-sub-title"><?= /* @escapeNotVerified */ __('Platinum Partners') ?></h2>
     <p class="partners-description">
         <?php /* @escapeNotVerified */
         echo __(
@@ -16,7 +16,7 @@
             'Magento reserves the Platinum level for select trusted partners that are committed to offering integrations of commerce features, functions, and tools, as well as back-end systems and operations, to extend and enhance the power of the Magento commerce platform.'
         ); ?>
     </p>
-    <h3 class="page-sub-sub-title"><?php /* @escapeNotVerified */ echo __('Featured Platinum Partners'); ?></h3>
+    <h3 class="page-sub-sub-title"><?= /* @escapeNotVerified */ __('Featured Platinum Partners') ?></h3>
     <div data-role="partners-block" class="partners-block">
         <div data-role="spinner" class="admin__data-grid-loading-mask">
             <div class="spinner">
@@ -29,7 +29,7 @@
     <div class="row row-gutter partners-footer">
         <div class="col-m-5">
             <div class="partners-search">
-                <h2 class="page-sub-title"><?php /* @escapeNotVerified */ echo __('Partner search'); ?></h2>
+                <h2 class="page-sub-title"><?= /* @escapeNotVerified */ __('Partner search') ?></h2>
                 <p>
                     <?php /* @escapeNotVerified */
                     echo __(
@@ -40,7 +40,7 @@
                 </p>
                 <a class="action-secondary" target="_blank"
                    href="http://partners.magento.com/partner_locator/search.aspx">
-                    <?php /* @escapeNotVerified */ echo __('More Partners'); ?>
+                    <?= /* @escapeNotVerified */ __('More Partners') ?>
                 </a>
             </div>
         </div>
@@ -53,7 +53,7 @@
                 alt="Partner"/>
         </div>
         <div class="col-m-4">
-            <h2 class="page-sub-title"><?php /* @escapeNotVerified */ echo __('Magento Marketplace'); ?></h2>
+            <h2 class="page-sub-title"><?= /* @escapeNotVerified */ __('Magento Marketplace') ?></h2>
             <p class="partner-description">
                 <?php /* @escapeNotVerified */ echo __(
                     'Extensions and Themes are an essential component of the Magento Ecosystem. ' .
@@ -62,7 +62,7 @@
             </p>
             <a class="action-secondary" target="_blank"
                href="http://www.magentocommerce.com/magento-connect/">
-                <?php /* @escapeNotVerified */ echo __('Visit Magento Marketplaces'); ?>
+                <?= /* @escapeNotVerified */ __('Visit Magento Marketplaces') ?>
             </a>
         </div>
     </div>
@@ -73,7 +73,7 @@
     {
         "*": {
             "Magento_Marketplace/default": {
-                "url": "<?php echo $block->getUrl('marketplace/partners/index',
+                "url": "<?= $block->getUrl('marketplace/partners/index',
                     ['_current' => true, 'block' => '', 'period' => '']) ?>"
             }
         }

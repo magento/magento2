@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -11,7 +11,7 @@
     </head>
     <body>
         <referenceContainer name="content">
-            <block class="Magento\Search\Block\Term" name="seo.searchterm" template="term.phtml" cacheable="false"/>
+            <block class="Magento\Search\Block\Term" name="seo.searchterm" template="Magento_Search::term.phtml" cacheable="false"/>
         </referenceContainer>
     </body>
 </page>

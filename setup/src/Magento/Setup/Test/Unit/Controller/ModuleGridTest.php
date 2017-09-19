@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,7 +12,7 @@ use Magento\Setup\Model\Grid\Module;
 /**
  * Class ModuleGridTest
  */
-class ModuleGridTest extends \PHPUnit_Framework_TestCase
+class ModuleGridTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Module|\PHPUnit_Framework_MockObject_MockObject

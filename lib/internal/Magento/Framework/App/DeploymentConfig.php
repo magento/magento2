@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,6 +10,8 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
 
 /**
  * Application deployment configuration
+ *
+ * @api
  */
 class DeploymentConfig
 {
@@ -118,6 +120,7 @@ class DeploymentConfig
      * Check if data from deploy files is avaiable
      *
      * @return bool
+     * @since 100.1.3
      */
     public function isDbAvailable()
     {

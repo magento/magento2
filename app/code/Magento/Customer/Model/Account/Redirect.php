@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\Account;
@@ -54,7 +54,7 @@ class Redirect
     protected $customerUrl;
 
     /**
-     * @deprecated
+     * @deprecated 100.2.0
      * @var UrlInterface
      */
     protected $url;
@@ -229,7 +229,7 @@ class Redirect
     /**
      * Get Cookie manager. For release backward compatibility.
      *
-     * @deprecated
+     * @deprecated 100.0.10
      * @return CookieManagerInterface
      */
     protected function getCookieManager()
@@ -243,7 +243,7 @@ class Redirect
     /**
      * Set cookie manager. For unit tests.
      *
-     * @deprecated
+     * @deprecated 100.0.10
      * @param object $value
      * @return void
      */

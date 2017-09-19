@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Console\Command;
@@ -15,7 +15,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 use Magento\Framework\App\Config\ConfigPathResolver;
 use Magento\Config\Console\Command\ConfigShow\ValueProcessor;
 
-class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
+class ConfigShowCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ValidatorInterface|MockObject

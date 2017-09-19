@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -43,6 +43,26 @@ define([
             this.modalTitle(element.checkboxText);
             this.modalContent(element.content);
             agreementsModal.showModal();
+        },
+
+        /**
+         * build a unique id for the term checkbox
+         *
+         * @param {Object} context - the ko context
+         * @param {Number} agreementId
+         */
+        getCheckboxId: function (context, agreementId) {
+            var paymentMethodName = '',
+                paymentMethodRenderer = context.$parents[1];
+
+            // corresponding payment method fetched from parent context
+            if (paymentMethodRenderer) {
+                // item looks like this: {title: "Check / Money order", method: "checkmo"}
+                paymentMethodName = paymentMethodRenderer.item ?
+                  paymentMethodRenderer.item.method : '';
+            }
+
+            return 'agreement_' + paymentMethodName + '_' + agreementId;
         },
 
         /**

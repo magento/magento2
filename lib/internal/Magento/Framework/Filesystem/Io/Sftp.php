@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Framework\Filesystem\Io;
 
@@ -16,11 +14,10 @@ namespace Magento\Framework\Filesystem\Io;
 class Sftp extends AbstractIo
 {
     const REMOTE_TIMEOUT = 10;
-
     const SSH2_PORT = 22;
 
     /**
-     * @var \Net_SFTP $_connection
+     * @var \phpseclib\Net\SFTP $_connection
      */
     protected $_connection = null;
 
@@ -48,7 +45,9 @@ class Sftp extends AbstractIo
         }
         $this->_connection = new \phpseclib\Net\SFTP($host, $port, $args['timeout']);
         if (!$this->_connection->login($args['username'], $args['password'])) {
-            throw new \Exception(sprintf("Unable to open SFTP connection as %s@%s", $args['username'], $args['host']));
+            throw new \Exception(
+                sprintf("Unable to open SFTP connection as %s@%s", $args['username'], $args['host'])
+            );
         }
     }
 
@@ -168,7 +167,7 @@ class Sftp extends AbstractIo
      */
     public function read($filename, $destination = null)
     {
-        if (is_null($destination)) {
+        if ($destination === null) {
             $destination = false;
         }
         return $this->_connection->get($filename, $destination);
@@ -184,7 +183,7 @@ class Sftp extends AbstractIo
      */
     public function write($filename, $source, $mode = null)
     {
-        $mode = is_readable($source) ? NET_SFTP_LOCAL_FILE : NET_SFTP_STRING;
+        $mode = is_readable($source) ? \phpseclib\Net\SFTP::SOURCE_LOCAL_FILE : \phpseclib\Net\SFTP::SOURCE_STRING;
         return $this->_connection->put($filename, $source, $mode);
     }
 

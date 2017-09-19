@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile
 ?>
 <div class="widget block block-category-link">
-    <a <?php /* @escapeNotVerified */ echo $block->getLinkAttributes() ?>><span><?php echo $block->escapeHtml($block->getLabel()) ?></span></a>
+    <a <?= /* @escapeNotVerified */ $block->getLinkAttributes() ?>><span><?= $block->escapeHtml($block->getLabel()) ?></span></a>
 </div>

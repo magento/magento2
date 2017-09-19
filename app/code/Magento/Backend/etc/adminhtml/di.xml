@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -14,7 +14,6 @@
     <preference for="Magento\Framework\App\DefaultPathInterface" type="Magento\Backend\App\DefaultPath" />
     <preference for="Magento\Backend\App\ConfigInterface" type="Magento\Backend\App\Config" />
     <preference for="Magento\Framework\App\Response\Http\FileFactory" type="Magento\Backend\App\Response\Http\FileFactory" />
-    <preference for="Magento\Framework\View\Layout\GeneratorPool" type="Magento\Backend\Model\View\Layout\GeneratorPool" />
     <type name="Magento\Framework\Stdlib\DateTime\Timezone">
         <arguments>
             <argument name="scopeType" xsi:type="const">Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT</argument>
@@ -23,7 +22,6 @@
     <type name="Magento\Framework\View\Result\Page">
         <arguments>
             <argument name="layoutReaderPool" xsi:type="object">pageConfigRenderPool</argument>
-            <argument name="generatorPool" xsi:type="object">Magento\Backend\Model\View\Layout\GeneratorPool</argument>
             <argument name="template" xsi:type="string">Magento_Theme::root.phtml</argument>
         </arguments>
     </type>

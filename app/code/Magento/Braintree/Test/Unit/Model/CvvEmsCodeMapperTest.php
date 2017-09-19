@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Test\Unit\Model;
@@ -10,7 +10,7 @@ use Magento\Braintree\Model\Ui\ConfigProvider;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
-class CvvEmsCodeMapperTest extends \PHPUnit_Framework_TestCase
+class CvvEmsCodeMapperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CvvEmsCodeMapper

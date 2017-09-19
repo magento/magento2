@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -35,11 +35,11 @@ class ObserverConfig
      */
     public function _isLatestPasswordExpired($latestPassword)
     {
-        if (!isset($latestPassword['expires']) || $this->getAdminPasswordLifetime() == 0) {
+        if (!isset($latestPassword['last_updated']) || $this->getAdminPasswordLifetime() == 0) {
             return false;
-        } else {
-            return (int)$latestPassword['expires'] < time();
         }
+
+        return (int)$latestPassword['last_updated'] + $this->getAdminPasswordLifetime() < time();
     }
 
     /**

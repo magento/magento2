@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Vault\Test\Unit\Plugin;
@@ -8,7 +8,7 @@ namespace Magento\Vault\Test\Unit\Plugin;
 /**
  * Class PaymentVaultConfigurationProcessTest.
  */
-class PaymentVaultConfigurationProcessTest extends \PHPUnit_Framework_TestCase
+class PaymentVaultConfigurationProcessTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject

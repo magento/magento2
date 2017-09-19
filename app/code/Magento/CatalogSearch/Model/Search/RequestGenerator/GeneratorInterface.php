@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,10 @@ namespace Magento\CatalogSearch\Model\Search\RequestGenerator;
 
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 
+/**
+ * @api
+ * @since 100.1.6
+ */
 interface GeneratorInterface
 {
     /**
@@ -15,6 +19,7 @@ interface GeneratorInterface
      * @param Attribute $attribute
      * @param string $filterName
      * @return array
+     * @since 100.1.6
      */
     public function getFilterData(Attribute $attribute, $filterName);
 
@@ -23,6 +28,7 @@ interface GeneratorInterface
      * @param Attribute $attribute
      * @param string $bucketName
      * @return array
+     * @since 100.1.6
      */
     public function getAggregationData(Attribute $attribute, $bucketName);
 }

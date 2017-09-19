@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@
 ?>
 <?php /** @var $block \Magento\Shipping\Block\Tracking\Link */ ?>
 <?php $order = $block->getOrder() ?>
-<a href="#" class="action track" title="<?php /* @escapeNotVerified */ echo $block->getLabel() ?>"
-   data-mage-init='{"popupWindow": {"windowURL":"<?php /* @escapeNotVerified */ echo $block->getWindowUrl($order) ?>","windowName":"trackorder","width":800,"height":600,"left":0,"top":0,"resizable":1,"scrollbars":1}}'>
-    <span><?php /* @escapeNotVerified */ echo $block->getLabel()?></span>
+<a href="#" class="action track" title="<?= /* @escapeNotVerified */ $block->getLabel() ?>"
+   data-mage-init='{"popupWindow": {"windowURL":"<?= /* @escapeNotVerified */ $block->getWindowUrl($order) ?>","windowName":"trackorder","width":800,"height":600,"left":0,"top":0,"resizable":1,"scrollbars":1}}'>
+    <span><?= /* @escapeNotVerified */ $block->getLabel() ?></span>
 </a>

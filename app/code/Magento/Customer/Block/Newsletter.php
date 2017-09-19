@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block;
@@ -11,7 +11,9 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 /**
  * Customer front  newsletter manage block
  *
+ * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 100.0.2
  */
 class Newsletter extends \Magento\Customer\Block\Account\Dashboard
 {

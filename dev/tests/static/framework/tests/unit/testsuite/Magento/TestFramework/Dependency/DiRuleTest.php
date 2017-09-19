@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TestFramework\Dependency;
 
 use Magento\TestFramework\Dependency\VirtualType\VirtualTypeMapper;
 
-class DiRuleTest extends \PHPUnit_Framework_TestCase
+class DiRuleTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param string $module
@@ -17,7 +17,6 @@ class DiRuleTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetDependencyInfo($module, $contents, array $expected)
     {
-
         $diRule = new DiRule(new VirtualTypeMapper([
                     'scope' => [
                         'someVirtualType1' => 'Magento\AnotherModule\Some\Class1',

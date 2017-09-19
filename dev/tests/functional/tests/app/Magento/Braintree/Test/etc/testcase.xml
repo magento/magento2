@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -155,7 +155,7 @@
         <step name="fillBillingInformation" module="Magento_Checkout" next="placeOrder" />
         <step name="placeOrder" module="Magento_Checkout" next="changeOrderStatusToPaymentReview" />
         <step name="changeOrderStatusToPaymentReview" module="Magento_Braintree" next="acceptPayment" />
-        <step name="acceptPayment" module="Magento_Braintree" />
+        <step name="acceptPayment" module="Magento_Sales" />
     </scenario>
     <scenario name="OnePageCheckoutDenyPaymentTest" firstStep="setupConfiguration">
         <step name="setupConfiguration" module="Magento_Config" next="createProducts" />
@@ -169,7 +169,7 @@
         <step name="fillBillingInformation" module="Magento_Checkout" next="placeOrder" />
         <step name="placeOrder" module="Magento_Checkout" next="changeOrderStatusToPaymentReview" />
         <step name="changeOrderStatusToPaymentReview" module="Magento_Braintree" next="denyPayment" />
-        <step name="denyPayment" module="Magento_Braintree" />
+        <step name="denyPayment" module="Magento_Sales" />
     </scenario>
     <scenario name="CreateOrderWithPayPalBraintreeVaultBackendTest" firstStep="setupConfiguration">
         <step name="setupConfiguration" module="Magento_Config" next="createProducts" />

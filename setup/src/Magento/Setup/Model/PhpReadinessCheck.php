@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Model;
 
 use Composer\Package\Version\VersionParser;
 use Magento\Framework\Composer\ComposerInformation;
-use Magento\Setup\Controller\ResponseTypeInterface;
 use Magento\Framework\Convert\DataSize;
+use Magento\Setup\Controller\ResponseTypeInterface;
 
 /**
  * Checks for PHP readiness. It is used by both Cron and Setup wizard.

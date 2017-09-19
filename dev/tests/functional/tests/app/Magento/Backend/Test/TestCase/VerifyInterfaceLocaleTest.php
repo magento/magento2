@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Test\TestCase;
 
 use Magento\Backend\Test\Constraint\AssertInterfaceLocaleAvailableOptions;
-use Magento\Mtf\TestCase\Injectable;
 use Magento\Backend\Test\Page\Adminhtml\SystemAccount;
+use Magento\Mtf\TestCase\Injectable;
 use Magento\Mtf\Util\Command\Locales;
 use Magento\User\Test\Page\Adminhtml\UserEdit;
 

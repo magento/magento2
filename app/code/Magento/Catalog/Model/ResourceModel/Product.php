@@ -1,19 +1,20 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel;
 
-use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Website\Link as ProductWebsiteLink;
 use Magento\Framework\App\ObjectManager;
 
 /**
  * Product entity resource model
  *
+ * @api
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Product extends AbstractResource
 {
@@ -62,6 +63,7 @@ class Product extends AbstractResource
 
     /**
      * @var \Magento\Framework\EntityManager\EntityManager
+     * @since 101.0.0
      */
     protected $entityManager;
 
@@ -72,6 +74,7 @@ class Product extends AbstractResource
 
     /**
      * @var array
+     * @since 101.0.0
      */
     protected $availableCategoryIdsCache = [];
 
@@ -151,7 +154,7 @@ class Product extends AbstractResource
     /**
      * Product Category table name getter
      *
-     * @deprecated
+     * @deprecated 101.1.0
      * @return string
      */
     public function getProductCategoryTable()
@@ -175,7 +178,7 @@ class Product extends AbstractResource
     /**
      * Retrieve product website identifiers
      *
-     * @deprecated
+     * @deprecated 101.1.0
      * @param \Magento\Catalog\Model\Product|int $product
      * @return array
      */
@@ -292,7 +295,7 @@ class Product extends AbstractResource
     /**
      * Save product website relations
      *
-     * @deprecated
+     * @deprecated 101.1.0
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
      */
@@ -321,7 +324,7 @@ class Product extends AbstractResource
      * @param \Magento\Framework\DataObject $object
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @deprecated
+     * @deprecated 101.1.0
      */
     protected function _saveCategories(\Magento\Framework\DataObject $object)
     {
@@ -564,10 +567,20 @@ class Product extends AbstractResource
      * @param integer $entityId
      * @param array|null $attributes
      * @return $this
+     * @since 101.0.0
      */
     public function load($object, $entityId, $attributes = [])
     {
-        $this->loadAttributesMetadata($attributes);
+        $select = $this->_getLoadRowSelect($object, $entityId);
+        $row = $this->getConnection()->fetchRow($select);
+
+        if (is_array($row)) {
+            $object->addData($row);
+        } else {
+            $object->isObjectNew(true);
+        }
+
+        $this->loadAttributesForObject($attributes, $object);
         $this->getEntityManager()->load($object, $entityId);
         return $this;
     }
@@ -575,6 +588,7 @@ class Product extends AbstractResource
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @since 101.0.0
      */
     protected function evaluateDelete($object, $id, $connection)
     {
@@ -605,6 +619,7 @@ class Product extends AbstractResource
      * @param  \Magento\Framework\Model\AbstractModel $object
      * @return $this
      * @throws \Exception
+     * @since 101.0.0
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -625,7 +640,7 @@ class Product extends AbstractResource
     }
 
     /**
-     * @deprecated
+     * @deprecated 101.1.0
      * @return ProductWebsiteLink
      */
     private function getProductWebsiteLink()
@@ -634,7 +649,7 @@ class Product extends AbstractResource
     }
 
     /**
-     * @deprecated
+     * @deprecated 101.1.0
      * @return \Magento\Catalog\Model\ResourceModel\Product\CategoryLink
      */
     private function getProductCategoryLink()
@@ -651,6 +666,7 @@ class Product extends AbstractResource
      * Store id is required to correctly identify attribute value we are working with.
      *
      * {@inheritdoc}
+     * @since 101.1.0
      */
     protected function getAttributeRow($entity, $object, $attribute)
     {

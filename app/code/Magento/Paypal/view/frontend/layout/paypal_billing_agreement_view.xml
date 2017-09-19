@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,7 +9,7 @@
     <update handle="customer_account"/>
     <body>
         <referenceContainer name="content">
-            <block class="Magento\Paypal\Block\Billing\Agreement\View" name="customer.account.billing.agreement" template="billing/agreement/view.phtml" cacheable="false"/>
+            <block class="Magento\Paypal\Block\Billing\Agreement\View" name="customer.account.billing.agreement" template="Magento_Paypal::billing/agreement/view.phtml" cacheable="false"/>
         </referenceContainer>
     </body>
 </page>

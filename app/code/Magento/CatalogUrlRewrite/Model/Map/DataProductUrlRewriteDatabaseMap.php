@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Model\Map;
@@ -17,16 +17,24 @@ class DataProductUrlRewriteDatabaseMap implements DatabaseMapInterface
 {
     const ENTITY_TYPE = 'product';
 
-    /** @var string[] */
+    /**
+     * @var string[]
+     */
     private $createdTableAdapters = [];
 
-    /** @var HashMapPool */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\Map\HashMapPool
+     */
     private $hashMapPool;
 
-    /** @var ResourceConnection */
+    /**
+     * @var \Magento\Framework\App\ResourceConnection
+     */
     private $connection;
 
-    /** @var TemporaryTableService */
+    /**
+     * @var \Magento\Framework\DB\TemporaryTableService
+     */
     private $temporaryTableService;
 
     /**

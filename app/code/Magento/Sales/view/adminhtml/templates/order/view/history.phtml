@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,11 +12,11 @@
         <div class="order-history-block" id="history_form">
 
             <div class="admin__field">
-                <label for="history_status" class="admin__field-label"><?php /* @escapeNotVerified */ echo __('Status') ?></label>
+                <label for="history_status" class="admin__field-label"><?= /* @escapeNotVerified */ __('Status') ?></label>
                 <div class="admin__field-control">
                     <select name="history[status]" id="history_status" class="admin__control-select">
                         <?php foreach ($block->getStatuses() as $_code => $_label): ?>
-                            <option value="<?php /* @escapeNotVerified */ echo $_code ?>"<?php if ($_code == $block->getOrder()->getStatus()): ?> selected="selected"<?php endif; ?>><?php /* @escapeNotVerified */ echo $_label ?></option>
+                            <option value="<?= /* @escapeNotVerified */ $_code ?>"<?php if ($_code == $block->getOrder()->getStatus()): ?> selected="selected"<?php endif; ?>><?= /* @escapeNotVerified */ $_label ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
@@ -24,7 +24,7 @@
 
             <div class="admin__field">
                 <label for="history_comment" class="admin__field-label">
-                    <?php /* @escapeNotVerified */ echo __('Comment') ?>
+                    <?= /* @escapeNotVerified */ __('Comment') ?>
                 </label>
                 <div class="admin__field-control">
                     <textarea name="history[comment]"
@@ -45,7 +45,7 @@
                                    class="admin__control-checkbox"
                                    value="1" />
                             <label class="admin__field-label" for="history_notify">
-                                <?php /* @escapeNotVerified */ echo __('Notify Customer by Email') ?>
+                                <?= /* @escapeNotVerified */ __('Notify Customer by Email') ?>
                             </label>
                         <?php endif; ?>
                     </div>
@@ -57,13 +57,13 @@
                                class="admin__control-checkbox"
                                value="1" />
                         <label class="admin__field-label" for="history_visible">
-                            <?php /* @escapeNotVerified */ echo __('Visible on Storefront') ?>
+                            <?= /* @escapeNotVerified */ __('Visible on Storefront') ?>
                         </label>
                     </div>
                 </div>
 
                 <div class="order-history-comments-actions">
-                    <?php echo $block->getChildHtml('submit_button') ?>
+                    <?= $block->getChildHtml('submit_button') ?>
                 </div>
             </div>
         </div>
@@ -72,21 +72,21 @@
     <ul class="note-list">
     <?php foreach ($block->getOrder()->getStatusHistoryCollection(true) as $_item): ?>
         <li class="note-list-item">
-            <span class="note-list-date"><?php /* @noEscape */ echo $block->formatDate($_item->getCreatedAt(), \IntlDateFormatter::MEDIUM) ?></span>
-            <span class="note-list-time"><?php /* @noEscape */ echo $block->formatTime($_item->getCreatedAt(), \IntlDateFormatter::MEDIUM) ?></span>
-            <span class="note-list-status"><?php /* @escapeNotVerified */ echo $_item->getStatusLabel() ?></span>
+            <span class="note-list-date"><?= /* @noEscape */ $block->formatDate($_item->getCreatedAt(), \IntlDateFormatter::MEDIUM) ?></span>
+            <span class="note-list-time"><?= /* @noEscape */ $block->formatTime($_item->getCreatedAt(), \IntlDateFormatter::MEDIUM) ?></span>
+            <span class="note-list-status"><?= /* @escapeNotVerified */ $_item->getStatusLabel() ?></span>
             <span class="note-list-customer">
-                <?php /* @escapeNotVerified */ echo __('Customer') ?>
+                <?= /* @escapeNotVerified */ __('Customer') ?>
                 <?php if ($block->isCustomerNotificationNotApplicable($_item)): ?>
-                    <span class="note-list-customer-notapplicable"><?php /* @escapeNotVerified */ echo __('Notification Not Applicable') ?></span>
+                    <span class="note-list-customer-notapplicable"><?= /* @escapeNotVerified */ __('Notification Not Applicable') ?></span>
                 <?php elseif ($_item->getIsCustomerNotified()): ?>
-                    <span class="note-list-customer-notified"><?php /* @escapeNotVerified */ echo __('Notified') ?></span>
+                    <span class="note-list-customer-notified"><?= /* @escapeNotVerified */ __('Notified') ?></span>
                 <?php else: ?>
-                    <span class="note-list-customer-not-notified"><?php /* @escapeNotVerified */ echo __('Not Notified') ?></span>
+                    <span class="note-list-customer-not-notified"><?= /* @escapeNotVerified */ __('Not Notified') ?></span>
                 <?php endif; ?>
             </span>
             <?php if ($_item->getComment()): ?>
-                <div class="note-list-comment"><?php echo $block->escapeHtml($_item->getComment(), ['b', 'br', 'strong', 'i', 'u', 'a']) ?></div>
+                <div class="note-list-comment"><?= $block->escapeHtml($_item->getComment(), ['b', 'br', 'strong', 'i', 'u', 'a']) ?></div>
             <?php endif; ?>
         </li>
     <?php endforeach; ?>
@@ -94,7 +94,7 @@
     <script>
 require(['prototype'], function(){
 
-        if($('order_status'))$('order_status').update('<?php /* @escapeNotVerified */ echo $block->getOrder()->getStatusLabel() ?>');
+        if($('order_status'))$('order_status').update('<?= /* @escapeNotVerified */ $block->getOrder()->getStatusLabel() ?>');
 
 });
 </script>

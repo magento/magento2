@@ -1,33 +1,39 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Gallery;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\MediaStorage\Model\File\Uploader as FileUploader;
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
+use Magento\MediaStorage\Model\File\Uploader as FileUploader;
 
 /**
  * Create handler for catalog product gallery
  *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 101.0.0
  */
 class CreateHandler implements ExtensionInterface
 {
     /**
      * @var \Magento\Framework\EntityManager\EntityMetadata
+     * @since 101.0.0
      */
     protected $metadata;
 
     /**
      * @var \Magento\Catalog\Api\Data\ProductAttributeInterface
+     * @since 101.0.0
      */
     protected $attribute;
 
     /**
      * @var \Magento\Catalog\Api\ProductAttributeRepositoryInterface
+     * @since 101.0.0
      */
     protected $attributeRepository;
 
@@ -35,26 +41,31 @@ class CreateHandler implements ExtensionInterface
      * Resource model
      *
      * @var \Magento\Catalog\Model\ResourceModel\Product\Gallery
+     * @since 101.0.0
      */
     protected $resourceModel;
 
     /**
      * @var \Magento\Framework\Json\Helper\Data
+     * @since 101.0.0
      */
     protected $jsonHelper;
 
     /**
      * @var \Magento\Catalog\Model\Product\Media\Config
+     * @since 101.0.0
      */
     protected $mediaConfig;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface
+     * @since 101.0.0
      */
     protected $mediaDirectory;
 
     /**
      * @var \Magento\MediaStorage\Helper\File\Storage\Database
+     * @since 101.0.0
      */
     protected $fileStorageDb;
 
@@ -98,6 +109,7 @@ class CreateHandler implements ExtensionInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 101.0.0
      */
     public function execute($product, $arguments = [])
     {
@@ -164,7 +176,7 @@ class CreateHandler implements ExtensionInterface
                 $product->setData($mediaAttrCode . '_label', $newImages[$attrData]['label']);
             }
 
-            if (in_array($attrData, array_keys($existImages))) {
+            if (in_array($attrData, array_keys($existImages)) && isset($existImages[$attrData]['label'])) {
                 $product->setData($mediaAttrCode . '_label', $existImages[$attrData]['label']);
             }
             if (!empty($product->getData($mediaAttrCode))) {
@@ -197,6 +209,7 @@ class CreateHandler implements ExtensionInterface
 
     /**
      * @return \Magento\Catalog\Api\Data\ProductAttributeInterface
+     * @since 101.0.0
      */
     public function getAttribute()
     {
@@ -214,6 +227,7 @@ class CreateHandler implements ExtensionInterface
      * @param array $images
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 101.0.0
      */
     protected function processDeletedImages($product, array &$images)
     {
@@ -223,6 +237,7 @@ class CreateHandler implements ExtensionInterface
      * @param \Magento\Catalog\Model\Product $product
      * @param array $images
      * @return void
+     * @since 101.0.0
      */
     protected function processNewAndExistingImages($product, array &$images)
     {
@@ -256,6 +271,7 @@ class CreateHandler implements ExtensionInterface
      * @param \Magento\Catalog\Model\Product $product
      * @param array $image
      * @return array
+     * @since 101.0.0
      */
     protected function processNewImage($product, array &$image)
     {
@@ -281,6 +297,7 @@ class CreateHandler implements ExtensionInterface
     /**
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
+     * @since 101.0.0
      */
     protected function duplicate($product)
     {
@@ -295,7 +312,7 @@ class CreateHandler implements ExtensionInterface
         $this->resourceModel->duplicate(
             $this->getAttribute()->getAttributeId(),
             isset($mediaGalleryData['duplicate']) ? $mediaGalleryData['duplicate'] : [],
-            $product->getOriginalId(),
+            $product->getOriginalLinkId(),
             $product->getData($this->metadata->getLinkField())
         );
 
@@ -307,6 +324,7 @@ class CreateHandler implements ExtensionInterface
      *
      * @param string $file
      * @return string
+     * @since 101.0.0
      */
     protected function moveImageFromTmp($file)
     {
@@ -334,6 +352,7 @@ class CreateHandler implements ExtensionInterface
     /**
      * @param string $file
      * @return string
+     * @since 101.0.0
      */
     protected function getFilenameFromTmp($file)
     {
@@ -346,6 +365,7 @@ class CreateHandler implements ExtensionInterface
      * @param string $file
      * @param bool $forTmp
      * @return string
+     * @since 101.0.0
      */
     protected function getUniqueFileName($file, $forTmp = false)
     {
@@ -370,6 +390,7 @@ class CreateHandler implements ExtensionInterface
      * @param string $file
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 101.0.0
      */
     protected function copyImage($file)
     {

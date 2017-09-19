@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,31 +15,31 @@
         <?php if ($lastCritical): ?>
             <ul class="message-system-list">
                 <li class="message message-warning error">
-                    <?php /* @escapeNotVerified */ echo $lastCritical->getText();?>
+                    <?= /* @escapeNotVerified */ $lastCritical->getText() ?>
                 </li>
             </ul>
         <?php endif; ?>
         <div class="message-system-short">
             <span class="message-system-short-label">
-                <?php /* @escapeNotVerified */ echo __('System Messages:')?>
+                <?= /* @escapeNotVerified */ __('System Messages:') ?>
             </span>
 
             <?php if ($block->getCriticalCount()): ?>
                 <div class="message message-warning error">
-                    <a class="message-link" href="#" title="<?php echo $block->escapeHtml(__('Critical System Messages'));?>">
-                        <?php /* @escapeNotVerified */ echo $block->getCriticalCount();?>
+                    <a class="message-link" href="#" title="<?= $block->escapeHtml(__('Critical System Messages')) ?>">
+                        <?= /* @escapeNotVerified */ $block->getCriticalCount() ?>
                     </a>
                 </div>
             <?php endif;?>
 
             <?php if ($block->getMajorCount()): ?>
                <div class="message message-warning warning">
-                   <a class="message-link" href="#" title="<?php echo $block->escapeHtml(__('Major System Messages'));?>">
-                       <?php /* @escapeNotVerified */ echo $block->getMajorCount();?>
+                   <a class="message-link" href="#" title="<?= $block->escapeHtml(__('Major System Messages')) ?>">
+                       <?= /* @escapeNotVerified */ $block->getMajorCount() ?>
                    </a>
                </div>
             <?php endif;?>
         </div>
-        <div id="message-system-all" title="<?php echo $block->escapeHtml(__('System messages'));?>" data-mage-init='<?php echo $block->escapeHtml($block->getSystemMessageDialogJson());?>'></div>
+        <div id="message-system-all" title="<?= $block->escapeHtml(__('System messages')) ?>" data-mage-init='<?= $block->escapeHtml($block->getSystemMessageDialogJson()) ?>'></div>
     </div>
 </div>

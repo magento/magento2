@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -57,6 +57,16 @@ class Links extends Block
     protected function expandCustomerMenu()
     {
         $this->_rootElement->find($this->toggleButton)->click();
+    }
+
+    /**
+     * Open customer registration
+     *
+     * @return void
+     */
+    public function openCustomerCreateLink()
+    {
+        $this->openLink('Create an Account');
     }
 
     /**

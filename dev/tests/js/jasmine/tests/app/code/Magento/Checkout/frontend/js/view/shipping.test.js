@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -80,7 +80,12 @@ define(['squire', 'ko', 'jquery', 'jquery/validate'], function (Squire, ko, $) {
     describe('Magento_Checkout/js/view/shipping', function () {
         describe('"navigate" method', function () {
             it('Check for return value.', function () {
-                expect(obj.navigate()).toBeUndefined();
+                var step = {
+                    isVisible: ko.observable(false)
+                };
+
+                expect(obj.navigate(step)).toBeUndefined();
+                expect(step.isVisible()).toBe(true);
             });
         });
 

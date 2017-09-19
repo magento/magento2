@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Framework\Webapi\Test\Unit;
 
@@ -26,7 +24,7 @@ use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\TestService;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
+class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /** @var ServiceInputProcessor */
     protected $serviceInputProcessor;
@@ -68,7 +66,8 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
         $cache->expects($this->any())->method('load')->willReturn(false);
 
         $this->customAttributeTypeLocator = $this->getMockBuilder(
-            \Magento\Eav\Model\EavCustomAttributeTypeLocator::class)
+            \Magento\Eav\Model\EavCustomAttributeTypeLocator::class
+        )
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -98,7 +97,7 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
                 'fieldNamer' => $this->fieldNamer
             ]
         );
-        $serializerMock = $this->getMock(SerializerInterface::class);
+        $serializerMock = $this->createMock(SerializerInterface::class);
         $serializerMock->method('serialize')
             ->willReturn('serializedData');
         $serializerMock->method('unserialize')
@@ -472,7 +471,7 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $customAttributeValue = null;
-        switch($type) {
+        switch ($type) {
             case 'integer':
                 $customAttributeValue = $value;
                 break;

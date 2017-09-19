@@ -1,13 +1,12 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Test\Integrity\Phrase;
 
 use Magento\Framework\Component\ComponentRegistrar;
-use Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer;
 
 /**
  * Scan source code for detects invocations of __() function or Phrase object, analyzes placeholders with arguments

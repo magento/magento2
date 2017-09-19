@@ -2,7 +2,7 @@
 /**
  * Front controller for WebAPI SOAP area.
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Controller;
@@ -28,9 +28,7 @@ class Soap implements \Magento\Framework\App\FrontControllerInterface
 
     /**#@-*/
 
-    /**
-     * @var \Magento\Webapi\Model\Soap\Server
-     */
+    /**#@-*/
     protected $_soapServer;
 
     /**
