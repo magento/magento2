@@ -31,7 +31,7 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
 
     /**
      * @var Session
-     * @deprecated
+     * @deprecated 101.1.0
      */
     protected $customerSession;
 
