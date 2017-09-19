@@ -22,7 +22,7 @@ class OneTouchOrderingTest extends TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $oneTouchHelper;
+    protected $oneTouchConfig;
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
@@ -49,7 +49,7 @@ class OneTouchOrderingTest extends TestCase
         $this->customerSession->method('getCustomer')->willReturn($this->customer);
 
         $this->customerBrainTreeManager = $this->createMock(CustomerBrainTreeManager::class);
-        $this->oneTouchHelper = $this->createMock(\Magento\OneTouchOrdering\Helper\Data::class);
+        $this->oneTouchConfig = $this->createMock(\Magento\OneTouchOrdering\Model\Config::class);
         $this->brainTreeConfig = $this->createMock(\Magento\Braintree\Gateway\Config\Config::class);
         $this->rateCheck = $this->createMock(\Magento\OneTouchOrdering\Model\RateCheck::class);
 
@@ -57,7 +57,7 @@ class OneTouchOrderingTest extends TestCase
             \Magento\OneTouchOrdering\Model\OneTouchOrdering::class,
             [
                 'customerSession' => $this->customerSession,
-                'oneTouchHelper' => $this->oneTouchHelper,
+                'oneTouchHelper' => $this->oneTouchConfig,
                 'brainTreeConfig'=> $this->brainTreeConfig,
                 'rateCheck' => $this->rateCheck,
                 'customerBrainTreeManager' => $this->customerBrainTreeManager
@@ -83,7 +83,7 @@ class OneTouchOrderingTest extends TestCase
             ->with($addressMock)
             ->willReturn(['test rate']);
         $this->customerSession->expects($this->once())->method('isLoggedIn')->willReturn(true);
-        $this->oneTouchHelper->expects($this->once())->method('isModuleEnabled')->willReturn(true);
+        $this->oneTouchConfig->expects($this->once())->method('isModuleEnabled')->willReturn(true);
         $this->customerSession->method('getCustomerId')->willReturn($customerId);
         $this->customerBrainTreeManager->expects($this->once())
             ->method('getVisibleAvailableTokens')
@@ -104,7 +104,7 @@ class OneTouchOrderingTest extends TestCase
 
         $this->rateCheck->method('getRatesForCustomerAddress')->with($addressMock)->willReturn([]);
         $this->customerSession->expects($this->once())->method('isLoggedIn')->willReturn(true);
-        $this->oneTouchHelper->expects($this->once())->method('isModuleEnabled')->willReturn(true);
+        $this->oneTouchConfig->expects($this->once())->method('isModuleEnabled')->willReturn(true);
         $this->customerSession->method('getCustomerId')->willReturn($customerId);
         $this->customerBrainTreeManager
             ->method('getVisibleAvailableTokens')

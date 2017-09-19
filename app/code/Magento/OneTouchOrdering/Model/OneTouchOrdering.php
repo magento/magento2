@@ -12,7 +12,7 @@ class OneTouchOrdering
      */
     protected $customerSession;
     /**
-     * @var \Magento\OneTouchOrdering\Helper\Data
+     * @var \Magento\OneTouchOrdering\Model\Config
      */
     protected $oneTouchHelper;
     /**
@@ -32,20 +32,20 @@ class OneTouchOrdering
      * OneTouchOrdering constructor.
      * @param \Magento\Customer\Model\Session $customerSession
      * @param CustomerBrainTreeManager $customerBrainTreeManager
-     * @param \Magento\OneTouchOrdering\Helper\Data $oneTouchHelper
+     * @param \Magento\OneTouchOrdering\Model\Config $oneTouchConfig
      * @param \Magento\Braintree\Gateway\Config\Config $brainTreeConfig
      * @param RateCheck $rateCheck
      */
     public function __construct(
         \Magento\Customer\Model\Session $customerSession,
         \Magento\OneTouchOrdering\Model\CustomerBrainTreeManager $customerBrainTreeManager,
-        \Magento\OneTouchOrdering\Helper\Data $oneTouchHelper,
+        \Magento\OneTouchOrdering\Model\Config $oneTouchConfig,
         \Magento\Braintree\Gateway\Config\Config $brainTreeConfig,
         \Magento\OneTouchOrdering\Model\RateCheck $rateCheck
     ) {
 
         $this->customerSession = $customerSession;
-        $this->oneTouchHelper = $oneTouchHelper;
+        $this->oneTouchHelper = $oneTouchConfig;
         $this->brainTreeConfig = $brainTreeConfig;
         $this->rateCheck = $rateCheck;
         $this->customerBrainTreeManager = $customerBrainTreeManager;

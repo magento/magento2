@@ -20,19 +20,19 @@ class Button extends \Magento\Framework\View\Element\Template
      */
     private $oneTouchOrdering;
     /**
-     * @var \Magento\OneTouchOrdering\Helper\Data
+     * @var \Magento\OneTouchOrdering\Model\Config
      */
-    private $oneTouchOrderingHelper;
+    private $oneTouchOrderingConfig;
 
     public function __construct(
         Template\Context $context,
-        \Magento\OneTouchOrdering\Helper\Data $oneTouchOrderingHelper,
+        \Magento\OneTouchOrdering\Model\Config $oneTouchOrderingHelper,
         OneTouchOrdering $oneTouchOrdering,
         array $data = []
     ) {
         parent::__construct($context, $data);
         $this->oneTouchOrdering = $oneTouchOrdering;
-        $this->oneTouchOrderingHelper = $oneTouchOrderingHelper;
+        $this->oneTouchOrderingConfig = $oneTouchOrderingHelper;
     }
 
     public function isButtonEnabled()
@@ -42,7 +42,7 @@ class Button extends \Magento\Framework\View\Element\Template
 
     public function getJsLayout()
     {
-        $buttonText = $this->oneTouchOrderingHelper->getButtonText();
+        $buttonText = $this->oneTouchOrderingConfig->getButtonText();
         $this->jsLayout['components']['one-touch-order']['config']['buttonText'] = $buttonText;
 
         return parent::getJsLayout();

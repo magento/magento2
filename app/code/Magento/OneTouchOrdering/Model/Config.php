@@ -3,12 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\OneTouchOrdering\Helper;
+namespace Magento\OneTouchOrdering\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
-class Data
+class Config
 {
     const ONE_TOUCH_ORDERING_MODULE_ACTIVE = 'sales/one_touch/active';
     const ONE_TOUCH_ORDERING_MODULE_BUTTON_TEXT = 'sales/one_touch/button_text';
