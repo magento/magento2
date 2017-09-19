@@ -74,7 +74,9 @@ class PrepareQuoteTest extends TestCase
     public function testPrepare()
     {
         $customerDataModel = $this->createMock(\Magento\Customer\Api\Data\CustomerInterface::class);
-        $customerAddressDataModel = $this->createMock(\Magento\Customer\Api\Data\AddressInterface::class);
+        $customerAddressDataModel = $this->createMock(
+            \Magento\Customer\Api\Data\AddressInterface::class
+        );
         $this->customerData
             ->expects($this->once())
             ->method('getCustomerDataModel')

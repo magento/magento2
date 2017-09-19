@@ -79,12 +79,6 @@ class PrepareQuote
     {
         $customerId = $this->customerData->getCustomerId();
         $cc = $this->customerBrainTreeManager->getCustomerBrainTreeCard($customerId);
-
-        if (!$cc) {
-            throw new LocalizedException(
-                __('There are no credit cards available.')
-            );
-        }
         $publicHash = $cc->getPublicHash();
         $quote->getPayment()->setQuote($quote)->importData(
             ['method' => BrainTreeConfigProvider::CC_VAULT_CODE]

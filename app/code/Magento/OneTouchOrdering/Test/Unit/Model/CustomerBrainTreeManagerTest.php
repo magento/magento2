@@ -6,6 +6,7 @@
 namespace Magento\OneTouchOrdering\Test\Unit\Model;
 
 use Magento\Braintree\Model\Ui\ConfigProvider as BrainTreeConfigProvider;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\OneTouchOrdering\Model\CustomerBrainTreeManager;
@@ -42,11 +43,16 @@ class CustomerBrainTreeManagerTest extends TestCase
         $this->filterBuilder->method('setField')->willReturnSelf();
         $this->filterBuilder->method('setConditionType')->willReturnSelf();
 
-        $searchCriteria = $this->createMock(\Magento\Framework\Api\SearchCriteriaInterface::class);
-        $this->paymentTokenRepository = $this->createMock(\Magento\Vault\Api\PaymentTokenRepositoryInterface::class);
+        $searchCriteria = $this->createMock(
+            \Magento\Framework\Api\SearchCriteriaInterface::class
+        );
+        $this->paymentTokenRepository = $this->createMock(
+            \Magento\Vault\Api\PaymentTokenRepositoryInterface::class
+        );
 
-        $this->searchCriteriaBuilder = $this->getMockBuilder(\Magento\Framework\Api\SearchCriteriaBuilder::class)
-            ->disableOriginalConstructor()
+        $this->searchCriteriaBuilder = $this->getMockBuilder(
+            \Magento\Framework\Api\SearchCriteriaBuilder::class
+        )->disableOriginalConstructor()
             ->setMethods(['addFilters', 'create'])
             ->getMock();
         $this->searchCriteriaBuilder->method('addFilters')->willReturn($this->searchCriteriaBuilder);
@@ -103,5 +109,19 @@ class CustomerBrainTreeManagerTest extends TestCase
 
         $result = $this->customerBrainTreeManager->getCustomerBrainTreeCard($customerId);
         $this->assertTrue($result);
+    }
+
+    public function testGetCustomerBrainTreeCardNoCC()
+    {
+        $customerId = 21;
+
+        $paymentTokenSearchResult = $this->getMockForAbstractClass(
+            \Magento\Vault\Api\Data\PaymentTokenSearchResultsInterface::class
+        );
+        $paymentTokenSearchResult->method('getItems')->willReturn([]);
+        $this->paymentTokenRepository->method('getList')->willReturn($paymentTokenSearchResult);
+        $this->expectException(LocalizedException::class);
+
+        $result = $this->customerBrainTreeManager->getCustomerBrainTreeCard($customerId);
     }
 }

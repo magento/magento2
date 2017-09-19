@@ -74,16 +74,6 @@ class PrepareQuotePaymentTest extends TestCase
         );
     }
 
-    public function testPreparePaymentNoCcAvailable()
-    {
-        $this->customerBrainTreeManager
-            ->expects($this->once())
-            ->method('getCustomerBrainTreeCard')
-            ->willReturn(false);
-        $this->expectException(LocalizedException::class);
-        $this->prepareQuote->preparePayment($this->quote);
-    }
-
     public function testPreparePayment()
     {
         $customerId = 32;

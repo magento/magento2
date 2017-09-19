@@ -7,6 +7,7 @@ namespace Magento\OneTouchOrdering\Model;
 
 use Magento\Braintree\Gateway\Command\GetPaymentNonceCommand;
 use Magento\Braintree\Model\Ui\ConfigProvider as BrainTreeConfigProvider;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Intl\DateTimeFactory;
 
 class CustomerBrainTreeManager
@@ -56,13 +57,16 @@ class CustomerBrainTreeManager
 
     /**
      * @param $customerId
-     * @return bool|\Magento\Vault\Api\Data\PaymentTokenInterface
+     * @return \Magento\Vault\Api\Data\PaymentTokenInterface
+     * @throws LocalizedException
      */
     public function getCustomerBrainTreeCard($customerId)
     {
         $tokens = $this->getVisibleAvailableTokens($customerId);
         if (empty($tokens)) {
-            return false;
+            throw new LocalizedException(
+                __('There are no credit cards available.')
+            );
         }
 
         return array_shift($tokens);

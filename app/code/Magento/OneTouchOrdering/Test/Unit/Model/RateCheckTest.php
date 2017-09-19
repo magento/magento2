@@ -150,9 +150,9 @@ class RateCheckTest extends TestCase
             ->setMethods(['getAllRates'])
             ->getMock();
 
-        $resultMock->expects($this->once())->method('getAllRates')->willReturn(true);
+        $resultMock->expects($this->once())->method('getAllRates')->willReturn([true]);
         $this->rateCollector->expects($this->once())->method('getResult')->willReturn($resultMock);
         $result = $this->rateCheck->getRatesForCustomerAddress($address);
-        $this->assertTrue($result);
+        $this->assertEquals($result, [true]);
     }
 }
