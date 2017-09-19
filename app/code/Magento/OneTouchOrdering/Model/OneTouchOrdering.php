@@ -6,6 +6,7 @@
 namespace Magento\OneTouchOrdering\Model;
 
 use Magento\Braintree\Gateway\Config\Config as BrainTreeConfig;
+use Magento\Customer\Model\Customer;
 use Magento\Customer\Model\Session;
 
 class OneTouchOrdering
@@ -57,7 +58,7 @@ class OneTouchOrdering
     /**
      * @return bool
      */
-    public function isOneTouchOrderingAvailable()
+    public function isOneTouchOrderingAvailable(): bool
     {
         return $this->isCustomerLoggedIn()
             && $this->isOneTouchButtonEnabled()
@@ -68,18 +69,18 @@ class OneTouchOrdering
     }
 
     /**
-     * @return int|void
+     * @return bool
      */
-    private function isAnyShippingMethodAvailable()
+    private function isAnyShippingMethodAvailable(): bool
     {
         $address = $this->getCustomer()->getDefaultShippingAddress();
-        return count($this->rateCheck->getRatesForCustomerAddress($address) > 0);
+        return count($this->rateCheck->getRatesForCustomerAddress($address)) > 0;
     }
 
     /**
      * @return bool
      */
-    private function isCustomerLoggedIn()
+    private function isCustomerLoggedIn(): bool
     {
         return $this->customerSession->isLoggedIn();
     }
@@ -87,7 +88,7 @@ class OneTouchOrdering
     /**
      * @return bool
      */
-    private function isOneTouchButtonEnabled()
+    private function isOneTouchButtonEnabled(): bool
     {
         return $this->oneTouchHelper->isModuleEnabled();
     }
@@ -95,7 +96,7 @@ class OneTouchOrdering
     /**
      * @return bool
      */
-    private function customerHasBrainTreeCreditCard()
+    private function customerHasBrainTreeCreditCard(): bool
     {
         $customerId = $this->customerSession->getCustomerId();
         $ccTokens = $this->customerBrainTreeManager->getVisibleAvailableTokens($customerId);
@@ -106,7 +107,7 @@ class OneTouchOrdering
     /**
      * @return bool
      */
-    private function customerHasDefaultAddresses()
+    private function customerHasDefaultAddresses(): bool
     {
         $customer = $this->getCustomer();
         return $customer->getDefaultBillingAddress() && $customer->getDefaultShippingAddress();
@@ -115,15 +116,15 @@ class OneTouchOrdering
     /**
      * @return bool
      */
-    private function isBrainTreeAvailable()
+    private function isBrainTreeAvailable(): bool
     {
         return $this->brainTreeConfig->isActive();
     }
 
     /**
-     * @return \Magento\Customer\Model\Customer
+     * @return Customer
      */
-    private function getCustomer()
+    private function getCustomer(): Customer
     {
         return $this->customerSession->getCustomer();
     }

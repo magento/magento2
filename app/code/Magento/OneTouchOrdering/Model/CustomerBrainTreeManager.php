@@ -11,7 +11,6 @@ use Magento\Framework\Intl\DateTimeFactory;
 
 class CustomerBrainTreeManager
 {
-
     /**
      * @var \Magento\Vault\Api\PaymentTokenRepositoryInterface
      */
@@ -74,7 +73,7 @@ class CustomerBrainTreeManager
      * @param $customerId
      * @return string
      */
-    public function getNonce($publicHash, $customerId)
+    public function getNonce($publicHash, $customerId): string
     {
         return $this->getNonce->execute(
             ['public_hash' => $publicHash, 'customer_id' => $customerId]
@@ -85,7 +84,7 @@ class CustomerBrainTreeManager
      * @param $customerId
      * @return \Magento\Vault\Api\Data\PaymentTokenInterface[]
      */
-    public function getVisibleAvailableTokens($customerId)
+    public function getVisibleAvailableTokens($customerId): array
     {
         $customerFilter = $this->getFilter(\Magento\Vault\Api\Data\PaymentTokenInterface::CUSTOMER_ID, $customerId);
         $visibleFilter = $this->getFilter(\Magento\Vault\Api\Data\PaymentTokenInterface::IS_VISIBLE, 1);
@@ -116,7 +115,12 @@ class CustomerBrainTreeManager
         return $this->repository->getList($searchCriteria)->getItems();
     }
 
-    private function getFilter($field, $value)
+    /**
+     * @param $field
+     * @param $value
+     * @return array
+     */
+    private function getFilter($field, $value): array
     {
         return [
             $this->filterBuilder->setField($field)

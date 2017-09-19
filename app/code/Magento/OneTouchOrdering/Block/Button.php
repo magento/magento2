@@ -47,7 +47,7 @@ class Button extends Template
     /**
      * @return bool
      */
-    public function isButtonEnabled()
+    public function isButtonEnabled(): bool
     {
         return $this->oneTouchOrdering->isOneTouchOrderingAvailable();
     }
@@ -55,7 +55,7 @@ class Button extends Template
     /**
      * @return string
      */
-    public function getJsLayout()
+    public function getJsLayout(): string
     {
         $buttonText = $this->oneTouchOrderingConfig->getButtonText();
         $this->jsLayout['components']['one-touch-order']['config']['buttonText'] = $buttonText;

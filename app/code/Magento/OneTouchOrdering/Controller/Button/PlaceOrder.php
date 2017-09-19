@@ -32,6 +32,14 @@ class PlaceOrder extends \Magento\Framework\App\Action\Action
      */
     private $orderRepository;
 
+    /**
+     * PlaceOrder constructor.
+     * @param Context $context
+     * @param StoreManagerInterface $storeManager
+     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+     * @param PlaceOrderModel $placeOrder
+     * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
+     */
     public function __construct(
         Context $context,
         StoreManagerInterface $storeManager,

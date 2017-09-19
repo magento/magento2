@@ -38,7 +38,7 @@ class Config
     /**
      * @return bool
      */
-    public function isModuleEnabled()
+    public function isModuleEnabled(): bool
     {
         return $this->scopeConfig->isSetFlag(
             self::ONE_TOUCH_ORDERING_MODULE_ACTIVE,
@@ -50,7 +50,7 @@ class Config
     /**
      * @return string
      */
-    public function getButtonText()
+    public function getButtonText(): string
     {
         return $this->scopeConfig->getValue(
             self::ONE_TOUCH_ORDERING_MODULE_BUTTON_TEXT,

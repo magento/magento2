@@ -8,7 +8,8 @@ namespace Magento\OneTouchOrdering\Model;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Quote\Model\ResourceModel\Quote;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\ResourceModel\Quote as QuoteRepository;
 
 class PlaceOrder
 {
@@ -17,7 +18,7 @@ class PlaceOrder
      */
     private $cartManagementInterface;
     /**
-     * @var Quote
+     * @var QuoteRepository
      */
     private $quoteRepository;
     /**
@@ -27,12 +28,12 @@ class PlaceOrder
 
     /**
      * PlaceOrder constructor.
-     * @param Quote $quoteRepository
+     * @param QuoteRepository $quoteRepository
      * @param \Magento\Quote\Api\CartManagementInterface $cartManagementInterface
      * @param PrepareQuote $prepareQuote
      */
     public function __construct(
-        Quote $quoteRepository,
+        QuoteRepository $quoteRepository,
         \Magento\Quote\Api\CartManagementInterface $cartManagementInterface,
         PrepareQuote $prepareQuote
     ) {
@@ -47,7 +48,7 @@ class PlaceOrder
      * @throws LocalizedException
      * @return int
      */
-    public function placeOrder(Product $product, array $params)
+    public function placeOrder(Product $product, array $params): int
     {
         $quote = $this->prepareQuote->prepare();
         $paramsObject = $this->_getProductRequest($params);
@@ -59,11 +60,11 @@ class PlaceOrder
     }
 
     /**
-     * @param \Magento\Quote\Model\Quote $quote
-     * @return \Magento\Quote\Model\Quote
+     * @param Quote $quote
+     * @return Quote
      * @throws LocalizedException
      */
-    private function selectCheapestShippingRate(\Magento\Quote\Model\Quote $quote)
+    private function selectCheapestShippingRate(Quote $quote): Quote
     {
         if ($quote->isVirtual()) {
             return $quote;
@@ -98,7 +99,7 @@ class PlaceOrder
      * @return DataObject
      * @throws LocalizedException
      */
-    private function _getProductRequest($requestInfo)
+    private function _getProductRequest($requestInfo): DataObject
     {
         if ($requestInfo instanceof DataObject) {
             $request = $requestInfo;

@@ -17,6 +17,11 @@ class Available extends Action
      */
     private $oneTouchOrdering;
 
+    /**
+     * Available constructor.
+     * @param Context $context
+     * @param OneTouchOrdering $oneTouchOrdering
+     */
     public function __construct(
         Context $context,
         OneTouchOrdering $oneTouchOrdering

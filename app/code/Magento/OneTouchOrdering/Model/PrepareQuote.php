@@ -30,6 +30,13 @@ class PrepareQuote
      */
     private $customerData;
 
+    /**
+     * PrepareQuote constructor.
+     * @param CustomerData $customerData
+     * @param QuoteFactory $quoteFactory
+     * @param StoreManagerInterface $storeManager
+     * @param CustomerBrainTreeManager $customerBrainTreeManager
+     */
     public function __construct(
         CustomerData $customerData,
         QuoteFactory $quoteFactory,
@@ -45,7 +52,7 @@ class PrepareQuote
     /**
      * @return Quote
      */
-    public function prepare()
+    public function prepare(): Quote
     {
         $store = $this->storeManager->getStore();
         $quote = $this->quoteFactory->create();

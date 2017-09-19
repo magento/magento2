@@ -5,6 +5,7 @@
  */
 namespace Magento\OneTouchOrdering\Model;
 
+use Magento\Customer\Model\Customer;
 use Magento\Customer\Model\Session;
 
 class CustomerData
@@ -14,6 +15,10 @@ class CustomerData
      */
     private $customerSession;
 
+    /**
+     * CustomerData constructor.
+     * @param Session $customerSession
+     */
     public function __construct(
         Session $customerSession
     ) {
@@ -23,7 +28,7 @@ class CustomerData
     /**
      * @return \Magento\Customer\Api\Data\AddressInterface
      */
-    public function getDefaultBillingAddressDataModel()
+    public function getDefaultBillingAddressDataModel(): \Magento\Customer\Api\Data\AddressInterface
     {
         return $this->getCustomer()->getDefaultBillingAddress()->getDataModel();
     }
@@ -31,7 +36,7 @@ class CustomerData
     /**
      * @return \Magento\Customer\Api\Data\AddressInterface
      */
-    public function getDefaultShippingAddressDataModel()
+    public function getDefaultShippingAddressDataModel(): \Magento\Customer\Api\Data\AddressInterface
     {
         return $this->getCustomer()->getDefaultShippingAddress()->getDataModel();
     }
@@ -39,7 +44,7 @@ class CustomerData
     /**
      * @return \Magento\Customer\Api\Data\CustomerInterface
      */
-    public function getCustomerDataModel()
+    public function getCustomerDataModel(): \Magento\Customer\Api\Data\CustomerInterface
     {
         return $this->getCustomer()->getDataModel();
     }
@@ -47,15 +52,15 @@ class CustomerData
     /**
      * @return int
      */
-    public function getCustomerId()
+    public function getCustomerId(): int
     {
         return $this->customerSession->getCustomerId();
     }
 
     /**
-     * @return \Magento\Customer\Model\Customer
+     * @return Customer
      */
-    private function getCustomer()
+    private function getCustomer(): Customer
     {
         return $this->customerSession->getCustomer();
     }

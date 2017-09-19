@@ -45,7 +45,7 @@ class RateCheck
      * @param Address $address
      * @return array
      */
-    public function getRatesForCustomerAddress(Address $address)
+    public function getRatesForCustomerAddress(Address $address): array
     {
         /** @var $request \Magento\Quote\Model\Quote\Address\RateRequest */
         $request = $this->rateRequestFactory->create();
