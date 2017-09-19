@@ -80,7 +80,7 @@ class PidConsumerManager
     /**
      * Checks that process is run
      *
-     * If php function does not available throws RuntimeException
+     * If php function exec is not available throws RuntimeException
      * If shell command returns non-zero code and this code is not 1 throws RuntimeException
      *
      * @param int $pid A pid of process
