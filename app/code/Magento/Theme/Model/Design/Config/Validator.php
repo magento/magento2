@@ -64,17 +64,8 @@ class Validator
         }
 
         foreach ($elements as $name => $data) {
-            // Load template object by configured template id
-            $template = $this->templateFactory->create();
-            $template->emulateDesign($designConfig->getScopeId());
             $templateId = $data['value'];
-            if (is_numeric($templateId)) {
-                $template->load($templateId);
-            } else {
-                $template->loadDefault($templateId);
-            }
-            $text = $template->getTemplateText();
-            $template->revertDesign();
+            $text = $this->getTemplateText($templateId, $designConfig);
             // Check if template body has a reference to the same config path
             if (preg_match_all(Template::CONSTRUCTION_TEMPLATE_PATTERN, $text, $constructions, PREG_SET_ORDER)) {
                 foreach ($constructions as $construction) {
@@ -92,6 +83,37 @@ class Validator
                 }
             }
         }
+    }
+
+    /**
+     * @param $designConfig
+     * @return mixed
+     */
+    private function getScopeId($designConfig)
+    {
+        if ($designConfig->getScope() == 'stores') {
+            return $designConfig->getScopeId();
+        }
+        return false;
+    }
+
+    /**
+     * @param $designConfig
+     * @return mixed
+     */
+    private function getTemplateText($templateId, $designConfig)
+    {
+        // Load template object by configured template id
+        $template = $this->templateFactory->create();
+        $template->emulateDesign($this->getScopeId($designConfig));
+        if (is_numeric($templateId)) {
+            $template->load($templateId);
+        } else {
+            $template->loadDefault($templateId);
+        }
+        $text = $template->getTemplateText();
+        $template->revertDesign();
+        return $text;
     }
 
     /**
