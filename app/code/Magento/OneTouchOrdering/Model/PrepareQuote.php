@@ -6,19 +6,23 @@
 namespace Magento\OneTouchOrdering\Model;
 
 use Magento\Braintree\Model\Ui\ConfigProvider as BrainTreeConfigProvider;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\QuoteFactory;
+use Magento\Store\Model\StoreManagerInterface;
 
 class PrepareQuote
 {
     /**
-     * @var \Magento\Quote\Model\QuoteFactory
+     * @var QuoteFactory
      */
     private $quoteFactory;
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     private $storeManager;
     /**
-     * @var \Magento\OneTouchOrdering\Model\CustomerBrainTreeManager
+     * @var CustomerBrainTreeManager
      */
     private $customerBrainTreeManager;
     /**
@@ -27,10 +31,10 @@ class PrepareQuote
     private $customerData;
 
     public function __construct(
-        \Magento\OneTouchOrdering\Model\CustomerData $customerData,
-        \Magento\Quote\Model\QuoteFactory $quoteFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\OneTouchOrdering\Model\CustomerBrainTreeManager $customerBrainTreeManager
+        CustomerData $customerData,
+        QuoteFactory $quoteFactory,
+        StoreManagerInterface $storeManager,
+        CustomerBrainTreeManager $customerBrainTreeManager
     ) {
         $this->quoteFactory = $quoteFactory;
         $this->storeManager = $storeManager;
@@ -39,7 +43,7 @@ class PrepareQuote
     }
 
     /**
-     * @return \Magento\Quote\Model\Quote
+     * @return Quote
      */
     public function prepare()
     {
@@ -61,16 +65,16 @@ class PrepareQuote
     }
 
     /**
-     * @param \Magento\Quote\Model\Quote $quote
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param Quote $quote
+     * @throws LocalizedException
      */
-    public function preparePayment(\Magento\Quote\Model\Quote $quote)
+    public function preparePayment(Quote $quote)
     {
         $customerId = $this->customerData->getCustomerId();
         $cc = $this->customerBrainTreeManager->getCustomerBrainTreeCard($customerId);
 
         if (!$cc) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __('There are no credit cards available.')
             );
         }

@@ -5,11 +5,12 @@
  */
 namespace Magento\OneTouchOrdering\Controller\Button;
 
+use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\OneTouchOrdering\Model\OneTouchOrdering;
 
-class Available extends \Magento\Framework\App\Action\Action
+class Available extends Action
 {
     /**
      * @var OneTouchOrdering

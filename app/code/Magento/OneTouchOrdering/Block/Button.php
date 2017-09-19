@@ -6,6 +6,8 @@
 namespace Magento\OneTouchOrdering\Block;
 
 use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\OneTouchOrdering\Model\Config;
 use Magento\OneTouchOrdering\Model\OneTouchOrdering;
 
 /**
@@ -13,33 +15,46 @@ use Magento\OneTouchOrdering\Model\OneTouchOrdering;
  * @package Magento\OneTouchOrdering\Block
  * @api
  */
-class Button extends \Magento\Framework\View\Element\Template
+class Button extends Template
 {
     /**
      * @var OneTouchOrdering
      */
     private $oneTouchOrdering;
     /**
-     * @var \Magento\OneTouchOrdering\Model\Config
+     * @var Config
      */
     private $oneTouchOrderingConfig;
 
+    /**
+     * Button constructor.
+     * @param Context $context
+     * @param Config $oneTouchOrderingConfig
+     * @param OneTouchOrdering $oneTouchOrdering
+     * @param array $data
+     */
     public function __construct(
-        Template\Context $context,
-        \Magento\OneTouchOrdering\Model\Config $oneTouchOrderingHelper,
+        Context $context,
+        Config $oneTouchOrderingConfig,
         OneTouchOrdering $oneTouchOrdering,
         array $data = []
     ) {
         parent::__construct($context, $data);
         $this->oneTouchOrdering = $oneTouchOrdering;
-        $this->oneTouchOrderingConfig = $oneTouchOrderingHelper;
+        $this->oneTouchOrderingConfig = $oneTouchOrderingConfig;
     }
 
+    /**
+     * @return bool
+     */
     public function isButtonEnabled()
     {
         return $this->oneTouchOrdering->isOneTouchOrderingAvailable();
     }
 
+    /**
+     * @return string
+     */
     public function getJsLayout()
     {
         $buttonText = $this->oneTouchOrderingConfig->getButtonText();

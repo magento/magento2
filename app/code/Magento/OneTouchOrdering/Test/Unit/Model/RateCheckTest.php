@@ -5,11 +5,14 @@
  */
 namespace Magento\OneTouchOrdering\Test\Unit\Model;
 
+use Magento\Framework\DataObject;
 use Magento\OneTouchOrdering\Model\RateCheck;
 use Magento\Quote\Model\Quote\Address\RateCollectorInterface;
 use Magento\Quote\Model\Quote\Address\RateCollectorInterfaceFactory;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Quote\Model\Quote\Address\RateRequestFactory;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\TestCase;
 use Magento\Customer\Model\Address;
 
@@ -40,7 +43,7 @@ class RateCheckTest extends TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->request = $this->getMockBuilder(\Magento\Quote\Model\Quote\Address\RateRequest::class)
+        $this->request = $this->getMockBuilder(RateRequest::class)
             ->disableOriginalConstructor()
             ->setMethods(null)
             ->getMock();
@@ -48,8 +51,8 @@ class RateCheckTest extends TestCase
         $rateRequestFactory = $this->createMock(RateRequestFactory::class);
         $rateRequestFactory->method('create')->willReturn($this->request);
 
-        $storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->store = $this->createMock(\Magento\Store\Model\Store::class);
+        $storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->store = $this->createMock(Store::class);
         $this->website = $this->createMock(\Magento\Store\Api\Data\WebsiteInterface::class);
 
         $storeManager->method('getStore')->willReturn($this->store);
@@ -142,7 +145,7 @@ class RateCheckTest extends TestCase
             ->setMethods(['getRegionCode'])
             ->getMock();
 
-        $resultMock = $this->getMockBuilder(\Magento\Framework\DataObject::class)
+        $resultMock = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
             ->setMethods(['getAllRates'])
             ->getMock();

@@ -5,9 +5,13 @@
  */
 namespace Magento\OneTouchOrdering\Test\Unit\Model;
 
-use Magento\OneTouchOrdering\Model\CustomerBrainTreeManager;
+use Magento\Catalog\Model\Product;
 use Magento\OneTouchOrdering\Model\PlaceOrder;
-use Magento\Quote\Api\CartManagementInterface;
+use Magento\OneTouchOrdering\Model\PrepareQuote;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\Address;
+use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
 class PlaceOrderTest extends TestCase
@@ -16,10 +20,6 @@ class PlaceOrderTest extends TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $cartManagementInterface;
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $customerBrainTreeManager;
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
@@ -47,15 +47,14 @@ class PlaceOrderTest extends TestCase
 
     public function setUp()
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
-        $this->cartManagementInterface = $this->createMock(CartManagementInterface::class);
-        $this->customerBrainTreeManager = $this->createMock(CustomerBrainTreeManager::class);
-        $this->quoteRepository = $this->createMock(\Magento\Quote\Model\ResourceModel\Quote::class);
-        $this->prepareQuote = $this->createMock(\Magento\OneTouchOrdering\Model\PrepareQuote::class);
-        $this->quote = $this->createMock(\Magento\Quote\Model\Quote::class);
-        $this->product = $this->createMock(\Magento\Catalog\Model\Product::class);
-        $this->shippingAddress = $this->getMockBuilder(\Magento\Quote\Model\Quote\Address::class)
+        $this->cartManagementInterface = $this->createMock(\Magento\Quote\Api\CartManagementInterface::class);
+        $this->quoteRepository = $this->createMock(QuoteResource::class);
+        $this->prepareQuote = $this->createMock(PrepareQuote::class);
+        $this->quote = $this->createMock(Quote::class);
+        $this->product = $this->createMock(Product::class);
+        $this->shippingAddress = $this->getMockBuilder(Address::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 ['setCollectShippingRates', 'collectShippingRates', 'getAllShippingRates', 'setShippingMethod']
@@ -63,7 +62,6 @@ class PlaceOrderTest extends TestCase
         $this->placeOrder = $objectManager->getObject(PlaceOrder::class, [
             'quoteRepository' => $this->quoteRepository,
             'cartManagementInterface' => $this->cartManagementInterface,
-            'customerBrainTreeManager' => $this->customerBrainTreeManager,
             'prepareQuote' => $this->prepareQuote
         ]);
     }

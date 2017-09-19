@@ -6,6 +6,7 @@
 namespace Magento\OneTouchOrdering\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 class Config
@@ -41,7 +42,7 @@ class Config
     {
         return $this->scopeConfig->isSetFlag(
             self::ONE_TOUCH_ORDERING_MODULE_ACTIVE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $this->storeManager->getStore()->getId()
         );
     }
@@ -53,7 +54,7 @@ class Config
     {
         return $this->scopeConfig->getValue(
             self::ONE_TOUCH_ORDERING_MODULE_BUTTON_TEXT,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $this->storeManager->getStore()->getId()
         );
     }

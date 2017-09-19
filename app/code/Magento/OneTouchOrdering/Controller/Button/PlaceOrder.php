@@ -9,12 +9,14 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\OneTouchOrdering\Model\PlaceOrder as PlaceOrderModel;
+use Magento\Store\Model\StoreManagerInterface;
 
 class PlaceOrder extends \Magento\Framework\App\Action\Action
 {
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     private $storeManager;
     /**
@@ -22,7 +24,7 @@ class PlaceOrder extends \Magento\Framework\App\Action\Action
      */
     private $productRepository;
     /**
-     * @var \Magento\OneTouchOrdering\Model\PlaceOrder
+     * @var PlaceOrderModel
      */
     private $placeOrder;
     /**
@@ -32,9 +34,9 @@ class PlaceOrder extends \Magento\Framework\App\Action\Action
 
     public function __construct(
         Context $context,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Model\ProductRepository $productRepository,
-        \Magento\OneTouchOrdering\Model\PlaceOrder $placeOrder,
+        StoreManagerInterface $storeManager,
+        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
+        PlaceOrderModel $placeOrder,
         \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
     ) {
         parent::__construct($context);

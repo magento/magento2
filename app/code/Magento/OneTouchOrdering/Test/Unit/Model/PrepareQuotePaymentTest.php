@@ -14,7 +14,6 @@ use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Payment;
 use Magento\Quote\Model\QuoteFactory;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Vault\Api\Data\PaymentTokenInterface;
 use PHPUnit\Framework\TestCase;
 use Magento\Braintree\Model\Ui\ConfigProvider as BrainTreeConfigProvider;
 
@@ -107,7 +106,7 @@ class PrepareQuotePaymentTest extends TestCase
             ->with(['method' => BrainTreeConfigProvider::CC_VAULT_CODE])
             ->willReturnSelf();
         $this->customerData->expects($this->once())->method('getCustomerId')->willReturn($customerId);
-        $cc = $this->createMock(PaymentTokenInterface::class);
+        $cc = $this->createMock(\Magento\Vault\Api\Data\PaymentTokenInterface::class);
         $this->customerBrainTreeManager->expects($this->once())
             ->method('getCustomerBrainTreeCard')
             ->with($customerId)

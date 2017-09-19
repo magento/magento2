@@ -5,6 +5,9 @@
  */
 namespace Magento\OneTouchOrdering\Model;
 
+use Magento\Catalog\Model\Product;
+use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Quote\Model\ResourceModel\Quote;
 
 class PlaceOrder
@@ -13,10 +16,6 @@ class PlaceOrder
      * @var \Magento\Quote\Api\CartManagementInterface
      */
     private $cartManagementInterface;
-    /**
-     * @var CustomerBrainTreeManager
-     */
-    private $customerBrainTreeManager;
     /**
      * @var Quote
      */
@@ -30,28 +29,25 @@ class PlaceOrder
      * PlaceOrder constructor.
      * @param Quote $quoteRepository
      * @param \Magento\Quote\Api\CartManagementInterface $cartManagementInterface
-     * @param CustomerBrainTreeManager $customerBrainTreeManager
      * @param PrepareQuote $prepareQuote
      */
     public function __construct(
-        \Magento\Quote\Model\ResourceModel\Quote $quoteRepository,
+        Quote $quoteRepository,
         \Magento\Quote\Api\CartManagementInterface $cartManagementInterface,
-        \Magento\OneTouchOrdering\Model\CustomerBrainTreeManager $customerBrainTreeManager,
-        \Magento\OneTouchOrdering\Model\PrepareQuote $prepareQuote
+        PrepareQuote $prepareQuote
     ) {
         $this->cartManagementInterface = $cartManagementInterface;
-        $this->customerBrainTreeManager = $customerBrainTreeManager;
         $this->quoteRepository = $quoteRepository;
         $this->prepareQuote = $prepareQuote;
     }
 
     /**
-     * @param \Magento\Catalog\Model\Product $product
+     * @param Product $product
      * @param array $params
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      * @return int
      */
-    public function placeOrder(\Magento\Catalog\Model\Product $product, array $params)
+    public function placeOrder(Product $product, array $params)
     {
         $quote = $this->prepareQuote->prepare();
         $paramsObject = $this->_getProductRequest($params);
@@ -65,7 +61,7 @@ class PlaceOrder
     /**
      * @param \Magento\Quote\Model\Quote $quote
      * @return \Magento\Quote\Model\Quote
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     private function selectCheapestShippingRate(\Magento\Quote\Model\Quote $quote)
     {
@@ -80,7 +76,7 @@ class PlaceOrder
             ->collectShippingRates()
             ->getAllShippingRates();
         if (empty($shippingRates)) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __('There are no shipping methods available for default shipping address.')
             );
         }
@@ -99,19 +95,19 @@ class PlaceOrder
 
     /**
      * @param $requestInfo
-     * @return \Magento\Framework\DataObject
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return DataObject
+     * @throws LocalizedException
      */
     private function _getProductRequest($requestInfo)
     {
-        if ($requestInfo instanceof \Magento\Framework\DataObject) {
+        if ($requestInfo instanceof DataObject) {
             $request = $requestInfo;
         } elseif (is_numeric($requestInfo)) {
-            $request = new \Magento\Framework\DataObject(['qty' => $requestInfo]);
+            $request = new DataObject(['qty' => $requestInfo]);
         } elseif (is_array($requestInfo)) {
-            $request = new \Magento\Framework\DataObject($requestInfo);
+            $request = new DataObject($requestInfo);
         } else {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __('We found an invalid request for adding product to quote.')
             );
         }

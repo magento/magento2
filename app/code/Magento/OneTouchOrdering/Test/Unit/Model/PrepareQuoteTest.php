@@ -5,8 +5,6 @@
  */
 namespace Magento\OneTouchOrdering\Test\Unit\Model;
 
-use Magento\Customer\Api\Data\AddressInterface;
-use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\OneTouchOrdering\Model\CustomerData;
 use Magento\OneTouchOrdering\Model\PrepareQuote;
@@ -75,8 +73,8 @@ class PrepareQuoteTest extends TestCase
 
     public function testPrepare()
     {
-        $customerDataModel = $this->createMock(CustomerInterface::class);
-        $customerAddressDataModel = $this->createMock(AddressInterface::class);
+        $customerDataModel = $this->createMock(\Magento\Customer\Api\Data\CustomerInterface::class);
+        $customerAddressDataModel = $this->createMock(\Magento\Customer\Api\Data\AddressInterface::class);
         $this->customerData
             ->expects($this->once())
             ->method('getCustomerDataModel')

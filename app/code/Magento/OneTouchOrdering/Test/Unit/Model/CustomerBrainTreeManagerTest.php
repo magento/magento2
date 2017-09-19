@@ -5,29 +5,24 @@
  */
 namespace Magento\OneTouchOrdering\Test\Unit\Model;
 
-use Magento\Framework\Api\FilterBuilder;
-use Magento\Framework\Intl\DateTimeFactory;
-use Magento\OneTouchOrdering\Model\CustomerBrainTreeManager;
-use Magento\Vault\Api\PaymentTokenRepositoryInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
-use PHPUnit\Framework\TestCase;
-use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Braintree\Model\Ui\ConfigProvider as BrainTreeConfigProvider;
-use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Vault\Api\Data\PaymentTokenSearchResultsInterface;
+use Magento\Framework\Intl\DateTimeFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\OneTouchOrdering\Model\CustomerBrainTreeManager;
+use PHPUnit\Framework\TestCase;
 
 class CustomerBrainTreeManagerTest extends TestCase
 {
     /**
-     * @var FilterBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\FilterBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
     private $filterBuilder;
     /**
-     * @var  PaymentTokenRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var  \Magento\Vault\Api\PaymentTokenRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $paymentTokenRepository;
     /**
-     * @var  SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var  \Magento\Framework\Api\SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
     private $searchCriteriaBuilder;
     /**
@@ -37,9 +32,9 @@ class CustomerBrainTreeManagerTest extends TestCase
 
     public function setUp()
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
-        $this->filterBuilder = $this->getMockBuilder(FilterBuilder::class)
+        $this->filterBuilder = $this->getMockBuilder(\Magento\Framework\Api\FilterBuilder::class)
             ->disableOriginalConstructor()
             ->setMethods(['setValue', 'setField', 'create', 'setConditionType'])
             ->getMock();
@@ -47,10 +42,10 @@ class CustomerBrainTreeManagerTest extends TestCase
         $this->filterBuilder->method('setField')->willReturnSelf();
         $this->filterBuilder->method('setConditionType')->willReturnSelf();
 
-        $searchCriteria = $this->createMock(SearchCriteriaInterface::class);
-        $this->paymentTokenRepository = $this->createMock(PaymentTokenRepositoryInterface::class);
+        $searchCriteria = $this->createMock(\Magento\Framework\Api\SearchCriteriaInterface::class);
+        $this->paymentTokenRepository = $this->createMock(\Magento\Vault\Api\PaymentTokenRepositoryInterface::class);
 
-        $this->searchCriteriaBuilder = $this->getMockBuilder(SearchCriteriaBuilder::class)
+        $this->searchCriteriaBuilder = $this->getMockBuilder(\Magento\Framework\Api\SearchCriteriaBuilder::class)
             ->disableOriginalConstructor()
             ->setMethods(['addFilters', 'create'])
             ->getMock();
@@ -74,11 +69,11 @@ class CustomerBrainTreeManagerTest extends TestCase
         $customerId = 21;
 
         $this->filterBuilder->method('setField')->withConsecutive($this->logicalOr(
-            [PaymentTokenInterface::CUSTOMER_ID],
-            [PaymentTokenInterface::IS_VISIBLE],
-            [PaymentTokenInterface::IS_ACTIVE],
-            [PaymentTokenInterface::PAYMENT_METHOD_CODE],
-            [PaymentTokenInterface::EXPIRES_AT]
+            [\Magento\Vault\Api\Data\PaymentTokenInterface::CUSTOMER_ID],
+            [\Magento\Vault\Api\Data\PaymentTokenInterface::IS_VISIBLE],
+            [\Magento\Vault\Api\Data\PaymentTokenInterface::IS_ACTIVE],
+            [\Magento\Vault\Api\Data\PaymentTokenInterface::PAYMENT_METHOD_CODE],
+            [\Magento\Vault\Api\Data\PaymentTokenInterface::EXPIRES_AT]
         ));
 
         $this->filterBuilder->method('setValue')->withConsecutive(
@@ -101,7 +96,7 @@ class CustomerBrainTreeManagerTest extends TestCase
         );
 
         $paymentTokenSearchResult = $this->getMockForAbstractClass(
-            PaymentTokenSearchResultsInterface::class
+            \Magento\Vault\Api\Data\PaymentTokenSearchResultsInterface::class
         );
         $paymentTokenSearchResult->method('getItems')->willReturn([true]);
         $this->paymentTokenRepository->method('getList')->willReturn($paymentTokenSearchResult);

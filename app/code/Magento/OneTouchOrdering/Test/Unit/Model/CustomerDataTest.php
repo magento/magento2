@@ -8,11 +8,9 @@ namespace Magento\OneTouchOrdering\Test\Unit\Model;
 use Magento\Customer\Model\Session;
 use Magento\Customer\Model\Address;
 use Magento\Customer\Model\Customer;
-use Magento\Customer\Api\Data\AddressInterface;
-use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\OneTouchOrdering\Model\CustomerData;
-use PHPUnit\Framework\TestCase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
 
 class CustomerDataTest extends TestCase
 {
@@ -46,9 +44,13 @@ class CustomerDataTest extends TestCase
         $objectManager = new ObjectManager($this);
         $this->customerSession = $this->createMock(Session::class);
         $this->customer = $this->createMock(Customer::class);
-        $this->customerDataModel = $this->createMock(CustomerInterface::class);
+        $this->customerDataModel = $this->createMock(
+            \Magento\Customer\Api\Data\CustomerInterface::class
+        );
         $this->customerAddressMock = $this->createMock(Address::class);
-        $this->customerAddressDataModel = $this->createMock(AddressInterface::class);
+        $this->customerAddressDataModel = $this->createMock(
+            \Magento\Customer\Api\Data\AddressInterface::class
+        );
 
         $this->customerData = $objectManager->getObject(
             CustomerData::class,

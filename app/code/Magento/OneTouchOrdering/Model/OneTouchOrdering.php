@@ -5,18 +5,21 @@
  */
 namespace Magento\OneTouchOrdering\Model;
 
+use Magento\Braintree\Gateway\Config\Config as BrainTreeConfig;
+use Magento\Customer\Model\Session;
+
 class OneTouchOrdering
 {
     /**
-     * @var \Magento\Customer\Model\Session
+     * @var Session
      */
     private $customerSession;
     /**
-     * @var \Magento\OneTouchOrdering\Model\Config
+     * @var Config
      */
     private $oneTouchHelper;
     /**
-     * @var \Magento\Braintree\Gateway\Config\Config
+     * @var BrainTreeConfig
      */
     private $brainTreeConfig;
     /**
@@ -30,18 +33,18 @@ class OneTouchOrdering
 
     /**
      * OneTouchOrdering constructor.
-     * @param \Magento\Customer\Model\Session $customerSession
+     * @param Session $customerSession
      * @param CustomerBrainTreeManager $customerBrainTreeManager
-     * @param \Magento\OneTouchOrdering\Model\Config $oneTouchConfig
-     * @param \Magento\Braintree\Gateway\Config\Config $brainTreeConfig
+     * @param Config $oneTouchConfig
+     * @param BrainTreeConfig $brainTreeConfig
      * @param RateCheck $rateCheck
      */
     public function __construct(
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\OneTouchOrdering\Model\CustomerBrainTreeManager $customerBrainTreeManager,
-        \Magento\OneTouchOrdering\Model\Config $oneTouchConfig,
-        \Magento\Braintree\Gateway\Config\Config $brainTreeConfig,
-        \Magento\OneTouchOrdering\Model\RateCheck $rateCheck
+        Session $customerSession,
+        CustomerBrainTreeManager $customerBrainTreeManager,
+        Config $oneTouchConfig,
+        BrainTreeConfig $brainTreeConfig,
+        RateCheck $rateCheck
     ) {
 
         $this->customerSession = $customerSession;

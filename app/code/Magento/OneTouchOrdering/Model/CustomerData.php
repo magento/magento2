@@ -5,15 +5,17 @@
  */
 namespace Magento\OneTouchOrdering\Model;
 
+use Magento\Customer\Model\Session;
+
 class CustomerData
 {
     /**
-     * @var \Magento\Customer\Model\Session
+     * @var Session
      */
     private $customerSession;
 
     public function __construct(
-        \Magento\Customer\Model\Session $customerSession
+        Session $customerSession
     ) {
         $this->customerSession = $customerSession;
     }
