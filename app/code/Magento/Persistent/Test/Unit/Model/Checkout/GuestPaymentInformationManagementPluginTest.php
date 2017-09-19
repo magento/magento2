@@ -14,42 +14,61 @@ class GuestPaymentInformationManagementPluginTest extends \PHPUnit_Framework_Tes
     /**
      * @var \Magento\Persistent\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $persistentHelperMock;
+    private $persistentHelperMock;
 
     /**
      * @var \Magento\Persistent\Helper\Session|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $persistentSessionMock;
+    private $persistentSessionMock;
 
     /**
      * @var \Magento\Checkout\Model\Session|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $checkoutSessionMock;
+    private $checkoutSessionMock;
 
     /**
      * @var \Magento\Persistent\Model\QuoteManager|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $quoteManagerMock;
+    private $quoteManagerMock;
 
     /**
      * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $customerSessionMock;
+    private $customerSessionMock;
 
     /**
      * @var \Magento\Quote\Api\CartRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $cartRepositoryMock;
+    private $cartRepositoryMock;
 
     /**
      * @var \Magento\Persistent\Model\Checkout\GuestPaymentInformationManagementPlugin
      */
-    protected $plugin;
+    private $plugin;
 
     /**
      * @var \Magento\Checkout\Model\GuestPaymentInformationManagement|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $subjectMock;
+    private $subjectMock;
+
+    /**
+     * @var \Magento\Quote\Api\Data\PaymentInterface|\PHPUnit_Framework_MockObject_MockObject $paymentInterfaceMock
+     */
+    private $paymentInterfaceMock;
+
+    /**
+     * Cart id.
+     *
+     * @var int $cartId
+     */
+    private $cartId;
+
+    /**
+     * Guest email address.
+     *
+     * @var string $email
+     */
+    private $email;
 
     protected function setUp()
     {
@@ -72,6 +91,15 @@ class GuestPaymentInformationManagementPluginTest extends \PHPUnit_Framework_Tes
             '',
             false
         );
+        $this->paymentInterfaceMock = $this->getMock(
+            \Magento\Quote\Api\Data\PaymentInterface::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->cartId = 1;
+        $this->email = 'guest@example.com';
 
         $this->plugin = new \Magento\Persistent\Model\Checkout\GuestPaymentInformationManagementPlugin(
             $this->persistentHelperMock,
@@ -85,14 +113,8 @@ class GuestPaymentInformationManagementPluginTest extends \PHPUnit_Framework_Tes
 
     public function testBeforeSavePaymentInformationAndPlaceOrderCartConvertsToGuest()
     {
-        $cartId = '1';
-        $email = 'guest@example.com';
         $walkMethod = 'setEmail';
-        $walkArgs = ['email' => $email];
-        /**
-         * @var \Magento\Quote\Api\Data\PaymentInterface|\PHPUnit_Framework_MockObject_MockObject $paymentInterfaceMock
-         */
-        $paymentInterfaceMock = $this->getMock(\Magento\Quote\Api\Data\PaymentInterface::class, [], [], '', false);
+        $walkArgs = ['email' => $this->email];
 
         $this->persistentHelperMock->expects($this->once())->method('isShoppingCartPersist')->willReturn(true);
         $this->persistentSessionMock->expects($this->once())->method('isPersistent')->willReturn(true);
@@ -114,9 +136,9 @@ class GuestPaymentInformationManagementPluginTest extends \PHPUnit_Framework_Tes
             false
         );
         $this->checkoutSessionMock->expects($this->once())->method('getQuote')->willReturn($quoteMock);
-        $quoteMock->expects($this->once())->method('getId')->willReturn($cartId);
-        $this->cartRepositoryMock->expects($this->once())->method('get')->with($cartId)->willReturn($quoteMock);
-        $quoteMock->expects($this->once())->method('setCustomerEmail')->with($email);
+        $quoteMock->expects($this->once())->method('getId')->willReturn($this->cartId);
+        $this->cartRepositoryMock->expects($this->once())->method('get')->with($this->cartId)->willReturn($quoteMock);
+        $quoteMock->expects($this->once())->method('setCustomerEmail')->with($this->email);
         /** @var \Magento\Framework\Data\Collection|\PHPUnit_Framework_MockObject_MockObject $collectionMock */
         $collectionMock = $this->getMock(\Magento\Framework\Data\Collection::class, [], [], '', false);
         $quoteMock->expects($this->once())->method('getAddressesCollection')->willReturn($collectionMock);
@@ -125,89 +147,57 @@ class GuestPaymentInformationManagementPluginTest extends \PHPUnit_Framework_Tes
 
         $this->plugin->beforeSavePaymentInformationAndPlaceOrder(
             $this->subjectMock,
-            $cartId,
-            $email,
-            $paymentInterfaceMock,
+            $this->cartId,
+            $this->email,
+            $this->paymentInterfaceMock,
             null
         );
     }
 
     public function testBeforeSavePaymentInformationAndPlaceOrderShoppingCartNotPersistentState()
     {
-        $cartId = '1';
-        $email = 'guest@example.com';
-
-        /**
-         * @var \Magento\Quote\Api\Data\PaymentInterface|\PHPUnit_Framework_MockObject_MockObject $paymentInterfaceMock
-         */
-        $paymentInterfaceMock = $this->getMock(\Magento\Quote\Api\Data\PaymentInterface::class, [], [], '', false);
-
         $this->persistentHelperMock->expects($this->once())->method('isShoppingCartPersist')->willReturn(false);
         $this->persistentSessionMock->expects($this->once())->method('isPersistent')->willReturn(true);
         $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->willReturn(false);
 
         $this->plugin->beforeSavePaymentInformationAndPlaceOrder(
             $this->subjectMock,
-            $cartId,
-            $email,
-            $paymentInterfaceMock,
+            $this->cartId,
+            $this->email,
+            $this->paymentInterfaceMock,
             null
         );
     }
 
     public function testBeforeSavePaymentInformationAndPlaceOrderPersistentSessionNotPersistentState()
     {
-        $cartId = '1';
-        $email = 'guest@example.com';
-
-        /**
-         * @var \Magento\Quote\Api\Data\PaymentInterface|\PHPUnit_Framework_MockObject_MockObject $paymentInterfaceMock
-         */
-        $paymentInterfaceMock = $this->getMock(\Magento\Quote\Api\Data\PaymentInterface::class, [], [], '', false);
-
         $this->persistentSessionMock->expects($this->once())->method('isPersistent')->willReturn(false);
 
         $this->plugin->beforeSavePaymentInformationAndPlaceOrder(
             $this->subjectMock,
-            $cartId,
-            $email,
-            $paymentInterfaceMock,
+            $this->cartId,
+            $this->email,
+            $this->paymentInterfaceMock,
             null
         );
     }
 
     public function testBeforeSavePaymentInformationAndPlaceOrderCustomerSessionInLoggedInState()
     {
-        $cartId = '1';
-        $email = 'guest@example.com';
-
-        /**
-         * @var \Magento\Quote\Api\Data\PaymentInterface|\PHPUnit_Framework_MockObject_MockObject $paymentInterfaceMock
-         */
-        $paymentInterfaceMock = $this->getMock(\Magento\Quote\Api\Data\PaymentInterface::class, [], [], '', false);
-
         $this->persistentSessionMock->expects($this->once())->method('isPersistent')->willReturn(true);
         $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->willReturn(true);
 
         $this->plugin->beforeSavePaymentInformationAndPlaceOrder(
             $this->subjectMock,
-            $cartId,
-            $email,
-            $paymentInterfaceMock,
+            $this->cartId,
+            $this->email,
+            $this->paymentInterfaceMock,
             null
         );
     }
 
     public function testBeforeSavePaymentInformationAndPlaceOrderQuoteManagerNotInPersistentState()
     {
-        $cartId = '1';
-        $email = 'guest@example.com';
-
-        /**
-         * @var \Magento\Quote\Api\Data\PaymentInterface|\PHPUnit_Framework_MockObject_MockObject $paymentInterfaceMock
-         */
-        $paymentInterfaceMock = $this->getMock(\Magento\Quote\Api\Data\PaymentInterface::class, [], [], '', false);
-
         $this->persistentHelperMock->expects($this->once())->method('isShoppingCartPersist')->willReturn(true);
         $this->persistentSessionMock->expects($this->once())->method('isPersistent')->willReturn(true);
         $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->willReturn(false);
@@ -215,9 +205,9 @@ class GuestPaymentInformationManagementPluginTest extends \PHPUnit_Framework_Tes
 
         $this->plugin->beforeSavePaymentInformationAndPlaceOrder(
             $this->subjectMock,
-            $cartId,
-            $email,
-            $paymentInterfaceMock,
+            $this->cartId,
+            $this->email,
+            $this->paymentInterfaceMock,
             null
         );
     }

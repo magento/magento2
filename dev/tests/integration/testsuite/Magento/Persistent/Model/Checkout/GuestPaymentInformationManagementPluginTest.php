@@ -15,72 +15,72 @@ class GuestPaymentInformationManagementPluginTest extends \PHPUnit_Framework_Tes
     /**
      * @var \Magento\Persistent\Helper\Session
      */
-    protected $persistentSessionHelper;
+    private $persistentSessionHelper;
 
     /**
      * @var \Magento\Customer\Model\Session
      */
-    protected $customerSession;
+    private $customerSession;
 
     /**
      * @var \Magento\Checkout\Model\Session
      */
-    protected $checkoutSession;
+    private $checkoutSession;
 
     /**
      * @var \Magento\Quote\Api\CartRepositoryInterface
      */
-    protected $cartRepository;
+    private $cartRepository;
 
     /**
      * @var \Magento\Quote\Api\CartManagementInterface
      */
-    protected $cartManagement;
+    private $cartManagement;
 
     /**
      * @var \Magento\Customer\Api\CustomerRepositoryInterface
      */
-    protected $customerFactory;
+    private $customerFactory;
 
     /**
      * @var \Magento\Quote\Api\CartItemRepositoryInterface
      */
-    protected $cartItemRepository;
+    private $cartItemRepository;
 
     /**
      * @var \Magento\Quote\Model\QuoteIdMask
      */
-    protected $quoteIdMaskFactory;
+    private $quoteIdMaskFactory;
 
     /**
      * @var \Magento\Quote\Api\PaymentMethodManagementInterface
      */
-    protected $paymentMethodManagement;
+    private $paymentMethodManagement;
 
     /**
      * @var \Magento\Quote\Api\BillingAddressManagementInterface
      */
-    protected $billingAddressManagement;
+    private $billingAddressManagement;
 
     /**
      * @var \Magento\Quote\Model\ShippingAddressManagementInterface
      */
-    protected $shippingAddressManagement;
+    private $shippingAddressManagement;
 
     /**
      * @var \Magento\Quote\Api\ShippingMethodManagementInterface
      */
-    protected $shippingEstimateManagement;
+    private $shippingEstimateManagement;
 
     /**
      * @var \Magento\Checkout\Api\TotalsInformationManagementInterface
      */
-    protected $totalsInformationManagement;
+    private $totalsInformationManagement;
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
      */
-    protected $objectManager;
+    private $objectManager;
 
     public function setUp()
     {

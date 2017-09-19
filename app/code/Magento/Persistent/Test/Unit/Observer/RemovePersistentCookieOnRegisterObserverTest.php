@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -11,51 +10,54 @@ namespace Magento\Persistent\Test\Unit\Observer;
 
 use \Magento\Persistent\Observer\RemovePersistentCookieOnRegisterObserver;
 
+/**
+ * Test for Magento\Persistent\Observer\RemovePersistentCookieOnRegisterObserver class.
+ */
 class RemovePersistentCookieOnRegisterObserverTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var RemovePersistentCookieOnRegisterObserver
      */
-    protected $model;
+    private $model;
 
     /**
      * @var \Magento\Persistent\Helper\Session|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $persistentSessionMock;
+    private $persistentSessionMock;
 
     /**
      * @var \Magento\Persistent\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $persistentDataMock;
+    private $persistentDataMock;
 
     /**
      * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $customerSessionMock;
+    private $customerSessionMock;
 
     /**
      * @var \Magento\Persistent\Model\QuoteManager|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $quoteManagerMock;
+    private $quoteManagerMock;
 
     /**
      * @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $observerMock;
+    private $observerMock;
 
     /**
      * @var \Magento\Persistent\Model\Session|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $sessionModelMock;
+    private $sessionModelMock;
 
     protected function setUp()
     {
-        $this->persistentSessionMock = $this->getMock('Magento\Persistent\Helper\Session', [], [], '', false);
-        $this->sessionModelMock = $this->getMock('Magento\Persistent\Model\Session', [], [], '', false);
-        $this->persistentDataMock = $this->getMock('Magento\Persistent\Helper\Data', [], [], '', false);
-        $this->customerSessionMock = $this->getMock('Magento\Customer\Model\Session', [], [], '', false);
-        $this->quoteManagerMock = $this->getMock('Magento\Persistent\Model\QuoteManager', [], [], '', false);
-        $this->observerMock = $this->getMock('Magento\Framework\Event\Observer', [], [], '', false);
+        $this->persistentSessionMock = $this->getMock(\Magento\Persistent\Helper\Session::class, [], [], '', false);
+        $this->sessionModelMock = $this->getMock(\Magento\Persistent\Model\Session::class, [], [], '', false);
+        $this->persistentDataMock = $this->getMock(\Magento\Persistent\Helper\Data::class, [], [], '', false);
+        $this->customerSessionMock = $this->getMock(\Magento\Customer\Model\Session::class, [], [], '', false);
+        $this->quoteManagerMock = $this->getMock(\Magento\Persistent\Model\QuoteManager::class, [], [], '', false);
+        $this->observerMock = $this->getMock(\Magento\Framework\Event\Observer::class, [], [], '', false);
 
         $this->model = new RemovePersistentCookieOnRegisterObserver(
             $this->persistentSessionMock,

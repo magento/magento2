@@ -16,37 +16,37 @@ class RemoveGuestPersistenceOnEmptyCartObserverTest extends \PHPUnit_Framework_T
     /**
      * @var RemoveGuestPersistenceOnEmptyCartObserver
      */
-    protected $model;
+    private $model;
 
     /**
      * @var \Magento\Persistent\Helper\Session|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $persistentSessionMock;
+    private $persistentSessionMock;
 
     /**
      * @var \Magento\Persistent\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $persistentDataMock;
+    private $persistentDataMock;
 
     /**
      * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $customerSessionMock;
+    private $customerSessionMock;
 
     /**
      * @var \Magento\Persistent\Model\QuoteManager|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $quoteManagerMock;
+    private $quoteManagerMock;
 
     /**
      * @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $observerMock;
+    private $observerMock;
 
     /**
      * @var \Magento\Quote\Api\CartRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $cartRepositoryMock;
+    private $cartRepositoryMock;
 
     protected function setUp()
     {
