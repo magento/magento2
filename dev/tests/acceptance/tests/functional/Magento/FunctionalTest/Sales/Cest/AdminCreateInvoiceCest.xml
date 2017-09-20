@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <cest name="AdminCreateInvoiceCest">
+        <annotations>
+            <features value="Invoice Creation"/>
+            <stories value="Create an Invoice via the Admin"/>
+            <group value="sales"/>
+            <env value="chrome"/>
+            <env value="firefox"/>
+            <env value="phantomjs"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" mergeKey="createCategory"/>
+            <entity name="categoryLink" type="custom_attribute" mergeKey="categoryLink">
+                <data key="attribute_code">category_ids</data>
+                <data key="value">$$createCategory.id$$</data>
+            </entity>
+            <createData entity="_defaultProduct" mergeKey="createProduct">
+                <required-entity name="categoryLink"/>
+            </createData>
+        </before>
+
+        <test name="CreateInvoiceTest">
+            <annotations>
+                <title value="Create Invoice"/>
+                <description value="Should be able to create an invoice via the admin."/>
+                <severity value="NORMAL"/>
+                <testCaseId value="MAGETWO-72096"/>
+            </annotations>
+
+            <!-- todo: Create an order via the api instead of driving the browser  -->
+            <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" mergeKey="onCategoryPage"/>
+            <waitForPageLoad mergeKey="waitForPageLoad1"/>
+            <moveMouseOver selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" mergeKey="hoverProduct"/>
+            <click selector="{{StorefrontCategoryMainSection.AddToCartBtn}}" mergeKey="addToCart"/>
+            <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" mergeKey="waitForProductAdded"/>
+            <click selector="{{StorefrontMiniCartSection.show}}" mergeKey="clickCart"/>
+            <click selector="{{StorefrontMiniCartSection.goToCheckout}}" mergeKey="goToCheckout"/>
+            <waitForPageLoad mergeKey="waitForPageLoad2"/>
+            <fillField selector="{{CheckoutShippingGuestInfoSection.email}}" userInput="{{CustomerEntityOne.email}}" mergeKey="enterEmail"/>
+            <fillField selector="{{CheckoutShippingGuestInfoSection.firstName}}" userInput="{{CustomerEntityOne.firstname}}" mergeKey="enterFirstName"/>
+            <fillField selector="{{CheckoutShippingGuestInfoSection.lastName}}" userInput="{{CustomerEntityOne.lastname}}" mergeKey="enterLastName"/>
+            <fillField selector="{{CheckoutShippingGuestInfoSection.street}}" userInput="{{CustomerAddressSimple.street[0]}}" mergeKey="enterStreet"/>
+            <fillField selector="{{CheckoutShippingGuestInfoSection.city}}" userInput="{{CustomerAddressSimple.city}}" mergeKey="enterCity"/>
+            <selectOption selector="{{CheckoutShippingGuestInfoSection.region}}" userInput="{{CustomerAddressSimple.state}}" mergeKey="selectRegion"/>
+            <fillField selector="{{CheckoutShippingGuestInfoSection.postcode}}" userInput="{{CustomerAddressSimple.postcode}}" mergeKey="enterPostcode"/>
+            <fillField selector="{{CheckoutShippingGuestInfoSection.telephone}}" userInput="{{CustomerAddressSimple.telephone}}" mergeKey="enterTelephone"/>
+            <waitForLoadingMaskToDisappear mergeKey="waitForLoadingMask"/>
+            <click selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}" mergeKey="selectFirstShippingMethod"/>
+            <waitForElement selector="{{CheckoutShippingMethodsSection.next}}" time="30" mergeKey="waitForNextButton"/>
+            <click selector="{{CheckoutShippingMethodsSection.next}}" mergeKey="clickNext"/>
+            <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" mergeKey="waitForPlaceOrderButton"/>
+            <click selector="{{CheckoutPaymentSection.placeOrder}}" mergeKey="clickPlaceOrder"/>
+            <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" returnVariable="orderNumber" mergeKey="grabOrderNumber"/>
+            <!-- end todo -->
+
+            <amOnPage url="{{AdminLoginPage}}" mergeKey="goToAdmin"/>
+            <waitForPageLoad mergeKey="waitForPageLoad1"/>
+            <fillField selector="{{AdminLoginFormSection.username}}" userInput="{{_ENV.MAGENTO_ADMIN_USERNAME}}" mergeKey="fillUsername"/>
+            <fillField selector="{{AdminLoginFormSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" mergeKey="fillPassword"/>
+            <click selector="{{AdminLoginFormSection.signIn}}" mergeKey="clickLogin"/>
+
+            <amOnPage url="{{OrdersPage}}" mergeKey="onOrdersPage"/>
+            <waitForElementNotVisible selector="{{OrdersGridSection.spinner}}" time="10" mergeKey="waitSpinner1"/>
+            <fillField selector="{{OrdersGridSection.search}}" variable="orderNumber" mergeKey="searchOrderNum"/>
+            <click selector="{{OrdersGridSection.submitSearch}}" mergeKey="submitSearch"/>
+            <waitForElementNotVisible selector="{{OrdersGridSection.spinner}}" time="10" mergeKey="waitSpinner2"/>
+
+            <click selector="{{OrdersGridSection.firstRow}}" mergeKey="clickOrderRow"/>
+            <click selector="{{OrderDetailsMainActionsSection.invoice}}" mergeKey="clickInvoice"/>
+            <click selector="{{InvoiceNewSection.submitInvoice}}" mergeKey="clickSubmitInvoice"/>
+            <see selector="{{OrderDetailsMessagesSection.successMessage}}" userInput="The invoice has been created." mergeKey="seeSuccessMessage"/>
+            <click selector="{{OrderDetailsOrderViewSection.invoices}}" mergeKey="clickInvoices"/>
+            <waitForElementNotVisible selector="{{OrderDetailsInvoicesSection.spinner}}" time="10" mergeKey="waitSpinner3"/>
+            <see selector="{{OrderDetailsInvoicesSection.content}}" variable="orderNumber" mergeKey="seeInvoice1"/>
+            <see selector="{{OrderDetailsInvoicesSection.content}}" userInput="John Doe" mergeKey="seeInvoice2"/>
+            <click selector="{{OrderDetailsOrderViewSection.information}}" mergeKey="clickInformation"/>
+            <see selector="{{OrderDetailsInformationSection.orderStatus}}" userInput="Processing" mergeKey="seeOrderStatus"/>
+            <amOnPage url="{{InvoicesPage}}" mergeKey="goToInvoices"/>
+            <waitForElementNotVisible selector="{{InvoicesGridSection.spinner}}" time="10" mergeKey="waitSpinner4"/>
+            <click selector="{{InvoicesGridSection.filter}}" mergeKey="clickFilters"/>
+            <fillField selector="{{InvoicesFiltersSection.orderNum}}" variable="orderNumber" mergeKey="searchOrderNum2"/>
+            <click selector="{{InvoicesGridSection.firstRow}}" mergeKey="clickInvoice2"/>
+            <see selector="{{InvoiceDetailsInformationSection.orderStatus}}" userInput="Processing" mergeKey="seeOrderStatus2"/>
+        </test>
+    </cest>
+</config>

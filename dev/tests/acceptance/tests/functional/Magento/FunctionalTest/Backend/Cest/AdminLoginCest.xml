@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <cest name="AdminLoginCest">
+        <annotations>
+            <features value="Admin Login"/>
+            <stories value="Login on the Admin Login page"/>
+            <group value="example"/>
+            <group value="login"/>
+            <env value="chrome"/>
+            <env value="firefox"/>
+            <env value="phantomjs"/>
+        </annotations>
+        <test name="LoginAsAdmin">
+            <annotations>
+                <title value="You should be able to log into the Magento Admin backend."/>
+                <description value="You should be able to log into the Magento Admin backend."/>
+                <severity value="CRITICAL"/>
+                <testCaseId value="MAGETWO-71572"/>
+            </annotations>
+            <amOnPage url="{{AdminLoginPage}}" mergeKey="amOnAdminLoginPage"/>
+            <fillField selector="{{AdminLoginFormSection.username}}" userInput="{{_ENV.MAGENTO_ADMIN_USERNAME}}" mergeKey="fillUsername"/>
+            <fillField selector="{{AdminLoginFormSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" mergeKey="fillPassword"/>
+            <click selector="{{AdminLoginFormSection.signIn}}" mergeKey="clickOnSignIn"/>
+            <seeInCurrentUrl url="{{AdminLoginPage}}" mergeKey="seeAdminLoginUrl"/>
+        </test>
+    </cest>
+</config>
