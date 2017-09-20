@@ -17,7 +17,7 @@ $product = $objectManager->create(\Magento\Catalog\Model\ProductRepository::clas
 $productResource = $objectManager->create(\Magento\Catalog\Model\ResourceModel\Product::class);
 $productResource->delete($product);
 
-$eavSetupFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Eav\Setup\EavSetupFactory::class);
+$eavSetupFactory = $objectManager->create(\Magento\Eav\Setup\EavSetupFactory::class);
 /** @var \Magento\Eav\Setup\EavSetup $eavSetup */
 $eavSetup = $eavSetupFactory->create();
 $eavSetup->removeAttribute(\Magento\Catalog\Model\Product::ENTITY, 'test_searchable_attribute');

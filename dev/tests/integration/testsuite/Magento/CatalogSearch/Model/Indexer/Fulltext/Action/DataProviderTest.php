@@ -1,9 +1,8 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Action;
 
 class DataProviderTest extends \PHPUnit\Framework\TestCase
@@ -19,7 +18,10 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
 
         $config = $objectManager->create(\Magento\Framework\Search\Request\Config::class);
         /** @var \Magento\Framework\Search\Request\Builder $requestBuilder */
-        $requestBuilder = $objectManager->create(\Magento\Framework\Search\Request\Builder::class, ['config' => $config]);
+        $requestBuilder = $objectManager->create(
+            \Magento\Framework\Search\Request\Builder::class,
+            ['config' => $config]
+        );
         $requestBuilder->bind('search_term', 'VALUE1');
         $requestBuilder->setRequestName('quick_search_container');
         $queryRequest = $requestBuilder->create();

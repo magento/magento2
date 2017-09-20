@@ -4,7 +4,8 @@
  * See COPYING.txt for license details.
  */
 
-$eavSetupFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Eav\Setup\EavSetupFactory::class);
+$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+$eavSetupFactory = $objectManager->create(\Magento\Eav\Setup\EavSetupFactory::class);
 /** @var \Magento\Eav\Setup\EavSetup $eavSetup */
 $eavSetup = $eavSetupFactory->create();
 $eavSetup->addAttribute(
