@@ -29,6 +29,10 @@ class PlaceOrder
      * @var ShippingRateChooserInterface
      */
     private $shippingRateChooser;
+    /**
+     * @var Config
+     */
+    private $oneTouchOrderingConfig;
 
     /**
      * PlaceOrder constructor.
@@ -41,12 +45,14 @@ class PlaceOrder
         QuoteRepository $quoteRepository,
         \Magento\Quote\Api\CartManagementInterface $cartManagementInterface,
         PrepareQuote $prepareQuote,
-        ShippingRateChooserInterface $shippingRateChooser
+        ShippingRateChooserInterface $shippingRateChooser,
+        Config $oneTouchOrderingConfig
     ) {
         $this->cartManagementInterface = $cartManagementInterface;
         $this->quoteRepository = $quoteRepository;
         $this->prepareQuote = $prepareQuote;
         $this->shippingRateChooser = $shippingRateChooser;
+        $this->oneTouchOrderingConfig = $oneTouchOrderingConfig;
     }
 
     /**
@@ -58,8 +64,8 @@ class PlaceOrder
      */
     public function placeOrder(Product $product, CustomerData $customerData, array $params): int
     {
-        $quote = $this->prepareQuote->prepare($customerData);
         $paramsObject = $this->getProductRequest($params);
+        $quote = $this->prepareQuote->prepare($customerData, $paramsObject);
         $quote->addProduct($product, $paramsObject);
         $this->shippingRateChooser->choose($quote);
         $this->prepareQuote->preparePayment($quote, $customerData->getCustomerId());
@@ -85,7 +91,7 @@ class PlaceOrder
                 __('We found an invalid request for adding product to quote.')
             );
         }
-        if (!$this->oneTouchOrderingHelper->isSelectAddressEnabled()) {
+        if (!$this->oneTouchOrderingConfig->isSelectAddressEnabled()) {
             $request->unsetData('customer_address');
         }
         return $request;

@@ -9,7 +9,8 @@ use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\Result\Json as JsonResult;
 use Magento\Framework\Controller\ResultFactory;
-use Magento\OneTouchOrdering\Model\CustomerAddresses;
+use Magento\OneTouchOrdering\Model\Config;
+use Magento\OneTouchOrdering\Model\CustomerAddressesFormater;
 use Magento\OneTouchOrdering\Model\OneTouchOrdering;
 use Magento\Customer\Model\Session;
 
@@ -23,42 +24,45 @@ class Available extends Action
      * @var Session
      */
     private $customerSession;
-
-    private $customerAddresses;
-
     /**
-     * Available constructor.
-     * @param Context $context
-     * @param OneTouchOrdering $oneTouchOrdering
-     * @param Session $customerSession
+     * @var CustomerAddressesFormater
      */
+    private $customerAddressesFormater;
+    /**
+     * @var Config
+     */
+    private $oneTouchOrderingConfig;
+
     public function __construct(
         Context $context,
         OneTouchOrdering $oneTouchOrdering,
         Session $customerSession,
-        CustomerAddresses $customerAddresses
+        CustomerAddressesFormater $customerAddressesFormater,
+        Config $oneTouchOrderingConfig
     ) {
         parent::__construct($context);
         $this->oneTouchOrdering = $oneTouchOrdering;
         $this->customerSession = $customerSession;
+        $this->customerAddressesFormater = $customerAddressesFormater;
+        $this->oneTouchOrderingConfig = $oneTouchOrderingConfig;
     }
 
     public function execute()
     {
-        $available = false;
-
+        $resultData = ['available' => false];
         /** @var JsonResult $result */
         $result = $this->resultFactory->create(ResultFactory::TYPE_JSON);
-        if ($this->customerSession->isLoggedIn()) {
-            $available = $this->oneTouchOrdering->isAvailableForCustomer($this->customerSession->getCustomer());
+        if (!$this->customerSession->isLoggedIn()) {
+            $result->setData($resultData);
+            return $result;
         }
-        $resultData = [
-            'available' => $available
-        ];
-        if (1) {
+        $customer = $this->customerSession->getCustomer();
+        $available = $this->oneTouchOrdering->isAvailableForCustomer($customer);
+        $resultData['available'] = $available;
+        if ($this->oneTouchOrderingConfig->isSelectAddressEnabled()) {
             $resultData += [
-                'addresses' => $this->customerAddresses->getFormattedAddresses(),
-                'defaultAddress' => $this->customerAddresses->getDefaultAddressId()
+                'addresses' => $this->customerAddressesFormater->getFormattedAddresses($customer),
+                'defaultAddress' => $customer->getDefaultShippingAddress()->getId()
             ];
         }
         $result->setData($resultData);

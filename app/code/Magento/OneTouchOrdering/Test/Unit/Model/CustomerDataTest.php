@@ -15,10 +15,6 @@ use PHPUnit\Framework\TestCase;
 class CustomerDataTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $customerSession;
-    /**
      * @var \PHPUnit_Framework_MockObject_MockObject|Customer
      */
     private $customer;
@@ -89,11 +85,7 @@ class CustomerDataTest extends TestCase
     public function testShippingAddressDataModel()
     {
         $addressId = 123;
-
-        $this->customerSession
-            ->expects($this->once())
-            ->method('getCustomer')
-            ->willReturn($this->customer);
+        $this->customerData->setCustomer($this->customer);
         $this->customer
             ->expects($this->once())
             ->method('getAddressById')

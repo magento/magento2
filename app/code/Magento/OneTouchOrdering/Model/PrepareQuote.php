@@ -7,6 +7,7 @@ namespace Magento\OneTouchOrdering\Model;
 
 use Exception;
 use Magento\Braintree\Model\Ui\ConfigProvider as BrainTreeConfigProvider;
+use Magento\Framework\DataObject;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteFactory;
 use Magento\Store\Model\StoreManagerInterface;
@@ -44,9 +45,10 @@ class PrepareQuote
 
     /**
      * @param CustomerData $customerData
+     * @param DataObject $params
      * @return Quote
      */
-    public function prepare(CustomerData $customerData): Quote
+    public function prepare(CustomerData $customerData, DataObject $params): Quote
     {
         $store = $this->storeManager->getStore();
         $quote = $this->quoteFactory->create();

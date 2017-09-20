@@ -6,7 +6,6 @@
 namespace Magento\OneTouchOrdering\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 class Config
@@ -65,11 +64,11 @@ class Config
      * @param $path
      * @return mixed
      */
-    protected function getValue($path)
+    private function getValue($path)
     {
         return $this->scopeConfig->getValue(
             $path,
-            ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $this->storeManager->getStore()->getId()
         );
     }
@@ -78,11 +77,11 @@ class Config
      * @param $path
      * @return bool
      */
-    protected function isSetFlag($path)
+    private function isSetFlag($path)
     {
         return $this->scopeConfig->isSetFlag(
             $path,
-            ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $this->storeManager->getStore()->getId()
         );
     }
