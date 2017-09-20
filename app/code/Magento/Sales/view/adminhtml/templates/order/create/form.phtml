@@ -8,7 +8,7 @@
 
 /** @var \Magento\Sales\Block\Adminhtml\Order\Create\Form $block */
 ?>
-<form id="edit_form" data-order-config='<?php /* @escapeNotVerified */ echo $block->getOrderDataJson() ?>' data-load-base-url="<?php /* @escapeNotVerified */ echo $block->getLoadBlockUrl() ?>" action="<?php /* @escapeNotVerified */ echo $block->getSaveUrl() ?>" method="post" enctype="multipart/form-data">
+<form id="edit_form" data-order-config='<?php echo $block->escapeHtml($block->getOrderDataJson()) ?>' data-load-base-url="<?php /* @escapeNotVerified */ echo $block->getLoadBlockUrl() ?>" action="<?php /* @escapeNotVerified */ echo $block->getSaveUrl() ?>" method="post" enctype="multipart/form-data">
     <?php echo $block->getBlockHtml('formkey')?>
     <div id="order-message">
         <?php echo $block->getChildHtml('message') ?>
