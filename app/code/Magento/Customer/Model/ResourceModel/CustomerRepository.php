@@ -7,6 +7,7 @@
 namespace Magento\Customer\Model\ResourceModel;
 
 use Magento\Customer\Api\CustomerMetadataInterface;
+use Magento\Customer\Model\Customer\NotificationStorage;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Api\ImageProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
@@ -89,6 +90,11 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     private $collectionProcessor;
 
     /**
+     * @var NotificationStorage
+     */
+    private $notificationStorage;
+
+    /**
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param \Magento\Customer\Model\Data\CustomerSecureFactory $customerSecureFactory
      * @param \Magento\Customer\Model\CustomerRegistry $customerRegistry
@@ -103,6 +109,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
      * @param ImageProcessorInterface $imageProcessor
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
      * @param CollectionProcessorInterface $collectionProcessor
+     * @param NotificationStorage $notificationStorage
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -119,7 +126,8 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         DataObjectHelper $dataObjectHelper,
         ImageProcessorInterface $imageProcessor,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor,
-        CollectionProcessorInterface $collectionProcessor = null
+        CollectionProcessorInterface $collectionProcessor,
+        NotificationStorage $notificationStorage
     ) {
         $this->customerFactory = $customerFactory;
         $this->customerSecureFactory = $customerSecureFactory;
@@ -134,7 +142,8 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         $this->dataObjectHelper = $dataObjectHelper;
         $this->imageProcessor = $imageProcessor;
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
-        $this->collectionProcessor = $collectionProcessor ?: $this->getCollectionProcessor();
+        $this->collectionProcessor = $collectionProcessor;
+        $this->notificationStorage = $notificationStorage;
     }
 
     /**
@@ -345,6 +354,8 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         $customerModel = $this->customerRegistry->retrieve($customerId);
         $customerModel->delete();
         $this->customerRegistry->remove($customerId);
+        $this->notificationStorage->remove(NotificationStorage::UPDATE_CUSTOMER_SESSION, $customerId);
+
         return true;
     }
 
@@ -369,21 +380,5 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         if ($fields) {
             $collection->addFieldToFilter($fields);
         }
-    }
-
-    /**
-     * Retrieve collection processor
-     *
-     * @deprecated 100.2.0
-     * @return CollectionProcessorInterface
-     */
-    private function getCollectionProcessor()
-    {
-        if (!$this->collectionProcessor) {
-            $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                'Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor'
-            );
-        }
-        return $this->collectionProcessor;
     }
 }
