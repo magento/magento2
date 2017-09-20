@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
+    <operation name="CreateProductOption" dataType="product_option" type="create">
+        <entry key="product_sku">string</entry>
+        <entry key="option_id">integer</entry>
+        <entry key="title">string</entry>
+        <entry key="type">string</entry>
+        <entry key="sort_order">integer</entry>
+        <entry key="is_require">boolean</entry>
+        <entry key="price">integer</entry>
+        <entry key="price_type">string</entry>
+        <entry key="sku">string</entry>
+        <entry key="file_extension">string</entry>
+        <entry key="max_characters">integer</entry>
+        <entry key="max_size_x">integer</entry>
+        <entry key="max_size_y">integer</entry>
+        <array key="values">
+            <value>product_option_value</value>
+        </array>
+    </operation>
+    <operation name="UpdateProductOption" dataType="product_option" type="update">
+        <entry key="product_sku">string</entry>
+        <entry key="option_id">integer</entry>
+        <entry key="title">string</entry>
+        <entry key="type">string</entry>
+        <entry key="sort_order">integer</entry>
+        <entry key="is_require">boolean</entry>
+        <entry key="price">integer</entry>
+        <entry key="price_type">string</entry>
+        <entry key="sku">string</entry>
+        <entry key="file_extension">string</entry>
+        <entry key="max_characters">integer</entry>
+        <entry key="max_size_x">integer</entry>
+        <entry key="max_size_y">integer</entry>
+        <array key="values">
+            <value>product_option_value</value>
+        </array>
+    </operation>
+</config>

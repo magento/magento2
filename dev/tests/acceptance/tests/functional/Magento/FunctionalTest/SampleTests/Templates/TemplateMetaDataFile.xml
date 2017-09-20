@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
+    <operation name="" dataType="" type="" auth="" url="" method="">
+        <header param="">application/json</header>
+        <param key="" type="">{}</param>
+        <jsonObject dataType="" key="">
+            <entry key=""></entry>
+            <array key="">
+                <value></value>
+            </array>
+        </jsonObject>
+        <entry key=""></entry>
+    </operation>
+</config>

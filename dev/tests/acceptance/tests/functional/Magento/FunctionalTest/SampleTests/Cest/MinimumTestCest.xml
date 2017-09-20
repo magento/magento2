@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Test XML Example -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <cest name="MinimumFieldsCest">
+        <annotations>
+            <features value="Minimum Test"/>
+            <stories value="Minimum Test"/>
+            <group value="example"/>
+            <env value="chrome"/>
+            <env value="firefox"/>
+            <env value="phantomjs"/>
+        </annotations>
+        <after>
+            <seeInCurrentUrl url="/admin/admin/" mergeKey="seeInCurrentUrl"/>
+        </after>
+        <test name="MinimumFieldsTest">
+            <annotations>
+                <title value="Minimum Test"/>
+                <description value="Minimum Test"/>
+            </annotations>
+            <amOnPage url="{{AdminLoginPage}}" mergeKey="navigateToAdmin"/>
+            <fillField selector="{{AdminLoginFormSection.username}}" userInput="{{_ENV.MAGENTO_ADMIN_USERNAME}}" mergeKey="fillUsername"/>
+            <fillField selector="{{AdminLoginFormSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" mergeKey="fillPassword"/>
+            <click selector="{{AdminLoginFormSection.signIn}}" mergeKey="clickLogin"/>
+        </test>
+    </cest>
+</config>

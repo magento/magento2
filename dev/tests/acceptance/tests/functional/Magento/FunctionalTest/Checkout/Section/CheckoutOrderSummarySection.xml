@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="CheckoutOrderSummarySection">
+        <element name="miniCartTab" type="button" locator=".title[role='tab']"/>
+        <element name="productItemName" type="text" locator=".product-item-name"/>
+        <element name="productItemQty" type="text" locator=".value"/>
+        <element name="productItemPrice" type="text" locator=".price"/>
+    </section>
+</config>

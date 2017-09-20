@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="StorefrontCategoryMainSection">
+        <element name="CategoryTitle" type="text" locator="#page-title-heading span"/>
+        <element name="ProductItemInfo" type="button" locator=".product-item-info"/>
+        <element name="AddToCartBtn" type="button" locator="button.action.tocart.primary"/>
+        <element name="SuccessMsg" type="button" locator="div.message-success"/>
+        <element name="productCount" type="text" locator="#toolbar-amount"/>
+    </section>
+</config>

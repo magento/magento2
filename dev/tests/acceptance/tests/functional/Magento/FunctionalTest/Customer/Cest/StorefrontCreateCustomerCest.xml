@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <cest name="StorefrontCreateCustomerCest">
+        <annotations>
+            <features value="Customer Creation"/>
+            <stories value="Create a Customer via the Storefront"/>
+            <env value="chrome"/>
+            <env value="firefox"/>
+            <env value="phantomjs"/>
+        </annotations>
+        <test name="CreateCustomerViaStorefront">
+            <annotations>
+                <title value="You should be able to create a customer via the storefront"/>
+                <description value="You should be able to create a customer via the storefront."/>
+                <severity value="CRITICAL"/>
+                <group value="create"/>
+                <testCaseId value="MAGETWO-23546"/>
+            </annotations>
+            <amOnPage mergeKey="amOnStorefrontPage"  url="/"/>
+            <click mergeKey="clickOnCreateAccountLink" selector="{{StorefrontPanelHeaderSection.createAnAccountLink}}"/>
+            <fillField  mergeKey="fillFirstName" userInput="{{CustomerEntityOne.firstname}}" selector="{{StorefrontCustomerCreateFormSection.firstnameField}}"/>
+            <fillField  mergeKey="fillLastName" userInput="{{CustomerEntityOne.lastname}}" selector="{{StorefrontCustomerCreateFormSection.lastnameField}}"/>
+            <fillField  mergeKey="fillEmail" userInput="{{CustomerEntityOne.email}}" selector="{{StorefrontCustomerCreateFormSection.emailField}}"/>
+            <fillField  mergeKey="fillPassword" userInput="{{CustomerEntityOne.password}}" selector="{{StorefrontCustomerCreateFormSection.passwordField}}"/>
+            <fillField  mergeKey="fillConfirmPassword" userInput="{{CustomerEntityOne.password}}" selector="{{StorefrontCustomerCreateFormSection.confirmPasswordField}}"/>
+            <click mergeKey="clickCreateAccountButton" selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}"/>
+            <see mergeKey="seeThankYouMessage" userInput="Thank you for registering with Main Website Store."/>
+            <see mergeKey="seeFirstName" userInput="{{CustomerEntityOne.firstname}}" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
+            <see mergeKey="seeLastName" userInput="{{CustomerEntityOne.lastname}}" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
+            <see mergeKey="seeEmail" userInput="{{CustomerEntityOne.email}}" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
+        </test>
+    </cest>
+</config>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/PageObject.xsd">
+    <page name="OrderDetailsPage" urlPath="/admin/sales/order/view/order_id/" module="Sales">
+        <section name="OrderDetailsMainActionsSection"/>
+        <section name="OrderDetailsInformationSection"/>
+        <section name="OrderDetailsMessagesSection"/>
+    </page>
+</config>

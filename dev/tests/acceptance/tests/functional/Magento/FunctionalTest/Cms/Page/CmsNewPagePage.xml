@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/PageObject.xsd">
+    <page name="CmsNewPagePage" urlPath="admin/cms/page/new" module="Magento_Cms">
+        <section name="CmsNewPagePageActionsSection"/>
+        <section name="CmsNewPagePageBasicFieldsSection"/>
+        <section name="CmsNewPagePageContentSection"/>
+        <section name="CmsNewPagePageSeoSection"/>
+    </page>
+</config>
