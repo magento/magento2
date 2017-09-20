@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/PageObject.xsd">
+    <page name="AdminProductEditPage" urlPath="admin/catalog/product/new" module="Magento_Catalog">
+        <section name="AdminProductFormSection"/>
+        <section name="AdminProductFormActionSection"/>
+        <section name="AdminMessagesSection"/>
+    </page>
+</config>

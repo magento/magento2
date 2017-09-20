@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
+    <operation name="CreateProductLink" dataType="product_link" type="create">
+        <entry key="sku">string</entry>
+        <entry key="link_type">string</entry>
+        <entry key="linked_product_sku">string</entry>
+        <entry key="linked_product_type">string</entry>
+        <entry key="position">integer</entry>
+        <array key="extension_attributes">
+            <value>product_link_extension_attribute</value>
+        </array>
+    </operation>
+    <operation name="UpdateProductLink" dataType="product_link" type="update">
+        <entry key="sku">string</entry>
+        <entry key="link_type">string</entry>
+        <entry key="linked_product_sku">string</entry>
+        <entry key="linked_product_type">string</entry>
+        <entry key="position">integer</entry>
+        <array key="extension_attributes">
+            <value>product_link_extension_attribute</value>
+        </array>
+    </operation>
+</config>

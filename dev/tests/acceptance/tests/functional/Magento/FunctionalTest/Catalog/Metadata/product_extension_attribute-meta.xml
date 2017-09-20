@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
+    <operation name="CreateProductExtensionAttribute" dataType="product_extension_attribute" type="create">
+        <entry key="stock_item">stock_item</entry>
+    </operation>
+    <operation name="UpdateProductExtensionAttribute" dataType="product_extension_attribute" type="update">
+        <entry key="stock_item">stock_item</entry>
+    </operation>
+</config>

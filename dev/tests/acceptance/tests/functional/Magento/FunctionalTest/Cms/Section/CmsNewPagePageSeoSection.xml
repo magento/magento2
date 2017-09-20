@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="CmsNewPagePageSeoSection">
+        <element name="header" type="button" locator="div[data-index=search_engine_optimisation]" timeout="30"/>
+        <element name="urlKey" type="input" locator="input[name=identifier]"/>
+    </section>
+</config>

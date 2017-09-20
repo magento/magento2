@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="StorefrontMiniCartSection">
+        <element name="quantity" type="button" locator="span.counter-number"/>
+        <element name="show" type="button" locator="a.showcart"/>
+        <element name="goToCheckout" type="button" locator="#top-cart-btn-checkout"/>
+    </section>
+</config>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
+    <operation name="CreateProductLinkExtensionAttribute" dataType="product_link_extension_attribute" type="create">
+        <header param="Content-Type">application/json</header>
+        <entry key="qty">integer</entry>
+    </operation>
+    <operation name="UpdateProductLinkExtensionAttribute" dataType="product_link_extension_attribute" type="update">
+        <header param="Content-Type">application/json</header>
+        <entry key="qty">integer</entry>
+    </operation>
+</config>

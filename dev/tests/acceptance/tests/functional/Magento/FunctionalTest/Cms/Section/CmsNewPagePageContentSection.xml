@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="CmsNewPagePageContentSection">
+        <element name="header" type="button" locator="div[data-index=content]"/>
+        <element name="contentHeading" type="input" locator="input[name=content_heading]"/>
+        <element name="content" type="input" locator="#cms_page_form_content"/>
+    </section>
+</config>

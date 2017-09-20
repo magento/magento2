@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <cest name="PersistMultipleEntitiesCest">
+        <annotations>
+            <group value="ff"/>
+            <group value="skip"/>
+        </annotations>
+        <before>
+            <createData entity="simplesubcategory" mergeKey="simplecategory"/>
+            <entity name="categoryLink" type="custom_attribute" mergeKey="categoryLink">
+                <data key="attribute_code">category_ids</data>
+                <data key="value">$$simplecategory.id$$</data>
+            </entity>
+
+            <createData entity="simpleproduct" mergeKey="simpleproduct1">
+                <required-entity name="categoryLink"/>
+            </createData>
+            <createData entity="simpleproduct" mergeKey="simpleproduct2">
+                <required-entity name="categoryLink"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="simpleproduct1" mergeKey="deleteProduct1"/>
+            <deleteData createDataKey="simpleproduct2" mergeKey="deleteProduct2"/>
+            <deleteData createDataKey="simplecategory" mergeKey="deleteCategory"/>
+        </after>
+        <test name="PersistMultipleEntitiesTest">
+            <amOnPage mergeKey="s11" url="/$$simplecategory.name$$.html" />
+            <waitForPageLoad mergeKey="s33"/>
+            <see mergeKey="s35" selector="{{StorefrontCategoryMainSection.productCount}}" userInput="2"/>
+        </test>
+    </cest>
+</config>

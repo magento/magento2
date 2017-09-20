@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
+    <operation name="CreateCustomerExtensionAttribute" dataType="customer_extension_attribute" type="create">
+        <entry key="is_subscribed">boolean</entry>
+        <entry key="extension_attribute">customer_nested_extension_attribute</entry>
+    </operation>
+    <operation name="UpdateCustomerExtensionAttribute" dataType="customer_extension_attribute" type="update">
+        <entry key="is_subscribed">boolean</entry>
+        <entry key="extension_attribute">customer_nested_extension_attribute</entry>
+    </operation>
+</config>
