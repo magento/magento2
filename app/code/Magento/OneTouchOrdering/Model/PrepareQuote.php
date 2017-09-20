@@ -23,24 +23,24 @@ class PrepareQuote
      */
     private $storeManager;
     /**
-     * @var CustomerBrainTreeManager
+     * @var CustomerCreditCardManager
      */
-    private $customerBrainTreeManager;
+    private $customerCreditCardManager;
 
     /**
      * PrepareQuote constructor.
      * @param QuoteFactory $quoteFactory
      * @param StoreManagerInterface $storeManager
-     * @param CustomerBrainTreeManager $customerBrainTreeManager
+     * @param CustomerCreditCardManager $customerCreditCardManager
      */
     public function __construct(
         QuoteFactory $quoteFactory,
         StoreManagerInterface $storeManager,
-        CustomerBrainTreeManager $customerBrainTreeManager
+        CustomerCreditCardManager $customerCreditCardManager
     ) {
         $this->quoteFactory = $quoteFactory;
         $this->storeManager = $storeManager;
-        $this->customerBrainTreeManager = $customerBrainTreeManager;
+        $this->customerCreditCardManager = $customerCreditCardManager;
     }
 
     /**
@@ -72,14 +72,14 @@ class PrepareQuote
      */
     public function preparePayment(Quote $quote, $customerId)
     {
-        $cc = $this->customerBrainTreeManager->getCustomerBrainTreeCard($customerId);
+        $cc = $this->customerCreditCardManager->getCustomerCreditCard($customerId);
         $publicHash = $cc->getPublicHash();
         $quote->getPayment()->setQuote($quote)->importData(
             ['method' => BrainTreeConfigProvider::CC_VAULT_CODE]
         )->setAdditionalInformation([
                 'customer_id' => $customerId,
                 'public_hash' => $publicHash,
-                'payment_method_nonce' => $this->customerBrainTreeManager->getNonce($publicHash, $customerId),
+                'payment_method_nonce' => $this->customerCreditCardManager->getNonce($publicHash, $customerId),
                 'is_active_payment_token_enabler' => true
         ]);
         $quote->collectTotals();

@@ -9,7 +9,7 @@ use Magento\Braintree\Gateway\Config\Config as BrainTreeConfig;
 use Magento\Customer\Model\Address;
 use Magento\Customer\Model\Customer;
 use Magento\OneTouchOrdering\Model\Config;
-use Magento\OneTouchOrdering\Model\CustomerBrainTreeManager;
+use Magento\OneTouchOrdering\Model\CustomerCreditCardManager;
 use Magento\OneTouchOrdering\Model\OneTouchOrdering;
 use Magento\OneTouchOrdering\Model\RateCheck;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -36,7 +36,7 @@ class OneTouchOrderingTest extends TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $customerBrainTreeManager;
+    private $customerCreditCardManager;
     /**
      * @var OneTouchOrdering
      */
@@ -47,7 +47,7 @@ class OneTouchOrderingTest extends TestCase
         $objectManager = new ObjectManager($this);
 
         $this->customer = $this->createMock(Customer::class);
-        $this->customerBrainTreeManager = $this->createMock(CustomerBrainTreeManager::class);
+        $this->customerCreditCardManager = $this->createMock(CustomerCreditCardManager::class);
         $this->oneTouchConfig = $this->createMock(Config::class);
         $this->brainTreeConfig = $this->createMock(BrainTreeConfig::class);
         $this->rateCheck = $this->createMock(RateCheck::class);
@@ -58,7 +58,7 @@ class OneTouchOrderingTest extends TestCase
                 'oneTouchHelper' => $this->oneTouchConfig,
                 'brainTreeConfig'=> $this->brainTreeConfig,
                 'rateCheck' => $this->rateCheck,
-                'customerBrainTreeManager' => $this->customerBrainTreeManager
+                'customerCreditCardManager' => $this->customerCreditCardManager
             ]
         );
     }
@@ -82,7 +82,7 @@ class OneTouchOrderingTest extends TestCase
             ->willReturn(['test rate']);
         $this->oneTouchConfig->expects($this->once())->method('isModuleEnabled')->willReturn(true);
         $this->customer->method('getId')->willReturn($customerId);
-        $this->customerBrainTreeManager->expects($this->once())
+        $this->customerCreditCardManager->expects($this->once())
             ->method('getVisibleAvailableTokens')
             ->with($customerId)
             ->willReturn(['test token']);
@@ -102,7 +102,7 @@ class OneTouchOrderingTest extends TestCase
         $this->rateCheck->method('getRatesForCustomerAddress')->with($addressMock)->willReturn([]);
         $this->oneTouchConfig->expects($this->once())->method('isModuleEnabled')->willReturn(true);
         $this->customer->method('getId')->willReturn($customerId);
-        $this->customerBrainTreeManager
+        $this->customerCreditCardManager
             ->method('getVisibleAvailableTokens')
             ->with($customerId)
             ->willReturn([]);

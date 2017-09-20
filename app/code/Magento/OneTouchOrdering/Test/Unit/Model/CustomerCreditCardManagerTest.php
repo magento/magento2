@@ -9,10 +9,10 @@ use Magento\Braintree\Model\Ui\ConfigProvider as BrainTreeConfigProvider;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\OneTouchOrdering\Model\CustomerBrainTreeManager;
+use Magento\OneTouchOrdering\Model\CustomerCreditCardManager;
 use PHPUnit\Framework\TestCase;
 
-class CustomerBrainTreeManagerTest extends TestCase
+class CustomerCreditCardManagerTest extends TestCase
 {
     /**
      * @var \Magento\Framework\Api\FilterBuilder|\PHPUnit_Framework_MockObject_MockObject
@@ -27,9 +27,9 @@ class CustomerBrainTreeManagerTest extends TestCase
      */
     private $searchCriteriaBuilder;
     /**
-     * @var  CustomerBrainTreeManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var  CustomerCreditCardManager|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $customerBrainTreeManager;
+    private $customerCreditCardManager;
 
     public function setUp()
     {
@@ -59,8 +59,8 @@ class CustomerBrainTreeManagerTest extends TestCase
         $this->searchCriteriaBuilder->method('create')->willReturn($searchCriteria);
         $dateTimeFactory = new DateTimeFactory();
 
-        $this->customerBrainTreeManager = $objectManager->getObject(
-            CustomerBrainTreeManager::class,
+        $this->customerCreditCardManager = $objectManager->getObject(
+            CustomerCreditCardManager::class,
             [
                 'repository' => $this->paymentTokenRepository,
                 'filterBuilder' => $this->filterBuilder,
@@ -107,11 +107,11 @@ class CustomerBrainTreeManagerTest extends TestCase
         $paymentTokenSearchResult->method('getItems')->willReturn([true]);
         $this->paymentTokenRepository->method('getList')->willReturn($paymentTokenSearchResult);
 
-        $result = $this->customerBrainTreeManager->getCustomerBrainTreeCard($customerId);
+        $result = $this->customerCreditCardManager->getCustomerCreditCard($customerId);
         $this->assertTrue($result);
     }
 
-    public function testGetCustomerBrainTreeCardNoCC()
+    public function testGetCustomerCreditCardNoCC()
     {
         $customerId = 21;
 
@@ -122,6 +122,6 @@ class CustomerBrainTreeManagerTest extends TestCase
         $this->paymentTokenRepository->method('getList')->willReturn($paymentTokenSearchResult);
         $this->expectException(LocalizedException::class);
 
-        $result = $this->customerBrainTreeManager->getCustomerBrainTreeCard($customerId);
+        $result = $this->customerCreditCardManager->getCustomerCreditCard($customerId);
     }
 }

@@ -10,7 +10,7 @@ use Magento\Braintree\Model\Ui\ConfigProvider as BrainTreeConfigProvider;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Intl\DateTimeFactory;
 
-class CustomerBrainTreeManager
+class CustomerCreditCardManager
 {
     /**
      * @var \Magento\Vault\Api\PaymentTokenRepositoryInterface
@@ -34,7 +34,7 @@ class CustomerBrainTreeManager
     private $getNonce;
 
     /**
-     * CustomerBrainTreeManager constructor.
+     * CustomerCreditCardManager constructor.
      * @param \Magento\Vault\Api\PaymentTokenRepositoryInterface $repository
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
@@ -60,7 +60,7 @@ class CustomerBrainTreeManager
      * @return \Magento\Vault\Api\Data\PaymentTokenInterface
      * @throws LocalizedException
      */
-    public function getCustomerBrainTreeCard($customerId)
+    public function getCustomerCreditCard($customerId)
     {
         $tokens = $this->getVisibleAvailableTokens($customerId);
         if (empty($tokens)) {

@@ -38,10 +38,6 @@ class PrepareQuoteTest extends TestCase
      */
     private $store;
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $customerBrainTreeManager;
-    /**
      * @var PrepareQuote
      */
     private $prepareQuote;

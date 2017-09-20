@@ -6,7 +6,7 @@
 namespace Magento\OneTouchOrdering\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\OneTouchOrdering\Model\CustomerBrainTreeManager;
+use Magento\OneTouchOrdering\Model\CustomerCreditCardManager;
 use Magento\OneTouchOrdering\Model\PrepareQuote;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Payment;
@@ -36,7 +36,7 @@ class PrepareQuotePaymentTest extends TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $customerBrainTreeManager;
+    private $customerCreditCardManager;
     /**
      * @var PrepareQuote
      */
@@ -54,14 +54,14 @@ class PrepareQuotePaymentTest extends TestCase
             )->getMock();
 
         $this->storeManager = $this->createMock(StoreManagerInterface::class);
-        $this->customerBrainTreeManager = $this->createMock(CustomerBrainTreeManager::class);
+        $this->customerCreditCardManager = $this->createMock(CustomerCreditCardManager::class);
 
         $this->prepareQuote = $objectManager->getObject(
             PrepareQuote::class,
             [
                 'quoteFactory' => $this->quoteFactory,
                 'storeManager' => $this->storeManager,
-                'customerBrainTreeManager' => $this->customerBrainTreeManager
+                'customerCreditCardManager' => $this->customerCreditCardManager
             ]
         );
     }
@@ -88,13 +88,13 @@ class PrepareQuotePaymentTest extends TestCase
             ->with(['method' => BrainTreeConfigProvider::CC_VAULT_CODE])
             ->willReturnSelf();
         $cc = $this->createMock(\Magento\Vault\Api\Data\PaymentTokenInterface::class);
-        $this->customerBrainTreeManager->expects($this->once())
-            ->method('getCustomerBrainTreeCard')
+        $this->customerCreditCardManager->expects($this->once())
+            ->method('getCustomerCreditCard')
             ->with($customerId)
             ->willReturn($cc);
         $cc->expects($this->once())->method('getPublicHash')->willReturn($publicHash);
         $this->quote->expects($this->once())->method('getPayment')->willReturn($payment);
-        $this->customerBrainTreeManager->expects($this->once())
+        $this->customerCreditCardManager->expects($this->once())
             ->method('getNonce')
             ->with($publicHash, $customerId)
             ->willReturn($nonce);

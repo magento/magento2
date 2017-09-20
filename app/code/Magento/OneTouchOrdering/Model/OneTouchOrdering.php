@@ -23,9 +23,9 @@ class OneTouchOrdering
      */
     private $rateCheck;
     /**
-     * @var CustomerBrainTreeManager
+     * @var CustomerCreditCardManager
      */
-    private $customerBrainTreeManager;
+    private $customerCreditCardManager;
     /**
      * @var Customer
      */
@@ -33,13 +33,13 @@ class OneTouchOrdering
 
     /**
      * OneTouchOrdering constructor.
-     * @param CustomerBrainTreeManager $customerBrainTreeManager
+     * @param CustomerCreditCardManager $customerCreditCardManager
      * @param Config $oneTouchConfig
      * @param BrainTreeConfig $brainTreeConfig
      * @param RateCheck $rateCheck
      */
     public function __construct(
-        CustomerBrainTreeManager $customerBrainTreeManager,
+        CustomerCreditCardManager $customerCreditCardManager,
         Config $oneTouchConfig,
         BrainTreeConfig $brainTreeConfig,
         RateCheck $rateCheck
@@ -48,7 +48,7 @@ class OneTouchOrdering
         $this->oneTouchHelper = $oneTouchConfig;
         $this->brainTreeConfig = $brainTreeConfig;
         $this->rateCheck = $rateCheck;
-        $this->customerBrainTreeManager = $customerBrainTreeManager;
+        $this->customerCreditCardManager = $customerCreditCardManager;
     }
 
     /**
@@ -87,7 +87,7 @@ class OneTouchOrdering
     private function customerHasBrainTreeCreditCard(): bool
     {
         $customerId = $this->getCustomer()->getId();
-        $ccTokens = $this->customerBrainTreeManager->getVisibleAvailableTokens($customerId);
+        $ccTokens = $this->customerCreditCardManager->getVisibleAvailableTokens($customerId);
 
         return !empty($ccTokens);
     }
