@@ -21,8 +21,6 @@ class SaveMultiple
     private $connection;
 
     /**
-     * SourceCarrierLinkManagement constructor
-     *
      * @param ResourceConnection $connection
      */
     public function __construct(
