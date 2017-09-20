@@ -152,7 +152,7 @@ class VariationHandler
         \Magento\Catalog\Model\Product $parentProduct,
         $postData
     ) {
-        $typeId = isset($postData['weight']) && !empty($postData['weight'])
+        $typeId = !empty($postData['weight'])
             ? ProductType::TYPE_SIMPLE
             : ProductType::TYPE_VIRTUAL;
 
