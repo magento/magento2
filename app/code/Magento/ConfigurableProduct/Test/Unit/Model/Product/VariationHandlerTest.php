@@ -4,15 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Product;
 
 use Magento\Catalog\Model\Product\Type;
 use Magento\ConfigurableProduct\Model\Product\VariationHandler;
 
 /**
- * @SuppressWarnings(PHPMD.LongVariable)
+ * Tests \Magento\ConfigurableProduct\Model\Product\VariationHandler.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class VariationHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -101,7 +100,7 @@ class VariationHandlerTest extends \PHPUnit_Framework_TestCase
         $this->product = $this->getMock(\Magento\Catalog\Model\Product::class, ['getMediaGallery'], [], '', false);
 
         $this->model = $this->objectHelper->getObject(
-            \Magento\ConfigurableProduct\Model\Product\VariationHandler::class,
+            VariationHandler::class,
             [
                 'productFactory' => $this->productFactoryMock,
                 'entityFactory' => $this->entityFactoryMock,
