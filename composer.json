@@ -147,6 +147,7 @@
         "magento/module-newsletter": "100.3.0-dev",
         "magento/module-offline-payments": "100.3.0-dev",
         "magento/module-offline-shipping": "100.3.0-dev",
+        "magento/module-one-touch-ordering": "100.3.0-dev",
         "magento/module-page-cache": "100.3.0-dev",
         "magento/module-payment": "100.3.0-dev",
         "magento/module-paypal": "100.3.0-dev",

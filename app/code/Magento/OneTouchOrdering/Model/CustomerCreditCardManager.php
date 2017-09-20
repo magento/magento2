@@ -5,6 +5,7 @@
  */
 namespace Magento\OneTouchOrdering\Model;
 
+use Exception;
 use Magento\Braintree\Gateway\Command\GetPaymentNonceCommand;
 use Magento\Braintree\Model\Ui\ConfigProvider as BrainTreeConfigProvider;
 use Magento\Framework\Exception\LocalizedException;
@@ -75,6 +76,7 @@ class CustomerCreditCardManager
     /**
      * @param $publicHash
      * @param $customerId
+     * @throws Exception
      * @return string
      */
     public function getNonce($publicHash, $customerId): string

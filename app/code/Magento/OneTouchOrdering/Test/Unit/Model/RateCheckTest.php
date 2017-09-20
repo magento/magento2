@@ -6,6 +6,7 @@
 namespace Magento\OneTouchOrdering\Test\Unit\Model;
 
 use Magento\Framework\DataObject;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\OneTouchOrdering\Model\RateCheck;
 use Magento\Quote\Model\Quote\Address\RateCollectorInterface;
 use Magento\Quote\Model\Quote\Address\RateCollectorInterfaceFactory;
@@ -41,7 +42,7 @@ class RateCheckTest extends TestCase
 
     public function setUp()
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
         $this->request = $this->getMockBuilder(RateRequest::class)
             ->disableOriginalConstructor()

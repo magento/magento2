@@ -5,10 +5,14 @@
  */
 namespace Magento\OneTouchOrdering\Controller\Button;
 
+use Exception;
+use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\Controller\Result\Json as JsonResult;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\OneTouchOrdering\Model\CustomerData;
 use Magento\OneTouchOrdering\Model\PlaceOrder as PlaceOrderModel;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -20,7 +24,7 @@ class PlaceOrder extends \Magento\Framework\App\Action\Action
      */
     private $storeManager;
     /**
-     * @var \Magento\Catalog\Model\ProductRepository
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface
      */
     private $productRepository;
     /**
@@ -32,11 +36,11 @@ class PlaceOrder extends \Magento\Framework\App\Action\Action
      */
     private $orderRepository;
     /**
-     * @var \Magento\Customer\Model\Session
+     * @var Session
      */
     private $customerSession;
     /**
-     * @var \Magento\OneTouchOrdering\Model\CustomerData
+     * @var CustomerData
      */
     private $customerData;
 
@@ -47,6 +51,8 @@ class PlaceOrder extends \Magento\Framework\App\Action\Action
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param PlaceOrderModel $placeOrder
      * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
+     * @param Session $customerSession
+     * @param CustomerData $customerData
      */
     public function __construct(
         Context $context,
@@ -54,8 +60,8 @@ class PlaceOrder extends \Magento\Framework\App\Action\Action
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         PlaceOrderModel $placeOrder,
         \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\OneTouchOrdering\Model\CustomerData $customerData
+        Session $customerSession,
+        CustomerData $customerData
     ) {
         parent::__construct($context);
         $this->storeManager = $storeManager;
@@ -69,7 +75,7 @@ class PlaceOrder extends \Magento\Framework\App\Action\Action
     public function execute()
     {
         $product = $this->initProduct();
-        /** @var \Magento\Framework\Controller\Result\Json $result */
+        /** @var JsonResult $result */
         $result = $this->resultFactory->create(ResultFactory::TYPE_JSON);
 
         $params = $this->getRequest()->getParams();
@@ -89,6 +95,13 @@ class PlaceOrder extends \Magento\Framework\App\Action\Action
                 'response' => $e->getMessage()
             ]);
             return $result;
+        } catch (Exception $e) {
+            $errorMsg = __('Something went wrong while processing your order. Please try again later.');
+            $this->messageManager->addErrorMessage($errorMsg);
+            $result->setData([
+                'response' => $e->getMessage()
+            ]);
+            return $result;
         }
 
         $order = $this->orderRepository->get($orderId);
@@ -100,6 +113,10 @@ class PlaceOrder extends \Magento\Framework\App\Action\Action
         return $result;
     }
 
+    /**
+     * @return \Magento\Catalog\Api\Data\ProductInterface
+     * @throws NoSuchEntityException
+     */
     private function initProduct()
     {
         $productId = (int)$this->getRequest()->getParam('product');

@@ -11,7 +11,6 @@ use Magento\OneTouchOrdering\Model\PrepareQuote;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Payment;
 use Magento\Quote\Model\QuoteFactory;
-use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\TestCase;
 use Magento\Braintree\Model\Ui\ConfigProvider as BrainTreeConfigProvider;
 
@@ -25,14 +24,6 @@ class PrepareQuotePaymentTest extends TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject|Quote
      */
     private $quote;
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $storeManager;
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $store;
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
@@ -53,14 +44,12 @@ class PrepareQuotePaymentTest extends TestCase
                 ['getBillingAddress', 'getShippingAddress', 'setInventoryProcessed', 'getPayment', 'collectTotals']
             )->getMock();
 
-        $this->storeManager = $this->createMock(StoreManagerInterface::class);
         $this->customerCreditCardManager = $this->createMock(CustomerCreditCardManager::class);
 
         $this->prepareQuote = $objectManager->getObject(
             PrepareQuote::class,
             [
                 'quoteFactory' => $this->quoteFactory,
-                'storeManager' => $this->storeManager,
                 'customerCreditCardManager' => $this->customerCreditCardManager
             ]
         );

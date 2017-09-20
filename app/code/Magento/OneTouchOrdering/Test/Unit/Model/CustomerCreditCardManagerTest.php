@@ -122,6 +122,6 @@ class CustomerCreditCardManagerTest extends TestCase
         $this->paymentTokenRepository->method('getList')->willReturn($paymentTokenSearchResult);
         $this->expectException(LocalizedException::class);
 
-        $result = $this->customerCreditCardManager->getCustomerCreditCard($customerId);
+        $this->customerCreditCardManager->getCustomerCreditCard($customerId);
     }
 }

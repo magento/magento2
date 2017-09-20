@@ -7,6 +7,7 @@ namespace Magento\OneTouchOrdering\Controller\Button;
 
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\Controller\Result\Json as JsonResult;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\OneTouchOrdering\Model\OneTouchOrdering;
 use Magento\Customer\Model\Session;
@@ -26,6 +27,7 @@ class Available extends Action
      * Available constructor.
      * @param Context $context
      * @param OneTouchOrdering $oneTouchOrdering
+     * @param Session $customerSession
      */
     public function __construct(
         Context $context,
@@ -41,7 +43,7 @@ class Available extends Action
     {
         $available = false;
 
-        /** @var \Magento\Framework\Controller\Result\Json $result */
+        /** @var JsonResult $result */
         $result = $this->resultFactory->create(ResultFactory::TYPE_JSON);
         if ($this->customerSession->isLoggedIn()) {
             $available = $this->oneTouchOrdering->isAvailableForCustomer($this->customerSession->getCustomer());

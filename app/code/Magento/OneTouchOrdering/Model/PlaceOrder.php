@@ -5,6 +5,7 @@
  */
 namespace Magento\OneTouchOrdering\Model;
 
+use Exception;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
@@ -34,6 +35,7 @@ class PlaceOrder
      * @param QuoteRepository $quoteRepository
      * @param \Magento\Quote\Api\CartManagementInterface $cartManagementInterface
      * @param PrepareQuote $prepareQuote
+     * @param ShippingRateChooserInterface $shippingRateChooser
      */
     public function __construct(
         QuoteRepository $quoteRepository,
@@ -51,6 +53,7 @@ class PlaceOrder
      * @param Product $product
      * @param CustomerData $customerData
      * @param array $params
+     * @throws Exception
      * @return int
      */
     public function placeOrder(Product $product, CustomerData $customerData, array $params): int

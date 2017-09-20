@@ -5,9 +5,8 @@
  */
 namespace Magento\OneTouchOrdering\Model;
 
+use Exception;
 use Magento\Braintree\Model\Ui\ConfigProvider as BrainTreeConfigProvider;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\OneTouchOrdering\Model\CustomerData;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteFactory;
 use Magento\Store\Model\StoreManagerInterface;
@@ -44,7 +43,7 @@ class PrepareQuote
     }
 
     /**
-     * @param \Magento\OneTouchOrdering\Model\CustomerData $customerData
+     * @param CustomerData $customerData
      * @return Quote
      */
     public function prepare(CustomerData $customerData): Quote
@@ -68,7 +67,7 @@ class PrepareQuote
 
     /**
      * @param Quote $quote
-     * @throws LocalizedException
+     * @throws Exception
      */
     public function preparePayment(Quote $quote, $customerId)
     {

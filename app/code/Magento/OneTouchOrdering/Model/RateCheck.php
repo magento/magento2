@@ -7,6 +7,7 @@ namespace Magento\OneTouchOrdering\Model;
 
 use Magento\Customer\Model\Address;
 use Magento\Quote\Model\Quote\Address\RateCollectorInterfaceFactory;
+use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Quote\Model\Quote\Address\RateRequestFactory;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -47,7 +48,7 @@ class RateCheck
      */
     public function getRatesForCustomerAddress(Address $address): array
     {
-        /** @var $request \Magento\Quote\Model\Quote\Address\RateRequest */
+        /** @var $request RateRequest */
         $request = $this->rateRequestFactory->create();
         $request->setDestCountryId($address->getCountryId());
         $request->setDestRegionId($address->getRegionId());
