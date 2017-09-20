@@ -8,7 +8,6 @@ namespace Magento\OneTouchOrdering\Model;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteRepository;
 
 class PlaceOrder
@@ -25,6 +24,10 @@ class PlaceOrder
      * @var PrepareQuote
      */
     private $prepareQuote;
+    /**
+     * @var ShippingRateChooserInterface
+     */
+    private $shippingRateChooser;
 
     /**
      * PlaceOrder constructor.
@@ -35,11 +38,13 @@ class PlaceOrder
     public function __construct(
         QuoteRepository $quoteRepository,
         \Magento\Quote\Api\CartManagementInterface $cartManagementInterface,
-        PrepareQuote $prepareQuote
+        PrepareQuote $prepareQuote,
+        ShippingRateChooserInterface $shippingRateChooser
     ) {
         $this->cartManagementInterface = $cartManagementInterface;
         $this->quoteRepository = $quoteRepository;
         $this->prepareQuote = $prepareQuote;
+        $this->shippingRateChooser = $shippingRateChooser;
     }
 
     /**
@@ -53,45 +58,10 @@ class PlaceOrder
         $quote = $this->prepareQuote->prepare($customerData);
         $paramsObject = $this->getProductRequest($params);
         $quote->addProduct($product, $paramsObject);
-        $this->selectCheapestShippingRate($quote);
+        $this->shippingRateChooser->choose($quote);
         $this->prepareQuote->preparePayment($quote, $customerData->getCustomerId());
         $this->quoteRepository->save($quote);
         return $this->cartManagementInterface->placeOrder($quote->getId());
-    }
-
-    /**
-     * @param Quote $quote
-     * @return Quote
-     * @throws LocalizedException
-     */
-    private function selectCheapestShippingRate(Quote $quote): Quote
-    {
-        if ($quote->isVirtual()) {
-            return $quote;
-        }
-
-        $address = $quote->getShippingAddress();
-
-        $shippingRates = $address
-            ->setCollectShippingRates(true)
-            ->collectShippingRates()
-            ->getAllShippingRates();
-        if (empty($shippingRates)) {
-            throw new LocalizedException(
-                __('There are no shipping methods available for default shipping address.')
-            );
-        }
-
-        $rate = array_shift($shippingRates);
-
-        foreach ($shippingRates as $tmpRate) {
-            if ($tmpRate['price'] < $rate['price']) {
-                $rate = $tmpRate;
-            }
-        }
-        $address->setShippingMethod($rate['code']);
-
-        return $quote;
     }
 
     /**
