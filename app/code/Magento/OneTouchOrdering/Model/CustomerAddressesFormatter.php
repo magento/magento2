@@ -12,9 +12,13 @@ use Magento\Customer\Model\Customer;
  * Class CustomerAddresses
  * @package Magento\OneTouchOrdering\Model
  */
-class CustomerAddressesFormater
+class CustomerAddressesFormatter
 {
 
+    /**
+     * @param Customer $customer
+     * @return array
+     */
     public function getFormattedAddresses(Customer $customer): array
     {
         $addresses = $customer->getAddresses();
@@ -33,7 +37,11 @@ class CustomerAddressesFormater
         return $addressesFormatted;
     }
 
-    private function format(Address $address)
+    /**
+     * @param Address $address
+     * @return string
+     */
+    private function format(Address $address): string
     {
         return sprintf(
             "%s, %s, %s, %s %s, %s",

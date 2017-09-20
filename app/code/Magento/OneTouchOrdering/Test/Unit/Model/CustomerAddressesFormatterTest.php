@@ -12,10 +12,10 @@ use Magento\Customer\Model\Address;
 use Magento\Customer\Model\Customer;
 use Magento\Directory\Model\Country;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\OneTouchOrdering\Model\CustomerAddressesFormater;
+use Magento\OneTouchOrdering\Model\CustomerAddressesFormatter;
 use PHPUnit\Framework\TestCase;
 
-class CustomerAddressesFormaterTest extends TestCase
+class CustomerAddressesFormatterTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|Customer
@@ -26,7 +26,7 @@ class CustomerAddressesFormaterTest extends TestCase
      */
     protected $address;
     /**
-     * @var CustomerAddressesFormater
+     * @var CustomerAddressesFormatter
      */
     protected $customerAddresses;
 
@@ -39,7 +39,7 @@ class CustomerAddressesFormaterTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getCountryModel', 'getId', 'getName'])
             ->getMock();
-        $this->customerAddresses = $objectManager->getObject(CustomerAddressesFormater::class);
+        $this->customerAddresses = $objectManager->getObject(CustomerAddressesFormatter::class);
     }
 
     public function testGetFormattedAddresses()

@@ -10,7 +10,7 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\Result\Json as JsonResult;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\OneTouchOrdering\Model\Config;
-use Magento\OneTouchOrdering\Model\CustomerAddressesFormater;
+use Magento\OneTouchOrdering\Model\CustomerAddressesFormatter;
 use Magento\OneTouchOrdering\Model\OneTouchOrdering;
 use Magento\Customer\Model\Session;
 
@@ -25,7 +25,7 @@ class Available extends Action
      */
     private $customerSession;
     /**
-     * @var CustomerAddressesFormater
+     * @var CustomerAddressesFormatter
      */
     private $customerAddressesFormater;
     /**
@@ -37,7 +37,7 @@ class Available extends Action
         Context $context,
         OneTouchOrdering $oneTouchOrdering,
         Session $customerSession,
-        CustomerAddressesFormater $customerAddressesFormater,
+        CustomerAddressesFormatter $customerAddressesFormater,
         Config $oneTouchOrderingConfig
     ) {
         parent::__construct($context);
