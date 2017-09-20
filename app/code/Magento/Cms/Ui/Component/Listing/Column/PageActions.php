@@ -5,11 +5,13 @@
  */
 namespace Magento\Cms\Ui\Component\Listing\Column;
 
+use Magento\Cms\Block\Adminhtml\Page\Grid\Renderer\Action\UrlBuilder;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Escaper;
+use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Component\Listing\Columns\Column;
-use Magento\Cms\Block\Adminhtml\Page\Grid\Renderer\Action\UrlBuilder;
-use Magento\Framework\UrlInterface;
 
 /**
  * Class PageActions
@@ -30,6 +32,13 @@ class PageActions extends Column
      * @var string
      */
     private $editUrl;
+
+    /**
+     * Escaper.
+     *
+     * @var Escaper
+     */
+    private $escaper;
 
     /**
      * @param ContextInterface $context
@@ -71,13 +80,14 @@ class PageActions extends Column
                         'href' => $this->urlBuilder->getUrl($this->editUrl, ['page_id' => $item['page_id']]),
                         'label' => __('Edit')
                     ];
+                    $title = $this->getEscaper()->escapeHtml($item['title']);
                     $item[$name]['delete'] = [
                         'href' => $this->urlBuilder->getUrl(self::CMS_URL_PATH_DELETE, ['page_id' => $item['page_id']]),
                         'label' => __('Delete'),
                         'confirm' => [
-                            'title' => __('Delete ${ $.$data.title }'),
-                            'message' => __('Are you sure you wan\'t to delete a ${ $.$data.title } record?')
-                        ]
+                            'title' => __('Delete %1', $title),
+                            'message' => __('Are you sure you wan\'t to delete a %1 record?', $title),
+                        ],
                     ];
                 }
                 if (isset($item['identifier'])) {
@@ -94,5 +104,20 @@ class PageActions extends Column
         }
 
         return $dataSource;
+    }
+
+    /**
+     * Get instance of escaper.
+     *
+     * @return Escaper
+     * @deprecated
+     */
+    private function getEscaper()
+    {
+        if (!$this->escaper) {
+            $this->escaper = ObjectManager::getInstance()->get(Escaper::class);
+        }
+
+        return $this->escaper;
     }
 }
