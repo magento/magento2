@@ -106,3 +106,4 @@ class BlockManagementTest extends \PHPUnit\Framework\TestCase
         $this->blockManagement->getByIdentifier($identifier, $storeId);
     }
 }
+

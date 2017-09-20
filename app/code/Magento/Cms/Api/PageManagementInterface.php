@@ -20,3 +20,4 @@ interface PageManagementInterface
      */
     public function getByIdentifier(string $identifier, $storeId = null) : \Magento\Cms\Api\Data\PageInterface;
 }
+

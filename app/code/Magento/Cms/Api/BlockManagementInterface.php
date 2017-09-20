@@ -20,3 +20,4 @@ interface BlockManagementInterface
      */
     public function getByIdentifier(string $identifier, $storeId = null) : \Magento\Cms\Api\Data\BlockInterface;
 }
+
