@@ -44,17 +44,17 @@ class PlaceOrder
 
     /**
      * @param Product $product
+     * @param CustomerData $customerData
      * @param array $params
-     * @throws LocalizedException
      * @return int
      */
-    public function placeOrder(Product $product, array $params): int
+    public function placeOrder(Product $product, CustomerData $customerData, array $params): int
     {
-        $quote = $this->prepareQuote->prepare();
+        $quote = $this->prepareQuote->prepare($customerData);
         $paramsObject = $this->getProductRequest($params);
         $quote->addProduct($product, $paramsObject);
         $this->selectCheapestShippingRate($quote);
-        $this->prepareQuote->preparePayment($quote);
+        $this->prepareQuote->preparePayment($quote, $customerData->getCustomerId());
         $this->quoteRepository->save($quote);
         return $this->cartManagementInterface->placeOrder($quote->getId());
     }

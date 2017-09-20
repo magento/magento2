@@ -7,6 +7,7 @@ namespace Magento\OneTouchOrdering\Model;
 
 use Magento\Braintree\Model\Ui\ConfigProvider as BrainTreeConfigProvider;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\OneTouchOrdering\Model\CustomerData;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteFactory;
 use Magento\Store\Model\StoreManagerInterface;
@@ -25,20 +26,14 @@ class PrepareQuote
      * @var CustomerBrainTreeManager
      */
     private $customerBrainTreeManager;
-    /**
-     * @var CustomerData
-     */
-    private $customerData;
 
     /**
      * PrepareQuote constructor.
-     * @param CustomerData $customerData
      * @param QuoteFactory $quoteFactory
      * @param StoreManagerInterface $storeManager
      * @param CustomerBrainTreeManager $customerBrainTreeManager
      */
     public function __construct(
-        CustomerData $customerData,
         QuoteFactory $quoteFactory,
         StoreManagerInterface $storeManager,
         CustomerBrainTreeManager $customerBrainTreeManager
@@ -46,25 +41,25 @@ class PrepareQuote
         $this->quoteFactory = $quoteFactory;
         $this->storeManager = $storeManager;
         $this->customerBrainTreeManager = $customerBrainTreeManager;
-        $this->customerData = $customerData;
     }
 
     /**
+     * @param \Magento\OneTouchOrdering\Model\CustomerData $customerData
      * @return Quote
      */
-    public function prepare(): Quote
+    public function prepare(CustomerData $customerData): Quote
     {
         $store = $this->storeManager->getStore();
         $quote = $this->quoteFactory->create();
 
         $quote->setStore($store);
         $quote->setCurrency();
-        $quote->assignCustomer($this->customerData->getCustomerDataModel());
+        $quote->assignCustomer($customerData->getCustomerDataModel());
         $quote->getBillingAddress()->importCustomerAddressData(
-            $this->customerData->getDefaultBillingAddressDataModel()
+            $customerData->getDefaultBillingAddressDataModel()
         );
         $quote->getShippingAddress()->importCustomerAddressData(
-            $this->customerData->getDefaultShippingAddressDataModel()
+            $customerData->getDefaultShippingAddressDataModel()
         );
         $quote->setInventoryProcessed(false);
 
@@ -75,9 +70,8 @@ class PrepareQuote
      * @param Quote $quote
      * @throws LocalizedException
      */
-    public function preparePayment(Quote $quote)
+    public function preparePayment(Quote $quote, $customerId)
     {
-        $customerId = $this->customerData->getCustomerId();
         $cc = $this->customerBrainTreeManager->getCustomerBrainTreeCard($customerId);
         $publicHash = $cc->getPublicHash();
         $quote->getPayment()->setQuote($quote)->importData(

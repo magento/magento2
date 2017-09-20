@@ -7,14 +7,9 @@ namespace Magento\OneTouchOrdering\Model;
 
 use Magento\Braintree\Gateway\Config\Config as BrainTreeConfig;
 use Magento\Customer\Model\Customer;
-use Magento\Customer\Model\Session;
 
 class OneTouchOrdering
 {
-    /**
-     * @var Session
-     */
-    private $customerSession;
     /**
      * @var Config
      */
@@ -38,21 +33,18 @@ class OneTouchOrdering
 
     /**
      * OneTouchOrdering constructor.
-     * @param Session $customerSession
      * @param CustomerBrainTreeManager $customerBrainTreeManager
      * @param Config $oneTouchConfig
      * @param BrainTreeConfig $brainTreeConfig
      * @param RateCheck $rateCheck
      */
     public function __construct(
-        Session $customerSession,
         CustomerBrainTreeManager $customerBrainTreeManager,
         Config $oneTouchConfig,
         BrainTreeConfig $brainTreeConfig,
         RateCheck $rateCheck
     ) {
 
-        $this->customerSession = $customerSession;
         $this->oneTouchHelper = $oneTouchConfig;
         $this->brainTreeConfig = $brainTreeConfig;
         $this->rateCheck = $rateCheck;

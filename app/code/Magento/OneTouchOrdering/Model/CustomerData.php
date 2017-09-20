@@ -6,24 +6,14 @@
 namespace Magento\OneTouchOrdering\Model;
 
 use Magento\Customer\Model\Customer;
-use Magento\Customer\Model\Session;
+use Magento\Framework\Exception\LocalizedException;
 
 class CustomerData
 {
     /**
-     * @var Session
+     * @var Customer
      */
-    private $customerSession;
-
-    /**
-     * CustomerData constructor.
-     * @param Session $customerSession
-     */
-    public function __construct(
-        Session $customerSession
-    ) {
-        $this->customerSession = $customerSession;
-    }
+    private $customer;
 
     /**
      * @return \Magento\Customer\Api\Data\AddressInterface
@@ -54,14 +44,32 @@ class CustomerData
      */
     public function getCustomerId(): int
     {
-        return $this->customerSession->getCustomerId();
+        return $this->getCustomer()->getId();
+    }
+
+    /**
+     * @param Customer $customer
+     * @return $this
+     */
+    public function setCustomer(Customer $customer)
+    {
+        $this->customer = $customer;
+
+        return $this;
     }
 
     /**
      * @return Customer
+     * @throws LocalizedException
      */
     private function getCustomer(): Customer
     {
-        return $this->customerSession->getCustomer();
+        if (!$this->customer) {
+            throw new LocalizedException(
+                __('Something went wrong. Please try again later.')
+            );
+        }
+
+        return $this->customer;
     }
 }

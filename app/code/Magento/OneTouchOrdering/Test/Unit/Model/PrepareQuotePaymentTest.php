@@ -5,10 +5,8 @@
  */
 namespace Magento\OneTouchOrdering\Test\Unit\Model;
 
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\OneTouchOrdering\Model\CustomerBrainTreeManager;
-use Magento\OneTouchOrdering\Model\CustomerData;
 use Magento\OneTouchOrdering\Model\PrepareQuote;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Payment;
@@ -22,13 +20,9 @@ class PrepareQuotePaymentTest extends TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $customerData;
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     private $quoteFactory;
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|Quote
      */
     private $quote;
     /**
@@ -52,7 +46,6 @@ class PrepareQuotePaymentTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->customerData = $this->createMock(CustomerData::class);
         $this->quoteFactory = $this->createMock(QuoteFactory::class);
         $this->quote = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
@@ -66,7 +59,6 @@ class PrepareQuotePaymentTest extends TestCase
         $this->prepareQuote = $objectManager->getObject(
             PrepareQuote::class,
             [
-                'customerData' => $this->customerData,
                 'quoteFactory' => $this->quoteFactory,
                 'storeManager' => $this->storeManager,
                 'customerBrainTreeManager' => $this->customerBrainTreeManager
@@ -95,7 +87,6 @@ class PrepareQuotePaymentTest extends TestCase
             ->method('importData')
             ->with(['method' => BrainTreeConfigProvider::CC_VAULT_CODE])
             ->willReturnSelf();
-        $this->customerData->expects($this->once())->method('getCustomerId')->willReturn($customerId);
         $cc = $this->createMock(\Magento\Vault\Api\Data\PaymentTokenInterface::class);
         $this->customerBrainTreeManager->expects($this->once())
             ->method('getCustomerBrainTreeCard')
@@ -108,7 +99,7 @@ class PrepareQuotePaymentTest extends TestCase
             ->with($publicHash, $customerId)
             ->willReturn($nonce);
         $this->quote->expects($this->once())->method('collectTotals');
-        $this->prepareQuote->preparePayment($this->quote);
+        $this->prepareQuote->preparePayment($this->quote, $customerId);
         
         $this->assertArraySubset($paymentAdditionalInformation, $payment->getAdditionalInformation());
     }

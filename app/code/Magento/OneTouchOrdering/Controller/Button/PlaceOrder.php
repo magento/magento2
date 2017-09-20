@@ -31,6 +31,14 @@ class PlaceOrder extends \Magento\Framework\App\Action\Action
      * @var \Magento\Sales\Api\OrderRepositoryInterface
      */
     private $orderRepository;
+    /**
+     * @var \Magento\Customer\Model\Session
+     */
+    private $customerSession;
+    /**
+     * @var \Magento\OneTouchOrdering\Model\CustomerData
+     */
+    private $customerData;
 
     /**
      * PlaceOrder constructor.
@@ -45,13 +53,17 @@ class PlaceOrder extends \Magento\Framework\App\Action\Action
         StoreManagerInterface $storeManager,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         PlaceOrderModel $placeOrder,
-        \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
+        \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
+        \Magento\Customer\Model\Session $customerSession,
+        \Magento\OneTouchOrdering\Model\CustomerData $customerData
     ) {
         parent::__construct($context);
         $this->storeManager = $storeManager;
         $this->productRepository = $productRepository;
         $this->placeOrder = $placeOrder;
         $this->orderRepository = $orderRepository;
+        $this->customerSession = $customerSession;
+        $this->customerData = $customerData;
     }
 
     public function execute()
@@ -62,7 +74,8 @@ class PlaceOrder extends \Magento\Framework\App\Action\Action
 
         $params = $this->getRequest()->getParams();
         try {
-            $orderId = $this->placeOrder->placeOrder($product, $params);
+            $customerData = $this->customerData->setCustomer($this->customerSession->getCustomer());
+            $orderId = $this->placeOrder->placeOrder($product, $customerData, $params);
         } catch (NoSuchEntityException $e) {
             $errorMsg = __('Something went wrong while processing your order. Please try again later.');
             $this->messageManager->addErrorMessage($errorMsg);

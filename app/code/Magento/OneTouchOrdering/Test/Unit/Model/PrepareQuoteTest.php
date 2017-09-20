@@ -18,7 +18,7 @@ use PHPUnit\Framework\TestCase;
 class PrepareQuoteTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|CustomerData
      */
     private $customerData;
     /**
@@ -64,7 +64,6 @@ class PrepareQuoteTest extends TestCase
         $this->prepareQuote = $objectManager->getObject(
             PrepareQuote::class,
             [
-                'customerData' => $this->customerData,
                 'quoteFactory' => $this->quoteFactory,
                 'storeManager' => $this->storeManager
             ]
@@ -100,7 +99,7 @@ class PrepareQuoteTest extends TestCase
             ->method('importCustomerAddressData')
             ->with($customerAddressDataModel);
         $this->quote->expects($this->once())->method('setInventoryProcessed')->with(false);
-        $result = $this->prepareQuote->prepare();
+        $result = $this->prepareQuote->prepare($this->customerData);
         $this->assertSame($this->quote, $result);
     }
 }

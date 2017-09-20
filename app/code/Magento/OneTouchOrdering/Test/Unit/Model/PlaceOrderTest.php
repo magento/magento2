@@ -6,6 +6,9 @@
 namespace Magento\OneTouchOrdering\Test\Unit\Model;
 
 use Magento\Catalog\Model\Product;
+use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\OneTouchOrdering\Model\CustomerData;
 use Magento\OneTouchOrdering\Model\PlaceOrder;
 use Magento\OneTouchOrdering\Model\PrepareQuote;
 use Magento\Quote\Model\Quote;
@@ -16,6 +19,10 @@ use PHPUnit\Framework\TestCase;
 
 class PlaceOrderTest extends TestCase
 {
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|CustomerData
+     */
+    private $customerData;
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
@@ -29,7 +36,7 @@ class PlaceOrderTest extends TestCase
      */
     private $quote;
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|Product
      */
     private $product;
     /**
@@ -49,7 +56,10 @@ class PlaceOrderTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->cartManagementInterface = $this->createMock(\Magento\Quote\Api\CartManagementInterface::class);
+        $this->customerData = $this->createMock(\Magento\OneTouchOrdering\Model\CustomerData::class);
+        $this->cartManagementInterface = $this->createMock(
+            \Magento\Quote\Api\CartManagementInterface::class
+        );
         $this->quoteRepository = $this->createMock(QuoteResource::class);
         $this->prepareQuote = $this->createMock(PrepareQuote::class);
         $this->quote = $this->createMock(Quote::class);
@@ -79,9 +89,9 @@ class PlaceOrderTest extends TestCase
             ->with(true)->willReturnSelf();
         $this->shippingAddress->expects($this->once())->method('collectShippingRates')->willReturnSelf();
         $this->shippingAddress->expects($this->once())->method('getAllShippingRates')->willReturn([]);
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectException(LocalizedException::class);
 
-        $this->placeOrder->placeOrder($this->product, ['qty' => 1]);
+        $this->placeOrder->placeOrder($this->product, $this->customerData, ['qty' => 1]);
     }
 
     public function testPlaceOrder()
@@ -94,7 +104,7 @@ class PlaceOrderTest extends TestCase
         $quoteId = 123;
         $orderId = 321;
 
-        $paramsObject = new \Magento\Framework\DataObject($params);
+        $paramsObject = new DataObject($params);
 
         $this->prepareQuote->expects($this->once())->method('prepare')->willReturn($this->quote);
         $this->quote->expects($this->once())
@@ -132,7 +142,7 @@ class PlaceOrderTest extends TestCase
             ->method('placeOrder')
             ->with($quoteId)
             ->willReturn($orderId);
-        $result = $this->placeOrder->placeOrder($this->product, $params);
+        $result = $this->placeOrder->placeOrder($this->product, $this->customerData, $params);
         $this->assertSame($result, $orderId);
     }
 }
