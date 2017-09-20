@@ -5,31 +5,37 @@
  */
 namespace Magento\OneTouchOrdering\Model;
 
+use Magento\Customer\Model\Address;
+use Magento\Quote\Model\Quote\Address\RateCollectorInterfaceFactory;
+use Magento\Quote\Model\Quote\Address\RateRequest;
+use Magento\Quote\Model\Quote\Address\RateRequestFactory;
+use Magento\Store\Model\StoreManagerInterface;
+
 class RateCheck
 {
     /**
-     * @var \Magento\Quote\Model\Quote\Address\RateRequestFactory
+     * @var RateRequestFactory
      */
     private $rateRequestFactory;
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     private $storeManager;
     /**
-     * @var \Magento\Quote\Model\Quote\Address\RateCollectorInterfaceFactory
+     * @var RateCollectorInterfaceFactory
      */
     private $rateCollector;
 
     /**
      * RateCheck constructor.
-     * @param \Magento\Quote\Model\Quote\Address\RateRequestFactory $rateRequestFactory
-     * @param \Magento\Quote\Model\Quote\Address\RateCollectorInterfaceFactory $rateCollector
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param RateRequestFactory $rateRequestFactory
+     * @param RateCollectorInterfaceFactory $rateCollector
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
-        \Magento\Quote\Model\Quote\Address\RateRequestFactory $rateRequestFactory,
-        \Magento\Quote\Model\Quote\Address\RateCollectorInterfaceFactory $rateCollector,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        RateRequestFactory $rateRequestFactory,
+        RateCollectorInterfaceFactory $rateCollector,
+        StoreManagerInterface $storeManager
     ) {
         $this->rateRequestFactory = $rateRequestFactory;
         $this->storeManager = $storeManager;
@@ -37,12 +43,12 @@ class RateCheck
     }
 
     /**
-     * @param \Magento\Customer\Model\Address $address
+     * @param Address $address
      * @return array
      */
-    public function getRatesForCustomerAddress(\Magento\Customer\Model\Address $address)
+    public function getRatesForCustomerAddress(Address $address): array
     {
-        /** @var $request \Magento\Quote\Model\Quote\Address\RateRequest */
+        /** @var $request RateRequest */
         $request = $this->rateRequestFactory->create();
         $request->setDestCountryId($address->getCountryId());
         $request->setDestRegionId($address->getRegionId());

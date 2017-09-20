@@ -5,119 +5,83 @@
  */
 namespace Magento\OneTouchOrdering\Model;
 
-use Magento\Quote\Model\ResourceModel\Quote;
+use Exception;
+use Magento\Catalog\Model\Product;
+use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Quote\Model\ResourceModel\Quote as QuoteRepository;
 
 class PlaceOrder
 {
     /**
      * @var \Magento\Quote\Api\CartManagementInterface
      */
-    protected $cartManagementInterface;
+    private $cartManagementInterface;
     /**
-     * @var CustomerBrainTreeManager
+     * @var QuoteRepository
      */
-    protected $customerBrainTreeManager;
-    /**
-     * @var Quote
-     */
-    protected $quoteRepository;
+    private $quoteRepository;
     /**
      * @var PrepareQuote
      */
-    protected $prepareQuote;
+    private $prepareQuote;
     /**
-     * @var \Magento\OneTouchOrdering\Helper\Data
+     * @var ShippingRateChooserInterface
      */
-    private $oneTouchOrderingHelper;
+    private $shippingRateChooser;
 
     /**
      * PlaceOrder constructor.
-     * @param Quote $quoteRepository
+     * @param QuoteRepository $quoteRepository
      * @param \Magento\Quote\Api\CartManagementInterface $cartManagementInterface
-     * @param CustomerBrainTreeManager $customerBrainTreeManager
      * @param PrepareQuote $prepareQuote
+     * @param ShippingRateChooserInterface $shippingRateChooser
      */
     public function __construct(
-        \Magento\Quote\Model\ResourceModel\Quote $quoteRepository,
+        QuoteRepository $quoteRepository,
         \Magento\Quote\Api\CartManagementInterface $cartManagementInterface,
-        \Magento\OneTouchOrdering\Model\CustomerBrainTreeManager $customerBrainTreeManager,
-        \Magento\OneTouchOrdering\Model\PrepareQuote $prepareQuote,
-        \Magento\OneTouchOrdering\Helper\Data $oneTouchOrderingHelper
+        PrepareQuote $prepareQuote,
+        ShippingRateChooserInterface $shippingRateChooser
     ) {
         $this->cartManagementInterface = $cartManagementInterface;
-        $this->customerBrainTreeManager = $customerBrainTreeManager;
         $this->quoteRepository = $quoteRepository;
         $this->prepareQuote = $prepareQuote;
-        $this->oneTouchOrderingHelper = $oneTouchOrderingHelper;
+        $this->shippingRateChooser = $shippingRateChooser;
     }
 
     /**
-     * @param \Magento\Catalog\Model\Product $product
+     * @param Product $product
+     * @param CustomerData $customerData
      * @param array $params
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws Exception
      * @return int
      */
-    public function placeOrder(\Magento\Catalog\Model\Product $product, array $params)
+    public function placeOrder(Product $product, CustomerData $customerData, array $params): int
     {
-        $paramsObject = $this->_getProductRequest($params);
-        $quote = $this->prepareQuote->prepare($paramsObject);
+        $quote = $this->prepareQuote->prepare($customerData);
+        $paramsObject = $this->getProductRequest($params);
         $quote->addProduct($product, $paramsObject);
-        $this->selectCheapestShippingRate($quote);
-        $this->prepareQuote->preparePayment($quote);
+        $this->shippingRateChooser->choose($quote);
+        $this->prepareQuote->preparePayment($quote, $customerData->getCustomerId());
         $this->quoteRepository->save($quote);
         return $this->cartManagementInterface->placeOrder($quote->getId());
     }
 
     /**
-     * @param \Magento\Quote\Model\Quote $quote
-     * @return \Magento\Quote\Model\Quote
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    protected function selectCheapestShippingRate(\Magento\Quote\Model\Quote $quote)
-    {
-        if ($quote->isVirtual()) {
-            return $quote;
-        }
-
-        $address = $quote->getShippingAddress();
-
-        $shippingRates = $address
-            ->setCollectShippingRates(true)
-            ->collectShippingRates()
-            ->getAllShippingRates();
-        if (empty($shippingRates)) {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                __('There are no shipping methods available for default shipping address.')
-            );
-        }
-
-        $rate = array_shift($shippingRates);
-
-        foreach ($shippingRates as $tmpRate) {
-            if ($tmpRate['price'] < $rate['price']) {
-                $rate = $tmpRate;
-            }
-        }
-        $address->setShippingMethod($rate['code']);
-
-        return $quote;
-    }
-
-    /**
      * @param $requestInfo
-     * @return \Magento\Framework\DataObject
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return DataObject
+     * @throws LocalizedException
      */
-    protected function _getProductRequest($requestInfo)
+    private function getProductRequest($requestInfo): DataObject
     {
-        if ($requestInfo instanceof \Magento\Framework\DataObject) {
+        if ($requestInfo instanceof DataObject) {
             $request = $requestInfo;
         } elseif (is_numeric($requestInfo)) {
-            $request = new \Magento\Framework\DataObject(['qty' => $requestInfo]);
+            $request = new DataObject(['qty' => $requestInfo]);
         } elseif (is_array($requestInfo)) {
-            $request = new \Magento\Framework\DataObject($requestInfo);
+            $request = new DataObject($requestInfo);
         } else {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __('We found an invalid request for adding product to quote.')
             );
         }

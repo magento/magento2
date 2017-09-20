@@ -5,59 +5,59 @@
  */
 namespace Magento\OneTouchOrdering\Model;
 
+use Magento\Braintree\Gateway\Config\Config as BrainTreeConfig;
+use Magento\Customer\Model\Customer;
+
 class OneTouchOrdering
 {
     /**
-     * @var \Magento\Customer\Model\Session
+     * @var Config
      */
-    protected $customerSession;
+    private $oneTouchHelper;
     /**
-     * @var \Magento\OneTouchOrdering\Helper\Data
+     * @var BrainTreeConfig
      */
-    protected $oneTouchHelper;
-    /**
-     * @var \Magento\Braintree\Gateway\Config\Config
-     */
-    protected $brainTreeConfig;
+    private $brainTreeConfig;
     /**
      * @var RateCheck
      */
-    protected $rateCheck;
+    private $rateCheck;
     /**
-     * @var CustomerBrainTreeManager
+     * @var CustomerCreditCardManager
      */
-    protected $customerBrainTreeManager;
+    private $customerCreditCardManager;
+    /**
+     * @var Customer
+     */
+    private $customer;
 
     /**
      * OneTouchOrdering constructor.
-     * @param \Magento\Customer\Model\Session $customerSession
-     * @param CustomerBrainTreeManager $customerBrainTreeManager
-     * @param \Magento\OneTouchOrdering\Helper\Data $oneTouchHelper
-     * @param \Magento\Braintree\Gateway\Config\Config $brainTreeConfig
+     * @param CustomerCreditCardManager $customerCreditCardManager
+     * @param Config $oneTouchConfig
+     * @param BrainTreeConfig $brainTreeConfig
      * @param RateCheck $rateCheck
      */
     public function __construct(
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\OneTouchOrdering\Model\CustomerBrainTreeManager $customerBrainTreeManager,
-        \Magento\OneTouchOrdering\Helper\Data $oneTouchHelper,
-        \Magento\Braintree\Gateway\Config\Config $brainTreeConfig,
-        \Magento\OneTouchOrdering\Model\RateCheck $rateCheck
+        CustomerCreditCardManager $customerCreditCardManager,
+        Config $oneTouchConfig,
+        BrainTreeConfig $brainTreeConfig,
+        RateCheck $rateCheck
     ) {
 
-        $this->customerSession = $customerSession;
-        $this->oneTouchHelper = $oneTouchHelper;
+        $this->oneTouchHelper = $oneTouchConfig;
         $this->brainTreeConfig = $brainTreeConfig;
         $this->rateCheck = $rateCheck;
-        $this->customerBrainTreeManager = $customerBrainTreeManager;
+        $this->customerCreditCardManager = $customerCreditCardManager;
     }
 
     /**
      * @return bool
      */
-    public function isOneTouchOrderingAvailable()
+    public function isAvailableForCustomer($customer): bool
     {
-        return $this->isCustomerLoggedIn()
-            && $this->isOneTouchButtonEnabled()
+        $this->customer = $customer;
+        return $this->isOneTouchButtonEnabled()
             && $this->isBrainTreeAvailable()
             && $this->customerHasDefaultAddresses()
             && $this->isAnyShippingMethodAvailable()
@@ -65,26 +65,18 @@ class OneTouchOrdering
     }
 
     /**
-     * @return int|void
+     * @return bool
      */
-    protected function isAnyShippingMethodAvailable()
+    private function isAnyShippingMethodAvailable(): bool
     {
         $address = $this->getCustomer()->getDefaultShippingAddress();
-        return count($this->rateCheck->getRatesForCustomerAddress($address) > 0);
+        return count($this->rateCheck->getRatesForCustomerAddress($address)) > 0;
     }
 
     /**
      * @return bool
      */
-    protected function isCustomerLoggedIn()
-    {
-        return $this->customerSession->isLoggedIn();
-    }
-
-    /**
-     * @return bool
-     */
-    protected function isOneTouchButtonEnabled()
+    private function isOneTouchButtonEnabled(): bool
     {
         return $this->oneTouchHelper->isModuleEnabled();
     }
@@ -92,10 +84,10 @@ class OneTouchOrdering
     /**
      * @return bool
      */
-    protected function customerHasBrainTreeCreditCard()
+    private function customerHasBrainTreeCreditCard(): bool
     {
-        $customerId = $this->customerSession->getCustomerId();
-        $ccTokens = $this->customerBrainTreeManager->getVisibleAvailableTokens($customerId);
+        $customerId = $this->getCustomer()->getId();
+        $ccTokens = $this->customerCreditCardManager->getVisibleAvailableTokens($customerId);
 
         return !empty($ccTokens);
     }
@@ -103,7 +95,7 @@ class OneTouchOrdering
     /**
      * @return bool
      */
-    protected function customerHasDefaultAddresses()
+    private function customerHasDefaultAddresses(): bool
     {
         $customer = $this->getCustomer();
         return $customer->getDefaultBillingAddress() && $customer->getDefaultShippingAddress();
@@ -112,16 +104,16 @@ class OneTouchOrdering
     /**
      * @return bool
      */
-    protected function isBrainTreeAvailable()
+    private function isBrainTreeAvailable(): bool
     {
         return $this->brainTreeConfig->isActive();
     }
 
     /**
-     * @return \Magento\Customer\Model\Customer
+     * @return Customer
      */
-    protected function getCustomer()
+    private function getCustomer(): Customer
     {
-        return $this->customerSession->getCustomer();
+        return $this->customer;
     }
 }

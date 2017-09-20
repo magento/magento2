@@ -5,11 +5,15 @@
  */
 namespace Magento\OneTouchOrdering\Test\Unit\Model;
 
+use Magento\Framework\DataObject;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\OneTouchOrdering\Model\RateCheck;
 use Magento\Quote\Model\Quote\Address\RateCollectorInterface;
 use Magento\Quote\Model\Quote\Address\RateCollectorInterfaceFactory;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Quote\Model\Quote\Address\RateRequestFactory;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\TestCase;
 use Magento\Customer\Model\Address;
 
@@ -18,29 +22,29 @@ class RateCheckTest extends TestCase
     /**
      * @var  RateRequest|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $request;
+    private $request;
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $store;
+    private $store;
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $website;
+    private $website;
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $rateCollector;
+    private $rateCollector;
     /**
      * @var RateCheck
      */
-    protected $rateCheck;
+    private $rateCheck;
 
     public function setUp()
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
-        $this->request = $this->getMockBuilder(\Magento\Quote\Model\Quote\Address\RateRequest::class)
+        $this->request = $this->getMockBuilder(RateRequest::class)
             ->disableOriginalConstructor()
             ->setMethods(null)
             ->getMock();
@@ -48,8 +52,8 @@ class RateCheckTest extends TestCase
         $rateRequestFactory = $this->createMock(RateRequestFactory::class);
         $rateRequestFactory->method('create')->willReturn($this->request);
 
-        $storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->store = $this->createMock(\Magento\Store\Model\Store::class);
+        $storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->store = $this->createMock(Store::class);
         $this->website = $this->createMock(\Magento\Store\Api\Data\WebsiteInterface::class);
 
         $storeManager->method('getStore')->willReturn($this->store);
@@ -142,14 +146,14 @@ class RateCheckTest extends TestCase
             ->setMethods(['getRegionCode'])
             ->getMock();
 
-        $resultMock = $this->getMockBuilder(\Magento\Framework\DataObject::class)
+        $resultMock = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
             ->setMethods(['getAllRates'])
             ->getMock();
 
-        $resultMock->expects($this->once())->method('getAllRates')->willReturn(true);
+        $resultMock->expects($this->once())->method('getAllRates')->willReturn([true]);
         $this->rateCollector->expects($this->once())->method('getResult')->willReturn($resultMock);
         $result = $this->rateCheck->getRatesForCustomerAddress($address);
-        $this->assertTrue($result);
+        $this->assertEquals($result, [true]);
     }
 }

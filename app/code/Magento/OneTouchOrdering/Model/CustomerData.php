@@ -5,23 +5,20 @@
  */
 namespace Magento\OneTouchOrdering\Model;
 
+use Magento\Customer\Model\Customer;
+use Magento\Framework\Exception\LocalizedException;
+
 class CustomerData
 {
     /**
-     * @var \Magento\Customer\Model\Session
+     * @var Customer
      */
-    protected $customerSession;
-
-    public function __construct(
-        \Magento\Customer\Model\Session $customerSession
-    ) {
-        $this->customerSession = $customerSession;
-    }
+    private $customer;
 
     /**
      * @return \Magento\Customer\Api\Data\AddressInterface
      */
-    public function getDefaultBillingAddressDataModel()
+    public function getDefaultBillingAddressDataModel(): \Magento\Customer\Api\Data\AddressInterface
     {
         return $this->getCustomer()->getDefaultBillingAddress()->getDataModel();
     }
@@ -29,7 +26,7 @@ class CustomerData
     /**
      * @return \Magento\Customer\Api\Data\AddressInterface
      */
-    public function getDefaultShippingAddressDataModel()
+    public function getDefaultShippingAddressDataModel(): \Magento\Customer\Api\Data\AddressInterface
     {
         return $this->getCustomer()->getDefaultShippingAddress()->getDataModel();
     }
@@ -46,7 +43,7 @@ class CustomerData
     /**
      * @return \Magento\Customer\Api\Data\CustomerInterface
      */
-    public function getCustomerDataModel()
+    public function getCustomerDataModel(): \Magento\Customer\Api\Data\CustomerInterface
     {
         return $this->getCustomer()->getDataModel();
     }
@@ -54,16 +51,34 @@ class CustomerData
     /**
      * @return int
      */
-    public function getCustomerId()
+    public function getCustomerId(): int
     {
-        return $this->customerSession->getCustomerId();
+        return $this->getCustomer()->getId();
     }
 
     /**
-     * @return \Magento\Customer\Model\Customer
+     * @param Customer $customer
+     * @return $this
      */
-    protected function getCustomer()
+    public function setCustomer(Customer $customer)
     {
-        return $this->customerSession->getCustomer();
+        $this->customer = $customer;
+
+        return $this;
+    }
+
+    /**
+     * @return Customer
+     * @throws LocalizedException
+     */
+    private function getCustomer(): Customer
+    {
+        if (!$this->customer) {
+            throw new LocalizedException(
+                __('Something went wrong. Please try again later.')
+            );
+        }
+
+        return $this->customer;
     }
 }

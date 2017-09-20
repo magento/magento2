@@ -5,50 +5,47 @@
  */
 namespace Magento\OneTouchOrdering\Model;
 
+use Exception;
 use Magento\Braintree\Gateway\Command\GetPaymentNonceCommand;
-use Magento\Framework\Api\FilterBuilder;
-use Magento\Vault\Api\PaymentTokenRepositoryInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\Intl\DateTimeFactory;
-use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Braintree\Model\Ui\ConfigProvider as BrainTreeConfigProvider;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Intl\DateTimeFactory;
 
-class CustomerBrainTreeManager
+class CustomerCreditCardManager
 {
-
     /**
-     * @var PaymentTokenRepositoryInterface
+     * @var \Magento\Vault\Api\PaymentTokenRepositoryInterface
      */
-    protected $repository;
+    private $repository;
     /**
-     * @var FilterBuilder
+     * @var \Magento\Framework\Api\FilterBuilder
      */
-    protected $filterBuilder;
+    private $filterBuilder;
     /**
-     * @var SearchCriteriaBuilder
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder
      */
-    protected $searchCriteriaBuilder;
+    private $searchCriteriaBuilder;
     /**
      * @var DateTimeFactory
      */
-    protected $dateTimeFactory;
+    private $dateTimeFactory;
     /**
      * @var GetPaymentNonceCommand
      */
-    protected $getNonce;
+    private $getNonce;
 
     /**
-     * CustomerBrainTreeManager constructor.
-     * @param PaymentTokenRepositoryInterface $repository
-     * @param FilterBuilder $filterBuilder
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * CustomerCreditCardManager constructor.
+     * @param \Magento\Vault\Api\PaymentTokenRepositoryInterface $repository
+     * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
+     * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param DateTimeFactory $dateTimeFactory
      * @param GetPaymentNonceCommand $getNonce
      */
     public function __construct(
-        PaymentTokenRepositoryInterface $repository,
-        FilterBuilder $filterBuilder,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
+        \Magento\Vault\Api\PaymentTokenRepositoryInterface $repository,
+        \Magento\Framework\Api\FilterBuilder $filterBuilder,
+        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
         DateTimeFactory $dateTimeFactory,
         GetPaymentNonceCommand $getNonce
     ) {
@@ -61,13 +58,16 @@ class CustomerBrainTreeManager
 
     /**
      * @param $customerId
-     * @return bool|PaymentTokenInterface
+     * @return \Magento\Vault\Api\Data\PaymentTokenInterface
+     * @throws LocalizedException
      */
-    public function getCustomerBrainTreeCard($customerId)
+    public function getCustomerCreditCard($customerId)
     {
         $tokens = $this->getVisibleAvailableTokens($customerId);
         if (empty($tokens)) {
-            return false;
+            throw new LocalizedException(
+                __('There are no credit cards available.')
+            );
         }
 
         return array_shift($tokens);
@@ -76,9 +76,10 @@ class CustomerBrainTreeManager
     /**
      * @param $publicHash
      * @param $customerId
+     * @throws Exception
      * @return string
      */
-    public function getNonce($publicHash, $customerId)
+    public function getNonce($publicHash, $customerId): string
     {
         return $this->getNonce->execute(
             ['public_hash' => $publicHash, 'customer_id' => $customerId]
@@ -87,20 +88,20 @@ class CustomerBrainTreeManager
 
     /**
      * @param $customerId
-     * @return PaymentTokenInterface[]
+     * @return \Magento\Vault\Api\Data\PaymentTokenInterface[]
      */
-    public function getVisibleAvailableTokens($customerId)
+    public function getVisibleAvailableTokens($customerId): array
     {
-        $customerFilter = $this->getFilter(PaymentTokenInterface::CUSTOMER_ID, $customerId);
-        $visibleFilter = $this->getFilter(PaymentTokenInterface::IS_VISIBLE, 1);
-        $isActiveFilter = $this->getFilter(PaymentTokenInterface::IS_ACTIVE, 1);
+        $customerFilter = $this->getFilter(\Magento\Vault\Api\Data\PaymentTokenInterface::CUSTOMER_ID, $customerId);
+        $visibleFilter = $this->getFilter(\Magento\Vault\Api\Data\PaymentTokenInterface::IS_VISIBLE, 1);
+        $isActiveFilter = $this->getFilter(\Magento\Vault\Api\Data\PaymentTokenInterface::IS_ACTIVE, 1);
         $isBrainTreeFilter = $this->getFilter(
-            PaymentTokenInterface::PAYMENT_METHOD_CODE,
+            \Magento\Vault\Api\Data\PaymentTokenInterface::PAYMENT_METHOD_CODE,
             BrainTreeConfigProvider::CODE
         );
 
         $expiresAtFilter = [
-            $this->filterBuilder->setField(PaymentTokenInterface::EXPIRES_AT)
+            $this->filterBuilder->setField(\Magento\Vault\Api\Data\PaymentTokenInterface::EXPIRES_AT)
                 ->setConditionType('gt')
                 ->setValue(
                     $this->dateTimeFactory->create(
@@ -120,7 +121,12 @@ class CustomerBrainTreeManager
         return $this->repository->getList($searchCriteria)->getItems();
     }
 
-    protected function getFilter($field, $value)
+    /**
+     * @param $field
+     * @param $value
+     * @return array
+     */
+    private function getFilter($field, $value): array
     {
         return [
             $this->filterBuilder->setField($field)

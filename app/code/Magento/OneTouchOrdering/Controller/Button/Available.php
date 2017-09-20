@@ -5,55 +5,62 @@
  */
 namespace Magento\OneTouchOrdering\Controller\Button;
 
+use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\Controller\Result\Json as JsonResult;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\OneTouchOrdering\Model\CustomerAddresses;
 use Magento\OneTouchOrdering\Model\OneTouchOrdering;
-use Magento\OneTouchOrdering\Helper\Data as OneTouchOrderingHelper;
+use Magento\Customer\Model\Session;
 
-class Available extends \Magento\Framework\App\Action\Action
+class Available extends Action
 {
     /**
      * @var OneTouchOrdering
      */
-    protected $oneTouchOrdering;
+    private $oneTouchOrdering;
     /**
-     * @var CustomerAddresses
+     * @var Session
      */
-    protected $customerAddresses;
-    /**
-     * @var OneTouchOrderingHelper
-     */
-    private $oneTouchOrderingHelper;
+    private $customerSession;
 
+    private $customerAddresses;
+
+    /**
+     * Available constructor.
+     * @param Context $context
+     * @param OneTouchOrdering $oneTouchOrdering
+     * @param Session $customerSession
+     */
     public function __construct(
         Context $context,
         OneTouchOrdering $oneTouchOrdering,
-        CustomerAddresses $customerAddresses,
-        OneTouchOrderingHelper $oneTouchOrderingHelper
+        Session $customerSession,
+        CustomerAddresses $customerAddresses
     ) {
         parent::__construct($context);
         $this->oneTouchOrdering = $oneTouchOrdering;
-        $this->customerAddresses = $customerAddresses;
-        $this->oneTouchOrderingHelper = $oneTouchOrderingHelper;
+        $this->customerSession = $customerSession;
     }
 
     public function execute()
     {
-        /** @var \Magento\Framework\Controller\Result\Json $result */
+        $available = false;
+
+        /** @var JsonResult $result */
         $result = $this->resultFactory->create(ResultFactory::TYPE_JSON);
-
+        if ($this->customerSession->isLoggedIn()) {
+            $available = $this->oneTouchOrdering->isAvailableForCustomer($this->customerSession->getCustomer());
+        }
         $resultData = [
-            'available' => $this->oneTouchOrdering->isOneTouchOrderingAvailable(),
+            'available' => $available
         ];
-
-        if ($this->oneTouchOrderingHelper->isSelectAddressEnabled()) {
+        if (1) {
             $resultData += [
                 'addresses' => $this->customerAddresses->getFormattedAddresses(),
                 'defaultAddress' => $this->customerAddresses->getDefaultAddressId()
             ];
         }
-
         $result->setData($resultData);
 
         return $result;

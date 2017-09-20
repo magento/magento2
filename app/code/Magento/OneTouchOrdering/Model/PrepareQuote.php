@@ -5,58 +5,63 @@
  */
 namespace Magento\OneTouchOrdering\Model;
 
+use Exception;
 use Magento\Braintree\Model\Ui\ConfigProvider as BrainTreeConfigProvider;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\QuoteFactory;
+use Magento\Store\Model\StoreManagerInterface;
 
 class PrepareQuote
 {
     /**
-     * @var \Magento\Quote\Model\QuoteFactory
+     * @var QuoteFactory
      */
-    protected $quoteFactory;
+    private $quoteFactory;
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
-    protected $storeManager;
+    private $storeManager;
     /**
-     * @var \Magento\OneTouchOrdering\Model\CustomerBrainTreeManager
+     * @var CustomerCreditCardManager
      */
-    protected $customerBrainTreeManager;
-    /**
-     * @var CustomerData
-     */
-    protected $customerData;
+    private $customerCreditCardManager;
 
+    /**
+     * PrepareQuote constructor.
+     * @param QuoteFactory $quoteFactory
+     * @param StoreManagerInterface $storeManager
+     * @param CustomerCreditCardManager $customerCreditCardManager
+     */
     public function __construct(
-        \Magento\OneTouchOrdering\Model\CustomerData $customerData,
-        \Magento\Quote\Model\QuoteFactory $quoteFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\OneTouchOrdering\Model\CustomerBrainTreeManager $customerBrainTreeManager
+        QuoteFactory $quoteFactory,
+        StoreManagerInterface $storeManager,
+        CustomerCreditCardManager $customerCreditCardManager
     ) {
         $this->quoteFactory = $quoteFactory;
         $this->storeManager = $storeManager;
-        $this->customerBrainTreeManager = $customerBrainTreeManager;
-        $this->customerData = $customerData;
+        $this->customerCreditCardManager = $customerCreditCardManager;
     }
 
     /**
-     * @return \Magento\Quote\Model\Quote
+     * @param CustomerData $customerData
+     * @return Quote
      */
-    public function prepare($params)
+    public function prepare(CustomerData $customerData): Quote
     {
         $store = $this->storeManager->getStore();
         $quote = $this->quoteFactory->create();
 
         $quote->setStore($store);
         $quote->setCurrency();
-        $quote->assignCustomer($this->customerData->getCustomerDataModel());
+        $quote->assignCustomer($customerData->getCustomerDataModel());
         $quote->getBillingAddress()->importCustomerAddressData(
-            $this->customerData->getDefaultBillingAddressDataModel()
+            $customerData->getDefaultBillingAddressDataModel()
         );
 
         if ($addressId = $params->getCustomerAddress()) {
-            $shippingAddressData = $this->customerData->getShippingAddressDataModel($addressId);
+            $shippingAddressData = $customerData->getShippingAddressDataModel($addressId);
         } else {
-            $shippingAddressData = $this->customerData->getDefaultShippingAddressDataModel();
+            $shippingAddressData = $customerData->getDefaultShippingAddressDataModel();
         }
 
         $quote->getShippingAddress()->importCustomerAddressData(
@@ -68,26 +73,19 @@ class PrepareQuote
     }
 
     /**
-     * @param \Magento\Quote\Model\Quote $quote
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param Quote $quote
+     * @throws Exception
      */
-    public function preparePayment(\Magento\Quote\Model\Quote $quote)
+    public function preparePayment(Quote $quote, $customerId)
     {
-        $customerId = $this->customerData->getCustomerId();
-        $cc = $this->customerBrainTreeManager->getCustomerBrainTreeCard($customerId);
-
-        if (!$cc) {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                __('There are no credit cards available.')
-            );
-        }
+        $cc = $this->customerCreditCardManager->getCustomerCreditCard($customerId);
         $publicHash = $cc->getPublicHash();
         $quote->getPayment()->setQuote($quote)->importData(
             ['method' => BrainTreeConfigProvider::CC_VAULT_CODE]
         )->setAdditionalInformation([
                 'customer_id' => $customerId,
                 'public_hash' => $publicHash,
-                'payment_method_nonce' => $this->customerBrainTreeManager->getNonce($publicHash, $customerId),
+                'payment_method_nonce' => $this->customerCreditCardManager->getNonce($publicHash, $customerId),
                 'is_active_payment_token_enabler' => true
         ]);
         $quote->collectTotals();

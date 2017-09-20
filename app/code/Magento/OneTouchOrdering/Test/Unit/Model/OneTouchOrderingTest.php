@@ -5,62 +5,60 @@
  */
 namespace Magento\OneTouchOrdering\Test\Unit\Model;
 
-use Magento\OneTouchOrdering\Model\CustomerBrainTreeManager;
+use Magento\Braintree\Gateway\Config\Config as BrainTreeConfig;
+use Magento\Customer\Model\Address;
+use Magento\Customer\Model\Customer;
+use Magento\OneTouchOrdering\Model\Config;
+use Magento\OneTouchOrdering\Model\CustomerCreditCardManager;
 use Magento\OneTouchOrdering\Model\OneTouchOrdering;
+use Magento\OneTouchOrdering\Model\RateCheck;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
 class OneTouchOrderingTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|Customer
      */
-    protected $customerSession;
+    private $customer;
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $customer;
+    private $oneTouchConfig;
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $oneTouchHelper;
+    private $brainTreeConfig;
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $brainTreeConfig;
+    private $rateCheck;
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $rateCheck;
+    private $customerCreditCardManager;
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var OneTouchOrdering
      */
-    protected $customerBrainTreeManager;
-    /**
-     * @var \Magento\OneTouchOrdering\Model\OneTouchOrdering
-     */
-    protected $oneTouchOrdering;
+    private $oneTouchOrdering;
 
     public function setUp()
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
-        $this->customerSession = $this->createMock(\Magento\Customer\Model\Session::class);
-        $this->customer = $this->createMock(\Magento\Customer\Model\Customer::class);
-        $this->customerSession->method('getCustomer')->willReturn($this->customer);
-
-        $this->customerBrainTreeManager = $this->createMock(CustomerBrainTreeManager::class);
-        $this->oneTouchHelper = $this->createMock(\Magento\OneTouchOrdering\Helper\Data::class);
-        $this->brainTreeConfig = $this->createMock(\Magento\Braintree\Gateway\Config\Config::class);
-        $this->rateCheck = $this->createMock(\Magento\OneTouchOrdering\Model\RateCheck::class);
+        $this->customer = $this->createMock(Customer::class);
+        $this->customerCreditCardManager = $this->createMock(CustomerCreditCardManager::class);
+        $this->oneTouchConfig = $this->createMock(Config::class);
+        $this->brainTreeConfig = $this->createMock(BrainTreeConfig::class);
+        $this->rateCheck = $this->createMock(RateCheck::class);
 
         $this->oneTouchOrdering = $objectManager->getObject(
-            \Magento\OneTouchOrdering\Model\OneTouchOrdering::class,
+            OneTouchOrdering::class,
             [
-                'customerSession' => $this->customerSession,
-                'oneTouchHelper' => $this->oneTouchHelper,
+                'oneTouchHelper' => $this->oneTouchConfig,
                 'brainTreeConfig'=> $this->brainTreeConfig,
                 'rateCheck' => $this->rateCheck,
-                'customerBrainTreeManager' => $this->customerBrainTreeManager
+                'customerCreditCardManager' => $this->customerCreditCardManager
             ]
         );
     }
@@ -68,7 +66,7 @@ class OneTouchOrderingTest extends TestCase
     public function testAllAvailable()
     {
         $customerId = 123;
-        $addressMock = $this->createMock(\Magento\Customer\Model\Address::class);
+        $addressMock = $this->createMock(Address::class);
         $this->customer
             ->expects($this->atLeastOnce())
             ->method('getDefaultShippingAddress')
@@ -82,37 +80,35 @@ class OneTouchOrderingTest extends TestCase
             ->method('getRatesForCustomerAddress')
             ->with($addressMock)
             ->willReturn(['test rate']);
-        $this->customerSession->expects($this->once())->method('isLoggedIn')->willReturn(true);
-        $this->oneTouchHelper->expects($this->once())->method('isModuleEnabled')->willReturn(true);
-        $this->customerSession->method('getCustomerId')->willReturn($customerId);
-        $this->customerBrainTreeManager->expects($this->once())
+        $this->oneTouchConfig->expects($this->once())->method('isModuleEnabled')->willReturn(true);
+        $this->customer->method('getId')->willReturn($customerId);
+        $this->customerCreditCardManager->expects($this->once())
             ->method('getVisibleAvailableTokens')
             ->with($customerId)
             ->willReturn(['test token']);
 
         $this->brainTreeConfig->expects($this->once())->method('isActive')->willReturn(true);
 
-        $this->assertTrue($this->oneTouchOrdering->isOneTouchOrderingAvailable());
+        $this->assertTrue($this->oneTouchOrdering->isAvailableForCustomer($this->customer));
     }
 
     public function testNotAllAvailable()
     {
         $customerId = 123;
-        $addressMock = $this->createMock(\Magento\Customer\Model\Address::class);
+        $addressMock = $this->createMock(Address::class);
         $this->customer->method('getDefaultShippingAddress')->willReturn($addressMock);
         $this->customer->method('getDefaultBillingAddress')->willReturn(false);
 
         $this->rateCheck->method('getRatesForCustomerAddress')->with($addressMock)->willReturn([]);
-        $this->customerSession->expects($this->once())->method('isLoggedIn')->willReturn(true);
-        $this->oneTouchHelper->expects($this->once())->method('isModuleEnabled')->willReturn(true);
-        $this->customerSession->method('getCustomerId')->willReturn($customerId);
-        $this->customerBrainTreeManager
+        $this->oneTouchConfig->expects($this->once())->method('isModuleEnabled')->willReturn(true);
+        $this->customer->method('getId')->willReturn($customerId);
+        $this->customerCreditCardManager
             ->method('getVisibleAvailableTokens')
             ->with($customerId)
             ->willReturn([]);
 
         $this->brainTreeConfig->expects($this->once())->method('isActive')->willReturn(true);
 
-        $this->assertFalse($this->oneTouchOrdering->isOneTouchOrderingAvailable());
+        $this->assertFalse($this->oneTouchOrdering->isAvailableForCustomer($this->customer));
     }
 }

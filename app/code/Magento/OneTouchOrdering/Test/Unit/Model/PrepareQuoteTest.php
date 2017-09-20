@@ -5,9 +5,6 @@
  */
 namespace Magento\OneTouchOrdering\Test\Unit\Model;
 
-use Magento\Customer\Api\Data\AddressInterface;
-use Magento\Customer\Api\Data\CustomerInterface;
-use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\OneTouchOrdering\Model\CustomerData;
 use Magento\OneTouchOrdering\Model\PrepareQuote;
@@ -21,33 +18,29 @@ use PHPUnit\Framework\TestCase;
 class PrepareQuoteTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|CustomerData
      */
-    protected $customerData;
+    private $customerData;
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $quoteFactory;
+    private $quoteFactory;
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $quote;
+    private $quote;
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $storeManager;
+    private $storeManager;
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $store;
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $customerBrainTreeManager;
+    private $store;
     /**
      * @var PrepareQuote
      */
-    protected $prepareQuote;
+    private $prepareQuote;
 
     public function setUp()
     {
@@ -67,18 +60,18 @@ class PrepareQuoteTest extends TestCase
         $this->prepareQuote = $objectManager->getObject(
             PrepareQuote::class,
             [
-                'customerData' => $this->customerData,
                 'quoteFactory' => $this->quoteFactory,
                 'storeManager' => $this->storeManager
             ]
         );
     }
 
-    public function testPrepareDefaultShippingAddress()
+    public function testPrepare()
     {
-        $params = new DataObject();
-        $customerDataModel = $this->createMock(CustomerInterface::class);
-        $customerAddressDataModel = $this->createMock(AddressInterface::class);
+        $customerDataModel = $this->createMock(\Magento\Customer\Api\Data\CustomerInterface::class);
+        $customerAddressDataModel = $this->createMock(
+            \Magento\Customer\Api\Data\AddressInterface::class
+        );
         $this->customerData
             ->expects($this->once())
             ->method('getCustomerDataModel')
@@ -102,41 +95,7 @@ class PrepareQuoteTest extends TestCase
             ->method('importCustomerAddressData')
             ->with($customerAddressDataModel);
         $this->quote->expects($this->once())->method('setInventoryProcessed')->with(false);
-        $result = $this->prepareQuote->prepare($params);
-        $this->assertSame($this->quote, $result);
-    }
-
-    public function testPrepareShippingAddressByAddressId()
-    {
-        $addressId = 1;
-        $params = new DataObject(['customer_address' => $addressId]);
-        $customerDataModel = $this->createMock(CustomerInterface::class);
-        $customerAddressDataModel = $this->createMock(AddressInterface::class);
-        $this->customerData
-            ->expects($this->once())
-            ->method('getCustomerDataModel')
-            ->willReturn($customerDataModel);
-        $this->customerData
-            ->expects($this->once())
-            ->method('getDefaultBillingAddressDataModel')
-            ->willReturn($customerAddressDataModel);
-        $this->customerData
-            ->expects($this->once())
-            ->method('getShippingAddressDataModel')
-            ->with($addressId)
-            ->willReturn($customerAddressDataModel);
-        $this->storeManager->expects($this->once())->method('getStore')->willReturn($this->store);
-        $this->quoteFactory->expects($this->once())->method('create')->willReturn($this->quote);
-
-        $quoteAddressMock = $this->createMock(QuoteAddress::class);
-        $this->quote->expects($this->once())->method('getBillingAddress')->willReturn($quoteAddressMock);
-        $this->quote->expects($this->once())->method('getShippingAddress')->willReturn($quoteAddressMock);
-        $quoteAddressMock
-            ->expects($this->exactly(2))
-            ->method('importCustomerAddressData')
-            ->with($customerAddressDataModel);
-        $this->quote->expects($this->once())->method('setInventoryProcessed')->with(false);
-        $result = $this->prepareQuote->prepare($params);
+        $result = $this->prepareQuote->prepare($this->customerData);
         $this->assertSame($this->quote, $result);
     }
 }

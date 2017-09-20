@@ -5,54 +5,83 @@
  */
 namespace Magento\OneTouchOrdering\Controller\Button;
 
+use Exception;
+use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\Controller\Result\Json as JsonResult;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\OneTouchOrdering\Model\CustomerData;
+use Magento\OneTouchOrdering\Model\PlaceOrder as PlaceOrderModel;
+use Magento\Store\Model\StoreManagerInterface;
 
 class PlaceOrder extends \Magento\Framework\App\Action\Action
 {
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     private $storeManager;
     /**
-     * @var \Magento\Catalog\Model\ProductRepository
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface
      */
     private $productRepository;
     /**
-     * @var \Magento\OneTouchOrdering\Model\PlaceOrder
+     * @var PlaceOrderModel
      */
     private $placeOrder;
     /**
      * @var \Magento\Sales\Api\OrderRepositoryInterface
      */
     private $orderRepository;
+    /**
+     * @var Session
+     */
+    private $customerSession;
+    /**
+     * @var CustomerData
+     */
+    private $customerData;
 
+    /**
+     * PlaceOrder constructor.
+     * @param Context $context
+     * @param StoreManagerInterface $storeManager
+     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+     * @param PlaceOrderModel $placeOrder
+     * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
+     * @param Session $customerSession
+     * @param CustomerData $customerData
+     */
     public function __construct(
         Context $context,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Model\ProductRepository $productRepository,
-        \Magento\OneTouchOrdering\Model\PlaceOrder $placeOrder,
-        \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
+        StoreManagerInterface $storeManager,
+        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
+        PlaceOrderModel $placeOrder,
+        \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
+        Session $customerSession,
+        CustomerData $customerData
     ) {
         parent::__construct($context);
         $this->storeManager = $storeManager;
         $this->productRepository = $productRepository;
         $this->placeOrder = $placeOrder;
         $this->orderRepository = $orderRepository;
+        $this->customerSession = $customerSession;
+        $this->customerData = $customerData;
     }
 
     public function execute()
     {
-        $product = $this->_initProduct();
-        /** @var \Magento\Framework\Controller\Result\Json $result */
+        $product = $this->initProduct();
+        /** @var JsonResult $result */
         $result = $this->resultFactory->create(ResultFactory::TYPE_JSON);
 
         $params = $this->getRequest()->getParams();
         try {
-            $orderId = $this->placeOrder->placeOrder($product, $params);
+            $customerData = $this->customerData->setCustomer($this->customerSession->getCustomer());
+            $orderId = $this->placeOrder->placeOrder($product, $customerData, $params);
         } catch (NoSuchEntityException $e) {
             $errorMsg = __('Something went wrong while processing your order. Please try again later.');
             $this->messageManager->addErrorMessage($errorMsg);
@@ -62,6 +91,13 @@ class PlaceOrder extends \Magento\Framework\App\Action\Action
             return $result;
         } catch (LocalizedException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
+            $result->setData([
+                'response' => $e->getMessage()
+            ]);
+            return $result;
+        } catch (Exception $e) {
+            $errorMsg = __('Something went wrong while processing your order. Please try again later.');
+            $this->messageManager->addErrorMessage($errorMsg);
             $result->setData([
                 'response' => $e->getMessage()
             ]);
@@ -77,7 +113,11 @@ class PlaceOrder extends \Magento\Framework\App\Action\Action
         return $result;
     }
 
-    protected function _initProduct()
+    /**
+     * @return \Magento\Catalog\Api\Data\ProductInterface
+     * @throws NoSuchEntityException
+     */
+    private function initProduct()
     {
         $productId = (int)$this->getRequest()->getParam('product');
         if ($productId) {

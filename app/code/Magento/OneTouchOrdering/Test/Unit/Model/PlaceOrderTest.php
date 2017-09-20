@@ -5,9 +5,15 @@
  */
 namespace Magento\OneTouchOrdering\Test\Unit\Model;
 
-use Magento\OneTouchOrdering\Model\CustomerBrainTreeManager;
+use Magento\Catalog\Model\Product;
+use Magento\Framework\DataObject;
+use Magento\OneTouchOrdering\Model\CustomerData;
 use Magento\OneTouchOrdering\Model\PlaceOrder;
-use Magento\Quote\Api\CartManagementInterface;
+use Magento\OneTouchOrdering\Model\PrepareQuote;
+use Magento\OneTouchOrdering\Model\ShippingRateChooserInterface;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
 class PlaceOrderTest extends TestCase
@@ -15,114 +21,70 @@ class PlaceOrderTest extends TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $cartManagementInterface;
+    private $shippingRateChooser;
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|CustomerData
+     */
+    private $customerData;
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $customerBrainTreeManager;
+    private $cartManagementInterface;
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $quoteRepository;
+    private $quoteRepository;
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $quote;
+    private $quote;
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|Product
+     */
+    private $product;
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $product;
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $shippingAddress;
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $prepareQuote;
+    private $prepareQuote;
     /**
      * @var \Magento\OneTouchOrdering\Model\PlaceOrder
      */
-    protected $placeOrder;
+    private $placeOrder;
 
     public function setUp()
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
-        $this->cartManagementInterface = $this->createMock(CartManagementInterface::class);
-        $this->customerBrainTreeManager = $this->createMock(CustomerBrainTreeManager::class);
-        $this->quoteRepository = $this->createMock(\Magento\Quote\Model\ResourceModel\Quote::class);
-        $this->prepareQuote = $this->createMock(\Magento\OneTouchOrdering\Model\PrepareQuote::class);
-        $this->quote = $this->createMock(\Magento\Quote\Model\Quote::class);
-        $this->product = $this->createMock(\Magento\Catalog\Model\Product::class);
-        $this->shippingAddress = $this->getMockBuilder(\Magento\Quote\Model\Quote\Address::class)
-            ->disableOriginalConstructor()
-            ->setMethods(
-                ['setCollectShippingRates', 'collectShippingRates', 'getAllShippingRates', 'setShippingMethod']
-            )->getMock();
+        $this->customerData = $this->createMock(CustomerData::class);
+        $this->cartManagementInterface = $this->createMock(
+            \Magento\Quote\Api\CartManagementInterface::class
+        );
+        $this->quoteRepository = $this->createMock(QuoteResource::class);
+        $this->prepareQuote = $this->createMock(PrepareQuote::class);
+        $this->quote = $this->createMock(Quote::class);
+        $this->product = $this->createMock(Product::class);
+        $this->shippingRateChooser = $this->createMock(ShippingRateChooserInterface::class);
         $this->placeOrder = $objectManager->getObject(PlaceOrder::class, [
             'quoteRepository' => $this->quoteRepository,
             'cartManagementInterface' => $this->cartManagementInterface,
-            'customerBrainTreeManager' => $this->customerBrainTreeManager,
-            'prepareQuote' => $this->prepareQuote
+            'prepareQuote' => $this->prepareQuote,
+            'shippingRateChooser' => $this->shippingRateChooser
         ]);
-    }
-
-    public function testPlaceOrderNoShippingRates()
-    {
-        $this->prepareQuote->expects($this->once())->method('prepare')->willReturn($this->quote);
-        $this->quote
-            ->expects($this->once())
-            ->method('getShippingAddress')
-            ->willReturn($this->shippingAddress);
-        $this->shippingAddress
-            ->expects($this->once())
-            ->method('setCollectShippingRates')
-            ->with(true)->willReturnSelf();
-        $this->shippingAddress->expects($this->once())->method('collectShippingRates')->willReturnSelf();
-        $this->shippingAddress->expects($this->once())->method('getAllShippingRates')->willReturn([]);
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-
-        $this->placeOrder->placeOrder($this->product, ['qty' => 1]);
     }
 
     public function testPlaceOrder()
     {
-        $shippingRates = [
-            ['code' => 'expensive_rate', 'price' => 100],
-            ['code' => 'cheap_rate', 'price' => 10]
-        ];
         $params = ['qty' => 1];
         $quoteId = 123;
         $orderId = 321;
 
-        $paramsObject = new \Magento\Framework\DataObject($params);
+        $paramsObject = new DataObject($params);
 
         $this->prepareQuote->expects($this->once())->method('prepare')->willReturn($this->quote);
         $this->quote->expects($this->once())
             ->method('addProduct')
             ->with($this->product, $paramsObject);
-        $this->quote
-            ->expects($this->once())
-            ->method('getShippingAddress')
-            ->willReturn($this->shippingAddress);
-        $this->shippingAddress
-            ->expects($this->once())
-            ->method('setCollectShippingRates')
-            ->with(true)
-            ->willReturnSelf();
-        $this->shippingAddress
-            ->expects($this->once())
-            ->method('collectShippingRates')
-            ->willReturnSelf();
-        $this->shippingAddress
-            ->expects($this->once())
-            ->method('getAllShippingRates')
-            ->willReturn($shippingRates);
-        $this->shippingAddress
-            ->expects($this->once())
-            ->method('setShippingMethod')
-            ->with('cheap_rate');
+        $this->shippingRateChooser->expects($this->once())->method('choose')->with($this->quote);
         $this->prepareQuote
             ->expects($this->once())
             ->method('preparePayment')
@@ -134,7 +96,7 @@ class PlaceOrderTest extends TestCase
             ->method('placeOrder')
             ->with($quoteId)
             ->willReturn($orderId);
-        $result = $this->placeOrder->placeOrder($this->product, $params);
+        $result = $this->placeOrder->placeOrder($this->product, $this->customerData, $params);
         $this->assertSame($result, $orderId);
     }
 }

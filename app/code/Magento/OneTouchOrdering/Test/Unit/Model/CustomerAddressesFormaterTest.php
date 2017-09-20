@@ -14,7 +14,7 @@ use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Directory\Model\Country;
 use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\OneTouchOrdering\Model\CustomerAddresses;
+use Magento\OneTouchOrdering\Model\CustomerAddressesFormater;
 use PHPUnit\Framework\TestCase;
 
 class CustomerAddressesTest extends TestCase
@@ -32,7 +32,7 @@ class CustomerAddressesTest extends TestCase
      */
     protected $address;
     /**
-     * @var CustomerAddresses
+     * @var CustomerAddressesFormater
      */
     protected $customerAddresses;
 
@@ -47,7 +47,7 @@ class CustomerAddressesTest extends TestCase
             ->setMethods(['getCountryModel', 'getId', 'getName'])
             ->getMock();
         $this->customerAddresses = $objectManager->getObject(
-            CustomerAddresses::class,
+            CustomerAddressesFormater::class,
             [
                 'customerSession' => $this->customerSession
             ]

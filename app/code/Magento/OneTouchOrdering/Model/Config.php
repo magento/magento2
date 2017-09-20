@@ -3,12 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\OneTouchOrdering\Helper;
+namespace Magento\OneTouchOrdering\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
-class Data
+class Config
 {
     const ONE_TOUCH_ORDERING_MODULE_ACTIVE = 'sales/one_touch/active';
     const ONE_TOUCH_ORDERING_MODULE_BUTTON_TEXT = 'sales/one_touch/button_text';
@@ -17,11 +18,11 @@ class Data
     /**
      * @var StoreManagerInterface
      */
-    protected $storeManager;
+    private $storeManager;
     /**
      * @var ScopeConfigInterface
      */
-    protected $scopeConfig;
+    private $scopeConfig;
 
     /**
      * Data constructor.
@@ -39,7 +40,7 @@ class Data
     /**
      * @return bool
      */
-    public function isModuleEnabled()
+    public function isModuleEnabled(): bool
     {
         return $this->isSetFlag(self::ONE_TOUCH_ORDERING_MODULE_ACTIVE);
     }
@@ -47,7 +48,7 @@ class Data
     /**
      * @return bool
      */
-    public function isSelectAddressEnabled()
+    public function isSelectAddressEnabled(): string
     {
         return $this->isSetFlag(self::ONE_TOUCH_ORDERING_MODULE_ADDRESS_SELECT);
     }
@@ -55,7 +56,7 @@ class Data
     /**
      * @return string
      */
-    public function getButtonText()
+    public function getButtonText(): string
     {
         return $this->getValue(self::ONE_TOUCH_ORDERING_MODULE_BUTTON_TEXT);
     }
@@ -68,7 +69,7 @@ class Data
     {
         return $this->scopeConfig->getValue(
             $path,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $this->storeManager->getStore()->getId()
         );
     }
@@ -81,7 +82,7 @@ class Data
     {
         return $this->scopeConfig->isSetFlag(
             $path,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $this->storeManager->getStore()->getId()
         );
     }
