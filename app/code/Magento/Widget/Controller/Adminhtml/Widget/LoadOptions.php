@@ -11,6 +11,11 @@ use Magento\Framework\App\ObjectManager;
 class LoadOptions extends \Magento\Backend\App\Action
 {
     /**
+     * @inheritdoc
+     */
+    const ADMIN_RESOURCE = 'Magento_Widget::widget_instance';
+
+    /**
      * @var \Magento\Widget\Helper\Conditions
      */
     private $conditionsHelper;
@@ -46,7 +51,8 @@ class LoadOptions extends \Magento\Backend\App\Action
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $result = ['error' => true, 'message' => $e->getMessage()];
             $this->getResponse()->representJson(
-                $this->_objectManager->get('Magento\Framework\Json\Helper\Data')->jsonEncode($result)
+                $this->_objectManager->get(\Magento\Framework\Json\Helper\Data::class)
+                    ->jsonEncode($result)
             );
         }
     }

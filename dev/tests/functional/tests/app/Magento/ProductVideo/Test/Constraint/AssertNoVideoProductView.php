@@ -35,6 +35,12 @@ class AssertNoVideoProductView extends AbstractConstraint
             $catalogProductView->getViewBlock()->isVideoVisible(),
             'Product video is displayed on product view when it should not.'
         );
+        $galleryElement = $catalogProductView->getViewBlock()->getGalleryElement();
+        $src = $galleryElement->getAttribute('src');
+        \PHPUnit_Framework_Assert::assertTrue(
+            strpos($src, '/placeholder/') !== false,
+            'Product video is displayed on product view when it should not.'
+        );
     }
 
     /**
