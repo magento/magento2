@@ -9,6 +9,8 @@ use Magento\Checkout\Controller\Cart\Index;
 
 /**
  * Class IndexTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CouponPostTest extends \PHPUnit_Framework_TestCase
 {
