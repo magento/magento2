@@ -19,18 +19,18 @@
     <?php foreach ($filterItems as $filterItem): ?>
         <li class="item">
             <?php if ($filterItem->getCount() > 0): ?>
-                <a href="<?php $block->escapeUrl($filterItem->getUrl()) ?>">
-                    <?php /* @escapeNotVerified */ $filterItem->getLabel() ?>
+                <a href="<?php echo $block->escapeUrl($filterItem->getUrl()) ?>">
+                    <?php /* @escapeNotVerified */ echo $filterItem->getLabel() ?>
                     <?php if ($this->helper('\Magento\Catalog\Helper\Data')->shouldDisplayProductCountOnLayer()): ?>
-                        <span class="count"><?php /* @escapeNotVerified */ $filterItem->getCount() ?><span class="filter-count-label">
-                            <?php if ($filterItem->getCount() == 1):?> <?php /* @escapeNotVerified */ __('item') ?><?php else:?> <?php /* @escapeNotVerified */ __('items') ?><?php endif;?></span></span>
+                        <span class="count"><?php /* @escapeNotVerified */ echo $filterItem->getCount()?><span class="filter-count-label">
+                            <?php if ($filterItem->getCount() == 1):?> <?php /* @escapeNotVerified */ echo __('item')?><?php else:?> <?php /* @escapeNotVerified */ echo __('items') ?><?php endif;?></span></span>
                     <?php endif; ?>
                 </a>
             <?php else:?>
-                <?php /* @escapeNotVerified */ $filterItem->getLabel() ?>
+                <?php /* @escapeNotVerified */ echo $filterItem->getLabel() ?>
                 <?php if ($this->helper('\Magento\Catalog\Helper\Data')->shouldDisplayProductCountOnLayer()): ?>
-                    <span class="count"><?php /* @escapeNotVerified */ $filterItem->getCount() ?><span class="filter-count-label">
-                        <?php if ($filterItem->getCount() == 1):?><?php /* @escapeNotVerified */ __('item') ?><?php else:?><?php /* @escapeNotVerified */ __('items') ?><?php endif;?></span></span>
+                    <span class="count"><?php /* @escapeNotVerified */ echo $filterItem->getCount()?><span class="filter-count-label">
+                        <?php if ($filterItem->getCount() == 1):?><?php /* @escapeNotVerified */ echo __('item')?><?php else:?><?php /* @escapeNotVerified */ echo __('items') ?><?php endif;?></span></span>
                 <?php endif; ?>
             <?php endif; ?>
         </li>
