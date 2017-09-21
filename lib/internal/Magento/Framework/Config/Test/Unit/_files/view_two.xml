@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Config/etc/view.xsd">
+    <vars module="One">
+        <var name="one">Value One Another</var>
+    </vars>
+    <vars module="Two">
+        <var name="two">Value Two</var>
+    </vars>
+    <vars module="Three">
+        <var name="three">Value Three</var>
+    </vars>
+    <exclude>
+        <item type="directory">first_dir</item>
+        <item type="file">second_file</item>
+    </exclude>
+</view>

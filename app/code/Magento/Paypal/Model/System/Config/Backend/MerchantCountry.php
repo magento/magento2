@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model\System\Config\Backend;
 
@@ -31,9 +13,9 @@ class MerchantCountry extends \Magento\Framework\App\Config\Value
     /**
      * Core data
      *
-     * @var \Magento\Core\Helper\Data
+     * @var \Magento\Directory\Helper\Data
      */
-    protected $_coreData;
+    protected $directoryHelper;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
@@ -44,24 +26,26 @@ class MerchantCountry extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Directory\Helper\Data $directoryHelper
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
+        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
-        array $data = array()
+        \Magento\Directory\Helper\Data $directoryHelper,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        array $data = []
     ) {
-        $this->_coreData = $coreData;
-        parent::__construct($context, $registry, $config, $resource, $resourceCollection, $data);
+        $this->directoryHelper = $directoryHelper;
+        parent::__construct($context, $registry, $config, $cacheTypeList, $resource, $resourceCollection, $data);
         $this->_storeManager = $storeManager;
     }
 
@@ -78,10 +62,10 @@ class MerchantCountry extends \Magento\Framework\App\Config\Value
                 $defaultCountry = $this->_storeManager->getWebsite(
                     $this->getWebsite()
                 )->getConfig(
-                    \Magento\Core\Helper\Data::XML_PATH_DEFAULT_COUNTRY
+                    \Magento\Directory\Helper\Data::XML_PATH_DEFAULT_COUNTRY
                 );
             } else {
-                $defaultCountry = $this->_coreData->getDefaultCountry($this->getStore());
+                $defaultCountry = $this->directoryHelper->getDefaultCountry($this->getStore());
             }
             $this->setValue($defaultCountry);
         }

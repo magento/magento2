@@ -1,30 +1,20 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\GoogleAnalytics\Block;
 
+use Magento\Framework\App\ObjectManager;
+
 /**
- * GoogleAnalitics Page Block
+ * GoogleAnalytics Page Block
+ *
+ * @api
+ * @since 100.0.2
  */
 class Ga extends \Magento\Framework\View\Element\Template
 {
@@ -36,24 +26,32 @@ class Ga extends \Magento\Framework\View\Element\Template
     protected $_googleAnalyticsData = null;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Order\CollectionFactory
+     * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory
      */
     protected $_salesOrderCollection;
 
     /**
+     * @var \Magento\Cookie\Helper\Cookie
+     */
+    private $cookieHelper;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Sales\Model\Resource\Order\CollectionFactory $salesOrderCollection
+     * @param \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $salesOrderCollection
      * @param \Magento\GoogleAnalytics\Helper\Data $googleAnalyticsData
      * @param array $data
+     * @param \Magento\Cookie\Helper\Cookie|null $cookieHelper
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Sales\Model\Resource\Order\CollectionFactory $salesOrderCollection,
+        \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $salesOrderCollection,
         \Magento\GoogleAnalytics\Helper\Data $googleAnalyticsData,
-        array $data = array()
+        array $data = [],
+        \Magento\Cookie\Helper\Cookie $cookieHelper = null
     ) {
         $this->_googleAnalyticsData = $googleAnalyticsData;
         $this->_salesOrderCollection = $salesOrderCollection;
+        $this->cookieHelper = $cookieHelper ?: ObjectManager::getInstance()->get(\Magento\Cookie\Helper\Cookie::class);
         parent::__construct($context, $data);
     }
 
@@ -84,26 +82,30 @@ class Ga extends \Magento\Framework\View\Element\Template
      *
      * @param string $accountId
      * @return string
-     * @link http://code.google.com/apis/analytics/docs/gaJS/gaJSApiBasicConfiguration.html#_gat.GA_Tracker_._trackPageview
-     * @link http://code.google.com/apis/analytics/docs/gaJS/gaJSApi_gaq.html
+     * @link https://developers.google.com/analytics/devguides/collection/analyticsjs/method-reference#set
+     * @link https://developers.google.com/analytics/devguides/collection/analyticsjs/method-reference#gaObjectMethods
+     * @deprecated 100.2.0 please use getPageTrackingData method
      */
     public function getPageTrackingCode($accountId)
     {
-        $pageName = trim($this->getPageName());
-        $optPageURL = '';
-        if ($pageName && substr($pageName, 0, 1) == '/' && strlen($pageName) > 1) {
-            $optPageURL = ", '{$this->escapeJsQuote($pageName)}'";
+        $anonymizeIp = "";
+        if ($this->_googleAnalyticsData->isAnonymizedIpActive()) {
+            $anonymizeIp = "\nga('set', 'anonymizeIp', true);";
         }
-        return "\n_gaq.push(['_setAccount', '{$this->escapeJsQuote(
-            $accountId
-        )}']);\n_gaq.push(['_trackPageview'{$optPageURL}]);\n";
+
+        return "\nga('create', '" . $this->escapeHtmlAttr($accountId, false)
+           . "', 'auto');{$anonymizeIp}\nga('send', 'pageview'{$this->getOptPageUrl()});\n";
     }
 
     /**
      * Render information about specified orders and their items
      *
-     * @link http://code.google.com/apis/analytics/docs/gaJS/gaJSApiEcommerce.html#_gat.GA_Tracker_._addTrans
+     * @link https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#checkout-options
+     * @link https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#measuring-transactions
+     * @link https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#transaction
+     *
      * @return string|void
+     * @deprecated 100.2.0 please use getOrdersTrackingData method
      */
     public function getOrdersTrackingCode()
     {
@@ -113,37 +115,44 @@ class Ga extends \Magento\Framework\View\Element\Template
         }
 
         $collection = $this->_salesOrderCollection->create();
-        $collection->addFieldToFilter('entity_id', array('in' => $orderIds));
-        $result = array();
+        $collection->addFieldToFilter('entity_id', ['in' => $orderIds]);
+        $result = [];
+
+        $result[] = "ga('require', 'ec', 'ec.js');";
+
         foreach ($collection as $order) {
-            if ($order->getIsVirtual()) {
-                $address = $order->getBillingAddress();
-            } else {
-                $address = $order->getShippingAddress();
-            }
-            $result[] = sprintf(
-                "_gaq.push(['_addTrans', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s']);",
-                $order->getIncrementId(),
-                $this->escapeJsQuote($this->_storeManager->getStore()->getFrontendName()),
-                $order->getBaseGrandTotal(),
-                $order->getBaseTaxAmount(),
-                $order->getBaseShippingAmount(),
-                $this->escapeJsQuote($this->escapeHtml($address->getCity())),
-                $this->escapeJsQuote($this->escapeHtml($address->getRegion())),
-                $this->escapeJsQuote($this->escapeHtml($address->getCountry()))
-            );
+            $result[] = "ga('set', 'currencyCode', '" . $order->getOrderCurrencyCode() . "');";
             foreach ($order->getAllVisibleItems() as $item) {
                 $result[] = sprintf(
-                    "_gaq.push(['_addItem', '%s', '%s', '%s', '%s', '%s', '%s']);",
-                    $order->getIncrementId(),
-                    $this->escapeJsQuote($item->getSku()),
-                    $this->escapeJsQuote($item->getName()),
-                    null, // there is no "category" defined for the order item
-                    $item->getBasePrice(),
+                    "ga('ec:addProduct', {
+                        'id': '%s',
+                        'name': '%s',
+                        'price': '%s',
+                        'quantity': %s
+                    });",
+                    $this->escapeJs($item->getSku()),
+                    $this->escapeJs($item->getName()),
+                    $item->getPrice(),
                     $item->getQtyOrdered()
                 );
             }
-            $result[] = "_gaq.push(['_trackTrans']);";
+
+            $result[] = sprintf(
+                "ga('ec:setAction', 'purchase', {
+                    'id': '%s',
+                    'affiliation': '%s',
+                    'revenue': '%s',
+                    'tax': '%s',
+                    'shipping': '%s'
+                });",
+                $order->getIncrementId(),
+                $this->escapeJs($this->_storeManager->getStore()->getFrontendName()),
+                $order->getGrandTotal(),
+                $order->getTaxAmount(),
+                $order->getShippingAmount()
+            );
+
+            $result[] = "ga('send', 'pageview');";
         }
         return implode("\n", $result);
     }
@@ -160,5 +169,103 @@ class Ga extends \Magento\Framework\View\Element\Template
         }
 
         return parent::_toHtml();
+    }
+
+    /**
+     * Return cookie restriction mode value.
+     *
+     * @return bool
+     * @since 100.2.0
+     */
+    public function isCookieRestrictionModeEnabled()
+    {
+        return $this->cookieHelper->isCookieRestrictionModeEnabled();
+    }
+
+    /**
+     * Return current website id.
+     *
+     * @return int
+     * @since 100.2.0
+     */
+    public function getCurrentWebsiteId()
+    {
+        return $this->_storeManager->getWebsite()->getId();
+    }
+
+    /**
+     * Return information about page for GA tracking
+     *
+     * @link https://developers.google.com/analytics/devguides/collection/analyticsjs/method-reference#set
+     * @link https://developers.google.com/analytics/devguides/collection/analyticsjs/method-reference#gaObjectMethods
+     *
+     * @param string $accountId
+     * @return array
+     * @since 100.2.0
+     */
+    public function getPageTrackingData($accountId)
+    {
+        return [
+            'optPageUrl' => $this->getOptPageUrl(),
+            'isAnonymizedIpActive' => $this->_googleAnalyticsData->isAnonymizedIpActive(),
+            'accountId' => $this->escapeHtmlAttr($accountId, false)
+        ];
+    }
+
+    /**
+     * Return information about order and items for GA tracking.
+     *
+     * @link https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#checkout-options
+     * @link https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#measuring-transactions
+     * @link https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#transaction
+     *
+     * @return array
+     * @since 100.2.0
+     */
+    public function getOrdersTrackingData()
+    {
+        $result = [];
+        $orderIds = $this->getOrderIds();
+        if (empty($orderIds) || !is_array($orderIds)) {
+            return $result;
+        }
+
+        $collection = $this->_salesOrderCollection->create();
+        $collection->addFieldToFilter('entity_id', ['in' => $orderIds]);
+
+        foreach ($collection as $order) {
+            foreach ($order->getAllVisibleItems() as $item) {
+                $result['products'][] = [
+                    'id' => $this->escapeJs($item->getSku()),
+                    'name' =>  $this->escapeJs($item->getName()),
+                    'price' => $item->getPrice(),
+                    'quantity' => $item->getQtyOrdered(),
+                ];
+            }
+            $result['orders'][] = [
+                'id' =>  $order->getIncrementId(),
+                'affiliation' => $this->escapeJs($this->_storeManager->getStore()->getFrontendName()),
+                'revenue' => $order->getGrandTotal(),
+                'tax' => $order->getTaxAmount(),
+                'shipping' => $order->getShippingAmount(),
+            ];
+            $result['currency'] = $order->getOrderCurrencyCode();
+        }
+        return $result;
+    }
+
+    /**
+     * Return page url for tracking.
+     *
+     * @return string
+     */
+    private function getOptPageUrl()
+    {
+        $optPageURL = '';
+        $pageName = trim($this->getPageName());
+        if ($pageName && substr($pageName, 0, 1) == '/' && strlen($pageName) > 1) {
+            $optPageURL = ", '" . $this->escapeHtmlAttr($pageName, false) . "'";
+        }
+        return $optPageURL;
     }
 }

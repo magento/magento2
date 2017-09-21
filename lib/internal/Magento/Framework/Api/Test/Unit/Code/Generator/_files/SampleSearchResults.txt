@@ -1,0 +1,14 @@
+namespace Magento\Framework\Api\Code\Generator;
+
+class SampleSearchResults extends \Magento\Framework\Api\SearchResults
+{
+    /**
+     * Returns array of items
+     *
+     * @return \Magento\Framework\Api\Code\Generator\Sample[]
+     */
+    public function getItems()
+    {
+        return parent::getItems();
+    }
+}

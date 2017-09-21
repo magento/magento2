@@ -1,32 +1,15 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
 
 /**
  * Order history tab
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
 class History extends \Magento\Backend\Block\Template implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
@@ -45,17 +28,25 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
     protected $_coreRegistry = null;
 
     /**
+     * @var \Magento\Sales\Helper\Admin
+     */
+    private $adminHelper;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Sales\Helper\Admin $adminHelper
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
-        array $data = array()
+        \Magento\Sales\Helper\Admin $adminHelper,
+        array $data = []
     ) {
         $this->_coreRegistry = $registry;
         parent::__construct($context, $data);
+        $this->adminHelper = $adminHelper;
     }
 
     /**
@@ -72,18 +63,21 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
      * Compose and get order full history.
      * Consists of the status history comments as well as of invoices, shipments and creditmemos creations
      *
+     * @TODO This method requires refactoring. Need to create separate model for comment history handling
+     * and avoid generating it dynamically
+     *
      * @return array
      */
     public function getFullHistory()
     {
         $order = $this->getOrder();
 
-        $history = array();
+        $history = [];
         foreach ($order->getAllStatusHistory() as $orderComment) {
             $history[] = $this->_prepareHistoryItem(
                 $orderComment->getStatusLabel(),
                 $orderComment->getIsCustomerNotified(),
-                $orderComment->getCreatedAtDate(),
+                $this->getOrderAdminDate($orderComment->getCreatedAt()),
                 $orderComment->getComment()
             );
         }
@@ -92,14 +86,14 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
             $history[] = $this->_prepareHistoryItem(
                 __('Credit memo #%1 created', $_memo->getIncrementId()),
                 $_memo->getEmailSent(),
-                $_memo->getCreatedAtDate()
+                $this->getOrderAdminDate($_memo->getCreatedAt())
             );
 
             foreach ($_memo->getCommentsCollection() as $_comment) {
                 $history[] = $this->_prepareHistoryItem(
                     __('Credit memo #%1 comment added', $_memo->getIncrementId()),
                     $_comment->getIsCustomerNotified(),
-                    $_comment->getCreatedAtDate(),
+                    $this->getOrderAdminDate($_comment->getCreatedAt()),
                     $_comment->getComment()
                 );
             }
@@ -109,14 +103,14 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
             $history[] = $this->_prepareHistoryItem(
                 __('Shipment #%1 created', $_shipment->getIncrementId()),
                 $_shipment->getEmailSent(),
-                $_shipment->getCreatedAtDate()
+                $this->getOrderAdminDate($_shipment->getCreatedAt())
             );
 
             foreach ($_shipment->getCommentsCollection() as $_comment) {
                 $history[] = $this->_prepareHistoryItem(
                     __('Shipment #%1 comment added', $_shipment->getIncrementId()),
                     $_comment->getIsCustomerNotified(),
-                    $_comment->getCreatedAtDate(),
+                    $this->getOrderAdminDate($_comment->getCreatedAt()),
                     $_comment->getComment()
                 );
             }
@@ -126,14 +120,14 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
             $history[] = $this->_prepareHistoryItem(
                 __('Invoice #%1 created', $_invoice->getIncrementId()),
                 $_invoice->getEmailSent(),
-                $_invoice->getCreatedAtDate()
+                $this->getOrderAdminDate($_invoice->getCreatedAt())
             );
 
             foreach ($_invoice->getCommentsCollection() as $_comment) {
                 $history[] = $this->_prepareHistoryItem(
                     __('Invoice #%1 comment added', $_invoice->getIncrementId()),
                     $_comment->getIsCustomerNotified(),
-                    $_comment->getCreatedAtDate(),
+                    $this->getOrderAdminDate($_comment->getCreatedAt()),
                     $_comment->getComment()
                 );
             }
@@ -143,11 +137,11 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
             $history[] = $this->_prepareHistoryItem(
                 __('Tracking number %1 for %2 assigned', $_track->getNumber(), $_track->getTitle()),
                 false,
-                $_track->getCreatedAtDate()
+                $this->getOrderAdminDate($_track->getCreatedAt())
             );
         }
 
-        usort($history, array(__CLASS__, "_sortHistoryByTimestamp"));
+        usort($history, [__CLASS__, 'sortHistoryByTimestamp']);
         return $history;
     }
 
@@ -156,10 +150,10 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
      *
      * @param array $item
      * @param string $dateType
-     * @param string $format
+     * @param int $format
      * @return string
      */
-    public function getItemCreatedAt(array $item, $dateType = 'date', $format = 'medium')
+    public function getItemCreatedAt(array $item, $dateType = 'date', $format = \IntlDateFormatter::MEDIUM)
     {
         if (!isset($item['created_at'])) {
             return '';
@@ -204,8 +198,9 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
      */
     public function getItemComment(array $item)
     {
-        $allowedTags = array('b', 'br', 'strong', 'i', 'u');
-        return isset($item['comment']) ? $this->escapeHtml($item['comment'], $allowedTags) : '';
+        $allowedTags = ['b', 'br', 'strong', 'i', 'u', 'a'];
+        return isset($item['comment'])
+            ? $this->adminHelper->escapeHtmlWithLinks($item['comment'], $allowedTags) : '';
     }
 
     /**
@@ -213,13 +208,13 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
      *
      * @param string $label
      * @param bool $notified
-     * @param \Magento\Framework\Stdlib\DateTime\DateInterface $created
+     * @param \DateTimeInterface $created
      * @param string $comment
      * @return array
      */
     protected function _prepareHistoryItem($label, $notified, $created, $comment = '')
     {
-        return array('title' => $label, 'notified' => $notified, 'comment' => $comment, 'created_at' => $created);
+        return ['title' => $label, 'notified' => $notified, 'comment' => $comment, 'created_at' => $created];
     }
 
     /**
@@ -265,7 +260,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
      */
     public function getTabUrl()
     {
-        return $this->getUrl('sales/*/commentsHistory', array('_current' => true));
+        return $this->getUrl('sales/*/commentsHistory', ['_current' => true]);
     }
 
     /**
@@ -303,15 +298,26 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
      * @param mixed $b
      * @return int
      */
-    private static function _sortHistoryByTimestamp($a, $b)
+    public static function sortHistoryByTimestamp($a, $b)
     {
         $createdAtA = $a['created_at'];
         $createdAtB = $b['created_at'];
 
-        /** @var $createdAta \Magento\Framework\Stdlib\DateTime\DateInterface */
+        /** @var $createdAtA \DateTime */
         if ($createdAtA->getTimestamp() == $createdAtB->getTimestamp()) {
             return 0;
         }
         return $createdAtA->getTimestamp() < $createdAtB->getTimestamp() ? -1 : 1;
+    }
+
+    /**
+     * Get order admin date
+     *
+     * @param int $createdAt
+     * @return \DateTime
+     */
+    public function getOrderAdminDate($createdAt)
+    {
+        return $this->_localeDate->date(new \DateTime($createdAt));
     }
 }

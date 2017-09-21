@@ -1,0 +1,181 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<!-- ko ifnot: disableLabel -->
+<label
+        class="admin__form-field-label"
+        data-bind="attr: {for: uid}
+">
+    <span translate="label"></span>
+</label>
+<!-- /ko -->
+<div
+        class="admin__action-multiselect-wrap action-select-wrap"
+        tabindex="0"
+        data-bind="
+        attr: {
+            id: uid
+        },
+        css: {
+            _active: listVisible,
+            'admin__action-multiselect-tree': isTree()
+        },
+        event: {
+            focusin: onFocusIn,
+            focusout: onFocusOut,
+            keydown: keydownSwitcher
+        },
+        outerClick: outerClick.bind($data)
+">
+    <!-- ko ifnot: chipsEnabled -->
+    <div
+            class="action-select admin__action-multiselect"
+            data-role="advanced-select"
+            data-bind="
+            css: {_active: multiselectFocus},
+            click: function(data, event) {
+                toggleListVisible(data, event)
+            }
+    ">
+        <div class="admin__action-multiselect-text"
+             data-role="selected-option"
+             data-bind="text: setCaption()">
+        </div>
+    </div>
+    <!-- /ko -->
+    <!-- ko if: chipsEnabled -->
+    <div
+            class="action-select admin__action-multiselect"
+            data-role="advanced-select"
+            data-bind="
+            css: {_active: multiselectFocus},
+            click: function(data, event) {
+                toggleListVisible(data, event)
+            }
+    ">
+        <div class="admin__action-multiselect-text"
+             data-bind="
+                visible: !hasData(),
+                i18n: selectedPlaceholders.defaultPlaceholder
+        ">
+        </div>
+        <!-- ko foreach: { data: getSelected(), as: 'option'}  -->
+            <span class="admin__action-multiselect-crumb">
+                <span data-bind="text: label">
+                </span>
+                <button
+                        class="action-close"
+                        type="button"
+                        data-action="remove-selected-item"
+                        tabindex="-1"
+                        data-bind="click: $parent.removeSelected.bind($parent, value)
+                ">
+                    <span class="action-close-text" translate="'Close'"></span>
+                </button>
+            </span>
+        <!-- /ko -->
+    </div>
+    <!-- /ko -->
+    <div class="action-menu"
+         data-bind="css: { _active: listVisible }
+    ">
+        <!-- ko if: filterOptions -->
+        <div class="admin__action-multiselect-search-wrap">
+            <input
+                    class="admin__control-text admin__action-multiselect-search"
+                    data-role="advanced-select-text"
+                    type="text"
+                    data-bind="
+                event: {
+                    keydown: filterOptionsKeydown
+                },
+                attr: {id: uid+2},
+                valueUpdate: 'afterkeydown',
+                value: filterInputValue,
+                hasFocus: filterOptionsFocus
+                ">
+            <label
+                    class="admin__action-multiselect-search-label"
+                    data-action="advanced-select-search"
+                    data-bind="attr: {for: uid+2}
+            ">
+            </label>
+            <div if="itemsQuantity"
+                 data-bind="text: itemsQuantity"
+                 class="admin__action-multiselect-search-count">
+            </div>
+        </div>
+        <!-- /ko -->
+        <ul class="admin__action-multiselect-menu-inner _root"
+            data-bind="
+                event: {
+                    mousemove: function(data, event){onMousemove($data, $index(), event)}
+                }
+            ">
+            <!-- ko foreach: { data: options, as: 'option'}  -->
+            <li class="admin__action-multiselect-menu-inner-item _root"
+                data-bind="css: { _parent: $data.optgroup }"
+                data-role="option-group">
+                <div class="action-menu-item"
+                     data-bind="
+                        css: {
+                            _selected: $parent.isSelected(option.value),
+                            _hover: $parent.isHovered(option, $element),
+                            _expended: $parent.getLevelVisibility($data),
+                            _unclickable: $parent.isLabelDecoration($data),
+                            _last: $parent.addLastElement($data),
+                            '_with-checkbox': $parent.showCheckbox
+                        },
+                        click: function(data, event){
+                            $parent.toggleOptionSelected($data, $index(), event);
+                        },
+                        clickBubble: false
+                ">
+                    <!-- ko if: $data.optgroup && $parent.showOpenLevelsActionIcon-->
+                    <div class="admin__action-multiselect-dropdown"
+                         data-bind="
+                            click: function(event){
+                                $parent.openChildLevel($data, $element, event);
+                            },
+                            clickBubble: false
+                         ">
+                    </div>
+                    <!-- /ko-->
+                    <!--ko if: $parent.showCheckbox-->
+                    <input
+                            class="admin__control-checkbox"
+                            type="checkbox"
+                            tabindex="-1"
+                            data-bind="attr: { 'checked': $parent.isSelected(option.value) }">
+                    <!-- /ko-->
+                    <label class="admin__action-multiselect-label">
+                        <span data-bind="text: option.label"></span>
+                        <span
+                                if="$parent.getPath(option)"
+                                class="admin__action-multiselect-item-path"
+                                data-bind="text: $parent.getPath(option)"></span>
+                    </label>
+                </div>
+                <!-- ko if: $data.optgroup -->
+                <!-- ko template: {name: $parent.optgroupTmpl, data: {root: $parent, current: $data}} -->
+                <!-- /ko -->
+                <!-- /ko-->
+            </li>
+            <!-- /ko -->
+        </ul>
+        <!-- ko if: $data.closeBtn -->
+        <div class="admin__action-multiselect-actions-wrap">
+            <button class="action-default"
+                    data-action="close-advanced-select"
+                    type="button"
+                    data-bind="click: outerClick">
+                <span translate="closeBtnLabel"></span>
+            </button>
+        </div>
+        <!-- /ko -->
+    </div>
+</div>

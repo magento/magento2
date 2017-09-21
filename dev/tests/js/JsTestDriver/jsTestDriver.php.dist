@@ -1,0 +1,35 @@
+<?php
+/**
+ * Returns an array containing the configuration used to generate the JsTestDriver configuration
+ * file that gets used by JsTestDriver when it executes the Javascript unit tests.
+ *
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ *
+ * @return array
+ */
+return array(
+    'server' => 'http://localhost:9876',
+    'load' => array(
+        '/dev/tests/js/JsTestDriver/framework',
+        '/lib/web/mage/webapi.js',
+        '/lib/web/mage/validation/validation.js',
+        '/lib/web/jquery/jstree/jquery.jstree.js',
+        '/lib/web/jquery/jquery-ui-timepicker-addon.js',
+        '/lib/web/mage/cookies.js',
+        '/lib/web/mage/calendar.js',
+        '/lib/web/mage/loader_old.js',
+        '/lib/web/mage/edit-trigger.js',
+        '/lib/web/mage/translate-inline.js',
+        '/lib/web/mage/translate-inline-vde.js',
+        '/lib/web/mage/backend/form.js',
+        '/lib/web/mage/backend/button.js',
+        '/lib/web/mage/backend/tabs.js',
+        '/lib/web/mage/backend/menu.js',
+        '/lib/web/mage/backend/suggest.js',
+        '/lib/web/mage/backend/tree-suggest.js',
+        '/lib/web/mage/zoom.js',
+    ),
+    'test' => array('/dev/tests/js/JsTestDriver/testsuite'),
+    'JsTestDriver' => '{{path_to_jstestdriver_jar}}'
+);

@@ -1,61 +1,49 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity\Modular;
+
+use Magento\Customer\Model\Context;
 
 /**
  * This test ensures that all blocks have the appropriate constructor arguments that allow
  * them to be instantiated via the objectManager.
  *
- * @magentoAppIsolation
+ * @magentoAppIsolation enabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractIntegrity
 {
     public function testBlockInstantiation()
     {
-        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
             function ($module, $class, $area) {
                 $this->assertNotEmpty($module);
                 $this->assertTrue(class_exists($class), "Block class: {$class}");
                 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                    'Magento\Framework\Config\ScopeInterface'
+                    \Magento\Framework\Config\ScopeInterface::class
                 )->setCurrentScope(
                     $area
                 );
                 $context = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                    'Magento\Framework\App\Http\Context'
+                    \Magento\Framework\App\Http\Context::class
                 );
-                $context->setValue(\Magento\Customer\Helper\Data::CONTEXT_AUTH, false, false);
+                $context->setValue(Context::CONTEXT_AUTH, false, false);
                 $context->setValue(
-                    \Magento\Customer\Helper\Data::CONTEXT_GROUP,
-                    \Magento\Customer\Service\V1\CustomerGroupServiceInterface::NOT_LOGGED_IN_ID,
-                    \Magento\Customer\Service\V1\CustomerGroupServiceInterface::NOT_LOGGED_IN_ID
+                    Context::CONTEXT_GROUP,
+                    \Magento\Customer\Model\GroupManagement::NOT_LOGGED_IN_ID,
+                    \Magento\Customer\Model\GroupManagement::NOT_LOGGED_IN_ID
                 );
                 \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea($area);
 
-                $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create($class);
-                $this->assertNotNull($block);
+                try {
+                    \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create($class);
+                } catch (\Exception $e) {
+                    throw new \Exception("Unable to instantiate '{$class}'", 0, $e);
+                }
             },
             $this->allBlocksDataProvider()
         );
@@ -70,25 +58,26 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
         try {
             /** @var $website \Magento\Store\Model\Website */
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Store\Model\StoreManagerInterface'
+                \Magento\Store\Model\StoreManagerInterface::class
             )->getStore()->setWebsiteId(
                 0
             );
 
             $enabledModules = $this->_getEnabledModules();
             $skipBlocks = $this->_getBlocksToSkip();
-            $templateBlocks = array();
-            $blockMods = \Magento\TestFramework\Utility\Classes::collectModuleClasses('Block');
+            $templateBlocks = [];
+            $blockMods = \Magento\Framework\App\Utility\Classes::collectModuleClasses('Block');
             foreach ($blockMods as $blockClass => $module) {
                 if (!isset($enabledModules[$module]) || isset($skipBlocks[$blockClass])) {
                     continue;
                 }
                 $class = new \ReflectionClass($blockClass);
-                if ($class->isAbstract() || !$class->isSubclassOf('Magento\Framework\View\Element\Template')) {
+                if ($class->isAbstract() || !$class->isSubclassOf(\Magento\Framework\View\Element\Template::class)) {
                     continue;
                 }
                 $templateBlocks = $this->_addBlock($module, $blockClass, $class, $templateBlocks);
             }
+            asort($templateBlocks);
             return $templateBlocks;
         } catch (\Exception $e) {
             trigger_error(
@@ -106,7 +95,7 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
      */
     protected function _getBlocksToSkip()
     {
-        $result = array();
+        $result = [];
         foreach (glob(__DIR__ . '/_files/skip_blocks*.php') as $file) {
             $blocks = include $file;
             $result = array_merge($result, $blocks);
@@ -124,28 +113,26 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
     private function _addBlock($module, $blockClass, $class, $templateBlocks)
     {
         $area = 'frontend';
-        if ($module == 'Magento_Install') {
-            $area = 'install';
-        } elseif ($module == 'Magento_Adminhtml' || strpos(
+        if ($module == 'Magento_Backend' || strpos(
             $blockClass,
             '\\Adminhtml\\'
         ) || strpos(
             $blockClass,
             '_Backend_'
         ) || $class->isSubclassOf(
-            'Magento\Backend\Block\Template'
+            \Magento\Backend\Block\Template::class
         )
         ) {
             $area = 'adminhtml';
         }
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\App\AreaList'
+            \Magento\Framework\App\AreaList::class
         )->getArea(
             \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
         )->load(
             \Magento\Framework\App\Area::PART_CONFIG
         );
-        $templateBlocks[$module . ', ' . $blockClass . ', ' . $area] = array($module, $blockClass, $area);
+        $templateBlocks[$module . ', ' . $blockClass . ', ' . $area] = [$module, $blockClass, $area];
         return $templateBlocks;
     }
 }

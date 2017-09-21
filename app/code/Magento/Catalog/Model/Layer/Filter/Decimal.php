@@ -1,84 +1,63 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- */
-
-
-/**
- * Catalog Layer Decimal Attribute Filter Model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Layer\Filter;
 
+/**
+ * Catalog Layer Decimal Attribute Filter Model
+ */
 class Decimal extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
 {
-    const MIN_RANGE_POWER = 10;
-
     /**
      * Resource instance
      *
-     * @var \Magento\Catalog\Model\Resource\Layer\Filter\Decimal
+     * @var \Magento\Catalog\Model\ResourceModel\Layer\Filter\Decimal
      */
     protected $_resource;
 
     /**
-     * Construct
-     *
-     * @param \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface
+     */
+    protected $priceCurrency;
+
+    /**
+     * @var DataProvider\Decimal
+     */
+    private $dataProvider;
+
+    /**
+     * @param ItemFactory $filterItemFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Layer $layer
-     * @param \Magento\Catalog\Model\Resource\Layer\Filter\DecimalFactory $filterDecimalFactory
+     * @param \Magento\Catalog\Model\Layer\Filter\Item\DataBuilder $itemDataBuilder
+     * @param \Magento\Catalog\Model\ResourceModel\Layer\Filter\DecimalFactory $filterDecimalFactory
+     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param array $data
      */
     public function __construct(
         \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Layer $layer,
-        \Magento\Catalog\Model\Resource\Layer\Filter\DecimalFactory $filterDecimalFactory,
-        array $data = array()
+        \Magento\Catalog\Model\Layer\Filter\Item\DataBuilder $itemDataBuilder,
+        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
+        \Magento\Catalog\Model\Layer\Filter\DataProvider\DecimalFactory $dataProviderFactory,
+        array $data = []
     ) {
-        $this->_resource = $filterDecimalFactory->create();
-        parent::__construct($filterItemFactory, $storeManager, $layer, $data);
         $this->_requestVar = 'decimal';
-    }
-
-    /**
-     * Retrieve resource instance
-     *
-     * @return \Magento\Catalog\Model\Resource\Layer\Filter\Decimal
-     */
-    protected function _getResource()
-    {
-        return $this->_resource;
+        $this->priceCurrency = $priceCurrency;
+        parent::__construct($filterItemFactory, $storeManager, $layer, $itemDataBuilder, $data);
+        $this->dataProvider = $dataProviderFactory->create(['layer' => $this->getLayer()]);
     }
 
     /**
      * Apply decimal range filter to product collection
      *
-     * @param \Zend_Controller_Request_Abstract $request
+     * @param \Magento\Framework\App\RequestInterface $request
      * @return $this
      */
-    public function apply(\Zend_Controller_Request_Abstract $request)
+    public function apply(\Magento\Framework\App\RequestInterface $request)
     {
         parent::apply($request);
 
@@ -86,7 +65,7 @@ class Decimal extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
          * Filter must be string: $index, $range
          */
         $filter = $request->getParam($this->getRequestVar());
-        if (!$filter) {
+        if (!$filter || is_array($filter)) {
             return $this;
         }
 
@@ -97,28 +76,17 @@ class Decimal extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
 
         list($index, $range) = $filter;
         if ((int)$index && (int)$range) {
-            $this->setRange((int)$range);
+            $this->dataProvider->setRange((int)$range);
 
-            $this->_getResource()->applyFilterToCollection($this, $range, $index);
+            $this->dataProvider->getResource()->applyFilterToCollection($this, $range, $index);
             $this->getLayer()->getState()->addFilter(
                 $this->_createItem($this->_renderItemLabel($range, $index), $filter)
             );
 
-            $this->_items = array();
+            $this->_items = [];
         }
 
         return $this;
-    }
-
-    /**
-     * Retrieve price aggreagation data cache key
-     *
-     * @return string
-     */
-    protected function _getCacheKey()
-    {
-        $key = $this->getLayer()->getStateKey() . '_ATTR_' . $this->getAttributeModel()->getAttributeCode();
-        return $key;
     }
 
     /**
@@ -126,84 +94,13 @@ class Decimal extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      *
      * @param   int $range
      * @param   float $value
-     * @return  string
+     * @return \Magento\Framework\Phrase
      */
     protected function _renderItemLabel($range, $value)
     {
-        $from = $this->_storeManager->getStore()->formatPrice(($value - 1) * $range, false);
-        $to = $this->_storeManager->getStore()->formatPrice($value * $range, false);
+        $from = $this->priceCurrency->format(($value - 1) * $range, false);
+        $to = $this->priceCurrency->format($value * $range, false);
         return __('%1 - %2', $from, $to);
-    }
-
-    /**
-     * Retrieve maximum value from layer products set
-     *
-     * @return float
-     */
-    public function getMaxValue()
-    {
-        $max = $this->getData('max_value');
-        if (is_null($max)) {
-            list($min, $max) = $this->_getResource()->getMinMax($this);
-            $this->setData('max_value', $max);
-            $this->setData('min_value', $min);
-        }
-        return $max;
-    }
-
-    /**
-     * Retrieve minimal value from layer products set
-     *
-     * @return float
-     */
-    public function getMinValue()
-    {
-        $min = $this->getData('min_value');
-        if (is_null($min)) {
-            list($min, $max) = $this->_getResource()->getMinMax($this);
-            $this->setData('max_value', $max);
-            $this->setData('min_value', $min);
-        }
-        return $min;
-    }
-
-    /**
-     * Retrieve range for building filter steps
-     *
-     * @return int
-     */
-    public function getRange()
-    {
-        $range = $this->getData('range');
-        if (!$range) {
-            $maxValue = $this->getMaxValue();
-            $index = 1;
-            do {
-                $range = pow(10, strlen(floor($maxValue)) - $index);
-                $items = $this->getRangeItemCounts($range);
-                $index++;
-            } while ($range > self::MIN_RANGE_POWER && count($items) < 2);
-            $this->setData('range', $range);
-        }
-
-        return $range;
-    }
-
-    /**
-     * Retrieve information about products count in range
-     *
-     * @param int $range
-     * @return int
-     */
-    public function getRangeItemCounts($range)
-    {
-        $rangeKey = 'range_item_counts_' . $range;
-        $items = $this->getData($rangeKey);
-        if (is_null($items)) {
-            $items = $this->_getResource()->getCount($this, $range);
-            $this->setData($rangeKey, $items);
-        }
-        return $items;
     }
 
     /**
@@ -213,18 +110,17 @@ class Decimal extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      */
     protected function _getItemsData()
     {
-        $data = array();
-        $range = $this->getRange();
-        $dbRanges = $this->getRangeItemCounts($range);
+        $range = $this->dataProvider->getRange($this);
+        $dbRanges = $this->dataProvider->getRangeItemCounts($range, $this);
 
         foreach ($dbRanges as $index => $count) {
-            $data[] = array(
-                'label' => $this->_renderItemLabel($range, $index),
-                'value' => $index . ',' . $range,
-                'count' => $count
+            $this->itemDataBuilder->addItemData(
+                $this->_renderItemLabel($range, $index),
+                $index . ',' . $range,
+                $count
             );
         }
 
-        return $data;
+        return $this->itemDataBuilder->build();
     }
 }

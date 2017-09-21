@@ -1,34 +1,16 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
+namespace Magento\Widget\Block\Adminhtml\Widget;
 
 /**
  * WYSIWYG widget options form
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
-namespace Magento\Widget\Block\Adminhtml\Widget;
-
 class Options extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
@@ -61,7 +43,7 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Framework\Option\ArrayPool $sourceModelPool,
         \Magento\Widget\Model\Widget $widget,
-        array $data = array()
+        array $data = []
     ) {
         $this->_sourceModelPool = $sourceModelPool;
         $this->_widget = $widget;
@@ -113,12 +95,12 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
         $this->setMainFieldsetHtmlId($mainFieldsetHtmlId);
         $fieldset = $this->getForm()->addFieldset(
             $mainFieldsetHtmlId,
-            array('legend' => __('Widget Options'), 'class' => 'fieldset-wide')
+            ['legend' => __('Widget Options'), 'class' => 'fieldset-wide fieldset-widget-options']
         );
         $this->setData('main_fieldset', $fieldset);
 
         // add dependence javascript block
-        $block = $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Form\Element\Dependence');
+        $block = $this->getLayout()->createBlock(\Magento\Backend\Block\Widget\Form\Element\Dependence::class);
         $this->setChild('form_after', $block);
 
         return $fieldset;
@@ -127,14 +109,14 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Add fields to main fieldset based on specified widget type
      *
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return $this
      */
     public function addFields()
     {
         // get configuration node and translation helper
         if (!$this->getWidgetType()) {
-            throw new \Magento\Framework\Model\Exception(__('Please specify a Widget Type.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Please specify a Widget Type.'));
         }
         $config = $this->_widget->getConfigAsObject($this->getWidgetType());
         if (!$config->getParameters()) {
@@ -150,8 +132,10 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Add field to Options form based on parameter configuration
      *
-     * @param \Magento\Framework\Object $parameter
+     * @param \Magento\Framework\DataObject $parameter
      * @return \Magento\Framework\Data\Form\Element\AbstractElement
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _addField($parameter)
     {
@@ -161,13 +145,13 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
 
         // prepare element data with values (either from request of from default values)
         $fieldName = $parameter->getKey();
-        $data = array(
+        $data = [
             'name' => $form->addSuffixToName($fieldName, 'parameters'),
             'label' => __($parameter->getLabel()),
             'required' => $parameter->getRequired(),
             'class' => 'widget-option',
-            'note' => __($parameter->getDescription())
-        );
+            'note' => __($parameter->getDescription()),
+        ];
 
         if ($values = $this->getWidgetValues()) {
             $data['value'] = isset($values[$fieldName]) ? $values[$fieldName] : '';
@@ -179,12 +163,20 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
             }
         }
 
+        if (is_array($data['value'])) {
+            foreach ($data['value'] as &$value) {
+                $value = html_entity_decode($value);
+            }
+        } else {
+            $data['value'] = html_entity_decode($data['value']);
+        }
+
         // prepare element dropdown values
         if ($values = $parameter->getValues()) {
             // dropdown options are specified in configuration
-            $data['values'] = array();
+            $data['values'] = [];
             foreach ($values as $option) {
-                $data['values'][] = array('label' => __($option['label']), 'value' => $option['value']);
+                $data['values'][] = ['label' => __($option['label']), 'value' => $option['value']];
             }
             // otherwise, a source model is specified
         } elseif ($sourceModel = $parameter->getSourceModel()) {
@@ -214,9 +206,9 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
             $helperBlock = $this->getLayout()->createBlock(
                 $helper->getType(),
                 '',
-                array('data' => $helper->getData())
+                ['data' => $helper->getData()]
             );
-            if ($helperBlock instanceof \Magento\Framework\Object) {
+            if ($helperBlock instanceof \Magento\Framework\DataObject) {
                 $helperBlock->setConfig(
                     $helper->getData()
                 )->setFieldsetId(

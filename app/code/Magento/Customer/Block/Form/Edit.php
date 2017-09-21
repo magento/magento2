@@ -1,65 +1,22 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Form;
 
-use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
-use Magento\Customer\Service\V1\CustomerAddressServiceInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Model\AccountManagement;
 
 /**
  * Customer edit form block
+ *
+ * @api
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 100.0.2
  */
 class Edit extends \Magento\Customer\Block\Account\Dashboard
 {
-    /**
-     * Constructor
-     *
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
-     * @param CustomerAccountServiceInterface $customerAccountService
-     * @param CustomerAddressServiceInterface $addressService
-     * @param array $data
-     */
-    public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory,
-        CustomerAccountServiceInterface $customerAccountService,
-        CustomerAddressServiceInterface $addressService,
-        array $data = array()
-    ) {
-        parent::__construct(
-            $context,
-            $customerSession,
-            $subscriberFactory,
-            $customerAccountService,
-            $addressService,
-            $data
-        );
-        $this->_isScopePrivate = true;
-    }
-
     /**
      * Retrieve form data
      *
@@ -68,9 +25,9 @@ class Edit extends \Magento\Customer\Block\Account\Dashboard
     protected function getFormData()
     {
         $data = $this->getData('form_data');
-        if (is_null($data)) {
-            $formData = $this->_customerSession->getCustomerFormData(true);
-            $data = array();
+        if ($data === null) {
+            $formData = $this->customerSession->getCustomerFormData(true);
+            $data = [];
             if ($formData) {
                 $data['data'] = $formData;
                 $data['customer_data'] = 1;
@@ -108,6 +65,28 @@ class Edit extends \Magento\Customer\Block\Account\Dashboard
      */
     public function getChangePassword()
     {
-        return $this->_customerSession->getChangePassword();
+        return $this->customerSession->getChangePassword();
+    }
+
+    /**
+     * Get minimum password length
+     *
+     * @return string
+     * @since 100.1.0
+     */
+    public function getMinimumPasswordLength()
+    {
+        return $this->_scopeConfig->getValue(AccountManagement::XML_PATH_MINIMUM_PASSWORD_LENGTH);
+    }
+
+    /**
+     * Get minimum password length
+     *
+     * @return string
+     * @since 100.1.0
+     */
+    public function getRequiredCharacterClassesNumber()
+    {
+        return $this->_scopeConfig->getValue(AccountManagement::XML_PATH_REQUIRED_CHARACTER_CLASSES_NUMBER);
     }
 }

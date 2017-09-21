@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Model\Product\Compare;
@@ -28,7 +10,7 @@ namespace Magento\Catalog\Model\Product\Compare;
  * @magentoDataFixture Magento/Catalog/_files/product_simple.php
  * @magentoDataFixture Magento/Customer/_files/customer.php
  */
-class ListCompareTest extends \PHPUnit_Framework_TestCase
+class ListCompareTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Product\Compare\ListCompare
@@ -36,7 +18,7 @@ class ListCompareTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Log\Model\Visitor
+     * @var \Magento\Customer\Model\Visitor
      */
     protected $_visitor;
 
@@ -47,17 +29,14 @@ class ListCompareTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $session \Magento\Customer\Model\Session */
         $this->_session = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Customer\Model\Session');
+            ->get(\Magento\Customer\Model\Session::class);
         $this->_visitor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Log\Model\Visitor');
-        /** @var \Magento\Framework\Stdlib\DateTime $dateTime */
-        $dateTime = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Framework\Stdlib\DateTime');
+            ->create(\Magento\Customer\Model\Visitor::class);
         $this->_visitor->setSessionId(md5(time()) . md5(microtime()))
-            ->setLastVisitAt($dateTime->now())
+            ->setLastVisitAt((new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT))
             ->save();
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Product\Compare\ListCompare', ['logVisitor' => $this->_visitor]);
+            ->create(\Magento\Catalog\Model\Product\Compare\ListCompare::class, ['customerVisitor' => $this->_visitor]);
     }
 
     protected function tearDown()
@@ -70,7 +49,7 @@ class ListCompareTest extends \PHPUnit_Framework_TestCase
         $this->_session->setCustomerId(1);
         /** @var $product \Magento\Catalog\Model\Product */
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Product')
+            ->create(\Magento\Catalog\Model\Product::class)
             ->load(1);
         $this->_model->addProduct($product);
         $this->assertTrue($this->_model->hasItems(1, $this->_visitor->getId()));
@@ -80,7 +59,7 @@ class ListCompareTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $product \Magento\Catalog\Model\Product */
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Product')
+            ->create(\Magento\Catalog\Model\Product::class)
             ->load(1);
         $this->_model->addProduct($product);
         $this->assertFalse($this->_model->hasItems(1, $this->_visitor->getId()));

@@ -1,36 +1,22 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Controller\Soap\Request;
 
-use Magento\Authz\Service\AuthorizationV1Interface as AuthorizationService;
-use Magento\Framework\Service\Data\AbstractObject;
-use Magento\Framework\Service\DataObjectConverter;
+use Magento\Framework\Api\ExtensibleDataInterface;
+use Magento\Framework\Api\MetadataObjectInterface;
+use Magento\Framework\Api\SimpleDataObjectConverter;
+use Magento\Framework\Webapi\Authorization;
+use Magento\Framework\Exception\AuthorizationException;
+use Magento\Framework\Reflection\DataObjectProcessor;
+use Magento\Framework\Webapi\ServiceInputProcessor;
+use Magento\Framework\Webapi\Request as SoapRequest;
+use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Webapi\Model\Soap\Config as SoapConfig;
-use Magento\Webapi\Controller\Soap\Request as SoapRequest;
-use Magento\Webapi\Exception as WebapiException;
-use Magento\Webapi\ServiceAuthorizationException;
-use Magento\Webapi\Controller\ServiceArgsSerializer;
+use Magento\Framework\Reflection\MethodsMap;
+use Magento\Webapi\Model\ServiceMetadata;
 
 /**
  * Handler of requests to SOAP server.
@@ -43,48 +29,76 @@ class Handler
 {
     const RESULT_NODE_NAME = 'result';
 
-    /** @var SoapRequest */
+    /**
+     * @var \Magento\Framework\Webapi\Request
+     */
     protected $_request;
 
-    /** @var \Magento\Framework\ObjectManager */
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
     protected $_objectManager;
 
-    /** @var SoapConfig */
+    /**
+     * @var \Magento\Webapi\Model\Soap\Config
+     */
     protected $_apiConfig;
 
-    /** @var AuthorizationService */
-    protected $_authorizationService;
+    /**
+     * @var \Magento\Framework\Webapi\Authorization
+     */
+    protected $authorization;
 
-    /** @var DataObjectConverter */
+    /**
+     * @var \Magento\Framework\Api\SimpleDataObjectConverter
+     */
     protected $_dataObjectConverter;
 
-    /** @var ServiceArgsSerializer */
-    protected $_serializer;
+    /**
+     * @var \Magento\Framework\Webapi\ServiceInputProcessor
+     */
+    protected $serviceInputProcessor;
+
+    /**
+     * @var \Magento\Framework\Reflection\DataObjectProcessor
+     */
+    protected $_dataObjectProcessor;
+
+    /**
+     * @var \Magento\Framework\Reflection\MethodsMap
+     */
+    protected $methodsMapProcessor;
 
     /**
      * Initialize dependencies.
      *
      * @param SoapRequest $request
-     * @param \Magento\Framework\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param SoapConfig $apiConfig
-     * @param AuthorizationService $authorizationService
-     * @param DataObjectConverter $dataObjectConverter
-     * @param ServiceArgsSerializer $serializer
+     * @param Authorization $authorization
+     * @param SimpleDataObjectConverter $dataObjectConverter
+     * @param ServiceInputProcessor $serviceInputProcessor
+     * @param DataObjectProcessor $dataObjectProcessor
+     * @param MethodsMap $methodsMapProcessor
      */
     public function __construct(
         SoapRequest $request,
-        \Magento\Framework\ObjectManager $objectManager,
+        \Magento\Framework\ObjectManagerInterface $objectManager,
         SoapConfig $apiConfig,
-        AuthorizationService $authorizationService,
-        DataObjectConverter $dataObjectConverter,
-        ServiceArgsSerializer $serializer
+        Authorization $authorization,
+        SimpleDataObjectConverter $dataObjectConverter,
+        ServiceInputProcessor $serviceInputProcessor,
+        DataObjectProcessor $dataObjectProcessor,
+        MethodsMap $methodsMapProcessor
     ) {
         $this->_request = $request;
         $this->_objectManager = $objectManager;
         $this->_apiConfig = $apiConfig;
-        $this->_authorizationService = $authorizationService;
+        $this->authorization = $authorization;
         $this->_dataObjectConverter = $dataObjectConverter;
-        $this->_serializer = $serializer;
+        $this->serviceInputProcessor = $serviceInputProcessor;
+        $this->_dataObjectProcessor = $dataObjectProcessor;
+        $this->methodsMapProcessor = $methodsMapProcessor;
     }
 
     /**
@@ -95,36 +109,32 @@ class Handler
      * @return \stdClass|null
      * @throws WebapiException
      * @throws \LogicException
-     * @throws ServiceAuthorizationException
+     * @throws AuthorizationException
      */
     public function __call($operation, $arguments)
     {
         $requestedServices = $this->_request->getRequestedServices();
         $serviceMethodInfo = $this->_apiConfig->getServiceMethodInfo($operation, $requestedServices);
-        $serviceClass = $serviceMethodInfo[SoapConfig::KEY_CLASS];
-        $serviceMethod = $serviceMethodInfo[SoapConfig::KEY_METHOD];
+        $serviceClass = $serviceMethodInfo[ServiceMetadata::KEY_CLASS];
+        $serviceMethod = $serviceMethodInfo[ServiceMetadata::KEY_METHOD];
 
         // check if the operation is a secure operation & whether the request was made in HTTPS
-        if ($serviceMethodInfo[SoapConfig::KEY_IS_SECURE] && !$this->_request->isSecure()) {
+        if ($serviceMethodInfo[ServiceMetadata::KEY_IS_SECURE] && !$this->_request->isSecure()) {
             throw new WebapiException(__("Operation allowed only in HTTPS"));
         }
 
-        if (!$this->_authorizationService->isAllowed($serviceMethodInfo[SoapConfig::KEY_ACL_RESOURCES])) {
-            // TODO: Consider passing Integration ID instead of Consumer ID
-            throw new ServiceAuthorizationException(
-                "Not Authorized.",
-                0,
-                null,
-                array(),
-                'authorization',
-                "Consumer ID = {$this->_request->getConsumerId()}",
-                implode($serviceMethodInfo[SoapConfig::KEY_ACL_RESOURCES], ', ')
+        if (!$this->authorization->isAllowed($serviceMethodInfo[ServiceMetadata::KEY_ACL_RESOURCES])) {
+            throw new AuthorizationException(
+                __(
+                    'Consumer is not authorized to access %resources',
+                    ['resources' => implode(', ', $serviceMethodInfo[ServiceMetadata::KEY_ACL_RESOURCES])]
+                )
             );
         }
         $service = $this->_objectManager->get($serviceClass);
         $inputData = $this->_prepareRequestData($serviceClass, $serviceMethod, $arguments);
-        $outputData = call_user_func_array(array($service, $serviceMethod), $inputData);
-        return $this->_prepareResponseData($outputData);
+        $outputData = call_user_func_array([$service, $serviceMethod], $inputData);
+        return $this->_prepareResponseData($outputData, $serviceClass, $serviceMethod);
     }
 
     /**
@@ -139,32 +149,46 @@ class Handler
     {
         /** SoapServer wraps parameters into array. Thus this wrapping should be removed to get access to parameters. */
         $arguments = reset($arguments);
-        $arguments = $this->_dataObjectConverter->convertStdObjectToArray($arguments);
-        return $this->_serializer->getInputData($serviceClass, $serviceMethod, $arguments);
+        $arguments = $this->_dataObjectConverter->convertStdObjectToArray($arguments, true);
+        return $this->serviceInputProcessor->process($serviceClass, $serviceMethod, $arguments);
     }
 
     /**
      * Convert service response into format acceptable by SoapServer.
      *
      * @param object|array|string|int|float|null $data
+     * @param string $serviceClassName
+     * @param string $serviceMethodName
      * @return array
      * @throws \InvalidArgumentException
      */
-    protected function _prepareResponseData($data)
+    protected function _prepareResponseData($data, $serviceClassName, $serviceMethodName)
     {
-        if ($data instanceof AbstractObject) {
-            $result = $this->_dataObjectConverter->convertKeysToCamelCase($data->__toArray());
+        /** @var string $dataType */
+        $dataType = $this->methodsMapProcessor->getMethodReturnType($serviceClassName, $serviceMethodName);
+        $result = null;
+        if (is_object($data)) {
+            $result = $this->_dataObjectConverter
+                ->convertKeysToCamelCase($this->_dataObjectProcessor->buildOutputDataArray($data, $dataType));
         } elseif (is_array($data)) {
+            $dataType = substr($dataType, 0, -2);
             foreach ($data as $key => $value) {
-                $result[$key] = $value instanceof AbstractObject
-                    ? $this->_dataObjectConverter->convertKeysToCamelCase($value->__toArray())
-                    : $value;
+                if ($value instanceof $dataType
+                    // the following two options are supported for backward compatibility
+                    || $value instanceof ExtensibleDataInterface
+                    || $value instanceof MetadataObjectInterface
+                ) {
+                    $result[] = $this->_dataObjectConverter
+                        ->convertKeysToCamelCase($this->_dataObjectProcessor->buildOutputDataArray($value, $dataType));
+                } else {
+                    $result[$key] = $value;
+                }
             }
-        } elseif (is_scalar($data) || is_null($data)) {
+        } elseif (is_scalar($data) || $data === null) {
             $result = $data;
         } else {
             throw new \InvalidArgumentException("Service returned result in invalid format.");
         }
-        return array(self::RESULT_NODE_NAME => $result);
+        return [self::RESULT_NODE_NAME => $result];
     }
 }

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<root>
+    <node_one attributeOne = '10' attributeTwo = '20'>
+        <subnode attributeThree = '30'>Value1</subnode>
+        <subnode attributeFour = '40' />
+        <books attributeFive = '50' />
+    </node_one>
+</root>

@@ -1,0 +1,127 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php /** @var $block \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\Js */ ?>
+<?= $block->getFormHtml() ?>
+
+<script>
+require([
+    "jquery",
+    "mage/template",
+    "Magento_Ui/js/modal/alert",
+    "jquery/file-uploader",
+    "Magento_Theme/js/sortable",
+    "mage/translate"
+], function ($, mageTemplate, alert) {
+
+    $('#js_files_uploader').fileupload({
+        dataType: 'json',
+        replaceFileInput: false,
+        sequentialUploads: true,
+        url: '<?= /* @escapeNotVerified */ $block->getJsUploadUrl() ?>',
+
+        /**
+         * Add data
+         * @param e
+         * @param data
+         */
+        add: function (e, data) {
+            var progressTmpl = mageTemplate('#js-file-uploader-template'),
+                fileSize,
+                tmpl;
+
+            $.each(data.files, function (index, file) {
+                fileSize = typeof file.size == "undefined" ?
+                    $.mage.__('We could not detect a size.') :
+                    byteConvert(file.size);
+
+                data.fileId = Math.random().toString(36).substr(2, 9);
+
+                tmpl = progressTmpl({
+                    data: {
+                        name: file.name,
+                        size: fileSize,
+                        id: data.fileId
+                    }
+                });
+
+                $(tmpl).appendTo('#js-file-uploader');
+            });
+
+            var uploadButton = $('#js_uploader_button');
+            uploadButton.removeAttr('disabled');
+
+            uploadButton.click(function () {
+                $('#messages').html('');
+                $(this).attr('disabled', 'disabled');
+
+                data.submit();
+            });
+        },
+
+        /**
+         * On done event
+         * @param e
+         * @param data
+         */
+        done: function (e, data) {
+            $('#no-js-files-found').remove();
+
+            var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
+            $(progressSelector).css('width', '100%');
+
+            $(this).val('');
+
+            if (!data.result.error) {
+                $(progressSelector).removeClass('upload-progress').addClass('upload-success');
+
+                $('#' + data.fileId).delay(2000).fadeOut(2000);
+                $('body').trigger('refreshJsList', {
+                    jsList: data.result.files
+                });
+            } else {
+                $(progressSelector).removeClass('upload-progress').addClass('upload-failure');
+            }
+
+            $('.ui-sortable').sortable('initButtons');
+        },
+
+        /**
+         * On progress
+         * @param e
+         * @param data
+         */
+        progress: function (e, data) {
+            var progress = parseInt(data.loaded / data.total * 100, 10);
+            var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
+            $(progressSelector).css('width', progress + '%');
+        },
+
+        /**
+         * Fail event
+         * @param e
+         * @param data
+         */
+        fail: function (e, data) {
+            var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
+            $(progressSelector).removeClass('upload-progress').addClass('upload-failure');
+
+            $(this).val('');
+            alert({
+                content: $.mage.__("We don't recognize this file extension.")
+            });
+        }
+    });
+
+    $('#js_files_uploader').click(function () {
+        /** Unbind click event on file change */
+        $('#js-file-uploader').html('');
+        $('#js_uploader_button').unbind('click');
+    });
+
+
+});
+</script>

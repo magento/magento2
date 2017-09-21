@@ -1,0 +1,230 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  _____________________________________________
+
+@component-indicator__size: 16px;
+
+//
+//  Component grid elements
+//  _____________________________________________
+
+.component-indicator {
+    border-radius: 50%;
+    cursor: help;
+    display: inline-block;
+    height: @component-indicator__size;
+    text-align: center;
+    vertical-align: middle;
+    width: @component-indicator__size;
+
+    &::before,
+    &::after {
+        background: @color-white;
+        display: block;
+        opacity: 0;
+        position: absolute;
+        transition: opacity .2s linear .1s;
+        visibility: hidden;
+    }
+
+    &::before {
+        border: 1px solid @color-gray68;
+        border-radius: 1px;
+        box-shadow: 0 0 2px rgba(0,0,0,.4);
+        content: attr(data-label);
+        font-size: @font-size__s;
+        margin: 30px 0 0 -10px;
+        min-width: 50px;
+        padding: 4px 5px;
+    }
+
+    &::after {
+        border-color: darken(@color-gray68, 8);
+        border-style: solid;
+        border-width: 1px 0 0 1px;
+        box-shadow: -1px -1px 1px rgba(0,0,0,.1);
+        content: '';
+        height: 10px;
+        margin: 9px 0 0 5px;
+        transform: rotate(45deg);
+        width: 10px;
+    }
+
+    &:hover {
+        &::before,
+        &::after {
+            opacity: 1;
+            transition: opacity .2s linear;
+            visibility: visible;
+        }
+    }
+
+    span {
+        display: block;
+        height: @component-indicator__size;
+        overflow: hidden;
+        width: @component-indicator__size;
+
+        &:before {
+            content: '';
+            display: block;
+            font-family: @icons__font-family;
+            font-size: @component-indicator__size;
+            height: 100%;
+            line-height: @component-indicator__size;
+            width: 100%;
+        }
+    }
+
+    &._on {
+        background: @color-success;
+    }
+
+    &._off {
+        background: @color-failed;
+
+        span {
+            &:before {
+                background: @color-white;
+                height: 4px;
+                margin: 8px auto 20px;
+                width: 12px;
+            }
+        }
+    }
+
+    &._info {
+        background: transparent;
+
+        span {
+            width: 21px;
+
+            &:before {
+                color: @color-info;
+                content: @icon-alert-round__content;
+                font-family: @icons__font-family;
+                font-size: @component-indicator__size;
+            }
+        }
+    }
+
+    &._tooltip {
+        background: transparent;
+        margin: 0px 0px 8px 5px;
+
+        a {
+            width: 21px;
+
+            &:hover {
+                text-decoration: none;
+            }
+
+            &:before {
+                color: @color-tertiary;
+                content: @icon-help__content;
+                font-family: @icons__font-family;
+                font-size: @component-indicator__size;
+            }
+        }
+    }
+}
+
+.col-manager-item-name {
+    .data-grid-data {
+        padding-left: 5px;
+    }
+
+    .ng-hide {
+        + .data-grid-data {
+            padding-left: 24px;
+        }
+    }
+
+    ._show-dependencies,
+    ._hide-dependencies {
+        cursor: pointer;
+        padding-left: 24px;
+        position: relative;
+
+        &:before {
+            display: block;
+            font-family: @icons__font-family;
+            font-size: 12px;
+            left: 0;
+            position: absolute;
+            top: 1px;
+        }
+    }
+
+    ._show-dependencies {
+        &:before {
+            content: @icon-caret-up__content;
+        }
+    }
+
+    ._hide-dependencies {
+        &:before {
+            content: @icon-caret-down__content;
+        }
+    }
+
+    ._no-dependencies {
+        padding-left: 24px;
+    }
+}
+
+.product-modules-block {
+    .lib-font-size(12);
+    padding: 15px 0 0;
+
+    .col-manager-item-name & {
+        padding-left: @indent__s;
+    }
+}
+
+.product-modules-title,
+.product-modules-descriprion {
+    font-weight: @font-weight__bold;
+    margin: 0 0 7px;
+}
+
+.product-modules-list {
+    .lib-font-size(11);
+    list-style: none;
+    margin: 0;
+
+    .col-manager-item-name & {
+        margin-left: 15px;
+
+        li {
+            padding: 0 0 0 15px;
+            position: relative;
+        }
+    }
+
+    li {
+        margin: 0 0 @indent__xs;
+    }
+
+    .component-indicator {
+        height: 10px;
+        left: 0;
+        position: absolute;
+        top: 3px;
+        width: 10px;
+    }
+}
+
+.module-summary {
+    white-space: nowrap;
+}
+
+.module-summary-title {
+    .lib-font-size(21);
+    margin-right: @indent__s;
+}

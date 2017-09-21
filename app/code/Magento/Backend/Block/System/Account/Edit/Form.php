@@ -1,27 +1,12 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\System\Account\Edit;
+
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Locale\OptionInterface;
 
 /**
  * Adminhtml edit admin user account form
@@ -30,6 +15,8 @@ namespace Magento\Backend\Block\System\Account\Edit;
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
+    const IDENTITY_VERIFICATION_PASSWORD_FIELD = 'current_password';
+
     /**
      * @var \Magento\Backend\Model\Auth\Session
      */
@@ -46,6 +33,13 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_localeLists;
 
     /**
+     * Operates with deployed locales.
+     *
+     * @var OptionInterface
+     */
+    private $deployedLocales;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
@@ -53,6 +47,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\Framework\Locale\ListsInterface $localeLists
      * @param array $data
+     * @param OptionInterface $deployedLocales Operates with deployed locales
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -61,11 +56,14 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\User\Model\UserFactory $userFactory,
         \Magento\Backend\Model\Auth\Session $authSession,
         \Magento\Framework\Locale\ListsInterface $localeLists,
-        array $data = array()
+        array $data = [],
+        OptionInterface $deployedLocales = null
     ) {
         $this->_userFactory = $userFactory;
         $this->_authSession = $authSession;
         $this->_localeLists = $localeLists;
+        $this->deployedLocales = $deployedLocales
+            ?: ObjectManager::getInstance()->get(OptionInterface::class);
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -81,68 +79,87 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
 
-        $fieldset = $form->addFieldset('base_fieldset', array('legend' => __('Account Information')));
+        $fieldset = $form->addFieldset('base_fieldset', ['legend' => __('Account Information')]);
 
         $fieldset->addField(
             'username',
             'text',
-            array('name' => 'username', 'label' => __('User Name'), 'title' => __('User Name'), 'required' => true)
+            ['name' => 'username', 'label' => __('User Name'), 'title' => __('User Name'), 'required' => true]
         );
 
         $fieldset->addField(
             'firstname',
             'text',
-            array('name' => 'firstname', 'label' => __('First Name'), 'title' => __('First Name'), 'required' => true)
+            ['name' => 'firstname', 'label' => __('First Name'), 'title' => __('First Name'), 'required' => true]
         );
 
         $fieldset->addField(
             'lastname',
             'text',
-            array('name' => 'lastname', 'label' => __('Last Name'), 'title' => __('Last Name'), 'required' => true)
+            ['name' => 'lastname', 'label' => __('Last Name'), 'title' => __('Last Name'), 'required' => true]
         );
 
-        $fieldset->addField('user_id', 'hidden', array('name' => 'user_id'));
+        $fieldset->addField('user_id', 'hidden', ['name' => 'user_id']);
 
         $fieldset->addField(
             'email',
             'text',
-            array('name' => 'email', 'label' => __('Email'), 'title' => __('User Email'), 'required' => true)
+            ['name' => 'email', 'label' => __('Email'), 'title' => __('User Email'), 'required' => true]
         );
 
         $fieldset->addField(
             'password',
             'password',
-            array(
+            [
                 'name' => 'password',
                 'label' => __('New Password'),
                 'title' => __('New Password'),
-                'class' => 'input-text validate-admin-password'
-            )
+                'class' => 'validate-admin-password admin__control-text'
+            ]
         );
 
         $fieldset->addField(
             'confirmation',
             'password',
-            array(
+            [
                 'name' => 'password_confirmation',
                 'label' => __('Password Confirmation'),
-                'class' => 'input-text validate-cpassword'
-            )
+                'class' => 'validate-cpassword admin__control-text'
+            ]
         );
 
         $fieldset->addField(
             'interface_locale',
             'select',
-            array(
+            [
                 'name' => 'interface_locale',
                 'label' => __('Interface Locale'),
                 'title' => __('Interface Locale'),
-                'values' => $this->_localeLists->getTranslatedOptionLocales(),
+                'values' => $this->deployedLocales->getTranslatedOptionLocales(),
                 'class' => 'select'
-            )
+            ]
         );
 
-        $form->setValues($user->getData());
+        $verificationFieldset = $form->addFieldset(
+            'current_user_verification_fieldset',
+            ['legend' => __('Current User Identity Verification')]
+        );
+        $verificationFieldset->addField(
+            self::IDENTITY_VERIFICATION_PASSWORD_FIELD,
+            'password',
+            [
+                'name' => self::IDENTITY_VERIFICATION_PASSWORD_FIELD,
+                'label' => __('Your Password'),
+                'id' => self::IDENTITY_VERIFICATION_PASSWORD_FIELD,
+                'title' => __('Your Password'),
+                'class' => 'validate-current-password required-entry admin__control-text',
+                'required' => true
+            ]
+        );
+
+        $data = $user->getData();
+        unset($data[self::IDENTITY_VERIFICATION_PASSWORD_FIELD]);
+        $form->setValues($data);
         $form->setAction($this->getUrl('adminhtml/system_account/save'));
         $form->setMethod('post');
         $form->setUseContainer(true);

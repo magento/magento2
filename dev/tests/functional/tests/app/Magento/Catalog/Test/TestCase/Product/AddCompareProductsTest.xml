@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Catalog\Test\TestCase\Product\AddCompareProductsTest" summary="Add Products to Compare" ticketId="MAGETWO-25843">
+        <variation name="AddCompareProductsTestVariation1">
+            <data name="products" xsi:type="string">catalogProductSimple::simple_for_composite_products</data>
+            <data name="isCustomerLoggedIn" xsi:type="string">No</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductCompareItemsLink" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductComparePage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductCompareBlockOnCmsPage" />
+        </variation>
+        <variation name="AddCompareProductsTestVariation2">
+            <data name="products" xsi:type="string">catalogProductSimple::simple_for_composite_products,bundleProduct::bundle_dynamic_product</data>
+            <data name="isCustomerLoggedIn" xsi:type="string">No</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductCompareItemsLink" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductComparePage" />
+        </variation>
+        <variation name="AddCompareProductsTestVariation3">
+            <data name="products" xsi:type="string">configurableProduct::configurable_with_qty_1</data>
+            <data name="isCustomerLoggedIn" xsi:type="string">Yes</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductCompareItemsLink" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductComparePage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductCompareBlockOnCmsPage" />
+        </variation>
+        <variation name="AddCompareProductsTestVariation4">
+            <data name="products" xsi:type="string">catalogProductSimple::simple_for_composite_products,catalogProductVirtual::default,downloadableProduct::default,groupedProduct::grouped_product_with_price,configurableProduct::configurable_with_qty_1,bundleProduct::bundle_dynamic_product,bundleProduct::bundle_fixed_product</data>
+            <data name="isCustomerLoggedIn" xsi:type="string">Yes</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductCompareItemsLink" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductComparePage" />
+        </variation>
+    </testCase>
+</config>

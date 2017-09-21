@@ -1,29 +1,11 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product;
 
-class TypeTest extends \PHPUnit_Framework_TestCase
+class TypeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Product\Type
@@ -33,7 +15,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_productType = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Catalog\Model\Product\Type'
+            \Magento\Catalog\Model\Product\Type::class
         );
     }
 
@@ -44,7 +26,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
      */
     public function testFactory($typeId, $expectedClass)
     {
-        $product = new \Magento\Framework\Object();
+        $product = new \Magento\Framework\DataObject();
         if ($typeId) {
             $product->setTypeId($typeId);
         }
@@ -57,16 +39,16 @@ class TypeTest extends \PHPUnit_Framework_TestCase
      */
     public function factoryDataProvider()
     {
-        return array(
-            array(null, 'Magento\Catalog\Model\Product\Type\Simple'),
-            array(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE, 'Magento\Catalog\Model\Product\Type\Simple'),
-            array(\Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL, 'Magento\Catalog\Model\Product\Type\Virtual'),
-            array(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE, 'Magento\Bundle\Model\Product\Type'),
-            array(
+        return [
+            [null, \Magento\Catalog\Model\Product\Type\Simple::class],
+            [\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE, \Magento\Catalog\Model\Product\Type\Simple::class],
+            [\Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL, \Magento\Catalog\Model\Product\Type\Virtual::class],
+            [\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE, \Magento\Bundle\Model\Product\Type::class],
+            [
                 \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE,
-                'Magento\Downloadable\Model\Product\Type'
-            )
-        );
+                \Magento\Downloadable\Model\Product\Type::class
+            ]
+        ];
     }
 
     /**
@@ -75,7 +57,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
      */
     public function testFactoryReturnsSingleton($typeId)
     {
-        $product = new \Magento\Framework\Object();
+        $product = new \Magento\Framework\DataObject();
         if ($typeId) {
             $product->setTypeId($typeId);
         }
@@ -90,13 +72,13 @@ class TypeTest extends \PHPUnit_Framework_TestCase
      */
     public function factoryReturnsSingletonDataProvider()
     {
-        return array(
-            array(null),
-            array(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE),
-            array(\Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL),
-            array(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE),
-            array(\Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE)
-        );
+        return [
+            [null],
+            [\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE],
+            [\Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL],
+            [\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE],
+            [\Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE]
+        ];
     }
 
     /**
@@ -112,16 +94,16 @@ class TypeTest extends \PHPUnit_Framework_TestCase
 
     public function priceFactoryDataProvider()
     {
-        return array(
-            array(null, 'Magento\Catalog\Model\Product\Type\Price'),
-            array(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE, 'Magento\Catalog\Model\Product\Type\Price'),
-            array(\Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL, 'Magento\Catalog\Model\Product\Type\Price'),
-            array(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE, 'Magento\Bundle\Model\Product\Price'),
-            array(
+        return [
+            [null, \Magento\Catalog\Model\Product\Type\Price::class],
+            [\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE, \Magento\Catalog\Model\Product\Type\Price::class],
+            [\Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL, \Magento\Catalog\Model\Product\Type\Price::class],
+            [\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE, \Magento\Bundle\Model\Product\Price::class],
+            [
                 \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE,
-                'Magento\Downloadable\Model\Product\Price'
-            )
-        );
+                \Magento\Downloadable\Model\Product\Price::class
+            ]
+        ];
     }
 
     public function testGetOptionArray()
@@ -165,12 +147,12 @@ class TypeTest extends \PHPUnit_Framework_TestCase
 
     public function getOptionTextDataProvider()
     {
-        return array(
-            array(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE),
-            array(\Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL),
-            array(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE),
-            array(\Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE)
-        );
+        return [
+            [\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE],
+            [\Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL],
+            [\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE],
+            [\Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE]
+        ];
     }
 
     public function testGetTypes()
@@ -199,7 +181,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     {
         $types = $this->_productType->getTypesByPriority();
         // collect the types and priority in the same order as the method returns
-        $result = array();
+        $result = [];
         foreach ($types as $typeId => $type) {
             if (!isset($type['index_priority'])) {
                 // possible bug: index_priority is not defined for each type
@@ -228,7 +210,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     protected function _assertOptions($options)
     {
         $this->assertInternalType('array', $options);
-        $types = array();
+        $types = [];
         foreach ($options as $option) {
             $this->assertArrayHasKey('value', $option);
             $this->assertArrayHasKey('label', $option);

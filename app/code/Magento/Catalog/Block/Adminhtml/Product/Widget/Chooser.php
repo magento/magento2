@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -39,20 +21,20 @@ class Chooser extends Extended
     /**
      * @var array
      */
-    protected $_selectedProducts = array();
+    protected $_selectedProducts = [];
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Category
+     * @var \Magento\Catalog\Model\ResourceModel\Category
      */
     protected $_resourceCategory;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product
+     * @var \Magento\Catalog\Model\ResourceModel\Product
      */
     protected $_resourceProduct;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
      */
     protected $_collectionFactory;
 
@@ -65,19 +47,19 @@ class Chooser extends Extended
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
-     * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $collectionFactory
-     * @param \Magento\Catalog\Model\Resource\Category $resourceCategory
-     * @param \Magento\Catalog\Model\Resource\Product $resourceProduct
+     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Category $resourceCategory
+     * @param \Magento\Catalog\Model\ResourceModel\Product $resourceProduct
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
-        \Magento\Catalog\Model\Resource\Product\CollectionFactory $collectionFactory,
-        \Magento\Catalog\Model\Resource\Category $resourceCategory,
-        \Magento\Catalog\Model\Resource\Product $resourceProduct,
-        array $data = array()
+        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory,
+        \Magento\Catalog\Model\ResourceModel\Category $resourceCategory,
+        \Magento\Catalog\Model\ResourceModel\Product $resourceProduct,
+        array $data = []
     ) {
         $this->_categoryFactory = $categoryFactory;
         $this->_collectionFactory = $collectionFactory;
@@ -109,11 +91,11 @@ class Chooser extends Extended
         $uniqId = $this->mathRandom->getUniqueHash($element->getId());
         $sourceUrl = $this->getUrl(
             'catalog/product_widget/chooser',
-            array('uniq_id' => $uniqId, 'use_massaction' => false)
+            ['uniq_id' => $uniqId, 'use_massaction' => false]
         );
 
         $chooser = $this->getLayout()->createBlock(
-            'Magento\Widget\Block\Adminhtml\Widget\Chooser'
+            \Magento\Widget\Block\Adminhtml\Widget\Chooser::class
         )->setElement(
             $element
         )->setConfig(
@@ -220,7 +202,7 @@ class Chooser extends Extended
                 {jsObject}.categoryName = node.attributes.id != "none" ? node.text : false;
             }
         ';
-        $js = str_replace('{jsObject}', $this->getJsObjectName(), $js);
+        $js = str_replace('{jsObject}', $this->escapeJs($this->getJsObjectName()), $js);
         return $js;
     }
 
@@ -235,9 +217,9 @@ class Chooser extends Extended
         if ($column->getId() == 'in_products') {
             $selected = $this->getSelectedProducts();
             if ($column->getFilter()->getValue()) {
-                $this->getCollection()->addFieldToFilter('entity_id', array('in' => $selected));
+                $this->getCollection()->addFieldToFilter('entity_id', ['in' => $selected]);
             } else {
-                $this->getCollection()->addFieldToFilter('entity_id', array('nin' => $selected));
+                $this->getCollection()->addFieldToFilter('entity_id', ['nin' => $selected]);
             }
         } else {
             parent::_addColumnFilterToCollection($column);
@@ -252,7 +234,7 @@ class Chooser extends Extended
      */
     protected function _prepareCollection()
     {
-        /* @var $collection \Magento\Catalog\Model\Resource\Product\Collection */
+        /* @var $collection \Magento\Catalog\Model\ResourceModel\Product\Collection */
         $collection = $this->_collectionFactory->create()->setStoreId(0)->addAttributeToSelect('name');
 
         if ($categoryId = $this->getCategoryId()) {
@@ -264,7 +246,7 @@ class Chooser extends Extended
                 if (empty($productIds)) {
                     $productIds = 0;
                 }
-                $collection->addFieldToFilter('entity_id', array('in' => $productIds));
+                $collection->addFieldToFilter('entity_id', ['in' => $productIds]);
             }
         }
 
@@ -286,7 +268,7 @@ class Chooser extends Extended
         if ($this->getUseMassaction()) {
             $this->addColumn(
                 'in_products',
-                array(
+                [
                     'header_css_class' => 'a-center',
                     'type' => 'checkbox',
                     'name' => 'in_products',
@@ -296,39 +278,39 @@ class Chooser extends Extended
                     'align' => 'center',
                     'index' => 'entity_id',
                     'use_index' => true
-                )
+                ]
             );
         }
 
         $this->addColumn(
             'entity_id',
-            array(
+            [
                 'header' => __('ID'),
                 'sortable' => true,
                 'index' => 'entity_id',
                 'header_css_class' => 'col-id',
                 'column_css_class' => 'col-id'
-            )
+            ]
         );
         $this->addColumn(
             'chooser_sku',
-            array(
+            [
                 'header' => __('SKU'),
                 'name' => 'chooser_sku',
                 'index' => 'sku',
                 'header_css_class' => 'col-sku',
                 'column_css_class' => 'col-sku'
-            )
+            ]
         );
         $this->addColumn(
             'chooser_name',
-            array(
+            [
                 'header' => __('Product'),
                 'name' => 'chooser_name',
                 'index' => 'name',
                 'header_css_class' => 'col-product',
                 'column_css_class' => 'col-product'
-            )
+            ]
         );
 
         return parent::_prepareColumns();
@@ -343,13 +325,13 @@ class Chooser extends Extended
     {
         return $this->getUrl(
             'catalog/product_widget/chooser',
-            array(
+            [
                 'products_grid' => true,
                 '_current' => true,
                 'uniq_id' => $this->getId(),
                 'use_massaction' => $this->getUseMassaction(),
                 'product_type_id' => $this->getProductTypeId()
-            )
+            ]
         );
     }
 

@@ -1,37 +1,26 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Model\Import\Entity;
 
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
+
 /**
  * Import EAV entity abstract model
+ *
+ * @api
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 abstract class AbstractEav extends \Magento\ImportExport\Model\Import\AbstractEntity
 {
     /**
      * Attribute collection name
      */
-    const ATTRIBUTE_COLLECTION_NAME = 'Magento\Framework\Data\Collection';
+    const ATTRIBUTE_COLLECTION_NAME = \Magento\Framework\Data\Collection::class;
 
     /**
      * Store manager
@@ -52,21 +41,21 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Import\AbstractEn
      *
      * @var array
      */
-    protected $_indexValueAttributes = array();
+    protected $_indexValueAttributes = [];
 
     /**
      * Website code-to-ID
      *
      * @var array
      */
-    protected $_websiteCodeToId = array();
+    protected $_websiteCodeToId = [];
 
     /**
      * All stores code-ID pairs.
      *
      * @var array
      */
-    protected $_storeCodeToId = array();
+    protected $_storeCodeToId = [];
 
     /**
      * Entity attributes parameters
@@ -80,7 +69,7 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Import\AbstractEn
      *
      * @var array
      */
-    protected $_attributes = array();
+    protected $_attributes = [];
 
     /**
      * Attributes collection
@@ -90,30 +79,32 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Import\AbstractEn
     protected $_attributeCollection;
 
     /**
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
-     * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper
+     * @param \Magento\Framework\App\ResourceConnection $resource
+     * @param ProcessingErrorAggregatorInterface $errorAggregator
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\ImportExport\Model\Export\Factory $collectionFactory
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Framework\Stdlib\String $string,
+        \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\ImportExport\Model\ImportFactory $importFactory,
-        \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
-        \Magento\Framework\App\Resource $resource,
+        \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper,
+        \Magento\Framework\App\ResourceConnection $resource,
+        ProcessingErrorAggregatorInterface $errorAggregator,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\ImportExport\Model\Export\Factory $collectionFactory,
         \Magento\Eav\Model\Config $eavConfig,
-        array $data = array()
+        array $data = []
     ) {
-        parent::__construct($coreData, $string, $scopeConfig, $importFactory, $resourceHelper, $resource, $data);
+        parent::__construct($string, $scopeConfig, $importFactory, $resourceHelper, $resource, $errorAggregator, $data);
 
         $this->_storeManager = $storeManager;
         $this->_attributeCollection = isset(
@@ -183,16 +174,17 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Import\AbstractEn
     {
         /** @var $attribute \Magento\Eav\Model\Attribute */
         foreach ($this->_attributeCollection as $attribute) {
-            $this->_attributes[$attribute->getAttributeCode()] = array(
+            $this->_attributes[$attribute->getAttributeCode()] = [
                 'id' => $attribute->getId(),
                 'code' => $attribute->getAttributeCode(),
                 'table' => $attribute->getBackend()->getTable(),
                 'is_required' => $attribute->getIsRequired(),
                 'is_static' => $attribute->isStatic(),
-                'rules' => $attribute->getValidateRules() ? unserialize($attribute->getValidateRules()) : null,
+                'rules' => $attribute->getValidateRules() ? $attribute->getValidateRules() : null,
                 'type' => \Magento\ImportExport\Model\Import::getAttributeType($attribute),
-                'options' => $this->getAttributeOptions($attribute)
-            );
+                'options' => $this->getAttributeOptions($attribute),
+            ];
+            $this->validColumnNames[] = $attribute->getAttributeCode();
         }
         return $this;
     }
@@ -216,9 +208,9 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Import\AbstractEn
      */
     public function getAttributeOptions(
         \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute,
-        array $indexAttributes = array()
+        array $indexAttributes = []
     ) {
-        $options = array();
+        $options = [];
 
         if ($attribute->usesSource()) {
             // merge global entity index value attributes
@@ -232,11 +224,11 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Import\AbstractEn
 
             try {
                 foreach ($attribute->getSource()->getAllOptions(false) as $option) {
-                    $value = is_array($option['value']) ? $option['value'] : array($option);
+                    $value = is_array($option['value']) ? $option['value'] : [$option];
                     foreach ($value as $innerOption) {
+                        // skip ' -- Please Select -- ' option
                         if (strlen($innerOption['value'])) {
-                            // skip ' -- Please Select -- ' option
-                            $options[strtolower($innerOption[$index])] = $innerOption['value'];
+                            $options[mb_strtolower($innerOption[$index])] = $innerOption['value'];
                         }
                     }
                 }

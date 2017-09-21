@@ -1,0 +1,32 @@
+<?php
+/**
+ * swagger-ui - Swagger UI is a dependency-free collection of HTML, JavaScript, and CSS
+ * assets that dynamically generate beautiful documentation from a Swagger-compliant API
+ *
+ * @version v2.1.1
+ * @link http://swagger.io
+ * @license Apache-2.0
+ *
+ * The original name of this file, as part of the swagger-ui package, was dist/index.html.
+ *
+ * Modified by Magento, Modifications Copyright © Magento, Inc. All rights reserved.
+ */
+
+/** @var \Magento\Framework\View\Element\Template $block */
+
+$schemaUrl = $block->getSchemaUrl();
+?>
+
+<div id='header'>
+    <div class="swagger-ui-wrap">
+        <a id="logo" href="http://swagger.io">swagger</a>
+        <form id='api_selector'>
+            <input id="input_baseUrl" type="hidden" value="<?= /* @escapeNotVerified */ $schemaUrl ?>"/>
+            <div class='input'><input placeholder="api_key" id="input_apiKey" name="apiKey" type="text"/></div>
+            <div class='input'><a id="explore" href="#" data-sw-translate>apply</a></div>
+        </form>
+    </div>
+</div>
+
+<div id="message-bar" class="swagger-ui-wrap" data-sw-translate>&nbsp;</div>
+<div id="swagger-ui-container" class="swagger-ui-wrap"></div>

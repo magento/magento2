@@ -1,0 +1,60 @@
+<?php
+/**
+ * Popup container template.
+ *
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ *
+ * @var \Magento\Backend\Block\Template $block
+ */
+
+// @codingStandardsIgnoreFile
+?>
+<script>
+    require([
+        "jquery",
+        'Magento_Ui/js/modal/confirm',
+        "jquery/ui",
+        "Magento_Integration/js/integration"
+    ], function ($, Confirm) {
+
+        window.integration = new Integration(
+            '<?= /* @escapeNotVerified */ $block->getUrl('*/*/permissionsDialog', ['id' => ':id', 'reauthorize' => ':isReauthorize', '_escape_params' => false]) ?>',
+            '<?= /* @escapeNotVerified */ $block->getUrl('*/*/tokensDialog', ['id' => ':id', 'reauthorize' => ':isReauthorize', '_escape_params' => false]) ?>',
+            '<?= /* @escapeNotVerified */ $block->getUrl('*/*/tokensExchange', ['id' => ':id', 'reauthorize' => ':isReauthorize', '_escape_params' => false]) ?>',
+            '<?= /* @escapeNotVerified */ $block->getUrl('*/*') ?>',
+            '<?= /* @escapeNotVerified */ $block->getUrl('*/*/loginSuccessCallback') ?>'
+        );
+
+        /**
+         * Confirm dialog for delete integration action
+         */
+        $(function () {
+            $('div#integrationGrid').on('click', 'button#delete', function (e) {
+
+                new Confirm({
+                    title: 'Are you sure?',
+                    content: "Are you sure you want to delete this integration? You can't undo this action.",
+                    actions: {
+                        confirm: function () {
+                            window.location.href = $(e.target).data('url');
+                        }
+                    }
+                });
+                e.stopPropagation();
+            });
+        });
+    });
+</script>
+
+<div id="integration-popup-container" style="display: none;"></div>
+<div id="integration-delete-container"
+     class="messages"
+     style="display: none;"
+     title="<?= /* @escapeNotVerified */ __('Are you sure ?') ?>">
+    <div class="message message-notice notice">
+        <div>
+            <?= /* @escapeNotVerified */ __("Are you sure you want to delete this integration? You can't undo this action.") ?>
+        </div>
+    </div>
+</div>

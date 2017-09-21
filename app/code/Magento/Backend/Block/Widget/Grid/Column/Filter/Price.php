@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 
@@ -59,7 +41,7 @@ class Price extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
         \Magento\Framework\DB\Helper $resourceHelper,
         \Magento\Directory\Model\Currency $currencyModel,
         \Magento\Directory\Model\Currency\DefaultLocator $currencyLocator,
-        array $data = array()
+        array $data = []
     ) {
         parent::__construct($context, $resourceHelper, $data);
         $this->_currencyModel = $currencyModel;
@@ -84,7 +66,7 @@ class Price extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
                 'From'
             ) . '" value="' . $this->getEscapedValue(
                 'from'
-            ) . '" class="input-text no-changes"  ' . $this->getUiId(
+            ) . '" class="input-text admin__control-text no-changes"  ' . $this->getUiId(
                 'filter',
                 $this->_getHtmlName(),
                 'from'
@@ -99,7 +81,7 @@ class Price extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
                 'To'
             ) . '" value="' . $this->getEscapedValue(
                 'to'
-            ) . '" class="input-text no-changes" ' . $this->getUiId(
+            ) . '" class="input-text admin__control-text no-changes" ' . $this->getUiId(
                 'filter',
                 $this->_getHtmlName(),
                 'to'
@@ -121,7 +103,7 @@ class Price extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
      */
     public function getDisplayCurrencySelect()
     {
-        if (!is_null($this->getColumn()->getData('display_currency_select'))) {
+        if ($this->getColumn()->getData('display_currency_select') !== null) {
             return $this->getColumn()->getData('display_currency_select');
         } else {
             return true;
@@ -135,7 +117,7 @@ class Price extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
      */
     public function getCurrencyAffect()
     {
-        if (!is_null($this->getColumn()->getData('currency_affect'))) {
+        if ($this->getColumn()->getData('currency_affect') !== null) {
             return $this->getColumn()->getData('currency_affect');
         } else {
             return true;
@@ -171,7 +153,7 @@ class Price extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
      */
     protected function _getCurrencyList()
     {
-        if (is_null($this->_currencyList)) {
+        if ($this->_currencyList === null) {
             $this->_currencyList = $this->_currencyModel->getConfigAllowCurrencies();
         }
         return $this->_currencyList;

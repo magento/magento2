@@ -1,0 +1,30 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<script>
+require([
+    'prototype'
+], function () {
+
+window.toggleValueElement = function(element) {
+    var disabled = false;
+    if (element.value == 1) {
+        // use default value
+        disabled = true;
+    }
+    $('plain_value').disabled = disabled;
+    $('html_value').disabled = disabled;
+    if (disabled) {
+        $('plain_value').addClassName('disabled');
+        $('html_value').addClassName('disabled');
+    } else {
+        $('plain_value').removeClassName('disabled');
+        $('html_value').removeClassName('disabled');
+    }
+}
+
+});
+</script>

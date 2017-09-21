@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model;
 
@@ -54,7 +36,7 @@ class Cart extends \Magento\Payment\Model\Cart
                 $subtotal -= $this->getDiscount();
             }
 
-            return array(self::AMOUNT_SUBTOTAL => $subtotal);
+            return [self::AMOUNT_SUBTOTAL => $subtotal];
         }
 
         return $this->_amounts;
@@ -68,7 +50,7 @@ class Cart extends \Magento\Payment\Model\Cart
     protected function _calculateCustomItemsSubtotal()
     {
         parent::_calculateCustomItemsSubtotal();
-        $this->_applyHiddenTaxWorkaround($this->_salesModel);
+        $this->_applyDiscountTaxCompensationWorkaround($this->_salesModel);
 
         $this->_validate();
     }
@@ -116,8 +98,8 @@ class Cart extends \Magento\Payment\Model\Cart
         $areItemsValid = $areItemsValid && $this->_areAmountsValid;
 
         if (!$areItemsValid) {
-            $this->_salesModelItems = array();
-            $this->_customItems = array();
+            $this->_salesModelItems = [];
+            $this->_customItems = [];
         }
     }
 
@@ -128,7 +110,7 @@ class Cart extends \Magento\Payment\Model\Cart
      */
     protected function _importItemsFromSalesModel()
     {
-        $this->_salesModelItems = array();
+        $this->_salesModelItems = [];
 
         foreach ($this->_salesModel->getAllItems() as $item) {
             if ($item->getParentItem()) {
@@ -183,18 +165,33 @@ class Cart extends \Magento\Payment\Model\Cart
      * - Catalog Prices = Including Tax
      * - Shipping Prices = Including Tax
      * - Apply Customer Tax = After Discount
-     * - Create a shopping cart price rule with % discount applied to the Shipping Amount
+     * - Create a cart price rule with % discount applied to the Shipping Amount
      * - run shopping cart and estimate shipping
      * - go to PayPal
      *
      * @param \Magento\Payment\Model\Cart\SalesModel\SalesModelInterface $salesEntity
      * @return void
      */
-    protected function _applyHiddenTaxWorkaround(
+    protected function _applyDiscountTaxCompensationWorkaround(
         \Magento\Payment\Model\Cart\SalesModel\SalesModelInterface $salesEntity
     ) {
         $dataContainer = $salesEntity->getTaxContainer();
-        $this->addTax((double)$dataContainer->getBaseHiddenTaxAmount());
-        $this->addTax((double)$dataContainer->getBaseShippingHiddenTaxAmnt());
+        $this->addTax((double)$dataContainer->getBaseDiscountTaxCompensationAmount());
+        $this->addTax((double)$dataContainer->getBaseShippingDiscountTaxCompensationAmnt());
+    }
+
+    /**
+     * Check whether any item has negative amount
+     *
+     * @return bool
+     */
+    public function hasNegativeItemAmount()
+    {
+        foreach ($this->_customItems as $item) {
+            if ($item->getAmount() < 0) {
+                return true;
+            }
+        }
+        return false;
     }
 }

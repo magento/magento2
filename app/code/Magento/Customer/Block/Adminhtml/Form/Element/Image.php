@@ -1,27 +1,8 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
-
 
 /**
  * Customer Widget Form Image File Element Block
@@ -35,7 +16,7 @@ class Image extends \Magento\Customer\Block\Adminhtml\Form\Element\File
     /**
      * Return Delete CheckBox Label
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     protected function _getDeleteCheckboxLabel()
     {
@@ -63,7 +44,7 @@ class Image extends \Magento\Customer\Block\Adminhtml\Form\Element\File
         if ($this->getValue() && !is_array($this->getValue())) {
             $url = $this->_getPreviewUrl();
             $imageId = sprintf('%s_image', $this->getHtmlId());
-            $image = array(
+            $image = [
                 'alt' => __('View Full Size'),
                 'title' => __('View Full Size'),
                 'src' => $url,
@@ -71,8 +52,8 @@ class Image extends \Magento\Customer\Block\Adminhtml\Form\Element\File
                 'height' => 22,
                 'width' => 22,
                 'id' => $imageId
-            );
-            $link = array('href' => $url, 'onclick' => "imagePreview('{$imageId}'); return false;");
+            ];
+            $link = ['href' => $url, 'onclick' => "imagePreview('{$imageId}'); return false;"];
 
             $html = sprintf(
                 '%s%s</a> ',
@@ -90,12 +71,9 @@ class Image extends \Magento\Customer\Block\Adminhtml\Form\Element\File
      */
     protected function _getPreviewUrl()
     {
-        if (is_array($this->getValue())) {
-            return false;
-        }
         return $this->_adminhtmlData->getUrl(
             'customer/index/viewfile',
-            array('image' => $this->_escaper->urlEncode($this->getValue()))
+            ['image' => $this->urlEncoder->encode($this->getValue())]
         );
     }
 }

@@ -1,32 +1,19 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Config;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\SerializerInterface;
+
 /**
  * Configuration class for ordered items
+ * @api
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 abstract class Ordered extends \Magento\Framework\App\Config\Base
 {
@@ -56,21 +43,21 @@ abstract class Ordered extends \Magento\Framework\App\Config\Base
      *
      * @var array
      */
-    protected $_models = array();
+    protected $_models = [];
 
     /**
      * Models configuration
      *
      * @var array
      */
-    protected $_modelsConfig = array();
+    protected $_modelsConfig = [];
 
     /**
      * Sorted models
      *
      * @var array
      */
-    protected $_collectors = array();
+    protected $_collectors = [];
 
     /**
      * @var \Magento\Framework\App\Cache\Type\Config
@@ -78,7 +65,7 @@ abstract class Ordered extends \Magento\Framework\App\Config\Base
     protected $_configCacheType;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $_logger;
 
@@ -88,21 +75,29 @@ abstract class Ordered extends \Magento\Framework\App\Config\Base
     protected $_salesConfig;
 
     /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Sales\Model\Config $salesConfig
      * @param \Magento\Framework\Simplexml\Element $sourceData
+     * @param SerializerInterface $serializer
      */
     public function __construct(
         \Magento\Framework\App\Cache\Type\Config $configCacheType,
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Sales\Model\Config $salesConfig,
-        $sourceData = null
+        $sourceData = null,
+        SerializerInterface $serializer = null
     ) {
         parent::__construct($sourceData);
         $this->_configCacheType = $configCacheType;
         $this->_logger = $logger;
         $this->_salesConfig = $salesConfig;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
     }
 
     /**
@@ -194,14 +189,14 @@ abstract class Ordered extends \Magento\Framework\App\Config\Base
      */
     protected function _initCollectors()
     {
-        $sortedCodes = array();
+        $sortedCodes = [];
         $cachedData = $this->_configCacheType->load($this->_collectorsCacheKey);
         if ($cachedData) {
-            $sortedCodes = unserialize($cachedData);
+            $sortedCodes = $this->serializer->unserialize($cachedData);
         }
         if (!$sortedCodes) {
             $sortedCodes = $this->_getSortedCollectorCodes($this->_modelsConfig);
-            $this->_configCacheType->save(serialize($sortedCodes), $this->_collectorsCacheKey);
+            $this->_configCacheType->save($this->serializer->serialize($sortedCodes), $this->_collectorsCacheKey);
         }
         foreach ($sortedCodes as $code) {
             $this->_collectors[$code] = $this->_models[$code];

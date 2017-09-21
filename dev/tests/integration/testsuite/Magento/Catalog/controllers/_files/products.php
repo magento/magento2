@@ -1,50 +1,39 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 // Copy images to tmp media path
 
-$obectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+use Magento\Framework\App\Filesystem\DirectoryList;
+
+$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+$objectManager->get(
+    \Magento\Framework\View\DesignInterface::class
+)->setArea(
+    'frontend'
+)->setDefaultDesignTheme();
+
 /** @var \Magento\Catalog\Model\Product\Media\Config $config */
-$config = $obectManager->get('Magento\Catalog\Model\Product\Media\Config');
+$config = $objectManager->get(\Magento\Catalog\Model\Product\Media\Config::class);
 /** @var \Magento\Framework\Filesystem\Directory\WriteInterface $mediaDirectory */
-$mediaDirectory = $obectManager->get('Magento\Framework\App\Filesystem')
-    ->getDirectoryWrite(\Magento\Framework\App\Filesystem::MEDIA_DIR);
+$mediaDirectory = $objectManager->get(\Magento\Framework\Filesystem::class)
+    ->getDirectoryWrite(DirectoryList::MEDIA);
 
 $baseTmpMediaPath = $config->getBaseTmpMediaPath();
 $mediaDirectory->create($baseTmpMediaPath);
 copy(__DIR__ . '/product_image.png', $mediaDirectory->getAbsolutePath($baseTmpMediaPath . '/product_image.png'));
 
 /** @var $productOne \Magento\Catalog\Model\Product */
-$productOne = $obectManager->create('Magento\Catalog\Model\Product');
-$productOne->setId(
-    1
-)->setTypeId(
+$productOne = $objectManager->create(\Magento\Catalog\Model\Product::class);
+$productOne->setTypeId(
     \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
 )->setAttributeSetId(
     4
 )->setWebsiteIds(
-    array($obectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore()->getWebsiteId())
+    [$objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)->getStore()->getWebsiteId()]
 )->setSku(
     'simple_product_1'
 )->setName(
@@ -58,7 +47,12 @@ $productOne->setId(
 )->setTaxClassId(
     2
 )->setStockData(
-    array('use_config_manage_stock' => 1, 'qty' => 99, 'is_in_stock' => 1)
+    [
+        'use_config_manage_stock'   => 1,
+        'qty'                       => 99,
+        'is_qty_decimal'            => 0,
+        'is_in_stock'               => 1,
+    ]
 )->setMetaTitle(
     'Simple Product 1 Meta Title'
 )->setMetaKeyword(
@@ -77,15 +71,13 @@ $productOne->setId(
 )->save();
 
 /** @var $productTwo \Magento\Catalog\Model\Product */
-$productTwo = $obectManager->create('Magento\Catalog\Model\Product');
-$productTwo->setId(
-    2
-)->setTypeId(
+$productTwo = $objectManager->create(\Magento\Catalog\Model\Product::class);
+$productTwo->setTypeId(
     \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
 )->setAttributeSetId(
     4
 )->setWebsiteIds(
-    array($obectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore()->getWebsiteId())
+    [$objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)->getStore()->getWebsiteId()]
 )->setSku(
     'simple_product_2'
 )->setName(
@@ -99,7 +91,7 @@ $productTwo->setId(
 )->setTaxClassId(
     2
 )->setStockData(
-    array('use_config_manage_stock' => 1, 'qty' => 24, 'is_in_stock' => 1)
+    ['use_config_manage_stock' => 1, 'qty' => 24, 'is_in_stock' => 1]
 )->setVisibility(
     \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH
 )->setStatus(

@@ -1,30 +1,14 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Directory\Model;
 
+use Magento\Framework\App\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\Logger;
+use Psr\Log\LoggerInterface as Logger;
+use Magento\Store\Model\Store;
 
 /**
  * Class PriceCurrency model for convert and format price value
@@ -32,7 +16,7 @@ use Magento\Framework\Logger;
 class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
 {
     /**
-     * @var StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -47,7 +31,7 @@ class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
     protected $logger;
 
     /**
-     * @param StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param CurrencyFactory $currencyFactory
      * @param Logger $logger
      */
@@ -62,97 +46,115 @@ class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
     }
 
     /**
-     * Convert and format price value for specified store or passed currency
-     *
-     * @param float $amount
-     * @param null|string|bool|int|\Magento\Store\Model\Store $store
-     * @param Currency|string|null $currency
-     * @return float
+     * {@inheritdoc}
      */
-    public function convert($amount, $store = null, $currency = null)
+    public function convert($amount, $scope = null, $currency = null)
     {
-        $currentCurrency = $this->getCurrency($store, $currency);
-        return $this->getStore($store)->getBaseCurrency()->convert($amount, $currentCurrency);
+        $currentCurrency = $this->getCurrency($scope, $currency);
+
+        return $this->getStore($scope)
+            ->getBaseCurrency()
+            ->convert($amount, $currentCurrency);
     }
 
     /**
-     * Format price value for specified store or passed currency
-     *
-     * @param float $amount
-     * @param bool $includeContainer
-     * @param int $precision
-     * @param null|string|bool|int|\Magento\Store\Model\Store $store
-     * @param Currency|string|null $currency
-     * @return string
+     * {@inheritdoc}
+     */
+    public function convertAndRound($amount, $scope = null, $currency = null, $precision = self::DEFAULT_PRECISION)
+    {
+        $currentCurrency = $this->getCurrency($scope, $currency);
+        $convertedValue = $this->getStore($scope)->getBaseCurrency()->convert($amount, $currentCurrency);
+        return round($convertedValue, $precision);
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function format(
         $amount,
         $includeContainer = true,
         $precision = self::DEFAULT_PRECISION,
-        $store = null,
+        $scope = null,
         $currency = null
     ) {
-        return $this->getCurrency($store, $currency)->formatPrecision($amount, $precision, [], $includeContainer);
+        return $this->getCurrency($scope, $currency)
+            ->formatPrecision($amount, $precision, [], $includeContainer);
     }
 
     /**
-     * Convert and format price value
-     *
-     * @param float $amount
-     * @param bool $includeContainer
-     * @param int $precision
-     * @param null|string|bool|int|\Magento\Store\Model\Store $store
-     * @param Currency|string|null $currency
-     * @return string
+     * {@inheritdoc}
      */
     public function convertAndFormat(
         $amount,
         $includeContainer = true,
         $precision = self::DEFAULT_PRECISION,
-        $store = null,
+        $scope = null,
         $currency = null
     ) {
-        $amount = $this->convert($amount, $store, $currency);
-        return $this->format($amount, $includeContainer, $precision, $store, $currency);
+        $amount = $this->convert($amount, $scope, $currency);
+
+        return $this->format($amount, $includeContainer, $precision, $scope, $currency);
     }
 
     /**
-     * Get currency model
-     *
-     * @param null|string|bool|int|\Magento\Store\Model\Store $store
-     * @param Currency|string|null $currency
-     * @return Currency
+     * {@inheritdoc}
      */
-    protected function getCurrency($store = null, $currency = null)
+    public function getCurrency($scope = null, $currency = null)
     {
         if ($currency instanceof Currency) {
             $currentCurrency = $currency;
         } elseif (is_string($currency)) {
-            $currency = $this->currencyFactory->create()->load($currency);
-            $baseCurrency = $this->getStore($store)->getBaseCurrency();
+            $currency = $this->currencyFactory->create()
+                ->load($currency);
+            $baseCurrency = $this->getStore($scope)
+                ->getBaseCurrency();
             $currentCurrency = $baseCurrency->getRate($currency) ? $currency : $baseCurrency;
         } else {
-            $currentCurrency = $this->getStore($store)->getCurrentCurrency();
+            $currentCurrency = $this->getStore($scope)
+                ->getCurrentCurrency();
         }
+
         return $currentCurrency;
+    }
+
+    /**
+     * @param null|string|bool|int|\Magento\Framework\App\ScopeInterface $scope
+     * @param \Magento\Framework\Model\AbstractModel|string|null $currency
+     * @return string
+     */
+    public function getCurrencySymbol($scope = null, $currency = null)
+    {
+        return $this->getCurrency($scope, $currency)->getCurrencySymbol();
     }
 
     /**
      * Get store model
      *
-     * @param null|string|bool|int|\\Magento\Store\Model\Store $store
-     * @return \\Magento\Store\Model\Store
+     * @param null|string|bool|int|ScopeInterface $scope
+     * @return Store
      */
-    protected function getStore($store = null)
+    protected function getStore($scope = null)
     {
         try {
-            if (!$store instanceof \Magento\Store\Model\Store) {
-                $store = $this->storeManager->getStore($store);
+            if (!$scope instanceof Store) {
+                $scope = $this->storeManager->getStore($scope);
             }
         } catch (\Exception $e) {
-            $this->logger->logException($e);
-            $store = $this->storeManager->getStore();
+            $this->logger->critical($e);
+            $scope = $this->storeManager->getStore();
         }
-        return $store;
+
+        return $scope;
+    }
+
+    /**
+     * Round price
+     *
+     * @param float $price
+     * @return float
+     */
+    public function round($price)
+    {
+        return round($price, 2);
     }
 }

@@ -1,0 +1,181 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Tax\Test\Repository\TaxRate">
+        <dataset name="default">
+            <field name="code" xsi:type="string">Tax Rate %isolation%</field>
+            <field name="rate" xsi:type="string">10</field>
+            <field name="tax_country_id" xsi:type="string">United States</field>
+            <field name="tax_postcode" xsi:type="string">*</field>
+            <field name="tax_region_id" xsi:type="string">California</field>
+        </dataset>
+
+        <dataset name="US-CA-Rate_1">
+            <field name="tax_calculation_rate_id" xsi:type="string">%id%</field>
+            <field name="tax_region_id" xsi:type="string">%id%</field>
+            <field name="tax_country_id" xsi:type="string">US</field>
+            <field name="tax_postcode" xsi:type="string">*</field>
+            <field name="code" xsi:type="string">US-CA-*-Rate 1</field>
+            <field name="rate" xsi:type="string">8.2500</field>
+            <field name="zip_is_range" xsi:type="string" />
+            <field name="zip_from" xsi:type="string" />
+            <field name="zip_to" xsi:type="string" />
+            <field name="id" xsi:type="string">1</field>
+            <field name="mtf_dataset_name" xsi:type="string">US-CA-*-Rate 1</field>
+        </dataset>
+
+        <dataset name="US-IL-Rate_1">
+            <field name="code" xsi:type="string">Tax Rate %isolation%</field>
+            <field name="rate" xsi:type="string">8.25</field>
+            <field name="tax_country_id" xsi:type="string">United States</field>
+            <field name="tax_postcode" xsi:type="string">*</field>
+            <field name="tax_region_id" xsi:type="string">%id%</field>
+        </dataset>
+
+        <dataset name="US-NY-Rate_1">
+            <field name="tax_calculation_rate_id" xsi:type="string">%id%</field>
+            <field name="tax_region_id" xsi:type="string">%id%</field>
+            <field name="tax_country_id" xsi:type="string">US</field>
+            <field name="tax_postcode" xsi:type="string">*</field>
+            <field name="code" xsi:type="string">US-NY-*-Rate 1</field>
+            <field name="rate" xsi:type="string">8.3750</field>
+            <field name="zip_is_range" xsi:type="string" />
+            <field name="zip_from" xsi:type="string" />
+            <field name="zip_to" xsi:type="string" />
+            <field name="id" xsi:type="string">2</field>
+            <field name="mtf_dataset_name" xsi:type="string">US-NY-*-Rate 1</field>
+        </dataset>
+
+        <dataset name="us_ca_rate_8_25">
+            <field name="code" xsi:type="string">Tax Rate %isolation%</field>
+            <field name="rate" xsi:type="string">8.25</field>
+            <field name="tax_country_id" xsi:type="string">United States</field>
+            <field name="tax_postcode" xsi:type="string">90230</field>
+            <field name="tax_region_id" xsi:type="string">California</field>
+        </dataset>
+
+        <dataset name="us_ca_rate_8_25_no_zip">
+            <field name="code" xsi:type="string">Tax Rate %isolation%</field>
+            <field name="rate" xsi:type="string">8.25</field>
+            <field name="tax_country_id" xsi:type="string">United States</field>
+            <field name="tax_postcode" xsi:type="string">*</field>
+            <field name="tax_region_id" xsi:type="string">California</field>
+        </dataset>
+
+        <dataset name="us_ca_rate_8_375">
+            <field name="code" xsi:type="string">Tax Rate %isolation%</field>
+            <field name="rate" xsi:type="string">8.375</field>
+            <field name="tax_country_id" xsi:type="string">United States</field>
+            <field name="tax_postcode" xsi:type="string">*</field>
+            <field name="tax_region_id" xsi:type="string">California</field>
+        </dataset>
+
+        <dataset name="us_ny_rate_8_375">
+            <field name="code" xsi:type="string">Tax Rate %isolation%</field>
+            <field name="rate" xsi:type="string">8.375</field>
+            <field name="tax_country_id" xsi:type="string">United States</field>
+            <field name="tax_region_id" xsi:type="string">New York</field>
+            <field name="tax_postcode" xsi:type="string">*</field>
+        </dataset>
+
+        <dataset name="us_ny_rate_8_25">
+            <field name="code" xsi:type="string">Tax Rate %isolation%</field>
+            <field name="rate" xsi:type="string">8.25</field>
+            <field name="tax_country_id" xsi:type="string">United States</field>
+            <field name="tax_region_id" xsi:type="string">New York</field>
+            <field name="tax_postcode" xsi:type="string">*</field>
+        </dataset>
+
+        <dataset name="us_ny_rate_8_1">
+            <field name="code" xsi:type="string">US-NY-*-%isolation%</field>
+            <field name="rate" xsi:type="string">8.1</field>
+            <field name="tax_country_id" xsi:type="string">United States</field>
+            <field name="tax_region_id" xsi:type="string">New York</field>
+            <field name="tax_postcode" xsi:type="string">*</field>
+        </dataset>
+
+        <dataset name="paypal_rate_8_25">
+            <field name="code" xsi:type="string">Tax Rate %isolation%</field>
+            <field name="rate" xsi:type="string">8.25</field>
+            <field name="tax_country_id" xsi:type="string">United States</field>
+            <field name="tax_postcode" xsi:type="string">95131</field>
+            <field name="tax_region_id" xsi:type="string">California</field>
+        </dataset>
+
+        <dataset name="uk_full_tax_rate">
+            <field name="code" xsi:type="string">Tax Rate %isolation%</field>
+            <field name="rate" xsi:type="string">20</field>
+            <field name="tax_country_id" xsi:type="string">United Kingdom</field>
+            <field name="tax_postcode" xsi:type="string">*</field>
+        </dataset>
+
+        <dataset name="default">
+            <field name="code" xsi:type="string">TaxIdentifier%isolation%</field>
+            <field name="tax_postcode" xsi:type="string">*</field>
+            <field name="tax_country_id" xsi:type="string">Australia</field>
+            <field name="rate" xsi:type="string">20</field>
+        </dataset>
+
+        <dataset name="withZipRange">
+            <field name="code" xsi:type="string">TaxIdentifier%isolation%</field>
+            <field name="zip_is_range" xsi:type="string">Yes</field>
+            <field name="zip_from" xsi:type="string">90001</field>
+            <field name="zip_to" xsi:type="string">96162</field>
+            <field name="tax_country_id" xsi:type="string">United States</field>
+            <field name="tax_region_id" xsi:type="string">California</field>
+            <field name="rate" xsi:type="string">15.5</field>
+        </dataset>
+
+        <dataset name="withFixedZip">
+            <field name="code" xsi:type="string">TaxIdentifier%isolation%</field>
+            <field name="tax_postcode" xsi:type="string">*</field>
+            <field name="tax_country_id" xsi:type="string">United States</field>
+            <field name="tax_region_id" xsi:type="string">Texas</field>
+            <field name="rate" xsi:type="string">20</field>
+        </dataset>
+
+        <dataset name="us_ut_fixed_zip_rate_20">
+            <field name="code" xsi:type="string">TaxIdentifier%isolation%</field>
+            <field name="tax_postcode" xsi:type="string">84001</field>
+            <field name="tax_country_id" xsi:type="string">United States</field>
+            <field name="tax_region_id" xsi:type="string">Utah</field>
+            <field name="rate" xsi:type="string">20</field>
+        </dataset>
+
+        <dataset name="tx_rate_10">
+            <field name="code" xsi:type="string">TaxIdentifier%isolation%</field>
+            <field name="tax_postcode" xsi:type="string">*</field>
+            <field name="tax_country_id" xsi:type="string">United States</field>
+            <field name="tax_region_id" xsi:type="string">Texas</field>
+            <field name="rate" xsi:type="string">10</field>
+        </dataset>
+
+        <dataset name="ny_rate_20">
+            <field name="code" xsi:type="string">TaxIdentifier%isolation%</field>
+            <field name="tax_postcode" xsi:type="string">*</field>
+            <field name="tax_country_id" xsi:type="string">United States</field>
+            <field name="tax_region_id" xsi:type="string">New York</field>
+            <field name="rate" xsi:type="string">20</field>
+        </dataset>
+
+        <dataset name="ca_rate_30">
+            <field name="code" xsi:type="string">TaxIdentifier%isolation%</field>
+            <field name="tax_postcode" xsi:type="string">*</field>
+            <field name="tax_country_id" xsi:type="string">United States</field>
+            <field name="tax_region_id" xsi:type="string">California</field>
+            <field name="rate" xsi:type="string">30</field>
+        </dataset>
+
+        <dataset name="us_full_tax_rate">
+            <field name="code" xsi:type="string">Tax Rate %isolation%</field>
+            <field name="rate" xsi:type="string">10</field>
+            <field name="tax_country_id" xsi:type="string">United States</field>
+            <field name="tax_postcode" xsi:type="string">*</field>
+        </dataset>
+    </repository>
+</config>

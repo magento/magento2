@@ -1,32 +1,19 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create;
+
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Pricing\Price\FinalPrice;
 
 /**
  * Adminhtml sales order create abstract block
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 abstract class AbstractCreate extends \Magento\Backend\Block\Widget
 {
@@ -45,17 +32,25 @@ abstract class AbstractCreate extends \Magento\Backend\Block\Widget
     protected $_orderCreate;
 
     /**
+     * @var PriceCurrencyInterface
+     */
+    protected $priceCurrency;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Model\Session\Quote $sessionQuote
      * @param \Magento\Sales\Model\AdminOrder\Create $orderCreate
+     * @param PriceCurrencyInterface $priceCurrency
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Model\Session\Quote $sessionQuote,
         \Magento\Sales\Model\AdminOrder\Create $orderCreate,
-        array $data = array()
+        PriceCurrencyInterface $priceCurrency,
+        array $data = []
     ) {
+        $this->priceCurrency = $priceCurrency;
         $this->_sessionQuote = $sessionQuote;
         $this->_orderCreate = $orderCreate;
         parent::__construct($context, $data);
@@ -84,7 +79,7 @@ abstract class AbstractCreate extends \Magento\Backend\Block\Widget
     /**
      * Retrieve quote model object
      *
-     * @return \Magento\Sales\Model\Quote
+     * @return \Magento\Quote\Model\Quote
      */
     public function getQuote()
     {
@@ -124,23 +119,45 @@ abstract class AbstractCreate extends \Magento\Backend\Block\Widget
     /**
      * Retrieve formated price
      *
-     * @param decimal $value
+     * @param float $value
      * @return string
      */
     public function formatPrice($value)
     {
-        return $this->getStore()->formatPrice($value);
+        return $this->priceCurrency->format(
+            $value,
+            true,
+            PriceCurrencyInterface::DEFAULT_PRECISION,
+            $this->getStore()
+        );
+    }
+
+    /**
+     * @param Product $product
+     * @return string
+     */
+    public function getItemPrice(Product $product)
+    {
+        $price = $product->getPriceInfo()->getPrice(FinalPrice::PRICE_CODE)->getValue();
+        return $this->convertPrice($price);
     }
 
     /**
      * Convert price
      *
-     * @param float $value
+     * @param int|float $value
      * @param bool $format
-     * @return float
+     * @return string|int|float
      */
     public function convertPrice($value, $format = true)
     {
-        return $this->getStore()->convertPrice($value, $format);
+        return $format
+            ? $this->priceCurrency->convertAndFormat(
+                $value,
+                true,
+                PriceCurrencyInterface::DEFAULT_PRECISION,
+                $this->getStore()
+            )
+            : $this->priceCurrency->convert($value, $this->getStore());
     }
 }

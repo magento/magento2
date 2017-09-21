@@ -1,0 +1,55 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+
+<?php
+/**
+ * Template for displaying product price at product view page, gift registry and wishlist
+ *
+ * @var $block \Magento\Catalog\Block\Product\Price
+ */
+?>
+<?php
+    /** @var $pricingHelper \Magento\Framework\Pricing\Helper\Data */
+    $pricingHelper = $this->helper('Magento\Framework\Pricing\Helper\Data');
+    /** @var $_catalogHelper \Magento\Catalog\Helper\Data */
+    $_catalogHelper = $this->helper('Magento\Catalog\Helper\Data');
+
+    /** @var $_product \Magento\Catalog\Model\Product */
+    $_product = $block->getProduct();
+    $_id = $_product->getId();
+    $_msrpPrice = '';
+?>
+<div class="price-box msrp">
+    <?php if ($_product->getMsrp()): ?>
+        <?php $_msrpPrice = $pricingHelper->currency($_product->getMsrp(), true, false) ?>
+        <span class="old-price"><?= /* @escapeNotVerified */ $_msrpPrice ?></span>
+    <?php endif; ?>
+    <?php if ($_catalogHelper->isShowPriceOnGesture($_product)): ?>
+        <?php $priceElementId = 'product-price-' . $_id . $block->getIdSuffix(); ?>
+        <span id="<?= /* @escapeNotVerified */ $priceElementId ?>" style="display: none"></span>
+        <?php $popupId = 'msrp-popup-' . $_id . $block->getRandomString(20); ?>
+        <a href="javascript:void(0);"
+           id="<?= /* @escapeNotVerified */ ($popupId) ?>"
+           data-mage-init='{"addToCart":{"popupId": "#<?= /* @escapeNotVerified */ ($popupId) ?>",
+                                         "productName": "<?= /* @noEscape */ $block->escapeJs($block->escapeHtml($_product->getName())) ?>",
+                                         "realPrice": <?= /* @escapeNotVerified */ $block->getRealPriceJs($_product) ?>,
+                                         "msrpPrice": "<?= /* @escapeNotVerified */ $_msrpPrice ?>",
+                                         "priceElementId":"<?= /* @escapeNotVerified */ $priceElementId ?>",
+                                         "popupCartButtonId": "#map-popup-button",
+                                         "cartForm": "#wishlist-view-form"}}'><?= /* @escapeNotVerified */ __('Click for price') ?>
+        </a>
+    <?php else: ?>
+        <span class="msrp-message">
+            <?= /* @escapeNotVerified */ $_catalogHelper->getMsrpPriceMessage($_product) ?>
+        </span>
+    <?php endif; ?>
+    <?php $helpLinkId = 'msrp-help-' . $_id . $block->getRandomString(20); ?>
+    <a href="javascript:void(0);" id="<?= /* @escapeNotVerified */ ($helpLinkId) ?>" data-mage-init='{"addToCart":{"helpLinkId": "#<?= /* @escapeNotVerified */ ($helpLinkId) ?>", "productName": "<?= /* @noEscape */ $block->escapeJs($block->escapeHtml($_product->getName())) ?>"}}' class="link tip"><?= /* @escapeNotVerified */ __("What's this?") ?></a>
+</div>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<root>
+    <node>
+        <subnode>Value1</subnode>
+        <subnode>Value2</subnode>
+    </node>
+</root>

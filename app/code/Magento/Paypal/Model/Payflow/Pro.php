@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model\Payflow;
 
@@ -35,14 +17,14 @@ class Pro extends \Magento\Paypal\Model\Pro
      *
      * @var string
      */
-    protected $_apiType = 'Magento\Paypal\Model\Api\PayflowNvp';
+    protected $_apiType = \Magento\Paypal\Model\Api\PayflowNvp::class;
 
     /**
      * Config model type
      *
      * @var string
      */
-    protected $_configType = 'Magento\Paypal\Model\Config';
+    protected $_configType = \Magento\Paypal\Model\Config::class;
 
     /**
      * Payflow trx_id key in transaction info
@@ -52,11 +34,11 @@ class Pro extends \Magento\Paypal\Model\Pro
     /**
      * Refund a capture transaction
      *
-     * @param \Magento\Framework\Object $payment
+     * @param \Magento\Framework\DataObject $payment
      * @param float $amount
      * @return void
      */
-    public function refund(\Magento\Framework\Object $payment, $amount)
+    public function refund(\Magento\Framework\DataObject $payment, $amount)
     {
         $captureTxnId = $this->_getParentTransactionId($payment);
         if ($captureTxnId) {
@@ -79,14 +61,16 @@ class Pro extends \Magento\Paypal\Model\Pro
     /**
      * Get payflow transaction id from parent transaction
      *
-     * @param \Magento\Framework\Object $payment
+     * @param \Magento\Framework\DataObject $payment
      * @return string
      */
-    protected function _getParentTransactionId(\Magento\Framework\Object $payment)
+    protected function _getParentTransactionId(\Magento\Framework\DataObject $payment)
     {
         if ($payment->getParentTransactionId()) {
-            return $payment->getTransaction(
-                $payment->getParentTransactionId()
+            return $this->transactionRepository->getByTransactionId(
+                $payment->getParentTransactionId(),
+                $payment->getId(),
+                $payment->getOrder()->getId()
             )->getAdditionalInformation(
                 self::TRANSPORT_PAYFLOW_TXN_ID
             );
@@ -118,14 +102,17 @@ class Pro extends \Magento\Paypal\Model\Pro
     /**
      * Fetch transaction details info method does not exists in Payflow
      *
-     * @param \Magento\Payment\Model\Info $payment
+     * @param \Magento\Payment\Model\InfoInterface $payment
      * @param string $transactionId
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function fetchTransactionInfo(\Magento\Payment\Model\Info $payment, $transactionId)
+    public function fetchTransactionInfo(\Magento\Payment\Model\InfoInterface $payment, $transactionId)
     {
-        throw new \Magento\Framework\Model\Exception(__('Fetch transaction details method does not exists in Payflow'));
+        throw new \Magento\Framework\Exception\LocalizedException(
+            __('Unable to fetch transaction details.')
+        );
     }
 
     /**

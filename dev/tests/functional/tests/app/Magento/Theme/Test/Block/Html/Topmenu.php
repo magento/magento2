@@ -1,31 +1,13 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @spi
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
 namespace Magento\Theme\Test\Block\Html;
 
-use Mtf\Block\Block;
-use Mtf\Client\Element\Locator;
+use Magento\Mtf\Block\Block;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Class Topmenu
@@ -70,9 +52,61 @@ class Topmenu extends Block
     public function selectCategoryByName($categoryName)
     {
         $rootElement = $this->_rootElement;
+        $category = $this->waitLoadTopMenu($categoryName);
+        if ($category[1]) {
+            $rootElement->waitUntil(
+                function () use ($category) {
+                    return $category[0]->isVisible() ? true : null;
+                }
+            );
+        }
+        $category[0]->click();
+    }
+
+    /**
+     * Hover on category from top menu by name.
+     *
+     * @param string $categoryName
+     * @return void
+     */
+    public function hoverCategoryByName($categoryName)
+    {
+        $rootElement = $this->_rootElement;
+        $category = $this->waitLoadTopMenu($categoryName);
+        if ($category[1]) {
+            $rootElement->waitUntil(
+                function () use ($category) {
+                    return $category[0]->isVisible() ? true : null;
+                }
+            );
+        }
+        $category[0]->hover();
+    }
+
+    /**
+     * Check is visible category in top menu by name
+     *
+     * @param string $categoryName
+     * @return bool
+     */
+    public function isCategoryVisible($categoryName)
+    {
+        return $this->waitLoadTopMenu($categoryName)[0]->isVisible();
+    }
+
+    /**
+     * Wait for load top menu
+     *
+     * @param string $categoryName
+     * @return array
+     */
+    protected function waitLoadTopMenu($categoryName)
+    {
+        $rootElement = $this->_rootElement;
         $moreCategoriesLink = $rootElement->find($this->moreParentCategories);
         $submenu = $moreCategoriesLink->find($this->submenu);
         $category = $rootElement->find(sprintf($this->category, $categoryName), Locator::SELECTOR_XPATH);
+        $notFindCategory = !$category->isVisible() && $moreCategoriesLink->isVisible();
         if (!$category->isVisible() && $moreCategoriesLink->isVisible()) {
             $rootElement->waitUntil(
                 function () use ($rootElement, $moreCategoriesLink, $submenu) {
@@ -81,14 +115,8 @@ class Topmenu extends Block
                     return $submenu->isVisible() ? true : null;
                 }
             );
-            $rootElement->waitUntil(
-                function () use ($category) {
-                    return $category->isVisible() ? true : null;
-                }
-            );
         }
-        sleep(1); // TODO: sleep should be removed after fix with category sliding
-        $category->click();
+        return [$category, $notFindCategory];
     }
 
     /**

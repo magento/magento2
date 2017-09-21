@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Api/etc/extension_attributes.xsd">
+    <extension_attributes for="Magento\Catalog\Api\Data\ProductInterface">
+        <attribute code="stock_item" type="Magento\CatalogInventory\Api\Data\StockItemInterface">
+            <resources>
+                <resource ref="Magento_CatalogInventory::cataloginventory"/>
+            </resources>
+            <join reference_table="cataloginventory_stock_item"
+                  join_on_field="id"
+                  reference_field="id"
+                    >
+                <field>qty</field>
+            </join>
+        </attribute>
+        <attribute code="reviews" type="Magento\Reviews\Api\Data\Reviews[]">
+            <join reference_table="reviews"
+                  reference_field="product_id"
+                  join_on_field="id"
+                    >
+                <field>comment</field>
+                <field>rating</field>
+                <field>date</field>
+            </join>
+        </attribute>
+    </extension_attributes>
+    <extension_attributes for="Magento\Catalog\Api\Data\ProductLinkInterface">
+        <attribute code="qty" type="float"/>
+    </extension_attributes>
+</config>

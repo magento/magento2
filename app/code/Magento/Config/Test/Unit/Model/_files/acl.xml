@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
+    <acl>
+        <resources>
+            <resource id="Magento_Backend::all" title="Allow everything" translate="title" />
+            <resource id="Magento_Backend::admin" title="Magento Admin" translate="title">
+                <resource id="Magento_Backend::dashboard" title="Dashboard" translate="title" sortOrder="0" />
+                <resource id="Magento_Backend::system" title="System" translate="title" sortOrder="90">
+                    <resource id="Magento_Backend::store" title="Manage Stores" translate="title" />
+                </resource>
+            </resource>
+        </resources>
+    </acl>
+</config>

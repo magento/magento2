@@ -1,59 +1,35 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order;
 
-class InvoiceTest extends \PHPUnit_Framework_TestCase
+class InvoiceTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @magentoDataFixture Magento/Sales/_files/order.php
+     * @var \Magento\Sales\Model\ResourceModel\Order\Collection
      */
-    public function testSendEmail()
+    private $_collection;
+
+    protected function setUp()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getInstance()
-            ->loadArea(\Magento\Framework\App\Area::AREA_FRONTEND);
-        $order = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Sales\Model\Order');
-        $order->loadByIncrementId('100000001');
-        $order->setCustomerEmail('customer@example.com');
-
-        $invoice = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Sales\Model\Order\Invoice'
+        $this->_collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Sales\Model\ResourceModel\Order\Collection::class
         );
-        $invoice->setOrder($order);
+    }
 
-        $payment = $order->getPayment();
-        $paymentInfoBlock = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Payment\Helper\Data'
-        )->getInfoBlock(
-            $payment
-        );
-        $paymentInfoBlock->setArea('invalid-area');
-        $payment->setBlockMock($paymentInfoBlock);
-
-        $this->assertEmpty($invoice->getEmailSent());
-        $invoice->sendEmail(true);
-        $this->assertNotEmpty($invoice->getEmailSent());
-        $this->assertEquals('frontend', $paymentInfoBlock->getArea());
+    /**
+     * @magentoDataFixture Magento/Sales/_files/invoice.php
+     */
+    public function testOrderTotalItemCount()
+    {
+        $expectedResult = [['total_item_count' => 1]];
+        $actualResult = [];
+        /** @var \Magento\Sales\Model\Order $order */
+        foreach ($this->_collection->getItems() as $order) {
+            $actualResult[] = ['total_item_count' => $order->getData('total_item_count')];
+        }
+        $this->assertEquals($expectedResult, $actualResult);
     }
 }

@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -27,7 +9,7 @@
  */
 namespace Magento\TestFramework\Event;
 
-class PhpUnit implements \PHPUnit_Framework_TestListener
+class PhpUnit implements \PHPUnit\Framework\TestListener
 {
     /**
      * Used when PHPUnit framework instantiates the class on its own and passes nothing to the constructor
@@ -55,13 +37,13 @@ class PhpUnit implements \PHPUnit_Framework_TestListener
      * Constructor
      *
      * @param \Magento\TestFramework\EventManager $eventManager
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(\Magento\TestFramework\EventManager $eventManager = null)
     {
         $this->_eventManager = $eventManager ?: self::$_defaultEventManager;
         if (!$this->_eventManager) {
-            throw new \Magento\Framework\Exception('Instance of the event manager is required.');
+            throw new \Magento\Framework\Exception\LocalizedException(__('Instance of the event manager is required.'));
         }
     }
 
@@ -70,7 +52,7 @@ class PhpUnit implements \PHPUnit_Framework_TestListener
      * @SuppressWarnings(PHPMD.ShortVariable)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function addError(\PHPUnit_Framework_Test $test, \Exception $e, $time)
+    public function addError(\PHPUnit\Framework\Test $test, \Exception $e, $time)
     {
     }
 
@@ -79,7 +61,7 @@ class PhpUnit implements \PHPUnit_Framework_TestListener
      * @SuppressWarnings(PHPMD.ShortVariable)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function addFailure(\PHPUnit_Framework_Test $test, \PHPUnit_Framework_AssertionFailedError $e, $time)
+    public function addFailure(\PHPUnit\Framework\Test $test, \PHPUnit\Framework\AssertionFailedError $e, $time)
     {
     }
 
@@ -88,7 +70,7 @@ class PhpUnit implements \PHPUnit_Framework_TestListener
      * @SuppressWarnings(PHPMD.ShortVariable)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function addIncompleteTest(\PHPUnit_Framework_Test $test, \Exception $e, $time)
+    public function addIncompleteTest(\PHPUnit\Framework\Test $test, \Exception $e, $time)
     {
     }
 
@@ -97,7 +79,7 @@ class PhpUnit implements \PHPUnit_Framework_TestListener
      * @SuppressWarnings(PHPMD.ShortVariable)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function addRiskyTest(\PHPUnit_Framework_Test $test, \Exception $e, $time)
+    public function addRiskyTest(\PHPUnit\Framework\Test $test, \Exception $e, $time)
     {
     }
 
@@ -106,17 +88,17 @@ class PhpUnit implements \PHPUnit_Framework_TestListener
      * @SuppressWarnings(PHPMD.ShortVariable)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function addSkippedTest(\PHPUnit_Framework_Test $test, \Exception $e, $time)
+    public function addSkippedTest(\PHPUnit\Framework\Test $test, \Exception $e, $time)
     {
     }
 
     /**
      * {@inheritdoc}
      */
-    public function startTestSuite(\PHPUnit_Framework_TestSuite $suite)
+    public function startTestSuite(\PHPUnit\Framework\TestSuite $suite)
     {
         /* PHPUnit runs tests with data provider in own test suite for each test, so just skip such test suites */
-        if ($suite instanceof \PHPUnit_Framework_TestSuite_DataProvider) {
+        if ($suite instanceof \PHPUnit\Framework\DataProviderTestSuite) {
             return;
         }
         $this->_eventManager->fireEvent('startTestSuite');
@@ -125,34 +107,41 @@ class PhpUnit implements \PHPUnit_Framework_TestListener
     /**
      * {@inheritdoc}
      */
-    public function endTestSuite(\PHPUnit_Framework_TestSuite $suite)
+    public function endTestSuite(\PHPUnit\Framework\TestSuite $suite)
     {
-        if ($suite instanceof \PHPUnit_Framework_TestSuite_DataProvider) {
+        if ($suite instanceof \PHPUnit\Framework\DataProviderTestSuite) {
             return;
         }
-        $this->_eventManager->fireEvent('endTestSuite', array($suite), true);
+        $this->_eventManager->fireEvent('endTestSuite', [$suite], true);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function startTest(\PHPUnit_Framework_Test $test)
+    public function startTest(\PHPUnit\Framework\Test $test)
     {
-        if (!$test instanceof \PHPUnit_Framework_TestCase || $test instanceof \PHPUnit_Framework_Warning) {
+        if (!$test instanceof \PHPUnit\Framework\TestCase || $test instanceof \PHPUnit\Framework\Warning) {
             return;
         }
-        $this->_eventManager->fireEvent('startTest', array($test));
+        $this->_eventManager->fireEvent('startTest', [$test]);
     }
 
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function endTest(\PHPUnit_Framework_Test $test, $time)
+    public function endTest(\PHPUnit\Framework\Test $test, $time)
     {
-        if (!$test instanceof \PHPUnit_Framework_TestCase || $test instanceof \PHPUnit_Framework_Warning) {
+        if (!$test instanceof \PHPUnit\Framework\TestCase || $test instanceof \PHPUnit\Framework\Warning) {
             return;
         }
-        $this->_eventManager->fireEvent('endTest', array($test), true);
+        $this->_eventManager->fireEvent('endTest', [$test], true);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addWarning(\PHPUnit\Framework\Test $test, \PHPUnit\Framework\Warning $e, $time)
+    {
     }
 }

@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Helper;
 
@@ -30,16 +12,6 @@ namespace Magento\Catalog\Helper;
  */
 class Catalog extends \Magento\Framework\App\Helper\AbstractHelper
 {
-    /**
-     * Config path to valid file paths
-     */
-    const XML_PATH_PUBLIC_FILES_VALID_PATHS = 'general/file/public_files_valid_paths';
-
-    /**
-     * Config path to sitemap valid paths
-     */
-    const XML_PATH_SITEMAP_VALID_PATHS = 'general/file/sitemap_generate_valid_paths';
-
     /**
      * Attribute Tab block name for product edit
      *
@@ -53,27 +25,6 @@ class Catalog extends \Magento\Framework\App\Helper\AbstractHelper
      * @var string
      */
     protected $_categoryAttributeTabBlock;
-
-    /**
-     * Core store config
-     *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    protected $_scopeConfig;
-
-    /**
-     * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     */
-    public function __construct(
-        \Magento\Framework\App\Helper\Context $context,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-    ) {
-        $this->_scopeConfig = $scopeConfig;
-        parent::__construct($context);
-    }
 
     /**
      * Retrieve Attribute Tab Block Name for Product Edit
@@ -117,18 +68,5 @@ class Catalog extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $this->_categoryAttributeTabBlock = $attributeTabBlock;
         return $this;
-    }
-
-    /**
-     * Get list valid paths for generate a sitemap XML file
-     *
-     * @return array
-     */
-    public function getSitemapValidPaths()
-    {
-        return array_merge(
-            $this->_scopeConfig->getValue(self::XML_PATH_SITEMAP_VALID_PATHS, \Magento\Store\Model\ScopeInterface::SCOPE_STORE),
-            $this->_scopeConfig->getValue(self::XML_PATH_PUBLIC_FILES_VALID_PATHS, \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
-        );
     }
 }

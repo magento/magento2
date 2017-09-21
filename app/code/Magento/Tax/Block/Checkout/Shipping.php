@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Block\Checkout;
 
@@ -42,24 +24,24 @@ class Shipping extends \Magento\Checkout\Block\Total\DefaultTotal
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Sales\Model\Config $salesConfig
      * @param \Magento\Tax\Model\Config $taxConfig
+     * @param array $layoutProcessors
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Sales\Model\Config $salesConfig,
         \Magento\Tax\Model\Config $taxConfig,
-        array $data = array()
+        array $layoutProcessors = [],
+        array $data = []
     ) {
         $this->_taxConfig = $taxConfig;
-        parent::__construct($context, $catalogData, $customerSession, $checkoutSession, $salesConfig, $data);
+        parent::__construct($context, $customerSession, $checkoutSession, $salesConfig, $layoutProcessors, $data);
         $this->_isScopePrivate = true;
     }
 
@@ -90,7 +72,7 @@ class Shipping extends \Magento\Checkout\Block\Total\DefaultTotal
      */
     public function getShippingIncludeTax()
     {
-        return $this->getTotal()->getAddress()->getShippingInclTax();
+        return $this->getTotal()->getShippingInclTax();
     }
 
     /**
@@ -100,32 +82,45 @@ class Shipping extends \Magento\Checkout\Block\Total\DefaultTotal
      */
     public function getShippingExcludeTax()
     {
-        return $this->getTotal()->getAddress()->getShippingAmount();
+        return $this->getTotal()->getValue();
     }
 
     /**
      * Get label for shipping include tax
      *
-     * @return float
+     * @return \Magento\Framework\Phrase
      */
     public function getIncludeTaxLabel()
     {
         return __(
             'Shipping Incl. Tax (%1)',
-            $this->escapeHtml($this->getTotal()->getAddress()->getShippingDescription())
+            $this->escapeHtml($this->getQuote()->getShippingAddress()->getShippingDescription())
         );
     }
 
     /**
      * Get label for shipping exclude tax
      *
-     * @return float
+     * @return \Magento\Framework\Phrase
      */
     public function getExcludeTaxLabel()
     {
         return __(
             'Shipping Excl. Tax (%1)',
-            $this->escapeHtml($this->getTotal()->getAddress()->getShippingDescription())
+            $this->escapeHtml($this->getQuote()->getShippingAddress()->getShippingDescription())
         );
+    }
+
+    /**
+     * Determine shipping visibility based on selected method.
+     *
+     * @return bool
+     */
+    public function displayShipping()
+    {
+        if (!$this->getQuote()->getShippingAddress()->getShippingMethod()) {
+            return false;
+        }
+        return true;
     }
 }

@@ -1,0 +1,33 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+/**
+ * @var $block \Magento\Backend\Block\Widget\Form\Container
+ */
+?>
+<?= /* @escapeNotVerified */ $block->getFormInitScripts() ?>
+<div data-mage-init='{"floatingHeader": {}}' class="page-actions attribute-popup-actions" <?= /* @escapeNotVerified */ $block->getUiId('content-header') ?>>
+    <?= $block->getButtonsHtml('header') ?>
+</div>
+
+<form id="edit_form" class="admin__scope-old edit-form" action="<?= $block->escapeHtml($block->getSaveUrl()) ?>" method="post">
+    <input name="form_key" type="hidden" value="<?= $block->escapeHtml($block->getFormKey()) ?>" />
+    <?= $block->getChildHtml('form') ?>
+</form>
+
+
+<script>
+require(['jquery', "mage/mage"], function(jQuery){
+
+    jQuery('#edit_form').mage('form').mage('validation', {validationUrl: '<?= /* @escapeNotVerified */ $block->getValidationUrl() ?>'});
+
+});
+</script>
+<?= /* @escapeNotVerified */ $block->getFormScripts() ?>

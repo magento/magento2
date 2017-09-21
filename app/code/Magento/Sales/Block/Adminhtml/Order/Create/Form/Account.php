@@ -1,35 +1,24 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Form;
 
+use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\Data\Form\Element\AbstractElement;
-use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * Create order account form
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Account extends AbstractForm
 {
@@ -40,30 +29,55 @@ class Account extends AbstractForm
      */
     protected $_metadataFormFactory;
 
-    /** @var CustomerAccountServiceInterface */
-    protected $_customerAccountService;
+    /**
+     * Customer repository
+     *
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface
+     */
+    protected $customerRepository;
+
+    /**
+     * @var \Magento\Framework\Api\ExtensibleDataObjectConverter
+     */
+    protected $_extensibleDataObjectConverter;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Model\Session\Quote $sessionQuote
      * @param \Magento\Sales\Model\AdminOrder\Create $orderCreate
+     * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\Data\FormFactory $formFactory
+     * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
      * @param \Magento\Customer\Model\Metadata\FormFactory $metadataFormFactory
-     * @param CustomerAccountServiceInterface $customerAccountService
+     * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
+     * @param ExtensibleDataObjectConverter $extensibleDataObjectConverter
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Model\Session\Quote $sessionQuote,
         \Magento\Sales\Model\AdminOrder\Create $orderCreate,
+        PriceCurrencyInterface $priceCurrency,
         \Magento\Framework\Data\FormFactory $formFactory,
+        \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
         \Magento\Customer\Model\Metadata\FormFactory $metadataFormFactory,
-        CustomerAccountServiceInterface $customerAccountService,
-        array $data = array()
+        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
+        \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter,
+        array $data = []
     ) {
         $this->_metadataFormFactory = $metadataFormFactory;
-        $this->_customerAccountService = $customerAccountService;
-        parent::__construct($context, $sessionQuote, $orderCreate, $formFactory, $data);
+        $this->customerRepository = $customerRepository;
+        $this->_extensibleDataObjectConverter = $extensibleDataObjectConverter;
+        parent::__construct(
+            $context,
+            $sessionQuote,
+            $orderCreate,
+            $priceCurrency,
+            $formFactory,
+            $dataObjectProcessor,
+            $data
+        );
     }
 
     /**
@@ -79,7 +93,7 @@ class Account extends AbstractForm
     /**
      * Return header text
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getHeaderText()
     {
@@ -97,7 +111,7 @@ class Account extends AbstractForm
         $customerForm = $this->_metadataFormFactory->create('customer', 'adminhtml_checkout');
 
         // prepare customer attributes to show
-        $attributes = array();
+        $attributes = [];
 
         // add system required attributes
         foreach ($customerForm->getSystemAttributes() as $attribute) {
@@ -115,7 +129,7 @@ class Account extends AbstractForm
             $attributes[$attribute->getAttributeCode()] = $attribute;
         }
 
-        $fieldset = $this->_form->addFieldset('main', array());
+        $fieldset = $this->_form->addFieldset('main', []);
 
         $this->_addAttributesToForm($attributes, $fieldset);
 
@@ -136,7 +150,7 @@ class Account extends AbstractForm
         switch ($element->getId()) {
             case 'email':
                 $element->setRequired(0);
-                $element->setClass('validate-email');
+                $element->setClass('validate-email admin__control-text');
                 break;
         }
         return $this;
@@ -150,11 +164,11 @@ class Account extends AbstractForm
     public function getFormValues()
     {
         try {
-            $customer = $this->_customerAccountService->getCustomer($this->getCustomerId());
+            $customer = $this->customerRepository->getById($this->getCustomerId());
         } catch (\Exception $e) {
             /** If customer does not exist do nothing. */
         }
-        $data = isset($customer) ? \Magento\Framework\Service\EavDataObjectConverter::toFlatArray($customer) : array();
+        $data = isset($customer) ? $this->_extensibleDataObjectConverter->toFlatArray($customer, [], \Magento\Customer\Api\Data\CustomerInterface::class) : [];
         foreach ($this->getQuote()->getData() as $key => $value) {
             if (strpos($key, 'customer_') === 0) {
                 $data[substr($key, 9)] = $value;

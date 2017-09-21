@@ -1,34 +1,20 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
 namespace Magento\Backend\Block\Page\System\Config\Robots;
+
+use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * "Reset to Defaults" button renderer
  *
+ * @deprecated 100.2.0
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Reset extends \Magento\Backend\Block\System\Config\Form\Field
+class Reset extends \Magento\Config\Block\System\Config\Form\Field
 {
     /**
      * Pasge robots default instructions
@@ -41,7 +27,7 @@ class Reset extends \Magento\Backend\Block\System\Config\Form\Field
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        array $data = array()
+        array $data = []
     ) {
         parent::__construct($context, $data);
     }
@@ -54,7 +40,7 @@ class Reset extends \Magento\Backend\Block\System\Config\Form\Field
     protected function _construct()
     {
         parent::_construct();
-        $this->setTemplate('page/system/config/robots/reset.phtml');
+        $this->setTemplate('Magento_Config::page/system/config/robots/reset.phtml');
     }
 
     /**
@@ -65,7 +51,8 @@ class Reset extends \Magento\Backend\Block\System\Config\Form\Field
     public function getRobotsDefaultCustomInstructions()
     {
         return trim((string)$this->_scopeConfig->getValue(
-            self::XML_PATH_ROBOTS_DEFAULT_CUSTOM_INSTRUCTIONS, \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT
+            self::XML_PATH_ROBOTS_DEFAULT_CUSTOM_INSTRUCTIONS,
+            ScopeConfigInterface::SCOPE_TYPE_DEFAULT
         ));
     }
 
@@ -77,13 +64,13 @@ class Reset extends \Magento\Backend\Block\System\Config\Form\Field
     public function getButtonHtml()
     {
         $button = $this->getLayout()->createBlock(
-            'Magento\Backend\Block\Widget\Button'
+            \Magento\Backend\Block\Widget\Button::class
         )->setData(
-            array(
+            [
                 'id' => 'reset_to_default_button',
                 'label' => __('Reset to Default'),
-                'onclick' => 'javascript:resetRobotsToDefault(); return false;'
-            )
+                'onclick' => 'javascript:resetRobotsToDefault(); return false;',
+            ]
         );
 
         return $button->toHtml();

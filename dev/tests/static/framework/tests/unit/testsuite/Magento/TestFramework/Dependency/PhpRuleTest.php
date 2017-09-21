@@ -1,29 +1,11 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\TestFramework\Dependency;
 
-class PhpRuleTest extends \PHPUnit_Framework_TestCase
+class PhpRuleTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var PhpRule
@@ -32,9 +14,13 @@ class PhpRuleTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $mapRoutes = array('someModule' => array('Magento\SomeModule'), 'anotherModule' => array('Magento\OneModule'));
-        $mapLayoutBlocks = array('area' => array('block.name' => array('Magento\SomeModule' => 'Magento\SomeModule')));
-        $this->model = new PhpRule($mapRoutes, $mapLayoutBlocks);
+        $mapRoutes = ['someModule' => ['Magento\SomeModule'], 'anotherModule' => ['Magento\OneModule']];
+        $mapLayoutBlocks = ['area' => ['block.name' => ['Magento\SomeModule' => 'Magento\SomeModule']]];
+        $pluginMap = [
+            'Magento\Module1\Plugin1' => 'Magento\Module1\Subject',
+            'Magento\Module1\Plugin2' => 'Magento\Module2\Subject',
+        ];
+        $this->model = new PhpRule($mapRoutes, $mapLayoutBlocks, $pluginMap);
     }
 
     public function testNonPhpGetDependencyInfo()
@@ -44,84 +30,147 @@ class PhpRuleTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $module
+     * @param string $class
      * @param string $content
      * @param array $expected
      * @dataProvider getDependencyInfoDataProvider
      */
-    public function testGetDependencyInfo($module, $content, array $expected)
+    public function testGetDependencyInfo($class, $content, array $expected)
     {
-        $this->assertEquals($expected, $this->model->getDependencyInfo($module, 'php', 'any', $content));
+        $file = $this->makeMockFilepath($class);
+        $module = $this->getModuleFromClass($class);
+        $this->assertEquals($expected, $this->model->getDependencyInfo($module, 'php', $file, $content));
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function getDependencyInfoDataProvider()
     {
-        return array(
-            array('Magento\SomeModule', 'something extends \Magento\SomeModule\Any\ClassName {', array()), //1
-            array(
-                'Magento\AnotherModule',
+        return [
+            'Extend class in same module' => [
+                'Magento\SomeModule\SomeClass',
                 'something extends \Magento\SomeModule\Any\ClassName {',
-                array(
-                    array(
+                []
+            ],
+            'Extend class in different module' => [
+                'Magento\AnotherModule\SomeClass',
+                'something extends \Magento\SomeModule\Any\ClassName {',
+                [
+                    [
                         'module' => 'Magento\SomeModule',
                         'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_HARD,
-                        'source' => 'Magento\SomeModule\Any\ClassName'
-                    )
-                )
-            ), // 2
-            array(
-                'Magento\SomeModule',
+                        'source' => 'Magento\SomeModule\Any\ClassName',
+                    ]
+                ]
+            ],
+            'getViewFileUrl in same module' => [
+                'Magento\SomeModule\SomeClass',
                 '$this->getViewFileUrl("Magento_SomeModule::js/order-by-sku-failure.js")',
-                array()
-            ), // 3
-            array(
-                'Magento\AnotherModule',
+                []
+            ],
+            'getViewFileUrl in different module' => [
+                'Magento\AnotherModule\SomeClass',
                 '$this->getViewFileUrl("Magento_SomeModule::js/order-by-sku-failure.js")',
-                array(
-                    array(
+                [
+                    [
                         'module' => 'Magento\SomeModule',
                         'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_HARD,
-                        'source' => 'Magento_SomeModule'
-                    )
-                )
-            ), //4
-            array('Magento\SomeModule', '$this->helper("Magento\SomeModule\Any\ClassName")', array()), //5
-            array(
-                'Magento\AnotherModule',
+                        'source' => 'Magento_SomeModule',
+                    ]
+                ]
+            ],
+            'Helper class from same module' => [
+                'Magento\SomeModule\SomeClass',
                 '$this->helper("Magento\SomeModule\Any\ClassName")',
-                array(
-                    array(
+                []
+            ],
+            'Helper class from another module' => [
+                'Magento\AnotherModule\SomeClass',
+                '$this->helper("Magento\SomeModule\Any\ClassName")',
+                [
+                    [
                         'module' => 'Magento\SomeModule',
                         'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_HARD,
-                        'source' => 'Magento\SomeModule\Any\ClassName'
-                    )
-                )
-            ), //6
-            array('Magento\SomeModule', '$this->getUrl("someModule")', array()), // 7
-            array(
-                'Magento\AnotherModule',
+                        'source' => 'Magento\SomeModule\Any\ClassName',
+                    ]
+                ]
+            ],
+            'getUrl from same module' => [
+                'Magento\SomeModule\SomeClass',
+                '$this->getUrl("someModule")',
+                []
+            ],
+            'getUrl from another module' => [
+                'Magento\SomeModule\SomeClass',
                 '$this->getUrl("anotherModule")',
-                array(
-                    array(
+                [
+                    [
                         'module' => 'Magento\OneModule',
                         'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_HARD,
-                        'source' => 'getUrl("anotherModule"'
-                    )
-                )
-            ), //8
-            array('Magento\SomeModule', '$this->getLayout()->getBlock(\'block.name\');', array()), // 9
-            array(
-                'Magento\AnotherModule',
+                        'source' => 'getUrl("anotherModule"',
+                    ]
+                ]
+            ],
+            'getBlock from same module' => [
+                'Magento\SomeModule\SomeClass',
+                '$this->getLayout()->getBlock(\'block.name\');', []
+            ],
+            'getBlock from another module' => [
+                'Magento\AnotherModule\SomeClass',
                 '$this->getLayout()->getBlock(\'block.name\');',
-                array(
-                    array(
+                [
+                    [
                         'module' => 'Magento\SomeModule',
                         'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_HARD,
-                        'source' => 'getBlock(\'block.name\')'
-                    )
-                )
-            ) // 10
-        );
+                        'source' => 'getBlock(\'block.name\')',
+                    ]
+                ]
+            ],
+            'Plugin on class in same module' => [
+                'Magento\Module1\Plugin1',
+                ', \Magento\Module1\Subject $variable',
+                []
+            ],
+            'Plugin depends on arbitrary class in same module' => [
+                'Magento\Module1\Plugin1',
+                ', \Magento\Module1\NotSubject $variable',
+                []
+            ],
+            'Plugin on class in different module' => [
+                'Magento\Module1\Plugin2',
+                'Magento\Module2\Subject',
+                [
+                    [
+                        'module' => 'Magento\Module2',
+                        'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_SOFT,
+                        'source' => 'Magento\Module2\Subject',
+                    ]
+                ],
+            ],
+            'Plugin depends on arbitrary class in same module as subject' => [
+                'Magento\Module1\Plugin2',
+                'Magento\Module2\NotSubject',
+                [
+                    [
+                        'module' => 'Magento\Module2',
+                        'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_SOFT,
+                        'source' => 'Magento\Module2\NotSubject',
+                    ]
+                ]
+            ],
+            'Plugin depends on arbitrary class in arbitrary module' => [
+                'Magento\Module1\Plugin2',
+                'Magento\OtherModule\NotSubject',
+                [
+                    [
+                        'module' => 'Magento\OtherModule',
+                        'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_HARD,
+                        'source' => 'Magento\OtherModule\NotSubject',
+                    ]
+                ]
+            ],
+        ];
     }
 
     /**
@@ -132,32 +181,54 @@ class PhpRuleTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetDefaultModelDependency($module, $content, array $expected)
     {
-        $mapLayoutBlocks = array(
-            'default' => array(
-                'block.name' => array(
+        $mapLayoutBlocks = [
+            'default' => [
+                'block.name' => [
                     'Magento\SomeModule' => 'Magento\SomeModule',
-                    'Magento\Install' => 'Magento\Install'
-                )
-            )
-        );
-        $this->model = new PhpRule(array(), $mapLayoutBlocks);
+                ],
+            ],
+        ];
+        $this->model = new PhpRule([], $mapLayoutBlocks);
         $this->assertEquals($expected, $this->model->getDependencyInfo($module, 'template', 'any', $content));
     }
 
     public function getDefaultModelDependencyDataProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 'Magento\AnotherModule',
                 '$this->getLayout()->getBlock(\'block.name\');',
-                array(
-                    array(
-                        'module' => 'Magento\Install',
+                [
+                    [
+                        'module' => 'Magento\SomeModule',
                         'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_HARD,
-                        'source' => 'getBlock(\'block.name\')'
-                    )
-                )
-            )
-        );
+                        'source' => 'getBlock(\'block.name\')',
+                    ]
+                ],
+            ]
+        ];
+    }
+
+    /**
+     * Make some fake filepath to correspond to the class name
+     *
+     * @param string $class
+     * @return string
+     */
+    private function makeMockFilepath($class)
+    {
+        return 'ClassRoot' . DIRECTORY_SEPARATOR . str_replace('\\', DIRECTORY_SEPARATOR, $class) . '.php';
+    }
+
+    /**
+     * Get the module name like Magento\Module out of a classname, assuming for test purpose that
+     * all modules are from "Magento" vendor
+     *
+     * @param string $class
+     * @return string
+     */
+    private function getModuleFromClass($class)
+    {
+        return substr($class, 0, strpos($class, '\\', 9)); // (strlen('Magento\\') + 1) === 9
     }
 }

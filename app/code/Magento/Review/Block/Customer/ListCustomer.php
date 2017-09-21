@@ -1,47 +1,32 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Review\Block\Customer;
 
-use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
-use Magento\Customer\Service\V1\CustomerAddressServiceInterface;
+use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 
 /**
  * Customer Reviews list block
+ *
+ * @api
+ * @since 100.0.2
  */
 class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
 {
     /**
      * Product reviews collection
      *
-     * @var \Magento\Review\Model\Resource\Review\Product\Collection
+     * @var \Magento\Review\Model\ResourceModel\Review\Product\Collection
      */
     protected $_collection;
 
     /**
      * Review resource model
      *
-     * @var \Magento\Review\Model\Resource\Review\Product\CollectionFactory
+     * @var \Magento\Review\Model\ResourceModel\Review\Product\CollectionFactory
      */
     protected $_collectionFactory;
 
@@ -54,9 +39,9 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
-     * @param CustomerAccountServiceInterface $customerAccountService
-     * @param CustomerAddressServiceInterface $addressService
-     * @param \Magento\Review\Model\Resource\Review\Product\CollectionFactory $collectionFactory
+     * @param CustomerRepositoryInterface $customerRepository
+     * @param AccountManagementInterface $customerAccountManagement
+     * @param \Magento\Review\Model\ResourceModel\Review\Product\CollectionFactory $collectionFactory
      * @param \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer
      * @param array $data
      */
@@ -64,48 +49,22 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory,
-        CustomerAccountServiceInterface $customerAccountService,
-        CustomerAddressServiceInterface $addressService,
-        \Magento\Review\Model\Resource\Review\Product\CollectionFactory $collectionFactory,
+        CustomerRepositoryInterface $customerRepository,
+        AccountManagementInterface $customerAccountManagement,
+        \Magento\Review\Model\ResourceModel\Review\Product\CollectionFactory $collectionFactory,
         \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer,
-        array $data = array()
+        array $data = []
     ) {
         $this->_collectionFactory = $collectionFactory;
         parent::__construct(
             $context,
             $customerSession,
             $subscriberFactory,
-            $customerAccountService,
-            $addressService,
+            $customerRepository,
+            $customerAccountManagement,
             $data
         );
-        $this->_isScopePrivate = true;
         $this->currentCustomer = $currentCustomer;
-    }
-
-    /**
-     * Initialize review collection
-     *
-     * @return $this
-     */
-    protected function _initCollection()
-    {
-        $this->_collection = $this->_collectionFactory->create();
-        $this->_collection
-            ->addStoreFilter($this->_storeManager->getStore()->getId())
-            ->addCustomerFilter($this->currentCustomer->getCustomerId())
-            ->setDateOrder();
-        return $this;
-    }
-
-    /**
-     * Gets collection items count
-     *
-     * @return int
-     */
-    public function count()
-    {
-        return $this->_getCollection()->getSize();
     }
 
     /**
@@ -125,44 +84,44 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
      */
     protected function _prepareLayout()
     {
-        $toolbar = $this->getLayout()->createBlock(
-            'Magento\Theme\Block\Html\Pager',
-            'customer_review_list.toolbar'
-        )->setCollection(
-            $this->getCollection()
-        );
+        if ($this->getReviews()) {
+            $toolbar = $this->getLayout()->createBlock(
+                \Magento\Theme\Block\Html\Pager::class,
+                'customer_review_list.toolbar'
+            )->setCollection(
+                $this->getReviews()
+            );
 
-        $this->setChild('toolbar', $toolbar);
+            $this->setChild('toolbar', $toolbar);
+        }
         return parent::_prepareLayout();
     }
 
     /**
-     * Get collection
+     * Get reviews
      *
-     * @return \Magento\Review\Model\Resource\Review\Product\Collection
+     * @return bool|\Magento\Review\Model\ResourceModel\Review\Product\Collection
      */
-    protected function _getCollection()
+    public function getReviews()
     {
+        if (!($customerId = $this->currentCustomer->getCustomerId())) {
+            return false;
+        }
         if (!$this->_collection) {
-            $this->_initCollection();
+            $this->_collection = $this->_collectionFactory->create();
+            $this->_collection
+                ->addStoreFilter($this->_storeManager->getStore()->getId())
+                ->addCustomerFilter($customerId)
+                ->setDateOrder();
         }
         return $this->_collection;
-    }
-
-    /**
-     * Get collection
-     *
-     * @return \Magento\Review\Model\Resource\Review\Product\Collection
-     */
-    public function getCollection()
-    {
-        return $this->_getCollection();
     }
 
     /**
      * Get review link
      *
      * @return string
+     * @deprecated 100.2.0
      */
     public function getReviewLink()
     {
@@ -170,13 +129,38 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
     }
 
     /**
+     * Get review URL
+     *
+     * @param \Magento\Review\Model\Review $review
+     * @return string
+     * @since 100.2.0
+     */
+    public function getReviewUrl($review)
+    {
+        return $this->getUrl('review/customer/view', ['id' => $review->getReviewId()]);
+    }
+
+    /**
      * Get product link
      *
      * @return string
+     * @deprecated 100.2.0
      */
     public function getProductLink()
     {
         return $this->getUrl('catalog/product/view/');
+    }
+
+    /**
+     * Get product URL
+     *
+     * @param \Magento\Review\Model\Review $review
+     * @return string
+     * @since 100.2.0
+     */
+    public function getProductUrl($review)
+    {
+        return $this->getUrl('catalog/product/view', ['id' => $review->getEntityPkValue()]);
     }
 
     /**
@@ -187,7 +171,7 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
      */
     public function dateFormat($date)
     {
-        return $this->formatDate($date, \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT);
+        return $this->formatDate($date, \IntlDateFormatter::SHORT);
     }
 
     /**
@@ -197,7 +181,10 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
      */
     protected function _beforeToHtml()
     {
-        $this->_getCollection()->load()->addReviewSummary();
+        $reviews = $this->getReviews();
+        if ($reviews) {
+            $reviews->load()->addReviewSummary();
+        }
         return parent::_beforeToHtml();
     }
 }

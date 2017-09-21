@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <block class="Magento\Sales\Block\Adminhtml\Order\Create\Items\Grid" name="item_unit_price" template="Magento_Sales::order/create/items/price/unit.phtml"/>
+        <block class="Magento\Sales\Block\Adminhtml\Order\Create\Items\Grid" name="item_row_total" template="Magento_Sales::order/create/items/price/row.phtml"/>
+        <block class="Magento\Sales\Block\Adminhtml\Order\Create\Items\Grid" name="item_row_total_with_discount" template="Magento_Sales::order/create/items/price/total.phtml"/>
+    </body>
+</page>

@@ -1,0 +1,65 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Header
+//  _____________________________________________
+
+@page-header__border-color: @color-gray89;
+@page-header__border-width: 1px;
+@page-header__padding-bottom: 2rem;
+@page-header__margin-bottom: 2.7rem;
+
+@search-global-label-icon__color: @color-very-dark-gray1;
+@notifications-action__color: @search-global-label-icon__color;
+@user-account-action__color: @search-global-label-icon__color;
+
+.page-header {
+    margin-bottom: @page-header__margin-bottom;
+    padding-bottom: @page-header__padding-bottom;
+    position: relative;
+
+    &:before {
+        border-bottom: @page-header__border-width solid @page-header__border-color;
+        bottom: 0;
+        content: '';
+        display: block;
+        height: @page-header__border-width;
+        left: @page-header__indent-horizontal;
+        position: absolute;
+        right: @page-header__indent-horizontal;
+
+        .container & {
+            content: normal;
+        }
+    }
+
+    .message {
+        margin-bottom: 1.8rem;
+
+        + .message {
+            margin-top: -1.5rem;
+        }
+    }
+
+    .search-global-input,
+    .admin__action-dropdown {
+        transition: none;
+    }
+
+    .container & {
+        margin-bottom: 0;
+    }
+}
+
+.page-title-wrapper {
+    margin-top: 1.1rem;
+
+    .container & {
+        background: url('@{path-to-pub}images/logo.svg') no-repeat 0 0;
+        min-height: 41px;
+        padding: 4px 0 0 45px;
+    }
+}

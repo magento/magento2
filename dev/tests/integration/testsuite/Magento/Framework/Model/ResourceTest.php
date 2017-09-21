@@ -1,41 +1,23 @@
 <?php
 /**
- * Test for \Magento\Framework\Model\Resource
+ * Test for \Magento\Framework\Model\ResourceModel
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Model;
 
-class ResourceTest extends \PHPUnit_Framework_TestCase
+class ResourceTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\App\Resource
+     * @var \Magento\Framework\App\ResourceConnection
      */
     protected $_model;
 
     protected function setUp()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Framework\App\Resource');
+            ->create(\Magento\Framework\App\ResourceConnection::class);
     }
 
     public function testGetTableName()
@@ -45,11 +27,11 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $tableNameOrig = 'store_website';
 
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\App\Resource',
-            array('tablePrefix' => 'prefix_')
+            \Magento\Framework\App\ResourceConnection::class,
+            ['tablePrefix' => 'prefix_']
         );
 
-        $tableName = $this->_model->getTableName(array($tableNameOrig, $tableSuffix));
+        $tableName = $this->_model->getTableName([$tableNameOrig, $tableSuffix]);
         $this->assertContains($tablePrefix, $tableName);
         $this->assertContains($tableSuffix, $tableName);
         $this->assertContains($tableNameOrig, $tableName);
@@ -57,33 +39,34 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Init profiler during creation of DB connect
+     * @return void
      */
     public function testProfilerInit()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        /** @var \Zend_Db_Adapter_Abstract $connection */
+        /** @var \Magento\Framework\DB\Adapter\Pdo\Mysql $connection */
         $connection = $objectManager->create(
-            'Magento\TestFramework\Db\Adapter\Mysql',
-            array(
-                'config' => array(
-                    'profiler' => array(
-                        'class' => 'Magento\Framework\Model\Resource\Db\Profiler',
-                        'enabled' => 'true'
-                    ),
+            \Magento\TestFramework\Db\Adapter\Mysql::class,
+            [
+                'config' => [
+                    'profiler' => [
+                        'class' => \Magento\Framework\Model\ResourceModel\Db\Profiler::class,
+                        'enabled' => 'true',
+                    ],
                     'username' => 'username',
                     'password' => 'password',
                     'host' => 'host',
                     'type' => 'type',
-                    'dbname' => 'dbname'
-                )
-            )
+                    'dbname' => 'dbname',
+                ]
+            ]
         );
 
-        /** @var \Magento\Framework\Model\Resource\Db\Profiler $profiler */
+        /** @var \Magento\Framework\Model\ResourceModel\Db\Profiler $profiler */
         $profiler = $connection->getProfiler();
 
-        $this->assertInstanceOf('Magento\Framework\Model\Resource\Db\Profiler', $profiler);
+        $this->assertInstanceOf(\Magento\Framework\Model\ResourceModel\Db\Profiler::class, $profiler);
         $this->assertTrue($profiler->getEnabled());
     }
 }

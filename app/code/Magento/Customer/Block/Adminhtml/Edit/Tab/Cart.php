@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab;
 
@@ -30,7 +12,8 @@ use Magento\Directory\Model\Currency;
 /**
  * Adminhtml customer orders grid block
  *
- * @SuppressWarnings(PHPMD.LongVariable)
+ * @api
+ * @since 100.0.2
  */
 class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -47,9 +30,14 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_dataCollectionFactory;
 
     /**
-     * @var \Magento\Sales\Model\QuoteFactory
+     * @var \Magento\Quote\Api\CartRepositoryInterface
      */
-    protected $_quoteFactory;
+    protected $quoteRepository;
+
+    /**
+     * @var \Magento\Quote\Model\Quote
+     */
+    protected $quote = null;
 
     /**
      * @var string
@@ -57,24 +45,32 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_parentTemplate;
 
     /**
+     * @var \Magento\Quote\Model\QuoteFactory
+     */
+    protected $quoteFactory;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\Sales\Model\QuoteFactory $quoteFactory
+     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param \Magento\Framework\Data\CollectionFactory $dataCollectionFactory
      * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Quote\Model\QuoteFactory $quoteFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
-        \Magento\Sales\Model\QuoteFactory $quoteFactory,
+        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         \Magento\Framework\Data\CollectionFactory $dataCollectionFactory,
         \Magento\Framework\Registry $coreRegistry,
-        array $data = array()
+        \Magento\Quote\Model\QuoteFactory $quoteFactory,
+        array $data = []
     ) {
         $this->_dataCollectionFactory = $dataCollectionFactory;
         $this->_coreRegistry = $coreRegistry;
-        $this->_quoteFactory = $quoteFactory;
+        $this->quoteRepository = $quoteRepository;
+        $this->quoteFactory = $quoteFactory;
         parent::__construct($context, $backendHelper, $data);
     }
 
@@ -107,10 +103,7 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareCollection()
     {
-        $customerId = $this->getCustomerId();
-        $storeIds = $this->_storeManager->getWebsite($this->getWebsiteId())->getStoreIds();
-
-        $quote = $this->_quoteFactory->create()->setSharedStoreIds($storeIds)->loadByCustomer($customerId);
+        $quote = $this->getQuote();
 
         if ($quote) {
             $collection = $quote->getItemsCollection(false);
@@ -118,7 +111,7 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
             $collection = $this->_dataCollectionFactory->create();
         }
 
-        $collection->addFieldToFilter('parent_item_id', array('null' => true));
+        $collection->addFieldToFilter('parent_item_id', ['null' => true]);
 
         $this->setCollection($collection);
 
@@ -130,72 +123,68 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareColumns()
     {
-        $this->addColumn('product_id', array('header' => __('ID'), 'index' => 'product_id', 'width' => '100px'));
+        $this->addColumn('product_id', ['header' => __('ID'), 'index' => 'product_id', 'width' => '100px']);
 
         $this->addColumn(
             'name',
-            array(
+            [
                 'header' => __('Product'),
                 'index' => 'name',
-                'renderer' => 'Magento\Customer\Block\Adminhtml\Edit\Tab\View\Grid\Renderer\Item'
-            )
+                'renderer' => \Magento\Customer\Block\Adminhtml\Edit\Tab\View\Grid\Renderer\Item::class
+            ]
         );
 
-        $this->addColumn('sku', array('header' => __('SKU'), 'index' => 'sku', 'width' => '100px'));
+        $this->addColumn('sku', ['header' => __('SKU'), 'index' => 'sku', 'width' => '100px']);
 
         $this->addColumn(
             'qty',
-            array('header' => __('Quantity'), 'index' => 'qty', 'type' => 'number', 'width' => '60px')
+            ['header' => __('Quantity'), 'index' => 'qty', 'type' => 'number', 'width' => '60px']
         );
 
         $this->addColumn(
             'price',
-            array(
+            [
                 'header' => __('Price'),
                 'index' => 'price',
                 'type' => 'currency',
-                'currency_code' => (string)$this->_scopeConfig->getValue(
-                    Currency::XML_PATH_CURRENCY_BASE,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-                )
-            )
+                'currency_code' => $this->getQuote()->getQuoteCurrencyCode(),
+                'rate' => $this->getQuote()->getBaseToQuoteRate(),
+            ]
         );
 
         $this->addColumn(
             'total',
-            array(
+            [
                 'header' => __('Total'),
                 'index' => 'row_total',
                 'type' => 'currency',
-                'currency_code' => (string)$this->_scopeConfig->getValue(
-                    Currency::XML_PATH_CURRENCY_BASE,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-                )
-            )
+                'currency_code' => $this->getQuote()->getQuoteCurrencyCode(),
+                'rate' => 1,
+            ]
         );
 
         $this->addColumn(
             'action',
-            array(
+            [
                 'header' => __('Action'),
                 'index' => 'quote_item_id',
-                'renderer' => 'Magento\Customer\Block\Adminhtml\Grid\Renderer\Multiaction',
+                'renderer' => \Magento\Customer\Block\Adminhtml\Grid\Renderer\Multiaction::class,
                 'filter' => false,
                 'sortable' => false,
-                'actions' => array(
-                    array(
+                'actions' => [
+                    [
                         'caption' => __('Configure'),
                         'url' => 'javascript:void(0)',
                         'process' => 'configurable',
-                        'control_object' => $this->getJsObjectName() . 'cartControl'
-                    ),
-                    array(
+                        'control_object' => $this->getJsObjectName() . 'cartControl',
+                    ],
+                    [
                         'caption' => __('Delete'),
                         'url' => '#',
                         'onclick' => 'return ' . $this->getJsObjectName() . 'cartControl.removeItem($item_id);'
-                    )
-                )
-            )
+                    ],
+                ]
+            ]
         );
 
         return parent::_prepareColumns();
@@ -216,7 +205,7 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     public function getGridUrl()
     {
-        return $this->getUrl('customer/*/cart', array('_current' => true, 'website_id' => $this->getWebsiteId()));
+        return $this->getUrl('customer/*/cart', ['_current' => true, 'website_id' => $this->getWebsiteId()]);
     }
 
     /**
@@ -226,7 +215,7 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     public function getGridParentHtml()
     {
-        $templateName = $this->_viewFileSystem->getFilename($this->_parentTemplate, array('_relative' => true));
+        $templateName = $this->resolver->getTemplateFileName($this->_parentTemplate, ['_relative' => true]);
         return $this->fetchView($templateName);
     }
 
@@ -235,6 +224,26 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     public function getRowUrl($row)
     {
-        return $this->getUrl('catalog/product/edit', array('id' => $row->getProductId()));
+        return $this->getUrl('catalog/product/edit', ['id' => $row->getProductId()]);
+    }
+
+    /**
+     * Get the quote of the cart
+     *
+     * @return \Magento\Quote\Model\Quote
+     */
+    protected function getQuote()
+    {
+        if (null === $this->quote) {
+            $customerId = $this->getCustomerId();
+            $storeIds = $this->_storeManager->getWebsite($this->getWebsiteId())->getStoreIds();
+
+            try {
+                $this->quote = $this->quoteRepository->getForCustomer($customerId, $storeIds);
+            } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+                $this->quote = $this->quoteFactory->create()->setSharedStoreIds($storeIds);
+            }
+        }
+        return $this->quote;
     }
 }

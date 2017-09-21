@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Helper;
 
@@ -27,6 +9,9 @@ use Magento\Framework\App\Action\Action;
 
 /**
  * CMS Page Helper
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+ * @SuppressWarnings(PHPMD.NPathComplexity)
  */
 class Page extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -44,13 +29,6 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
      * CMS home page config path
      */
     const XML_PATH_HOME_PAGE = 'web/default/cms_home_page';
-
-    /**
-     * Catalog product
-     *
-     * @var \Magento\Theme\Helper\Layout
-     */
-    protected $_pageLayout;
 
     /**
      * Design package instance
@@ -94,72 +72,56 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_escaper;
 
     /**
-     * @var \Magento\Framework\App\ViewInterface
+     * @var \Magento\Framework\View\Result\PageFactory
      */
-    protected $_view;
+    protected $resultPageFactory;
 
     /**
+     * Constructor
+     *
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\Cms\Model\Page $page
-     * @param \Magento\Theme\Helper\Layout $pageLayout
      * @param \Magento\Framework\View\DesignInterface $design
      * @param \Magento\Cms\Model\PageFactory $pageFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Escaper $escaper
-     * @param \Magento\Framework\App\ViewInterface $view
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Cms\Model\Page $page,
-        \Magento\Theme\Helper\Layout $pageLayout,
         \Magento\Framework\View\DesignInterface $design,
         \Magento\Cms\Model\PageFactory $pageFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Escaper $escaper,
-        \Magento\Framework\App\ViewInterface $view
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory
     ) {
         $this->messageManager = $messageManager;
-        $this->_view = $view;
         $this->_page = $page;
-        $this->_pageLayout = $pageLayout;
         $this->_design = $design;
         $this->_pageFactory = $pageFactory;
         $this->_storeManager = $storeManager;
-        $this->_storeManager = $storeManager;
         $this->_localeDate = $localeDate;
         $this->_escaper = $escaper;
+        $this->resultPageFactory = $resultPageFactory;
         parent::__construct($context);
     }
 
     /**
-     * Renders CMS page on front end
-     *
-     * Call from controller action
+     * Return result CMS page
      *
      * @param Action $action
-     * @param int $pageId
-     * @return bool
+     * @param null $pageId
+     * @return \Magento\Framework\View\Result\Page|bool
      */
-    public function renderPage(Action $action, $pageId = null)
+    public function prepareResultPage(Action $action, $pageId = null)
     {
-        return $this->_renderPage($action, $pageId);
-    }
-
-    /**
-     * Renders CMS page
-     *
-     * @param Action $action
-     * @param int $pageId
-     * @param bool $renderLayout
-     * @return bool
-     */
-    protected function _renderPage(Action $action, $pageId = null, $renderLayout = true)
-    {
-        if (!is_null($pageId) && $pageId !== $this->_page->getId()) {
+        if ($pageId !== null && $pageId !== $this->_page->getId()) {
             $delimiterPosition = strrpos($pageId, '|');
             if ($delimiterPosition) {
                 $pageId = substr($pageId, 0, $delimiterPosition);
@@ -186,73 +148,33 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
                 $this->_design->setDesignTheme($this->_page->getCustomTheme());
             }
         }
-        $this->_view->getLayout()->getUpdate()->addHandle('default')->addHandle('cms_page_view');
-        $this->_view->addPageLayoutHandles(array('id' => $this->_page->getIdentifier()));
-
-        $this->_view->addActionLayoutHandles();
-        if ($this->_page->getRootTemplate()) {
-            if ($this->_page->getCustomRootTemplate()
-                && $this->_page->getCustomRootTemplate() != 'empty'
-                && $inRange
-            ) {
-                $handle = $this->_page->getCustomRootTemplate();
-            } else {
-                $handle = $this->_page->getRootTemplate();
-            }
-            $this->_pageLayout->applyHandle($handle);
-        }
+        /** @var \Magento\Framework\View\Result\Page $resultPage */
+        $resultPage = $this->resultPageFactory->create();
+        $this->setLayoutType($inRange, $resultPage);
+        $resultPage->addHandle('cms_page_view');
+        $resultPage->addPageLayoutHandles(['id' => str_replace('/', '_', $this->_page->getIdentifier())]);
 
         $this->_eventManager->dispatch(
             'cms_page_render',
-            array('page' => $this->_page, 'controller_action' => $action)
+            ['page' => $this->_page, 'controller_action' => $action, 'request' => $this->_getRequest()]
         );
 
-        $this->_view->loadLayoutUpdates();
         if ($this->_page->getCustomLayoutUpdateXml() && $inRange) {
             $layoutUpdate = $this->_page->getCustomLayoutUpdateXml();
         } else {
             $layoutUpdate = $this->_page->getLayoutUpdateXml();
         }
         if (!empty($layoutUpdate)) {
-            $this->_view->getLayout()->getUpdate()->addUpdate($layoutUpdate);
+            $resultPage->getLayout()->getUpdate()->addUpdate($layoutUpdate);
         }
-        $this->_view->generateLayoutXml()->generateLayoutBlocks();
 
-        $contentHeadingBlock = $this->_view->getLayout()->getBlock('page_content_heading');
+        $contentHeadingBlock = $resultPage->getLayout()->getBlock('page_content_heading');
         if ($contentHeadingBlock) {
             $contentHeading = $this->_escaper->escapeHtml($this->_page->getContentHeading());
             $contentHeadingBlock->setContentHeading($contentHeading);
         }
 
-        if ($this->_page->getRootTemplate()) {
-            $this->_pageLayout->applyTemplate($this->_page->getRootTemplate());
-        }
-
-        /* @TODO: Move catalog and checkout storage types to appropriate modules */
-        $messageBlock = $this->_view->getLayout()->getMessagesBlock();
-        $messageBlock->addStorageType($this->messageManager->getDefaultGroup());
-        $messageBlock->addMessages($this->messageManager->getMessages(true));
-
-        if ($renderLayout) {
-            $this->_view->renderLayout();
-        }
-
-        return true;
-    }
-
-    /**
-     * Renders CMS Page with more flexibility then original renderPage function.
-     * Allows to use also backend action as first parameter.
-     * Also takes third parameter which allows not run renderLayout method.
-     *
-     * @param Action $action
-     * @param int $pageId
-     * @param bool $renderLayout
-     * @return bool
-     */
-    public function renderPageExtended(Action $action, $pageId = null, $renderLayout = true)
-    {
-        return $this->_renderPage($action, $pageId, $renderLayout);
+        return $resultPage;
     }
 
     /**
@@ -265,7 +187,7 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
     {
         /** @var \Magento\Cms\Model\Page $page */
         $page = $this->_pageFactory->create();
-        if (!is_null($pageId) && $pageId !== $page->getId()) {
+        if ($pageId !== null && $pageId !== $page->getId()) {
             $page->setStoreId($this->_storeManager->getStore()->getId());
             if (!$page->load($pageId)) {
                 return null;
@@ -276,6 +198,29 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
             return null;
         }
 
-        return $this->_urlBuilder->getUrl(null, array('_direct' => $page->getIdentifier()));
+        return $this->_urlBuilder->getUrl(null, ['_direct' => $page->getIdentifier()]);
+    }
+
+    /**
+     * Set layout type
+     *
+     * @param bool $inRange
+     * @param \Magento\Framework\View\Result\Page $resultPage
+     * @return \Magento\Framework\View\Result\Page
+     */
+    protected function setLayoutType($inRange, $resultPage)
+    {
+        if ($this->_page->getPageLayout()) {
+            if ($this->_page->getCustomPageLayout()
+                && $this->_page->getCustomPageLayout() != 'empty'
+                && $inRange
+            ) {
+                $handle = $this->_page->getCustomPageLayout();
+            } else {
+                $handle = $this->_page->getPageLayout();
+            }
+            $resultPage->getConfig()->setPageLayout($handle);
+        }
+        return $resultPage;
     }
 }

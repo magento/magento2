@@ -1,34 +1,20 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model;
 
+use Magento\Framework\Api\AttributeValueFactory;
+
 /**
  * Abstract model for catalog entities
- *
+ * @api
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
-abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
+abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensibleModel
 {
     /**
      * Attribute default values
@@ -36,23 +22,23 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
      * This array contain default values for attributes which was redefine
      * value for store
      *
-     * @var array
+     * @var array|null
      */
-    protected $_defaultValues = array();
+    protected $_defaultValues;
 
     /**
      * This array contains codes of attributes which have value in current store
      *
-     * @var array
+     * @var array|null
      */
-    protected $_storeValuesFlags = array();
+    protected $_storeValuesFlags;
 
     /**
      * Locked attributes
      *
      * @var array
      */
-    protected $_lockedAttributes = array();
+    protected $_lockedAttributes = [];
 
     /**
      * Is model deleteable
@@ -76,23 +62,40 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
     protected $_storeManager;
 
     /**
+     * @var \Magento\Catalog\Model\Attribute\ScopeOverriddenValue
+     */
+    private $scopeOverriddenValue;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
+     * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
+        AttributeValueFactory $customAttributeFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
-        array $data = array()
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        array $data = []
     ) {
         $this->_storeManager = $storeManager;
-        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+        parent::__construct(
+            $context,
+            $registry,
+            $extensionFactory,
+            $customAttributeFactory,
+            $resource,
+            $resourceCollection,
+            $data
+        );
     }
 
     /**
@@ -129,7 +132,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
      */
     public function unlockAttributes()
     {
-        $this->_lockedAttributes = array();
+        $this->_lockedAttributes = [];
         return $this;
     }
 
@@ -176,7 +179,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
      *
      * @param string|array $key
      * @param mixed $value
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function setData($key, $value = null)
     {
@@ -209,7 +212,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
      */
     public function unsetData($key = null)
     {
-        if (!is_null($key) && $this->isLockedAttribute($key) || $this->isReadonly()) {
+        if ($key !== null && $this->isLockedAttribute($key) || $this->isReadonly()) {
             return $this;
         }
 
@@ -219,7 +222,8 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
     /**
      * Get collection instance
      *
-     * @return \Magento\Catalog\Model\Resource\Collection\AbstractCollection
+     * @return \Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection
+     * @deprecated 101.1.0 because collections should be used directly via factory
      */
     public function getResourceCollection()
     {
@@ -281,6 +285,8 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
      * @param   string $attributeCode
      * @param   mixed  $value
      * @return  $this
+     *
+     * @deprecated 101.0.0
      */
     public function setAttributeDefaultValue($attributeCode, $value)
     {
@@ -289,13 +295,39 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Get attribute scope overridden value instance
+     *
+     * @return \Magento\Catalog\Model\Attribute\ScopeOverriddenValue
+     *
+     * @deprecated 101.0.0
+     */
+    private function getAttributeScopeOverriddenValue()
+    {
+        if ($this->scopeOverriddenValue === null) {
+            $this->scopeOverriddenValue = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Catalog\Model\Attribute\ScopeOverriddenValue::class);
+        }
+        return $this->scopeOverriddenValue;
+    }
+
+    /**
      * Retrieve default value for attribute code
      *
      * @param   string $attributeCode
      * @return  array|boolean
+     *
+     * @deprecated 101.0.0
      */
     public function getAttributeDefaultValue($attributeCode)
     {
+        if ($this->_defaultValues === null) {
+            $entityType = [
+                \Magento\Catalog\Model\Product::ENTITY => \Magento\Catalog\Api\Data\ProductInterface::class,
+                \Magento\Catalog\Model\Category::ENTITY => \Magento\Catalog\Api\Data\CategoryInterface::class,
+            ][$this->getResource()->getEntityType()->getEntityTypeCode()];
+            $this->_defaultValues = $this->getAttributeScopeOverriddenValue()->getDefaultValues($entityType, $this);
+        }
+
         return array_key_exists($attributeCode, $this->_defaultValues) ? $this->_defaultValues[$attributeCode] : false;
     }
 
@@ -305,6 +337,8 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
      *
      * @param   string $attributeCode
      * @return  $this
+     *
+     * @deprecated 101.0.0
      */
     public function setExistsStoreValueFlag($attributeCode)
     {
@@ -317,9 +351,25 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
      *
      * @param   string $attributeCode
      * @return  bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     *
+     * @deprecated 101.0.0
      */
     public function getExistsStoreValueFlag($attributeCode)
     {
+        if ($this->_storeValuesFlags === null) {
+            $entityType = [
+                \Magento\Catalog\Model\Product::ENTITY => \Magento\Catalog\Api\Data\ProductInterface::class,
+                \Magento\Catalog\Model\Category::ENTITY => \Magento\Catalog\Api\Data\CategoryInterface::class,
+            ][$this->getResource()->getEntityType()->getEntityTypeCode()];
+            return $this->getAttributeScopeOverriddenValue()->containsValue(
+                $entityType,
+                $this,
+                $attributeCode,
+                $this->getStore()->getId()
+            );
+        }
+
         return array_key_exists($attributeCode, $this->_storeValuesFlags);
     }
 
@@ -328,10 +378,10 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
      *
      * @return \Magento\Catalog\Model\AbstractModel
      */
-    protected function _beforeSave()
+    public function beforeSave()
     {
         $this->unlockAttributes();
-        return parent::_beforeSave();
+        return parent::beforeSave();
     }
 
     /**

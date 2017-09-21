@@ -1,0 +1,154 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  _____________________________________________
+
+@table__color: @color-very-dark-gray-black;
+@table__border-color: @color-gray89;
+
+@table-th__border-color: @table__border-color;
+
+@table-td__border-color: @table__border-color;
+
+@table-tfoot__background-color: @color-white-fog;
+
+@admin__table-primary__font-size: 1.3rem;
+@admin__table-primary__padding-vertical: 1rem;
+@admin__table-primary__padding-horizontal: 1.5rem;
+
+@admin__table-secondary__padding-vertical: @admin__table-primary__padding-vertical;
+@admin__table-secondary__padding-horizontal: 1rem;
+@admin__table-secondary-caption__font-size: 1.8rem;
+@admin__table-secondary-cell__odd__color: @color-white-fog2;
+@admin__table-secondary-th__color: @color-brownie-light;
+
+//
+//  Tables
+//  _____________________________________________
+
+table {
+    background-color: transparent;
+    color: @table__color;
+
+    > caption {
+        margin-bottom: .5em;
+    }
+}
+
+.admin__table-wrapper {
+    .lib-table-overflow();
+}
+
+.admin__table-primary,
+.admin__table-secondary {
+    width: 100%;
+}
+
+.admin__table-primary {
+    font-size: @admin__table-primary__font-size;
+
+    th,
+    td {
+        padding: @admin__table-primary__padding-vertical @admin__table-primary__padding-horizontal;
+        text-align: left;
+
+        &:first-child {
+            padding-left: 0;
+        }
+    }
+
+    th {
+        border-bottom: 1px solid @table-th__border-color;
+        border-top: 1px solid @table-th__border-color;
+        font-weight: @font-weight__bold;
+        vertical-align: bottom;
+    }
+
+    td {
+        border-bottom: 1px solid @table-td__border-color;
+        vertical-align: top;
+    }
+
+    tbody {
+        tr {
+            &:last-child {
+                td {
+                    border-bottom-color: transparent;
+                }
+            }
+        }
+    }
+
+    tfoot {
+        background: @table-tfoot__background-color;
+        font-weight: @font-weight__semibold;
+
+        th,
+        td {
+            &:first-child {
+                padding-left: @admin__table-primary__padding-horizontal;
+            }
+        }
+    }
+}
+
+.admin__table-secondary {
+    caption {
+        font-size: @admin__table-secondary-caption__font-size;
+        font-weight: @font-weight__bold;
+        margin-bottom: .75em;
+        text-align: left;
+    }
+
+    thead {
+        th {
+            background-color: transparent;
+            font-weight: @font-weight__semibold;
+        }
+    }
+
+    tbody {
+        th {
+            vertical-align: top;
+        }
+
+        tr {
+            &:nth-child(odd) {
+                th,
+                td {
+                    background-color: @admin__table-secondary-cell__odd__color;
+                }
+            }
+        }
+    }
+
+    tfoot {
+        tr {
+            &:nth-child(odd) {
+                th,
+                td {
+                    background-color: @color-white;
+                }
+            }
+
+            &:first-child {
+                border-top: 1px solid @table-td__border-color;
+            }
+        }
+    }
+
+    th,
+    td {
+        padding: @admin__table-secondary__padding-horizontal @admin__table-secondary__padding-vertical;
+        text-align: left;
+    }
+
+    th {
+        color: @admin__table-secondary-th__color;
+        font-weight: @font-weight__regular;
+    }
+}

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
+  <page name="OrderInvoiceNew" area="Adminhtml" mca="sales/order_invoice/new" module="Magento_Sales">
+    <block name="formBlock" class="Magento\Sales\Test\Block\Adminhtml\Order\Invoice\Form" locator="#edit_form" strategy="css selector"/>
+    <block name="totalsBlock" class="Magento\Sales\Test\Block\Adminhtml\Order\Invoice\Totals" locator="#invoice_totals" strategy="css selector"/>
+  </page>
+</config>

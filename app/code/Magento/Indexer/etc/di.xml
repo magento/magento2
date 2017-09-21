@@ -1,33 +1,18 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE_AFL.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/Framework/ObjectManager/etc/config.xsd">
-    <preference for="Magento\Framework\Mview\View\State\CollectionInterface" type="Magento\Indexer\Model\Resource\Mview\View\State\Collection" />
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Framework\Mview\View\State\CollectionInterface" type="Magento\Indexer\Model\ResourceModel\Mview\View\State\Collection" />
     <preference for="Magento\Framework\Mview\View\StateInterface" type="Magento\Indexer\Model\Mview\View\State" />
-    <preference for="Magento\Indexer\Model\ConfigInterface" type="Magento\Indexer\Model\Config" />
-    <preference for="Magento\Indexer\Model\IndexerInterface" type="Magento\Indexer\Model\Indexer" />
+    <preference for="Magento\Framework\Indexer\ConfigInterface" type="Magento\Indexer\Model\Config" />
+    <preference for="Magento\Framework\Indexer\IndexerInterface" type="Magento\Indexer\Model\Indexer\DependencyDecorator" />
+    <preference for="Magento\Framework\Indexer\Table\StrategyInterface" type="Magento\Framework\Indexer\Table\Strategy" />
+    <preference for="Magento\Framework\Indexer\StateInterface" type="Magento\Indexer\Model\Indexer\State" />
+    <type name="Magento\Framework\Indexer\Table\StrategyInterface" shared="false" />
     <type name="Magento\Indexer\Model\Indexer">
         <arguments>
             <argument name="view" xsi:type="object" shared="false">Magento\Framework\Mview\View</argument>
@@ -38,9 +23,14 @@
             <argument name="configData" xsi:type="object">Magento\Indexer\Model\Config\Data\Proxy</argument>
         </arguments>
     </type>
+    <type name="Magento\Indexer\Model\HandlerPool">
+        <arguments>
+            <argument name="defaultHandler" xsi:type="object">Magento\Indexer\Model\Handler\DefaultHandler</argument>
+        </arguments>
+    </type>
     <type name="Magento\Indexer\Model\Config\Data">
         <arguments>
-            <argument name="stateCollection" xsi:type="object" shared="false">Magento\Indexer\Model\Resource\Indexer\State\Collection</argument>
+            <argument name="stateCollection" xsi:type="object" shared="false">Magento\Indexer\Model\ResourceModel\Indexer\State\Collection</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Mview\View\Subscription">
@@ -49,7 +39,26 @@
         </arguments>
     </type>
     <type name="Magento\Indexer\Model\Processor">
-        <plugin name="page-cache-indexer-reindex-invalidate"
-                type="Magento\Indexer\Model\Processor\InvalidateCache" sortOrder="10"/>
+        <plugin name="page-cache-indexer-reindex-clean-cache"
+                type="Magento\Indexer\Model\Processor\CleanCache" sortOrder="10"/>
+    </type>
+
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="info" xsi:type="object">Magento\Indexer\Console\Command\IndexerInfoCommand</item>
+                <item name="reindex" xsi:type="object">Magento\Indexer\Console\Command\IndexerReindexCommand</item>
+                <item name="set-mode" xsi:type="object">Magento\Indexer\Console\Command\IndexerSetModeCommand</item>
+                <item name="show-mode" xsi:type="object">Magento\Indexer\Console\Command\IndexerShowModeCommand</item>
+                <item name="status" xsi:type="object">Magento\Indexer\Console\Command\IndexerStatusCommand</item>
+                <item name="reset" xsi:type="object">Magento\Indexer\Console\Command\IndexerResetStateCommand</item>
+            </argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Framework\Indexer\BatchSizeManagementInterface" type="Magento\Framework\Indexer\BatchSizeManagement" />
+    <type name="Magento\Indexer\Model\Indexer\DependencyDecorator">
+        <arguments>
+            <argument name="indexer" xsi:type="object" shared="false">Magento\Indexer\Model\Indexer</argument>
+        </arguments>
     </type>
 </config>

@@ -2,31 +2,62 @@
 /**
  * Set of tests of layout directives handling behavior
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View;
 
-class LayoutDirectivesTest extends \PHPUnit_Framework_TestCase
+use Magento\Framework\App\State;
+
+class LayoutDirectivesTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @var \Magento\Framework\View\LayoutFactory
+     */
+    protected $layoutFactory;
+
+    /**
+     * @var \Magento\Framework\View\Layout\BuilderFactory
+     */
+    protected $builderFactory;
+
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    protected $objectManager;
+
+    /**
+     * @var \Magento\Framework\App\State
+     */
+    protected $state;
+
+    protected function setUp()
+    {
+        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->layoutFactory = $this->objectManager->get(\Magento\Framework\View\LayoutFactory::class);
+        $this->state = $this->objectManager->get(\Magento\Framework\App\State::class);
+    }
+
+    /**
+     * Prepare a layout model with pre-loaded fixture of an update XML
+     *
+     * @param string $fixtureFile
+     * @return \Magento\Framework\View\LayoutInterface
+     */
+    protected function _getLayoutModel($fixtureFile)
+    {
+        $this->objectManager->get(\Magento\Framework\App\Cache\Type\Layout::class)->clean();
+        $layout = $this->layoutFactory->create();
+        /** @var $xml \Magento\Framework\View\Layout\Element */
+        $xml = simplexml_load_file(
+            __DIR__ . "/_files/layout_directives_test/{$fixtureFile}",
+            \Magento\Framework\View\Layout\Element::class
+        );
+        $layout->loadString($xml->asXml());
+        $layout->generateElements();
+        return $layout;
+    }
+
     /**
      * Test scheduled operations in the rendering of elements
      *
@@ -44,9 +75,19 @@ class LayoutDirectivesTest extends \PHPUnit_Framework_TestCase
     public function testRenderElement()
     {
         $layout = $this->_getLayoutModel('render.xml');
+        $this->assertEquals('124', $layout->renderElement('container_one'));
+        $this->assertEquals('12', $layout->renderElement('block_one'));
+    }
+
+    /**
+     * @expectedException \OutOfBoundsException
+     * @expectedExceptionMessage No element found with ID 'nonexisting_element'
+     * @magentoAppIsolation enabled
+     */
+    public function testRenderNonExistentElementShouldThrowException()
+    {
+        $layout = $this->_getLayoutModel('render.xml');
         $this->assertEmpty($layout->renderElement('nonexisting_element'));
-        $this->assertEquals('124', $layout->renderElement('container1'));
-        $this->assertEquals('12', $layout->renderElement('block1'));
     }
 
     /**
@@ -58,16 +99,8 @@ class LayoutDirectivesTest extends \PHPUnit_Framework_TestCase
     public function testGetBlockUnscheduled()
     {
         $layout = $this->_getLayoutModel('get_block.xml');
-        $this->assertInstanceOf('Magento\Framework\View\Element\Text', $layout->getBlock('block1'));
-        $this->assertInstanceOf('Magento\Framework\View\Element\Text', $layout->getBlock('block2'));
-    }
-
-    /**
-     * @expectedException \Magento\Framework\Exception
-     */
-    public function testGetBlockUnscheduledException()
-    {
-        $this->_getLayoutModel('get_block_exception.xml');
+        $this->assertInstanceOf(\Magento\Framework\View\Element\Text::class, $layout->getBlock('block_first'));
+        $this->assertInstanceOf(\Magento\Framework\View\Element\Text::class, $layout->getBlock('block_second'));
     }
 
     public function testLayoutArgumentsDirective()
@@ -81,16 +114,13 @@ class LayoutDirectivesTest extends \PHPUnit_Framework_TestCase
     public function testLayoutArgumentsDirectiveIfComplexValues()
     {
         $layout = $this->_getLayoutModel('arguments_complex_values.xml');
-
         $this->assertEquals(
-            array('parameters' => array('first' => '1', 'second' => '2')),
+            ['parameters' => ['first' => '1', 'second' => '2']],
             $layout->getBlock('block_with_args_complex_values')->getOne()
         );
-
         $this->assertEquals('two', $layout->getBlock('block_with_args_complex_values')->getTwo());
-
         $this->assertEquals(
-            array('extra' => array('key1' => 'value1', 'key2' => 'value2')),
+            ['extra' => ['key1' => 'value1', 'key2' => 'value2']],
             $layout->getBlock('block_with_args_complex_values')->getThree()
         );
     }
@@ -99,11 +129,11 @@ class LayoutDirectivesTest extends \PHPUnit_Framework_TestCase
     {
         $layout = $this->_getLayoutModel('arguments_object_type.xml');
         $this->assertInstanceOf(
-            'Magento\Framework\Data\Collection\Db',
+            \Magento\Framework\Data\Collection::class,
             $layout->getBlock('block_with_object_args')->getOne()
         );
         $this->assertInstanceOf(
-            'Magento\Framework\Data\Collection\Db',
+            \Magento\Framework\Data\Collection::class,
             $layout->getBlock('block_with_object_args')->getTwo()
         );
         $this->assertEquals(3, $layout->getBlock('block_with_object_args')->getThree());
@@ -119,14 +149,15 @@ class LayoutDirectivesTest extends \PHPUnit_Framework_TestCase
 
     public function testLayoutObjectArgumentUpdatersDirective()
     {
+        $this->markTestSkipped('Will be fixed after MAGETWO-33840 will be done');
         $layout = $this->_getLayoutModel('arguments_object_type_updaters.xml');
 
-        $expectedObjectData = array(0 => 'updater call', 1 => 'updater call');
+        $expectedObjectData = [0 => 'updater call', 1 => 'updater call'];
 
         $expectedSimpleData = 1;
 
         $dataSource = $layout->getBlock('block_with_object_updater_args')->getOne();
-        $this->assertInstanceOf('Magento\Framework\Data\Collection', $dataSource);
+        $this->assertInstanceOf(\Magento\Framework\Data\Collection::class, $dataSource);
         $this->assertEquals($expectedObjectData, $dataSource->getUpdaterCall());
         $this->assertEquals($expectedSimpleData, $layout->getBlock('block_with_object_updater_args')->getTwo());
     }
@@ -152,8 +183,8 @@ class LayoutDirectivesTest extends \PHPUnit_Framework_TestCase
     public function testActionAnonymousParentBlock()
     {
         $layout = $this->_getLayoutModel('action_for_anonymous_parent_block.xml');
-        $this->assertEquals('schedule_block', $layout->getParentName('test.block.insert'));
-        $this->assertEquals('schedule_block_1', $layout->getParentName('test.block.append'));
+        $this->assertEquals('schedule_block0', $layout->getParentName('test.block.insert'));
+        $this->assertEquals('schedule_block1', $layout->getParentName('test.block.append'));
     }
 
     /**
@@ -165,6 +196,18 @@ class LayoutDirectivesTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($layout->getBlock('no_name2'));
         $this->assertFalse($layout->getBlock('child_block1'));
         $this->assertTrue($layout->isBlock('child_block2'));
+    }
+
+    /**
+     * @magentoAppIsolation enabled
+     */
+    public function testRemoveCancellation()
+    {
+        $layout = $this->_getLayoutModel('remove_cancellation.xml');
+        $this->assertTrue($layout->isContainer('container1'));
+        $this->assertTrue($layout->isBlock('child_block1'));
+        $this->assertTrue($layout->isBlock('no_name2'));
+        $this->assertFalse($layout->getBlock('not_exist'));
     }
 
     /**
@@ -193,7 +236,7 @@ class LayoutDirectivesTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testMoveBroken()
     {
@@ -201,18 +244,18 @@ class LayoutDirectivesTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testMoveAliasBroken()
     {
         $this->_getLayoutModel('move_alias_broken.xml');
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception
-     */
     public function testRemoveBroken()
     {
+        if ($this->state->getMode() === State::MODE_DEVELOPER) {
+            $this->expectException('OutOfBoundsException');
+        }
         $this->_getLayoutModel('remove_broken.xml');
     }
 
@@ -233,34 +276,12 @@ class LayoutDirectivesTest extends \PHPUnit_Framework_TestCase
      */
     public function sortSpecialCasesDataProvider()
     {
-        return array(
-            'Before element which is after' => array('sort_before_after.xml', '312'),
-            'Before element which is previous' => array('sort_before_before.xml', '213'),
-            'After element which is after' => array('sort_after_after.xml', '312'),
-            'After element which is previous' => array('sort_after_previous.xml', '321')
-        );
-    }
-
-    /**
-     * Prepare a layout model with pre-loaded fixture of an update XML
-     *
-     * @param string $fixtureFile
-     * @return \Magento\Framework\View\LayoutInterface
-     */
-    protected function _getLayoutModel($fixtureFile)
-    {
-        /** @var $layout \Magento\Framework\View\LayoutInterface */
-        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
-        );
-        /** @var $xml \Magento\Framework\View\Layout\Element */
-        $xml = simplexml_load_file(
-            __DIR__ . "/_files/layout_directives_test/{$fixtureFile}",
-            'Magento\Framework\View\Layout\Element'
-        );
-        $layout->loadString($xml->asXml());
-        $layout->generateElements();
-        return $layout;
+        return [
+            'Before element which is after' => ['sort_before_after.xml', '312'],
+            'Before element which is previous' => ['sort_before_before.xml', '213'],
+            'After element which is after' => ['sort_after_after.xml', '312'],
+            'After element which is previous' => ['sort_after_previous.xml', '321']
+        ];
     }
 
     /**
@@ -271,8 +292,8 @@ class LayoutDirectivesTest extends \PHPUnit_Framework_TestCase
     {
         $layout = $this->_getLayoutModel('ifconfig.xml');
         $this->assertFalse($layout->getBlock('block1'));
-        $this->assertInstanceOf('Magento\Framework\View\Element\BlockInterface', $layout->getBlock('block2'));
-        $this->assertInstanceOf('Magento\Framework\View\Element\BlockInterface', $layout->getBlock('block3'));
+        $this->assertFalse($layout->getBlock('block2'));
+        $this->assertInstanceOf(\Magento\Framework\View\Element\BlockInterface::class, $layout->getBlock('block3'));
         $this->assertFalse($layout->getBlock('block4'));
     }
 
@@ -284,6 +305,6 @@ class LayoutDirectivesTest extends \PHPUnit_Framework_TestCase
     {
         $layout = $this->_getLayoutModel('group.xml');
         $childNames = $layout->getBlock('block1')->getGroupChildNames('group1');
-        $this->assertEquals(array('block2', 'block3'), $childNames);
+        $this->assertEquals(['block2', 'block3'], $childNames);
     }
 }

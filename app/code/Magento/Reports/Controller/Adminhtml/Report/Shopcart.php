@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -29,9 +11,11 @@
  */
 namespace Magento\Reports\Controller\Adminhtml\Report;
 
-use Magento\Framework\App\ResponseInterface;
-
-class Shopcart extends \Magento\Backend\App\Action
+/**
+ * @api
+ * @since 100.0.2
+ */
+abstract class Shopcart extends \Magento\Backend\App\Action
 {
     /**
      * @var \Magento\Framework\App\Response\Http\FileFactory
@@ -61,162 +45,6 @@ class Shopcart extends \Magento\Backend\App\Action
         $this->_addBreadcrumb(__('Reports'), __('Reports'));
         $this->_addBreadcrumb(__('Shopping Cart'), __('Shopping Cart'));
         return $this;
-    }
-
-    /**
-     * Customer shopping carts action
-     *
-     * @return void
-     */
-    public function customerAction()
-    {
-        $this->_title->add(__('Customer Shopping Carts'));
-
-        $this->_initAction()->_setActiveMenu(
-            'Magento_Reports::report_shopcart_customer'
-        )->_addBreadcrumb(
-            __('Customers Report'),
-            __('Customers Report')
-        )->_addContent(
-            $this->_view->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Shopcart\Customer')
-        );
-        $this->_view->renderLayout();
-    }
-
-    /**
-     * Export shopcart customer report to CSV format
-     *
-     * @return ResponseInterface
-     */
-    public function exportCustomerCsvAction()
-    {
-        $fileName = 'shopcart_customer.csv';
-        $content = $this->_view->getLayout()->createBlock(
-            'Magento\Reports\Block\Adminhtml\Shopcart\Customer\Grid'
-        )->getCsvFile();
-
-        return $this->_fileFactory->create($fileName, $content);
-    }
-
-    /**
-     * Export shopcart customer report to Excel XML format
-     *
-     * @return ResponseInterface
-     */
-    public function exportCustomerExcelAction()
-    {
-        $fileName = 'shopcart_customer.xml';
-        $content = $this->_view->getLayout()->createBlock(
-            'Magento\Reports\Block\Adminhtml\Shopcart\Customer\Grid'
-        )->getExcelFile(
-            $fileName
-        );
-
-        return $this->_fileFactory->create($fileName, $content);
-    }
-
-    /**
-     * Products in carts action
-     *
-     * @return void
-     */
-    public function productAction()
-    {
-        $this->_title->add(__('Products in Carts'));
-
-        $this->_initAction()->_setActiveMenu(
-            'Magento_Reports::report_shopcart_product'
-        )->_addBreadcrumb(
-            __('Products Report'),
-            __('Products Report')
-        )->_addContent(
-            $this->_view->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Shopcart\Product')
-        );
-        $this->_view->renderLayout();
-    }
-
-    /**
-     * Export products report grid to CSV format
-     *
-     * @return ResponseInterface
-     */
-    public function exportProductCsvAction()
-    {
-        $fileName = 'shopcart_product.csv';
-        $content = $this->_view->getLayout()->createBlock(
-            'Magento\Reports\Block\Adminhtml\Shopcart\Product\Grid'
-        )->getCsvFile();
-
-        return $this->_fileFactory->create($fileName, $content, \Magento\Framework\App\Filesystem::VAR_DIR);
-    }
-
-    /**
-     * Export products report to Excel XML format
-     *
-     * @return ResponseInterface
-     */
-    public function exportProductExcelAction()
-    {
-        $fileName = 'shopcart_product.xml';
-        $content = $this->_view->getLayout()->createBlock(
-            'Magento\Reports\Block\Adminhtml\Shopcart\Product\Grid'
-        )->getExcelFile(
-            $fileName
-        );
-
-        return $this->_fileFactory->create($fileName, $content, \Magento\Framework\App\Filesystem::VAR_DIR);
-    }
-
-    /**
-     * Abandoned carts action
-     *
-     * @return void
-     */
-    public function abandonedAction()
-    {
-        $this->_title->add(__('Abandoned Carts'));
-
-        $this->_initAction()->_setActiveMenu(
-            'Magento_Reports::report_shopcart_abandoned'
-        )->_addBreadcrumb(
-            __('Abandoned Carts'),
-            __('Abandoned Carts')
-        )->_addContent(
-            $this->_view->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Shopcart\Abandoned')
-        );
-        $this->_view->renderLayout();
-    }
-
-    /**
-     * Export abandoned carts report grid to CSV format
-     *
-     * @return ResponseInterface
-     */
-    public function exportAbandonedCsvAction()
-    {
-        $fileName = 'shopcart_abandoned.csv';
-        $content = $this->_view->getLayout()->createBlock(
-            'Magento\Reports\Block\Adminhtml\Shopcart\Abandoned\Grid'
-        )->getCsvFile();
-
-        return $this->_fileFactory->create($fileName, $content, \Magento\Framework\App\Filesystem::VAR_DIR);
-    }
-
-    /**
-     * Export abandoned carts report to Excel XML format
-     *
-     * @return ResponseInterface
-     */
-    public function exportAbandonedExcelAction()
-    {
-        $fileName = 'shopcart_abandoned.xml';
-        $content = $this->_view->getLayout()->createBlock(
-            'Magento\Reports\Block\Adminhtml\Shopcart\Abandoned\Grid'
-        )->getExcelFile(
-            $fileName
-        );
-
-        return $this->_fileFactory->create($fileName, $content, \Magento\Framework\App\Filesystem::VAR_DIR);
     }
 
     /**

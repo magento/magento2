@@ -1,33 +1,20 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Block\Adminhtml\System\Config;
 
 /**
  * Custom renderer for PayPal API credentials wizard popup
  */
-class ApiWizard extends \Magento\Backend\Block\System\Config\Form\Field
+class ApiWizard extends \Magento\Config\Block\System\Config\Form\Field
 {
+    /**
+     * Path to block template
+     */
+    const WIZARD_TEMPLATE = 'system/config/api_wizard.phtml';
+
     /**
      * Set template to itself
      *
@@ -37,7 +24,7 @@ class ApiWizard extends \Magento\Backend\Block\System\Config\Form\Field
     {
         parent::_prepareLayout();
         if (!$this->getTemplate()) {
-            $this->setTemplate('system/config/api_wizard.phtml');
+            $this->setTemplate(static::WIZARD_TEMPLATE);
         }
         return $this;
     }
@@ -64,15 +51,45 @@ class ApiWizard extends \Magento\Backend\Block\System\Config\Form\Field
     {
         $originalData = $element->getOriginalData();
         $this->addData(
-            array(
+            [
+                // Global
+                'query' => $this->createQuery(
+                    [
+                        'partnerId' => $originalData['partner_id'],
+                        'partnerLogoUrl' => $this->_assetRepo->getUrl($originalData['partner_logo_url']),
+                        'receiveCredentials' => $originalData['receive_credentials'],
+                        'showPermissions' => $originalData['show_permissions'],
+                        'displayMode' => $originalData['display_mode'],
+                        'productIntentID' => $originalData['product_intent_id'],
+                    ]
+                ),
+                // Live
                 'button_label' => __($originalData['button_label']),
                 'button_url' => $originalData['button_url'],
                 'html_id' => $element->getHtmlId(),
+                // Sandbox
                 'sandbox_button_label' => __($originalData['sandbox_button_label']),
                 'sandbox_button_url' => $originalData['sandbox_button_url'],
-                'sandbox_html_id' => 'sandbox_' . $element->getHtmlId()
-            )
+                'sandbox_html_id' => 'sandbox_' . $element->getHtmlId(),
+            ]
         );
         return $this->_toHtml();
+    }
+
+    /**
+     * Create request query
+     *
+     * @param array $requestData
+     * @return string
+     */
+    private function createQuery(array $requestData)
+    {
+        $query = [];
+
+        foreach ($requestData as $name => $value) {
+            $query[] = sprintf('%s=%s', $name, $value);
+        }
+
+        return implode('&', $query);
     }
 }

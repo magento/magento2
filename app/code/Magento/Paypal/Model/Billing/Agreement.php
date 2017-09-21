@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model\Billing;
 
@@ -28,8 +10,7 @@ use Magento\Sales\Model\Order\Payment;
 /**
  * Billing Agreement abstract model
  *
- * @method \Magento\Paypal\Model\Resource\Billing\Agreement _getResource()
- * @method \Magento\Paypal\Model\Resource\Billing\Agreement getResource()
+ * @api
  * @method int getCustomerId()
  * @method \Magento\Paypal\Model\Billing\Agreement setCustomerId(int $value)
  * @method string getMethodCode()
@@ -46,6 +27,9 @@ use Magento\Sales\Model\Order\Payment;
  * @method \Magento\Paypal\Model\Billing\Agreement setStoreId(int $value)
  * @method string getAgreementLabel()
  * @method \Magento\Paypal\Model\Billing\Agreement setAgreementLabel(string $value)
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
 {
@@ -58,10 +42,10 @@ class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
      *
      * @var array
      */
-    protected $_relatedOrders = array();
+    protected $_relatedOrders = [];
 
     /**
-     * @var \Magento\Paypal\Model\Resource\Billing\Agreement\CollectionFactory
+     * @var \Magento\Paypal\Model\ResourceModel\Billing\Agreement\CollectionFactory
      */
     protected $_billingAgreementFactory;
 
@@ -74,21 +58,21 @@ class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Payment\Helper\Data $paymentData
-     * @param \Magento\Paypal\Model\Resource\Billing\Agreement\CollectionFactory $billingAgreementFactory
+     * @param \Magento\Paypal\Model\ResourceModel\Billing\Agreement\CollectionFactory $billingAgreementFactory
      * @param \Magento\Framework\Stdlib\DateTime\DateTimeFactory $dateFactory
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Payment\Helper\Data $paymentData,
-        \Magento\Paypal\Model\Resource\Billing\Agreement\CollectionFactory $billingAgreementFactory,
+        \Magento\Paypal\Model\ResourceModel\Billing\Agreement\CollectionFactory $billingAgreementFactory,
         \Magento\Framework\Stdlib\DateTime\DateTimeFactory $dateFactory,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
-        array $data = array()
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        array $data = []
     ) {
         parent::__construct($context, $registry, $paymentData, $resource, $resourceCollection, $data);
         $this->_billingAgreementFactory = $billingAgreementFactory;
@@ -102,7 +86,7 @@ class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
      */
     protected function _construct()
     {
-        $this->_init('Magento\Paypal\Model\Resource\Billing\Agreement');
+        $this->_init(\Magento\Paypal\Model\ResourceModel\Billing\Agreement::class);
     }
 
     /**
@@ -110,7 +94,7 @@ class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
      *
      * @return \Magento\Framework\Model\AbstractModel
      */
-    protected function _beforeSave()
+    public function beforeSave()
     {
         $date = $this->_dateFactory->create()->gmtDate();
         if ($this->isObjectNew() && !$this->getCreatedAt()) {
@@ -118,7 +102,7 @@ class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
         } else {
             $this->setUpdatedAt($date);
         }
-        return parent::_beforeSave();
+        return parent::beforeSave();
     }
 
     /**
@@ -126,18 +110,18 @@ class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
      *
      * @return \Magento\Framework\Model\AbstractModel
      */
-    protected function _afterSave()
+    public function afterSave()
     {
         if (!empty($this->_relatedOrders)) {
             $this->_saveOrderRelations();
         }
-        return parent::_afterSave();
+        return parent::afterSave();
     }
 
     /**
      * Retrieve billing agreement status label
      *
-     * @return string
+     * @return \Magento\Framework\Phrase|string
      */
     public function getStatusLabel()
     {
@@ -159,7 +143,8 @@ class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
     public function initToken()
     {
         $this->getPaymentMethodInstance()
-            ->initBillingAgreementToken($this);
+             ->initBillingAgreementToken($this);
+
         return $this->getRedirectUrl();
     }
 
@@ -172,7 +157,8 @@ class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
     public function verifyToken()
     {
         $this->getPaymentMethodInstance()
-            ->getBillingAgreementTokenInfo($this);
+             ->getBillingAgreementTokenInfo($this);
+
         return $this;
     }
 
@@ -185,8 +171,8 @@ class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
     {
         $this->verifyToken();
 
-        $paymentMethodInstance = $this->getPaymentMethodInstance()
-            ->placeBillingAgreement($this);
+        $paymentMethodInstance = $this->getPaymentMethodInstance();
+        $paymentMethodInstance->placeBillingAgreement($this);
 
         $this->setCustomerId($this->getCustomerId())
             ->setMethodCode($this->getMethodCode())
@@ -194,6 +180,7 @@ class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
             ->setStatus(self::STATUS_ACTIVE)
             ->setAgreementLabel($paymentMethodInstance->getTitle())
             ->save();
+
         return $this;
     }
 
@@ -226,10 +213,10 @@ class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
      */
     public function getStatusesArray()
     {
-        return array(
+        return [
             self::STATUS_ACTIVE     => __('Active'),
             self::STATUS_CANCELED   => __('Canceled')
-        );
+        ];
     }
 
     /**
@@ -266,13 +253,14 @@ class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
         $this->_paymentMethodInstance = (isset($baData['method_code']))
             ? $this->_paymentData->getMethodInstance($baData['method_code'])
             : $payment->getMethodInstance();
-        if ($this->_paymentMethodInstance) {
-            $this->_paymentMethodInstance->setStore($payment->getMethodInstance()->getStore());
-            $this->setCustomerId($payment->getOrder()->getCustomerId())
-                ->setMethodCode($this->_paymentMethodInstance->getCode())
-                ->setReferenceId($baData['billing_agreement_id'])
-                ->setStatus(self::STATUS_ACTIVE);
-        }
+
+        $this->_paymentMethodInstance->setStore($payment->getMethodInstance()->getStore());
+        $this->setCustomerId($payment->getOrder()->getCustomerId())
+            ->setMethodCode($this->_paymentMethodInstance->getCode())
+            ->setReferenceId($baData['billing_agreement_id'])
+            ->setStatus(self::STATUS_ACTIVE)
+            ->setAgreementLabel($this->_paymentMethodInstance->getTitle());
+
         return $this;
     }
 
@@ -280,7 +268,7 @@ class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
      * Retrieve available customer Billing Agreements
      *
      * @param int $customerId
-     * @return \Magento\Paypal\Model\Resource\Billing\Agreement\Collection
+     * @return \Magento\Paypal\Model\ResourceModel\Billing\Agreement\Collection
      */
     public function getAvailableCustomerBillingAgreements($customerId)
     {

@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Block\Product;
 
@@ -28,7 +10,7 @@ namespace Magento\Catalog\Block\Product;
  *
  * @magentoDataFixture Magento/Catalog/_files/products_new.php
  */
-class NewTest extends \PHPUnit_Framework_TestCase
+class NewTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Block\Product\NewProduct
@@ -37,18 +19,25 @@ class NewTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        /**
+         * @var \Magento\Customer\Api\GroupManagementInterface $groupManagement
+         */
+        $groupManagement = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get(\Magento\Customer\Api\GroupManagementInterface::class);
+        $notLoggedInId = $groupManagement->getNotLoggedInGroup()->getId();
+
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea(\Magento\Framework\App\Area::AREA_FRONTEND);
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\App\Http\Context'
+            \Magento\Framework\App\Http\Context::class
         )->setValue(
-            \Magento\Customer\Helper\Data::CONTEXT_GROUP,
-            \Magento\Customer\Service\V1\CustomerGroupServiceInterface::NOT_LOGGED_IN_ID,
-            \Magento\Customer\Service\V1\CustomerGroupServiceInterface::NOT_LOGGED_IN_ID
+            \Magento\Customer\Model\Context::CONTEXT_GROUP,
+            $notLoggedInId,
+            $notLoggedInId
         );
         $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
-            'Magento\Catalog\Block\Product\NewProduct'
+            \Magento\Catalog\Block\Product\NewProduct::class
         );
     }
 
@@ -65,7 +54,7 @@ class NewTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(1, array_shift($keys));
         $this->assertEquals(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Store\Model\StoreManagerInterface'
+                \Magento\Store\Model\StoreManagerInterface::class
             )->getStore()->getId(),
             $info[1]
         );
@@ -73,7 +62,7 @@ class NewTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(2, array_shift($keys));
 
         $themeModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\DesignInterface'
+            \Magento\Framework\View\DesignInterface::class
         )->getDesignTheme();
 
         $this->assertEquals($themeModel->getId() ?: null, $info[2]);
@@ -81,7 +70,7 @@ class NewTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(3, array_shift($keys));
         $this->assertEquals(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Customer\Model\Session'
+                \Magento\Customer\Model\Session::class
             )->getCustomerGroupId(),
             $info[3]
         );
@@ -113,15 +102,38 @@ class NewTest extends \PHPUnit_Framework_TestCase
         $this->_block->setProductsCount(5);
         $this->_block->setTemplate('product/widget/new/content/new_list.phtml');
         $this->_block->setLayout(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\View\LayoutInterface')
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+                \Magento\Framework\View\LayoutInterface::class
+            )
         );
 
         $html = $this->_block->toHtml();
         $this->assertNotEmpty($html);
         $this->assertContains('New Product', $html);
         $this->assertInstanceOf(
-            'Magento\Catalog\Model\Resource\Product\Collection',
+            \Magento\Catalog\Model\ResourceModel\Product\Collection::class,
             $this->_block->getProductCollection()
         );
+    }
+
+    /**
+     * @covers \Magento\Catalog\Block\Product\Widget\NewWidget::getCacheKeyInfo
+     */
+    public function testNewWidgetGetCacheKeyInfo()
+    {
+        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\Framework\View\LayoutInterface::class
+        )->createBlock(
+            \Magento\Catalog\Block\Product\Widget\NewWidget::class
+        );
+
+        $requestParams = ['test' => 'data'];
+
+        $block->getRequest()->setParams($requestParams);
+
+        $info = $block->getCacheKeyInfo();
+
+        $this->assertEquals('CATALOG_PRODUCT_NEW', $info[0]);
+        $this->assertEquals(json_encode($requestParams), $info[8]);
     }
 }

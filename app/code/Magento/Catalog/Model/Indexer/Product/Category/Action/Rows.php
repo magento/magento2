@@ -1,27 +1,13 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Indexer\Product\Category\Action;
+
+use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\Product;
+use Magento\Framework\Indexer\CacheContext;
 
 class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractAction
 {
@@ -33,13 +19,18 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     protected $limitationByProducts;
 
     /**
+     * @var \Magento\Framework\Indexer\CacheContext
+     */
+    private $cacheContext;
+
+    /**
      * Refresh entities index
      *
      * @param int[] $entityIds
      * @param bool $useTempTable
      * @return $this
      */
-    public function execute(array $entityIds = array(), $useTempTable = false)
+    public function execute(array $entityIds = [], $useTempTable = false)
     {
         $this->limitationByProducts = $entityIds;
         $this->useTempTable = $useTempTable;
@@ -48,7 +39,41 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
 
         $this->reindex();
 
+        $this->registerProducts($entityIds);
+        $this->registerCategories($entityIds);
+
         return $this;
+    }
+
+    /**
+     * Register affected products
+     *
+     * @param array $entityIds
+     * @return void
+     */
+    private function registerProducts($entityIds)
+    {
+        $this->getCacheContext()->registerEntities(Product::CACHE_TAG, $entityIds);
+    }
+
+    /**
+     * Register categories assigned to products
+     *
+     * @param array $entityIds
+     * @return void
+     */
+    private function registerCategories($entityIds)
+    {
+        $categories = $this->connection->fetchCol(
+            $this->connection->select()
+                ->from($this->getMainTable(), ['category_id'])
+                ->where('product_id IN (?)', $entityIds)
+                ->distinct()
+        );
+
+        if ($categories) {
+            $this->getCacheContext()->registerEntities(Category::CACHE_TAG, $categories);
+        }
     }
 
     /**
@@ -58,9 +83,9 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      */
     protected function removeEntries()
     {
-        $this->getWriteAdapter()->delete(
+        $this->connection->delete(
             $this->getMainTable(),
-            array('product_id IN (?)' => $this->limitationByProducts)
+            ['product_id IN (?)' => $this->limitationByProducts]
         );
     }
 
@@ -108,5 +133,19 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     protected function isRangingNeeded()
     {
         return false;
+    }
+
+    /**
+     * Get cache context
+     *
+     * @return \Magento\Framework\Indexer\CacheContext
+     * @deprecated 101.0.0
+     */
+    private function getCacheContext()
+    {
+        if ($this->cacheContext === null) {
+            $this->cacheContext = \Magento\Framework\App\ObjectManager::getInstance()->get(CacheContext::class);
+        }
+        return $this->cacheContext;
     }
 }

@@ -1,0 +1,117 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  _____________________________________________
+
+@list-item-icon__indent-left: 3.5rem;
+
+//
+
+ul,
+ol,
+dl {
+    margin-top: 0;
+}
+
+.list {
+    margin-bottom: 1em;
+    padding-left: 0;
+
+    > li {
+        display: block;
+        margin-bottom: .75em;
+        position: relative;
+
+        > .icon-success,
+        > .icon-failed {
+            font-size: 1.6em;
+            left: -.1em;
+            position: absolute;
+            top: 0;
+        }
+
+        > .icon-success {
+            color: @color-success;
+        }
+
+        > .icon-failed {
+            color: @color-failed;
+        }
+    }
+}
+
+.list-item-icon {
+    padding-left: @list-item-icon__indent-left;
+}
+
+.list-item-success,
+.list-item-failed,
+.list-item-warning {
+    padding-left: @list-item-icon__indent-left;
+
+    &:before {
+        font-family: @icons__font-family;
+        font-size: 1.6em;
+        left: -.1em;
+        position: absolute;
+        top: -.2em;
+    }
+}
+
+.list-item-success {
+    &:before {
+        color: @color-success;
+        content: @icon-check-mage__content;
+    }
+}
+
+.list-item-failed {
+    &:before {
+        color: @color-failed;
+        content: @icon-error__content;
+    }
+}
+
+.list-item-warning {
+    &:before {
+        color: @color-warning;
+        content: @icon-warning__content;
+    }
+}
+
+//  Definition list
+
+.list-definition {
+    margin: 0 0 3rem;
+    padding: 0;
+
+    > dt {
+        clear: left;
+        float: left;
+    }
+
+    > dd {
+        margin-bottom: 1em;
+        margin-left: 20rem;
+    }
+}
+
+//
+//  Mobile
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    .list-definition {
+        > dt {
+            float: none;
+        }
+
+        > dd {
+            margin-left: 0;
+        }
+    }
+}

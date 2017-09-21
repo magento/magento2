@@ -1,45 +1,28 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Model\Config;
 
-use Zend\Server\Reflection;
-use Zend\Server\Reflection\ReflectionMethod;
+use Zend\Code\Reflection\MethodReflection;
 
 /**
  * Class reflector.
  */
 class ClassReflector
 {
-    /** @var \Magento\Webapi\Model\Config\ClassReflector\TypeProcessor */
+    /**
+     * @var \Magento\Framework\Reflection\TypeProcessor
+     */
     protected $_typeProcessor;
 
     /**
      * Construct reflector.
      *
-     * @param \Magento\Webapi\Model\Config\ClassReflector\TypeProcessor $typeProcessor
+     * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
      */
-    public function __construct(\Magento\Webapi\Model\Config\ClassReflector\TypeProcessor $typeProcessor)
+    public function __construct(\Magento\Framework\Reflection\TypeProcessor $typeProcessor)
     {
         $this->_typeProcessor = $typeProcessor;
     }
@@ -80,9 +63,9 @@ class ClassReflector
      */
     public function reflectClassMethods($className, $methods)
     {
-        $data = array();
-        $classReflection = new \Zend\Server\Reflection\ReflectionClass(new \ReflectionClass($className));
-        /** @var $methodReflection ReflectionMethod */
+        $data = [];
+        $classReflection = new \Zend\Code\Reflection\ClassReflection($className);
+        /** @var \Zend\Code\Reflection\MethodReflection $methodReflection */
         foreach ($classReflection->getMethods() as $methodReflection) {
             $methodName = $methodReflection->getName();
             if (array_key_exists($methodName, $methods)) {
@@ -95,37 +78,77 @@ class ClassReflector
     /**
      * Retrieve method interface and documentation description.
      *
-     * @param ReflectionMethod $method
+     * @param \Zend\Code\Reflection\MethodReflection $method
      * @return array
      * @throws \InvalidArgumentException
      */
-    public function extractMethodData(ReflectionMethod $method)
+    public function extractMethodData(\Zend\Code\Reflection\MethodReflection $method)
     {
-        $methodData = array('documentation' => $method->getDescription(), 'interface' => array());
-        $prototypes = $method->getPrototypes();
-        /** Take the fullest interface that also includes optional parameters. */
-        /** @var \Zend\Server\Reflection\Prototype $prototype */
-        $prototype = end($prototypes);
-        /** @var \Zend\Server\Reflection\ReflectionParameter $parameter */
-        foreach ($prototype->getParameters() as $parameter) {
-            $parameterData = array(
-                'type' => $this->_typeProcessor->process($parameter->getType()),
+        $methodData = ['documentation' => $this->extractMethodDescription($method), 'interface' => []];
+        /** @var \Zend\Code\Reflection\ParameterReflection $parameter */
+        foreach ($method->getParameters() as $parameter) {
+            $parameterData = [
+                'type' => $this->_typeProcessor->register($this->_typeProcessor->getParamType($parameter)),
                 'required' => !$parameter->isOptional(),
-                'documentation' => $parameter->getDescription()
-            );
+                'documentation' => $this->_typeProcessor->getParamDescription($parameter),
+            ];
             if ($parameter->isOptional()) {
                 $parameterData['default'] = $parameter->getDefaultValue();
             }
             $methodData['interface']['in']['parameters'][$parameter->getName()] = $parameterData;
         }
-        if ($prototype->getReturnType() != 'void' && $prototype->getReturnType() != 'null') {
-            $methodData['interface']['out']['parameters']['result'] = array(
-                'type' => $this->_typeProcessor->process($prototype->getReturnType()),
-                'documentation' => $prototype->getReturnValue()->getDescription(),
-                'required' => true
-            );
+        $returnType = $this->_typeProcessor->getGetterReturnType($method);
+        if ($returnType['type'] != 'void' && $returnType['type'] != 'null') {
+            $methodData['interface']['out']['parameters']['result'] = [
+                'type' => $this->_typeProcessor->register($returnType['type']),
+                'documentation' => $returnType['description'],
+                'required' => true,
+            ];
+        }
+        $exceptions = $this->_typeProcessor->getExceptions($method);
+        if (!empty($exceptions)) {
+            $methodData['interface']['out']['throws'] = $exceptions;
         }
 
         return $methodData;
+    }
+
+    /**
+     * Retrieve method full documentation description.
+     *
+     * @param \Zend\Code\Reflection\MethodReflection $method
+     * @return string
+     */
+    protected function extractMethodDescription(\Zend\Code\Reflection\MethodReflection $method)
+    {
+        $methodReflection = new MethodReflection(
+            $method->getDeclaringClass()->getName(),
+            $method->getName()
+        );
+
+        $docBlock = $methodReflection->getDocBlock();
+        if (!$docBlock) {
+            throw new \LogicException(
+                'The docBlock of the method '.
+                $method->getDeclaringClass()->getName() . '::' .  $method->getName() . ' is empty.'
+            );
+        }
+        return $this->_typeProcessor->getDescription($docBlock);
+    }
+
+    /**
+     * Retrieve class full documentation description.
+     *
+     * @param string $className
+     * @return string
+     */
+    public function extractClassDescription($className)
+    {
+        $classReflection = new \Zend\Code\Reflection\ClassReflection($className);
+        $docBlock = $classReflection->getDocBlock();
+        if (!$docBlock) {
+            return '';
+        }
+        return $this->_typeProcessor->getDescription($docBlock);
     }
 }

@@ -1,30 +1,13 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
-
 namespace Magento\Newsletter\Model;
 
-class SubscriberTest extends \PHPUnit_Framework_TestCase
+use Magento\TestFramework\Mail\Template\TransportBuilderMock;
+
+class SubscriberTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Subscriber
@@ -34,8 +17,27 @@ class SubscriberTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Newsletter\Model\Subscriber'
+            \Magento\Newsletter\Model\Subscriber::class
         );
+    }
+
+    /**
+     * @magentoDataFixture Magento/Newsletter/_files/subscribers.php
+     * @magentoConfigFixture current_store newsletter/subscription/confirm 1
+     */
+    public function testEmailConfirmation()
+    {
+        $this->_model->subscribe('customer_confirm@example.com');
+        /** @var TransportBuilderMock $transportBuilder */
+        $transportBuilder = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get(\Magento\TestFramework\Mail\Template\TransportBuilderMock::class);
+        // confirmationCode 'ysayquyajua23iq29gxwu2eax2qb6gvy' is taken from fixture
+        $this->assertContains(
+            '/newsletter/subscriber/confirm/id/' . $this->_model->getSubscriberId()
+            . '/code/ysayquyajua23iq29gxwu2eax2qb6gvy',
+            $transportBuilder->getSentMessage()->getRawMessage()
+        );
+        $this->assertEquals(Subscriber::STATUS_NOT_ACTIVE, $this->_model->getSubscriberStatus());
     }
 
     /**
@@ -78,4 +80,3 @@ class SubscriberTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(Subscriber::STATUS_SUBSCRIBED, $this->_model->getSubscriberStatus());
     }
 }
- 

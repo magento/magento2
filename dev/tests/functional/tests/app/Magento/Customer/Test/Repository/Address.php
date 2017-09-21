@@ -1,30 +1,12 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Customer\Test\Repository;
 
-use Mtf\Repository\AbstractRepository;
+use Magento\Mtf\Repository\AbstractRepository;
 
 /**
  * Class Address Repository
@@ -36,15 +18,15 @@ class Address extends AbstractRepository
     /**
      * {inheritdoc}
      */
-    public function __construct(array $defaultConfig = array(), array $defaultData = array())
+    public function __construct(array $defaultConfig = [], array $defaultData = [])
     {
-        $this->_data['default'] = array(
+        $this->_data['default'] = [
             'config' => $defaultConfig,
-            'data' => $defaultData
-        );
+            'data' => $defaultData,
+        ];
 
-        $this->_data['address_US_1'] = $this->_getUS1();
-        $this->_data['address_US_2'] = $this->_getUS2();
+        $this->_data['US_address_1'] = $this->_getUS1();
+        $this->_data['US_address_2'] = $this->_getUS2();
         $this->_data['address_UK'] = $this->getAddressUK();
         $this->_data['address_UK_2'] = $this->getAddressUK2();
         $this->_data['address_UK_with_VAT'] = $this->getAddressUKWithVAT($this->_data['address_UK']);
@@ -54,140 +36,140 @@ class Address extends AbstractRepository
 
     protected function _getUS1()
     {
-        return array(
-            'data' => array(
-                'fields' => array(
-                    'firstname' => array(
-                        'value' => 'John'
-                    ),
-                    'lastname' => array(
-                        'value' => 'Doe'
-                    ),
-                    'email' => array(
-                        'value' => 'John.Doe%isolation%@example.com'
-                    ),
-                    'company' => array(
-                        'value' => 'Magento %isolation%'
-                    ),
-                    'street_1' => array(
-                        'value' => '6161 West Centinela Avenue'
-                    ),
-                    'city' => array(
-                        'value' => 'Culver City'
-                    ),
-                    'region_id' => array(
+        return [
+            'data' => [
+                'fields' => [
+                    'firstname' => [
+                        'value' => 'John',
+                    ],
+                    'lastname' => [
+                        'value' => 'Doe',
+                    ],
+                    'email' => [
+                        'value' => 'John.Doe%isolation%@example.com',
+                    ],
+                    'company' => [
+                        'value' => 'Magento %isolation%',
+                    ],
+                    'street' => [
+                        'value' => '6161 West Centinela Avenue',
+                    ],
+                    'city' => [
+                        'value' => 'Culver City',
+                    ],
+                    'region_id' => [
                         'value' => 'California',
-                        'input' => 'select'
-                    ),
-                    'postcode' => array(
-                        'value' => '90230'
-                    ),
-                    'country_id' => array(
+                        'input' => 'select',
+                    ],
+                    'postcode' => [
+                        'value' => '90230',
+                    ],
+                    'country_id' => [
                         'value' => 'United States',
-                        'input' => 'select'
-                    ),
-                    'telephone' => array(
-                        'value' => '555-55-555-55'
-                    )
-                )
-            )
-        );
+                        'input' => 'select',
+                    ],
+                    'telephone' => [
+                        'value' => '555-55-555-55',
+                    ],
+                ],
+            ]
+        ];
     }
 
     protected function _getBackendUS1()
     {
-        return array(
-            'data' => array(
-                'fields' => array(
-                    'save_in_address_book' => array(
+        return [
+            'data' => [
+                'fields' => [
+                    'save_in_address_book' => [
                         'value' => 'Yes',
-                        'input' => 'checkbox'
-                    )
-                )
-            )
-        );
+                        'input' => 'checkbox',
+                    ],
+                ],
+            ]
+        ];
     }
 
     protected function _getUS2()
     {
-        return array(
-            'data' => array(
-                'fields' => array(
-                    'firstname' => array(
-                        'value' => 'Billy'
-                    ),
-                    'lastname' => array(
-                        'value' => 'Holiday'
-                    ),
-                    'email' => array(
-                        'value' => 'b.holliday@example.net'
-                    ),
-                    'company' => array(
-                        'value' => 'Magento %isolation%'
-                    ),
-                    'street_1' => array(
-                        'value' => '727 5th Ave'
-                    ),
-                    'city' => array(
-                        'value' => 'New York'
-                    ),
-                    'region_id' => array(
+        return [
+            'data' => [
+                'fields' => [
+                    'firstname' => [
+                        'value' => 'Billy',
+                    ],
+                    'lastname' => [
+                        'value' => 'Holiday',
+                    ],
+                    'email' => [
+                        'value' => 'b.holliday@example.net',
+                    ],
+                    'company' => [
+                        'value' => 'Magento %isolation%',
+                    ],
+                    'street' => [
+                        'value' => '727 5th Ave',
+                    ],
+                    'city' => [
                         'value' => 'New York',
-                        'input' => 'select'
-                    ),
-                    'postcode' => array(
-                        'value' => '10022'
-                    ),
-                    'country_id' => array(
+                    ],
+                    'region_id' => [
+                        'value' => 'New York',
+                        'input' => 'select',
+                    ],
+                    'postcode' => [
+                        'value' => '10022',
+                    ],
+                    'country_id' => [
                         'value' => 'United States',
-                        'input' => 'select'
-                    ),
-                    'telephone' => array(
-                        'value' => '777-77-77-77'
-                    )
-                )
-            )
-        );
+                        'input' => 'select',
+                    ],
+                    'telephone' => [
+                        'value' => '777-77-77-77',
+                    ],
+                ],
+            ]
+        ];
     }
 
     protected function _getDataUS1()
     {
-        return array(
-            'data' => array(
-                'fields' => array(
-                    'firstname' => array(
-                        'value' => 'John'
-                    ),
-                    'lastname' => array(
-                        'value' => 'Doe'
-                    ),
-                    'company' => array(
-                        'value' => 'Magento %isolation%'
-                    ),
-                    'street_1' => array(
-                        'value' => '6161 West Centinela Avenue'
-                    ),
-                    'country_id' => array(
+        return [
+            'data' => [
+                'fields' => [
+                    'firstname' => [
+                        'value' => 'John',
+                    ],
+                    'lastname' => [
+                        'value' => 'Doe',
+                    ],
+                    'company' => [
+                        'value' => 'Magento %isolation%',
+                    ],
+                    'street' => [
+                        'value' => '6161 West Centinela Avenue',
+                    ],
+                    'country_id' => [
                         'value' => 'United States',
-                        'input' => 'select'
-                    ),
-                    'region_id' => array(
+                        'input' => 'select',
+                    ],
+                    'region_id' => [
                         'value' => 'California',
                         'input' => 'select',
-                        'selector' => '#region_id'
-                    ),
-                    'city' => array(
-                        'value' => 'Culver City'
-                    ),
-                    'postcode' => array(
-                        'value' => '90230'
-                    ),
-                    'telephone' => array(
-                        'value' => '555-55-555-55'
-                    )
-                )
-            )
-        );
+                        'selector' => '#region_id',
+                    ],
+                    'city' => [
+                        'value' => 'Culver City',
+                    ],
+                    'postcode' => [
+                        'value' => '90230',
+                    ],
+                    'telephone' => [
+                        'value' => '555-55-555-55',
+                    ],
+                ],
+            ]
+        ];
     }
 
     /**
@@ -197,40 +179,40 @@ class Address extends AbstractRepository
      */
     protected function getAddressUK()
     {
-        return array(
-            'data' => array(
-                'fields' => array(
-                    'firstname' => array(
+        return [
+            'data' => [
+                'fields' => [
+                    'firstname' => [
                         'value' => 'Jane',
-                    ),
-                    'lastname' => array(
+                    ],
+                    'lastname' => [
                         'value' => 'Doe',
-                    ),
-                    'telephone' => array(
+                    ],
+                    'telephone' => [
                         'value' => '444-44-444-44',
-                    ),
-                    'street[]' => array(
+                    ],
+                    'street[]' => [
                         'value' => '172, Westminster Bridge Rd',
-                    ),
-                    'country_id' => array(
+                    ],
+                    'country_id' => [
                         'value' => 'United Kingdom',
                         'input_value' => 'GB',
                         'input' => 'select',
                         'selector' => '#country',
-                    ),
-                    'region' => array(
+                    ],
+                    'region' => [
                         'value' => 'London',
-                    ),
-                    'city' => array(
+                    ],
+                    'city' => [
                         'value' => 'London',
-                    ),
-                    'postcode' => array(
+                    ],
+                    'postcode' => [
                         'value' => 'SE1 7RW',
                         'selector' => '#zip',
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
     }
 
     /**
@@ -240,42 +222,42 @@ class Address extends AbstractRepository
      */
     protected function getAddressUK2()
     {
-        return array(
-            'data' => array(
-                'fields' => array(
-                    'firstname' => array(
-                        'value' => 'Jane'
-                    ),
-                    'lastname' => array(
-                        'value' => 'Doe'
-                    ),
-                    'company' => array(
-                        'value' => 'Magento %isolation%'
-                    ),
-                    'telephone' => array(
-                        'value' => '444-44-444-44'
-                    ),
-                    'street_1' => array(
-                        'value' => '42 King Street West'
-                    ),
-                    'country_id' => array(
+        return [
+            'data' => [
+                'fields' => [
+                    'firstname' => [
+                        'value' => 'Jane',
+                    ],
+                    'lastname' => [
+                        'value' => 'Doe',
+                    ],
+                    'company' => [
+                        'value' => 'Magento %isolation%',
+                    ],
+                    'telephone' => [
+                        'value' => '444-44-444-44',
+                    ],
+                    'street' => [
+                        'value' => '42 King Street West',
+                    ],
+                    'country_id' => [
                         'value' => 'United Kingdom',
                         'input' => 'select',
-                    ),
-                    'region' => array(
+                    ],
+                    'region' => [
                         'value' => 'Manchester',
                         'selector' => '#region',
-                    ),
-                    'city' => array(
-                        'value' => 'Manchester'
-                    ),
-                    'postcode' => array(
+                    ],
+                    'city' => [
+                        'value' => 'Manchester',
+                    ],
+                    'postcode' => [
                         'value' => 'M3 2WY',
                         'selector' => '#zip',
-                    )
-                )
-            )
-        );
+                    ],
+                ],
+            ]
+        ];
     }
 
     /**
@@ -288,15 +270,15 @@ class Address extends AbstractRepository
     {
         return array_replace_recursive(
             $defaultData,
-            array(
-                'data' => array(
-                    'fields' => array(
-                        'vat_id' => array(
+            [
+                'data' => [
+                    'fields' => [
+                        'vat_id' => [
                             'value' => '584451913',
-                        ),
-                    ),
-                ),
-            )
+                        ],
+                    ],
+                ],
+            ]
         );
     }
 
@@ -307,41 +289,41 @@ class Address extends AbstractRepository
      */
     protected function getAddressDE()
     {
-        return array(
-            'data' => array(
-                'fields' => array(
-                    'firstname' => array(
-                        'value' => 'Jan'
-                    ),
-                    'lastname' => array(
-                        'value' => 'Jansen'
-                    ),
-                    'company' => array(
-                        'value' => 'Magento %isolation%'
-                    ),
-                    'country_id' => array(
+        return [
+            'data' => [
+                'fields' => [
+                    'firstname' => [
+                        'value' => 'Jan',
+                    ],
+                    'lastname' => [
+                        'value' => 'Jansen',
+                    ],
+                    'company' => [
+                        'value' => 'Magento %isolation%',
+                    ],
+                    'country_id' => [
                         'value' => 'Germany',
-                        'input' => 'select'
-                    ),
-                    'street_1' => array(
-                        'value' => 'Augsburger Strabe 41'
-                    ),
-                    'city' => array(
-                        'value' => 'Berlin'
-                    ),
-                    'region_id' => array(
+                        'input' => 'select',
+                    ],
+                    'street' => [
+                        'value' => 'Augsburger Strabe 41',
+                    ],
+                    'city' => [
+                        'value' => 'Berlin',
+                    ],
+                    'region_id' => [
                         'value' => 'Berlin',
                         'input' => 'select',
                         'selector' => '#region_id',
-                    ),
-                    'postcode' => array(
-                        'value' => '10789'
-                    ),
-                    'telephone' => array(
-                        'value' => '333-33-333-33'
-                    )
-                )
-            )
-        );
+                    ],
+                    'postcode' => [
+                        'value' => '10789',
+                    ],
+                    'telephone' => [
+                        'value' => '333-33-333-33',
+                    ],
+                ],
+            ]
+        ];
     }
 }

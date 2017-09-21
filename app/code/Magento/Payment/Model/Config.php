@@ -1,38 +1,29 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Model;
 
-use Magento\Store\Model\Store;
+use Magento\Framework\Locale\Bundle\DataBundle;
 use Magento\Payment\Model\Method\AbstractMethod;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Payment configuration model
  *
  * Used for retrieving configuration data by payment models
+ *
+ * @api
+ * @since 100.0.2
  */
 class Config
 {
+    /**
+     * Years range
+     */
+    const YEARS_RANGE = 10;
+
     /**
      * @var array
      */
@@ -53,62 +44,63 @@ class Config
     /**
      * Locale model
      *
-     * @var \Magento\Framework\Locale\ListsInterface
+     * @var \Magento\Framework\Locale\ResolverInterface
      */
-    protected $_localeLists;
+    protected $localeResolver;
 
     /**
      * Payment method factory
      *
      * @var \Magento\Payment\Model\Method\Factory
      */
-    protected $_methodFactory;
+    protected $_paymentMethodFactory;
+
+    /**
+     * DateTime
+     *
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     */
+    protected $_date;
 
     /**
      * Construct
      *
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig
      * @param \Magento\Payment\Model\Method\Factory $paymentMethodFactory
-     * @param \Magento\Framework\Locale\ListsInterface $localeLists
+     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param \Magento\Framework\Config\DataInterface $dataStorage
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig,
         \Magento\Payment\Model\Method\Factory $paymentMethodFactory,
-        \Magento\Framework\Locale\ListsInterface $localeLists,
-        \Magento\Framework\Config\DataInterface $dataStorage
+        \Magento\Framework\Locale\ResolverInterface $localeResolver,
+        \Magento\Framework\Config\DataInterface $dataStorage,
+        \Magento\Framework\Stdlib\DateTime\DateTime $date
     ) {
         $this->_scopeConfig = $scopeConfig;
         $this->_dataStorage = $dataStorage;
-        $this->_coreConfig = $coreConfig;
-        $this->_methodFactory = $paymentMethodFactory;
-        $this->_localeLists = $localeLists;
+        $this->_paymentMethodFactory = $paymentMethodFactory;
+        $this->localeResolver = $localeResolver;
+        $this->_date = $date;
     }
 
     /**
      * Retrieve active system payments
      *
-     * @param null|string|bool|int|Store $store
      * @return array
+     * @api
      */
-    public function getActiveMethods($store = null)
+    public function getActiveMethods()
     {
-        $methods = array();
-        $config = $this->_scopeConfig->getValue('payment', \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
-        foreach ($config as $code => $methodConfig) {
-            if ($this->_scopeConfig->isSetFlag(
-                'payment/' . $code . '/active',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                $store
-            )
-            ) {
-                if (array_key_exists('model', $methodConfig)) {
-                    $methodModel = $this->_methodFactory->create($methodConfig['model']);
-                    if ($methodModel && $methodModel->getConfigData('active', $store)) {
-                        $methods[$code] = $this->_getMethod($code, $methodConfig);
-                    }
+        $methods = [];
+        foreach ($this->_scopeConfig->getValue('payment', ScopeInterface::SCOPE_STORE, null) as $code => $data) {
+            if (isset($data['active'], $data['model']) && (bool)$data['active']) {
+                /** @var MethodInterface $methodModel Actually it's wrong interface */
+                $methodModel = $this->_paymentMethodFactory->create($data['model']);
+                $methodModel->setStore(null);
+                if ($methodModel->getConfigData('active', null)) {
+                    $methods[$code] = $methodModel;
                 }
             }
         }
@@ -116,55 +108,10 @@ class Config
     }
 
     /**
-     * Retrieve all system payments
-     *
-     * @param null|string|bool|int|Store $store
-     * @return array
-     */
-    public function getAllMethods($store = null)
-    {
-        $methods = array();
-        $config = $this->_scopeConfig->getValue('payment', \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
-        foreach ($config as $code => $methodConfig) {
-            $data = $this->_getMethod($code, $methodConfig);
-            if (false !== $data) {
-                $methods[$code] = $data;
-            }
-        }
-        return $methods;
-    }
-
-    /**
-     * @param string $code
-     * @param string $config
-     * @param null|string|bool|int|Store $store
-     * @return \Magento\Payment\Model\MethodInterface
-     */
-    protected function _getMethod($code, $config, $store = null)
-    {
-        if (isset($this->_methods[$code])) {
-            return $this->_methods[$code];
-        }
-        if (empty($config['model'])) {
-            return false;
-        }
-        $modelName = $config['model'];
-
-        if (!class_exists($modelName)) {
-            return false;
-        }
-
-        /** @var AbstractMethod $method */
-        $method = $this->_methodFactory->create($modelName);
-        $method->setId($code)->setStore($store);
-        $this->_methods[$code] = $method;
-        return $this->_methods[$code];
-    }
-
-    /**
-     * Retrieve array of credit card types
+     * Get list of credit card types
      *
      * @return array
+     * @api
      */
     public function getCcTypes()
     {
@@ -175,6 +122,7 @@ class Config
      * Retrieve array of payment methods information
      *
      * @return array
+     * @api
      */
     public function getMethodsInfo()
     {
@@ -185,27 +133,27 @@ class Config
      * Get payment groups
      *
      * @return array
+     * @api
      */
     public function getGroups()
     {
-        $groups = $this->_dataStorage->get('groups');
-        $result = array();
-        foreach ($groups as $code => $title) {
-            $result[$code] = $title;
-        }
-        return $result;
+        return $this->_dataStorage->get('groups');
     }
 
     /**
      * Retrieve list of months translation
      *
      * @return array
+     * @api
      */
     public function getMonths()
     {
-        $data = $this->_localeLists->getTranslationList('month');
-        foreach ($data as $key => $value) {
-            $monthNum = $key < 10 ? '0' . $key : $key;
+        $data = [];
+        $months = (new DataBundle())->get(
+            $this->localeResolver->getLocale()
+        )['calendar']['gregorian']['monthNames']['format']['wide'];
+        foreach ($months as $key => $value) {
+            $monthNum = ++$key < 10 ? '0' . $key : $key;
             $data[$key] = $monthNum . ' - ' . $value;
         }
         return $data;
@@ -215,13 +163,13 @@ class Config
      * Retrieve array of available years
      *
      * @return array
+     * @api
      */
     public function getYears()
     {
-        $years = array();
-        $first = date("Y");
-
-        for ($index = 0; $index <= 10; $index++) {
+        $years = [];
+        $first = (int)$this->_date->date('Y');
+        for ($index = 0; $index <= self::YEARS_RANGE; $index++) {
             $year = $first + $index;
             $years[$year] = $year;
         }

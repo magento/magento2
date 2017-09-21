@@ -1,0 +1,73 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var \Magento\Framework\View\Element\Template $block */
+?>
+<link rel="stylesheet" type="text/css" href="<?= $block->escapeUrl($block->getViewFileUrl('prototype/windows/themes/default.css')) ?>"/>
+<link rel="stylesheet" type="text/css" href="<?= $block->escapeUrl($block->getViewFileUrl('mage/translate-inline.css')) ?>"/>
+
+<script id="translate-inline-icon" type="text/x-magento-template">
+    <img src="<%- data.img %>" height="16" width="16" class="translate-edit-icon">
+</script>
+<script id="translate-form-template" type="text/x-magento-template">
+    <form id="<%- data.id %>">
+        <% _.each(data.items, function(item, i) { %>
+            <div class="translate-table-container">
+                <table class="table">
+                    <% _.each(item, function(value, index) { %>
+                        <tr>
+                            <th class="label" style="text-transform: capitalize;"><%- index %>:</th>
+                            <td class="value"><%- value %></td>
+                        </tr>
+                    <% }); %>
+                <tr>
+                    <th class="label">
+                        <label for="perstore_<%- i %>">Store View Specific:</label>
+                    </th>
+                    <td class="value">
+                        <input id="perstore_<%- i %>" name="translate[<%- i %>][perstore]" type="checkbox" value="1"/>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="label">
+                        <label for="custom_<%- i %>">Custom:</label>
+                    </th>
+                    <td class="value">
+                        <input name="translate[<%- i %>][original]" type="hidden" value="<%- item.original %>"/>
+                        <input id="custom_<%- i %>"
+                               name="translate[<%- i %>][custom]"
+                               class="input-text"
+                               value="<%- item.translated %>" />
+                    </td>
+                </tr>
+            </table></div>
+        <% }); %>
+    </form>
+    <% if (data.message) { %>
+        <p class="a-center accent"><%- data.message %></p>
+    <% } %>
+</script>
+
+<div data-role="translate-dialog" data-mage-init='{"translateInline":{"ajaxUrl":"<?= $block->escapeJs($block->escapeUrl($block->getAjaxUrl())) ?>"},"loader":{}}'></div>
+<script>
+require([
+    "jquery",
+    "mage/edit-trigger",
+    "mage/translate-inline"
+], function($){
+        $('body').editTrigger(
+            {
+                img: '<?= $block->escapeJs($block->escapeUrl($block->getViewFileUrl('Magento_Theme::fam_book_open.png'))) ?>',
+                alwaysShown: true,
+                singleElement: false
+            }
+        );
+        
+        $('body').addClass('trnslate-inline-area');
+});
+</script>

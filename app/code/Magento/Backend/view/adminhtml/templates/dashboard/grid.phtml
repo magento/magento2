@@ -1,0 +1,94 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+
+$numColumns = sizeof($block->getColumns());
+?>
+<?php if ($block->getCollection()): ?>
+<div class="dashboard-item-content">
+    <?php if ($block->getCollection()->getSize()>0): ?>
+        <table class="admin__table-primary dashboard-data" id="<?= /* @escapeNotVerified */ $block->getId() ?>_table">
+            <?php
+            /* This part is commented to remove all <col> tags from the code. */
+            /* foreach ($block->getColumns() as $_column): ?>
+            <col <?= $_column->getHtmlProperty() ?> />
+            <?php endforeach; */ ?>
+            <?php if ($block->getHeadersVisibility() || $block->getFilterVisibility()): ?>
+                <thead>
+                <?php if ($block->getHeadersVisibility()): ?>
+                    <tr>
+                        <?php foreach ($block->getColumns() as $_column): ?>
+                            <?= $_column->getHeaderHtml() ?>
+                        <?php endforeach; ?>
+                    </tr>
+                <?php endif; ?>
+                </thead>
+            <?php endif; ?>
+            <?php if (!$block->getIsCollapsed()): ?>
+                <tbody>
+                <?php foreach ($block->getCollection() as $_index => $_item): ?>
+                    <tr title="<?= /* @escapeNotVerified */ $block->getRowUrl($_item) ?>">
+                    <?php $i = 0; foreach ($block->getColumns() as $_column): ?>
+                        <td class="<?= /* @escapeNotVerified */ $_column->getCssProperty() ?> <?= ++$i == $numColumns ? 'last' : '' ?>"><?= (($_html = $_column->getRowField($_item)) != '' ? $_html : '&nbsp;') ?></td>
+                    <?php endforeach; ?>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            <?php endif; ?>
+        </table>
+    <?php else: ?>
+        <div class="<?= /* @escapeNotVerified */ $block->getEmptyTextClass() ?>"><?= /* @escapeNotVerified */ $block->getEmptyText() ?></div>
+    <?php endif; ?>
+</div>
+<?php if ($block->canDisplayContainer()): ?>
+<script>
+var deps = [];
+
+<?php if ($block->getDependencyJsObject()): ?>
+deps.push('uiRegistry');
+<?php endif; ?>
+
+<?php if (strpos($block->getRowClickCallback(), 'order.') !== false): ?>
+deps.push('Magento_Sales/order/create/form');
+<?php endif; ?>
+
+deps.push('mage/adminhtml/grid');
+
+require(deps, function(<?= ($block->getDependencyJsObject() ? 'registry' : '') ?>){
+    <?php //TODO: getJsObjectName and getRowClickCallback has unexpected behavior. Should be removed ?>
+
+    <?php if ($block->getDependencyJsObject()): ?>
+        registry.get('<?= /* @escapeNotVerified */ $block->getDependencyJsObject() ?>', function (<?= /* @escapeNotVerified */ $block->getDependencyJsObject() ?>) {
+    <?php endif; ?>
+
+    <?= /* @escapeNotVerified */ $block->getJsObjectName() ?> = new varienGrid('<?= /* @escapeNotVerified */ $block->getId() ?>', '<?= /* @escapeNotVerified */ $block->getGridUrl() ?>', '<?= /* @escapeNotVerified */ $block->getVarNamePage() ?>', '<?= /* @escapeNotVerified */ $block->getVarNameSort() ?>', '<?= /* @escapeNotVerified */ $block->getVarNameDir() ?>', '<?= /* @escapeNotVerified */ $block->getVarNameFilter() ?>');
+    <?= /* @escapeNotVerified */ $block->getJsObjectName() ?>.useAjax = '<?= /* @escapeNotVerified */ $block->getUseAjax() ?>';
+    <?php if ($block->getRowClickCallback()): ?>
+        <?= /* @escapeNotVerified */ $block->getJsObjectName() ?>.rowClickCallback = <?= /* @escapeNotVerified */ $block->getRowClickCallback() ?>;
+    <?php endif; ?>
+    <?php if ($block->getCheckboxCheckCallback()): ?>
+        <?= /* @escapeNotVerified */ $block->getJsObjectName() ?>.checkboxCheckCallback = <?= /* @escapeNotVerified */ $block->getCheckboxCheckCallback() ?>;
+    <?php endif; ?>
+    <?php if ($block->getRowInitCallback()): ?>
+        <?= /* @escapeNotVerified */ $block->getJsObjectName() ?>.initRowCallback = <?= /* @escapeNotVerified */ $block->getRowInitCallback() ?>;
+        <?= /* @escapeNotVerified */ $block->getJsObjectName() ?>.rows.each(function(row){<?= /* @escapeNotVerified */ $block->getRowInitCallback() ?>(<?= /* @escapeNotVerified */ $block->getJsObjectName() ?>, row)});
+    <?php endif; ?>
+    <?php if ($block->getMassactionBlock()->isAvailable()): ?>
+    <?= /* @escapeNotVerified */ $block->getMassactionBlock()->getJavaScript() ?>
+    <?php endif ?>
+
+    <?php if ($block->getDependencyJsObject()): ?>
+    });
+    <?php endif; ?>
+
+});
+</script>
+<?php endif; ?>
+<?php endif ?>

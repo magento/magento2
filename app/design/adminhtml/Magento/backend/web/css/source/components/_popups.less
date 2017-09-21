@@ -1,0 +1,486 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Components -> Popups
+//  _____________________________________________
+
+//
+//  Jquery UI popup window
+//  _____________________________________________
+
+.ui-dialog {
+    .appearing__off();
+    background: @popup__background-color;
+    min-width: 40%;
+    transform: scale(.7);
+    transition: all .3s;
+    width: 75%;
+
+    &.ui-dialog-active {
+        .appearing__on();
+        transform: scale(1);
+    }
+
+    &.ui-draggable {
+        .ui-dialog-titlebar {
+            cursor: move;
+        }
+    }
+
+    .ui-dialog-titlebar {
+        color: @popup-title__color;
+        font-size: @popup-title__font-size;
+        line-height: @popup-title__line-height;
+        padding: @popup__padding__vertical @popup__padding__horizontal * 2 @popup__padding__vertical @popup__padding__horizontal;
+    }
+
+    .ui-dialog-titlebar-close {
+        cursor: pointer;
+        .lib-icon-font(
+        @_icon-font-content: @popup-close-icon__content,
+        @_icon-font: @popup-close-icon__font,
+        @_icon-font-size: @popup-close-icon__font-size,
+        @_icon-font-color: @popup-close-icon__color,
+        @_icon-font-color-hover: @popup-close-icon__hover__color
+        );
+        position: absolute;
+        right: @popup-close-icon__right;
+        top: @popup-close-icon__top - .3;
+
+        .ui-icon {
+            display: none;
+        }
+
+        &.ui-state-hover {
+            border: none;
+        }
+    }
+
+    .ui-dialog-content {
+        overflow: auto;
+        padding: 0 @popup__padding__horizontal @popup__padding__vertical;
+
+        .fieldset {
+            padding-left: 0;
+            padding-right: 0;
+        }
+    }
+
+    .ui-dialog-buttonpane {
+        padding: 0 @popup__padding__horizontal @popup__padding__vertical;
+    }
+
+    .content + .ui-dialog-buttonset {
+        padding-top: @popup__padding__vertical;
+        text-align: right;
+    }
+
+    .ui-dialog-buttonset {
+        &:extend(.abs-clearfix all);
+    }
+
+    .action-close {
+        &:extend(.abs-action-tertiary all);
+        font-size: @button__large__font-size;
+        margin: 0 0 0 @popup__padding__horizontal;
+        padding: @button__large__padding-vertical 0;
+
+        &:before {
+            content: normal;
+        }
+
+        span {
+            overflow: auto;
+            position: static;
+        }
+    }
+
+    .ui-button,
+    .action-primary {
+        &:extend(.abs-action-secondary all);
+        &:extend(.abs-action-l all);
+        float: right;
+        margin: 0 0 0 @popup__padding__horizontal;
+    }
+
+    .fieldset {
+        &:last-child {
+            padding-bottom: 0;
+        }
+    }
+
+    .main-col,
+    .side-col {
+        float: left;
+        padding-bottom: 0;
+
+        &:after {
+            display: none;
+        }
+    }
+
+    .side-col {
+        width: 20%;
+    }
+
+    .main-col {
+        padding-right: 0;
+        width: 80%;
+    }
+
+    .grid,
+    .pager {
+        padding-bottom: 0;
+    }
+
+    .grid-actions {
+        padding-top: 0;
+    }
+
+    .ui-resizable {
+        position: relative;
+    }
+
+    .ui-resizable-handle {
+        display: block;
+        font-size: .1px;
+        position: absolute;
+    }
+
+    .ui-resizable-disabled,
+    .ui-resizable-autohide {
+        .ui-resizable-handle {
+            display: none;
+        }
+    }
+
+    .ui-resizable-n {
+        cursor: n-resize;
+        height: 7px;
+        left: 0;
+        top: -5px;
+        width: 100%;
+    }
+
+    .ui-resizable-s {
+        bottom: 0;
+        cursor: s-resize;
+        height: 7px;
+        left: 0;
+        width: 100%;
+    }
+
+    .ui-resizable-e {
+        cursor: e-resize;
+        height: 100%;
+        right: 0;
+        top: 0;
+        width: 7px;
+    }
+
+    .ui-resizable-w {
+        cursor: w-resize;
+        height: 100%;
+        left: -7px;
+        top: 0;
+        width: 7px;
+    }
+
+    .ui-resizable-se {
+        bottom: 1px;
+        cursor: se-resize;
+        height: 12px;
+        right: 1px;
+        width: 12px;
+    }
+
+    .ui-resizable-sw {
+        bottom: 0;
+        cursor: sw-resize;
+        height: 9px;
+        left: -5px;
+        width: 9px;
+    }
+
+    .ui-resizable-nw {
+        cursor: nw-resize;
+        height: 9px;
+        left: -5px;
+        top: -5px;
+        width: 9px;
+    }
+
+    .ui-resizable-ne {
+        cursor: ne-resize;
+        height: 9px;
+        right: 0;
+        top: -5px;
+        width: 9px;
+    }
+
+    //
+    //  Block 'Insert File'
+    //  -----------------------------------------
+
+    .main-col,
+    .magento-message {
+        .insert-title-inner {
+            &:extend(.abs-clearfix all);
+            border-bottom: 1px solid @color-gray68;
+            margin: 0 0 @indent__base;
+            padding-bottom: @indent__xs;
+        }
+
+        .insert-actions {
+            float: right;
+        }
+
+        .title {
+            font-size: @font-size__l;
+            padding-top: @indent__xs;
+        }
+
+        .main-col-inner .uploader {
+            border: 1px solid @color-gray68;
+            margin: 0 0 @indent__s;
+            padding: @indent__xs;
+        }
+
+        .breadcrumbs {
+            list-style: none;
+            padding-left: 0;
+
+            li {
+                display: inline-block;
+                margin: 0 @indent__xs @indent__xs 0;
+
+                &:after {
+                    content: '';
+                    margin: 0 @indent__xs 0 0;
+                }
+            }
+        }
+
+        #contents-uploader {
+            margin: 0 0 @indent__base;
+        }
+
+        .fileinput-button {
+            cursor: pointer;
+            display: inline-block;
+            float: none;
+            vertical-align: middle;
+
+            span {
+                display: none;
+            }
+
+            input {
+                -moz-transform: none;
+                border: none;
+                opacity: 1;
+                position: static;
+            }
+        }
+
+        .file-row {
+            border: 1px solid @color-gray68;
+            margin: @indent__xs 0;
+            padding: 2px;
+        }
+
+        .filecnt {
+            border: 1px solid @color-gray68;
+            display: inline-block;
+            margin: 0 @indent__xs 15px 0;
+            overflow: hidden;
+            padding: 3px;
+            width: 100px;
+
+            &.selected {
+                border-color: @color-blue-dodger;
+            }
+
+            p {
+                text-align: center;
+            }
+        }
+
+        #contents-uploader {
+            &:extend(.abs-clearfix all);
+        }
+
+        .x-tree {
+            margin-bottom: @indent__base;
+        }
+    }
+}
+
+.ui-dialog {
+    .admin__fieldset {
+        > .admin__legend {
+            float: none;
+            font-size: 1.8rem;
+            margin: 0 0 @indent__base @popup-fieldset__margin-left;
+            width: auto;
+        }
+
+        .product-options {
+            margin-left: @popup-fieldset__margin-left;
+
+            .admin__field-control {
+                margin-bottom: @indent__base;
+            }
+        }
+    }
+}
+
+//  The message/dialog popup
+.ui-popup-message {
+    .ui-dialog-titlebar {
+        background: @color-lazy-sun;
+        font-size: 1.4rem;
+        font-weight: @font-weight__bold;
+        padding: 2rem 2rem 0 7.5rem;
+    }
+
+    .ui-dialog-titlebar-close {
+        right: 1.5rem;
+        top: 1rem;
+
+        &:before {
+            font-size: 1.4rem;
+        }
+    }
+
+    .ui-dialog-content {
+        background: @color-lazy-sun;
+        margin-bottom: 0;
+        overflow: inherit;
+        padding: 0 2rem 2rem;
+
+        .messages,
+        .message {
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+
+        .message {
+            &:first-child {
+                padding-top: 0;
+
+                &:before {
+                    top: 0;
+                }
+            }
+
+            &:last-child {
+                padding-bottom: 0;
+            }
+        }
+    }
+
+    .ui-dialog-buttonpane {
+        background: @color-lazy-sun;
+        padding: 0 2rem 2rem;
+    }
+}
+
+//
+//  Block 'Insert Variable'
+//  _____________________________________________
+
+.insert-variable {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    li {
+        margin-top: @indent__xs;
+        padding-left: @indent__s;
+
+        b {
+            display: inline-block;
+            margin-left: -@indent__s;
+        }
+    }
+}
+
+//
+//  Attribute Popup
+//  _____________________________________________
+
+.attribute-popup { // ToDo UI: remove or refactor after New attribute popup refactored to sliding panel
+    .page-content {
+        padding: 0;
+    }
+}
+
+.attribute-popup-actions { // ToDo UI: remove or refactor after New attribute popup refactored to sliding panel
+    &:extend(.abs-clearfix all);
+    background: @page-main-actions__background-color;
+    border-bottom: 1px solid @page-main-actions__border-color;
+    border-top: 1px solid @page-main-actions__border-color;
+    padding: @page-main-actions__padding;
+
+    &.page-actions {
+        float: none;
+    }
+
+    &.fixed { // ToDo UI: remove or refactor after New attribute popup refactored to sliding panel
+        background: @color-white !important;
+        border-bottom: 0 !important;
+        left: 0 !important;
+        padding: @popup__padding !important;
+
+        .page-actions-buttons {
+            padding-right: 0;
+        }
+    }
+
+    .action-default {
+        &.reset {
+            &:extend(.abs-action-tertiary all);
+            font-size: @button__large__font-size;
+            padding: @button__large__padding-vertical 0;
+        }
+    }
+
+    .page-actions-buttons > button.action-default.primary {
+        &:extend(.abs-action-secondary all);
+        &:extend(.abs-action-l all);
+        float: right;
+    }
+
+    .page-actions-inner {
+        &:before {
+            display: none;
+        }
+    }
+}
+
+.ie9 {
+    .catalog-product-attribute-edit {
+        &.attribute-popup {
+            min-width: 0;
+
+            .menu-wrapper {
+                display: none;
+            }
+
+            .page-actions {
+                button {
+                    float: none;
+                }
+
+                .primary {
+                    float: right;
+                }
+            }
+        }
+    }
+}

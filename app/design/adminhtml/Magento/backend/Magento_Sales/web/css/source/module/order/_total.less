@@ -1,0 +1,39 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Totals
+//  ---------------------------------------------
+
+.order-subtotal-table {
+    .admin__control-text {
+        width: 5.4rem;
+    }
+    .admin__total-amount {
+        text-align: right;
+    }
+}
+
+.order-totals {
+    .admin__total-amount {
+        text-align: right;
+    }
+}
+
+.order-totals-actions {
+    margin-top: @indent__s;
+    .actions {
+        margin-top: @indent__l;
+        text-align: right;
+    }
+    .action-default {
+        &:extend(.abs-action-l all);
+    }
+    .primary {
+        + .primary {
+            margin-left: @indent__s;
+        }
+    }
+}

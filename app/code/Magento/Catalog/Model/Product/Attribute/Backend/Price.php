@@ -1,32 +1,20 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Attribute\Backend;
 
+use \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
+use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
+
 /**
- * Catalog product price attribute backend model
+ * Backend model for set of EAV attributes with 'frontend_input' equals 'price'.
+ *
+ * @api
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
@@ -59,33 +47,45 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     protected $_config;
 
     /**
-     * Construct
-     *
-     * @param \Magento\Framework\Logger $logger
+     * @var \Magento\Framework\Locale\FormatInterface
+     */
+    protected $localeFormat;
+
+    /**
+     * @var \Magento\Catalog\Model\Attribute\ScopeOverriddenValue
+     */
+    private $scopeOverriddenValue;
+
+    /**
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Framework\Locale\FormatInterface $localeFormat
+     * @param ScopeOverriddenValue|null $scopeOverriddenValue
      */
     public function __construct(
-        \Magento\Framework\Logger $logger,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\Framework\App\Config\ScopeConfigInterface $config
+        \Magento\Framework\App\Config\ScopeConfigInterface $config,
+        \Magento\Framework\Locale\FormatInterface $localeFormat,
+        ScopeOverriddenValue $scopeOverriddenValue = null
     ) {
         $this->_currencyFactory = $currencyFactory;
         $this->_storeManager = $storeManager;
         $this->_helper = $catalogData;
         $this->_config = $config;
-        parent::__construct($logger);
+        $this->localeFormat = $localeFormat;
+        $this->scopeOverriddenValue = $scopeOverriddenValue
+            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(ScopeOverriddenValue::class);
     }
 
     /**
      * Set Attribute instance
      * Rewrite for redefine attribute scope
      *
-     * @param \Magento\Catalog\Model\Resource\Eav\Attribute $attribute
+     * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
      * @return $this
      */
     public function setAttribute($attribute)
@@ -98,57 +98,45 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     /**
      * Redefine Attribute scope
      *
-     * @param \Magento\Catalog\Model\Resource\Eav\Attribute $attribute
+     * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
      * @return $this
      */
     public function setScope($attribute)
     {
         if ($this->_helper->isPriceGlobal()) {
-            $attribute->setIsGlobal(\Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_GLOBAL);
+            $attribute->setIsGlobal(ScopedAttributeInterface::SCOPE_GLOBAL);
         } else {
-            $attribute->setIsGlobal(\Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_WEBSITE);
+            $attribute->setIsGlobal(ScopedAttributeInterface::SCOPE_WEBSITE);
         }
 
         return $this;
     }
 
     /**
-     * After Save Attribute manipulation
+     * After Save Price Attribute manipulation
+     * Processes product price attributes if price scoped to website and updates data when:
+     * * Price changed for non-default store view - will update price for all stores assigned to current website.
+     * * Price will be changed according to store currency even if price changed in product with default store id.
+     * * In a case when price was removed for non-default store (use default option checked) the default store price
+     * * will be used instead
      *
      * @param \Magento\Catalog\Model\Product $object
      * @return $this
      */
     public function afterSave($object)
     {
-        $value = $object->getData($this->getAttribute()->getAttributeCode());
-        /**
-         * Orig value is only for existing objects
-         */
-        $oridData = $object->getOrigData();
-        $origValueExist = $oridData && array_key_exists($this->getAttribute()->getAttributeCode(), $oridData);
-        if ($object->getStoreId() != 0 || !$value || $origValueExist) {
-            return $this;
-        }
-
-        if ($this->getAttribute()->getIsGlobal() == \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_WEBSITE) {
-            $baseCurrency = $this->_config->getValue(
-                \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE,
-                'default'
-            );
-
-            $storeIds = $object->getStoreIds();
-            if (is_array($storeIds)) {
-                foreach ($storeIds as $storeId) {
-                    $storeCurrency = $this->_storeManager->getStore($storeId)->getBaseCurrencyCode();
-                    if ($storeCurrency == $baseCurrency) {
-                        continue;
-                    }
-                    $rate = $this->_currencyFactory->create()->load($baseCurrency)->getRate($storeCurrency);
-                    if (!$rate) {
-                        $rate = 1;
-                    }
-                    $newValue = $value * $rate;
-                    $object->addAttributeUpdate($this->getAttribute()->getAttributeCode(), $newValue, $storeId);
+        /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
+        $attribute = $this->getAttribute();
+        $attributeCode = $attribute->getAttributeCode();
+        $value = $object->getData($attributeCode);
+        // $value may be passed as null to unset the attribute
+        if ($value === null || (float)$value > 0) {
+            if ($attribute->isScopeWebsite() && $object->getStoreId() != \Magento\Store\Model\Store::DEFAULT_STORE_ID) {
+                if ($this->isUseDefault($object)) {
+                    $value = null;
+                }
+                foreach ((array)$object->getWebsiteStoreIds() as $storeId) {
+                    $object->addAttributeUpdate($attributeCode, $value, $storeId);
                 }
             }
         }
@@ -157,10 +145,26 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     }
 
     /**
+     * Check whether product uses default attribute's value in selected scope
+     * @param \Magento\Catalog\Model\Product $object
+     * @return bool
+     */
+    private function isUseDefault($object)
+    {
+        $overridden = $this->scopeOverriddenValue->containsValue(
+            \Magento\Catalog\Api\Data\ProductInterface::class,
+            $object,
+            $this->getAttribute()->getAttributeCode(),
+            $object->getStoreId()
+        );
+        return !$overridden;
+    }
+
+    /**
      * Validate
      *
      * @param \Magento\Catalog\Model\Product $object
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return bool
      */
     public function validate($object)
@@ -170,10 +174,25 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
             return parent::validate($object);
         }
 
-        if (!preg_match('/^\d*(\.|,)?\d{0,4}$/i', $value) || $value < 0) {
-            throw new \Magento\Framework\Model\Exception(__('Please enter a number 0 or greater in this field.'));
+        if (!$this->isPositiveOrZero($value)) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Please enter a number 0 or greater in this field.')
+            );
         }
 
         return true;
+    }
+
+    /**
+     * Returns whether the value is greater than, or equal to, zero
+     *
+     * @param mixed $value
+     * @return bool
+     */
+    protected function isPositiveOrZero($value)
+    {
+        $value = $this->localeFormat->getNumber($value);
+        $isNegative = $value < 0;
+        return  !$isNegative;
     }
 }

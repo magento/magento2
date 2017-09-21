@@ -1,32 +1,14 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Newsletter\Controller\Adminhtml;
 
 /**
  * @magentoAppArea adminhtml
  */
-class NewsletterTemplateTest extends \Magento\Backend\Utility\Controller
+class NewsletterTemplateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
      * @var \Magento\Newsletter\Model\Template
@@ -36,16 +18,16 @@ class NewsletterTemplateTest extends \Magento\Backend\Utility\Controller
     protected function setUp()
     {
         parent::setUp();
-        $post = array(
+        $post = [
             'code' => 'test data',
             'subject' => 'test data2',
             'sender_email' => 'sender@email.com',
             'sender_name' => 'Test Sender Name',
-            'text' => 'Template Content'
-        );
-        $this->getRequest()->setPost($post);
+            'text' => 'Template Content',
+        ];
+        $this->getRequest()->setPostValue($post);
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Newsletter\Model\Template'
+            \Magento\Newsletter\Model\Template::class
         );
     }
 
@@ -54,8 +36,9 @@ class NewsletterTemplateTest extends \Magento\Backend\Utility\Controller
         /**
          * Unset messages
          */
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Backend\Model\Session')->destroy();
-        unset($this->_model);
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Backend\Model\Session::class)
+            ->destroy();
+        $this->_model = null;
     }
 
     /**
@@ -64,7 +47,6 @@ class NewsletterTemplateTest extends \Magento\Backend\Utility\Controller
      */
     public function testSaveActionCreateNewTemplateAndVerifySuccessMessage()
     {
-        $this->_model->loadByCode('some_unique_code');
         $this->getRequest()->setParam('id', $this->_model->getId());
         $this->dispatch('backend/newsletter/template/save');
         /**
@@ -75,7 +57,7 @@ class NewsletterTemplateTest extends \Magento\Backend\Utility\Controller
          * Check that success message is set
          */
         $this->assertSessionMessages(
-            $this->equalTo(array('The newsletter template has been saved.')),
+            $this->equalTo(['The newsletter template has been saved.']),
             \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
         );
     }
@@ -86,7 +68,13 @@ class NewsletterTemplateTest extends \Magento\Backend\Utility\Controller
      */
     public function testSaveActionEditTemplateAndVerifySuccessMessage()
     {
-        $this->_model->loadByCode('some_unique_code');
+        // Loading by code, since ID will vary. template_code is not actually used to load anywhere else.
+        $this->_model->load('some_unique_code', 'template_code');
+
+        // Ensure that template is actually loaded so as to prevent a false positive on saving a *new* template
+        // instead of existing one.
+        $this->assertEquals('some_unique_code', $this->_model->getTemplateCode());
+
         $this->getRequest()->setParam('id', $this->_model->getId());
         $this->dispatch('backend/newsletter/template/save');
 
@@ -99,25 +87,24 @@ class NewsletterTemplateTest extends \Magento\Backend\Utility\Controller
          * Check that success message is set
          */
         $this->assertSessionMessages(
-            $this->equalTo(array('The newsletter template has been saved.')),
+            $this->equalTo(['The newsletter template has been saved.']),
             \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
         );
     }
 
     /**
      * @magentoAppIsolation enabled
-     * @magentoDbIsolation enabled
      */
     public function testSaveActionTemplateWithInvalidDataAndVerifySuccessMessage()
     {
-        $post = array(
+        $post = [
             'code' => 'test data',
             'subject' => 'test data2',
             'sender_email' => 'sender_email.com',
             'sender_name' => 'Test Sender Name',
-            'text' => 'Template Content'
-        );
-        $this->getRequest()->setPost($post);
+            'text' => 'Template Content',
+        ];
+        $this->getRequest()->setPostValue($post);
         $this->dispatch('backend/newsletter/template/save');
 
         /**
@@ -140,7 +127,9 @@ class NewsletterTemplateTest extends \Magento\Backend\Utility\Controller
      */
     public function testDeleteActionTemplateAndVerifySuccessMessage()
     {
-        $this->_model->loadByCode('some_unique_code');
+        // Loading by code, since ID will vary. template_code is not actually used to load anywhere else.
+        $this->_model->load('some_unique_code', 'template_code');
+
         $this->getRequest()->setParam('id', $this->_model->getId());
         $this->dispatch('backend/newsletter/template/delete');
 
@@ -153,7 +142,7 @@ class NewsletterTemplateTest extends \Magento\Backend\Utility\Controller
          * Check that success message is set
          */
         $this->assertSessionMessages(
-            $this->equalTo(array('The newsletter template has been deleted.')),
+            $this->equalTo(['The newsletter template has been deleted.']),
             \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
         );
     }

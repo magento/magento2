@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <virtualType name="requirejsConfigFileSourceBaseFiltered" type="Magento\Framework\View\File\Collector\Decorator\ModuleOutput">
+        <arguments>
+            <argument name="subject" xsi:type="object">Magento\Framework\View\File\Collector\Base</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="requirejsConfigFileSourceBaseSorted" type="Magento\Framework\View\File\Collector\Decorator\ModuleDependency">
+        <arguments>
+            <argument name="subject" xsi:type="object">requirejsConfigFileSourceBaseFiltered</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="requirejsFileSourceThemeFiltered" type="Magento\Framework\View\File\Collector\Decorator\ModuleOutput">
+        <arguments>
+            <argument name="subject" xsi:type="object">Magento\Framework\View\File\Collector\ThemeModular</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="requirejsFileSourceThemeSorted" type="Magento\Framework\View\File\Collector\Decorator\ModuleDependency">
+        <arguments>
+            <argument name="subject" xsi:type="object">requirejsFileSourceThemeFiltered</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\RequireJs\Config\File\Collector\Aggregated">
+        <arguments>
+            <argument name="baseFiles" xsi:type="object">requirejsConfigFileSourceBaseSorted</argument>
+            <argument name="themeModularFiles" xsi:type="object">requirejsFileSourceThemeSorted</argument>
+            <argument name="themeFiles" xsi:type="object">Magento\Framework\View\File\Collector\Theme</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\RequireJs\Config">
+        <arguments>
+            <argument name="minifyAdapter" xsi:type="object">jsMinificationAdapter</argument>
+        </arguments>
+    </type>
+</config>

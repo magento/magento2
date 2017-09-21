@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model\Payflow;
 
@@ -28,7 +10,7 @@ namespace Magento\Paypal\Model\Payflow;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Request extends \Magento\Framework\Object
+class Request extends \Magento\Framework\DataObject
 {
     /**
      * Set/Get attribute wrapper
@@ -37,7 +19,8 @@ class Request extends \Magento\Framework\Object
      * @param string $method
      * @param array $args
      * @return mixed
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function __call($method, $args)
     {
@@ -69,8 +52,8 @@ class Request extends \Magento\Framework\Object
                 //\Magento\Framework\Profiler::stop('HAS: '.get_class($this).'::'.$method);
                 return isset($this->_data[$key]);
         }
-        throw new \Magento\Framework\Exception(
-            "Invalid method " . get_class($this) . "::" . $method . "(" . print_r($args, 1) . ")"
+        throw new \Magento\Framework\Exception\LocalizedException(
+            __("Invalid method %1::%2", get_class($this), $method)
         );
     }
 }

@@ -1,52 +1,220 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\CheckoutAgreements\Model;
 
-/**
- * @method \Magento\CheckoutAgreements\Model\Resource\Agreement _getResource()
- * @method \Magento\CheckoutAgreements\Model\Resource\Agreement getResource()
- * @method string getName()
- * @method \Magento\CheckoutAgreements\Model\Agreement setName(string $value)
- * @method string getContent()
- * @method \Magento\CheckoutAgreements\Model\Agreement setContent(string $value)
- * @method string getContentHeight()
- * @method \Magento\CheckoutAgreements\Model\Agreement setContentHeight(string $value)
- * @method string getCheckboxText()
- * @method \Magento\CheckoutAgreements\Model\Agreement setCheckboxText(string $value)
- * @method int getIsActive()
- * @method \Magento\CheckoutAgreements\Model\Agreement setIsActive(int $value)
- * @method int getIsHtml()
- * @method \Magento\CheckoutAgreements\Model\Agreement setIsHtml(int $value)
- *
- */
-class Agreement extends \Magento\Framework\Model\AbstractModel
+use Magento\CheckoutAgreements\Api\Data\AgreementInterface;
+
+class Agreement extends \Magento\Framework\Model\AbstractExtensibleModel implements AgreementInterface
 {
     /**
+     * Allowed CSS units for height field
+     *
+     * @var array
+     */
+    protected $allowedCssUnits = ['px', 'pc', 'pt', 'ex', 'em', 'mm', 'cm', 'in', '%'];
+
+    /**
      * @return void
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {
-        $this->_init('Magento\CheckoutAgreements\Model\Resource\Agreement');
+        $this->_init(\Magento\CheckoutAgreements\Model\ResourceModel\Agreement::class);
     }
+
+    /**
+     * @param \Magento\Framework\DataObject $agreementData
+     * @return array|bool
+     */
+    public function validateData($agreementData)
+    {
+        $errors = [];
+
+        $contentHeight = $agreementData->getContentHeight();
+        if ($contentHeight !== ''
+            && !preg_match('/^[0-9]*\.*[0-9]+(' . implode("|", $this->allowedCssUnits) . ')?$/', $contentHeight)
+        ) {
+            $errors[] = "Please input a valid CSS-height. For example 100px or 77pt or 20em or .5ex or 50%.";
+        }
+
+        return (count($errors)) ? $errors : true;
+    }
+
+    /**
+     * Processing object before save data
+     *
+     * @return $this
+     */
+    public function beforeSave()
+    {
+        if ($this->getContentHeight() == 0) {
+            $this->setContentHeight(''); //converting zero Content-Height
+        }
+
+        if ($this->getContentHeight()
+            && !preg_match('/(' . implode("|", $this->allowedCssUnits) . ')/', $this->getContentHeight())
+        ) {
+            $contentHeight = $this->getContentHeight() . 'px'; //setting default units for Content-Height
+            $this->setContentHeight($contentHeight);
+        }
+
+        return parent::beforeSave();
+    }
+
+    //@codeCoverageIgnoreStart
+
+    /**
+     * @inheritdoc
+     */
+    public function getAgreementId()
+    {
+        return $this->getData(self::AGREEMENT_ID);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setAgreementId($id)
+    {
+        return $this->setData(self::AGREEMENT_ID, $id);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getName()
+    {
+        return $this->getData(self::NAME);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setName($name)
+    {
+        return $this->setData(self::NAME, $name);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getContent()
+    {
+        return $this->getData(self::CONTENT);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setContent($content)
+    {
+        return $this->setData(self::CONTENT, $content);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getContentHeight()
+    {
+        return $this->getData(self::CONTENT_HEIGHT);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setContentHeight($height)
+    {
+        return $this->setData(self::CONTENT_HEIGHT, $height);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCheckboxText()
+    {
+        return $this->getData(self::CHECKBOX_TEXT);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setCheckboxText($text)
+    {
+        return $this->setData(self::CHECKBOX_TEXT, $text);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getIsActive()
+    {
+        return $this->getData(self::IS_ACTIVE);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setIsActive($status)
+    {
+        return $this->setData(self::IS_ACTIVE, $status);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getIsHtml()
+    {
+        return $this->getData(self::IS_HTML);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setIsHtml($isHtml)
+    {
+        return $this->setData(self::IS_HTML, $isHtml);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getMode()
+    {
+        return $this->getData(self::MODE);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setMode($mode)
+    {
+        return $this->setData(self::MODE, $mode);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\CheckoutAgreements\Api\Data\AgreementExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\CheckoutAgreements\Api\Data\AgreementExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\CheckoutAgreements\Api\Data\AgreementExtensionInterface $extensionAttributes
+    ) {
+        return $this->_setExtensionAttributes($extensionAttributes);
+    }
+
+    //@codeCoverageIgnoreEnd
 }

@@ -1,0 +1,17 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="admin__field admin__field-option">
+    <input type="checkbox" class="admin__control-checkbox" data-bind="checked: checked,
+    attr: { id: uid, disabled: disabled, name: inputName }, hasFocus: focused">
+
+    <label class="admin__field-label" data-bind="text: description || label, attr: { for: uid }">
+    </label>
+
+    <!-- ko if: notice -->
+    <div class="admin__field-note" data-bind="attr: {id: noticeId}"><span data-bind="text: notice"></span></div>
+    <!-- /ko -->
+</div>

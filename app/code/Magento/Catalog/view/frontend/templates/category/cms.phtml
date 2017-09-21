@@ -1,0 +1,21 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+/**
+ * Category view template
+ *
+ * @var $block \Magento\Catalog\Block\Category\View
+ */
+?>
+<?php if ($block->isContentMode() || $block->isMixedMode()): ?>
+    <div class="category-cms">
+        <?= $block->getCmsBlockHtml() ?>
+    </div>
+<?php endif; ?>

@@ -1,0 +1,32 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+/** @var \Magento\Tax\Block\Item\Price\Renderer $block */
+
+$_item = $block->getItem();
+/** @var \Magento\Sales\Model\Order $_order */
+$_order = $_item->getOrder();
+?>
+
+<?php if ($block->displayPriceExclTax() || $block->displayBothPrices()): ?>
+    <?php if ($block->displayBothPrices()): ?>
+        <span class="label"><?= /* @escapeNotVerified */  __('Excl. Tax') ?>:</span>
+    <?php endif; ?>
+    <?= /* @escapeNotVerified */  $_order->formatPrice($_item->getRowTotal()) ?>
+<?php endif; ?>
+
+
+<?php if ($block->displayPriceInclTax() || $block->displayBothPrices()): ?>
+    <?php if ($block->displayBothPrices()): ?>
+        <br /><span class="label"><?= /* @escapeNotVerified */  __('Incl. Tax') ?>:</span>
+    <?php endif; ?>
+    <?php $_incl = $this->helper('Magento\Checkout\Helper\Data')->getSubtotalInclTax($_item); ?>
+    <?= /* @escapeNotVerified */  $_order->formatPrice($_incl) ?>
+<?php endif; ?>

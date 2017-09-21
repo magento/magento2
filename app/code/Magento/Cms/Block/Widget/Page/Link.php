@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Block\Widget\Page;
 
@@ -50,7 +32,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements \Magento
     protected $_anchorText;
 
     /**
-     * @var \Magento\Cms\Model\Resource\Page
+     * @var \Magento\Cms\Model\ResourceModel\Page
      */
     protected $_resourcePage;
 
@@ -63,15 +45,15 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements \Magento
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Cms\Model\Resource\Page $resourcePage
+     * @param \Magento\Cms\Model\ResourceModel\Page $resourcePage
      * @param \Magento\Cms\Helper\Page $cmsPage
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Cms\Model\Resource\Page $resourcePage,
+        \Magento\Cms\Model\ResourceModel\Page $resourcePage,
         \Magento\Cms\Helper\Page $cmsPage,
-        array $data = array()
+        array $data = []
     ) {
         parent::__construct($context, $data);
         $this->_resourcePage = $resourcePage;
@@ -90,7 +72,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements \Magento
             $this->_href = '';
             if ($this->getData('href')) {
                 $this->_href = $this->getData('href');
-            } else if ($this->getData('page_id')) {
+            } elseif ($this->getData('page_id')) {
                 $this->_href = $this->_cmsPage->getPageUrl($this->getData('page_id'));
             }
         }
@@ -111,7 +93,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements \Magento
             if ($this->getData('title') !== null) {
                 // compare to null used here bc user can specify blank title
                 $this->_title = $this->getData('title');
-            } else if ($this->getData('page_id')) {
+            } elseif ($this->getData('page_id')) {
                 $this->_title = $this->_resourcePage->getCmsPageTitleById($this->getData('page_id'));
             } elseif ($this->getData('href')) {
                 $this->_title = $this->_resourcePage->setStore($this->_storeManager->getStore())
@@ -133,8 +115,6 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements \Magento
     {
         if ($this->getData('anchor_text')) {
             $this->_anchorText = $this->getData('anchor_text');
-        } elseif ($this->getTitle()) {
-            $this->_anchorText = $this->getTitle();
         } elseif ($this->getData('href')) {
             $this->_anchorText = $this->_resourcePage->setStore(
                 $this->_storeManager->getStore()
@@ -143,6 +123,8 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements \Magento
             );
         } elseif ($this->getData('page_id')) {
             $this->_anchorText = $this->_resourcePage->getCmsPageTitleById($this->getData('page_id'));
+        } elseif ($this->getTitle()) {
+            $this->_anchorText = $this->getTitle();
         } else {
             $this->_anchorText = $this->getData('href');
         }

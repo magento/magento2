@@ -1,0 +1,140 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  _____________________________________________
+
+//  Sizes
+
+@readiness-check-side__width: 22rem;
+@readiness-check-content__indent: 5.7rem;
+
+//
+//  Common
+//  ---------------------------------------------
+
+.readiness-check-item {
+    margin-bottom: 4rem;
+    min-height: 2.5rem;
+
+    .spinner {
+        float: left;
+        font-size: 2.5rem;
+        margin: -.4rem 0 0 1.7rem;
+    }
+}
+
+.readiness-check-title {
+    font-size: @base__font-size;
+    font-weight: @font-weight__bold;
+    margin-bottom: .1rem;
+    margin-left: @readiness-check-content__indent;
+}
+
+.readiness-check-content {
+    margin-left: @readiness-check-content__indent;
+    margin-right: @readiness-check-side__width;
+    position: relative;
+
+    .readiness-check-title {
+        margin-left: 0;
+    }
+
+    .list {
+        margin-top: -.3rem;
+    }
+}
+
+.readiness-check-side {
+    left: 100%;
+    padding-left: 2.4rem;
+    position: absolute;
+    top: 0;
+    width: @readiness-check-side__width;
+
+    .side-title {
+        margin-bottom: 0;
+    }
+}
+
+.readiness-check-icon {
+    float: left;
+    margin-left: 1.7rem;
+    margin-top: .3rem;
+}
+
+.extensions-information {
+    margin-bottom: 5rem;
+
+    h3 {
+        font-size: @base__font-size;
+        margin-bottom: 1.3rem;
+    }
+
+    .message {
+        margin-bottom: @indent__m;
+
+        &:before {
+            margin-top: 0;
+            top: 1.8rem;
+        }
+    }
+
+    .extensions-container {
+        padding: 0 @indent__base;
+    }
+
+    .list {
+        margin-bottom: @indent__s;
+
+        select {
+            cursor: pointer;
+
+            &:disabled {
+                background: @color-gray80;
+                cursor: default;
+            }
+        }
+
+        .extension-delete {
+            &:extend(.abs-action-delete all);
+            font-size: 1.7rem;
+            padding-top: 0;
+        }
+    }
+}
+
+.delete-modal-wrap {
+    padding: 0 4% @indent__xl;
+
+    h3 {
+        .lib-font-size(34);
+        display: inline-block;
+        font-weight: @font-weight__light;
+        margin: 0 0 @indent__base;
+        padding: .9rem 0 0;
+        vertical-align: top;
+    }
+
+    .actions {
+        padding: @indent__l 0 0;
+    }
+}
+
+//
+//  Mobile
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    .readiness-check-content {
+        margin-right: 2rem;
+    }
+
+    .readiness-check-side {
+        padding: 2rem 0;
+        position: static;
+    }
+}

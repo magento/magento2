@@ -1,0 +1,188 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  _____________________________________________
+
+@form-el__border-color: @color-gray68;
+@form-el__color: @base__color;
+@form-el__focus__border-color: @focus__color;
+@form-el__hover__border-color: darken(@form-el__border-color, 10%);
+
+@color-required: @color-prime;
+
+//
+//  Structure
+//  _____________________________________________
+
+[class*='col-'] {
+    .form-el-input,
+    .form-el-select {
+        width: 100%;
+    }
+}
+
+//  Fieldset
+.form-fieldset {
+    border: none;
+    margin: 0 0 1em;
+    padding: 0;
+}
+
+//
+//  Forms block structure
+//  ---------------------------------------------
+
+.form-row {
+    &:extend(.abs-clearer all);
+    margin-bottom: 2.2rem;
+
+    .form-row {
+        margin-bottom: .4rem;
+    }
+
+    //  Labels
+    .form-label {
+        display: block;
+        font-weight: @font-weight__semibold;
+        padding: @form-el__indent-top 2.1em 0 0;
+        text-align: right;
+
+        &.required {
+            position: relative;
+
+            &:after {
+                color: @color-required;
+                content: '*';
+                font-size: 1.15em;
+                position: absolute;
+                right: .7em;
+                top: .5em;
+            }
+        }
+    }
+
+    .form-el-checkbox,
+    .form-el-radio {
+        + .form-label {
+            &:before {
+                top: .1rem + @form-el__indent-top;
+            }
+
+            &:after {
+                top: .1rem + @form-el__indent-top + .4rem;
+            }
+        }
+    }
+    &.form-row-text {
+        padding-top: .6rem;
+
+        .action-sign-out {
+            font-size: 1.2rem;
+            margin-left: @indent__s;
+        }
+    }
+}
+
+.form-note {
+    font-size: 1.2rem;
+    font-weight: @font-weight__semibold;
+    margin-top: @indent__s;
+}
+
+.form-el-dummy {
+    display: none;
+}
+
+.fieldset {
+    border: 0;
+    margin: 0;
+    min-width: 0;
+    padding: 0;
+}
+
+//
+//  Elements
+//  _____________________________________________
+
+input:not([disabled]),
+textarea:not([disabled]) {
+    &:focus {
+        box-shadow: none;
+    }
+}
+
+//
+//  Inputs
+//  ---------------------------------------------
+
+.form-el-input {
+    border: 1px solid @form-el__border-color;
+    color: @form-el__color;
+    padding: @form-el__padding-top @form-el__padding-side @form-el__padding-bottom;
+
+    &:hover {
+        border-color: @form-el__hover__border-color;
+    }
+
+    &:focus {
+        border-color: @form-el__focus__border-color;
+    }
+
+    &:required {
+        box-shadow: none;
+    }
+}
+
+//
+//  Labels
+//  ---------------------------------------------
+
+.form-label {
+    margin-bottom: .5em;
+}
+
+[class*='form-label'][for] {
+    cursor: pointer;
+}
+
+//
+//  Insider
+//  ---------------------------------------------
+
+.form-el-insider-wrap {
+    display: table;
+    width: 100%;
+}
+
+.form-el-insider-input {
+    display: table-cell;
+    width: 100%;
+}
+
+.form-el-insider {
+    border-radius: @form-el__border-radius;
+    display: table-cell;
+    padding: @form-el__padding-top + .08em @form-el__padding-side @form-el__padding-bottom 0;
+    vertical-align: top;
+}
+
+//
+//  Mobile
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    .form-row {
+        .form-label {
+            text-align: left;
+            &.required {
+                &:after {
+                    position: static;
+                }
+            }
+        }
+    }
+}

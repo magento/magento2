@@ -1,0 +1,43 @@
+Url,Url
+Title,Title
+Description,Description
+"Preview Image","Preview Image"
+"Get Video Information","Get Video Information"
+"Hide from Product Page","Hide from Product Page"
+Role,Role
+"YouTube and Vimeo supported.","YouTube and Vimeo supported."
+"Vimeo supported.<br />To add YouTube video, please <a href=""%1"">enter YouTube API Key</a> first.","Vimeo supported.<br />To add YouTube video, please <a href=""%1"">enter YouTube API Key</a> first."
+"Protocol isn't allowed","Protocol isn't allowed"
+"Could not get preview image information. Please check your connection and try again.","Could not get preview image information. Please check your connection and try again."
+"Add Video","Add Video"
+"Browse to find or drag image here","Browse to find or drag image here"
+"Delete video","Delete video"
+"Delete image","Delete image"
+Hidden,Hidden
+"Alt Text","Alt Text"
+"Image Size","Image Size"
+{size},{size}
+"Image Resolution","Image Resolution"
+"{width}^{height} px","{width}^{height} px"
+Title:,Title:
+Uploaded:,Uploaded:
+Uploader:,Uploader:
+Duration:,Duration:
+"Video Error","Video Error"
+"Unknown video type","Unknown video type"
+"Invalid video url","Invalid video url"
+"Youtube API key is invalid","Youtube API key is invalid"
+"Video cant be shown due to the following reason: ","Video cant be shown due to the following reason: "
+"Video not found","Video not found"
+"New Video","New Video"
+Save,Save
+Cancel,Cancel
+Delete,Delete
+"Edit Video","Edit Video"
+"Images and Videos","Images and Videos"
+"Product Video","Product Video"
+"YouTube API Key","YouTube API Key"
+"Autostart base video","Autostart base video"
+"Show related video","Show related video"
+"Auto restart video","Auto restart video"
+"Images And Videos","Images And Videos"

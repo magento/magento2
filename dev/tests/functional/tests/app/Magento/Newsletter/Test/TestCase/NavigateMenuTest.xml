@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Backend\Test\TestCase\NavigateMenuTest">
+        <variation name="NavigateMenuTest46">
+            <data name="menuItem" xsi:type="string">Marketing > Newsletter Template</data>
+            <data name="pageTitle" xsi:type="string">Newsletter Templates</data>
+            <constraint name="Magento\Backend\Test\Constraint\AssertBackendPageIsAvailable"/>
+        </variation>
+        <variation name="NavigateMenuTest47">
+            <data name="menuItem" xsi:type="string">Marketing > Newsletter Queue</data>
+            <data name="pageTitle" xsi:type="string">Newsletter Queue</data>
+            <constraint name="Magento\Backend\Test\Constraint\AssertBackendPageIsAvailable"/>
+        </variation>
+        <variation name="NavigateMenuTest48">
+            <data name="menuItem" xsi:type="string">Marketing > Newsletter Subscribers</data>
+            <data name="pageTitle" xsi:type="string">Newsletter Subscribers</data>
+            <constraint name="Magento\Backend\Test\Constraint\AssertBackendPageIsAvailable"/>
+        </variation>
+        <variation name="NavigateMenuTest49">
+            <data name="menuItem" xsi:type="string">Reports > Newsletter Problem Reports</data>
+            <data name="pageTitle" xsi:type="string">Newsletter Problems Report</data>
+            <constraint name="Magento\Backend\Test\Constraint\AssertBackendPageIsAvailable"/>
+        </variation>
+    </testCase>
+</config>

@@ -1,28 +1,15 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
 namespace Magento\Backend\Model\Menu\Director;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Director extends \Magento\Backend\Model\Menu\AbstractDirector
 {
     /**
@@ -30,22 +17,21 @@ class Director extends \Magento\Backend\Model\Menu\AbstractDirector
      *
      * @var array
      */
-    protected $_messagePatterns = array('update' => 'Item %s was updated', 'remove' => 'Item %s was removed');
+    protected $_messagePatterns = ['update' => 'Item %s was updated', 'remove' => 'Item %s was removed'];
 
     /**
      * Get command object
      *
      * @param array $data command params
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @return \Magento\Backend\Model\Menu\Builder\AbstractCommand
      */
     protected function _getCommand($data, $logger)
     {
-        $command = $this->_commandFactory->create($data['type'], array('data' => $data));
+        $command = $this->_commandFactory->create($data['type'], ['data' => $data]);
         if (isset($this->_messagePatterns[$data['type']])) {
-            $logger->logDebug(
-                sprintf($this->_messagePatterns[$data['type']], $command->getId()),
-                \Magento\Backend\Model\Menu::LOGGER_KEY
+            $logger->info(
+                sprintf($this->_messagePatterns[$data['type']], $command->getId())
             );
         }
         return $command;
@@ -56,11 +42,14 @@ class Director extends \Magento\Backend\Model\Menu\AbstractDirector
      *
      * @param array $config
      * @param \Magento\Backend\Model\Menu\Builder $builder
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @return void
      */
-    public function direct(array $config, \Magento\Backend\Model\Menu\Builder $builder, \Magento\Framework\Logger $logger)
-    {
+    public function direct(
+        array $config,
+        \Magento\Backend\Model\Menu\Builder $builder,
+        \Psr\Log\LoggerInterface $logger
+    ) {
         foreach ($config as $data) {
             $builder->processCommand($this->_getCommand($data, $logger));
         }

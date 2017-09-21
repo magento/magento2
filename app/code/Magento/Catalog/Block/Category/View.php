@@ -1,35 +1,17 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- */
-
-/**
- * Category View block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Block\Category;
 
-class View extends \Magento\Framework\View\Element\Template implements \Magento\Framework\View\Block\IdentityInterface
+/**
+ * Class View
+ * @api
+ * @package Magento\Catalog\Block\Category
+ * @since 100.0.2
+ */
+class View extends \Magento\Framework\View\Element\Template implements \Magento\Framework\DataObject\IdentityInterface
 {
     /**
      * Core registry
@@ -52,20 +34,20 @@ class View extends \Magento\Framework\View\Element\Template implements \Magento\
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Catalog\Model\Layer\Category $catalogLayer
+     * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Helper\Category $categoryHelper
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Catalog\Model\Layer\Category $catalogLayer,
+        \Magento\Catalog\Model\Layer\Resolver $layerResolver,
         \Magento\Framework\Registry $registry,
         \Magento\Catalog\Helper\Category $categoryHelper,
-        array $data = array()
+        array $data = []
     ) {
         $this->_categoryHelper = $categoryHelper;
-        $this->_catalogLayer = $catalogLayer;
+        $this->_catalogLayer = $layerResolver->get();
         $this->_coreRegistry = $registry;
         parent::__construct($context, $data);
     }
@@ -77,44 +59,30 @@ class View extends \Magento\Framework\View\Element\Template implements \Magento\
     {
         parent::_prepareLayout();
 
-        $this->getLayout()->createBlock('Magento\Catalog\Block\Breadcrumbs');
+        $this->getLayout()->createBlock(\Magento\Catalog\Block\Breadcrumbs::class);
 
-        $headBlock = $this->getLayout()->getBlock('head');
         $category = $this->getCurrentCategory();
-        if ($headBlock && $category) {
+        if ($category) {
             $title = $category->getMetaTitle();
             if ($title) {
-                $headBlock->setTitle($title);
+                $this->pageConfig->getTitle()->set($title);
             }
             $description = $category->getMetaDescription();
             if ($description) {
-                $headBlock->setDescription($description);
+                $this->pageConfig->setDescription($description);
             }
             $keywords = $category->getMetaKeywords();
             if ($keywords) {
-                $headBlock->setKeywords($keywords);
+                $this->pageConfig->setKeywords($keywords);
             }
-            //@todo: move canonical link to separate block
-            if ($this->_categoryHelper->canUseCanonicalTag() && !$headBlock->getChildBlock(
-                'magento-page-head-category-canonical-link'
-            )
-            ) {
-                $headBlock->addChild(
-                    'magento-page-head-category-canonical-link',
-                    'Magento\Theme\Block\Html\Head\Link',
-                    array(
-                        'url' => $category->getUrl(),
-                        'properties' => array('attributes' => array('rel' => 'canonical'))
-                    )
+            if ($this->_categoryHelper->canUseCanonicalTag()) {
+                $this->pageConfig->addRemotePageAsset(
+                    $category->getUrl(),
+                    'canonical',
+                    ['attributes' => ['rel' => 'canonical']]
                 );
             }
-            /**
-             * want to show rss feed in the url
-             */
-            if ($this->isRssCatalogEnable() && $this->isTopCategory()) {
-                $title = __('%1 RSS Feed', $this->getCurrentCategory()->getName());
-                $headBlock->addRss($title, $this->getRssLink());
-            }
+
             $pageMainTitle = $this->getLayout()->getBlock('page.main.title');
             if ($pageMainTitle) {
                 $pageMainTitle->setPageTitle($this->getCurrentCategory()->getName());
@@ -122,36 +90,6 @@ class View extends \Magento\Framework\View\Element\Template implements \Magento\
         }
 
         return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function isRssCatalogEnable()
-    {
-        return $this->_scopeConfig->getValue('rss/catalog/category', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
-    }
-
-    /**
-     * @return bool
-     */
-    public function isTopCategory()
-    {
-        return $this->getCurrentCategory()->getLevel() == 2;
-    }
-
-    /**
-     * @return string
-     */
-    public function getRssLink()
-    {
-        return $this->_urlBuilder->getUrl(
-            'rss/catalog/category',
-            array(
-                'cid' => $this->getCurrentCategory()->getId(),
-                'store_id' => $this->_storeManager->getStore()->getId()
-            )
-        );
     }
 
     /**
@@ -182,7 +120,7 @@ class View extends \Magento\Framework\View\Element\Template implements \Magento\
     {
         if (!$this->getData('cms_block_html')) {
             $html = $this->getLayout()->createBlock(
-                'Magento\Cms\Block\Block'
+                \Magento\Cms\Block\Block::class
             )->setBlockId(
                 $this->getCurrentCategory()->getLandingPage()
             )->toHtml();

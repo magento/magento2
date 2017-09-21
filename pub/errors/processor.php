@@ -1,30 +1,16 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Error;
 
+use Magento\Framework\Serialize\Serializer\Json;
+
 /**
  * Error processor
+ *
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class Processor
 {
@@ -37,42 +23,42 @@ class Processor
      * Page title
      *
      * @var string
-    */
+     */
     public $pageTitle;
 
     /**
      * Skin URL
      *
      * @var string
-    */
+     */
     public $skinUrl;
 
     /**
      * Base URL
      *
      * @var string
-    */
+     */
     public $baseUrl;
 
     /**
      * Post data
      *
      * @var array
-    */
+     */
     public $postData;
 
     /**
      * Report data
      *
      * @var array
-    */
+     */
     public $reportData;
 
     /**
      * Report action
      *
      * @var string
-    */
+     */
     public $reportAction;
 
     /**
@@ -86,28 +72,28 @@ class Processor
      * Report file
      *
      * @var string
-    */
+     */
     protected $_reportFile;
 
     /**
      * Show error message
      *
      * @var bool
-    */
+     */
     public $showErrorMsg;
 
     /**
      * Show message after sending email
      *
      * @var bool
-    */
+     */
     public $showSentMsg;
 
     /**
      * Show form for sending
      *
      * @var bool
-    */
+     */
     public $showSendForm;
 
     /**
@@ -119,41 +105,50 @@ class Processor
      * Server script name
      *
      * @var string
-    */
+     */
     protected $_scriptName;
 
     /**
      * Is root
      *
      * @var bool
-    */
+     */
     protected $_root;
 
     /**
      * Internal config object
      *
      * @var \stdClass
-    */
+     */
     protected $_config;
 
     /**
      * Http response
      *
-     * @var Magento\Framework\App\Response\Http
+     * @var \Magento\Framework\App\Response\Http
      */
     protected $_response;
 
     /**
-     * @param \Magento\Framework\App\Response\Http $response
+     * JSON serializer
+     *
+     * @var Json
      */
-    public function __construct(\Magento\Framework\App\Response\Http $response)
+    private $serializer;
+
+    /**
+     * @param \Magento\Framework\App\Response\Http $response
+     * @param Json $serializer
+     */
+    public function __construct(\Magento\Framework\App\Response\Http $response, Json $serializer = null)
     {
         $this->_response = $response;
         $this->_errorDir  = __DIR__ . '/';
         $this->_reportDir = dirname(dirname($this->_errorDir)) . '/var/report/';
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Json::class);
 
         if (!empty($_SERVER['SCRIPT_NAME'])) {
-            if (in_array(basename($_SERVER['SCRIPT_NAME'], '.php'), array('404', '503', 'report'))) {
+            if (in_array(basename($_SERVER['SCRIPT_NAME'], '.php'), ['404', '503', 'report'])) {
                 $this->_scriptName = dirname($_SERVER['SCRIPT_NAME']);
             } else {
                 $this->_scriptName = $_SERVER['SCRIPT_NAME'];
@@ -166,7 +161,7 @@ class Processor
         }
 
         $this->_indexDir = $this->_getIndexDir();
-        $this->_root  = is_dir($this->_indexDir.'app');
+        $this->_root  = is_dir($this->_indexDir . 'app');
 
         $this->_prepareConfig();
         if (isset($_GET['skin'])) {
@@ -197,7 +192,6 @@ class Processor
         $this->_response->setHttpResponseCode(404);
         $this->_response->setBody($this->_renderPage('404.phtml'));
         return $this->_response;
-
     }
 
     /**
@@ -244,7 +238,13 @@ class Processor
      */
     public function getViewFileUrl()
     {
-        return $this->getBaseUrl() . self::ERROR_DIR. '/' . $this->_config->skin . '/';
+        //The url needs to be updated base on Document root path.
+        return $this->getBaseUrl() .
+        str_replace(
+            str_replace('\\', '/', $this->_indexDir),
+            '',
+            str_replace('\\', '/', $this->_errorDir)
+        ) . $this->_config->skin . '/';
     }
 
     /**
@@ -268,7 +268,7 @@ class Processor
         $isSecure = (!empty($_SERVER['HTTPS'])) && ($_SERVER['HTTPS'] != 'off');
         $url = ($isSecure ? 'https://' : 'http://') . $host;
 
-        if (!empty($_SERVER['SERVER_PORT']) && !in_array($_SERVER['SERVER_PORT'], array(80, 433))
+        if (!empty($_SERVER['SERVER_PORT']) && !in_array($_SERVER['SERVER_PORT'], [80, 443])
             && !preg_match('/.*?\:[0-9]+$/', $url)
         ) {
             $url .= ':' . $_SERVER['SERVER_PORT'];
@@ -313,7 +313,7 @@ class Processor
     {
         $documentRoot = '';
         if (!empty($_SERVER['DOCUMENT_ROOT'])) {
-            $documentRoot = rtrim($_SERVER['DOCUMENT_ROOT'], '/');
+            $documentRoot = rtrim(realpath($_SERVER['DOCUMENT_ROOT']), '/');
         }
         return dirname($documentRoot . $this->_scriptName) . '/';
     }
@@ -322,6 +322,8 @@ class Processor
      * Prepare config data
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _prepareConfig()
     {
@@ -337,10 +339,10 @@ class Processor
         $config->skin           = self::DEFAULT_SKIN;
 
         //combine xml data to one object
-        if (!is_null($design) && (string)$design->skin) {
+        if ($design !== null && (string)$design->skin) {
             $this->_setSkin((string)$design->skin, $config);
         }
-        if (!is_null($local)) {
+        if ($local !== null) {
             if ((string)$local->report->action) {
                 $config->action = $local->report->action;
             }
@@ -368,7 +370,7 @@ class Processor
      * Load xml file
      *
      * @param string $xmlFile
-     * @return SimpleXMLElement
+     * @return \SimpleXMLElement
      */
     protected function _loadXml($xmlFile)
     {
@@ -403,12 +405,7 @@ class Processor
      */
     protected function _getFilePath($file, $directories = null)
     {
-        if (is_null($directories)) {
-            $directories = array();
-
-            if (!$this->_root) {
-                $directories[] = $this->_indexDir . self::ERROR_DIR . '/';
-            }
+        if ($directories === null) {
             $directories[] = $this->_errorDir;
         }
 
@@ -427,16 +424,6 @@ class Processor
      */
     protected function _getTemplatePath($template)
     {
-        $directories = array();
-
-        if (!$this->_root) {
-            $directories[] = $this->_indexDir . self::ERROR_DIR. '/'. $this->_config->skin . '/';
-
-            if ($this->_config->skin != self::DEFAULT_SKIN) {
-                $directories[] = $this->_indexDir . self::ERROR_DIR . '/'. self::DEFAULT_SKIN . '/';
-            }
-        }
-
         $directories[] = $this->_errorDir . $this->_config->skin . '/';
 
         if ($this->_config->skin != self::DEFAULT_SKIN) {
@@ -471,7 +458,7 @@ class Processor
      * Create report
      *
      * @param array $reportData
-     * @return void
+     * @return string
      */
     public function saveReport($reportData)
     {
@@ -484,20 +471,14 @@ class Processor
             @mkdir($this->_reportDir, 0777, true);
         }
 
-        @file_put_contents($this->_reportFile, serialize($reportData));
-        @chmod($this->_reportFile, 0777);
+        @file_put_contents($this->_reportFile, $this->serializer->serialize($reportData));
 
         if (isset($reportData['skin']) && self::DEFAULT_SKIN != $reportData['skin']) {
             $this->_setSkin($reportData['skin']);
         }
         $this->_setReportUrl();
 
-        if (headers_sent()) {
-            echo '<script type="text/javascript">';
-            echo "window.location.href = '{$this->reportUrl}';";
-            echo '</script>';
-            exit;
-        }
+        return $this->reportUrl;
     }
 
     /**
@@ -505,6 +486,7 @@ class Processor
      *
      * @param int $reportId
      * @return void
+     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function loadReport($reportId)
     {
@@ -515,13 +497,15 @@ class Processor
             header("Location: " . $this->getBaseUrl());
             die();
         }
-        $this->_setReportData(unserialize(file_get_contents($this->_reportFile)));
+        $this->_setReportData($this->serializer->unserialize(file_get_contents($this->_reportFile)));
     }
 
     /**
      * Send report
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function sendReport()
     {
@@ -535,12 +519,11 @@ class Processor
 
         if (isset($_POST['submit'])) {
             if ($this->_validate()) {
-
                 $msg  = "URL: {$this->reportData['url']}\n"
                     . "IP Address: {$this->_getClientIp()}\n"
                     . "First Name: {$this->postData['firstName']}\n"
                     . "Last Name: {$this->postData['lastName']}\n"
-                    . "E-mail Address: {$this->postData['email']}\n";
+                    . "Email Address: {$this->postData['email']}\n";
                 if ($this->postData['telephone']) {
                     $msg .= "Telephone: {$this->postData['telephone']}\n";
                 }
@@ -597,7 +580,7 @@ class Processor
      */
     protected function _setSkin($value, \stdClass $config = null)
     {
-        if (preg_match('/^[a-z0-9_]+$/i', $value) && is_dir($this->_indexDir . self::ERROR_DIR . '/' . $value)) {
+        if (preg_match('/^[a-z0-9_]+$/i', $value) && is_dir($this->_errorDir . $value)) {
             if (!$config) {
                 if ($this->_config) {
                     $config = $this->_config;
@@ -618,7 +601,7 @@ class Processor
     {
         if ($this->reportId && $this->_config && isset($this->_config->skin)) {
             $this->reportUrl = "{$this->getBaseUrl(true)}pub/errors/report.php?"
-                . http_build_query(array('id' => $this->reportId, 'skin' => $this->_config->skin));
+                . http_build_query(['id' => $this->reportId, 'skin' => $this->_config->skin]);
         }
     }
 }

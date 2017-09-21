@@ -1,0 +1,180 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var $upsModel \Magento\Ups\Helper\Config */
+/** @var $block \Magento\Ups\Block\Backend\System\CarrierConfig */
+$upsCarrierConfig = $block->getCarrierConfig();
+$orShipArr = $upsCarrierConfig->getCode('originShipment');
+$defShipArr = $upsCarrierConfig->getCode('method');
+
+$sectionCode = $block->getRequest()->getParam('section');
+$websiteCode = $block->getRequest()->getParam('website');
+$storeCode = $block->getRequest()->getParam('store');
+
+if (!$storeCode && $websiteCode) {
+    /** @var $web \Magento\Store\Model\Website */
+    $web = $block->getWebsiteModel()->load($websiteCode);
+    $storedAllowedMethods = explode(',', $web->getConfig('carriers/ups/allowed_methods'));
+    $storedOriginShipment = $block->escapeHtml($web->getConfig('carriers/ups/origin_shipment'));
+    $storedFreeShipment   = $block->escapeHtml($web->getConfig('carriers/ups/free_method'));
+    $storedUpsType        = $block->escapeHtml($web->getConfig('carriers/ups/type'));
+} elseif ($storeCode) {
+    $storedAllowedMethods = explode(',', $block->getConfig('carriers/ups/allowed_methods', $storeCode));
+    $storedOriginShipment = $block->escapeHtml($block->getConfig('carriers/ups/origin_shipment', $storeCode));
+    $storedFreeShipment   = $block->escapeHtml($block->getConfig('carriers/ups/free_method', $storeCode));
+    $storedUpsType        = $block->escapeHtml($block->getConfig('carriers/ups/type', $storeCode));
+} else {
+    $storedAllowedMethods = explode(',', $block->getConfig('carriers/ups/allowed_methods'));
+    $storedOriginShipment = $block->escapeHtml($block->getConfig('carriers/ups/origin_shipment'));
+    $storedFreeShipment   = $block->escapeHtml($block->getConfig('carriers/ups/free_method'));
+    $storedUpsType        = $block->escapeHtml($block->getConfig('carriers/ups/type'));
+}
+?>
+<script>
+require(["prototype"], function(){
+
+//<![CDATA[
+    function hideRowArrayElements(arr)
+    {
+        for (var a = 0; a < arr.length; a++) {
+            $(arr[a]).up(1).hide();
+        }
+    }
+
+    function showRowArrayElements(arr)
+    {
+        for (var a = 0; a < arr.length; a++) {
+            $(arr[a]).up(1).show();
+        }
+    }
+
+    function inArray(arr, value)
+    {
+        for (var i = 0; i < arr.length; i++) {
+            if (arr[i] === value) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    var upsXml = Class.create();
+    upsXml.prototype = {
+        initialize: function()
+        {
+            this.carriersUpsTypeId = 'carriers_ups_type';
+            if (!$(this.carriersUpsTypeId)) {
+                return;
+            }
+
+            this.checkingUpsXmlId = ['carriers_ups_gateway_xml_url','carriers_ups_username',
+                'carriers_ups_password','carriers_ups_access_license_number'];
+            this.checkingUpsId = ['carriers_ups_gateway_url'];
+            this.originShipmentTitle = '';
+            this.allowedMethodsId = 'carriers_ups_allowed_methods';
+            this.freeShipmentId = 'carriers_ups_free_method';
+            this.onlyUpsXmlElements = ['carriers_ups_gateway_xml_url','carriers_ups_tracking_xml_url',
+                'carriers_ups_username','carriers_ups_password','carriers_ups_access_license_number',
+                'carriers_ups_origin_shipment','carriers_ups_negotiated_active','carriers_ups_shipper_number',
+                'carriers_ups_mode_xml'];
+            this.onlyUpsElements = ['carriers_ups_gateway_url'];
+
+            this.storedOriginShipment = '<?= /* @noEscape */ $storedOriginShipment ?>';
+            this.storedFreeShipment = '<?= /* @noEscape */ $storedFreeShipment ?>';
+            this.storedUpsType = '<?= /* @noEscape */ $storedUpsType ?>';
+            <?php /** @var $jsonHelper \Magento\Framework\Json\Helper\Data */ $jsonHelper = $this->helper('Magento\Framework\Json\Helper\Data'); ?>
+            this.storedAllowedMethods = <?= /* @noEscape */ $jsonHelper->jsonEncode($storedAllowedMethods) ?>;
+            this.originShipmentObj = <?= /* @noEscape */ $jsonHelper->jsonEncode($orShipArr) ?>;
+            this.originShipmentObj['default'] = <?= /* @noEscape */ $jsonHelper->jsonEncode($defShipArr) ?>;
+
+            this.setFormValues();
+            Event.observe($(this.carriersUpsTypeId), 'change', this.setFormValues.bind(this));
+        },
+        updateAllowedMethods: function(originShipmentTitle)
+        {
+            var allowedMethods = $(this.allowedMethodsId), // multiselect
+                freeMethod = $(this.freeShipmentId), // single-choice select
+                originShipment = this.originShipmentObj[originShipmentTitle];
+
+            while (allowedMethods.length > 0) {
+                allowedMethods.remove(0);
+            }
+
+            while (freeMethod.length > 0) {
+                freeMethod.remove(0);
+            }
+            freeMethod.insert(new Element('option', {value:''}).update('<?= $block->escapeHtml(__('None')) ?>'));
+
+            var code, option;
+            for (code in originShipment) {
+                option = new Element('option', {value:code}).update(originShipment[code]);
+                if ((originShipmentTitle == this.storedOriginShipment || originShipmentTitle == 'default')
+                    && this.storedFreeShipment == code
+                ) {
+                    option.selected = true;
+                }
+                freeMethod.insert(option);
+
+                option = new Element('option', {value:code}).update(originShipment[code]);
+                if (this.storedUpsType == 'UPS') {
+                    if (originShipmentTitle != 'default' || inArray(this.storedAllowedMethods, code)) {
+                        option.selected = true;
+                    }
+                } else if (originShipmentTitle != this.storedOriginShipment
+                    || inArray(this.storedAllowedMethods, code)
+                ) {
+                    option.selected = true;
+                }
+
+                if ((originShipmentTitle == 'default' || originShipmentTitle == this.storedOriginShipment)
+                    && inArray(this.storedAllowedMethods, code)
+                ) {
+                    option.selected = true;
+                }
+
+                allowedMethods.insert(option);
+            }
+        },
+        setFormValues: function()
+        {
+            var a;
+            if ($F(this.carriersUpsTypeId) == 'UPS') {
+                for (a = 0; a < this.checkingUpsXmlId.length; a++) {
+                    $(this.checkingUpsXmlId[a]).removeClassName('required-entry');
+                }
+                for (a = 0; a < this.checkingUpsId.length; a++) {
+                    $(this.checkingUpsXmlId[a]).addClassName('required-entry');
+                }
+                Event.stopObserving($('carriers_ups_origin_shipment'), 'change', this.changeOriginShipment.bind(this));
+                showRowArrayElements(this.onlyUpsElements);
+                hideRowArrayElements(this.onlyUpsXmlElements);
+                this.changeOriginShipment(null, 'default');
+            } else {
+                for (a = 0; a < this.checkingUpsXmlId.length; a++) {
+                    $(this.checkingUpsXmlId[a]).addClassName('required-entry');
+                }
+                for (a = 0; a < this.checkingUpsId.length; a++) {
+                    $(this.checkingUpsXmlId[a]).removeClassName('required-entry');
+                }
+                Event.observe($('carriers_ups_origin_shipment'), 'change', this.changeOriginShipment.bind(this));
+                showRowArrayElements(this.onlyUpsXmlElements);
+                hideRowArrayElements(this.onlyUpsElements);
+                this.changeOriginShipment(null, null);
+            }
+        },
+        changeOriginShipment: function(Event, key)
+        {
+            this.originShipmentTitle = key ? key : $F('carriers_ups_origin_shipment');
+            this.updateAllowedMethods(this.originShipmentTitle);
+        }
+    };
+    xml = new upsXml();
+    //]]>
+
+});
+</script>

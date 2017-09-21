@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -34,21 +16,61 @@ class WordsFinder
      *
      * @var array
      */
-    protected $_binaryExtensions = array('jpg', 'jpeg', 'png', 'gif', 'swf', 'mp3', 'avi', 'mov', 'flv', 'jar', 'zip');
+    protected $_binaryExtensions = [
+        'jpg', 'jpeg', 'png', 'gif', 'swf', 'mp3', 'avi', 'mov', 'flv', 'jar', 'zip',
+        'eot', 'ttf', 'woff', 'woff2', 'ico', 'svg',
+    ];
+
+    /**
+     * Copyright string which must be present in every non-binary file
+     *
+     * @var string
+     */
+    protected $copyrightString = 'Copyright © Magento, Inc. All rights reserved.';
+
+    /**
+     * Copying string which must be present in every non-binary file right after copyright string
+     *
+     * @var string
+     */
+    protected $copyingString = 'See COPYING.txt for license details.';
+
+    /**
+     * List of extensions for which copyright check must be skipped
+     *
+     * @var array
+     */
+    protected $copyrightSkipExtensions = ['csv', 'json', 'lock', 'md', 'txt'];
+
+    /**
+     * List of paths where copyright check must be skipped
+     *
+     * @var array
+     */
+    protected $copyrightSkipList = [
+        'lib/web/legacy-build.min.js'
+    ];
+
+    /**
+     * Whether copyright presence should be checked or not
+     *
+     * @var bool
+     */
+    protected $isCopyrightChecked;
 
     /**
      * Words to search for
      *
      * @var array
      */
-    protected $_words = array();
+    protected $_words = [];
 
     /**
      * Map of whitelisted paths to whitelisted words
      *
      * @var array
      */
-    protected $_whitelist = array();
+    protected $_whitelist = [];
 
     /**
      * Path to base dir, used to calculate relative paths
@@ -58,34 +80,46 @@ class WordsFinder
     protected $_baseDir;
 
     /**
+     * Component Registrar
+     *
+     * @var \Magento\Framework\Component\ComponentRegistrar
+     */
+    protected $componentRegistrar;
+
+    /**
+     * Map of phrase to exclude from the file content
+     *
+     * @var  array
+     */
+    private $exclude = [];
+
+    /**
      * @param string|array $configFiles
      * @param string $baseDir
+     * @param \Magento\Framework\Component\ComponentRegistrar $componentRegistrar
+     * @param bool $isCopyrightChecked
      * @throws \Magento\TestFramework\Inspection\Exception
      */
-    public function __construct($configFiles, $baseDir)
+    public function __construct($configFiles, $baseDir, $componentRegistrar, $isCopyrightChecked = false)
     {
         if (!is_dir($baseDir)) {
             throw new \Magento\TestFramework\Inspection\Exception("Base directory {$baseDir} does not exist");
         }
-        $this->_baseDir = realpath($baseDir);
+        $this->_baseDir = str_replace('\\', '/', realpath($baseDir));
+        $this->componentRegistrar = $componentRegistrar;
 
         // Load config files
         if (!is_array($configFiles)) {
-            $configFiles = array($configFiles);
+            $configFiles = [$configFiles];
         }
         foreach ($configFiles as $configFile) {
             $this->_loadConfig($configFile);
         }
 
         // Add config files to whitelist, as they surely contain banned words
-        $basePath = $this->_baseDir . '/';
-        $basePathLen = strlen($basePath);
         foreach ($configFiles as $configFile) {
-            $configFile = realpath($configFile);
-            if (strncmp($basePath, $configFile, $basePathLen) === 0) {
-                // File is inside base dir
-                $this->_whitelist[$this->_getRelPath($configFile)] = array();
-            }
+            $configFile = str_replace('\\', '/', realpath($configFile));
+            $this->_whitelist[$configFile] = [];
         }
 
         $this->_normalizeWhitelistPaths();
@@ -94,6 +128,8 @@ class WordsFinder
         if (!$this->_words) {
             throw new \Magento\TestFramework\Inspection\Exception('No words to check');
         }
+
+        $this->isCopyrightChecked = $isCopyrightChecked;
     }
 
     /**
@@ -125,7 +161,7 @@ class WordsFinder
      */
     protected function _extractWords(\SimpleXMLElement $configXml)
     {
-        $words = array();
+        $words = [];
         $nodes = $configXml->xpath('//config/words/word');
         foreach ($nodes as $node) {
             $words[] = (string)$node;
@@ -143,11 +179,14 @@ class WordsFinder
      * @param \SimpleXMLElement $configXml
      * @return \Magento\TestFramework\Inspection\WordsFinder
      * @throws \Magento\TestFramework\Inspection\Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _extractWhitelist(\SimpleXMLElement $configXml)
     {
         // Load whitelist entries
-        $whitelist = array();
+        $whitelist = [];
+        $exclude = [];
         $nodes = $configXml->xpath('//config/whitelist/item');
         foreach ($nodes as $node) {
             $path = $node->xpath('path');
@@ -156,18 +195,39 @@ class WordsFinder
                     'A "path" must be defined for the whitelisted item'
                 );
             }
-            $path = (string)$path[0];
+            $component = $node->xpath('component');
+            if ($component) {
+                $componentType = $component[0]->xpath('@type')[0];
+                $componentName = $component[0]->xpath('@name')[0];
+                $path = $this->componentRegistrar->getPath((string)$componentType, (string)$componentName)
+                    . '/' . (string)$path[0];
+            } else {
+                $path = $this->_baseDir . '/' . (string)$path[0];
+            }
 
             // Words
-            $words = array();
+            $words = [];
             $wordNodes = $node->xpath('word');
             if ($wordNodes) {
                 foreach ($wordNodes as $wordNode) {
                     $words[] = (string)$wordNode;
                 }
             }
-
             $whitelist[$path] = $words;
+
+            $excludeNodes = $node->xpath('exclude');
+            $excludes = [];
+            if ($excludeNodes) {
+                foreach ($excludeNodes as $extractNode) {
+                    $excludes[] = (string)$extractNode;
+                }
+            }
+
+            if (isset($exclude[$path])) {
+                $exclude[$path] = array_merge($excludes, $exclude[$path]);
+            } else {
+                $exclude[$path] = $excludes;
+            }
         }
 
         // Merge with already present whitelist
@@ -178,6 +238,12 @@ class WordsFinder
             $this->_whitelist[$newPath] = array_unique($newWords);
         }
 
+        foreach ($exclude as $newPath => $newWords) {
+            if (isset($this->exclude[$newPath])) {
+                $newWords = array_merge($this->exclude[$newPath], $newWords);
+            }
+            $this->exclude[$newPath] = array_unique($newWords);
+        }
         return $this;
     }
 
@@ -187,7 +253,7 @@ class WordsFinder
     protected function _normalizeWhitelistPaths()
     {
         $whitelist = $this->_whitelist;
-        $this->_whitelist = array();
+        $this->_whitelist = [];
         foreach ($whitelist as $whitelistFile => $whitelistWords) {
             $whitelistFile = str_replace('\\', '/', $whitelistFile);
             $this->_whitelist[$whitelistFile] = $whitelistWords;
@@ -205,11 +271,10 @@ class WordsFinder
     {
         $foundWords = $this->_findWords($file);
         if (!$foundWords) {
-            return array();
+            return [];
         }
 
-        $relPath = substr($file, strlen($this->_baseDir) + 1);
-        return self::_removeWhitelistedWords($relPath, $foundWords);
+        return self::_removeWhitelistedWords($file, $foundWords);
     }
 
     /**
@@ -217,22 +282,51 @@ class WordsFinder
      *
      * @param  string $file
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _findWords($file)
     {
-        // MAGETWO-1569: Yaml files are not checked until license placeholder replacement is implemented for them
-        $checkContents = !$this->_isBinaryFile($file) && pathinfo($file, PATHINFO_EXTENSION) !== 'yml';
-
-        $relPath = $this->_getRelPath($file);
+        $checkContents = !$this->_isBinaryFile($file);
+        $path = $this->getSearchablePath($file);
         $contents = $checkContents ? file_get_contents($file) : '';
+        if (isset($this->exclude[$file]) && !empty($this->exclude[$file])) {
+            foreach ($this->exclude[$file] as $stringToEliminate) {
+                $contents = str_replace($stringToEliminate, "", $contents);
+            }
+        }
 
-        $foundWords = array();
+        $foundWords = [];
         foreach ($this->_words as $word) {
-            if (stripos($relPath, $word) !== false || stripos($contents, $word) !== false) {
+            if (stripos($path, $word) !== false || stripos($contents, $word) !== false) {
                 $foundWords[] = $word;
             }
         }
+        if ($contents && $this->isCopyrightChecked && !$this->isCopyrightCheckSkipped($file)
+            && (($copyrightStringPosition = mb_strpos($contents, $this->copyrightString)) === false
+            || ($copyingStringPosition = strpos($contents, $this->copyingString)) === false
+            || $copyingStringPosition - $copyrightStringPosition - mb_strlen($this->copyrightString) > 10)
+        ) {
+            $foundWords[] = 'Copyright string is missing';
+        }
         return $foundWords;
+    }
+
+    /**
+     * @param string $path
+     * @return bool
+     */
+    protected function isCopyrightCheckSkipped($path)
+    {
+        if (in_array(pathinfo($path, PATHINFO_EXTENSION), $this->copyrightSkipExtensions)) {
+            return true;
+        }
+        foreach ($this->copyrightSkipList as $dir) {
+            if (strpos($path, $dir) !== false) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -263,7 +357,7 @@ class WordsFinder
 
             if (!$whitelistWords) {
                 // All words are permitted there
-                return array();
+                return [];
             }
             $foundWords = array_diff($foundWords, $whitelistWords);
         }
@@ -271,13 +365,16 @@ class WordsFinder
     }
 
     /**
-     * Return file path relative to base dir
+     * Return the path for words search
      *
      * @param string $file
      * @return string
      */
-    protected function _getRelPath($file)
+    protected function getSearchablePath($file)
     {
+        if (strpos($file, $this->_baseDir) === false) {
+            return $file;
+        }
         return substr($file, strlen($this->_baseDir) + 1);
     }
 }

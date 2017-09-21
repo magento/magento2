@@ -1,0 +1,24 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var $block \Magento\Framework\View\Element\Template */
+
+/** @var $block \Magento\Framework\View\Element\Template */
+$_gridPopupBlock = $block->getChildBlock('catalog.product.group.grid.popup.container')->getChildBlock('grid');
+$_gridPopupBlock->setRowClickCallback('function(){}');
+?>
+<div id="grouped-product-container" data-mage-init='{"groupedProduct":{"gridPopup":"[data-grid-id=<?= /* @escapeNotVerified */ $_gridPopupBlock->getId() ?>]"}}'>
+    <div class="no-products-message">
+        <?= /* @escapeNotVerified */ __('There are no grouped products.') ?>
+    </div>
+    <?= $block->getChildHtml('list') ?>
+    <div data-role="add-product-dialog" class="no-display">
+        <?= $block->getChildBlock('catalog.product.group.grid.popup.container')->getChildHtml('grid') ?>
+    </div>
+    <button type="button" data-role="add-product">Add Products to Group</button>
+</div>

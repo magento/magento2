@@ -1,0 +1,98 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Upgrade -> Pages -> Home
+//  _____________________________________________
+
+//
+//  Variables
+//  ---------------------------------------------
+
+@setup-home-item__background-color: @color-gray98;
+@setup-home-item__border-color: @color-gray80;
+@setup-home-item__color: @text__color;
+@setup-home-item__active__border-color: darken(@color-gray80, 25%);
+
+//
+
+.home-page-inner-wrap {
+    margin: 0 auto;
+    max-width: 91rem;
+}
+
+.setup-home-title {
+    margin-bottom: 3.9rem;
+    padding-top: 1.8rem;
+    text-align: center;
+}
+
+.setup-home-item {
+    background-color: @setup-home-item__background-color;
+    border: 1px solid @setup-home-item__border-color;
+    color: @setup-home-item__color;
+    display: block;
+    margin-bottom: 2rem;
+    margin-left: 1.3rem;
+    margin-right: 1.3rem;
+    min-height: 30rem;
+    padding: 2rem;
+    text-align: center;
+
+    &:hover {
+        border-color: @setup-home-item__active__border-color;
+        color: @setup-home-item__color;
+        text-decoration: none;
+        transition: border-color .1s linear;
+    }
+
+    &:active {
+        transform: scale(.99);
+    }
+
+    &:before {
+        &:extend(.abs-icon all);
+        display: block;
+        font-size: 7rem;
+        margin-bottom: 3.3rem;
+        margin-top: 4rem;
+    }
+}
+
+.setup-home-item-component,
+.setup-home-item-extension {
+    &:before {
+        content: @icon-lego__content;
+    }
+}
+
+.setup-home-item-module {
+    &:before {
+        content: @icon-module__content;
+    }
+}
+
+.setup-home-item-upgrade {
+    &:before {
+        content: @icon-updater__content;
+    }
+}
+
+.setup-home-item-configuration {
+    &:before {
+        content: @icon-system-config__content;
+    }
+}
+
+.setup-home-item-title {
+    display: block;
+    font-size: 1.8rem;
+    letter-spacing: @letter-spacing__small;
+    margin-bottom: 1rem;
+}
+
+.setup-home-item-description {
+    display: block;
+}

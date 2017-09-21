@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
+    <page name="CatalogProductSetEdit" area="Adminhtml" mca="catalog/product_set/edit" module="Magento_Catalog">
+        <block name="pageActions" class="Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\Set\FormPageActions" locator=".page-main-actions" strategy="css selector"/>
+        <block name="attributeSetEditBlock" class="Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\Set\Main" locator=".attribute-set" strategy="css selector"/>
+        <block name="attributeSetEditForm" class="Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\Set\Main\EditForm" locator="#set_name" strategy="css selector"/>
+        <block name="modalBlock" class="Magento\Ui\Test\Block\Adminhtml\Modal" locator="._show[data-role=modal]" strategy="css selector"/>
+    </page>
+</config>

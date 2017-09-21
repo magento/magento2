@@ -2,32 +2,14 @@
 /**
  * Test for \Magento\Framework\Filesystem\File\Write
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filesystem\File;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
-class WriteTest extends \PHPUnit_Framework_TestCase
+class WriteTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Current file path
@@ -53,7 +35,7 @@ class WriteTest extends \PHPUnit_Framework_TestCase
      * @dataProvider fileExistProvider
      * @param $path
      * @param $mode
-     * @expectedException \Magento\Framework\Filesystem\FilesystemException
+     * @expectedException \Magento\Framework\Exception\FileSystemException
      */
     public function testFileExistException($path, $mode)
     {
@@ -67,7 +49,7 @@ class WriteTest extends \PHPUnit_Framework_TestCase
      */
     public function fileExistProvider()
     {
-        return array(array('popup.csv', 'x'), array('popup.csv', 'x+'));
+        return [['popup.csv', 'x'], ['popup.csv', 'x+']];
     }
 
     /**
@@ -95,12 +77,12 @@ class WriteTest extends \PHPUnit_Framework_TestCase
      */
     public function writeProvider()
     {
-        return array(
-            array('new1.csv', 'w', 'write check', 11),
-            array('new3.csv', 'a', 'write check', 11),
-            array('new5.csv', 'x', 'write check', 11),
-            array('new7.csv', 'c', 'write check', 11)
-        );
+        return [
+            ['new1.csv', 'w', 'write check', 11],
+            ['new3.csv', 'a', 'write check', 11],
+            ['new5.csv', 'x', 'write check', 11],
+            ['new7.csv', 'c', 'write check', 11],
+        ];
     }
 
     /**
@@ -131,24 +113,25 @@ class WriteTest extends \PHPUnit_Framework_TestCase
      */
     public function writeAndReadProvider()
     {
-        return array(
-            array('new2.csv', 'w+', 'write check', 11),
-            array('new4.csv', 'a+', 'write check', 11),
-            array('new6.csv', 'x+', 'write check', 11),
-            array('new8.csv', 'c+', 'write check', 11)
-        );
+        return [
+            ['new2.csv', 'w+', 'write check', 11],
+            ['new4.csv', 'a+', 'write check', 11],
+            ['new6.csv', 'x+', 'write check', 11],
+            ['new8.csv', 'c+', 'write check', 11],
+        ];
     }
 
     /**
      * Writes one CSV row to the file.
      *
-     * @dataProvider csvProvider
+     * @dataProvider csvDataProvider
+     * @param array $expectedData
      * @param string $path
      * @param array $data
      * @param string $delimiter
      * @param string $enclosure
      */
-    public function testWriteCsv($path, array $data, $delimiter = ',', $enclosure = '"')
+    public function testWriteCsv($expectedData, $path, array $data, $delimiter = ',', $enclosure = '"')
     {
         $file = $this->getFileInstance($path, 'w+');
         $result = $file->writeCsv($data, $delimiter, $enclosure);
@@ -156,7 +139,7 @@ class WriteTest extends \PHPUnit_Framework_TestCase
         $read = $file->readCsv($result, $delimiter, $enclosure);
         $file->close();
         $this->removeCurrentFile();
-        $this->assertEquals($data, $read);
+        $this->assertEquals($expectedData, $read);
     }
 
     /**
@@ -164,12 +147,13 @@ class WriteTest extends \PHPUnit_Framework_TestCase
      *
      * @return array
      */
-    public function csvProvider()
+    public function csvDataProvider()
     {
-        return array(
-            array('newcsv1.csv', array('field1', 'field2'), ',', '"'),
-            array('newcsv1.csv', array('field1', 'field2'), '%', '@')
-        );
+        return [
+            [['field1', 'field2'], 'newcsv1.csv', ['field1', 'field2'], ',', '"'],
+            [['field1', 'field2'], 'newcsv1.csv', ['field1', 'field2'], '%', '@'],
+            [[' =field1', 'field2'], 'newcsv1.csv', ['=field1', 'field2'], '%', '@'],
+        ];
     }
 
     /**
@@ -215,12 +199,12 @@ class WriteTest extends \PHPUnit_Framework_TestCase
     {
         $this->currentFilePath = __DIR__ . '/../_files/' . $path;
         return Bootstrap::getObjectManager()->create(
-            'Magento\Framework\Filesystem\File\Write',
-            array(
+            \Magento\Framework\Filesystem\File\Write::class,
+            [
                 'path' => $this->currentFilePath,
                 'driver' => new \Magento\Framework\Filesystem\Driver\File(),
-                'mode' => $mode
-            )
+                'mode' => $mode,
+            ]
         );
     }
 }

@@ -1,44 +1,26 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model\Payment\Method\Billing;
 
-use Magento\Paypal\Model\Payment\Method\Billing\AbstractAgreement;
+use Magento\Quote\Api\Data\PaymentInterface;
 
-class AbstractAgreementTest extends \PHPUnit_Framework_TestCase
+class AbstractAgreementTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Paypal\Model\Method\Agreement */
     protected $_model;
 
     protected function setUp()
     {
-        $config = $this->getMockBuilder('\Magento\Paypal\Model\Config')->disableOriginalConstructor()->getMock();
+        $config = $this->getMockBuilder(\Magento\Paypal\Model\Config::class)->disableOriginalConstructor()->getMock();
         $config->expects($this->any())->method('isMethodAvailable')->will($this->returnValue(true));
-        $proMock = $this->getMockBuilder('Magento\Paypal\Model\Pro')->disableOriginalConstructor()->getMock();
+        $proMock = $this->getMockBuilder(\Magento\Paypal\Model\Pro::class)->disableOriginalConstructor()->getMock();
         $proMock->expects($this->any())->method('getConfig')->will($this->returnValue($config));
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Paypal\Model\Method\Agreement',
-            array('data' => array($proMock))
+            \Magento\Paypal\Model\Method\Agreement::class,
+            ['data' => [$proMock]]
         );
     }
 
@@ -49,7 +31,7 @@ class AbstractAgreementTest extends \PHPUnit_Framework_TestCase
     public function testIsActive()
     {
         $quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Sales\Model\Resource\Quote\Collection'
+            \Magento\Quote\Model\ResourceModel\Quote\Collection::class
         )->getFirstItem();
         $this->assertTrue($this->_model->isAvailable($quote));
     }
@@ -60,24 +42,30 @@ class AbstractAgreementTest extends \PHPUnit_Framework_TestCase
      */
     public function testAssignData()
     {
-        /** @var \Magento\Sales\Model\Resource\Quote\Collection $collection */
+        /** @var \Magento\Quote\Model\ResourceModel\Quote\Collection $collection */
         $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Sales\Model\Resource\Quote\Collection'
+            \Magento\Quote\Model\ResourceModel\Quote\Collection::class
         );
-        /** @var \Magento\Sales\Model\Quote $quote */
+        /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $collection->getFirstItem();
 
         /** @var \Magento\Payment\Model\Info $info */
         $info = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Payment\Model\Info'
+            \Magento\Payment\Model\Info::class
         )->setQuote(
             $quote
         );
         $this->_model->setData('info_instance', $info);
         $billingAgreement = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Paypal\Model\Resource\Billing\Agreement\Collection'
+            \Magento\Paypal\Model\ResourceModel\Billing\Agreement\Collection::class
         )->getFirstItem();
-        $data = array(AbstractAgreement::TRANSPORT_BILLING_AGREEMENT_ID => $billingAgreement->getId());
+        $data = new \Magento\Framework\DataObject(
+            [
+                PaymentInterface::KEY_ADDITIONAL_DATA => [
+                    AbstractAgreement::TRANSPORT_BILLING_AGREEMENT_ID => $billingAgreement->getId()
+                ]
+            ]
+        );
         $this->_model->assignData($data);
         $this->assertEquals(
             'REF-ID-TEST-678',

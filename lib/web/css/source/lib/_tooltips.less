@@ -1,0 +1,230 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Tooltips
+//  _____________________________________________
+
+.lib-tooltip(
+    @_tooltip-position: top,
+    @_tooltip-selector-toggle: ~".tooltip-toggle",
+    @_tooltip-selector-content: ~".tooltip-content",
+    @_tooltip-background: @tooltip__background,
+    @_tooltip-border-color: @tooltip__border-color,
+    @_tooltip-border-width: @tooltip__border-width,
+    @_tooltip-border-radius: @tooltip__border-radius,
+    @_tooltip-color: @tooltip__color,
+    @_tooltip-cursor: @tooltip__cursor,
+    @_tooltip-font-size: @tooltip__font-size,
+    @_tooltip-font-family: @tooltip__font-family,
+    @_tooltip-font-weight: @tooltip__font-weight,
+    @_tooltip-line-height: @tooltip__line-height,
+    @_tooltip-font-style: @tooltip__font-style,
+    @_tooltip-margin: @tooltip__margin,
+    @_tooltip-padding: @tooltip__padding,
+    @_tooltip-min-width: @tooltip__min-width,
+    @_tooltip-max-width: @tooltip__max-width,
+    @_tooltip-arrow-size: @tooltip-arrow__size,
+    @_tooltip-arrow-offset: @tooltip-arrow__offset,
+    @_tooltip-z-index: @tooltip__z-index
+) {
+    position: relative;
+
+    @{_tooltip-selector-content} {
+        .lib-css(background, @_tooltip-background);
+        .lib-css(border-radius, @_tooltip-border-radius);
+        .lib-css(margin, @_tooltip-margin);
+        .lib-css(max-width, @_tooltip-max-width);
+        .lib-css(min-width, @_tooltip-min-width);
+        .lib-css(padding, @_tooltip-padding);
+        .lib-css(z-index, @_tooltip-z-index);
+        display: none;
+        position: absolute;
+        text-align: left;
+
+        .lib-typography(
+            @_color: @_tooltip-color,
+            @_font-size: @_tooltip-font-size,
+            @_font-family: @_tooltip-font-family,
+            @_font-weight: @_tooltip-font-weight,
+            @_line-height: @_tooltip-line-height,
+            @_font-style: @_tooltip-font-style
+        );
+
+        ._lib-tooltip-border(@_tooltip-border-width, @_tooltip-border-color);
+
+        @_tooltip-arrow-after-margin: @_tooltip-arrow-size * -1px;
+        @_tooltip-arrow-before-margin: (@_tooltip-arrow-size + round(@_tooltip-border-width * 1.41421356)) * -1px;
+
+        &:after,
+        &:before {
+            border: solid transparent;
+            content: '';
+            height: 0;
+            position: absolute;
+            width: 0;
+        }
+
+        &:after {
+            .lib-css(border-width, @_tooltip-arrow-size);
+            border-color: transparent;
+        }
+
+        &:before {
+            .lib-css(border-width, @_tooltip-arrow-before-margin * -1);
+            border-color: transparent;
+        }
+
+        ._lib-tooltip-arrow-position(
+            @_tooltip-position,
+            @_tooltip-arrow-size,
+            @_tooltip-background,
+            @_tooltip-arrow-after-margin,
+            @_tooltip-arrow-before-margin,
+            @_tooltip-arrow-offset,
+            @_tooltip-border-color
+        );
+    }
+
+    & @{_tooltip-selector-toggle} {
+        .lib-css(cursor, @_tooltip-cursor);
+    }
+
+    & @{_tooltip-selector-toggle}:hover + @{_tooltip-selector-content},
+    & @{_tooltip-selector-toggle}:focus + @{_tooltip-selector-content},
+    &:hover @{_tooltip-selector-content} {
+        display: block;
+    }
+}
+
+._lib-tooltip-border(
+    @_tooltip-border-width,
+    @_tooltip-border-color
+) when not (@_tooltip-border-width = 0) and not (@_tooltip-border-width = false) and not (@_tooltip-border-color = false) {
+    .lib-css(border, @_tooltip-border-width solid @_tooltip-border-color);
+}
+
+._lib-tooltip-arrow-position(
+    @_tooltip-position,
+    @_tooltip-arrow-size,
+    @_tooltip-background,
+    @_tooltip-arrow-after-margin,
+    @_tooltip-arrow-before-margin,
+    @_tooltip-arrow-offset,
+    @_tooltip-border-color
+) when (@_tooltip-position = top) {
+    .lib-css(margin-bottom, @_tooltip-arrow-size);
+    bottom: 100%;
+    left: 0;
+
+    &:after,
+    &:before {
+        top: 100%;
+    }
+    &:after {
+        .lib-css(border-top-color, @_tooltip-background);
+        .lib-css(left, @_tooltip-arrow-offset + @_tooltip-arrow-size);
+        .lib-css(margin-left, @_tooltip-arrow-after-margin);
+    }
+
+    &:before {
+        .lib-css(border-top-color, @_tooltip-border-color);
+        .lib-css(left, @_tooltip-arrow-offset + @_tooltip-arrow-size);
+        .lib-css(margin-left, @_tooltip-arrow-before-margin);
+    }
+}
+
+._lib-tooltip-arrow-position(
+    @_tooltip-position,
+    @_tooltip-arrow-size,
+    @_tooltip-background,
+    @_tooltip-arrow-after-margin,
+    @_tooltip-arrow-before-margin,
+    @_tooltip-arrow-offset,
+    @_tooltip-border-color
+) when (@_tooltip-position = left) {
+    .lib-css(margin-right, @_tooltip-arrow-size);
+    right: 100%;
+    top: 0;
+
+    &:after,
+    &:before {
+        left: 100%;
+    }
+
+    &:after {
+        .lib-css(border-left-color, @_tooltip-background);
+        .lib-css(margin-top, @_tooltip-arrow-after-margin);
+        .lib-css(top, @_tooltip-arrow-offset + @_tooltip-arrow-size)
+    }
+
+    &:before {
+        .lib-css(border-left-color, @_tooltip-border-color);
+        .lib-css(margin-top, @_tooltip-arrow-before-margin);
+        .lib-css(top, @_tooltip-arrow-offset + @_tooltip-arrow-size);
+    }
+}
+
+._lib-tooltip-arrow-position(
+    @_tooltip-position,
+    @_tooltip-arrow-size,
+    @_tooltip-background,
+    @_tooltip-arrow-after-margin,
+    @_tooltip-arrow-before-margin,
+    @_tooltip-arrow-offset,
+    @_tooltip-border-color
+) when (@_tooltip-position = right) {
+    .lib-css(margin-left, @_tooltip-arrow-size);
+    left: 100%;
+    top: 0;
+
+    &:after,
+    &:before {
+        right: 100%;
+    }
+
+    &:after {
+        .lib-css(border-right-color, @_tooltip-background);
+        .lib-css(margin-top, @_tooltip-arrow-after-margin);
+        .lib-css(top, @_tooltip-arrow-offset + @_tooltip-arrow-size);
+    }
+
+    &:before {
+        .lib-css(border-right-color, @_tooltip-border-color);
+        .lib-css(margin-top, @_tooltip-arrow-before-margin);
+        .lib-css(top, @_tooltip-arrow-offset + @_tooltip-arrow-size);
+    }
+}
+
+._lib-tooltip-arrow-position(
+    @_tooltip-position,
+    @_tooltip-arrow-size,
+    @_tooltip-background,
+    @_tooltip-arrow-after-margin,
+    @_tooltip-arrow-before-margin,
+    @_tooltip-arrow-offset,
+    @_tooltip-border-color
+) when (@_tooltip-position = bottom) {
+    .lib-css(margin-top, @_tooltip-arrow-size);
+    left: 0;
+    top: 100%;
+
+    &:after,
+    &:before {
+        bottom: 100%;
+    }
+
+    &:after {
+        .lib-css(border-bottom-color, @_tooltip-background);
+        .lib-css(left, @_tooltip-arrow-offset + @_tooltip-arrow-size);
+        .lib-css(margin-left, @_tooltip-arrow-after-margin);
+    }
+
+    &:before {
+        .lib-css(border-bottom-color, @_tooltip-border-color);
+        .lib-css(left, @_tooltip-arrow-offset + @_tooltip-arrow-size);
+        .lib-css(margin-left, @_tooltip-arrow-before-margin);
+    }
+}

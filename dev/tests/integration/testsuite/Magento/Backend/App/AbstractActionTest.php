@@ -1,33 +1,15 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Backend\App;
 
 /**
- * Test class for \Magento\Backend\Controller\AbstractAction.
+ * Test class for \Magento\Backend\App\AbstractAction.
  * @magentoAppArea adminhtml
  */
-class AbstractActionTest extends \Magento\Backend\Utility\Controller
+class AbstractActionTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
      * Check redirection to startup page for logged user
@@ -38,14 +20,14 @@ class AbstractActionTest extends \Magento\Backend\Utility\Controller
     {
         $this->markTestSkipped('Session destruction doesn\'t work');
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Config\ScopeInterface'
+            \Magento\Framework\Config\ScopeInterface::class
         )->setCurrentScope(
             \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
         );
         $this->dispatch('backend');
         /** @var $backendUrlModel \Magento\Backend\Model\UrlInterface */
         $backendUrlModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Backend\Model\UrlInterface'
+            \Magento\Backend\Model\UrlInterface::class
         );
         $url = $backendUrlModel->getStartupPageUrl();
         $expected = $backendUrlModel->getUrl($url);
@@ -64,14 +46,17 @@ class AbstractActionTest extends \Magento\Backend\Utility\Controller
          */
         $this->_auth->logout();
 
-        $postLogin = array(
-            'login' => array(
+        /** @var \Magento\Framework\Data\Form\FormKey $formKey */
+        $formKey = $this->_objectManager->get(\Magento\Framework\Data\Form\FormKey::class);
+        $postLogin = [
+            'login' => [
                 'username' => \Magento\TestFramework\Bootstrap::ADMIN_NAME,
-                'password' => \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
-            )
-        );
+                'password' => \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD,
+            ],
+            'form_key' => $formKey->getFormKey(),
+        ];
 
-        $this->getRequest()->setPost($postLogin);
+        $this->getRequest()->setPostValue($postLogin);
         $this->dispatch('backend/admin/system_account/index');
 
         $expected = 'backend/admin/system_account/index';
@@ -90,7 +75,7 @@ class AbstractActionTest extends \Magento\Backend\Utility\Controller
     {
         /** @var $noticeInbox \Magento\AdminNotification\Model\Inbox */
         $noticeInbox = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\AdminNotification\Model\Inbox'
+            \Magento\AdminNotification\Model\Inbox::class
         );
         if (!$noticeInbox->loadLatestNotice()->getId()) {
             $noticeInbox->addCritical('Test notice', 'Test description');
@@ -103,7 +88,7 @@ class AbstractActionTest extends \Magento\Backend\Utility\Controller
 
         /** @var $acl \Magento\Framework\Acl */
         $acl = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Framework\Acl\Builder')
+            ->get(\Magento\Framework\Acl\Builder::class)
             ->getAcl();
         if ($isLimitedAccess) {
             $acl->deny(null, $resource);
@@ -112,7 +97,7 @@ class AbstractActionTest extends \Magento\Backend\Utility\Controller
         $this->dispatch('backend/admin/dashboard');
 
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         );
         $actualBlocks = $layout->getAllBlocks();
 
@@ -131,9 +116,9 @@ class AbstractActionTest extends \Magento\Backend\Utility\Controller
      */
     public function nodesWithAcl()
     {
-        return array(
-            array('notification_window', 'Magento_AdminNotification::show_toolbar', true),
-            array('notification_window', 'Magento_AdminNotification::show_toolbar', false)
-        );
+        return [
+            ['notification_window', 'Magento_AdminNotification::show_toolbar', true],
+            ['notification_window', 'Magento_AdminNotification::show_toolbar', false]
+        ];
     }
 }

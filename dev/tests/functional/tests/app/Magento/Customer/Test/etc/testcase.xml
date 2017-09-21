@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/TestCase/etc/testcase.xsd">
+  <scenario name="CreateOrderFromCustomerPageTest" firstStep="createCustomer">
+    <step name="createCustomer" module="Magento_Customer" next="openCustomerOnBackend"/>
+    <step name="openCustomerOnBackend" module="Magento_Customer" next="createOrderFromCustomerAccount"/>
+    <step name="createOrderFromCustomerAccount" module="Magento_Customer" next="createProducts"/>
+    <step name="createProducts" module="Magento_Catalog" next="selectStore"/>
+    <step name="selectStore" module="Magento_Sales" next="addProducts" />
+    <step name="addProducts" module="Magento_Sales" next="updateProductsData"/>
+    <step name="updateProductsData" module="Magento_Sales" next="fillBillingAddress"/>
+    <step name="fillBillingAddress" module="Magento_Sales" next="fillShippingAddress"/>
+    <step name="fillShippingAddress" module="Magento_Sales" next="selectPaymentMethodForOrder"/>
+    <step name="selectPaymentMethodForOrder" module="Magento_Sales" next="selectShippingMethodForOrder"/>
+    <step name="selectShippingMethodForOrder" module="Magento_Sales" next="submitOrder"/>
+    <step name="submitOrder" module="Magento_Sales"/>
+  </scenario>
+</config>

@@ -1,0 +1,33 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<div class="amount price-container">
+    <!-- ko if: displaySubtotal() -->
+        <!-- ko if: display_cart_subtotal_excl_tax -->
+            <span class="price-wrapper" data-bind="html: cart().subtotal_excl_tax"></span>
+        <!-- /ko -->
+
+        <!-- ko if: !display_cart_subtotal_excl_tax && display_cart_subtotal_incl_tax -->
+            <span class="price-wrapper" data-bind="html: cart().subtotal_incl_tax"></span>
+        <!-- /ko -->
+
+        <!-- ko if: !display_cart_subtotal_excl_tax && !display_cart_subtotal_incl_tax -->
+            <span class="price-wrapper price-including-tax"
+                  data-bind="attr: { 'data-label': $t('Incl. Tax') }, html: cart().subtotal_incl_tax">
+            </span>
+
+            <span class="price-wrapper price-excluding-tax"
+                  data-bind="attr: { 'data-label': $t('Excl. Tax') }, html: cart().subtotal_excl_tax">
+            </span>
+        <!-- /ko -->
+    <!-- /ko -->
+    <!-- ko ifnot: displaySubtotal() -->
+        <!-- ko foreach: getRegion('minicart-subtotal-hidden') -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
+        <!-- /ko -->
+    <!-- /ko -->
+</div>

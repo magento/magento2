@@ -1,0 +1,38 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php /** @var $block \Magento\AdminNotification\Block\System\Messages\UnreadMessagePopup */ ?>
+
+<div style="display:none" id="system_messages_list" data-role="system_messages_list" title="<?= $block->escapeHtml($block->getPopupTitle()) ?>">
+    <ul class="message-system-list messages">
+        <?php foreach ($block->getUnreadMessages() as $message): ?>
+            <li class="message message-warning <?= /* @escapeNotVerified */ $block->getItemClass($message) ?>">
+                <?= /* @escapeNotVerified */ $message->getText() ?>
+            </li>
+        <?php endforeach;?>
+    </ul>
+</div>
+
+<script>
+require([
+    "jquery",
+    "Magento_Ui/js/modal/modal"
+], function($){
+    if (this.modal) {
+        this.modal.html($('[data-role="system_messages_list"]').html());
+    } else {
+        this.modal = $('[data-role="system_messages_list"]').modal({
+            modalClass: 'modal-system-messages ui-popup-message',
+            type: 'popup',
+            buttons: []
+        });
+    }
+    this.modal.modal('openModal');
+});
+</script>

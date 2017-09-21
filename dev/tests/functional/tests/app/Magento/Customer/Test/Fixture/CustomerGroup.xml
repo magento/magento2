@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+    <fixture name="customerGroup"
+             module="Magento_Customer"
+             type="flat"
+             entity_type="customer_group"
+             collection="Magento\Customer\Model\ResourceModel\Group\Collection"
+             repository_class="Magento\Customer\Test\Repository\CustomerGroup"
+             handler_interface="Magento\Customer\Test\Handler\CustomerGroup\CustomerGroupInterface"
+             class="Magento\Customer\Test\Fixture\CustomerGroup">
+        <field name="customer_group_code" is_required="1" />
+        <field name="tax_class_id" is_required="1" source="Magento\Customer\Test\Fixture\CustomerGroup\TaxClassIds" />
+        <field name="customer_group_id" />
+    </fixture>
+</config>

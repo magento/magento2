@@ -1,30 +1,54 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE_AFL.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/Framework/Event/etc/events.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="sales_order_place_after">
-        <observer name="sales_vat_request_params_order_comment" instance="Magento\Sales\Model\Observer" method="addVatRequestParamsOrderComment" />
+        <observer name="sales_vat_request_params_order_comment" instance="Magento\Sales\Observer\Frontend\AddVatRequestParamsOrderComment" />
+    </event>
+    <event name="sales_order_process_relation">
+        <observer name="sales_grid_order_sync_insert" instance="SalesOrderIndexGridSyncInsert" />
+    </event>
+    <event name="sales_order_invoice_process_relation">
+        <observer name="sales_grid_order_invoice_sync_insert" instance="SalesInvoiceIndexGridSyncInsert" />
+    </event>
+    <event name="sales_order_shipment_process_relation">
+        <observer name="sales_grid_order_shipment_sync_insert" instance="SalesShipmentIndexGridSyncInsert" />
+    </event>
+    <event name="sales_order_creditmemo_process_relation">
+        <observer name="sales_grid_order_creditmemo_sync_insert" instance="SalesCreditmemoIndexGridSyncInsert" />
+    </event>
+    <event name="sales_order_delete_after">
+        <observer name="sales_grid_order_sync_remove" instance="SalesOrderIndexGridSyncRemove" />
+    </event>
+    <event name="sales_order_invoice_delete_after">
+        <observer name="sales_grid_order_invoice_sync_remove" instance="SalesInvoiceIndexGridSyncRemove" />
+    </event>
+    <event name="sales_order_shipment_delete_after">
+        <observer name="sales_grid_order_shipment_sync_remove" instance="SalesShipmentIndexGridSyncRemove" />
+    </event>
+    <event name="sales_order_creditmemo_delete_after">
+        <observer name="sales_grid_order_creditmemo_sync_remove" instance="SalesCreditmemoIndexGridSyncRemove" />
+    </event>
+    <event name="admin_sales_order_address_update">
+        <observer name="sales_grid_admin_refresh_grids" instance="Magento\Sales\Observer\GridProcessAddressChange" />
+    </event>
+    <event name="config_data_dev_grid_async_indexing_disabled">
+        <observer name="sales_grid_order_async_insert" instance="SalesOrderIndexGridAsyncInsertObserver" />
+        <observer name="sales_grid_order_invoice_async_insert" instance="SalesInvoiceIndexGridAsyncInsertObserver" />
+        <observer name="sales_grid_order_shipment_async_insert" instance="SalesShipmentIndexGridAsyncInsertObserver" />
+        <observer name="sales_grid_order_creditmemo_async_insert" instance="SalesCreditmemoIndexGridAsyncInsertObserver" />
+    </event>
+    <event name="config_data_sales_email_general_async_sending_disabled">
+        <observer name="sales_send_order_emails" instance="SalesOrderSendEmailsObserver" />
+        <observer name="sales_send_order_invoice_emails" instance="SalesOrderInvoiceSendEmailsObserver" />
+        <observer name="sales_send_order_shipment_emails" instance="SalesOrderShipmentSendEmailsObserver" />
+        <observer name="sales_send_order_creditmemo_emails" instance="SalesOrderCreditmemoSendEmailsObserver" />
+    </event>
+    <event name="store_add">
+        <observer name="magento_sequence" instance="Magento\SalesSequence\Observer\SequenceCreatorObserver" />
     </event>
 </config>

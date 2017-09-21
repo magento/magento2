@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<!--
+Variations:
+1) override all original values by appending 0
+2) add new sibling on each level (where siblings are applicable)
+3) add a "new_attribute" to each of the declared nodes
+-->
+<root>
+    <node name="node1" new_attribute="1">
+        <param name="scalar1" new_attribute="2">
+            <value new_attribute="3">scalar10</value>
+        </param>
+        <param name="complex" new_attribute="4">
+            <complex new_attribute="5">
+                <item key="scalar2" new_attribute="6">
+                    <value new_attribute="7">scalar20</value>
+                </item>
+                <item key="scalar3" new_attribute="8">
+                    <value new_attribute="9">scalar30</value>
+                </item>
+                <item key="scalar41">
+                    <value>scalar41</value>
+                </item>
+            </complex>
+        </param>
+        <param name="scalar11"/>
+    </node>
+    <node name="node2" new_attribute="10">
+        <param name="recursive" new_attribute="11">
+            <complex new_attribute="12">
+                <item key="recursive1" new_attribute="13">
+                    <complex new_attribute="14">
+                        <item key="nested1" new_attribute="15">
+                            <value new_attribute="16">scalar40</value>
+                        </item>
+                        <item key="nested2" new_attribute="17">
+                            <value new_attribute="18">scalar50</value>
+                        </item>
+                        <item key="nested31">
+                            <value>scalar51</value>
+                        </item>
+                    </complex>
+                </item>
+                <item key="recursive2" new_attribute="19">
+                    <complex new_attribute="20">
+                        <item key="recursive1" new_attribute="21">
+                            <value new_attribute="22">scalar60</value>
+                        </item>
+                        <item key="recursive2" new_attribute="23">
+                            <value new_attribute="24">scalar70</value>
+                        </item>
+                    </complex>
+                </item>
+                <item key="nested_l_1">
+                    <complex>
+                        <item key="nested_l_2">
+                            <complex>
+                                <item key="nested_l_3_1"/>
+                            </complex>
+                        </item>
+                    </complex>
+                </item>
+            </complex>
+        </param>
+    </node>
+    <node name="node31"/>
+    <another_node name="node3">
+        <param name="scalar4">
+            <value>scalar4</value>
+        </param>
+    </another_node>
+</root>

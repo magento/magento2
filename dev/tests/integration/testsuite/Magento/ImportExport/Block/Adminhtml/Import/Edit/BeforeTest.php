@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -27,7 +9,7 @@
  */
 namespace Magento\ImportExport\Block\Adminhtml\Import\Edit;
 
-class BeforeTest extends \PHPUnit_Framework_TestCase
+class BeforeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test model
@@ -41,52 +23,40 @@ class BeforeTest extends \PHPUnit_Framework_TestCase
      *
      * @var array
      */
-    protected $_sourceEntities = array(
-        'entity_1' => array('code' => 'behavior_1', 'token' => 'Some_Random_First_Class'),
-        'entity_2' => array('code' => 'behavior_2', 'token' => 'Some_Random_Second_Class')
-    );
+    protected $_sourceEntities = [
+        'entity_1' => ['code' => 'behavior_1', 'token' => 'Some_Random_First_Class'],
+        'entity_2' => ['code' => 'behavior_2', 'token' => 'Some_Random_Second_Class'],
+    ];
 
     /**
      * Expected entity behaviors
      *
      * @var array
      */
-    protected $_expectedEntities = array('entity_1' => 'behavior_1', 'entity_2' => 'behavior_2');
+    protected $_expectedEntities = ['entity_1' => 'behavior_1', 'entity_2' => 'behavior_2'];
 
     /**
      * Source unique behaviors
      *
      * @var array
      */
-    protected $_sourceBehaviors = array(
+    protected $_sourceBehaviors = [
         'behavior_1' => 'Some_Random_First_Class',
-        'behavior_2' => 'Some_Random_Second_Class'
-    );
+        'behavior_2' => 'Some_Random_Second_Class',
+    ];
 
     /**
      * Expected unique behaviors
      *
      * @var array
      */
-    protected $_expectedBehaviors = array('behavior_1', 'behavior_2');
+    protected $_expectedBehaviors = ['behavior_1', 'behavior_2'];
 
     protected function setUp()
     {
-        $coreHelper = $this->getMock('Magento\Core\Helper\Data', array('jsonEncode'), array(), '', false, false);
-        $coreHelper->expects(
-            $this->any()
-        )->method(
-            'jsonEncode'
-        )->will(
-            $this->returnCallback(array($this, 'jsonEncodeCallback'))
-        );
-
-        $importModel = $this->getMock(
-            'Magento\ImportExport\Model\Import',
-            array('getEntityBehaviors', 'getUniqueEntityBehaviors'),
-            array(),
-            '',
-            false
+        $importModel = $this->createPartialMock(
+            \Magento\ImportExport\Model\Import::class,
+            ['getEntityBehaviors', 'getUniqueEntityBehaviors']
         );
         $importModel->expects(
             $this->any()
@@ -103,29 +73,13 @@ class BeforeTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->_sourceBehaviors)
         );
 
-        $arguments = array(
-            'coreData' => $coreHelper,
-            'importModel' => $importModel,
-            'urlBuilder' => $this->getMock('Magento\Backend\Model\Url', array(), array(), '', false)
-        );
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_model = $objectManager->create('Magento\ImportExport\Block\Adminhtml\Import\Edit\Before', $arguments);
-    }
-
-    protected function tearDown()
-    {
-        unset($this->_model);
-    }
-
-    /**
-     * Callback method for \Magento\Core\Helper\Data::jsonEncode
-     *
-     * @param mixed $data
-     * @return string
-     */
-    public function jsonEncodeCallback($data)
-    {
-        return \Zend_Json::encode($data);
+        $this->_model = $objectManager->create(
+            \Magento\ImportExport\Block\Adminhtml\Import\Edit\Before::class,
+            [
+                'importModel' => $importModel,
+            ]
+        );
     }
 
     /**
@@ -136,7 +90,7 @@ class BeforeTest extends \PHPUnit_Framework_TestCase
     public function testGetEntityBehaviors()
     {
         $actualEntities = $this->_model->getEntityBehaviors();
-        $expectedEntities = \Zend_Json::encode($this->_expectedEntities);
+        $expectedEntities = json_encode($this->_expectedEntities);
         $this->assertEquals($expectedEntities, $actualEntities);
     }
 
@@ -148,7 +102,7 @@ class BeforeTest extends \PHPUnit_Framework_TestCase
     public function testGetUniqueBehaviors()
     {
         $actualBehaviors = $this->_model->getUniqueBehaviors();
-        $expectedBehaviors = \Zend_Json::encode($this->_expectedBehaviors);
+        $expectedBehaviors = json_encode($this->_expectedBehaviors);
         $this->assertEquals($expectedBehaviors, $actualBehaviors);
     }
 }

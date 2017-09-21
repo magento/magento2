@@ -1,32 +1,16 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Helper;
 
 /**
  * @magentoAppArea adminhtml
+ * @magentoAppIsolation enabled
+ * @magentoDbIsolation enabled
  */
-class DataTest extends \PHPUnit_Framework_TestCase
+class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Helper\Data
@@ -41,12 +25,12 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Config\ScopeInterface'
+            \Magento\Framework\Config\ScopeInterface::class
         )->setCurrentScope(
             \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
         );
         $this->_helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Backend\Helper\Data'
+            \Magento\Backend\Helper\Data::class
         );
     }
 
@@ -55,7 +39,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->_helper = null;
         $this->_auth = null;
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Config\ScopeInterface'
+            \Magento\Framework\Config\ScopeInterface::class
         )->setCurrentScope(
             null
         );
@@ -67,9 +51,11 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected function _login()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Backend\Model\UrlInterface'
+            \Magento\Backend\Model\UrlInterface::class
         )->turnOffSecretKey();
-        $this->_auth = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Backend\Model\Auth');
+        $this->_auth = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\Backend\Model\Auth::class
+        );
         $this->_auth->login(
             \Magento\TestFramework\Bootstrap::ADMIN_NAME,
             \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
@@ -83,7 +69,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     {
         $this->_auth->logout();
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Backend\Model\UrlInterface'
+            \Magento\Backend\Model\UrlInterface::class
         )->turnOnSecretKey();
     }
 
@@ -95,7 +81,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     public function testPageHelpUrl()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\App\RequestInterface'
+            \Magento\Framework\App\RequestInterface::class
         )->setControllerModule(
             'dummy'
         )->setControllerName(
@@ -103,7 +89,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
         )->setActionName(
             'test'
         );
-
 
         $expected = 'http://www.magentocommerce.com/gethelp/en_US/dummy/index/test/';
         $this->assertEquals($expected, $this->_helper->getPageHelpUrl(), 'Incorrect help Url');
@@ -124,10 +109,10 @@ class DataTest extends \PHPUnit_Framework_TestCase
          * perform login
          */
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Backend\Model\UrlInterface'
+            \Magento\Backend\Model\UrlInterface::class
         )->turnOffSecretKey();
 
-        $auth = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Backend\Model\Auth');
+        $auth = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Backend\Model\Auth::class);
         $auth->login(\Magento\TestFramework\Bootstrap::ADMIN_NAME, \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD);
         $this->assertEquals(1, $this->_helper->getCurrentUserId());
 
@@ -136,7 +121,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
          */
         $auth->logout();
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Backend\Model\UrlInterface'
+            \Magento\Backend\Model\UrlInterface::class
         )->turnOnSecretKey();
 
         $this->assertFalse($this->_helper->getCurrentUserId());
@@ -144,11 +129,10 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers \Magento\Backend\Helper\Data::prepareFilterString
-     * @covers \Magento\Backend\Helper\Data::decodeFilter
      */
     public function testPrepareFilterString()
     {
-        $expected = array('key1' => 'val1', 'key2' => 'val2', 'key3' => 'val3');
+        $expected = ['key1' => 'val1', 'key2' => 'val2', 'key3' => 'val3'];
 
         $filterString = base64_encode('key1=' . rawurlencode('val1') . '&key2=' . rawurlencode('val2') . '&key3=val3');
         $actual = $this->_helper->prepareFilterString($filterString);

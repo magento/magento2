@@ -1,0 +1,29 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+/**
+ * @see \Magento\AdminNotification\Block\Window
+ */
+?>
+<ul class="message-system-list"
+    style="display: none;"
+    data-mage-init='{
+        "Magento_Ui/js/modal/modal": {
+            "autoOpen": true,
+            "buttons": false,
+            "modalClass": "modal-system-messages",
+            "title": "<?= /* @escapeNotVerified */ $block->getHeaderText() ?>"
+        }
+    }'>
+    <li class="message message-warning warning">
+        <?= /* @escapeNotVerified */ $block->getNoticeMessageText() ?><br/>
+        <a href="<?= /* @escapeNotVerified */ $block->getNoticeMessageUrl() ?>"><?= /* @escapeNotVerified */ $block->getReadDetailsText() ?></a>
+    </li>
+</ul>

@@ -1,116 +1,93 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Test\Constraint;
 
-use Mtf\Constraint\AbstractConstraint;
+use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 use Magento\Cms\Test\Page\CmsIndex;
-use Magento\Catalog\Test\Fixture\Category;
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
+use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
- * Class AssertProductInCategory
+ * Checking the product in the page of its price.
  */
 class AssertProductInCategory extends AbstractConstraint
 {
     /**
-     * Constraint severeness
+     * Checking the product in the page of its price.
      *
-     * @var string
-     */
-    protected $severeness = 'low';
-
-    /**
      * @param CatalogCategoryView $catalogCategoryView
      * @param CmsIndex $cmsIndex
-     * @param CatalogProductSimple $product
+     * @param FixtureInterface $product
      * @param Category $category
+     * @return void
      */
     public function processAssert(
         CatalogCategoryView $catalogCategoryView,
         CmsIndex $cmsIndex,
-        CatalogProductSimple $product,
+        FixtureInterface $product,
         Category $category
     ) {
-        //Open category view page
+        // Open category view page and check visible product
+        $categoryName = $category->getName();
+        if ($product->hasData('category_ids')) {
+            $categoryIds = $product->getCategoryIds();
+            $categoryName = is_array($categoryIds) ? reset($categoryIds) : $categoryName;
+        }
         $cmsIndex->open();
-        $cmsIndex->getTopmenu()->selectCategoryByName($category->getCategoryName());
+        $cmsIndex->getTopmenu()->selectCategoryByName($categoryName);
 
-        //process asserts
+        $isProductVisible = $catalogCategoryView->getListProductBlock()->getProductItem($product)->isVisible();
+        while (!$isProductVisible && $catalogCategoryView->getBottomToolbar()->nextPage()) {
+            $isProductVisible = $catalogCategoryView->getListProductBlock()->getProductItem($product)->isVisible();
+        }
+
+        \PHPUnit_Framework_Assert::assertTrue(
+            $isProductVisible,
+            'Product is absent on category page.'
+        );
+
+        //Process price asserts
         $this->assertPrice($product, $catalogCategoryView);
     }
 
     /**
-     * Verify product price on category view page
+     * Verify product price on category view page.
      *
-     * @param CatalogProductSimple $product
+     * @param FixtureInterface $product
      * @param CatalogCategoryView $catalogCategoryView
+     * @return void
      */
-    protected function assertPrice(CatalogProductSimple $product, CatalogCategoryView $catalogCategoryView)
+    protected function assertPrice(FixtureInterface $product, CatalogCategoryView $catalogCategoryView)
     {
-        /** @var \Magento\Catalog\Test\Fixture\CatalogProductSimple\Price $priceFixture */
-        $priceFixture = $product->getDataFieldConfig('price')['source'];
-        $pricePresetData = $priceFixture->getPreset();
+        $priceBlock = $catalogCategoryView->getListProductBlock()->getProductItem($product)->getPriceBlock();
 
-        //Regular price verification
-        if (isset($pricePresetData['category_special_price'])) {
-            $regularPrice = $catalogCategoryView->getListProductBlock()->getProductPriceBlock($product->getName())
-                ->getRegularPrice();
+        \PHPUnit_Framework_Assert::assertEquals(
+            number_format($product->getPrice(), 2, '.', ''),
+            $priceBlock->isOldPriceVisible() ? $priceBlock->getOldPrice() : $priceBlock->getPrice(),
+            'Product regular price on category page is not correct.'
+        );
+
+        if ($product->hasData('special_price')) {
             \PHPUnit_Framework_Assert::assertEquals(
-                $pricePresetData['category_price'],
-                $regularPrice,
-                'Product regular price on category page is not correct.'
-            );
-            //Special price verification
-            $specialPrice = $catalogCategoryView->getListProductBlock()->getProductPriceBlock(
-                $product->getName()
-            )->getSpecialPrice();
-            \PHPUnit_Framework_Assert::assertEquals(
-                $pricePresetData['category_special_price'],
-                $specialPrice,
+                number_format($product->getSpecialPrice(), 2, '.', ''),
+                $priceBlock->getSpecialPrice(),
                 'Product special price on category page is not correct.'
-            );
-        } else {
-            //Price verification
-            $price = $catalogCategoryView->getListProductBlock()->getProductPriceBlock($product->getName())
-                ->getPrice();
-            \PHPUnit_Framework_Assert::assertContains(
-                (string)$price,
-                $pricePresetData['category_price'],
-                'Product price on category page is not correct.'
             );
         }
     }
 
     /**
-     * Text of Visible in category assert
+     * Returns a string representation of the object.
      *
      * @return string
      */
     public function toString()
     {
-        return 'Product price on category page is not correct.';
+        return 'Product price on category page correct.';
     }
 }

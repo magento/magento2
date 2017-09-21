@@ -1,0 +1,140 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  _____________________________________________
+
+@alert__font-size: @font-size__base;
+@alert__font-style: @font-style__base;
+@alert__font-weight: @font-weight__regular;
+@alert__color: @color-gray20;
+@alert__background-color: @color-lazy-sun;
+@alert__error__background-color: @color-pink;
+@alert__spinner__font-size: 2.5rem;
+
+//
+//  Alert Icons
+//  ---------------------------------------------
+
+@alert-icon__font-name: @icons-admin__font-name;
+@alert-icon__font-size: 1.9rem;
+
+@alert-icon__notice__content: @icon-info__content;
+@alert-icon__notice__color: @color-blue-pure;
+
+@alert-icon__warning__content: @icon-warning__content;
+@alert-icon__warning__color: @color-phoenix;
+
+@alert-icon__progress__content: @icon-refresh__content;
+@alert-icon__progress__color: @color-blue-dodger;
+
+@alert-icon__success__content: @icon-check-mage__content;
+@alert-icon__success__color: @color-green-apple;
+
+@alert-icon__error__content: @icon-error__content;
+@alert-icon__error__color: @color-tomato-brick;
+@alert-icon__error__font-size: 1.5rem;
+
+//
+//  Messages
+//  ---------------------------------------------
+
+.messages {
+    .message {
+        &:last-child {
+            margin: 0 0 2rem;
+        }
+    }
+}
+
+.message {
+    background: @alert__background-color;
+    border: none;
+    border-radius: 0;
+    color: @alert__color;
+    font-size: @alert__font-size;
+    margin: 0 0 1px;
+    padding: 1.8rem 4rem 1.8rem 5.5rem;
+    position: relative;
+    text-shadow: none;
+
+    &:before {
+        background: none;
+        border: 0;
+        color: @alert-icon__notice__color;
+        content: @alert-icon__notice__content;
+        font-family: @alert-icon__font-name;
+        font-size: @alert-icon__font-size;
+        font-style: @alert__font-style;
+        font-weight: @alert__font-weight;
+        height: auto;
+        left: 1.9rem;
+        line-height: inherit;
+        position: absolute;
+        speak: none;
+        text-shadow: none;
+        top: 1.3rem;
+        width: auto;
+    }
+}
+
+.message-notice {
+    &:before {
+        color: @alert-icon__notice__color;
+        content: @alert-icon__notice__content;
+    }
+}
+
+.message-warning {
+    &:before {
+        color: @alert-icon__warning__color;
+        content: @alert-icon__warning__content;
+    }
+}
+
+.message-progress {
+    &:before {
+        color: @alert-icon__progress__color;
+        content: @alert-icon__progress__content;
+    }
+}
+
+.message-error {
+    background: @alert__error__background-color;
+
+    &:before {
+        color: @alert-icon__error__color;
+        content: @alert-icon__error__content;
+        font-size: @alert-icon__error__font-size;
+        left: 2.2rem;
+        margin-top: 0.5rem;
+    }
+}
+
+.message-success {
+    &:before {
+        color: @alert-icon__success__color;
+        content: @alert-icon__success__content;
+    }
+}
+
+.message-spinner {
+    &:before {
+        display: none;
+    }
+
+    .spinner {
+        font-size: @alert__spinner__font-size;
+        left: 1.5rem;
+        position: absolute;
+        top: 1.5rem;
+    }
+}
+
+.message-in-rating-edit {
+    margin-left: 1.8rem;
+    margin-right: 1.8rem;
+}

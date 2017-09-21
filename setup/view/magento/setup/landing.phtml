@@ -1,0 +1,28 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<section class="page-landing">
+    <img class="logo" src="<?= $this->basePath() ?>/pub/images/magento-logo.svg" alt="Magento"/>
+    <p class="text-version">
+        <?= 'Version' . ' ' . $this->version ?>
+    </p>
+    <p class="text-welcome">
+        Welcome to Magento Admin, your online store headquarters.
+        <br>
+        Click 'Agree and Set Up Magento' or read <a href="http://devdocs.magento.com/guides/v2.0/install-gde/install/web/install-web.html" target="_blank">Getting Started</a> to learn more.
+    </p>
+    <p class="text-terms">
+        <a href="" ng-click="previousState()">Terms & Agreement</a>
+    </p>
+    <button
+        type="button"
+        class="btn btn-large btn-prime btn-submit"
+        ng-click="nextState()"
+        >Agree and Setup Magento</button>
+</section>

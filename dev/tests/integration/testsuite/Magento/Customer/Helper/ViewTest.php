@@ -1,52 +1,33 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Helper;
 
+use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
-class ViewTest extends \PHPUnit_Framework_TestCase
+class ViewTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Customer\Helper\View */
     protected $_helper;
 
-    /** @var \Magento\Customer\Service\V1\CustomerMetadataServiceInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CustomerMetadataInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $_customerMetadataService;
 
     protected function setUp()
     {
-        $this->_customerMetadataService = $this->getMock(
-            'Magento\Customer\Service\V1\CustomerMetadataServiceInterface'
-        );
+        $this->_customerMetadataService = $this->createMock(\Magento\Customer\Api\CustomerMetadataInterface::class);
         $this->_helper = Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Helper\View',
-            array('customerMetadataService' => $this->_customerMetadataService)
+            \Magento\Customer\Helper\View::class,
+            ['customerMetadataService' => $this->_customerMetadataService]
         );
         parent::setUp();
     }
 
     /**
-     * @param \Magento\Customer\Service\V1\Data\Customer $customerData
+     * @param \Magento\Customer\Api\Data\CustomerInterface $customerData
      * @param string $expectedCustomerName
      * @param bool $isPrefixAllowed
      * @param bool $isMiddleNameAllowed
@@ -60,23 +41,10 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $isMiddleNameAllowed = false,
         $isSuffixAllowed = false
     ) {
-
-        $visibleAttribute = $this->getMock(
-            'Magento\Customer\Service\V1\Data\Eav\AttributeMetadata',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $visibleAttribute = $this->createMock(\Magento\Customer\Api\Data\AttributeMetadataInterface::class);
         $visibleAttribute->expects($this->any())->method('isVisible')->will($this->returnValue(true));
 
-        $invisibleAttribute = $this->getMock(
-            'Magento\Customer\Service\V1\Data\Eav\AttributeMetadata',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $invisibleAttribute = $this->createMock(\Magento\Customer\Api\Data\AttributeMetadataInterface::class);
         $invisibleAttribute->expects($this->any())->method('isVisible')->will($this->returnValue(false));
 
         $this->_customerMetadataService->expects(
@@ -85,11 +53,11 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             'getAttributeMetadata'
         )->will(
             $this->returnValueMap(
-                array(
-                    array('customer', 'prefix', $isPrefixAllowed ? $visibleAttribute : $invisibleAttribute),
-                    array('customer', 'middlename', $isMiddleNameAllowed ? $visibleAttribute : $invisibleAttribute),
-                    array('customer', 'suffix', $isSuffixAllowed ? $visibleAttribute : $invisibleAttribute)
-                )
+                [
+                    ['prefix', $isPrefixAllowed ? $visibleAttribute : $invisibleAttribute],
+                    ['middlename', $isMiddleNameAllowed ? $visibleAttribute : $invisibleAttribute],
+                    ['suffix', $isSuffixAllowed ? $visibleAttribute : $invisibleAttribute],
+                ]
             )
         );
 
@@ -102,11 +70,13 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
     public function getCustomerNameDataProvider()
     {
-        /** @var \Magento\Customer\Service\V1\Data\CustomerBuilder $customerBuilder */
-        $customerBuilder = Bootstrap::getObjectManager()->create('Magento\Customer\Service\V1\Data\CustomerBuilder');
-        return array(
-            'With disabled prefix, middle name, suffix' => array(
-                $customerBuilder->setPrefix(
+        /** @var \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerFactory */
+        $customerFactory = Bootstrap::getObjectManager()->create(
+            \Magento\Customer\Api\Data\CustomerInterfaceFactory::class
+        );
+        return [
+            'With disabled prefix, middle name, suffix' => [
+                $customerFactory->create()->setPrefix(
                     'prefix'
                 )->setFirstname(
                     'FirstName'
@@ -116,11 +86,11 @@ class ViewTest extends \PHPUnit_Framework_TestCase
                     'LastName'
                 )->setSuffix(
                     'suffix'
-                )->create(),
-                'FirstName LastName'
-            ),
-            'With prefix, middle name, suffix' => array(
-                $customerBuilder->setPrefix(
+                ),
+                'FirstName LastName',
+            ],
+            'With prefix, middle name, suffix' => [
+                $customerFactory->create()->setPrefix(
                     'prefix'
                 )->setFirstname(
                     'FirstName'
@@ -130,32 +100,32 @@ class ViewTest extends \PHPUnit_Framework_TestCase
                     'LastName'
                 )->setSuffix(
                     'suffix'
-                )->create(),
+                ),
                 'prefix FirstName MiddleName LastName suffix',
                 true, // $isPrefixAllowed
                 true, // $isMiddleNameAllowed
-                true //$isSuffixAllowed
-            ),
-            'Empty prefix, middle name, suffix' => array(
-                $customerBuilder->setFirstname('FirstName')->setLastname('LastName')->create(),
+                true, //$isSuffixAllowed
+            ],
+            'Empty prefix, middle name, suffix' => [
+                $customerFactory->create()->setFirstname('FirstName')->setLastname('LastName'),
                 'FirstName LastName',
                 true, // $isPrefixAllowed
                 true, // $isMiddleNameAllowed
-                true //$isSuffixAllowed
-            ),
-            'Empty prefix and suffix, not empty middle name' => array(
-                $customerBuilder->setFirstname(
+                true, //$isSuffixAllowed
+            ],
+            'Empty prefix and suffix, not empty middle name' => [
+                $customerFactory->create()->setFirstname(
                     'FirstName'
                 )->setMiddlename(
                     'MiddleName'
                 )->setLastname(
                     'LastName'
-                )->create(),
+                ),
                 'FirstName MiddleName LastName',
                 true, // $isPrefixAllowed
                 true, // $isMiddleNameAllowed
-                true //$isSuffixAllowed
-            )
-        );
+                true, //$isSuffixAllowed
+            ]
+        ];
     }
 }

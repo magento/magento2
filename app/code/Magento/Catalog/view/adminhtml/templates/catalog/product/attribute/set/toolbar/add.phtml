@@ -1,0 +1,14 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?= $block->getFormHtml() ?>
+<script>
+require(['jquery', "mage/mage"], function(jQuery){
+
+    jQuery('#<?= /* @escapeNotVerified */ $block->getFormId() ?>').mage('form').mage('validation');
+
+});
+</script>

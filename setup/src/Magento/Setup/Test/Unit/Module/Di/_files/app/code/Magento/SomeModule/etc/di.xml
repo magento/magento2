@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding="utf-8" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Store\Model\Config\InvalidatorInterface" type="Magento\Store\Model\Config\Invalidator\Proxy" />
+    <preference for="Magento\Framework\App\CacheInterface" type="Magento\Framework\App\Cache\Proxy" />
+    <virtualType name="custom_cache_instance" type="Magento\Framework\App\Cache">
+        <plugin name="tag" type="Magento\Framework\App\Cache\TagPlugin" />
+    </virtualType>
+    <type name="Magento\SomeModule\Model\Test">
+        <arguments>
+            <argument name="proxy" xsi:type="object">\Magento\SomeModule\Model\Element\Proxy</argument>
+            <argument name="array" xsi:type="array">
+                <item name="proxy" xsi:type="object">\Magento\SomeModule\Model\Nested\Element\Proxy</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

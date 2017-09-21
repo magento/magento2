@@ -1,37 +1,14 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\Entity\Attribute;
 
+use Magento\Framework\Api\AttributeValueFactory;
+
 /**
- * @author      Magento Core Team <core@magentocommerce.com>
- *
- * @method \Magento\Eav\Model\Resource\Entity\Attribute\Group _getResource()
- * @method \Magento\Eav\Model\Resource\Entity\Attribute\Group getResource()
- * @method int getAttributeSetId()
- * @method \Magento\Eav\Model\Entity\Attribute\Group setAttributeSetId(int $value)
- * @method string getAttributeGroupName()
- * @method \Magento\Eav\Model\Entity\Attribute\Group setAttributeGroupName(string $value)
+ * @api
  * @method int getSortOrder()
  * @method \Magento\Eav\Model\Entity\Attribute\Group setSortOrder(int $value)
  * @method int getDefaultId()
@@ -40,23 +17,64 @@ namespace Magento\Eav\Model\Entity\Attribute;
  * @method \Magento\Eav\Model\Entity\Attribute\Group setAttributeGroupCode(string $value)
  * @method string getTabGroupCode()
  * @method \Magento\Eav\Model\Entity\Attribute\Group setTabGroupCode(string $value)
+ * @since 100.0.2
  */
-class Group extends \Magento\Framework\Model\AbstractModel
+class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
+    \Magento\Eav\Api\Data\AttributeGroupInterface
 {
+    /**
+     * @var \Magento\Framework\Filter\Translit
+     */
+    private $translitFilter;
+
+    /**
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
+     * @param AttributeValueFactory $customAttributeFactory
+     * @param \Magento\Framework\Filter\Translit $translitFilter
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
+        AttributeValueFactory $customAttributeFactory,
+        \Magento\Framework\Filter\Translit $translitFilter,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        array $data = []
+    ) {
+        parent::__construct(
+            $context,
+            $registry,
+            $extensionFactory,
+            $customAttributeFactory,
+            $resource,
+            $resourceCollection,
+            $data
+        );
+        $this->translitFilter = $translitFilter;
+    }
+
     /**
      * Resource initialization
      *
      * @return void
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {
-        $this->_init('Magento\Eav\Model\Resource\Entity\Attribute\Group');
+        $this->_init(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Group::class);
     }
 
     /**
      * Checks if current attribute group exists
      *
      * @return bool
+     * @codeCoverageIgnore
      */
     public function itemExists()
     {
@@ -67,6 +85,7 @@ class Group extends \Magento\Framework\Model\AbstractModel
      * Delete groups
      *
      * @return $this
+     * @codeCoverageIgnore
      */
     public function deleteGroups()
     {
@@ -78,14 +97,99 @@ class Group extends \Magento\Framework\Model\AbstractModel
      *
      * @return $this
      */
-    protected function _beforeSave()
+    public function beforeSave()
     {
         if (!$this->getAttributeGroupCode()) {
             $groupName = $this->getAttributeGroupName();
             if ($groupName) {
-                $this->setAttributeGroupCode(trim(preg_replace('/[^a-z0-9]+/', '-', strtolower($groupName)), '-'));
+                $attributeGroupCode = trim(
+                    preg_replace(
+                        '/[^a-z0-9]+/',
+                        '-',
+                        $this->translitFilter->filter(strtolower($groupName))
+                    ),
+                    '-'
+                );
+                if (empty($attributeGroupCode)) {
+                    // in the following code md5 is not used for security purposes
+                    $attributeGroupCode = md5($groupName);
+                }
+                $this->setAttributeGroupCode($attributeGroupCode);
             }
         }
-        return parent::_beforeSave();
+        return parent::beforeSave();
     }
+
+    /**
+     * {@inheritdoc}
+     * @codeCoverageIgnoreStart
+     */
+    public function getAttributeGroupId()
+    {
+        return $this->getData(self::GROUP_ID);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAttributeGroupName()
+    {
+        return $this->getData(self::GROUP_NAME);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAttributeSetId()
+    {
+        return $this->getData(self::ATTRIBUTE_SET_ID);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setAttributeGroupId($attributeGroupId)
+    {
+        return $this->setData(self::GROUP_ID, $attributeGroupId);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setAttributeGroupName($attributeGroupName)
+    {
+        return $this->setData(self::GROUP_NAME, $attributeGroupName);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setAttributeSetId($attributeSetId)
+    {
+        return $this->setData(self::ATTRIBUTE_SET_ID, $attributeSetId);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Eav\Api\Data\AttributeGroupExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Eav\Api\Data\AttributeGroupExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\Eav\Api\Data\AttributeGroupExtensionInterface $extensionAttributes
+    ) {
+        return $this->_setExtensionAttributes($extensionAttributes);
+    }
+
+    //@codeCoverageIgnoreEnd
 }

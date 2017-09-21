@@ -1,0 +1,101 @@
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+#bundle_product_container .tier {
+    margin-bottom: 13px;
+}
+
+#bundle_product_container .col-qty > input[type='text'] {
+    text-align: right;
+}
+
+#bundle_product_container .col-name {
+    max-width: 250px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#bundle_product_container .col-sku {
+    max-width: 170px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#bundle_product_container .col-draggable {
+    width: 10px;
+}
+
+#bundle_product_container .col-actions {
+    width: 40px;
+}
+
+#bundle_product_container .col-qty,
+#bundle_product_container .col-uqty,
+#bundle_product_container .col-default {
+    width: 70px;
+}
+
+#bundle_product_container .field-option-req .control {
+    top: 39px;
+}
+
+.selection-search .massaction {
+    display: none;
+}
+
+/* Sku, Price, Weight Fields */
+.field-sku .control .sku {
+    display: inline-block;
+    width: 140px;
+    margin-right: 11px;
+}
+
+.field-sku .control .sku > input[type='text'] {
+    width: 100%;
+}
+
+.field-price .addon > .price {
+    display: table;
+    direction: rtl;
+    float: left;
+    width: 140px;
+    margin-right: 15px;
+}
+
+.field-price .addon > .price > * {
+    direction: ltr;
+}
+
+.field-price .addon > .price + .select {
+    float: left;
+}
+
+.field-weight .weight {
+    display: inline-block;
+    margin-right: 15px;
+    vertical-align: top;
+    width: 140px;
+}
+
+.field-weight .weight .admin__control-addon .input-text {
+    min-width: 10rem;
+}
+
+.field-weight .weight .admin__control-addon .input-text,
+.field-weight .weight .admin__control-addon .admin__addon-suffix {
+    flex-basis: 10rem;
+}
+
+.ie9 .field-weight .weight .admin__control-addon .input-text {
+    width: 100px;
+}
+
+.weight-switcher .admin__control-addon {
+    width: 100%;
+}
+
+.field-weight .weight .field:first-child {
+    width: 100%;
+}

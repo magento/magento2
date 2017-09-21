@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -93,7 +75,6 @@ class Observer
     ) {
         $this->_importFactory = $importFactory;
         $this->_scopeConfig = $scopeConfig;
-        $this->_importFactory = $importFactory;
         $this->_transportBuilder = $transportBuilder;
         $this->_storeManager = $storeManager;
         $this->_currencyFactory = $currencyFactory;
@@ -103,10 +84,12 @@ class Observer
     /**
      * @param mixed $schedule
      * @return void
+     * @throws \Exception
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function scheduledUpdateCurrencyRates($schedule)
     {
-        $importWarnings = array();
+        $importWarnings = [];
         if (!$this->_scopeConfig->getValue(
             self::IMPORT_ENABLE,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
@@ -118,8 +101,8 @@ class Observer
             return;
         }
 
-        $errors = array();
-        $rates = array();
+        $errors = [];
+        $rates = [];
         $service = $this->_scopeConfig->getValue(
             self::IMPORT_SERVICE,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
@@ -131,6 +114,7 @@ class Observer
                 $errors = $importModel->getMessages();
             } catch (\Exception $e) {
                 $importWarnings[] = __('FATAL ERROR:') . ' ' . __('We can\'t initialize the import model.');
+                throw $e;
             }
         } else {
             $importWarnings[] = __('FATAL ERROR:') . ' ' . __('Please specify the correct Import Service.');
@@ -142,9 +126,14 @@ class Observer
             }
         }
 
+        $errorRecipient = $this->_scopeConfig->getValue(
+            self::XML_PATH_ERROR_RECIPIENT,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
         if (sizeof($importWarnings) == 0) {
             $this->_currencyFactory->create()->saveRates($rates);
-        } else {
+        } elseif ($errorRecipient) {
+            //if $errorRecipient is not set, there is no sense send email to nobody
             $this->inlineTranslation->suspend();
 
             $this->_transportBuilder->setTemplateIdentifier(
@@ -153,23 +142,18 @@ class Observer
                     \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                 )
             )->setTemplateOptions(
-                array(
-                    'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
-                    'store' => $this->_storeManager->getStore()->getId()
-                )
+                [
+                    'area' => \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE,
+                    'store' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
+                ]
             )->setTemplateVars(
-                array('warnings' => join("\n", $importWarnings))
+                ['warnings' => join("\n", $importWarnings)]
             )->setFrom(
                 $this->_scopeConfig->getValue(
                     self::XML_PATH_ERROR_IDENTITY,
                     \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                 )
-            )->addTo(
-                $this->_scopeConfig->getValue(
-                    self::XML_PATH_ERROR_RECIPIENT,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-                )
-            );
+            )->addTo($errorRecipient);
             $transport = $this->_transportBuilder->getTransport();
             $transport->sendMessage();
 

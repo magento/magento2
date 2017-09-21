@@ -1,0 +1,59 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+/**
+ * JS block for including Countries with Optional Zip
+ *
+ * @see \Magento\Backend\Block\Template
+ */
+
+?>
+<script>
+require([
+    "prototype",
+    "mage/adminhtml/events"
+], function(){
+
+//<![CDATA[
+optionalZipCountries = <?= /* @noEscape */ $this->helper('Magento\Directory\Helper\Data')->getCountriesWithOptionalZip(true) ?>;
+
+function onAddressCountryChanged (countryElement) {
+    var zipElementId = countryElement.id.replace(/country_id/, 'postcode');
+
+    // Ajax-request and normal content load compatibility
+    if ($(zipElementId) != undefined) {
+        setPostcodeOptional($(zipElementId), countryElement.value);
+    } else {
+        Event.observe(window, "load", function () {
+            setPostcodeOptional($(zipElementId), countryElement.value);
+        });
+    }
+}
+
+function setPostcodeOptional(zipElement, country) {
+    if (optionalZipCountries.indexOf(country) != -1) {
+        while (zipElement.hasClassName('required-entry')) {
+            zipElement.removeClassName('required-entry');
+        }
+        zipElement.up('div.field').removeClassName('required');
+        zipElement.up('div.field').removeClassName('_required');
+    } else {
+        zipElement.addClassName('required-entry');
+        zipElement.up('div.field').addClassName('required');
+        zipElement.up('div.field').addClassName('_required');
+    }
+}
+
+varienGlobalEvents.attachEventHandler("address_country_changed", onAddressCountryChanged);
+
+window.setPostcodeOptional = setPostcodeOptional;
+window.onAddressCountryChanged = onAddressCountryChanged;
+window.optionalZipCountries = optionalZipCountries;
+//]]>
+
+});
+</script>

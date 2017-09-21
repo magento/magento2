@@ -1,0 +1,22 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<tr class="data-grid-bulk-edit-panel data-grid-editable-row" each="data: fields, as: '$col'" visible="active">
+    <td if="$parent.getColumn(index).visible" css="'data-grid-actions-cell': $parent.isActionsColumn($col)">
+        <if args="$parent.isActionsColumn($col)">
+            <with args="$parent">
+                <button class="action-default" type="button" click="apply" disable="!hasData">
+                    <span translate="'Apply'"/>
+                </button>
+            </with>
+        </if>
+        
+        <if args="$data.isEditor">
+            <label class="admin__field-label admin__field-label-vertical" attr="for: uid" translate="'All in Column'"/>
+            <render/>
+        </if>
+    </td>
+</tr>

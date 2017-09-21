@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+  <!--
+  /**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+  -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Magento_Search::search_terms" title="Search Terms" translate="title" module="Magento_Search" sortOrder="40" parent="Magento_Backend::marketing_seo" action="search/term/index" resource="Magento_Search::search" />
+        <add id="Magento_Search::search_synonyms" title="Search Synonyms" translate="title" module="Magento_Search" sortOrder="50" parent="Magento_Backend::marketing_seo" action="search/synonyms/index" resource="Magento_Search::synonyms" />
+    </menu>
+</config>

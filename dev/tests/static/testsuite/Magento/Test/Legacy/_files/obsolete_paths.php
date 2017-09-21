@@ -4,26 +4,8 @@
  *
  * Format: array(<path>[, <replacement>])
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 return [
     ['/app/code/core/Mage', '/app/code/Magento'],
@@ -40,8 +22,6 @@ return [
     ],
     ['/dev/tests/unit/testsuite/Magento/Filesystem', '/dev/tests/unit/testsuite/Magento/Framework/Filesystem'],
     ['/lib/Magento/Config', '/lib/Magento/Framework/Config'],
-    ['/dev/tests/integration/testsuite/Magento/Config', '/dev/tests/integration/testsuite/Magento/Framework/Config'],
-    ['/dev/tests/unit/testsuite/Magento/Config', '/dev/tests/unit/testsuite/Magento/Framework/Config'],
     ['/lib/Magento/Model', '/lib/Magento/Framework/Model'],
     ['/dev/tests/integration/testsuite/Magento/Model', '/dev/tests/integration/testsuite/Magento/Framework/Model'],
     ['/dev/tests/unit/testsuite/Magento/Model', '/dev/tests/unit/testsuite/Magento/Framework/Model'],
@@ -71,11 +51,6 @@ return [
     ],
     ['/dev/tests/unit/testsuite/Magento/Session', '/dev/tests/unit/testsuite/Magento/Framework/Session'],
     ['/lib/Magento/Authorization', '/lib/Magento/Framework/Authorization'],
-    [
-        '/dev/tests/integration/testsuite/Magento/Authorization',
-        '/dev/tests/integration/testsuite/Magento/Framework/Authorization'
-    ],
-    ['/dev/tests/unit/testsuite/Magento/Authorization', '/dev/tests/unit/testsuite/Magento/Framework/Authorization'],
     ['/lib/Magento/Cache', '/lib/Magento/Framework/Cache'],
     ['/dev/tests/integration/testsuite/Magento/Cache', '/dev/tests/integration/testsuite/Magento/Framework/Cache'],
     ['/dev/tests/unit/testsuite/Magento/Cache', '/dev/tests/unit/testsuite/Magento/Framework/Cache'],
@@ -145,7 +120,9 @@ return [
     ['/lib/Magento/Pricing', '/lib/Magento/Framework/Pricing'],
     ['/dev/tests/integration/testsuite/Magento/Pricing', '/dev/tests/integration/testsuite/Magento/Framework/Pricing'],
     ['/dev/tests/unit/testsuite/Magento/Pricing', '/dev/tests/unit/testsuite/Magento/Framework/Pricing'],
-    ['/lib/Magento/Connect', '/lib/Magento/Framework/Connect'],
+    ['/lib/Magento/Connect'],
+    ['/lib/Magento/Framework/Connect'],
+    ['/lib/internal/Magento/Framework/Connect'],
     ['/lib/Magento/Profiler', '/lib/Magento/Framework/Profiler'],
     ['/dev/tests/unit/testsuite/Magento/Profiler', '/dev/tests/unit/testsuite/Magento/Framework/Profiler'],
     [
@@ -179,9 +156,9 @@ return [
     ['/lib/Magento/Option', '/lib/Magento/Framework/Option'],
     ['/dev/tests/unit/testsuite/Magento/Option', '/dev/tests/unit/testsuite/Magento/Framework/Option'],
     ['/dev/tests/integration/testsuite/Magento/Option', '/dev/tests/integration/testsuite/Magento/Framework/Option'],
-    ['/lib/Magento/Service', '/lib/Magento/Framework/Service'],
-    ['/dev/tests/unit/testsuite/Magento/Service', '/dev/tests/unit/testsuite/Magento/Framework/Service'],
-    ['/dev/tests/integration/testsuite/Magento/Service', '/dev/tests/integration/testsuite/Magento/Framework/Service'],
+    ['/lib/Magento/Service', '/lib/Magento/Framework/Api'],
+    ['/dev/tests/unit/testsuite/Magento/Service', '/dev/tests/unit/testsuite/Magento/Framework/Api'],
+    ['/dev/tests/integration/testsuite/Magento/Service', '/dev/tests/integration/testsuite/Magento/Framework/Api'],
     ['/lib/Magento/System', '/lib/Magento/Framework/System'],
     ['/dev/tests/unit/testsuite/Magento/System', '/dev/tests/unit/testsuite/Magento/Framework/System'],
     ['/dev/tests/integration/testsuite/Magento/System', '/dev/tests/integration/testsuite/Magento/Framework/System'],
@@ -242,4 +219,46 @@ return [
     ['/lib/Magento/Object', '/lib/Magento/Framework/Object'],
     ['/dev/tests/unit/testsuite/Magento/Object', '/dev/tests/unit/testsuite/Magento/Framework/Object'],
     ['/dev/tests/integration/testsuite/Magento/Object', '/dev/tests/integration/testsuite/Magento/Framework/Object'],
+    ['/dev/tests/unit/testsuite/Magento/Core/Model/View/Url', '/dev/tests/unit/testsuite/Magento/Framework/View/Url'],
+    ['/app/code/Magento/Core/Model/View/Url', '/lib/internal/Magento/Framework/View/Url'],
+    ['/downloader'],
+    ['/app/code/Magento/Core/Model/Design/Backend', '/app/code/Magento/Theme/Model/Design/Backend'],
+    [
+        '/dev/tests/integration/testsuite/Magento/Core/Model/Design/Backend',
+        '/dev/tests/integration/testsuite/Magento/Theme/Model/Design/Backend'
+    ],
+    ['/app/code/Magento/Core/Model/Resource/Theme', '/app/code/Magento/Theme/Model/Resource/Theme'],
+    [
+        '/dev/tests/integration/testsuite/Magento/Core/Model/Resource/Theme',
+        '/dev/tests/integration/testsuite/Magento/Theme/Model/Resource/Theme'
+    ],
+    ['/dev/tests/unit/testsuite/Magento/Webapi/Service/Entity'],
+    ['/app/code/Magento/Install'],
+    ['/dev/tests/integration/testsuite/Magento/Install'],
+    ['/dev/tests/static/testsuite/Magento/Test/Integrity/Magento/Install'],
+    ['/dev/tests/integration/testsuite/Magento/Test/Integrity/Modular/InstallWizardConfigFilesTest.php'],
+    ['/dev/tests/static/testsuite/Magento/Test/Legacy/Magento/Install'],
+    ['/dev/tests/unit/testsuite/Magento/Install'],
+    ['/dev/shell/install.php'],
+    ['/dev/shell/uninstall.php'],
+    ['/app/design/install'],
+    ['/app/etc/local.xml', '/app/etc/config.php'],
+    ['/app/code/Magento/RecurringPayment'],
+    ['/app/code/Magento/PayPalRecurringPayment'],
+    ['/app/code/Magento/Weee/Model/Total/Quote/Nominal/Weee.php'],
+    ['/app/code/Magento/Tax/Model/Sales/Total/Quote/Nominal/Subtotal.php'],
+    ['/app/code/Magento/Tax/Model/Sales/Total/Quote/Nominal/Tax.php'],
+    ['/app/code/Magento/SalesRule/Model/Quote/Nominal/Discount.php'],
+    ['/app/code/Magento/Sales/Model/Quote/Address/Total/Nominal.php'],
+    ['/app/code/Magento/Sales/Model/Quote/Address/Total/Nominal'],
+    ['/app/code/Magento/Checkout/Block/Total/Nominal.php'],
+    ['/app/code/Magento/Checkout/etc/sales.xml'],
+    ['/app/code/Magento/Core/Model/TemplateEngine/Decorator/DebugHints.php'],
+    ['/dev/tests/unit/testsuite/Magento/Core/Model/TemplateEngine/Decorator/DebugHints.php'],
+    ['/dev/tests/unit/testsuite'],
+    ['/app/code/Magento/Log'],
+    ['/app/code/Magento/DesignEditor'],
+    ['/dev/tools/Magento/Tools/Migration'],
+    ['/dev/shell/dependency.php'],
+    ['/dev/tests/performance'],
 ];

@@ -1,0 +1,29 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Page header -> Actions group
+//  _____________________________________________
+
+//
+//  Components
+//  ---------------------------------------------
+
+@import 'actions-group/_user.less';
+@import 'actions-group/_search.less';
+@import 'actions-group/_notifications.less';
+
+//
+//  Variables
+//  ---------------------------------------------
+
+@page-header-action__height: @action__height + .1rem;
+
+//
+
+.page-header-actions {
+    &:extend(.abs-clearfix all);
+    padding-top: 1.1rem;
+}

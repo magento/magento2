@@ -2,67 +2,53 @@
 /**
  * Config actions block
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
 namespace Magento\Backend\Test\Block\System\Config;
 
-use Mtf\Client\Element\Locator;
-use \Magento\Backend\Test\Block\PageActions as AbstractPageActions;
+use Magento\Backend\Test\Block\FormPageActions as AbstractPageActions;
+use Magento\Store\Test\Fixture\Store;
+use Magento\Mtf\Client\Locator;
 
+/**
+ * Class PageActions
+ * System config page action
+ */
 class PageActions extends AbstractPageActions
 {
     /**
-     * Save button
+     * Scope CSS selector
      *
      * @var string
      */
-    protected $saveButton = '#save';
-
-    /**
-     * @var string
-     */
-    protected $scopeSelector = '.actions.dropdown';
-
-    /**
-     * Click "Save" button
-     */
-    public function save()
-    {
-        $this->_rootElement->find($this->saveButton)->click();
-    }
+    protected $scopeSelector = '.store-switcher .actions.dropdown';
 
     /**
      * Select store
      *
-     * @param array $websiteScope
+     * @param string $websiteScope
      * @return $this
      */
     public function selectStore($websiteScope)
     {
-        $scope = $this->_rootElement->find($this->scopeSelector, Locator::SELECTOR_CSS, 'liselect');
-        $scope->click();
-        $scope->setValue($websiteScope);
-        $this->_rootElement->acceptAlert();
+        $this->_rootElement->find($this->scopeSelector, Locator::SELECTOR_CSS, 'liselectstore')
+            ->setValue($websiteScope);
 
         return $this;
+    }
+
+    /**
+     * Check if store is visible in scope dropdown
+     *
+     * @param Store $store
+     * @return bool
+     */
+    public function isStoreVisible($store)
+    {
+        $storeViews = $this->_rootElement->find($this->scopeSelector, Locator::SELECTOR_CSS, 'liselectstore')
+            ->getValues();
+        return in_array($store->getGroupId() . "/" . $store->getName(), $storeViews);
     }
 }

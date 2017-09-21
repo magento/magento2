@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+    <fixture name="category"
+             module="Magento_Catalog"
+             type="eav"
+             entity_type="catalog_category_entity"
+             collection="Magento\Catalog\Model\ResourceModel\Category\Collection"
+             repository_class="Magento\Catalog\Test\Repository\Category"
+             handler_interface="Magento\Catalog\Test\Handler\Category\CategoryInterface"
+             class="Magento\Catalog\Test\Fixture\Category">
+        <field name="entity_id" is_required="1" />
+        <field name="entity_type_id" is_required="" />
+        <field name="attribute_set_id" is_required="" />
+        <field name="created_at" is_required="" />
+        <field name="updated_at" is_required="" />
+        <field name="id" group="null" />
+        <field name="store_id" is_required="" group="null" source="Magento\Catalog\Test\Fixture\Category\StoreId" />
+        <field name="parent_id" is_required="" group="null" source="Magento\Catalog\Test\Fixture\Category\ParentId" />
+        <field name="path" is_required="" group="null" />
+        <field name="children_count" is_required="" />
+        <field name="position" is_required="" />
+        <field name="level" is_required="" />
+        <field name="is_active" group="general_information" />
+        <field name="include_in_menu" group="general_information" />
+        <field name="name" group="general_information" />
+        <field name="use_default_name" group="general_information"/>
+        <field name="description" is_required="0" group="content" />
+        <field name="landing_page" group="content" source="Magento\Catalog\Test\Fixture\Category\LandingPage" />
+        <field name="display_mode" group="display_setting" />
+        <field name="is_anchor" group="display_setting" />
+        <field name="available_product_listing_config" is_required="" group="display_setting" />
+        <field name="available_sort_by" is_required="0" group="display_setting" />
+        <field name="default_product_listing_config" is_required="0" group="display_setting" />
+        <field name="default_sort_by" is_required="0" group="display_setting" />
+        <field name="use_config_price_range" is_required="0" group="display_setting" />
+        <field name="layered_navigation_price_step" is_required="0" group="display_setting" />
+        <field name="url_key" group="seo" />
+        <field name="use_default_url_key" group="seo" />
+        <field name="meta_title" is_required="" group="seo" />
+        <field name="meta_keywords" is_required="" group="seo" />
+        <field name="meta_description" is_required="" group="seo" />
+        <field name="category_products" group="category_products" source="Magento\Catalog\Test\Fixture\Category\CategoryProducts" />
+        <field name="use_parent_category_settings" is_required="" group="design" />
+        <field name="theme" is_required="" group="design" />
+        <field name="layout" is_required="" group="design" />
+        <field name="layout_update_xml" is_required="" group="design" />
+        <field name="apply_design_to_products" is_required="" group="design" />
+        <field name="schedule_update_from" is_required="" group="schedule_design_update" />
+        <field name="schedule_update_to" is_required="" group="schedule_design_update" />
+    </fixture>
+</config>

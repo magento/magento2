@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Deploy\Model\Deployer">
+        <arguments>
+            <argument name="alternativeSources" xsi:type="array">
+                <item name="css" xsi:type="object">AlternativeSourceProcessors</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Deploy\Model\Deploy\LocaleDeploy">
+        <arguments>
+            <argument name="alternativeSources" xsi:type="array">
+                <item name="css" xsi:type="object">AlternativeSourceProcessors</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\FrontControllerInterface">
+        <plugin name="configHash" type="Magento\Deploy\Model\Plugin\ConfigChangeDetector" sortOrder="50"/>
+    </type>
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="setModeCommand" xsi:type="object">Magento\Deploy\Console\Command\SetModeCommand</item>
+                <item name="showModeCommand" xsi:type="object">Magento\Deploy\Console\Command\ShowModeCommand</item>
+                <item name="dumpApplicationCommand" xsi:type="object">\Magento\Deploy\Console\Command\App\ApplicationDumpCommand</item>
+                <item name="sensitiveConfigSetCommand" xsi:type="object">\Magento\Deploy\Console\Command\App\SensitiveConfigSetCommand</item>
+                <item name="configImportCommand" xsi:type="object">Magento\Deploy\Console\Command\App\ConfigImportCommand</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Deploy\Model\Filesystem">
+        <arguments>
+            <argument name="shell" xsi:type="object">Magento\Framework\App\Shell</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Deploy\Console\Command\App\SensitiveConfigSet\CollectorFactory">
+        <arguments>
+            <argument name="types" xsi:type="array">
+                <item name="interactive" xsi:type="string">Magento\Deploy\Console\Command\App\SensitiveConfigSet\InteractiveCollector</item>
+                <item name="simple" xsi:type="string">Magento\Deploy\Console\Command\App\SensitiveConfigSet\SimpleCollector</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <preference for="Magento\Deploy\Package\BundleInterface" type="Magento\Deploy\Package\Bundle\RequireJs"/>
+    <type name="Magento\Deploy\Source\SourcePool">
+        <arguments>
+            <argument name="sources" xsi:type="array">
+                <item name="lib" xsi:type="object">Magento\Deploy\Source\Lib</item>
+                <item name="modules" xsi:type="object">Magento\Deploy\Source\Modules</item>
+                <item name="themes" xsi:type="object">Magento\Deploy\Source\Themes</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Deploy\Package\Package">
+        <arguments>
+            <argument name="preProcessors" xsi:type="array">
+                <item name="less" xsi:type="object">Magento\Deploy\Package\Processor\PreProcessor\Less</item>
+                <item name="css" xsi:type="object">Magento\Deploy\Package\Processor\PreProcessor\Css</item>
+            </argument>
+            <argument name="postProcessors" xsi:type="array">
+                <item name="map" xsi:type="object">Magento\Deploy\Package\Processor\PostProcessor\Map</item>
+                <item name="cssUrls" xsi:type="object">Magento\Deploy\Package\Processor\PostProcessor\CssUrls</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Deploy\App\Mode\ConfigProvider">
+        <arguments>
+            <argument name="config" xsi:type="array">
+                <item name="developer" xsi:type="array">
+                    <item name="production" xsi:type="array">
+                        <item name="dev/debug/debug_logging" xsi:type="string">0</item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+</config>

@@ -1,134 +1,151 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
 namespace Magento\Checkout\Test\Block;
 
 use Exception;
-use Mtf\Block\Block;
-use Mtf\Factory\Factory;
-use Mtf\Client\Element\Locator;
-use Magento\Catalog\Test\Fixture\Product;
-use Magento\Catalog\Test\Fixture\SimpleProduct;
-use Magento\Catalog\Test\Fixture\ConfigurableProduct;
+use Magento\Checkout\Test\Block\Cart\CartItem;
 use Magento\Checkout\Test\Block\Onepage\Link;
+use Magento\Mtf\Block\Block;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Factory\Factory;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Class Cart
- * Shopping cart block
- *
+ * Shopping Cart block
  */
 class Cart extends Block
 {
+    // @codingStandardsIgnoreStart
     /**
-     * Proceed to checkout block
+     * Locator value for correspondent "Shopping Cart item" block.
+     *
+     * @var string
+     */
+    protected $cartItemByProductName = './/tbody[contains(@class,"cart item") and (.//*[contains(@class,"product-item-name")]/a[.="%s"])]';
+    // @codingStandardsIgnoreEnd
+
+    /**
+     * Locator value for "Proceed to One Page Checkout" block.
      *
      * @var string
      */
     protected $onepageLinkBlock = '.action.primary.checkout';
 
     /**
-     * 'Clear Shopping Cart' button
+     * Locator value for "Clear Shopping Cart" button.
      *
      * @var string
      */
     protected $clearShoppingCart = '#empty_cart_button';
 
     /**
-     * Cart item sub-total xpath selector
+     * Locator value for "Update Shopping Cart" button.
      *
      * @var string
      */
-    protected $itemSubTotalSelector = '//td[@class="col subtotal excl tax"]//span[@class="price"]';
+    protected $updateShoppingCart = '.update[name="update_cart_action"]';
 
     /**
-     * Cart item unit price xpath selector
+     * Locator value for "Check out with PayPal" button.
      *
      * @var string
      */
-    protected $itemUnitPriceSelector = '//td[@class="col price excl tax"]//span[@class="price"]';
+    protected $paypalCheckoutButton = '[data-action=checkout-form-submit]';
 
     /**
-     * Unit Price value
+     * Locator value for "Check out with PayPal" button.
      *
      * @var string
      */
-    protected $cartProductPrice = '//tr[string(td/div/strong/a)="%s"]/td[@class="col price excl tax"]/span/span';
+    protected $inContextPaypalCheckoutButton = 'ul.checkout-methods-items a[data-action="paypal-in-context-checkout"]';
 
     /**
-     * Get sub-total for the specified item in the cart
+     * Locator value for "Check out with Braintree PayPal" button.
      *
-     * @param SimpleProduct $product
-     * @return string
+     * @var string
      */
-    public function getCartItemSubTotal($product)
+    protected $braintreePaypalCheckoutButton = './/button[contains(@id, "braintree-paypal-mini-cart")]';
+
+    /**
+     * Locator value for "empty Shopping Cart" block.
+     *
+     * @var string
+     */
+    protected $cartEmpty = '.cart-empty';
+
+    /**
+     * Locator value for "Shopping Cart" container.
+     *
+     * @var string
+     */
+    protected $cartContainer = '.cart-container';
+
+    /**
+     * Locator value for "Remove Product" button.
+     *
+     * @var string
+     */
+    protected $deleteItemButton = 'a.action.action-delete';
+
+    /**
+     * PayPal load spinner.
+     *
+     * @var string
+     */
+    protected $preloaderSpinner = '#preloaderSpinner';
+
+    /**
+     * Cart item class name.
+     *
+     * @var string
+     */
+    protected $cartItemClass = \Magento\Checkout\Test\Block\Cart\CartItem::class;
+
+    /**
+     * Wait for PayPal page is loaded.
+     *
+     * @return void
+     */
+    public function waitForFormLoaded()
     {
-        $selector = '//tr[normalize-space(td)="' . $this->getProductName(
-            $product
-        ) . '"]' . $this->itemSubTotalSelector;
-        return $this->_rootElement->find($selector, Locator::SELECTOR_XPATH)->getText();
+        $this->waitForElementNotVisible($this->preloaderSpinner);
     }
 
     /**
-     * Get unit price for the specified item in the cart
+     * Get Shopping Cart item.
      *
-     * @param Product $product
-     * @param string $currency
-     *
-     * @return float
+     * @param FixtureInterface $product
+     * @return CartItem
      */
-    public function getCartItemUnitPrice($product, $currency = '$')
+    public function getCartItem(FixtureInterface $product)
     {
-        $selector = '//tr[normalize-space(td)="' . $this->getProductName(
-            $product
-        ) . '"]' . $this->itemUnitPriceSelector;
+        $dataConfig = $product->getDataConfig();
+        $typeId = isset($dataConfig['type_id']) ? $dataConfig['type_id'] : null;
+        $cartItem = null;
 
-        $prices = explode("\n", trim($this->_rootElement->find($selector, Locator::SELECTOR_XPATH)->getText()));
-        if (count($prices) == 1) {
-            return floatval(trim($prices[0], $currency));
+        if ($this->hasRender($typeId)) {
+            $cartItem = $this->callRender($typeId, 'getCartItem', ['product' => $product]);
+        } else {
+            $cartItemBlock = $this->_rootElement->find(
+                sprintf($this->cartItemByProductName, $product->getName()),
+                Locator::SELECTOR_XPATH
+            );
+            $cartItem = $this->blockFactory->create(
+                $this->cartItemClass,
+                ['element' => $cartItemBlock]
+            );
         }
-        return $this->formatPricesData($prices, $currency);
+
+        return $cartItem;
     }
 
     /**
-     * Get product options in the cart
-     *
-     * @param Product $product
-     * @return array|string
-     */
-    public function getCartItemOptions($product)
-    {
-        $selector = '//tr[string(td/div/strong/a)="' . $this->getProductName($product)
-            . '"]//dl[@class="cart item options"]';
-
-        $optionsBlock = $this->_rootElement->find($selector, Locator::SELECTOR_XPATH);
-        if (!$optionsBlock->isVisible()) {
-            return '';
-        }
-        return $optionsBlock->getText();
-    }
-
-    /**
-     * Get proceed to checkout block
+     * Get "Proceed to One Page Checkout" block.
      *
      * @return Link
      */
@@ -140,17 +157,43 @@ class Cart extends Block
     }
 
     /**
-     * Press 'Check out with PayPal' button
+     * Click "Check out with Braintree PayPal" button.
+     *
+     * @return string
      */
-    public function paypalCheckout()
+    public function braintreePaypalCheckout()
     {
-        $this->_rootElement->find('[data-action=checkout-form-submit]', Locator::SELECTOR_CSS)->click();
+        $currentWindow = $this->browser->getCurrentWindow();
+        $this->_rootElement->find($this->braintreePaypalCheckoutButton, Locator::SELECTOR_XPATH)
+            ->click();
+        return $currentWindow;
     }
 
     /**
-     * Returns the total discount price
+     * Click "Check out with PayPal" button.
      *
-     * @var string
+     * @return void
+     */
+    public function paypalCheckout()
+    {
+        $this->_rootElement->find($this->paypalCheckoutButton)->click();
+    }
+
+    /**
+     * Click "Check out with PayPal" button.
+     */
+    public function inContextPaypalCheckout()
+    {
+        $this->waitForCheckoutButton();
+        $this->_rootElement->find($this->inContextPaypalCheckoutButton)->click();
+        $this->browser->selectWindow();
+        $this->waitForFormLoaded();
+        $this->browser->closeWindow();
+    }
+
+    /**
+     * Get total discount Price value.
+     *
      * @return string
      * @throws Exception
      */
@@ -158,7 +201,7 @@ class Cart extends Block
     {
         $element = $this->_rootElement->find(
             '//table[@id="shopping-cart-totals-table"]' .
-            '//tr[normalize-space(td)="Discount"]' .
+            '//tr[@class="totals"]' .
             '//td[@class="amount"]//span[@class="price"]',
             Locator::SELECTOR_XPATH
         );
@@ -169,57 +212,65 @@ class Cart extends Block
     }
 
     /**
-     * Clear shopping cart
+     * Clear Shopping Cart.
+     *
+     * @return void
      */
     public function clearShoppingCart()
     {
-        $clearShoppingCart = $this->_rootElement->find($this->clearShoppingCart);
-        if ($clearShoppingCart->isVisible()) {
-            $clearShoppingCart->click();
+        while (!$this->cartIsEmpty()) {
+            $this->_rootElement->find($this->deleteItemButton)->click();
         }
     }
 
     /**
-     * Check if a product has been successfully added to the cart
+     * Check if Product is present in Shopping Cart or not.
      *
-     * @param Product $product
+     * @param FixtureInterface $product
      * @return boolean
      */
-    public function isProductInShoppingCart($product)
+    public function isProductInShoppingCart(FixtureInterface $product)
     {
-        return $this->_rootElement->find(
-            '//tr[normalize-space(td)="' . $this->getProductName($product) . '"]',
-            Locator::SELECTOR_XPATH
-        )->isVisible();
+        return $this->getCartItem($product)->isVisible();
     }
 
     /**
-     * Return the name of the specified product.
+     * Update Shopping Cart.
      *
-     * @param Product $product
-     * @return string
+     * @return void
      */
-    private function getProductName($product)
+    public function updateShoppingCart()
     {
-        $productName = $product->getProductName();
-        if ($product instanceof ConfigurableProduct) {
-            $productOptions = $product->getProductOptions();
-            if (!empty($productOptions)) {
-                $productName = $productName . ' ' . key($productOptions) . ' ' . current($productOptions);
-            }
-        }
-        return $productName;
+        $this->_rootElement->find($this->updateShoppingCart)->click();
     }
 
     /**
-     * Get product price "Unit Price" by product name
+     * Check if Shopping Cart is empty or not.
      *
-     * @param $productName
-     * @return string
+     * @return bool
      */
-    public function getProductPriceByName($productName)
+    public function cartIsEmpty()
     {
-        $priceSelector = sprintf($this->cartProductPrice, $productName);
-        return $this->_rootElement->find($priceSelector, Locator::SELECTOR_XPATH)->getText();
+        return $this->_rootElement->find($this->cartEmpty)->isVisible();
+    }
+
+    /**
+     * Wait while Shopping Cart container is loaded.
+     *
+     * @return void
+     */
+    public function waitCartContainerLoading()
+    {
+        $this->waitForElementVisible($this->cartContainer);
+    }
+
+    /**
+     * Wait until in-context checkout button is visible.
+     *
+     * @return void
+     */
+    public function waitForCheckoutButton()
+    {
+        $this->waitForElementVisible($this->inContextPaypalCheckoutButton);
     }
 }

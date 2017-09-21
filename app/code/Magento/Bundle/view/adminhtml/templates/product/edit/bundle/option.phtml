@@ -1,0 +1,315 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var $block \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option */
+?>
+<script id="bundle-option-template" type="text/x-magento-template">
+    <div id="<?= /* @escapeNotVerified */ $block->getFieldId() ?>_<%- data.index %>" class="option-box">
+        <div class="fieldset-wrapper admin__collapsible-block-wrapper opened" id="<?= /* @escapeNotVerified */ $block->getFieldId() ?>_<%- data.index %>-wrapper">
+            <div class="fieldset-wrapper-title">
+                <strong class="admin__collapsible-title" data-toggle="collapse" data-target="#<?= /* @escapeNotVerified */ $block->getFieldId() ?>_<%- data.index %>-content">
+                    <span><%- data.default_title %></span>
+                </strong>
+                <div class="actions">
+                    <?= $block->getOptionDeleteButtonHtml() ?>
+                </div>
+                <div data-role="draggable-handle" class="draggable-handle"></div>
+            </div>
+            <div class="fieldset-wrapper-content in collapse" id="<?= /* @escapeNotVerified */ $block->getFieldId() ?>_<%- data.index %>-content">
+                <fieldset class="fieldset">
+                    <fieldset class="fieldset-alt">
+                        <div class="field field-option-title required">
+                            <label class="label" for="id_<?= /* @escapeNotVerified */ $block->getFieldName() ?>_<%- data.index %>_title">
+                                <?= /* @escapeNotVerified */ __('Option Title') ?>
+                            </label>
+                            <div class="control">
+                                <?php if ($block->isDefaultStore()): ?>
+                                <input class="input-text required-entry"
+                                       type="text"
+                                       name="<?= /* @escapeNotVerified */ $block->getFieldName() ?>[<%- data.index %>][title]"
+                                       id="id_<?= /* @escapeNotVerified */ $block->getFieldName() ?>_<%- data.index %>_title"
+                                       value="<%- data.title %>"
+                                       data-original-value="<%- data.title %>" />
+                                <?php else: ?>
+                                <input class="input-text required-entry"
+                                       type="text"
+                                       name="<?= /* @escapeNotVerified */ $block->getFieldName() ?>[<%- data.index %>][default_title]"
+                                       id="id_<?= /* @escapeNotVerified */ $block->getFieldName() ?>_<%- data.index %>_default_title"
+                                       value="<%- data.default_title %>"
+                                       data-original-value="<%- data.default_title %>" />
+                                <?php endif; ?>
+                                <input type="hidden"
+                                       id="<?= /* @escapeNotVerified */ $block->getFieldId() ?>_id_<%- data.index %>"
+                                       name="<?= /* @escapeNotVerified */ $block->getFieldName() ?>[<%- data.index %>][option_id]"
+                                       value="<%- data.option_id %>" />
+                                <input type="hidden"
+                                       name="<?= /* @escapeNotVerified */ $block->getFieldName() ?>[<%- data.index %>][delete]"
+                                       value=""
+                                       data-state="deleted" />
+                            </div>
+                        </div>
+                        <?php if (!$block->isDefaultStore()): ?>
+                        <div class="field field-option-store-view required">
+                            <label class="label" for="id_<?= /* @escapeNotVerified */ $block->getFieldName() ?>_<%- data.index %>_title_store">
+                                <?= /* @escapeNotVerified */ __('Store View Title') ?>
+                            </label>
+                            <div class="control">
+                                <input class="input-text required-entry" type="text"
+                                       name="<?= /* @escapeNotVerified */ $block->getFieldName() ?>[<%- data.index %>][title]"
+                                       id="id_<?= /* @escapeNotVerified */ $block->getFieldName() ?>_<%- data.index %>_title_store"
+                                       value="<%- data.title %>" />
+                            </div>
+                        </div>
+                        <?php endif; ?>
+                        <div class="field field-option-input-type required">
+                            <label class="label" for="<?= /* @escapeNotVerified */ $block->getFieldId() . '_<%- data.index %>_type' ?>">
+                                <?= /* @escapeNotVerified */ __('Input Type') ?>
+                            </label>
+                            <div class="control">
+                                <?= $block->getTypeSelectHtml() ?>
+                            </div>
+                        </div>
+                        <div class="field field-option-req">
+                            <div class="control">
+                                <input type="checkbox"
+                                       class="is-required"
+                                       checked="checked"
+                                       id="field-option-req" />
+                                <label for="field-option-req">
+                                    <?= /* @escapeNotVerified */ __('Required') ?>
+                                </label>
+                                <span style="display:none"><?= $block->getRequireSelectHtml() ?></span>
+                            </div>
+                        </div>
+                        <div class="field field-option-position no-display">
+                            <label class="label" for="field-option-position">
+                                <?= /* @escapeNotVerified */ __('Position') ?>
+                            </label>
+                            <div class="control">
+                                <input class="input-text validate-zero-or-greater"
+                                       type="text"
+                                       name="<?= /* @escapeNotVerified */ $block->getFieldName() ?>[<%- data.index %>][position]"
+                                       value="<%- data.position %>"
+                                       id="field-option-position" />
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <div class="no-products-message">
+                        <?= /* @escapeNotVerified */ __('There are no products in this option.') ?>
+                    </div>
+                    <?= $block->getAddSelectionButtonHtml() ?>
+                </fieldset>
+            </div>
+        </div>
+        <div id="<?= /* @escapeNotVerified */ $block->getFieldId() ?>_search_<%- data.index %>" class="selection-search"></div>
+    </div>
+</script>
+
+<?= $block->getSelectionHtml() ?>
+
+<script>
+require([
+    'jquery',
+    'mage/template',
+    'jquery/jquery.tabs',
+    'collapsable',
+    'Magento_Bundle/js/bundle-product',
+    'prototype',
+    'mage/adminhtml/form'
+], function(jQuery, mageTemplate){
+
+    var optionTemplate = jQuery('#bundle-option-template').html();
+
+function changeInputType(oldObject, oType) {
+    var newObject = document.createElement('input');
+    newObject.type = oType;
+    if(oldObject.size) newObject.size = oldObject.size;
+    if(oldObject.value) newObject.value = oldObject.value;
+    if(oldObject.name) newObject.name = oldObject.name;
+    if(oldObject.id) newObject.id = oldObject.id;
+    if(oldObject.onclick) newObject.onclick = oldObject.onclick;
+    if(oldObject.className) newObject.className = oldObject.className;
+    oldObject.parentNode.replaceChild(newObject,oldObject);
+    return newObject;
+}
+
+Bundle.Option = Class.create();
+Bundle.Option.prototype = {
+    idLabel : '<?= /* @escapeNotVerified */ $block->getFieldId() ?>',
+    templateText : '',
+    itemsCount : 0,
+    initialize : function(template) {
+        this.templateText = template;
+    },
+
+    add : function(data) {
+        if (!data) {
+            data = <?= /* @escapeNotVerified */ $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode(['default_title' => __('New Option')]) ?>;
+        } else {
+            data.title = data.title.replace(/</g, "&lt;");
+            data.title = data.title.replace(/"/g, "&quot;");
+            data.default_title =  data.title;
+        }
+        data.index = this.itemsCount++;
+
+        this.template = mageTemplate(this.templateText);
+
+        jQuery('#product_bundle_container')
+            .append(this.template({
+                data: data
+            }));
+
+        jQuery('.collapse', jQuery('#product_bundle_container')).collapsable();
+
+        //set selected type
+        if (data.type) {
+            $A($(this.idLabel + '_'+data.index+'_type').options).each(function(option){
+                if (option.value==data.type) option.selected = true;
+            });
+        }
+
+        //set selected is_require
+        if (data.required) {
+            $A($(this.idLabel + '_'+data.index+'_required').options).each(function(option){
+                if (option.value==data.required) option.selected = true;
+            });
+        }
+        // rebind change notifications
+        varienWindowOnload(true);
+
+        if (jQuery && jQuery('#bundle_product_container').data('bundleProduct')) {
+            jQuery('#bundle_product_container').bundleProduct('refreshSortableElements');
+        }
+
+        return data.index;
+    },
+
+    remove : function(event){
+        var element = Event.findElement(event, 'div').up('.option-box');
+        if (element) {
+            var idInput = Element.select(element, '[name$="[option_id]"]')[0];
+            if (idInput.value == '') {
+                element.remove();
+            } else {
+                Element.select(element, '[data-state="deleted"]').each(function (elem) {
+                    elem.value = '1';
+                });
+
+                Element.select(element, ['input', 'select']).each(function (elem) {
+                    elem.hide();
+                    elem.className = '';
+                });
+
+                Element.hide(element);
+            }
+        }
+    },
+
+    changeType : function(event) {
+        var element = Event.element(event);
+        parts = element.id.split('_');
+        i = parts[2];
+        if (element.value == 'multi' || element.value == 'checkbox') {
+            inputs = $A($$('#' + bSelection.idLabel + '_box_' + i + ' tr.selection input.default'));
+            inputs.each(
+                function(elem){
+                    //elem.type = "checkbox";
+                    changeInputType(elem, 'checkbox');
+                }
+            );
+            /**
+             * Hide not needed elements (user defined qty select box)
+             */
+            inputs = $A($$('#' + bSelection.idLabel + '_box_' + i + ' .qty-box'));
+            inputs.each(
+                function(elem){
+                    elem.hide();
+                }
+            );
+
+        } else {
+            inputs = $A($$('#' + bSelection.idLabel + '_box_' + i + ' tr.selection input.default'));
+            have = false;
+            for (j=0; j< inputs.length; j++) {
+                //inputs[j].type = "radio";
+                changeInputType(inputs[j], 'radio');
+                if (inputs[j].checked && have) {
+                    inputs[j].checked = false;
+                } else {
+                    have = true;
+                }
+            }
+
+            /**
+             * Show user defined select box
+             */
+            inputs = $A($$('#' + bSelection.idLabel + '_box_' + i + ' .qty-box'));
+            inputs.each(
+                function(elem){
+                    elem.show();
+                }
+            );
+        }
+    },
+
+    priceTypeFixed : function() {
+        inputs = $A($$('.price-type-box'));
+        inputs.each(
+            function(elem){
+                elem.show();
+            }
+        );
+    },
+
+    priceTypeDynamic : function() {
+        inputs = $A($$('.price-type-box'));
+        inputs.each(
+            function(elem){
+                elem.hide();
+            }
+        );
+    }
+};
+
+var optionIndex = 0;
+bOption = new Bundle.Option(optionTemplate);
+<?php
+    foreach ($block->getOptions() as $_option) {
+        /** @var $_option \Magento\Bundle\Model\Option */
+        /* @escapeNotVerified */ echo 'optionIndex = bOption.add(', $_option->toJson(), ');', PHP_EOL;
+        if ($_option->getSelections()) {
+            foreach ($_option->getSelections() as $_selection) {
+                /** @var $_selection \Magento\Catalog\Model\Product */
+                $_selection->setName($block->escapeHtml($_selection->getName()));
+                /* @escapeNotVerified */ echo 'bSelection.addRow(optionIndex,', $_selection->toJson(), ');', PHP_EOL;
+            }
+        }
+    }
+?>
+function togglePriceType() {
+    bOption['priceType' + ($('price_type').value == '1' ? 'Fixed' : 'Dynamic')]();
+}
+
+jQuery('#bundle_product_container').bundleProduct();
+jQuery('#product_bundle_container .collapse').collapse('hide');
+
+jQuery(window).load(function() {
+    togglePriceType();
+    Event.observe('price_type', 'change', togglePriceType);
+});
+
+});
+</script>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Bundle/js/bundle-type-handler": {}
+        }
+    }
+</script>

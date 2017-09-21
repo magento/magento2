@@ -1,3 +1,5 @@
+; Copyright © Magento, Inc. All rights reserved.
+; See COPYING.txt for license details.
 ; This file is for CGI/FastCGI installations.
 ; Try copying it to php5.ini, if it doesn't work
 

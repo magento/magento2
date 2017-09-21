@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model;
 
@@ -28,7 +10,10 @@ use Magento\Framework\App\RequestInterface;
 /**
  * EAV Entity Form Model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 abstract class Form
 {
@@ -165,7 +150,7 @@ abstract class Form
      * @param RequestInterface $httpRequest
      * @param \Magento\Framework\Validator\ConfigFactory $validatorConfigFactory
      *
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -177,10 +162,12 @@ abstract class Form
         \Magento\Framework\Validator\ConfigFactory $validatorConfigFactory
     ) {
         if (empty($this->_moduleName)) {
-            throw new \Magento\Framework\Model\Exception(__('Current module pathname is undefined'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('The current module pathname is undefined.'));
         }
         if (empty($this->_entityTypeCode)) {
-            throw new \Magento\Framework\Model\Exception(__('Current module EAV entity is undefined'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('The current module EAV entity is undefined.')
+            );
         }
         $this->_storeManager = $storeManager;
         $this->_eavConfig = $eavConfig;
@@ -199,14 +186,14 @@ abstract class Form
     protected function _getFormAttributeCollection()
     {
         return $this->_universalFactory->create(
-            str_replace('_', '\\', $this->_moduleName) . '\\Model\\Resource\\Form\\Attribute\\Collection'
+            str_replace('_', '\\', $this->_moduleName) . '\\Model\\ResourceModel\\Form\\Attribute\\Collection'
         );
     }
 
     /**
      * Get EAV Entity Form Attribute Collection with applied filters
      *
-     * @return \Magento\Eav\Model\Resource\Form\Attribute\Collection
+     * @return \Magento\Eav\Model\ResourceModel\Form\Attribute\Collection
      */
     protected function _getFilteredFormAttributeCollection()
     {
@@ -224,6 +211,7 @@ abstract class Form
      *
      * @param \Magento\Store\Model\Store|string|int $store
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setStore($store)
     {
@@ -277,7 +265,7 @@ abstract class Form
      */
     public function getStore()
     {
-        if (is_null($this->_store)) {
+        if ($this->_store === null) {
             $this->_store = $this->_storeManager->getStore();
         }
         return $this->_store;
@@ -286,13 +274,13 @@ abstract class Form
     /**
      * Return current form code
      *
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return string
      */
     public function getFormCode()
     {
         if (empty($this->_formCode)) {
-            throw new \Magento\Framework\Model\Exception(__('Form code is not defined'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('The form code is not defined.'));
         }
         return $this->_formCode;
     }
@@ -305,7 +293,7 @@ abstract class Form
      */
     public function getEntityType()
     {
-        if (is_null($this->_entityType)) {
+        if ($this->_entityType === null) {
             $this->setEntityType($this->_entityTypeCode);
         }
         return $this->_entityType;
@@ -314,13 +302,13 @@ abstract class Form
     /**
      * Return current entity instance
      *
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Framework\Model\AbstractModel
      */
     public function getEntity()
     {
-        if (is_null($this->_entity)) {
-            throw new \Magento\Framework\Model\Exception(__('Entity instance is not defined'));
+        if ($this->_entity === null) {
+            throw new \Magento\Framework\Exception\LocalizedException(__('The entity instance is not defined.'));
         }
         return $this->_entity;
     }
@@ -332,9 +320,9 @@ abstract class Form
      */
     public function getAttributes()
     {
-        if (is_null($this->_attributes)) {
-            $this->_attributes = array();
-            $this->_userAttributes = array();
+        if ($this->_attributes === null) {
+            $this->_attributes = [];
+            $this->_userAttributes = [];
             /** @var $attribute \Magento\Eav\Model\Attribute */
             foreach ($this->_getFilteredFormAttributeCollection() as $attribute) {
                 $this->_attributes[$attribute->getAttributeCode()] = $attribute;
@@ -373,7 +361,7 @@ abstract class Form
      */
     public function getUserAttributes()
     {
-        if (is_null($this->_userAttributes)) {
+        if ($this->_userAttributes === null) {
             // load attributes
             $this->getAttributes();
         }
@@ -387,7 +375,7 @@ abstract class Form
      */
     public function getSystemAttributes()
     {
-        if (is_null($this->_systemAttributes)) {
+        if ($this->_systemAttributes === null) {
             // load attributes
             $this->getAttributes();
         }
@@ -401,7 +389,7 @@ abstract class Form
      */
     public function getAllowedAttributes()
     {
-        if (is_null($this->_allowedAttributes)) {
+        if ($this->_allowedAttributes === null) {
             // load attributes
             $this->getAttributes();
         }
@@ -431,10 +419,8 @@ abstract class Form
     public function prepareRequest(array $data)
     {
         $request = clone $this->_httpRequest;
-        $request->setParamSources();
         $request->clearParams();
         $request->setParams($data);
-
         return $request;
     }
 
@@ -448,7 +434,7 @@ abstract class Form
      */
     public function extractData(RequestInterface $request, $scope = null, $scopeOnly = true)
     {
-        $data = array();
+        $data = [];
         /** @var $attribute \Magento\Eav\Model\Attribute */
         foreach ($this->getAllowedAttributes() as $attribute) {
             $dataModel = $this->_getAttributeDataModel($attribute);
@@ -467,19 +453,19 @@ abstract class Form
      */
     protected function _getValidator(array $data)
     {
-        if (is_null($this->_validator)) {
+        if ($this->_validator === null) {
             $configFiles = $this->_modulesReader->getConfigurationFiles('validation.xml');
             /** @var $validatorFactory \Magento\Framework\Validator\Config */
-            $validatorFactory = $this->_validatorConfigFactory->create(array('configFiles' => $configFiles));
+            $validatorFactory = $this->_validatorConfigFactory->create(['configFiles' => $configFiles]);
             $builder = $validatorFactory->createValidatorBuilder('eav_entity', 'form');
 
             $builder->addConfiguration(
                 'eav_data_validator',
-                array('method' => 'setAttributes', 'arguments' => array($this->getAllowedAttributes()))
+                ['method' => 'setAttributes', 'arguments' => [$this->getAllowedAttributes()]]
             );
             $builder->addConfiguration(
                 'eav_data_validator',
-                array('method' => 'setData', 'arguments' => array($data))
+                ['method' => 'setData', 'arguments' => [$data]]
             );
             $this->_validator = $builder->createValidator();
         }
@@ -496,7 +482,7 @@ abstract class Form
     {
         $validator = $this->_getValidator($data);
         if (!$validator->isValid($this->getEntity())) {
-            $messages = array();
+            $messages = [];
             foreach ($validator->getMessages() as $errorMessages) {
                 $messages = array_merge($messages, (array)$errorMessages);
             }
@@ -554,7 +540,7 @@ abstract class Form
      */
     public function outputData($format = \Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_TEXT)
     {
-        $data = array();
+        $data = [];
         /** @var $attribute \Magento\Eav\Model\Attribute */
         foreach ($this->getAllowedAttributes() as $attribute) {
             $dataModel = $this->_getAttributeDataModel($attribute);
@@ -595,6 +581,7 @@ abstract class Form
      * Return is AJAX Request
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsAjaxRequest()
     {

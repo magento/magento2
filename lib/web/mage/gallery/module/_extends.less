@@ -1,0 +1,127 @@
+// /**
+// * Copyright © Magento, Inc. All rights reserved.
+// * See COPYING.txt for license details.
+// */
+
+.fotorama-stretch {
+    bottom: 0;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 100%;
+}
+
+.fotorama-grab-cursor {
+    cursor: move;
+    cursor: -webkit-grab;
+    cursor: -moz-grab;
+    cursor: -o-grab;
+    cursor: -ms-grab;
+    cursor: grab;
+}
+
+.fotorama-grabbing-cursor {
+    cursor: move;
+    cursor: -webkit-grabbing;
+    cursor: -moz-grabbing;
+    cursor: -o-grabbing;
+    cursor: -ms-grabbing;
+    cursor: grabbing;
+}
+
+.fotorama-gpu {
+    transform: translateZ(0);
+}
+
+.fotorama-focus {
+    outline: 0;
+}
+
+.fotorama-focus-overlay {
+    &:after {
+        &:extend(.fotorama-stretch);
+        background-color: @color-blue2;
+        border-radius: inherit;
+        content: '';
+    }
+}
+
+.fotorama-transform-disabled {
+    transform: none !important;
+}
+
+.fotorama-transition-for-slide {
+    transition-duration: 0ms;
+    transition-property: transform, width;
+    transition-timing-function: cubic-bezier(0.1, 0, 0.25, 1);
+}
+
+.fotorama-no-select {
+    user-select: none;
+}
+
+.fotorama-select {
+    user-select: text;
+}
+
+.fotorama-empty-bg {
+    background: url(data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=);
+}
+
+.fotorama-auto-margin {
+    margin: auto;
+    padding: 0;
+}
+
+.fotorama-inline-block {
+    .fotorama-inline-block();
+}
+
+.fotorama-content-box {
+    box-sizing: content-box;
+}
+
+.fotorama-border-box {
+    box-sizing: border-box;
+}
+
+.fotorama-hidden {
+    left: -99999px;
+    position: absolute;
+    top: -99999px;
+    z-index: -@z-index-10;
+}
+
+.fotorama-visible {
+    left: auto;
+    opacity: 1;
+    position: relative;
+    top: auto;
+    z-index: auto;
+}
+
+.fotorama-no-tap {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.transitionDuration {
+    transition-duration: 333ms;
+}
+
+.transitionDurationZero {
+    transition-duration: 0ms;
+}
+
+.fotorama-sprite {
+    &:extend(.fotorama-print-background);
+    background-image: url('gallery.png');
+    background-repeat: no-repeat;
+}
+
+.fotorama-print-background {
+    @media print {
+        background: none !important;
+    }
+}

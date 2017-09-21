@@ -1,0 +1,487 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+
+/**
+ * @var $block \Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable\Links
+ */
+?>
+<?php $_product = $block->getProduct()?>
+<?php $block->getConfigJson() ?>
+<fieldset class="admin__fieldset downloadable-form" data-ui-id="downloadable-links">
+    <legend class="admin__legend"><span><?= /* @escapeNotVerified */ __('Links') ?></span></legend><br>
+    <p class="note"><?= /* @escapeNotVerified */ __('Add links to your product files here.') ?></p>
+    <div class="admin__field" <?= !$block->isSingleStoreMode() ? ' data-config-scope="' . __('[STORE VIEW]') . '"' : '' ?>>
+        <label class="admin__field-label" for="downloadable_links_title"><span><?= /* @escapeNotVerified */ __('Title') ?></span></label>
+        <div class="admin__field-control">
+            <input type="text" class="admin__control-text" id="downloadable_links_title" name="product[links_title]" value="<?= /* @escapeNotVerified */ $block->getLinksTitle() ?>" <?= ($_product->getStoreId() && $block->getUsedDefault()) ? 'disabled="disabled"' : '' ?>>
+            <?php if ($_product->getStoreId()): ?>
+                <div class="admin__field admin__field-option">
+                    <input id="link_title_default" class="admin__control-checkbox" type="checkbox" name="use_default[]" value="links_title" onclick="toggleValueElements(this, this.parentNode.parentNode)" <?= $block->getUsedDefault() ? 'checked="checked"' : '' ?> />
+                    <label class="admin__field-label" for="link_title_default"><span><?= /* @escapeNotVerified */ __('Use Default Value') ?></span></label>
+                </div>
+            <?php endif; ?>
+        </div>
+    </div>
+
+    <div class="admin__field" <?= !$block->isSingleStoreMode() ? ' data-config-scope="' . __('[GLOBAL]') . '"' : '' ?>>
+        <label class="admin__field-label" for="downloadable_link_purchase_type"><span><?= /* @escapeNotVerified */ __('Links can be purchased separately') ?></span></label>
+        <div class="admin__field-control">
+            <div class="admin__field-control link-switcher" data-role="link-switcher">
+                <div class="admin__field-control-group">
+                    <div class="admin__field admin__field-option">
+                        <input type="radio" name="product[links_purchased_separately]" value="1"
+                               class="admin__control-radio"
+                               id="link-switcher1"
+                           <?php if($block->isProductLinksCanBePurchasedSeparately()): ?>
+                               checked="checked"
+                           <?php endif; ?>
+                            >
+                        <label class="admin__field-label" for="link-switcher1">
+                            <span>Yes</span>
+                        </label>
+                    </div>
+                    <div class="admin__field admin__field-option">
+                        <input type="radio" name="product[links_purchased_separately]" value="0"
+                                class="admin__control-radio"
+                                id="link-switcher0"
+                            <?php if(!$block->isProductLinksCanBePurchasedSeparately()): ?>
+                                checked="checked"
+                            <?php endif; ?>
+                            >
+                        <label class="admin__field-label" for="link-switcher0">
+                            <span>No</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="admin__field admin__field-wide">
+        <div class="admin__field-control">
+            <div class="admin__control-table-wrapper">
+                <table class="admin__control-table">
+                    <thead>
+                        <tr>
+                            <th class="col-sort"><span><?= /* @escapeNotVerified */ __('Sort Order') ?></span></th>
+                            <th class="col-title _required"><span><?= /* @escapeNotVerified */ __('Title') ?></span></th>
+                            <?php if ($block->getCanReadPrice() !== false) : ?>
+                                <th class="col-price"><span><?= /* @escapeNotVerified */ __('Price') ?></span></th>
+                            <?php endif; ?>
+                            <th class="col-file"><span><?= /* @escapeNotVerified */ __('Attach File or Enter Link') ?></span></th>
+                            <th class="col-sample"><span><?= /* @escapeNotVerified */ __('Sample') ?></span></th>
+                            <th class="col-share"><span><?= /* @escapeNotVerified */ __('Shareable') ?></span></th>
+                            <th class="col-limit"><span><?= /* @escapeNotVerified */ __('Max. Downloads') ?></span></th>
+                            <th class="col-actions">&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <td class="col-actions-add" colspan="8"><?= $block->getAddButtonHtml() ?></td>
+                        </tr>
+                    </tfoot>
+                    <tbody id="link_items_body">
+                    </tbody>
+                </table>
+            </div>
+            <div class="admin__field-note">
+                <span><?= /* @escapeNotVerified */ __('Alphanumeric, dash and underscore characters are recommended for filenames. Improper characters are replaced with \'_\'.') ?></span>
+            </div>
+        </div>
+    </div>
+</fieldset>
+<script>
+require([
+    'jquery',
+    'uiRegistry',
+    'mage/template',
+    'jquery/file-uploader',
+    'mage/mage',
+    'prototype',
+    'mage/translate'
+], function(jQuery, registry, mageTemplate){
+    registry.get('downloadable', function (Downloadable) {
+        var linkTemplate = '<tr>'+
+            '<td class="col-sort" data-role="draggable-handle"><input data-container="link-order" type="hidden" ' +
+            'name="downloadable[link][<%- ' +
+            'data.id' +
+            ' %>][sort_order]" ' +
+            'value="<%- data.sort_order %>" class="input-text admin__control-text sort" />' +
+                '<span class="draggable-handle" title="<?= /* @escapeNotVerified */ $block->escapeHtml(__('Sort Variations')) ?>"></span>' +
+            '</td>'+
+            '<td class="col-title">'+
+                '<input type="hidden" class="__delete__" name="downloadable[link][<%- data.id %>][is_delete]" value="" />'+
+                '<input type="hidden" name="downloadable[link][<%- data.id %>][link_id]" value="<%- data.link_id %>" />'+
+                '<input type="text" class="required-entry input-text admin__control-text" name="downloadable[link][<%- data.id %>][title]" value="<%- data.title %>" />'+
+                <?php if($_product->getStoreId()): ?>
+                    '<div class="admin__field admin__field-option">'+
+                    '<input type="checkbox" id="downloadable_link_<%- data.id %>_title" name="downloadable[link][<%- data.id %>][use_default_title]" value="1" class="admin__control-checkbox" />'+
+                    '<label for="downloadable_link_<%- data.id %>_title" class="admin__field-label"><span><?= /* @escapeNotVerified */ __('Use Default Value') ?></span></label>'+
+                    '</div>' +
+                <?php endif; ?>
+                <?php if ($block->getCanReadPrice() == false) : ?>
+                    '<input type="hidden" id="downloadable_link_<%- data.id %>_price_value" class="link-prices" name="downloadable[link][<%- data.id %>][price]" value="0" />' +
+                    <?php if ($_product->getStoreId() && $block->getIsPriceWebsiteScope()) : ?>
+                    '<input type="hidden" id="downloadable_link_<%- data.id %>_price" name="downloadable[link][<%- data.id %>][use_default_price]" value="1" />' +
+                    <?php endif; ?>
+                <?php endif; ?>
+            '</td>'+
+            <?php if ($block->getCanReadPrice() !== false) : ?>
+                '<td class="col-price">'+
+                    '<div class="admin__control-addon">' +
+                        '<input type="text" id="downloadable_link_<%- data.id %>_price_value" class="input-text admin__control-text validate-number link-prices<?php if ($block->getCanEditPrice() === false) : ?> disabled<?php endif; ?>" name="downloadable[link][<%- data.id %>][price]" value="<%- data.price %>"<?php if ($block->getCanEditPrice() === false) : ?> disabled="disabled"<?php endif; ?> /> ' +
+                        '<label class="admin__addon-prefix"><span><?= $block->escapeHtml($block->getBaseCurrencySymbol($_product->getStoreId())) ?></span></label>' +
+                    '</div>' +
+                    <?php if ($_product->getStoreId() && $block->getIsPriceWebsiteScope()) : ?>
+                        '<div class="admin__field admin__field-option">'+
+                            '<input type="checkbox" id="downloadable_link_<%- data.id %>_price" name="downloadable[link][<%- data.id %>][use_default_price]" value="1"<?php if ($block->getCanEditPrice() === false) : ?> disabled="disabled"<?php endif; ?> class="admin__control-checkbox" />'+
+                            '<label for="downloadable_link_<%- data.id %>_price" class="admin__field-label"><span><?= /* @escapeNotVerified */ __('Use Default Value') ?></span></label>' +
+                        '</div>' +
+                    <?php endif; ?>
+                '</td>' +
+            <?php endif; ?>
+            '<td class="col-file">'+
+                '<div class="admin__field admin__field-option">'+
+                    '<input type="radio" class="admin__control-radio validate-one-required-by-name" id="downloadable_link_<%- data.id %>_file_type" name="downloadable[link][<%- data.id %>][type]" value="file"<%- data.file_checked %> />' +
+                    '<label for="downloadable_link_<%- data.id %>_file_type" class="admin__field-label"><span><?= /* @escapeNotVerified */ __('File') ?></span></label>'+
+                    '<input type="hidden" class="validate-downloadable-file" id="downloadable_link_<%- data.id %>_file_save" name="downloadable[link][<%- data.id %>][file]" value="<%- data.file_save %>" />'+
+
+                    '<div id="downloadable_link_<%- data.id %>_file" class="admin__field-uploader">'+
+                        '<div id="downloadable_link_<%- data.id %>_file-old" class="file-row-info"></div>'+
+                        '<div id="downloadable_link_<%- data.id %>_file-new" class="file-row-info new-file"></div>'+
+                        '<div class="fileinput-button form-buttons">'+
+                            '<span><?= /* @escapeNotVerified */ __('Browse Files...') ?></span>' +
+                            '<input id="downloadable_link_<%- data.id %>_file" type="file" name="<?= /* @escapeNotVerified */ $block->getFileFieldName('links') ?>">' +
+                            '<script>' +
+                                'linksUploader("#downloadable_link_<%- data.id %>_file", "<?= /* @escapeNotVerified */ $block->getUploadUrl('links') ?>"); ' +
+                            '</scr'+'ipt>'+
+                        '</div>'+
+                    '</div>'+
+                '</div>'+
+                '<div class="admin__field admin__field-option admin__field-file-url">'+
+                    '<input type="radio" class="admin__control-radio validate-one-required-by-name" id="downloadable_link_<%- data.id %>_url_type" name="downloadable[link][<%- data.id %>][type]" value="url"<%- data.url_checked %> />' +
+                    '<label for="downloadable_link_<%- data.id %>_url_type" class="admin__field-label"><span><?= /* @escapeNotVerified */ __('URL') ?></span></label>' +
+                    '<input type="text" class="validate-downloadable-url validate-url admin__control-text" name="downloadable[link][<%- data.id %>][link_url]" value="<%- data.link_url %>" placeholder="<?= /* @escapeNotVerified */ __('URL') ?>" />'+
+                '</div>'+
+                '<div>'+
+                    '<span id="downloadable_link_<%- data.id %>_link_container"></span>'+
+                '</div>'+
+            '</td>'+
+            '<td class="col-sample">'+
+                '<div class="admin__field admin__field-option">'+
+                    '<input type="radio" class="admin__control-radio" id="downloadable_link_<%- data.id %>_sample_file_type" name="downloadable[link][<%- data.id %>][sample][type]" value="file"<%- data.sample_file_checked %> />' +
+                    '<label for="downloadable_link_<%- data.id %>_sample_file_type" class="admin__field-label"><span><?= /* @escapeNotVerified */ __('File') ?>:</span></label>'+
+                    '<input type="hidden" id="downloadable_link_<%- data.id %>_sample_file_save" name="downloadable[link][<%- data.id %>][sample][file]" value="<%- data.sample_file_save %>" class="validate-downloadable-file"/>'+
+                    '<div id="downloadable_link_<%- data.id %>_sample_file" class="admin__field-uploader">'+
+                        '<div id="downloadable_link_<%- data.id %>_sample_file-old" class="file-row-info"></div>'+
+                        '<div id="downloadable_link_<%- data.id %>_sample_file-new" class="file-row-info new-file"></div>'+
+                        '<div class="fileinput-button form-buttons">'+
+                        '<span><?= /* @escapeNotVerified */ __('Browse Files...') ?></span>' +
+                        '<input id="downloadable_link_<%- data.id %>_sample_file" type="file" name="<?= /* @escapeNotVerified */ $block->getFileFieldName('link_samples') ?>">' +
+                        '<script>'+
+                        'linksUploader("#downloadable_link_<%- data.id %>_sample_file", "<?= /* @escapeNotVerified */ $block->getUploadUrl('link_samples') ?>"); ' +
+                        '</scr'+'ipt>'+
+                        '</div>'+
+                    '</div>'+
+                '</div>'+
+
+                '<div class="admin__field admin__field-option admin__field-file-url">'+
+                    '<input type="radio" class="admin__control-radio validate-one-required-by-name" id="downloadable_link_<%- data.id %>_sample_url_type" name="downloadable[link][<%- data.id %>][sample][type]" value="url"<%- data.sample_url_checked %> />' +
+                    '<label for="downloadable_link_<%- data.id %>_sample_url_type" class="admin__field-label"><span><?= /* @escapeNotVerified */ __('URL') ?></span></label>'+
+                    '<input type="text" class="validate-downloadable-url validate-url admin__control-text" name="downloadable[link][<%- data.id %>][sample][url]" value="<%- data.sample_url %>" placeholder="<?= /* @escapeNotVerified */ __('URL') ?>" />'+
+                '</div>'+
+                '<div>'+
+                    '<span id="downloadable_link_<%- data.id %>_sample_container"></span>'+
+                '</div>'+
+            '</td>'+
+            '<td class="col-share">'+
+                '<select id="downloadable_link _<%- data.id %>_shareable" class="admin__control-select" name="downloadable[link][<%- data.id %>][is_shareable]">'+
+                    '<option value="1"><?= /* @escapeNotVerified */ __('Yes') ?></option>'+
+                    '<option value="0"><?= /* @escapeNotVerified */ __('No') ?></option>'+
+                    '<option value="2" selected="selected"><?= /* @escapeNotVerified */ __('Use config') ?></option>'+
+                '</select>'+
+            '</td>'+
+            '<td class="col-limit">' +
+                '<input type="text" id="downloadable_link_<%- data.id %>_downloads" name="downloadable[link][<%- data.id %>][number_of_downloads]" class="input-text validate-zero-or-greater admin__control-text downloads" value="<%- data.number_of_downloads %>" />'+
+                '<div class="admin__field admin__field-option">' +
+                    '<input type="checkbox" class="admin__control-checkbox" id="downloadable_link_<%- data.id %>_is_unlimited" name="downloadable[link][<%- data.id %>][is_unlimited]" value="1" <%- data.is_unlimited %> />' +
+                    '<label for="downloadable_link_<%- data.id %>_is_unlimited" class="admin__field-label"><span><?= /* @escapeNotVerified */ __('Unlimited') ?></span></label>' +
+                '</div>' +
+            '</td>'+
+            '<td class="col-action">'+
+                '<button id="downloadable_link_<%- data.id %>_delete_button" type="button" class="action-delete" title="<?= /* @escapeNotVerified */ $block->escapeHtml(__('Delete')) ?>"><span><?= /* @escapeNotVerified */ __('Delete') ?></span></button>'+
+            '</td>'+
+        '</tr>';
+
+        var linkItems = {
+            tbody : $('link_items_body'),
+            templateText : linkTemplate,
+            itemCount : 0,
+            add : function(data) {
+                alertAlreadyDisplayed = false;
+                this.template = mageTemplate(this.templateText);
+
+                if(!data.link_id){
+                    data = {};
+                    data.link_id  = 0;
+                    data.link_type = 'file';
+                    data.sample_type = 'none';
+                    data.number_of_downloads = '<?= /* @escapeNotVerified */ $block->getConfigMaxDownloads() ?>';
+                    data.sort_order = this.itemCount + 1;
+                }
+
+                data.id = this.itemCount;
+
+                if (data.link_type == 'url') {
+                    data.url_checked = ' checked="checked"';
+                } else if (data.link_type == 'file') {
+                    data.file_checked = ' checked="checked"';
+                }
+                if (data.sample_type == 'url') {
+                    data.sample_url_checked = ' checked="checked"';
+                } else if (data.sample_type == 'file') {
+                    data.sample_file_checked = ' checked="checked"';
+                }
+
+                var rowElement = Element.insert(this.tbody, {
+                    'bottom': this.template({data: data})
+                });
+
+                scopeTitle = $('downloadable_link_'+data.id+'_title');
+                if (scopeTitle) {
+                    Event.observe(scopeTitle, 'click', function(event){
+                        scopeElm = $(Event.findElement(event, 'input'));
+                        titleField = scopeElm.up(0).down('input[type="text"]');
+                        if (scopeElm.checked == true) {
+                            titleField.disabled = true;
+                        } else {
+                            titleField.disabled = false;
+                        }
+                    });
+                }
+                if (!data.store_title && scopeTitle) {
+                    scopeTitle.up(0).down('input[type="text"]').disabled = true;
+                    scopeTitle.checked = true;
+                }
+
+                scopePrice = $('downloadable_link_'+data.id+'_price');
+                if (scopePrice) {
+                    Event.observe(scopePrice, 'click', function(event){
+                        scopeElm = $(Event.findElement(event, 'input'));
+                        priceField = scopeElm.up(0).down('input[type="text"]');
+                        if (scopeElm.checked == true) {
+                            priceField.disabled = true;
+                        } else {
+                            priceField.disabled = false;
+                        }
+                    });
+                }
+                if (!data.website_price && scopePrice) {
+                    scopePrice.up(0).down('input[type="text"]').disabled = true;
+                    scopePrice.checked = true;
+                }
+                downloadsElm = $('downloadable_link_'+data.id+'_downloads');
+                isUnlimitedElm = $('downloadable_link_'+data.id+'_is_unlimited');
+                if (data.is_unlimited) {
+                    downloadsElm.disabled = true;
+                }
+                Event.observe(isUnlimitedElm, 'click', function(event){
+                    elm = Event.element(event);
+                    elm.up('td').down('input[type="text"].downloads').disabled = elm.checked;
+                });
+
+                if (data.is_shareable) {
+                    options = $('downloadable_link _'+data.id+'_shareable').options;
+                    for (var i=0; i < options.length; i++) {
+                        if (options[i].value == data.is_shareable) {
+                            options[i].selected = true;
+                        }
+                    }
+                }
+
+                sampleUrl = $('downloadable_link_'+data.id+'_sample_url_type');
+                linkUrl = $('downloadable_link_'+data.id+'_url_type');
+
+                if (!data.file_save) {
+                    data.file_save = [];
+                }
+                if (!data.sample_file_save) {
+                    data.sample_file_save = [];
+                }
+
+                // link sample file
+                new Downloadable.FileUploader(
+                    'linkssample',
+                    'linkssample_'+data.id,
+                    sampleUrl.up('td'),
+                    'downloadable[link]['+data.id+'][sample]',
+                    data.sample_file_save,
+                    'downloadable_link_'+data.id+'_sample_file',
+                    <?= /* @escapeNotVerified */ $block->getConfigJson('link_samples') ?>
+                );
+                // link file
+                new Downloadable.FileUploader(
+                    'links',
+                    'links_'+data.id,
+                    linkUrl.up('td'),
+                    'downloadable[link]['+data.id+']',
+                    data.file_save,
+                    'downloadable_link_'+data.id+'_file',
+                    <?= /* @escapeNotVerified */ $block->getConfigJson() ?>
+                );
+
+                linkFile = $('downloadable_link_'+data.id+'_file_type');
+                linkFile.advaiceContainer = 'downloadable_link_'+data.id+'_link_container';
+                linkUrl.advaiceContainer = 'downloadable_link_'+data.id+'_link_container';
+                $('downloadable_link_'+data.id+'_file_save').advaiceContainer = 'downloadable_link_'+data.id+'_link_container';
+
+                sampleFile = $('downloadable_link_'+data.id+'_sample_file_type');
+
+                this.itemCount++;
+                this.togglePriceFields();
+                this.bindRemoveButtons();
+            },
+            sorting: function () {
+                var list = jQuery(this.tbody);
+                list.sortable({
+                    axis: 'y',
+                    handle: '[data-role=draggable-handle]',
+                    items: 'tr',
+                    update: function (event, data) {
+                        list.find('[data-container=link-order]').each(function (i, el) {
+                            jQuery(el).val(i + 1);
+                        });
+                    },
+                    tolerance: 'pointer'
+                });
+            },
+            remove : function(event){
+                var element = $(Event.findElement(event, 'tr'));
+                alertAlreadyDisplayed = false;
+                if(element){
+                    element.down('input[type="hidden"].__delete__').value = '1';
+                    Element.select(element, 'div.flex').each(function(elm){
+                        elm.remove();
+                    });
+                    element.addClassName('no-display');
+                    element.addClassName('ignore-validate');
+                    element.hide();
+                }
+            },
+            bindRemoveButtons : function(){
+                var buttons = $$('tbody#link_items_body .action-delete');
+                for(var i=0;i<buttons.length;i++){
+                    if(!$(buttons[i]).binded && !$(buttons[i]).hasClassName('disabled')){
+                        $(buttons[i]).binded = true;
+                        Event.observe(buttons[i], 'click', this.remove.bind(this));
+                    }
+                }
+            },
+            togglePriceFields : function(){
+                var toogleTo = jQuery('#link-switcher1').is(':checked');
+                var disableFlag = true;
+                if (toogleTo) {
+                    disableFlag = false;
+                }
+                $$('.link-prices[type="text"]').each(function(elm){
+                    var flag = disableFlag;
+                    if (elm.hasClassName('disabled')) {
+                        flag = true;
+                    }
+                    elm.disabled = flag;
+                });
+            }
+        };
+
+        linkItems.sorting();
+        linkItems.bindRemoveButtons();
+
+        linksUploader = function (id, url) {
+            (function ($) {
+                $(id).fileupload({
+                    dataType: 'json',
+                    url: url,
+                    sequentialUploads: true,
+                    maxFileSize: 2000000,
+                    add: function (e, data) {
+                        var progressTmpl = mageTemplate(id + '-template'),
+                            fileSize,
+                            tmpl;
+
+                        $.each(data.files, function (index, file) {
+                            if ($(id + ' .progressbar-container').length) {
+                                $(id + ' .progressbar-container').parent().remove();
+                            }
+
+                            fileSize = typeof file.size == "undefined" ?
+                                $.mage.__('We could not detect a size.') :
+                                byteConvert(file.size);
+
+                            data.fileId = Math.random().toString(36).substr(2, 9);
+
+                            tmpl = progressTmpl({
+                                data: {
+                                    name: file.name,
+                                    size: fileSize,
+                                    id: data.fileId
+                                }
+                            });
+
+                            $(tmpl).appendTo(id);
+                        });
+
+                        $(this).fileupload('process', data).done(function () {
+                            data.submit();
+                        });
+                    },
+                    done: function (e, data) {
+                        var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
+                        $(progressSelector).css('width', '100%');
+                        if (data.result && !data.result.hasOwnProperty('errorcode')) {
+                            $(progressSelector).removeClass('upload-progress').addClass('upload-success');
+                            new Downloadable.FileList(id.substr(1), null).handleUploadComplete(data.result);
+                        } else {
+                            $(progressSelector).removeClass('upload-progress').addClass('upload-failure');
+                            var errorMsg = '<span class="file-info-error">' + data.result.error + '</span>';
+                            $('#' + data.fileId + ' .file-info').append(errorMsg);
+                        }
+                    },
+                    progress: function (e, data) {
+                        var progress = parseInt(data.loaded / data.total * 100, 10);
+                        var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
+                        $(progressSelector).css('width', progress + '%');
+                    },
+                    fail: function (e, data) {
+                        var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
+                        $(progressSelector).removeClass('upload-progress').addClass('upload-failure');
+                        if (data.result && data.result.hasOwnProperty('errorcode')) {
+                            var errorMsg = '<span class="file-info-error">' + data.result.error + '</span>';
+                            $('#' + data.fileId + ' .file-info').append(errorMsg);
+                        }
+                    }
+                });
+            })(jQuery);
+        };
+
+        if (jQuery('input[name="product[links_purchased_separately]"]')) {
+            jQuery('input[name="product[links_purchased_separately]"]').on('change', linkItems.togglePriceFields.bind());
+        }
+
+        if($('add_link_item')) {
+            Event.observe('add_link_item', 'click', linkItems.add.bind(linkItems));
+        }
+
+        <?php foreach ($block->getLinkData() as $item): ?>
+            linkItems.add(<?= /* @escapeNotVerified */ $item->toJson() ?>);
+        <?php endforeach; ?>
+
+    });
+});
+</script>

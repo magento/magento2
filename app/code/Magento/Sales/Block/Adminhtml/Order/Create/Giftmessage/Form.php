@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Giftmessage;
 
@@ -28,10 +10,6 @@ use Magento\Framework\Data\Form\Element\Fieldset;
 /**
  * Adminhtml order creating gift message item form
  *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
-
-/**
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
@@ -65,9 +43,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_messageHelper;
 
     /**
-     * @var \Magento\Customer\Service\V1\CustomerAccountServiceInterface
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface
      */
-    protected $_customerService;
+    protected $customerRepository;
 
     /**
      * @var \Magento\Customer\Helper\View
@@ -75,12 +53,14 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_customerViewHelper;
 
     /**
+     * Constructor
+     *
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Backend\Model\Session\Quote $sessionQuote
      * @param \Magento\GiftMessage\Helper\Message $messageHelper
-     * @param \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerService
+     * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param \Magento\Customer\Helper\View $customerViewHelper
      * @param array $data
      */
@@ -90,13 +70,13 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Backend\Model\Session\Quote $sessionQuote,
         \Magento\GiftMessage\Helper\Message $messageHelper,
-        \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerService,
+        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         \Magento\Customer\Helper\View $customerViewHelper,
-        array $data = array()
+        array $data = []
     ) {
         $this->_messageHelper = $messageHelper;
         $this->_sessionQuote = $sessionQuote;
-        $this->_customerService = $customerService;
+        $this->customerRepository = $customerRepository;
         $this->_customerViewHelper = $customerViewHelper;
         parent::__construct($context, $registry, $formFactory, $data);
     }
@@ -104,10 +84,10 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Set entity for form
      *
-     * @param \Magento\Framework\Object $entity
+     * @param \Magento\Framework\DataObject $entity
      * @return $this
      */
-    public function setEntity(\Magento\Framework\Object $entity)
+    public function setEntity(\Magento\Framework\DataObject $entity)
     {
         $this->_entity = $entity;
         return $this;
@@ -116,7 +96,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Retrieve entity for form
      *
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function getEntity()
     {
@@ -142,9 +122,10 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             return '';
         }
 
-        if ($this->_getSession()->hasCustomerId()) {
-            $customerData = $this->_customerService->getCustomer($this->_getSession()->getCustomerId());
-            return $this->_customerViewHelper->getCustomerName($customerData);
+        if ($this->_getSession()->hasCustomerId() && $this->_getSession()->getCustomerId()) {
+            // TODO to change email on id
+            $customer = $this->customerRepository->getById($this->_getSession()->getCustomerId());
+            return $this->_customerViewHelper->getCustomerName($customer);
         }
 
         $object = $this->getEntity();
@@ -192,10 +173,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     public function _prepareForm()
     {
         $form = $this->_formFactory->create();
-        $fieldset = $form->addFieldset('main', array('no_container' => true));
-
-        $fieldset->addField('type', 'hidden', array('name' => $this->_getFieldName('type')));
-
+        $fieldset = $form->addFieldset('main', ['no_container' => true]);
+        $fieldset->addField('type', 'hidden', ['name' => $this->_getFieldName('type')]);
         $form->setHtmlIdPrefix($this->_getFieldIdPrefix());
 
         if ($this->getEntityType() == 'item') {
@@ -217,10 +196,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         // Overridden default data with edited when block reloads througth Ajax
         $this->_applyPostData();
-
         $form->setValues($this->getMessage()->getData());
-
         $this->setForm($form);
+
         return $this;
     }
 
@@ -233,10 +211,10 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     protected function _prepareHiddenFields(Fieldset $fieldset)
     {
-        $fieldset->addField('sender', 'hidden', array('name' => $this->_getFieldName('sender')));
-        $fieldset->addField('recipient', 'hidden', array('name' => $this->_getFieldName('recipient')));
+        $fieldset->addField('sender', 'hidden', ['name' => $this->_getFieldName('sender')]);
+        $fieldset->addField('recipient', 'hidden', ['name' => $this->_getFieldName('recipient')]);
+        $fieldset->addField('message', 'hidden', ['name' => $this->_getFieldName('message')]);
 
-        $fieldset->addField('message', 'hidden', array('name' => $this->_getFieldName('message')));
         return $this;
     }
 
@@ -252,26 +230,30 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $fieldset->addField(
             'sender',
             'text',
-            array(
+            [
                 'name' => $this->_getFieldName('sender'),
                 'label' => __('From'),
                 'required' => $this->getMessage()->getMessage() ? true : false
-            )
+            ]
         );
         $fieldset->addField(
             'recipient',
             'text',
-            array(
+            [
                 'name' => $this->_getFieldName('recipient'),
                 'label' => __('To'),
                 'required' => $this->getMessage()->getMessage() ? true : false
-            )
+            ]
         );
 
         $fieldset->addField(
             'message',
             'textarea',
-            array('name' => $this->_getFieldName('message'), 'label' => __('Message'), 'rows' => '5', 'cols' => '20')
+            [
+                'name' => $this->_getFieldName('message'),
+                'label' => __('Message'),
+                'class' => 'admin__control-textarea'
+            ]
         );
         return $this;
     }
@@ -294,7 +276,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     public function getMessage()
     {
-        if (is_null($this->_giftMessage)) {
+        if ($this->_giftMessage === null) {
             $this->_initMessage();
         }
 
@@ -340,11 +322,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     protected function _applyPostData()
     {
-        if (is_array(
-            $giftmessages = $this->getRequest()->getParam('giftmessage')
-        ) && isset(
-            $giftmessages[$this->getEntity()->getId()]
-        )
+        if (is_array($giftmessages = $this->getRequest()->getParam('giftmessage'))
+            && isset($giftmessages[$this->getEntity()->getId()])
         ) {
             $this->getMessage()->addData($giftmessages[$this->getEntity()->getId()]);
         }

@@ -1,0 +1,213 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\GroupedProduct\Test\Repository\GroupedProduct\Associated">
+        <dataset name="defaultSimpleProduct">
+            <field name="assigned_products" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="id" xsi:type="string">%id%</item>
+                    <item name="name" xsi:type="string">%item1_simple::getProductName%</item>
+                    <item name="position" xsi:type="string">%position%</item>
+                    <item name="qty" xsi:type="string">1</item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="id" xsi:type="string">%id%</item>
+                    <item name="name" xsi:type="string">%item1_simple::getProductName%</item>
+                    <item name="position" xsi:type="string">%position%</item>
+                    <item name="qty" xsi:type="string">2</item>
+                </item>
+            </field>
+            <field name="products" xsi:type="array">
+                <item name="0" xsi:type="string">catalogProductSimple::default</item>
+                <item name="1" xsi:type="string">catalogProductSimple::product_100_dollar</item>
+            </field>
+        </dataset>
+
+        <dataset name="one_simple_product">
+            <field name="assigned_products" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="id" xsi:type="string">%id%</item>
+                    <item name="name" xsi:type="string">%item1_simple::getProductName%</item>
+                    <item name="position" xsi:type="string">%position%</item>
+                    <item name="qty" xsi:type="string">1</item>
+                </item>
+            </field>
+            <field name="products" xsi:type="array">
+                <item name="0" xsi:type="string">catalogProductSimple::default</item>
+            </field>
+        </dataset>
+
+        <dataset name="defaultSimpleProduct_without_qty">
+            <field name="assigned_products" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="id" xsi:type="string">%id%</item>
+                    <item name="name" xsi:type="string">%item1_simple::getProductName%</item>
+                    <item name="position" xsi:type="string">%position%</item>
+                    <item name="qty" xsi:type="string">0</item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="id" xsi:type="string">%id%</item>
+                    <item name="name" xsi:type="string">%item1_simple::getProductName%</item>
+                    <item name="position" xsi:type="string">%position%</item>
+                    <item name="qty" xsi:type="string">0</item>
+                </item>
+            </field>
+            <field name="products" xsi:type="array">
+                <item name="0" xsi:type="string">catalogProductSimple::default</item>
+                <item name="1" xsi:type="string">catalogProductSimple::product_100_dollar</item>
+            </field>
+        </dataset>
+
+        <dataset name="defaultSimpleProduct_with_specialPrice">
+            <field name="assigned_products" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="id" xsi:type="string">%id%</item>
+                    <item name="name" xsi:type="string">%item1_simple::getProductName%</item>
+                    <item name="position" xsi:type="string">%position%</item>
+                    <item name="qty" xsi:type="string">1</item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="id" xsi:type="string">%id%</item>
+                    <item name="name" xsi:type="string">%item1_simple::getProductName%</item>
+                    <item name="position" xsi:type="string">%position%</item>
+                    <item name="qty" xsi:type="string">2</item>
+                </item>
+            </field>
+            <field name="products" xsi:type="array">
+                <item name="0" xsi:type="string">catalogProductSimple::withSpecialPrice</item>
+                <item name="1" xsi:type="string">catalogProductSimple::withSpecialPrice</item>
+            </field>
+        </dataset>
+
+        <dataset name="simple_product_with_special_price">
+            <field name="assigned_products" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="id" xsi:type="string">%id%</item>
+                    <item name="name" xsi:type="string">%item1_simple::getProductName%</item>
+                    <item name="position" xsi:type="string">%position%</item>
+                    <item name="qty" xsi:type="string">1</item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="id" xsi:type="string">%id%</item>
+                    <item name="name" xsi:type="string">%item1_simple::getProductName%</item>
+                    <item name="position" xsi:type="string">%position%</item>
+                    <item name="qty" xsi:type="string">2</item>
+                </item>
+            </field>
+            <field name="products" xsi:type="array">
+                <item name="0" xsi:type="string">catalogProductSimple::with_special_price_from_to_dates</item>
+                <item name="1" xsi:type="string">catalogProductSimple::with_special_price_from_to_dates</item>
+            </field>
+        </dataset>
+
+        <dataset name="defaultVirtualProduct">
+            <field name="assigned_products" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="id" xsi:type="string">%id%</item>
+                    <item name="name" xsi:type="string">%item1_virtual::getProductName%</item>
+                    <item name="position" xsi:type="string">%position%</item>
+                    <item name="qty" xsi:type="string">1</item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="id" xsi:type="string">%id%</item>
+                    <item name="name" xsi:type="string">%item1_virtual::getProductName%</item>
+                    <item name="position" xsi:type="string">%position%</item>
+                    <item name="qty" xsi:type="string">2</item>
+                </item>
+            </field>
+            <field name="products" xsi:type="array">
+                <item name="0" xsi:type="string">catalogProductVirtual::default</item>
+                <item name="1" xsi:type="string">catalogProductVirtual::product_50_dollar</item>
+            </field>
+        </dataset>
+
+        <dataset name="three_simple_products">
+            <field name="assigned_products" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="id" xsi:type="string">%id%</item>
+                    <item name="name" xsi:type="string">%item1_simple::getProductName%</item>
+                    <item name="position" xsi:type="string">%position%</item>
+                    <item name="qty" xsi:type="string">3</item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="id" xsi:type="string">%id%</item>
+                    <item name="name" xsi:type="string">%item1_simple::getProductName%</item>
+                    <item name="position" xsi:type="string">%position%</item>
+                    <item name="qty" xsi:type="string">1</item>
+                </item>
+                <item name="2" xsi:type="array">
+                    <item name="id" xsi:type="string">%id%</item>
+                    <item name="name" xsi:type="string">%item1_simple::getProductName%</item>
+                    <item name="position" xsi:type="string">%position%</item>
+                    <item name="qty" xsi:type="string">2</item>
+                </item>
+            </field>
+            <field name="products" xsi:type="array">
+                <item name="0" xsi:type="string">catalogProductSimple::default</item>
+                <item name="1" xsi:type="string">catalogProductSimple::product_40_dollar</item>
+                <item name="2" xsi:type="string">catalogProductSimple::product_100_dollar</item>
+            </field>
+        </dataset>
+
+        <dataset name="three_simple_products_buy_all">
+            <field name="assigned_products" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="id" xsi:type="string">%id%</item>
+                    <item name="name" xsi:type="string">%item1_simple::getProductName%</item>
+                    <item name="position" xsi:type="string">%position%</item>
+                    <item name="qty" xsi:type="string">3</item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="id" xsi:type="string">%id%</item>
+                    <item name="name" xsi:type="string">%item1_simple::getProductName%</item>
+                    <item name="position" xsi:type="string">%position%</item>
+                    <item name="qty" xsi:type="string">1</item>
+                </item>
+                <item name="2" xsi:type="array">
+                    <item name="id" xsi:type="string">%id%</item>
+                    <item name="name" xsi:type="string">%item1_simple::getProductName%</item>
+                    <item name="position" xsi:type="string">%position%</item>
+                    <item name="qty" xsi:type="string">2</item>
+                </item>
+            </field>
+            <field name="products" xsi:type="array">
+                <item name="0" xsi:type="string">catalogProductSimple::default_qty_3</item>
+                <item name="1" xsi:type="string">catalogProductSimple::default_qty_1</item>
+                <item name="2" xsi:type="string">catalogProductSimple::default_qty_2</item>
+            </field>
+        </dataset>
+
+        <dataset name="simple_downloadable_virtual">
+            <field name="assigned_products" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="id" xsi:type="string">%id%</item>
+                    <item name="name" xsi:type="string">%item1_simple::getProductName%</item>
+                    <item name="position" xsi:type="string">%position%</item>
+                    <item name="qty" xsi:type="string">3</item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="id" xsi:type="string">%id%</item>
+                    <item name="name" xsi:type="string">%item2_downloadable::getProductName%</item>
+                    <item name="position" xsi:type="string">%position%</item>
+                    <item name="qty" xsi:type="string">7</item>
+                </item>
+                <item name="2" xsi:type="array">
+                    <item name="id" xsi:type="string">%id%</item>
+                    <item name="name" xsi:type="string">%item3_virtual::getProductName%</item>
+                    <item name="position" xsi:type="string">%position%</item>
+                    <item name="qty" xsi:type="string">11</item>
+                </item>
+            </field>
+            <field name="products" xsi:type="array">
+                <item name="0" xsi:type="string">catalogProductSimple::default</item>
+                <item name="1" xsi:type="string">catalogProductSimple::product_40_dollar</item>
+                <item name="2" xsi:type="string">catalogProductSimple::product_100_dollar</item>
+            </field>
+        </dataset>
+    </repository>
+</config>

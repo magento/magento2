@@ -1,0 +1,57 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Cms\Test\Repository\CmsPage">
+        <dataset name="default">
+            <field name="title" xsi:type="string">page-%isolation%</field>
+            <field name="identifier" xsi:type="string">page-%isolation%</field>
+            <field name="store_id" xsi:type="string">All Store Views</field>
+            <field name="is_active" xsi:type="string">Yes</field>
+            <field name="content" xsi:type="array">
+                <item name="content" xsi:type="string">Test Content</item>
+            </field>
+            <field name="content_heading" xsi:type="string">Heading-%isolation%</field>
+            <field name="page_layout" xsi:type="string">1 column</field>
+        </dataset>
+
+        <dataset name="cms-page-duplicated">
+            <field name="title" xsi:type="string">404 Not Found 1 Test%isolation%</field>
+            <field name="identifier" xsi:type="string">home</field>
+            <field name="store_id" xsi:type="string">All Store Views</field>
+            <field name="is_active" xsi:type="string">Yes</field>
+            <field name="content" xsi:type="array">
+                <item name="content" xsi:type="string">Test Content</item>
+            </field>
+            <field name="meta_keywords" xsi:type="string">Page keywords</field>
+            <field name="meta_description" xsi:type="string">Page description</field>
+        </dataset>
+
+        <dataset name="3_column_template">
+            <field name="title" xsi:type="string">page-compare-%isolation%</field>
+            <field name="identifier" xsi:type="string">page-compare-%isolation%</field>
+            <field name="store_id" xsi:type="string">All Store Views</field>
+            <field name="is_active" xsi:type="string">Yes</field>
+            <field name="content" xsi:type="array">
+                <item name="content" xsi:type="string">Test Content</item>
+            </field>
+            <field name="page_layout" xsi:type="string">3 columns</field>
+        </dataset>
+
+        <dataset name="cms-page-searchable">
+            <field name="title" xsi:type="string">page_%isolation%</field>
+            <field name="identifier" xsi:type="string">page_%isolation%</field>
+            <field name="store_id" xsi:type="string">All Store Views</field>
+            <field name="is_active" xsi:type="string">Yes</field>
+            <field name="content" xsi:type="array">
+                <item name="content" xsi:type="string">Test Content</item>
+            </field>
+            <field name="content_heading" xsi:type="string">Heading_%isolation%</field>
+            <field name="page_layout" xsi:type="string">1 column</field>
+        </dataset>
+    </repository>
+</config>

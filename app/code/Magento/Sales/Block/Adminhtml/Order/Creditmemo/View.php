@@ -1,32 +1,16 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Creditmemo;
 
 /**
  * Adminhtml creditmemo view
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class View extends \Magento\Backend\Block\Widget\Form\Container
 {
@@ -38,14 +22,14 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Backend\Block\Widget\Context $context,
         \Magento\Framework\Registry $registry,
-        array $data = array()
+        array $data = []
     ) {
         $this->_coreRegistry = $registry;
         parent::__construct($context, $data);
@@ -64,68 +48,68 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
 
         parent::_construct();
 
-        $this->_removeButton('save');
-        $this->_removeButton('reset');
-        $this->_removeButton('delete');
+        $this->buttonList->remove('save');
+        $this->buttonList->remove('reset');
+        $this->buttonList->remove('delete');
 
         if (!$this->getCreditmemo()) {
             return;
         }
 
         if ($this->getCreditmemo()->canCancel()) {
-            $this->_addButton(
+            $this->buttonList->add(
                 'cancel',
-                array(
+                [
                     'label' => __('Cancel'),
                     'class' => 'delete',
                     'onclick' => 'setLocation(\'' . $this->getCancelUrl() . '\')'
-                )
+                ]
             );
         }
 
         if ($this->_isAllowedAction('Magento_Sales::emails')) {
             $this->addButton(
                 'send_notification',
-                array(
+                [
                     'label' => __('Send Email'),
                     'class' => 'send-email',
                     'onclick' => 'confirmSetLocation(\'' . __(
-                        'Are you sure you want to send a Credit memo email to customer?'
+                        'Are you sure you want to send a credit memo email to customer?'
                     ) . '\', \'' . $this->getEmailUrl() . '\')'
-                )
+                ]
             );
         }
 
         if ($this->getCreditmemo()->canRefund()) {
-            $this->_addButton(
+            $this->buttonList->add(
                 'refund',
-                array(
+                [
                     'label' => __('Refund'),
                     'class' => 'refund',
                     'onclick' => 'setLocation(\'' . $this->getRefundUrl() . '\')'
-                )
+                ]
             );
         }
 
         if ($this->getCreditmemo()->canVoid()) {
-            $this->_addButton(
+            $this->buttonList->add(
                 'void',
-                array(
+                [
                     'label' => __('Void'),
                     'class' => 'void',
                     'onclick' => 'setLocation(\'' . $this->getVoidUrl() . '\')'
-                )
+                ]
             );
         }
 
         if ($this->getCreditmemo()->getId()) {
-            $this->_addButton(
+            $this->buttonList->add(
                 'print',
-                array(
+                [
                     'label' => __('Print'),
                     'class' => 'print',
                     'onclick' => 'setLocation(\'' . $this->getPrintUrl() . '\')'
-                )
+                ]
             );
         }
     }
@@ -143,19 +127,23 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
     /**
      * Retrieve text for header
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getHeaderText()
     {
         if ($this->getCreditmemo()->getEmailSent()) {
-            $emailSent = __('The credit memo email was sent');
+            $emailSent = __('The credit memo email was sent.');
         } else {
-            $emailSent = __('the credit memo email is not sent');
+            $emailSent = __('The credit memo email wasn\'t sent.');
         }
         return __(
             'Credit Memo #%1 | %3 | %2 (%4)',
             $this->getCreditmemo()->getIncrementId(),
-            $this->formatDate($this->getCreditmemo()->getCreatedAtDate(), 'medium', true),
+            $this->formatDate(
+                $this->_localeDate->date(new \DateTime($this->getCreditmemo()->getCreatedAt())),
+                \IntlDateFormatter::MEDIUM,
+                true
+            ),
             $this->getCreditmemo()->getStateName(),
             $emailSent
         );
@@ -170,10 +158,10 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
     {
         return $this->getUrl(
             'sales/order/view',
-            array(
+            [
                 'order_id' => $this->getCreditmemo() ? $this->getCreditmemo()->getOrderId() : null,
                 'active_tab' => 'order_creditmemos'
-            )
+            ]
         );
     }
 
@@ -184,7 +172,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      */
     public function getCaptureUrl()
     {
-        return $this->getUrl('sales/*/capture', array('creditmemo_id' => $this->getCreditmemo()->getId()));
+        return $this->getUrl('sales/*/capture', ['creditmemo_id' => $this->getCreditmemo()->getId()]);
     }
 
     /**
@@ -194,7 +182,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      */
     public function getVoidUrl()
     {
-        return $this->getUrl('sales/*/void', array('creditmemo_id' => $this->getCreditmemo()->getId()));
+        return $this->getUrl('sales/*/void', ['creditmemo_id' => $this->getCreditmemo()->getId()]);
     }
 
     /**
@@ -204,7 +192,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      */
     public function getCancelUrl()
     {
-        return $this->getUrl('sales/*/cancel', array('creditmemo_id' => $this->getCreditmemo()->getId()));
+        return $this->getUrl('sales/*/cancel', ['creditmemo_id' => $this->getCreditmemo()->getId()]);
     }
 
     /**
@@ -216,10 +204,10 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
     {
         return $this->getUrl(
             'sales/*/email',
-            array(
+            [
                 'creditmemo_id' => $this->getCreditmemo()->getId(),
                 'order_id' => $this->getCreditmemo()->getOrderId()
-            )
+            ]
         );
     }
 
@@ -230,7 +218,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      */
     public function getPrintUrl()
     {
-        return $this->getUrl('sales/*/print', array('creditmemo_id' => $this->getCreditmemo()->getId()));
+        return $this->getUrl('sales/*/print', ['creditmemo_id' => $this->getCreditmemo()->getId()]);
     }
 
     /**
@@ -243,14 +231,14 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
     {
         if ($flag) {
             if ($this->getCreditmemo()->getBackUrl()) {
-                return $this->_updateButton(
+                return $this->buttonList->update(
                     'back',
                     'onclick',
                     'setLocation(\'' . $this->getCreditmemo()->getBackUrl() . '\')'
                 );
             }
 
-            return $this->_updateButton(
+            return $this->buttonList->update(
                 'back',
                 'onclick',
                 'setLocation(\'' . $this->getUrl('sales/creditmemo/') . '\')'

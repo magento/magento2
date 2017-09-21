@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -27,6 +9,12 @@
  */
 namespace Magento\Theme\Helper;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Storage extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
@@ -81,7 +69,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Magento filesystem
      *
-     * @var \Magento\Framework\App\Filesystem
+     * @var \Magento\Framework\Filesystem
      */
     protected $filesystem;
 
@@ -102,13 +90,13 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Framework\App\Filesystem $filesystem
+     * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Backend\Model\Session $session
      * @param \Magento\Framework\View\Design\Theme\FlyweightFactory $themeFactory
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\App\Filesystem $filesystem,
+        \Magento\Framework\Filesystem $filesystem,
         \Magento\Backend\Model\Session $session,
         \Magento\Framework\View\Design\Theme\FlyweightFactory $themeFactory
     ) {
@@ -116,8 +104,8 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
         $this->filesystem = $filesystem;
         $this->_session = $session;
         $this->_themeFactory = $themeFactory;
-        $this->mediaDirectoryWrite = $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::MEDIA_DIR);
-        $this->mediaDirectoryWrite->create($this->getStorageRoot());
+        $this->mediaDirectoryWrite = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $this->mediaDirectoryWrite->create($this->mediaDirectoryWrite->getRelativePath($this->getStorageRoot()));
     }
 
     /**
@@ -129,7 +117,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
     public function convertPathToId($path)
     {
         $path = str_replace($this->getStorageRoot(), '', $path);
-        return $this->urlEncode($path);
+        return $this->urlEncoder->encode($path);
     }
 
     /**
@@ -140,7 +128,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function convertIdToPath($value)
     {
-        $path = $this->urlDecode($value);
+        $path = $this->urlDecoder->decode($value);
         if (!strstr($path, $this->getStorageRoot())) {
             $path = $this->getStorageRoot() . $path;
         }
@@ -169,7 +157,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
         if (null === $this->_storageRoot) {
             $this->_storageRoot = implode(
                 '/',
-                array($this->_getTheme()->getCustomization()->getCustomizationPath(), $this->getStorageType())
+                [$this->_getTheme()->getCustomization()->getCustomizationPath(), $this->getStorageType()]
             );
         }
         return $this->_storageRoot;
@@ -178,7 +166,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Get theme module for custom static files
      *
-     * @return \Magento\Core\Model\Theme
+     * @return \Magento\Theme\Model\Theme
      * @throws \InvalidArgumentException
      */
     protected function _getTheme()
@@ -195,17 +183,17 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
      * Get storage type
      *
      * @return string
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getStorageType()
     {
-        $allowedTypes = array(
+        $allowedTypes = [
             \Magento\Theme\Model\Wysiwyg\Storage::TYPE_FONT,
-            \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE
-        );
+            \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE,
+        ];
         $type = (string)$this->_getRequest()->getParam(self::PARAM_CONTENT_TYPE);
         if (!in_array($type, $allowedTypes)) {
-            throw new \Magento\Framework\Exception('Invalid type');
+            throw new \Magento\Framework\Exception\LocalizedException(__('Invalid type'));
         }
         return $type;
     }
@@ -217,14 +205,14 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getRelativeUrl()
     {
-        $pathPieces = array('..', $this->getStorageType());
+        $pathPieces = ['..', $this->getStorageType()];
         $node = $this->_getRequest()->getParam(self::PARAM_NODE);
         if ($node !== self::NODE_ROOT) {
-            $node = $this->urlDecode($node);
+            $node = $this->urlDecoder->decode($node);
             $nodes = explode('/', trim($node, '/'));
             $pathPieces = array_merge($pathPieces, $nodes);
         }
-        $pathPieces[] = $this->urlDecode($this->_getRequest()->getParam(self::PARAM_FILENAME));
+        $pathPieces[] = $this->urlDecoder->decode($this->_getRequest()->getParam(self::PARAM_FILENAME));
         return implode('/', $pathPieces);
     }
 
@@ -287,54 +275,37 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
         $themeId = $this->_getRequest()->getParam(self::PARAM_THEME_ID);
         $contentType = $this->_getRequest()->getParam(self::PARAM_CONTENT_TYPE);
         $node = $this->_getRequest()->getParam(self::PARAM_NODE);
-        return array(
+        return [
             self::PARAM_THEME_ID => $themeId,
             self::PARAM_CONTENT_TYPE => $contentType,
             self::PARAM_NODE => $node
-        );
+        ];
     }
 
     /**
      * Get allowed extensions by type
      *
      * @return string[]
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getAllowedExtensionsByType()
     {
-        switch ($this->getStorageType()) {
-            case \Magento\Theme\Model\Wysiwyg\Storage::TYPE_FONT:
-                $extensions = array('ttf', 'otf', 'eot', 'svg', 'woff');
-                break;
-            case \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE:
-                $extensions = array('jpg', 'jpeg', 'gif', 'png', 'xbm', 'wbmp');
-                break;
-            default:
-                throw new \Magento\Framework\Exception('Invalid type');
-        }
-        return $extensions;
+        return $this->getStorageType() == \Magento\Theme\Model\Wysiwyg\Storage::TYPE_FONT
+                ? ['ttf', 'otf', 'eot', 'svg', 'woff']
+                : ['jpg', 'jpeg', 'gif', 'png', 'xbm', 'wbmp'];
     }
 
     /**
      * Get storage type name for display.
      *
      * @return string
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getStorageTypeName()
     {
-        switch ($this->getStorageType()) {
-            case \Magento\Theme\Model\Wysiwyg\Storage::TYPE_FONT:
-                $name = self::FONTS;
-                break;
-            case \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE:
-                $name = self::IMAGES;
-                break;
-            default:
-                throw new \Magento\Framework\Exception('Invalid type');
-        }
-
-        return $name;
+        return $this->getStorageType() == \Magento\Theme\Model\Wysiwyg\Storage::TYPE_FONT
+            ? self::FONTS
+            : self::IMAGES;
     }
 
     /**

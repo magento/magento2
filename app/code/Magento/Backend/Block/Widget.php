@@ -1,34 +1,16 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block;
 
 /**
  * Base widget class
  *
- * @author     Magento Core Team <core@magentocommerce.com>
- *
+ * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @since 100.0.2
  */
 class Widget extends \Magento\Backend\Block\Template
 {
@@ -68,7 +50,7 @@ class Widget extends \Magento\Backend\Block\Template
      * @param array $params url parameters
      * @return string current url
      */
-    public function getCurrentUrl($params = array())
+    public function getCurrentUrl($params = [])
     {
         if (!isset($params['_current'])) {
             $params['_current'] = true;
@@ -97,28 +79,14 @@ class Widget extends \Magento\Backend\Block\Template
      * @param array $dataAttr
      * @return string
      */
-    public function getButtonHtml($label, $onclick, $class = '', $buttonId = null, $dataAttr = array())
+    public function getButtonHtml($label, $onclick, $class = '', $buttonId = null, $dataAttr = [])
     {
         return $this->getLayout()->createBlock(
-            'Magento\Backend\Block\Widget\Button'
+            \Magento\Backend\Block\Widget\Button::class
         )->setData(
-            array('label' => $label, 'onclick' => $onclick, 'class' => $class, 'type' => 'button', 'id' => $buttonId)
+            ['label' => $label, 'onclick' => $onclick, 'class' => $class, 'type' => 'button', 'id' => $buttonId]
         )->setDataAttribute(
             $dataAttr
         )->toHtml();
-    }
-
-    /**
-     * @return string
-     */
-    public function getGlobalIcon()
-    {
-        return '<img src="' . $this->getViewFileUrl(
-            'images/fam_link.gif'
-        ) . '" alt="' . __(
-            'Global Attribute'
-        ) . '" title="' . __(
-            'This attribute shares the same value in all stores.'
-        ) . '" class="attribute-global"/>';
     }
 }

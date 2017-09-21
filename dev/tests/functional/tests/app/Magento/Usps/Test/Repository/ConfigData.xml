@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Config\Test\Repository\ConfigData">
+        <dataset name="disable_shipping_all">
+            <field name="carriers/usps/active" xsi:type="array">
+                <item name="scope" xsi:type="string">carriers</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+
+        <dataset name="usps">
+            <field name="carriers/usps/active" xsi:type="array">
+                <item name="scope" xsi:type="string">carriers</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="carriers/usps/gateway_url" xsi:type="array">
+                <item name="scope" xsi:type="string">carriers</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string"/>
+                <item name="value" xsi:type="string">http://production.shippingapis.com/ShippingAPI.dll</item>
+            </field>
+            <field name="carriers/usps/gateway_secure_url" xsi:type="array">
+                <item name="scope" xsi:type="string">carriers</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string"/>
+                <item name="value" xsi:type="string">https://secure.shippingapis.com/ShippingAPI.dll</item>
+            </field>
+            <field name="carriers/usps/userid" xsi:type="array">
+                <item name="scope" xsi:type="string">carriers</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string"/>
+                <item name="value" xsi:type="string">CARRIERS_USPS_USERID</item>
+            </field>
+            <field name="carriers/usps/password" xsi:type="array">
+                <item name="scope" xsi:type="string">carriers</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string"/>
+                <item name="value" xsi:type="string">CARRIERS_USPS_PASSWORD</item>
+            </field>
+            <field name="carriers/usps/debug" xsi:type="array">
+                <item name="scope" xsi:type="string">carriers</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+        </dataset>
+        <dataset name="usps_rollback">
+            <field name="carriers/usps/active" xsi:type="array">
+                <item name="scope" xsi:type="string">carriers</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+        <dataset name="usps_container_sm_flat_rate_box">
+            <field name="carriers/usps/container" xsi:type="array">
+                <item name="scope" xsi:type="string">carriers</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Small Flat-Rate Box</item>
+                <item name="value" xsi:type="string">SM FLAT RATE BOX</item>
+            </field>
+        </dataset>
+        <dataset name="usps_container_sm_flat_rate_box_rollback">
+            <field name="carriers/usps/container" xsi:type="array">
+                <item name="scope" xsi:type="string">carriers</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Variable</item>
+                <item name="value" xsi:type="string">VARIABLE</item>
+            </field>
+        </dataset>
+    </repository>
+</config>

@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Items;
 
@@ -27,6 +9,7 @@ namespace Magento\Sales\Block\Items;
  * Abstract block for display sales (quote/order/invoice etc.) items
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 class AbstractItems extends \Magento\Framework\View\Element\Template
 {
@@ -41,6 +24,7 @@ class AbstractItems extends \Magento\Framework\View\Element\Template
      * @param string $type
      * @return \Magento\Framework\View\Element\AbstractBlock
      * @throws \RuntimeException
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getItemRenderer($type)
     {
@@ -53,7 +37,7 @@ class AbstractItems extends \Magento\Framework\View\Element\Template
         if (!$rendererList) {
             throw new \RuntimeException('Renderer list for block "' . $this->getNameInLayout() . '" is not defined');
         }
-        $overriddenTemplates = $this->getOverriddenTemplates() ?: array();
+        $overriddenTemplates = $this->getOverriddenTemplates() ?: [];
         $template = isset($overriddenTemplates[$type]) ? $overriddenTemplates[$type] : $this->getRendererTemplate();
         $renderer = $rendererList->getRenderer($type, self::DEFAULT_TYPE, $template);
         $renderer->setRenderedBlock($this);
@@ -65,6 +49,7 @@ class AbstractItems extends \Magento\Framework\View\Element\Template
      *
      * @param \Magento\Framework\View\Element\AbstractBlock $renderer
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _prepareItem(\Magento\Framework\View\Element\AbstractBlock $renderer)
     {
@@ -74,14 +59,14 @@ class AbstractItems extends \Magento\Framework\View\Element\Template
     /**
      * Return product type for quote/order item
      *
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      * @return string
      */
-    protected function _getItemType(\Magento\Framework\Object $item)
+    protected function _getItemType(\Magento\Framework\DataObject $item)
     {
         if ($item->getOrderItem()) {
             $type = $item->getOrderItem()->getProductType();
-        } elseif ($item instanceof \Magento\Sales\Model\Quote\Address\Item) {
+        } elseif ($item instanceof \Magento\Quote\Model\Quote\Address\Item) {
             $type = $item->getQuoteItem()->getProductType();
         } else {
             $type = $item->getProductType();
@@ -92,10 +77,10 @@ class AbstractItems extends \Magento\Framework\View\Element\Template
     /**
      * Get item row html
      *
-     * @param   \Magento\Framework\Object $item
+     * @param   \Magento\Framework\DataObject $item
      * @return  string
      */
-    public function getItemHtml(\Magento\Framework\Object $item)
+    public function getItemHtml(\Magento\Framework\DataObject $item)
     {
         $type = $this->_getItemType($item);
 

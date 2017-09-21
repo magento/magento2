@@ -1,35 +1,17 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Helper\Session;
 
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Customer\Model\Session as CustomerSession;
-use Magento\Framework\View\LayoutInterface;
-use Magento\Customer\Service\V1\Data\CustomerBuilder;
-use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\Module\Manager as ModuleManager;
 use Magento\Framework\App\ViewInterface;
+use Magento\Framework\Module\Manager as ModuleManager;
+use Magento\Framework\View\LayoutInterface;
 
 /**
  * Class CurrentCustomer
@@ -47,14 +29,14 @@ class CurrentCustomer
     protected $layout;
 
     /**
-     * @var \Magento\Customer\Service\V1\Data\CustomerBuilder
+     * @var \Magento\Customer\Api\Data\CustomerInterfaceFactory
      */
-    protected $customerBuilder;
+    protected $customerFactory;
 
     /**
-     * @var \Magento\Customer\Service\V1\CustomerAccountServiceInterface
+     * @var CustomerRepositoryInterface
      */
-    protected $customerAccountService;
+    protected $customerRepository;
 
     /**
      * @var \Magento\Framework\App\RequestInterface
@@ -74,8 +56,8 @@ class CurrentCustomer
     /**
      * @param CustomerSession $customerSession
      * @param LayoutInterface $layout
-     * @param CustomerBuilder $customerBuilder
-     * @param CustomerAccountServiceInterface $customerAccountService
+     * @param CustomerInterfaceFactory $customerFactory
+     * @param CustomerRepositoryInterface $customerRepository
      * @param RequestInterface $request
      * @param ModuleManager $moduleManager
      * @param ViewInterface $view
@@ -83,16 +65,16 @@ class CurrentCustomer
     public function __construct(
         CustomerSession $customerSession,
         LayoutInterface $layout,
-        CustomerBuilder $customerBuilder,
-        CustomerAccountServiceInterface $customerAccountService,
+        CustomerInterfaceFactory $customerFactory,
+        CustomerRepositoryInterface $customerRepository,
         RequestInterface $request,
         ModuleManager $moduleManager,
         ViewInterface $view
     ) {
         $this->customerSession = $customerSession;
         $this->layout = $layout;
-        $this->customerBuilder = $customerBuilder;
-        $this->customerAccountService = $customerAccountService;
+        $this->customerFactory = $customerFactory;
+        $this->customerRepository = $customerRepository;
         $this->request = $request;
         $this->moduleManager = $moduleManager;
         $this->view = $view;
@@ -101,27 +83,29 @@ class CurrentCustomer
     /**
      * Returns customer Data with customer group only
      *
-     * @return \Magento\Customer\Service\V1\Data\Customer
+     * @return \Magento\Customer\Api\Data\CustomerInterface
      */
     protected function getDepersonalizedCustomer()
     {
-        return $this->customerBuilder->setGroupId($this->customerSession->getCustomerGroupId())->create();
+        $customer = $this->customerFactory->create();
+        $customer->setGroupId($this->customerSession->getCustomerGroupId());
+        return $customer;
     }
 
     /**
      * Returns customer Data from service
      *
-     * @return \Magento\Customer\Service\V1\Data\Customer
+     * @return \Magento\Customer\Api\Data\CustomerInterface
      */
     protected function getCustomerFromService()
     {
-        return $this->customerAccountService->getCustomer($this->customerSession->getId());
+        return $this->customerRepository->getById($this->customerSession->getId());
     }
 
     /**
      * Returns current customer according to session and context
      *
-     * @return \Magento\Customer\Service\V1\Data\Customer
+     * @return \Magento\Customer\Api\Data\CustomerInterface
      */
     public function getCustomer()
     {

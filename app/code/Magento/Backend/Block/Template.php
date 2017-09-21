@@ -1,32 +1,29 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block;
 
 /**
- * Backend abstract block
+ * Standard admin block. Adds admin-specific behavior and event.
+ * Should be used when you declare a block in admin layout handle.
  *
+ * Avoid extending this class if possible.
+ *
+ * If you need custom presentation logic in your blocks, use this class as block, and declare
+ * custom view models in block arguments in layout handle file.
+ *
+ * Example:
+ * <block name="my.block" class="Magento\Backend\Block\Template" template="My_Module::template.phtml" >
+ *      <arguments>
+ *          <argument name="viewModel" xsi:type="object">My\Module\ViewModel\Custom</argument>
+ *      </arguments>
+ * </block>
+ *
+ * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @since 100.0.2
  */
 class Template extends \Magento\Framework\View\Element\Template
 {
@@ -59,7 +56,7 @@ class Template extends \Magento\Framework\View\Element\Template
      * @param \Magento\Backend\Block\Template\Context $context
      * @param array $data
      */
-    public function __construct(\Magento\Backend\Block\Template\Context $context, array $data = array())
+    public function __construct(\Magento\Backend\Block\Template\Context $context, array $data = [])
     {
         $this->_localeDate = $context->getLocaleDate();
         $this->_authorization = $context->getAuthorization();
@@ -81,13 +78,18 @@ class Template extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Check whether or not the module output is enabled
+     * Check whether or not the module output is enabled.
      *
      * Because many module blocks belong to Backend module,
-     * the feature "Disable module output" doesn't cover Admin area
+     * the feature "Disable module output" doesn't cover Admin area.
      *
      * @param string $moduleName Full module name
      * @return boolean
+     * @deprecated 100.2.0 Magento does not support disabling/enabling modules output from the Admin Panel since 2.2.0
+     * version. Module output can still be enabled/disabled in configuration files. However, this functionality should
+     * not be used in future development. Module design should explicitly state dependencies to avoid requiring output
+     * disabling. This functionality will temporarily be kept in Magento core, as there are unresolved modularity
+     * issues that will be addressed in future releases.
      */
     public function isOutputEnabled($moduleName = null)
     {
@@ -118,7 +120,7 @@ class Template extends \Magento\Framework\View\Element\Template
      */
     protected function _toHtml()
     {
-        $this->_eventManager->dispatch('adminhtml_block_html_before', array('block' => $this));
+        $this->_eventManager->dispatch('adminhtml_block_html_before', ['block' => $this]);
         return parent::_toHtml();
     }
 

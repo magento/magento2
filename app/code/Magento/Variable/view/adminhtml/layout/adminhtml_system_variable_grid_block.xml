@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="adminhtml.system.variable.grid.container">
+            <block class="Magento\Backend\Block\Widget\Grid" name="adminhtml.system.variable.grid" as="grid">
+                <arguments>
+                    <argument name="id" xsi:type="string">customVariablesGrid</argument>
+                    <argument name="dataSource" xsi:type="object">Magento\Variable\Model\ResourceModel\Variable\Collection</argument>
+                    <argument name="default_sort" xsi:type="string">variable_id</argument>
+                    <argument name="default_dir" xsi:type="string">ASC</argument>
+                </arguments>
+                <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" name="adminhtml.system.variable.grid.columnSet" as="grid.columnSet">
+                    <arguments>
+                        <argument name="rowUrl" xsi:type="array">
+                            <item name="path" xsi:type="string">adminhtml/*/edit</item>
+                            <item name="extraParamsTemplate" xsi:type="array">
+                                <item name="variable_id" xsi:type="string">getId</item>
+                            </item>
+                        </argument>
+                    </arguments>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="variable_id">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Variable ID</argument>
+                            <argument name="index" xsi:type="string">variable_id</argument>
+                            <argument name="column_css_class" xsi:type="string">col-id</argument>
+                            <argument name="header_css_class" xsi:type="string">col-id</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="code">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Variable Code</argument>
+                            <argument name="index" xsi:type="string">code</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="name">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Name</argument>
+                            <argument name="index" xsi:type="string">name</argument>
+                        </arguments>
+                    </block>
+                </block>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

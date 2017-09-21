@@ -1,0 +1,31 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var \Magento\Review\Block\Rating\Entity\Detailed $block */
+?>
+<?php if (!empty($collection) && $collection->getSize()): ?>
+    <div class="table-wrapper">
+        <table class="data table ratings review summary">
+            <caption class="table-caption"><?= $block->escapeHtml(__('Ratings Review Summary')) ?></caption>
+            <tbody>
+            <?php foreach ($collection as $_rating): ?>
+                <?php if ($_rating->getSummary()): ?>
+                    <tr>
+                        <th class="label" scope="row"><?= $block->escapeHtml(__($_rating->getRatingCode())) ?></th>
+                        <td class="value">
+                            <div class="rating box">
+                                <div class="rating" style="width:<?= /* @noEscape */ ceil($_rating->getSummary()) ?>%;"></div>
+                            </div>
+                        </td>
+                    </tr>
+                <?php endif; ?>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+<?php endif; ?>

@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<root>
+    <is_test>
+        <value_key>value</value_key>
+        <value_sensitive_key>vaLue</value_sensitive_key>
+        <false_key>false</false_key>
+        <off_key>off</off_key>
+        <on_key>on</on_key>
+        <regular_cdata><![CDATA[value]]></regular_cdata>
+        <empty_cdata><![CDATA[]]></empty_cdata>
+        <empty_text></empty_text>
+    </is_test>
+    <class_test>
+        <class>Magento\ModuleName\Model\ClassName</class>
+    </class_test>
+    <model_test>
+        <model>Magento\ModuleName\Model\ClassName</model>
+    </model_test>
+    <no_classname_test>
+        <none/>
+    </no_classname_test>
+</root>

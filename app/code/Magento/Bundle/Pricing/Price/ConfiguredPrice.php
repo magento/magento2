@@ -1,37 +1,21 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Bundle\Pricing\Price;
 
-use Magento\Catalog\Model\Product;
-use Magento\Catalog\Pricing\Price as CatalogPrice;
-use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
-use Magento\Catalog\Pricing\Price\ConfiguredPriceInterface;
 use Magento\Bundle\Pricing\Adjustment\BundleCalculatorInterface;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
+use Magento\Catalog\Pricing\Price as CatalogPrice;
+use Magento\Catalog\Pricing\Price\ConfiguredPriceInterface;
 
 /**
  * Configured price model
+ * @api
+ * @since 100.0.2
  */
 class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPriceInterface
 {
@@ -51,19 +35,32 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
     protected $item;
 
     /**
+     * Serializer interface instance.
+     *
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
+
+    /**
      * @param Product $saleableItem
      * @param float $quantity
      * @param BundleCalculatorInterface $calculator
+     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param ItemInterface $item
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      */
     public function __construct(
         Product $saleableItem,
         $quantity,
         BundleCalculatorInterface $calculator,
-        ItemInterface $item = null
+        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
+        ItemInterface $item = null,
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->item = $item;
-        parent::__construct($saleableItem, $quantity, $calculator);
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+        parent::__construct($saleableItem, $quantity, $calculator, $priceCurrency);
     }
 
     /**
@@ -79,7 +76,7 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
     /**
      * Get Options with attached Selections collection
      *
-     * @return array|\Magento\Bundle\Model\Resource\Option\Collection
+     * @return array|\Magento\Bundle\Model\ResourceModel\Option\Collection
      */
     public function getOptions()
     {
@@ -90,13 +87,16 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
 
         // get bundle options
         $optionsQuoteItemOption = $this->item->getOptionByCode('bundle_option_ids');
-        $bundleOptionsIds = $optionsQuoteItemOption ? unserialize($optionsQuoteItemOption->getValue()) : array();
+        $bundleOptionsIds = $optionsQuoteItemOption
+            ? $this->serializer->unserialize($optionsQuoteItemOption->getValue())
+            : [];
+
         if ($bundleOptionsIds) {
-            /** @var \Magento\Bundle\Model\Resource\Option\Collection $optionsCollection */
+            /** @var \Magento\Bundle\Model\ResourceModel\Option\Collection $optionsCollection */
             $optionsCollection = $typeInstance->getOptionsByIds($bundleOptionsIds, $bundleProduct);
             // get and add bundle selections collection
             $selectionsQuoteItemOption = $this->item->getOptionByCode('bundle_selection_ids');
-            $bundleSelectionIds = unserialize($selectionsQuoteItemOption->getValue());
+            $bundleSelectionIds = $this->serializer->unserialize($selectionsQuoteItemOption->getValue());
             if ($bundleSelectionIds) {
                 $selectionsCollection = $typeInstance->getSelectionsByIds($bundleSelectionIds, $bundleProduct);
                 $bundleOptions = $optionsCollection->appendSelections($selectionsCollection, true);
@@ -136,7 +136,10 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
     {
         if ($this->item) {
             $configuredOptionsAmount = $this->getConfiguredAmount()->getBaseAmount();
-            return parent::getValue() + $this->basePrice->calculateBaseValue($configuredOptionsAmount);
+            return parent::getValue() +
+                $this->priceInfo
+                    ->getPrice(BundleDiscountPrice::PRICE_CODE)
+                    ->calculateDiscount($configuredOptionsAmount);
         } else {
             return parent::getValue();
         }
@@ -149,6 +152,6 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
      */
     public function getAmount()
     {
-        return $this->item ? $this->getConfiguredAmount($this->basePrice->getValue()) : parent::getAmount();
+        return $this->item ? $this->getConfiguredAmount($this->getBasePrice()->getValue()) : parent::getAmount();
     }
 }

@@ -1,27 +1,11 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order\Total\Config;
+
+use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Configuration class for totals
@@ -40,7 +24,7 @@ class Base extends \Magento\Sales\Model\Config\Ordered
      *
      * @var array
      */
-    protected $_totalModels = array();
+    protected $_totalModels = [];
 
     /**
      * Configuration path where to collect registered totals
@@ -56,19 +40,21 @@ class Base extends \Magento\Sales\Model\Config\Ordered
 
     /**
      * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Sales\Model\Config $salesConfig
      * @param \Magento\Sales\Model\Order\TotalFactory $orderTotalFactory
-     * @param mixed $sourceData
+     * @param \Magento\Framework\Simplexml\Element|mixed $sourceData
+     * @param SerializerInterface $serializer
      */
     public function __construct(
         \Magento\Framework\App\Cache\Type\Config $configCacheType,
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Sales\Model\Config $salesConfig,
         \Magento\Sales\Model\Order\TotalFactory $orderTotalFactory,
-        $sourceData = null
+        $sourceData = null,
+        SerializerInterface $serializer = null
     ) {
-        parent::__construct($configCacheType, $logger, $salesConfig, $sourceData);
+        parent::__construct($configCacheType, $logger, $salesConfig, $sourceData, $serializer);
         $this->_orderTotalFactory = $orderTotalFactory;
     }
 
@@ -79,13 +65,13 @@ class Base extends \Magento\Sales\Model\Config\Ordered
      * @param string $totalCode
      * @param array $totalConfig
      * @return \Magento\Sales\Model\Order\Total\AbstractTotal
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _initModelInstance($class, $totalCode, $totalConfig)
     {
         $model = $this->_orderTotalFactory->create($class);
         if (!$model instanceof \Magento\Sales\Model\Order\Total\AbstractTotal) {
-            throw new \Magento\Framework\Model\Exception(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 __('The total model should be extended from \Magento\Sales\Model\Order\Total\AbstractTotal.')
             );
         }

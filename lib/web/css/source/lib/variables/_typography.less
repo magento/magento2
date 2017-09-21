@@ -1,0 +1,245 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Typography variables
+//  _____________________________________________
+
+//
+//  Fonts
+//  ---------------------------------------------
+
+//  Path
+@font-path: "../../fonts/";
+@icons__font-path: "@{baseDir}fonts/Blank-Theme-Icons/Blank-Theme-Icons";
+
+//  Names
+@icons__font-name: 'icons-blank-theme'; // ToDo UI: we need to rename (it shouldn't use blank theme name) or move icon fonts to blank theme
+
+//  Font families
+@font-family__sans-serif: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+@font-family__serif: Georgia, 'Times New Roman', Times, serif;
+@font-family__monospace: Menlo, Monaco, Consolas, 'Courier New', monospace;
+
+@font-family__base: @font-family__sans-serif;
+
+//  Sizes
+@root__font-size: 62.5%; // Defines ratio between root font size and base font size, 1rem = 10px
+@font-size-ratio__base: 1.4; // Defines ratio of the root font-size to the base font-size
+
+@font-size-unit: rem; // The unit to which most typography values will be converted by default
+@font-size-unit-ratio: unit(@root__font-size * 16/100); // Ratio of the root font-size to the font-size unit
+@font-size-unit-convert: true; // Controls whether font-size values are converted to the specified font-size unit
+
+@font-size__base: unit(@font-size-unit-ratio * @font-size-ratio__base, px); // Base font size value in <b>px</b>
+@font-size__xl: ceil(1.5 * @font-size__base); // 21px
+@font-size__l: ceil(1.25 * @font-size__base); // 18px
+@font-size__s: ceil(.85 * @font-size__base); // 12px
+@font-size__xs: floor(.75 * @font-size__base); // 11px
+
+//  Weights
+@font-weight__light: 300;
+@font-weight__regular: 400;
+@font-weight__heavier: 500;
+@font-weight__semibold: 600;
+@font-weight__bold: 700;
+
+//  Styles
+@font-style__base: normal;
+@font-style__emphasis: italic;
+
+//  Line heights
+@line-height__base: 1.428571429;
+@line-height__computed: floor(@font-size__base * @line-height__base);
+@line-height__xl: 1.7;
+@line-height__l: 1.5;
+@line-height__s: 1.33;
+
+//  Colors
+@text__color: @primary__color;
+@text__color__intense: @primary__color__darker;
+@text__color__muted: @primary__color__lighter;
+
+//
+//  Indents
+//  ---------------------------------------------
+
+@indent__base: @line-height__computed; // 20px
+@indent__xl: @indent__base * 2; // 40px
+@indent__l: @indent__base * 1.5; // 30px
+@indent__m: @indent__base * 1.25; // 25px
+@indent__s: @indent__base / 2; // 10px
+@indent__xs: @indent__base / 4; // 5px
+
+//
+//  Borders
+//  ---------------------------------------------
+
+@border-color__base: darken(@page__background-color, 18%);
+@border-width__base: 1px;
+
+//
+//  Links
+//  ---------------------------------------------
+
+@link__color: @color-blue1;
+@link__text-decoration: none;
+
+@link__visited__color: @link__color;
+@link__visited__text-decoration: none;
+
+@link__hover__color: @color-blue2;
+@link__hover__text-decoration: underline;
+
+@link__active__color: @active__color;
+@link__active__text-decoration: underline;
+
+//
+//  Focus
+//  ---------------------------------------------
+
+@focus__color: @color-sky-blue1;
+@focus__box-shadow: 0 0 3px 1px @focus__color;
+
+//
+//  Lists
+//  ---------------------------------------------
+
+@list__color__base: false;
+@list__font-size__base: false;
+@list__margin-top: 0;
+@list__margin-bottom: @indent__m;
+
+@list-item__margin-top: 0;
+@list-item__margin-bottom: @indent__s;
+
+@dl__margin-top: 0;
+@dl__margin-bottom: @indent__base;
+
+@dt__margin-top: 0;
+@dt__margin-bottom: @indent__xs;
+@dt__font-weight: @font-weight__bold;
+
+@dd__margin-top: 0;
+@dd__margin-bottom: @indent__s;
+
+//
+//  Paragraphs
+//  ---------------------------------------------
+
+@p__margin-top: 0;
+@p__margin-bottom: @indent__s;
+
+//
+//  Headings
+//  ---------------------------------------------
+
+@heading__font-family__base: false;
+@heading__font-weight__base: @font-weight__light;
+@heading__line-height__base: 1.1;
+@heading__color__base: false;
+@heading__font-style__base: false;
+@heading__margin-top__base: @indent__base;
+@heading__margin-bottom__base: @indent__base;
+
+@h1__font-size: ceil((@font-size__base * 1.85)); // 26px
+@h1__font-color: @heading__color__base;
+@h1__font-family: @heading__font-family__base;
+@h1__font-weight: @heading__font-weight__base;
+@h1__font-style: @heading__font-style__base;
+@h1__line-height: @heading__line-height__base;
+@h1__margin-top: 0;
+@h1__margin-bottom: @heading__margin-bottom__base;
+@h1__font-size-desktop: ceil((@font-size__base * 2.85)); // 40px
+
+@h2__font-size: ceil((@font-size__base * 1.85)); // 26px
+@h2__font-color: @heading__color__base;
+@h2__font-family: @heading__font-family__base;
+@h2__font-weight: @heading__font-weight__base;
+@h2__font-style: @heading__font-style__base;
+@h2__line-height: @heading__line-height__base;
+@h2__margin-top: @indent__m;
+@h2__margin-bottom: @heading__margin-bottom__base;
+
+@h3__font-size: ceil((@font-size__base * 1.28)); // 18px
+@h3__font-color: @heading__color__base;
+@h3__font-family: @heading__font-family__base;
+@h3__font-weight: @heading__font-weight__base;
+@h3__font-style: @heading__font-style__base;
+@h3__line-height: @heading__line-height__base;
+@h3__margin-top: @indent__base * .75;
+@h3__margin-bottom: @indent__s;
+
+@h4__font-size: @font-size__base; // 14px
+@h4__font-color: @heading__color__base;
+@h4__font-family: @heading__font-family__base;
+@h4__font-weight: @font-weight__bold;
+@h4__font-style: @heading__font-style__base;
+@h4__line-height: @heading__line-height__base;
+@h4__margin-top: @heading__margin-top__base;
+@h4__margin-bottom: @heading__margin-bottom__base;
+
+@h5__font-size: ceil((@font-size__base * .85)); // 12px
+@h5__font-color: @heading__color__base;
+@h5__font-family: @heading__font-family__base;
+@h5__font-weight: @font-weight__bold;
+@h5__font-style: @heading__font-style__base;
+@h5__line-height: @heading__line-height__base;
+@h5__margin-top: @heading__margin-top__base;
+@h5__margin-bottom: @heading__margin-bottom__base;
+
+@h6__font-size: ceil((@font-size__base * .7)); // 10px
+@h6__font-color: @heading__color__base;
+@h6__font-family: @heading__font-family__base;
+@h6__font-weight: @font-weight__bold;
+@h6__font-style: @heading__font-style__base;
+@h6__line-height: @heading__line-height__base;
+@h6__margin-top: @heading__margin-top__base;
+@h6__margin-bottom: @heading__margin-bottom__base;
+
+@heading__small-color: @primary__color;
+@heading__small-line-height: 1;
+@heading__small-size: (@font-size__xs/@font-size__base) * 100%;
+
+//  Code blocks
+@code__background-color: @panel__background-color;
+@code__color: @primary__color__darker;
+@code__font-size: @font-size__s;
+@code__padding: 2px 4px;
+
+@pre__background-color: @panel__background-color;
+@pre__border-color: @border-color__base;
+@pre__border-width: @border-width__base;
+@pre__color: @primary__color__darker;
+
+@kbd__background-color: @panel__background-color;
+@kbd__color: @primary__color__darker;
+
+//  Blockquote
+@blockquote__border-color: @border-color__base;
+@blockquote__border-width: 0;
+@blockquote__content-before: '\2014 \00A0';
+@blockquote__font-size: @font-size__base;
+@blockquote__font-style: @font-style__emphasis;
+@blockquote__margin: 0 0 @indent__base @indent__xl;
+@blockquote__padding: 0;
+
+@blockquote-small__color: @primary__color;
+@blockquote-small__font-size: @font-size__xs;
+
+@cite__font-style: @font-style__base;
+
+//  Misc
+@hr__border-color: @border-color__base;
+@hr__border-style: solid;
+@hr__border-width: @border-width__base;
+
+@mark__color: @primary__color__dark;
+@mark__background-color: @panel__background-color;
+
+@abbr__border-color: @border-color__base;
+
+//  Disable filters output in css
+@disable-filters: false;

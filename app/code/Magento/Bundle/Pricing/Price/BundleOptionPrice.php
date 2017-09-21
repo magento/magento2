@@ -1,31 +1,13 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Pricing\Price;
 
-use Magento\Framework\Pricing\Price\AbstractPrice;
 use Magento\Bundle\Pricing\Adjustment\BundleCalculatorInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Framework\Pricing\Price\AbstractPrice;
 
 /**
  * Bundle option price model
@@ -56,16 +38,18 @@ class BundleOptionPrice extends AbstractPrice implements BundleOptionPriceInterf
      * @param Product $saleableItem
      * @param float $quantity
      * @param BundleCalculatorInterface $calculator
+     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param BundleSelectionFactory $bundleSelectionFactory
      */
     public function __construct(
         Product $saleableItem,
         $quantity,
         BundleCalculatorInterface $calculator,
+        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         BundleSelectionFactory $bundleSelectionFactory
     ) {
         $this->selectionFactory = $bundleSelectionFactory;
-        parent::__construct($saleableItem, $quantity, $calculator);
+        parent::__construct($saleableItem, $quantity, $calculator, $priceCurrency);
         $this->product->setQty($this->quantity);
     }
 
@@ -96,7 +80,7 @@ class BundleOptionPrice extends AbstractPrice implements BundleOptionPriceInterf
     /**
      * Get Options with attached Selections collection
      *
-     * @return \Magento\Bundle\Model\Resource\Option\Collection
+     * @return \Magento\Bundle\Model\ResourceModel\Option\Collection
      */
     public function getOptions()
     {
@@ -105,7 +89,7 @@ class BundleOptionPrice extends AbstractPrice implements BundleOptionPriceInterf
         $typeInstance = $bundleProduct->getTypeInstance();
         $typeInstance->setStoreFilter($bundleProduct->getStoreId(), $bundleProduct);
 
-        /** @var \Magento\Bundle\Model\Resource\Option\Collection $optionCollection */
+        /** @var \Magento\Bundle\Model\ResourceModel\Option\Collection $optionCollection */
         $optionCollection = $typeInstance->getOptionsCollection($bundleProduct);
 
         $selectionCollection = $typeInstance->getSelectionsCollection(
@@ -113,7 +97,7 @@ class BundleOptionPrice extends AbstractPrice implements BundleOptionPriceInterf
             $bundleProduct
         );
 
-        $priceOptions = $optionCollection->appendSelections($selectionCollection, false, false);
+        $priceOptions = $optionCollection->appendSelections($selectionCollection, true, false);
         return $priceOptions;
     }
 
@@ -125,8 +109,22 @@ class BundleOptionPrice extends AbstractPrice implements BundleOptionPriceInterf
      */
     public function getOptionSelectionAmount($selection)
     {
-        $selectionPrice = $this->selectionFactory->create($this->product, $selection, $selection->getSelectionQty());
-        return $selectionPrice->getAmount();
+        $cacheKey = implode(
+            '_',
+            [
+                $this->product->getId(),
+                $selection->getOptionId(),
+                $selection->getSelectionId()
+            ]
+        );
+
+        if (!isset($this->optionSelecionAmountCache[$cacheKey])) {
+            $selectionPrice = $this->selectionFactory
+                ->create($this->product, $selection, $selection->getSelectionQty());
+            $this->optionSelecionAmountCache[$cacheKey] =  $selectionPrice->getAmount();
+        }
+
+        return $this->optionSelecionAmountCache[$cacheKey];
     }
 
     /**

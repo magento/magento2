@@ -1,28 +1,12 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer;
 
+use Magento\Catalog\Model\ProductTypes\ConfigInterface;
+use Magento\CatalogInventory\Api\StockStateInterface;
 use Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\QuoteItemQtyList;
 
 class StockItem
@@ -33,37 +17,48 @@ class StockItem
     protected $quoteItemQtyList;
 
     /**
-     * @var \Magento\Catalog\Model\ProductTypes\ConfigInterface
+     * @var ConfigInterface
      */
     protected $typeConfig;
 
     /**
-     * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $typeConfig
+     * @var StockStateInterface
+     */
+    protected $stockState;
+
+    /**
+     * @param ConfigInterface $typeConfig
      * @param QuoteItemQtyList $quoteItemQtyList
+     * @param StockStateInterface $stockState
      */
     public function __construct(
-        \Magento\Catalog\Model\ProductTypes\ConfigInterface $typeConfig,
-        QuoteItemQtyList $quoteItemQtyList
+        ConfigInterface $typeConfig,
+        QuoteItemQtyList $quoteItemQtyList,
+        StockStateInterface $stockState
     ) {
         $this->quoteItemQtyList = $quoteItemQtyList;
         $this->typeConfig = $typeConfig;
+        $this->stockState = $stockState;
     }
 
     /**
      * Initialize stock item
      *
-     * @param \Magento\CatalogInventory\Model\Stock\Item $stockItem
-     * @param \Magento\Sales\Model\Quote\Item $quoteItem
+     * @param \Magento\CatalogInventory\Api\Data\StockItemInterface $stockItem
+     * @param \Magento\Quote\Model\Quote\Item $quoteItem
      * @param int $qty
      *
-     * @return \Magento\Framework\Object
-     * @throws \Magento\Framework\Model\Exception
+     * @return \Magento\Framework\DataObject
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function initialize(
-        \Magento\CatalogInventory\Model\Stock\Item $stockItem,
-        \Magento\Sales\Model\Quote\Item $quoteItem,
+        \Magento\CatalogInventory\Api\Data\StockItemInterface $stockItem,
+        \Magento\Quote\Model\Quote\Item $quoteItem,
         $qty
     ) {
+        $product = $quoteItem->getProduct();
         /**
          * When we work with subitem
          */
@@ -72,33 +67,42 @@ class StockItem
             /**
              * we are using 0 because original qty was processed
              */
-            $qtyForCheck = $this->quoteItemQtyList->getQty($quoteItem->getProduct()->getId(), $quoteItem->getId(), 0);
+            $qtyForCheck = $this->quoteItemQtyList
+                ->getQty($product->getId(), $quoteItem->getId(), $quoteItem->getQuoteId(), 0);
         } else {
             $increaseQty = $quoteItem->getQtyToAdd() ? $quoteItem->getQtyToAdd() : $qty;
             $rowQty = $qty;
             $qtyForCheck = $this->quoteItemQtyList->getQty(
-                $quoteItem->getProduct()->getId(),
+                $product->getId(),
                 $quoteItem->getId(),
+                $quoteItem->getQuoteId(),
                 $increaseQty
             );
         }
 
-        $productTypeCustomOption = $quoteItem->getProduct()->getCustomOption('product_type');
-        if (!is_null($productTypeCustomOption)) {
+        $productTypeCustomOption = $product->getCustomOption('product_type');
+        if ($productTypeCustomOption !== null) {
             // Check if product related to current item is a part of product that represents product set
             if ($this->typeConfig->isProductSet($productTypeCustomOption->getValue())) {
-                $stockItem->setProductName($quoteItem->getProduct()->getName());
                 $stockItem->setIsChildItem(true);
             }
         }
 
-        $result = $stockItem->checkQuoteItemQty($rowQty, $qtyForCheck, $qty);
+        $stockItem->setProductName($product->getName());
+
+        $result = $this->stockState->checkQuoteItemQty(
+            $product->getId(),
+            $rowQty,
+            $qtyForCheck,
+            $qty,
+            $product->getStore()->getWebsiteId()
+        );
 
         if ($stockItem->hasIsChildItem()) {
             $stockItem->unsIsChildItem();
         }
 
-        if (!is_null($result->getItemIsQtyDecimal())) {
+        if ($result->getItemIsQtyDecimal() !== null) {
             $quoteItem->setIsQtyDecimal($result->getItemIsQtyDecimal());
             if ($quoteItem->getParentItem()) {
                 $quoteItem->getParentItem()->setIsQtyDecimal($result->getItemIsQtyDecimal());
@@ -111,23 +115,23 @@ class StockItem
          * exception for updating also managed by product type
          */
         if ($result->getHasQtyOptionUpdate() && (!$quoteItem->getParentItem() ||
-            $quoteItem->getParentItem()->getProduct()->getTypeInstance()->getForceChildItemQtyChanges(
-                $quoteItem->getParentItem()->getProduct()
+                $quoteItem->getParentItem()->getProduct()->getTypeInstance()->getForceChildItemQtyChanges(
+                    $quoteItem->getParentItem()->getProduct()
+                )
             )
-        )
         ) {
             $quoteItem->setData('qty', $result->getOrigQty());
         }
 
-        if (!is_null($result->getItemUseOldQty())) {
+        if ($result->getItemUseOldQty() !== null) {
             $quoteItem->setUseOldQty($result->getItemUseOldQty());
         }
 
-        if (!is_null($result->getMessage())) {
+        if ($result->getMessage() !== null) {
             $quoteItem->setMessage($result->getMessage());
         }
 
-        if (!is_null($result->getItemBackorders())) {
+        if ($result->getItemBackorders() !== null) {
             $quoteItem->setBackorders($result->getItemBackorders());
         }
 

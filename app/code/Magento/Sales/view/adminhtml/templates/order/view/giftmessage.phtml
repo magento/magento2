@@ -1,0 +1,64 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php if ($block->canDisplayGiftmessage()): ?>
+<?php $_required = $block->getMessage()->getMessage() != ''?>
+<div id="<?= $block->getHtmlId() ?>" class="admin__page-section-content giftmessage-whole-order-container">
+    <form class="entry-edit form-inline" id="<?= /* @escapeNotVerified */ $block->getFieldId('form') ?>" action="<?= /* @escapeNotVerified */ $block->getSaveUrl() ?>">
+        <fieldset class="admin__fieldset">
+            <legend class="admin__legend"><span><?= /* @escapeNotVerified */ __('Gift Message for the Entire Order') ?></span></legend>
+            <br/>
+
+            <input type="hidden" id="<?= /* @escapeNotVerified */ $block->getFieldId('type') ?>"
+                   name="<?= /* @escapeNotVerified */ $block->getFieldName('type') ?>"
+                   value="order"/>
+
+            <div class="admin__field field-from-name<?= $_required ? ' required' : '' ?>">
+                <label class="admin__field-label"
+                       for="<?= /* @escapeNotVerified */ $block->getFieldId('sender') ?>"><span><?= /* @escapeNotVerified */ __('From Name') ?></span></label>
+
+                <div class="admin__field-control">
+                    <input class="admin__control-text <?= $_required ? 'required-entry' : '' ?>" type="text"
+                           id="<?= /* @escapeNotVerified */ $block->getFieldId('sender') ?>"
+                           name="<?= /* @escapeNotVerified */ $block->getFieldName('sender') ?>"
+                           value="<?= $block->escapeHtml($block->getMessage()->getSender()) ?>"/>
+                </div>
+            </div>
+
+            <div class="admin__field field-to-name<?= $_required ? ' required' : '' ?>">
+                <label class="admin__field-label"
+                       for="<?= /* @escapeNotVerified */ $block->getFieldId('recipient') ?>"><span><?= /* @escapeNotVerified */ __('To Name') ?></span></label>
+
+                <div class="admin__field-control">
+                    <input class="admin__control-text <?= $_required ? 'required-entry' : '' ?>" type="text"
+                           id="<?= /* @escapeNotVerified */ $block->getFieldId('recipient') ?>"
+                           name="<?= /* @escapeNotVerified */ $block->getFieldName('recipient') ?>"
+                           value="<?= $block->escapeHtml($block->getMessage()->getRecipient()) ?>"/>
+                </div>
+            </div>
+
+            <div class="admin__field field-gift-message">
+                <label class="admin__field-label"
+                       for="<?= /* @escapeNotVerified */ $block->getFieldId('message') ?>"><span><?= /* @escapeNotVerified */ __('Gift Message') ?></span></label>
+                <div class="admin__field-control">
+                    <textarea id="<?= /* @escapeNotVerified */ $block->getFieldId('message') ?>"
+                              name="<?= /* @escapeNotVerified */ $block->getFieldName('message') ?>"
+                              class="admin__control-textarea"
+                              rows="2"
+                              cols="15"><?= $block->escapeHtml($block->getMessage()->getMessage()) ?></textarea>
+                </div>
+            </div>
+
+            <div class="actions">
+                <?= $block->getSaveButtonHtml() ?>
+            </div>
+        </fieldset>
+    </form>
+</div>
+<?php endif ?>

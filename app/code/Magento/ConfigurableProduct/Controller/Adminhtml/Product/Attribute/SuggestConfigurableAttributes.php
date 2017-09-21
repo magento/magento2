@@ -1,26 +1,8 @@
 <?php
 /**
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Controller\Adminhtml\Product\Attribute;
 
@@ -30,38 +12,45 @@ use Magento\ConfigurableProduct\Model\SuggestedAttributeList;
 class SuggestConfigurableAttributes extends Action
 {
     /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Catalog::products';
+
+    /**
      * @var \Magento\ConfigurableProduct\Model\SuggestedAttributeList
      */
     protected $attributeList;
 
     /**
-     * @var \Magento\Core\Helper\Data
+     * @var \Magento\Framework\Json\Helper\Data
      */
-    protected $coreHelper;
+    protected $jsonHelper;
+
+    /**
+     * Store manager
+     *
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    protected $storeManager;
 
     /**
      * @param Action\Context $context
      * @param SuggestedAttributeList $attributeList
-     * @param \Magento\Core\Helper\Data $coreHelper
+     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         Action\Context $context,
         SuggestedAttributeList $attributeList,
-        \Magento\Core\Helper\Data $coreHelper
+        \Magento\Framework\Json\Helper\Data $jsonHelper,
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->attributeList = $attributeList;
-        $this->coreHelper = $coreHelper;
+        $this->jsonHelper = $jsonHelper;
+        $this->storeManager = $storeManager;
         parent::__construct($context);
-    }
-
-    /**
-     * ACL check
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Catalog::attributes_attributes');
     }
 
     /**
@@ -69,10 +58,12 @@ class SuggestConfigurableAttributes extends Action
      *
      * @return void
      */
-    public function indexAction()
+    public function execute()
     {
-        $this->getResponse()->setBody(
-            $this->coreHelper->jsonEncode(
+        $this->storeManager->setCurrentStore(\Magento\Store\Model\Store::ADMIN_CODE);
+
+        $this->getResponse()->representJson(
+            $this->jsonHelper->jsonEncode(
                 $this->attributeList->getSuggestedAttributes($this->getRequest()->getParam('label_part'))
             )
         );

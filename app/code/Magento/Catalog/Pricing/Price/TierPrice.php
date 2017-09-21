@@ -1,40 +1,26 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
 
 namespace Magento\Catalog\Pricing\Price;
 
-use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
 use Magento\Catalog\Model\Product;
-use Magento\Customer\Model\Group;
+use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Customer\Model\Session;
-use Magento\Framework\Pricing\Price\AbstractPrice;
-use Magento\Framework\Pricing\PriceInfoInterface;
+use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
 use Magento\Framework\Pricing\Amount\AmountInterface;
+use Magento\Framework\Pricing\Price\AbstractPrice;
 use Magento\Framework\Pricing\Price\BasePriceProviderInterface;
+use Magento\Framework\Pricing\PriceInfoInterface;
+use Magento\Customer\Model\Group\RetrieverInterface as CustomerGroupRetrieverInterface;
 
 /**
- * Tire prices model
+ * @api
+ * @since 100.0.2
  */
 class TierPrice extends AbstractPrice implements TierPriceInterface, BasePriceProviderInterface
 {
@@ -45,6 +31,7 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
 
     /**
      * @var Session
+     * @deprecated
      */
     protected $customerSession;
 
@@ -68,30 +55,43 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
     protected $priceList;
 
     /**
-     * Should filter by base price or not
-     *
-     * @var bool
+     * @var GroupManagementInterface
      */
-    protected $filterByBasePrice = true;
+    protected $groupManagement;
+
+    /**
+     * @var CustomerGroupRetrieverInterface
+     */
+    private $customerGroupRetriever;
 
     /**
      * @param Product $saleableItem
      * @param float $quantity
      * @param CalculatorInterface $calculator
+     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param Session $customerSession
+     * @param GroupManagementInterface $groupManagement
+     * @param CustomerGroupRetrieverInterface|null $customerGroupRetriever
      */
     public function __construct(
         Product $saleableItem,
         $quantity,
         CalculatorInterface $calculator,
-        Session $customerSession
+        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
+        Session $customerSession,
+        GroupManagementInterface $groupManagement,
+        CustomerGroupRetrieverInterface $customerGroupRetriever = null
     ) {
-        parent::__construct($saleableItem, $quantity, $calculator);
+        $quantity = floatval($quantity) ? $quantity : 1;
+        parent::__construct($saleableItem, $quantity, $calculator, $priceCurrency);
         $this->customerSession = $customerSession;
+        $this->groupManagement = $groupManagement;
+        $this->customerGroupRetriever = $customerGroupRetriever
+            ?? \Magento\Framework\App\ObjectManager::getInstance()->get(CustomerGroupRetrieverInterface::class);
         if ($saleableItem->hasCustomerGroupId()) {
             $this->customerGroup = (int) $saleableItem->getCustomerGroupId();
         } else {
-            $this->customerGroup = (int) $this->customerSession->getCustomerGroupId();
+            $this->customerGroup = (int) $this->customerGroupRetriever->getCustomerGroupId();
         }
     }
 
@@ -106,7 +106,7 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
             $prices = $this->getStoredTierPrices();
             $prevQty = PriceInfoInterface::PRODUCT_QUANTITY_DEFAULT;
             $this->value = $prevPrice = $tierPrice = false;
-            $priceGroup = Group::CUST_GROUP_ALL;
+            $priceGroup = $this->groupManagement->getAllCustomersGroup()->getId();
 
             foreach ($prices as $price) {
                 if (!$this->canApplyTierPrice($price, $priceGroup, $prevQty)) {
@@ -172,14 +172,20 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
     protected function filterTierPrices(array $priceList)
     {
         $qtyCache = [];
-        foreach ($priceList as $priceKey => $price) {
-            /* filter price by customer group */
-            if ($price['cust_group'] !== $this->customerGroup && $price['cust_group'] !== Group::CUST_GROUP_ALL) {
+        $allCustomersGroupId = $this->groupManagement->getAllCustomersGroup()->getId();
+        foreach ($priceList as $priceKey => &$price) {
+            if ($price['price'] >= $this->priceInfo->getPrice(FinalPrice::PRICE_CODE)->getValue()) {
                 unset($priceList[$priceKey]);
                 continue;
             }
-            /* select a lower price between Tier price and base price */
-            if ($this->filterByBasePrice && $price['price'] > $this->getBasePrice()) {
+
+            if (isset($price['price_qty']) && $price['price_qty'] == 1) {
+                unset($priceList[$priceKey]);
+                continue;
+            }
+            /* filter price by customer group */
+            if ($price['cust_group'] != $this->customerGroup &&
+                $price['cust_group'] != $allCustomersGroupId) {
                 unset($priceList[$priceKey]);
                 continue;
             }
@@ -209,14 +215,21 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
     }
 
     /**
+     * Calculates savings percentage according to the given tier price amount
+     * and related product price amount.
+     *
      * @param AmountInterface $amount
+     *
      * @return float
      */
     public function getSavePercent(AmountInterface $amount)
     {
-        return ceil(
-            100 - ((100 / $this->priceInfo->getPrice(BasePrice::PRICE_CODE)->getAmount()->getBaseAmount())
-                * $amount->getBaseAmount())
+        $productPriceAmount = $this->priceInfo->getPrice(
+            FinalPrice::PRICE_CODE
+        )->getAmount();
+
+        return round(
+            100 - ((100 / $productPriceAmount->getValue()) * $amount->getValue())
         );
     }
 
@@ -239,10 +252,11 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
      */
     protected function canApplyTierPrice(array $currentTierPrice, $prevPriceGroup, $prevQty)
     {
+        $custGroupAllId = (int)$this->groupManagement->getAllCustomersGroup()->getId();
         // Tier price can be applied, if:
         // tier price is for current customer group or is for all groups
-        if ($currentTierPrice['cust_group'] !== $this->customerGroup
-            && $currentTierPrice['cust_group'] !== Group::CUST_GROUP_ALL
+        if ((int)$currentTierPrice['cust_group'] !== $this->customerGroup
+            && (int)$currentTierPrice['cust_group'] !== $custGroupAllId
         ) {
             return false;
         }
@@ -256,8 +270,8 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
         }
         // and found tier qty is same as previous tier qty, but current tier group isn't ALL_GROUPS
         if ($currentTierPrice['price_qty'] == $prevQty
-            && $prevPriceGroup !== Group::CUST_GROUP_ALL
-            && $currentTierPrice['cust_group'] === Group::CUST_GROUP_ALL
+            && $prevPriceGroup !== $custGroupAllId
+            && $currentTierPrice['cust_group'] === $custGroupAllId
         ) {
             return false;
         }
@@ -268,6 +282,7 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
      * Get clear tier price list stored in DB
      *
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function getStoredTierPrices()
     {
@@ -282,9 +297,29 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
                 }
             }
             if (null === $this->rawPriceList || !is_array($this->rawPriceList)) {
-                $this->rawPriceList = array();
+                $this->rawPriceList = [];
+            }
+            if (!$this->isPercentageDiscount()) {
+                foreach ($this->rawPriceList as $index => $rawPrice) {
+                    if (isset($rawPrice['price'])) {
+                        $this->rawPriceList[$index]['price'] =
+                            $this->priceCurrency->convertAndRound($rawPrice['price']);
+                    }
+                    if (isset($rawPrice['website_price'])) {
+                        $this->rawPriceList[$index]['website_price'] =
+                            $this->priceCurrency->convertAndRound($rawPrice['website_price']);
+                    }
+                }
             }
         }
         return $this->rawPriceList;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPercentageDiscount()
+    {
+        return false;
     }
 }

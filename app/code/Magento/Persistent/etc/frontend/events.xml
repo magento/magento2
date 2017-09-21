@@ -1,83 +1,69 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE_AFL.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/Magento/Framework/Event/etc/events.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="customer_data_object_login">
-        <observer name="persistent" instance="Magento\Persistent\Model\Observer\Session" method="synchronizePersistentOnLogin" />
+        <observer name="persistent" instance="Magento\Persistent\Observer\SynchronizePersistentOnLoginObserver" />
     </event>
     <event name="customer_logout">
-        <observer name="persistent" instance="Magento\Persistent\Model\Observer\Session" method="synchronizePersistentOnLogout" />
-    </event>
-    <event name="controller_front_send_response_after">
-        <observer name="persistent" instance="Magento\Persistent\Model\Observer\Session" method="synchronizePersistentInfo" />
+        <observer name="persistent" instance="Magento\Persistent\Observer\SynchronizePersistentOnLogoutObserver" />
     </event>
     <event name="controller_action_predispatch_customer_account_loginPost">
-        <observer name="persistent" instance="Magento\Persistent\Model\Observer\Session" method="setRememberMeCheckedStatus" />
+        <observer name="persistent" instance="Magento\Persistent\Observer\SetRememberMeCheckedStatusObserver" />
+    </event>
+    <event name="controller_action_predispatch_customer_ajax_login">
+        <observer name="persistent" instance="Magento\Persistent\Observer\SetRememberMeStatusForAjaxLoginObserver" />
     </event>
     <event name="controller_action_predispatch_customer_account_createpost">
-        <observer name="persistent" instance="Magento\Persistent\Model\Observer\Session" method="setRememberMeCheckedStatus" />
-        <observer name="persistent_authenticate" instance="Magento\Persistent\Model\Observer" method="customerAuthenticatedEvent" />
-    </event>
-    <event name="controller_action_layout_generate_blocks_after">
-        <observer name="persistent" instance="Magento\Persistent\Model\Observer" method="applyPersistentData" />
-    </event>
-    <event name="controller_action_predispatch">
-        <observer name="persistent" instance="Magento\Persistent\Model\Observer" method="emulateQuote" />
-        <observer name="persistent_session" instance="Magento\Persistent\Model\Observer\Session" method="renewCookie" />
-        <observer name="persistent_quote" instance="Magento\Persistent\Model\Observer" method="checkExpirePersistentQuote" />
-        <observer name="persistent_customer" instance="Magento\Persistent\Model\Observer" method="emulateCustomer" />
-        <observer name="persistent_checkout" instance="Magento\Persistent\Model\Observer" method="preventExpressCheckout" />
-    </event>
-    <event name="checkout_allow_guest">
-        <observer name="persistent" instance="Magento\Persistent\Model\Observer" method="disableGuestCheckout" />
-    </event>
-    <event name="customer_customer_authenticated">
-        <observer name="persistent" instance="Magento\Persistent\Model\Observer" method="customerAuthenticatedEvent" />
-    </event>
-    <event name="controller_action_predispatch_persistent_index_unsetCookie">
-        <observer name="persistent" instance="Magento\Persistent\Model\Observer" method="preventClearCheckoutSession" />
-    </event>
-    <event name="controller_action_postdispatch_persistent_index_unsetCookie">
-        <observer name="persistent" instance="Magento\Persistent\Model\Observer" method="makePersistentQuoteGuest" />
-    </event>
-    <event name="sales_quote_save_before">
-        <observer name="persistent" instance="Magento\Persistent\Model\Observer" method="setQuotePersistentData" />
-    </event>
-    <event name="custom_quote_process">
-        <observer name="persistent" instance="Magento\Persistent\Model\Observer" method="setLoadPersistentQuote" />
+        <observer name="persistent" instance="Magento\Persistent\Observer\SetRememberMeCheckedStatusObserver" />
+        <observer name="persistent_authenticate" instance="Magento\Persistent\Observer\CustomerAuthenticatedEventObserver" />
     </event>
     <event name="controller_action_postdispatch_checkout_onepage_saveBilling">
-        <observer name="persistent" instance="Magento\Persistent\Model\Observer\Session" method="setRememberMeCheckedStatus" />
+        <observer name="persistent" instance="Magento\Persistent\Observer\SetRememberMeCheckedStatusObserver" />
+    </event>
+    <event name="layout_generate_blocks_after">
+        <observer name="persistent" instance="Magento\Persistent\Observer\ApplyPersistentDataObserver" />
+    </event>
+    <event name="controller_action_predispatch">
+        <observer name="persistent_synchronize" instance="Magento\Persistent\Observer\SynchronizePersistentInfoObserver" />
+        <observer name="persistent" instance="Magento\Persistent\Observer\EmulateQuoteObserver" />
+        <observer name="persistent_session" instance="Magento\Persistent\Observer\RenewCookieObserver" />
+        <observer name="persistent_quote" instance="Magento\Persistent\Observer\CheckExpirePersistentQuoteObserver" />
+        <observer name="persistent_customer" instance="Magento\Persistent\Observer\EmulateCustomerObserver" />
+        <observer name="persistent_checkout" instance="Magento\Persistent\Observer\PreventExpressCheckoutObserver" />
+    </event>
+    <event name="customer_customer_authenticated">
+        <observer name="persistent" instance="Magento\Persistent\Observer\CustomerAuthenticatedEventObserver" />
+    </event>
+    <event name="controller_action_predispatch_persistent_index_unsetCookie">
+        <observer name="persistent" instance="Magento\Persistent\Observer\PreventClearCheckoutSessionObserver" />
+    </event>
+    <event name="controller_action_postdispatch_persistent_index_unsetCookie">
+        <observer name="persistent" instance="Magento\Persistent\Observer\MakePersistentQuoteGuestObserver" />
+    </event>
+    <event name="sales_quote_save_before">
+        <observer name="persistent" instance="Magento\Persistent\Observer\SetQuotePersistentDataObserver" />
+    </event>
+    <event name="custom_quote_process">
+        <observer name="persistent" instance="Magento\Persistent\Observer\SetLoadPersistentQuoteObserver" />
     </event>
     <event name="customer_register_success">
-        <observer name="persistent" instance="Magento\Persistent\Model\Observer" method="removePersistentCookie" />
+        <observer name="persistent" instance="Magento\Persistent\Observer\RemovePersistentCookieOnRegisterObserver" />
     </event>
     <event name="render_block">
-        <observer name="persistent" instance="Magento\Persistent\Model\Observer" method="applyBlockPersistentData" />
+        <observer name="persistent" instance="Magento\Persistent\Observer\ApplyBlockPersistentDataObserver" />
     </event>
     <event name="update_customer_cookies">
-        <observer name="persistent" instance="Magento\Persistent\Model\Observer" method="updateCustomerCookies" />
+        <observer name="persistent" instance="Magento\Persistent\Observer\UpdateCustomerCookiesObserver" />
+    </event>
+    <event name="persistent_session_expired">
+        <observer name="refresh_customer_data" instance="Magento\Persistent\Observer\RefreshCustomerData" />
+    </event>
+    <event name="checkout_cart_save_after">
+        <observer name="persistent" instance="Magento\Persistent\Observer\RemoveGuestPersistenceOnEmptyCartObserver" />
     </event>
 </config>

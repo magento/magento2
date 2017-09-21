@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
+    <acl>
+        <resources>
+            <resource id="Backend_Dummy1::all" title="Allow everything"/>
+            <resource id="Backend_Dummy1::parent" title="Dummy Parent Resource">
+                <resource id="Backend_Dummy1::first" title="Dummy Resource #1" sortOrder="0" />
+                <resource id="Backend_Dummy1::second" title="Dummy Resource #2" sortOrder="10"/>
+                <resource id="Backend_Dummy1::third" title="Dummy Resource #3" sortOrder="50" />
+            </resource>
+        </resources>
+    </acl>
+</config>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Customer\Test\TestCase\CreateCustomerGroupEntityTest" summary="Create Customer Group" ticketId="MAGETWO-23422">
+        <variation name="CreateCustomerGroupEntityTestVariation1">
+            <data name="customerGroup/data/tax_class_id/dataset" xsi:type="string">retail_customer</data>
+            <data name="customerGroup/data/customer_group_code" xsi:type="string">GroupName%isolation%</data>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupSuccessSaveMessage" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupInGrid" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupOnCustomerForm" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupOnProductForm" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupOnCatalogPriceRuleForm" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupOnCartPriceRuleForm" />
+        </variation>
+        <variation name="CreateCustomerGroupEntityTestVariation2">
+            <data name="customerGroup/data/tax_class_id/dataset" xsi:type="string">retail_customer</data>
+            <data name="customerGroup/data/customer_group_code" xsi:type="string">General</data>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupAlreadyExists" />
+        </variation>
+        <variation name="CreateCustomerGroupEntityTestVariation3">
+            <data name="customerGroup/data/tax_class_id/dataset" xsi:type="string">customer_tax_class</data>
+            <data name="customerGroup/data/customer_group_code" xsi:type="string">GroupName%isolation%</data>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupSuccessSaveMessage" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupInGrid" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupOnCustomerForm" />
+        </variation>
+    </testCase>
+</config>

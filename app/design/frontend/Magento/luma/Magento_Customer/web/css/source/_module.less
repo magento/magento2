@@ -1,0 +1,577 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  _____________________________________________
+
+@account-title-border-color: @color-gray-middle2;
+@account-table-border-bottom-color: @color-gray-middle1;
+@account-table-action-delete: @color-red12;
+
+@_password-default: @color-gray-light01;
+@_password-weak: #ffafae;
+@_password-medium: #ffd6b3;
+@_password-strong: #c5eeac;
+@_password-very-strong: #81b562;
+
+//
+//  Common
+//  _____________________________________________
+
+& when (@media-common = true) {
+    .login-container {
+        .block {
+            &-new-customer {
+                .actions-toolbar {
+                    margin-top: 25px;
+                }
+            }
+
+            .block-title {
+                &:extend(.abs-login-block-title all);
+                .lib-font-size(18);
+            }
+        }
+
+        .fieldset {
+            .lib-form-hasrequired(bottom);
+
+            &:after {
+                margin-top: 35px;
+            }
+        }
+    }
+
+    .block-addresses-list {
+        .items.addresses {
+            > .item {
+                margin-bottom: @indent__base;
+
+                &:last-child {
+                    margin-bottom: 0;
+                }
+            }
+
+            .item.actions {
+                margin-top: @indent__xs;
+
+                .action {
+                    &:extend(.abs-account-actions all);
+                }
+            }
+        }
+
+        address {
+            &:extend(.abs-account-block-line-height all);
+        }
+    }
+
+    .form-address-edit {
+        #region_id {
+            display: none;
+        }
+
+        .actions-toolbar .action.primary {
+            &:extend(.abs-button-l all);
+        }
+    }
+
+    .form-edit-account {
+        .fieldset.password {
+            display: none;
+        }
+    }
+
+    .form-create-account {
+        .fieldset-fullname {
+            .fields {
+                .field {
+                    float: none;
+                }
+            }
+        }
+    }
+
+    //  Full name fieldset
+    .fieldset {
+        .fullname {
+            > .label {
+                &:extend(.abs-visually-hidden all);
+            }
+        }
+    }
+
+    .box-billing-address,
+    .box-shipping-address,
+    .box-address-billing,
+    .box-address-shipping,
+    .box-information,
+    .box-newsletter {
+        .box-content {
+            &:extend(.abs-account-block-line-height all);
+        }
+    }
+
+    //  My account
+    .account {
+        .page-title-wrapper {
+            .page-title {
+                display: inline-block;
+            }
+        }
+
+        .messages {
+            margin-bottom: @indent__base;
+        }
+
+        .column.main {
+            margin-bottom: @indent__l;
+
+            h2 {
+                margin-top: 0;
+            }
+
+            .block:not(.widget) {
+                &:extend(.abs-account-blocks all);
+            }
+        }
+
+        .sidebar-additional {
+            margin-top: @indent__xl;
+        }
+
+        .table-wrapper {
+            .lib-css(margin-bottom, @indent__base);
+            border-bottom: 1px solid @account-table-border-bottom-color;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+
+        .legend {
+            &:extend(.abs-account-title all);
+        }
+    }
+
+    .account,
+    [class^='sales-guest-'],
+    .sales-guest-view {
+        .column.main {
+            .order-details-items {
+                .table-wrapper {
+                    .data.table {
+                        &:extend(.abs-table-striped all);
+                    }
+                }
+            }
+        }
+
+        .data.table {
+            .col.actions {
+                .action {
+                    &:extend(.abs-account-actions all);
+                    &.delete {
+                        .lib-css(color, @account-table-action-delete);
+                    }
+                }
+            }
+        }
+    }
+
+    //  Checkout address (create shipping address)
+    .field.street {
+        .field.additional {
+            .label {
+                &:extend(.abs-visually-hidden all);
+            }
+        }
+    }
+
+    //
+    //  Blocks & Widgets
+    //  ---------------------------------------------
+
+    .block {
+        &:extend(.abs-margin-for-blocks-and-widgets all);
+        .column.main & {
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+
+        .title {
+            strong {
+                .lib-heading(h4);
+                .column.main & {
+                }
+            }
+
+            margin-bottom: @indent__s;
+        }
+
+        p {
+            &:last-child {
+                margin: 0;
+            }
+        }
+
+        .box-actions {
+            margin-top: @indent__xs;
+
+            .action {
+                &:extend(.abs-account-actions all);
+            }
+        }
+    }
+
+    //
+    //  Password Strength Meter
+    //  ---------------------------------------------
+
+    .field.password {
+        .control {
+            .lib-vendor-prefix-display();
+            .lib-vendor-prefix-flex-direction();
+
+            .mage-error {
+                .lib-vendor-prefix-order(2);
+            }
+
+            .input-text {
+                .lib-vendor-prefix-order(0);
+                z-index: 2;
+            }
+        }
+    }
+
+    .password-strength-meter {
+        background-color: @_password-default;
+        height: @form-element-input__height;
+        line-height: @form-element-input__height;
+        padding: @form-element-input__padding;
+        position: relative;
+        z-index: 1;
+
+        &:before {
+            content: '';
+            height: 100%;
+            left: 0;
+            position: absolute;
+            top: 0;
+            z-index: -1;
+        }
+
+        .password-none & {
+            &:before {
+                background-color: @_password-default;
+                width: 100%;
+            }
+        }
+
+        .password-weak & {
+            &:before {
+                background-color: @_password-weak;
+                width: 25%;
+            }
+        }
+
+        .password-medium & {
+            &:before {
+                background-color: @_password-medium;
+                width: 50%;
+            }
+        }
+
+        .password-strong & {
+            &:before {
+                background-color: @_password-strong;
+                width: 75%;
+            }
+        }
+
+        .password-very-strong & {
+            &:before {
+                background-color: @_password-very-strong;
+                width: 100%;
+            }
+        }
+    }
+
+    .control.captcha-image {
+        .lib-css(margin-top, @indent__s);
+
+        .captcha-img {
+            vertical-align: middle;
+        }
+    }
+
+    .account {
+        .data.table-return-items {
+            .qty {
+                .input-text {
+                    &:extend(.abs-input-qty all);
+                }
+            }
+        }
+    }
+
+    .order-products-toolbar {
+        position: relative;
+
+        .toolbar-amount {
+            position: relative;
+            text-align: center;
+        }
+    }
+}
+
+//
+//  Desktop
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+    .login-container {
+        &:extend(.abs-add-clearfix-desktop all);
+
+        .block {
+            &:extend(.abs-blocks-2columns all);
+            &.login {
+                .actions-toolbar {
+                    > .primary {
+                        margin-bottom: 0;
+                        margin-right: @indent__l;
+                    }
+
+                    > .secondary {
+                        float: left;
+                    }
+                }
+            }
+        }
+
+        .fieldset {
+            > .field {
+                > .control {
+                    width: 55%;
+                }
+            }
+        }
+    }
+
+    .form-create-account {
+        .fieldset-fullname {
+            .fields {
+                display: table;
+                width: 100%;
+
+                .field {
+                    display: table-cell;
+
+                    + .field {
+                        padding-left: @indent__s;
+                    }
+                }
+            }
+
+            .field-name-prefix,
+            .field-name-suffix {
+                width: 50px;
+            }
+        }
+    }
+
+    .form.password.reset,
+    .form.send.confirmation,
+    .form.password.forget,
+    .form.create.account {
+        min-width: 600px;
+        width: 50%;
+    }
+
+    //  My account
+    .account.page-layout-2columns-left {
+        .sidebar-main,
+        .sidebar-additional {
+            width: 22.3%;
+        }
+
+        .column.main {
+            width: 77.7%;
+        }
+    }
+
+    .account {
+        .page-title-wrapper {
+            &:extend(.abs-add-clearfix-desktop all);
+        }
+
+        .column.main {
+            .block:not(.widget) {
+                .block-content {
+                    &:extend(.abs-add-clearfix-desktop all);
+
+                    .box {
+                        &:extend(.abs-blocks-2columns all);
+                    }
+                }
+            }
+        }
+
+        .data.table {
+            margin-bottom: 0;
+
+            .col {
+                &.actions {
+                    white-space: nowrap;
+                }
+            }
+        }
+
+        .toolbar {
+            &:extend(.abs-pager-toolbar all);
+        }
+    }
+
+    .block-addresses-list {
+        .items.addresses {
+            &:extend(.abs-add-clearfix-desktop all);
+            font-size: 0;
+
+            > .item {
+                display: inline-block;
+                font-size: @font-size__base;
+                margin-bottom: @indent__base;
+                vertical-align: top;
+                width: 48%;
+
+                &:nth-last-child(1),
+                &:nth-last-child(2) {
+                    margin-bottom: 0;
+                }
+
+                &:nth-child(even) {
+                    margin-left: 4%;
+                }
+            }
+        }
+
+        address {
+            &:extend(.abs-account-block-font-size all);
+        }
+    }
+
+    .page-main {
+        .block {
+            &:extend(.abs-margin-for-blocks-and-widgets-desktop all);
+        }
+    }
+
+    .form-address-edit {
+        > .fieldset {
+            &:extend(.abs-blocks-2columns all);
+        }
+    }
+
+    .form-edit-account {
+        .fieldset {
+            &:extend(.abs-blocks-2columns all);
+
+            .fieldset {
+                margin-bottom: @indent__base;
+                width: 100%;
+            }
+        }
+    }
+
+    .box-billing-address,
+    .box-shipping-address,
+    .box-address-billing,
+    .box-address-shipping,
+    .box-information {
+        .box-content {
+            &:extend(.abs-account-block-font-size all);
+        }
+    }
+
+    .control.captcha-image {
+        .captcha-img {
+            margin: 0 @indent__s @indent__s 0;
+        }
+    }
+}
+
+//
+//  Mobile @screen__s
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+    .account {
+        .column.main,
+        .sidebar-additional {
+            margin: 0;
+        }
+
+        .data.table {
+            &:extend(.abs-table-striped-mobile all);
+        }
+    }
+}
+
+//
+//  Mobile @screen__m
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    .login-container {
+        .fieldset {
+            &:after {
+                text-align: center;
+            }
+        }
+    }
+
+    .account {
+        .page.messages {
+            margin-bottom: @indent__xl;
+        }
+
+        .column.main {
+            .block:not(.widget) {
+                .block-title {
+                    &:extend(.abs-add-clearfix-mobile-m all);
+
+                    > .action {
+                        float: right;
+                        .lib-css(margin-top, @indent__xs);
+                    }
+                }
+
+                .block-content {
+                    .box {
+                        .lib-css(margin-bottom, @indent__base);
+                        &:last-child {
+                            margin-bottom: 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .control.captcha-image {
+        .captcha-img {
+            display: block;
+            .lib-css(margin-bottom, @indent__s);
+        }
+    }
+
+    .customer-account-index {
+        .page-title-wrapper {
+            position: relative;
+        }
+    }
+}

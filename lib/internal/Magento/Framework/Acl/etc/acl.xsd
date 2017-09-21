@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="config">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="acl">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="resources">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element minOccurs="0" maxOccurs="unbounded" name="resource" type="aclResource" />
+                                    </xs:sequence>
+                                </xs:complexType>
+
+                                <xs:unique name="uniqueResourceId">
+                                    <xs:annotation>
+                                        <xs:documentation>
+                                            Attribute id is unique under all ACL resources
+                                        </xs:documentation>
+                                    </xs:annotation>
+                                    <xs:selector xpath=".//*"/>
+                                    <xs:field xpath="@id"/>
+                                </xs:unique>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="aclResource">
+        <xs:annotation>
+            <xs:documentation>
+                ACL Resource. Recursive complex type
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="resource" type="aclResource" />
+        </xs:sequence>
+
+        <xs:attribute name="id" type="typeId" use="required" />
+        <xs:attribute name="title" type="typeTitle" use="optional" />
+        <xs:attribute name="translate" type="xs:string" use="optional" />
+        <xs:attribute name="sortOrder" type="xs:int" use="optional" />
+        <xs:attribute name="disabled" type="xs:boolean" use="optional" />
+    </xs:complexType>
+
+    <xs:simpleType name="typeId">
+        <xs:annotation>
+            <xs:documentation>
+                Item id attribute can has only [a-z0-9/_]. Minimal length 3 symbol. Case insensitive.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:restriction base="xs:string">
+            <xs:pattern value="([A-Z]+[a-zA-Z0-9]{1,}){1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="typeTitle">
+        <xs:annotation>
+            <xs:documentation>
+                Item title attribute minimal length 3 symbol
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:restriction base="xs:string">
+            <xs:minLength value="3" />
+            <xs:maxLength value="50" />
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

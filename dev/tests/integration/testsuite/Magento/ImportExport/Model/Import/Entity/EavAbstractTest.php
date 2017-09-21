@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -27,7 +9,7 @@
  */
 namespace Magento\ImportExport\Model\Import\Entity;
 
-class EavAbstractTest extends \PHPUnit_Framework_TestCase
+class EavAbstractTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Model object which used for tests
@@ -43,8 +25,8 @@ class EavAbstractTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->_model = $this->getMockForAbstractClass(
-            'Magento\ImportExport\Model\Import\Entity\AbstractEav',
-            array(),
+            \Magento\ImportExport\Model\Import\Entity\AbstractEav::class,
+            [],
             '',
             false
         );
@@ -57,24 +39,30 @@ class EavAbstractTest extends \PHPUnit_Framework_TestCase
     {
         $indexAttributeCode = 'gender';
 
-        /** @var $attributeCollection \Magento\Customer\Model\Resource\Attribute\Collection */
+        /** @var $attributeCollection \Magento\Customer\Model\ResourceModel\Attribute\Collection */
         $attributeCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Model\Resource\Attribute\Collection'
+            \Magento\Customer\Model\ResourceModel\Attribute\Collection::class
         );
         $attributeCollection->addFieldToFilter(
             'attribute_code',
-            array('in' => array($indexAttributeCode, 'group_id'))
+            ['in' => [$indexAttributeCode, 'group_id']]
         );
         /** @var $attribute \Magento\Customer\Model\Attribute */
         foreach ($attributeCollection as $attribute) {
             $index = $attribute->getAttributeCode() == $indexAttributeCode ? 'value' : 'label';
-            $expectedOptions = array();
+            $expectedOptions = [];
             foreach ($attribute->getSource()->getAllOptions(false) as $option) {
-                $expectedOptions[strtolower($option[$index])] = $option['value'];
+                if (is_array($option['value'])) {
+                    foreach ($option['value'] as $value) {
+                        $expectedOptions[strtolower($value[$index])] = $value['value'];
+                    }
+                } else {
+                    $expectedOptions[strtolower($option[$index])] = $option['value'];
+                }
             }
-            $actualOptions = $this->_model->getAttributeOptions($attribute, array($indexAttributeCode));
-            sort($expectedOptions);
-            sort($actualOptions);
+            $actualOptions = $this->_model->getAttributeOptions($attribute, [$indexAttributeCode]);
+            asort($expectedOptions);
+            asort($actualOptions);
             $this->assertEquals($expectedOptions, $actualOptions);
         }
     }

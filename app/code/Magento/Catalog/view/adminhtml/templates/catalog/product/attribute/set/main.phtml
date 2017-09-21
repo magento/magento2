@@ -1,0 +1,467 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<div class="attribute-set">
+
+    <div class="admin__data-grid-loading-mask"
+         data-role="spinner">
+        <div class="spinner">
+            <span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span>
+        </div>
+    </div>
+    <div class="edit-attribute-set attribute-set-col">
+        <?= $block->getSetFormHtml() ?>
+        <script>
+            require([
+                "jquery",
+                "mage/mage"
+            ], function(jQuery){
+
+                jQuery('#set-prop-form').mage('validation', {errorClass: 'mage-error'});
+
+            });
+        </script>
+    </div>
+    <div class="attribute-set-col fieldset-wrapper">
+        <div class="fieldset-wrapper-title">
+            <span class="title"><?= /* @escapeNotVerified */ __('Groups') ?></span>
+        </div>
+        <?php if (!$block->getIsReadOnly()): ?>
+            <?= /* @escapeNotVerified */ $block->getAddGroupButton() ?>&nbsp;<?= /* @escapeNotVerified */ $block->getDeleteGroupButton() ?>
+            <p class="note-block"><?= /* @escapeNotVerified */ __('Double click on a group to rename it.') ?></p>
+        <?php endif; ?>
+
+        <?= $block->getSetsFilterHtml() ?>
+        <?= $block->getGroupTreeHtml() ?>
+    </div>
+    <div class="attribute-set-col fieldset-wrapper">
+        <div class="fieldset-wrapper-title">
+            <span class="title"><?= /* @escapeNotVerified */ __('Unassigned Attributes') ?></span>
+        </div>
+        <div id="tree-div2" class="attribute-set-tree"></div>
+        <script id="ie-deferred-loader" defer="defer" src="//:"></script>
+        <script>
+            define("tree-panel",
+                [
+                    "jquery",
+                    "Magento_Ui/js/modal/prompt",
+                    "Magento_Ui/js/modal/alert",
+                    "extjs/ext-tree-checkbox",
+                    "prototype"
+                ], function(jQuery, prompt, alert){
+
+                //<![CDATA[
+                var allowDragAndDrop = <?= /* @escapeNotVerified */ ($block->getIsReadOnly() ? 'false' : 'true') ?>;
+                var canEditGroups = <?= /* @escapeNotVerified */ ($block->getIsReadOnly() ? 'false' : 'true') ?>;
+
+                var TreePanels = function() {
+                    // shorthand
+                    var Tree = Ext.tree;
+
+                    return {
+                        init : function(){
+                            // yui-ext tree
+
+                            var tree = new Ext.tree.TreePanel('tree-div1', {
+                                animate:false,
+                                loader: false,
+                                enableDD:allowDragAndDrop,
+                                containerScroll: true,
+                                rootVisible: false
+                            });
+
+                            // set the root node
+                            this.root = new Ext.tree.TreeNode({
+                                text: 'ROOT',
+                                allowDrug:false,
+                                allowDrop:true,
+                                id:'1'
+                            });
+
+                            tree.setRootNode(this.root);
+                            buildCategoryTree(this.root, <?= /* @escapeNotVerified */ $block->getGroupTreeJson() ?>);
+                            // render the tree
+                            tree.render();
+                            this.root.expand(false, false);
+                            tree.expandAll();
+
+                            this.ge = new Ext.tree.TreeEditor(tree, {
+                                allowBlank:false,
+                                blankText:'<?= /* @escapeNotVerified */ __('A name is required.') ?>',
+                                selectOnFocus:true,
+                                cls:'folder'
+                            });
+
+                            this.root.addListener('beforeinsert', editSet.leftBeforeInsert);
+                            this.root.addListener('beforeappend', editSet.leftBeforeInsert);
+
+                            //this.ge.addListener('beforerender', editSet.editGroup);
+                            this.ge.addListener('beforeshow', editSet.editGroup);
+                            this.ge.addListener('beforecomplete', editSet.beforeRenameGroup);
+                            //this.ge.addListener('startedit', editSet.editGroup);
+
+                            //-------------------------------------------------------------
+
+                            var tree2 = new Ext.tree.TreePanel('tree-div2', {
+                                animate:false,
+                                loader: false,
+                                enableDD:allowDragAndDrop,
+                                containerScroll: true,
+                                rootVisible: false,
+                                lines:false
+                            });
+
+                            // set the root node
+                            this.root2 = new Ext.tree.TreeNode({
+                                text: 'ROOT',
+                                draggable:false,
+                                id:'free'
+                            });
+                            tree2.setRootNode(this.root2);
+                            buildCategoryTree(this.root2, <?= /* @escapeNotVerified */ $block->getAttributeTreeJson() ?>);
+
+                            this.root2.addListener('beforeinsert', editSet.rightBeforeInsert);
+                            this.root2.addListener('beforeappend', editSet.rightBeforeAppend);
+
+                            this.root2.addListener('append', editSet.rightAppend);
+                            this.root2.addListener('remove', editSet.rightRemove);
+                            // render the tree
+                            tree2.render();
+                            this.root2.expand(false, false);
+                            tree2.expandAll();
+                        },
+
+                        rebuildTrees : function(){
+                            editSet.req.attributes = new Array();
+                            rootNode = TreePanels.root;
+                            var gIterator = 0;
+                            for( i in rootNode.childNodes ) {
+                                if(rootNode.childNodes[i].id) {
+                                    var group = rootNode.childNodes[i];
+                                    editSet.req.groups[gIterator] = new Array(group.id, group.attributes.text.strip(), (gIterator+1));
+                                    var iterator = 0
+                                    for( j in group.childNodes ) {
+                                        iterator ++;
+                                        if( group.childNodes[j].id > 0 ) {
+                                            editSet.req.attributes[group.childNodes[j].id] = new Array(group.childNodes[j].id, group.id, iterator, group.childNodes[j].attributes.entity_id);
+                                        }
+                                    }
+                                    iterator = 0;
+                                }
+                                gIterator ++;
+                            }
+
+                            editSet.req.not_attributes = new Array();
+                            rootNode = TreePanels.root2;
+
+                            var iterator = 0;
+                            for( i in rootNode.childNodes ) {
+                                if(rootNode.childNodes[i].id) {
+                                    if( rootNode.childNodes[i].id > 0 ) {
+                                        editSet.req.not_attributes[iterator] = rootNode.childNodes[i].attributes.entity_id;
+                                    }
+                                    iterator ++;
+                                }
+                            }
+                        }
+                    };
+                }();
+
+                function buildCategoryTree(parent, config){
+                    if (!config) return null;
+                    if (parent && config && config.length){
+                        for (var i = 0; i < config.length; i++) {
+                            var node = new Ext.tree.TreeNode(config[i]);
+                            parent.appendChild(node);
+                            node.addListener('click', editSet.register);
+                            node.addListener('beforemove', editSet.groupBeforeMove);
+                            node.addListener('beforeinsert', editSet.groupBeforeInsert);
+                            node.addListener('beforeappend', editSet.groupBeforeInsert);
+                            if( config[i].children ) {
+                                for( j in config[i].children ) {
+                                    if(config[i].children[j].id) {
+                                        newNode = new Ext.tree.TreeNode(config[i].children[j]);
+                                        node.appendChild(newNode);
+                                        newNode.addListener('click', editSet.unregister);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                editSet = function() {
+                    return {
+                        register : function(node) {
+                            editSet.currentNode = node;
+                        },
+
+                        unregister : function() {
+                            editSet.currentNode = false;
+                        },
+
+                        submit : function() {
+                            var i, child, newNode;
+
+                            if( TreePanels.root.firstChild == TreePanels.root.lastChild ) {
+                                return;
+                            }
+
+                            if( editSet.SystemNodesExists(editSet.currentNode) ) {
+                                alert({
+                                    content: '<?= $block->escapeJs(__('This group contains system attributes. Please move system attributes to another group and try again.')) ?>'
+                                });
+                                return;
+                            }
+
+                            if( editSet.currentNode && editSet.currentNode.attributes.cls == 'folder' ) {
+                                TreePanels.root.removeChild(editSet.currentNode);
+
+                                for( i in editSet.currentNode.childNodes ) {
+                                    if( editSet.currentNode.childNodes[i].id ) {
+                                        child = editSet.currentNode.childNodes[i];
+                                        newNode = new Ext.tree.TreeNode(child.attributes);
+
+                                        if( child.attributes.is_user_defined == 1 ) {
+                                            TreePanels.root2.appendChild(newNode);
+                                        }
+                                    }
+                                }
+
+                                editSet.req.removeGroups[editSet.currentNode.id] = editSet.currentNode.id;
+                                editSet.currentNode = false;
+                            }
+                        },
+
+                        SystemNodesExists : function(currentNode) {
+                            if (!currentNode) {
+                                alert({
+                                    content: '<?= $block->escapeJs(__('Please select a node.')) ?>'
+                                });
+                                return;
+                            }
+
+                            for (i in currentNode.childNodes) {
+                                if (currentNode.childNodes[i].id) {
+                                    child = editSet.currentNode.childNodes[i];
+                                    if (child.attributes.is_unassignable != 1) {
+                                        return true;
+                                    }
+                                }
+                            }
+                        },
+
+                        rightAppend : function(node) {
+                            return;
+                        },
+
+                        addGroup : function() {
+                            prompt({
+                                title: "<?= /* @escapeNotVerified */ __('Add New Group') ?>",
+                                content: "<?= /* @escapeNotVerified */ __('Please enter a new group name.') ?>",
+                                value: "",
+                                validation: true,
+                                validationRules: ['required-entry'],
+                                attributesForm: {
+                                    novalidate: 'novalidate',
+                                    action: ''
+                                },
+                                attributesField: {
+                                    name: 'name',
+                                    'data-validate': '{required:true}',
+                                    maxlength: '255'
+                                },
+                                actions: {
+                                    confirm: function (group_name) {
+                                        group_name = group_name.strip();
+
+                                        if (!editSet.validateGroupName(group_name, 0)) {
+                                            return;
+                                        }
+
+                                        var newNode = new Ext.tree.TreeNode({
+                                            text : group_name.escapeHTML(),
+                                            cls : 'folder',
+                                            allowDrop : true,
+                                            allowDrag : true
+                                        });
+
+                                        TreePanels.root.appendChild(newNode);
+                                        newNode.addListener('beforemove', editSet.groupBeforeMove);
+                                        newNode.addListener('beforeinsert', editSet.groupBeforeInsert);
+                                        newNode.addListener('beforeappend', editSet.groupBeforeInsert);
+                                        newNode.addListener('click', editSet.register);
+                                    }
+                                }
+                            });
+                        },
+
+                        editGroup : function(obj) {
+                            if( obj.editNode.attributes.cls != 'folder' || !canEditGroups) {
+                                TreePanels.ge.cancelEdit();
+                                return false;
+                            }
+                        },
+
+                        beforeRenameGroup : function(obj, after, before) {
+                            return editSet.validateGroupName(after, obj.editNode.id);
+                        },
+
+                        validateGroupName : function(name, exceptNodeId) {
+                            name = name.strip();
+                            var result = true;
+                            if (name === '') {
+                                result = false;
+                            }
+                            for (var i=0; i < TreePanels.root.childNodes.length; i++) {
+                                if (TreePanels.root.childNodes[i].text.toLowerCase() == name.toLowerCase() && TreePanels.root.childNodes[i].id != exceptNodeId) {
+                                    errorText = '<?= /* @escapeNotVerified */ __('An attribute group named "/name/" already exists.') ?>';
+                                    alert({
+                                        content: errorText.replace("/name/",name)
+                                    });
+                                    result =  false;
+                                }
+                            }
+                            return result;
+                        },
+
+                        save : function() {
+                            var block;
+
+                            if ($('messages')) {
+                                $('messages').update();
+                            } else {
+                                block = jQuery('<div/>').attr('id', 'messages');
+                                jQuery('.page-main-actions').after(block);
+                            }
+                            TreePanels.rebuildTrees();
+                            if(!jQuery('#set-prop-form').valid()) {
+                                return;
+                            }
+                            editSet.req.attribute_set_name = $('attribute_set_name').value;
+                            if (!editSet.req.form_key) {
+                                editSet.req.form_key = FORM_KEY;
+                            }
+                            var req = {data : Ext.util.JSON.encode(editSet.req)};
+                            var con = new Ext.lib.Ajax.request('POST', '<?= /* @escapeNotVerified */ $block->getMoveUrl() ?>', {success:editSet.success,failure:editSet.failure}, req);
+                        },
+
+                        success : function(o) {
+                            var response = Ext.util.JSON.decode(o.responseText);
+                            if( response.error ) {
+                                $('messages').update(response.message);
+                            } else if( response.ajaxExpired && response.ajaxRedirect ){
+                                setLocation(response.ajaxRedirect);
+                            } else if( response.url ){
+                                setLocation(response.url);
+                            } else if( response.message ) {
+                                $('messages').update(response.message);
+                            }
+                        },
+
+                        failure : function(o) {
+                            alert({
+                                content: '<?= $block->escapeJs(__('Sorry, we\'re unable to complete this request.')) ?>'
+                            });
+                        },
+
+                        groupBeforeMove : function(tree, nodeThis, oldParent, newParent) {
+                            if( newParent.attributes.cls == 'folder' && nodeThis.attributes.cls == 'folder' ) {
+                                return false;
+                            }
+
+                            if( newParent == TreePanels.root && nodeThis.attributes.cls != 'folder' ) {
+                                return false;
+                            }
+                        },
+
+                        rightBeforeAppend : function(tree, nodeThis, node, newParent) {
+                            if (node.attributes.is_user_defined == 0) {
+                                alert({
+                                    content: '<?= $block->escapeJs(__('You can\'t remove attributes from this attribute set.')) ?>'
+                                });
+                                return false;
+                            } else {
+                                return true;
+                            }
+                        },
+
+                        rightBeforeInsert : function(tree, nodeThis, node, newParent) {
+                            var empty = TreePanels.root2.findChild('id', 'empty');
+                            if (empty) {
+                                return false;
+                            }
+
+                            if (node.attributes.is_unassignable == 0) {
+                                alert({
+                                    content: '<?= $block->escapeJs(__('You can\'t remove attributes from this attribute set.')) ?>'
+                                });
+                                return false;
+                            } else {
+                                return true;
+                            }
+                        },
+
+                        groupBeforeInsert : function(tree, nodeThis, node, newParent) {
+                            if( node.allowChildren ) {
+                                return false;
+                            }
+                        },
+
+                        rightAppend : function(tree, nodeThis, node) {
+                            var empty = TreePanels.root2.findChild('id', 'empty');
+                            if( empty && node.id != 'empty' ) {
+                                TreePanels.root2.removeChild(empty);
+                            }
+                        },
+
+                        rightRemove : function(tree, nodeThis, node) {
+                            if( nodeThis.firstChild == null && node.id != 'empty' ) {
+                                var newNode = new Ext.tree.TreeNode({
+                                    text : '<?= /* @escapeNotVerified */ __('Empty') ?>',
+                                    id : 'empty',
+                                    cls : 'folder',
+                                    is_user_defined : 1,
+                                    allowDrop : false,
+                                    allowDrag : false
+                                });
+                                TreePanels.root2.appendChild(newNode);
+                            }
+                        },
+
+                        leftBeforeInsert : function(tree, nodeThis, node, newParent) {
+                            if( node.allowChildren == false ) {
+                                return false;
+                            }
+                        }
+                    }
+                }();
+
+                function initVars() {
+                    editSet.req = {};
+                    editSet.req.attributes = false;
+                    editSet.req.groups = new Array();
+                    editSet.req.not_attributes = false;
+                    editSet.req.attribute_set_name = false;
+                    editSet.req.removeGroups = new Array();
+                }
+
+                jQuery(function() {
+                    initVars();
+                    TreePanels.init();
+                    jQuery("[data-role='spinner']").hide();
+                });
+                //]]>
+
+            });
+            require(["tree-panel"]);
+        </script>
+    </div>
+</div>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\UrlRewrite\Test\TestCase\DeleteProductUrlRewriteEntityTest" summary="Delete Product URL Rewrites" ticketId="MAGETWO-23287">
+        <variation name="DeleteProductUrlRewriteEntityTestVariation1">
+            <data name="productRedirect/dataset" xsi:type="string">default_without_target</data>
+            <data name="productRedirect/data/target_path/entity" xsi:type="string">product/%catalogProductSimple::product_100_dollar%</data>
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteDeletedMessage" />
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteNotInGrid" />
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertPageByUrlRewriteIsNotFound" />
+        </variation>
+    </testCase>
+</config>

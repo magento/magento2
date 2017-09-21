@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Catalog\Test\TestCase\Category\DeleteCategoryEntityTest" summary="Delete Category" ticketId="MAGETWO-23303">
+        <variation name="DeleteCategoryEntityTestVariation1_RootCategory" summary="Can delete a root category not assigned to any store">
+            <data name="category/dataset" xsi:type="string">root_category</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySuccessDeleteMessage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryAbsenceOnBackend" />
+        </variation>
+        <variation name="DeleteCategoryEntityTestVariation2_Subcategory" summary="Can delete a subcategory">
+            <data name="category/dataset" xsi:type="string">root_subcategory</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySuccessDeleteMessage" />
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteCategoryNotInGrid" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryAbsenceOnBackend" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryAbsenceOnFrontend" />
+        </variation>
+        <variation name="DeleteCategoryEntityTestVariation3_RootCategory_AssignedToStore" summary="Cannot delete root category assigned to some store">
+            <data name="category/dataset" xsi:type="string">default_category</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryCannotBeDeleted" />
+        </variation>
+    </testCase>
+</config>

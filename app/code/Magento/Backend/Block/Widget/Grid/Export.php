@@ -1,39 +1,27 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
 namespace Magento\Backend\Block\Widget\Grid;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 /**
+ * @api
+ * @deprecated 100.2.0 in favour of UI component implementation
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\Block\Widget\Grid\ExportInterface
 {
     /**
      * Grid export types
      *
-     * @var  \Magento\Framework\Object[]
+     * @var  \Magento\Framework\DataObject[]
      */
-    protected $_exportTypes = array();
+    protected $_exportTypes = [];
 
     /**
      * Rows per page for import
@@ -74,7 +62,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Data\CollectionFactory $collectionFactory,
-        array $data = array()
+        array $data = []
     ) {
         $this->_collectionFactory = $collectionFactory;
         parent::__construct($context, $data);
@@ -82,7 +70,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
 
     /**
      * @return void
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _construct()
     {
@@ -90,12 +78,14 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
         if ($this->hasData('exportTypes')) {
             foreach ($this->getData('exportTypes') as $type) {
                 if (!isset($type['urlPath']) || !isset($type['label'])) {
-                    throw new \Magento\Framework\Model\Exception('Invalid export type supplied for grid export block');
+                    throw new \Magento\Framework\Exception\LocalizedException(
+                        __('Invalid export type supplied for grid export block')
+                    );
                 }
                 $this->addExportType($type['urlPath'], $type['label']);
             }
         }
-        $this->_directory = $this->_filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::VAR_DIR);
+        $this->_directory = $this->_filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
     }
 
     /**
@@ -111,7 +101,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
     /**
      * Retrieve totals
      *
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     protected function _getTotals()
     {
@@ -122,6 +112,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      * Return count totals
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getCountTotals()
     {
@@ -141,7 +132,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
     /**
      * Retrieve grid export types
      *
-     * @return  \Magento\Framework\Object[]|false
+     * @return  \Magento\Framework\DataObject[]|false
      */
     public function getExportTypes()
     {
@@ -168,13 +159,13 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
         $this->setChild(
             'export_button',
             $this->getLayout()->createBlock(
-                'Magento\Backend\Block\Widget\Button'
+                \Magento\Backend\Block\Widget\Button::class
             )->setData(
-                array(
+                [
                     'label' => __('Export'),
                     'onclick' => $this->getParentBlock()->getJsObjectName() . '.doExport()',
-                    'class' => 'task'
-                )
+                    'class' => 'task',
+                ]
             )
         );
         return parent::_prepareLayout();
@@ -199,8 +190,8 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      */
     public function addExportType($url, $label)
     {
-        $this->_exportTypes[] = new \Magento\Framework\Object(
-            array('url' => $this->getUrl($url, array('_current' => true)), 'label' => $label)
+        $this->_exportTypes[] = new \Magento\Framework\DataObject(
+            ['url' => $this->getUrl($url, ['_current' => true]), 'label' => $label]
         );
         return $this;
     }
@@ -223,7 +214,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      */
     protected function _getExportHeaders()
     {
-        $row = array();
+        $row = [];
         foreach ($this->_getColumns() as $column) {
             if (!$column->getIsSystem()) {
                 $row[] = $column->getExportHeader();
@@ -240,7 +231,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
     protected function _getExportTotals()
     {
         $totals = $this->_getTotals();
-        $row = array();
+        $row = [];
         foreach ($this->_getColumns() as $column) {
             if (!$column->getIsSystem()) {
                 $row[] = $column->hasTotalsLabel() ? $column->getTotalsLabel() : $column->getRowFieldExport($totals);
@@ -267,10 +258,11 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
         $break = false;
 
         while ($break !== true) {
+            $originalCollection->clear();
             $originalCollection->setPageSize($this->getExportPageSize());
             $originalCollection->setCurPage($page);
             $originalCollection->load();
-            if (is_null($count)) {
+            if ($count === null) {
                 $count = $originalCollection->getSize();
                 $lPage = $originalCollection->getLastPageNumber();
             }
@@ -281,7 +273,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
 
             $collection = $this->_getRowCollection($originalCollection);
             foreach ($collection as $item) {
-                call_user_func_array(array($this, $callback), array_merge(array($item), $args));
+                call_user_func_array([$this, $callback], array_merge([$item], $args));
             }
         }
     }
@@ -289,13 +281,15 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
     /**
      * Write item data to csv export file
      *
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      * @param \Magento\Framework\Filesystem\File\WriteInterface $stream
      * @return void
      */
-    protected function _exportCsvItem(\Magento\Framework\Object $item, \Magento\Framework\Filesystem\File\WriteInterface $stream)
-    {
-        $row = array();
+    protected function _exportCsvItem(
+        \Magento\Framework\DataObject $item,
+        \Magento\Framework\Filesystem\File\WriteInterface $stream
+    ) {
+        $row = [];
         foreach ($this->_getColumns() as $column) {
             if (!$column->getIsSystem()) {
                 $row[] = $column->getRowFieldExport($item);
@@ -321,18 +315,18 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
 
         $stream->writeCsv($this->_getExportHeaders());
         $stream->lock();
-        $this->_exportIterateCollection('_exportCsvItem', array($stream));
+        $this->_exportIterateCollection('_exportCsvItem', [$stream]);
         if ($this->getCountTotals()) {
             $stream->writeCsv($this->_getExportTotals());
         }
         $stream->unlock();
         $stream->close();
 
-        return array(
+        return [
             'type' => 'filename',
             'value' => $file,
             'rm' => true  // can delete file after use
-        );
+        ];
     }
 
     /**
@@ -345,7 +339,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
         $csv = '';
         $collection = $this->_getPreparedCollection();
 
-        $data = array();
+        $data = [];
         foreach ($this->_getColumns() as $column) {
             if (!$column->getIsSystem()) {
                 $data[] = '"' . $column->getExportHeader() . '"';
@@ -354,12 +348,12 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
         $csv .= implode(',', $data) . "\n";
 
         foreach ($collection as $item) {
-            $data = array();
+            $data = [];
             foreach ($this->_getColumns() as $column) {
                 if (!$column->getIsSystem()) {
                     $data[] = '"' . str_replace(
-                        array('"', '\\'),
-                        array('""', '\\\\'),
+                        ['"', '\\'],
+                        ['""', '\\\\'],
                         $column->getRowFieldExport($item)
                     ) . '"';
                 }
@@ -368,12 +362,12 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
         }
 
         if ($this->getCountTotals()) {
-            $data = array();
+            $data = [];
             foreach ($this->_getColumns() as $column) {
                 if (!$column->getIsSystem()) {
                     $data[] = '"' . str_replace(
-                        array('"', '\\'),
-                        array('""', '\\\\'),
+                        ['"', '\\'],
+                        ['""', '\\\\'],
                         $column->getRowFieldExport($this->_getTotals())
                     ) . '"';
                 }
@@ -393,7 +387,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
     {
         $collection = $this->_getPreparedCollection();
 
-        $indexes = array();
+        $indexes = [];
         foreach ($this->_getColumns() as $column) {
             if (!$column->getIsSystem()) {
                 $indexes[] = $column->getIndex();
@@ -414,12 +408,12 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
     /**
      *  Get a row data of the particular columns
      *
-     * @param \Magento\Framework\Object $data
+     * @param \Magento\Framework\DataObject $data
      * @return string[]
      */
-    public function getRowRecord(\Magento\Framework\Object $data)
+    public function getRowRecord(\Magento\Framework\DataObject $data)
     {
-        $row = array();
+        $row = [];
         foreach ($this->_getColumns() as $column) {
             if (!$column->getIsSystem()) {
                 $row[] = $column->getRowFieldExport($data);
@@ -440,7 +434,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
     {
         $collection = $this->_getRowCollection();
 
-        $convert = new \Magento\Framework\Convert\Excel($collection->getIterator(), array($this, 'getRowRecord'));
+        $convert = new \Magento\Framework\Convert\Excel($collection->getIterator(), [$this, 'getRowRecord']);
 
         $name = md5(microtime());
         $file = $this->_path . '/' . $name . '.xml';
@@ -458,11 +452,11 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
         $stream->unlock();
         $stream->close();
 
-        return array(
+        return [
             'type' => 'filename',
             'value' => $file,
             'rm' => true  // can delete file after use
-        );
+        ];
     }
 
     /**
@@ -474,8 +468,8 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
     {
         $collection = $this->_getPreparedCollection();
 
-        $headers = array();
-        $data = array();
+        $headers = [];
+        $data = [];
         foreach ($this->_getColumns() as $column) {
             if (!$column->getIsSystem()) {
                 $headers[] = $column->getHeader();
@@ -484,7 +478,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
         $data[] = $headers;
 
         foreach ($collection as $item) {
-            $row = array();
+            $row = [];
             foreach ($this->_getColumns() as $column) {
                 if (!$column->getIsSystem()) {
                     $row[] = $column->getRowField($item);
@@ -494,7 +488,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
         }
 
         if ($this->getCountTotals()) {
-            $row = array();
+            $row = [];
             foreach ($this->_getColumns() as $column) {
                 if (!$column->getIsSystem()) {
                     $row[] = $column->getRowField($this->_getTotals());
@@ -520,13 +514,13 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
         }
         $collection = $this->_collectionFactory->create();
 
-        /** @var $item \Magento\Framework\Object */
+        /** @var $item \Magento\Framework\DataObject */
         foreach ($baseCollection as $item) {
             if ($item->getIsEmpty()) {
                 continue;
             }
             if ($item->hasChildren() && count($item->getChildren()) > 0) {
-                /** @var $subItem \Magento\Framework\Object */
+                /** @var $subItem \Magento\Framework\DataObject */
                 foreach ($item->getChildren() as $subItem) {
                     $tmpItem = clone $item;
                     $tmpItem->unsChildren();

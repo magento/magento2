@@ -1,52 +1,86 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
 namespace Magento\Review\Block;
 
-class FormTest extends \PHPUnit_Framework_TestCase
+use Magento\Framework\App\Area;
+use Magento\Framework\App\Config\Value;
+use Magento\Framework\App\ReinitableConfig;
+use Magento\Framework\App\State;
+use Magento\TestFramework\ObjectManager;
+
+class FormTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @magentoAppArea frontend
+     * @var ObjectManager;
      */
-    public function testCustomerOnForm()
+    private $objectManager;
+
+    protected function setUp()
     {
-        $session = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Customer\Model\Session');
-        $service = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Customer\Service\V1\CustomerAccountService');
-        $customer = $service->authenticate('customer@example.com', 'password');
-        $session->setCustomerDataAsLoggedIn($customer);
-        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Review\Block\Form');
-        /** @var \Magento\Framework\Escaper $escaper */
-        $escaper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Framework\Escaper');
-        $this->assertStringMatchesFormat(
-            '%A<input type="text" name="nickname" id="nickname_field" class="input-text"'
-                . ' data-validate="{required:true}" value="'
-                . $escaper->escapeHtml($customer->getFirstname()) . '" />%A',
-            $block->toHtml()
-        );
+        $this->objectManager = $this->getObjectManager();
+
+        parent::setUp();
+    }
+
+    /**
+     * @magentoDbIsolation enabled
+     * @magentoDataFixture Magento/Review/_files/config.php
+     * @dataProvider getCorrectFlagDataProvider
+     */
+    public function testGetCorrectFlag(
+        $path,
+        $scope,
+        $scopeId,
+        $value,
+        $expectedResult
+    ) {
+        /** @var State $appState */
+        $appState = $this->objectManager->get(State::class);
+        $appState->setAreaCode(Area::AREA_FRONTEND);
+
+        /** @var Value $config */
+        $config = $this->objectManager->create(Value::class);
+        $config->setPath($path);
+        $config->setScope($scope);
+        $config->setScopeId($scopeId);
+        $config->setValue($value);
+        $config->save();
+        /** @var ReinitableConfig $reinitableConfig */
+        $reinitableConfig = $this->objectManager->create(ReinitableConfig::class);
+        $reinitableConfig->reinit();
+
+        /** @var \Magento\Review\Block\Form $form */
+        $form = $this->objectManager->create(\Magento\Review\Block\Form::class);
+        $result = $form->getAllowWriteReviewFlag();
+        $this->assertEquals($result, $expectedResult);
+    }
+
+    public function getCorrectFlagDataProvider()
+    {
+        return [
+            [
+                'path' => 'catalog/review/allow_guest',
+                'scope' => 'websites',
+                'scopeId' => '1',
+                'value' => 0,
+                'expectedResult' => false,
+            ],
+            [
+                'path' => 'catalog/review/allow_guest',
+                'scope' => 'websites',
+                'scopeId' => '1',
+                'value' => 1,
+                'expectedResult' => true
+            ]
+        ];
+    }
+
+    private function getObjectManager()
+    {
+        return \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
 }

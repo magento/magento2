@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <sendfriend>
+            <email>
+                <enabled>1</enabled>
+                <template>sendfriend_email_template</template>
+                <allow_guest>0</allow_guest>
+                <max_recipients>5</max_recipients>
+                <max_per_hour>5</max_per_hour>
+                <check_by>0</check_by>
+            </email>
+        </sendfriend>
+    </default>
+</config>

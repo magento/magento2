@@ -1,28 +1,12 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer;
 
+use Magento\CatalogInventory\Api\StockRegistryInterface;
+use Magento\CatalogInventory\Api\StockStateInterface;
 use Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\QuoteItemQtyList;
 
 class Option
@@ -33,40 +17,52 @@ class Option
     protected $quoteItemQtyList;
 
     /**
-     * @param QuoteItemQtyList $quoteItemQtyList
+     * @var StockRegistryInterface
      */
-    public function __construct(QuoteItemQtyList $quoteItemQtyList)
-    {
+    protected $stockRegistry;
+
+    /**
+     * @var StockStateInterface
+     */
+    protected $stockState;
+
+    /**
+     * @param QuoteItemQtyList $quoteItemQtyList
+     * @param StockRegistryInterface $stockRegistry
+     * @param StockStateInterface $stockState
+     */
+    public function __construct(
+        QuoteItemQtyList $quoteItemQtyList,
+        StockRegistryInterface $stockRegistry,
+        StockStateInterface $stockState
+    ) {
         $this->quoteItemQtyList = $quoteItemQtyList;
+        $this->stockRegistry = $stockRegistry;
+        $this->stockState = $stockState;
     }
 
     /**
-     * Initialize item option
+     * Init stock item
      *
-     * @param \Magento\Sales\Model\Quote\Item\Option $option
-     * @param \Magento\Sales\Model\Quote\Item $quoteItem
-     * @param int $qty
+     * @param \Magento\Quote\Model\Quote\Item\Option $option
+     * @param \Magento\Quote\Model\Quote\Item $quoteItem
      *
-     * @return \Magento\Framework\Object
-     *
-     * @throws \Magento\Framework\Model\Exception
+     * @return \Magento\CatalogInventory\Model\Stock\Item
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function initialize(
-        \Magento\Sales\Model\Quote\Item\Option $option,
-        \Magento\Sales\Model\Quote\Item $quoteItem,
-        $qty
+    public function getStockItem(
+        \Magento\Quote\Model\Quote\Item\Option $option,
+        \Magento\Quote\Model\Quote\Item $quoteItem
     ) {
-        $optionValue = $option->getValue();
-        $optionQty = $qty * $optionValue;
-        $increaseOptionQty = ($quoteItem->getQtyToAdd() ? $quoteItem->getQtyToAdd() : $qty) * $optionValue;
-
-        /* @var $stockItem \Magento\CatalogInventory\Model\Stock\Item */
-        $stockItem = $option->getProduct()->getStockItem();
-
-        if (!$stockItem instanceof \Magento\CatalogInventory\Model\Stock\Item) {
-            throw new \Magento\Framework\Model\Exception(__('The stock item for Product in option is not valid.'));
+        $stockItem = $this->stockRegistry->getStockItem(
+            $option->getProduct()->getId(),
+            $quoteItem->getStore()->getWebsiteId()
+        );
+        if (!$stockItem->getItemId()) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('The stock item for Product in option is not valid.')
+            );
         }
-
         /**
          * define that stock item is child for composite product
          */
@@ -76,15 +72,45 @@ class Option
          */
         $stockItem->setSuppressCheckQtyIncrements(true);
 
+        return $stockItem;
+    }
+
+    /**
+     * Initialize item option
+     *
+     * @param \Magento\Quote\Model\Quote\Item\Option $option
+     * @param \Magento\Quote\Model\Quote\Item $quoteItem
+     * @param int $qty
+     *
+     * @return \Magento\Framework\DataObject
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function initialize(
+        \Magento\Quote\Model\Quote\Item\Option $option,
+        \Magento\Quote\Model\Quote\Item $quoteItem,
+        $qty
+    ) {
+        $optionValue = $option->getValue();
+        $optionQty = $qty * $optionValue;
+        $increaseOptionQty = ($quoteItem->getQtyToAdd() ? $quoteItem->getQtyToAdd() : $qty) * $optionValue;
         $qtyForCheck = $this->quoteItemQtyList->getQty(
             $option->getProduct()->getId(),
             $quoteItem->getId(),
+            $quoteItem->getQuoteId(),
             $increaseOptionQty
         );
 
-        $result = $stockItem->checkQuoteItemQty($optionQty, $qtyForCheck, $optionValue);
+        $stockItem = $this->getStockItem($option, $quoteItem);
+        $stockItem->setProductName($option->getProduct()->getName());
+        $result = $this->stockState->checkQuoteItemQty(
+            $option->getProduct()->getId(),
+            $optionQty,
+            $qtyForCheck,
+            $optionValue,
+            $option->getProduct()->getStore()->getWebsiteId()
+        );
 
-        if (!is_null($result->getItemIsQtyDecimal())) {
+        if ($result->getItemIsQtyDecimal() !== null) {
             $option->setIsQtyDecimal($result->getItemIsQtyDecimal());
         }
 
@@ -97,11 +123,11 @@ class Option
              */
             $quoteItem->setData('qty', intval($qty));
         }
-        if (!is_null($result->getMessage())) {
+        if ($result->getMessage() !== null) {
             $option->setMessage($result->getMessage());
             $quoteItem->setMessage($result->getMessage());
         }
-        if (!is_null($result->getItemBackorders())) {
+        if ($result->getItemBackorders() !== null) {
             $option->setBackorders($result->getItemBackorders());
         }
 

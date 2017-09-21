@@ -1,30 +1,11 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Adminhtml\Edit;
 
 use Magento\Customer\Controller\RegistryConstants;
-use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
 
 /**
  * Adminhtml customer edit form block
@@ -32,11 +13,16 @@ use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
-     * Customer Service.
+     * Customer Repository.
      *
-     * @var CustomerAccountServiceInterface
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface
      */
-    protected $_customerAccountService;
+    protected $_customerRepository;
+
+    /**
+     * @var \Magento\Framework\Api\ExtensibleDataObjectConverter
+     */
+    protected $_extensibleDataObjectConverter;
 
     /**
      * Constructor
@@ -44,17 +30,20 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
-     * @param CustomerAccountServiceInterface $customerAccountService
+     * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
+     * @param \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
-        CustomerAccountServiceInterface $customerAccountService,
-        array $data = array()
+        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
+        \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter,
+        array $data = []
     ) {
-        $this->_customerAccountService = $customerAccountService;
+        $this->_customerRepository = $customerRepository;
+        $this->_extensibleDataObjectConverter = $extensibleDataObjectConverter;
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -67,25 +56,29 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     {
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create(
-            array(
-                'data' => array(
+            [
+                'data' => [
                     'id' => 'edit_form',
                     'action' => $this->getUrl('customer/*/save'),
                     'method' => 'post',
-                    'enctype' => 'multipart/form-data'
-                )
-            )
+                    'enctype' => 'multipart/form-data',
+                ],
+            ]
         );
 
         $customerId = $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID);
 
         if ($customerId) {
-            $form->addField('id', 'hidden', array('name' => 'customer_id'));
-            $customer = $this->_customerAccountService->getCustomer($customerId);
+            $form->addField('id', 'hidden', ['name' => 'customer_id']);
+            $customer = $this->_customerRepository->getById($customerId);
             $form->setValues(
-                \Magento\Framework\Service\EavDataObjectConverter::toFlatArray($customer)
+                $this->_extensibleDataObjectConverter->toFlatArray(
+                    $customer,
+                    [],
+                    \Magento\Customer\Api\Data\CustomerInterface::class
+                )
             )->addValues(
-                array('customer_id' => $customerId)
+                ['customer_id' => $customerId]
             );
         }
 

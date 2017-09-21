@@ -1,39 +1,22 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Helper\Dashboard;
 
-use Magento\Core\Helper\Data as HelperData;
-
 /**
  * Adminhtml abstract  dashboard helper.
+ *
+ * @api
+ * @since 100.0.2
  */
-abstract class AbstractDashboard extends HelperData
+abstract class AbstractDashboard extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * Helper collection
      *
-     * @var \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection|array
+     * @var \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection|array
      */
     protected $_collection;
 
@@ -42,14 +25,14 @@ abstract class AbstractDashboard extends HelperData
      *
      * @var array
      */
-    protected $_params = array();
+    protected $_params = [];
 
     /**
-     * @return array|\Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
+     * @return array|\Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
      */
     public function getCollection()
     {
-        if (is_null($this->_collection)) {
+        if ($this->_collection === null) {
             $this->_initCollection();
         }
         return $this->_collection;
@@ -84,7 +67,7 @@ abstract class AbstractDashboard extends HelperData
      */
     public function getColumn($index)
     {
-        $result = array();
+        $result = [];
         foreach ($this->getItems() as $item) {
             if (is_array($item)) {
                 if (isset($item[$index])) {
@@ -92,7 +75,7 @@ abstract class AbstractDashboard extends HelperData
                 } else {
                     $result[] = null;
                 }
-            } elseif ($item instanceof \Magento\Framework\Object) {
+            } elseif ($item instanceof \Magento\Framework\DataObject) {
                 $result[] = $item->getData($index);
             } else {
                 $result[] = null;

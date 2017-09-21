@@ -1,33 +1,20 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model\Api;
+
+use Magento\Payment\Helper\Formatter;
+use Magento\Payment\Model\Method\Logger;
 
 /**
  * Abstract class for Paypal API wrappers
  */
-abstract class AbstractApi extends \Magento\Framework\Object
+abstract class AbstractApi extends \Magento\Framework\DataObject
 {
+    use Formatter;
+
     /**
      * Config instance
      *
@@ -39,38 +26,40 @@ abstract class AbstractApi extends \Magento\Framework\Object
      * Global private to public interface map
      * @var array
      */
-    protected $_globalMap = array();
+    protected $_globalMap = [];
 
     /**
      * Filter callbacks for exporting $this data to API call
      *
      * @var array
      */
-    protected $_exportToRequestFilters = array();
+    protected $_exportToRequestFilters = [];
 
     /**
      * Filter callbacks for importing API result to $this data
      *
      * @var array
      */
-    protected $_importFromRequestFilters = array();
+    protected $_importFromRequestFilters = [];
 
     /**
      * Line items export to request mapping settings
      *
      * @var array
      */
-    protected $_lineItemExportItemsFormat = array();
+    protected $_lineItemExportItemsFormat = [];
 
     /**
      * @var array
      */
-    protected $_lineItemExportItemsFilters = array();
+    protected $_lineItemExportItemsFilters = [
+        'name' => 'strval'
+    ];
 
     /**
      * @var array
      */
-    protected $_lineItemTotalExportMap = array();
+    protected $_lineItemTotalExportMap = [];
 
     /**
      * PayPal shopping cart instance
@@ -84,14 +73,14 @@ abstract class AbstractApi extends \Magento\Framework\Object
      *
      * @var array
      */
-    protected $_shippingOptionsExportItemsFormat = array();
+    protected $_shippingOptionsExportItemsFormat = [];
 
     /**
      * Fields that should be replaced in debug with '***'
      *
      * @var array
      */
-    protected $_debugReplacePrivateDataKeys = array();
+    protected $_debugReplacePrivateDataKeys = [];
 
     /**
      * Customer address
@@ -101,9 +90,14 @@ abstract class AbstractApi extends \Magento\Framework\Object
     protected $_customerAddress;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $_logger;
+
+    /**
+     * @var Logger
+     */
+    protected $customLogger;
 
     /**
      * @var \Magento\Framework\Locale\ResolverInterface
@@ -116,36 +110,29 @@ abstract class AbstractApi extends \Magento\Framework\Object
     protected $_regionFactory;
 
     /**
-     * @var \Magento\Framework\Logger\AdapterFactory
-     */
-    protected $_logAdapterFactory;
-
-    /**
-     * Constructor
-     *
      * By default is looking for first argument as array and assigns it as object
      * attributes This behavior may change in child classes
      *
      * @param \Magento\Customer\Helper\Address $customerAddress
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param Logger $customLogger
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
-     * @param \Magento\Framework\Logger\AdapterFactory $logAdapterFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Customer\Helper\Address $customerAddress,
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
+        Logger $customLogger,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \Magento\Directory\Model\RegionFactory $regionFactory,
-        \Magento\Framework\Logger\AdapterFactory $logAdapterFactory,
-        array $data = array()
+        array $data = []
     ) {
         $this->_customerAddress = $customerAddress;
         $this->_logger = $logger;
+        $this->customLogger = $customLogger;
         $this->_localeResolver = $localeResolver;
         $this->_regionFactory = $regionFactory;
-        $this->_logAdapterFactory = $logAdapterFactory;
         parent::__construct($data);
     }
 
@@ -156,7 +143,7 @@ abstract class AbstractApi extends \Magento\Framework\Object
      */
     public function getApiUsername()
     {
-        return $this->_config->apiUsername;
+        return $this->_config->getValue('apiUsername');
     }
 
     /**
@@ -166,7 +153,7 @@ abstract class AbstractApi extends \Magento\Framework\Object
      */
     public function getApiPassword()
     {
-        return $this->_config->apiPassword;
+        return $this->_config->getValue('apiPassword');
     }
 
     /**
@@ -176,7 +163,7 @@ abstract class AbstractApi extends \Magento\Framework\Object
      */
     public function getApiSignature()
     {
-        return $this->_config->apiSignature;
+        return $this->_config->getValue('apiSignature');
     }
 
     /**
@@ -203,6 +190,7 @@ abstract class AbstractApi extends \Magento\Framework\Object
      * Return Paypal Api proxy status based on config data
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getUseProxy()
     {
@@ -302,25 +290,25 @@ abstract class AbstractApi extends \Magento\Framework\Object
     /**
      * Import $this public data to specified object or array
      *
-     * @param array|\Magento\Framework\Object $to
+     * @param array|\Magento\Framework\DataObject $to
      * @param array $publicMap
-     * @return array|\Magento\Framework\Object
+     * @return array|\Magento\Framework\DataObject
      */
-    public function &import($to, array $publicMap = array())
+    public function import($to, array $publicMap = [])
     {
-        return \Magento\Framework\Object\Mapper::accumulateByMap(array($this, 'getDataUsingMethod'), $to, $publicMap);
+        return \Magento\Framework\DataObject\Mapper::accumulateByMap([$this, 'getDataUsingMethod'], $to, $publicMap);
     }
 
     /**
      * Export $this public data from specified object or array
      *
-     * @param array|\Magento\Framework\Object $from
+     * @param array|\Magento\Framework\DataObject $from
      * @param array $publicMap
      * @return $this
      */
-    public function export($from, array $publicMap = array())
+    public function export($from, array $publicMap = [])
     {
-        \Magento\Framework\Object\Mapper::accumulateByMap($from, array($this, 'setDataUsingMethod'), $publicMap);
+        \Magento\Framework\DataObject\Mapper::accumulateByMap($from, [$this, 'setDataUsingMethod'], $publicMap);
         return $this;
     }
 
@@ -353,9 +341,9 @@ abstract class AbstractApi extends \Magento\Framework\Object
      *
      * @return string
      */
-    public function getLocaleCode()
+    public function getLocale()
     {
-        return $this->_localeResolver->getLocaleCode();
+        return $this->_localeResolver->getLocale();
     }
 
     /**
@@ -375,21 +363,21 @@ abstract class AbstractApi extends \Magento\Framework\Object
      * @param array $request
      * @return array
      */
-    protected function &_exportToRequest(array $privateRequestMap, array $request = array())
+    protected function &_exportToRequest(array $privateRequestMap, array $request = [])
     {
-        $map = array();
+        $map = [];
         foreach ($privateRequestMap as $key) {
             if (isset($this->_globalMap[$key])) {
                 $map[$this->_globalMap[$key]] = $key;
             }
         }
-        $result = \Magento\Framework\Object\Mapper::accumulateByMap(array($this, 'getDataUsingMethod'), $request, $map);
+        $result = \Magento\Framework\DataObject\Mapper::accumulateByMap([$this, 'getDataUsingMethod'], $request, $map);
         foreach ($privateRequestMap as $key) {
             if (isset($this->_exportToRequestFilters[$key]) && isset($result[$key])) {
                 $callback = $this->_exportToRequestFilters[$key];
                 $privateKey = $result[$key];
                 $publicKey = $map[$this->_globalMap[$key]];
-                $result[$key] = call_user_func(array($this, $callback), $privateKey, $publicKey);
+                $result[$key] = call_user_func([$this, $callback], $privateKey, $publicKey);
             }
         }
         return $result;
@@ -404,17 +392,17 @@ abstract class AbstractApi extends \Magento\Framework\Object
      */
     protected function _importFromResponse(array $privateResponseMap, array $response)
     {
-        $map = array();
+        $map = [];
         foreach ($privateResponseMap as $key) {
             if (isset($this->_globalMap[$key])) {
                 $map[$key] = $this->_globalMap[$key];
             }
             if (isset($response[$key]) && isset($this->_importFromRequestFilters[$key])) {
                 $callback = $this->_importFromRequestFilters[$key];
-                $response[$key] = call_user_func(array($this, $callback), $response[$key], $key, $map[$key]);
+                $response[$key] = call_user_func([$this, $callback], $response[$key], $key, $map[$key]);
             }
         }
-        \Magento\Framework\Object\Mapper::accumulateByMap($response, array($this, 'setDataUsingMethod'), $map);
+        \Magento\Framework\DataObject\Mapper::accumulateByMap($response, [$this, 'setDataUsingMethod'], $map);
     }
 
     /**
@@ -425,6 +413,7 @@ abstract class AbstractApi extends \Magento\Framework\Object
      * @param array &$request
      * @param int $i
      * @return true|null
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _exportLineItems(array &$request, $i = 0)
     {
@@ -438,7 +427,7 @@ abstract class AbstractApi extends \Magento\Framework\Object
                 if (isset($this->_lineItemTotalExportMap[$key])) {
                     // !empty($total)
                     $privateKey = $this->_lineItemTotalExportMap[$key];
-                    $request[$privateKey] = $this->_filterAmount($total);
+                    $request[$privateKey] = $this->formatPrice($total);
                 }
             }
         }
@@ -453,14 +442,7 @@ abstract class AbstractApi extends \Magento\Framework\Object
             foreach ($this->_lineItemExportItemsFormat as $publicKey => $privateFormat) {
                 $result = true;
                 $value = $item->getDataUsingMethod($publicKey);
-                if (isset($this->_lineItemExportItemsFilters[$publicKey])) {
-                    $callback = $this->_lineItemExportItemsFilters[$publicKey];
-                    $value = call_user_func(array($this, $callback), $value);
-                }
-                if (is_float($value)) {
-                    $value = $this->_filterAmount($value);
-                }
-                $request[sprintf($privateFormat, $i)] = $value;
+                $request[sprintf($privateFormat, $i)] = $this->formatValue($value, $publicKey);
             }
             $i++;
         }
@@ -485,7 +467,7 @@ abstract class AbstractApi extends \Magento\Framework\Object
             foreach ($this->_shippingOptionsExportItemsFormat as $publicKey => $privateFormat) {
                 $value = $option->getDataUsingMethod($publicKey);
                 if (is_float($value)) {
-                    $value = $this->_filterAmount($value);
+                    $value = $this->formatPrice($value);
                 }
                 if (is_bool($value)) {
                     $value = $this->_filterBool($value);
@@ -495,17 +477,6 @@ abstract class AbstractApi extends \Magento\Framework\Object
             $i++;
         }
         return true;
-    }
-
-    /**
-     * Filter amounts in API calls
-     *
-     * @param float|string $value
-     * @return string
-     */
-    protected function _filterAmount($value)
-    {
-        return sprintf('%.2F', $value);
     }
 
     /**
@@ -542,16 +513,16 @@ abstract class AbstractApi extends \Magento\Framework\Object
         if ($this->hasData($key)) {
             return $this->getData($key);
         }
-        return $this->_config->{$key} ? $this->_config->{$key} : $default;
+        return $this->_config->getValue($key) ? $this->_config->getValue($key) : $default;
     }
 
     /**
      * region_id workaround: PayPal requires state code, try to find one in the address
      *
-     * @param \Magento\Framework\Object $address
+     * @param \Magento\Framework\DataObject $address
      * @return string
      */
-    protected function _lookupRegionCodeFromAddress(\Magento\Framework\Object $address)
+    protected function _lookupRegionCodeFromAddress(\Magento\Framework\DataObject $address)
     {
         $regionId = $address->getData('region_id');
         if ($regionId) {
@@ -567,11 +538,11 @@ abstract class AbstractApi extends \Magento\Framework\Object
      * Street address workaround: divides address lines into parts by specified keys
      * (keys should go as 3rd, 4th[...] parameters)
      *
-     * @param \Magento\Framework\Object $address
+     * @param \Magento\Framework\DataObject $address
      * @param array $to
      * @return void
      */
-    protected function _importStreetFromAddress(\Magento\Framework\Object $address, array &$to)
+    protected function _importStreetFromAddress(\Magento\Framework\DataObject $address, array &$to)
     {
         $keys = func_get_args();
         array_shift($keys);
@@ -621,34 +592,63 @@ abstract class AbstractApi extends \Magento\Framework\Object
      */
     protected function _debug($debugData)
     {
-        if ($this->getDebugFlag()) {
-            $this->_logAdapterFactory->create(
-                array('fileName' => 'payment_' . $this->_config->getMethodCode() . '.log')
-            )->setFilterDataKeys(
-                $this->_debugReplacePrivateDataKeys
-            )->log(
-                $debugData
-            );
-        }
+        $this->customLogger->debug(
+            $debugData,
+            (array)$this->getDebugReplacePrivateDataKeys(),
+            (bool)$this->getDebugFlag()
+        );
     }
 
     /**
      * Define if debugging is enabled
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getDebugFlag()
     {
-        return $this->_config->debug;
+        return $this->_config->getValue('debug');
     }
 
     /**
      * Check whether API certificate authentication should be used
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getUseCertAuthentication()
     {
-        return (bool)$this->_config->apiAuthentication;
+        return (bool)$this->_config->getValue('apiAuthentication');
+    }
+
+    /**
+     * Return replace keys for debug data
+     *
+     * @return array
+     */
+    public function getDebugReplacePrivateDataKeys()
+    {
+        return $this->_debugReplacePrivateDataKeys;
+    }
+
+    /**
+     * Formats value according to configured filters or converts to 0.00 format if value is float.
+     *
+     * @param string|int|float|\Magento\Framework\Phrase $value
+     * @param string $publicKey
+     * @return string
+     */
+    private function formatValue($value, $publicKey)
+    {
+        if (!empty($this->_lineItemExportItemsFilters[$publicKey])) {
+            $callback = $this->_lineItemExportItemsFilters[$publicKey];
+            $value = method_exists($this, $callback) ? $this->{$callback}($value) : $callback($value);
+        }
+
+        if (is_float($value)) {
+            $value = $this->formatPrice($value);
+        }
+
+        return $value;
     }
 }

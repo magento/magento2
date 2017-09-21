@@ -1,0 +1,25 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+/**
+ * @var $block \Magento\CurrencySymbol\Block\Adminhtml\System\Currency
+ */
+?>
+
+<form action="<?= /* @escapeNotVerified */ $block->getImportFormAction() ?>" method="post" class="import-service">
+    <?= $block->getBlockHtml('formkey') ?>
+    <fieldset class="admin__fieldset admin__fieldset-import-service">
+        <?= $block->getServicesHtml() ?>
+        <?= $block->getImportButtonHtml() ?>
+    </fieldset>
+</form>
+<?= $block->getResetButtonHtml() ?>
+<?= $block->getSaveButtonHtml() ?>
+<?= $block->getRatesMatrixHtml() ?>

@@ -1,98 +1,171 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Test\Constraint;
 
+use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Checkout\Test\Page\CheckoutCart;
-use Mtf\Constraint\AbstractConstraint;
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
+use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
- * Class AssertProductInCart
+ * Assertion that the product is correctly displayed in cart.
  */
 class AssertProductInCart extends AbstractConstraint
 {
     /**
-     * Constraint severeness
+     * Price on form.
      *
      * @var string
      */
-    protected $severeness = 'low';
+    protected $formPrice;
 
     /**
+     * Fixture actual price.
+     *
+     * @var string
+     */
+    protected $fixtureActualPrice;
+
+    /**
+     * Fixture price.
+     *
+     * @var string
+     */
+    protected $fixturePrice;
+
+    /**
+     * Assertion that the product is correctly displayed in cart.
+     *
      * @param CatalogProductView $catalogProductView
-     * @param CatalogProductSimple $product
+     * @param FixtureInterface $product
+     * @param BrowserInterface $browser
      * @param CheckoutCart $checkoutCart
+     * @return void
      */
     public function processAssert(
         CatalogProductView $catalogProductView,
-        CatalogProductSimple $product,
+        FixtureInterface $product,
+        BrowserInterface $browser,
         CheckoutCart $checkoutCart
     ) {
-        //Add product to cart
-        $catalogProductView->init($product);
-        $catalogProductView->open();
-        $productOptions = $product->getCustomOptions();
-        if ($productOptions) {
-            $customOption = $catalogProductView->getOptionsBlock();
-            $options = $customOption->getProductCustomOptions();
-            $key = $productOptions[0]['title'];
-            $customOption->selectProductCustomOption($options[$key][1]);
-        }
+        // Add product to cart
+        $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
+        $catalogProductView->getViewBlock()->fillOptions($product);
         $catalogProductView->getViewBlock()->clickAddToCart();
+        $catalogProductView->getMessagesBlock()->waitSuccessMessage();
 
-        $this->assertOnShoppingCart($product, $checkoutCart);
-    }
-
-    /**
-     * Assert prices on the shopping Cart
-     *
-     * @param CatalogProductSimple $product
-     * @param CheckoutCart $checkoutCart
-     */
-    protected function assertOnShoppingCart(CatalogProductSimple $product, CheckoutCart $checkoutCart)
-    {
-        /** @var \Magento\Catalog\Test\Fixture\CatalogProductSimple\Price $priceFixture */
-        $priceFixture = $product->getDataFieldConfig('price')['source'];
-        $pricePresetData = $priceFixture->getPreset();
-
-        $price = $checkoutCart->getCartBlock()->getProductPriceByName($product->getName());
+        // Check price
+        $this->countPrices($product, $checkoutCart);
         \PHPUnit_Framework_Assert::assertEquals(
-            $pricePresetData['cart_price'],
-            $price,
+            $this->fixtureActualPrice,
+            $this->formPrice,
             'Product price in shopping cart is not correct.'
         );
     }
 
     /**
-     * Text of Visible in category assert
+     * Count prices.
+     *
+     * @param FixtureInterface $product
+     * @param CheckoutCart $checkoutCart
+     * @return void
+     */
+    protected function countPrices(FixtureInterface $product, CheckoutCart $checkoutCart)
+    {
+        /** @var CatalogProductSimple $product */
+        $this->fixturePrice = $product->getPrice();
+        $this->prepareFormPrice($product, $checkoutCart);
+        $this->countSpecialPrice($product);
+        $this->countCheckoutCartItemPrice($product);
+        $this->countCustomOptionsPrice($product);
+    }
+
+    /**
+     * Count count special price.
+     *
+     * @param FixtureInterface $product
+     * @return void
+     */
+    protected function countSpecialPrice(FixtureInterface $product)
+    {
+        /** @var CatalogProductSimple $product */
+        $specialPrice = $product->getSpecialPrice();
+        if ($specialPrice) {
+            $this->fixturePrice = $product->getSpecialPrice();
+        }
+    }
+
+    /**
+     * Prepare form price.
+     *
+     * @param FixtureInterface $product
+     * @param CheckoutCart $checkoutCart
+     * @return void
+     */
+    protected function prepareFormPrice(FixtureInterface $product, CheckoutCart $checkoutCart)
+    {
+        $checkoutCart->open();
+        $cartItem = $checkoutCart->getCartBlock()->getCartItem($product);
+        $this->formPrice = $cartItem->getPrice();
+    }
+
+    /**
+     * Count cart item price.
+     *
+     * @param FixtureInterface $product
+     * @return void
+     */
+    protected function countCheckoutCartItemPrice(FixtureInterface $product)
+    {
+        /** @var CatalogProductSimple $product */
+        $checkoutData = $product->getCheckoutData();
+        $checkoutCartItem = isset($checkoutData['cartItem']) ? $checkoutData['cartItem'] : [];
+        if (isset($checkoutCartItem['price'])) {
+            $this->fixturePrice = $checkoutCartItem['price'];
+        }
+        $this->fixtureActualPrice = $this->fixturePrice;
+    }
+
+    /**
+     * Count custom options price.
+     *
+     * @param FixtureInterface $product
+     * @return void
+     */
+    protected function countCustomOptionsPrice(FixtureInterface $product)
+    {
+        /** @var CatalogProductSimple $product */
+        $customOptions = $product->getCustomOptions();
+        $checkoutData = $product->getCheckoutData();
+        $checkoutCustomOptions = isset($checkoutData['options']['custom_options'])
+            ? $checkoutData['options']['custom_options']
+            : [];
+        foreach ($checkoutCustomOptions as $checkoutOption) {
+            $attributeKey = str_replace('attribute_key_', '', $checkoutOption['title']);
+            $optionKey = str_replace('option_key_', '', $checkoutOption['value']);
+            $option = $customOptions[$attributeKey]['options'][$optionKey];
+
+            if ('Fixed' == $option['price_type']) {
+                $this->fixtureActualPrice += $option['price'];
+            } else {
+                $this->fixtureActualPrice += ($this->fixturePrice / 100) * $option['price'];
+            }
+        }
+    }
+
+    /**
+     * Returns a string representation of the object.
      *
      * @return string
      */
     public function toString()
     {
-        return 'Product price in shopping cart is not correct.';
+        return 'Product is correctly displayed in cart.';
     }
 }

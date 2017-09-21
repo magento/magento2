@@ -1,33 +1,21 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Block\Html;
 
-use Magento\Framework\View\Block\IdentityInterface;
+use Magento\Framework\Data\Tree\Node;
+use Magento\Framework\Data\Tree\NodeFactory;
+use Magento\Framework\Data\TreeFactory;
+use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\View\Element\Template;
 
 /**
  * Html page top menu block
+ *
+ * @api
+ * @since 100.0.2
  */
 class Topmenu extends Template implements IdentityInterface
 {
@@ -36,7 +24,7 @@ class Topmenu extends Template implements IdentityInterface
      *
      * @var array
      */
-    protected $identities = array();
+    protected $identities = [];
 
     /**
      * Top menu data tree
@@ -46,13 +34,41 @@ class Topmenu extends Template implements IdentityInterface
     protected $_menu;
 
     /**
-     * Init top menu tree structure
-     *
-     * @return void
+     * @var NodeFactory
      */
-    public function _construct()
+    private $nodeFactory;
+
+    /**
+     * @var TreeFactory
+     */
+    private $treeFactory;
+
+    /**
+     * @param Template\Context $context
+     * @param NodeFactory $nodeFactory
+     * @param TreeFactory $treeFactory
+     * @param array $data
+     */
+    public function __construct(
+        Template\Context $context,
+        NodeFactory $nodeFactory,
+        TreeFactory $treeFactory,
+        array $data = []
+    ) {
+        parent::__construct($context, $data);
+        $this->nodeFactory = $nodeFactory;
+        $this->treeFactory = $treeFactory;
+    }
+
+    /**
+     * Get block cache life time
+     *
+     * @return int
+     * @since 100.1.0
+     */
+    protected function getCacheLifetime()
     {
-        $this->_menu = new \Magento\Framework\Data\Tree\Node(array(), 'root', new \Magento\Framework\Data\Tree());
+        return parent::getCacheLifetime() ?: 3600;
     }
 
     /**
@@ -67,20 +83,20 @@ class Topmenu extends Template implements IdentityInterface
     {
         $this->_eventManager->dispatch(
             'page_block_html_topmenu_gethtml_before',
-            array('menu' => $this->_menu, 'block' => $this)
+            ['menu' => $this->getMenu(), 'block' => $this, 'request' => $this->getRequest()]
         );
 
-        $this->_menu->setOutermostClass($outermostClass);
-        $this->_menu->setChildrenWrapClass($childrenWrapClass);
+        $this->getMenu()->setOutermostClass($outermostClass);
+        $this->getMenu()->setChildrenWrapClass($childrenWrapClass);
 
-        $html = $this->_getHtml($this->_menu, $childrenWrapClass, $limit);
+        $html = $this->_getHtml($this->getMenu(), $childrenWrapClass, $limit);
 
-        $transportObject = new \Magento\Framework\Object(array('html' => $html));
+        $transportObject = new \Magento\Framework\DataObject(['html' => $html]);
         $this->_eventManager->dispatch(
             'page_block_html_topmenu_gethtml_after',
-            array('menu' => $this->_menu, 'transportObject' => $transportObject)
+            ['menu' => $this->getMenu(), 'transportObject' => $transportObject]
         );
-
+        $html = $transportObject->getHtml();
         return $html;
     }
 
@@ -118,7 +134,7 @@ class Topmenu extends Template implements IdentityInterface
             return;
         }
 
-        $result[] = array('total' => $total, 'max' => (int)ceil($total / ceil($total / $limit)));
+        $result[] = ['total' => $total, 'max' => (int)ceil($total / ceil($total / $limit))];
 
         $count = 0;
         $firstCol = true;
@@ -137,7 +153,7 @@ class Topmenu extends Template implements IdentityInterface
                 $colbrake = false;
             }
 
-            $result[] = array('place' => $place, 'colbrake' => $colbrake);
+            $result[] = ['place' => $place, 'colbrake' => $colbrake];
 
             $firstCol = false;
         }
@@ -161,22 +177,14 @@ class Topmenu extends Template implements IdentityInterface
             return $html;
         }
 
-        if (!empty($childrenWrapClass)) {
-            $html .= '<div class="' . $childrenWrapClass . '">';
-        }
-
         $colStops = null;
         if ($childLevel == 0 && $limit) {
             $colStops = $this->_columnBrake($child->getChildren(), $limit);
         }
 
-        $html .= '<ul class="level' . $childLevel . '">';
+        $html .= '<ul class="level' . $childLevel . ' ' . $childrenWrapClass . '">';
         $html .= $this->_getHtml($child, $childrenWrapClass, $limit, $colStops);
         $html .= '</ul>';
-
-        if (!empty($childrenWrapClass)) {
-            $html .= '</div>';
-        }
 
         return $html;
     }
@@ -197,13 +205,13 @@ class Topmenu extends Template implements IdentityInterface
         \Magento\Framework\Data\Tree\Node $menuTree,
         $childrenWrapClass,
         $limit,
-        $colBrakes = array()
+        $colBrakes = []
     ) {
         $html = '';
 
         $children = $menuTree->getChildren();
         $parentLevel = $menuTree->getLevel();
-        $childLevel = is_null($parentLevel) ? 0 : $parentLevel + 1;
+        $childLevel = $parentLevel === null ? 0 : $parentLevel + 1;
 
         $counter = 1;
         $itemPosition = 1;
@@ -212,7 +220,11 @@ class Topmenu extends Template implements IdentityInterface
         $parentPositionClass = $menuTree->getPositionClass();
         $itemPositionClassPrefix = $parentPositionClass ? $parentPositionClass . '-' : 'nav-';
 
+        /** @var \Magento\Framework\Data\Tree\Node $child */
         foreach ($children as $child) {
+            if ($childLevel === 0 && $child->getData('is_parent_active') === false) {
+                continue;
+            }
             $child->setLevel($childLevel);
             $child->setIsFirst($counter == 1);
             $child->setIsLast($counter == $childrenCount);
@@ -275,7 +287,7 @@ class Topmenu extends Template implements IdentityInterface
     protected function _getMenuItemAttributes(\Magento\Framework\Data\Tree\Node $item)
     {
         $menuItemClasses = $this->_getMenuItemClasses($item);
-        return array('class' => implode(' ', $menuItemClasses));
+        return ['class' => implode(' ', $menuItemClasses)];
     }
 
     /**
@@ -286,7 +298,7 @@ class Topmenu extends Template implements IdentityInterface
      */
     protected function _getMenuItemClasses(\Magento\Framework\Data\Tree\Node $item)
     {
-        $classes = array();
+        $classes = [];
 
         $classes[] = 'level' . $item->getLevel();
         $classes[] = $item->getPositionClass();
@@ -297,6 +309,8 @@ class Topmenu extends Template implements IdentityInterface
 
         if ($item->getIsActive()) {
             $classes[] = 'active';
+        } elseif ($item->getHasActive()) {
+            $classes[] = 'has-active';
         }
 
         if ($item->getIsLast()) {
@@ -322,7 +336,9 @@ class Topmenu extends Template implements IdentityInterface
      */
     public function addIdentity($identity)
     {
-        $this->identities[] = $identity;
+        if (!in_array($identity, $this->identities)) {
+            $this->identities[] = $identity;
+        }
     }
 
     /**
@@ -333,5 +349,52 @@ class Topmenu extends Template implements IdentityInterface
     public function getIdentities()
     {
         return $this->identities;
+    }
+
+    /**
+     * Get cache key informative items
+     *
+     * @return array
+     * @since 100.1.0
+     */
+    public function getCacheKeyInfo()
+    {
+        $keyInfo = parent::getCacheKeyInfo();
+        $keyInfo[] = $this->getUrl('*/*/*', ['_current' => true, '_query' => '']);
+        return $keyInfo;
+    }
+
+    /**
+     * Get tags array for saving cache
+     *
+     * @return array
+     * @since 100.1.0
+     */
+    protected function getCacheTags()
+    {
+        return array_merge(parent::getCacheTags(), $this->getIdentities());
+    }
+
+    /**
+     * Get menu object.
+     *
+     * Creates \Magento\Framework\Data\Tree\Node root node object.
+     * The creation logic was moved from class constructor into separate method.
+     *
+     * @return Node
+     * @since 100.1.0
+     */
+    public function getMenu()
+    {
+        if (!$this->_menu) {
+            $this->_menu = $this->nodeFactory->create(
+                [
+                    'data' => [],
+                    'idField' => 'root',
+                    'tree' => $this->treeFactory->create()
+                ]
+            );
+        }
+        return $this->_menu;
     }
 }

@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -29,8 +11,12 @@
  */
 namespace Magento\Eav\Block\Adminhtml\Attribute\Edit\Options;
 
-use Magento\Store\Model\Resource\Store\Collection;
+use Magento\Store\Model\ResourceModel\Store\Collection;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Options extends \Magento\Backend\Block\Template
 {
     /**
@@ -39,7 +25,7 @@ class Options extends \Magento\Backend\Block\Template
     protected $_registry;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory
      */
     protected $_attrOptionCollectionFactory;
 
@@ -56,16 +42,16 @@ class Options extends \Magento\Backend\Block\Template
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
-        array $data = array()
+        array $data = []
     ) {
         parent::__construct($context, $data);
         $this->_registry = $registry;
@@ -90,7 +76,7 @@ class Options extends \Magento\Backend\Block\Template
     /**
      * Retrieve stores collection with default store
      *
-     * @return Collection
+     * @return array
      */
     public function getStores()
     {
@@ -98,6 +84,26 @@ class Options extends \Magento\Backend\Block\Template
             $this->setData('stores', $this->_storeManager->getStores(true));
         }
         return $this->_getData('stores');
+    }
+
+    /**
+     * Returns stores sorted by Sort Order
+     *
+     * @return array
+     * @since 100.1.0
+     */
+    public function getStoresSortedBySortOrder()
+    {
+        $stores = $this->getStores();
+        if (is_array($stores)) {
+            usort($stores, function ($storeA, $storeB) {
+                if ($storeA->getSortOrder() == $storeB->getSortOrder()) {
+                    return $storeA->getId() < $storeB->getId() ? -1 : 1;
+                }
+                return ($storeA->getSortOrder() < $storeB->getSortOrder()) ? -1 : 1;
+            });
+        }
+        return $stores;
     }
 
     /**
@@ -109,7 +115,7 @@ class Options extends \Magento\Backend\Block\Template
     {
         $values = $this->_getData('option_values');
         if ($values === null) {
-            $values = array();
+            $values = [];
 
             $attribute = $this->getAttributeObject();
             $optionCollection = $this->_getOptionValuesCollection($attribute);
@@ -125,7 +131,7 @@ class Options extends \Magento\Backend\Block\Template
 
     /**
      * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
-     * @param array|\Magento\Eav\Model\Resource\Entity\Attribute\Option\Collection $optionCollection
+     * @param array|\Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection $optionCollection
      * @return array
      */
     protected function _prepareOptionValues(
@@ -137,11 +143,11 @@ class Options extends \Magento\Backend\Block\Template
             $defaultValues = explode(',', $attribute->getDefaultValue());
             $inputType = $type === 'select' ? 'radio' : 'checkbox';
         } else {
-            $defaultValues = array();
+            $defaultValues = [];
             $inputType = '';
         }
 
-        $values = array();
+        $values = [];
         $isSystemAttribute = is_array($optionCollection);
         foreach ($optionCollection as $option) {
             $bunch = $isSystemAttribute ? $this->_prepareSystemAttributeOptionValues(
@@ -154,7 +160,7 @@ class Options extends \Magento\Backend\Block\Template
                 $defaultValues
             );
             foreach ($bunch as $value) {
-                $values[] = new \Magento\Framework\Object($value);
+                $values[] = new \Magento\Framework\DataObject($value);
             }
         }
 
@@ -166,7 +172,7 @@ class Options extends \Magento\Backend\Block\Template
      * It is represented by an array in case of system attribute
      *
      * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
-     * @return array|\Magento\Eav\Model\Resource\Entity\Attribute\Option\Collection
+     * @return array|\Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection
      */
     protected function _getOptionValuesCollection(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute)
     {
@@ -190,7 +196,7 @@ class Options extends \Magento\Backend\Block\Template
     /**
      * Prepare option values of system attribute
      *
-     * @param array|\Magento\Eav\Model\Resource\Entity\Attribute\Option $option
+     * @param array|\Magento\Eav\Model\ResourceModel\Entity\Attribute\Option $option
      * @param string $inputType
      * @param array $defaultValues
      * @param string $valuePrefix
@@ -199,7 +205,7 @@ class Options extends \Magento\Backend\Block\Template
     protected function _prepareSystemAttributeOptionValues($option, $inputType, $defaultValues, $valuePrefix = '')
     {
         if (is_array($option['value'])) {
-            $values = array();
+            $values = [];
             foreach ($option['value'] as $subOption) {
                 $bunch = $this->_prepareSystemAttributeOptionValues(
                     $subOption,
@@ -223,13 +229,13 @@ class Options extends \Magento\Backend\Block\Template
                 \Magento\Store\Model\Store::DEFAULT_STORE_ID ? $valuePrefix . $this->escapeHtml($option['label']) : '';
         }
 
-        return array($value);
+        return [$value];
     }
 
     /**
      * Prepare option values of user defined attribute
      *
-     * @param array|\Magento\Eav\Model\Resource\Entity\Attribute\Option $option
+     * @param array|\Magento\Eav\Model\ResourceModel\Entity\Attribute\Option $option
      * @param string $inputType
      * @param array $defaultValues
      * @return array
@@ -253,7 +259,7 @@ class Options extends \Magento\Backend\Block\Template
             ) : '';
         }
 
-        return array($value);
+        return [$value];
     }
 
     /**
@@ -265,8 +271,8 @@ class Options extends \Magento\Backend\Block\Template
     public function getStoreOptionValues($storeId)
     {
         $values = $this->getData('store_option_values_' . $storeId);
-        if (is_null($values)) {
-            $values = array();
+        if ($values === null) {
+            $values = [];
             $valuesCollection = $this->_attrOptionCollectionFactory->create()->setAttributeFilter(
                 $this->getAttributeObject()->getId()
             )->setStoreFilter(
@@ -285,8 +291,9 @@ class Options extends \Magento\Backend\Block\Template
      * Retrieve attribute object from registry
      *
      * @return \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
+     * @codeCoverageIgnore
      */
-    private function getAttributeObject()
+    protected function getAttributeObject()
     {
         return $this->_registry->registry('entity_attribute');
     }

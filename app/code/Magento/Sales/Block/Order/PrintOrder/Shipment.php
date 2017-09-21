@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Order\PrintOrder;
 
@@ -27,6 +9,9 @@ use Magento\Framework\View\Element\AbstractBlock;
 
 /**
  * Sales order details block
+ *
+ * @api
+ * @since 100.0.2
  */
 class Shipment extends \Magento\Sales\Block\Items\AbstractItems
 {
@@ -35,41 +20,49 @@ class Shipment extends \Magento\Sales\Block\Items\AbstractItems
      *
      * @var array
      */
-    protected $_tracks = array();
+    protected $tracks = [];
 
     /**
      * Order shipments collection
      *
-     * @var array|\Magento\Sales\Model\Resource\Order\Shipment\Collection
+     * @var array|\Magento\Sales\Model\ResourceModel\Order\Shipment\Collection
      */
-    protected $_shipmentsCollection;
+    protected $shipmentsCollection;
 
     /**
      * Core registry
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $coreRegistry = null;
 
     /**
      * @var \Magento\Payment\Helper\Data
      */
-    protected $_paymentHelper;
+    protected $paymentHelper;
+
+    /**
+     * @var \Magento\Sales\Model\Order\Address\Renderer
+     */
+    protected $addressRenderer;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Payment\Helper\Data $paymentHelper
+     * @param \Magento\Sales\Model\Order\Address\Renderer $addressRenderer
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Payment\Helper\Data $paymentHelper,
-        array $data = array()
+        \Magento\Sales\Model\Order\Address\Renderer $addressRenderer,
+        array $data = []
     ) {
-        $this->_paymentHelper = $paymentHelper;
-        $this->_coreRegistry = $registry;
+        $this->paymentHelper = $paymentHelper;
+        $this->coreRegistry = $registry;
+        $this->addressRenderer = $addressRenderer;
         parent::__construct($context, $data);
     }
 
@@ -84,14 +77,14 @@ class Shipment extends \Magento\Sales\Block\Items\AbstractItems
 
         foreach ($tracksCollection->getItems() as $track) {
             $shipmentId = $track->getParentId();
-            $this->_tracks[$shipmentId][] = $track;
+            $this->tracks[$shipmentId][] = $track;
         }
 
-        $shipment = $this->_coreRegistry->registry('current_shipment');
+        $shipment = $this->coreRegistry->registry('current_shipment');
         if ($shipment) {
-            $this->_shipmentsCollection = array($shipment);
+            $this->shipmentsCollection = [$shipment];
         } else {
-            $this->_shipmentsCollection = $this->getOrder()->getShipmentsCollection();
+            $this->shipmentsCollection = $this->getOrder()->getShipmentsCollection();
         }
 
         return parent::_beforeToHtml();
@@ -102,11 +95,9 @@ class Shipment extends \Magento\Sales\Block\Items\AbstractItems
      */
     protected function _prepareLayout()
     {
-        $headBlock = $this->getLayout()->getBlock('head');
-        if ($headBlock) {
-            $headBlock->setTitle(__('Order # %1', $this->getOrder()->getRealOrderId()));
-        }
-        $this->setChild('payment_info', $this->_paymentHelper->getInfoBlock($this->getOrder()->getPayment()));
+        $this->pageConfig->getTitle()->set(__('Order # %1', $this->getOrder()->getRealOrderId()));
+        $infoBlock = $this->paymentHelper->getInfoBlock($this->getOrder()->getPayment(), $this->getLayout());
+        $this->setChild('payment_info', $infoBlock);
     }
 
     /**
@@ -138,7 +129,7 @@ class Shipment extends \Magento\Sales\Block\Items\AbstractItems
      */
     public function getOrder()
     {
-        return $this->_coreRegistry->registry('current_order');
+        return $this->coreRegistry->registry('current_order');
     }
 
     /**
@@ -146,7 +137,7 @@ class Shipment extends \Magento\Sales\Block\Items\AbstractItems
      */
     public function getShipment()
     {
-        return $this->_coreRegistry->registry('current_shipment');
+        return $this->coreRegistry->registry('current_shipment');
     }
 
     /**
@@ -163,11 +154,11 @@ class Shipment extends \Magento\Sales\Block\Items\AbstractItems
     /**
      * Retrieve order shipments collection
      *
-     * @return array|\Magento\Sales\Model\Resource\Order\Shipment\Collection
+     * @return array|\Magento\Sales\Model\ResourceModel\Order\Shipment\Collection
      */
     public function getShipmentsCollection()
     {
-        return $this->_shipmentsCollection;
+        return $this->shipmentsCollection;
     }
 
     /**
@@ -178,9 +169,9 @@ class Shipment extends \Magento\Sales\Block\Items\AbstractItems
      */
     public function getShipmentTracks($shipment)
     {
-        $tracks = array();
-        if (!empty($this->_tracks[$shipment->getId()])) {
-            $tracks = $this->_tracks[$shipment->getId()];
+        $tracks = [];
+        if (!empty($this->tracks[$shipment->getId()])) {
+            $tracks = $this->tracks[$shipment->getId()];
         }
         return $tracks;
     }
@@ -197,7 +188,7 @@ class Shipment extends \Magento\Sales\Block\Items\AbstractItems
         if (!$shippingAddress instanceof \Magento\Sales\Model\Order\Address) {
             return '';
         }
-        return $shippingAddress->format('html');
+        return $this->addressRenderer->format($shippingAddress, 'html');
     }
 
     /**
@@ -212,7 +203,7 @@ class Shipment extends \Magento\Sales\Block\Items\AbstractItems
         if (!$billingAddress instanceof \Magento\Sales\Model\Order\Address) {
             return '';
         }
-        return $billingAddress->format('html');
+        return $this->addressRenderer->format($billingAddress, 'html');
     }
 
     /**
@@ -223,7 +214,7 @@ class Shipment extends \Magento\Sales\Block\Items\AbstractItems
      */
     public function getShipmentItems($shipment)
     {
-        $res = array();
+        $res = [];
         foreach ($shipment->getItemsCollection() as $item) {
             if (!$item->getOrderItem()->getParentItem()) {
                 $res[] = $item;

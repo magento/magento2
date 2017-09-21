@@ -1,0 +1,137 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  _____________________________________________
+
+@checkbox__background-color: @color-white;
+@checkbox__border-color: @color-gray68;
+@checkbox-check__font-size: 1em;
+@checkbox-check__line-height: 1;
+@checkbox-icon__content: @icon-check-mage__content;
+@radio-bullet__color: @color-brownie;
+
+//
+//  Common
+//  _____________________________________________
+
+.form-el-checkbox,
+.form-el-radio {
+    &:extend(.abs-visually-hidden all);
+
+    //  Disabled state
+    &[disabled],
+    &.disabled {
+        + .form-label,
+        + .form-label:before {
+            cursor: default;
+            opacity: @disabled__opacity;
+            pointer-events: none;
+        }
+    }
+
+    //  Hover state
+    &:not([disabled]),
+    &:not(.disabled) {
+        + .form-label {
+            &:hover {
+                &:before {
+                    border-color: @radio-bullet__color;
+                }
+            }
+        }
+    }
+
+    + .form-label {
+        font-weight: @font-weight__regular;
+        padding-left: 2em;
+        padding-right: 0;
+        position: relative;
+        text-align: left;
+        transition: border-color .1s linear;
+
+        &:before {
+            border: 1px solid;
+            content: '';
+            left: 0;
+            position: absolute;
+            top: .1rem;
+            transition: border-color .1s linear;
+        }
+    }
+}
+
+//
+//  Checkboxes
+//  _____________________________________________
+
+//  Unchecked checkbox state
+.form-el-checkbox {
+    + .form-label {
+        &:before {
+            background-color: @checkbox__background-color;
+            border-color: @checkbox__border-color;
+            border-radius: @form-el__border-radius;
+            font-size: @checkbox-check__font-size;
+            height: 1.6rem;
+            line-height: @checkbox-check__line-height;
+            width: 1.6rem;
+        }
+    }
+}
+
+//  Checked checkbox state
+.form-el-checkbox {
+    &:checked {
+        + .form-label {
+            &::before {
+                content: @checkbox-icon__content;
+                font-family: @icons__font-family;
+            }
+        }
+    }
+}
+
+//
+//  Radio
+//  _____________________________________________
+
+//  Unchecked radio state
+.form-el-radio {
+    + .form-label {
+        &:before {
+            background-color: @color-white;
+            border: 1px solid @color-gray68;
+            border-radius: 100%;
+            height: 1.8rem;
+            width: 1.8rem;
+        }
+
+        &:after {
+            background: transparent;
+            border: .5rem solid transparent;
+            border-radius: 100%;
+            content: '';
+            height: 0;
+            left: .4rem;
+            position: absolute;
+            top: .1rem + .4rem;
+            transition: background .3s linear;
+            width: 0;
+        }
+    }
+
+    //  Checked radio state
+    &:checked {
+        + .form-label {
+            cursor: default;
+
+            &:after {
+                border-color: @radio-bullet__color;
+            }
+        }
+    }
+}

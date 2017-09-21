@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Reports\Test\TestCase\AbandonedCartsReportEntityTest" summary="Abandoned Carts Report" ticketId="MAGETWO-28558">
+        <variation name="AbandonedCartsReportEntityTestVariation1">
+            <data name="description" xsi:type="string">add product to cart as registered user and check product in Report</data>
+            <data name="customer/dataset" xsi:type="string">default</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::product_100_dollar</data>
+            <constraint name="Magento\Reports\Test\Constraint\AssertAbandonedCartCustomerInfoResult" />
+        </variation>
+        <variation name="AbandonedCartsReportEntityTestVariation2">
+            <data name="description" xsi:type="string">add two products to cart as registered user and check product in Report</data>
+            <data name="customer/dataset" xsi:type="string">default</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::product_100_dollar</data>
+            <data name="products/1" xsi:type="string">catalogProductSimple::product_100_dollar</data>
+            <constraint name="Magento\Reports\Test\Constraint\AssertAbandonedCartCustomerInfoResult" />
+        </variation>
+    </testCase>
+</config>

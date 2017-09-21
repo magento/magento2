@@ -1,44 +1,34 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller;
 
+use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Customer\Model\CustomerRegistry;
+use Magento\Framework\Data\Form\FormKey;
 use Magento\TestFramework\Helper\Bootstrap;
 
 class AddressTest extends \Magento\TestFramework\TestCase\AbstractController
 {
+    /** @var AccountManagementInterface */
+    private $accountManagement;
+
+    /** @var FormKey */
+    private $formKey;
+
     protected function setUp()
     {
         parent::setUp();
-        $logger = $this->getMock('Magento\Framework\Logger', array(), array(), '', false);
+        $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
         $session = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Model\Session',
-            array($logger)
+            \Magento\Customer\Model\Session::class,
+            [$logger]
         );
-        $service = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Service\V1\CustomerAccountService'
-        );
-        $customer = $service->authenticate('customer@example.com', 'password');
+        $this->accountManagement = Bootstrap::getObjectManager()->create(AccountManagementInterface::class);
+        $this->formKey = Bootstrap::getObjectManager()->create(FormKey::class);
+        $customer = $this->accountManagement->authenticate('customer@example.com', 'password');
         $session->setCustomerDataAsLoggedIn($customer);
     }
 
@@ -65,8 +55,8 @@ class AddressTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('customer/address/edit');
 
         $body = $this->getResponse()->getBody();
-        $this->assertContains('value="Firstname"', $body);
-        $this->assertContains('value="Lastname"', $body);
+        $this->assertContains('value="John"', $body);
+        $this->assertContains('value="Smith"', $body);
     }
 
     /**
@@ -78,40 +68,50 @@ class AddressTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->getRequest()->setParam(
             'id',
             2
-        )->setServer(
-            array('REQUEST_METHOD' => 'POST')
-        )->setPost(
-            array(
-                'form_key' => $this->_objectManager->get('Magento\Framework\Data\Form\FormKey')->getFormKey(),
+        )->setMethod(
+            'POST'
+        )->setPostValue(
+            [
+                'form_key' => $this->_objectManager->get(\Magento\Framework\Data\Form\FormKey::class)->getFormKey(),
                 'firstname' => 'James',
                 'lastname' => 'Bond',
-                'company' => 'Ebay',
+                'company' => 'Magento Commerce Inc.',
                 'telephone' => '1112223333',
                 'fax' => '2223334444',
-                'street' => array('1234 Monterey Rd', 'Apt 13'),
+                'street' => ['1234 Monterey Rd', 'Apt 13'],
                 'city' => 'Kyiv',
                 'region' => 'Kiev',
                 'postcode' => '55555',
                 'country_id' => 'UA',
                 'success_url' => '',
-                'error_url' => ''
-            )
+                'error_url' => '',
+                'default_billing' => true,
+                'default_shipping' => true,
+            ]
         );
         // we are overwriting the address coming from the fixture
         $this->dispatch('customer/address/formPost');
-
+        $this->getCustomerRegistry()->remove(1);
         $this->assertRedirect($this->stringContains('customer/address/index'));
         $this->assertSessionMessages(
-            $this->equalTo(array('The address has been saved.')),
+            $this->equalTo(['You saved the address.']),
             \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
         );
-        /** @var \Magento\Customer\Service\V1\CustomerAddressService $addressService */
-        $addressService = Bootstrap::getObjectManager()->create('Magento\Customer\Service\V1\CustomerAddressService');
-        $address = $addressService->getAddress(2);
+        $address = $this->accountManagement->getDefaultBillingAddress(1);
 
         $this->assertEquals('UA', $address->getCountryId());
         $this->assertEquals('Kyiv', $address->getCity());
         $this->assertEquals('Kiev', $address->getRegion()->getRegion());
+        $this->assertTrue($address->isDefaultBilling());
+        $this->assertTrue($address->isDefaultShipping());
+    }
+
+    /**
+     * @return CustomerRegistry
+     */
+    private function getCustomerRegistry()
+    {
+        return $this->_objectManager->get(CustomerRegistry::class);
     }
 
     /**
@@ -123,14 +123,14 @@ class AddressTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->getRequest()->setParam(
             'id',
             1
-        )->setServer(
-            array('REQUEST_METHOD' => 'POST')
-        )->setPost(
-            array(
-                'form_key' => $this->_objectManager->get('Magento\Framework\Data\Form\FormKey')->getFormKey(),
+        )->setMethod(
+            'POST'
+        )->setPostValue(
+            [
+                'form_key' => $this->_objectManager->get(\Magento\Framework\Data\Form\FormKey::class)->getFormKey(),
                 'firstname' => 'James',
                 'lastname' => 'Bond',
-                'company' => 'Ebay',
+                'company' => 'Magento Commerce Inc.',
                 'telephone' => '1112223333',
                 'fax' => '2223334444',
                 // omit street and city to fail validation
@@ -139,20 +139,20 @@ class AddressTest extends \Magento\TestFramework\TestCase\AbstractController
                 'postcode' => '55555',
                 'country_id' => 'US',
                 'success_url' => '',
-                'error_url' => ''
-            )
+                'error_url' => '',
+            ]
         );
         // we are overwriting the address coming from the fixture
         $this->dispatch('customer/address/formPost');
-
+        $this->getCustomerRegistry()->remove(1);
         $this->assertRedirect($this->stringContains('customer/address/edit'));
         $this->assertSessionMessages(
             $this->equalTo(
-                array(
+                [
                     'One or more input exceptions have occurred.',
                     'street is a required field.',
-                    'city is a required field.'
-                )
+                    'city is a required field.',
+                ]
             ),
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
@@ -165,12 +165,13 @@ class AddressTest extends \Magento\TestFramework\TestCase\AbstractController
     public function testDeleteAction()
     {
         $this->getRequest()->setParam('id', 1);
+        $this->getRequest()->setParam('form_key', $this->formKey->getFormKey());
         // we are overwriting the address coming from the fixture
         $this->dispatch('customer/address/delete');
 
         $this->assertRedirect($this->stringContains('customer/address/index'));
         $this->assertSessionMessages(
-            $this->equalTo(array('The address has been deleted.')),
+            $this->equalTo(['You deleted the address.']),
             \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
         );
     }
@@ -182,12 +183,13 @@ class AddressTest extends \Magento\TestFramework\TestCase\AbstractController
     public function testWrongAddressDeleteAction()
     {
         $this->getRequest()->setParam('id', 555);
+        $this->getRequest()->setParam('form_key', $this->formKey->getFormKey());
         // we are overwriting the address coming from the fixture
         $this->dispatch('customer/address/delete');
 
         $this->assertRedirect($this->stringContains('customer/address/index'));
         $this->assertSessionMessages(
-            $this->equalTo(array('An error occurred while deleting the address.')),
+            $this->equalTo(['We can\'t delete the address right now.']),
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
     }

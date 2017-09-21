@@ -1,26 +1,11 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Downloadable\Helper\Catalog\Product;
 
 /**
@@ -36,27 +21,17 @@ class Configuration extends \Magento\Framework\App\Helper\AbstractHelper impleme
      *
      * @var \Magento\Catalog\Helper\Product\Configuration
      */
-    protected $_productConfigur = null;
-
-    /**
-     * Core store config
-     *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    protected $_scopeConfig;
+    protected $productConfig = null;
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Catalog\Helper\Product\Configuration $productConfigur
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Catalog\Helper\Product\Configuration $productConfig
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Catalog\Helper\Product\Configuration $productConfigur,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+        \Magento\Catalog\Helper\Product\Configuration $productConfig
     ) {
-        $this->_productConfigur = $productConfigur;
-        $this->_scopeConfig = $scopeConfig;
+        $this->productConfig = $productConfig;
         parent::__construct($context);
     }
 
@@ -69,7 +44,7 @@ class Configuration extends \Magento\Framework\App\Helper\AbstractHelper impleme
     public function getLinks(\Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item)
     {
         $product = $item->getProduct();
-        $itemLinks = array();
+        $itemLinks = [];
         $linkIds = $item->getOptionByCode('downloadable_link_ids');
         if ($linkIds) {
             $productLinks = $product->getTypeInstance()->getLinks($product);
@@ -94,7 +69,7 @@ class Configuration extends \Magento\Framework\App\Helper\AbstractHelper impleme
         if (strlen($title)) {
             return $title;
         }
-        return $this->_scopeConfig->getValue(\Magento\Downloadable\Model\Link::XML_PATH_LINKS_TITLE, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $this->scopeConfig->getValue(\Magento\Downloadable\Model\Link::XML_PATH_LINKS_TITLE, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
 
     /**
@@ -105,11 +80,11 @@ class Configuration extends \Magento\Framework\App\Helper\AbstractHelper impleme
      */
     public function getOptions(\Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item)
     {
-        $options = $this->_productConfigur->getOptions($item);
+        $options = $this->productConfig->getOptions($item);
 
         $links = $this->getLinks($item);
         if ($links) {
-            $linksOption = array('label' => $this->getLinksTitle($item->getProduct()), 'value' => array());
+            $linksOption = ['label' => $this->getLinksTitle($item->getProduct()), 'value' => []];
             foreach ($links as $link) {
                 $linksOption['value'][] = $link->getTitle();
             }

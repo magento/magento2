@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -27,19 +9,23 @@
  */
 namespace Magento\Catalog\Helper\Product\Edit\Action;
 
+/**
+ * Class Attribute
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Attribute extends \Magento\Backend\Helper\Data
 {
     /**
      * Selected products for mass-update
      *
-     * @var \Magento\Catalog\Model\Resource\Product\Collection
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     protected $_products;
 
     /**
      * Array of same attributes for selected products
      *
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute\Collection
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection
      */
     protected $_attributes;
 
@@ -48,10 +34,10 @@ class Attribute extends \Magento\Backend\Helper\Data
      *
      * @var string[]
      */
-    protected $_excludedAttributes = array('url_key');
+    protected $_excludedAttributes = ['url_key'];
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
      */
     protected $_productsFactory;
 
@@ -66,6 +52,11 @@ class Attribute extends \Magento\Backend\Helper\Data
     protected $_eavConfig;
 
     /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    protected $_storeManager;
+
+    /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\App\Route\Config $routeConfig
      * @param \Magento\Framework\Locale\ResolverInterface $locale
@@ -75,7 +66,9 @@ class Attribute extends \Magento\Backend\Helper\Data
      * @param \Magento\Framework\Math\Random $mathRandom
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Backend\Model\Session $session
-     * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productsFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productsFactory
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -87,11 +80,13 @@ class Attribute extends \Magento\Backend\Helper\Data
         \Magento\Framework\Math\Random $mathRandom,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Backend\Model\Session $session,
-        \Magento\Catalog\Model\Resource\Product\CollectionFactory $productsFactory
+        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productsFactory,
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->_eavConfig = $eavConfig;
         $this->_session = $session;
         $this->_productsFactory = $productsFactory;
+        $this->_storeManager = $storeManager;
         parent::__construct($context, $routeConfig, $locale, $backendUrl, $auth, $frontNameResolver, $mathRandom);
     }
 
@@ -99,15 +94,15 @@ class Attribute extends \Magento\Backend\Helper\Data
      * Return product collection with selected product filter
      * Product collection didn't load
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Collection
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     public function getProducts()
     {
-        if (is_null($this->_products)) {
+        if ($this->_products === null) {
             $productsIds = $this->getProductIds();
 
             if (!is_array($productsIds)) {
-                $productsIds = array(0);
+                $productsIds = [0];
             }
 
             $this->_products = $this->_productsFactory->create()->setStoreId(
@@ -121,16 +116,24 @@ class Attribute extends \Magento\Backend\Helper\Data
     }
 
     /**
+     * Set array of selected product
+     *
+     * @param array $productIds
+     *
+     * @return void
+     */
+    public function setProductIds($productIds)
+    {
+        $this->_session->setProductIds($productIds);
+    }
+
+    /**
      * Return array of selected product ids from post or session
      *
      * @return array|null
      */
     public function getProductIds()
     {
-        if ($this->_getRequest()->isPost() && $this->_getRequest()->getActionName() == 'edit') {
-            $this->_session->setProductIds($this->_getRequest()->getParam('product', null));
-        }
-
         return $this->_session->getProductIds();
     }
 
@@ -157,11 +160,11 @@ class Attribute extends \Magento\Backend\Helper\Data
     /**
      * Return collection of same attributes for selected products without unique
      *
-     * @return \Magento\Eav\Model\Resource\Entity\Attribute\Collection
+     * @return \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection
      */
     public function getAttributes()
     {
-        if (is_null($this->_attributes)) {
+        if ($this->_attributes === null) {
             $this->_attributes = $this->_eavConfig->getEntityType(
                 \Magento\Catalog\Model\Product::ENTITY
             )->getAttributeCollection()->addIsNotUniqueFilter()->setInAllAttributeSetsFilter(
@@ -169,7 +172,7 @@ class Attribute extends \Magento\Backend\Helper\Data
             );
 
             if ($this->_excludedAttributes) {
-                $this->_attributes->addFieldToFilter('attribute_code', array('nin' => $this->_excludedAttributes));
+                $this->_attributes->addFieldToFilter('attribute_code', ['nin' => $this->_excludedAttributes]);
             }
 
             // check product type apply to limitation and remove attributes that impossible to change in mass-update
@@ -187,5 +190,14 @@ class Attribute extends \Magento\Backend\Helper\Data
         }
 
         return $this->_attributes;
+    }
+
+    /**
+     * @param int $storeId
+     * @return int
+     */
+    public function getStoreWebsiteId($storeId)
+    {
+        return $this->_storeManager->getStore($storeId)->getWebsiteId();
     }
 }

@@ -1,0 +1,21 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php if (sizeof($block->getTotals()) > 0): ?>
+<table class="items-to-invoice">
+    <tr>
+    <?php foreach ($block->getTotals() as $_total): ?>
+        <td <?php if ($_total['grand']): ?>class="grand-total"<?php endif; ?>>
+            <?= /* @escapeNotVerified */ $_total['label'] ?><br />
+            <?= /* @escapeNotVerified */ $_total['value'] ?>
+        </td>
+    <?php endforeach; ?>
+    </tr>
+</table>
+<?php endif; ?>

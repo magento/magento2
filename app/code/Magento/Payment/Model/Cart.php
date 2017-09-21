@@ -1,30 +1,15 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Model;
 
 /**
  * Provide methods for collecting cart items information of specific sales model entity
+ *
+ * @api
+ * @since 100.0.2
  */
 class Cart
 {
@@ -38,14 +23,9 @@ class Cart
     const AMOUNT_DISCOUNT = 'discount';
 
     const AMOUNT_SUBTOTAL = 'subtotal';
+    /**#@-*/
 
-    /**@@+*/
-
-    /**
-     * Sales model
-     *
-     * @var \Magento\Payment\Model\Cart\SalesModel\SalesModelInterface
-     */
+    /**#@-*/
     protected $_salesModel;
 
     /**
@@ -67,21 +47,21 @@ class Cart
      *
      * @var array
      */
-    protected $_customItems = array();
+    protected $_customItems = [];
 
     /**
      * Items imported from sales model
      *
      * @var array
      */
-    protected $_salesModelItems = array();
+    protected $_salesModelItems = [];
 
     /**
      * Flags that indicates whether discount, shopping and taxes should be transferred as cart item
      *
      * @var array
      */
-    protected $_transferFlags = array();
+    protected $_transferFlags = [];
 
     /**
      * Flags which indicates whether items data is outdated and has to be recollected
@@ -93,7 +73,7 @@ class Cart
     /**
      * @param \Magento\Payment\Model\Cart\SalesModel\Factory $salesModelFactory
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Sales\Model\Order|\Magento\Sales\Model\Quote $salesModel
+     * @param \Magento\Quote\Api\Data\CartInterface $salesModel
      */
     public function __construct(
         \Magento\Payment\Model\Cart\SalesModel\Factory $salesModelFactory,
@@ -109,6 +89,7 @@ class Cart
      * Return payment cart sales model
      *
      * @return \Magento\Payment\Model\Cart\SalesModel\SalesModelInterface
+     * @api
      */
     public function getSalesModel()
     {
@@ -120,6 +101,7 @@ class Cart
      *
      * @param float $taxAmount
      * @return void
+     * @api
      */
     public function addTax($taxAmount)
     {
@@ -131,6 +113,7 @@ class Cart
      *
      * @param float $taxAmount
      * @return void
+     * @api
      */
     public function setTax($taxAmount)
     {
@@ -141,6 +124,7 @@ class Cart
      * Get tax amount
      *
      * @return float
+     * @api
      */
     public function getTax()
     {
@@ -152,6 +136,7 @@ class Cart
      *
      * @param float $discountAmount
      * @return void
+     * @api
      */
     public function addDiscount($discountAmount)
     {
@@ -163,6 +148,7 @@ class Cart
      *
      * @param float $discountAmount
      * @return void
+     * @api
      */
     public function setDiscount($discountAmount)
     {
@@ -173,6 +159,7 @@ class Cart
      * Get discount amount
      *
      * @return float
+     * @api
      */
     public function getDiscount()
     {
@@ -184,6 +171,7 @@ class Cart
      *
      * @param float $shippingAmount
      * @return void
+     * @api
      */
     public function addShipping($shippingAmount)
     {
@@ -195,6 +183,7 @@ class Cart
      *
      * @param float $shippingAmount
      * @return void
+     * @api
      */
     public function setShipping($shippingAmount)
     {
@@ -205,6 +194,7 @@ class Cart
      * Get shipping amount
      *
      * @return float
+     * @api
      */
     public function getShipping()
     {
@@ -216,6 +206,7 @@ class Cart
      *
      * @param float $subtotalAmount
      * @return void
+     * @api
      */
     public function addSubtotal($subtotalAmount)
     {
@@ -226,6 +217,7 @@ class Cart
      * Get subtotal amount
      *
      * @return float
+     * @api
      */
     public function getSubtotal()
     {
@@ -240,6 +232,7 @@ class Cart
      * @param float $amount
      * @param string|null $identifier
      * @return void
+     * @api
      */
     public function addCustomItem($name, $qty, $amount, $identifier = null)
     {
@@ -250,6 +243,7 @@ class Cart
      * Get all cart items
      *
      * @return array
+     * @api
      */
     public function getAllItems()
     {
@@ -261,6 +255,7 @@ class Cart
      * Get shipping, tax, subtotal and discount amounts all together
      *
      * @return array
+     * @api
      */
     public function getAmounts()
     {
@@ -273,6 +268,7 @@ class Cart
      * Specify that shipping should be transferred as cart item
      *
      * @return void
+     * @api
      */
     public function setTransferShippingAsItem()
     {
@@ -283,6 +279,7 @@ class Cart
      * Specify that discount should be transferred as cart item
      *
      * @return void
+     * @api
      */
     public function setTransferDiscountAsItem()
     {
@@ -302,12 +299,12 @@ class Cart
 
         $this->_itemsCollectingRequired = false;
 
-        $this->_salesModelItems = array();
-        $this->_customItems = array();
+        $this->_salesModelItems = [];
+        $this->_customItems = [];
 
         $this->_resetAmounts();
 
-        $this->_eventManager->dispatch('payment_cart_collect_items_and_amounts', array('cart' => $this));
+        $this->_eventManager->dispatch('payment_cart_collect_items_and_amounts', ['cart' => $this]);
 
         $this->_importItemsFromSalesModel();
         $this->_calculateCustomItemsSubtotal();
@@ -320,7 +317,7 @@ class Cart
      */
     protected function _importItemsFromSalesModel()
     {
-        $this->_salesModelItems = array();
+        $this->_salesModelItems = [];
 
         foreach ($this->_salesModel->getAllItems() as $item) {
             if ($item->getParentItem()) {
@@ -330,7 +327,8 @@ class Cart
             $this->_salesModelItems[] = $this->_createItemFromData(
                 $item->getName(),
                 $item->getQty(),
-                $item->getPrice()
+                $item->getPrice(),
+                $item->getOriginalItem()->getId()
             );
         }
 
@@ -411,11 +409,11 @@ class Cart
      * @param int $qty
      * @param float $amount
      * @param null|string $identifier
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     protected function _createItemFromData($name, $qty, $amount, $identifier = null)
     {
-        $item = new \Magento\Framework\Object(array('name' => $name, 'qty' => $qty, 'amount' => (double)$amount));
+        $item = new \Magento\Framework\DataObject(['name' => $name, 'qty' => $qty, 'amount' => (double)$amount]);
 
         if ($identifier) {
             $item->setData('id', $identifier);
@@ -431,11 +429,11 @@ class Cart
      */
     protected function _resetAmounts()
     {
-        $this->_amounts = array(
+        $this->_amounts = [
             self::AMOUNT_DISCOUNT => 0,
             self::AMOUNT_SHIPPING => 0,
             self::AMOUNT_SUBTOTAL => 0,
-            self::AMOUNT_TAX => 0
-        );
+            self::AMOUNT_TAX => 0,
+        ];
     }
 }

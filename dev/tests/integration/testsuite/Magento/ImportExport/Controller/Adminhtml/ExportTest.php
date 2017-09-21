@@ -1,32 +1,14 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Controller\Adminhtml;
 
 /**
  * @magentoAppArea adminhtml
  */
-class ExportTest extends \Magento\Backend\Utility\Controller
+class ExportTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
      * Set value of $_SERVER['HTTP_X_REQUESTED_WITH'] parameter here
@@ -42,12 +24,12 @@ class ExportTest extends \Magento\Backend\Utility\Controller
      */
     public function getEntityTypesDataProvider()
     {
-        return array(
-            'products' => array('$entityType' => 'catalog_product'),
-            'customers' => array('$entityType' => 'customer'),
+        return [
+            'products' => ['$entityType' => 'catalog_product'],
+            'customers' => ['$entityType' => 'customer'],
             // customer entities
-            'customers_customer_entities' => array('$entityType' => 'customer', '$customerEntityType' => 'customer')
-        );
+            'customers_customer_entities' => ['$entityType' => 'customer', '$customerEntityType' => 'customer']
+        ];
     }
 
     protected function setUp()
@@ -61,7 +43,7 @@ class ExportTest extends \Magento\Backend\Utility\Controller
 
     protected function tearDown()
     {
-        if (!is_null($this->_httpXRequestedWith)) {
+        if ($this->_httpXRequestedWith !== null) {
             $_SERVER['HTTP_X_REQUESTED_WITH'] = $this->_httpXRequestedWith;
         }
 
@@ -78,11 +60,11 @@ class ExportTest extends \Magento\Backend\Utility\Controller
      */
     public function testGetFilterAction($entityType, $customerEntityType = null)
     {
-
         $this->getRequest()->setParam('isAjax', true);
 
         // Provide X_REQUESTED_WITH header in response to mark next action as ajax
-        $_SERVER['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
+        $this->getRequest()->getHeaders()
+            ->addHeaderLine('X_REQUESTED_WITH', 'XMLHttpRequest');
 
         $url = 'backend/admin/export/getFilter/entity/' . $entityType;
         if ($customerEntityType) {
@@ -101,7 +83,20 @@ class ExportTest extends \Magento\Backend\Utility\Controller
         $this->dispatch('backend/admin/export/index');
 
         $body = $this->getResponse()->getBody();
-        $this->assertSelectCount('fieldset#base_fieldset', 1, $body);
-        $this->assertSelectCount('fieldset#base_fieldset div.field', 2, $body);
+
+        $this->assertEquals(
+            1,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//fieldset[@id="base_fieldset"]',
+                $body
+            )
+        );
+        $this->assertEquals(
+            3,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//fieldset[@id="base_fieldset"]/div[contains(@class,"field")]',
+                $body
+            )
+        );
     }
 }

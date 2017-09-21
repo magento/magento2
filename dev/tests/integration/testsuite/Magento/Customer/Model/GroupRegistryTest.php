@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Customer\Model;
@@ -27,7 +9,7 @@ namespace Magento\Customer\Model;
 /**
  * Test for \Magento\Customer\Model\GroupRegistry
  */
-class GroupRegistryTest extends \PHPUnit_Framework_TestCase
+class GroupRegistryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * The group code from the fixture data.
@@ -42,20 +24,24 @@ class GroupRegistryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Customer\Model\GroupRegistry');
+            ->create(\Magento\Customer\Model\GroupRegistry::class);
     }
 
     /**
      * Find the group with a given code.
      *
-     * @param string $code 
+     * @param string $code
      * @return int
      */
     protected function _findGroupIdWithCode($code)
     {
-        $groupService = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Customer\Service\V1\CustomerGroupService');
-        foreach ($groupService->getGroups() as $group) {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var \Magento\Customer\Api\GroupRepositoryInterface $groupRepository */
+        $groupRepository = $objectManager->create(\Magento\Customer\Api\GroupRepositoryInterface::class);
+        /** @var \Magento\Framework\Api\SearchCriteriaBuilder $searchBuilder */
+        $searchBuilder = $objectManager->create(\Magento\Framework\Api\SearchCriteriaBuilder::class);
+
+        foreach ($groupRepository->getList($searchBuilder->create())->getItems() as $group) {
             if ($group->getCode() === $code) {
                 return $group->getId();
             }
@@ -71,7 +57,7 @@ class GroupRegistryTest extends \PHPUnit_Framework_TestCase
     {
         $groupId = $this->_findGroupIdWithCode(self::GROUP_CODE);
         $group = $this->_model->retrieve($groupId);
-        $this->assertInstanceOf('\Magento\Customer\Model\Group', $group);
+        $this->assertInstanceOf(\Magento\Customer\Model\Group::class, $group);
         $this->assertEquals($groupId, $group->getId());
     }
 
@@ -82,7 +68,7 @@ class GroupRegistryTest extends \PHPUnit_Framework_TestCase
     {
         $groupId = 0;
         $group = $this->_model->retrieve($groupId);
-        $this->assertInstanceOf('\Magento\Customer\Model\Group', $group);
+        $this->assertInstanceOf(\Magento\Customer\Model\Group::class, $group);
         $this->assertEquals($groupId, $group->getId());
     }
 
@@ -94,12 +80,12 @@ class GroupRegistryTest extends \PHPUnit_Framework_TestCase
         $groupId = $this->_findGroupIdWithCode(self::GROUP_CODE);
         $groupBeforeDeletion = $this->_model->retrieve($groupId);
         $group2 = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Customer\Model\Group');
+            ->create(\Magento\Customer\Model\Group::class);
         $group2->load($groupId)
             ->delete();
         $groupAfterDeletion = $this->_model->retrieve($groupId);
         $this->assertEquals($groupBeforeDeletion, $groupAfterDeletion);
-        $this->assertInstanceOf('\Magento\Customer\Model\Group', $groupAfterDeletion);
+        $this->assertInstanceOf(\Magento\Customer\Model\Group::class, $groupAfterDeletion);
         $this->assertEquals($groupId, $groupAfterDeletion->getId());
     }
 
@@ -120,7 +106,7 @@ class GroupRegistryTest extends \PHPUnit_Framework_TestCase
     {
         $groupId = $this->_findGroupIdWithCode(self::GROUP_CODE);
         $group = $this->_model->retrieve($groupId);
-        $this->assertInstanceOf('\Magento\Customer\Model\Group', $group);
+        $this->assertInstanceOf(\Magento\Customer\Model\Group::class, $group);
         $group->delete();
         $this->_model->remove($groupId);
         $this->_model->retrieve($groupId);

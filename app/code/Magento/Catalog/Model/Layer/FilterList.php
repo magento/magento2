@@ -1,30 +1,10 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Model\Layer;
-
-use Magento\Catalog\Model\Layer\Filter;
 
 class FilterList
 {
@@ -36,7 +16,7 @@ class FilterList
     /**
      * Filter factory
      *
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
 
@@ -48,27 +28,27 @@ class FilterList
     /**
      * @var string[]
      */
-    protected $filterTypes = array(
-        self::CATEGORY_FILTER  => 'Magento\Catalog\Model\Layer\Filter\Category',
-        self::ATTRIBUTE_FILTER => 'Magento\Catalog\Model\Layer\Filter\Attribute',
-        self::PRICE_FILTER     => 'Magento\Catalog\Model\Layer\Filter\Price',
-        self::DECIMAL_FILTER   => 'Magento\Catalog\Model\Layer\Filter\Decimal',
-    );
+    protected $filterTypes = [
+        self::CATEGORY_FILTER  => \Magento\Catalog\Model\Layer\Filter\Category::class,
+        self::ATTRIBUTE_FILTER => \Magento\Catalog\Model\Layer\Filter\Attribute::class,
+        self::PRICE_FILTER     => \Magento\Catalog\Model\Layer\Filter\Price::class,
+        self::DECIMAL_FILTER   => \Magento\Catalog\Model\Layer\Filter\Decimal::class,
+    ];
 
     /**
      * @var \Magento\Catalog\Model\Layer\Filter\AbstractFilter[]
      */
-    protected $filters = array();
+    protected $filters = [];
 
     /**
-     * @param \Magento\Framework\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param FilterableAttributeListInterface $filterableAttributes
      * @param array $filters
      */
     public function __construct(
-        \Magento\Framework\ObjectManager $objectManager,
+        \Magento\Framework\ObjectManagerInterface $objectManager,
         FilterableAttributeListInterface $filterableAttributes,
-        array $filters = array()
+        array $filters = []
     ) {
         $this->objectManager = $objectManager;
         $this->filterableAttributes = $filterableAttributes;
@@ -86,11 +66,11 @@ class FilterList
     public function getFilters(\Magento\Catalog\Model\Layer $layer)
     {
         if (!count($this->filters)) {
-            $this->filters = array(
-                $this->objectManager->create($this->filterTypes[self::CATEGORY_FILTER], array('layer' => $layer)),
-            );
-            foreach ($this->filterableAttributes->getList() as $attibute) {
-                $this->filters[] = $this->createAttributeFilter($attibute, $layer);
+            $this->filters = [
+                $this->objectManager->create($this->filterTypes[self::CATEGORY_FILTER], ['layer' => $layer]),
+            ];
+            foreach ($this->filterableAttributes->getList() as $attribute) {
+                $this->filters[] = $this->createAttributeFilter($attribute, $layer);
             }
         }
         return $this->filters;
@@ -99,14 +79,31 @@ class FilterList
     /**
      * Create filter
      *
-     * @param \Magento\Catalog\Model\Resource\Eav\Attribute $attribute
+     * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
      * @param \Magento\Catalog\Model\Layer $layer
-     * @return mixed
+     * @return \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      */
     protected function createAttributeFilter(
-        \Magento\Catalog\Model\Resource\Eav\Attribute $attribute,
+        \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute,
         \Magento\Catalog\Model\Layer $layer
     ) {
+        $filterClassName = $this->getAttributeFilterClass($attribute);
+
+        $filter = $this->objectManager->create(
+            $filterClassName,
+            ['data' => ['attribute_model' => $attribute], 'layer' => $layer]
+        );
+        return $filter;
+    }
+
+    /**
+     * Get Attribute Filter Class Name
+     *
+     * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
+     * @return string
+     */
+    protected function getAttributeFilterClass(\Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute)
+    {
         $filterClassName = $this->filterTypes[self::ATTRIBUTE_FILTER];
 
         if ($attribute->getAttributeCode() == 'price') {
@@ -115,10 +112,6 @@ class FilterList
             $filterClassName = $this->filterTypes[self::DECIMAL_FILTER];
         }
 
-        $filter = $this->objectManager->create(
-            $filterClassName,
-            array('data' => array('attribute_model' => $attribute), 'layer' => $layer)
-        );
-        return $filter;
+        return $filterClassName;
     }
 }

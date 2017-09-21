@@ -1,33 +1,20 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
 namespace Magento\Backend\Block\Widget;
 
 /**
  * Backend grid widget block
  *
+ * @api
+ * @deprecated 100.2.0 in favour of UI component implementation
  * @method string getRowClickCallback() getRowClickCallback()
  * @method \Magento\Backend\Block\Widget\Grid setRowClickCallback() setRowClickCallback(string $value)
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @since 100.0.2
  */
 class Grid extends \Magento\Backend\Block\Widget
 {
@@ -81,7 +68,7 @@ class Grid extends \Magento\Backend\Block\Widget
     /**
      * @var array
      */
-    protected $_defaultFilter = array();
+    protected $_defaultFilter = [];
 
     /**
      * Empty grid text
@@ -128,16 +115,9 @@ class Grid extends \Magento\Backend\Block\Widget
     /**
      * Totals
      *
-     * @var \Magento\Framework\Object
+     * @var \Magento\Framework\DataObject
      */
     protected $_varTotals;
-
-    /**
-     * RSS list
-     *
-     * @var \Magento\Framework\Object[]
-     */
-    protected $_rssLists = array();
 
     /**
      * @var string
@@ -162,7 +142,7 @@ class Grid extends \Magento\Backend\Block\Widget
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
-        array $data = array()
+        array $data = []
     ) {
         $this->_backendHelper = $backendHelper;
         $this->_backendSession = $context->getBackendSession();
@@ -171,6 +151,7 @@ class Grid extends \Magento\Backend\Block\Widget
 
     /**
      * @return void
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _construct()
     {
@@ -201,12 +182,6 @@ class Grid extends \Magento\Backend\Block\Widget
         );
 
         $this->setData('use_ajax', $this->hasData('use_ajax') ? (bool)$this->getData('use_ajax') : false);
-
-        if ($this->hasData('rssList') && is_array($this->getData('rssList'))) {
-            foreach ($this->getData('rssList') as $item) {
-                $this->addRssList($item['url'], $item['label']);
-            }
-        }
     }
 
     /**
@@ -243,13 +218,15 @@ class Grid extends \Magento\Backend\Block\Widget
     /**
      * Retrieve export block
      *
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Framework\View\Element\AbstractBlock|bool
      */
     public function getExportBlock()
     {
         if (!$this->getChildBlock('grid.export')) {
-            throw new \Magento\Framework\Model\Exception('Export block for grid ' . $this->getNameInLayout() . ' is not defined');
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Export block for grid %1 is not defined', $this->getNameInLayout())
+            );
         }
         return $this->getChildBlock('grid.export');
     }
@@ -362,18 +339,18 @@ class Grid extends \Magento\Backend\Block\Widget
      * Apply sorting and filtering to collection
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _prepareCollection()
     {
         if ($this->getCollection()) {
-
             $this->_preparePage();
 
             $columnId = $this->getParam($this->getVarNameSort(), $this->_defaultSort);
             $dir = $this->getParam($this->getVarNameDir(), $this->_defaultDir);
             $filter = $this->getParam($this->getVarNameFilter(), null);
 
-            if (is_null($filter)) {
+            if ($filter === null) {
                 $filter = $this->_defaultFilter;
             }
 
@@ -381,9 +358,9 @@ class Grid extends \Magento\Backend\Block\Widget
                 $data = $this->_backendHelper->prepareFilterString($filter);
                 $data = array_merge($data, (array)$this->getRequest()->getPost($this->getVarNameFilter()));
                 $this->_setFilterValues($data);
-            } else if ($filter && is_array($filter)) {
+            } elseif ($filter && is_array($filter)) {
                 $this->_setFilterValues($filter);
-            } else if (0 !== sizeof($this->_defaultFilter)) {
+            } elseif (0 !== sizeof($this->_defaultFilter)) {
                 $this->_setFilterValues($this->_defaultFilter);
             }
 
@@ -395,17 +372,6 @@ class Grid extends \Magento\Backend\Block\Widget
         }
 
         return $this;
-    }
-
-    /**
-     * Decode URL encoded filter value recursive callback method
-     *
-     * @param string &$value
-     * @return void
-     */
-    protected function _decodeFilter(&$value)
-    {
-        $value = $this->_backendHelper->decodeFilter($value);
     }
 
     /**
@@ -426,6 +392,10 @@ class Grid extends \Magento\Backend\Block\Widget
      */
     protected function _prepareGrid()
     {
+        $this->_eventManager->dispatch(
+            'backend_block_widget_grid_prepare_grid_before',
+            ['grid' => $this, 'collection' => $this->getCollection()]
+        );
         if ($this->getChildBlock('grid.massaction') && $this->getChildBlock('grid.massaction')->isAvailable()) {
             $this->getChildBlock('grid.massaction')->prepareMassactionColumn();
         }
@@ -465,22 +435,26 @@ class Grid extends \Magento\Backend\Block\Widget
         $this->setChild(
             'reset_filter_button',
             $this->getLayout()->createBlock(
-                'Magento\Backend\Block\Widget\Button'
+                \Magento\Backend\Block\Widget\Button::class
             )->setData(
-                array('label' => __('Reset Filter'), 'onclick' => $this->getJsObjectName() . '.resetFilter()', 'class' => 'action-reset')
-            )
+                [
+                    'label' => __('Reset Filter'),
+                    'onclick' => $this->getJsObjectName() . '.resetFilter()',
+                    'class' => 'action-reset action-tertiary'
+                ]
+            )->setDataAttribute(['action' => 'grid-filter-reset'])
         );
         $this->setChild(
             'search_button',
             $this->getLayout()->createBlock(
-                'Magento\Backend\Block\Widget\Button'
+                \Magento\Backend\Block\Widget\Button::class
             )->setData(
-                array(
+                [
                     'label' => __('Search'),
                     'onclick' => $this->getJsObjectName() . '.doFilter()',
-                    'class' => 'task'
-                )
-            )
+                    'class' => 'action-secondary',
+                ]
+            )->setDataAttribute(['action' => 'grid-filter-apply'])
         );
     }
 
@@ -621,6 +595,7 @@ class Grid extends \Magento\Backend\Block\Widget
      * Return visibility of pager
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getPagerVisibility()
     {
@@ -642,6 +617,7 @@ class Grid extends \Magento\Backend\Block\Widget
      * Return visibility of message blocks
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getMessageBlockVisibility()
     {
@@ -709,42 +685,6 @@ class Grid extends \Magento\Backend\Block\Widget
     }
 
     /**
-     * Retrieve rss lists types
-     *
-     * @return \Magento\Framework\Object[]|false
-     */
-    public function getRssLists()
-    {
-        return empty($this->_rssLists) ? false : $this->_rssLists;
-    }
-
-    /**
-     * Add new rss list to grid
-     *
-     * @param   string $url
-     * @param   string $label
-     * @return  $this
-     */
-    public function addRssList($url, $label)
-    {
-        $this->_rssLists[] = new \Magento\Framework\Object(
-            array('url' => $this->getUrl($url, array('_nosecret' => true)), 'label' => $label)
-        );
-        return $this;
-    }
-
-    /**
-     * Clear rss list in grid
-     *
-     * @return  $this
-     */
-    public function clearRss()
-    {
-        $this->_rssLists = array();
-        return $this;
-    }
-
-    /**
      * Check whether grid container should be displayed
      *
      * @return bool
@@ -774,7 +714,7 @@ class Grid extends \Magento\Backend\Block\Widget
      * @param array $params url parameters
      * @return string current grid url
      */
-    public function getAbsoluteGridUrl($params = array())
+    public function getAbsoluteGridUrl($params = [])
     {
         return $this->getCurrentUrl($params);
     }
@@ -821,7 +761,7 @@ class Grid extends \Magento\Backend\Block\Widget
      */
     public function getJsObjectName()
     {
-        return $this->getId() . 'JsObject';
+        return preg_replace("~[^a-z0-9_]*~i", '', $this->getId()) . 'JsObject';
     }
 
     /**
@@ -840,6 +780,7 @@ class Grid extends \Magento\Backend\Block\Widget
      * Return count totals
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getCountTotals()
     {
@@ -849,10 +790,10 @@ class Grid extends \Magento\Backend\Block\Widget
     /**
      * Set totals
      *
-     * @param \Magento\Framework\Object $totals
+     * @param \Magento\Framework\DataObject $totals
      * @return void
      */
-    public function setTotals(\Magento\Framework\Object $totals)
+    public function setTotals(\Magento\Framework\DataObject $totals)
     {
         $this->_varTotals = $totals;
     }
@@ -860,7 +801,7 @@ class Grid extends \Magento\Backend\Block\Widget
     /**
      * Retrieve totals
      *
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function getTotals()
     {
@@ -876,8 +817,8 @@ class Grid extends \Magento\Backend\Block\Widget
     {
         $html = '';
         if ($this->getColumnSet()->isFilterVisible()) {
-            $html .= $this->getResetFilterButtonHtml();
             $html .= $this->getSearchButtonHtml();
+            $html .= $this->getResetFilterButtonHtml();
         }
         return $html;
     }

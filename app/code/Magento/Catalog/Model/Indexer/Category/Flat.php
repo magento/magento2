@@ -1,29 +1,19 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Indexer\Category;
 
-class Flat implements \Magento\Indexer\Model\ActionInterface, \Magento\Framework\Mview\ActionInterface
+use Magento\Framework\Indexer\CacheContext;
+
+/**
+ * Category flat indexer
+ *
+ * @api
+ * @since 100.0.2
+ */
+class Flat implements \Magento\Framework\Indexer\ActionInterface, \Magento\Framework\Mview\ActionInterface
 {
     /**
      * @var \Magento\Catalog\Model\Indexer\Category\Flat\Action\FullFactory
@@ -36,23 +26,28 @@ class Flat implements \Magento\Indexer\Model\ActionInterface, \Magento\Framework
     protected $rowsActionFactory;
 
     /**
-     * @var \Magento\Indexer\Model\IndexerInterface
+     * @var \Magento\Framework\Indexer\IndexerRegistry
      */
-    protected $indexer;
+    protected $indexerRegistry;
+
+    /**
+     * @var \Magento\Framework\Indexer\CacheContext
+     */
+    private $cacheContext;
 
     /**
      * @param Flat\Action\FullFactory $fullActionFactory
      * @param Flat\Action\RowsFactory $rowsActionFactory
-     * @param \Magento\Indexer\Model\IndexerInterface $indexer
+     * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
      */
     public function __construct(
         Flat\Action\FullFactory $fullActionFactory,
         Flat\Action\RowsFactory $rowsActionFactory,
-        \Magento\Indexer\Model\IndexerInterface $indexer
+        \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
     ) {
         $this->fullActionFactory = $fullActionFactory;
         $this->rowsActionFactory = $rowsActionFactory;
-        $this->indexer = $indexer;
+        $this->indexerRegistry = $indexerRegistry;
     }
 
     /**
@@ -63,17 +58,18 @@ class Flat implements \Magento\Indexer\Model\ActionInterface, \Magento\Framework
      */
     public function execute($ids)
     {
-        $this->indexer->load(Flat\State::INDEXER_ID);
-        if ($this->indexer->isInvalid()) {
+        $indexer = $this->indexerRegistry->get(Flat\State::INDEXER_ID);
+        if ($indexer->isInvalid()) {
             return;
         }
 
         /** @var Flat\Action\Rows $action */
         $action = $this->rowsActionFactory->create();
-        if ($this->indexer->isWorking()) {
+        if ($indexer->isWorking()) {
             $action->reindex($ids, true);
         }
         $action->reindex($ids);
+        $this->getCacheContext()->registerEntities(\Magento\Catalog\Model\Category::CACHE_TAG, $ids);
     }
 
     /**
@@ -84,6 +80,7 @@ class Flat implements \Magento\Indexer\Model\ActionInterface, \Magento\Framework
     public function executeFull()
     {
         $this->fullActionFactory->create()->reindexAll();
+        $this->getCacheContext()->registerTags([\Magento\Catalog\Model\Category::CACHE_TAG]);
     }
 
     /**
@@ -92,7 +89,7 @@ class Flat implements \Magento\Indexer\Model\ActionInterface, \Magento\Framework
      * @param int[] $ids
      * @return void
      */
-    public function executeList($ids)
+    public function executeList(array $ids)
     {
         $this->execute($ids);
     }
@@ -105,6 +102,22 @@ class Flat implements \Magento\Indexer\Model\ActionInterface, \Magento\Framework
      */
     public function executeRow($id)
     {
-        $this->execute(array($id));
+        $this->execute([$id]);
+    }
+
+    /**
+     * Get cache context
+     *
+     * @return \Magento\Framework\Indexer\CacheContext
+     * @deprecated 100.0.11
+     * @since 100.0.11
+     */
+    protected function getCacheContext()
+    {
+        if (!($this->cacheContext instanceof CacheContext)) {
+            return \Magento\Framework\App\ObjectManager::getInstance()->get(CacheContext::class);
+        } else {
+            return $this->cacheContext;
+        }
     }
 }

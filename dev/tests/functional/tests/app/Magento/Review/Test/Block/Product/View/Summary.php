@@ -1,56 +1,38 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
  * @api
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Review\Test\Block\Product\View;
 
-use Mtf\Block\Block;
+use Magento\Mtf\Block\Block;
+use Magento\Mtf\Client\ElementInterface;
 
 /**
- * Reviews frontend block
- *
+ * Reviews frontend block.
  */
 class Summary extends Block
 {
     /**
-     * Add review link selector
+     * Add review link selector.
      *
      * @var string
      */
     protected $addReviewLinkSelector = '.action.add';
 
     /**
-     * View review link selector
+     * View review link selector.
      *
      * @var string
      */
     protected $viewReviewLinkSelector = '.action.view';
 
     /**
-     * Get add review link
+     * Get add review link.
      *
-     * @return \Mtf\Client\Element
+     * @return ElementInterface
      */
     public function getAddReviewLink()
     {
@@ -58,9 +40,22 @@ class Summary extends Block
     }
 
     /**
+     * Click on add review link.
+     *
+     * @return void
+     */
+    public function clickAddReviewLink()
+    {
+        $reviewLink = $this->getAddReviewLink();
+        if ($reviewLink->isVisible()) {
+            $reviewLink->click();
+        }
+    }
+
+    /**
      * Get view review link
      *
-     * @return \Mtf\Client\Element
+     * @return ElementInterface
      */
     public function getViewReviewLink()
     {

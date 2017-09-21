@@ -1,32 +1,18 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Persistent\Model;
 
 /**
  * Persistent Session Model
  *
+ * @api
  * @method int getCustomerId()
+ * @method Session setCustomerId()
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Session extends \Magento\Framework\Model\AbstractModel
 {
@@ -45,14 +31,14 @@ class Session extends \Magento\Framework\Model\AbstractModel
      *
      * @var string[]
      */
-    protected $_unserializableFields = array(
+    protected $_unserializableFields = [
         'persistent_id',
         'key',
         'customer_id',
         'website_id',
         'info',
-        'updated_at'
-    );
+        'updated_at',
+    ];
 
     /**
      * If model loads expired sessions
@@ -69,11 +55,11 @@ class Session extends \Magento\Framework\Model\AbstractModel
     protected $_persistentData;
 
     /**
-     * Core data
+     * Json Helper
      *
-     * @var \Magento\Core\Helper\Data
+     * @var \Magento\Framework\Json\Helper\Data
      */
-    protected $_coreData;
+    protected $jsonHelper;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
@@ -88,11 +74,18 @@ class Session extends \Magento\Framework\Model\AbstractModel
     protected $_storeManager;
 
     /**
-     * Cookie model
+     * Cookie manager
      *
-     * @var \Magento\Framework\Stdlib\Cookie
+     * @var \Magento\Framework\Stdlib\CookieManagerInterface
      */
-    protected $_cookie;
+    protected $_cookieManager;
+
+    /**
+     * Cookie metadata factory
+     *
+     * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
+     */
+    protected $_cookieMetadataFactory;
 
     /**
      * @var \Magento\Framework\Math\Random
@@ -105,39 +98,50 @@ class Session extends \Magento\Framework\Model\AbstractModel
     protected $sessionConfig;
 
     /**
-     * Construct
+     * Request
+     *
+     * @var \Magento\Framework\App\Request\Http
+     */
+    private $request;
+
+    /**
+     * Constructor
      *
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\Persistent\Helper\Data $persistentData
-     * @param \Magento\Framework\Stdlib\Cookie $cookie
+     * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
+     * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Math\Random $mathRandom
      * @param \Magento\Framework\Session\Config\ConfigInterface $sessionConfig
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\Persistent\Helper\Data $persistentData,
-        \Magento\Framework\Stdlib\Cookie $cookie,
+        \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
+        \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Math\Random $mathRandom,
         \Magento\Framework\Session\Config\ConfigInterface $sessionConfig,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
-        array $data = array()
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        array $data = []
     ) {
-        $this->_coreData = $coreData;
+        $this->jsonHelper = $jsonHelper;
         $this->_persistentData = $persistentData;
         $this->_coreConfig = $coreConfig;
-        $this->_cookie = $cookie;
+        $this->_cookieManager = $cookieManager;
+        $this->_cookieMetadataFactory = $cookieMetadataFactory;
         $this->_storeManager = $storeManager;
         $this->sessionConfig = $sessionConfig;
         $this->mathRandom = $mathRandom;
@@ -148,10 +152,11 @@ class Session extends \Magento\Framework\Model\AbstractModel
      * Define resource model
      *
      * @return void
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {
-        $this->_init('Magento\Persistent\Model\Resource\Session');
+        $this->_init(\Magento\Persistent\Model\ResourceModel\Session::class);
     }
 
     /**
@@ -159,6 +164,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      *
      * @param bool $loadExpired
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setLoadExpired($loadExpired = true)
     {
@@ -170,6 +176,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      * Get if model loads expired sessions
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getLoadExpired()
     {
@@ -181,6 +188,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      *
      * @param int|string|\Magento\Store\Model\Store $store
      * @return string
+     * @codeCoverageIgnore
      */
     public function getExpiredBefore($store = null)
     {
@@ -193,18 +201,18 @@ class Session extends \Magento\Framework\Model\AbstractModel
      *
      * @return $this
      */
-    protected function _beforeSave()
+    public function beforeSave()
     {
-        parent::_beforeSave();
+        parent::beforeSave();
 
         // Setting info
-        $info = array();
+        $info = [];
         foreach ($this->getData() as $index => $value) {
             if (!in_array($index, $this->_unserializableFields)) {
                 $info[$index] = $value;
             }
         }
-        $this->setInfo($this->_coreData->jsonEncode($info));
+        $this->setInfo($this->jsonHelper->jsonEncode($info));
 
         if ($this->isObjectNew()) {
             $this->setWebsiteId($this->_storeManager->getStore()->getWebsiteId());
@@ -225,7 +233,10 @@ class Session extends \Magento\Framework\Model\AbstractModel
     protected function _afterLoad()
     {
         parent::_afterLoad();
-        $info = $this->_coreData->jsonDecode($this->getInfo());
+        $info = null;
+        if ($this->getInfo()) {
+            $info = $this->jsonHelper->jsonDecode($this->getInfo());
+        }
         if (is_array($info)) {
             foreach ($info as $key => $value) {
                 $this->setData($key, $value);
@@ -243,7 +254,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
     public function loadByCookieKey($key = null)
     {
         if (null === $key) {
-            $key = $this->_cookie->get(self::COOKIE_NAME);
+            $key = $this->_cookieManager->getCookie(self::COOKIE_NAME);
         }
         if ($key) {
             $this->load($key, 'key');
@@ -257,6 +268,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      *
      * @param int $id
      * @return $this
+     * @codeCoverageIgnore
      */
     public function loadByCustomerId($id)
     {
@@ -283,10 +295,47 @@ class Session extends \Magento\Framework\Model\AbstractModel
      * Remove persistent cookie
      *
      * @return $this
+     * @api
      */
     public function removePersistentCookie()
     {
-        $this->_cookie->set(self::COOKIE_NAME, null, null, $this->sessionConfig->getCookiePath());
+        $cookieMetadata = $this->_cookieMetadataFactory->createSensitiveCookieMetadata()
+            ->setPath($this->sessionConfig->getCookiePath());
+        $this->_cookieManager->deleteCookie(self::COOKIE_NAME, $cookieMetadata);
+        return $this;
+    }
+
+    /**
+     * Set persistent cookie
+     *
+     * @param int $duration Time in seconds.
+     * @param string $path
+     * @return $this
+     * @api
+     */
+    public function setPersistentCookie($duration, $path)
+    {
+        $value = $this->getKey();
+        $this->setCookie($value, $duration, $path);
+        return $this;
+    }
+
+    /**
+     * Postpone cookie expiration time if cookie value defined
+     *
+     * @param int $duration Time in seconds.
+     * @param string $path
+     * @return $this
+     */
+    public function renewPersistentCookie($duration, $path)
+    {
+        if ($duration === null) {
+            return $this;
+        }
+        $value = $this->_cookieManager->getCookie(self::COOKIE_NAME);
+        if (null !== $value) {
+            $this->setCookie($value, $duration, $path);
+        }
         return $this;
     }
 
@@ -298,7 +347,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      */
     public function deleteExpired($websiteId = null)
     {
-        if (is_null($websiteId)) {
+        if ($websiteId === null) {
             $websiteId = $this->_storeManager->getStore()->getWebsiteId();
         }
 
@@ -319,17 +368,56 @@ class Session extends \Magento\Framework\Model\AbstractModel
      * Delete 'persistent' cookie
      *
      * @return $this
+     * @codeCoverageIgnore
      */
-    protected function _afterDeleteCommit()
+    public function afterDeleteCommit()
     {
         $this->removePersistentCookie();
-        return parent::_afterDeleteCommit();
+        return parent::afterDeleteCommit();
+    }
+
+    /**
+     * Set persistent shopping cart cookie.
+     *
+     * @param string $value
+     * @param int $duration
+     * @param string $path
+     * @return void
+     */
+    private function setCookie($value, $duration, $path)
+    {
+        $publicCookieMetadata = $this->_cookieMetadataFactory->createPublicCookieMetadata()
+            ->setDuration($duration)
+            ->setPath($path)
+            ->setSecure($this->getRequest()->isSecure())
+            ->setHttpOnly(true);
+        $this->_cookieManager->setPublicCookie(
+            self::COOKIE_NAME,
+            $value,
+            $publicCookieMetadata
+        );
+    }
+
+    /**
+     * Get request object
+     *
+     * @return \Magento\Framework\App\Request\Http
+     * @deprecated 100.1.0
+     */
+    private function getRequest()
+    {
+        if ($this->request == null) {
+            $this->request = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\App\Request\Http::class);
+        }
+        return $this->request;
     }
 
     /**
      * Set `updated_at` to be always changed
      *
      * @return $this
+     * @since 100.1.0
      */
     public function save()
     {

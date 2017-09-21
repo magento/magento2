@@ -1,0 +1,64 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+/** @var \Magento\Msrp\Block\Popup $block */
+?>
+<?php if ($block->isEnabled()): ?>
+    <script data-role="msrp-popup-template" type="text/x-magento-template">
+    <div id="map-popup-click-for-price" class="map-popup">
+        <div class="popup-header">
+            <strong class="title" id="map-popup-heading-price"></strong>
+        </div>
+        <div class="popup-content">
+            <div class="map-info-price" id="map-popup-content">
+                <div class="price-box">
+                    <div class="map-msrp" id="map-popup-msrp-box">
+                        <span class="label"><?= /* @escapeNotVerified */ __('Price') ?></span>
+                        <span class="old-price map-old-price" id="map-popup-msrp">
+                            <span class="price"></span>
+                        </span>
+                    </div>
+                    <div class="map-price" id="map-popup-price-box">
+                        <span class="label"><?= /* @escapeNotVerified */ __('Actual Price') ?></span>
+                        <span id="map-popup-price" class="actual-price"></span>
+                    </div>
+                </div>
+                <form action="" method="POST" id="product_addtocart_form_from_popup" class="map-form-addtocart">
+                    <input type="hidden" name="product" class="product_id" value="" id="map-popup-product-id"/>
+                    <button type="button"
+                            title="<?= $block->escapeHtml(__('Add to Cart')) ?>"
+                            class="action tocart primary"
+                            id="map-popup-button">
+                        <span><?= /* @escapeNotVerified */ __('Add to Cart') ?></span>
+                    </button>
+                    <div class="additional-addtocart-box">
+                        <?= $block->getChildHtml() ?>
+                    </div>
+                </form>
+            </div>
+            <div class="map-text" id="map-popup-text">
+                <?= /* @escapeNotVerified */ $block->getExplanationMessage() ?>
+            </div>
+        </div>
+    </div>
+    </script>
+    <script data-role="msrp-info-template" type="text/x-magento-template">
+    <div id="map-popup-what-this" class="map-popup">
+        <div class="popup-header">
+            <strong class="title" id="map-popup-heading-what-this"></strong>
+        </div>
+        <div class="popup-content">
+            <div class="map-help-text" id="map-popup-text-what-this">
+                <?= /* @escapeNotVerified */ $block->getExplanationMessageWhatsThis() ?>
+            </div>
+        </div>
+    </div>
+    </script>
+<?php endif; ?>

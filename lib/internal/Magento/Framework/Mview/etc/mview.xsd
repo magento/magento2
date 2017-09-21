@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="config">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="view" type="viewType" minOccurs="1" maxOccurs="unbounded" />
+            </xs:sequence>
+        </xs:complexType>
+        <xs:unique name="uniqueViewId">
+            <xs:annotation>
+                <xs:documentation>
+                    View Id must be unique.
+                </xs:documentation>
+            </xs:annotation>
+            <xs:selector xpath="view" />
+            <xs:field xpath="@id" />
+        </xs:unique>
+    </xs:element>
+
+    <xs:complexType name="viewType">
+        <xs:annotation>
+            <xs:documentation>
+                View declaration.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element minOccurs="0" name="subscriptions" type="subscriptionsType">
+                <xs:unique name="uniqueSubscriptionsTable">
+                    <xs:annotation>
+                        <xs:documentation>
+                            Table must be unique.
+                        </xs:documentation>
+                    </xs:annotation>
+                    <xs:selector xpath=".//table" />
+                    <xs:field xpath="@name" />
+                    <xs:field xpath="@entity_column" />
+                </xs:unique>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:string" use="required" />
+        <xs:attribute name="class" type="classType" use="required" />
+        <xs:attribute name="group" type="xs:string" use="required" />
+    </xs:complexType>
+
+    <xs:simpleType name="classType">
+        <xs:annotation>
+            <xs:documentation>
+                Class name can contain only [a-zA-Z\].
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-zA-Z\\]+" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="subscriptionsType">
+        <xs:annotation>
+            <xs:documentation>
+                Subscriptions declaration.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="table" type="subscriptionsTableType" minOccurs="1" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="subscriptionsTableType">
+        <xs:annotation>
+            <xs:documentation>
+                Table declaration.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="name" type="tableNameType" use="required" />
+        <xs:attribute name="entity_column" type="entityColumnType" use="required" />
+        <xs:attribute name="subscription_model" type="subscriptionModelType" />
+    </xs:complexType>
+
+    <xs:simpleType name="entityColumnType">
+        <xs:annotation>
+            <xs:documentation>
+                Entity column can contain only [a-z_].
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-z_]+" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="tableNameType">
+        <xs:annotation>
+            <xs:documentation>
+                Table name can contain only [a-z_].
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-z_]+" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="subscriptionModelType">
+        <xs:annotation>
+            <xs:documentation>
+                DEPRECATED. Subscription model must be a valid PHP class or interface name.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-zA-Z_][a-zA-Z0-9\\]*" />
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

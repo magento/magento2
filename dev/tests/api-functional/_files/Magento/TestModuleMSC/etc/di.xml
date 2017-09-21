@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <preference for="Magento\TestModuleMSC\Api\AllSoapAndRestInterface" type="Magento\TestModuleMSC\Model\AllSoapAndRest" />
+
+    <preference for="Magento\TestModuleMSC\Api\Data\ItemInterface" type="Magento\TestModuleMSC\Model\Data\Item" />
+    <preference for="Magento\TestModuleMSC\Api\Data\CustomAttributeDataObjectInterface" type="Magento\TestModuleMSC\Model\Data\CustomAttributeDataObject" />
+    <preference for="Magento\TestModuleMSC\Api\Data\CustomAttributeNestedDataObjectInterface" type="Magento\TestModuleMSC\Model\Data\CustomAttributeNestedDataObject" />
+
+    <virtualType name="Magento\TestModuleMSC\Service\Config\TestModuleMSCMetadataConfig" type="Magento\Framework\Api\ExtensionAttribute\Config\MetadataConfig">
+        <arguments>
+            <argument name="attributeMetadataBuilder" xsi:type="object">Magento\TestModuleMSC\Model\Data\Eav\AttributeMetadataBuilder</argument>
+            <argument name="dataObjectClassName" xsi:type="string">Magento\TestModuleMSC\Model\Data\Item</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\TestModuleMSC\Model\Data\Item">
+        <arguments>
+            <argument name="resource" xsi:type="object">Magento\TestModuleMSC\Model\ResourceModel\Item</argument>
+            <argument name="metadataService" xsi:type="object">Magento\TestModuleMSC\Service\Config\TestModuleMSCMetadataConfig</argument>
+        </arguments>
+    </type>
+    <type name="Magento\TestModuleMSC\Model\Data\CustomAttributeDataObject">
+        <arguments>
+            <argument name="resource" xsi:type="object">Magento\TestModuleMSC\Model\ResourceModel\Item</argument>
+        </arguments>
+    </type>
+        <virtualType name="CustomAttributeMap" type="Magento\Framework\DataObject">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="customAttributeDataObjectInterface" xsi:type="string">Magento\TestModuleMSC\Api\Data\CustomAttributeDataObjectInterface</item>
+                <item name="customAttributeNestedDataObjectInterface" xsi:type="string">Magento\TestModuleMSC\Api\Data\CustomAttributeNestedDataObjectInterface</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Eav\Model\EavCustomAttributeTypeLocator">
+        <arguments>
+            <argument name="serviceEntityTypeMap" xsi:type="array">
+                <item name="Magento\TestModuleMSC\Api\AllSoapAndRestInterface" xsi:type="string">1</item>
+            </argument>
+            <argument name="serviceBackendModelDataInterfaceMap" xsi:type="array">
+                <item name="Magento\TestModuleMSC\Api\AllSoapAndRestInterface" xsi:type="array">
+                    <item name="Magento\Sample\BackendType1" xsi:type="string">Magento\TestModuleMSC\Api\Data\CustomAttributeDataObjectInterface</item>
+                    <item name="Magento\Sample\BackendType2" xsi:type="string">Magento\TestModuleMSC\Api\Data\CustomAttributeNestedDataObjectInterface</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+</config>

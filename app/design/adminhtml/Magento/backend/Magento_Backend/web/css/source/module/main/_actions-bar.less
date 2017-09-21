@@ -1,0 +1,154 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Main elements -> Actions bar
+//  _____________________________________________
+
+//  ToDo UI: Consist old styles, should be changed with new design
+
+//
+//  Components
+//  ---------------------------------------------
+
+@import 'actions-bar/_store-switcher.less';
+
+.page-main-actions:not(._hidden),
+.page-actions._fixed {
+    &:extend(.abs-clearfix all);
+    background: @page-main-actions__background-color;
+    border-bottom: 1px solid @page-main-actions__border-color;
+    border-top: 1px solid @page-main-actions__border-color;
+    padding: @page-main-actions__padding;
+}
+
+.page-main-actions {
+    margin: 0 0 @indent__l;
+
+    &._hidden {
+        .store-switcher {
+            display: none;
+        }
+
+        .page-actions-placeholder {
+            min-height: 50px;
+        }
+    }
+}
+
+//
+//  Page actions group
+//  ---------------------------------------------
+
+.page-actions {
+    @_page-action__indent: 1.3rem;
+    float: right;
+
+    .page-main-actions & {
+        &._fixed {
+            left: @page-wrapper__indent-left;
+            position: fixed;
+            right: 0;
+            top: 0;
+            z-index: @page-actions__fixed__z-index + 101;
+
+            .page-actions-inner {
+                &:before {
+                    .lib-text-overflow-ellipsis();
+                    color: @page-title__color;
+                    content: attr(data-title);
+                    float: left;
+                    font-size: @page-title__font-size;
+                    margin-top: .3rem;
+                    max-width: 50%;
+                }
+            }
+        }
+    }
+
+    button,
+    .page-actions-buttons > button,
+    .page-actions-buttons > .action {
+        &:extend(.abs-action-l all);
+    }
+
+    > button,
+    .page-actions-buttons > button,
+    .page-actions-buttons > .action {
+        &:extend(.abs-action-quaternary all);
+        float: right;
+        margin-left: @_page-action__indent;
+
+        &.back,
+        &.action-back {
+            //  ToDo UI: Should be changed to ._back
+            float: left;
+            .lib-vendor-prefix-order(-1);
+
+            &:before {
+                &:extend(.abs-icon all);
+                content: @icon-back-arrow__content;
+                margin-right: .5em;
+                position: relative;
+                top: 1px;
+            }
+        }
+
+        &.action-primary,
+        &.primary {
+            //  ToDo UI: Should be changed to .action-primary
+            &:extend(.abs-action-primary all);
+            &:extend(.abs-action-l all);
+            .lib-vendor-prefix-order(2);
+        }
+
+        &.action-secondary {
+            &:extend(.abs-action-secondary all);
+            &:extend(.abs-action-l all);
+        }
+
+        &.save {
+            //  ToDo UI: Should be changed to ._save
+            &:not(.primary) {
+                .lib-vendor-prefix-order(1);
+            }
+        }
+
+        &.delete {
+            //  ToDo UI: Should be changed to ._delete
+            .lib-vendor-prefix-order(-1);
+        }
+    }
+
+    .page-actions-buttons {
+        > .action-element {
+            float: right;
+            margin-left: @_page-action__indent;
+        }
+    }
+
+    .actions-split {
+        &:extend(.abs-actions-split-xl all);
+        float: right;
+        margin-left: @_page-action__indent;
+
+        .lib-vendor-prefix-order(2);
+        .dropdown-menu {
+            .item {
+                display: block;
+            }
+        }
+    }
+}
+
+.page-actions-buttons {
+    float: right;
+    justify-content: flex-end;
+
+    .lib-vendor-prefix-display(flex);
+    .customer-index-edit & {
+        background-color: transparent;
+    }
+}

@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <sales>
+            <msrp>
+                <enabled>0</enabled>
+                <display_price_type>1</display_price_type>
+                <explanation_message>Our price is lower than the manufacturer's "minimum advertised price." As a result, we cannot show you the price in catalog or the product page. &lt;br /&gt;&lt;br /&gt; You have no obligation to purchase the product once you know the price. You can simply remove the item from your cart.</explanation_message>
+                <explanation_message_whats_this>Our price is lower than the manufacturer's "minimum advertised price." As a result, we cannot show you the price in catalog or the product page. &lt;br /&gt;&lt;br /&gt; You have no obligation to purchase the product once you know the price. You can simply remove the item from your cart.</explanation_message_whats_this>
+            </msrp>
+        </sales>
+    </default>
+</config>

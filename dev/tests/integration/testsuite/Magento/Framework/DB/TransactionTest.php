@@ -1,30 +1,16 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\DB;
 
-class TransactionTest extends \PHPUnit_Framework_TestCase
+use Magento\Framework\Flag;
+
+class TransactionTest extends \PHPUnit\Framework\TestCase
 {
+    protected $objectManager;
+
     /**
      * @var \Magento\Framework\DB\Transaction
      */
@@ -32,8 +18,9 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Framework\DB\Transaction');
+        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->_model = $this->objectManager
+            ->create(\Magento\Framework\DB\Transaction::class);
     }
 
     /**
@@ -41,16 +28,11 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveDelete()
     {
-        $first = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Store\Model\Group');
-        $first->setData(
-            array('website_id' => 1, 'name' => 'test 1', 'root_category_id' => 1, 'default_store_id' => 1)
-        );
-
-        $second = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Store\Model\Group');
-        $second->setData(
-            array('website_id' => 1, 'name' => 'test 2', 'root_category_id' => 1, 'default_store_id' => 1)
-        );
-
+        /** @var Flag $first */
+        $first = $this->objectManager->create(Flag::class, ['data' => ['flag_code' => 'test1']]);
+        $first->setFlagData('test1data');
+        $second = $this->objectManager->create(Flag::class, ['data' => ['flag_code' => 'test2']]);
+        $second->setFlagData('test2data');
 
         $first->save();
         $this->_model->addObject($first)->addObject($second, 'second');
@@ -60,7 +42,7 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
 
         $this->_model->delete();
 
-        $test = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Store\Model\Group');
+        $test = $this->objectManager->create(Flag::class);
         $test->load($first->getId());
         $this->assertEmpty($test->getId());
     }

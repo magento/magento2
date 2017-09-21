@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Api/etc/extension_attributes.xsd">
+    <extension_attributes for="Magento\Quote\Api\Data\ProductOptionInterface">
+        <attribute code="custom_options" type="Magento\Catalog\Api\Data\CustomOptionInterface[]" />
+    </extension_attributes>
+    <extension_attributes for="Magento\Catalog\Api\Data\ProductInterface">
+        <attribute code="website_ids" type="int[]"/>
+    </extension_attributes>
+    <extension_attributes for="Magento\Catalog\Api\Data\ProductOptionInterface">
+        <attribute code="custom_options" type="Magento\Catalog\Api\Data\CustomOptionInterface[]" />
+    </extension_attributes>
+    <extension_attributes for="Magento\Catalog\Api\Data\CustomOptionInterface">
+        <attribute code="file_info" type="Magento\Framework\Api\Data\ImageContentInterface"/>
+    </extension_attributes>
+    <extension_attributes for="Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface">
+        <attribute code="video_content" type="Magento\Framework\Api\Data\VideoContentInterface" />
+    </extension_attributes>
+    <extension_attributes for="Magento\Catalog\Api\Data\ProductInterface">
+        <attribute code="category_links" type="Magento\Catalog\Api\Data\CategoryLinkInterface[]" />
+    </extension_attributes>
+    <extension_attributes for="Magento\Catalog\Api\Data\ProductTierPriceInterface">
+        <attribute code="percentage_value" type="float" />
+    </extension_attributes>
+    <extension_attributes for="Magento\Catalog\Api\Data\ProductTierPriceInterface">
+        <attribute code="website_id" type="int" />
+    </extension_attributes>
+</config>

@@ -1,0 +1,13 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<script>
+    var BASE_URL = '<?= /* @escapeNotVerified */ $block->getUrl('*') ?>';
+    var FORM_KEY = '<?= /* @escapeNotVerified */ $block->getFormKey() ?>';
+    var require = {
+        "baseUrl": "<?= /* @escapeNotVerified */ $block->getViewFileUrl('/') ?>"
+    };
+</script>

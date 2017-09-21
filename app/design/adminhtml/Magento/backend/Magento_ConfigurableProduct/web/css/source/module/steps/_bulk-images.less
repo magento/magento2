@@ -1,0 +1,95 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  _____________________________________________
+
+@steps-wizard-gallery-image__background-color: @color-white-fog;
+@steps-wizard-gallery-image__padding: 14px @indent__base;
+
+//
+//  Common
+//  _____________________________________________
+
+.steps-wizard {
+    .steps-wizard-section-list {
+        &:extend(.abs-list-reset-styles all);
+        margin: 0 0 @indent__l;
+
+        > li {
+            margin: 0 0 @indent__s;
+        }
+    }
+
+    .steps-wizard-section {
+        margin: 0 0 @indent__l;
+
+        .admin__field-control {
+            .admin__control-select {
+                min-width: 100%;
+            }
+        }
+    }
+
+    .steps-wizard-section-title {
+        border-bottom: 1px solid @steps-wizard-section-title__border-color;
+        font-size: @steps-wizard-section-title__font-size;
+        margin: 0 0 @indent__s;
+        padding: 0 0 @indent__s;
+    }
+
+    .gallery-image-wrapper {
+        background: @steps-wizard-gallery-image__background-color;
+        padding: @steps-wizard-gallery-image__padding;
+        position: relative;
+
+        .multiselect-alt {
+            &:extend(.abs-list-reset-styles all);
+        }
+    }
+
+    .attribute-image-selector {
+        .attribute-label {
+            display: block;
+            margin: 0 0 @indent__s;
+        }
+
+        .attributes-selector-list {
+            border: 1px solid @color-gray-light01;
+            list-style-type: none;
+            margin: 0 0 @indent__m;
+            padding: @indent__m @indent__s;
+
+            &:empty {
+                display: none;
+            }
+
+            > .item {
+                + .item {
+                    margin-top: @indent__m;
+                }
+            }
+        }
+
+        .attribute-label {
+            .lib-font-size(16);
+            margin-bottom: @indent__xs;
+        }
+
+        .image-panel {
+            margin: 0;
+        }
+    }
+
+    .bulk-attribute-values {
+        max-width: 700px;
+
+        .admin__field-label {
+            padding-left: 2.6rem;
+            text-align: left;
+        }
+    }
+}

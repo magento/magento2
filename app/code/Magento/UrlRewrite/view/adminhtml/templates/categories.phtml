@@ -1,0 +1,26 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var \Magento\UrlRewrite\Block\Catalog\Category\Tree $block */
+?>
+<fieldset class="admin__fieldset" data-ui-id="category-selector">
+    <legend class="admin__legend"><span><?= $block->escapeHtml(__('Select Category')) ?></span></legend>
+    <div class="content content-category-tree">
+        <input type="hidden" name="categories" id="product_categories" value="" />
+        <?php if ($block->getRoot()): ?>
+        <div data-mage-init='<?php /* @noEscape */ echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode(
+            [
+                'categoryTree' => [
+                    'data' => $block->getTreeArray(),
+                    'url' => $block->escapeUrl($block->getLoadTreeUrl()),
+                ],
+            ]
+        ); ?>' class="jstree-default"></div>
+        <?php endif; ?>
+    </div>
+</fieldset>

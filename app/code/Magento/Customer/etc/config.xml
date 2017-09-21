@@ -1,29 +1,11 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE_AFL.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Core/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
         <customer>
             <account_share>
@@ -36,6 +18,7 @@
                 <email_domain>example.com</email_domain>
                 <email_identity>general</email_identity>
                 <email_template>customer_create_account_email_template</email_template>
+                <email_no_password_template>customer_create_account_email_no_password_template</email_no_password_template>
                 <email_confirmation_template>customer_create_account_email_confirmation_template</email_confirmation_template>
                 <email_confirmed_template>customer_create_account_email_confirmed_template</email_confirmed_template>
                 <vat_frontend_visibility>0</vat_frontend_visibility>
@@ -43,12 +26,21 @@
             <default>
                 <group>1</group>
             </default>
+            <account_information>
+                <change_email_template>customer_account_information_change_email_template</change_email_template>
+                <change_email_and_password_template>customer_account_information_change_email_and_password_template</change_email_and_password_template>
+            </account_information>
             <password>
                 <forgot_email_identity>support</forgot_email_identity>
                 <forgot_email_template>customer_password_forgot_email_template</forgot_email_template>
                 <remind_email_template>customer_password_remind_email_template</remind_email_template>
-                <reset_link_expiration_period>1</reset_link_expiration_period>
+                <reset_link_expiration_period>2</reset_link_expiration_period>
                 <reset_password_template>customer_password_reset_password_template</reset_password_template>
+                <required_character_classes_number>3</required_character_classes_number>
+                <minimum_password_length>8</minimum_password_length>
+                <lockout_failures>10</lockout_failures>
+                <lockout_threshold>10</lockout_threshold>
+                <autocomplete_on_storefront>0</autocomplete_on_storefront>
             </password>
             <address>
                 <street_lines>2</street_lines>
@@ -59,6 +51,9 @@
                 <suffix_options />
                 <dob_show />
                 <gender_show />
+                <telephone_show>req</telephone_show>
+                <company_show>opt</company_show>
+                <fax_show/>
             </address>
             <startup>
                 <redirect_dashboard>1</redirect_dashboard>
@@ -73,41 +68,36 @@
 {{depend street4}}{{var street4}}{{/depend}}
 {{if city}}{{var city}},  {{/if}}{{if region}}{{var region}}, {{/if}}{{if postcode}}{{var postcode}}{{/if}}
 {{var country}}
-T: {{var telephone}}
+{{depend telephone}}T: {{var telephone}}{{/depend}}
 {{depend fax}}F: {{var fax}}{{/depend}}
 {{depend vat_id}}VAT: {{var vat_id}}{{/depend}}</text>
                 <oneline>{{depend prefix}}{{var prefix}} {{/depend}}{{var firstname}} {{depend middlename}}{{var middlename}} {{/depend}}{{var lastname}}{{depend suffix}} {{var suffix}}{{/depend}}, {{var street}}, {{var city}}, {{var region}} {{var postcode}}, {{var country}}</oneline>
-                <html><![CDATA[{{depend prefix}}{{var prefix}} {{/depend}}{{var firstname}} {{depend middlename}}{{var middlename}} {{/depend}}{{var lastname}}{{depend suffix}} {{var suffix}}{{/depend}}<br/>
+                <html><![CDATA[{{depend prefix}}{{var prefix}} {{/depend}}{{var firstname}} {{depend middlename}}{{var middlename}} {{/depend}}{{var lastname}}{{depend suffix}} {{var suffix}}{{/depend}}{{depend firstname}}<br />{{/depend}}
 {{depend company}}{{var company}}<br />{{/depend}}
 {{if street1}}{{var street1}}<br />{{/if}}
 {{depend street2}}{{var street2}}<br />{{/depend}}
 {{depend street3}}{{var street3}}<br />{{/depend}}
 {{depend street4}}{{var street4}}<br />{{/depend}}
-{{if city}}{{var city}},  {{/if}}{{if region}}{{var region}}, {{/if}}{{if postcode}}{{var postcode}}{{/if}}<br/>
-{{var country}}<br/>
-{{depend telephone}}T: {{var telephone}}{{/depend}}
-{{depend fax}}<br/>F: {{var fax}}{{/depend}}
-{{depend vat_id}}<br/>VAT: {{var vat_id}}{{/depend}}]]></html>
+{{if city}}{{var city}},  {{/if}}{{if region}}{{var region}}, {{/if}}{{if postcode}}{{var postcode}}{{/if}}<br />
+{{var country}}<br />
+{{depend telephone}}T: <a href="tel:{{var telephone}}">{{var telephone}}</a>{{/depend}}
+{{depend fax}}<br />F: {{var fax}}{{/depend}}
+{{depend vat_id}}<br />VAT: {{var vat_id}}{{/depend}}]]></html>
                 <pdf><![CDATA[{{depend prefix}}{{var prefix}} {{/depend}}{{var firstname}} {{depend middlename}}{{var middlename}} {{/depend}}{{var lastname}}{{depend suffix}} {{var suffix}}{{/depend}}|
 {{depend company}}{{var company}}|{{/depend}}
-{{if street1}}{{var street1}}
-{{/if}}
+{{if street1}}{{var street1}}|{{/if}}
 {{depend street2}}{{var street2}}|{{/depend}}
 {{depend street3}}{{var street3}}|{{/depend}}
 {{depend street4}}{{var street4}}|{{/depend}}
-{{if city}}{{var city}},|{{/if}}
-{{if region}}{{var region}}, {{/if}}{{if postcode}}{{var postcode}}{{/if}}|
+{{if city}}{{var city}}, {{/if}}{{if region}}{{var region}}, {{/if}}{{if postcode}}{{var postcode}}{{/if}}|
 {{var country}}|
-{{depend telephone}}T: {{var telephone}}{{/depend}}|
-{{depend fax}}<br/>F: {{var fax}}{{/depend}}|
-{{depend vat_id}}<br/>VAT: {{var vat_id}}{{/depend}}|]]></pdf>
+{{depend telephone}}T: {{var telephone}}|{{/depend}}
+{{depend fax}}F: {{var fax}}|{{/depend}}|
+{{depend vat_id}}VAT: {{var vat_id}}{{/depend}}|]]></pdf>
             </address_templates>
+            <online_customers>
+                <section_data_lifetime>60</section_data_lifetime>
+            </online_customers>
         </customer>
-        <export>
-            <customer_page_size>
-                <customer>10000</customer>
-                <address>5000</address>
-            </customer_page_size>
-        </export>
     </default>
 </config>

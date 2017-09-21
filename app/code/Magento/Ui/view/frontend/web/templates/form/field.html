@@ -1,0 +1,57 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="field" data-bind="visible: visible, attr: {'name': element.dataScope}, css: additionalClasses">
+
+    <label class="label" data-bind="attr: { for: element.uid }">
+        <!-- ko if: element.label -->
+        <span translate="element.label"></span>
+        <!-- /ko -->
+    </label>
+
+    <div class="control" data-bind="css: {'_with-tooltip': element.tooltip}">
+        <!-- ko ifnot: element.hasAddons() -->
+            <!-- ko template: element.elementTmpl --><!-- /ko -->
+        <!-- /ko -->
+
+        <!-- ko if: element.hasAddons() -->
+            <div class="control-addon">
+                <!-- ko template: element.elementTmpl --><!-- /ko -->
+
+                <!-- ko if: element.addbefore -->
+                    <label class="addon-prefix" data-bind="attr: { for: element.uid }"><span data-bind="text: element.addbefore"></span></label>
+                <!-- /ko -->
+
+                <!-- ko if: element.addafter -->
+                    <label class="addon-suffix" data-bind="attr: { for: element.uid }"><span data-bind="text: element.addafter"></span></label>
+                <!-- /ko -->
+            </div>
+        <!-- /ko -->
+
+        <!-- ko if: element.tooltip -->
+            <!-- ko template: element.tooltipTpl --><!-- /ko -->
+        <!-- /ko -->
+
+        <!-- ko if: element.notice -->
+            <div class="field-note" data-bind="attr: { id: element.noticeId }">
+                <span data-bind="text: element.notice"/>
+            </div>
+        <!-- /ko -->
+
+        <!-- ko if: element.error() -->
+            <div class="field-error" data-bind="attr: { id: element.errorId }" generated="true">
+                <span data-bind="text: element.error"/>
+            </div>
+        <!-- /ko -->
+
+        <!-- ko if: element.warn() -->
+            <div role="alert" class="message warning" data-bind="attr: { id: element.warningId }" generated="true">
+                <span data-bind="text: element.warn"/>
+            </div>
+        <!-- /ko -->
+    </div>
+</div>
+<!-- /ko -->

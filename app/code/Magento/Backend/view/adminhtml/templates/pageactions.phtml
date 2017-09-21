@@ -1,0 +1,14 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php if ($block->getChildHtml()):?>
+    <div data-mage-init='{"floatingHeader": {}}' class="page-actions" <?= /* @escapeNotVerified */ $block->getUiId('content-header') ?>>
+        <?= $block->getChildHtml() ?>
+    </div>
+<?php endif; ?>

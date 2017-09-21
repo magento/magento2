@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Checkout\Model\CompositeConfigProvider">
+        <arguments>
+            <argument name="configProviders" xsi:type="array">
+                <item name="weee_config_provider" xsi:type="object">Magento\Weee\Model\WeeeConfigProvider</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\Action\AbstractAction">
+        <plugin name="weee-app-action-dispatchController-context-plugin"
+                type="Magento\Weee\Model\App\Action\ContextPlugin"/>
+    </type>
+    <type name="Magento\Checkout\CustomerData\Cart">
+        <plugin name="cart_private_data_tax" type="Magento\Weee\Plugin\Checkout\CustomerData\Cart"/>
+    </type>
+</config>

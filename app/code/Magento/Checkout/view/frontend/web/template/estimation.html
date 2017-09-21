@@ -1,0 +1,19 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="opc-estimated-wrapper" data-bind="blockLoader: isLoading">
+    <div class="estimated-block">
+        <span class="estimated-label" data-bind="i18n: 'Estimated Total'"></span>
+        <span class="estimated-price" data-bind="text: getValue()"></span>
+    </div>
+    <div class="minicart-wrapper">
+        <button type="button" class="action showcart" data-bind="click: showSidebar" data-toggle="opc-summary">
+            <span class="counter qty">
+                <span class="counter-number" data-bind="text: getQuantity()"></span>
+            </span>
+        </button>
+    </div>
+</div>

@@ -1,32 +1,14 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Newsletter\Controller\Adminhtml;
 
 /**
  * @magentoAppArea adminhtml
  */
-class NewsletterQueueTest extends \Magento\Backend\Utility\Controller
+class NewsletterQueueTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
      * @var \Magento\Newsletter\Model\Template
@@ -37,7 +19,7 @@ class NewsletterQueueTest extends \Magento\Backend\Utility\Controller
     {
         parent::setUp();
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Newsletter\Model\Template'
+            \Magento\Newsletter\Model\Template::class
         );
     }
 
@@ -47,27 +29,33 @@ class NewsletterQueueTest extends \Magento\Backend\Utility\Controller
          * Unset messages
          */
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Backend\Model\Session'
+            \Magento\Backend\Model\Session::class
         )->getMessages(
             true
         );
-        unset($this->_model);
+        $this->_model = null;
     }
 
     /**
      * @magentoDataFixture Magento/Newsletter/_files/newsletter_sample.php
-     * @magentoAppIsolation disabled
      */
     public function testSaveActionQueueTemplateAndVerifySuccessMessage()
     {
-        $postForQueue = array(
+        $postForQueue = [
             'sender_email' => 'johndoe_gieee@unknown-domain.com',
             'sender_name' => 'john doe',
             'subject' => 'test subject',
-            'text' => 'newsletter text'
-        );
-        $this->getRequest()->setPost($postForQueue);
-        $this->_model->loadByCode('some_unique_code');
+            'text' => 'newsletter text',
+        ];
+        $this->getRequest()->setPostValue($postForQueue);
+
+        // Loading by code, since ID will vary. template_code is not actually used to load anywhere else.
+        $this->_model->load('some_unique_code', 'template_code');
+
+        // Ensure that template is actually loaded so as to prevent a false positive on saving a *new* template
+        // instead of existing one.
+        $this->assertEquals('some_unique_code', $this->_model->getTemplateCode());
+
         $this->getRequest()->setParam('template_id', $this->_model->getId());
         $this->dispatch('backend/newsletter/queue/save');
 
@@ -80,7 +68,7 @@ class NewsletterQueueTest extends \Magento\Backend\Utility\Controller
          * Check that success message is set
          */
         $this->assertSessionMessages(
-            $this->equalTo(array('The newsletter queue has been saved.')),
+            $this->equalTo(['You saved the newsletter queue.']),
             \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
         );
     }

@@ -1,0 +1,127 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Actions -> Actions split
+//  _____________________________________________
+
+//  Actions split is a button aggregator with dropdown element
+
+//
+//  Extends
+//  ---------------------------------------------
+
+.abs-actions-split-xl {
+    @_dropdown__padding-right: 4rem;
+    @_action-toggle__width: @_dropdown__padding-right;
+
+    @_triangle__height: @button-marker-triangle__height__xl;
+    @_triangle__right: (@_dropdown__padding-right / 2) - (@_triangle__width / 2);
+    @_triangle__width: @button-marker-triangle__width__xl;
+
+    .action-default {
+        margin-right: @_action-toggle__width;
+    }
+
+    .action-toggle {
+        padding-right: @_dropdown__padding-right;
+
+        &:after {
+            border-width: @_triangle__height @_triangle__width / 2 0 @_triangle__width / 2;
+            margin-top: -((@_triangle__width / 2) / 2);
+            right: @_triangle__right;
+        }
+    }
+}
+
+//  Double button action
+.actions-split {
+    @_action-split__min-width: @_action-toggle__width + @_action-default__min-width;
+    @_action-default__min-width: 9.3rem;
+    @_action-toggle__width: @action__height;
+
+    &:extend(.abs-clearfix all);
+    position: relative;
+    z-index: @actions-split__z-index;
+
+    &.active,
+    &._active,
+    &:hover {
+        box-shadow: @button__hover__box-shadow;
+    }
+
+    &.active,
+    &._active {
+        .action-toggle {
+            &.action-primary,
+            &.primary {
+                background-color: @button-primary__hover__background-color;
+                border-color: @button-primary__hover__background-color;
+            }
+        }
+
+        .dropdown-menu {
+            .appearing__on();
+            display: block;
+        }
+    }
+
+    .action-toggle,
+    .action-default {
+        float: left;
+        margin: 0;
+
+        &.active,
+        &._active,
+        &:hover {
+            box-shadow: none;
+        }
+    }
+
+    .action-default {
+        margin-right: @_action-toggle__width;
+        min-width: @_action-default__min-width;
+    }
+
+    .action-toggle {
+        .action-toggle-triangle(
+        @_dropdown__padding-right: @_action-toggle__width;
+        @_triangle__height: @button-marker-triangle__height;
+        @_triangle__width: @button-marker-triangle__width;
+        );
+        border-left-color: rgba(0, 0, 0, .2);
+        bottom: 0;
+        padding-left: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+
+        //  Disable triangle rotation
+        //  &._active,
+        //  &.active {
+        //  &:after {
+        //  transform: none;
+        //  }
+        //  }
+
+        &.action-secondary,
+        &.secondary,
+        &.action-primary,
+        &.primary {
+            &:after {
+                border-color: @color-white transparent transparent transparent;
+            }
+        }
+
+        > span {
+            .hidden();
+        }
+    }
+
+    .dropdown-menu,
+    .action-menu {
+        &:extend(.abs-action-menu all);
+    }
+}

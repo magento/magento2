@@ -1,33 +1,13 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Newsletter\Model;
 
 /**
  * Newsletter problem model
  *
- * @method \Magento\Newsletter\Model\Resource\Problem _getResource()
- * @method \Magento\Newsletter\Model\Resource\Problem getResource()
  * @method int getSubscriberId()
  * @method \Magento\Newsletter\Model\Problem setSubscriberId(int $value)
  * @method int getQueueId()
@@ -38,6 +18,9 @@ namespace Magento\Newsletter\Model;
  * @method \Magento\Newsletter\Model\Problem setProblemErrorText(string $value)
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ *
+ * @api
+ * @since 100.0.2
  */
 class Problem extends \Magento\Framework\Model\AbstractModel
 {
@@ -61,17 +44,17 @@ class Problem extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
-        array $data = array()
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        array $data = []
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->_subscriberFactory = $subscriberFactory;
@@ -84,7 +67,7 @@ class Problem extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Newsletter\Model\Resource\Problem');
+        $this->_init(\Magento\Newsletter\Model\ResourceModel\Problem::class);
     }
 
     /**
@@ -135,7 +118,7 @@ class Problem extends \Magento\Framework\Model\AbstractModel
             return null;
         }
 
-        if (is_null($this->_subscriber)) {
+        if ($this->_subscriber === null) {
             $this->_subscriber = $this->_subscriberFactory->create()->load($this->getSubscriberId());
         }
 

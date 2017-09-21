@@ -1,57 +1,38 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Model;
+
+use Magento\Cms\Api\Data\BlockInterface;
+use Magento\Cms\Model\ResourceModel\Block as ResourceCmsBlock;
+use Magento\Framework\DataObject\IdentityInterface;
+use Magento\Framework\Model\AbstractModel;
 
 /**
  * CMS block model
  *
- * @method \Magento\Cms\Model\Resource\Block _getResource()
- * @method \Magento\Cms\Model\Resource\Block getResource()
- * @method string getTitle()
- * @method \Magento\Cms\Model\Block setTitle(string $value)
- * @method string getIdentifier()
- * @method \Magento\Cms\Model\Block setIdentifier(string $value)
- * @method string getContent()
- * @method \Magento\Cms\Model\Block setContent(string $value)
- * @method string getCreationTime()
- * @method \Magento\Cms\Model\Block setCreationTime(string $value)
- * @method string getUpdateTime()
- * @method \Magento\Cms\Model\Block setUpdateTime(string $value)
- * @method int getIsActive()
- * @method \Magento\Cms\Model\Block setIsActive(int $value)
+ * @method Block setStoreId(array $storeId)
+ * @method array getStoreId()
  */
-class Block extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\Object\IdentityInterface
+class Block extends AbstractModel implements BlockInterface, IdentityInterface
 {
     /**
      * CMS block cache tag
      */
-    const CACHE_TAG = 'cms_block';
+    const CACHE_TAG = 'cms_b';
 
-    /**
-     * @var string
+    /**#@+
+     * Block's statuses
      */
-    protected $_cacheTag = 'cms_block';
+    const STATUS_ENABLED = 1;
+    const STATUS_DISABLED = 0;
+
+    /**#@-*/
+
+    /**#@-*/
+    protected $_cacheTag = self::CACHE_TAG;
 
     /**
      * Prefix of model events names
@@ -65,22 +46,22 @@ class Block extends \Magento\Framework\Model\AbstractModel implements \Magento\F
      */
     protected function _construct()
     {
-        $this->_init('Magento\Cms\Model\Resource\Block');
+        $this->_init(\Magento\Cms\Model\ResourceModel\Block::class);
     }
 
     /**
      * Prevent blocks recursion
      *
-     * @return \Magento\Framework\Model\AbstractModel
-     * @throws \Magento\Framework\Model\Exception
+     * @return AbstractModel
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function _beforeSave()
+    public function beforeSave()
     {
-        $needle = 'block_id="' . $this->getBlockId() . '"';
+        $needle = 'block_id="' . $this->getId() . '"';
         if (false == strstr($this->getContent(), $needle)) {
-            return parent::_beforeSave();
+            return parent::beforeSave();
         }
-        throw new \Magento\Framework\Model\Exception(
+        throw new \Magento\Framework\Exception\LocalizedException(
             __('Make sure that static block content does not reference the block itself.')
         );
     }
@@ -92,6 +73,173 @@ class Block extends \Magento\Framework\Model\AbstractModel implements \Magento\F
      */
     public function getIdentities()
     {
-        return array(self::CACHE_TAG . '_' . $this->getId());
+        return [self::CACHE_TAG . '_' . $this->getId(), self::CACHE_TAG . '_' . $this->getIdentifier()];
+    }
+
+    /**
+     * Retrieve block id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->getData(self::BLOCK_ID);
+    }
+
+    /**
+     * Retrieve block identifier
+     *
+     * @return string
+     */
+    public function getIdentifier()
+    {
+        return (string)$this->getData(self::IDENTIFIER);
+    }
+
+    /**
+     * Retrieve block title
+     *
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->getData(self::TITLE);
+    }
+
+    /**
+     * Retrieve block content
+     *
+     * @return string
+     */
+    public function getContent()
+    {
+        return $this->getData(self::CONTENT);
+    }
+
+    /**
+     * Retrieve block creation time
+     *
+     * @return string
+     */
+    public function getCreationTime()
+    {
+        return $this->getData(self::CREATION_TIME);
+    }
+
+    /**
+     * Retrieve block update time
+     *
+     * @return string
+     */
+    public function getUpdateTime()
+    {
+        return $this->getData(self::UPDATE_TIME);
+    }
+
+    /**
+     * Is active
+     *
+     * @return bool
+     */
+    public function isActive()
+    {
+        return (bool)$this->getData(self::IS_ACTIVE);
+    }
+
+    /**
+     * Set ID
+     *
+     * @param int $id
+     * @return BlockInterface
+     */
+    public function setId($id)
+    {
+        return $this->setData(self::BLOCK_ID, $id);
+    }
+
+    /**
+     * Set identifier
+     *
+     * @param string $identifier
+     * @return BlockInterface
+     */
+    public function setIdentifier($identifier)
+    {
+        return $this->setData(self::IDENTIFIER, $identifier);
+    }
+
+    /**
+     * Set title
+     *
+     * @param string $title
+     * @return BlockInterface
+     */
+    public function setTitle($title)
+    {
+        return $this->setData(self::TITLE, $title);
+    }
+
+    /**
+     * Set content
+     *
+     * @param string $content
+     * @return BlockInterface
+     */
+    public function setContent($content)
+    {
+        return $this->setData(self::CONTENT, $content);
+    }
+
+    /**
+     * Set creation time
+     *
+     * @param string $creationTime
+     * @return BlockInterface
+     */
+    public function setCreationTime($creationTime)
+    {
+        return $this->setData(self::CREATION_TIME, $creationTime);
+    }
+
+    /**
+     * Set update time
+     *
+     * @param string $updateTime
+     * @return BlockInterface
+     */
+    public function setUpdateTime($updateTime)
+    {
+        return $this->setData(self::UPDATE_TIME, $updateTime);
+    }
+
+    /**
+     * Set is active
+     *
+     * @param bool|int $isActive
+     * @return BlockInterface
+     */
+    public function setIsActive($isActive)
+    {
+        return $this->setData(self::IS_ACTIVE, $isActive);
+    }
+
+    /**
+     * Receive page store ids
+     *
+     * @return int[]
+     */
+    public function getStores()
+    {
+        return $this->hasData('stores') ? $this->getData('stores') : $this->getData('store_id');
+    }
+
+    /**
+     * Prepare block's statuses.
+     *
+     * @return array
+     */
+    public function getAvailableStatuses()
+    {
+        return [self::STATUS_ENABLED => __('Enabled'), self::STATUS_DISABLED => __('Disabled')];
     }
 }

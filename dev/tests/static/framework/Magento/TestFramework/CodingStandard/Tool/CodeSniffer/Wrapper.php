@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -27,19 +9,15 @@
  */
 namespace Magento\TestFramework\CodingStandard\Tool\CodeSniffer;
 
-class Wrapper extends \PHP_CodeSniffer_CLI
+use PHP_CodeSniffer\Config;
+use PHP_CodeSniffer\Runner;
+
+class Wrapper extends Runner
 {
     /**
-     * Emulate console arguments
-     *
-     * @param $values
-     * @return \Magento\TestFramework\CodingStandard\Tool\CodeSniffer\Wrapper
+     * @var array
      */
-    public function setValues($values)
-    {
-        $this->values = $values;
-        return $this;
-    }
+    private $settings = [];
 
     /**
      * Return the current version of php code sniffer
@@ -49,10 +27,28 @@ class Wrapper extends \PHP_CodeSniffer_CLI
     public function version()
     {
         $version = '0.0.0';
-        if (defined('\PHP_CodeSniffer::VERSION')) {
-            $phpcs = new \PHP_CodeSniffer();
-            $version = $phpcs::VERSION;
+        if (defined('\PHP_CodeSniffer\Config::VERSION')) {
+            $version = Config::VERSION;
         }
         return $version;
+    }
+
+    public function init()
+    {
+        $this->config->extensions = $this->settings['extensions'];
+        unset($this->settings['extensions']);
+        $this->config->setSettings(array_replace_recursive(
+            $this->config->getSettings(),
+            $this->settings
+        ));
+        return parent::init();
+    }
+
+    /**
+     * @param array $settings
+     */
+    public function setSettings($settings)
+    {
+        $this->settings = $settings;
     }
 }

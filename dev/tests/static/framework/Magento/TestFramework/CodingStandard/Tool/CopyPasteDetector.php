@@ -1,40 +1,33 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
 
 /**
  * PHP Copy Paste Detector v1.4.0 tool wrapper
  */
 namespace Magento\TestFramework\CodingStandard\Tool;
 
-class CopyPasteDetector implements \Magento\TestFramework\CodingStandard\ToolInterface
+use Magento\TestFramework\CodingStandard\ToolInterface;
+
+class CopyPasteDetector implements ToolInterface, BlacklistInterface
 {
     /**
      * Report file
      *
      * @var string
      */
-    protected $_reportFile;
+    private $reportFile;
+
+    /**
+     * List of paths to be excluded from tool run
+     *
+     * @var array
+     */
+    private $blacklist;
 
     /**
      * Constructor
@@ -43,11 +36,19 @@ class CopyPasteDetector implements \Magento\TestFramework\CodingStandard\ToolInt
      */
     public function __construct($reportFile)
     {
-        $this->_reportFile = $reportFile;
+        $this->reportFile = $reportFile;
     }
 
     /**
-     * Whether the tool can be ran on the current environment
+     * {@inheritdoc}
+     */
+    public function setBlackList(array $blackList)
+    {
+        $this->blacklist = $blackList;
+    }
+
+    /**
+     * Whether the tool can be run in the current environment
      *
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      *
@@ -55,7 +56,7 @@ class CopyPasteDetector implements \Magento\TestFramework\CodingStandard\ToolInt
      */
     public function canRun()
     {
-        exec('phpcpd --version', $output, $exitCode);
+        exec($this->getCommand() . ' --version', $output, $exitCode);
         return $exitCode === 0;
     }
 
@@ -63,30 +64,43 @@ class CopyPasteDetector implements \Magento\TestFramework\CodingStandard\ToolInt
      * Run tool for files specified
      *
      * @param array $whiteList Files/directories to be inspected
-     * @param array $blackList Files/directories to be excluded from the inspection
-     * @param array $extensions Array of alphanumeric strings, for example: 'php', 'xml', 'phtml', 'css'...
+     * @return int
      *
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     *
-     * @return int
      */
-    public function run(array $whiteList, array $blackList = array(), array $extensions = array())
+    public function run(array $whiteList)
     {
-        $blackListStr = ' ';
-        foreach ($blackList as $file) {
+        $blacklistedDirs = [];
+        $blacklistedFileNames = [];
+        foreach ($this->blacklist as $file) {
             $file = escapeshellarg(trim($file));
             if (!$file) {
                 continue;
             }
-            $blackListStr .= '--exclude ' . $file . ' ';
+            $ext = pathinfo($file, PATHINFO_EXTENSION);
+            if ($ext != '') {
+                $blacklistedFileNames[] = $file;
+            } else {
+                $blacklistedDirs[] = '--exclude ' . $file . ' ';
+            }
         }
 
-        $command = 'phpcpd' . ' --log-pmd ' . escapeshellarg(
-            $this->_reportFile
-        ) . ' --min-lines 13' . $blackListStr . ' ' . BP;
-
+        $command = $this->getCommand() . ' --log-pmd ' . escapeshellarg($this->reportFile)
+            . ' --names-exclude ' . join(',', $blacklistedFileNames) . ' --min-lines 13 ' . join(' ', $blacklistedDirs)
+            . ' ' . implode(' ', $whiteList);
         exec($command, $output, $exitCode);
 
         return !(bool)$exitCode;
+    }
+
+    /**
+     * Get PHPCPD command
+     *
+     * @return string
+     */
+    private function getCommand()
+    {
+        $vendorDir = require BP . '/app/etc/vendor_path.php';
+        return 'php ' . BP . '/' . $vendorDir . '/bin/phpcpd';
     }
 }

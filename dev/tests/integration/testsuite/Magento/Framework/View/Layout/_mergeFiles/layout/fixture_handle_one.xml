@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page>
+    <body>
+        <block class="Magento\Framework\View\Element\Template" template="Magento_Framework::fixture_template_one.phtml"/>
+    </body>
+</page>

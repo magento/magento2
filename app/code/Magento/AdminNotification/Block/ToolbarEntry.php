@@ -1,54 +1,74 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
 namespace Magento\AdminNotification\Block;
 
 /**
  * Toolbar entry that shows latest notifications
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class ToolbarEntry extends \Magento\Backend\Block\Template
 {
     /**
+     * Number of notifications showed on expandable window
+     */
+    const NOTIFICATIONS_NUMBER = 3;
+
+    /**
+     * Number of notifications showed on icon
+     */
+    const NOTIFICATIONS_COUNTER_MAX = 99;
+
+    /**
+     * Length of notification description showed by default
+     */
+    const NOTIFICATION_DESCRIPTION_LENGTH = 150;
+
+    /**
      * Collection of latest unread notifications
      *
-     * @var \Magento\AdminNotification\Model\Resource\Inbox\Collection
+     * @var \Magento\AdminNotification\Model\ResourceModel\Inbox\Collection
      */
     protected $_notificationList;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\AdminNotification\Model\Resource\Inbox\Collection\Unread $notificationList
+     * @param \Magento\AdminNotification\Model\ResourceModel\Inbox\Collection\Unread $notificationList
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\AdminNotification\Model\Resource\Inbox\Collection\Unread $notificationList,
-        array $data = array()
+        \Magento\AdminNotification\Model\ResourceModel\Inbox\Collection\Unread $notificationList,
+        array $data = []
     ) {
         parent::__construct($context, $data);
         $this->_notificationList = $notificationList;
+    }
+
+    /**
+     * Retrieve notification description start length
+     *
+     * @return int
+     */
+    public function getNotificationDescriptionLength()
+    {
+        return self::NOTIFICATION_DESCRIPTION_LENGTH;
+    }
+
+    /**
+     * Retrieve notification counter max value
+     *
+     * @return int
+     */
+    public function getNotificationCounterMax()
+    {
+        return self::NOTIFICATIONS_COUNTER_MAX;
     }
 
     /**
@@ -64,11 +84,11 @@ class ToolbarEntry extends \Magento\Backend\Block\Template
     /**
      * Retrieve the list of latest unread notifications
      *
-     * @return \Magento\AdminNotification\Model\Resource\Inbox\Collection
+     * @return \Magento\AdminNotification\Model\ResourceModel\Inbox\Collection
      */
     public function getLatestUnreadNotifications()
     {
-        return $this->_notificationList;
+        return $this->_notificationList->setPageSize(self::NOTIFICATIONS_NUMBER);
     }
 
     /**
@@ -79,13 +99,18 @@ class ToolbarEntry extends \Magento\Backend\Block\Template
      */
     public function formatNotificationDate($dateString)
     {
-        if (date('Ymd') == date('Ymd', strtotime($dateString))) {
-            return $this->formatTime(
-                $dateString,
-                \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT,
-                false
+        $date = new \DateTime($dateString);
+        if ($date == new \DateTime('today')) {
+            return $this->_localeDate->formatDateTime(
+                $date,
+                \IntlDateFormatter::NONE,
+                \IntlDateFormatter::SHORT
             );
         }
-        return $this->formatDate($dateString, \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM, true);
+        return $this->_localeDate->formatDateTime(
+            $date,
+            \IntlDateFormatter::MEDIUM,
+            \IntlDateFormatter::MEDIUM
+        );
     }
 }

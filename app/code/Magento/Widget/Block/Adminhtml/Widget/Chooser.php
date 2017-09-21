@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -51,7 +33,7 @@ class Chooser extends \Magento\Backend\Block\Template
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Framework\Data\Form\Element\Factory $elementFactory,
-        array $data = array()
+        array $data = []
     ) {
         $this->_jsonEncoder = $jsonEncoder;
         $this->_elementFactory = $elementFactory;
@@ -81,16 +63,16 @@ class Chooser extends \Magento\Backend\Block\Template
     /**
      * Convert Array config to Object
      *
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function getConfig()
     {
-        if ($this->_getData('config') instanceof \Magento\Framework\Object) {
+        if ($this->_getData('config') instanceof \Magento\Framework\DataObject) {
             return $this->_getData('config');
         }
 
         $configArray = $this->_getData('config');
-        $config = new \Magento\Framework\Object();
+        $config = new \Magento\Framework\DataObject();
         $this->setConfig($config);
         if (!is_array($configArray)) {
             return $this->_getData('config');
@@ -102,7 +84,7 @@ class Chooser extends \Magento\Backend\Block\Template
         }
 
         // chooser control buttons
-        $buttons = array('open' => __('Choose...'), 'close' => __('Close'));
+        $buttons = ['open' => __('Choose...'), 'close' => __('Close')];
         if (isset($configArray['button']) && is_array($configArray['button'])) {
             foreach ($configArray['button'] as $id => $label) {
                 $buttons[$id] = __($label);
@@ -137,6 +119,7 @@ class Chooser extends \Magento\Backend\Block\Template
      * Flag to indicate include hidden field before chooser or not
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getHiddenEnabled()
     {
@@ -160,11 +143,11 @@ class Chooser extends \Magento\Backend\Block\Template
         $chooser = $fieldset->addField(
             'chooser' . $element->getId(),
             'note',
-            array('label' => $config->getLabel() ? $config->getLabel() : '', 'value_class' => 'value2')
+            ['label' => $config->getLabel() ? $config->getLabel() : '', 'value_class' => 'value2']
         );
         $hiddenHtml = '';
         if ($this->getHiddenEnabled()) {
-            $hidden = $this->_elementFactory->create('hidden', array('data' => $element->getData()));
+            $hidden = $this->_elementFactory->create('hidden', ['data' => $element->getData()]);
             $hidden->setId("{$chooserId}value")->setForm($element->getForm());
             if ($element->getRequired()) {
                 $hidden->addClass('required-entry');
@@ -175,7 +158,7 @@ class Chooser extends \Magento\Backend\Block\Template
 
         $buttons = $config->getButtons();
         $chooseButton = $this->getLayout()->createBlock(
-            'Magento\Backend\Block\Widget\Button'
+            \Magento\Backend\Block\Widget\Button::class
         )->setType(
             'button'
         )->setId(
@@ -204,7 +187,9 @@ class Chooser extends \Magento\Backend\Block\Template
             <div id="' .
             $chooserId .
             'advice-container" class="hidden"></div>
-            <script type="text/javascript">//<![CDATA[
+            <script>
+            require(["prototype", "mage/adminhtml/wysiwyg/widget"], function(){
+            //<![CDATA[
                 (function() {
                     var instantiateChooser = function() {
                         window.' .
@@ -231,13 +216,11 @@ class Chooser extends \Magento\Backend\Block\Template
                         }
                     }
 
-                    if (document.loaded) { //allow load over ajax
-                        instantiateChooser();
-                    } else {
-                        document.observe("dom:loaded", instantiateChooser);
-                    }
+                    jQuery(instantiateChooser);
                 })();
-            //]]></script>
+            //]]>
+            });
+            </script>
         ';
     }
 }

@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Search\Api\SearchInterface" type="Magento\Search\Model\Search"/>
+    <type name="Magento\Framework\Module\Setup\Migration">
+        <arguments>
+            <argument name="compositeModules" xsi:type="array">
+                <item name="search" xsi:type="string">Magento_Search</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Search\Model\AdapterFactory">
+        <arguments>
+            <argument name="adapters" xsi:type="array">
+                <item name="mysql" xsi:type="string">Magento\Framework\Search\Adapter\Mysql\Adapter</item>
+            </argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Search\Model\QueryFactoryInterface" type="Magento\Search\Model\QueryFactory" />
+    <preference for="Magento\Search\Model\QueryInterface" type="Magento\Search\Model\Query" />
+    <preference for="Magento\Search\Api\SynonymAnalyzerInterface" type="Magento\Search\Model\SynonymAnalyzer" />
+    <type name="Magento\Search\Model\Adminhtml\System\Config\Source\Engine">
+        <arguments>
+            <argument name="engines" xsi:type="array">
+                <item name="mysql" xsi:type="string">MySQL</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Search\Model\EngineResolver">
+        <arguments>
+            <argument name="path" xsi:type="string">catalog/search/engine</argument>
+            <argument name="scopeType" xsi:type="string">default</argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Search\Model\AutocompleteInterface" type="Magento\Search\Model\Autocomplete" />
+    <preference for="Magento\Search\Model\Autocomplete\ItemInterface" type="Magento\Search\Model\Autocomplete\Item" />
+    <preference for="Magento\Framework\Search\SearchEngineInterface" type="Magento\Search\Model\SearchEngine"/>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
+        <arguments>
+            <argument name="appliers" xsi:type="array">
+                <item name="regular" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\RegularFilter</item>
+                <item name="fulltext" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\FulltextFilter</item>
+            </argument>
+        </arguments>
+    </type>
+    <!-- @api -->
+    <virtualType name="Magento\Search\Model\ResourceModel\Synonyms\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="name" xsi:type="string">search_synonyms_grid_data_source</argument>
+            <argument name="primaryFieldName" xsi:type="string">group_id</argument>
+            <argument name="requestFieldName" xsi:type="string">id</argument>
+            <argument name="mainTable" xsi:type="string">search_synonyms</argument>
+            <argument name="resourceModel" xsi:type="string">Magento\Search\Model\ResourceModel\SynonymGroup</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="search_synonyms_grid_data_source" xsi:type="string">Magento\Search\Model\ResourceModel\Synonyms\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Search\Api\Data\SynonymGroupInterface" type="Magento\Search\Model\SynonymGroup" />
+    <preference for="Magento\Search\Api\SynonymGroupRepositoryInterface" type="Magento\Search\Model\SynonymGroupRepository" />
+    <preference for="Magento\Framework\Search\Adapter\Preprocessor\PreprocessorInterface" type="Magento\Search\Adapter\Query\Preprocessor\Synonyms" />
+    <type name="Magento\Framework\Search\Adapter\Mysql\Query\Builder\Match">
+        <arguments>
+            <argument name="preprocessors" xsi:type="array">
+                <item name="synonymsPreprocessor" xsi:type="object">Magento\Search\Adapter\Query\Preprocessor\Synonyms</item>
+            </argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Framework\Search\SearchEngine\ConfigInterface" type="Magento\Search\Model\SearchEngine\Config" />
+    <type name="Magento\Search\Model\SearchEngine\Config">
+        <arguments>
+            <argument name="dataStorage" xsi:type="object">Magento\Search\Model\SearchEngine\Config\Data</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Backend\Model\Menu\Builder">
+        <plugin name="SearchTermMenuBuilder" type="Magento\Search\Model\SearchEngine\MenuBuilder" />
+    </type>
+</config>

@@ -1,36 +1,18 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable;
 
-class SamplesTest extends \PHPUnit_Framework_TestCase
+class SamplesTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetUploadButtonsHtml()
     {
         $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
-            'Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable\Samples'
+            \Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable\Samples::class
         );
         \Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable\LinksTest::performUploadButtonTest(
             $block
@@ -45,15 +27,15 @@ class SamplesTest extends \PHPUnit_Framework_TestCase
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->get(
-            'Magento\Framework\Registry'
+            \Magento\Framework\Registry::class
         )->register(
             'current_product',
-            new \Magento\Framework\Object(array('type_id' => 'simple'))
+            new \Magento\Framework\DataObject(['type_id' => 'simple'])
         );
         $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
-            'Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable\Samples'
+            \Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable\Samples::class
         );
         $this->assertEmpty($block->getSampleData());
     }
@@ -74,21 +56,21 @@ class SamplesTest extends \PHPUnit_Framework_TestCase
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->get(
-            'Magento\Framework\Registry'
+            \Magento\Framework\Registry::class
         )->register(
             'current_product',
-            new \Magento\Framework\Object(
-                array(
+            new \Magento\Framework\DataObject(
+                [
                     'type_id' => $productType,
                     'id' => '1',
-                    'samples_title' => $samplesTitle
-                )
+                    'samples_title' => $samplesTitle,
+                ]
             )
         );
         $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
-            'Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable\Samples'
+            \Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable\Samples::class
         );
         $this->assertEquals($expectedResult, $block->getSamplesTitle());
     }
@@ -100,13 +82,13 @@ class SamplesTest extends \PHPUnit_Framework_TestCase
      */
     public function productSamplesTitleDataProvider()
     {
-        return array(
-            array('simple', null, 'Samples Title Test'),
-            array('simple', 'Samples Title', 'Samples Title Test'),
-            array('virtual', null, 'Samples Title Test'),
-            array('virtual', 'Samples Title', 'Samples Title Test'),
-            array('downloadable', null, null),
-            array('downloadable', 'Samples Title', 'Samples Title')
-        );
+        return [
+            ['simple', null, 'Samples Title Test'],
+            ['simple', 'Samples Title', 'Samples Title Test'],
+            ['virtual', null, 'Samples Title Test'],
+            ['virtual', 'Samples Title', 'Samples Title Test'],
+            ['downloadable', null, null],
+            ['downloadable', 'Samples Title', 'Samples Title']
+        ];
     }
 }

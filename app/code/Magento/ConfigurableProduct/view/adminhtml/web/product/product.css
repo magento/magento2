@@ -1,0 +1,183 @@
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/* Variations Search Field */
+#variations-search-field {
+    margin-bottom: 16px;
+}
+
+#variations-search-field > .control {
+    position: relative;
+    width: 42%;
+}
+
+#variations-search-field > .control > input {
+    padding-right: 25px;
+}
+
+@media screen and (max-width: 960px) {
+    [class^="fields-group-"] .field {
+        width: auto !important;
+    }
+}
+
+/* "Generate Variations" button */
+.generate {
+    margin-bottom: 18px;
+}
+
+#product-variations-matrix > .title {
+    margin-top: 2rem;
+    margin-bottom: 10px;
+}
+
+#product-variations-matrix img.variation {
+    display: block;
+    position: relative;
+    border: 1px solid #d6d6d6;
+    width: 50px;
+    height: 50px;
+    z-index: 2;
+    background: #fff;
+}
+
+#product-variations-matrix .action-upload {
+    position: relative;
+    border: 1px solid #b7b2a7;
+    background: #fff;
+    border-radius: 0;
+    padding: 0;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    color: #9f9a91;
+    overflow: hidden;
+    cursor: default;
+    filter: none;
+}
+
+#product-variations-matrix .action-upload input[type="file"] {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 50px;
+    height: 50px;
+    background: none;
+    border: 500px solid transparent;
+    font-size: 10em;
+    z-index: 3;
+    cursor: pointer;
+}
+
+#product-variations-matrix .action-upload:hover {
+    color: #7e7e7e;
+}
+
+#product-variations-matrix .action-upload:before {
+    font-family: 'MUI-Icons';
+    font-style: normal;
+    speak: none;
+    font-weight: normal;
+    -webkit-font-smoothing: antialiased;
+    content: '\e02d'; /* plus icon */
+    font-size: 22px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    text-align: center;
+}
+
+#product-variations-matrix .action-upload.loading:before {
+    content: '';
+}
+
+#product-variations-matrix .action-upload.loading:after {
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    margin: 0;
+    width: 31px;
+    height: 31px;
+    z-index: 4;
+}
+
+#product-variations-matrix .action-upload img.variation {
+    border: 0;
+}
+
+#product-variations-matrix .action-upload span,
+#product-variations-matrix .action-choose span {
+    display: none;
+}
+
+#product-variations-matrix .action-choose,
+#product-variations-matrix .action-choose:hover,
+#product-variations-matrix .action-choose[disabled] {
+    color: #b8b3a7;
+}
+
+#product-variations-matrix .action-choose:hover {
+    color: #7e7e7e;
+}
+
+#product-variations-matrix .action-choose:before {
+    font-family: 'MUI-Icons';
+    font-style: normal;
+    speak: none;
+    font-weight: normal;
+    -webkit-font-smoothing: antialiased;
+    content: '\e03f'; /* user icon */
+}
+
+#product-variations-matrix .col-name > a {
+    display: inline-block;
+    margin-top: 5px;
+}
+
+#product-variations-matrix .col-name > a + .action-choose:before {
+    content: '\e040'; /* user icon */
+    color: #a09a8c;
+}
+
+#product-variations-matrix .col-name > input,
+#product-variations-matrix .col-sku > input {
+    width: 90%;
+}
+
+#product-variations-matrix .col-actions {
+    width: 60px;
+}
+
+/* Select Associated Product popup window */
+#configurable_associated_products_grid .filter-actions,
+#configurable_associated_products_grid .filter {
+    display: none;
+}
+
+#product_options_container .data-table td,
+#attribute-tier_price-container .data-table td,
+
+#product_options_container .data-table td.opt-price-type,
+#product_options_container .data-table td.select-opt-price-type,
+#product_options_container .data-table td.select-opt-price{
+    width: 13%;
+}
+
+#product_options_container .product-option-scope-checkbox {
+    margin: 10px 5px 10px 0;
+}
+
+#product_options_container .select + .product-option-scope-checkbox {
+    margin: 0 5px;
+}
+
+#allow_open_amount {
+    margin-top: 8px;
+}

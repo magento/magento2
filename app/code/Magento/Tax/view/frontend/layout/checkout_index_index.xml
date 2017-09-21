@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="checkout.root">
+            <arguments>
+                <argument name="jsLayout" xsi:type="array">
+                    <item name="components" xsi:type="array">
+                        <item name="checkout" xsi:type="array">
+                            <item name="children" xsi:type="array">
+                                <item name="steps" xsi:type="array">
+                                    <item name="children" xsi:type="array">
+                                        <item name="shipping-step" xsi:type="array">
+                                            <item name="children" xsi:type="array">
+                                                <item name="shippingAddress" xsi:type="array">
+                                                    <item name="children" xsi:type="array">
+                                                        <item name="price" xsi:type="array">
+                                                            <item name="component" xsi:type="string">Magento_Tax/js/view/checkout/shipping_method/price</item>
+                                                            <item name="displayArea" xsi:type="string">price</item>
+                                                        </item>
+                                                    </item>
+                                                </item>
+                                            </item>
+                                        </item>
+                                    </item>
+                                </item>
+                                <item name="sidebar" xsi:type="array">
+                                    <item name="children" xsi:type="array">
+                                        <item name="summary" xsi:type="array">
+                                            <item name="children" xsi:type="array">
+                                                <item name="totals" xsi:type="array">
+                                                    <item name="children" xsi:type="array">
+                                                        <!-- sort order for this totals is configured on admin panel-->
+                                                        <!-- Stores->Configuration->SALES->Sales->General->Checkout Totals Sort Order -->
+                                                        <item name="subtotal" xsi:type="array">
+                                                            <item name="component"  xsi:type="string">Magento_Tax/js/view/checkout/summary/subtotal</item>
+                                                            <item name="config" xsi:type="array">
+                                                                <item name="excludingTaxMessage" xsi:type="string" translate="true">Excl. Tax</item>
+                                                                <item name="includingTaxMessage" xsi:type="string" translate="true">Incl. Tax</item>
+                                                            </item>
+                                                        </item>
+                                                        <item name="shipping" xsi:type="array">
+                                                            <item name="component"  xsi:type="string">Magento_Tax/js/view/checkout/summary/shipping</item>
+                                                            <item name="sortOrder" xsi:type="string">20</item>
+                                                            <item name="config" xsi:type="array">
+                                                                <item name="excludingTaxMessage" xsi:type="string" translate="true">Excl. Tax</item>
+                                                                <item name="includingTaxMessage" xsi:type="string" translate="true">Incl. Tax</item>
+                                                            </item>
+                                                        </item>
+                                                        <item name="before_grandtotal" xsi:type="array">
+                                                            <item name="component"  xsi:type="string">uiComponent</item>
+                                                            <item name="sortOrder" xsi:type="string">30</item>
+                                                            <item name="children" xsi:type="array">
+                                                                <!-- merge your components here -->
+                                                            </item>
+                                                        </item>
+                                                        <item name="tax" xsi:type="array">
+                                                            <item name="component"  xsi:type="string">Magento_Tax/js/view/checkout/summary/tax</item>
+                                                            <item name="config" xsi:type="array">
+                                                                <item name="title" xsi:type="string" translate="true">Tax</item>
+                                                            </item>
+                                                        </item>
+                                                        <item name="grand-total" xsi:type="array">
+                                                            <item name="component"  xsi:type="string">Magento_Tax/js/view/checkout/summary/grand-total</item>
+                                                            <item name="config" xsi:type="array">
+                                                                <item name="exclTaxLabel" xsi:type="string" translate="true">Order Total Excl. Tax</item>
+                                                                <item name="inclTaxLabel" xsi:type="string" translate="true">Order Total Incl. Tax</item>
+                                                                <item name="basicCurrencyMessage" xsi:type="string" translate="true">Your credit card will be charged for</item>
+                                                                <item name="title" xsi:type="string" translate="true">Order Total</item>
+                                                            </item>
+                                                        </item>
+                                                    </item>
+                                                </item>
+                                                <item name="cart_items" xsi:type="array">
+                                                    <item name="children" xsi:type="array">
+                                                        <item name="details" xsi:type="array">
+                                                            <item name="children" xsi:type="array">
+                                                                <item name="subtotal" xsi:type="array">
+                                                                    <item name="component" xsi:type="string">Magento_Tax/js/view/checkout/summary/item/details/subtotal</item>
+                                                                </item>
+                                                            </item>
+                                                        </item>
+                                                    </item>
+                                                </item>
+                                            </item>
+                                        </item>
+                                    </item>
+                                </item>
+                            </item>
+                        </item>
+                    </item>
+                </argument>
+            </arguments>
+        </referenceBlock>
+    </body>
+</page>

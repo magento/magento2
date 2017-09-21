@@ -1,0 +1,20 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var \Magento\Customer\Block\CustomerData $block */
+?>
+<script type="text/x-magento-init">
+<?= /* @noEscape */ $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonEncode([
+        '*' => ['Magento_Customer/js/customer-data' => [
+            'sectionLoadUrl' => $block->getCustomerDataUrl('customer/section/load'),
+            'expirableSectionLifetime' => $block->getExpirableSectionLifetime(),
+            'expirableSectionNames' => $block->getExpirableSectionNames(),
+            'cookieLifeTime' => $block->getCookieLifeTime(),
+            'updateSessionUrl' => $block->getCustomerDataUrl('customer/account/updateSession'),
+        ]],
+    ]);
+?>
+</script>

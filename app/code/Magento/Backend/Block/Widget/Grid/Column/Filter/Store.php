@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -29,6 +11,8 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 
 class Store extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilter
 {
+    const ALL_STORE_VIEWS = '0';
+
     /**
      * @var \Magento\Store\Model\System\Store
      */
@@ -44,7 +28,7 @@ class Store extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
         \Magento\Backend\Block\Context $context,
         \Magento\Framework\DB\Helper $resourceHelper,
         \Magento\Store\Model\System\Store $systemStore,
-        array $data = array()
+        array $data = []
     ) {
         $this->_systemStore = $systemStore;
         parent::__construct($context, $resourceHelper, $data);
@@ -54,6 +38,8 @@ class Store extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
      * Render HTML of the element
      *
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getHtml()
     {
@@ -63,7 +49,7 @@ class Store extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
 
         $allShow = $this->getColumn()->getStoreAll();
 
-        $html = '<select name="' . $this->escapeHtml(
+        $html = '<select class="admin__control-select" name="' . $this->escapeHtml(
             $this->_getHtmlName()
         ) . '" ' . $this->getColumn()->getValidateClass() . $this->getUiId(
             'filter',
@@ -71,9 +57,9 @@ class Store extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
         ) . '>';
         $value = $this->getColumn()->getValue();
         if ($allShow) {
-            $html .= '<option value="0"' . ($value == 0 ? ' selected="selected"' : '') . '>' . __(
-                'All Store Views'
-            ) . '</option>';
+            $html .= '<option value="' . self::ALL_STORE_VIEWS . '"'
+                 . ($value == self::ALL_STORE_VIEWS ? ' selected="selected"' : '') . '>'
+                 . __('All Store Views') . '</option>';
         } else {
             $html .= '<option value=""' . (!$value ? ' selected="selected"' : '') . '></option>';
         }
@@ -129,13 +115,14 @@ class Store extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
      */
     public function getCondition()
     {
-        if (is_null($this->getValue())) {
+        $value = $this->getValue();
+        if ($value === null || $value == self::ALL_STORE_VIEWS) {
             return null;
         }
-        if ($this->getValue() == '_deleted_') {
-            return array('null' => true);
+        if ($value == '_deleted_') {
+            return ['null' => true];
         } else {
-            return array('eq' => $this->getValue());
+            return ['eq' => $value];
         }
     }
 }

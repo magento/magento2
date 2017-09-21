@@ -1,0 +1,76 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/* @var $block \Magento\Newsletter\Block\Adminhtml\Queue\Edit */
+
+?>
+<div data-mage-init='{"floatingHeader": {}}' class="page-actions">
+    <?= $block->getBackButtonHtml() ?>
+    <?= $block->getPreviewButtonHtml() ?>
+    <?php if (!$block->getIsPreview()): ?>
+        <?= $block->getResetButtonHtml() ?>
+        <?= $block->getSaveButtonHtml() ?>
+    <?php endif ?>
+    <?php if ($block->getCanResume()): ?>
+        <?= $block->getResumeButtonHtml() ?>
+    <?php endif ?>
+</div>
+
+<form action="<?= $block->escapeUrl($block->getSaveUrl()) ?>" method="post" id="queue_edit_form">
+    <?= $block->getBlockHtml('formkey') ?>
+    <?= $block->getChildHtml('form') ?>
+</form>
+<form action="<?= $block->escapeUrl($block->getPreviewUrl()) ?>" method="post" id="newsletter_queue_preview_form" target="_blank">
+    <?= $block->getBlockHtml('formkey') ?>
+    <div class="no-display">
+        <input type="hidden" id="preview_type" name="type" value="<?= /* @noEscape */ $block->getIsTextType() ? 1 : 2 ?>" />
+        <input type="hidden" id="preview_text" name="text" value="" />
+        <input type="hidden" id="preview_styles" name="styles" value="" />
+        <input type="hidden" id="preview_id" name="id" value="" />
+    </div>
+</form>
+<script>
+require([
+    'jquery',
+    'tinymce',
+    'mage/mage',
+    'prototype'
+], function(jQuery, tinyMCE){
+
+//<![CDATA[
+jQuery('#queue_edit_form').mage('form').mage('validation');
+jQuery('#newsletter_queue_preview_form').mage('form').mage('validation');
+
+queueControl = {
+    id: 'text',
+    preview: function() {
+        if (this.isEditor() && tinyMCE.get(this.id)) {
+            tinyMCE.triggerSave();
+            $('preview_text').value = tinyMCE.get(this.id).getContent();
+            tinyMCE.triggerSave();
+        } else {
+            $('preview_text').value = $(this.id).value;
+        }
+        if ($('styles') != undefined) {
+            $('preview_styles').value = $('styles').value;
+        }
+        if ($('id') != undefined) {
+            $('preview_id').value = $('id').value;
+        }
+        // Temporary solution will be replaced after refactoring of newsletter queue functionality
+        jQuery('#newsletter_queue_preview_form').trigger('save');
+        return false;
+    },
+    isEditor: function() {
+        return (typeof tinyMceEditors != 'undefined' && tinyMceEditors.get(this.id) != undefined)
+    }
+};
+//]]>
+
+});
+</script>

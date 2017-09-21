@@ -1,0 +1,28 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php /** @var $block \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRenderer */ ?>
+<?php $_item = $block->getItem() ?>
+<?php $_item->setStoreId($_item->getCreditMemo()->getStoreId()) ?>
+<?php $block->setPriceDataObject($_item) ?>
+<tr>
+    <td class="col-product"><?= $block->getColumnHtml($_item, 'name') ?></td>
+    <td class="col-price">
+        <?= $block->getColumnHtml($_item, 'price') ?>
+    </td>
+    <td class="col-qty"><?= /* @escapeNotVerified */ $_item->getQty()*1 ?></td>
+    <td class="col-subtotal">
+        <?= $block->getColumnHtml($_item, 'subtotal') ?>
+    </td>
+    <td class="col-tax"><?= /* @escapeNotVerified */ $block->displayPriceAttribute('tax_amount') ?></td>
+    <td class="col-discount"><?= /* @escapeNotVerified */ $block->displayPriceAttribute('discount_amount') ?></td>
+    <td class="col-total last">
+        <?= $block->getColumnHtml($_item, 'total') ?>
+    </td>
+</tr>

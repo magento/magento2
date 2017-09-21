@@ -1,33 +1,21 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Pricing\Render;
 
-use Magento\Framework\Pricing\Render\PriceBox as BasePriceBox;
-use Magento\Catalog\Pricing\Price\MsrpPrice;
-use Magento\Framework\Pricing\Render;
 use Magento\Catalog\Pricing\Price;
+use Magento\Framework\Pricing\Render\PriceBox as BasePriceBox;
+use Magento\Msrp\Pricing\Price\MsrpPrice;
+use Magento\Catalog\Model\Product\Pricing\Renderer\SalableResolverInterface;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Framework\Pricing\SaleableInterface;
+use Magento\Framework\Pricing\Price\PriceInterface;
+use Magento\Framework\Pricing\Render\RendererPool;
+use Magento\Framework\App\ObjectManager;
+use Magento\Catalog\Pricing\Price\MinimalPriceCalculatorInterface;
 
 /**
  * Class for final_price rendering
@@ -38,34 +26,83 @@ use Magento\Catalog\Pricing\Price;
 class FinalPriceBox extends BasePriceBox
 {
     /**
+     * @var SalableResolverInterface
+     */
+    private $salableResolver;
+
+    /**
+     * @var MinimalPriceCalculatorInterface
+     */
+    private $minimalPriceCalculator;
+
+    /**
+     * @param Context $context
+     * @param SaleableInterface $saleableItem
+     * @param PriceInterface $price
+     * @param RendererPool $rendererPool
+     * @param array $data
+     * @param SalableResolverInterface $salableResolver
+     * @param MinimalPriceCalculatorInterface $minimalPriceCalculator
+     */
+    public function __construct(
+        Context $context,
+        SaleableInterface $saleableItem,
+        PriceInterface $price,
+        RendererPool $rendererPool,
+        array $data = [],
+        SalableResolverInterface $salableResolver = null,
+        MinimalPriceCalculatorInterface $minimalPriceCalculator = null
+    ) {
+        parent::__construct($context, $saleableItem, $price, $rendererPool, $data);
+        $this->salableResolver = $salableResolver ?: ObjectManager::getInstance()->get(SalableResolverInterface::class);
+        $this->minimalPriceCalculator = $minimalPriceCalculator
+            ?: ObjectManager::getInstance()->get(MinimalPriceCalculatorInterface::class);
+    }
+
+    /**
      * @return string
      */
     protected function _toHtml()
     {
-        $result = parent::_toHtml();
-
-        try {
-            /** @var MsrpPrice $msrpPriceType */
-            $msrpPriceType = $this->getSaleableItem()->getPriceInfo()->getPrice('msrp_price');
-        } catch (\InvalidArgumentException $e) {
-            $this->_logger->logException($e);
-            return $this->wrapResult($result);
+        if (!$this->salableResolver->isSalable($this->getSaleableItem())) {
+            return '';
         }
 
-        //Renders MAP price in case it is enabled
-        if ($msrpPriceType->canApplyMsrp($this->getSaleableItem())) {
+        $result = parent::_toHtml();
+        //Renders MSRP in case it is enabled
+        if ($this->isMsrpPriceApplicable()) {
             /** @var BasePriceBox $msrpBlock */
             $msrpBlock = $this->rendererPool->createPriceRender(
                 MsrpPrice::PRICE_CODE,
                 $this->getSaleableItem(),
                 [
-                    'real_price_html' => $result
+                    'real_price_html' => $result,
+                    'zone' => $this->getZone(),
                 ]
             );
             $result = $msrpBlock->toHtml();
         }
 
         return $this->wrapResult($result);
+    }
+
+    /**
+     * Check is MSRP applicable for the current product.
+     *
+     * @return bool
+     */
+    protected function isMsrpPriceApplicable()
+    {
+        try {
+            /** @var MsrpPrice $msrpPriceType */
+            $msrpPriceType = $this->getSaleableItem()->getPriceInfo()->getPrice('msrp_price');
+        } catch (\InvalidArgumentException $e) {
+            $this->_logger->critical($e);
+            return false;
+        }
+
+        $product = $this->getSaleableItem();
+        return $msrpPriceType->canApplyMsrp($product) && $msrpPriceType->isMinimalPriceLessMsrp($product);
     }
 
     /**
@@ -76,7 +113,10 @@ class FinalPriceBox extends BasePriceBox
      */
     protected function wrapResult($html)
     {
-        return '<div class="price-box ' . $this->getData('css_classes') . '">' . $html . '</div>';
+        return '<div class="price-box ' . $this->getData('css_classes') . '" ' .
+            'data-role="priceBox" ' .
+            'data-product-id="' . $this->getSaleableItem()->getId() . '"' .
+            '>' . $html . '</div>';
     }
 
     /**
@@ -86,13 +126,17 @@ class FinalPriceBox extends BasePriceBox
      */
     public function renderAmountMinimal()
     {
-        /** @var \Magento\Catalog\Pricing\Price\FinalPrice $price */
-        $price = $this->getPriceType(\Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE);
         $id = $this->getPriceId() ? $this->getPriceId() : 'product-minimal-price-' . $this->getSaleableItem()->getId();
+
+        $amount = $this->minimalPriceCalculator->getAmount($this->getSaleableItem());
+        if ($amount === null) {
+            return '';
+        }
+
         return $this->renderAmount(
-            $price->getMinimalPrice(),
+            $amount,
             [
-                'display_label'     => __('As low as:'),
+                'display_label'     => __('As low as'),
                 'price_id'          => $id,
                 'include_container' => false,
                 'skip_adjustments' => true
@@ -119,12 +163,49 @@ class FinalPriceBox extends BasePriceBox
      */
     public function showMinimalPrice()
     {
+        $minTierPrice = $this->minimalPriceCalculator->getValue($this->getSaleableItem());
+
         /** @var Price\FinalPrice $finalPrice */
         $finalPrice = $this->getPriceType(Price\FinalPrice::PRICE_CODE);
         $finalPriceValue = $finalPrice->getAmount()->getValue();
-        $minimalPriceAValue = $finalPrice->getMinimalPrice()->getValue();
+
         return $this->getDisplayMinimalPrice()
-        && $minimalPriceAValue
-        && $minimalPriceAValue < $finalPriceValue;
+            && $minTierPrice !== null
+            && $minTierPrice < $finalPriceValue;
+    }
+
+    /**
+     * Get Key for caching block content
+     *
+     * @return string
+     */
+    public function getCacheKey()
+    {
+        return parent::getCacheKey() . ($this->getData('list_category_page') ? '-list-category-page': '');
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return array
+     */
+    public function getCacheKeyInfo()
+    {
+        $cacheKeys = parent::getCacheKeyInfo();
+        $cacheKeys['display_minimal_price'] = $this->getDisplayMinimalPrice();
+        $cacheKeys['is_product_list'] = $this->isProductList();
+        return $cacheKeys;
+    }
+
+    /**
+     * Get flag that price rendering should be done for the list of products
+     * By default (if flag is not set) is false
+     *
+     * @return bool
+     */
+    public function isProductList()
+    {
+        $isProductList = $this->getData('is_product_list');
+        return $isProductList === true;
     }
 }

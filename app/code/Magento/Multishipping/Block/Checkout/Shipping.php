@@ -1,39 +1,24 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Multishipping\Block\Checkout;
 
-use Magento\Sales\Model\Quote\Address;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Quote\Model\Quote\Address;
 
 /**
  * Mustishipping checkout shipping
  *
+ * @api
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Shipping extends \Magento\Sales\Block\Items\AbstractItems
 {
     /**
-     * @var \Magento\Framework\Filter\Object\GridFactory
+     * @var \Magento\Framework\Filter\DataObject\GridFactory
      */
     protected $_filterGridFactory;
 
@@ -43,19 +28,27 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
     protected $_taxHelper;
 
     /**
+     * @var PriceCurrencyInterface
+     */
+    protected $priceCurrency;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Framework\Filter\Object\GridFactory $filterGridFactory
+     * @param \Magento\Framework\Filter\DataObject\GridFactory $filterGridFactory
      * @param \Magento\Multishipping\Model\Checkout\Type\Multishipping $multishipping
      * @param \Magento\Tax\Helper\Data $taxHelper
+     * @param PriceCurrencyInterface $priceCurrency
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Framework\Filter\Object\GridFactory $filterGridFactory,
+        \Magento\Framework\Filter\DataObject\GridFactory $filterGridFactory,
         \Magento\Multishipping\Model\Checkout\Type\Multishipping $multishipping,
         \Magento\Tax\Helper\Data $taxHelper,
-        array $data = array()
+        PriceCurrencyInterface $priceCurrency,
+        array $data = []
     ) {
+        $this->priceCurrency = $priceCurrency;
         $this->_taxHelper = $taxHelper;
         $this->_filterGridFactory = $filterGridFactory;
         $this->_multishipping = $multishipping;
@@ -78,9 +71,9 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
      */
     protected function _prepareLayout()
     {
-        if ($headBlock = $this->getLayout()->getBlock('head')) {
-            $headBlock->setTitle(__('Shipping Methods') . ' - ' . $headBlock->getDefaultTitle());
-        }
+        $this->pageConfig->getTitle()->set(
+            __('Shipping Methods') . ' - ' . $this->pageConfig->getTitle()->getDefault()
+        );
         return parent::_prepareLayout();
     }
 
@@ -98,7 +91,7 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
     public function getAddressCount()
     {
         $count = $this->getData('address_count');
-        if (is_null($count)) {
+        if ($count === null) {
             $count = count($this->getAddresses());
             $this->setData('address_count', $count);
         }
@@ -107,11 +100,11 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
 
     /**
      * @param Address $address
-     * @return \Magento\Framework\Object[]
+     * @return \Magento\Framework\DataObject[]
      */
     public function getAddressItems($address)
     {
-        $items = array();
+        $items = [];
         foreach ($address->getAllItems() as $item) {
             if ($item->getParentItemId()) {
                 continue;
@@ -165,7 +158,7 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
      */
     public function getAddressEditUrl($address)
     {
-        return $this->getUrl('*/checkout_address/editShipping', array('id' => $address->getCustomerAddressId()));
+        return $this->getUrl('*/checkout_address/editShipping', ['id' => $address->getCustomerAddressId()]);
     }
 
     /**
@@ -200,21 +193,23 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
      */
     public function getShippingPrice($address, $price, $flag)
     {
-        return $address->getQuote()->getStore()->convertPrice(
+        return $this->priceCurrency->convertAndFormat(
             $this->_taxHelper->getShippingPrice($price, $flag, $address),
-            true
+            true,
+            PriceCurrencyInterface::DEFAULT_PRECISION,
+            $address->getQuote()->getStore()
         );
     }
 
     /**
      * Retrieve text for items box
      *
-     * @param \Magento\Framework\Object $addressEntity
+     * @param \Magento\Framework\DataObject $addressEntity
      * @return string
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function getItemsBoxTextAfter(\Magento\Framework\Object $addressEntity)
+    public function getItemsBoxTextAfter(\Magento\Framework\DataObject $addressEntity)
     {
         return '';
     }

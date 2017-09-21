@@ -1,91 +1,55 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Block\Catalog\Product;
 
 /**
  * Bundle product price block
- *
+ * @api
+ * @since 100.0.2
  */
 class Price extends \Magento\Catalog\Block\Product\Price
 {
     /**
-     * @var \Magento\Tax\Model\Calculation
+     * @var \Magento\Tax\Helper\Data
      */
-    protected $_taxCalc;
+    protected $_taxHelper;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\Math\Random $mathRandom
      * @param \Magento\Checkout\Helper\Cart $cartHelper
-     * @param \Magento\Tax\Model\Calculation $taxCalc
+     * @param \Magento\Tax\Helper\Data $taxData
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\Tax\Helper\Data $taxData,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Stdlib\String $string,
+        \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\Framework\Math\Random $mathRandom,
         \Magento\Checkout\Helper\Cart $cartHelper,
-        \Magento\Tax\Model\Calculation $taxCalc,
-        array $data = array()
+        \Magento\Tax\Helper\Data $taxData,
+        array $data = []
     ) {
+        $this->_taxHelper = $taxData;
         parent::__construct(
             $context,
             $jsonEncoder,
             $catalogData,
-            $taxData,
             $registry,
             $string,
             $mathRandom,
             $cartHelper,
             $data
         );
-        $this->_taxCalc = $taxCalc;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isRatesGraterThenZero()
-    {
-        $request = $this->_taxCalc->getRateRequest(false, false, false);
-        $request->setProductClassId($this->getProduct()->getTaxClassId());
-        $defaultTax = $this->_taxCalc->getRate($request);
-
-        $request = $this->_taxCalc->getRateRequest();
-        $request->setProductClassId($this->getProduct()->getTaxClassId());
-        $currentTax = $this->_taxCalc->getRate($request);
-
-        return floatval($defaultTax) > 0 || floatval($currentTax) > 0;
     }
 
     /**
@@ -102,7 +66,7 @@ class Price extends \Magento\Catalog\Block\Product\Price
         ) {
             return false;
         }
-        return $this->_taxData->displayBothPrices();
+        return $this->_taxHelper->displayBothPrices();
     }
 
     /**

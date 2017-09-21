@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab\View;
 
@@ -35,7 +17,7 @@ class Sales extends \Magento\Backend\Block\Template
     /**
      * Sales entity collection
      *
-     * @var \Magento\Sales\Model\Resource\Sale\Collection
+     * @var \Magento\Sales\Model\ResourceModel\Sale\Collection
      */
     protected $_collection;
 
@@ -69,7 +51,7 @@ class Sales extends \Magento\Backend\Block\Template
     protected $_currencyFactory;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Sale\CollectionFactory
+     * @var \Magento\Sales\Model\ResourceModel\Sale\CollectionFactory
      */
     protected $_collectionFactory;
 
@@ -78,16 +60,16 @@ class Sales extends \Magento\Backend\Block\Template
      *
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
-     * @param \Magento\Sales\Model\Resource\Sale\CollectionFactory $collectionFactory
+     * @param \Magento\Sales\Model\ResourceModel\Sale\CollectionFactory $collectionFactory
      * @param \Magento\Framework\Registry $coreRegistry
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
-        \Magento\Sales\Model\Resource\Sale\CollectionFactory $collectionFactory,
+        \Magento\Sales\Model\ResourceModel\Sale\CollectionFactory $collectionFactory,
         \Magento\Framework\Registry $coreRegistry,
-        array $data = array()
+        array $data = []
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_currencyFactory = $currencyFactory;
@@ -127,10 +109,10 @@ class Sales extends \Magento\Backend\Block\Template
             true
         )->load();
 
-        $this->_groupedCollection = array();
+        $this->_groupedCollection = [];
 
         foreach ($this->_collection as $sale) {
-            if (!is_null($sale->getStoreId())) {
+            if ($sale->getStoreId() !== null) {
                 $store = $this->_storeManager->getStore($sale->getStoreId());
                 $websiteId = $store->getWebsiteId();
                 $groupId = $store->getGroupId();
@@ -177,7 +159,7 @@ class Sales extends \Magento\Backend\Block\Template
     }
 
     /**
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function getTotals()
     {

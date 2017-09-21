@@ -1,28 +1,15 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Model\Menu;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
+ * @since 100.0.2
+ */
 class Config
 {
     const CACHE_ID = 'backend_menu_config';
@@ -52,7 +39,7 @@ class Config
     protected $_menu;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $_logger;
 
@@ -83,7 +70,7 @@ class Config
      * @param \Magento\Backend\Model\Menu\Config\Reader $configReader
      * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\App\State $appState
      */
@@ -94,7 +81,7 @@ class Config
         \Magento\Backend\Model\Menu\Config\Reader $configReader,
         \Magento\Framework\App\Cache\Type\Config $configCacheType,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\App\State $appState
     ) {
@@ -120,21 +107,17 @@ class Config
      */
     public function getMenu()
     {
-        if ($this->_scopeConfig->getValue('dev/log/active', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)) {
-            $this->_logger->addStreamLog(\Magento\Backend\Model\Menu::LOGGER_KEY);
-        }
-
         try {
             $this->_initMenu();
             return $this->_menu;
         } catch (\InvalidArgumentException $e) {
-            $this->_logger->logException($e);
+            $this->_logger->critical($e);
             throw $e;
         } catch (\BadMethodCallException $e) {
-            $this->_logger->logException($e);
+            $this->_logger->critical($e);
             throw $e;
         } catch (\OutOfRangeException $e) {
-            $this->_logger->logException($e);
+            $this->_logger->critical($e);
             throw $e;
         } catch (\Exception $e) {
             throw $e;

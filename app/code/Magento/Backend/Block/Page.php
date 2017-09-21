@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -29,13 +11,12 @@
  */
 namespace Magento\Backend\Block;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Page extends \Magento\Backend\Block\Template
 {
-    /**
-     * @var string
-     */
-    protected $_template = 'admin/page.phtml';
-
     /**
      * @var \Magento\Framework\Locale\ResolverInterface
      */
@@ -49,7 +30,7 @@ class Page extends \Magento\Backend\Block\Template
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
-        array $data = array()
+        array $data = []
     ) {
         parent::__construct($context, $data);
         $this->_localeResolver = $localeResolver;
@@ -64,7 +45,7 @@ class Page extends \Magento\Backend\Block\Template
     {
         parent::_construct();
 
-        $this->addBodyClass($this->_request->getFullActionName('-'));
+        $this->pageConfig->addBodyClass($this->_request->getFullActionName('-'));
     }
 
     /**
@@ -75,22 +56,9 @@ class Page extends \Magento\Backend\Block\Template
     public function getLang()
     {
         if (!$this->hasData('lang')) {
-            $this->setData('lang', substr($this->_localeResolver->getLocaleCode(), 0, 2));
+            $this->setData('lang', substr($this->_localeResolver->getLocale(), 0, 2));
         }
         return $this->getData('lang');
-    }
-
-    /**
-     * Add CSS class to page body tag
-     *
-     * @param string $className
-     * @return $this
-     */
-    public function addBodyClass($className)
-    {
-        $className = preg_replace('#[^a-z0-9]+#', '-', strtolower($className));
-        $this->setBodyClass($this->getBodyClass() . ' ' . $className);
-        return $this;
     }
 
     /**

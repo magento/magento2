@@ -1,32 +1,16 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Form;
 
 /**
  * Customer login form block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Login extends \Magento\Framework\View\Element\Template
 {
@@ -41,47 +25,26 @@ class Login extends \Magento\Framework\View\Element\Template
     protected $_customerSession;
 
     /**
-     * @var \Magento\Customer\Helper\Data
+     * @var \Magento\Customer\Model\Url
      */
-    protected $_customerHelper;
-
-    /**
-     * Checkout data
-     *
-     * @var \Magento\Checkout\Helper\Data
-     */
-    protected $checkoutData;
-
-    /**
-     * Core url
-     *
-     * @var \Magento\Core\Helper\Url
-     */
-    protected $coreUrl;
+    protected $_customerUrl;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Customer\Helper\Data $customerHelper
-     * @param \Magento\Checkout\Helper\Data $checkoutData
-     * @param \Magento\Core\Helper\Url $coreUrl
+     * @param \Magento\Customer\Model\Url $customerUrl
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Customer\Helper\Data $customerHelper,
-        \Magento\Checkout\Helper\Data $checkoutData,
-        \Magento\Core\Helper\Url $coreUrl,
-        array $data = array()
+        \Magento\Customer\Model\Url $customerUrl,
+        array $data = []
     ) {
-        $this->_customerHelper = $customerHelper;
-        $this->_customerSession = $customerSession;
-        $this->checkoutData = $checkoutData;
-        $this->coreUrl = $coreUrl;
-
         parent::__construct($context, $data);
-        $this->_isScopePrivate = true;
+        $this->_isScopePrivate = false;
+        $this->_customerUrl = $customerUrl;
+        $this->_customerSession = $customerSession;
     }
 
     /**
@@ -89,7 +52,7 @@ class Login extends \Magento\Framework\View\Element\Template
      */
     protected function _prepareLayout()
     {
-        $this->getLayout()->getBlock('head')->setTitle(__('Customer Login'));
+        $this->pageConfig->getTitle()->set(__('Customer Login'));
         return parent::_prepareLayout();
     }
 
@@ -100,24 +63,7 @@ class Login extends \Magento\Framework\View\Element\Template
      */
     public function getPostActionUrl()
     {
-        return $this->_customerHelper->getLoginPostUrl();
-    }
-
-    /**
-     * Retrieve create new account url
-     *
-     * @return string
-     */
-    public function getCreateAccountUrl()
-    {
-        $url = $this->getData('create_account_url');
-        if (is_null($url)) {
-            $url = $this->_customerHelper->getRegisterUrl();
-        }
-        if ($this->checkoutData->isContextCheckout()) {
-            $url = $this->coreUrl->addRequestParam($url, array('context' => 'checkout'));
-        }
-        return $url;
+        return $this->_customerUrl->getLoginPostUrl();
     }
 
     /**
@@ -127,7 +73,7 @@ class Login extends \Magento\Framework\View\Element\Template
      */
     public function getForgotPasswordUrl()
     {
-        return $this->_customerHelper->getForgotPasswordUrl();
+        return $this->_customerUrl->getForgotPasswordUrl();
     }
 
     /**
@@ -141,5 +87,18 @@ class Login extends \Magento\Framework\View\Element\Template
             $this->_username = $this->_customerSession->getUsername(true);
         }
         return $this->_username;
+    }
+
+    /**
+     * Check if autocomplete is disabled on storefront
+     *
+     * @return bool
+     */
+    public function isAutocompleteDisabled()
+    {
+        return (bool)!$this->_scopeConfig->getValue(
+            \Magento\Customer\Model\Form::XML_PATH_ENABLE_AUTOCOMPLETE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 }

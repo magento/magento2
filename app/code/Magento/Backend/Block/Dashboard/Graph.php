@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Dashboard;
 
@@ -40,28 +22,28 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
      *
      * @var array
      */
-    protected $_allSeries = array();
+    protected $_allSeries = [];
 
     /**
      * Axis labels
      *
      * @var array
      */
-    protected $_axisLabels = array();
+    protected $_axisLabels = [];
 
     /**
      * Axis maps
      *
      * @var array
      */
-    protected $_axisMaps = array();
+    protected $_axisMaps = [];
 
     /**
      * Data rows
      *
      * @var array
      */
-    protected $_dataRows = array();
+    protected $_dataRows = [];
 
     /**
      * Simple encoding chars
@@ -118,26 +100,18 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
     protected $_dashboardData = null;
 
     /**
-     * @var \Magento\Framework\Locale\ListsInterface
-     */
-    protected $_localeLists = null;
-
-    /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Reports\Model\Resource\Order\CollectionFactory $collectionFactory
+     * @param \Magento\Reports\Model\ResourceModel\Order\CollectionFactory $collectionFactory
      * @param \Magento\Backend\Helper\Dashboard\Data $dashboardData
-     * @param \Magento\Framework\Locale\ListsInterface $localeLists
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Reports\Model\Resource\Order\CollectionFactory $collectionFactory,
+        \Magento\Reports\Model\ResourceModel\Order\CollectionFactory $collectionFactory,
         \Magento\Backend\Helper\Dashboard\Data $dashboardData,
-        \Magento\Framework\Locale\ListsInterface $localeLists,
-        array $data = array()
+        array $data = []
     ) {
         $this->_dashboardData = $dashboardData;
-        $this->_localeLists = $localeLists;
         parent::__construct($context, $collectionFactory, $data);
     }
 
@@ -204,17 +178,21 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
      *
      * @param bool $directUrl
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function getChartUrl($directUrl = true)
     {
-        $params = array(
+        $params = [
             'cht' => 'lc',
             'chf' => 'bg,s,ffffff',
             'chco' => 'ef672f',
             'chls' => '7',
             'chxs' => '0,676056,15,0,l,676056|1,676056,15,0,l,676056',
-            'chm' => 'h,f2ebde,0,0:1:.1,1,-1'
-        );
+            'chm' => 'h,f2ebde,0,0:1:.1,1,-1',
+        ];
 
         $this->_allSeries = $this->getRowsData($this->_dataRows);
 
@@ -222,11 +200,10 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
             $this->setAxisLabels($axis, $this->getRowsData($attr, true));
         }
 
-        $timezoneLocal = $this->_scopeConfig->getValue(
-            $this->_localeDate->getDefaultTimezonePath(),
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
+        $timezoneLocal = $this->_localeDate->getConfigTimezone();
 
+        /** @var \DateTime $dateStart */
+        /** @var \DateTime $dateEnd */
         list($dateStart, $dateEnd) = $this->_collectionFactory->create()->getDateRange(
             $this->getDataHelper()->getParam('period'),
             '',
@@ -234,27 +211,34 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
             true
         );
 
-        $dateStart->setTimezone($timezoneLocal);
-        $dateEnd->setTimezone($timezoneLocal);
+        $dateStart->setTimezone(new \DateTimeZone($timezoneLocal));
+        $dateEnd->setTimezone(new \DateTimeZone($timezoneLocal));
 
-        $dates = array();
-        $datas = array();
+        if ($this->getDataHelper()->getParam('period') == '24h') {
+            $dateEnd->modify('-1 hour');
+        } else {
+            $dateEnd->setTime(23, 59, 59);
+            $dateStart->setTime(0, 0, 0);
+        }
 
-        while ($dateStart->compare($dateEnd) < 0) {
+        $dates = [];
+        $datas = [];
+
+        while ($dateStart <= $dateEnd) {
             switch ($this->getDataHelper()->getParam('period')) {
                 case '7d':
                 case '1m':
-                    $d = $dateStart->toString('yyyy-MM-dd');
-                    $dateStart->addDay(1);
+                    $d = $dateStart->format('Y-m-d');
+                    $dateStart->modify('+1 day');
                     break;
                 case '1y':
                 case '2y':
-                    $d = $dateStart->toString('yyyy-MM');
-                    $dateStart->addMonth(1);
+                    $d = $dateStart->format('Y-m');
+                    $dateStart->modify('+1 month');
                     break;
                 default:
-                    $d = $dateStart->toString('yyyy-MM-dd HH:00');
-                    $dateStart->addHour(1);
+                    $d = $dateStart->format('Y-m-d H:00');
+                    $dateStart->modify('+1 hour');
             }
             foreach ($this->getAllSeries() as $index => $serie) {
                 if (in_array($d, $this->_axisLabels['x'])) {
@@ -311,8 +295,8 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
         }
 
         // process each string in the array, and find the max length
-        $localmaxvalue = array(0);
-        $localminvalue = array(0);
+        $localmaxvalue = [0];
+        $localminvalue = [0];
         foreach ($this->getAllSeries() as $index => $serie) {
             $localmaxvalue[$index] = max($serie);
             $localminvalue[$index] = min($serie);
@@ -323,7 +307,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
 
         // default values
         $yrange = 0;
-        $yLabels = array();
+        $yLabels = [];
         $miny = 0;
         $maxy = 0;
         $yorigin = 0;
@@ -341,7 +325,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
             $yorigin = 0;
         }
 
-        $chartdata = array();
+        $chartdata = [];
 
         foreach ($this->getAllSeries() as $index => $serie) {
             $thisdataarray = $serie;
@@ -395,7 +379,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
 
         $params['chd'] .= $buffer;
 
-        $valueBuffer = array();
+        $valueBuffer = [];
 
         if (sizeof($this->_axisLabels) > 0) {
             $params['chxt'] = implode(',', array_keys($this->_axisLabels));
@@ -407,26 +391,26 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
                      */
                     foreach ($this->_axisLabels[$idx] as $_index => $_label) {
                         if ($_label != '') {
+                            $period = new \DateTime($_label, new \DateTimeZone($timezoneLocal));
                             switch ($this->getDataHelper()->getParam('period')) {
                                 case '24h':
-                                    $this->_axisLabels[$idx][$_index] = $this->formatTime(
-                                        new \Magento\Framework\Stdlib\DateTime\Date($_label, 'yyyy-MM-dd HH:00'),
-                                        'short',
-                                        false
+                                    $this->_axisLabels[$idx][$_index] = $this->_localeDate->formatDateTime(
+                                        $period->setTime($period->format('H'), 0, 0),
+                                        \IntlDateFormatter::NONE,
+                                        \IntlDateFormatter::SHORT
                                     );
                                     break;
                                 case '7d':
                                 case '1m':
-                                    $this->_axisLabels[$idx][$_index] = $this->formatDate(
-                                        new \Magento\Framework\Stdlib\DateTime\Date($_label, 'yyyy-MM-dd')
+                                    $this->_axisLabels[$idx][$_index] = $this->_localeDate->formatDateTime(
+                                        $period,
+                                        \IntlDateFormatter::SHORT,
+                                        \IntlDateFormatter::NONE
                                     );
                                     break;
                                 case '1y':
                                 case '2y':
-                                    $formats = $this->_localeLists->getTranslationList('datetime');
-                                    $format = isset($formats['yyMM']) ? $formats['yyMM'] : 'MM/yyyy';
-                                    $format = str_replace(array("yyyy", "yy", "MM"), array("Y", "y", "m"), $format);
-                                    $this->_axisLabels[$idx][$_index] = date($format, strtotime($_label));
+                                    $this->_axisLabels[$idx][$_index] = date('m/Y', strtotime($_label));
                                     break;
                             }
                         } else {
@@ -448,7 +432,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
 
         // return the encoded data
         if ($directUrl) {
-            $p = array();
+            $p = [];
             foreach ($params as $name => $value) {
                 $p[] = $name . '=' . urlencode($value);
             }
@@ -456,8 +440,8 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
         } else {
             $gaData = urlencode(base64_encode(json_encode($params)));
             $gaHash = $this->_dashboardData->getChartDataHash($gaData);
-            $params = array('ga' => $gaData, 'h' => $gaHash);
-            return $this->getUrl('adminhtml/*/tunnel', array('_query' => $params));
+            $params = ['ga' => $gaData, 'h' => $gaHash];
+            return $this->getUrl('adminhtml/*/tunnel', ['_query' => $params]);
         }
     }
 
@@ -471,7 +455,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
     protected function getRowsData($attributes, $single = false)
     {
         $items = $this->getCollection()->getItems();
-        $options = array();
+        $options = [];
         foreach ($items as $item) {
             if ($single) {
                 $options[] = max(0, $item->getData($attributes));
@@ -569,7 +553,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
      */
     protected function _prepareData()
     {
-        if (!is_null($this->_dataHelper)) {
+        if ($this->_dataHelper !== null) {
             $availablePeriods = array_keys($this->_dashboardData->getDatePeriods());
             $period = $this->getRequest()->getParam('period');
             $this->getDataHelper()->setParam(

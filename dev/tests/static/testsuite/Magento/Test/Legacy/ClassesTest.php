@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -27,26 +9,35 @@
  */
 namespace Magento\Test\Legacy;
 
-class ClassesTest extends \PHPUnit_Framework_TestCase
+use Magento\Framework\App\Utility\Files;
+
+class ClassesTest extends \PHPUnit\Framework\TestCase
 {
     public function testPhpCode()
     {
-        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
             /**
              * @param string $file
              */
             function ($file) {
-                $classes = \Magento\TestFramework\Utility\Classes::collectPhpCodeClasses(file_get_contents($file));
+                $classes = \Magento\Framework\App\Utility\Classes::collectPhpCodeClasses(file_get_contents($file));
                 $this->_assertNonFactoryName($classes, $file);
             },
-            \Magento\TestFramework\Utility\Files::init()->getPhpFiles()
+            Files::init()->getPhpFiles(
+                Files::INCLUDE_APP_CODE
+                | Files::INCLUDE_PUB_CODE
+                | Files::INCLUDE_LIBS
+                | Files::INCLUDE_TEMPLATES
+                | Files::AS_DATA_SET
+                | Files::INCLUDE_NON_CLASSES
+            )
         );
     }
 
     public function testConfiguration()
     {
-        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
             /**
              * @param string $path
@@ -54,46 +45,46 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
             function ($path) {
                 $xml = simplexml_load_file($path);
 
-                $classes = \Magento\TestFramework\Utility\Classes::collectClassesInConfig($xml);
+                $classes = \Magento\Framework\App\Utility\Classes::collectClassesInConfig($xml);
                 $this->_assertNonFactoryName($classes, $path);
 
-                $modules = \Magento\TestFramework\Utility\Classes::getXmlAttributeValues($xml, '//@module', 'module');
+                $modules = \Magento\Framework\App\Utility\Classes::getXmlAttributeValues($xml, '//@module', 'module');
                 $this->_assertNonFactoryName(array_unique($modules), $path, false, true);
             },
-            \Magento\TestFramework\Utility\Files::init()->getConfigFiles()
+            Files::init()->getConfigFiles()
         );
     }
 
     public function testLayouts()
     {
-        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
             /**
              * @param string $path
              */
             function ($path) {
                 $xml = simplexml_load_file($path);
-                $classes = \Magento\TestFramework\Utility\Classes::collectLayoutClasses($xml);
-                foreach (\Magento\TestFramework\Utility\Classes::getXmlAttributeValues(
+                $classes = \Magento\Framework\App\Utility\Classes::collectLayoutClasses($xml);
+                foreach (\Magento\Framework\App\Utility\Classes::getXmlAttributeValues(
                     $xml,
                     '/layout//@helper',
                     'helper'
                 ) as $class) {
-                    $classes[] = \Magento\TestFramework\Utility\Classes::getCallbackClass($class);
+                    $classes[] = \Magento\Framework\App\Utility\Classes::getCallbackClass($class);
                 }
                 $classes = array_merge(
                     $classes,
-                    \Magento\TestFramework\Utility\Classes::getXmlAttributeValues($xml, '/layout//@module', 'module')
+                    \Magento\Framework\App\Utility\Classes::getXmlAttributeValues($xml, '/layout//@module', 'module')
                 );
                 $this->_assertNonFactoryName(array_unique($classes), $path);
 
-                $tabs = \Magento\TestFramework\Utility\Classes::getXmlNodeValues(
+                $tabs = \Magento\Framework\App\Utility\Classes::getXmlNodeValues(
                     $xml,
                     '/layout//action[@method="addTab"]/block'
                 );
                 $this->_assertNonFactoryName(array_unique($tabs), $path, true);
             },
-            \Magento\TestFramework\Utility\Files::init()->getLayoutFiles()
+            Files::init()->getLayoutFiles()
         );
     }
 
@@ -111,7 +102,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
         if (!$names) {
             return;
         }
-        $factoryNames = array();
+        $factoryNames = [];
         foreach ($names as $name) {
             try {
                 if ($softComparison) {
@@ -126,7 +117,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
                     $this->assertFalse(false === strpos($name, '\\'));
                     $this->assertRegExp('/^([A-Z\\\\][A-Za-z\d\\\\]+)+$/', $name);
                 }
-            } catch (\PHPUnit_Framework_AssertionFailedError $e) {
+            } catch (\PHPUnit\Framework\AssertionFailedError $e) {
                 $factoryNames[] = $name;
             }
         }

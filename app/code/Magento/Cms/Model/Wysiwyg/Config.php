@@ -1,40 +1,45 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Model\Wysiwyg;
 
+use Magento\Framework\Filesystem;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Ui\Component\Wysiwyg\ConfigInterface;
+
 /**
  * Wysiwyg Config for Editor HTML Element
+ *
+ * @api
+ * @since 100.0.2
  */
-class Config extends \Magento\Framework\Object
+class Config extends \Magento\Framework\DataObject implements ConfigInterface
 {
     /**
-     * Wysiwyg behaviour
+     * Wysiwyg status enabled
      */
     const WYSIWYG_ENABLED = 'enabled';
 
+    /**
+     * Wysiwyg status configuration path
+     */
+    const WYSIWYG_STATUS_CONFIG_PATH = 'cms/wysiwyg/enabled';
+
+    /**
+     *
+     */
+    const WYSIWYG_SKIN_IMAGE_PLACEHOLDER_ID = 'Magento_Cms::images/wysiwyg_skin_image.png';
+
+    /**
+     * Wysiwyg status hidden
+     */
     const WYSIWYG_HIDDEN = 'hidden';
 
+    /**
+     * Wysiwyg status disabled
+     */
     const WYSIWYG_DISABLED = 'disabled';
 
     /**
@@ -48,12 +53,12 @@ class Config extends \Magento\Framework\Object
     protected $_authorization;
 
     /**
-     * @var \Magento\Framework\View\Url
+     * @var \Magento\Framework\View\Asset\Repository
      */
-    protected $_viewUrl;
+    protected $_assetRepo;
 
     /**
-     * @var \Magento\Core\Model\Variable\Config
+     * @var \Magento\Variable\Model\Variable\Config
      */
     protected $_variableConfig;
 
@@ -61,13 +66,6 @@ class Config extends \Magento\Framework\Object
      * @var \Magento\Widget\Model\Widget\Config
      */
     protected $_widgetConfig;
-
-    /**
-     * Cms data
-     *
-     * @var \Magento\Cms\Helper\Data
-     */
-    protected $_cmsData;
 
     /**
      * Core event manager proxy
@@ -94,43 +92,58 @@ class Config extends \Magento\Framework\Object
     protected $_backendUrl;
 
     /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    protected $_storeManager;
+
+    /**
+     * @var Filesystem
+     * @since 101.0.0
+     */
+    protected $filesystem;
+
+    /**
      * @param \Magento\Backend\Model\UrlInterface $backendUrl
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Cms\Helper\Data $cmsData
      * @param \Magento\Framework\AuthorizationInterface $authorization
-     * @param \Magento\Framework\View\Url $viewUrl
-     * @param \Magento\Core\Model\Variable\Config $variableConfig
+     * @param \Magento\Framework\View\Asset\Repository $assetRepo
+     * @param \Magento\Variable\Model\Variable\Config $variableConfig
      * @param \Magento\Widget\Model\Widget\Config $widgetConfig
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param Filesystem $filesystem
      * @param array $windowSize
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Backend\Model\UrlInterface $backendUrl,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Cms\Helper\Data $cmsData,
         \Magento\Framework\AuthorizationInterface $authorization,
-        \Magento\Framework\View\Url $viewUrl,
-        \Magento\Core\Model\Variable\Config $variableConfig,
+        \Magento\Framework\View\Asset\Repository $assetRepo,
+        \Magento\Variable\Model\Variable\Config $variableConfig,
         \Magento\Widget\Model\Widget\Config $widgetConfig,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        array $windowSize = array(),
-        array $data = array()
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        Filesystem $filesystem,
+        array $windowSize = [],
+        array $data = []
     ) {
         $this->_backendUrl = $backendUrl;
         $this->_eventManager = $eventManager;
-        $this->_cmsData = $cmsData;
         $this->_scopeConfig = $scopeConfig;
         $this->_authorization = $authorization;
-        $this->_viewUrl = $viewUrl;
+        $this->_assetRepo = $assetRepo;
         $this->_variableConfig = $variableConfig;
         $this->_widgetConfig = $widgetConfig;
         $this->_windowSize = $windowSize;
+        $this->_storeManager = $storeManager;
+        $this->filesystem = $filesystem;
         parent::__construct($data);
     }
 
     /**
-     * Return Wysiwyg config as \Magento\Framework\Object
+     * Return Wysiwyg config as \Magento\Framework\DataObject
      *
      * Config options description:
      *
@@ -142,45 +155,48 @@ class Config extends \Magento\Framework\Object
      * files_browser_*:         Files Browser (media, images) settings
      * encode_directives:       Encode template directives with JS or not
      *
-     * @param array|\Magento\Framework\Object $data \Magento\Framework\Object constructor params to override default config values
-     * @return \Magento\Framework\Object
+     * @param array|\Magento\Framework\DataObject $data Object constructor params to override default config values
+     * @return \Magento\Framework\DataObject
      */
-    public function getConfig($data = array())
+    public function getConfig($data = [])
     {
-        $config = new \Magento\Framework\Object();
+        $config = new \Magento\Framework\DataObject();
 
         $config->setData(
-            array(
+            [
                 'enabled' => $this->isEnabled(),
                 'hidden' => $this->isHidden(),
                 'use_container' => false,
                 'add_variables' => true,
                 'add_widgets' => true,
                 'no_display' => false,
-                'translator' => $this->_cmsData,
                 'encode_directives' => true,
+                'baseStaticUrl' => $this->_assetRepo->getStaticViewFileContext()->getBaseUrl(),
+                'baseStaticDefaultUrl' => str_replace('index.php/', '', $this->_backendUrl->getBaseUrl())
+                    . $this->filesystem->getUri(DirectoryList::STATIC_VIEW) . '/',
                 'directives_url' => $this->_backendUrl->getUrl('cms/wysiwyg/directive'),
-                'popup_css' => $this->_viewUrl->getViewFileUrl(
+                'popup_css' => $this->_assetRepo->getUrl(
                     'mage/adminhtml/wysiwyg/tiny_mce/themes/advanced/skins/default/dialog.css'
                 ),
-                'content_css' => $this->_viewUrl->getViewFileUrl(
+                'content_css' => $this->_assetRepo->getUrl(
                     'mage/adminhtml/wysiwyg/tiny_mce/themes/advanced/skins/default/content.css'
                 ),
                 'width' => '100%',
-                'plugins' => array()
-            )
+                'height' => '500px',
+                'plugins' => [],
+            ]
         );
 
         $config->setData('directives_url_quoted', preg_quote($config->getData('directives_url')));
 
         if ($this->_authorization->isAllowed('Magento_Cms::media_gallery')) {
             $config->addData(
-                array(
+                [
                     'add_images' => true,
                     'files_browser_window_url' => $this->_backendUrl->getUrl('cms/wysiwyg_images/index'),
                     'files_browser_window_width' => $this->_windowSize['width'],
-                    'files_browser_window_height' => $this->_windowSize['height']
-                )
+                    'files_browser_window_height' => $this->_windowSize['height'],
+                ]
             );
         }
 
@@ -202,13 +218,15 @@ class Config extends \Magento\Framework\Object
     }
 
     /**
-     * Return URL for skin images placeholder
+     * Return path for skin images placeholder
      *
      * @return string
      */
-    public function getSkinImagePlaceholderUrl()
+    public function getSkinImagePlaceholderPath()
     {
-        return $this->_viewUrl->getViewFileUrl('Magento_Cms::images/wysiwyg_skin_image.png');
+        $staticPath = $this->_storeManager->getStore()->getBaseStaticDir();
+        $placeholderPath = $this->_assetRepo->createAsset(self::WYSIWYG_SKIN_IMAGE_PLACEHOLDER_ID)->getPath();
+        return $staticPath . '/' . $placeholderPath;
     }
 
     /**
@@ -218,8 +236,12 @@ class Config extends \Magento\Framework\Object
      */
     public function isEnabled()
     {
-        $wysiwygState = $this->_scopeConfig->getValue('cms/wysiwyg/enabled', \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $this->getStoreId());
-        return in_array($wysiwygState, array(self::WYSIWYG_ENABLED, self::WYSIWYG_HIDDEN));
+        $wysiwygState = $this->_scopeConfig->getValue(
+            self::WYSIWYG_STATUS_CONFIG_PATH,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $this->getStoreId()
+        );
+        return in_array($wysiwygState, [self::WYSIWYG_ENABLED, self::WYSIWYG_HIDDEN]);
     }
 
     /**
@@ -229,6 +251,10 @@ class Config extends \Magento\Framework\Object
      */
     public function isHidden()
     {
-        return $this->_scopeConfig->getValue('cms/wysiwyg/enabled', \Magento\Store\Model\ScopeInterface::SCOPE_STORE) == self::WYSIWYG_HIDDEN;
+        $status = $this->_scopeConfig->getValue(
+            self::WYSIWYG_STATUS_CONFIG_PATH,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+        return $status == self::WYSIWYG_HIDDEN;
     }
 }

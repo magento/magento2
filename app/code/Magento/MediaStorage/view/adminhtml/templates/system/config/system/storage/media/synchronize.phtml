@@ -1,0 +1,185 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+
+<?php /* @var $block \Magento\MediaStorage\Block\System\Config\System\Storage\Media\Synchronize */ ?>
+
+<script>
+require([
+    'jquery',
+    'prototype',
+    'mage/backend/validation',
+    'jquery/validate'
+], function(jQuery){
+
+    allowedStorages = [],
+    getConnectionName = function (storageType, connection) {
+        if (storageType == 0) {
+            return storageType;
+        } else if (connection != '') {
+            return storageType + '_' + connection;
+        }
+
+        return '';
+    };
+
+    addAllowedStorage(
+        $('system_media_storage_configuration_media_storage').value,
+        $('system_media_storage_configuration_media_database').value
+    );
+
+    <?php $syncStorageParams = $block->getSyncStorageParams() ?>
+    addAllowedStorage(<?= /* @escapeNotVerified */ $syncStorageParams['storage_type'] ?>, '<?= /* @escapeNotVerified */ $syncStorageParams['connection_name'] ?>');
+
+    defaultValues   = [];
+    defaultValues['system_media_storage_configuration_media_storage']   = $('system_media_storage_configuration_media_storage').value;
+    defaultValues['system_media_storage_configuration_media_database']  = $('system_media_storage_configuration_media_database').value;
+
+
+    function addAllowedStorage(storageType, connection)
+    {
+        storage = getConnectionName(storageType, connection);
+
+        if (storage != '' && !allowedStorages.include(storage)) {
+            allowedStorages.push(storage);
+        }
+        $('system_media_storage_configuration_media_storage').value = storageType;
+        $('system_media_storage_configuration_media_database').value = connection;
+    }
+
+    function checkButtonState(event) {
+        var element = Event.element(event);
+
+        defaultStorage = getConnectionName(
+            defaultValues['system_media_storage_configuration_media_storage'],
+            defaultValues['system_media_storage_configuration_media_database']
+        );
+
+        storage = getConnectionName(
+            $('system_media_storage_configuration_media_storage').value,
+            $('system_media_storage_configuration_media_database').value
+        );
+        if (defaultStorage != storage) {
+            enableSyncButton();
+        } else {
+            disableSyncButton();
+        }
+    }
+
+    function enableStorageSelection() {
+        $('system_media_storage_configuration_media_storage').enable('enabled');
+        $('system_media_storage_configuration_media_database').enable('enabled');
+    }
+
+    function disableStorageSelection() {
+        $('system_media_storage_configuration_media_storage').disable('disabled');
+        $('system_media_storage_configuration_media_database').disable('disabled');
+    }
+
+    function enableSyncButton() {
+        Form.Element.enable('synchronize_button');
+        $('synchronize_button').removeClassName('disabled');
+    }
+
+    function disableSyncButton() {
+        Form.Element.disable('synchronize_button');
+        $('synchronize_button').addClassName('disabled');
+    }
+
+    var checkStatus = function() {
+        u = new Ajax.PeriodicalUpdater('', '<?= /* @escapeNotVerified */ $block->getAjaxStatusUpdateUrl() ?>', {
+            method:     'get',
+            frequency:  5,
+            loaderArea: false,
+
+            onSuccess: function(transport) {
+                var response;
+
+                try {
+                    response = JSON.parse(transport.responseText);
+                    if (response.state == '<?= /* @escapeNotVerified */ \Magento\MediaStorage\Model\File\Storage\Flag::STATE_RUNNING ?>'
+                        && response.message
+                    ) {
+                        if ($('sync_span').hasClassName('no-display')) {
+                            $('sync_span').removeClassName('no-display');
+                            $('sync_message_span').update(response.message);
+                        }
+                    } else {
+                        u.stop();
+                        enableStorageSelection();
+                        $('sync_span').addClassName('no-display');
+
+                        if (response.state == '<?= /* @escapeNotVerified */ \Magento\MediaStorage\Model\File\Storage\Flag::STATE_FINISHED ?>') {
+                            addAllowedStorage(
+                                $('system_media_storage_configuration_media_storage').value,
+                                $('system_media_storage_configuration_media_database').value
+                            );
+                        } else if (response.state == '<?= /* @escapeNotVerified */ \Magento\MediaStorage\Model\File\Storage\Flag::STATE_NOTIFIED ?>') {
+                            if (response.has_errors) {
+                                enableSyncButton();
+                            } else {
+                                addAllowedStorage(
+                                    $('system_media_storage_configuration_media_storage').value,
+                                    $('system_media_storage_configuration_media_database').value
+                                );
+                            }
+                        }
+                    }
+                } catch (e) {
+                    response = {};
+                }
+            }
+        });
+    };
+
+    Event.observe(window, 'load', function(){
+        disableStorageSelection();
+        disableSyncButton();
+        checkStatus();
+    });
+    $('system_media_storage_configuration_media_storage').observe('change', checkButtonState);
+    $('system_media_storage_configuration_media_database').observe('change', checkButtonState);
+
+    jQuery('#synchronize_button').click(function () {
+        if (!jQuery.validator.validateElement('#synchronize-validation-input')) {
+            jQuery('[for="synchronize-validation-input"]').hide();
+        }
+        params = {
+            storage:    $('system_media_storage_configuration_media_storage').value,
+            connection: $('system_media_storage_configuration_media_database').value
+        };
+
+        new Ajax.Request('<?= /* @escapeNotVerified */ $block->getAjaxSyncUrl() ?>', {
+            parameters:     params,
+            loaderArea:     false,
+            asynchronous:   true
+        });
+
+        window.setTimeout(checkStatus, 2011);
+
+        disableStorageSelection();
+        disableSyncButton();
+    });
+
+    jQuery.validator.addMethod('required-synchronize', function(){
+        storage = getConnectionName(
+            $('system_media_storage_configuration_media_storage').value,
+            $('system_media_storage_configuration_media_database').value
+        );
+        return allowedStorages.include(storage);
+    }, 'Synchronization is required.');
+});
+</script>
+
+<?= $block->getButtonHtml() ?>
+<span class="sync-indicator no-display" id="sync_span">
+    <img alt="Synchronize" style="margin:0 5px" src="<?= /* @escapeNotVerified */ $block->getViewFileUrl('images/process_spinner.gif') ?>"/>
+    <span id="sync_message_span"></span>
+</span>
+<input type="hidden" id="synchronize-validation-input" class="required-synchronize no-display"/>

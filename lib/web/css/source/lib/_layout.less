@@ -1,0 +1,126 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Layout
+//  _____________________________________________
+
+//  Page Width mixin
+.lib-layout-width(
+    @_layout__min-width: @layout__min-width,
+    @_layout__max-width: @layout__max-width,
+    @_layout__indent: @layout-indent__width
+) when not (@responsive = true) {
+    ._lib-layout-width(@_layout__min-width, @_layout__max-width);
+    .lib-css(padding-left, @layout-indent__width);
+    .lib-css(padding-right, @layout-indent__width);
+    margin: 0 auto;
+}
+
+._lib-layout-width(
+        @_layout__min-width: @layout__min-width,
+        @_layout__max-width: @layout__max-width
+    ) when (@_layout__min-width = @_layout__max-width) {
+    .lib-css(width, @_layout__min-width);
+}
+
+._lib-layout-width(
+        @_layout__min-width: @layout__min-width,
+        @_layout__max-width: @layout__max-width
+    ) when not (@_layout__min-width = @_layout__max-width) {
+    .lib-css(max-width, @_layout__max-width);
+    .lib-css(min-width, @_layout__min-width);
+    width: auto;
+}
+
+#lib-layout-columns() {
+    & when (@use-flex = true) {
+        .lib-vendor-prefix-display(flex);
+        .lib-vendor-prefix-flex-wrap(wrap);
+        box-sizing: border-box;
+    };
+    &:after {
+        clear: both;
+        content: ' ';
+        display: block;
+        height: 0;
+        overflow: hidden;
+        visibility: hidden;
+    }
+    .main() {
+        .@{layout-class-1column} & {
+            .lib-layout-column(1, 2, 100%);
+        }
+        .@{layout-class-3columns} & {
+            .lib-layout-column(3, 2, @layout-column-main__width-3);
+        }
+        .@{layout-class-2columns__left} & {
+            .lib-layout-column(2, 2, @layout-column-main__width-2-left);
+        }
+        .@{layout-class-2columns__right} & {
+            .lib-layout-column(2, 1, @layout-column-main__width-2-right);
+        }
+    }
+
+    .left() {
+        .@{layout-class-3columns} & {
+            .lib-layout-column(3, 1, @layout-column__left-width);
+        }
+        .@{layout-class-2columns__left} & {
+            .lib-layout-column(2, 1, @layout-column__left-width);
+        }
+        .@{layout-class-2columns__right} & {
+            .lib-layout-column(2, 1, @layout-column__left-width);
+        }
+    }
+
+    .right() {
+        .@{layout-class-3columns} & {
+            .lib-layout-column(3, 3, @layout-column__right-width);
+        }
+        .@{layout-class-2columns__left} & {
+            .lib-layout-column(2, 2, @layout-column__right-width);
+        }
+        .@{layout-class-2columns__right} & {
+            .lib-layout-column(2, 2, @layout-column__right-width);
+        }
+    }
+}
+
+._lib-column-width(@_width, @_check, @_index) when (@_check = false) and (@_index = 1) {
+    .lib-column-width(@_width);
+}
+
+._lib-column-width(@_width, @_check, @_index) when (@_check = true), (@_width = auto) {
+    .lib-css(width, @_width);
+    @_index: 1;
+}
+
+._lib-set-column-width(@_index, @_width) when (@_index > 0) {
+    @_checkUnit: isunit(@_width, extract(@_units, @_index));
+    ._lib-column-width(@_width, @_checkUnit, @_index);
+    ._lib-set-column-width(@_index - 1, @_width);
+}
+
+.lib-layout-column(@_total-columns, @_order, @_width) {
+    @_units: "px","%","em","rem","pt";
+    ._lib-set-column-width(length(@_units), @_width);
+    .lib-flex-degradation(@_total-columns, @_order);
+    & when (@use-flex = true) {
+        .lib-vendor-prefix-order(@_order);
+    }
+}
+
+.lib-flex-degradation(@_total-columns, @_order) when (@_order = 1) {
+    float: left;
+}
+
+.lib-flex-degradation(@_total-columns, @_order) when (@_order = @_total-columns) {
+    float: right;
+}
+
+.lib-flex-degradation(@_total-columns, @_order) when (@_total-columns = 3) and (@_order = 2) {
+    display: inline-block;
+}

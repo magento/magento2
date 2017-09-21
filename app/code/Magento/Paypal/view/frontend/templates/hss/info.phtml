@@ -1,0 +1,16 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+// @codingStandardsIgnoreFile
+/**
+ * @var \Magento\Paypal\Block\Payment\Info $block
+ */
+?>
+<div id="payment_form_<?= $block->escapeHtml($block->getMethodCode()) ?>"
+     style="display:none" class="hss items">
+    <?= $block->escapeHtml(__(
+        'You will be required to enter your payment details after you place an order.'
+    )); ?>
+</div>

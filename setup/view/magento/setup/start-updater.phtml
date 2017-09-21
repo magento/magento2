@@ -1,0 +1,52 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+
+<div class="nav-bar-outer-actions">
+    <div class="outer-actions-inner-wrap">
+        <div class="btn-wrap btn-wrap-triangle-left btn-wrap-prev">
+            <button
+                type="button"
+                class="btn"
+                ng-click="goToPreviousState()"
+                >Back</button>
+        </div>
+    </div>
+</div>
+
+<h2 class="page-title">{{$state.current.header}}</h2>
+
+<div class="message message-warning">
+    <span class="message-text">
+        <strong>
+            We will take your store offline to protect shoppers during the duration of the {{type}} activity.
+        </strong>
+        <div ng-show="type == 'upgrade'">
+            Before you start upgrade, you can optionally
+            <a href="http://devdocs.magento.com/guides/v2.1/comp-mgr/trouble/cman/maint-mode.html">
+            configure a custom maintenance page</a> that informs shoppers the store is offline.
+            (Magento provides a default page.)
+        </div>
+    </span>
+</div>
+
+<form
+    novalidate
+    name="start-updater"
+    >
+
+    <div ng-repeat="package in packages">
+        <div>We're ready to {{type}} {{package.name}}{{package.version ? ' to ' + package.version : ''}}. </div>
+    </div>
+    <br/>
+    <button
+        class="btn btn-large btn-prime"
+        ng-click="update()"
+        type="button"
+        >{{buttonText}}</button>
+    <br/>
+    <div ng-show="started">{{errorMessage}}</div>
+</form>

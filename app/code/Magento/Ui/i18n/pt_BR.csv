@@ -1,0 +1,4 @@
+"Log JS Errors to Session Storage","Log JS Errors to Session Storage"
+"If enabled, can be used by functional tests for extended reporting","If enabled, can be used by functional tests for extended reporting"
+"Log JS Errors to Session Storage Key","Log JS Errors to Session Storage Key"
+"Use this key to retrieve collected js errors","Use this key to retrieve collected js errors"

@@ -1,0 +1,58 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Edit Order comments
+//  ---------------------------------------------
+
+.edit-order-comments {
+    .note-list {
+        font-size: @edit-order-comment-notes__font-size;
+        list-style: none;
+        margin: 0 0 @order-create-sidebar__margin;
+    }
+    .note-list-item {
+        margin: 0 0 @order-create-sidebar__margin__s;
+    }
+    .note-list-date,
+    .note-list-time {
+        padding: 0 @order-create-sidebar__margin__m 0 0;
+    }
+    .note-list-status,
+    .note-list-customer {
+        border-left: 1px solid @edit-order-comment-notes__border-color;
+        padding: 0 @order-create-sidebar__margin__m;
+    }
+    .note-list-customer-notapplicable,
+    .note-list-customer-not-notified,
+    .note-list-customer-notified {
+        font-weight: @font-weight__bold;
+        padding: 0 @order-create-sidebar__margin__m 0 0;
+    }
+    .note-list-comment {
+        margin: 0 0 @order-create-sidebar__margin__reqular;
+    }
+    .comments-block-item {
+        margin: 0 0 @order-create-sidebar__margin;
+    }
+    .comments-block-item-comment {
+        margin: 0 0 @order-create-sidebar__margin__s;
+    }
+    .comments-block-item-date-time {
+        font-size: @font-size__tiny;
+    }
+}
+
+.edit-order-comments-block-title {
+    margin: 0 0 @order-create-sidebar__margin;
+    .lib-typography(
+    @_font-size: 1.9rem,
+    @_color: @color-brown-darkie,
+    @_font-weight: @font-weight__semibold,
+    @_line-height: @line-height__s,
+    @_font-family: false,
+    @_font-style: false
+    );
+}

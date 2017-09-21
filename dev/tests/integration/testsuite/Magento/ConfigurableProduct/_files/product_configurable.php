@@ -1,146 +1,142 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
-/* Create attribute */
-/** @var $installer \Magento\Catalog\Model\Resource\Setup */
-$installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Catalog\Model\Resource\Setup',
-    array('resourceName' => 'catalog_setup')
-);
-/** @var $attribute \Magento\Catalog\Model\Resource\Eav\Attribute */
-$attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Catalog\Model\Resource\Eav\Attribute'
-);
-$attribute->setData(
-    array(
-        'attribute_code' => 'test_configurable',
-        'entity_type_id' => $installer->getEntityTypeId('catalog_product'),
-        'is_global' => 1,
-        'is_user_defined' => 1,
-        'frontend_input' => 'select',
-        'is_unique' => 0,
-        'is_required' => 1,
-        'is_configurable' => 1,
-        'is_searchable' => 0,
-        'is_visible_in_advanced_search' => 0,
-        'is_comparable' => 0,
-        'is_filterable' => 0,
-        'is_filterable_in_search' => 0,
-        'is_used_for_promo_rules' => 0,
-        'is_html_allowed_on_front' => 1,
-        'is_visible_on_front' => 0,
-        'used_in_product_listing' => 0,
-        'used_for_sort_by' => 0,
-        'frontend_label' => array('Test Configurable'),
-        'backend_type' => 'int',
-        'option' => array(
-            'value' => array('option_0' => array('Option 1'), 'option_1' => array('Option 2')),
-            'order' => array('option_0' => 1, 'option_1' => 2)
-        )
-    )
-);
-$attribute->save();
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Catalog\Model\Product\Type;
+use Magento\Catalog\Model\Product\Visibility;
+use Magento\Catalog\Setup\CategorySetup;
+use Magento\ConfigurableProduct\Helper\Product\Options\Factory;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\Eav\Api\Data\AttributeOptionInterface;
+use Magento\TestFramework\Helper\Bootstrap;
 
-/* Assign attribute to attribute set */
-$installer->addAttributeToGroup('catalog_product', 'Default', 'General', $attribute->getId());
+\Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize();
 
-/* Create simple products per each option */
-/** @var $options \Magento\Eav\Model\Resource\Entity\Attribute\Option\Collection */
-$options = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Eav\Model\Resource\Entity\Attribute\Option\Collection'
-);
-$options->setAttributeFilter($attribute->getId());
+require __DIR__ . '/configurable_attribute.php';
 
-$attributeValues = array();
-$productIds = array();
+/** @var ProductRepositoryInterface $productRepository */
+$productRepository = Bootstrap::getObjectManager()
+    ->create(ProductRepositoryInterface::class);
+
+/** @var $installer CategorySetup */
+$installer = Bootstrap::getObjectManager()->create(CategorySetup::class);
+
+/* Create simple products per each option value*/
+/** @var AttributeOptionInterface[] $options */
+$options = $attribute->getOptions();
+
+$attributeValues = [];
+$attributeSetId = $installer->getAttributeSetId('catalog_product', 'Default');
+$associatedProductIds = [];
+$productIds = [10, 20];
+array_shift($options); //remove the first option which is empty
+
 foreach ($options as $option) {
-    /** @var $product \Magento\Catalog\Model\Product */
-    $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
-    $product->setTypeId(
-        \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
-    )->setId(
-        $option->getId() * 10
-    )->setAttributeSetId(
-        $installer->getAttributeSetId('catalog_product', 'Default')
-    )->setWebsiteIds(
-        array(1)
-    )->setName(
-        'Configurable Option' . $option->getId()
-    )->setSku(
-        'simple_' . $option->getId()
-    )->setPrice(
-        10
-    )->setTestConfigurable(
-        $option->getId()
-    )->setVisibility(
-        \Magento\Catalog\Model\Product\Visibility::VISIBILITY_NOT_VISIBLE
-    )->setStatus(
-        \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
-    )->setStockData(
-        array('use_config_manage_stock' => 1, 'qty' => 100, 'is_qty_decimal' => 0, 'is_in_stock' => 1)
-    )->save();
-    $attributeValues[] = array(
+    /** @var $product Product */
+    $product = Bootstrap::getObjectManager()->create(Product::class);
+    $productId = array_shift($productIds);
+    $product->setTypeId(Type::TYPE_SIMPLE)
+        ->setId($productId)
+        ->setAttributeSetId($attributeSetId)
+        ->setWebsiteIds([1])
+        ->setName('Configurable Option' . $option->getLabel())
+        ->setSku('simple_' . $productId)
+        ->setPrice($productId)
+        ->setTestConfigurable($option->getValue())
+        ->setVisibility(Visibility::VISIBILITY_NOT_VISIBLE)
+        ->setStatus(Status::STATUS_ENABLED)
+        ->setStockData(['use_config_manage_stock' => 1, 'qty' => 100, 'is_qty_decimal' => 0, 'is_in_stock' => 1]);
+
+    $product = $productRepository->save($product);
+
+    /** @var \Magento\CatalogInventory\Model\Stock\Item $stockItem */
+    $stockItem = Bootstrap::getObjectManager()->create(\Magento\CatalogInventory\Model\Stock\Item::class);
+    $stockItem->load($productId, 'product_id');
+
+    if (!$stockItem->getProductId()) {
+        $stockItem->setProductId($productId);
+    }
+    $stockItem->setUseConfigManageStock(1);
+    $stockItem->setQty(1000);
+    $stockItem->setIsQtyDecimal(0);
+    $stockItem->setIsInStock(1);
+    $stockItem->save();
+
+    $attributeValues[] = [
         'label' => 'test',
         'attribute_id' => $attribute->getId(),
-        'value_index' => $option->getId(),
-        'is_percent' => false,
-        'pricing_value' => 5
-    );
-    $productIds[] = $product->getId();
+        'value_index' => $option->getValue(),
+    ];
+    $associatedProductIds[] = $product->getId();
 }
 
-/** @var $product \Magento\Catalog\Model\Product */
-$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
-$product->setTypeId(
-    \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE
-)->setId(
-    1
-)->setAttributeSetId(
-    $installer->getAttributeSetId('catalog_product', 'Default')
-)->setWebsiteIds(
-    array(1)
-)->setName(
-    'Configurable Product'
-)->setSku(
-    'configurable'
-)->setPrice(
-    100
-)->setVisibility(
-    \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH
-)->setStatus(
-    \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
-)->setStockData(
-    array('use_config_manage_stock' => 1, 'is_in_stock' => 1)
-)->setAssociatedProductIds(
-    $productIds
-)->setConfigurableAttributesData(
-    array(
-        array(
-            'attribute_id' => $attribute->getId(),
-            'attribute_code' => $attribute->getAttributeCode(),
-            'frontend_label' => 'test',
-            'values' => $attributeValues
-        )
-    )
-)->save();
+/** @var $product Product */
+$product = Bootstrap::getObjectManager()->create(Product::class);
+
+/** @var Factory $optionsFactory */
+$optionsFactory = Bootstrap::getObjectManager()->create(Factory::class);
+
+$configurableAttributesData = [
+    [
+        'attribute_id' => $attribute->getId(),
+        'code' => $attribute->getAttributeCode(),
+        'label' => $attribute->getStoreLabel(),
+        'position' => '0',
+        'values' => $attributeValues,
+    ],
+];
+
+$configurableOptions = $optionsFactory->create($configurableAttributesData);
+
+$extensionConfigurableAttributes = $product->getExtensionAttributes();
+$extensionConfigurableAttributes->setConfigurableProductOptions($configurableOptions);
+$extensionConfigurableAttributes->setConfigurableProductLinks($associatedProductIds);
+
+$product->setExtensionAttributes($extensionConfigurableAttributes);
+
+// Remove any previously created product with the same id.
+/** @var \Magento\Framework\Registry $registry */
+$registry = Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
+$registry->unregister('isSecureArea');
+$registry->register('isSecureArea', true);
+try {
+    $productToDelete = $productRepository->getById(1);
+    $productRepository->delete($productToDelete);
+
+    /** @var \Magento\Quote\Model\ResourceModel\Quote\Item $itemResource */
+    $itemResource = Bootstrap::getObjectManager()->get(\Magento\Quote\Model\ResourceModel\Quote\Item::class);
+    $itemResource->getConnection()->delete(
+        $itemResource->getMainTable(),
+        'product_id = ' . $productToDelete->getId()
+    );
+} catch (\Exception $e) {
+    // Nothing to remove
+}
+$registry->unregister('isSecureArea');
+$registry->register('isSecureArea', false);
+
+$product->setTypeId(Configurable::TYPE_CODE)
+    ->setId(1)
+    ->setAttributeSetId($attributeSetId)
+    ->setWebsiteIds([1])
+    ->setName('Configurable Product')
+    ->setSku('configurable')
+    ->setVisibility(Visibility::VISIBILITY_BOTH)
+    ->setStatus(Status::STATUS_ENABLED)
+    ->setStockData(['use_config_manage_stock' => 1, 'is_in_stock' => 1]);
+
+$productRepository->save($product);
+
+/** @var \Magento\Catalog\Api\CategoryLinkManagementInterface $categoryLinkManagement */
+$categoryLinkManagement = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->create(\Magento\Catalog\Api\CategoryLinkManagementInterface::class);
+
+$categoryLinkManagement->assignProductToCategories(
+    $product->getSku(),
+    [2]
+);

@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model\Billing;
 
@@ -40,7 +22,7 @@ abstract class AbstractAgreement extends \Magento\Framework\Model\AbstractModel
      *
      * @var array
      */
-    protected $_errors = array();
+    protected $_errors = [];
 
     /**
      * Init billing agreement
@@ -81,17 +63,17 @@ abstract class AbstractAgreement extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Payment\Helper\Data $paymentData
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Payment\Helper\Data $paymentData,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
-        array $data = array()
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        array $data = []
     ) {
         $this->_paymentData = $paymentData;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
@@ -104,10 +86,8 @@ abstract class AbstractAgreement extends \Magento\Framework\Model\AbstractModel
      */
     public function getPaymentMethodInstance()
     {
-        if (is_null($this->_paymentMethodInstance)) {
+        if ($this->_paymentMethodInstance === null) {
             $this->_paymentMethodInstance = $this->_paymentData->getMethodInstance($this->getMethodCode());
-        }
-        if ($this->_paymentMethodInstance) {
             $this->_paymentMethodInstance->setStore($this->getStoreId());
         }
         return $this->_paymentMethodInstance;
@@ -120,8 +100,8 @@ abstract class AbstractAgreement extends \Magento\Framework\Model\AbstractModel
      */
     public function isValid()
     {
-        $this->_errors = array();
-        if (is_null($this->getPaymentMethodInstance()) || !$this->getPaymentMethodInstance()->getCode()) {
+        $this->_errors = [];
+        if ($this->getPaymentMethodInstance() === null || !$this->getPaymentMethodInstance()->getCode()) {
             $this->_errors[] = __('The payment method code is not set.');
         }
         if (!$this->getReferenceId()) {
@@ -133,15 +113,15 @@ abstract class AbstractAgreement extends \Magento\Framework\Model\AbstractModel
     /**
      * Before save, it's overridden just to make data validation on before save event
      *
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Framework\Model\AbstractModel
      */
-    protected function _beforeSave()
+    public function beforeSave()
     {
         if ($this->isValid()) {
-            return parent::_beforeSave();
+            return parent::beforeSave();
         }
         array_unshift($this->_errors, __('Unable to save Billing Agreement:'));
-        throw new \Magento\Framework\Model\Exception(implode(' ', $this->_errors));
+        throw new \Magento\Framework\Exception\LocalizedException(__(implode(' ', $this->_errors)));
     }
 }

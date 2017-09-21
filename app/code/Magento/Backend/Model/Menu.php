@@ -1,38 +1,24 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Model;
 
+use Magento\Backend\Model\Menu\Item;
+use Magento\Backend\Model\Menu\Item\Factory;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\SerializerInterface;
+use Psr\Log\LoggerInterface;
+
 /**
  * Backend menu model
+ *
+ * @api
+ * @since 100.0.2
  */
 class Menu extends \ArrayObject
 {
-    /**
-     * Name of special logger key for debugging building menu
-     */
-    const LOGGER_KEY = 'menu-debug';
-
     /**
      * Path in tree structure
      *
@@ -41,35 +27,56 @@ class Menu extends \ArrayObject
     protected $_path = '';
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var LoggerInterface
      */
     protected $_logger;
 
     /**
-     * @param \Magento\Framework\Logger $logger
-     * @param string $pathInMenuStructure
+     * @var Factory
      */
-    public function __construct(\Magento\Framework\Logger $logger, $pathInMenuStructure = '')
-    {
+    private $menuItemFactory;
+
+    /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
+     * Menu constructor
+     *
+     * @param LoggerInterface $logger
+     * @param string $pathInMenuStructure
+     * @param Factory|null $menuItemFactory
+     * @param SerializerInterface|null $serializer
+     */
+    public function __construct(
+        LoggerInterface $logger,
+        $pathInMenuStructure = '',
+        Factory $menuItemFactory = null,
+        SerializerInterface $serializer = null
+    ) {
         if ($pathInMenuStructure) {
             $this->_path = $pathInMenuStructure . '/';
         }
         $this->_logger = $logger;
-        $this->setIteratorClass('Magento\Backend\Model\Menu\Iterator');
+        $this->setIteratorClass(\Magento\Backend\Model\Menu\Iterator::class);
+        $this->menuItemFactory = $menuItemFactory ?: ObjectManager::getInstance()
+            ->create(Factory::class);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->create(SerializerInterface::class);
     }
 
     /**
      * Add child to menu item
      *
-     * @param \Magento\Backend\Model\Menu\Item $item
+     * @param Item $item
      * @param string $parentId
      * @param int $index
      * @return void
      * @throws \InvalidArgumentException
      */
-    public function add(\Magento\Backend\Model\Menu\Item $item, $parentId = null, $index = null)
+    public function add(Item $item, $parentId = null, $index = null)
     {
-        if (!is_null($parentId)) {
+        if ($parentId !== null) {
             $parentItem = $this->get($parentId);
             if ($parentItem === null) {
                 throw new \InvalidArgumentException("Item with identifier {$parentId} does not exist");
@@ -79,9 +86,8 @@ class Menu extends \ArrayObject
             $index = intval($index);
             if (!isset($this[$index])) {
                 $this->offsetSet($index, $item);
-                $this->_logger->logDebug(
-                    sprintf('Add of item with id %s was processed', $item->getId()),
-                    self::LOGGER_KEY
+                $this->_logger->info(
+                    sprintf('Add of item with id %s was processed', $item->getId())
                 );
             } else {
                 $this->add($item, $parentId, $index + 1);
@@ -93,13 +99,13 @@ class Menu extends \ArrayObject
      * Retrieve menu item by id
      *
      * @param string $itemId
-     * @return \Magento\Backend\Model\Menu\Item|null
+     * @return Item|null
      */
     public function get($itemId)
     {
         $result = null;
+        /** @var Item $item */
         foreach ($this as $item) {
-            /** @var $item \Magento\Backend\Model\Menu\Item */
             if ($item->getId() == $itemId) {
                 $result = $item;
                 break;
@@ -140,14 +146,13 @@ class Menu extends \ArrayObject
     public function remove($itemId)
     {
         $result = false;
+        /** @var Item $item */
         foreach ($this as $key => $item) {
-            /** @var $item \Magento\Backend\Model\Menu\Item */
             if ($item->getId() == $itemId) {
                 unset($this[$key]);
                 $result = true;
-                $this->_logger->logDebug(
-                    sprintf('Remove on item with id %s was processed', $item->getId()),
-                    self::LOGGER_KEY
+                $this->_logger->info(
+                    sprintf('Remove on item with id %s was processed', $item->getId())
                 );
                 break;
             }
@@ -169,8 +174,8 @@ class Menu extends \ArrayObject
     public function reorder($itemId, $position)
     {
         $result = false;
+        /** @var Item $item */
         foreach ($this as $key => $item) {
-            /** @var $item \Magento\Backend\Model\Menu\Item */
             if ($item->getId() == $itemId) {
                 unset($this[$key]);
                 $this->add($item, null, $position);
@@ -186,10 +191,10 @@ class Menu extends \ArrayObject
     /**
      * Check whether provided item is last in list
      *
-     * @param \Magento\Backend\Model\Menu\Item $item
+     * @param Item $item
      * @return bool
      */
-    public function isLast(\Magento\Backend\Model\Menu\Item $item)
+    public function isLast(Item $item)
     {
         return $this->offsetGet(max(array_keys($this->getArrayCopy())))->getId() == $item->getId();
     }
@@ -197,17 +202,17 @@ class Menu extends \ArrayObject
     /**
      * Find first menu item that user is able to access
      *
-     * @return \Magento\Backend\Model\Menu\Item|null
+     * @return Item|null
      */
     public function getFirstAvailable()
     {
         $result = null;
-        /** @var $item \Magento\Backend\Model\Menu\Item */
+        /** @var Item $item */
         foreach ($this as $item) {
             if ($item->isAllowed() && !$item->isDisabled()) {
                 if ($item->hasChildren()) {
                     $result = $item->getChildren()->getFirstAvailable();
-                    if (false == is_null($result)) {
+                    if (false == ($result === null)) {
                         break;
                     }
                 } else {
@@ -223,11 +228,11 @@ class Menu extends \ArrayObject
      * Get parent items by item id
      *
      * @param string $itemId
-     * @return \Magento\Backend\Model\Menu\Item[]
+     * @return Item[]
      */
     public function getParentItems($itemId)
     {
-        $parents = array();
+        $parents = [];
         $this->_findParentItems($this, $itemId, $parents);
         return array_reverse($parents);
     }
@@ -242,8 +247,8 @@ class Menu extends \ArrayObject
      */
     protected function _findParentItems($menu, $itemId, &$parents)
     {
+        /** @var Item $item */
         foreach ($menu as $item) {
-            /** @var $item \Magento\Backend\Model\Menu\Item */
             if ($item->getId() == $itemId) {
                 return true;
             }
@@ -258,16 +263,57 @@ class Menu extends \ArrayObject
     }
 
     /**
-     * Hack to unset logger instance which cannot be serialized
+     * Serialize menu
      *
      * @return string
      */
     public function serialize()
     {
-        $logger = $this->_logger;
-        unset($this->_logger);
-        $result = parent::serialize();
-        $this->_logger = $logger;
-        return $result;
+        return $this->serializer->serialize($this->toArray());
+    }
+
+    /**
+     * Get menu data represented as an array
+     *
+     * @return array
+     * @since 100.2.0
+     */
+    public function toArray()
+    {
+        $data = [];
+        foreach ($this as $item) {
+            $data[] = $item->toArray();
+        }
+        return $data;
+    }
+
+    /**
+     * Unserialize menu
+     *
+     * @param string $serialized
+     * @return void
+     * @since 100.2.0
+     */
+    public function unserialize($serialized)
+    {
+        $data = $this->serializer->unserialize($serialized);
+        $this->populateFromArray($data);
+    }
+
+    /**
+     * Populate the menu with data from array
+     *
+     * @param array $data
+     * @return void
+     * @since 100.2.0
+     */
+    public function populateFromArray(array $data)
+    {
+        $items = [];
+        foreach ($data as $itemData) {
+            $item = $this->menuItemFactory->create($itemData);
+            $items[] = $item;
+        }
+        $this->exchangeArray($items);
     }
 }

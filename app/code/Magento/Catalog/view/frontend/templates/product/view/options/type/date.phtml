@@ -1,0 +1,58 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php $_option = $block->getOption() ?>
+<?php $_optionId = $_option->getId() ?>
+<?php $class = ($_option->getIsRequire()) ? ' required' : ''; ?>
+<div class="field date<?= /* @escapeNotVerified */ $class ?>"
+    data-mage-init='{"priceOptionDate":{"fromSelector":"#product_addtocart_form"}}'>
+    <fieldset class="fieldset fieldset-product-options-inner<?= /* @escapeNotVerified */ $class ?>">
+        <legend class="legend">
+            <span><?= $block->escapeHtml($_option->getTitle()) ?></span>
+            <?= /* @escapeNotVerified */ $block->getFormatedPrice() ?>
+        </legend>
+        <div class="control">
+            <?php if ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_DATE_TIME
+                || $_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_DATE): ?>
+
+                <?= $block->getDateHtml() ?>
+
+            <?php endif; ?>
+
+            <?php if ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_DATE_TIME
+                || $_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_TIME): ?>
+                <?= $block->getTimeHtml() ?>
+            <?php endif; ?>
+
+            <?php if ($_option->getIsRequire()): ?>
+                <input type="hidden"
+                       name="validate_datetime_<?= /* @escapeNotVerified */ $_optionId ?>"
+                       class="validate-datetime-<?= /* @escapeNotVerified */ $_optionId ?>"
+                       value=""
+                       data-validate="{'validate-required-datetime':<?= /* @escapeNotVerified */ $_optionId ?>}"/>
+            <?php else: ?>
+                <input type="hidden"
+                       name="validate_datetime_<?= /* @escapeNotVerified */ $_optionId ?>"
+                       class="validate-datetime-<?= /* @escapeNotVerified */ $_optionId ?>"
+                       value=""
+                       data-validate="{'validate-optional-datetime':<?= /* @escapeNotVerified */ $_optionId ?>}"/>
+            <?php endif; ?>
+            <script type="text/x-magento-init">
+            {
+                "#product_addtocart_form": {
+                    "validation": {
+                        "ignore": ":hidden:not(input[name^='validate_datetime_'])"
+                    }
+                }
+            }
+        </script>
+        </div>
+    </fieldset>
+
+</div>

@@ -1,0 +1,44 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+/**
+ * Product list toolbar
+ *
+ * @var $block \Magento\Catalog\Block\Product\ProductList\Toolbar
+ */
+use Magento\Catalog\Model\Product\ProductList\Toolbar;
+?>
+<?php if ($block->isEnabledViewSwitcher()): ?>
+<div class="modes">
+    <?php $_modes = $block->getModes(); ?>
+    <?php if ($_modes && count($_modes) > 1): ?>
+    <strong class="modes-label" id="modes-label"><?= /* @escapeNotVerified */ __('View as') ?></strong>
+    <?php foreach ($block->getModes() as $_code => $_label): ?>
+        <?php if ($block->isModeActive($_code)): ?>
+            <strong title="<?= /* @escapeNotVerified */ $_label ?>"
+                class="modes-mode active mode-<?= /* @escapeNotVerified */ strtolower($_code) ?>"
+                data-value="<?= /* @escapeNotVerified */ strtolower($_code) ?>">
+                <span><?= /* @escapeNotVerified */ $_label ?></span>
+            </strong>
+        <?php else: ?>
+            <a class="modes-mode mode-<?= /* @escapeNotVerified */ strtolower($_code) ?>"
+               title="<?= /* @escapeNotVerified */ $_label ?>"
+               href="#"
+               data-role="mode-switcher"
+               data-value="<?= /* @escapeNotVerified */ strtolower($_code) ?>"
+               id="mode-<?= /* @escapeNotVerified */ strtolower($_code) ?>"
+               aria-labelledby="modes-label mode-<?= /* @escapeNotVerified */ strtolower($_code) ?>">
+                <span><?= /* @escapeNotVerified */ $_label ?></span>
+            </a>
+            <?php endif; ?>
+        <?php endforeach; ?>
+    <?php endif; ?>
+</div>
+<?php endif; ?>

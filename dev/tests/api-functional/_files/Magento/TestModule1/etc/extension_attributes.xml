@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Api/etc/extension_attributes.xsd">
+    <extension_attributes for="Magento\TestModule1\Service\V1\Entity\Item">
+        <attribute code="custom_attribute_data_object" type="Magento\TestModuleMSC\Model\Data\CustomAttributeDataObject" />
+        <attribute code="custom_attribute_string" type="string" />
+    </extension_attributes>
+    <extension_attributes for="Magento\TestModuleMSC\Model\Data\CustomAttributeDataObject">
+        <attribute code="custom_attribute_nested" type="Magento\TestModuleMSC\Model\Data\CustomAttributeNestedDataObject" />
+        <attribute code="custom_attribute_int" type="int" />
+    </extension_attributes>
+</config>

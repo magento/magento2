@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Catalog\Test\TestCase\Product\ValidateOrderOfProductTypeTest">
+        <variation name="ValidateOrderOfProductTypeTestVariation1">
+            <data name="menu/4" xsi:type="string">Bundle Product</data>
+        </variation>
+    </testCase>
+</config>

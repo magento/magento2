@@ -1,42 +1,28 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Block\Adminhtml\Customer\Edit\Tab;
 
 use Magento\Customer\Controller\RegistryConstants;
+use Magento\Ui\Component\Layout\Tabs\TabInterface;
 
 /**
  * Adminhtml customer billing agreement tab
+ *
+ * @api
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 100.0.2
  */
-class Agreement extends \Magento\Paypal\Block\Adminhtml\Billing\Agreement\Grid implements
-    \Magento\Backend\Block\Widget\Tab\TabInterface
+class Agreement extends \Magento\Paypal\Block\Adminhtml\Billing\Agreement\Grid implements TabInterface
 {
     /**
      * Columns, that should be removed from grid
      *
      * @var array
      */
-    protected $_columnsToRemove = array('customer_email', 'customer_firstname', 'customer_lastname');
+    protected $_columnsToRemove = ['customer_email', 'customer_firstname', 'customer_lastname'];
 
     /**
      * Core registry
@@ -49,7 +35,7 @@ class Agreement extends \Magento\Paypal\Block\Adminhtml\Billing\Agreement\Grid i
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Paypal\Helper\Data $helper
-     * @param \Magento\Paypal\Model\Resource\Billing\Agreement\CollectionFactory $agreementFactory
+     * @param \Magento\Paypal\Model\ResourceModel\Billing\Agreement\CollectionFactory $agreementFactory
      * @param \Magento\Paypal\Model\Billing\Agreement $agreementModel
      * @param \Magento\Framework\Registry $coreRegistry
      * @param array $data
@@ -58,10 +44,10 @@ class Agreement extends \Magento\Paypal\Block\Adminhtml\Billing\Agreement\Grid i
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Paypal\Helper\Data $helper,
-        \Magento\Paypal\Model\Resource\Billing\Agreement\CollectionFactory $agreementFactory,
+        \Magento\Paypal\Model\ResourceModel\Billing\Agreement\CollectionFactory $agreementFactory,
         \Magento\Paypal\Model\Billing\Agreement $agreementModel,
         \Magento\Framework\Registry $coreRegistry,
-        array $data = array()
+        array $data = []
     ) {
         $this->_coreRegistry = $coreRegistry;
         parent::__construct($context, $backendHelper, $helper, $agreementFactory, $agreementModel, $data);
@@ -99,7 +85,7 @@ class Agreement extends \Magento\Paypal\Block\Adminhtml\Billing\Agreement\Grid i
      */
     public function canShowTab()
     {
-        return !is_null($this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID));
+        return $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID) !== null;
     }
 
     /**
@@ -117,7 +103,37 @@ class Agreement extends \Magento\Paypal\Block\Adminhtml\Billing\Agreement\Grid i
      */
     public function getGridUrl()
     {
-        return $this->getUrl('paypal/billing_agreement/customerGrid', array('_current' => true));
+        return $this->getUrl('paypal/billing_agreement/customerGrid', ['_current' => true]);
+    }
+
+    /**
+     * Tab class getter
+     *
+     * @return string
+     */
+    public function getTabClass()
+    {
+        return '';
+    }
+
+    /**
+     * Return URL link to Tab content
+     *
+     * @return string
+     */
+    public function getTabUrl()
+    {
+        return '';
+    }
+
+    /**
+     * Tab should be loaded trough Ajax call
+     *
+     * @return bool
+     */
+    public function isAjaxLoaded()
+    {
+        return false;
     }
 
     /**
@@ -137,10 +153,7 @@ class Agreement extends \Magento\Paypal\Block\Adminhtml\Billing\Agreement\Grid i
      */
     protected function _prepareCollection()
     {
-        $customerId = $this->_coreRegistry->registry('current_customer_id');
-        if (!$customerId) {
-            $customerId = $this->_coreRegistry->registry('current_customer')->getId();
-        }
+        $customerId = $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID);
         $collection = $this->_agreementFactory->create()->addFieldToFilter(
             'customer_id',
             $customerId
@@ -155,6 +168,7 @@ class Agreement extends \Magento\Paypal\Block\Adminhtml\Billing\Agreement\Grid i
      * Remove some columns and make other not sortable
      *
      * @return \Magento\Backend\Block\Widget\Grid\Extended
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function _prepareColumns()
     {

@@ -3,30 +3,14 @@
  * Abstract class that helps in writing tests that validate config xml files
  * are valid both individually and when merged.
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\TestFramework\TestCase;
 
-abstract class AbstractConfigFiles extends \PHPUnit_Framework_TestCase
+use Magento\Framework\Component\ComponentRegistrar;
+
+abstract class AbstractConfigFiles extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string
@@ -48,34 +32,37 @@ abstract class AbstractConfigFiles extends \PHPUnit_Framework_TestCase
      */
     protected $_objectManager;
 
+    /**
+     * @var ComponentRegistrar
+     */
+    protected $componentRegistrar;
+
     public function setUp()
     {
+        $this->componentRegistrar = new ComponentRegistrar();
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $xmlFiles = $this->getXmlConfigFiles();
         if (!empty($xmlFiles)) {
-
             $this->_fileResolverMock = $this->getMockBuilder(
-                'Magento\Framework\App\Arguments\FileResolver\Primary'
+                \Magento\Framework\App\Arguments\FileResolver\Primary::class
             )->disableOriginalConstructor()->getMock();
 
             /* Enable Validation regardles of MAGE_MODE */
             $validateStateMock = $this->getMockBuilder(
-                'Magento\Framework\Config\ValidationStateInterface'
+                \Magento\Framework\Config\ValidationStateInterface::class
             )->disableOriginalConstructor()->getMock();
-            $validateStateMock->expects($this->any())->method('isValidated')->will($this->returnValue(true));
+            $validateStateMock->expects($this->any())->method('isValidationRequired')->will($this->returnValue(true));
 
             $this->_reader = $this->_objectManager->create(
                 $this->_getReaderClassName(),
-                array(
+                [
                     'configFiles' => $xmlFiles,
                     'fileResolver' => $this->_fileResolverMock,
                     'validationState' => $validateStateMock
-                )
+                ]
             );
 
-            $filesystem = $this->_objectManager->get('Magento\Framework\App\Filesystem');
-            $modulesDir = $filesystem->getPath(\Magento\Framework\App\Filesystem::MODULES_DIR);
-            $this->_schemaFile = $modulesDir . $this->_getXsdPath();
+            $this->_schemaFile = $this->_getXsdPath();
         }
     }
 
@@ -92,7 +79,11 @@ abstract class AbstractConfigFiles extends \PHPUnit_Framework_TestCase
         if ($skip) {
             $this->markTestSkipped('There are no xml files in the system for this test.');
         }
-        $domConfig = new \Magento\Framework\Config\Dom($file);
+        $validationStateMock = $this->createMock(\Magento\Framework\Config\ValidationStateInterface::class);
+        $validationStateMock->method('isValidationRequired')
+            ->willReturn(false);
+        $domConfig = new \Magento\Framework\Config\Dom($file, $validationStateMock);
+        $errors = [];
         $result = $domConfig->validate($this->_schemaFile, $errors);
         $message = "Invalid XML-file: {$file}\n";
         foreach ($errors as $error) {
@@ -109,17 +100,14 @@ abstract class AbstractConfigFiles extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped('There are no xml files in the system for this test.');
         }
         // have the file resolver return all relevant xml files
-        $this->_fileResolverMock->expects(
-            $this->any()
-        )->method(
-            'get'
-        )->will(
-            $this->returnValue($this->getXmlConfigFiles())
-        );
+        $this->_fileResolverMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnValue($this->getXmlConfigFiles()));
+
         try {
             // this will merge all xml files and validate them
             $this->_reader->read('global');
-        } catch (\Magento\Framework\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->fail($e->getMessage());
         }
     }
@@ -135,9 +123,9 @@ abstract class AbstractConfigFiles extends \PHPUnit_Framework_TestCase
     public function xmlConfigFileProvider()
     {
         $fileList = $this->getXmlConfigFiles();
-        $result = array();
+        $result = [];
         foreach ($fileList as $fileContent) {
-            $result[] = array($fileContent);
+            $result[] = [$fileContent];
         }
         return $result;
     }
@@ -150,17 +138,11 @@ abstract class AbstractConfigFiles extends \PHPUnit_Framework_TestCase
     public function getXmlConfigFiles()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $directory = $objectManager->get(
-            'Magento\Framework\App\Filesystem'
-        )->getDirectoryRead(
-            \Magento\Framework\App\Filesystem::MODULES_DIR
-        );
-        return $objectManager->get(
-            '\Magento\Framework\Config\FileIteratorFactory'
-        )->create(
-            $directory,
-            $directory->search($this->_getConfigFilePathGlob())
-        );
+        /** @var $moduleDirSearch \Magento\Framework\Component\DirSearch */
+        $moduleDirSearch = $objectManager->get(\Magento\Framework\Component\DirSearch::class);
+
+        return $objectManager->get(\Magento\Framework\Config\FileIteratorFactory::class)
+            ->create($moduleDirSearch->collectFiles(ComponentRegistrar::MODULE, $this->_getConfigFilePathGlob()));
     }
 
     /**
@@ -180,7 +162,7 @@ abstract class AbstractConfigFiles extends \PHPUnit_Framework_TestCase
     abstract protected function _getConfigFilePathGlob();
 
     /**
-     * Returns a path to the per file XSD file, relative to the modules directory.
+     * Returns an absolute path to the XSD file corresponding to the XML files specified in _getConfigFilePathGlob
      *
      * @return string
      */

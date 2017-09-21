@@ -1,0 +1,131 @@
+cc_type,"Credit Card Type"
+cc_number,"Credit Card Number"
+avsPostalCodeResponseCode,"AVS Postal Code Response Code"
+avsStreetAddressResponseCode,"AVS Street Address Response Code"
+cvvResponseCode,"CVV Response Code"
+processorAuthorizationCode,"Processor Authorization Code"
+processorResponseCode,"Processor Response Code"
+processorResponseText,"Processor Response Text"
+braintree,Braintree
+liabilityShifted,"Liability Shifted"
+liabilityShiftPossible,"Liability Shift Possible"
+riskDataId,"Risk ID"
+riskDataDecision,"Risk Decision"
+paymentId,"Payment Id"
+payerEmail,"Payer Email"
+sale,Sale
+credit,Credit
+authorization_expired,"Authorization expired"
+authorizing,Authorizing
+authorized,Authorized
+gateway_rejected,"Gateway rejected"
+failed,Failed
+processor_declined,"Processor declined"
+settled,Settled
+settling,Settling
+submitted_for_settlement,"Submitted for settlement"
+voided,Voided
+unrecognized,Unrecognized
+settlement_declined,"Settlement declined"
+settlement_pending,"Settlement pending"
+settlement_confirmed,"Settlement confirmed"
+paypal_account,"Paypal account"
+coinbase_account,"Coinbase account"
+europe_bank_accout,"Europe bank account"
+credit_card,"Credit card"
+apple_pay_card,"Apple pay card"
+android_pay_card,"Android pay card"
+Country,Country
+"Allowed Credit Card Types","Allowed Credit Card Types"
+"Add Rule","Add Rule"
+"Braintree Settlement Report","Braintree Settlement Report"
+"Sorry, but something went wrong","Sorry, but something went wrong"
+"We can't initialize checkout.","We can't initialize checkout."
+"No authorization transaction to proceed capture.","No authorization transaction to proceed capture."
+"Braintree error response.","Braintree error response."
+"Payment method nonce can't be retrieved.","Payment method nonce can't be retrieved."
+"Wrong transaction status","Wrong transaction status"
+Authorize,Authorize
+"Authorize and Capture","Authorize and Capture"
+"--Please Select--","--Please Select--"
+"Please agree to all the terms and conditions before placing the order.","Please agree to all the terms and conditions before placing the order."
+"Credit Card Type","Credit Card Type"
+"Credit Card Number","Credit Card Number"
+"Please, enter valid Credit Card Number","Please, enter valid Credit Card Number"
+"Expiration Date","Expiration Date"
+"Please, enter valid Expiration Date","Please, enter valid Expiration Date"
+"Card Verification Number","Card Verification Number"
+"Please, enter valid Card Verification Number","Please, enter valid Card Verification Number"
+ending,ending
+expires,expires
+"Are you sure you want to delete this PayPal account","Are you sure you want to delete this PayPal account"
+"PayPal Account","PayPal Account"
+"PayPal Logo","PayPal Logo"
+Actions,Actions
+Delete,Delete
+"Credit Card Information","Credit Card Information"
+"What is this?","What is this?"
+"Save for later use.","Save for later use."
+"Place Order","Place Order"
+"This payment is not available","This payment is not available"
+MM,MM
+YY,YY
+"Please try again with another form of payment.","Please try again with another form of payment."
+"Sorry, but something went wrong.","Sorry, but something went wrong."
+"Payment ","Payment "
+Braintree,Braintree
+"Accept credit/debit cards and PayPal in your Magento store.<br/>No setup or monthly fees and your customers never leave your store to complete the purchase.","Accept credit/debit cards and PayPal in your Magento store.<br/>No setup or monthly fees and your customers never leave your store to complete the purchase."
+"Enable this Solution","Enable this Solution"
+"Enable PayPal through Braintree","Enable PayPal through Braintree"
+"Vault Enabled","Vault Enabled"
+"Basic Braintree Settings","Basic Braintree Settings"
+Title,Title
+Environment,Environment
+"Payment Action","Payment Action"
+"Merchant ID","Merchant ID"
+"Public Key","Public Key"
+"Private Key","Private Key"
+"Advanced Braintree Settings","Advanced Braintree Settings"
+"Vault Title","Vault Title"
+"Merchant Account ID","Merchant Account ID"
+"Advanced Fraud Protection","Advanced Fraud Protection"
+"Kount Merchant ID","Kount Merchant ID"
+Debug,Debug
+"CVV Verification","CVV Verification"
+"Credit Card Types","Credit Card Types"
+"Sort Order","Sort Order"
+"Country Specific Settings","Country Specific Settings"
+"Payment from Applicable Countries","Payment from Applicable Countries"
+"Payment from Specific Countries","Payment from Specific Countries"
+"Country Specific Credit Card Types","Country Specific Credit Card Types"
+"PayPal through Braintree","PayPal through Braintree"
+"Override Merchant Name","Override Merchant Name"
+"Require Customer's Billing Address","Require Customer's Billing Address"
+"Allow to Edit Shipping Address Entered During Checkout on PayPal Side","Allow to Edit Shipping Address Entered During Checkout on PayPal Side"
+"Display on Shopping Cart","Display on Shopping Cart"
+"Skip Order Review","Skip Order Review"
+"3D Secure Verification Settings","3D Secure Verification Settings"
+"3D Secure Verification","3D Secure Verification"
+"Threshold Amount","Threshold Amount"
+"Verify for Applicable Countries","Verify for Applicable Countries"
+"Verify for Specific Countries","Verify for Specific Countries"
+"Dynamic Descriptors","Dynamic Descriptors"
+Name,Name
+Phone,Phone
+URL,URL
+"Apply filters in order to get results. Only first 100 records will be displayed in the grid, you will be able to download full version of the report in .csv format.","Apply filters in order to get results. Only first 100 records will be displayed in the grid, you will be able to download full version of the report in .csv format."
+Select...,Select...
+Status,Status
+"Transaction Type","Transaction Type"
+"Payment Type","Payment Type"
+"PayPal Payment ID","PayPal Payment ID"
+"Created At","Created At"
+"Transaction ID","Transaction ID"
+"Order ID","Order ID"
+Type,Type
+Amount,Amount
+"Settlement Code","Settlement Code"
+"Settlement Response Text","Settlement Response Text"
+"Refund Ids","Refund Ids"
+"Settlement Batch ID","Settlement Batch ID"
+Currency,Currency

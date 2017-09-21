@@ -1,28 +1,12 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Helper\Product;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Catalog\Helper\Product\Configuration\ConfigurationInterface;
 use Magento\Framework\App\Helper\AbstractHelper;
 
@@ -50,25 +34,33 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
     /**
      * Magento string lib
      *
-     * @var \Magento\Framework\Stdlib\String
+     * @var \Magento\Framework\Stdlib\StringUtils
      */
     protected $string;
+
+    /**
+     * @var Json
+     */
+    private $serializer;
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory
      * @param \Magento\Framework\Filter\FilterManager $filter
-     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\StringUtils $string
+     * @param Json $serializer
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory,
         \Magento\Framework\Filter\FilterManager $filter,
-        \Magento\Framework\Stdlib\String $string
+        \Magento\Framework\Stdlib\StringUtils $string,
+        Json $serializer = null
     ) {
         $this->_productOptionFactory = $productOptionFactory;
         $this->filter = $filter;
         $this->string = $string;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         parent::__construct($context);
     }
 
@@ -81,10 +73,10 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
     public function getCustomOptions(\Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item)
     {
         $product = $item->getProduct();
-        $options = array();
+        $options = [];
         $optionIds = $item->getOptionByCode('option_ids');
         if ($optionIds) {
-            $options = array();
+            $options = [];
             foreach (explode(',', $optionIds->getValue()) as $optionId) {
                 $option = $product->getOptionById($optionId);
                 if ($option) {
@@ -109,21 +101,21 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
                         }
                     }
 
-                    $options[] = array(
+                    $options[] = [
                         'label' => $option->getTitle(),
                         'value' => $group->getFormattedOptionValue($itemOption->getValue()),
                         'print_value' => $group->getPrintableOptionValue($itemOption->getValue()),
                         'option_id' => $option->getId(),
                         'option_type' => $option->getType(),
-                        'custom_view' => $group->isCustomizedView()
-                    );
+                        'custom_view' => $group->isCustomizedView(),
+                    ];
                 }
             }
         }
 
         $addOptions = $item->getOptionByCode('additional_options');
         if ($addOptions) {
-            $options = array_merge($options, unserialize($addOptions->getValue()));
+            $options = array_merge($options, $this->serializer->unserialize($addOptions->getValue()));
         }
 
         return $options;
@@ -163,18 +155,20 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
      *  - 'cutReplacer': replacer for cut off value part when option value exceeds maxLength
      *
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getFormattedOptionValue($optionValue, $params = null)
     {
         // Init params
         if (!$params) {
-            $params = array();
+            $params = [];
         }
         $maxLength = isset($params['max_length']) ? $params['max_length'] : null;
         $cutReplacer = isset($params['cut_replacer']) ? $params['cut_replacer'] : '...';
 
         // Proceed with option
-        $optionInfo = array();
+        $optionInfo = [];
 
         // Define input data format
         if (is_array($optionValue)) {
@@ -183,18 +177,18 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
                 if (isset($optionInfo['value'])) {
                     $optionValue = $optionInfo['value'];
                 }
-            } else if (isset($optionValue['value'])) {
+            } elseif (isset($optionValue['value'])) {
                 $optionValue = $optionValue['value'];
             }
         }
 
         // Render customized option view
         if (isset($optionInfo['custom_view']) && $optionInfo['custom_view']) {
-            $_default = array('value' => $optionValue);
+            $_default = ['value' => $optionValue];
             if (isset($optionInfo['option_type'])) {
                 try {
                     $group = $this->_productOptionFactory->create()->groupFactory($optionInfo['option_type']);
-                    return array('value' => $group->getCustomizedView($optionInfo));
+                    return ['value' => $group->getCustomizedView($optionInfo)];
                 } catch (\Exception $e) {
                     return $_default;
                 }
@@ -206,17 +200,17 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
         if (is_array($optionValue)) {
             $truncatedValue = implode("\n", $optionValue);
             $truncatedValue = nl2br($truncatedValue);
-            return array('value' => $truncatedValue);
+            return ['value' => $truncatedValue];
         } else {
             if ($maxLength) {
-                $truncatedValue = $this->filter->truncate($optionValue, array('length' => $maxLength, 'etc' => ''));
+                $truncatedValue = $this->filter->truncate($optionValue, ['length' => $maxLength, 'etc' => '']);
             } else {
                 $truncatedValue = $optionValue;
             }
             $truncatedValue = nl2br($truncatedValue);
         }
 
-        $result = array('value' => $truncatedValue);
+        $result = ['value' => $truncatedValue];
 
         if ($maxLength && $this->string->strlen($optionValue) > $maxLength) {
             $result['value'] = $result['value'] . $cutReplacer;

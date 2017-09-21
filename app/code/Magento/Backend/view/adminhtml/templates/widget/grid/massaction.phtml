@@ -1,0 +1,102 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?= /* @escapeNotVerified */ $block->getSomething() ?>
+<div id="<?= $block->getHtmlId() ?>" class="admin__grid-massaction">
+
+    <?php if ($block->getHideFormElement() !== true):?>
+    <form action="" id="<?= $block->getHtmlId() ?>-form" method="post">
+    <?php endif ?>
+        <div class="admin__grid-massaction-form">
+    <?= $block->getBlockHtml('formkey') ?>
+            <select
+                id="<?= $block->getHtmlId() ?>-select"
+                class="required-entry local-validation admin__control-select"
+                <?= /* @escapeNotVerified */ $block->getUiId('select') ?>>
+                <option class="admin__control-select-placeholder" value="" selected><?= /* @escapeNotVerified */ __('Actions') ?></option>
+                <?php foreach ($block->getItems() as $_item):?>
+                    <option value="<?= /* @escapeNotVerified */ $_item->getId() ?>"<?= ($_item->getSelected() ? ' selected="selected"' : '') ?>><?= /* @escapeNotVerified */ $_item->getLabel() ?></option>
+                <?php endforeach; ?>
+            </select>
+            <span class="outer-span" id="<?= $block->getHtmlId() ?>-form-hiddens"></span>
+            <span class="outer-span" id="<?= $block->getHtmlId() ?>-form-additional"></span>
+            <?= $block->getApplyButtonHtml() ?>
+        </div>
+    <?php if ($block->getHideFormElement() !== true):?>
+    </form>
+    <?php endif ?>
+    <div class="no-display">
+    <?php foreach ($block->getItems() as $_item): ?>
+        <div id="<?= $block->getHtmlId() ?>-item-<?= /* @escapeNotVerified */ $_item->getId() ?>-block">
+            <?php if ('' != $_item->getBlockName()):?>
+                <?= $block->getChildHtml($_item->getBlockName()) ?>
+            <?php endif;?>
+        </div>
+    <?php endforeach; ?>
+    </div>
+
+    <div class="mass-select-wrap">
+        <select
+            id="<?= $block->getHtmlId() ?>-mass-select"
+            class="action-select-multiselect _disabled"
+            disabled="disabled"
+            data-menu="grid-mass-select">
+            <optgroup label="<?= /* @escapeNotVerified */ __('Mass Actions') ?>">
+                <option disabled selected></option>
+                <?php if ($block->getUseSelectAll()):?>
+                    <option value="selectAll">
+                        <?= /* @escapeNotVerified */ __('Select All') ?>
+                    </option>
+                    <option value="unselectAll">
+                        <?= /* @escapeNotVerified */ __('Unselect All') ?>
+                    </option>
+                <?php endif; ?>
+                <option value="selectVisible">
+                    <?= /* @escapeNotVerified */ __('Select Visible') ?>
+                </option>
+                <option value="unselectVisible">
+                    <?= /* @escapeNotVerified */ __('Unselect Visible') ?>
+                </option>
+            </optgroup>
+        </select>
+        <label for="<?= $block->getHtmlId() ?>-mass-select"></label>
+    </div>
+
+<script>
+    require(['jquery', 'domReady!'], function($){
+        'use strict';
+        $('#<?= $block->getHtmlId() ?>-mass-select')
+            .removeClass('_disabled')
+            .prop('disabled', false)
+            .change(function () {
+            var massAction = $('option:selected', this).val();
+            this.blur();
+            switch (massAction) {
+                <?php if ($block->getUseSelectAll()):?>
+                case 'selectAll':
+                    return <?= /* @escapeNotVerified */ $block->getJsObjectName() ?>.selectAll();
+                    break;
+                case 'unselectAll':
+                    return <?= /* @escapeNotVerified */ $block->getJsObjectName() ?>.unselectAll();
+                    break;
+                <?php endif; ?>
+                case 'selectVisible':
+                    return <?= /* @escapeNotVerified */ $block->getJsObjectName() ?>.selectVisible();
+                    break;
+                case 'unselectVisible':
+                    return <?= /* @escapeNotVerified */ $block->getJsObjectName() ?>.unselectVisible();
+                    break;
+            }
+        });
+    });
+    <?php if (!$block->getParentBlock()->canDisplayContainer()): ?>
+        <?= /* @escapeNotVerified */ $block->getJsObjectName() ?>.setGridIds('<?= /* @escapeNotVerified */ $block->getGridIdsJson() ?>');
+    <?php endif; ?>
+</script>
+</div>

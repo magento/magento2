@@ -1,27 +1,12 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model;
+
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\LocalizedException;
 
 class Download
 {
@@ -31,12 +16,12 @@ class Download
     protected $_rootDir;
 
     /**
-     * @var \Magento\Core\Helper\File\Storage\Database
+     * @var \Magento\MediaStorage\Helper\File\Storage\Database
      */
     protected $_fileStorageDatabase;
 
     /**
-     * @var \Magento\Core\Model\File\Storage\DatabaseFactory
+     * @var \Magento\MediaStorage\Model\File\Storage\DatabaseFactory
      */
     protected $_storageDatabaseFactory;
 
@@ -46,18 +31,26 @@ class Download
     protected $_fileFactory;
 
     /**
-     * @param \Magento\Framework\App\Filesystem $filesystem
-     * @param \Magento\Core\Helper\File\Storage\Database $fileStorageDatabase
-     * @param \Magento\Core\Model\File\Storage\DatabaseFactory $storageDatabaseFactory
+     * @var string
+     */
+    protected $rootDirBasePath;
+
+    /**
+     * @param \Magento\Framework\Filesystem $filesystem
+     * @param \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDatabase
+     * @param \Magento\MediaStorage\Model\File\Storage\DatabaseFactory $storageDatabaseFactory
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
+     * @param string $rootDirBasePath
      */
     public function __construct(
-        \Magento\Framework\App\Filesystem $filesystem,
-        \Magento\Core\Helper\File\Storage\Database $fileStorageDatabase,
-        \Magento\Core\Model\File\Storage\DatabaseFactory $storageDatabaseFactory,
-        \Magento\Framework\App\Response\Http\FileFactory $fileFactory
+        \Magento\Framework\Filesystem $filesystem,
+        \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDatabase,
+        \Magento\MediaStorage\Model\File\Storage\DatabaseFactory $storageDatabaseFactory,
+        \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
+        $rootDirBasePath = DirectoryList::MEDIA
     ) {
-        $this->_rootDir = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::ROOT_DIR);
+        $this->rootDirBasePath = $rootDirBasePath;
+        $this->_rootDir = $filesystem->getDirectoryWrite($this->rootDirBasePath);
         $this->_fileStorageDatabase = $fileStorageDatabase;
         $this->_storageDatabaseFactory = $storageDatabaseFactory;
         $this->_fileFactory = $fileFactory;
@@ -73,18 +66,19 @@ class Download
     public function downloadFile($info)
     {
         $relativePath = $info['order_path'];
-        if ($this->_isCanProcessed($relativePath)) {
+        if (!$this->_isCanProcessed($relativePath)) {
             //try get file from quote
             $relativePath = $info['quote_path'];
-            if ($this->_isCanProcessed($relativePath)) {
-                throw new \Exception();
+            if (!$this->_isCanProcessed($relativePath)) {
+                throw new LocalizedException(
+                    __('Path "%1" is not part of allowed directory "%2"', $relativePath, $this->rootDirBasePath)
+                );
             }
         }
-
         $this->_fileFactory->create(
             $info['title'],
-            array('value' => $this->_rootDir->getRelativePath($relativePath), 'type' => 'filename'),
-            \Magento\Framework\App\Filesystem::ROOT_DIR
+            ['value' => $this->_rootDir->getRelativePath($relativePath), 'type' => 'filename'],
+            $this->rootDirBasePath
         );
     }
 
@@ -95,32 +89,29 @@ class Download
     protected function _isCanProcessed($relativePath)
     {
         $filePath = $this->_rootDir->getAbsolutePath($relativePath);
-        return (!$this->_rootDir->isFile(
-            $relativePath
-        ) || !$this->_rootDir->isReadable(
-            $relativePath
-        )) && !$this->_processDatabaseFile(
-            $filePath
-        );
+        $pathWithFixedSeparator = str_replace('\\', '/', $this->_rootDir->getDriver()->getRealPath($filePath));
+        return (strpos($pathWithFixedSeparator, $relativePath) !== false
+            && $this->_rootDir->isFile($relativePath) && $this->_rootDir->isReadable($relativePath))
+            || $this->_processDatabaseFile($filePath, $relativePath);
     }
 
     /**
      * Check file in database storage if needed and place it on file system
      *
      * @param string $filePath
+     * @param string $relativePath
      * @return bool
      */
-    protected function _processDatabaseFile($filePath)
+    protected function _processDatabaseFile($filePath, $relativePath)
     {
         if (!$this->_fileStorageDatabase->checkDbUsage()) {
             return false;
         }
-        $relativePath = $this->_fileStorageDatabase->getMediaRelativePath($filePath);
         $file = $this->_storageDatabaseFactory->create()->loadByFilename($relativePath);
         if (!$file->getId()) {
             return false;
         }
-        $stream = $this->_rootDir->openFile($filePath, 'w+');
+        $stream = $this->_rootDir->openFile($relativePath, 'w+');
         $stream->lock();
         $stream->write($filePath, $file->getContent());
         $stream->unlock();

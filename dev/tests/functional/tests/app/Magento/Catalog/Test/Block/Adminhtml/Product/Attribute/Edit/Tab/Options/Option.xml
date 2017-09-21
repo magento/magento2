@@ -1,0 +1,21 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<mapping strict="0">
+    <fields>
+        <is_default>
+            <selector>[name="default[]"]</selector>
+            <input>checkbox</input>
+        </is_default>
+        <admin>
+            <selector>[name$="[0]"]</selector>
+        </admin>
+        <view>
+            <selector>[name$="[1]"]</selector>
+        </view>
+    </fields>
+</mapping>

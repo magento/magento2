@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity\Theme;
 
@@ -30,32 +12,16 @@ class TemplateFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrit
      */
     public function testTemplates()
     {
-        $invalidTemplates = array();
+        $invalidTemplates = [];
         foreach ($this->templatesDataProvider() as $template) {
             list($area, $themeId, $module, $file, $xml) = $template;
-
-            if ($area === 'frontend' && in_array(
-                $module . '::' . $file,
-                array(
-                    'Magento_Reports::Magento_Catalog::product/list/items.phtml',
-                    'Magento_Review::redirect.phtml',
-                    'Magento_Theme::blank.phtml'
-                )
-            )
-            ) {
-                continue; // $this->markTestIncomplete('MAGETWO-9806');
-            }
-
-            $params = array('area' => $area, 'themeId' => $themeId, 'module' => $module);
+            $params = ['area' => $area, 'themeId' => $themeId, 'module' => $module];
             try {
-                $templateFilename = \Magento\TestFramework\Helper\Bootstrap::getObjectmanager()->get(
-                    'Magento\Framework\View\FileSystem'
-                )->getFilename(
-                    $file,
-                    $params
-                );
+                $templateFilename = \Magento\TestFramework\Helper\Bootstrap::getObjectmanager()
+                    ->get(\Magento\Framework\View\FileSystem::class)
+                    ->getTemplateFileName($file, $params);
                 $this->assertFileExists($templateFilename);
-            } catch (\PHPUnit_Framework_ExpectationFailedException $e) {
+            } catch (\PHPUnit\Framework\ExpectationFailedException $e) {
                 $invalidTemplates[] = "File \"{$templateFilename}\" does not exist." .
                     PHP_EOL .
                     "Parameters: {$area}/{$themeId} {$module}::{$file}" .
@@ -73,18 +39,18 @@ class TemplateFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrit
 
     public function templatesDataProvider()
     {
-        $templates = array();
+        $templates = [];
 
         $themes = $this->_getDesignThemes();
         foreach ($themes as $theme) {
             /** @var \Magento\Framework\View\Layout\ProcessorInterface $layoutUpdate */
             $layoutUpdate = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-                'Magento\Framework\View\Layout\ProcessorInterface',
-                array('theme' => $theme)
+                \Magento\Framework\View\Layout\ProcessorInterface::class,
+                ['theme' => $theme]
             );
             $layoutTemplates = $this->_getLayoutTemplates($layoutUpdate->getFileLayoutUpdatesXml());
             foreach ($layoutTemplates as $templateData) {
-                $templates[] = array_merge(array($theme->getArea(), $theme->getId()), $templateData);
+                $templates[] = array_merge([$theme->getArea(), $theme->getId()], $templateData);
             }
         }
 
@@ -96,10 +62,11 @@ class TemplateFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrit
      *
      * @param  \SimpleXMLElement $layoutXml
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _getLayoutTemplates($layoutXml)
     {
-        $templates = array();
+        $templates = [];
 
         $blocks = $layoutXml->xpath('//block');
         foreach ($blocks as $block) {
@@ -107,7 +74,7 @@ class TemplateFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrit
             if (isset($attributes['template'])) {
                 $module = $this->_getBlockModule($block);
                 if (!$this->_isTemplateForDisabledModule($module, (string)$attributes['template'])) {
-                    $templates[] = array($module, (string)$attributes['template'], $block->asXML());
+                    $templates[] = [$module, (string)$attributes['template'], $block->asXML()];
                 }
             }
         }
@@ -126,7 +93,7 @@ class TemplateFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrit
                     );
                     $module = $this->_getBlockModule($block[0]);
                     if (!$template->attributes() && !$this->_isTemplateForDisabledModule($module, (string)$template)) {
-                        $templates[] = array($module, (string)$template, $parent[0]->asXml());
+                        $templates[] = [$module, (string)$template, $parent[0]->asXml()];
                     }
                     break;
                 case 'addInformationRenderer':
@@ -134,7 +101,7 @@ class TemplateFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrit
                     $blockType = $action[0]->xpath('block');
                     $module = $this->_getBlockModule($blockType[0]);
                     if (!$this->_isTemplateForDisabledModule($module, (string)$template)) {
-                        $templates[] = array($module, (string)$template, $action[0]->asXml());
+                        $templates[] = [$module, (string)$template, $action[0]->asXml()];
                     }
                     break;
                 default:

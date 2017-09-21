@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -29,6 +11,13 @@
  */
 namespace Magento\Downloadable\Block\Checkout\Cart\Item;
 
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
+
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
 {
     /**
@@ -36,36 +25,46 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
      *
      * @var \Magento\Downloadable\Helper\Catalog\Product\Configuration
      */
-    protected $_downloadProdConfig = null;
+    protected $_downloadableProductConfiguration = null;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Catalog\Helper\Product\Configuration $productConfig
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Catalog\Helper\Image $imageHelper
-     * @param \Magento\Core\Helper\Url $urlHelper
+     * @param \Magento\Catalog\Block\Product\ImageBuilder $imageBuilder
+     * @param \Magento\Framework\Url\Helper\Data $urlHelper
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
-     * @param \Magento\Downloadable\Helper\Catalog\Product\Configuration $dwnCtlgProdConfig
+     * @param PriceCurrencyInterface $priceCurrency
+     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param InterpretationStrategyInterface $messageInterpretationStrategy
+     * @param \Magento\Downloadable\Helper\Catalog\Product\Configuration $downloadableProductConfiguration
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Catalog\Helper\Product\Configuration $productConfig,
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Catalog\Helper\Image $imageHelper,
-        \Magento\Core\Helper\Url $urlHelper,
+        \Magento\Catalog\Block\Product\ImageBuilder $imageBuilder,
+        \Magento\Framework\Url\Helper\Data $urlHelper,
         \Magento\Framework\Message\ManagerInterface $messageManager,
-        \Magento\Downloadable\Helper\Catalog\Product\Configuration $dwnCtlgProdConfig,
-        array $data = array()
+        PriceCurrencyInterface $priceCurrency,
+        \Magento\Framework\Module\Manager $moduleManager,
+        InterpretationStrategyInterface $messageInterpretationStrategy,
+        \Magento\Downloadable\Helper\Catalog\Product\Configuration $downloadableProductConfiguration,
+        array $data = []
     ) {
-        $this->_downloadProdConfig = $dwnCtlgProdConfig;
+        $this->_downloadableProductConfiguration = $downloadableProductConfiguration;
         parent::__construct(
             $context,
             $productConfig,
             $checkoutSession,
-            $imageHelper,
+            $imageBuilder,
             $urlHelper,
             $messageManager,
+            $priceCurrency,
+            $moduleManager,
+            $messageInterpretationStrategy,
             $data
         );
     }
@@ -77,7 +76,10 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
      */
     public function getLinks()
     {
-        return $this->_downloadProdConfig->getLinks($this->getItem());
+        if (!$this->getItem()) {
+            return [];
+        }
+        return $this->_downloadableProductConfiguration->getLinks($this->getItem());
     }
 
     /**
@@ -87,6 +89,26 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
      */
     public function getLinksTitle()
     {
-        return $this->_downloadProdConfig->getLinksTitle($this->getProduct());
+        return $this->_downloadableProductConfiguration->getLinksTitle($this->getProduct());
+    }
+
+    /**
+     * Get list of all options for product
+     *
+     * @return array
+     */
+    public function getOptionList()
+    {
+        return $this->_downloadableProductConfiguration->getOptions($this->getItem());
+    }
+
+    /**
+     * Get list of all options for product
+     * @param \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item
+     * @return array
+     */
+    public function getOption($item)
+    {
+        return $this->_downloadableProductConfiguration->getOptions($item);
     }
 }

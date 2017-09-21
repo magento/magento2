@@ -1,0 +1,35 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Jasmine Spec Runner</title>
+        <link rel="shortcut icon" type="image/png" href="<%= temp %>/jasmine_favicon.png">
+        <% css.forEach(function (style) { %>
+        <link rel="stylesheet" href="<%= style %>">
+        <script type="text/javascript">
+            var require = {
+                baseUrl: '<%= options.baseUrl %>'
+            };
+        </script>
+        <% }); %>
+        <% with (scripts) { %>
+            <% [].concat(polyfills, jasmine, boot, vendor, src, reporters).forEach(function (script) { %>
+            <script type="text/javascript" src="<%= script %>"></script>
+            <% }); %>
+        <% } %>
+        <script type="text/javascript">
+            var jasmineBoot = window.onload;
+            window.onload = null;
+
+            require(<%= JSON.stringify(scripts.helpers) %>, jasmineBoot);
+        </script>
+    </head>
+    <body></body>
+</html>

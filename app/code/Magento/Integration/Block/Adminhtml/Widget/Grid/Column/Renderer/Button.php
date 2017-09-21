@@ -1,31 +1,13 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer;
 
 use Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer;
+use Magento\Framework\DataObject;
 use Magento\Integration\Model\Integration;
-use Magento\Framework\Object;
 
 /**
  * Render HTML <button> tag.
@@ -36,7 +18,7 @@ class Button extends AbstractRenderer
     /**
      * {@inheritdoc}
      */
-    public function render(\Magento\Framework\Object $row)
+    public function render(\Magento\Framework\DataObject $row)
     {
         /** @var array $attributes */
         $attributes = $this->_prepareAttributes($row);
@@ -46,10 +28,10 @@ class Button extends AbstractRenderer
     /**
      * Determine whether current integration came from config file
      *
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return bool
      */
-    protected function _isConfigBasedIntegration(Object $row)
+    protected function _isConfigBasedIntegration(DataObject $row)
     {
         return $row->hasData(
             Integration::SETUP_TYPE
@@ -61,20 +43,20 @@ class Button extends AbstractRenderer
     /**
      * Whether current item is disabled.
      *
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function _isDisabled(Object $row)
+    protected function _isDisabled(DataObject $row)
     {
         return false;
     }
 
     /**
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return string
      */
-    protected function _getDisabledAttribute(Object $row)
+    protected function _getDisabledAttribute(DataObject $row)
     {
         return $this->_isDisabled($row) ? 'disabled' : '';
     }
@@ -86,12 +68,12 @@ class Button extends AbstractRenderer
      * - Then it tries to get it from the button's column layout description.
      * If received attribute value is empty - attribute is not added to final HTML.
      *
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return array
      */
-    protected function _prepareAttributes(Object $row)
+    protected function _prepareAttributes(DataObject $row)
     {
-        $attributes = array();
+        $attributes = [];
         foreach ($this->_getValidAttributes() as $attributeName) {
             $methodName = sprintf('_get%sAttribute', ucfirst($attributeName));
             $rowMethodName = sprintf('get%s', ucfirst($attributeName));
@@ -103,7 +85,11 @@ class Button extends AbstractRenderer
             ) : $this->getColumn()->{$rowMethodName}();
 
             if ($attributeValue) {
-                $attributes[] = sprintf('%s="%s"', $attributeName, $this->escapeHtml($attributeValue));
+                $attributes[] = sprintf(
+                    '%s="%s"',
+                    $attributeName,
+                    $this->escapeHtmlAttr($attributeValue, false)
+                );
             }
         }
         return $attributes;
@@ -122,7 +108,7 @@ class Button extends AbstractRenderer
          *                               'onmouseover', 'onmouseup'
          * Element attributes - 'disabled', 'name', 'type', 'value'
          */
-        return array(
+        return [
             'accesskey',
             'class',
             'id',
@@ -141,7 +127,7 @@ class Button extends AbstractRenderer
             'name',
             'type',
             'value'
-        );
+        ];
     }
 
     /**

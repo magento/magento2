@@ -1,0 +1,24 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php if (sizeof($block->getTotals()) > 0): ?>
+<div class="dashboard-totals" id="dashboard_diagram_totals">
+    <ul class="dashboard-totals-list">
+        <?php foreach ($block->getTotals() as $_total): ?>
+            <li class="dashboard-totals-item">
+                <span class="dashboard-totals-label"><?= /* @escapeNotVerified */ $_total['label'] ?></span>
+                <strong class="dashboard-totals-value">
+                    <?= /* @escapeNotVerified */ $_total['value'] ?>
+                    <span class="dashboard-totals-decimals"><?= /* @escapeNotVerified */ $_total['decimals'] ?></span>
+                </strong>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+</div>
+<?php endif; ?>

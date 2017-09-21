@@ -1,46 +1,39 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Helper\Product;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class ConfigurationPool
 {
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $_objectManager;
 
     /**
      * @var \Magento\Catalog\Helper\Product\Configuration\ConfigurationInterface[]
      */
-    private $_instances = array();
+    private $_instances = [];
 
     /**
-     * @param \Magento\Framework\ObjectManager $objectManager
+     * @var array
      */
-    public function __construct(\Magento\Framework\ObjectManager $objectManager)
+    private $instancesByType = [];
+
+    /**
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param array $instancesByType
+     */
+    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, array $instancesByType)
     {
         $this->_objectManager = $objectManager;
+        $this->instancesByType = $instancesByType;
     }
 
     /**
@@ -58,11 +51,23 @@ class ConfigurationPool
             ) {
                 throw new \LogicException(
                     "{$className} doesn't implement " .
-                    "\\Magento\\Catalog\\Helper\\Product\\Configuration\\ConfigurationInterface"
+                    \Magento\Catalog\Helper\Product\Configuration\ConfigurationInterface::class
                 );
             }
             $this->_instances[$className] = $helperInstance;
         }
         return $this->_instances[$className];
+    }
+
+    /**
+     * @param string $productType
+     * @return Configuration\ConfigurationInterface
+     */
+    public function getByProductType($productType)
+    {
+        if (!isset($this->instancesByType[$productType])) {
+            return $this->instancesByType['default'];
+        }
+        return $this->instancesByType[$productType];
     }
 }

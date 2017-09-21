@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Newsletter\Test\TestCase\CreateNewsletterTemplateEntityTest" summary="Create newsletter template " ticketId="MAGETWO-23302">
+        <variation name="CreateNewsletterTemplateEntityTestVariation1">
+            <data name="template/data/code" xsi:type="string">TemplateName%isolation%</data>
+            <data name="template/data/subject" xsi:type="string">TemplateSubject%isolation%</data>
+            <data name="template/data/sender_name" xsi:type="string">SenderName%isolation%</data>
+            <data name="template/data/sender_email" xsi:type="string">SenderName%isolation%@example.com</data>
+            <data name="template/data/text" xsi:type="string">Some content %isolation%</data>
+            <constraint name="Magento\Newsletter\Test\Constraint\AssertNewsletterSuccessCreateMessage" />
+            <constraint name="Magento\Newsletter\Test\Constraint\AssertNewsletterInGrid" />
+        </variation>
+    </testCase>
+</config>

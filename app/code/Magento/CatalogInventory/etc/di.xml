@@ -1,44 +1,50 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE_AFL.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/Framework/ObjectManager/etc/config.xsd">
-    <type name="Magento\CatalogInventory\Model\Observer">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\CatalogInventory\Api\Data\StockInterface" type="Magento\CatalogInventory\Model\Stock" />
+    <preference for="Magento\CatalogInventory\Api\Data\StockItemInterface" type="Magento\CatalogInventory\Model\Stock\Item" />
+    <preference for="Magento\CatalogInventory\Api\Data\StockStatusInterface" type="Magento\CatalogInventory\Model\Stock\Status" />
+
+    <preference for="Magento\CatalogInventory\Api\Data\StockCollectionInterface" type="Magento\CatalogInventory\Model\ResourceModel\Stock\Collection" />
+    <preference for="Magento\CatalogInventory\Api\Data\StockItemCollectionInterface" type="Magento\CatalogInventory\Model\ResourceModel\Stock\Item\Collection" />
+    <preference for="Magento\CatalogInventory\Api\Data\StockStatusCollectionInterface" type="Magento\CatalogInventory\Model\ResourceModel\Stock\Status\Collection" />
+
+    <preference for="Magento\CatalogInventory\Api\StockCriteriaInterface" type="Magento\CatalogInventory\Model\ResourceModel\Stock\StockCriteria" />
+    <preference for="Magento\CatalogInventory\Api\StockItemCriteriaInterface" type="Magento\CatalogInventory\Model\ResourceModel\Stock\Item\StockItemCriteria" />
+    <preference for="Magento\CatalogInventory\Api\StockStatusCriteriaInterface" type="Magento\CatalogInventory\Model\ResourceModel\Stock\Status\StockStatusCriteria" />
+
+    <preference for="Magento\CatalogInventory\Api\StockConfigurationInterface" type="Magento\CatalogInventory\Model\Configuration" />
+    <preference for="Magento\CatalogInventory\Api\StockManagementInterface" type="Magento\CatalogInventory\Model\StockManagement" />
+    <preference for="Magento\CatalogInventory\Api\StockIndexInterface" type="Magento\CatalogInventory\Model\StockIndex" />
+    <preference for="Magento\CatalogInventory\Api\StockRegistryInterface" type="Magento\CatalogInventory\Model\StockRegistry" />
+    <preference for="Magento\CatalogInventory\Api\StockStateInterface" type="Magento\CatalogInventory\Model\StockState" />
+
+    <preference for="Magento\CatalogInventory\Api\StockRepositoryInterface" type="Magento\CatalogInventory\Model\Stock\StockRepository" />
+    <preference for="Magento\CatalogInventory\Api\StockItemRepositoryInterface" type="Magento\CatalogInventory\Model\Stock\StockItemRepository" />
+    <preference for="Magento\CatalogInventory\Api\StockStatusRepositoryInterface" type="Magento\CatalogInventory\Model\Stock\StockStatusRepository" />
+
+    <preference for="Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface" type="Magento\CatalogInventory\Model\StockRegistryProvider" />
+    <preference for="Magento\CatalogInventory\Model\Spi\StockStateProviderInterface" type="Magento\CatalogInventory\Model\StockStateProvider" />
+
+    <preference for="Magento\CatalogInventory\Model\ResourceModel\QtyCounterInterface" type="Magento\CatalogInventory\Model\ResourceModel\Stock" />
+    <type name="Magento\Catalog\Model\Product\Attribute\Repository">
+        <plugin name="filterCustomAttribute" type="Magento\CatalogInventory\Model\Plugin\FilterCustomAttribute" />
+    </type>
+    <type name="Magento\CatalogInventory\Model\Plugin\FilterCustomAttribute">
         <arguments>
-            <argument name="resourceIndexerStock" xsi:type="object">Magento\CatalogInventory\Model\Resource\Indexer\Stock\Proxy</argument>
-            <argument name="resourceStock" xsi:type="object">Magento\CatalogInventory\Model\Resource\Stock\Proxy</argument>
-            <argument name="indexer" xsi:type="object">Magento\Index\Model\Indexer\Proxy</argument>
-            <argument name="stock" xsi:type="object">Magento\CatalogInventory\Model\Stock\Proxy</argument>
-            <argument name="stockStatus" xsi:type="object">Magento\CatalogInventory\Model\Stock\Status\Proxy</argument>
-            <argument name="catalogInventoryData" xsi:type="object">Magento\CatalogInventory\Helper\Data\Proxy</argument>
+            <argument name="blackList" xsi:type="array">
+                <item name="quantity_and_stock_status" xsi:type="string">quantity_and_stock_status</item>
+            </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Module\Updater\SetupFactory">
+    <type name="Magento\CatalogInventory\Observer\UpdateItemsStockUponConfigChangeObserver">
         <arguments>
-            <argument name="resourceTypes" xsi:type="array">
-                <item name="cataloginventory_setup" xsi:type="string">Magento\Eav\Model\Entity\Setup</item>
-            </argument>
+            <argument name="resourceStock" xsi:type="object">Magento\CatalogInventory\Model\ResourceModel\Stock\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Catalog\Model\Layer">
@@ -48,6 +54,64 @@
         <arguments>
             <argument name="compositeModules" xsi:type="array">
                 <item name="cataloginventory" xsi:type="string">Magento_CatalogInventory</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Store\Model\ResourceModel\Group">
+        <plugin name="storeGroupResourceAroundBeforeSave" type="Magento\CatalogInventory\Model\Indexer\Stock\Plugin\StoreGroup"/>
+    </type>
+    <type name="Magento\Catalog\Model\Indexer\Product\Full">
+        <arguments>
+            <argument name="indexerList" xsi:type="array">
+                <item name="cataloginventory_stock" xsi:type="const">Magento\CatalogInventory\Model\Indexer\Stock\Processor::INDEXER_ID</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Block\Product\View">
+        <plugin name="quantityValidators" type="Magento\CatalogInventory\Block\Plugin\ProductView" />
+    </type>
+    <type name="Magento\CatalogInventory\Model\Configuration">
+        <arguments>
+            <argument name="config" xsi:type="object">Magento\Catalog\Model\ProductTypes\Config\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product">
+        <plugin name="catalogInventoryAfterLoad" type="Magento\CatalogInventory\Model\Plugin\AfterProductLoad"/>
+    </type>
+    <type name="Magento\CatalogInventory\Setup\UpgradeData">
+        <arguments>
+            <argument name="indexerProcessor" xsi:type="object">Magento\CatalogInventory\Model\Indexer\Stock\Processor</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Product\CompositeBaseSelectProcessor">
+        <arguments>
+            <argument name="baseSelectProcessors" xsi:type="array">
+                <item name="stock_status" xsi:type="object">Magento\CatalogInventory\Model\ResourceModel\Product\StockStatusBaseSelectProcessor</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\CatalogInventory\Model\Indexer\Stock\BatchSizeManagement" type="Magento\Framework\Indexer\BatchSizeManagement">
+        <arguments>
+            <argument name="rowSizeEstimator" xsi:type="object">Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\IndexTableRowSizeEstimator</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\IndexTableRowSizeEstimator" type="Magento\Framework\Indexer\IndexTableRowSizeEstimator">
+        <arguments>
+            <argument name="rowMemorySize" xsi:type="number">100</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\CatalogInventory\Model\Indexer\Stock\Action\Full">
+        <arguments>
+            <argument name="batchRowsCount" xsi:type="array">
+                <item name="default" xsi:type="number">200</item>
+            </argument>
+            <argument name="batchSizeManagement" xsi:type="object">Magento\CatalogInventory\Model\Indexer\Stock\BatchSizeManagement</argument>
+        </arguments>
+    </type>
+    <type name="\Magento\Framework\Data\CollectionModifier">
+        <arguments>
+            <argument name="conditions" xsi:type="array">
+                <item name="stockStatusCondition" xsi:type="object">Magento\CatalogInventory\Model\ProductCollectionStockCondition</item>
             </argument>
         </arguments>
     </type>

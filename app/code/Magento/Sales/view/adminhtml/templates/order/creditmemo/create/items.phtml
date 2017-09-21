@@ -1,0 +1,208 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php $_items = $block->getCreditmemo()->getAllItems() ?>
+
+<section class="admin__page-section">
+    <div class="admin__page-section-title">
+        <span class="title"><?= /* @escapeNotVerified */ __('Items to Refund') ?></span>
+    </div>
+
+    <?php if (count($_items)) : ?>
+    <div class="admin__table-wrapper">
+        <table class="data-table admin__table-primary order-creditmemo-tables">
+            <thead>
+                <tr class="headings">
+                    <th class="col-product"><span><?= /* @escapeNotVerified */ __('Product') ?></span></th>
+                    <th class="col-price"><span><?= /* @escapeNotVerified */ __('Price') ?></span></th>
+                    <th class="col-ordered-qty"><span><?= /* @escapeNotVerified */ __('Qty') ?></span></th>
+                    <?php if ($block->canReturnToStock()) : ?>
+                    <th class="col-return-to-stock"><span><?= /* @escapeNotVerified */ __('Return to Stock') ?></span></th>
+                    <?php endif; ?>
+                    <th class="col-refund"><span><?= /* @escapeNotVerified */ __('Qty to Refund') ?></span></th>
+                    <th class="col-subtotal"><span><?= /* @escapeNotVerified */ __('Subtotal') ?></span></th>
+                    <th class="col-tax-amount"><span><?= /* @escapeNotVerified */ __('Tax Amount') ?></span></th>
+                    <th class="col-discont"><span><?= /* @escapeNotVerified */ __('Discount Amount') ?></span></th>
+                    <th class="col-total last"><span><?= /* @escapeNotVerified */ __('Row Total') ?></span></th>
+                </tr>
+            </thead>
+            <?php if ($block->canEditQty()): ?>
+            <tfoot>
+                <tr>
+                    <td colspan="3">&nbsp;</td>
+                    <td colspan="3">
+                        <?= $block->getUpdateButtonHtml() ?>
+                    </td>
+                    <td colspan="3" class="last">&nbsp;</td>
+                </tr>
+            </tfoot>
+            <?php endif; ?>
+            <?php $i = 0; foreach ($_items as $_item): ?>
+                <?php if ($_item->getOrderItem()->getParentItem()) {
+                continue;
+            } else {
+                $i++;
+            } ?>
+                <tbody class="<?= /* @escapeNotVerified */ $i%2 ? 'even' : 'odd' ?>">
+                    <?= $block->getItemHtml($_item) ?>
+                    <?= $block->getItemExtraInfoHtml($_item->getOrderItem()) ?>
+                </tbody>
+            <?php endforeach; ?>
+        </table>
+    </div>
+    <?php else : ?>
+    <div class="no-items">
+        <?= /* @escapeNotVerified */ __('No Items To Refund') ?>
+    </div>
+    <?php endif; ?>
+</section>
+
+<?php $orderTotalBar = $block->getChildHtml('order_totalbar'); ?>
+
+<?php if (!empty($orderTotalBar)): ?>
+<section class="fieldset-wrapper">
+    <?= /* @escapeNotVerified */ $orderTotalBar ?>
+</section>
+<?php endif; ?>
+
+<section class="admin__page-section">
+    <input type="hidden" name="creditmemo[do_offline]" id="creditmemo_do_offline" value="0" />
+    <div class="admin__page-section-title">
+        <span class="title"><?= /* @escapeNotVerified */ __('Order Total') ?></span>
+    </div>
+    <div class="admin__page-section-content">
+        <div class="admin__page-section-item order-comments-history">
+            <div class="admin__page-section-item-title">
+                <span class="title"><?= /* @escapeNotVerified */ __('Credit Memo Comments') ?></span>
+            </div>
+            <div id="history_form" class="admin__fieldset-wrapper-content">
+                <div class="admin__field">
+                    <label class="normal admin__field-label"
+                           for="creditmemo_comment_text">
+                        <span><?= /* @escapeNotVerified */ __('Comment Text') ?></span></label>
+                    <div class="admin__field-control">
+                        <textarea id="creditmemo_comment_text"
+                                  class="admin__control-textarea"
+                                  name="creditmemo[comment_text]"
+                                  rows="3"
+                                  cols="5"><?= /* @escapeNotVerified */ $block->getCreditmemo()->getCommentText() ?></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="admin__page-section-item order-totals creditmemo-totals">
+            <div class="admin__page-section-item-title">
+                <span class="title"><?= /* @escapeNotVerified */ __('Refund Totals') ?></span>
+            </div>
+            <?= $block->getChildHtml('creditmemo_totals') ?>
+            <div class="order-totals-actions">
+                <div class="field choice admin__field admin__field-option field-append-comments">
+                    <input id="notify_customer"
+                           class="admin__control-checkbox"
+                           name="creditmemo[comment_customer_notify]"
+                           value="1"
+                           type="checkbox" />
+                    <label for="notify_customer" class="admin__field-label">
+                        <span><?= /* @escapeNotVerified */ __('Append Comments') ?></span>
+                    </label>
+                </div>
+                <?php if ($block->canSendCreditmemoEmail()):?>
+                <div class="field choice admin__field admin__field-option field-email-copy">
+                    <input id="send_email"
+                           class="admin__control-checkbox"
+                           name="creditmemo[send_email]"
+                           value="1"
+                           type="checkbox" />
+                    <label for="send_email" class="admin__field-label">
+                        <span><?= /* @escapeNotVerified */ __('Email Copy of Credit Memo') ?></span>
+                    </label>
+                </div>
+                <?php endif; ?>
+                <?= $block->getChildHtml('submit_before') ?>
+                <div class="actions">
+                    <?= $block->getChildHtml('submit_offline') ?>
+                    <?= $block->getChildHtml('submit_button') ?>
+                    <?= $block->getChildHtml('submit_after') ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+require(['jquery', 'prototype'], function(jQuery){
+
+//<![CDATA[
+var submitButtons = $$('.submit-button');
+var updateButtons = $$('.update-button');
+var fields = $$('.qty-input');
+
+updateButtons.each(function (elem) {elem.disabled=true;elem.addClassName('disabled');});
+
+for(var i=0;i<fields.length;i++){
+    fields[i].observe('change', checkButtonsRelation)
+    fields[i].baseValue = fields[i].value;
+}
+
+function checkButtonsRelation() {
+    var hasChanges = false;
+    fields.each(function (elem) {
+        if (elem.baseValue != elem.value) {
+            hasChanges = true;
+        }
+    }.bind(this));
+    if (hasChanges) {
+        submitButtons.each(function (elem) {elem.disabled=true;elem.addClassName('disabled');});
+        updateButtons.each(function (elem) {elem.disabled=false;elem.removeClassName('disabled');});
+    }
+    else {
+        submitButtons.each(function (elem) {elem.disabled=false;elem.removeClassName('disabled');});
+        updateButtons.each(function (elem) {elem.disabled=true;elem.addClassName('disabled');});
+    }
+}
+
+submitCreditMemo = function() {
+    if ($('creditmemo_do_offline')) $('creditmemo_do_offline').value=0;
+    // Temporary solution will be replaced after refactoring order functionality
+    jQuery('#edit_form').triggerHandler('save');
+}
+
+submitCreditMemoOffline = function() {
+    if ($('creditmemo_do_offline')) $('creditmemo_do_offline').value=1;
+    // Temporary solution will be replaced after refactoring order functionality
+    jQuery('#edit_form').triggerHandler('save');
+}
+
+var sendEmailCheckbox = $('send_email');
+
+if (sendEmailCheckbox) {
+    var notifyCustomerCheckbox = $('notify_customer');
+    var creditmemoCommentText = $('creditmemo_comment_text');
+    Event.observe(sendEmailCheckbox, 'change', bindSendEmail);
+    bindSendEmail();
+}
+
+function bindSendEmail()
+{
+    if (sendEmailCheckbox.checked == true) {
+        notifyCustomerCheckbox.disabled = false;
+        //creditmemoCommentText.disabled = false;
+    }
+    else {
+        notifyCustomerCheckbox.disabled = true;
+        //creditmemoCommentText.disabled = true;
+    }
+}
+
+window.bindSendEmail = bindSendEmail;
+window.checkButtonsRelation = checkButtonsRelation;
+//]]>
+
+});
+</script>

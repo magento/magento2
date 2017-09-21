@@ -1,0 +1,71 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+
+<?php
+    $_product = $block->getProduct();
+?>
+<?php if ($_product->isSaleable() && $block->hasOptions()): ?>
+<div id="bundleSummary"
+     class="block-bundle-summary"
+     data-mage-init='{"sticky":{"container": ".product-add-form"}}'>
+    <div class="title">
+        <strong><?= /* @escapeNotVerified */ __('Your Customization') ?></strong>
+    </div>
+    <div class="content">
+        <div class="bundle-info">
+            <?= $block->getImage($_product, 'bundled_product_customization_page')->toHtml() ?>
+            <div class="product-details">
+                <strong class="product name"><?= $block->escapeHtml($_product->getName()) ?></strong>
+                <?php if ($_product->getIsSalable()): ?>
+                    <p class="available stock" title="<?= /* @escapeNotVerified */ __('Availability') ?>">
+                        <span><?= /* @escapeNotVerified */ __('In stock') ?></span>
+                    </p>
+                <?php else: ?>
+                    <p class="unavailable stock" title="<?= /* @escapeNotVerified */ __('Availability') ?>">
+                        <span><?= /* @escapeNotVerified */ __('Out of stock') ?></span>
+                    </p>
+                <?php endif; ?>
+                <?= $block->getChildHtml('', true) ?>
+            </div>
+        </div>
+        <div class="bundle-summary">
+            <strong class="subtitle"><?= /* @escapeNotVerified */ __('Summary') ?></strong>
+            <div id="bundle-summary" data-container="product-summary">
+                <ul data-mage-init='{"productSummary": []}' class="bundle items"></ul>
+                <script data-template="bundle-summary" type="text/x-magento-template">
+                    <li>
+                        <strong class="label"><%- data._label_ %>:</strong>
+                        <div data-container="options"></div>
+                    </li>
+                </script>
+                <script data-template="bundle-option" type="text/x-magento-template">
+                    <div><?= /* @escapeNotVerified */ __('%1 x %2', '<%- data._quantity_ %>', '<%- data._label_ %>') ?></div>
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/x-magento-init">
+    {
+        ".product-add-form": {
+            "slide": {
+                "slideSpeed": 1500,
+                "slideSelector": "#bundle-slide",
+                "slideBackSelector": ".action.customization.back",
+                "bundleProductSelector": "#bundleProduct",
+                "bundleOptionsContainer": ".product-add-form"
+                <?php if ($block->isStartCustomization()): ?>
+                ,"autostart": true
+                <?php endif;?>
+            }
+        }
+    }
+</script>
+<?php endif; ?>

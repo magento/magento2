@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
+    <page name="AdminCache" area="Adminhtml" mca="admin/cache/" module="Magento_PageCache">
+        <block name="messagesBlock" class="Magento\Backend\Test\Block\Messages" locator="#messages .messages" strategy="css selector"/>
+        <block name="actionsBlock" class="Magento\PageCache\Test\Block\Cache" locator="div.page-actions" strategy="css selector"/>
+        <block name="additionalBlock" class="Magento\PageCache\Test\Block\Cache\Additional" locator="div.additional-cache-management" strategy="css selector"/>
+        <block name="gridBlock" class="Magento\PageCache\Test\Block\Cache\Grid" locator="div#cache_grid" strategy="css selector"/>
+        <block name="modalBlock" class="Magento\Ui\Test\Block\Adminhtml\Modal" locator="._show[data-role=modal]" strategy="css selector"/>
+        <block name="systemMessageDialog" class="Magento\AdminNotification\Test\Block\System\Messages" locator='.ui-popup-message .modal-inner-wrap' strategy="css selector" />
+        <block name="systemMessageBlock" class="Magento\AdminNotification\Test\Block\System\Messages\System" locator="#system_messages" strategy="css selector" />
+    </page>
+</config>

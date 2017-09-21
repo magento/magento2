@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Reports\Test\TestCase\SalesCouponReportEntityTest" summary="Sales Coupon Report" ticketId="MAGETWO-28190">
+        <variation name="SalesCouponReportEntityTestVariation1">
+            <data name="order/dataset" xsi:type="string">with_coupon</data>
+            <data name="viewsReport/report_type" xsi:type="string">Order Created</data>
+            <data name="viewsReport/period_type" xsi:type="string">Year</data>
+            <data name="viewsReport/from" xsi:type="string">m/d/Y</data>
+            <data name="viewsReport/to" xsi:type="string">m/d/Y</data>
+            <data name="viewsReport/show_order_statuses" xsi:type="string">Any</data>
+            <data name="viewsReport/show_empty_rows" xsi:type="string">No</data>
+            <data name="viewsReport/price_rule_type" xsi:type="string">Any</data>
+            <constraint name="Magento\Reports\Test\Constraint\AssertCouponReportResult" />
+        </variation>
+        <variation name="SalesCouponReportEntityTestVariation2">
+            <data name="order/dataset" xsi:type="string">with_coupon</data>
+            <data name="viewsReport/report_type" xsi:type="string">Order Created</data>
+            <data name="viewsReport/period_type" xsi:type="string">Month</data>
+            <data name="viewsReport/from" xsi:type="string">m/d/Y</data>
+            <data name="viewsReport/to" xsi:type="string">m/d/Y</data>
+            <data name="viewsReport/show_order_statuses" xsi:type="string">Specified</data>
+            <data name="viewsReport/order_statuses" xsi:type="string">Processing</data>
+            <data name="viewsReport/show_empty_rows" xsi:type="string">No</data>
+            <data name="viewsReport/price_rule_type" xsi:type="string">Any</data>
+            <constraint name="Magento\Reports\Test\Constraint\AssertCouponReportResult" />
+        </variation>
+        <variation name="SalesCouponReportEntityTestVariation3">
+            <data name="order/dataset" xsi:type="string">with_coupon</data>
+            <data name="viewsReport/report_type" xsi:type="string">Order Updated</data>
+            <data name="viewsReport/period_type" xsi:type="string">Day</data>
+            <data name="viewsReport/from" xsi:type="string">m/d/Y</data>
+            <data name="viewsReport/to" xsi:type="string">m/d/Y</data>
+            <data name="viewsReport/show_order_statuses" xsi:type="string">Any</data>
+            <data name="viewsReport/show_empty_rows" xsi:type="string">No</data>
+            <data name="viewsReport/price_rule_type" xsi:type="string">Specified</data>
+            <data name="viewsReport/rules_list" xsi:type="string">%rule_name%</data>
+            <constraint name="Magento\Reports\Test\Constraint\AssertCouponReportResult" />
+        </variation>
+        <variation name="SalesCouponReportEntityTestVariation4">
+            <data name="order/dataset" xsi:type="string">with_coupon</data>
+            <data name="viewsReport/report_type" xsi:type="string">Order Updated</data>
+            <data name="viewsReport/period_type" xsi:type="string">Day</data>
+            <data name="viewsReport/from" xsi:type="string">m/d/Y 12:00 a-1 day</data>
+            <data name="viewsReport/to" xsi:type="string">m/d/Y 12:00 a+1 day</data>
+            <data name="viewsReport/show_order_statuses" xsi:type="string">Specified</data>
+            <data name="viewsReport/order_statuses" xsi:type="string">Processing</data>
+            <data name="viewsReport/show_empty_rows" xsi:type="string">Yes</data>
+            <data name="viewsReport/price_rule_type" xsi:type="string">Specified</data>
+            <data name="viewsReport/rules_list" xsi:type="string">%rule_name%</data>
+            <constraint name="Magento\Reports\Test\Constraint\AssertCouponReportResult" />
+        </variation>
+    </testCase>
+</config>

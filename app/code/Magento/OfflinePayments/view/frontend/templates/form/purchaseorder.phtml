@@ -1,0 +1,22 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+/**
+ * @var $block \Magento\OfflinePayments\Block\Form\Purchaseorder
+ */
+$methodCode = $block->escapeHtml($block->getMethodCode());
+?>
+<fieldset class="fieldset items <?= /* @noEscape */ $methodCode ?>" id="payment_form_<?= /* @noEscape */ $methodCode ?>" style="display: none">
+    <div class="field number required">
+        <label for="po_number" class="label"><span><?= $block->escapeHtml(__('Purchase Order Number')) ?></span></label>
+        <div class="control">
+            <input type="text" id="po_number" name="payment[po_number]" title="<?= $block->escapeHtml(__('Purchase Order Number')) ?>"
+                   class="input-text required-entry"
+                   value="<?= $block->escapeHtml($block->getInfoData('po_number')) ?>" />
+        </div>
+    </div>
+</fieldset>

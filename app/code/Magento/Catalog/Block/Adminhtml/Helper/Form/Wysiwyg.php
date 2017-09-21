@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -73,7 +55,7 @@ class Wysiwyg extends \Magento\Framework\Data\Form\Element\Textarea
         \Magento\Framework\View\LayoutInterface $layout,
         \Magento\Framework\Module\Manager $moduleManager,
         \Magento\Backend\Helper\Data $backendData,
-        array $data = array()
+        array $data = []
     ) {
         $this->_wysiwygConfig = $wysiwygConfig;
         $this->_layout = $layout;
@@ -89,44 +71,63 @@ class Wysiwyg extends \Magento\Framework\Data\Form\Element\Textarea
      */
     public function getAfterElementHtml()
     {
+        $config = $this->_wysiwygConfig->getConfig();
+        $config = json_encode($config->getData());
+
         $html = parent::getAfterElementHtml();
         if ($this->getIsWysiwygEnabled()) {
             $disabled = $this->getDisabled() || $this->getReadonly();
             $html .= $this->_layout->createBlock(
-                'Magento\Backend\Block\Widget\Button',
+                \Magento\Backend\Block\Widget\Button::class,
                 '',
-                array(
-                    'data' => array(
+                [
+                    'data' => [
                         'label' => __('WYSIWYG Editor'),
                         'type' => 'button',
                         'disabled' => $disabled,
-                        'class' => $disabled ? 'disabled action-wysiwyg' : 'action-wysiwyg',
+                        'class' => 'action-wysiwyg',
                         'onclick' => 'catalogWysiwygEditor.open(\'' . $this->_backendData->getUrl(
                             'catalog/product/wysiwyg'
-                        ) . '\', \'' . $this->getHtmlId() . '\')'
-                    )
-                )
+                        ) . '\', \'' . $this->getHtmlId() . '\')',
+                    ]
+                ]
             )->toHtml();
             $html .= <<<HTML
-<script type="text/javascript">
+<script>
+require([
+    'jquery',
+    'mage/adminhtml/wysiwyg/tiny_mce/setup'
+], function(jQuery){
+
+var config = $config,
+    editor;
+
+jQuery.extend(config, {
+    settings: {
+        theme_advanced_buttons1 : 'bold,italic,|,justifyleft,justifycenter,justifyright,|,' +
+            'fontselect,fontsizeselect,|,forecolor,backcolor,|,link,unlink,image,|,bullist,numlist,|,code',
+        theme_advanced_buttons2: null,
+        theme_advanced_buttons3: null,
+        theme_advanced_buttons4: null,
+        theme_advanced_statusbar_location: null
+    },
+    files_browser_window_url: false
+});
+
+editor = new tinyMceWysiwygSetup(
+    '{$this->getHtmlId()}',
+    config
+);
+
+editor.turnOn();
+
 jQuery('#{$this->getHtmlId()}')
     .addClass('wysiwyg-editor')
     .data(
         'wysiwygEditor',
-        new tinyMceWysiwygSetup(
-            '{$this->getHtmlId()}',
-             {
-                settings: {
-                    theme_advanced_buttons1 : 'bold,italic,|,justifyleft,justifycenter,justifyright,|,' +
-                        'fontselect,fontsizeselect,|,forecolor,backcolor,|,link,unlink,image,|,bullist,numlist,|,code',
-                    theme_advanced_buttons2: null,
-                    theme_advanced_buttons3: null,
-                    theme_advanced_buttons4: null,
-                    theme_advanced_statusbar_location: null
-                }
-            }
-        ).turnOn()
+        editor
     );
+});
 </script>
 HTML;
         }
@@ -137,6 +138,7 @@ HTML;
      * Check whether wysiwyg enabled or not
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsWysiwygEnabled()
     {

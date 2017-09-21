@@ -1,31 +1,15 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
  * Theme Config model
  */
 namespace Magento\Theme\Model;
+
+use Magento\Framework\App\Config\ScopeConfigInterface;
 
 class Config
 {
@@ -95,7 +79,7 @@ class Config
      */
     public function assignToStore(
         $theme,
-        array $stores = array(),
+        array $stores = [],
         $scope = \Magento\Store\Model\ScopeInterface::SCOPE_STORES
     ) {
         $isReassigned = false;
@@ -115,7 +99,7 @@ class Config
 
         $this->_eventManager->dispatch(
             'assign_theme_to_stores_after',
-            array('stores' => $stores, 'scope' => $scope, 'theme' => $theme)
+            ['stores' => $stores, 'scope' => $scope, 'theme' => $theme]
         );
 
         return $this;
@@ -126,7 +110,7 @@ class Config
      *
      * @param string $scope
      * @param string $configPath
-     * @return \Magento\Core\Model\Resource\Config\Data\Collection
+     * @return \Magento\Config\Model\ResourceModel\Config\Data\Collection
      */
     protected function _getAssignedScopesCollection($scope, $configPath)
     {
@@ -191,7 +175,7 @@ class Config
     protected function _assignThemeToDefaultScope($themeId, &$isReassigned)
     {
         $configPath = \Magento\Framework\View\DesignInterface::XML_PATH_THEME_ID;
-        $this->_configWriter->save($configPath, $themeId, \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT);
+        $this->_configWriter->save($configPath, $themeId, ScopeConfigInterface::SCOPE_TYPE_DEFAULT);
         $isReassigned = true;
         return $this;
     }

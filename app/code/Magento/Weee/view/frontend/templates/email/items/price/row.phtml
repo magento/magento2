@@ -1,0 +1,64 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+/** @var \Magento\Weee\Block\Item\Price\Renderer $block */
+
+/** @var $_weeeHelper \Magento\Weee\Helper\Data */
+$_weeeHelper = $this->helper('Magento\Weee\Helper\Data');
+
+$_item = $block->getItem();
+/** @var \Magento\Sales\Model\Order $_order */
+$_order = $_item->getOrder();
+?>
+
+<?php if ($block->displayPriceExclTax() || $block->displayBothPrices()): ?>
+    <?php if ($block->displayBothPrices()): ?>
+        <span class="label"><?= /* @escapeNotVerified */  __('Excl. Tax') ?>:</span>
+    <?php endif; ?>
+    <?= /* @escapeNotVerified */  $_order->formatPrice($block->getRowDisplayPriceExclTax()) ?>
+
+    <?php if ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item)): ?>
+        <br />
+        <?php if ($block->displayPriceWithWeeeDetails()): ?>
+            <small>
+                <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item) as $tax): ?>
+                    <span class="nobr"><?= /* @escapeNotVerified */  $tax['title'] ?>: <?= /* @escapeNotVerified */  $_order->formatPrice($tax['row_amount'], true, true) ?></span><br />
+                <?php endforeach; ?>
+            </small>
+        <?php endif; ?>
+
+        <?php if ($block->displayFinalPrice()): ?>
+            <br />
+            <span class="nobr"><?= /* @escapeNotVerified */  __('Total') ?>:<br /> <?= /* @escapeNotVerified */  $_order->formatPrice($block->getFinalRowDisplayPriceExclTax()) ?></span>
+        <?php endif; ?>
+    <?php endif; ?>
+<?php endif; ?>
+
+
+<?php if ($block->displayPriceInclTax() || $block->displayBothPrices()): ?>
+    <?php if ($block->displayBothPrices()): ?>
+        <br /><span class="label"><?= /* @escapeNotVerified */  __('Incl. Tax') ?>:</span>
+    <?php endif; ?>
+    <?= /* @escapeNotVerified */  $_order->formatPrice($block->getRowDisplayPriceInclTax()) ?>
+    <?php if ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item)): ?>
+        <br />
+        <?php if ($block->displayPriceWithWeeeDetails()): ?>
+            <small>
+                <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item) as $tax): ?>
+                    <span class="nobr"><?= /* @escapeNotVerified */  $tax['title'] ?>: <?= /* @escapeNotVerified */  $_order->formatPrice($tax['row_amount_incl_tax'], true, true) ?></span><br />
+                <?php endforeach; ?>
+            </small>
+        <?php endif; ?>
+
+        <?php if ($block->displayFinalPrice()): ?>
+            <span class="nobr"><?= /* @escapeNotVerified */  __('Total Incl. Tax') ?>:<br /> <?= /* @escapeNotVerified */  $_order->formatPrice($block->getFinalRowDisplayPriceInclTax()) ?></span>
+        <?php endif; ?>
+    <?php endif; ?>
+<?php endif; ?>

@@ -1,0 +1,175 @@
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+.swatch_sub-menu_container {
+    position: absolute;
+    z-index: 9999;
+    width: 140px;
+    display: none;
+}
+
+.swatch-visual-options-container .admin__control-table-wrapper {
+    overflow: inherit;
+}
+
+.swatch_row {
+    padding: 5px;
+    background-color: #fbfaf6;
+    position: relative;
+    height: 30px;
+    overflow: hidden;
+    border: 1px solid #000;
+}
+
+.position-relative {
+    position: relative;
+}
+
+.swatch_row_name {
+    position: absolute;
+    background-color: #fbfaf6;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+.swatch_row_name p {
+    padding-top: 10px;
+}
+
+.swatch_window {
+    border: 1px solid #000;
+    width: 30px;
+    height: 30px;
+    overflow: hidden;
+}
+
+.swatch_window {
+    border: 1px solid #c6c5c3 !important;
+    cursor: pointer;
+    overflow: visible !important;
+    position: relative;
+    width: 25px !important;
+    height: 24px !important;
+}
+
+.swatch_window:after {
+    position: absolute;
+    content: '\2193';
+    top: -5px;
+    font-size: 19px;
+    color: #808080;
+    right: -22px;
+    width: 16px;
+    height: 32px;
+    background: #fff;
+    border-radius: 0 3px 3px 0;
+    border: 1px solid rgb(173, 173, 173);
+    text-align: center;
+    z-index: 8;
+}
+
+.swatch_window:before {
+    position: absolute;
+    content: '';
+    top: -4px;
+    font-size: 19px;
+    color: #808080;
+    left: -4px;
+    width: 27px;
+    height: 26px;
+    background: transparent;
+    border-radius: 3px 0 0 3px;
+    border: 3px solid rgb(255, 255, 255);
+    z-index: 1;
+    outline: 1px solid rgb(173, 173, 173);
+}
+
+.swatch_sub-menu_container {
+    border: 1px solid rgb(173, 173, 173) !important;
+    border-radius: 5px 0 5px 5px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.22);
+}
+
+.swatch_sub-menu_container .swatch_row {
+    border: 0 !important;
+    text-align: left;
+    cursor: pointer;
+    border-bottom: 1px solid #e3e3e3 !important;
+}
+.swatch_sub-menu_container .swatch_row:first-child {
+    border-radius: 5px 0 0 0;
+}
+
+.swatch_sub-menu_container .swatch_row:last-child {
+    border-bottom: 0 !important;
+    border-radius: 0 0 5px 5px;
+}
+
+.swatch_sub-menu_container .swatch_row .swatch_row_name p {
+    padding-left: 12px;
+}
+
+.swatch_sub-menu_container .swatch_row .swatch_row_name {
+    background: #fff !important;
+}
+
+.swatch_sub-menu_container .swatch_row:hover .swatch_row_name {
+    background: #fbfaf6 !important;
+}
+
+.swatch_sub-menu_container {
+    margin-left: -94px;
+    top: 37px;
+}
+
+.swatch_sub-menu_container:after {
+    width: 16px;
+    background: #fff;
+    height: 3px;
+    top: -3px;
+    right: 0;
+    content: '';
+    position: absolute;
+}
+
+.swatches-visual-col {
+    box-sizing: content-box;
+    position: relative;
+}
+
+.col-swatch {
+    width: 50px;
+}
+
+.swatches-visual-col.unavailable:after {
+    content: '';
+    position: absolute;
+    width: 35px;
+    height: 2px;
+    background: #f00;
+    transform: rotate(-45deg);
+    -o-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+    z-index: 5;
+    left: 3px;
+    top: 20px;
+}
+
+.modal-slide .swatches-visual-col.unavailable:after {
+    left: -4px;
+    top: 25px;
+}
+
+.colorpicker {
+    z-index: 9999;
+}
+
+.attribute-popup-actions {
+    z-index: 15;
+}

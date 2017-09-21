@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
+    <page name="UrlRewriteEdit" area="Adminhtml" mca="admin/url_rewrite/edit" module="Magento_UrlRewrite">
+        <block name="treeBlock" class="Magento\UrlRewrite\Test\Block\Adminhtml\Catalog\Category\Tree" locator="[id='page:main-container']" strategy="css selector"/>
+        <block name="formBlock" class="Magento\UrlRewrite\Test\Block\Adminhtml\Catalog\Edit\UrlRewriteForm" locator="[id='page:main-container']" strategy="css selector"/>
+        <block name="messagesBlock" class="Magento\Backend\Test\Block\Messages" locator="#messages .messages" strategy="css selector"/>
+        <block name="pageMainActions" class="Magento\Backend\Test\Block\FormPageActions" locator=".page-main-actions" strategy="css selector"/>
+        <block name="productGridBlock" class="Magento\UrlRewrite\Test\Block\Adminhtml\Catalog\Product\Grid" locator="[id='productGrid']" strategy="css selector"/>
+        <block name="urlRewriteTypeSelectorBlock" class="Magento\UrlRewrite\Test\Block\Adminhtml\Selector" locator="[data-container-for='entity-type-selector']" strategy="css selector"/>
+        <block name="cmsGridBlock" class="Magento\UrlRewrite\Test\Block\Adminhtml\Cms\Page\Grid" locator="#cmsPageGrid" strategy="css selector"/>
+        <block name="modalBlock" class="Magento\Ui\Test\Block\Adminhtml\Modal" locator="._show[data-role=modal]" strategy="css selector"/>
+    </page>
+</config>

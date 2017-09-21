@@ -1,0 +1,68 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+?>
+<?php /** @var $block \Magento\Backend\Block\Widget\Form\Renderer\Fieldset */ ?>
+
+<div id="js-file-uploader" class="uploader">
+</div>
+<script id="js-file-uploader-template" type="text/x-magento-template"> 
+    <div id="<%- data.id %>" class="file-row">
+        <span class="file-info"><%- data.name %> (<%- data.size %>)</span>
+        <div class="progressbar-container">
+            <div class="progressbar upload-progress" style="width: 0%;"></div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</script>
+<script id="js-uploaded-file-template" type="text/x-magento-template">
+    <input class="up" type="button" value="">
+    <input class="down" type="button" value="">
+    <input type="hidden" name="js_order[<%- data.id %>]" value="1">
+
+    <div class="js-file">
+        <%- data.name %>
+        <div class="remove-js">
+            <input
+                type="checkbox"
+                id="remove_js_files_<%- data.id %>"
+                name="js_removed_files[]"
+                value="<%- data.id %>" />
+            <label for="remove_js_files_<%- data.id %>"><?= /* @escapeNotVerified */ __('Remove') ?></label>
+        </div>
+    </div>
+
+    <input type="hidden" name="js_uploaded_files[]" value="<%- data.temporary %>" />
+</script>
+
+<ul id="js-files-container" class="js-files-container ui-sortable" ></ul>
+
+<script>
+require([
+    "jquery",
+    "jquery/ui",
+    "Magento_Theme/js/sortable",
+    "Magento_Theme/js/custom-js-list"
+], function(jQuery){
+
+jQuery(function($) {
+    $('.ui-sortable').sortable();
+    $('.ui-sortable').disableSelection();
+
+    $('#js-files-container').themeJsList({
+        templateId : '#js-uploaded-file-template',
+        refreshFileListEvent : 'refreshJsList',
+        prefixItemId : 'js-file-'
+    });
+    $('body').trigger(
+        'refreshJsList',
+        {jsList: <?= /* @escapeNotVerified */ $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getJsFiles()) ?>}
+    );
+});
+
+});
+</script>

@@ -1,0 +1,44 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+
+<?php
+/** @var $block \Magento\ConfigurableProduct\Block\Product\View\Type\Configurable*/
+$_product    = $block->getProduct();
+$_attributes = $block->decorateArray($block->getAllowAttributes());
+?>
+<?php if ($_product->isSaleable() && count($_attributes)):?>
+    <?php foreach ($_attributes as $_attribute): ?>
+        <div class="field configurable required">
+            <label class="label" for="attribute<?= /* @escapeNotVerified */ $_attribute->getAttributeId() ?>">
+                <span><?= $block->escapeHtml($_attribute->getProductAttribute()->getStoreLabel()) ?></span>
+            </label>
+            <div class="control">
+                <select name="super_attribute[<?= /* @escapeNotVerified */ $_attribute->getAttributeId() ?>]"
+                        data-selector="super_attribute[<?= /* @escapeNotVerified */ $_attribute->getAttributeId() ?>]"
+                        data-validate="{required:true}"
+                        id="attribute<?= /* @escapeNotVerified */ $_attribute->getAttributeId() ?>"
+                        class="super-attribute-select">
+                    <option value=""><?= /* @escapeNotVerified */ __('Choose an Option...') ?></option>
+                </select>
+            </div>
+        </div>
+    <?php endforeach; ?>
+    <script type="text/x-magento-init">
+        {
+            "#product_addtocart_form": {
+                "configurable": {
+                    "spConfig": <?= /* @escapeNotVerified */ $block->getJsonConfig() ?>,
+                    "gallerySwitchStrategy": "<?php /* @escapeNotVerified */ echo $block->getVar('gallery_switch_strategy',
+                        'Magento_ConfigurableProduct') ?: 'replace'; ?>"
+                }
+            }
+        }
+    </script>
+<?php endif;?>

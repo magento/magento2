@@ -1,0 +1,4 @@
+product_websites,store_view_code,attribute_set_code,product_type,categories,sku,price,name,url_key
+base,,Default,simple,Default Category/category-defaultstore,product,123,product,product
+,default,Default,simple,,product,,product-default,product-default
+,fixturestore,Default,simple,,product,,product-fixture,product-fixture

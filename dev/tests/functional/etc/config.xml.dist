@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="config.xsd">
+    <application>
+        <reopenBrowser>testCase</reopenBrowser>
+        <backendLogin>admin</backendLogin>
+        <backendPassword>123123q</backendPassword>
+        <appBackendUrl>http://magento2ce.com/admin/</appBackendUrl>
+        <backendLoginUrl>admin/auth/login</backendLoginUrl>
+    </application>
+    <isolation>
+        <resetUrlPath>dev/tests/functional/isolation.php</resetUrlPath>
+        <testSuite>none</testSuite>
+        <testCase>none</testCase>
+        <test>none</test>
+    </isolation>
+    <install>
+        <host>127.0.0.1</host>
+        <user>root</user>
+        <password>123123q</password>
+        <dbName>default</dbName>
+        <baseUrl>http://magento2ce.com/</baseUrl>
+        <backendName>backend</backendName>
+    </install>
+    <handler>
+        <webapi priority="0">
+            <token>integration_token</token>
+        </webapi>
+        <curl priority="1" />
+        <ui priority="2" />
+    </handler>
+</config>

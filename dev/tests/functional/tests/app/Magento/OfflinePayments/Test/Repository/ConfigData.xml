@@ -1,0 +1,248 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Config\Test\Repository\ConfigData">
+        <dataset name="cashondelivery">
+            <field name="payment/cashondelivery/active" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+        </dataset>
+
+        <dataset name="cashondelivery_rollback">
+            <field name="payment/cashondelivery/active" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+
+        <dataset name="cashondelivery_specificcountry_gb">
+            <field name="payment/cashondelivery/active" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="payment/cashondelivery/allowspecific" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Specific Countries</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="payment/cashondelivery/specificcountry" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="value" xsi:type="array">
+                    <item name="United Kingdom" xsi:type="string">GB</item>
+                </item>
+            </field>
+        </dataset>
+
+        <dataset name="cashondelivery_specificcountry_gb_rollback">
+            <field name="payment/cashondelivery/active" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="payment/cashondelivery/allowspecific" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">All Allowed Countries</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+
+        <dataset name="checkmo">
+            <field name="payment/checkmo/active" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+        </dataset>
+
+        <dataset name="checkmo_disabled">
+            <field name="payment/checkmo/active" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+
+        <dataset name="checkmo_specificcountry_gb">
+            <field name="payment/checkmo/active" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="payment/checkmo/allowspecific" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Specific Countries</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="payment/checkmo/specificcountry" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="value" xsi:type="array">
+                    <item name="United Kingdom" xsi:type="string">GB</item>
+                </item>
+            </field>
+        </dataset>
+
+        <dataset name="checkmo_specificcountry_gb_rollback">
+            <field name="payment/checkmo/allowspecific" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">All Allowed Countries</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+
+        <dataset name="banktransfer">
+            <field name="payment/banktransfer/active" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+        </dataset>
+
+        <dataset name="banktransfer_rollback">
+            <field name="payment/banktransfer/active" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+
+        <dataset name="banktransfer_specificcountry_gb">
+            <field name="payment/banktransfer/active" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="payment/banktransfer/allowspecific" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Specific Countries</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="payment/banktransfer/specificcountry" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="value" xsi:type="array">
+                    <item name="United Kingdom" xsi:type="string">GB</item>
+                </item>
+            </field>
+        </dataset>
+
+        <dataset name="banktransfer_specificcountry_gb_rollback">
+            <field name="payment/banktransfer/active" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="payment/banktransfer/allowspecific" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">All Allowed Countries</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+
+        <dataset name="purchaseorder">
+            <field name="payment/purchaseorder/active" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+        </dataset>
+
+        <dataset name="purchaseorder_rollback">
+            <field name="payment/purchaseorder/active" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+
+        <dataset name="purchaseorder_specificcountry_gb">
+            <field name="payment/purchaseorder/active" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="payment/purchaseorder/allowspecific" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Specific Countries</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="payment/purchaseorder/specificcountry" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="value" xsi:type="array">
+                    <item name="United Kingdom" xsi:type="string">GB</item>
+                </item>
+            </field>
+        </dataset>
+
+        <dataset name="purchaseorder_specificcountry_gb_rollback">
+            <field name="payment/purchaseorder/active" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="payment/purchaseorder/allowspecific" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">All Allowed Countries</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+
+        <dataset name="zero_subtotal_checkout">
+            <field name="payment/zero_subtotal_checkout/active" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+        </dataset>
+
+        <dataset name="can_subtract_and_can_back_in_stock">
+            <field name="cataloginventory/options/can_subtract" xsi:type="array">
+                <item name="scope" xsi:type="string">cataloginventory</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="cataloginventory/options/can_back_in_stock" xsi:type="array">
+                <item name="scope" xsi:type="string">cataloginventory</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+        </dataset>
+    </repository>
+</config>

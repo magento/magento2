@@ -1,0 +1,17 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+
+<div class="admin__page-section-title">
+    <strong class="title"><?= /* @escapeNotVerified */ $block->getHeaderText() ?></strong>
+    <div class="actions">
+        <?= $block->getButtonsHtml() ?>
+    </div>
+</div>
+<?= $block->getChildHtml() ?>

@@ -1,32 +1,18 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Widget\Grid;
 
 /**
  * Backend grid container block
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ *
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @api
+ * @deprecated 100.2.0 in favour of UI component implementation
+ * @since 100.0.2
  */
 class Container extends \Magento\Backend\Block\Widget\Container
 {
@@ -41,9 +27,7 @@ class Container extends \Magento\Backend\Block\Widget\Container
 
     /**#@-*/
 
-    /**
-     * @var string
-     */
+    /**#@-*/
     protected $_addButtonLabel;
 
     /**
@@ -76,7 +60,7 @@ class Container extends \Magento\Backend\Block\Widget\Container
             $this->_addButtonLabel = $this->_getData(self::PARAM_BUTTON_NEW);
         } else {
             // legacy logic to support all descendants
-            if (is_null($this->_addButtonLabel)) {
+            if ($this->_addButtonLabel === null) {
                 $this->_addButtonLabel = __('Add New');
             }
             $this->_addNewButton();
@@ -85,7 +69,7 @@ class Container extends \Magento\Backend\Block\Widget\Container
             $this->_backButtonLabel = $this->_getData(self::PARAM_BUTTON_BACK);
         } else {
             // legacy logic
-            if (is_null($this->_backButtonLabel)) {
+            if ($this->_backButtonLabel === null) {
                 $this->_backButtonLabel = __('Back');
             }
         }
@@ -103,7 +87,7 @@ class Container extends \Magento\Backend\Block\Widget\Container
                 $this->getLayout()->createBlock(
                     str_replace(
                         '_',
-                        \Magento\Framework\Autoload\IncludePath::NS_SEPARATOR,
+                        '\\',
                         $this->_blockGroup
                     ) . '\\Block\\' . str_replace(
                         ' ',
@@ -158,13 +142,13 @@ class Container extends \Magento\Backend\Block\Widget\Container
      */
     protected function _addNewButton()
     {
-        $this->_addButton(
+        $this->addButton(
             'add',
-            array(
+            [
                 'label' => $this->getAddButtonLabel(),
                 'onclick' => 'setLocation(\'' . $this->getCreateUrl() . '\')',
                 'class' => 'add primary'
-            )
+            ]
         );
     }
 
@@ -173,13 +157,13 @@ class Container extends \Magento\Backend\Block\Widget\Container
      */
     protected function _addBackButton()
     {
-        $this->_addButton(
+        $this->addButton(
             'back',
-            array(
+            [
                 'label' => $this->getBackButtonLabel(),
                 'onclick' => 'setLocation(\'' . $this->getBackUrl() . '\')',
                 'class' => 'back'
-            )
+            ]
         );
     }
 

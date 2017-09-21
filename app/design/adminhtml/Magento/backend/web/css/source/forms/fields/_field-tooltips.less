@@ -1,0 +1,112 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  _____________________________________________
+
+@field-tooltip__margin-top: .5rem;
+@field-tooltip__width: 45px;
+
+@field-tooltip-icon__color: @color-brownie;
+@field-tooltip-icon__size: 2.2rem;
+
+@field-tooltip-content-arrow__margin: 2rem;
+@field-tooltip-content-arrow__size: 1.6rem;
+
+@field-tooltip-content__background-color: @color-lazy-sun;
+@field-tooltip-content__border-color: @color-dark-grayish-orange;
+@field-tooltip-content__padding: 1.5rem 2.5rem;
+@field-tooltip-content__width: 32rem;
+@field-tooltip-content__z-index: 1;
+
+@field-tooltip-action__margin-left: 2rem;
+
+//
+//  Form Fields
+//  _____________________________________________
+
+.admin__field-tooltip {
+    display: inline-block;
+    margin-top: @field-tooltip__margin-top;
+    max-width: @field-tooltip__width;
+    overflow: visible;
+    vertical-align: top;
+    width: 0;
+
+    &:hover {
+        position: relative;
+        z-index: @field-tooltip__z-index;
+    }
+
+    .admin__field-option & {
+        margin-top: @indent__xs;
+    }
+
+    .admin__field-tooltip-action {
+        display: inline-block;
+        margin-left: @field-tooltip-action__margin-left;
+        position: relative;
+        z-index: @field-tooltip-content__z-index + 1;
+
+        .lib-icon-font(
+            @icon-help__content,
+            @icons-admin__font-name,
+            @_icon-font-size: @field-tooltip-icon__size,
+            @_icon-font-line-height: 1,
+            @_icon-font-color: @field-tooltip-icon__color
+        );
+
+        span {
+            &:extend(.abs-visually-hidden);
+        }
+    }
+
+    .admin__control-text:focus + .admin__field-tooltip-content,
+    &:hover .admin__field-tooltip-content {
+        display: block;
+    }
+
+    .admin__field-tooltip-content {
+        &:extend(.abs-admin__field-tooltip-content all);
+        bottom: @field-tooltip-icon__size + @field-tooltip-content-arrow__size;
+        display: none;
+        right: -@field-tooltip-content-arrow__margin - (@field-tooltip-icon__size/2) + (@field-tooltip-content-arrow__size/2);
+
+        &:after,
+        &:before {
+            .lib-arrow(
+                @_position: down,
+                @_size: @field-tooltip-content-arrow__size,
+                @_color: @field-tooltip-content__border-color
+            );
+            content: '';
+            display: block;
+            position: absolute;
+            right: @field-tooltip-content-arrow__margin;
+            top: 100%;
+            z-index: 3;
+        }
+
+        &:after {
+            border-top-color: @field-tooltip-content__background-color;
+            margin-top: -1px;
+            z-index: 4;
+        }
+    }
+}
+
+.abs-admin__field-tooltip-content {
+    @_shadow: 0 2px 8px 0 rgba(0, 0, 0, .3);
+
+    .lib-css(box-shadow, @_shadow);
+    background: @field-tooltip-content__background-color;
+    border: 1px solid @field-tooltip-content__border-color;
+    border-radius: 1px;
+    padding: @field-tooltip-content__padding;
+    position: absolute;
+    width: @field-tooltip-content__width;
+    z-index: @field-tooltip-content__z-index;
+}

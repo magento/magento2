@@ -1,0 +1,38 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="ui-tabs">
+    <ul class="address-list ui-tabs-nav">
+
+        <li class="address-list-item" outereach="elems" css="'ui-state-active': active" click="activate">
+            <div class="address-list-item-actions">
+                <button class="action-delete" type="button" click="$parent.removeAddress.bind($parent, $data)">
+                    <span text="$parent.removeLabel"/>
+                </button>
+            </div>
+            <render args="previewTpl"/>
+            <div each="getRegion('head')" render=""/>
+        </li>
+
+        <li class="address-list-actions last">
+            <button class="scalable add" type="button" click="addChild">
+                <span text="addLabel"/>
+            </button>
+        </li>
+    </ul>
+
+    <div class="address-item-edit" outereach="elems" visible="active">
+        <div class="address-item-edit-content">
+            <fieldset class="admin__fieldset">
+                <legend class="admin__legend">
+                    <span text="$parent.label"/>
+                </legend><br />
+                
+                <each args="getRegion('body')" render=""/>
+            </fieldset>
+        </div>
+    </div>
+</div>

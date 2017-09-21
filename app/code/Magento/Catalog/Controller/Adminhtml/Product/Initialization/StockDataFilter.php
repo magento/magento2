@@ -1,46 +1,43 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Initialization;
 
+use Magento\CatalogInventory\Api\StockConfigurationInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+
+/**
+ * Class StockDataFilter
+ */
 class StockDataFilter
 {
     /**
      * The greatest value which could be stored in CatalogInventory Qty field
      */
-    const MAX_QTY_VALUE = 99999999.9999;
+    const MAX_QTY_VALUE = 99999999;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
     protected $scopeConfig;
 
     /**
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @var StockConfigurationInterface
      */
-    public function __construct(\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig)
-    {
+    protected $stockConfiguration;
+
+    /**
+     * @param ScopeConfigInterface $scopeConfig
+     * @param StockConfigurationInterface $stockConfiguration
+     */
+    public function __construct(
+        ScopeConfigInterface $scopeConfig,
+        StockConfigurationInterface $stockConfiguration
+    ) {
         $this->scopeConfig = $scopeConfig;
+        $this->stockConfiguration = $stockConfiguration;
     }
 
     /**
@@ -48,6 +45,7 @@ class StockDataFilter
      *
      * @param array $stockData
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function filter(array $stockData)
     {
@@ -56,10 +54,7 @@ class StockDataFilter
         }
 
         if ($stockData['use_config_manage_stock'] == 1 && !isset($stockData['manage_stock'])) {
-            $stockData['manage_stock'] = $this->scopeConfig->getValue(
-                \Magento\CatalogInventory\Model\Stock\Item::XML_PATH_MANAGE_STOCK,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            );
+            $stockData['manage_stock'] = $this->stockConfiguration->getManageStock();
         }
         if (isset($stockData['qty']) && (double)$stockData['qty'] > self::MAX_QTY_VALUE) {
             $stockData['qty'] = self::MAX_QTY_VALUE;

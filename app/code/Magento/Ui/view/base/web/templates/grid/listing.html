@@ -1,0 +1,22 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="admin__data-grid-wrap" data-role="grid-wrapper">
+    <table class="data-grid" data-role="grid">
+       <thead>
+            <tr each="data: getVisible(), as: '$col'" render="getHeader()"/>
+        </thead>
+        <tbody>
+            <tr class="data-row" repeat="foreach: rows, item: '$row'" css="'_odd-row': $index % 2">
+                <td outerfasteach="data: getVisible(), as: '$col'"
+                    css="getFieldClass($row())" click="getFieldHandler($row())" template="getBody()"/>
+            </tr>
+            <tr ifnot="hasData()" class="data-grid-tr-no-data">
+                <td attr="colspan: countVisible()" translate="'We couldn\'t find any records.'"/>
+            </tr>
+        </tbody>
+    </table>
+</div>

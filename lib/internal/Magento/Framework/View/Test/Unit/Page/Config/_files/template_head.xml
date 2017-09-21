@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <title>Test title</title>
+        <meta name="meta_name" content="meta_content"/>
+        <meta property="og:video:secure_url" content="https://secure.example.com/movie.swf" />
+        <meta property="og:locale:alternate" content="uk_UA" />
+        <css src="path/file.css" media="all" />
+        <script src="path/file.js" defer="defer"/>
+        <link src="http://url.com" src_type="url"/>
+        <remove src="path/remove/file.css"/>
+        <attribute name="head_attribute_name" value="head_attribute_value"/>
+    </head>
+</page>

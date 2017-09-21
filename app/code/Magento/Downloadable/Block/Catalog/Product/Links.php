@@ -1,79 +1,55 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Block\Catalog\Product;
 
 use Magento\Catalog\Pricing\Price\FinalPrice;
-use Magento\Catalog\Pricing\Price\RegularPrice;
 use Magento\Downloadable\Model\Link;
 use Magento\Downloadable\Pricing\Price\LinkPrice;
+use Magento\Framework\Json\EncoderInterface;
 
 /**
  * Downloadable Product Links part block
  *
+ * @api
+ * @since 100.0.2
  */
 class Links extends \Magento\Catalog\Block\Product\AbstractProduct
 {
     /**
-     * @var \Magento\Framework\Json\EncoderInterface
+     * @var \Magento\Framework\Pricing\Helper\Data
      */
-    protected $jsonEncoder;
+    protected $pricingHelper;
 
     /**
-     * @var \Magento\Core\Helper\Data
+     * @var EncoderInterface
      */
-    protected $coreData;
-
-    /**
-     * @var \Magento\Customer\Service\V1\CustomerAccountServiceInterface
-     */
-    protected $accountService;
+    protected $encoder;
 
     /**
      * @param \Magento\Catalog\Block\Product\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Customer\Service\V1\CustomerAccountServiceInterface $accountService
+     * @param \Magento\Framework\Pricing\Helper\Data $pricingHelper
+     * @param EncoderInterface $encoder
      * @param array $data
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Customer\Service\V1\CustomerAccountServiceInterface $accountService,
-        array $data = array()
+        \Magento\Framework\Pricing\Helper\Data $pricingHelper,
+        EncoderInterface $encoder,
+        array $data = []
     ) {
-        $this->coreData = $coreData;
-        $this->accountService = $accountService;
-        parent::__construct(
-            $context,
-            $data
-        );
-        $this->_isScopePrivate = true;
+        $this->pricingHelper = $pricingHelper;
+        $this->encoder = $encoder;
+        parent::__construct($context, $data);
     }
 
     /**
      * Enter description here...
      *
      * @return boolean
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getLinksPurchasedSeparately()
     {
@@ -82,6 +58,7 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
 
     /**
      * @return boolean
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getLinkSelectionRequired()
     {
@@ -113,7 +90,7 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
     public function getCurrencyPrice($price)
     {
         $store = $this->getProduct()->getStore();
-        return $this->coreData->currencyByStore($price, $store, false);
+        return $this->pricingHelper->currencyByStore($price, $store, false);
     }
 
     /**
@@ -121,54 +98,19 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
      */
     public function getJsonConfig()
     {
-        $priceInfo = $this->getProduct()->getPriceInfo();
-        $finalPrice = $priceInfo->getPrice(FinalPrice::PRICE_CODE);
-        $regularPrice = $priceInfo->getPrice(RegularPrice::PRICE_CODE);
-        $config = [
-            'price' => $this->coreData->currency(
-                $finalPrice->getAmount()->getValue(),
-                false,
-                false
-            ),
-            'oldPrice' => $this->coreData->currency(
-                $regularPrice->getValue(),
-                false,
-                false
-            )
-        ];
-        $config['links'] = $this->getLinksConfig();
+        $finalPrice = $this->getProduct()->getPriceInfo()
+            ->getPrice(FinalPrice::PRICE_CODE);
 
-        return json_encode($config);
-    }
-
-    /**
-     * Get links price config
-     *
-     * @return array
-     */
-    protected function getLinksConfig()
-    {
-        $finalPrice = $this->getProduct()->getPriceInfo()->getPrice(FinalPrice::PRICE_CODE);
         $linksConfig = [];
         foreach ($this->getLinks() as $link) {
             $amount = $finalPrice->getCustomAmount($link->getPrice());
-            $price = $this->coreData->currency($link->getPrice(), false, false);
             $linksConfig[$link->getId()] = [
-                'price' => $price,
-                'oldPrice' => $price,
-                'inclTaxPrice' => $this->coreData->currency(
-                    $amount->getValue(),
-                    false,
-                    false
-                ),
-                'exclTaxPrice' => $this->coreData->currency(
-                    $amount->getBaseAmount(),
-                    false,
-                    false
-                )
+                'finalPrice' => $amount->getValue(),
+                'basePrice' => $amount->getBaseAmount()
             ];
         }
-        return $linksConfig;
+
+        return $this->encoder->encode(['links' => $linksConfig]);
     }
 
     /**
@@ -178,7 +120,7 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
     public function getLinkSampleUrl($link)
     {
         $store = $this->getProduct()->getStore();
-        return $store->getUrl('downloadable/download/linkSample', array('link_id' => $link->getId()));
+        return $store->getUrl('downloadable/download/linkSample', ['link_id' => $link->getId()]);
     }
 
     /**
@@ -191,17 +133,24 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
         if ($this->getProduct()->getLinksTitle()) {
             return $this->getProduct()->getLinksTitle();
         }
-        return $this->_scopeConfig->getValue(\Magento\Downloadable\Model\Link::XML_PATH_LINKS_TITLE, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $this->_scopeConfig->getValue(
+            \Magento\Downloadable\Model\Link::XML_PATH_LINKS_TITLE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**
      * Return true if target of link new window
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsOpenInNewWindow()
     {
-        return $this->_scopeConfig->isSetFlag(\Magento\Downloadable\Model\Link::XML_PATH_TARGET_NEW_WINDOW, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $this->_scopeConfig->isSetFlag(
+            \Magento\Downloadable\Model\Link::XML_PATH_TARGET_NEW_WINDOW,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**
@@ -209,6 +158,7 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
      *
      * @param Link $link
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsLinkChecked($link)
     {

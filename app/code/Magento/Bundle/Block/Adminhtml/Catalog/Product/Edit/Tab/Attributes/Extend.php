@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -31,6 +13,11 @@ namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes;
 
 class Extend extends \Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset\Element
 {
+    /**
+     * Initialize block template
+     */
+    private $template = 'Magento_Bundle::catalog/product/edit/tab/attributes/extend.phtml';
+
     const DYNAMIC = 0;
 
     const FIXED = 1;
@@ -43,17 +30,25 @@ class Extend extends \Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset\Ele
     protected $_coreRegistry = null;
 
     /**
+     * @var \Magento\Framework\Data\FormFactory
+     */
+    private $formFactory;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
-        array $data = array()
+        \Magento\Framework\Data\FormFactory $formFactory,
+        array $data = []
     ) {
         $this->_coreRegistry = $registry;
         parent::__construct($context, $data);
+        $this->formFactory = $formFactory;
     }
 
     /**
@@ -75,104 +70,51 @@ class Extend extends \Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset\Ele
      */
     public function getElementHtml()
     {
-        $elementHtml = parent::getElementHtml();
+        $templateFile = $this->getTemplateFile($this->template);
+        return $this->fetchView($templateFile);
+    }
 
-        $switchAttributeCode = $this->getAttribute()->getAttributeCode() . '_type';
-        $switchAttributeValue = $this->getProduct()->getData($switchAttributeCode);
+    /**
+     * Execute method getElementHtml from parrent class
+     *
+     * @return string
+     */
+    public function getParentElementHtml()
+    {
+        return parent::getElementHtml();
+    }
 
-        $html = '<select name="product[' .
-            $switchAttributeCode .
-            ']" id="' .
-            $switchAttributeCode .
-            '" type="select" class="required-entry select next-toinput"' .
-            ($this->getProduct()->getId() &&
-            $this->getAttribute()->getAttributeCode() == 'price' ||
-            $this->getElement()->getReadonly() ? ' disabled="disabled"' : '') . '>
-            <option value="">' . __('-- Select --') . '</option>
-            <option ' . ($switchAttributeValue ==
-            self::DYNAMIC ? 'selected' : '') . ' value="' . self::DYNAMIC . '">' . __('Dynamic') . '</option>
-            <option ' . ($switchAttributeValue ==
-            self::FIXED ? 'selected' : '') . ' value="' . self::FIXED . '">' . __('Fixed') . '</option>
-        </select>';
+    /**
+     * @return array
+     */
+    public function getOptions()
+    {
+        return [
+            [
+                'value' => '',
+                'label' => __('-- Select --')
+            ],
+            [
+                'value' => self::DYNAMIC,
+                'label' => __('Dynamic')
+            ],
+            [
+                'value' => self::FIXED,
+                'label' => __('Fixed')
+            ]
+        ];
+    }
 
-        if (!($this->getAttribute()->getAttributeCode() == 'price' && $this->getCanReadPrice() === false)) {
-            $html = '<div class="' .
-                $this->getAttribute()->getAttributeCode() .
-                ' ">' .
-                $elementHtml .
-                '</div>' .
-                $html;
-        }
-        if ($this->getDisableChild() && !$this->getElement()->getReadonly()) {
-            $html .= "<script type=\"text/javascript\">
-                function " .
-                $switchAttributeCode .
-                "_change() {
-                    if ($('" .
-                $switchAttributeCode .
-                "').value == '" .
-                self::DYNAMIC .
-                "') {
-                        if ($('" .
-                $this->getAttribute()->getAttributeCode() .
-                "')) {
-                            $('" .
-                $this->getAttribute()->getAttributeCode() .
-                "').disabled = true;
-                            $('" .
-                $this->getAttribute()->getAttributeCode() .
-                "').value = '';
-                            $('" .
-                $this->getAttribute()->getAttributeCode() .
-                "').removeClassName('required-entry');
-                        }
-
-                        if ($('dynamic-price-warning')) {
-                            $('dynamic-price-warning').show();
-                        }
-                    } else {
-                        if ($('" .
-                $this->getAttribute()->getAttributeCode() .
-                "')) {";
-
-            if ($this->getAttribute()->getAttributeCode() == 'price' &&
-                $this->getCanEditPrice() === false &&
-                $this->getCanReadPrice() === true &&
-                $this->getProduct()->isObjectNew()
-            ) {
-                $defaultProductPrice = $this->getDefaultProductPrice() ? $this->getDefaultProductPrice() : "''";
-                $html .= "$('" .
-                    $this->getAttribute()->getAttributeCode() .
-                    "').value = " .
-                    $defaultProductPrice .
-                    ";";
-            } else {
-                $html .= "$('" .
-                    $this->getAttribute()->getAttributeCode() .
-                    "').disabled = false;
-                          $('" .
-                    $this->getAttribute()->getAttributeCode() .
-                    "').addClassName('required-entry');";
-            }
-
-            $html .= "}
-
-                        if ($('dynamic-price-warning')) {
-                            $('dynamic-price-warning').hide();
-                        }
-                    }
-                }";
-
-            if (!($this->getAttribute()->getAttributeCode() == 'price' &&
-                !$this->getCanEditPrice() &&
-                !$this->getProduct()->isObjectNew())
-            ) {
-                $html .= "$('" . $switchAttributeCode . "').observe('change', " . $switchAttributeCode . "_change);";
-            }
-            $html .= $switchAttributeCode . "_change();
-            </script>";
-        }
-        return $html;
+    /**
+     * @return bool
+     */
+    public function isDisabledField()
+    {
+        return $this->_getData('is_disabled_field')
+            || ($this->getProduct()->getId()
+                && $this->getAttribute()->getAttributeCode() === 'price'
+            )
+            || $this->getElement()->getReadonly();
     }
 
     /**
@@ -184,5 +126,28 @@ class Extend extends \Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset\Ele
             $this->setData('product', $this->_coreRegistry->registry('product'));
         }
         return $this->getData('product');
+    }
+
+    /**
+     * @param string $switchAttributeCode
+     * @return \Magento\Framework\Data\Form\Element\Select
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function getExtendedElement($switchAttributeCode)
+    {
+        $form = $this->formFactory->create();
+        return $form->addField(
+            $switchAttributeCode,
+            'select',
+            [
+                'name' => "product[{$switchAttributeCode}]",
+                'values' => $this->getOptions(),
+                'value' => $switchAttributeCode,
+                'class' => 'required-entry next-toinput',
+                'no_span' => true,
+                'disabled' => $this->isDisabledField(),
+                'value' => $this->getProduct()->getData($switchAttributeCode),
+            ]
+        );
     }
 }

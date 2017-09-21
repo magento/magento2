@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Model;
 
@@ -28,7 +10,7 @@ namespace Magento\Backend\Model;
  *
  * @magentoAppArea adminhtml
  */
-class UrlTest extends \PHPUnit_Framework_TestCase
+class UrlTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Model\UrlInterface
@@ -39,7 +21,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Backend\Model\UrlInterface'
+            \Magento\Backend\Model\UrlInterface::class
         );
     }
 
@@ -66,7 +48,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $request \Magento\Framework\App\RequestInterface */
         $request = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Framework\App\RequestInterface');
+            ->create(\Magento\Framework\App\RequestInterface::class);
         $request->setControllerName(
             'default_controller'
         )->setActionName(
@@ -77,7 +59,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
 
         $this->_model->setRequest($request);
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Session\SessionManagerInterface'
+            \Magento\Framework\Session\SessionManagerInterface::class
         )->setData(
             '_form_key',
             'salt'
@@ -93,53 +75,53 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         /** @var $encryptor \Magento\Framework\Encryption\EncryptorInterface */
-        $encryptor = $objectManager->get('Magento\Framework\Encryption\EncryptorInterface');
+        $encryptor = $objectManager->get(\Magento\Framework\Encryption\EncryptorInterface::class);
 
-        return array(
-            array(
+        return [
+            [
                 '',
                 '',
                 '',
-                $encryptor->getHash('default_router' . 'default_controller' . 'default_action' . 'salt')
-            ),
-            array('', '', 'action', $encryptor->getHash('default_router' . 'default_controller' . 'action' . 'salt')),
-            array(
+                $encryptor->getHash('default_router' . 'default_controller' . 'default_action' . 'salt'),
+            ],
+            ['', '', 'action', $encryptor->getHash('default_router' . 'default_controller' . 'action' . 'salt')],
+            [
                 '',
                 'controller',
                 '',
                 $encryptor->getHash('default_router' . 'controller' . 'default_action' . 'salt')
-            ),
-            array(
+            ],
+            [
                 '',
                 'controller',
                 'action',
                 $encryptor->getHash('default_router' . 'controller' . 'action' . 'salt')
-            ),
-            array(
+            ],
+            [
                 'adminhtml',
                 '',
                 '',
                 $encryptor->getHash('adminhtml' . 'default_controller' . 'default_action' . 'salt')
-            ),
-            array(
+            ],
+            [
                 'adminhtml',
                 '',
                 'action',
                 $encryptor->getHash('adminhtml' . 'default_controller' . 'action' . 'salt')
-            ),
-            array(
+            ],
+            [
                 'adminhtml',
                 'controller',
                 '',
                 $encryptor->getHash('adminhtml' . 'controller' . 'default_action' . 'salt')
-            ),
-            array(
+            ],
+            [
                 'adminhtml',
                 'controller',
                 'action',
                 $encryptor->getHash('adminhtml' . 'controller' . 'action' . 'salt')
-            )
-        );
+            ]
+        ];
     }
 
     /**
@@ -150,16 +132,16 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         /** @var $encryptor \Magento\Framework\Encryption\EncryptorInterface */
-        $encryptor = $objectManager->get('Magento\Framework\Encryption\EncryptorInterface');
+        $encryptor = $objectManager->get(\Magento\Framework\Encryption\EncryptorInterface::class);
 
         /** @var $request \Magento\Framework\App\Request\Http */
         $request = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Framework\App\RequestInterface');
+            ->create(\Magento\Framework\App\RequestInterface::class);
         $request->setControllerName('controller')->setActionName('action');
         $request->initForward()->setControllerName(uniqid())->setActionName(uniqid());
         $this->_model->setRequest($request);
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Session\SessionManagerInterface'
+            \Magento\Framework\Session\SessionManagerInterface::class
         )->setData(
             '_form_key',
             'salt'

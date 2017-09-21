@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="events.xsd">
+    <preset name="base">
+        <observer class="Magento\Mtf\System\Observer\WebapiResponse">
+            <tag name="webapi_failed" />
+        </observer>
+    </preset>
+    <preset name="coverage" extends="base">
+        <observer class="Magento\Mtf\System\Observer\PageUrl">
+            <tag name="click_after"/>
+            <tag name="accept_alert_after"/>
+            <tag name="dismiss_alert_after"/>
+            <tag name="open_after"/>
+            <tag name="forward"/>
+            <tag name="back"/>
+        </observer>
+        <observer class="Magento\Mtf\System\Observer\AppState">
+            <tag name="app_state_applied"/>
+        </observer>
+        <observer class="Magento\Mtf\System\Observer\Log">
+            <tag name="exception"/>
+            <tag name="failure"/>
+            <tag name="execution" />
+        </observer>
+        <observer class="Magento\Mtf\System\Observer\SourceCode">
+            <tag name="exception"/>
+            <tag name="failure"/>
+        </observer>
+        <observer class="Magento\Mtf\System\Observer\Screenshot">
+            <tag name="exception"/>
+            <tag name="failure"/>
+        </observer>
+        <observer class="Magento\Mtf\System\Observer\CurlResponse">
+            <tag name="curl_failed"/>
+        </observer>
+        <observer class="Magento\Mtf\System\Observer\WebapiResponse">
+            <tag name="webapi_failed" />
+        </observer>
+    </preset>
+</config>

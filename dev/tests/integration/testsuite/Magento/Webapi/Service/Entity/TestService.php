@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Service\Entity;
 
@@ -32,14 +14,14 @@ class TestService
      */
     public function simple($entityId, $name)
     {
-        return array($entityId, $name);
+        return [$entityId, $name];
     }
 
     /**
-     * @param \Magento\Webapi\Service\Entity\NestedData $nested
-     * @return \Magento\Webapi\Service\Entity\NestedData
+     * @param \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\Nested $nested
+     * @return \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\Nested
      */
-    public function nestedData(NestedData $nested)
+    public function nestedData(Nested $nested)
     {
         return $nested;
     }
@@ -63,8 +45,8 @@ class TestService
     }
 
     /**
-     * @param \Magento\Webapi\Service\Entity\SimpleData[] $dataObjects
-     * @return \Magento\Webapi\Service\Entity\SimpleData[]
+     * @param \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\Simple[] $dataObjects
+     * @return \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\Simple[]
      */
     public function dataArray(array $dataObjects)
     {
@@ -72,28 +54,28 @@ class TestService
     }
 
     /**
-     * @param \Magento\Webapi\Service\Entity\SimpleArrayData $arrayData
-     * @return \Magento\Webapi\Service\Entity\SimpleArrayData
+     * @param \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\SimpleArray $arrayData
+     * @return \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\SimpleArray
      */
-    public function nestedSimpleArray(SimpleArrayData $arrayData)
+    public function nestedSimpleArray(SimpleArray $arrayData)
     {
         return $arrayData;
     }
 
     /**
-     * @param \Magento\Webapi\Service\Entity\AssociativeArrayData $associativeArrayData
-     * @return \Magento\Webapi\Service\Entity\AssociativeArrayData
+     * @param \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\AssociativeArray $associativeArrayData
+     * @return \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\AssociativeArray
      */
-    public function nestedAssociativeArray(AssociativeArrayData $associativeArrayData)
+    public function nestedAssociativeArray(AssociativeArray $associativeArrayData)
     {
         return $associativeArrayData;
     }
 
     /**
-     * @param \Magento\Webapi\Service\Entity\DataArrayData $dataObjects
-     * @return \Magento\Webapi\Service\Entity\DataArrayData
+     * @param \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\DataArray $dataObjects
+     * @return \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\DataArray
      */
-    public function nestedDataArray(DataArrayData $dataObjects)
+    public function nestedDataArray(DataArray $dataObjects)
     {
         return $dataObjects;
     }

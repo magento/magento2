@@ -1,29 +1,11 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Block\Advanced;
 
-class ResultTest extends \PHPUnit_Framework_TestCase
+class ResultTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\LayoutInterface
@@ -37,10 +19,10 @@ class ResultTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+        $this->_layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Framework\View\LayoutInterface::class
         );
-        $this->_block = $this->_layout->createBlock('Magento\CatalogSearch\Block\Advanced\Result', 'block');
+        $this->_block = $this->_layout->createBlock(\Magento\CatalogSearch\Block\Advanced\Result::class, 'block');
     }
 
     /**
@@ -48,28 +30,29 @@ class ResultTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetListOrders()
     {
-        $sortOptions = array(
+        $sortOptions = [
             'option1' => 'Label Option 1',
             'position' => 'Label Position',
-            'option3' => 'Label Option 2'
-        );
-        $category = $this->getMock(
-            'Magento\Catalog\Model\Category',
-            array('getAvailableSortByOptions'),
-            array(),
-            '',
-            false
-        );
+            'option3' => 'Label Option 2',
+        ];
+        /** @var \Magento\Catalog\Model\Category $category */
+        $category = $this->createPartialMock(\Magento\Catalog\Model\Category::class, ['getAvailableSortByOptions']);
         $category->expects($this->atLeastOnce())
             ->method('getAvailableSortByOptions')
             ->will($this->returnValue($sortOptions));
         $category->setId(100500); // Any id - just for layer navigation
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Catalog\Model\Layer\Search')
-            ->setCurrentCategory($category);
+        /** @var \Magento\Catalog\Model\Layer\Resolver $resolver */
+        $resolver = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get(\Magento\Catalog\Model\Layer\Resolver::class);
+        $resolver->get()->setCurrentCategory($category);
 
-        $childBlock = $this->_layout->addBlock('Magento\Framework\View\Element\Text', 'search_result_list', 'block');
+        $childBlock = $this->_layout->addBlock(
+            \Magento\Framework\View\Element\Text::class,
+            'search_result_list',
+            'block'
+        );
 
-        $expectedOptions = array('option1' => 'Label Option 1', 'option3' => 'Label Option 2');
+        $expectedOptions = ['option1' => 'Label Option 1', 'option3' => 'Label Option 2'];
         $this->assertNotEquals($expectedOptions, $childBlock->getAvailableOrders());
         $this->_block->setListOrders();
         $this->assertEquals($expectedOptions, $childBlock->getAvailableOrders());
@@ -81,7 +64,11 @@ class ResultTest extends \PHPUnit_Framework_TestCase
     public function testSetListModes()
     {
         /** @var $childBlock \Magento\Framework\View\Element\Text */
-        $childBlock = $this->_layout->addBlock('Magento\Framework\View\Element\Text', 'search_result_list', 'block');
+        $childBlock = $this->_layout->addBlock(
+            \Magento\Framework\View\Element\Text::class,
+            'search_result_list',
+            'block'
+        );
         $this->assertEmpty($childBlock->getModes());
         $this->_block->setListModes();
         $this->assertNotEmpty($childBlock->getModes());
@@ -90,11 +77,15 @@ class ResultTest extends \PHPUnit_Framework_TestCase
     public function testSetListCollection()
     {
         /** @var $childBlock \Magento\Framework\View\Element\Text */
-        $childBlock = $this->_layout->addBlock('Magento\Framework\View\Element\Text', 'search_result_list', 'block');
+        $childBlock = $this->_layout->addBlock(
+            \Magento\Framework\View\Element\Text::class,
+            'search_result_list',
+            'block'
+        );
         $this->assertEmpty($childBlock->getCollection());
         $this->_block->setListCollection();
         $this->assertInstanceOf(
-            'Magento\CatalogSearch\Model\Resource\Advanced\Collection',
+            \Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection::class,
             $childBlock->getCollection()
         );
     }

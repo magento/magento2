@@ -1,61 +1,58 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity\Modular;
 
-class IndexerConfigFilesTest extends \PHPUnit_Framework_TestCase
+use Magento\Framework\Filesystem;
+
+class IndexerConfigFilesTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Index\Model\Indexer\Config\Reader
+     * Configuration acl file list
+     *
+     * @var array
      */
-    protected $_model;
+    protected $fileList = [];
 
-    public function setUp()
+    /**
+     * Path to scheme file
+     *
+     * @var string
+     */
+    protected $schemaFile;
+
+    protected function setUp()
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var $filesystem \Magento\Framework\App\Filesystem */
-        $filesystem = $objectManager->get('Magento\Framework\App\Filesystem');
-        $modulesDirectory = $filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem::MODULES_DIR);
-        $fileIteratorFactory = $objectManager->get('Magento\Framework\Config\FileIteratorFactory');
-        $xmlFiles = $fileIteratorFactory->create(
-            $modulesDirectory,
-            $modulesDirectory->search('/*/*/etc/{*/indexers.xml,indexers.xml}')
-        );
-
-        $validationStateMock = $this->getMock('Magento\Framework\Config\ValidationStateInterface');
-        $validationStateMock->expects($this->any())->method('isValidated')->will($this->returnValue(true));
-        $fileResolverMock = $this->getMock('Magento\Framework\Config\FileResolverInterface');
-        $fileResolverMock->expects($this->any())->method('get')->will($this->returnValue($xmlFiles));
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-
-        $this->_model = $objectManager->create(
-            'Magento\Index\Model\Indexer\Config\Reader',
-            array('fileResolver' => $fileResolverMock, 'validationState' => $validationStateMock)
-        );
+        $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
+        $this->schemaFile = $urnResolver->getRealPath('urn:magento:framework:Indexer/etc/indexer.xsd');
     }
 
-    public function testImportXmlFiles()
+    /**
+     * Test each acl configuration file
+     * @param string $file
+     * @dataProvider indexerConfigFileDataProvider
+     */
+    public function testIndexerConfigFile($file)
     {
-        $this->_model->read('global');
+        $validationStateMock = $this->createMock(\Magento\Framework\Config\ValidationStateInterface::class);
+        $validationStateMock->method('isValidationRequired')
+            ->willReturn(true);
+        $domConfig = new \Magento\Framework\Config\Dom(file_get_contents($file), $validationStateMock);
+        $result = $domConfig->validate($this->schemaFile, $errors);
+        $message = "Invalid XML-file: {$file}\n";
+        foreach ($errors as $error) {
+            $message .= "{$error}\n";
+        }
+        $this->assertTrue($result, $message);
+    }
+
+    /**
+     * @return array
+     */
+    public function indexerConfigFileDataProvider()
+    {
+        return \Magento\Framework\App\Utility\Files::init()->getConfigFiles('indexer.xml');
     }
 }

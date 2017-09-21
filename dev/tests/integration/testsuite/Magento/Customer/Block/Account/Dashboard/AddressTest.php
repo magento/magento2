@@ -1,33 +1,15 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Customer\Block\Account\Dashboard;
 
-use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
-class AddressTest extends \PHPUnit_Framework_TestCase
+class AddressTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Customer\Block\Account\Dashboard\Address
@@ -38,26 +20,30 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     protected $_customerSession;
 
     /**
-     * @var \Magento\Framework\Module\Manager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
 
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_customerSession = $this->objectManager->get('Magento\Customer\Model\Session');
-        $this->_block = $this->objectManager->get('Magento\Framework\View\LayoutInterface')
+        $this->_customerSession = $this->objectManager->get(\Magento\Customer\Model\Session::class);
+        $this->_block = $this->objectManager->get(\Magento\Framework\View\LayoutInterface::class)
             ->createBlock(
-                'Magento\Customer\Block\Account\Dashboard\Address',
+                \Magento\Customer\Block\Account\Dashboard\Address::class,
                 '',
-                array('customerSession' => $this->_customerSession)
+                ['customerSession' => $this->_customerSession]
             );
-        $this->objectManager->get('Magento\Framework\App\ViewInterface')->setIsLayoutLoaded(true);
+        $this->objectManager->get(\Magento\Framework\App\ViewInterface::class)->setIsLayoutLoaded(true);
     }
 
     protected function tearDown()
     {
         $this->_customerSession->unsCustomerId();
+        /** @var \Magento\Customer\Model\CustomerRegistry $customerRegistry */
+        $customerRegistry = $this->objectManager->get(\Magento\Customer\Model\CustomerRegistry::class);
+        //Cleanup customer from registry
+        $customerRegistry->remove(1);
     }
 
     /**
@@ -66,12 +52,12 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     public function testGetCustomer()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $layout = $objectManager->get('Magento\Framework\View\LayoutInterface');
+        $layout = $objectManager->get(\Magento\Framework\View\LayoutInterface::class);
         $layout->setIsCacheable(false);
-        /** @var CustomerAccountServiceInterface $customerAccountService */
-        $customerAccountService = $objectManager
-            ->get('Magento\Customer\Service\V1\CustomerAccountServiceInterface');
-        $customer = $customerAccountService->getCustomer(1);
+        /** @var CustomerRepositoryInterface $customerRepository */
+        $customerRepository = $objectManager
+            ->get(\Magento\Customer\Api\CustomerRepositoryInterface::class);
+        $customer = $customerRepository->getById(1);
         $this->_customerSession->setCustomerId(1);
         $object = $this->_block->getCustomer();
         $this->assertEquals($customer, $object);
@@ -80,10 +66,12 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
     public function testGetCustomerMissingCustomer()
     {
-        $moduleManager = $this->objectManager->get('Magento\Framework\Module\Manager');
+        $moduleManager = $this->objectManager->get(\Magento\Framework\Module\Manager::class);
         if ($moduleManager->isEnabled('Magento_PageCache')) {
-            $customerDataBuilder = $this->objectManager->create('Magento\Customer\Service\V1\Data\CustomerBuilder');
-            $customerData = $customerDataBuilder->setGroupId($this->_customerSession->getCustomerGroupId())->create();
+            $customerDataFactory = $this->objectManager->create(
+                \Magento\Customer\Api\Data\CustomerInterfaceFactory::class
+            );
+            $customerData = $customerDataFactory->create()->setGroupId($this->_customerSession->getCustomerGroupId());
             $this->assertEquals($customerData, $this->_block->getCustomer());
         } else {
             $this->assertNull($this->_block->getCustomer());
@@ -109,14 +97,14 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
     public function getPrimaryShippingAddressHtmlDataProvider()
     {
-        $expected = "John Smith<br/>\nCompanyName<br />\nGreen str, 67<br />\n\n\n\nCityM,  Alabama, 75477<br/>"
-            . "\nUnited States<br/>\nT: 3468676\n\n";
+        $expected = "John Smith<br />\nCompanyName<br />\nGreen str, 67<br />\n\n\n\nCityM,  Alabama, 75477<br />"
+            . "\nUnited States<br />\nT: <a href=\"tel:3468676\">3468676</a>\n\n";
 
-        return array(
-            '0' => array(0, 'You have not set a default shipping address.'),
-            '1' => array(1, $expected),
-            '5' => array(5, 'You have not set a default shipping address.')
-        );
+        return [
+            '0' => [0, 'You have not set a default shipping address.'],
+            '1' => [1, $expected],
+            '5' => [5, 'You have not set a default shipping address.']
+        ];
     }
 
     /**
@@ -125,7 +113,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      * @magentoDataFixture Magento/Customer/_files/customer_no_address.php
      * @dataProvider getPrimaryBillingAddressHtmlDataProvider
      */
-    public function testGetPrimaryBillingingAddressHtml($customerId, $expected)
+    public function testGetPrimaryBillingAddressHtml($customerId, $expected)
     {
         if (!empty($customerId)) {
             $this->_customerSession->setCustomerId($customerId);
@@ -136,8 +124,8 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
     public function getPrimaryBillingAddressHtmlDataProvider()
     {
-        $expected = "John Smith<br/>\nCompanyName<br />\nGreen str, 67<br />\n\n\n\nCityM,  Alabama, 75477<br/>"
-            . "\nUnited States<br/>\nT: 3468676\n\n";
+        $expected = "John Smith<br />\nCompanyName<br />\nGreen str, 67<br />\n\n\n\nCityM,  Alabama, 75477<br />"
+            . "\nUnited States<br />\nT: <a href=\"tel:3468676\">3468676</a>\n\n";
         return [
             '0' => [0, 'You have not set a default billing address.'],
             '1' => [1, $expected],
@@ -149,7 +137,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Customer/_files/customer_two_addresses.php
      * @magentoDataFixture Magento/Customer/_files/customer_no_address.php
-     * @dataProvider getPrimaryShippingAddressEditUrlDataProvider
+     * @dataProvider getPrimaryAddressEditUrlDataProvider
      */
     public function testGetPrimaryShippingAddressEditUrl($customerId, $expected)
     {
@@ -160,19 +148,11 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $url);
     }
 
-    public function getPrimaryShippingAddressEditUrlDataProvider()
-    {
-        return [
-            '0' => [0, 'http://localhost/index.php/customer/address/edit/'],
-            '1' => [1, 'http://localhost/index.php/customer/address/edit/'],
-        ];
-    }
-
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Customer/_files/customer_two_addresses.php
      * @magentoDataFixture Magento/Customer/_files/customer_no_address.php
-     * @dataProvider getPrimaryBillingAddressEditUrlDataProvider
+     * @dataProvider getPrimaryAddressEditUrlDataProvider
      */
     public function testGetPrimaryBillingAddressEditUrl($customerId, $expected)
     {
@@ -183,11 +163,10 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $url);
     }
 
-    public function getPrimaryBillingAddressEditUrlDataProvider()
+    public function getPrimaryAddressEditUrlDataProvider()
     {
         return [
-            '0' => [0, 'http://localhost/index.php/customer/address/edit/'],
-            '1' => [1, 'http://localhost/index.php/customer/address/edit/'],
+            '1' => [1, 'http://localhost/index.php/customer/address/edit/id/1/'],
         ];
     }
 }

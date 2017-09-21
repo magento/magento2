@@ -1,53 +1,22 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order\Shipment;
 
+use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Sales\Api\Data\ShipmentTrackInterface;
+use Magento\Sales\Model\AbstractModel;
+
 /**
- * @method \Magento\Sales\Model\Resource\Order\Shipment\Track _getResource()
- * @method \Magento\Sales\Model\Resource\Order\Shipment\Track getResource()
- * @method int getParentId()
- * @method \Magento\Sales\Model\Order\Shipment\Track setParentId(int $value)
- * @method float getWeight()
- * @method \Magento\Sales\Model\Order\Shipment\Track setWeight(float $value)
- * @method float getQty()
- * @method \Magento\Sales\Model\Order\Shipment\Track setQty(float $value)
- * @method int getOrderId()
- * @method \Magento\Sales\Model\Order\Shipment\Track setOrderId(int $value)
- * @method string getDescription()
- * @method \Magento\Sales\Model\Order\Shipment\Track setDescription(string $value)
- * @method string getTitle()
- * @method \Magento\Sales\Model\Order\Shipment\Track setTitle(string $value)
- * @method string getCarrierCode()
- * @method \Magento\Sales\Model\Order\Shipment\Track setCarrierCode(string $value)
- * @method string getCreatedAt()
- * @method \Magento\Sales\Model\Order\Shipment\Track setCreatedAt(string $value)
- * @method string getUpdatedAt()
- * @method \Magento\Sales\Model\Order\Shipment\Track setUpdatedAt(string $value)
- *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
-class Track extends \Magento\Sales\Model\AbstractModel
+class Track extends AbstractModel implements ShipmentTrackInterface
 {
     /**
      * Code of custom carrier
@@ -75,35 +44,44 @@ class Track extends \Magento\Sales\Model\AbstractModel
     protected $_storeManager;
 
     /**
-     * @var \Magento\Sales\Model\Order\ShipmentFactory
+     * @var \Magento\Sales\Api\ShipmentRepositoryInterface
      */
-    protected $_shipmentFactory;
+    protected $shipmentRepository;
 
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
+     * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Sales\Model\Order\ShipmentFactory $shipmentFactory
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Sales\Api\ShipmentRepositoryInterface $shipmentRepository
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
+        AttributeValueFactory $customAttributeFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Sales\Model\Order\ShipmentFactory $shipmentFactory,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
-        array $data = array()
+        \Magento\Sales\Api\ShipmentRepositoryInterface $shipmentRepository,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        array $data = []
     ) {
-        parent::__construct($context, $registry, $localeDate, $dateTime, $resource, $resourceCollection, $data);
+        parent::__construct(
+            $context,
+            $registry,
+            $extensionFactory,
+            $customAttributeFactory,
+            $resource,
+            $resourceCollection,
+            $data
+        );
         $this->_storeManager = $storeManager;
-        $this->_shipmentFactory = $shipmentFactory;
+        $this->shipmentRepository = $shipmentRepository;
     }
 
     /**
@@ -113,11 +91,13 @@ class Track extends \Magento\Sales\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\Resource\Order\Shipment\Track');
+        $this->_init(\Magento\Sales\Model\ResourceModel\Order\Shipment\Track::class);
     }
 
     /**
      * Tracking number getter
+     *
+     * @codeCoverageIgnore
      *
      * @return string
      */
@@ -129,8 +109,10 @@ class Track extends \Magento\Sales\Model\AbstractModel
     /**
      * Tracking number setter
      *
+     * @codeCoverageIgnore
+     *
      * @param string $number
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function setNumber($number)
     {
@@ -139,6 +121,8 @@ class Track extends \Magento\Sales\Model\AbstractModel
 
     /**
      * Declare Shipment instance
+     *
+     * @codeCoverageIgnore
      *
      * @param \Magento\Sales\Model\Order\Shipment $shipment
      * @return $this
@@ -153,11 +137,16 @@ class Track extends \Magento\Sales\Model\AbstractModel
      * Retrieve Shipment instance
      *
      * @return \Magento\Sales\Model\Order\Shipment
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getShipment()
     {
         if (!$this->_shipment instanceof \Magento\Sales\Model\Order\Shipment) {
-            $this->_shipment = $this->_shipmentFactory->create()->load($this->getParentId());
+            if ($this->getParentId()) {
+                $this->_shipment = $this->shipmentRepository->get($this->getParentId());
+            } else {
+                throw new LocalizedException(__("Parent shipment cannot be loaded for track object."));
+            }
         }
 
         return $this->_shipment;
@@ -207,22 +196,6 @@ class Track extends \Magento\Sales\Model\AbstractModel
     }
 
     /**
-     * Before object save
-     *
-     * @return $this
-     */
-    protected function _beforeSave()
-    {
-        parent::_beforeSave();
-
-        if (!$this->getParentId() && $this->getShipment()) {
-            $this->setParentId($this->getShipment()->getId());
-        }
-
-        return $this;
-    }
-
-    /**
      * Add data to the object.
      *
      * Retains previous data in the object.
@@ -238,4 +211,209 @@ class Track extends \Magento\Sales\Model\AbstractModel
         }
         return parent::addData($data);
     }
+
+    //@codeCoverageIgnoreStart
+
+    /**
+     * Returns track_number
+     *
+     * @return string
+     */
+    public function getTrackNumber()
+    {
+        return $this->getData(ShipmentTrackInterface::TRACK_NUMBER);
+    }
+
+    /**
+     * Returns carrier_code
+     *
+     * @return string
+     */
+    public function getCarrierCode()
+    {
+        return $this->getData(ShipmentTrackInterface::CARRIER_CODE);
+    }
+
+    /**
+     * Returns created_at
+     *
+     * @return string
+     */
+    public function getCreatedAt()
+    {
+        return $this->getData(ShipmentTrackInterface::CREATED_AT);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCreatedAt($createdAt)
+    {
+        return $this->setData(ShipmentTrackInterface::CREATED_AT, $createdAt);
+    }
+
+    /**
+     * Returns description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->getData(ShipmentTrackInterface::DESCRIPTION);
+    }
+
+    /**
+     * Returns order_id
+     *
+     * @return int
+     */
+    public function getOrderId()
+    {
+        return $this->getData(ShipmentTrackInterface::ORDER_ID);
+    }
+
+    /**
+     * Returns parent_id
+     *
+     * @return int
+     */
+    public function getParentId()
+    {
+        return $this->getData(ShipmentTrackInterface::PARENT_ID);
+    }
+
+    /**
+     * Returns qty
+     *
+     * @return float
+     */
+    public function getQty()
+    {
+        return $this->getData(ShipmentTrackInterface::QTY);
+    }
+
+    /**
+     * Returns title
+     *
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->getData(ShipmentTrackInterface::TITLE);
+    }
+
+    /**
+     * Returns updated_at
+     *
+     * @return string
+     */
+    public function getUpdatedAt()
+    {
+        return $this->getData(ShipmentTrackInterface::UPDATED_AT);
+    }
+
+    /**
+     * Returns weight
+     *
+     * @return float
+     */
+    public function getWeight()
+    {
+        return $this->getData(ShipmentTrackInterface::WEIGHT);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setUpdatedAt($timestamp)
+    {
+        return $this->setData(ShipmentTrackInterface::UPDATED_AT, $timestamp);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setParentId($id)
+    {
+        return $this->setData(ShipmentTrackInterface::PARENT_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setWeight($weight)
+    {
+        return $this->setData(ShipmentTrackInterface::WEIGHT, $weight);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setQty($qty)
+    {
+        return $this->setData(ShipmentTrackInterface::QTY, $qty);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setOrderId($id)
+    {
+        return $this->setData(ShipmentTrackInterface::ORDER_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTrackNumber($trackNumber)
+    {
+        return $this->setData(ShipmentTrackInterface::TRACK_NUMBER, $trackNumber);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setDescription($description)
+    {
+        return $this->setData(ShipmentTrackInterface::DESCRIPTION, $description);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTitle($title)
+    {
+        return $this->setData(ShipmentTrackInterface::TITLE, $title);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCarrierCode($code)
+    {
+        return $this->setData(ShipmentTrackInterface::CARRIER_CODE, $code);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Sales\Api\Data\ShipmentTrackExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Sales\Api\Data\ShipmentTrackExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Sales\Api\Data\ShipmentTrackExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
+    }
+
+    //@codeCoverageIgnoreEnd
 }

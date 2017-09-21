@@ -1,34 +1,20 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\ImportExport\Helper;
 
 /**
  * ImportExport data helper
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
-class Data extends \Magento\Core\Helper\Data
+class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**#@+
      * XML path for config data
@@ -39,52 +25,35 @@ class Data extends \Magento\Core\Helper\Data
 
     /**#@-*/
 
-    /**
-     * @var \Magento\Framework\File\Size
-     */
+    /**#@-*/
     protected $_fileSize;
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\App\State $appState
-     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\File\Size $fileSize
-     * @param bool $dbCompatibleMode
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\App\State $appState,
-        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
-        \Magento\Framework\File\Size $fileSize,
-        $dbCompatibleMode = true
+        \Magento\Framework\File\Size $fileSize
     ) {
         $this->_fileSize = $fileSize;
         parent::__construct(
-            $context,
-            $scopeConfig,
-            $storeManager,
-            $appState,
-            $priceCurrency,
-            $dbCompatibleMode
+            $context
         );
     }
 
     /**
      * Get maximum upload size message
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getMaxUploadSizeMessage()
     {
         $maxImageSize = $this->_fileSize->getMaxFileSizeInMb();
         if ($maxImageSize) {
-            $message = __('The total size of the uploadable files can\'t be more that %1M', $maxImageSize);
+            $message = __('Make sure your file isn\'t more than %1M.', $maxImageSize);
         } else {
-            $message = __('System doesn\'t allow to get file upload settings');
+            $message = __('We can\'t provide the upload settings right now.');
         }
         return $message;
     }
@@ -96,17 +65,17 @@ class Data extends \Magento\Core\Helper\Data
      */
     public function getLocalValidPaths()
     {
-        $paths = $this->_scopeConfig->getValue(self::XML_PATH_EXPORT_LOCAL_VALID_PATH, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        $paths = $this->scopeConfig->getValue(self::XML_PATH_EXPORT_LOCAL_VALID_PATH, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
         return $paths;
     }
 
     /**
-     * Retrieve size of bunch (how much products should be involved in one import iteration)
+     * Retrieve size of bunch (how many entities should be involved in one import iteration)
      *
      * @return int
      */
     public function getBunchSize()
     {
-        return (int)$this->_scopeConfig->getValue(self::XML_PATH_BUNCH_SIZE, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return (int)$this->scopeConfig->getValue(self::XML_PATH_BUNCH_SIZE, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
 }

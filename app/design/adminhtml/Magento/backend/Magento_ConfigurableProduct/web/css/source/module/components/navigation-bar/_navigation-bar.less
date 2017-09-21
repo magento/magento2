@@ -1,0 +1,364 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Navigation Bar in Steps Wizard
+//  _____________________________________________
+
+//
+//  Variables
+//  _____________________________________________
+
+@nav__background-color: @color-white-fog;
+@nav__border-color: @color-gray89;
+@nav__indent-right: 1.5rem;
+
+@nav-bar__color: @color-brownie;
+@nav-bar__font-size: 1.2rem;
+
+@nav-bar__height__base: ((@button__font-size * @button__line-height) +
+    (@button__font-size * @button__padding-top) +
+    (@button__font-size * @button__padding-top));
+
+@nav-bar__indent-top: 3rem;
+@nav-bar__min-height: 5.8rem;
+
+@nav-bar-bullet-wrap__background-color: @color-gray84;
+@nav-bar-bullet-wrap__border-bottom-color: @color-gray85;
+@nav-bar-bullet-wrap__border-top-color: @color-gray75;
+
+@nav-bar-dot__size: 2.2rem;
+@nav-bar-items__indent-bottom: 1.7rem;
+@nav-bar-item__color: @color-gray65;
+
+@nav-bar-point__border-width: .4rem;
+@nav-bar-point__size: .7rem;
+
+@nav-bar-step__width: 10.3rem;
+
+//
+//  Common
+//  _____________________________________________
+
+//
+//  Navigation
+//  ---------------------------------------------
+
+.nav {
+    &:extend(.abs-clearfix all);
+    background-color: @nav__background-color;
+    border-bottom: 1px solid @nav__border-color;
+    border-top: 1px solid @nav__border-color;
+    display: none;
+    padding: @nav-bar-dot__size @nav__indent-right 0 0;
+}
+
+//  Buttons panel
+.nav-bar-outer-actions {
+    margin-bottom: @nav-bar-items__indent-bottom;
+
+    .action-wrap {
+        display: inline-block;
+        margin-left: .5rem;
+        margin-right: .5rem;
+    }
+}
+
+.nav-bar-outer-actions {
+    margin-top: -(@nav-bar__indent-top + @nav-bar__min-height + @nav-bar-items__indent-bottom + .1rem);
+    padding-right: @nav__indent-right;
+}
+
+//
+//  Progress bar
+//  ---------------------------------------------
+
+.nav-bar {
+    counter-reset: i;
+    float: left;
+    margin: 0 1rem @nav-bar-items__indent-bottom 0;
+    padding: 0;
+    position: relative;
+    white-space: nowrap;
+
+    //  Progress line tunnel
+    &:before {
+        .lib-background-gradient( @_background-gradient: true, @_background-gradient-direction: vertical, @_background-gradient-color-start: @color-gray82, @_background-gradient-color-end: @color-gray83 );
+        border-bottom: 1px solid @nav-bar-bullet-wrap__border-bottom-color;
+        border-top: 1px solid @nav-bar-bullet-wrap__border-top-color;
+        content: '';
+        height: .8rem;
+        left: @nav-bar-step__width / 2;
+        position: absolute;
+        right: @nav-bar-step__width / 2;
+        top: @nav-bar-point__size;
+    }
+
+    //  Step link wrap
+    > li {
+        display: inline-block;
+        font-size: 0;
+        position: relative;
+        vertical-align: top;
+        width: @nav-bar-step__width;
+
+        //  Discard progress line for first item
+        &:first-child {
+            &:after {
+                display: none;
+            }
+        }
+
+        //  Progress line
+        &:after {
+            background-color: @nav-bar__color;
+            content: '';
+            height: .5rem;
+            left: ~'calc(-50% + .25rem)';
+            position: absolute;
+            right: ~'calc(50% + .7rem)';
+            top: .9rem;
+        }
+
+        //  Disabled state
+        &.disabled,
+        &.ui-state-disabled {
+            &:before {
+                bottom: 0;
+                content: '';
+                left: 0;
+                position: absolute;
+                right: 0;
+                top: 0;
+                z-index: 1;
+            }
+        }
+
+        //  Active step link wrap
+        &.active,
+        &.ui-state-active {
+            //  Not visited
+            ~ li {
+                //  Not visited progress line (discard)
+                &:after {
+                    display: none;
+                }
+
+                a {
+                    //  Not visited step link bullet
+                    &:after {
+                        background-color: transparent;
+                        border-color: transparent;
+                        color: @nav-bar-item__color;
+                    }
+                }
+            }
+
+            //  Active link
+            a {
+                color: darken(@nav-bar__color, 30%);
+                &:hover {
+                    cursor: default;
+                }
+
+                //  Active step link bullet
+                &:after {
+                    background-color: @color-white;
+                    content: '';
+                }
+            }
+        }
+    }
+
+    //  Visited step link
+    a {
+        color: @nav-bar__color;
+        display: block;
+        font-size: @nav-bar__font-size;
+        font-weight: @font-weight__semibold;
+        line-height: 1.2;
+        overflow: hidden;
+        padding: 3rem .5em 0;
+        position: relative;
+        text-align: center;
+        text-overflow: ellipsis;
+
+        &:hover {
+            text-decoration: none;
+        }
+
+        //  Visited step link bullet
+        &:after {
+            background-color: @nav-bar__color;
+            border: 4px solid @nav-bar__color;
+            border-radius: 100%;
+            color: @color-white;
+            content: counter(i);
+            counter-increment: i;
+            height: @nav-bar-point__size;
+            left: 50%;
+            line-height: .6;
+            margin-left: -@nav-bar-point__size - .1;
+            position: absolute;
+            right: auto;
+            text-align: center;
+            top: @nav-bar-dot__size / 2 - (@nav-bar-point__size / 2) - @nav-bar-point__border-width + .05;
+            width: @nav-bar-point__size;
+        }
+
+        //  Visited step link bullet wrap
+        &:before {
+            background-color: @nav-bar-bullet-wrap__background-color;
+            border: 1px solid transparent;
+            border-radius: 100%;
+            content: '';
+            height: @nav-bar-dot__size - .1;
+            left: 50%;
+            line-height: 1;
+            margin-left: -(@nav-bar-dot__size / 2) - .1;
+            position: absolute;
+            top: 0;
+            width: @nav-bar-dot__size - .1;
+        }
+    }
+}
+
+//
+//  Steps
+//  ---------------------------------------------
+
+.steps-wizard {
+    .nav-bar {
+        margin: @indent__xs 0 0;
+
+        a {
+            text-overflow: initial;
+            white-space: normal;
+        }
+
+        :after,
+        :before {
+            box-sizing: content-box;
+        }
+    }
+
+    .nav-bar-outer-actions {
+        margin-top: @indent__s;
+        padding-right: 0;
+    }
+}
+
+//
+//  Mobile
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__xs) {
+    .nav-bar {
+        width: @nav-bar-step__width * .75 * 3;
+
+        > li {
+            width: @nav-bar-step__width - .3;
+        }
+    }
+
+    .nav .btn-group,
+    .nav-bar-outer-actions {
+        .btn-wrap-try-again {
+            clear: both;
+            display: block;
+            float: none;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 1rem;
+            padding-top: 1rem;
+        }
+    }
+}
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+    .nav-bar {
+        &:before {
+            display: none;
+        }
+    }
+}
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    .nav {
+        padding-bottom: 0;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .nav-bar-outer-actions {
+        margin-top: 0;
+    }
+
+    .nav-bar {
+        &:extend(.abs-clearfix all);
+        display: block;
+        margin-bottom: 0;
+        margin-left: auto;
+        margin-right: auto;
+        width: @nav-bar-step__width * 4;
+
+        > li {
+            float: left;
+            min-height: 9rem;
+
+            &:after {
+                display: none;
+            }
+        }
+
+        a {
+            line-height: 1.4;
+        }
+    }
+}
+
+//
+//  Desktop
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__l) {
+    .nav {
+        padding-bottom: @nav-bar__height__base + @nav-bar-items__indent-bottom;
+        padding-left: 1.5rem;
+        text-align: center;
+    }
+
+    .nav-bar {
+        display: inline-block;
+        float: none;
+        margin-right: 0;
+        vertical-align: top;
+    }
+
+    .nav .btn-group,
+    .nav-bar-outer-actions {
+        display: inline-block;
+        float: none;
+        margin-top: -(@nav-bar__indent-top + @nav-bar__height__base + @nav-bar-items__indent-bottom + .1rem);
+        text-align: center;
+        vertical-align: top;
+        width: 100%;
+    }
+
+    .nav-bar-outer-actions {
+        padding-right: 0;
+
+        .outer-actions-inner-wrap {
+            display: inline-block;
+        }
+    }
+}
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__l) {
+    //  Buttons panel
+    .nav-bar-outer-actions {
+        float: right;
+    }
+}

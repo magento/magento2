@@ -1,0 +1,16 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php if ($block->getCanDisplayTotalPaid()): ?>
+<tr>
+    <td class="label"><strong><?= /* @escapeNotVerified */ __('Total Paid') ?></strong></td>
+    <td class="emph"><?= /* @escapeNotVerified */ $block->displayPriceAttribute('total_paid', true) ?>
+    </td>
+</tr>
+<?php endif; ?>

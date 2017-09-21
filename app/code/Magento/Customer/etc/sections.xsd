@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="config">
+        <xs:annotation>
+            <xs:documentation>The root node for sections configuration</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="action" maxOccurs="unbounded" minOccurs="1">
+                    <xs:complexType mixed="true">
+                        <xs:sequence>
+                            <xs:element name="section" maxOccurs="unbounded" minOccurs="0">
+                                <xs:complexType>
+                                    <xs:simpleContent>
+                                        <xs:extension base="xs:string">
+                                            <xs:attribute type="xs:string" name="name" use="required"/>
+                                        </xs:extension>
+                                    </xs:simpleContent>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                        <xs:attribute type="xs:string" name="name" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+
+        <xs:unique name="uniqueType">
+            <xs:annotation>
+                <xs:documentation>
+                    Action name should be unique in scope of file
+                </xs:documentation>
+            </xs:annotation>
+            <xs:selector xpath="action" />
+            <xs:field xpath="@name" />
+        </xs:unique>
+    </xs:element>
+</xs:schema>

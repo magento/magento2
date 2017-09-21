@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Config\Model\Config\Structure\SearchInterface" type="Magento\Config\Model\Config\Structure" />
+    <preference for="Magento\Config\Model\Config\Backend\File\RequestData\RequestDataInterface" type="Magento\Config\Model\Config\Backend\File\RequestData" />
+    <preference for="Magento\Config\Model\Config\Structure\ElementVisibilityInterface" type="Magento\Config\Model\Config\Structure\ElementVisibilityComposite" />
+    <type name="Magento\Config\Model\Config\Structure\Element\Iterator\Tab" shared="false" />
+    <type name="Magento\Config\Model\Config\Structure\Element\Iterator\Section" shared="false" />
+    <type name="Magento\Config\Model\Config\Structure\ElementVisibilityComposite">
+        <arguments>
+            <argument name="visibility" xsi:type="array">
+                <item name="productionVisibility" xsi:type="object">Magento\Config\Model\Config\Structure\ConcealInProductionConfigList</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

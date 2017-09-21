@@ -1,0 +1,22 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="data-grid-filters-actions-wrap">
+    <div class="data-grid-filters-action-wrap">
+        <button
+                class="action-default"
+                data-action="grid-filter-expand"
+                data-bind="
+                 click: function(){
+                    window.scrollTo(0, 0);
+                    $data.trigger('open');
+                 },
+                 attr: {disabled: !hasVisible()}">
+            <span data-bind="i18n: 'Filters'"></span>
+        </button>
+        <span class="filters-active" data-bind="text: countActive() || ''"></span> <!-- Added the amount of selected filters -->
+    </div>
+</div>

@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Catalog\Test\Repository\CatalogProductAttribute\Options">
+        <dataset name="default">
+            <field name="0" xsi:type="array">
+                <item name="is_default" xsi:type="string">Yes</item>
+                <item name="admin" xsi:type="string">blue</item>
+            </field>
+        </dataset>
+
+        <dataset name="two_options">
+            <field name="0" xsi:type="array">
+                <item name="admin" xsi:type="string">black</item>
+            </field>
+            <field name="1" xsi:type="array">
+                <item name="admin" xsi:type="string">white</item>
+            </field>
+        </dataset>
+    </repository>
+</config>

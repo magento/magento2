@@ -1,0 +1,118 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="adminhtml.search.term.grid.container">
+            <block class="Magento\Backend\Block\Widget\Grid" name="adminhtml.catalog.search.grid" as="grid">
+                <arguments>
+                    <argument name="id" xsi:type="string">search_term_grid</argument>
+                    <argument name="dataSource" xsi:type="object">Magento\Search\Model\ResourceModel\Query\Collection</argument>
+                    <argument name="default_sort" xsi:type="string">name</argument>
+                    <argument name="default_dir" xsi:type="string">ASC</argument>
+                    <argument name="save_parameters_in_session" xsi:type="string">1</argument>
+                </arguments>
+                <block class="Magento\Backend\Block\Widget\Grid\Massaction" name="adminhtml.catalog.search.grid.massaction" as="grid.massaction">
+                    <arguments>
+                        <argument name="massaction_id_field" xsi:type="string">query_id</argument>
+                        <argument name="form_field_name" xsi:type="string">search</argument>
+                        <argument name="use_select_all" xsi:type="string">1</argument>
+                        <argument name="options" xsi:type="array">
+                            <item name="delete" xsi:type="array">
+                                <item name="label" xsi:type="string" translate="true">Delete</item>
+                                <item name="url" xsi:type="string">*/*/massDelete</item>
+                                <item name="confirm" xsi:type="string" translate="true">Are you sure?</item>
+                            </item>
+                        </argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" name="adminhtml.catalog.search.grid.columnSet" as="grid.columnSet">
+                    <arguments>
+                        <argument name="rowUrl" xsi:type="array">
+                            <item name="path" xsi:type="string">*/*/edit</item>
+                            <item name="extraParamsTemplate" xsi:type="array">
+                                <item name="id" xsi:type="string">getId</item>
+                            </item>
+                        </argument>
+                    </arguments>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="search_query">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Search Query</argument>
+                            <argument name="index" xsi:type="string">query_text</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column\Multistore" as="store_id">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Store</argument>
+                            <argument name="type" xsi:type="string">store</argument>
+                            <argument name="id" xsi:type="string">store_id</argument>
+                            <argument name="index" xsi:type="string">store_id</argument>
+                            <argument name="store_view" xsi:type="string">1</argument>
+                            <argument name="sortable" xsi:type="string">0</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="num_results">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Results</argument>
+                            <argument name="index" xsi:type="string">num_results</argument>
+                            <argument name="type" xsi:type="string">number</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="popularity">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Uses</argument>
+                            <argument name="index" xsi:type="string">popularity</argument>
+                            <argument name="type" xsi:type="string">number</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="redirect">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Redirect URL</argument>
+                            <argument name="index" xsi:type="string">redirect</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="display_in_terms">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Suggested Terms</argument>
+                            <argument name="sortable" xsi:type="string">1</argument>
+                            <argument name="index" xsi:type="string">display_in_terms</argument>
+                            <argument name="type" xsi:type="string">options</argument>
+                            <argument name="options" xsi:type="array">
+                                <item name="yes" xsi:type="array">
+                                    <item name="value" xsi:type="string">1</item>
+                                    <item name="label" xsi:type="string" translate="true">yes</item>
+                                </item>
+                                <item name="no" xsi:type="array">
+                                    <item name="value" xsi:type="string">0</item>
+                                    <item name="label" xsi:type="string" translate="true">no</item>
+                                </item>
+                            </argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="action">
+                        <arguments>
+                            <argument name="type" xsi:type="string">action</argument>
+                            <argument name="header" xsi:type="string" translate="true">Action</argument>
+                            <argument name="filter" xsi:type="string">0</argument>
+                            <argument name="sortable" xsi:type="string">0</argument>
+                            <argument name="index" xsi:type="string">query_id</argument>
+                            <argument name="actions" xsi:type="array">
+                                <item name="edit" xsi:type="array">
+                                    <item name="caption" xsi:type="string" translate="true">Edit</item>
+                                    <item name="url" xsi:type="array">
+                                        <item name="base" xsi:type="string">*/*/edit</item>
+                                    </item>
+                                    <item name="field" xsi:type="string">id</item>
+                                </item>
+                            </argument>
+                        </arguments>
+                    </block>
+                </block>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

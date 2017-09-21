@@ -1,33 +1,16 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Review\Model;
+
+use Magento\Framework\DataObject\IdentityInterface;
 
 /**
  * Rating model
  *
- * @method Resource\Rating getResource()
- * @method Resource\Rating _getResource()
+ * @api
  * @method array getRatingCodes()
  * @method \Magento\Review\Model\Rating setRatingCodes(array $value)
  * @method array getStores()
@@ -35,8 +18,9 @@ namespace Magento\Review\Model;
  * @method string getRatingCode()
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
-class Rating extends \Magento\Framework\Model\AbstractModel
+class Rating extends \Magento\Framework\Model\AbstractModel implements IdentityInterface
 {
     /**
      * rating entity codes
@@ -53,7 +37,7 @@ class Rating extends \Magento\Framework\Model\AbstractModel
     protected $_ratingOptionFactory;
 
     /**
-     * @var \Magento\Review\Model\Resource\Rating\Option\CollectionFactory
+     * @var \Magento\Review\Model\ResourceModel\Rating\Option\CollectionFactory
      */
     protected $_ratingCollectionF;
 
@@ -61,19 +45,19 @@ class Rating extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Review\Model\Rating\OptionFactory $ratingOptionFactory
-     * @param \Magento\Review\Model\Resource\Rating\Option\CollectionFactory $ratingCollectionF
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Review\Model\ResourceModel\Rating\Option\CollectionFactory $ratingCollectionF
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Review\Model\Rating\OptionFactory $ratingOptionFactory,
-        \Magento\Review\Model\Resource\Rating\Option\CollectionFactory $ratingCollectionF,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
-        array $data = array()
+        \Magento\Review\Model\ResourceModel\Rating\Option\CollectionFactory $ratingCollectionF,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        array $data = []
     ) {
         $this->_ratingOptionFactory = $ratingOptionFactory;
         $this->_ratingCollectionF = $ratingCollectionF;
@@ -87,7 +71,7 @@ class Rating extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Review\Model\Resource\Rating');
+        $this->_init(\Magento\Review\Model\ResourceModel\Rating::class);
     }
 
     /**
@@ -142,7 +126,7 @@ class Rating extends \Magento\Framework\Model\AbstractModel
                 $this->getId()
             )->setPositionOrder()->load()->getItems();
         }
-        return array();
+        return [];
     }
 
     /**
@@ -150,7 +134,7 @@ class Rating extends \Magento\Framework\Model\AbstractModel
      *
      * @param int $entityPkValue
      * @param bool $onlyForCurrentStore
-     * @return \Magento\Framework\Data\Collection\Db
+     * @return \Magento\Framework\Data\Collection\AbstractDb
      */
     public function getEntitySummary($entityPkValue, $onlyForCurrentStore = true)
     {
@@ -178,5 +162,16 @@ class Rating extends \Magento\Framework\Model\AbstractModel
     public function getEntityIdByCode($entityCode)
     {
         return $this->getResource()->getEntityIdByCode($entityCode);
+    }
+
+    /**
+     * Return unique ID(s) for each object in system
+     *
+     * @return array
+     */
+    public function getIdentities()
+    {
+        // clear cache for all reviews
+        return [Review::CACHE_TAG];
     }
 }

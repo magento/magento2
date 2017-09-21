@@ -1,54 +1,23 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Sales\Model\Order\Shipment;
 
+use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Sales\Api\Data\ShipmentItemInterface;
+use Magento\Sales\Model\AbstractModel;
+
 /**
- * @method \Magento\Sales\Model\Resource\Order\Shipment\Item _getResource()
- * @method \Magento\Sales\Model\Resource\Order\Shipment\Item getResource()
- * @method int getParentId()
- * @method \Magento\Sales\Model\Order\Shipment\Item setParentId(int $value)
- * @method float getRowTotal()
- * @method \Magento\Sales\Model\Order\Shipment\Item setRowTotal(float $value)
- * @method float getPrice()
- * @method \Magento\Sales\Model\Order\Shipment\Item setPrice(float $value)
- * @method float getWeight()
- * @method \Magento\Sales\Model\Order\Shipment\Item setWeight(float $value)
- * @method float getQty()
- * @method int getProductId()
- * @method \Magento\Sales\Model\Order\Shipment\Item setProductId(int $value)
- * @method int getOrderItemId()
- * @method \Magento\Sales\Model\Order\Shipment\Item setOrderItemId(int $value)
- * @method string getAdditionalData()
- * @method \Magento\Sales\Model\Order\Shipment\Item setAdditionalData(string $value)
- * @method string getDescription()
- * @method \Magento\Sales\Model\Order\Shipment\Item setDescription(string $value)
- * @method string getName()
- * @method \Magento\Sales\Model\Order\Shipment\Item setName(string $value)
- * @method string getSku()
- * @method \Magento\Sales\Model\Order\Shipment\Item setSku(string $value)
+ * @api
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
-class Item extends \Magento\Framework\Model\AbstractModel
+class Item extends AbstractModel implements ShipmentItemInterface
 {
     /**
      * @var string
@@ -78,20 +47,32 @@ class Item extends \Magento\Framework\Model\AbstractModel
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
+     * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Sales\Model\Order\ItemFactory $orderItemFactory
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
+        AttributeValueFactory $customAttributeFactory,
         \Magento\Sales\Model\Order\ItemFactory $orderItemFactory,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
-        array $data = array()
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        array $data = []
     ) {
-        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+        parent::__construct(
+            $context,
+            $registry,
+            $extensionFactory,
+            $customAttributeFactory,
+            $resource,
+            $resourceCollection,
+            $data
+        );
         $this->_orderItemFactory = $orderItemFactory;
     }
 
@@ -102,11 +83,13 @@ class Item extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\Resource\Order\Shipment\Item');
+        $this->_init(\Magento\Sales\Model\ResourceModel\Order\Shipment\Item::class);
     }
 
     /**
      * Declare Shipment instance
+     *
+     * @codeCoverageIgnore
      *
      * @param \Magento\Sales\Model\Order\Shipment $shipment
      * @return $this
@@ -119,6 +102,8 @@ class Item extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Retrieve Shipment instance
+     *
+     * @codeCoverageIgnore
      *
      * @return \Magento\Sales\Model\Order\Shipment
      */
@@ -162,24 +147,11 @@ class Item extends \Magento\Framework\Model\AbstractModel
      *
      * @param float $qty
      * @return \Magento\Sales\Model\Order\Invoice\Item
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function setQty($qty)
     {
-        if ($this->getOrderItem()->getIsQtyDecimal()) {
-            $qty = (double)$qty;
-        } else {
-            $qty = (int)$qty;
-        }
-        $qty = $qty > 0 ? $qty : 0;
-        /**
-         * Check qty availability
-         */
-        if ($qty <= $this->getOrderItem()->getQtyToShip() || $this->getOrderItem()->isDummy(true)) {
-            $this->setData('qty', $qty);
-        } else {
-            throw new \Magento\Framework\Model\Exception(__('We found an invalid qty to ship for item "%1".', $this->getName()));
-        }
+        $this->setData('qty', $qty);
         return $this;
     }
 
@@ -187,6 +159,7 @@ class Item extends \Magento\Framework\Model\AbstractModel
      * Applying qty to order item
      *
      * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function register()
     {
@@ -194,18 +167,218 @@ class Item extends \Magento\Framework\Model\AbstractModel
         return $this;
     }
 
+    //@codeCoverageIgnoreStart
+
     /**
-     * Before object save
+     * Returns additional_data
      *
+     * @return string
+     */
+    public function getAdditionalData()
+    {
+        return $this->getData(ShipmentItemInterface::ADDITIONAL_DATA);
+    }
+
+    /**
+     * Returns description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->getData(ShipmentItemInterface::DESCRIPTION);
+    }
+
+    /**
+     * Returns name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->getData(ShipmentItemInterface::NAME);
+    }
+
+    /**
+     * Returns order_item_id
+     *
+     * @return int
+     */
+    public function getOrderItemId()
+    {
+        return $this->getData(ShipmentItemInterface::ORDER_ITEM_ID);
+    }
+
+    /**
+     * Returns parent_id
+     *
+     * @return int
+     */
+    public function getParentId()
+    {
+        return $this->getData(ShipmentItemInterface::PARENT_ID);
+    }
+
+    /**
+     * Returns price
+     *
+     * @return float
+     */
+    public function getPrice()
+    {
+        return $this->getData(ShipmentItemInterface::PRICE);
+    }
+
+    /**
+     * Returns product_id
+     *
+     * @return int
+     */
+    public function getProductId()
+    {
+        return $this->getData(ShipmentItemInterface::PRODUCT_ID);
+    }
+
+    /**
+     * Returns qty
+     *
+     * @return float
+     */
+    public function getQty()
+    {
+        return $this->getData(ShipmentItemInterface::QTY);
+    }
+
+    /**
+     * Returns row_total
+     *
+     * @return float
+     */
+    public function getRowTotal()
+    {
+        return $this->getData(ShipmentItemInterface::ROW_TOTAL);
+    }
+
+    /**
+     * Returns sku
+     *
+     * @return string
+     */
+    public function getSku()
+    {
+        return $this->getData(ShipmentItemInterface::SKU);
+    }
+
+    /**
+     * Returns weight
+     *
+     * @return float
+     */
+    public function getWeight()
+    {
+        return $this->getData(ShipmentItemInterface::WEIGHT);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setParentId($id)
+    {
+        return $this->setData(ShipmentItemInterface::PARENT_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setRowTotal($amount)
+    {
+        return $this->setData(ShipmentItemInterface::ROW_TOTAL, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setPrice($price)
+    {
+        return $this->setData(ShipmentItemInterface::PRICE, $price);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setWeight($weight)
+    {
+        return $this->setData(ShipmentItemInterface::WEIGHT, $weight);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setProductId($id)
+    {
+        return $this->setData(ShipmentItemInterface::PRODUCT_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setOrderItemId($id)
+    {
+        return $this->setData(ShipmentItemInterface::ORDER_ITEM_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setAdditionalData($additionalData)
+    {
+        return $this->setData(ShipmentItemInterface::ADDITIONAL_DATA, $additionalData);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setDescription($description)
+    {
+        return $this->setData(ShipmentItemInterface::DESCRIPTION, $description);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setName($name)
+    {
+        return $this->setData(ShipmentItemInterface::NAME, $name);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setSku($sku)
+    {
+        return $this->setData(ShipmentItemInterface::SKU, $sku);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Sales\Api\Data\ShipmentItemExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Sales\Api\Data\ShipmentItemExtensionInterface $extensionAttributes
      * @return $this
      */
-    protected function _beforeSave()
+    public function setExtensionAttributes(\Magento\Sales\Api\Data\ShipmentItemExtensionInterface $extensionAttributes)
     {
-        parent::_beforeSave();
-
-        if (!$this->getParentId() && $this->getShipment()) {
-            $this->setParentId($this->getShipment()->getId());
-        }
-        return $this;
+        return $this->_setExtensionAttributes($extensionAttributes);
     }
+
+    //@codeCoverageIgnoreEnd
 }

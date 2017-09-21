@@ -1,0 +1,44 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+if ($exist = $block->getRecentlyComparedProducts()) {
+    $type = 'widget-compared';
+
+    $image = 'recently_compared_products_images_only_widget';
+    $title = __('Recently Compared');
+    $items = $exist;
+
+    $showWishlist = false;
+    $showCompare = false;
+    $showCart = false;
+    $rating = false;
+    $description = false;
+}
+?>
+<?php if ($exist): ?>
+<div class="block widget block-compared-products-images">
+    <div class="block-title">
+        <strong><?= /* @escapeNotVerified */ $title ?></strong>
+    </div>
+    <div class="block-content">
+        <?php $suffix = $block->getNameInLayout(); ?>
+        <ol id="widget-compared-<?= /* @escapeNotVerified */ $suffix ?>" class="product-items product-items-images">
+        <?php $i = 0; foreach ($items as $_product): ?>
+            <li class="product-item">
+                <a class="product-item-photo" href="<?= /* @escapeNotVerified */ $_product->getProductUrl() ?>"
+                    title="<?= /* @escapeNotVerified */ $block->stripTags($_product->getName(), null, true) ?>">
+                    <?= $block->getImage($_product, $image)->toHtml() ?>
+                </a>
+            </li>
+        <?php endforeach; ?>
+        </ol>
+    </div>
+</div>
+<?php endif; ?>

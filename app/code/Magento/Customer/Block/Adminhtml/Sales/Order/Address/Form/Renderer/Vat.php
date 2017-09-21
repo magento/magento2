@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Adminhtml\Sales\Order\Address\Form\Renderer;
 
@@ -57,7 +39,7 @@ class Vat extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
-        array $data = array()
+        array $data = []
     ) {
         $this->_jsonEncoder = $jsonEncoder;
         parent::__construct($context, $data);
@@ -70,7 +52,7 @@ class Vat extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element
      */
     public function getValidateButton()
     {
-        if (is_null($this->_validateButton)) {
+        if ($this->_validateButton === null) {
             /** @var $form \Magento\Framework\Data\Form */
             $form = $this->_element->getForm();
 
@@ -80,47 +62,52 @@ class Vat extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element
             $validateUrl = $this->_urlBuilder->getUrl('customer/system_config_validatevat/validateAdvanced');
 
             $groupMessage = __(
-                'The customer is currently assigned to Customer Group %s.'
+                'The customer is now assigned to Customer Group %s.'
             ) . ' ' . __(
                 'Would you like to change the Customer Group for this order?'
             );
 
             $vatValidateOptions = $this->_jsonEncoder->encode(
-                array(
+                [
                     'vatElementId' => $vatElementId,
                     'countryElementId' => $countryElementId,
                     'groupIdHtmlId' => 'group_id',
                     'validateUrl' => $validateUrl,
-                    'vatValidMessage' => __('The VAT ID is valid. The current Customer Group will be used.'),
+                    'vatValidMessage' => __('The VAT ID is valid.'),
+                    'vatInvalidMessage' => __('The VAT ID entered (%s) is not a valid VAT ID.'),
+                    'vatValidAndGroupValidMessage' => __(
+                        'The VAT ID is valid. The current Customer Group will be used.'
+                    ),
+                    'vatValidAndGroupInvalidMessage' => __(
+                        'The VAT ID is valid but no Customer Group is assigned for it.'
+                    ),
                     'vatValidAndGroupChangeMessage' => __(
-                        'Based on the VAT ID, ' . 'the customer would belong to the Customer Group %s.'
-                    ) . "\n" . $groupMessage,
-                    'vatInvalidMessage' => __(
-                        'The VAT ID entered (%s) is not a valid VAT ID. ' .
-                        'The customer would belong to Customer Group %s.'
+                        'Based on the VAT ID, the customer belongs to the Customer Group %s.'
                     ) . "\n" . $groupMessage,
                     'vatValidationFailedMessage' => __(
-                        'There was an error validating the VAT ID. ' .
+                        'Something went wrong while validating the VAT ID.'
+                    ),
+                    'vatCustomerGroupMessage' => __(
                         'The customer would belong to Customer Group %s.'
-                    ) . "\n" . $groupMessage,
-                    'vatErrorMessage' => __('There was an error validating the VAT ID.')
-                )
+                    ),
+                    'vatGroupErrorMessage' => __('There was an error detecting Customer Group.'),
+                ]
             );
 
             $optionsVarName = $this->getJsVariablePrefix() . 'VatParameters';
-            $beforeHtml = '<script type="text/javascript">var ' .
+            $beforeHtml = '<script>var ' .
                 $optionsVarName .
                 ' = ' .
                 $vatValidateOptions .
                 ';</script>';
             $this->_validateButton = $this->getLayout()->createBlock(
-                'Magento\Backend\Block\Widget\Button'
+                \Magento\Backend\Block\Widget\Button::class
             )->setData(
-                array(
+                [
                     'label' => __('Validate VAT Number'),
                     'before_html' => $beforeHtml,
-                    'onclick' => 'order.validateVat(' . $optionsVarName . ')'
-                )
+                    'onclick' => 'order.validateVat(' . $optionsVarName . ')',
+                ]
             );
         }
         return $this->_validateButton;

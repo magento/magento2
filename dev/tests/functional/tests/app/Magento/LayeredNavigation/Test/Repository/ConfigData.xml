@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Config\Test\Repository\ConfigData">
+        <dataset name="layered_navigation_manual_range_10">
+            <field name="catalog/layered_navigation/display_product_count" xsi:type="array">
+                <item name="scope" xsi:type="string">default</item>
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="value" label="Yes" xsi:type="string">1</item>
+            </field>
+            <field name="catalog/layered_navigation/price_range_calculation" xsi:type="array">
+                <item name="scope" xsi:type="string">default</item>
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="value" label="Manual" xsi:type="string">manual</item>
+            </field>
+            <field name="catalog/layered_navigation/price_range_step" xsi:type="array">
+                <item name="scope" xsi:type="string">default</item>
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="value" xsi:type="string">10</item>
+            </field>
+            <field name="catalog/layered_navigation/price_range_max_intervals" xsi:type="array">
+                <item name="scope" xsi:type="string">default</item>
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="value" xsi:type="string">10</item>
+            </field>
+        </dataset>
+        <dataset name="layered_navigation_automatic_equalize_price_range">
+            <field name="catalog/layered_navigation/display_product_count" xsi:type="array">
+                <item name="scope" xsi:type="string">default</item>
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="value" label="Yes" xsi:type="string">1</item>
+            </field>
+            <field name="catalog/layered_navigation/price_range_calculation" xsi:type="array">
+                <item name="scope" xsi:type="string">default</item>
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="value" label="Automatic (equalize price ranges)" xsi:type="string">auto</item>
+            </field>
+        </dataset>
+        <dataset name="layered_navigation_automatic_equalize_product_counts">
+            <field name="catalog/layered_navigation/display_product_count" xsi:type="array">
+                <item name="scope" xsi:type="string">default</item>
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="value" label="Yes" xsi:type="string">1</item>
+            </field>
+            <field name="catalog/layered_navigation/price_range_calculation" xsi:type="array">
+                <item name="scope" xsi:type="string">default</item>
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="value" label="Automatic (equalize product counts)" xsi:type="string">improved</item>
+            </field>
+            <field name="catalog/layered_navigation/one_price_interval" xsi:type="array">
+                <item name="scope" xsi:type="string">default</item>
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="value" xsi:type="string">0</item>
+            </field>
+            <field name="catalog/layered_navigation/interval_division_limit" xsi:type="array">
+                <item name="scope" xsi:type="string">default</item>
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="value" xsi:type="string">3</item>
+            </field>
+        </dataset>
+        <dataset name="layered_navigation_manual_range_10_rollback">
+            <field name="catalog/layered_navigation/display_product_count" xsi:type="array">
+                <item name="scope" xsi:type="string">default</item>
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="value" label="Yes" xsi:type="string">1</item>
+            </field>
+            <field name="catalog/layered_navigation/price_range_calculation" xsi:type="array">
+                <item name="scope" xsi:type="string">default</item>
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="value" label="Automatic (equalize price ranges)" xsi:type="string">auto</item>
+            </field>
+        </dataset>
+        <dataset name="layered_navigation_automatic_equalize_price_range_rollback">
+            <field name="catalog/layered_navigation/display_product_count" xsi:type="array">
+                <item name="scope" xsi:type="string">default</item>
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="value" label="Yes" xsi:type="string">1</item>
+            </field>
+            <field name="catalog/layered_navigation/price_range_calculation" xsi:type="array">
+                <item name="scope" xsi:type="string">default</item>
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="value" label="Automatic (equalize price ranges)" xsi:type="string">auto</item>
+            </field>
+        </dataset>
+        <dataset name="layered_navigation_automatic_equalize_product_counts_rollback">
+            <field name="catalog/layered_navigation/display_product_count" xsi:type="array">
+                <item name="scope" xsi:type="string">default</item>
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="value" label="Yes" xsi:type="string">1</item>
+            </field>
+            <field name="catalog/layered_navigation/price_range_calculation" xsi:type="array">
+                <item name="scope" xsi:type="string">default</item>
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="value" label="Automatic (equalize price ranges)" xsi:type="string">auto</item>
+            </field>
+        </dataset>
+    </repository>
+</config>

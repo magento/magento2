@@ -1,32 +1,13 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\Form;
 
 /**
  * Eav Form Type Model
  *
- * @method \Magento\Eav\Model\Resource\Form\Type getResource()
  * @method string getCode()
  * @method \Magento\Eav\Model\Form\Type setCode(string $value)
  * @method string getLabel()
@@ -64,18 +45,19 @@ class Type extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Eav\Model\Form\FieldsetFactory $fieldsetFactory
      * @param \Magento\Eav\Model\Form\ElementFactory $elementFactory
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Eav\Model\Form\FieldsetFactory $fieldsetFactory,
         \Magento\Eav\Model\Form\ElementFactory $elementFactory,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
-        array $data = array()
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        array $data = []
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->_fieldsetFactory = $fieldsetFactory;
@@ -86,30 +68,11 @@ class Type extends \Magento\Framework\Model\AbstractModel
      * Initialize resource model
      *
      * @return void
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {
-        $this->_init('Magento\Eav\Model\Resource\Form\Type');
-    }
-
-    /**
-     * Retrieve resource instance wrapper
-     *
-     * @return \Magento\Eav\Model\Resource\Form\Type
-     */
-    protected function _getResource()
-    {
-        return parent::_getResource();
-    }
-
-    /**
-     * Retrieve resource collection instance wrapper
-     *
-     * @return \Magento\Eav\Model\Resource\Form\Type\Collection
-     */
-    public function getCollection()
-    {
-        return parent::getCollection();
+        $this->_init(\Magento\Eav\Model\ResourceModel\Form\Type::class);
     }
 
     /**
@@ -169,7 +132,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
         )->setSortOrder();
 
         // copy fieldsets
-        $fieldsetMap = array();
+        $fieldsetMap = [];
         foreach ($fieldsetCollection as $skeletonFieldset) {
             $this->_fieldsetFactory->create()->setTypeId(
                 $this->getId()

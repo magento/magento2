@@ -1,34 +1,19 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Price\Group;
 
 use Magento\Backend\Block\Widget;
-use Magento\Customer\Service\V1\CustomerGroupServiceInterface;
+use Magento\Customer\Api\GroupManagementInterface;
+use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
 
 /**
  * Adminhtml group price item abstract renderer
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractGroup extends Widget implements RendererInterface
 {
@@ -56,9 +41,9 @@ abstract class AbstractGroup extends Widget implements RendererInterface
     /**
      * Catalog data
      *
-     * @var \Magento\Catalog\Helper\Data
+     * @var \Magento\Framework\Module\Manager
      */
-    protected $_catalogData = null;
+    protected $moduleManager;
 
     /**
      * Core registry
@@ -73,30 +58,54 @@ abstract class AbstractGroup extends Widget implements RendererInterface
     protected $_directoryHelper;
 
     /**
-     * @var CustomerGroupServiceInterface
+     * @var GroupRepositoryInterface
      */
-    protected $_groupService;
+    protected $_groupRepository;
+
+    /**
+     * @var GroupManagementInterface
+     */
+    protected $_groupManagement;
+
+    /**
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder
+     */
+    protected $_searchCriteriaBuilder;
+
+    /**
+     * @var \Magento\Framework\Locale\CurrencyInterface
+     */
+    protected $_localeCurrency;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param CustomerGroupServiceInterface $groupService
+     * @param GroupRepositoryInterface $groupRepository
      * @param \Magento\Directory\Helper\Data $directoryHelper
-     * @param \Magento\Catalog\Helper\Data $catalogData
+     * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Framework\Registry $registry
+     * @param GroupManagementInterface $groupManagement
+     * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param \Magento\Framework\Locale\CurrencyInterface $localeCurrency
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        CustomerGroupServiceInterface $groupService,
+        GroupRepositoryInterface $groupRepository,
         \Magento\Directory\Helper\Data $directoryHelper,
-        \Magento\Catalog\Helper\Data $catalogData,
+        \Magento\Framework\Module\Manager $moduleManager,
         \Magento\Framework\Registry $registry,
-        array $data = array()
+        GroupManagementInterface $groupManagement,
+        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
+        \Magento\Framework\Locale\CurrencyInterface $localeCurrency,
+        array $data = []
     ) {
-        $this->_groupService = $groupService;
+        $this->_groupRepository = $groupRepository;
         $this->_directoryHelper = $directoryHelper;
-        $this->_catalogData = $catalogData;
+        $this->moduleManager = $moduleManager;
         $this->_coreRegistry = $registry;
+        $this->_groupManagement = $groupManagement;
+        $this->_searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->_localeCurrency = $localeCurrency;
         parent::__construct($context, $data);
     }
 
@@ -151,17 +160,21 @@ abstract class AbstractGroup extends Widget implements RendererInterface
      */
     public function getValues()
     {
-        $values = array();
+        $values = [];
         $data = $this->getElement()->getValue();
 
         if (is_array($data)) {
             $values = $this->_sortValues($data);
         }
 
+        $currency = $this->_localeCurrency->getCurrency($this->_directoryHelper->getBaseCurrencyCode());
+
         foreach ($values as &$value) {
             $value['readonly'] = $value['website_id'] == 0 &&
                 $this->isShowWebsiteColumn() &&
                 !$this->isAllowChangeWebsite();
+            $value['price'] =
+                $currency->toCurrency($value['price'], ['display' => \Magento\Framework\Currency::NO_SYMBOL]);
         }
 
         return $values;
@@ -187,19 +200,19 @@ abstract class AbstractGroup extends Widget implements RendererInterface
     public function getCustomerGroups($groupId = null)
     {
         if ($this->_customerGroups === null) {
-            if (!$this->_catalogData->isModuleEnabled('Magento_Customer')) {
-                return array();
+            if (!$this->moduleManager->isEnabled('Magento_Customer')) {
+                return [];
             }
-            $groups = $this->_groupService->getGroups();
             $this->_customerGroups = $this->_getInitialCustomerGroups();
-
-            foreach ($groups as $group) {
+            /** @var \Magento\Customer\Api\Data\GroupInterface[] $groups */
+            $groups = $this->_groupRepository->getList($this->_searchCriteriaBuilder->create());
+            foreach ($groups->getItems() as $group) {
                 $this->_customerGroups[$group->getId()] = $group->getCode();
             }
         }
 
         if ($groupId !== null) {
-            return isset($this->_customerGroups[$groupId]) ? $this->_customerGroups[$groupId] : array();
+            return isset($this->_customerGroups[$groupId]) ? $this->_customerGroups[$groupId] : [];
         }
 
         return $this->_customerGroups;
@@ -212,7 +225,7 @@ abstract class AbstractGroup extends Widget implements RendererInterface
      */
     protected function _getInitialCustomerGroups()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -242,34 +255,34 @@ abstract class AbstractGroup extends Widget implements RendererInterface
      */
     public function getWebsites()
     {
-        if (!is_null($this->_websites)) {
+        if ($this->_websites !== null) {
             return $this->_websites;
         }
 
-        $this->_websites = array(
-            0 => array('name' => __('All Websites'), 'currency' => $this->_directoryHelper->getBaseCurrencyCode())
-        );
+        $this->_websites = [
+            0 => ['name' => __('All Websites'), 'currency' => $this->_directoryHelper->getBaseCurrencyCode()]
+        ];
 
         if (!$this->isScopeGlobal() && $this->getProduct()->getStoreId()) {
             /** @var $website \Magento\Store\Model\Website */
             $website = $this->_storeManager->getStore($this->getProduct()->getStoreId())->getWebsite();
 
-            $this->_websites[$website->getId()] = array(
+            $this->_websites[$website->getId()] = [
                 'name' => $website->getName(),
                 'currency' => $website->getBaseCurrencyCode()
-            );
+            ];
         } elseif (!$this->isScopeGlobal()) {
-            $websites = $this->_storeManager->getWebsites(false);
+            $websites = $this->_storeManager->getWebsites();
             $productWebsiteIds = $this->getProduct()->getWebsiteIds();
             foreach ($websites as $website) {
                 /** @var $website \Magento\Store\Model\Website */
                 if (!in_array($website->getId(), $productWebsiteIds)) {
                     continue;
                 }
-                $this->_websites[$website->getId()] = array(
+                $this->_websites[$website->getId()] = [
                     'name' => $website->getName(),
                     'currency' => $website->getBaseCurrencyCode()
-                );
+                ];
             }
         }
 
@@ -283,7 +296,7 @@ abstract class AbstractGroup extends Widget implements RendererInterface
      */
     public function getDefaultCustomerGroup()
     {
-        return CustomerGroupServiceInterface::CUST_GROUP_ALL;
+        return $this->_groupManagement->getAllCustomersGroup()->getId();
     }
 
     /**
@@ -342,7 +355,7 @@ abstract class AbstractGroup extends Widget implements RendererInterface
     /**
      * Retrieve Group Price entity attribute
      *
-     * @return \Magento\Catalog\Model\Resource\Eav\Attribute
+     * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute
      */
     public function getAttribute()
     {

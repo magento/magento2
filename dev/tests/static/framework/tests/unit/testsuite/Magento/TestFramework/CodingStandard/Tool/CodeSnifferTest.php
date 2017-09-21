@@ -1,29 +1,13 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\TestFramework\CodingStandard\Tool;
 
-class CodeSnifferTest extends \PHPUnit_Framework_TestCase
+use PHP_CodeSniffer\Runner;
+
+class CodeSnifferTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\TestFramework\CodingStandard\Tool\CodeSniffer
@@ -31,7 +15,7 @@ class CodeSnifferTest extends \PHPUnit_Framework_TestCase
     protected $_tool;
 
     /**
-     * @var PHP_CodeSniffer_CLI
+     * @var Runner
      */
     protected $_wrapper;
 
@@ -47,7 +31,7 @@ class CodeSnifferTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_wrapper = $this->getMock('Magento\TestFramework\CodingStandard\Tool\CodeSniffer\Wrapper');
+        $this->_wrapper = $this->createMock(\Magento\TestFramework\CodingStandard\Tool\CodeSniffer\Wrapper::class);
         $this->_tool = new \Magento\TestFramework\CodingStandard\Tool\CodeSniffer(
             self::RULE_SET,
             self::REPORT_FILE,
@@ -57,31 +41,26 @@ class CodeSnifferTest extends \PHPUnit_Framework_TestCase
 
     public function testRun()
     {
-        $whiteList = array('test' . rand(), 'test' . rand());
-        $blackList = array('test' . rand(), 'test' . rand());
-        $extensions = array('test' . rand(), 'test' . rand());
+        $whiteList = ['test' . rand(), 'test' . rand()];
+        $extensions = ['test' . rand(), 'test' . rand()];
 
-        $this->_wrapper->expects($this->once())->method('getDefaults')->will($this->returnValue(array()));
-
-        $expectedCliEmulation = array(
+        $expectedCliEmulation = [
             'files' => $whiteList,
-            'standard' => self::RULE_SET,
-            'ignored' => $blackList,
+            'standards' => [self::RULE_SET],
             'extensions' => $extensions,
-            'reportFile' => self::REPORT_FILE,
             'warningSeverity' => 0,
-            'reports' => array('checkstyle' => null)
-        );
+            'reports' => ['full' => self::REPORT_FILE],
+        ];
 
-        $this->_wrapper->expects($this->once())->method('setValues')->with($this->equalTo($expectedCliEmulation));
+        $this->_tool->setExtensions($extensions);
 
-        $this->_wrapper->expects($this->once())->method('process');
+        $this->_wrapper->expects($this->once())
+            ->method('setSettings')
+            ->with($this->equalTo($expectedCliEmulation));
 
-        $this->_tool->run($whiteList, $blackList, $extensions);
-    }
+        $this->_wrapper->expects($this->once())
+            ->method('runPHPCS');
 
-    public function testGetReportFile()
-    {
-        $this->assertEquals(self::REPORT_FILE, $this->_tool->getReportFile());
+        $this->_tool->run($whiteList);
     }
 }

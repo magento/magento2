@@ -1,34 +1,20 @@
 <?php
 /**
- * Customer dashboard addresses section
- *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Account\Dashboard;
 
-use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
+use Magento\Customer\Api\Data\AddressInterface;
+use Magento\Customer\Model\Address\Mapper;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Customer\Service\V1\Data\AddressConverter;
 
+/**
+ * Class to manage customer dashboard addresses section
+ *
+ * @api
+ * @since 100.0.2
+ */
 class Address extends \Magento\Framework\View\Element\Template
 {
     /**
@@ -47,10 +33,16 @@ class Address extends \Magento\Framework\View\Element\Template
     protected $currentCustomerAddress;
 
     /**
+     * @var Mapper
+     */
+    protected $addressMapper;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer
      * @param \Magento\Customer\Helper\Session\CurrentCustomerAddress $currentCustomerAddress
      * @param \Magento\Customer\Model\Address\Config $addressConfig
+     * @param Mapper $addressMapper
      * @param array $data
      */
     public function __construct(
@@ -58,19 +50,20 @@ class Address extends \Magento\Framework\View\Element\Template
         \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer,
         \Magento\Customer\Helper\Session\CurrentCustomerAddress $currentCustomerAddress,
         \Magento\Customer\Model\Address\Config $addressConfig,
-        array $data = array()
+        Mapper $addressMapper,
+        array $data = []
     ) {
         $this->currentCustomer = $currentCustomer;
         $this->currentCustomerAddress = $currentCustomerAddress;
         $this->_addressConfig = $addressConfig;
         parent::__construct($context, $data);
-        $this->_isScopePrivate = true;
+        $this->addressMapper = $addressMapper;
     }
 
     /**
      * Get the logged in customer
      *
-     * @return \Magento\Customer\Service\V1\Data\Customer|null
+     * @return \Magento\Customer\Api\Data\CustomerInterface|null
      */
     public function getCustomer()
     {
@@ -84,7 +77,7 @@ class Address extends \Magento\Framework\View\Element\Template
     /**
      * HTML for Shipping Address
      *
-     * @return string
+     * @return \Magento\Framework\Phrase|string
      */
     public function getPrimaryShippingAddressHtml()
     {
@@ -104,7 +97,7 @@ class Address extends \Magento\Framework\View\Element\Template
     /**
      * HTML for Billing Address
      *
-     * @return string
+     * @return \Magento\Framework\Phrase|string
      */
     public function getPrimaryBillingAddressHtml()
     {
@@ -126,12 +119,14 @@ class Address extends \Magento\Framework\View\Element\Template
      */
     public function getPrimaryShippingAddressEditUrl()
     {
-        if (is_null($this->getCustomer())) {
+        if (!$this->getCustomer()) {
             return '';
         } else {
+            $address = $this->currentCustomerAddress->getDefaultShippingAddress();
+            $addressId = $address ? $address->getId() : null;
             return $this->_urlBuilder->getUrl(
                 'customer/address/edit',
-                array('id' => $this->getCustomer()->getDefaultShipping())
+                ['id' => $addressId]
             );
         }
     }
@@ -141,12 +136,14 @@ class Address extends \Magento\Framework\View\Element\Template
      */
     public function getPrimaryBillingAddressEditUrl()
     {
-        if (is_null($this->getCustomer())) {
+        if (!$this->getCustomer()) {
             return '';
         } else {
+            $address = $this->currentCustomerAddress->getDefaultBillingAddress();
+            $addressId = $address ? $address->getId() : null;
             return $this->_urlBuilder->getUrl(
                 'customer/address/edit',
-                array('id' => $this->getCustomer()->getDefaultBilling())
+                ['id' => $addressId]
             );
         }
     }
@@ -162,13 +159,13 @@ class Address extends \Magento\Framework\View\Element\Template
     /**
      * Render an address as HTML and return the result
      *
-     * @param \Magento\Customer\Service\V1\Data\Address $address
+     * @param AddressInterface $address
      * @return string
      */
     protected function _getAddressHtml($address)
     {
         /** @var \Magento\Customer\Block\Address\Renderer\RendererInterface $renderer */
         $renderer = $this->_addressConfig->getFormatByCode('html')->getRenderer();
-        return $renderer->renderArray(AddressConverter::toFlatArray($address));
+        return $renderer->renderArray($this->addressMapper->toFlatArray($address));
     }
 }

@@ -1,35 +1,15 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
 namespace Magento\Paypal\Model;
+
+use Magento\Framework\Exception\RemoteServiceUnavailableException;
 
 class AbstractIpn
 {
-    /**
-     * Default log filename
-     */
-    const DEFAULT_LOG_FILE = 'paypal_unknown_ipn.log';
-
     /**
      * @var Config
      */
@@ -47,7 +27,7 @@ class AbstractIpn
      *
      * @var array
      */
-    protected $_debugData = array();
+    protected $_debugData = [];
 
     /**
      * @var \Magento\Paypal\Model\ConfigFactory
@@ -61,18 +41,18 @@ class AbstractIpn
 
     /**
      * @param \Magento\Paypal\Model\ConfigFactory $configFactory
-     * @param \Magento\Framework\Logger\AdapterFactory $logAdapterFactory
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\HTTP\Adapter\CurlFactory $curlFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Paypal\Model\ConfigFactory $configFactory,
-        \Magento\Framework\Logger\AdapterFactory $logAdapterFactory,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\HTTP\Adapter\CurlFactory $curlFactory,
-        array $data = array()
+        array $data = []
     ) {
         $this->_configFactory = $configFactory;
-        $this->_logAdapterFactory = $logAdapterFactory;
+        $this->logger = $logger;
         $this->_curlFactory = $curlFactory;
         $this->_ipnRequest = $data;
     }
@@ -95,22 +75,37 @@ class AbstractIpn
      * Post back to PayPal to check whether this request is a valid one
      *
      * @return void
+     * @throws RemoteServiceUnavailableException
      * @throws \Exception
      */
     protected function _postBack()
     {
         $httpAdapter = $this->_curlFactory->create();
         $postbackQuery = http_build_query($this->getRequestData()) . '&cmd=_notify-validate';
-        $postbackUrl = $this->_config->getPaypalUrl();
+        $postbackUrl = $this->_config->getPayPalIpnUrl();
         $this->_addDebugData('postback_to', $postbackUrl);
 
-        $httpAdapter->setConfig(array('verifypeer' => $this->_config->verifyPeer));
-        $httpAdapter->write(\Zend_Http_Client::POST, $postbackUrl, '1.1', array('Connection: close'), $postbackQuery);
+        $httpAdapter->setConfig(['verifypeer' => $this->_config->getValue('verifyPeer')]);
+        $httpAdapter->write(\Zend_Http_Client::POST, $postbackUrl, '1.1', ['Connection: close'], $postbackQuery);
         try {
             $postbackResult = $httpAdapter->read();
         } catch (\Exception $e) {
-            $this->_addDebugData('http_error', array('error' => $e->getMessage(), 'code' => $e->getCode()));
+            $this->_addDebugData('http_error', ['error' => $e->getMessage(), 'code' => $e->getCode()]);
             throw $e;
+        }
+
+        /*
+         * Handle errors on PayPal side.
+         */
+        $responseCode = \Zend_Http_Response::extractCode($postbackResult);
+        if (empty($postbackResult) || in_array($responseCode, ['500', '502', '503'])) {
+            if (empty($postbackResult)) {
+                $reason = 'Empty response.';
+            } else {
+                $reason = 'Response code: ' . $responseCode . '.';
+            }
+            $this->_debugData['exception'] = 'PayPal IPN postback failure. ' . $reason;
+            throw new RemoteServiceUnavailableException(__($reason));
         }
 
         $response = preg_split('/^\r?$/m', $postbackResult, 2);
@@ -118,7 +113,7 @@ class AbstractIpn
         if ($response != 'VERIFIED') {
             $this->_addDebugData('postback', $postbackQuery);
             $this->_addDebugData('postback_result', $postbackResult);
-            throw new \Exception('PayPal IPN postback failure. See ' . self::DEFAULT_LOG_FILE . ' for details.');
+            throw new \Exception('PayPal IPN postback failure. See system.log for details.');
         }
     }
 
@@ -127,6 +122,7 @@ class AbstractIpn
      *
      * @param string $ipnPaymentStatus
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _filterPaymentStatus($ipnPaymentStatus)
     {
@@ -169,12 +165,8 @@ class AbstractIpn
      */
     protected function _debug()
     {
-        if ($this->_config && $this->_config->debug) {
-            $file = $this->_config
-                ->getMethodCode() ? "payment_{$this
-                ->_config
-                ->getMethodCode()}.log" : self::DEFAULT_LOG_FILE;
-            $this->_logAdapterFactory->create(array('fileName' => $file))->log($this->_debugData);
+        if ($this->_config && $this->_config->getValue('debug')) {
+            $this->logger->debug(var_export($this->_debugData, true));
         }
     }
 

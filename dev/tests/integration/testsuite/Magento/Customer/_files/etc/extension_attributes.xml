@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Api/etc/extension_attributes.xsd">
+    <extension_attributes for="Magento\Tax\Api\Data\TaxRateInterface">
+    </extension_attributes>
+    <extension_attributes for="Magento\Catalog\Api\Data\ProductInterface">
+        <attribute code="stock_item" type="Magento\CatalogInventory\Service\Data\V1\StockItem" />
+    </extension_attributes>
+    <extension_attributes for="Magento\Catalog\Api\Data\CategoryInterface">
+        <attribute code="category_attribute_1" type="Magento\Catalog\Api\Data\CategoryAttributeType1" />
+        <attribute code="category_attribute_2" type="Magento\Catalog\Api\Data\CategoryAttributeType2" />
+    </extension_attributes>
+    <extension_attributes for="Magento\Customer\Api\Data\CustomerInterface">
+        <attribute code="customer_attribute_1" type="Magento\Customer\Api\Data\CustomerAttributeType1" />
+        <attribute code="customer_attribute_2" type="Magento\Customer\Api\Data\CustomerAttributeType2" />
+    </extension_attributes>
+    <extension_attributes for="Magento\Customer\Api\Data\AddressInterface">
+        <attribute code="address_attribute_1" type="Magento\Customer\Api\Data\AddressAttributeType1" />
+        <attribute code="address_attribute_2" type="Magento\Customer\Api\Data\AddressAttributeType2" />
+    </extension_attributes>
+</config>

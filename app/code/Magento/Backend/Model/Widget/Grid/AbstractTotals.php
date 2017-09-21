@@ -1,28 +1,15 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
 namespace Magento\Backend\Model\Widget\Grid;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 abstract class AbstractTotals implements \Magento\Backend\Model\Widget\Grid\TotalsInterface
 {
     /**
@@ -32,7 +19,7 @@ abstract class AbstractTotals implements \Magento\Backend\Model\Widget\Grid\Tota
      *
      * @var array
      */
-    protected $_columns = array();
+    protected $_columns = [];
 
     /**
      * Array of totals based on columns index
@@ -41,12 +28,12 @@ abstract class AbstractTotals implements \Magento\Backend\Model\Widget\Grid\Tota
      *
      * @var array
      */
-    protected $_totals = array();
+    protected $_totals = [];
 
     /**
      * Factory model
      *
-     * @var \Magento\Framework\Object\Factory
+     * @var \Magento\Framework\DataObject\Factory
      */
     protected $_factory;
 
@@ -58,11 +45,13 @@ abstract class AbstractTotals implements \Magento\Backend\Model\Widget\Grid\Tota
     protected $_parser;
 
     /**
-     * @param \Magento\Framework\Object\Factory $factory
+     * @param \Magento\Framework\DataObject\Factory $factory
      * @param \Magento\Backend\Model\Widget\Grid\Parser $parser
      */
-    public function __construct(\Magento\Framework\Object\Factory $factory, \Magento\Backend\Model\Widget\Grid\Parser $parser)
-    {
+    public function __construct(
+        \Magento\Framework\DataObject\Factory $factory,
+        \Magento\Backend\Model\Widget\Grid\Parser $parser
+    ) {
         $this->_factory = $factory;
         $this->_parser = $parser;
     }
@@ -238,7 +227,7 @@ abstract class AbstractTotals implements \Magento\Backend\Model\Widget\Grid\Tota
      * Count totals for all columns set
      *
      * @param \Magento\Framework\Data\Collection $collection
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function countTotals($collection)
     {
@@ -252,7 +241,7 @@ abstract class AbstractTotals implements \Magento\Backend\Model\Widget\Grid\Tota
     /**
      * Get totals as object
      *
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function getTotals()
     {
@@ -268,9 +257,9 @@ abstract class AbstractTotals implements \Magento\Backend\Model\Widget\Grid\Tota
     public function reset($isFullReset = false)
     {
         if ($isFullReset) {
-            $this->_columns = array();
+            $this->_columns = [];
         }
 
-        $this->_totals = array();
+        $this->_totals = [];
     }
 }

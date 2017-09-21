@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<validation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Validator/etc/validation.xsd">
+    <entity name="test_entity">
+        <rules>
+            <rule name="test_rule_constraint">
+                <entity_constraints>
+                    <!-- attribute class is required for tag element -->
+                    <constraint alias="eav_validator"/>
+                </entity_constraints>
+            </rule>
+        </rules>
+        <groups>
+            <group name="test_group">
+                <uses>
+                    <use rule="test_rule_constraint"/>
+                </uses>
+            </group>
+        </groups>
+    </entity>
+</validation>

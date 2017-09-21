@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser;
 
@@ -33,27 +15,34 @@ namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser;
  */
 class Container extends \Magento\Framework\View\Element\Html\Select
 {
-    /**
-     * @var \Magento\Framework\View\Layout\ProcessorFactory
+    /**#@+
+     * Frontend page layouts
      */
+    const PAGE_LAYOUT_1COLUMN = '1column-center';
+    const PAGE_LAYOUT_2COLUMNS_LEFT = '2columns-left';
+    const PAGE_LAYOUT_2COLUMNS_RIGHT = '2columns-right';
+    const PAGE_LAYOUT_3COLUMNS = '3columns';
+    /**#@-*/
+
+    /**#@-*/
     protected $_layoutProcessorFactory;
 
     /**
-     * @var \Magento\Core\Model\Resource\Theme\CollectionFactory
+     * @var \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory
      */
     protected $_themesFactory;
 
     /**
      * @param \Magento\Framework\View\Element\Context $context
      * @param \Magento\Framework\View\Layout\ProcessorFactory $layoutProcessorFactory
-     * @param \Magento\Core\Model\Resource\Theme\CollectionFactory $themesFactory
+     * @param \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory $themesFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Context $context,
         \Magento\Framework\View\Layout\ProcessorFactory $layoutProcessorFactory,
-        \Magento\Core\Model\Resource\Theme\CollectionFactory $themesFactory,
-        array $data = array()
+        \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory $themesFactory,
+        array $data = []
     ) {
         $this->_layoutProcessorFactory = $layoutProcessorFactory;
         $this->_themesFactory = $themesFactory;
@@ -83,14 +72,21 @@ class Container extends \Magento\Framework\View\Element\Html\Select
     protected function _beforeToHtml()
     {
         if (!$this->getOptions()) {
-            $layoutMergeParams = array('theme' => $this->_getThemeInstance($this->getTheme()));
+            $layoutMergeParams = ['theme' => $this->_getThemeInstance($this->getTheme())];
             /** @var $layoutProcessor \Magento\Framework\View\Layout\ProcessorInterface */
             $layoutProcessor = $this->_layoutProcessorFactory->create($layoutMergeParams);
-            $layoutProcessor->addPageHandles(array($this->getLayoutHandle()));
-            $layoutProcessor->addPageHandles(array('default'));
+            $layoutProcessor->addPageHandles([$this->getLayoutHandle()]);
+            $layoutProcessor->addPageHandles(['default']);
             $layoutProcessor->load();
 
-            $containers = $layoutProcessor->getContainers();
+            $pageLayoutProcessor = $this->_layoutProcessorFactory->create($layoutMergeParams);
+            $pageLayouts = $this->getPageLayouts();
+            foreach ($pageLayouts as $pageLayout) {
+                $pageLayoutProcessor->addHandle($pageLayout);
+            }
+            $pageLayoutProcessor->load();
+
+            $containers = array_merge($pageLayoutProcessor->getContainers(), $layoutProcessor->getContainers());
             if ($this->getAllowedContainers()) {
                 foreach (array_keys($containers) as $containerName) {
                     if (!in_array($containerName, $this->getAllowedContainers())) {
@@ -112,12 +108,27 @@ class Container extends \Magento\Framework\View\Element\Html\Select
      * Retrieve theme instance by its identifier
      *
      * @param int $themeId
-     * @return \Magento\Core\Model\Theme|null
+     * @return \Magento\Theme\Model\Theme|null
      */
     protected function _getThemeInstance($themeId)
     {
-        /** @var \Magento\Core\Model\Resource\Theme\Collection $themeCollection */
+        /** @var \Magento\Theme\Model\ResourceModel\Theme\Collection $themeCollection */
         $themeCollection = $this->_themesFactory->create();
         return $themeCollection->getItemById($themeId);
+    }
+
+    /**
+     * Retrieve page layouts
+     *
+     * @return array
+     */
+    protected function getPageLayouts()
+    {
+        return [
+            self::PAGE_LAYOUT_1COLUMN,
+            self::PAGE_LAYOUT_2COLUMNS_LEFT,
+            self::PAGE_LAYOUT_2COLUMNS_RIGHT,
+            self::PAGE_LAYOUT_3COLUMNS,
+        ];
     }
 }

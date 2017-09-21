@@ -1,0 +1,77 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+// @codingStandardsIgnoreFile
+/* @var $block \Magento\GroupedProduct\Block\Product\Grouped\AssociatedProducts\ListAssociatedProducts */
+?>
+<script type="text/x-magento-template" id="group-product-template">
+<tr title="#" class="pointer" data-role="row">
+    <td data-column="info" class="col-draggable col-info">
+        <span class="draggable-handle"></span>
+        <input
+            type="hidden"
+            name="links[associated][<%- data.id %>][id]"
+            value="<%- data.id %>"
+            data-role="id" />
+        <input
+            type="hidden"
+            name="links[associated][<%- data.id %>][position]"
+            value="<%- data.position %>"
+            data-role="position" />
+    </td>
+    <td data-column="name" class="editable col-name">
+        <%- data.name %>
+    </td>
+    <td data-column="sku" class="col-sku">
+        <%- data.sku %>
+    </td>
+    <td data-column="price" class="col-price">
+        <%- data.price %>
+    </td>
+    <td data-column="qty" class="editable col-qty col-number">
+        <input
+            type="text"
+            class="admin__control-text"
+            name="links[associated][<%- data.id %>][qty]"
+            value="<%- data.qty %>">
+    </td>
+    <td data-column="actions" class="col-actions">
+        <button
+            type="button"
+            class="action-delete"
+            data-role="delete"></button>
+    </td>
+</tr>
+</script>
+<div class="grid-container no-display">
+    <table class="admin__control-table" data-role="grouped-product-grid"
+        data-products="<?= $block->escapeHtml(
+            $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($block->getAssociatedProducts())
+        ); ?>">
+        <thead>
+            <tr class="headings">
+                <th data-column="info" class="col-draggable no-link col-info">
+                    <span></span>
+                </th>
+                <th data-column="name" class="no-link col-name">
+                    <span><?= /* @escapeNotVerified */ __('Name') ?></span>
+                </th>
+                <th data-column="sku" class="no-link col-sku">
+                    <span><?= /* @escapeNotVerified */ __('SKU') ?></span>
+                </th>
+                <th data-column="price" class="no-link col-price">
+                    <span><?= /* @escapeNotVerified */ __('Price') ?></span>
+                    </th>
+                <th data-column="qty" class="no-link col-qty">
+                    <span><?= /* @escapeNotVerified */ __('Default Qty') ?></span>
+                </th>
+                <th data-column="actions" class="last no-link col-actions">
+                    <span></span>
+                </th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>

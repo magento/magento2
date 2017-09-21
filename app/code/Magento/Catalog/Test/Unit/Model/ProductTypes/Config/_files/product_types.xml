@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Catalog:etc/product_types.xsd">
+    <type name="type_one" label="Label One" modelInstance="Instance_Type" composite="true" indexPriority="40" canUseQtyDecimals="true" isQty="true" sortOrder="100">
+        <priceModel instance="Instance_Type_One" />
+        <indexerModel instance="Instance_Type_Two" />
+        <stockIndexerModel instance="Instance_Type_Three" />
+    </type>
+    <type name="type_two" modelInstance="Instance_Type">
+        <allowedSelectionTypes>
+            <type name="type_two" />
+        </allowedSelectionTypes>
+        <customAttributes>
+            <attribute name="some_name" value="some_value" />
+        </customAttributes>
+    </type>
+    <type name="type_three" label="Label Three" modelInstance="Instance_Type" composite="false" indexPriority="20" canUseQtyDecimals="false" isQty="false" sortOrder="5">
+        <priceModel instance="Instance_Type_Three" />
+        <indexerModel instance="Instance_Type_Three" />
+        <stockIndexerModel instance="Instance_Type_Three" />
+    </type>
+    <composableTypes>
+        <type name="type_one" />
+        <type name="type_three" />        
+    </composableTypes>
+</config>

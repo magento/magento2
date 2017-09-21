@@ -1,34 +1,17 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
 namespace Magento\Authorizenet\Model\Directpost;
 
+use Magento\Authorizenet\Model\Request as AuthorizenetRequest;
+
 /**
- * Authorize.net request model for DirectPost model.
- *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * Authorize.net request model for DirectPost model
  */
-class Request extends \Magento\Framework\Object
+class Request extends AuthorizenetRequest
 {
     /**
      * @var string
@@ -97,15 +80,9 @@ class Request extends \Magento\Framework\Object
 
         $this->setXTestRequest($paymentMethod->getConfigData('test') ? 'TRUE' : 'FALSE');
 
-        $this->setXLogin(
-            $paymentMethod->getConfigData('login')
-        )->setXType(
-            'AUTH_ONLY'
-        )->setXMethod(
-            \Magento\Authorizenet\Model\Authorizenet::REQUEST_METHOD_CC
-        )->setXRelayUrl(
-            $paymentMethod->getRelayUrl()
-        );
+        $this->setXLogin($paymentMethod->getConfigData('login'))
+            ->setXMethod(\Magento\Authorizenet\Model\Authorizenet::REQUEST_METHOD_CC)
+            ->setXRelayUrl($paymentMethod->getRelayUrl());
 
         $this->_setTransactionKey($paymentMethod->getConfigData('trans_key'));
         return $this;
@@ -124,6 +101,7 @@ class Request extends \Magento\Framework\Object
     ) {
         $payment = $order->getPayment();
 
+        $this->setXType($payment->getAnetTransType());
         $this->setXFpSequence($order->getQuoteId());
         $this->setXInvoiceNum($order->getIncrementId());
         $this->setXAmount($payment->getBaseAmountAuthorized());
@@ -134,42 +112,26 @@ class Request extends \Magento\Framework\Object
             sprintf('%.2F', $order->getBaseShippingAmount())
         );
 
-        //need to use strval() because NULL values IE6-8 decodes as "null" in JSON in JavaScript, but we need "" for null values.
+        //need to use strval() because NULL values IE6-8 decodes as "null" in JSON in JavaScript,
+        //but we need "" for null values.
         $billing = $order->getBillingAddress();
         if (!empty($billing)) {
-            $this->setXFirstName(
-                strval($billing->getFirstname())
-            )->setXLastName(
-                strval($billing->getLastname())
-            )->setXCompany(
-                strval($billing->getCompany())
-            )->setXAddress(
-                strval($billing->getStreet(1))
-            )->setXCity(
-                strval($billing->getCity())
-            )->setXState(
-                strval($billing->getRegion())
-            )->setXZip(
-                strval($billing->getPostcode())
-            )->setXCountry(
-                strval($billing->getCountry())
-            )->setXPhone(
-                strval($billing->getTelephone())
-            )->setXFax(
-                strval($billing->getFax())
-            )->setXCustId(
-                strval($billing->getCustomerId())
-            )->setXCustomerIp(
-                strval($order->getRemoteIp())
-            )->setXCustomerTaxId(
-                strval($billing->getTaxId())
-            )->setXEmail(
-                strval($order->getCustomerEmail())
-            )->setXEmailCustomer(
-                strval($paymentMethod->getConfigData('email_customer'))
-            )->setXMerchantEmail(
-                strval($paymentMethod->getConfigData('merchant_email'))
-            );
+            $this->setXFirstName(strval($billing->getFirstname()))
+                ->setXLastName(strval($billing->getLastname()))
+                ->setXCompany(strval($billing->getCompany()))
+                ->setXAddress(strval($billing->getStreetLine(1)))
+                ->setXCity(strval($billing->getCity()))
+                ->setXState(strval($billing->getRegion()))
+                ->setXZip(strval($billing->getPostcode()))
+                ->setXCountry(strval($billing->getCountryId()))
+                ->setXPhone(strval($billing->getTelephone()))
+                ->setXFax(strval($billing->getFax()))
+                ->setXCustId(strval($billing->getCustomerId()))
+                ->setXCustomerIp(strval($order->getRemoteIp()))
+                ->setXCustomerTaxId(strval($billing->getTaxId()))
+                ->setXEmail(strval($order->getCustomerEmail()))
+                ->setXEmailCustomer(strval($paymentMethod->getConfigData('email_customer')))
+                ->setXMerchantEmail(strval($paymentMethod->getConfigData('merchant_email')));
         }
 
         $shipping = $order->getShippingAddress();
@@ -181,7 +143,7 @@ class Request extends \Magento\Framework\Object
             )->setXShipToCompany(
                 strval($shipping->getCompany())
             )->setXShipToAddress(
-                strval($shipping->getStreet(1))
+                strval($shipping->getStreetLine(1))
             )->setXShipToCity(
                 strval($shipping->getCity())
             )->setXShipToState(
@@ -189,7 +151,7 @@ class Request extends \Magento\Framework\Object
             )->setXShipToZip(
                 strval($shipping->getPostcode())
             )->setXShipToCountry(
-                strval($shipping->getCountry())
+                strval($shipping->getCountryId())
             );
         }
 

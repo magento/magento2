@@ -1,32 +1,14 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Widget;
 
 /**
  * @magentoAppArea adminhtml
  */
-class TabsTest extends \PHPUnit_Framework_TestCase
+class TabsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoAppIsolation enabled
@@ -35,21 +17,21 @@ class TabsTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $widgetInstance \Magento\Widget\Model\Widget\Instance */
         $widgetInstance = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Widget\Model\Widget\Instance'
+            \Magento\Widget\Model\Widget\Instance::class
         );
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Framework\Registry')->register('current_widget_instance', $widgetInstance);
+        $objectManager->get(\Magento\Framework\Registry::class)->register('current_widget_instance', $widgetInstance);
 
         /** @var $layout \Magento\Framework\View\Layout */
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         );
         /** @var $block \Magento\Backend\Block\Widget\Tabs */
-        $block = $layout->createBlock('Magento\Backend\Block\Widget\Tabs', 'block');
-        $layout->addBlock('Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Main', 'child_tab', 'block');
+        $block = $layout->createBlock(\Magento\Backend\Block\Widget\Tabs::class, 'block');
+        $layout->addBlock(\Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Main::class, 'child_tab', 'block');
         $block->addTab('tab_id', 'child_tab');
 
-        $this->assertEquals(array('tab_id'), $block->getTabsIds());
+        $this->assertEquals(['tab_id'], $block->getTabsIds());
     }
 }

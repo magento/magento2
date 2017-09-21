@@ -1,27 +1,11 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Helper\Wysiwyg;
+
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Wysiwyg Images Helper
@@ -53,13 +37,6 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_directory;
 
     /**
-     * Core data
-     *
-     * @var \Magento\Core\Helper\Data
-     */
-    protected $_coreData;
-
-    /**
      * Adminhtml data
      *
      * @var \Magento\Backend\Helper\Data
@@ -78,23 +55,20 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Backend\Helper\Data $backendData
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Framework\App\Filesystem $filesystem
+     * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Backend\Helper\Data $backendData,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Framework\App\Filesystem $filesystem,
+        \Magento\Framework\Filesystem $filesystem,
         \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         parent::__construct($context);
         $this->_backendData = $backendData;
-        $this->_coreData = $coreData;
         $this->_storeManager = $storeManager;
 
-        $this->_directory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::MEDIA_DIR);
+        $this->_directory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->_directory->create(\Magento\Cms\Model\Wysiwyg\Config::IMAGE_DIRECTORY);
     }
 
@@ -178,7 +152,7 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
         $checkResult->isAllowed = false;
         $this->_eventManager->dispatch(
             'cms_wysiwyg_images_static_urls_allowed',
-            array('result' => $checkResult, 'store_id' => $this->_storeId)
+            ['result' => $checkResult, 'store_id' => $this->_storeId]
         );
         return $checkResult->isAllowed;
     }
@@ -202,8 +176,8 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
             if ($this->isUsingStaticUrlsAllowed()) {
                 $html = $fileurl; // $mediaPath;
             } else {
-                $directive = $this->_coreData->urlEncode($directive);
-                $html = $this->_backendData->getUrl('cms/wysiwyg/directive', array('___directive' => $directive));
+                $directive = $this->urlEncoder->encode($directive);
+                $html = $this->_backendData->getUrl('cms/wysiwyg/directive', ['___directive' => $directive]);
             }
         }
         return $html;
@@ -214,7 +188,7 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
      * Try to create target directory if it doesn't exist
      *
      * @return string
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getCurrentPath()
     {
@@ -232,9 +206,9 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
                 if (!$this->_directory->isExist($currentDir)) {
                     $this->_directory->create($currentDir);
                 }
-            } catch (\Magento\Framework\Filesystem\FilesystemException $e) {
+            } catch (\Magento\Framework\Exception\FileSystemException $e) {
                 $message = __('The directory %1 is not writable by server.', $currentPath);
-                throw new \Magento\Framework\Model\Exception($message);
+                throw new \Magento\Framework\Exception\LocalizedException($message);
             }
             $this->_currentPath = $currentPath;
         }

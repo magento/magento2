@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+    <block class="Magento\Framework\View\Element\Template" name="sample_email_content" template="Magento_Email::sample_email_content.phtml"/>
+    <block class="Magento\Framework\View\Element\Text" name="ignored_email_content">
+        <action method="setText">
+            <argument name="text" xsi:type="string">Ignored email content, only the first block is used</argument>
+        </action>
+    </block>
+</layout>

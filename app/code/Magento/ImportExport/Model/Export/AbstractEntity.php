@@ -1,41 +1,28 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Model\Export;
 
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\ImportExport\Model\Export\Adapter\AbstractAdapter;
+use Magento\ImportExport\Model\Export;
 
 /**
  * Export entity abstract model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ *
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @since 100.0.2
  */
 abstract class AbstractEntity
 {
     /**#@+
      * Attribute collection name
      */
-    const ATTRIBUTE_COLLECTION_NAME = 'Magento\Framework\Data\Collection';
+    const ATTRIBUTE_COLLECTION_NAME = \Magento\Framework\Data\Collection::class;
 
     /**#@-*/
 
@@ -46,11 +33,7 @@ abstract class AbstractEntity
 
     /**#@-*/
 
-    /**
-     * Store manager
-     *
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
+    /**#@-*/
     protected $_storeManager;
 
     /**
@@ -58,7 +41,7 @@ abstract class AbstractEntity
      *
      * @var array
      */
-    protected $_errors = array();
+    protected $_errors = [];
 
     /**
      * Error counter
@@ -79,21 +62,21 @@ abstract class AbstractEntity
      *
      * @var array
      */
-    protected $_invalidRows = array();
+    protected $_invalidRows = [];
 
     /**
      * Validation failure message template definitions
      *
      * @var array
      */
-    protected $_messageTemplates = array();
+    protected $_messageTemplates = [];
 
     /**
      * Parameters
      *
      * @var array
      */
-    protected $_parameters = array();
+    protected $_parameters = [];
 
     /**
      * Number of entities processed by validation
@@ -121,21 +104,21 @@ abstract class AbstractEntity
      *
      * @var array
      */
-    protected $_storeIdToCode = array();
+    protected $_storeIdToCode = [];
 
     /**
      * Website ID-to-code
      *
      * @var array
      */
-    protected $_websiteIdToCode = array();
+    protected $_websiteIdToCode = [];
 
     /**
      * Disabled attributes
      *
      * @var string[]
      */
-    protected $_disabledAttributes = array();
+    protected $_disabledAttributes = [];
 
     /**
      * Export file name
@@ -161,7 +144,7 @@ abstract class AbstractEntity
     /**
      * Collection by pages iterator
      *
-     * @var \Magento\ImportExport\Model\Resource\CollectionByPagesIterator
+     * @var \Magento\ImportExport\Model\ResourceModel\CollectionByPagesIterator
      */
     protected $_byPagesIterator;
 
@@ -173,18 +156,33 @@ abstract class AbstractEntity
     protected $_scopeConfig;
 
     /**
+     * Attribute code to its values. Only attributes with options and only default store values used
+     *
+     * @var array
+     */
+    protected $_attributeCodes = null;
+
+    /**
+     * Permanent entity columns
+     *
+     * @var string[]
+     */
+    protected $_permanentAttributes = [];
+
+    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\ImportExport\Model\Export\Factory $collectionFactory
-     * @param \Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory $resourceColFactory
+     * @param \Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory $resourceColFactory
      * @param array $data
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\ImportExport\Model\Export\Factory $collectionFactory,
-        \Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory $resourceColFactory,
-        array $data = array()
+        \Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory $resourceColFactory,
+        array $data = []
     ) {
         $this->_scopeConfig = $scopeConfig;
         $this->_storeManager = $storeManager;
@@ -269,6 +267,20 @@ abstract class AbstractEntity
     }
 
     /**
+     * Retrieve message template
+     *
+     * @param string $errorCode
+     * @return null|string
+     */
+    public function retrieveMessageTemplate($errorCode)
+    {
+        if (isset($this->_messageTemplates[$errorCode])) {
+            return $this->_messageTemplates[$errorCode];
+        }
+        return null;
+    }
+
+    /**
      * Export process
      *
      * @return string
@@ -286,12 +298,44 @@ abstract class AbstractEntity
     /**
      * Iterate through given collection page by page and export items
      *
-     * @param \Magento\Framework\Data\Collection\Db $collection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $collection
      * @return void
      */
-    protected function _exportCollectionByPages(\Magento\Framework\Data\Collection\Db $collection)
+    protected function _exportCollectionByPages(\Magento\Framework\Data\Collection\AbstractDb $collection)
     {
-        $this->_byPagesIterator->iterate($collection, $this->_pageSize, array(array($this, 'exportItem')));
+        $this->_byPagesIterator->iterate($collection, $this->_pageSize, [[$this, 'exportItem']]);
+    }
+
+    /**
+     * Get attributes codes which are appropriate for export
+     *
+     * @return array
+     */
+    protected function _getExportAttributeCodes()
+    {
+        if (null === $this->_attributeCodes) {
+            if (!empty($this->_parameters[Export::FILTER_ELEMENT_SKIP])
+                && is_array($this->_parameters[Export::FILTER_ELEMENT_SKIP])
+            ) {
+                $skippedAttributes = array_flip(
+                    $this->_parameters[Export::FILTER_ELEMENT_SKIP]
+                );
+            } else {
+                $skippedAttributes = [];
+            }
+            $attributeCodes = [];
+
+            /** @var $attribute AbstractAttribute */
+            foreach ($this->filterAttributeCollection($this->getAttributeCollection()) as $attribute) {
+                if (!isset($skippedAttributes[$attribute->getAttributeId()])
+                    || in_array($attribute->getAttributeCode(), $this->_permanentAttributes)
+                ) {
+                    $attributeCodes[] = $attribute->getAttributeCode();
+                }
+            }
+            $this->_attributeCodes = $attributeCodes;
+        }
+        return $this->_attributeCodes;
     }
 
     /**
@@ -312,7 +356,7 @@ abstract class AbstractEntity
     /**
      * Get entity collection
      *
-     * @return \Magento\Framework\Data\Collection\Db
+     * @return \Magento\Framework\Data\Collection\AbstractDb
      */
     abstract protected function _getEntityCollection();
 
@@ -351,14 +395,14 @@ abstract class AbstractEntity
      */
     public function getErrorMessages()
     {
-        $messages = array();
+        $messages = [];
         foreach ($this->_errors as $errorCode => $errorRows) {
             $message = isset(
                 $this->_messageTemplates[$errorCode]
             ) ? __(
                 $this->_messageTemplates[$errorCode]
             ) : __(
-                "Please correct the value for '%1' column",
+                'Please correct the value for "%1" column.',
                 $errorCode
             );
             $message = (string)$message;
@@ -412,12 +456,12 @@ abstract class AbstractEntity
      * Inner writer object getter
      *
      * @return AbstractAdapter
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getWriter()
     {
         if (!$this->_writer) {
-            throw new \Magento\Framework\Model\Exception(__('Please specify writer.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Please specify the writer.'));
         }
 
         return $this->_writer;

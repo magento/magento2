@@ -1,26 +1,10 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
 
 /**
  * Adminhtml reviews grid
@@ -61,7 +45,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Review collection model factory
      *
-     * @var \Magento\Review\Model\Resource\Review\Product\CollectionFactory
+     * @var \Magento\Review\Model\ResourceModel\Review\Product\CollectionFactory
      */
     protected $_productsFactory;
 
@@ -76,7 +60,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Review\Model\ReviewFactory $reviewFactory
-     * @param \Magento\Review\Model\Resource\Review\Product\CollectionFactory $productsFactory
+     * @param \Magento\Review\Model\ResourceModel\Review\Product\CollectionFactory $productsFactory
      * @param \Magento\Review\Helper\Data $reviewData
      * @param \Magento\Review\Helper\Action\Pager $reviewActionPager
      * @param \Magento\Framework\Registry $coreRegistry
@@ -86,11 +70,11 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Review\Model\ReviewFactory $reviewFactory,
-        \Magento\Review\Model\Resource\Review\Product\CollectionFactory $productsFactory,
+        \Magento\Review\Model\ResourceModel\Review\Product\CollectionFactory $productsFactory,
         \Magento\Review\Helper\Data $reviewData,
         \Magento\Review\Helper\Action\Pager $reviewActionPager,
         \Magento\Framework\Registry $coreRegistry,
-        array $data = array()
+        array $data = []
     ) {
         $this->_productsFactory = $productsFactory;
         $this->_coreRegistry = $coreRegistry;
@@ -136,7 +120,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     {
         /** @var $model \Magento\Review\Model\Review */
         $model = $this->_reviewFactory->create();
-        /** @var $collection \Magento\Review\Model\Resource\Review\Product\Collection */
+        /** @var $collection \Magento\Review\Model\ResourceModel\Review\Product\Collection */
         $collection = $this->_productsFactory->create();
 
         if ($this->getProductId() || $this->getRequest()->getParam('productId', false)) {
@@ -171,60 +155,61 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Prepare grid columns
      *
      * @return \Magento\Backend\Block\Widget\Grid
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareColumns()
     {
         $this->addColumn(
             'review_id',
-            array(
+            [
                 'header' => __('ID'),
                 'filter_index' => 'rt.review_id',
                 'index' => 'review_id',
                 'header_css_class' => 'col-id',
                 'column_css_class' => 'col-id'
-            )
+            ]
         );
 
         $this->addColumn(
             'created_at',
-            array(
+            [
                 'header' => __('Created'),
                 'type' => 'datetime',
                 'filter_index' => 'rt.created_at',
                 'index' => 'review_created_at',
                 'header_css_class' => 'col-date',
                 'column_css_class' => 'col-date'
-            )
+            ]
         );
 
         if (!$this->_coreRegistry->registry('usePendingFilter')) {
             $this->addColumn(
                 'status',
-                array(
+                [
                     'header' => __('Status'),
                     'type' => 'options',
                     'options' => $this->_reviewData->getReviewStatuses(),
                     'filter_index' => 'rt.status_id',
                     'index' => 'status_id'
-                )
+                ]
             );
         }
 
         $this->addColumn(
             'title',
-            array(
+            [
                 'header' => __('Title'),
                 'filter_index' => 'rdt.title',
                 'index' => 'title',
                 'type' => 'text',
                 'truncate' => 50,
                 'escape' => true
-            )
+            ]
         );
 
         $this->addColumn(
             'nickname',
-            array(
+            [
                 'header' => __('Nickname'),
                 'filter_index' => 'rdt.nickname',
                 'index' => 'nickname',
@@ -233,12 +218,12 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 'escape' => true,
                 'header_css_class' => 'col-name',
                 'column_css_class' => 'col-name'
-            )
+            ]
         );
 
         $this->addColumn(
             'detail',
-            array(
+            [
                 'header' => __('Review'),
                 'index' => 'detail',
                 'filter_index' => 'rdt.detail',
@@ -246,7 +231,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 'truncate' => 50,
                 'nl2br' => true,
                 'escape' => true
-            )
+            ]
         );
 
         /**
@@ -255,62 +240,65 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         if (!$this->_storeManager->isSingleStoreMode()) {
             $this->addColumn(
                 'visible_in',
-                array('header' => __('Visibility'), 'index' => 'stores', 'type' => 'store', 'store_view' => true)
+                ['header' => __('Visibility'), 'index' => 'stores', 'type' => 'store', 'store_view' => true]
             );
         }
 
         $this->addColumn(
             'type',
-            array(
+            [
                 'header' => __('Type'),
                 'type' => 'select',
                 'index' => 'type',
-                'filter' => 'Magento\Review\Block\Adminhtml\Grid\Filter\Type',
-                'renderer' => 'Magento\Review\Block\Adminhtml\Grid\Renderer\Type'
-            )
+                'filter' => \Magento\Review\Block\Adminhtml\Grid\Filter\Type::class,
+                'renderer' => \Magento\Review\Block\Adminhtml\Grid\Renderer\Type::class
+            ]
         );
 
         $this->addColumn(
             'name',
-            array('header' => __('Product'), 'type' => 'text', 'index' => 'name', 'escape' => true)
+            ['header' => __('Product'), 'type' => 'text', 'index' => 'name', 'escape' => true]
         );
 
         $this->addColumn(
             'sku',
-            array(
+            [
                 'header' => __('SKU'),
                 'type' => 'text',
                 'index' => 'sku',
                 'escape' => true
-            )
+            ]
         );
 
         $this->addColumn(
             'action',
-            array(
+            [
                 'header' => __('Action'),
                 'type' => 'action',
                 'getter' => 'getReviewId',
-                'actions' => array(
-                    array(
+                'actions' => [
+                    [
                         'caption' => __('Edit'),
-                        'url' => array(
+                        'url' => [
                             'base' => 'review/product/edit',
-                            'params' => array(
+                            'params' => [
                                 'productId' => $this->getProductId(),
                                 'customerId' => $this->getCustomerId(),
-                                'ret' => $this->_coreRegistry->registry('usePendingFilter') ? 'pending' : null
-                            )
-                        ),
-                        'field' => 'id'
-                    )
-                ),
+                                'ret' => $this->_coreRegistry->registry('usePendingFilter') ? 'pending' : null,
+                            ],
+                        ],
+                        'field' => 'id',
+                    ],
+                ],
                 'filter' => false,
                 'sortable' => false
-            )
+            ]
         );
 
-        $this->addRssList('rss/catalog/review', __('Pending Reviews RSS'));
+        $block = $this->getLayout()->getBlock('grid.bottom.links');
+        if ($block) {
+            $this->setChild('grid.bottom.links', $block);
+        }
 
         return parent::_prepareColumns();
     }
@@ -329,55 +317,55 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 
         $this->getMassactionBlock()->addItem(
             'delete',
-            array(
+            [
                 'label' => __('Delete'),
                 'url' => $this->getUrl(
                     '*/*/massDelete',
-                    array('ret' => $this->_coreRegistry->registry('usePendingFilter') ? 'pending' : 'index')
+                    ['ret' => $this->_coreRegistry->registry('usePendingFilter') ? 'pending' : 'index']
                 ),
                 'confirm' => __('Are you sure?')
-            )
+            ]
         );
 
         $statuses = $this->_reviewData->getReviewStatusesOptionArray();
-        array_unshift($statuses, array('label' => '', 'value' => ''));
+        array_unshift($statuses, ['label' => '', 'value' => '']);
         $this->getMassactionBlock()->addItem(
             'update_status',
-            array(
+            [
                 'label' => __('Update Status'),
                 'url' => $this->getUrl(
                     '*/*/massUpdateStatus',
-                    array('ret' => $this->_coreRegistry->registry('usePendingFilter') ? 'pending' : 'index')
+                    ['ret' => $this->_coreRegistry->registry('usePendingFilter') ? 'pending' : 'index']
                 ),
-                'additional' => array(
-                    'status' => array(
+                'additional' => [
+                    'status' => [
                         'name' => 'status',
                         'type' => 'select',
                         'class' => 'required-entry',
                         'label' => __('Status'),
-                        'values' => $statuses
-                    )
-                )
-            )
+                        'values' => $statuses,
+                    ],
+                ]
+            ]
         );
     }
 
     /**
      * Get row url
      *
-     * @param \Magento\Review\Model\Review|\Magento\Framework\Object $row
+     * @param \Magento\Review\Model\Review|\Magento\Framework\DataObject $row
      * @return string
      */
     public function getRowUrl($row)
     {
         return $this->getUrl(
             'review/product/edit',
-            array(
+            [
                 'id' => $row->getReviewId(),
                 'productId' => $this->getProductId(),
                 'customerId' => $this->getCustomerId(),
                 'ret' => $this->_coreRegistry->registry('usePendingFilter') ? 'pending' : null
-            )
+            ]
         );
     }
 
@@ -391,7 +379,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         if ($this->getProductId() || $this->getCustomerId()) {
             return $this->getUrl(
                 'review/product' . ($this->_coreRegistry->registry('usePendingFilter') ? 'pending' : ''),
-                array('productId' => $this->getProductId(), 'customerId' => $this->getCustomerId())
+                ['productId' => $this->getProductId(), 'customerId' => $this->getCustomerId()]
             );
         } else {
             return $this->getCurrentUrl();

@@ -1,32 +1,16 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\GiftMessage\Block\Adminhtml\Sales\Order\View;
 
 /**
  * Gift message adminhtml sales order view items
  *
+ * @api
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Items extends \Magento\Backend\Block\Template
 {
@@ -35,7 +19,7 @@ class Items extends \Magento\Backend\Block\Template
      *
      * @var array
      */
-    protected $_giftMessage = array();
+    protected $_giftMessage = [];
 
     /**
      * @var \Magento\GiftMessage\Helper\Message
@@ -50,7 +34,7 @@ class Items extends \Magento\Backend\Block\Template
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\GiftMessage\Helper\Message $messageHelper,
-        array $data = array()
+        array $data = []
     ) {
         $this->_messageHelper = $messageHelper;
         parent::__construct($context, $data);
@@ -60,6 +44,7 @@ class Items extends \Magento\Backend\Block\Template
      * Get Order Item
      *
      * @return \Magento\Sales\Model\Order\Item
+     * @codeCoverageIgnore
      */
     public function getItem()
     {
@@ -98,14 +83,14 @@ class Items extends \Magento\Backend\Block\Template
         if ($this->getItem()->getOrder()) {
             if ($this->getItem()->getOrder()->getShippingAddress()) {
                 return $this->getItem()->getOrder()->getShippingAddress()->getName();
-            } else if ($this->getItem()->getOrder()->getBillingAddress()) {
+            } elseif ($this->getItem()->getOrder()->getBillingAddress()) {
                 return $this->getItem()->getOrder()->getBillingAddress()->getName();
             }
         }
 
         if ($this->getItem()->getShippingAddress()) {
             return $this->getItem()->getShippingAddress()->getName();
-        } else if ($this->getItem()->getBillingAddress()) {
+        } elseif ($this->getItem()->getBillingAddress()) {
             return $this->getItem()->getBillingAddress()->getName();
         }
 
@@ -117,6 +102,7 @@ class Items extends \Magento\Backend\Block\Template
      *
      * @param string $name
      * @return string
+     * @codeCoverageIgnore
      */
     public function getFieldName($name)
     {
@@ -128,6 +114,7 @@ class Items extends \Magento\Backend\Block\Template
      *
      * @param string $id
      * @return string
+     * @codeCoverageIgnore
      */
     public function getFieldId($id)
     {
@@ -138,6 +125,7 @@ class Items extends \Magento\Backend\Block\Template
      * Retrieve field html id prefix
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getFieldIdPrefix()
     {
@@ -184,12 +172,13 @@ class Items extends \Magento\Backend\Block\Template
      * Retrieve save url
      *
      * @return array
+     * @codeCoverageIgnore
      */
     public function getSaveUrl()
     {
         return $this->getUrl(
             'sales/order_view_giftmessage/save',
-            array('entity' => $this->getItem()->getId(), 'type' => 'order_item', 'reload' => true)
+            ['entity' => $this->getItem()->getId(), 'type' => 'order_item', 'reload' => true]
         );
     }
 
@@ -197,6 +186,7 @@ class Items extends \Magento\Backend\Block\Template
      * Retrieve block html id
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getHtmlId()
     {

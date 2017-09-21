@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -46,32 +28,32 @@ class Add extends \Magento\Backend\Block\Template
         if ($this->getToolbar()) {
             $this->getToolbar()->addChild(
                 'save_button',
-                'Magento\Backend\Block\Widget\Button',
-                array(
-                    'label' => __('Save Attribute Set'),
+                \Magento\Backend\Block\Widget\Button::class,
+                [
+                    'label' => __('Save'),
                     'class' => 'save primary save-attribute-set',
-                    'data_attribute' => array(
-                        'mage-init' => array('button' => array('event' => 'save', 'target' => '#set-prop-form'))
-                    )
-                )
+                    'data_attribute' => [
+                        'mage-init' => ['button' => ['event' => 'save', 'target' => '#set-prop-form']],
+                    ]
+                ]
             );
             $this->getToolbar()->addChild(
                 'back_button',
-                'Magento\Backend\Block\Widget\Button',
-                array(
+                \Magento\Backend\Block\Widget\Button::class,
+                [
                     'label' => __('Back'),
                     'onclick' => 'setLocation(\'' . $this->getUrl('catalog/*/') . '\')',
                     'class' => 'back'
-                )
+                ]
             );
         }
 
-        $this->addChild('setForm', 'Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Main\Formset');
+        $this->addChild('setForm', \Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Main\Formset::class);
         return parent::_prepareLayout();
     }
 
     /**
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     protected function _getHeader()
     {

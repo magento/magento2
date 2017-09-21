@@ -1,0 +1,40 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/**
+ * @var $block \Magento\Tax\Block\Checkout\Grandtotal
+ */
+?>
+<?php if ($block->includeTax() && $block->getTotalExclTax() >= 0):?>
+<tr class="grand totals excl">
+    <th style="<?= /* @escapeNotVerified */ $block->getStyle() ?>" class="mark" colspan="<?= /* @escapeNotVerified */ $block->getColspan() ?>" scope="row">
+        <strong><?= /* @escapeNotVerified */ __('Grand Total Excl. Tax') ?></strong>
+    </th>
+    <td style="<?= /* @escapeNotVerified */ $block->getStyle() ?>" class="amount" data-th="<?= $block->escapeHtml(__('Grand Total Excl. Tax')) ?>">
+        <strong><?= /* @escapeNotVerified */ $this->helper('Magento\Checkout\Helper\Data')->formatPrice($block->getTotalExclTax()) ?></strong>
+    </td>
+</tr>
+<?= /* @escapeNotVerified */ $block->renderTotals('taxes', $block->getColspan()) ?>
+<tr class="grand totals incl">
+    <th style="<?= /* @escapeNotVerified */ $block->getStyle() ?>" class="mark" colspan="<?= /* @escapeNotVerified */ $block->getColspan() ?>" scope="row">
+        <strong><?= /* @escapeNotVerified */ __('Grand Total Incl. Tax') ?></strong>
+    </th>
+    <td style="<?= /* @escapeNotVerified */ $block->getStyle() ?>" class="amount" data-th="<?= $block->escapeHtml(__('Grand Total Incl. Tax')) ?>">
+        <strong><?= /* @escapeNotVerified */ $this->helper('Magento\Checkout\Helper\Data')->formatPrice($block->getTotal()->getValue()) ?></strong>
+    </td>
+</tr>
+<?php else:?>
+<tr class="grand totals">
+    <th style="<?= /* @escapeNotVerified */ $block->getStyle() ?>" class="mark" colspan="<?= /* @escapeNotVerified */ $block->getColspan() ?>" scope="row">
+        <strong><?= /* @escapeNotVerified */ $block->getTotal()->getTitle() ?></strong>
+    </th>
+    <td style="<?= /* @escapeNotVerified */ $block->getStyle() ?>" class="amount" data-th="<?= $block->escapeHtml($block->getTotal()->getTitle()) ?>">
+        <strong><?= /* @escapeNotVerified */ $this->helper('Magento\Checkout\Helper\Data')->formatPrice($block->getTotal()->getValue()) ?></strong>
+    </td>
+</tr>
+<?php endif;?>

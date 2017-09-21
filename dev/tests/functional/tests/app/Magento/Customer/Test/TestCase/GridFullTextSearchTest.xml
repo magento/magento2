@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Ui\Test\TestCase\GridFullTextSearchTest" summary="Grid UI Component Full Text Search" ticketId="MAGETWO-41023">
+        <variation name="CustomerGridFullTextSearch">
+            <data name="tag" xsi:type="string">severity:S2</data>
+            <data name="description" xsi:type="string">Verify customer page grid full text search</data>
+            <data name="itemsCount" xsi:type="string">2</data>
+            <data name="fixtureName" xsi:type="string">customer</data>
+            <data name="fixtureDataSet" xsi:type="string">johndoe_unique</data>
+            <data name="pageClass" xsi:type="string">Magento\Customer\Test\Page\Adminhtml\CustomerIndex</data>
+            <data name="gridRetriever" xsi:type="string">getCustomerGridBlock</data>
+            <data name="idGetter" xsi:type="string">getId</data>
+            <data name="fieldGetter" xsi:type="string">getLastname</data>
+            <constraint name="Magento\Ui\Test\Constraint\AssertGridFullTextSearch"/>
+        </variation>
+    </testCase>
+</config>

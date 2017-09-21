@@ -1,32 +1,17 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Report\Filter\Form;
 
 /**
  * Sales Adminhtml report filter form for coupons report
  *
+ * @api
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 100.0.2
  */
 class Coupon extends \Magento\Sales\Block\Adminhtml\Report\Filter\Form
 {
@@ -40,7 +25,7 @@ class Coupon extends \Magento\Sales\Block\Adminhtml\Report\Filter\Form
     /**
      * Rule factory
      *
-     * @var \Magento\SalesRule\Model\Resource\Report\RuleFactory
+     * @var \Magento\SalesRule\Model\ResourceModel\Report\RuleFactory
      */
     protected $_reportRule;
 
@@ -49,7 +34,7 @@ class Coupon extends \Magento\Sales\Block\Adminhtml\Report\Filter\Form
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Sales\Model\Order\ConfigFactory $orderConfig
-     * @param \Magento\SalesRule\Model\Resource\Report\RuleFactory $reportRule
+     * @param \Magento\SalesRule\Model\ResourceModel\Report\RuleFactory $reportRule
      * @param array $data
      */
     public function __construct(
@@ -57,8 +42,8 @@ class Coupon extends \Magento\Sales\Block\Adminhtml\Report\Filter\Form
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Sales\Model\Order\ConfigFactory $orderConfig,
-        \Magento\SalesRule\Model\Resource\Report\RuleFactory $reportRule,
-        array $data = array()
+        \Magento\SalesRule\Model\ResourceModel\Report\RuleFactory $reportRule,
+        array $data = []
     ) {
         $this->_reportRule = $reportRule;
         parent::__construct($context, $registry, $formFactory, $orderConfig, $data);
@@ -77,29 +62,33 @@ class Coupon extends \Magento\Sales\Block\Adminhtml\Report\Filter\Form
         $fieldset = $this->getForm()->getElement('base_fieldset');
 
         if (is_object($fieldset) && $fieldset instanceof \Magento\Framework\Data\Form\Element\Fieldset) {
-
             $fieldset->addField(
                 'price_rule_type',
                 'select',
-                array(
+                [
                     'name' => 'price_rule_type',
-                    'options' => array(__('Any'), __('Specified')),
-                    'label' => __('Shopping Cart Price Rule')
-                )
+                    'options' => [__('Any'), __('Specified')],
+                    'label' => __('Cart Price Rule')
+                ]
             );
 
             $rulesList = $this->_reportRule->create()->getUniqRulesNamesList();
 
-            $rulesListOptions = array();
+            $rulesListOptions = [];
 
             foreach ($rulesList as $key => $ruleName) {
-                $rulesListOptions[] = array('label' => $ruleName, 'value' => $key, 'title' => $ruleName);
+                $rulesListOptions[] = ['label' => $ruleName, 'value' => $key, 'title' => $ruleName];
             }
 
             $fieldset->addField(
                 'rules_list',
                 'multiselect',
-                array('name' => 'rules_list', 'values' => $rulesListOptions, 'display' => 'none'),
+                [
+                    'name' => 'rules_list',
+                    'label' => '',
+                    'values' => $rulesListOptions,
+                    'display' => 'none'
+                ],
                 'price_rule_type'
             );
 
@@ -128,7 +117,7 @@ class Coupon extends \Magento\Sales\Block\Adminhtml\Report\Filter\Form
              */
             /** @var $formAfterBlock \Magento\Backend\Block\Widget\Form\Element\Dependence */
             $formAfterBlock = $this->getLayout()->createBlock(
-                'Magento\Backend\Block\Widget\Form\Element\Dependence',
+                \Magento\Backend\Block\Widget\Form\Element\Dependence::class,
                 'adminhtml.block.widget.form.element.dependence'
             );
             $formAfterBlock->addFieldMap(

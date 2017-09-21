@@ -1,0 +1,18 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div data-role="checkout-messages" class="messages" data-bind="visible: isVisible(), click: removeAll">
+    <!-- ko foreach: messageContainer.getErrorMessages() -->
+    <div role="alert" class="message message-error error">
+        <div data-ui-id="checkout-cart-validationmessages-message-error" data-bind="text: $data"></div>
+    </div>
+    <!--/ko-->
+    <!-- ko foreach: messageContainer.getSuccessMessages() -->
+    <div role="alert" class="message message-success success">
+        <div data-ui-id="checkout-cart-validationmessages-message-success" data-bind="text: $data"></div>
+    </div>
+    <!--/ko-->
+</div>

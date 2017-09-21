@@ -1,0 +1,45 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var \Magento\Catalog\Block\Product\Gallery $block */
+?>
+<?php $_width = $block->getImageWidth(); ?>
+<div class="product-image-popup" style="width:<?= /* @escapeNotVerified */ $_width ?>px;">
+    <div class="buttons-set"><a href="#" class="button" role="close-window"><span><?= /* @escapeNotVerified */ __('Close Window') ?></span></a></div>
+    <?php if ($block->getPreviousImageUrl() || $block->getNextImageUrl()): ?>
+        <div class="nav">
+          <?php if ($_prevUrl = $block->getPreviousImageUrl()): ?>
+              <a href="<?= /* @escapeNotVerified */ $_prevUrl ?>" class="prev">&laquo; <?= /* @escapeNotVerified */ __('Prev') ?></a>
+          <?php endif; ?>
+          <?php if ($_nextUrl = $block->getNextImageUrl()): ?>
+              <a href="<?= /* @escapeNotVerified */ $_nextUrl ?>" class="next"><?= /* @escapeNotVerified */ __('Next') ?> &raquo;</a>
+          <?php endif; ?>
+        </div>
+    <?php endif; ?>
+    <?php if ($_imageTitle = $block->escapeHtml($block->getCurrentImage()->getLabel())): ?>
+        <h1 class="image-label"><?= /* @escapeNotVerified */ $_imageTitle ?></h1>
+    <?php endif; ?>
+    <?php
+        $imageUrl = $this->helper('Magento\Catalog\Helper\Image')
+            ->init($block->getProduct(), 'product_page_image_large')
+            ->setImageFile($block->getImageFile())
+            ->getUrl();
+    ?>
+    <img src="<?= /* @escapeNotVerified */ $imageUrl ?>"<?php if ($_width): ?> width="<?= /* @escapeNotVerified */ $_width ?>"<?php endif; ?> alt="<?= $block->escapeHtml($block->getCurrentImage()->getLabel()) ?>" title="<?= $block->escapeHtml($block->getCurrentImage()->getLabel()) ?>" id="product-gallery-image" class="image" data-mage-init='{"catalogGallery":{}}'/>
+    <div class="buttons-set"><a href="#" class="button" role="close-window"><span><?= /* @escapeNotVerified */ __('Close Window') ?></span></a></div>
+    <?php if ($block->getPreviousImageUrl() || $block->getNextImageUrl()): ?>
+        <div class="nav">
+          <?php if ($_prevUrl = $block->getPreviousImageUrl()): ?>
+              <a href="<?= /* @escapeNotVerified */ $_prevUrl ?>" class="prev">&laquo; <?= /* @escapeNotVerified */ __('Prev') ?></a>
+          <?php endif; ?>
+          <?php if ($_nextUrl = $block->getNextImageUrl()): ?>
+              <a href="<?= /* @escapeNotVerified */ $_nextUrl ?>" class="next"><?= /* @escapeNotVerified */ __('Next') ?> &raquo;</a>
+          <?php endif; ?>
+        </div>
+    <?php endif; ?>
+</div>

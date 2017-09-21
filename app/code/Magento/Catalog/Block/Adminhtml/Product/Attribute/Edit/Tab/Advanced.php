@@ -1,27 +1,10 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
 
 /**
  * Product attribute add/edit form main tab
@@ -31,9 +14,15 @@
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab;
 
 use Magento\Backend\Block\Widget\Form\Generic;
-use Magento\Backend\Model\Config\Source\Yesno;
+use Magento\Config\Model\Config\Source\Yesno;
+use Magento\Eav\Block\Adminhtml\Attribute\PropertyLocker;
 use Magento\Eav\Helper\Data;
+use Magento\Framework\App\ObjectManager;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Advanced extends Generic
 {
     /**
@@ -49,11 +38,22 @@ class Advanced extends Generic
     protected $_yesNo;
 
     /**
+     * @var array
+     */
+    protected $disableScopeChangeList;
+
+    /**
+     * @var PropertyLocker
+     */
+    private $propertyLocker;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param Yesno $yesNo
      * @param Data $eavData
+     * @param array $disableScopeChangeList
      * @param array $data
      */
     public function __construct(
@@ -62,10 +62,12 @@ class Advanced extends Generic
         \Magento\Framework\Data\FormFactory $formFactory,
         Yesno $yesNo,
         Data $eavData,
-        array $data = array()
+        array $disableScopeChangeList = ['sku'],
+        array $data = []
     ) {
         $this->_yesNo = $yesNo;
         $this->_eavData = $eavData;
+        $this->disableScopeChangeList = $disableScopeChangeList;
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -73,18 +75,19 @@ class Advanced extends Generic
      * Adding product form elements for editing attribute
      *
      * @return $this
+     * @SuppressWarnings(PHPMD)
      */
     protected function _prepareForm()
     {
         $attributeObject = $this->getAttributeObject();
 
         $form = $this->_formFactory->create(
-            array('data' => array('id' => 'edit_form', 'action' => $this->getData('action'), 'method' => 'post'))
+            ['data' => ['id' => 'edit_form', 'action' => $this->getData('action'), 'method' => 'post']]
         );
 
         $fieldset = $form->addFieldset(
             'advanced_fieldset',
-            array('legend' => __('Advanced Attribute Properties'), 'collapsable' => true)
+            ['legend' => __('Advanced Attribute Properties'), 'collapsable' => true]
         );
 
         $yesno = $this->_yesNo->toOptionArray();
@@ -96,87 +99,121 @@ class Advanced extends Generic
         $fieldset->addField(
             'attribute_code',
             'text',
-            array(
+            [
                 'name' => 'attribute_code',
                 'label' => __('Attribute Code'),
                 'title' => __('Attribute Code'),
                 'note' => __(
-                    'For internal use. Must be unique with no spaces. Maximum length of attribute code must be less than %1 symbols',
+                    'This is used internally. Make sure you don\'t use spaces or more than %1 symbols.',
                     \Magento\Eav\Model\Entity\Attribute::ATTRIBUTE_CODE_MAX_LENGTH
                 ),
                 'class' => $validateClass
-            )
+            ]
         );
 
         $fieldset->addField(
             'default_value_text',
             'text',
-            array(
+            [
                 'name' => 'default_value_text',
                 'label' => __('Default Value'),
                 'title' => __('Default Value'),
                 'value' => $attributeObject->getDefaultValue()
-            )
+            ]
         );
 
         $fieldset->addField(
             'default_value_yesno',
             'select',
-            array(
+            [
                 'name' => 'default_value_yesno',
                 'label' => __('Default Value'),
                 'title' => __('Default Value'),
                 'values' => $yesno,
                 'value' => $attributeObject->getDefaultValue()
-            )
+            ]
         );
 
-        $dateFormat = $this->_localeDate->getDateFormat(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT);
+        $dateFormat = $this->_localeDate->getDateFormat(\IntlDateFormatter::SHORT);
         $fieldset->addField(
             'default_value_date',
             'date',
-            array(
+            [
                 'name' => 'default_value_date',
                 'label' => __('Default Value'),
                 'title' => __('Default Value'),
-                'image' => $this->getViewFileUrl('images/grid-cal.gif'),
                 'value' => $attributeObject->getDefaultValue(),
                 'date_format' => $dateFormat
-            )
+            ]
         );
 
         $fieldset->addField(
             'default_value_textarea',
             'textarea',
-            array(
+            [
                 'name' => 'default_value_textarea',
                 'label' => __('Default Value'),
                 'title' => __('Default Value'),
                 'value' => $attributeObject->getDefaultValue()
-            )
+            ]
         );
 
         $fieldset->addField(
             'is_unique',
             'select',
-            array(
+            [
                 'name' => 'is_unique',
                 'label' => __('Unique Value'),
                 'title' => __('Unique Value (not shared with other products)'),
-                'note' => __('Not shared with other products'),
+                'note' => __('Not shared with other products.'),
                 'values' => $yesno
-            )
+            ]
         );
 
         $fieldset->addField(
             'frontend_class',
             'select',
-            array(
+            [
                 'name' => 'frontend_class',
                 'label' => __('Input Validation for Store Owner'),
                 'title' => __('Input Validation for Store Owner'),
                 'values' => $this->_eavData->getFrontendClasses($attributeObject->getEntityType()->getEntityTypeCode())
-            )
+            ]
+        );
+
+        $fieldset->addField(
+            'is_used_in_grid',
+            'select',
+            [
+                'name' => 'is_used_in_grid',
+                'label' => __('Add to Column Options'),
+                'title' => __('Add to Column Options'),
+                'values' => $yesno,
+                'value' => $attributeObject->getData('is_used_in_grid') ?: 1,
+                'note' => __('Select "Yes" to add this attribute to the list of column options in the product grid.'),
+            ]
+        );
+
+        $fieldset->addField(
+            'is_visible_in_grid',
+            'hidden',
+            [
+                'name' => 'is_visible_in_grid',
+                'value' => $attributeObject->getData('is_visible_in_grid') ?: 1,
+            ]
+        );
+
+        $fieldset->addField(
+            'is_filterable_in_grid',
+            'select',
+            [
+                'name' => 'is_filterable_in_grid',
+                'label' => __('Use in Filter Options'),
+                'title' => __('Use in Filter Options'),
+                'values' => $yesno,
+                'value' => $attributeObject->getData('is_filterable_in_grid') ?: 1,
+                'note' => __('Select "Yes" to add this attribute to the list of filter options in the product grid.'),
+            ]
         );
 
         if ($attributeObject->getId()) {
@@ -186,32 +223,36 @@ class Advanced extends Generic
             }
         }
 
-        $scopes = array(
-            \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_STORE => __('Store View'),
-            \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_WEBSITE => __('Website'),
-            \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_GLOBAL => __('Global')
-        );
+        $scopes = [
+            \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE => __('Store View'),
+            \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_WEBSITE => __('Website'),
+            \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_GLOBAL => __('Global'),
+        ];
 
         if ($attributeObject->getAttributeCode() == 'status' || $attributeObject->getAttributeCode() == 'tax_class_id'
         ) {
-            unset($scopes[\Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_STORE]);
+            unset($scopes[\Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE]);
         }
 
         $fieldset->addField(
             'is_global',
             'select',
-            array(
+            [
                 'name' => 'is_global',
                 'label' => __('Scope'),
                 'title' => __('Scope'),
-                'note' => __('Declare attribute value saving scope'),
+                'note' => __('Declare attribute value saving scope.'),
                 'values' => $scopes
-            ),
+            ],
             'attribute_code'
         );
 
-        $this->_eventManager->dispatch('product_attribute_form_build', array('form' => $form));
+        $this->_eventManager->dispatch('product_attribute_form_build', ['form' => $form]);
+        if (in_array($attributeObject->getAttributeCode(), $this->disableScopeChangeList)) {
+            $form->getElement('is_global')->setDisabled(1);
+        }
         $this->setForm($form);
+        $this->getPropertyLocker()->lock($form);
         return $this;
     }
 
@@ -234,5 +275,18 @@ class Advanced extends Generic
     private function getAttributeObject()
     {
         return $this->_coreRegistry->registry('entity_attribute');
+    }
+
+    /**
+     * Get property locker
+     *
+     * @return PropertyLocker
+     */
+    private function getPropertyLocker()
+    {
+        if (null === $this->propertyLocker) {
+            $this->propertyLocker = ObjectManager::getInstance()->get(PropertyLocker::class);
+        }
+        return $this->propertyLocker;
     }
 }

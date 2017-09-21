@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<root>
+    <node>
+        <entity>entity_value1</entity>
+        <subnode id="my_id1" some_attribute="attribute_value1"/>
+        <subnode id="my_id2" some_attribute="attribute_value">
+            <child>value</child>
+        </subnode>
+    </node>
+    <other_node id="id1">
+        <child identifier="id1"/>
+    </other_node>
+</root>

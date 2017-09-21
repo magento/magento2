@@ -1,0 +1,6 @@
+sku,product_type,store_view_code,name,price,attribute_set_code,categories
+simple1,simple,fixturestore,"simple 1",25,Default,"Default Category/Category 1"
+simple1,simple,,"simple 1",25,Default,"Default Category/Category 1"
+simple2,simple,fixturestore,"simple 2",34,Default,"Default Category/Category 1"
+simple2,simple,,"simple 2",34,Default,"Default Category/Category 1"
+simple3,simple,,"simple 3",58,Default,"Default Category/Category 1"

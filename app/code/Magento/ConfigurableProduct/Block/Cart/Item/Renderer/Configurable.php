@@ -1,34 +1,19 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Block\Cart\Item\Renderer;
 
 use Magento\Catalog\Model\Config\Source\Product\Thumbnail as ThumbnailSource;
 use Magento\Checkout\Block\Cart\Item\Renderer;
-use Magento\Framework\View\Block\IdentityInterface;
+use Magento\Framework\DataObject\IdentityInterface;
 
 /**
  * Shopping cart item render block for configurable products.
+ *
+ * @api
+ * @since 100.0.2
  */
 class Configurable extends Renderer implements IdentityInterface
 {
@@ -38,39 +23,9 @@ class Configurable extends Renderer implements IdentityInterface
     const CONFIG_THUMBNAIL_SOURCE = 'checkout/cart/configurable_product_image';
 
     /**
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Catalog\Helper\Product\Configuration $productConfig
-     * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Catalog\Helper\Image $imageHelper
-     * @param \Magento\Core\Helper\Url $urlHelper
-     * @param \Magento\Framework\Message\ManagerInterface $messageManager
-     * @param array $data
-     */
-    public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Catalog\Helper\Product\Configuration $productConfig,
-        \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Catalog\Helper\Image $imageHelper,
-        \Magento\Core\Helper\Url $urlHelper,
-        \Magento\Framework\Message\ManagerInterface $messageManager,
-        array $data = array()
-    ) {
-        parent::__construct(
-            $context,
-            $productConfig,
-            $checkoutSession,
-            $imageHelper,
-            $urlHelper,
-            $messageManager,
-            $data
-        );
-        $this->_isScopePrivate = true;
-    }
-
-    /**
      * Get item configurable child product
      *
-     * @return \Magento\Catalog\Model\Product
+     * @return \Magento\Catalog\Model\Product|null
      */
     public function getChildProduct()
     {
@@ -112,8 +67,9 @@ class Configurable extends Renderer implements IdentityInterface
         if ($this->_scopeConfig->getValue(
             self::CONFIG_THUMBNAIL_SOURCE,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        ) == ThumbnailSource::OPTION_USE_PARENT_IMAGE ||
-            !($this->getChildProduct()->getThumbnail() && $this->getChildProduct()->getThumbnail() != 'no_selection')
+        ) == ThumbnailSource::OPTION_USE_PARENT_IMAGE
+          || !($this->getChildProduct()
+          && $this->getChildProduct()->getThumbnail() && $this->getChildProduct()->getThumbnail() != 'no_selection')
         ) {
             $product = $this->getProduct();
         } else {

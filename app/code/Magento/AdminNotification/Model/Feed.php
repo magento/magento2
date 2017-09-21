@@ -1,32 +1,19 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\AdminNotification\Model;
+
+use Magento\Framework\Config\ConfigOptionsListConstants;
 
 /**
  * AdminNotification Feed model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
+ * @since 100.0.2
  */
 class Feed extends \Magento\Framework\Model\AbstractModel
 {
@@ -56,26 +43,62 @@ class Feed extends \Magento\Framework\Model\AbstractModel
     protected $_inboxFactory;
 
     /**
+     * @var \Magento\Framework\HTTP\Adapter\CurlFactory
+     *
+     */
+    protected $curlFactory;
+
+    /**
+     * Deployment configuration
+     *
+     * @var \Magento\Framework\App\DeploymentConfig
+     */
+    protected $_deploymentConfig;
+
+    /**
+     * @var \Magento\Framework\App\ProductMetadataInterface
+     */
+    protected $productMetadata;
+
+    /**
+     * @var \Magento\Framework\UrlInterface
+     */
+    protected $urlBuilder;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Backend\App\ConfigInterface $backendConfig
-     * @param \Magento\AdminNotification\Model\InboxFactory $inboxFactory
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param InboxFactory $inboxFactory
+     * @param \Magento\Framework\HTTP\Adapter\CurlFactory $curlFactory
+     * @param \Magento\Framework\App\DeploymentConfig $deploymentConfig
+     * @param \Magento\Framework\App\ProductMetadataInterface $productMetadata
+     * @param \Magento\Framework\UrlInterface $urlBuilder
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Backend\App\ConfigInterface $backendConfig,
         \Magento\AdminNotification\Model\InboxFactory $inboxFactory,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
-        array $data = array()
+        \Magento\Framework\HTTP\Adapter\CurlFactory $curlFactory,
+        \Magento\Framework\App\DeploymentConfig $deploymentConfig,
+        \Magento\Framework\App\ProductMetadataInterface $productMetadata,
+        \Magento\Framework\UrlInterface $urlBuilder,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        array $data = []
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
-        $this->_backendConfig = $backendConfig;
-        $this->_inboxFactory = $inboxFactory;
+        $this->_backendConfig    = $backendConfig;
+        $this->_inboxFactory     = $inboxFactory;
+        $this->curlFactory       = $curlFactory;
+        $this->_deploymentConfig = $deploymentConfig;
+        $this->productMetadata   = $productMetadata;
+        $this->urlBuilder        = $urlBuilder;
     }
 
     /**
@@ -95,7 +118,7 @@ class Feed extends \Magento\Framework\Model\AbstractModel
     public function getFeedUrl()
     {
         $httpPath = $this->_backendConfig->isSetFlag(self::XML_USE_HTTPS_PATH) ? 'https://' : 'http://';
-        if (is_null($this->_feedUrl)) {
+        if ($this->_feedUrl === null) {
             $this->_feedUrl = $httpPath . $this->_backendConfig->getValue(self::XML_FEED_URL_PATH);
         }
         return $this->_feedUrl;
@@ -112,19 +135,24 @@ class Feed extends \Magento\Framework\Model\AbstractModel
             return $this;
         }
 
-        $feedData = array();
+        $feedData = [];
 
         $feedXml = $this->getFeedData();
 
+        $installDate = strtotime($this->_deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_INSTALL_DATE));
+
         if ($feedXml && $feedXml->channel && $feedXml->channel->item) {
             foreach ($feedXml->channel->item as $item) {
-                $feedData[] = array(
-                    'severity' => (int)$item->severity,
-                    'date_added' => $this->getDate((string)$item->pubDate),
-                    'title' => (string)$item->title,
-                    'description' => (string)$item->description,
-                    'url' => (string)$item->link
-                );
+                $itemPublicationDate = strtotime((string)$item->pubDate);
+                if ($installDate <= $itemPublicationDate) {
+                    $feedData[] = [
+                        'severity' => (int)$item->severity,
+                        'date_added' => date('Y-m-d H:i:s', $itemPublicationDate),
+                        'title' => (string)$item->title,
+                        'description' => (string)$item->description,
+                        'url' => (string)$item->link,
+                    ];
+                }
             }
 
             if ($feedData) {
@@ -134,17 +162,6 @@ class Feed extends \Magento\Framework\Model\AbstractModel
         $this->setLastUpdate();
 
         return $this;
-    }
-
-    /**
-     * Retrieve DB date from RSS date
-     *
-     * @param string $rssDate
-     * @return string YYYY-MM-DD YY:HH:SS
-     */
-    public function getDate($rssDate)
-    {
-        return gmdate('Y-m-d H:i:s', strtotime($rssDate));
     }
 
     /**
@@ -185,8 +202,16 @@ class Feed extends \Magento\Framework\Model\AbstractModel
      */
     public function getFeedData()
     {
-        $curl = new \Magento\Framework\HTTP\Adapter\Curl();
-        $curl->setConfig(array('timeout' => 2));
+        $curl = $this->curlFactory->create();
+        $curl->setConfig(
+            [
+                'timeout'   => 2,
+                'useragent' => $this->productMetadata->getName()
+                    . '/' . $this->productMetadata->getVersion()
+                    . ' (' . $this->productMetadata->getEdition() . ')',
+                'referer'   => $this->urlBuilder->getUrl('*/*/*')
+            ]
+        );
         $curl->write(\Zend_Http_Client::GET, $this->getFeedUrl(), '1.0');
         $data = $curl->read();
         if ($data === false) {
@@ -206,6 +231,8 @@ class Feed extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Retrieve feed as XML element
+     *
      * @return \SimpleXMLElement
      */
     public function getFeedXml()

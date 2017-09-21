@@ -1,29 +1,11 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Option\Type;
 
-use Magento\Framework\Model\Exception;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Catalog product option select type
@@ -43,23 +25,23 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     /**
      * Magento string lib
      *
-     * @var \Magento\Framework\Stdlib\String
+     * @var \Magento\Framework\Stdlib\StringUtils
      */
     protected $string;
 
     /**
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\Escaper $escaper
      * @param array $data
      */
     public function __construct(
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\Stdlib\String $string,
+        \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\Framework\Escaper $escaper,
-        array $data = array()
+        array $data = []
     ) {
         $this->string = $string;
         $this->_escaper = $escaper;
@@ -71,7 +53,7 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      *
      * @param array $values All product option values, i.e. array (option_id => mixed, option_id => mixed...)
      * @return $this
-     * @throws Exception
+     * @throws LocalizedException
      */
     public function validateUserValue($values)
     {
@@ -82,13 +64,13 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
 
         if (empty($value) && $option->getIsRequire() && !$this->getSkipCheckRequiredOption()) {
             $this->setIsValid(false);
-            throw new Exception(__('Please specify the product\'s required option(s).'));
+            throw new LocalizedException(__('Please specify product\'s required option(s).'));
         }
         if (!$this->_isSingleSelection()) {
             $valuesCollection = $option->getOptionValuesByOptionId($value, $this->getProduct()->getStoreId())->load();
             if ($valuesCollection->count() != count($value)) {
                 $this->setIsValid(false);
-                throw new Exception(__('Please specify the product\'s required option(s).'));
+                throw new LocalizedException(__('Please specify product\'s required option(s).'));
             }
         }
         return $this;
@@ -136,7 +118,7 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     /**
      * Return currently unavailable product configuration message
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     protected function _getWrongConfigurationMessage()
     {
@@ -192,7 +174,7 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      */
     public function parseOptionValue($optionValue, $productOptionValues)
     {
-        $values = array();
+        $values = [];
         if (!$this->_isSingleSelection()) {
             foreach (explode(',', $optionValue) as $value) {
                 $value = trim($value);
@@ -282,7 +264,7 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         $option = $this->getOption();
 
         if (!$this->_isSingleSelection()) {
-            $skus = array();
+            $skus = [];
             foreach (explode(',', $optionValue) as $value) {
                 $optionSku = $option->getValueById($value);
                 if ($optionSku) {
@@ -319,10 +301,10 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      */
     protected function _isSingleSelection()
     {
-        $single = array(
-            \Magento\Catalog\Model\Product\Option::OPTION_TYPE_DROP_DOWN,
-            \Magento\Catalog\Model\Product\Option::OPTION_TYPE_RADIO
-        );
+        $single = [
+            \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_DROP_DOWN,
+            \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_RADIO,
+        ];
         return in_array($this->getOption()->getType(), $single);
     }
 }

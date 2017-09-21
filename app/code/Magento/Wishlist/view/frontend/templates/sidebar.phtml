@@ -1,0 +1,87 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var \Magento\Wishlist\Block\Customer\Sidebar $block */
+?>
+<?php
+$wishlistHelper = $this->helper('Magento\Wishlist\Helper\Data');
+?>
+<?php if ($wishlistHelper->isAllow()) : ?>
+    <div class="block block-wishlist" data-bind="scope: 'wishlist'">
+        <div class="block-title">
+            <strong role="heading" aria-level="2"><?= $block->escapeHtml($block->getTitle()) ?></strong>
+            <!-- ko if: wishlist().counter -->
+            <span data-bind="text: wishlist().counter" class="counter"></span>
+            <!-- /ko -->
+        </div>
+        <div class="block-content">
+            <strong class="subtitle"><?= $block->escapeHtml(__('Last Added Items')) ?></strong>
+            <!-- ko if: wishlist().counter -->
+                <ol class="product-items no-display" id="wishlist-sidebar" data-bind="foreach: wishlist().items, css: {'no-display': null}">
+                    <li class="product-item">
+                        <div class="product-item-info">
+                            <a class="product-item-photo" data-bind="attr: { href: product_url, title: product_name }">
+                                <!-- ko template: {name: $data.image.template, data: $data.image} --><!-- /ko -->
+                            </a>
+                            <div class="product-item-details">
+                                <strong class="product-item-name">
+                                    <a data-bind="attr: { href: product_url }" class="product-item-link">
+                                        <span data-bind="text: product_name"></span>
+                                    </a>
+                                </strong>
+                                <div data-bind="html: product_price"></div>
+                                <div class="product-item-actions">
+                                    <!-- ko if: product_is_saleable_and_visible -->
+                                    <div class="actions-primary">
+                                        <!-- ko if: product_has_required_options -->
+                                        <a href="#" data-bind="attr: {'data-post': add_to_cart_params}" class="action tocart primary"><span><?= $block->escapeHtml(__('Add to Cart')) ?></span></a>
+                                        <!-- /ko -->
+                                        <!-- ko ifnot: product_has_required_options -->
+                                            <button type="button" class="action tocart primary" data-bind="attr: {'data-post': add_to_cart_params}"><span><?= $block->escapeHtml(__('Add to Cart')) ?></span></button>
+                                        <!-- /ko -->
+                                    </div>
+                                    <!-- /ko -->
+                                    <div class="actions-secondary">
+                                        <a href="#"  data-bind="attr: {'data-post': delete_item_params}"
+                                           title="<?= $block->escapeHtmlAttr(__('Remove This Item')) ?>"
+                                           class="btn-remove action delete">
+                                            <span><?= $block->escapeHtml(__('Remove This Item')) ?></span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ol>
+                <div class="actions-toolbar no-display" data-bind="css: {'no-display': null}">
+                    <div class="primary">
+                        <a class="action details"
+                           href="<?= $block->escapeUrl($this->helper('Magento\Wishlist\Helper\Data')->getListUrl()) ?>"
+                           title="<?= $block->escapeHtmlAttr(__('Go to Wish List')) ?>"><span><?= $block->escapeHtml(__('Go to Wish List')) ?></span></a>
+                    </div>
+                </div>
+            <!-- /ko -->
+            <!-- ko ifnot: wishlist().counter -->
+                <div class="empty"><?= $block->escapeHtml(__('You have no items in your wish list.')) ?></div>
+            <!-- /ko -->
+        </div>
+    </div>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "wishlist": {
+                        "component": "Magento_Wishlist/js/view/wishlist"
+                    }
+                }
+            }
+        }
+    }
+</script>
+<?php endif ?>

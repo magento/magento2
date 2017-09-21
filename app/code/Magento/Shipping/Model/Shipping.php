@@ -1,31 +1,18 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Shipping\Model;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Quote\Model\Quote\Address\RateCollectorInterface;
+use Magento\Quote\Model\Quote\Address\RateRequestFactory;
 use Magento\Sales\Model\Order\Shipment;
-use Magento\Sales\Model\Quote\Address\RateCollectorInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Shipping implements RateCollectorInterface
 {
     /**
@@ -77,7 +64,7 @@ class Shipping implements RateCollectorInterface
     protected $_rateResultFactory;
 
     /**
-     * @var \Magento\Sales\Model\Quote\Address\RateRequestFactory
+     * @var \Magento\Quote\Model\Quote\Address\RateRequestFactory
      */
     protected $_shipmentRequestFactory;
 
@@ -92,6 +79,16 @@ class Shipping implements RateCollectorInterface
     protected $mathDivision;
 
     /**
+     * @var \Magento\CatalogInventory\Api\StockRegistryInterface
+     */
+    protected $stockRegistry;
+
+    /**
+     * @var RateRequestFactory
+     */
+    private $rateRequestFactory;
+
+    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Shipping\Model\Config $shippingConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -100,6 +97,10 @@ class Shipping implements RateCollectorInterface
      * @param \Magento\Shipping\Model\Shipment\RequestFactory $shipmentRequestFactory
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
      * @param \Magento\Framework\Math\Division $mathDivision
+     * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
+     * @param RateRequestFactory $rateRequestFactory
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -109,7 +110,9 @@ class Shipping implements RateCollectorInterface
         \Magento\Shipping\Model\Rate\ResultFactory $rateResultFactory,
         \Magento\Shipping\Model\Shipment\RequestFactory $shipmentRequestFactory,
         \Magento\Directory\Model\RegionFactory $regionFactory,
-        \Magento\Framework\Math\Division $mathDivision
+        \Magento\Framework\Math\Division $mathDivision,
+        \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
+        RateRequestFactory $rateRequestFactory = null
     ) {
         $this->_scopeConfig = $scopeConfig;
         $this->_shippingConfig = $shippingConfig;
@@ -119,6 +122,8 @@ class Shipping implements RateCollectorInterface
         $this->_shipmentRequestFactory = $shipmentRequestFactory;
         $this->_regionFactory = $regionFactory;
         $this->mathDivision = $mathDivision;
+        $this->stockRegistry = $stockRegistry;
+        $this->rateRequestFactory = $rateRequestFactory ?: ObjectManager::getInstance()->get(RateRequestFactory::class);
     }
 
     /**
@@ -169,11 +174,11 @@ class Shipping implements RateCollectorInterface
     /**
      * Retrieve all methods for supplied shipping data
      *
-     * @param \Magento\Sales\Model\Quote\Address\RateRequest $request
+     * @param \Magento\Quote\Model\Quote\Address\RateRequest $request
      * @return $this
      * @todo make it ordered
      */
-    public function collectRates(\Magento\Sales\Model\Quote\Address\RateRequest $request)
+    public function collectRates(\Magento\Quote\Model\Quote\Address\RateRequest $request)
     {
         $storeId = $request->getStoreId();
         if (!$request->getOrig()) {
@@ -217,7 +222,7 @@ class Shipping implements RateCollectorInterface
             }
         } else {
             if (!is_array($limitCarrier)) {
-                $limitCarrier = array($limitCarrier);
+                $limitCarrier = [$limitCarrier];
             }
             foreach ($limitCarrier as $carrierCode) {
                 $carrierConfig = $this->_scopeConfig->getValue(
@@ -239,8 +244,10 @@ class Shipping implements RateCollectorInterface
      * Collect rates of given carrier
      *
      * @param string $carrierCode
-     * @param \Magento\Sales\Model\Quote\Address\RateRequest $request
+     * @param \Magento\Quote\Model\Quote\Address\RateRequest $request
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function collectCarrierRates($carrierCode, $request)
     {
@@ -251,7 +258,7 @@ class Shipping implements RateCollectorInterface
         }
         $carrier->setActiveFlag($this->_availabilityConfigField);
         $result = $carrier->checkAvailableShipCountries($request);
-        if (false !== $result && !$result instanceof \Magento\Sales\Model\Quote\Address\RateResult\Error) {
+        if (false !== $result && !$result instanceof \Magento\Quote\Model\Quote\Address\RateResult\Error) {
             $result = $carrier->proccessAdditionalValidation($request);
         }
         /*
@@ -259,11 +266,11 @@ class Shipping implements RateCollectorInterface
          * if the delivery country is not within specific countries
          */
         if (false !== $result) {
-            if (!$result instanceof \Magento\Sales\Model\Quote\Address\RateResult\Error) {
+            if (!$result instanceof \Magento\Quote\Model\Quote\Address\RateResult\Error) {
                 if ($carrier->getConfigData('shipment_requesttype')) {
                     $packages = $this->composePackagesForCarrier($carrier, $request);
                     if (!empty($packages)) {
-                        $sumResults = array();
+                        $sumResults = [];
                         foreach ($packages as $weight => $packageCount) {
                             $request->setPackageWeight($weight);
                             $result = $carrier->collectRates($request);
@@ -275,7 +282,7 @@ class Shipping implements RateCollectorInterface
                             $sumResults[] = $result;
                         }
                         if (!empty($sumResults) && count($sumResults) > 1) {
-                            $result = array();
+                            $result = [];
                             foreach ($sumResults as $res) {
                                 if (empty($result)) {
                                     $result = $res;
@@ -305,7 +312,7 @@ class Shipping implements RateCollectorInterface
                 return $this;
             }
             // sort rates by price
-            if (method_exists($result, 'sortRatesByPrice')) {
+            if (method_exists($result, 'sortRatesByPrice') && is_callable([$result, 'sortRatesByPrice'])) {
                 $result->sortRatesByPrice();
             }
             $this->getResult()->append($result);
@@ -318,19 +325,22 @@ class Shipping implements RateCollectorInterface
      * Divides order into items and items into parts if it's necessary
      *
      * @param \Magento\Shipping\Model\Carrier\AbstractCarrier $carrier
-     * @param \Magento\Sales\Model\Quote\Address\RateRequest $request
+     * @param \Magento\Quote\Model\Quote\Address\RateRequest $request
      * @return array [int, float]
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function composePackagesForCarrier($carrier, $request)
     {
         $allItems = $request->getAllItems();
-        $fullItems = array();
+        $fullItems = [];
 
         $maxWeight = (double)$carrier->getConfigData('max_package_weight');
 
+        /** @var $item \Magento\Quote\Model\Quote\Item */
         foreach ($allItems as $item) {
-            if ($item->getProductType() == \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE &&
-                $item->getProduct()->getShipmentType()
+            if ($item->getProductType() == \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE
+                && $item->getProduct()->getShipmentType()
             ) {
                 continue;
             }
@@ -338,20 +348,24 @@ class Shipping implements RateCollectorInterface
             $qty = $item->getQty();
             $changeQty = true;
             $checkWeight = true;
-            $decimalItems = array();
+            $decimalItems = [];
 
             if ($item->getParentItem()) {
                 if (!$item->getParentItem()->getProduct()->getShipmentType()) {
                     continue;
                 }
-                $qty = $item->getIsQtyDecimal() ? $item->getParentItem()->getQty() : $item->getParentItem()->getQty() *
-                    $item->getQty();
+                $qty = $item->getIsQtyDecimal()
+                    ? $item->getParentItem()->getQty()
+                    : $item->getParentItem()->getQty() * $item->getQty();
             }
 
             $itemWeight = $item->getWeight();
-            if ($item->getIsQtyDecimal() && $item->getProductType() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE
+            if ($item->getIsQtyDecimal()
+                && $item->getProductType() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE
             ) {
-                $stockItem = $item->getProduct()->getStockItem();
+                $productId = $item->getProduct()->getId();
+
+                $stockItem = $this->stockRegistry->getStockItem($productId, $item->getStore()->getWebsiteId());
                 if ($stockItem->getIsDecimalDivided()) {
                     if ($stockItem->getEnableQtyIncrements() && $stockItem->getQtyIncrements()) {
                         $itemWeight = $itemWeight * $stockItem->getQtyIncrements();
@@ -361,10 +375,10 @@ class Shipping implements RateCollectorInterface
                         $itemWeight = $itemWeight * $item->getQty();
                         if ($itemWeight > $maxWeight) {
                             $qtyItem = floor($itemWeight / $maxWeight);
-                            $decimalItems[] = array('weight' => $maxWeight, 'qty' => $qtyItem);
+                            $decimalItems[] = ['weight' => $maxWeight, 'qty' => $qtyItem];
                             $weightItem = $this->mathDivision->getExactDivision($itemWeight, $maxWeight);
                             if ($weightItem) {
-                                $decimalItems[] = array('weight' => $weightItem, 'qty' => 1);
+                                $decimalItems[] = ['weight' => $weightItem, 'qty' => 1];
                             }
                             $checkWeight = false;
                         } else {
@@ -377,13 +391,13 @@ class Shipping implements RateCollectorInterface
             }
 
             if ($checkWeight && $maxWeight && $itemWeight > $maxWeight) {
-                return array();
+                return [];
             }
 
-            if ($changeQty &&
-                !$item->getParentItem() &&
-                $item->getIsQtyDecimal() &&
-                $item->getProductType() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE
+            if ($changeQty
+                && !$item->getParentItem()
+                && $item->getIsQtyDecimal()
+                && $item->getProductType() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE
             ) {
                 $qty = 1;
             }
@@ -414,7 +428,7 @@ class Shipping implements RateCollectorInterface
      */
     protected function _makePieces($items, $maxWeight)
     {
-        $pieces = array();
+        $pieces = [];
         if (!empty($items)) {
             $sumWeight = 0;
 
@@ -454,14 +468,14 @@ class Shipping implements RateCollectorInterface
     /**
      * Collect rates by address
      *
-     * @param \Magento\Framework\Object $address
+     * @param \Magento\Framework\DataObject $address
      * @param null|bool|array $limitCarrier
      * @return $this
      */
-    public function collectRatesByAddress(\Magento\Framework\Object $address, $limitCarrier = null)
+    public function collectRatesByAddress(\Magento\Framework\DataObject $address, $limitCarrier = null)
     {
-        /** @var $request \Magento\Sales\Model\Quote\Address\RateRequest */
-        $request = $this->_shipmentRequestFactory->create();
+        /** @var $request \Magento\Quote\Model\Quote\Address\RateRequest */
+        $request = $this->rateRequestFactory->create();
         $request->setAllItems($address->getAllItems());
         $request->setDestCountryId($address->getCountryId());
         $request->setDestRegionId($address->getRegionId());
@@ -471,10 +485,13 @@ class Shipping implements RateCollectorInterface
         $request->setPackageWeight($address->getWeight());
         $request->setFreeMethodWeight($address->getFreeMethodWeight());
         $request->setPackageQty($address->getItemQty());
-        $request->setStoreId($this->_storeManager->getStore()->getId());
-        $request->setWebsiteId($this->_storeManager->getStore()->getWebsiteId());
-        $request->setBaseCurrency($this->_storeManager->getStore()->getBaseCurrency());
-        $request->setPackageCurrency($this->_storeManager->getStore()->getCurrentCurrency());
+
+        /** @var \Magento\Store\Api\Data\StoreInterface $store */
+        $store = $this->_storeManager->getStore();
+        $request->setStoreId($store->getId());
+        $request->setWebsiteId($store->getWebsiteId());
+        $request->setBaseCurrency($store->getBaseCurrency());
+        $request->setPackageCurrency($store->getCurrentCurrency());
         $request->setLimitCarrier($limitCarrier);
 
         $request->setBaseSubtotalInclTax($address->getBaseSubtotalInclTax());

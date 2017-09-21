@@ -1,0 +1,250 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Components -> Modals
+//  _____________________________________________
+
+//
+//  Variables
+//  ---------------------------------------------
+
+@modal-title__color: @text__color;
+
+@modal-title-span__font-size: @font-size__base;
+
+@modal-popup-title__font-size: 2.4rem;
+
+@modal-slide-title__font-size: 2.1rem;
+
+@modal-action-close__color: @color-brownie-vanilla;
+@modal-action-close__font-size: 2rem;
+@modal-action-close__active__font-size: 1.8rem;
+@modal-action-close__hover__color: darken(@color-brownie-vanilla, 10%);
+@modal-popup-footer-button__margin: 2rem;
+@modal-popup-footer-button__padding: 1.4rem;
+@modal-popup-footer-button__font-size: 1.5rem;
+@modal-popup-footer-button__color: @color-brownie;
+@modal-popup-colored__background: @color-lazy-sun;
+@modal-popup-colorless__background: @color-white;
+@modal-prompt-message__padding: 2rem;
+
+//
+
+.modal-popup,
+.modal-slide {
+    .action-close {
+        color: @modal-action-close__color;
+        position: absolute;
+        right: 0;
+        top: 0;
+        z-index: 1;
+
+        &:active {
+            transform: none;
+
+            &:before {
+                font-size: @modal-action-close__active__font-size;
+            }
+        }
+
+        &:hover {
+            &:before {
+                color: @modal-action-close__hover__color;
+            }
+        }
+
+        &:before {
+            font-size: @modal-action-close__font-size;
+        }
+
+        &:focus {
+            background-color: transparent;
+        }
+    }
+}
+
+.modal-popup {
+    &.prompt {
+        .prompt-message {
+            padding-bottom: @modal-prompt-message__padding;
+
+            input {
+                width: 100%;
+            }
+        }
+    }
+
+    &.confirm,
+    &.prompt {
+        .modal-inner-wrap {
+            .message {
+                background: @modal-popup-colorless__background;
+            }
+        }
+    }
+
+    &.modal-system-messages {
+        .modal-inner-wrap {
+            background: @modal-popup-colored__background;
+        }
+    }
+
+    &._image-box {
+        .modal-inner-wrap {
+            margin: 5rem auto;
+            max-width: @modal-popup-image-box__max-width;
+            position: static;
+        }
+
+        .thumbnail-preview {
+            padding-bottom: @indent__l;
+            text-align: center;
+
+            .thumbnail-preview-image-block {
+                border: 1px solid @modal-popup-image-box__border-color;
+                margin: 0 auto @indent__base;
+                max-width: @modal-popup-image-box-preview__max-width;
+                padding: @indent__base;
+            }
+
+            .thumbnail-preview-image {
+                max-height: @modal-popup-image-box-preview-image__max-height;
+            }
+        }
+    }
+
+    .modal-title {
+        font-size: @modal-popup-title__font-size;
+        margin-right: @modal-popup-title__font-size + @modal-popup__padding + 1rem;
+    }
+
+    .action-close {
+        padding: @modal-popup__padding @modal-popup__padding;
+
+        &:active {
+            padding-right: @modal-popup__padding + (@modal-action-close__font-size - @modal-action-close__active__font-size) / 3;
+            padding-top: @modal-popup__padding + (@modal-action-close__font-size - @modal-action-close__active__font-size) / 3;
+        }
+    }
+
+    .modal-footer {
+        padding-top: @modal-slide__padding;
+        text-align: right;
+
+        .action-primary {
+            &:extend(.abs-action-secondary all);
+            &:extend(.abs-action-l all);
+        }
+
+        .action-secondary {
+            &:extend(.abs-action-tertiary all);
+            &:extend(.abs-action-l all);
+        }
+    }
+
+    .action-close {
+        padding: @modal-popup__padding;
+
+        &:active,
+        &:focus {
+            background: transparent;
+            padding-right: @modal-popup__padding + (@modal-action-close__font-size - @modal-action-close__active__font-size) / 2;
+            padding-top: @modal-popup__padding + (@modal-action-close__font-size - @modal-action-close__active__font-size) / 2;
+        }
+    }
+}
+
+.modal-slide {
+    .modal-content-new-attribute {
+        -webkit-overflow-scrolling: touch;
+        overflow: auto;
+        padding-bottom: 0;
+
+        iframe {
+            margin-bottom: -@indent__m;
+        }
+    }
+
+    .modal-title {
+        font-size: @modal-slide-title__font-size;
+        margin-right: @modal-slide-title__font-size + @modal-slide__padding + 1rem;
+    }
+
+    .action-close {
+        padding: @modal-slide-header__padding-vertical @modal-slide__padding;
+
+        &:active {
+            padding-right: @modal-slide__padding + (@modal-action-close__font-size - @modal-action-close__active__font-size) / 2;
+            padding-top: @modal-slide-header__padding-vertical + (@modal-action-close__font-size - @modal-action-close__active__font-size) / 2;
+        }
+    }
+
+    .page-main-actions {
+        margin-bottom: @modal-slide-header__padding-vertical - @page-main-actions__padding;
+        margin-top: @modal-slide-header__padding-vertical;
+    }
+
+    .magento-message {
+        padding: 0 @popup__padding__horizontal @popup__padding__vertical;
+        position: relative;
+    }
+
+    .main-col,
+    .magento-message {
+        .insert-title-inner {
+            &:extend(.abs-clearfix all);
+            border-bottom: 1px solid @color-gray68;
+            margin: 0 0 @indent__base;
+            padding-bottom: @indent__xs;
+        }
+
+        .insert-actions {
+            float: right;
+        }
+
+        .title {
+            font-size: @font-size__l;
+            padding-top: @indent__xs;
+        }
+    }
+
+    .main-col,
+    .side-col {
+        float: left;
+        padding-bottom: 0;
+
+        &:after {
+            display: none;
+        }
+    }
+
+    .side-col {
+        width: 20%;
+    }
+
+    .main-col {
+        padding-right: 0;
+        width: 80%;
+    }
+
+    .content-footer {
+        .form-buttons {
+            float: right;
+        }
+    }
+}
+
+.modal-title {
+    font-weight: @font-weight__regular;
+    margin-bottom: 0;
+    min-height: 1em;
+
+    span {
+        font-size: @modal-title-span__font-size;
+        font-style: @font-style__emphasis;
+        margin-left: @indent__s;
+    }
+}

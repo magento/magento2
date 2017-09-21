@@ -1,0 +1,126 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Catalog\Test\Repository\Product\TierPrice">
+        <dataset name="default">
+            <field name="0" xsi:type="array">
+                <item name="price" xsi:type="string">15</item>
+                <item name="website" xsi:type="string">All Websites [USD]</item>
+                <item name="price_qty" xsi:type="string">3</item>
+                <item name="customer_group" xsi:type="array">
+                    <item name="dataset" xsi:type="string">ALL_GROUPS</item>
+                </item>
+            </field>
+            <field name="1" xsi:type="array">
+                <item name="price" xsi:type="string">24</item>
+                <item name="website" xsi:type="string">All Websites [USD]</item>
+                <item name="price_qty" xsi:type="string">15</item>
+                <item name="customer_group" xsi:type="array">
+                    <item name="dataset" xsi:type="string">ALL_GROUPS</item>
+                </item>
+            </field>
+        </dataset>
+
+        <dataset name="more_is_cheaper">
+            <field name="0" xsi:type="array">
+                <item name="price" xsi:type="string">24</item>
+                <item name="website" xsi:type="string">All Websites [USD]</item>
+                <item name="price_qty" xsi:type="string">3</item>
+                <item name="customer_group" xsi:type="array">
+                    <item name="dataset" xsi:type="string">ALL_GROUPS</item>
+                </item>
+            </field>
+            <field name="1" xsi:type="array">
+                <item name="price" xsi:type="string">15</item>
+                <item name="website" xsi:type="string">All Websites [USD]</item>
+                <item name="price_qty" xsi:type="string">30</item>
+                <item name="customer_group" xsi:type="array">
+                    <item name="dataset" xsi:type="string">ALL_GROUPS</item>
+                </item>
+            </field>
+        </dataset>
+
+        <dataset name="MAGETWO-23002">
+            <field name="0" xsi:type="array">
+                <item name="price" xsi:type="string">90</item>
+                <item name="website" xsi:type="string">All Websites [USD]</item>
+                <item name="price_qty" xsi:type="string">2</item>
+                <item name="customer_group" xsi:type="array">
+                    <item name="dataset" xsi:type="string">ALL_GROUPS</item>
+                </item>
+            </field>
+        </dataset>
+
+        <dataset name="general">
+            <field name="0" xsi:type="array">
+                <item name="price" xsi:type="string">80</item>
+                <item name="website" xsi:type="string">All Websites [USD]</item>
+                <item name="price_qty" xsi:type="string">2</item>
+                <item name="customer_group" xsi:type="array">
+                    <item name="dataset" xsi:type="string">General</item>
+                </item>
+            </field>
+        </dataset>
+
+        <dataset name="not_logged_in">
+            <field name="0" xsi:type="array">
+                <item name="price" xsi:type="string">90</item>
+                <item name="website" xsi:type="string">All Websites [USD]</item>
+                <item name="price_qty" xsi:type="string">2</item>
+                <item name="customer_group" xsi:type="array">
+                    <item name="dataset" xsi:type="string">NOT_LOGGED_IN</item>
+                </item>
+            </field>
+        </dataset>
+
+        <dataset name="custom_with_fixed_discount">
+            <field name="0" xsi:type="array">
+                <item name="value_type" xsi:type="string">Fixed</item>
+                <item name="price" xsi:type="string">95</item>
+                <item name="website" xsi:type="string">All Websites [USD]</item>
+                <item name="price_qty" xsi:type="string">5</item>
+                <item name="customer_group" xsi:type="array">
+                    <item name="dataset" xsi:type="string">ALL_GROUPS</item>
+                </item>
+            </field>
+        </dataset>
+
+        <dataset name="custom_with_percentage_discount">
+            <field name="0" xsi:type="array">
+                <item name="value_type" xsi:type="string">Discount</item>
+                <item name="percentage_value" xsi:type="string">3</item>
+                <item name="website" xsi:type="string">All Websites [USD]</item>
+                <item name="price_qty" xsi:type="string">10</item>
+                <item name="customer_group" xsi:type="array">
+                    <item name="dataset" xsi:type="string">ALL_GROUPS</item>
+                </item>
+            </field>
+        </dataset>
+
+        <dataset name="custom_for_qty_1">
+            <field name="0" xsi:type="array">
+                <item name="price" xsi:type="string">5</item>
+                <item name="website" xsi:type="string">All Websites [USD]</item>
+                <item name="price_qty" xsi:type="string">1</item>
+                <item name="customer_group" xsi:type="array">
+                    <item name="dataset" xsi:type="string">ALL_GROUPS</item>
+                </item>
+            </field>
+        </dataset>
+        <dataset name="high_cost">
+            <field name="0" xsi:type="array">
+                <item name="price" xsi:type="string">500000</item>
+                <item name="website" xsi:type="string">All Websites [USD]</item>
+                <item name="price_qty" xsi:type="string">1</item>
+                <item name="customer_group" xsi:type="array">
+                    <item name="dataset" xsi:type="string">ALL_GROUPS</item>
+                </item>
+            </field>
+        </dataset>
+    </repository>
+</config>

@@ -1,27 +1,15 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Catalog\Model\Indexer\Category\Flat;
+
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\EntityManager\MetadataPool;
 
 class AbstractAction
 {
@@ -38,7 +26,7 @@ class AbstractAction
     protected $attributeCodes;
 
     /**
-     * @var \Magento\Framework\App\Resource
+     * @var Resource
      */
     protected $resource;
 
@@ -50,7 +38,7 @@ class AbstractAction
     /**
      * Catalog resource helper
      *
-     * @var \Magento\Catalog\Model\Resource\Helper
+     * @var \Magento\Catalog\Model\ResourceModel\Helper
      */
     protected $resourceHelper;
 
@@ -59,19 +47,37 @@ class AbstractAction
      *
      * @var array
      */
-    protected $columns = array();
+    protected $columns = [];
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface
+     */
+    protected $connection;
+
+    /**
+     * @var \Magento\Framework\EntityManager\EntityMetadata
+     */
+    protected $categoryMetadata;
+
+    /**
+     * Static columns to skip
+     *
+     * @var array
+     */
+    protected $skipStaticColumns = [];
+
+    /**
+     * @param ResourceConnection $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Model\Resource\Helper $resourceHelper
+     * @param \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
+        ResourceConnection $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Model\Resource\Helper $resourceHelper
+        \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
     ) {
         $this->resource = $resource;
+        $this->connection = $resource->getConnection();
         $this->storeManager = $storeManager;
         $this->resourceHelper = $resourceHelper;
         $this->columns = array_merge($this->getStaticColumns(), $this->getEavColumns());
@@ -111,34 +117,9 @@ class AbstractAction
         }
 
         $suffix = sprintf('store_%d', $storeId);
-        $table = $this->getWriteAdapter()->getTableName($this->getTableName('catalog_category_flat_' . $suffix));
+        $table = $this->connection->getTableName($this->getTableName('catalog_category_flat_' . $suffix));
 
         return $table;
-    }
-
-    /**
-     * Retrieve connection for read data
-     *
-     * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     */
-    protected function getReadAdapter()
-    {
-        $writeAdapter = $this->getWriteAdapter();
-        if ($writeAdapter && $writeAdapter->getTransactionLevel() > 0) {
-            // if transaction is started we should use write connection for reading
-            return $writeAdapter;
-        }
-        return $this->resource->getConnection('read');
-    }
-
-    /**
-     * Retrieve connection for write data
-     *
-     * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     */
-    protected function getWriteAdapter()
-    {
-        return $this->resource->getConnection('write');
     }
 
     /**
@@ -149,7 +130,7 @@ class AbstractAction
      */
     protected function getFlatTableStructure($tableName)
     {
-        $table = $this->getWriteAdapter()->newTable(
+        $table = $this->connection->newTable(
             $tableName
         )->setComment(
             sprintf("Catalog Category Flat", $tableName)
@@ -165,36 +146,36 @@ class AbstractAction
                 $fieldName,
                 $fieldProp['type'][0],
                 $fieldProp['type'][1],
-                array(
+                [
                     'nullable' => $fieldProp['nullable'],
                     'unsigned' => $fieldProp['unsigned'],
                     'default' => $default,
                     'primary' => isset($fieldProp['primary']) ? $fieldProp['primary'] : false
-                ),
+                ],
                 $fieldProp['comment'] != '' ? $fieldProp['comment'] : ucwords(str_replace('_', ' ', $fieldName))
             );
         }
 
         // Adding indexes
         $table->addIndex(
-            $this->getWriteAdapter()->getIndexName($tableName, array('entity_id')),
-            array('entity_id'),
-            array('type' => 'primary')
+            $this->connection->getIndexName($tableName, ['entity_id']),
+            ['entity_id'],
+            ['type' => 'primary']
         );
         $table->addIndex(
-            $this->getWriteAdapter()->getIndexName($tableName, array('store_id')),
-            array('store_id'),
-            array('type' => 'index')
+            $this->connection->getIndexName($tableName, ['store_id']),
+            ['store_id'],
+            ['type' => 'index']
         );
         $table->addIndex(
-            $this->getWriteAdapter()->getIndexName($tableName, array('path')),
-            array('path'),
-            array('type' => 'index')
+            $this->connection->getIndexName($tableName, ['path']),
+            ['path'],
+            ['type' => 'index']
         );
         $table->addIndex(
-            $this->getWriteAdapter()->getIndexName($tableName, array('level')),
-            array('level'),
-            array('type' => 'index')
+            $this->connection->getIndexName($tableName, ['level']),
+            ['level'],
+            ['type' => 'index']
         );
 
         return $table;
@@ -204,17 +185,17 @@ class AbstractAction
      * Return array of static columns
      *
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function getStaticColumns()
     {
-        $columns = array();
-        $columnsToSkip = array('entity_type_id', 'attribute_set_id');
-        $describe = $this->getReadAdapter()->describeTable(
-            $this->getReadAdapter()->getTableName($this->getTableName('catalog_category_entity'))
+        $columns = [];
+        $describe = $this->connection->describeTable(
+            $this->connection->getTableName($this->getTableName('catalog_category_entity'))
         );
 
         foreach ($describe as $column) {
-            if (in_array($column['COLUMN_NAME'], $columnsToSkip)) {
+            if (in_array($column['COLUMN_NAME'], $this->getSkipStaticColumns())) {
                 continue;
             }
             $isUnsigned = '';
@@ -256,21 +237,21 @@ class AbstractAction
                     $isUnsigned = null;
                     break;
             }
-            $columns[$column['COLUMN_NAME']] = array(
-                'type' => array($ddlType, $options),
+            $columns[$column['COLUMN_NAME']] = [
+                'type' => [$ddlType, $options],
                 'unsigned' => $isUnsigned,
                 'nullable' => $column['NULLABLE'],
                 'default' => $column['DEFAULT'] === null ? false : $column['DEFAULT'],
-                'comment' => $column['COLUMN_NAME']
-            );
+                'comment' => $column['COLUMN_NAME'],
+            ];
         }
-        $columns['store_id'] = array(
-            'type' => array(\Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT, 5),
+        $columns['store_id'] = [
+            'type' => [\Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT, 5],
             'unsigned' => true,
             'nullable' => false,
             'default' => '0',
-            'comment' => 'Store Id'
-        );
+            'comment' => 'Store Id',
+        ];
 
         return $columns;
     }
@@ -282,57 +263,57 @@ class AbstractAction
      */
     protected function getEavColumns()
     {
-        $columns = array();
+        $columns = [];
         foreach ($this->getAttributes() as $attribute) {
             if ($attribute['backend_type'] == 'static') {
                 continue;
             }
-            $columns[$attribute['attribute_code']] = array();
+            $columns[$attribute['attribute_code']] = [];
             switch ($attribute['backend_type']) {
                 case 'varchar':
-                    $columns[$attribute['attribute_code']] = array(
-                        'type' => array(\Magento\Framework\DB\Ddl\Table::TYPE_TEXT, 255),
+                    $columns[$attribute['attribute_code']] = [
+                        'type' => [\Magento\Framework\DB\Ddl\Table::TYPE_TEXT, 255],
                         'unsigned' => null,
                         'nullable' => true,
                         'default' => null,
-                        'comment' => (string)$attribute['frontend_label']
-                    );
+                        'comment' => (string)$attribute['frontend_label'],
+                    ];
                     break;
                 case 'int':
-                    $columns[$attribute['attribute_code']] = array(
-                        'type' => array(\Magento\Framework\DB\Ddl\Table::TYPE_INTEGER, null),
+                    $columns[$attribute['attribute_code']] = [
+                        'type' => [\Magento\Framework\DB\Ddl\Table::TYPE_INTEGER, null],
                         'unsigned' => null,
                         'nullable' => true,
                         'default' => null,
-                        'comment' => (string)$attribute['frontend_label']
-                    );
+                        'comment' => (string)$attribute['frontend_label'],
+                    ];
                     break;
                 case 'text':
-                    $columns[$attribute['attribute_code']] = array(
-                        'type' => array(\Magento\Framework\DB\Ddl\Table::TYPE_TEXT, '64k'),
+                    $columns[$attribute['attribute_code']] = [
+                        'type' => [\Magento\Framework\DB\Ddl\Table::TYPE_TEXT, '64k'],
                         'unsigned' => null,
                         'nullable' => true,
                         'default' => null,
-                        'comment' => (string)$attribute['frontend_label']
-                    );
+                        'comment' => (string)$attribute['frontend_label'],
+                    ];
                     break;
                 case 'datetime':
-                    $columns[$attribute['attribute_code']] = array(
-                        'type' => array(\Magento\Framework\DB\Ddl\Table::TYPE_DATETIME, null),
+                    $columns[$attribute['attribute_code']] = [
+                        'type' => [\Magento\Framework\DB\Ddl\Table::TYPE_DATETIME, null],
                         'unsigned' => null,
                         'nullable' => true,
                         'default' => null,
-                        'comment' => (string)$attribute['frontend_label']
-                    );
+                        'comment' => (string)$attribute['frontend_label'],
+                    ];
                     break;
                 case 'decimal':
-                    $columns[$attribute['attribute_code']] = array(
-                        'type' => array(\Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL, '12,4'),
+                    $columns[$attribute['attribute_code']] = [
+                        'type' => [\Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL, '12,4'],
                         'unsigned' => null,
                         'nullable' => true,
                         'default' => null,
-                        'comment' => (string)$attribute['frontend_label']
-                    );
+                        'comment' => (string)$attribute['frontend_label'],
+                    ];
                     break;
             }
         }
@@ -348,25 +329,25 @@ class AbstractAction
     protected function getAttributes()
     {
         if ($this->attributeCodes === null) {
-            $select = $this->getReadAdapter()->select()->from(
-                $this->getReadAdapter()->getTableName($this->getTableName('eav_entity_type')),
-                array()
+            $select = $this->connection->select()->from(
+                $this->connection->getTableName($this->getTableName('eav_entity_type')),
+                []
             )->join(
-                $this->getReadAdapter()->getTableName($this->getTableName('eav_attribute')),
-                $this->getReadAdapter()->getTableName(
+                $this->connection->getTableName($this->getTableName('eav_attribute')),
+                $this->connection->getTableName(
                     $this->getTableName('eav_attribute')
-                ) . '.entity_type_id = ' . $this->getReadAdapter()->getTableName(
+                ) . '.entity_type_id = ' . $this->connection->getTableName(
                     $this->getTableName('eav_entity_type')
                 ) . '.entity_type_id',
-                $this->getReadAdapter()->getTableName($this->getTableName('eav_attribute')) . '.*'
+                $this->connection->getTableName($this->getTableName('eav_attribute')) . '.*'
             )->where(
-                $this->getReadAdapter()->getTableName(
+                $this->connection->getTableName(
                     $this->getTableName('eav_entity_type')
                 ) . '.entity_type_code = ?',
                 \Magento\Catalog\Model\Category::ENTITY
             );
-            $this->attributeCodes = array();
-            foreach ($this->getReadAdapter()->fetchAll($select) as $attribute) {
+            $this->attributeCodes = [];
+            foreach ($this->connection->fetchAll($select) as $attribute) {
                 $this->attributeCodes[$attribute['attribute_id']] = $attribute;
             }
         }
@@ -384,22 +365,22 @@ class AbstractAction
     protected function getAttributeValues($entityIds, $storeId)
     {
         if (!is_array($entityIds)) {
-            $entityIds = array($entityIds);
+            $entityIds = [$entityIds];
         }
-        $values = array();
+        $values = [];
 
         foreach ($entityIds as $entityId) {
-            $values[$entityId] = array();
+            $values[$entityId] = [];
         }
         $attributes = $this->getAttributes();
-        $attributesType = array('varchar', 'int', 'decimal', 'text', 'datetime');
+        $attributesType = ['varchar', 'int', 'decimal', 'text', 'datetime'];
         foreach ($attributesType as $type) {
             foreach ($this->getAttributeTypeValues($type, $entityIds, $storeId) as $row) {
-                if (isset($row['entity_id']) && isset($row['attribute_id'])) {
+                if (isset($row[$this->getCategoryMetadata()->getLinkField()]) && isset($row['attribute_id'])) {
                     $attributeId = $row['attribute_id'];
                     if (isset($attributes[$attributeId])) {
                         $attributeCode = $attributes[$attributeId]['attribute_code'];
-                        $values[$row['entity_id']][$attributeCode] = $row['value'];
+                        $values[$row[$this->getCategoryMetadata()->getLinkField()]][$attributeCode] = $row['value'];
                     }
                 }
             }
@@ -417,36 +398,42 @@ class AbstractAction
      */
     protected function getAttributeTypeValues($type, $entityIds, $storeId)
     {
-        $select = $this->getReadAdapter()->select()->from(
-            array(
-                'def' => $this->getReadAdapter()->getTableName($this->getTableName('catalog_category_entity_' . $type))
-            ),
-            array('entity_id', 'attribute_id')
+        $linkField = $this->getCategoryMetadata()->getLinkField();
+        $select = $this->connection->select()->from(
+            [
+                'def' => $this->connection->getTableName($this->getTableName('catalog_category_entity_' . $type)),
+            ],
+            [$linkField, 'attribute_id']
         )->joinLeft(
-            array(
-                'store' => $this->getReadAdapter()->getTableName(
+            [
+                'e' => $this->connection->getTableName($this->getTableName('catalog_category_entity'))
+            ],
+            "def.{$linkField} = e.{$linkField}"
+        )->joinLeft(
+            [
+                'store' => $this->connection->getTableName(
                     $this->getTableName('catalog_category_entity_' . $type)
-                )
-            ),
-            'store.entity_id = def.entity_id AND store.attribute_id = def.attribute_id ' .
+                ),
+            ],
+            "store.{$linkField} = def.{$linkField} AND store.attribute_id = def.attribute_id " .
             'AND store.store_id = ' .
             $storeId,
-            array(
-                'value' => $this->getReadAdapter()->getCheckSql(
+            [
+                'value' => $this->connection->getCheckSql(
                     'store.value_id > 0',
-                    $this->getReadAdapter()->quoteIdentifier('store.value'),
-                    $this->getReadAdapter()->quoteIdentifier('def.value')
+                    $this->connection->quoteIdentifier('store.value'),
+                    $this->connection->quoteIdentifier('def.value')
                 )
-            )
+            ]
         )->where(
-            'def.entity_id IN (?)',
+            "e.entity_id IN (?)",
             $entityIds
         )->where(
             'def.store_id IN (?)',
-            array(\Magento\Store\Model\Store::DEFAULT_STORE_ID, $storeId)
+            [\Magento\Store\Model\Store::DEFAULT_STORE_ID, $storeId]
         );
 
-        return $this->getReadAdapter()->fetchAll($select);
+        return $this->connection->fetchAll($select);
     }
 
     /**
@@ -457,7 +444,7 @@ class AbstractAction
      */
     protected function prepareValuesToInsert($data)
     {
-        $values = array();
+        $values = [];
         foreach (array_keys($this->getColumns()) as $column) {
             if (isset($data[$column])) {
                 $values[$column] = $data[$column];
@@ -477,5 +464,31 @@ class AbstractAction
     protected function getTableName($name)
     {
         return $this->resource->getTableName($name);
+    }
+
+    /**
+     * @return \Magento\Framework\EntityManager\EntityMetadata
+     */
+    private function getCategoryMetadata()
+    {
+        if (null === $this->categoryMetadata) {
+            $metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\EntityManager\MetadataPool::class);
+            $this->categoryMetadata = $metadataPool->getMetadata(\Magento\Catalog\Api\Data\CategoryInterface::class);
+        }
+        return $this->categoryMetadata;
+    }
+
+    /**
+     * @return array
+     */
+    private function getSkipStaticColumns()
+    {
+        if (null === $this->skipStaticColumns) {
+            $provider = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Catalog\Model\Indexer\Category\Flat\SkipStaticColumnsProvider::class);
+            $this->skipStaticColumns = $provider->get();
+        }
+        return $this->skipStaticColumns;
     }
 }

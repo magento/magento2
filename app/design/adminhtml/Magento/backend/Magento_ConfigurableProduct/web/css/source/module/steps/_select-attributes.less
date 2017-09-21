@@ -1,0 +1,25 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Common
+//  ---------------------------------------------
+
+.steps-wizard {
+    .select-attributes-block {
+        &:extend(.abs-clearfix all);
+        margin: 0 0 @indent__base;
+    }
+
+    .select-attributes-actions {
+        float: right;
+        margin-bottom: @indent__s;
+
+        .action-default {
+            &:extend(.abs-action-secondary all);
+            &:extend(.abs-action-l all);
+        }
+    }
+}

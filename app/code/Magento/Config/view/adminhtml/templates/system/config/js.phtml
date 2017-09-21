@@ -1,0 +1,246 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<script>
+require([
+    'prototype'
+], function () {
+
+var freeModel = Class.create();
+freeModel.prototype = {
+    initialize : function()
+    {
+        this.reload = false;
+        this.bindFreeMethodCutoffCostRelation();
+    },
+    bindFreeMethodCutoffCostRelation : function(parentId)
+    {
+        if (parentId) {
+            // todo: fix bug in IE
+            var freeMethodElements = $$('#'+parentId+' .free-method');
+        } else {
+            var freeMethodElements = $$('.free-method');
+        }
+        for(var i=0;i<freeMethodElements.length; i++) {
+            Event.observe(freeMethodElements[i], 'change', this.checkFreeMethod.bind(this));
+            this.initFreeMethod(freeMethodElements[i]);
+        }
+    },
+    initFreeMethod : function(element)
+    {
+        var freeMethodElement = element;
+
+        if (freeMethodElement && freeMethodElement.id) {
+            var cutoffElement  = $(freeMethodElement.id.replace(/free_method/, 'cutoff_cost'));
+            if (cutoffElement) {
+                if (freeMethodElement.value == '') {
+                    cutoffElement.disabled = true;
+                } else {
+                    cutoffElement.disabled = false;
+                }
+            }
+        }
+    },
+    checkFreeMethod : function(event)
+    {
+        var freeMethodElement = Event.element(event);
+        if (freeMethodElement && freeMethodElement.id) {
+            var cutoffElement  = $(freeMethodElement.id.replace(/free_method/, 'cutoff_cost'));
+            if (cutoffElement) {
+                if (freeMethodElement.value == '') {
+                    cutoffElement.disabled = true;
+                } else {
+                    cutoffElement.disabled = false;
+                }
+            }
+        }
+    }
+}
+
+freeMethod = new freeModel();
+
+var originModel = Class.create();
+originModel.prototype = {
+    initialize : function()
+    {
+        this.reload = false;
+        this.loader = new varienLoader(true);
+        this.regionsUrl = "<?= /* @escapeNotVerified */ $block->getUrl('directory/json/countryRegion') ?>";
+
+        this.bindCountryRegionRelation();
+    },
+    bindCountryRegionRelation : function(parentId)
+    {
+        if (parentId) {
+            // todo: fix bug in IE
+            var countryElements = $$('#'+parentId+' .countries');
+        } else {
+            var countryElements = $$('.countries');
+        }
+        for(var i=0; i<countryElements.size(); i++) {
+            Event.observe(countryElements[i], 'change', this.reloadRegionField.bind(this));
+            this.initRegionField(countryElements[i]);
+            if ($(countryElements[i].id+'_inherit')) {
+                Event.observe($(countryElements[i].id+'_inherit'), 'change', this.enableRegionZip.bind(this));
+            }
+        }
+    },
+    enableRegionZip : function(event)
+    {
+        this.reload = true;
+        var countryElement = Event.element(event);
+        if (countryElement && countryElement.id && !countryElement.checked) {
+            var regionElement  = $(countryElement.id.replace(/country_id/, 'region_id'));
+            var zipElement  = $(countryElement.id.replace(/country_id/, 'postcode'));
+            if (regionElement && regionElement.checked) {
+                regionElement.click();
+            }
+            if (zipElement && zipElement.checked) {
+                zipElement.click();
+            }
+        }
+    },
+    initRegionField : function(element)
+    {
+        var countryElement = element;
+        if (countryElement && countryElement.id) {
+            var regionElement  = $(countryElement.id.replace(/country_id/, 'region_id'));
+            if (regionElement) {
+                this.regionElement = regionElement;
+                if (countryElement.value.length) {
+                    var url = this.regionsUrl+'parent/'+countryElement.value;
+                    this.loader.load(url, {}, this.refreshRegionField.bind(this));
+                } else {
+                    this.clearRegionField(this.regionElement.disabled);
+                }
+            }
+        }
+    },
+    reloadRegionField : function(event)
+    {
+        this.reload = true;
+        var countryElement = Event.element(event);
+        if (countryElement && countryElement.id) {
+            var regionElement  = $(countryElement.id.replace(/country_id/, 'region_id'));
+            if (regionElement) {
+                this.regionElement = regionElement;
+                if (countryElement.value.length) {
+                    var url = this.regionsUrl+'parent/'+countryElement.value;
+                    this.loader.load(url, {}, this.refreshRegionField.bind(this));
+                } else {
+                    this.clearRegionField(this.regionElement.disabled);
+                }
+            }
+        }
+    },
+    refreshRegionField : function(serverResponse)
+    {
+        if (serverResponse) {
+            var data = eval('(' + serverResponse + ')');
+            var value = this.regionElement.value;
+            var disabled = this.regionElement.disabled;
+            if (data.length) {
+                var html = '<select name="'+this.regionElement.name+'" id="'+this.regionElement.id+'" class="required-entry select" title="'+this.regionElement.title+'"'+(disabled?" disabled":"")+'>';
+                for (var i in data) {
+                    if (data[i].label) {
+                        html+= '<option value="'+data[i].value+'"';
+                        if (this.regionElement.value && (this.regionElement.value == data[i].value || this.regionElement.value == data[i].label)) {
+                            html+= ' selected';
+                        }
+                        html+='>'+data[i].label+'<\/option>';
+                    }
+                }
+                html+= '<\/select>';
+
+                var parentNode = this.regionElement.parentNode;
+                var regionElementId = this.regionElement.id;
+                parentNode.innerHTML = html;
+                this.regionElement = $(regionElementId);
+            } else if (this.reload) {
+                this.clearRegionField(disabled);
+            }
+        }
+    },
+    clearRegionField: function(disabled) {
+        var html = '<input type="text" name="' + this.regionElement.name + '" id="' + this.regionElement.id + '" class="input-text" title="' + this.regionElement.title + '"' + (disabled ? " disabled" : "") + '>';
+        var parentNode = this.regionElement.parentNode;
+        var regionElementId = this.regionElement.id;
+        parentNode.innerHTML = html;
+        this.regionElement = $(regionElementId);
+    }
+}
+
+originAddress = new originModel();
+
+var perPageModel = Class.create();
+
+perPageModel.prototype = {
+    initialize : function()
+    {
+        this.listModeElement = $('catalog_frontend_list_mode');
+        if (this.listModeElement) {
+            this.gridValuesElement = $('catalog_frontend_grid_per_page_values');
+            this.listValuesElement = $('catalog_frontend_list_per_page_values');
+            this.listElement = $('catalog_frontend_list_per_page');
+            this.gridElement = $('catalog_frontend_grid_per_page');
+
+            this.gridOptions = [];
+            this.listOptions = [];
+
+            this.refreshPerPageSelect();
+            this.bindListModeChange();
+        }
+    },
+    bindListModeChange : function()
+    {
+        Event.observe(this.listModeElement, 'change', this.refreshPerPageSelect.bind(this));
+    },
+    refreshPerPageSelect : function()
+    {
+        if (this.listModeElement.value != '') {
+            if (this.listModeElement.value == 'grid') {
+                this.listElement.up(1).hide();
+                this.listValuesElement.up(1).hide();
+
+                this.gridElement.up(1).show();
+                this.gridValuesElement.up(1).show();
+            } else if (this.listModeElement.value == 'grid-list' || this.listModeElement.value == 'list-grid') {
+                this.listElement.up(1).show();
+                this.listValuesElement.up(1).show();
+
+                this.gridElement.up(1).show();
+                this.gridValuesElement.up(1).show();
+            } else if (this.listModeElement.value == 'list') {
+                this.listElement.up(1).show();
+                this.listValuesElement.up(1).show();
+
+                this.gridElement.up(1).hide();
+                this.gridValuesElement.up(1).hide();
+            }
+        }
+    }
+}
+
+perPageSelect = new perPageModel();
+
+function showHint() {
+    $$('.hint').each(function(element){
+        Event.observe(element, 'mouseover', function(){
+            element.down().show()
+        });
+        Event.observe(element, 'mouseout', function(){
+            element.down().hide()
+        });
+    });
+}
+
+Event.observe(window, 'load', showHint);
+
+});
+</script>

@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Newsletter\Block\Adminhtml\Queue;
 
@@ -28,6 +10,9 @@ use Magento\Newsletter\Model\Queue as ModelQueue;
 
 /**
  * Newsletter queue edit block
+ *
+ * @api
+ * @since 100.0.2
  */
 class Edit extends \Magento\Backend\Block\Template
 {
@@ -44,24 +29,16 @@ class Edit extends \Magento\Backend\Block\Template
     protected $_coreRegistry = null;
 
     /**
-     * @var \Magento\Cms\Model\Wysiwyg\Config
-     */
-    protected $_wysiwygConfig;
-
-    /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig
      * @param \Magento\Framework\Registry $registry
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig,
         \Magento\Framework\Registry $registry,
-        array $data = array()
+        array $data = []
     ) {
         $this->_coreRegistry = $registry;
-        $this->_wysiwygConfig = $wysiwygConfig;
         parent::__construct($context, $data);
     }
 
@@ -96,7 +73,7 @@ class Edit extends \Magento\Backend\Block\Template
     {
         $this->setChild(
             'form',
-            $this->getLayout()->createBlock('Magento\Newsletter\Block\Adminhtml\Queue\Edit\Form', 'form')
+            $this->getLayout()->createBlock(\Magento\Newsletter\Block\Adminhtml\Queue\Edit\Form::class, 'form')
         );
         return parent::_beforeToHtml();
     }
@@ -109,9 +86,9 @@ class Edit extends \Magento\Backend\Block\Template
     public function getSaveUrl()
     {
         if ($this->getTemplateId()) {
-            $params = array('template_id' => $this->getTemplateId());
+            $params = ['template_id' => $this->getTemplateId()];
         } else {
-            $params = array('id' => $this->getRequest()->getParam('id'));
+            $params = ['id' => $this->getRequest()->getParam('id')];
         }
         return $this->getUrl('*/*/save', $params);
     }
@@ -123,63 +100,58 @@ class Edit extends \Magento\Backend\Block\Template
      */
     protected function _prepareLayout()
     {
-        // Load Wysiwyg on demand and Prepare layout
-        if ($this->_wysiwygConfig->isEnabled()) {
-            $this->getLayout()->getBlock('head')->setCanLoadTinyMce(true);
-        }
-
         $this->getToolbar()->addChild(
             'back_button',
-            'Magento\Backend\Block\Widget\Button',
-            array(
+            \Magento\Backend\Block\Widget\Button::class,
+            [
                 'label' => __('Back'),
                 'onclick' => "window.location.href = '" . $this->getUrl(
                     $this->getTemplateId() ? '*/template' : '*/*'
                 ) . "'",
                 'class' => 'action-back'
-            )
+            ]
         );
 
         $this->getToolbar()->addChild(
             'reset_button',
-            'Magento\Backend\Block\Widget\Button',
-            array('label' => __('Reset'), 'class' => 'reset', 'onclick' => 'window.location = window.location')
+            \Magento\Backend\Block\Widget\Button::class,
+            ['label' => __('Reset'), 'class' => 'reset', 'onclick' => 'window.location = window.location']
         );
 
         $this->getToolbar()->addChild(
             'preview_button',
-            'Magento\Backend\Block\Widget\Button',
-            array('label' => __('Preview Template'), 'onclick' => 'queueControl.preview();', 'class' => 'preview')
+            \Magento\Backend\Block\Widget\Button::class,
+            ['label' => __('Preview Template'), 'onclick' => 'queueControl.preview();', 'class' => 'preview']
         );
 
         $this->getToolbar()->addChild(
             'save_button',
-            'Magento\Backend\Block\Widget\Button',
-            array(
+            \Magento\Backend\Block\Widget\Button::class,
+            [
                 'label' => __('Save Newsletter'),
                 'class' => 'save primary',
-                'data_attribute' => array(
-                    'mage-init' => array('button' => array('event' => 'save', 'target' => '#queue_edit_form'))
-                )
-            )
+                'data_attribute' => [
+                    'mage-init' => ['button' => ['event' => 'save', 'target' => '#queue_edit_form']],
+                ]
+            ]
         );
 
         $this->getToolbar()->addChild(
             'save_and_resume',
-            'Magento\Backend\Block\Widget\Button',
-            array(
+            \Magento\Backend\Block\Widget\Button::class,
+            [
                 'label' => __('Save and Resume'),
                 'class' => 'save',
-                'data_attribute' => array(
-                    'mage-init' => array(
-                        'button' => array(
+                'data_attribute' => [
+                    'mage-init' => [
+                        'button' => [
                             'event' => 'save',
                             'target' => '#queue_edit_form',
-                            'eventData' => array('action' => array('args' => array('_resume' => 1)))
-                        )
-                    )
-                )
-            )
+                            'eventData' => ['action' => ['args' => ['_resume' => 1]]],
+                        ],
+                    ],
+                ]
+            ]
         );
 
         return parent::_prepareLayout();
@@ -192,7 +164,12 @@ class Edit extends \Magento\Backend\Block\Template
      */
     public function getPreviewUrl()
     {
-        return $this->getUrl('*/*/preview');
+        if ($this->getTemplateId()) {
+            $params = ['template_id' => $this->getTemplateId()];
+        } else {
+            $params = ['id' => $this->getRequest()->getParam('id')];
+        }
+        return $this->getUrl('*/*/preview', $params);
     }
 
     /**
@@ -249,12 +226,13 @@ class Edit extends \Magento\Backend\Block\Template
      * Getter for availability preview mode
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsPreview()
     {
         return !in_array(
             $this->getQueue()->getQueueStatus(),
-            array(ModelQueue::STATUS_NEVER, ModelQueue::STATUS_PAUSE)
+            [ModelQueue::STATUS_NEVER, ModelQueue::STATUS_PAUSE]
         );
     }
 
@@ -272,6 +250,7 @@ class Edit extends \Magento\Backend\Block\Template
      * Getter for id of current store (the only one in single-store mode and current in multi-stores mode)
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     protected function getStoreId()
     {
@@ -282,6 +261,7 @@ class Edit extends \Magento\Backend\Block\Template
      * Getter for check is this newsletter the plain text.
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsTextType()
     {
@@ -292,16 +272,18 @@ class Edit extends \Magento\Backend\Block\Template
      * Getter for availability resume action
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getCanResume()
     {
-        return in_array($this->getQueue()->getQueueStatus(), array(ModelQueue::STATUS_PAUSE));
+        return in_array($this->getQueue()->getQueueStatus(), [ModelQueue::STATUS_PAUSE]);
     }
 
     /**
      * Getter for header text
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getHeaderText()
     {

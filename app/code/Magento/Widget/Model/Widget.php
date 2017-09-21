@@ -1,84 +1,100 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- */
-
-/**
- * Widget model for different purposes
- *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Widget\Model;
 
+/**
+ * Widget model for different purposes
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @api
+ * @since 100.0.2
+ */
 class Widget
 {
     /**
      * @var \Magento\Widget\Model\Config\Data
      */
-    protected $_dataStorage;
+    protected $dataStorage;
 
     /**
      * @var \Magento\Framework\App\Cache\Type\Config
      */
-    protected $_configCacheType;
+    protected $configCacheType;
 
     /**
-     * @var \Magento\Framework\View\Url
+     * @var \Magento\Framework\View\Asset\Repository
      */
-    protected $_viewUrl;
+    protected $assetRepo;
+
+    /**
+     * @var \Magento\Framework\View\Asset\Source
+     */
+    protected $assetSource;
 
     /**
      * @var \Magento\Framework\View\FileSystem
      */
-    protected $_viewFileSystem;
+    protected $viewFileSystem;
 
     /**
-     * Core data
-     *
      * @var \Magento\Framework\Escaper
      */
-    protected $_escaper;
+    protected $escaper;
 
     /**
      * @var array
      */
-    protected $_widgetsArray = array();
+    protected $widgetsArray = [];
+
+    /**
+     * @var \Magento\Widget\Helper\Conditions
+     */
+    protected $conditionsHelper;
+
+    /**
+     * @var \Magento\Framework\Math\Random
+     */
+    private $mathRandom;
 
     /**
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Widget\Model\Config\Data $dataStorage
-     * @param \Magento\Framework\View\Url $viewUrl
+     * @param \Magento\Framework\View\Asset\Repository $assetRepo
+     * @param \Magento\Framework\View\Asset\Source $assetSource
      * @param \Magento\Framework\View\FileSystem $viewFileSystem
+     * @param \Magento\Widget\Helper\Conditions $conditionsHelper
      */
     public function __construct(
         \Magento\Framework\Escaper $escaper,
         \Magento\Widget\Model\Config\Data $dataStorage,
-        \Magento\Framework\View\Url $viewUrl,
-        \Magento\Framework\View\FileSystem $viewFileSystem
+        \Magento\Framework\View\Asset\Repository $assetRepo,
+        \Magento\Framework\View\Asset\Source $assetSource,
+        \Magento\Framework\View\FileSystem $viewFileSystem,
+        \Magento\Widget\Helper\Conditions $conditionsHelper
     ) {
-        $this->_escaper = $escaper;
-        $this->_dataStorage = $dataStorage;
-        $this->_viewUrl = $viewUrl;
-        $this->_viewFileSystem = $viewFileSystem;
+        $this->escaper = $escaper;
+        $this->dataStorage = $dataStorage;
+        $this->assetRepo = $assetRepo;
+        $this->assetSource = $assetSource;
+        $this->viewFileSystem = $viewFileSystem;
+        $this->conditionsHelper = $conditionsHelper;
+    }
+
+    /**
+     * @return \Magento\Framework\Math\Random
+     *
+     * @deprecated 100.1.0
+     */
+    private function getMathRandom()
+    {
+        if ($this->mathRandom === null) {
+            $this->mathRandom = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\Math\Random::class);
+        }
+        return $this->mathRandom;
     }
 
     /**
@@ -104,10 +120,12 @@ class Widget
     }
 
     /**
-     * Return widget XML configuration as \Magento\Framework\Object and makes some data preparations
+     * Return widget XML configuration as \Magento\Framework\DataObject and makes some data preparations
      *
      * @param string $type Widget type
      * @return null|\Magento\Framework\Simplexml\Element
+     *
+     * @deprecated 100.2.0
      */
     public function getConfigAsXml($type)
     {
@@ -115,67 +133,105 @@ class Widget
     }
 
     /**
-     * Return widget XML configuration as \Magento\Framework\Object and makes some data preparations
+     * Return widget XML configuration as \Magento\Framework\DataObject and makes some data preparations
      *
      * @param string $type Widget type
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function getConfigAsObject($type)
     {
         $widget = $this->getWidgetByClassType($type);
 
-        $object = new \Magento\Framework\Object();
+        $object = new \Magento\Framework\DataObject();
         if ($widget === null) {
             return $object;
         }
-        $widget = $this->_getAsCanonicalArray($widget);
+        $widget = $this->getAsCanonicalArray($widget);
 
         // Save all nodes to object data
         $object->setType($type);
         $object->setData($widget);
 
         // Correct widget parameters and convert its data to objects
+        $newParams = $this->prepareWidgetParameters($object);
+        $object->setData('parameters', $newParams);
+
+        return $object;
+    }
+
+    /**
+     * Prepare widget parameters
+     *
+     * @param \Magento\Framework\DataObject $object
+     * @return array
+     */
+    protected function prepareWidgetParameters(\Magento\Framework\DataObject $object)
+    {
         $params = $object->getData('parameters');
-        $newParams = array();
+        $newParams = [];
         if (is_array($params)) {
             $sortOrder = 0;
             foreach ($params as $key => $data) {
                 if (is_array($data)) {
-                    $data['key'] = $key;
-                    $data['sort_order'] = isset($data['sort_order']) ? (int)$data['sort_order'] : $sortOrder;
+                    $data = $this->prepareDropDownValues($data, $key, $sortOrder);
+                    $data = $this->prepareHelperBlock($data);
 
-                    // prepare values (for drop-dawns) specified directly in configuration
-                    $values = array();
-                    if (isset($data['values']) && is_array($data['values'])) {
-                        foreach ($data['values'] as $value) {
-                            if (isset($value['label']) && isset($value['value'])) {
-                                $values[] = $value;
-                            }
-                        }
-                    }
-                    $data['values'] = $values;
-
-                    // prepare helper block object
-                    if (isset($data['helper_block'])) {
-                        $helper = new \Magento\Framework\Object();
-                        if (isset($data['helper_block']['data']) && is_array($data['helper_block']['data'])) {
-                            $helper->addData($data['helper_block']['data']);
-                        }
-                        if (isset($data['helper_block']['type'])) {
-                            $helper->setType($data['helper_block']['type']);
-                        }
-                        $data['helper_block'] = $helper;
-                    }
-
-                    $newParams[$key] = new \Magento\Framework\Object($data);
+                    $newParams[$key] = new \Magento\Framework\DataObject($data);
                     $sortOrder++;
                 }
             }
         }
-        uasort($newParams, array($this, '_sortParameters'));
-        $object->setData('parameters', $newParams);
+        uasort($newParams, [$this, 'sortParameters']);
 
-        return $object;
+        return $newParams;
+    }
+
+    /**
+     * Prepare drop-down values
+     *
+     * @param array $data
+     * @param string $key
+     * @param int $sortOrder
+     * @return array
+     */
+    protected function prepareDropDownValues(array $data, $key, $sortOrder)
+    {
+        $data['key'] = $key;
+        $data['sort_order'] = isset($data['sort_order']) ? (int)$data['sort_order'] : $sortOrder;
+
+        $values = [];
+        if (isset($data['values']) && is_array($data['values'])) {
+            foreach ($data['values'] as $value) {
+                if (isset($value['label']) && isset($value['value'])) {
+                    $values[] = $value;
+                }
+            }
+        }
+        $data['values'] = $values;
+
+        return $data;
+    }
+
+    /**
+     * Prepare helper block
+     *
+     * @param array $data
+     * @return array
+     */
+    protected function prepareHelperBlock(array $data)
+    {
+        if (isset($data['helper_block'])) {
+            $helper = new \Magento\Framework\DataObject();
+            if (isset($data['helper_block']['data']) && is_array($data['helper_block']['data'])) {
+                $helper->addData($data['helper_block']['data']);
+            }
+            if (isset($data['helper_block']['type'])) {
+                $helper->setType($data['helper_block']['type']);
+            }
+            $data['helper_block'] = $helper;
+        }
+
+        return $data;
     }
 
     /**
@@ -184,9 +240,9 @@ class Widget
      * @param array $filters Key-value array of filters for widget node properties
      * @return array
      */
-    public function getWidgets($filters = array())
+    public function getWidgets($filters = [])
     {
-        $widgets = $this->_dataStorage->get();
+        $widgets = $this->dataStorage->get();
         $result = $widgets;
 
         // filter widgets by params
@@ -214,22 +270,22 @@ class Widget
      * @param array $filters Key-value array of filters for widget node properties
      * @return array
      */
-    public function getWidgetsArray($filters = array())
+    public function getWidgetsArray($filters = [])
     {
-        if (empty($this->_widgetsArray)) {
-            $result = array();
+        if (empty($this->widgetsArray)) {
+            $result = [];
             foreach ($this->getWidgets($filters) as $code => $widget) {
-                $result[$widget['name']] = array(
+                $result[$widget['name']] = [
                     'name' => __((string)$widget['name']),
                     'code' => $code,
                     'type' => $widget['@']['type'],
-                    'description' => __((string)$widget['description'])
-                );
+                    'description' => __((string)$widget['description']),
+                ];
             }
-            usort($result, array($this, "_sortWidgets"));
-            $this->_widgetsArray = $result;
+            usort($result, [$this, "sortWidgets"]);
+            $this->widgetsArray = $result;
         }
-        return $this->_widgetsArray;
+        return $this->widgetsArray;
     }
 
     /**
@@ -240,13 +296,16 @@ class Widget
      * @param bool $asIs Return result as widget directive(true) or as placeholder image(false)
      * @return string Widget directive ready to parse
      */
-    public function getWidgetDeclaration($type, $params = array(), $asIs = true)
+    public function getWidgetDeclaration($type, $params = [], $asIs = true)
     {
-        $directive = '{{widget type="' . preg_quote($type) . '"';
+        $directive = '{{widget type="' . $type . '"';
 
         foreach ($params as $name => $value) {
             // Retrieve default option value if pre-configured
-            if (is_array($value)) {
+            if ($name == 'conditions') {
+                $name = 'conditions_encoded';
+                $value = $this->conditionsHelper->encode($value);
+            } elseif (is_array($value)) {
                 $value = implode(',', $value);
             } elseif (trim($value) == '') {
                 $widget = $this->getConfigAsObject($type);
@@ -255,10 +314,12 @@ class Widget
                     $value = $parameters[$name]->getValue();
                 }
             }
-            if ($value) {
-                $directive .= sprintf(' %s="%s"', $name, $value);
+            if (isset($value)) {
+                $directive .= sprintf(' %s="%s"', $name, $this->escaper->escapeQuote($value));
             }
         }
+
+        $directive .= $this->getWidgetPageVarName($params);
         $directive .= '}}';
 
         if ($asIs) {
@@ -267,11 +328,29 @@ class Widget
 
         $html = sprintf(
             '<img id="%s" src="%s" title="%s">',
-            $this->_idEncode($directive),
+            $this->idEncode($directive),
             $this->getPlaceholderImageUrl($type),
-            $this->_escaper->escapeUrl($directive)
+            $this->escaper->escapeUrl($directive)
         );
         return $html;
+    }
+
+    /**
+     * @param array $params
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function getWidgetPageVarName($params = [])
+    {
+        $pageVarName = '';
+        if (array_key_exists('show_pager', $params) && (bool)$params['show_pager']) {
+            $pageVarName = sprintf(
+                ' %s="%s"',
+                'page_var_name',
+                'p' . $this->getMathRandom()->getRandomString(5, \Magento\Framework\Math\Random::CHARS_LOWERS)
+            );
+        }
+        return $pageVarName;
     }
 
     /**
@@ -287,10 +366,14 @@ class Widget
         if (is_array($widget) && isset($widget['placeholder_image'])) {
             $placeholder = (string)$widget['placeholder_image'];
         }
-        if (!$placeholder || !$this->_viewFileSystem->getViewFile($placeholder)) {
-            $placeholder = 'Magento_Widget::placeholder.gif';
+        if ($placeholder) {
+            $asset = $this->assetRepo->createAsset($placeholder);
+            $placeholder = $this->assetSource->getFile($asset);
+            if ($placeholder) {
+                return $asset->getUrl();
+            }
         }
-        return $this->_viewUrl->getViewFileUrl($placeholder);
+        return $this->assetRepo->getUrl('Magento_Widget::placeholder.gif');
     }
 
     /**
@@ -302,7 +385,7 @@ class Widget
      */
     public function getPlaceholderImageUrls()
     {
-        $result = array();
+        $result = [];
         $widgets = $this->getWidgets();
         /** @var array $widget */
         foreach ($widgets as $widget) {
@@ -317,12 +400,12 @@ class Widget
     }
 
     /**
-     * Remove attributes from widget array so that emulates how \Magento\Framework\Simplexml\Element::asCanonicalArray works
+     * Remove attributes from widget array and emulate work of \Magento\Framework\Simplexml\Element::asCanonicalArray
      *
      * @param array $inputArray
      * @return array
      */
-    protected function _getAsCanonicalArray($inputArray)
+    protected function getAsCanonicalArray($inputArray)
     {
         if (array_key_exists('@', $inputArray)) {
             unset($inputArray['@']);
@@ -331,7 +414,7 @@ class Widget
             if (!is_array($value)) {
                 continue;
             }
-            $inputArray[$key] = $this->_getAsCanonicalArray($value);
+            $inputArray[$key] = $this->getAsCanonicalArray($value);
         }
         return $inputArray;
     }
@@ -342,7 +425,7 @@ class Widget
      * @param string $string
      * @return string
      */
-    protected function _idEncode($string)
+    protected function idEncode($string)
     {
         return strtr(base64_encode($string), '+/=', ':_-');
     }
@@ -354,7 +437,7 @@ class Widget
      * @param array $secondElement
      * @return bool
      */
-    protected function _sortWidgets($firstElement, $secondElement)
+    protected function sortWidgets($firstElement, $secondElement)
     {
         return strcmp($firstElement["name"], $secondElement["name"]);
     }
@@ -362,11 +445,11 @@ class Widget
     /**
      * Widget parameters sort callback
      *
-     * @param \Magento\Framework\Object $firstElement
-     * @param \Magento\Framework\Object $secondElement
+     * @param \Magento\Framework\DataObject $firstElement
+     * @param \Magento\Framework\DataObject $secondElement
      * @return int
      */
-    protected function _sortParameters($firstElement, $secondElement)
+    protected function sortParameters($firstElement, $secondElement)
     {
         $aOrder = (int)$firstElement->getData('sort_order');
         $bOrder = (int)$secondElement->getData('sort_order');

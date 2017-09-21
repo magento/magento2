@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="controller_action_predispatch">
+        <observer name="customer_visitor" instance="Magento\Customer\Observer\Visitor\InitByRequestObserver" />
+    </event>
+    <event name="controller_action_postdispatch">
+        <observer name="customer_visitor" instance="Magento\Customer\Observer\Visitor\SaveByRequestObserver" />
+    </event>
+    <event name="customer_data_object_login">
+        <observer name="customer_visitor" instance="Magento\Customer\Observer\Visitor\BindCustomerLoginObserver" />
+    </event>
+    <event name="customer_logout">
+        <observer name="customer_visitor" instance="Magento\Customer\Observer\Visitor\BindCustomerLogoutObserver" />
+        <observer name="customer_log_logout" instance="Magento\Customer\Observer\LogLastLogoutAtObserver" />
+    </event>
+    <event name="checkout_quote_destroy">
+        <observer name="customer_visitor" instance="Magento\Customer\Observer\Visitor\BindQuoteDestroyObserver" />
+    </event>
+    <event name="customer_login">
+        <observer name="customer_log_login" instance="Magento\Customer\Observer\LogLastLoginAtObserver" />
+    </event>
+    <event name="customer_customer_authenticated">
+        <observer name="customer_password" instance="Magento\Customer\Observer\UpgradeCustomerPasswordObserver" />
+        <observer name="customer_unlock" instance="Magento\Customer\Observer\CustomerLoginSuccessObserver" />
+    </event>
+</config>

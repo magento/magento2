@@ -1,29 +1,11 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE_AFL.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Backend/etc/system_file.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
         <section id="promo" translate="label" type="text" sortOrder="400" showInDefault="1" showInWebsite="0" showInStore="0">
             <class>separator-top</class>
@@ -32,12 +14,12 @@
             <resource>Magento_SalesRule::config_promo</resource>
             <group id="auto_generated_coupon_codes" translate="label" showInDefault="1" sortOrder="10">
                 <label>Auto Generated Specific Coupon Codes</label>
-                <field id="length" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="length" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Code Length</label>
                     <comment>Excluding prefix, suffix and separators.</comment>
                     <frontend_class>validate-digits</frontend_class>
                 </field>
-                <field id="format" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="format" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Code Format</label>
                     <source_model>Magento\SalesRule\Model\System\Config\Source\Coupon\Format</source_model>
                 </field>
@@ -51,6 +33,14 @@
                     <label>Dash Every X Characters</label>
                     <comment>If empty no separation.</comment>
                     <frontend_class>validate-digits</frontend_class>
+                </field>
+            </group>
+        </section>
+        <section id="rss">
+            <group id="catalog">
+                <field id="discounts" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Coupons/Discounts</label>
+                    <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
                 </field>
             </group>
         </section>

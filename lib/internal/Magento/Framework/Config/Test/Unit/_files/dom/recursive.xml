@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<root>
+    <node name="node1">
+        <param name="scalar1">
+            <value>scalar1</value>
+        </param>
+        <param name="complex">
+            <complex>
+                <item key="scalar2">
+                    <value>scalar2</value>
+                </item>
+                <item key="scalar3">
+                    <value>scalar3</value>
+                </item>
+            </complex>
+        </param>
+    </node>
+    <node name="node2">
+        <param name="recursive">
+            <complex>
+                <item key="recursive1">
+                    <complex>
+                        <item key="nested1">
+                            <value>scalar4</value>
+                        </item>
+                        <item key="nested2">
+                            <value>scalar5</value>
+                        </item>
+                    </complex>
+                </item>
+                <item key="recursive2">
+                    <complex>
+                        <item key="recursive1"><!-- intentionally same names as the above -->
+                            <value>scalar6</value>
+                        </item>
+                        <item key="recursive2">
+                            <value>scalar7</value>
+                        </item>
+                    </complex>
+                </item>
+                <item key="nested_l_1">
+                    <complex>
+                        <item key="nested_l_2">
+                            <complex>
+                                <item key="nested_l_3"/>
+                            </complex>
+                        </item>
+                    </complex>
+                </item>
+            </complex>
+        </param>
+    </node>
+    <another_node name="node3">
+        <param name="scalar4">
+            <value>scalar3</value>
+        </param>
+    </another_node>
+</root>

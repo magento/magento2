@@ -1,32 +1,17 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
 namespace Magento\User\Block\User;
 
 /**
  * User edit page
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
@@ -38,14 +23,14 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Backend\Block\Widget\Context $context,
         \Magento\Framework\Registry $registry,
-        array $data = array()
+        array $data = []
     ) {
         $this->_coreRegistry = $registry;
         parent::__construct($context, $data);
@@ -64,12 +49,79 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
 
         parent::_construct();
 
-        $this->_updateButton('save', 'label', __('Save User'));
-        $this->_updateButton('delete', 'label', __('Delete User'));
+        $this->buttonList->update('save', 'label', __('Save User'));
+        $this->buttonList->remove('delete');
+
+        $objId = (int)$this->getRequest()->getParam($this->_objectId);
+
+        if (!empty($objId)) {
+            $this->addButton(
+                'delete',
+                [
+                    'label' => __('Delete User'),
+                    'class' => 'delete',
+                    'data_attribute' => [
+                        'role' => 'delete-user'
+                    ]
+                ]
+            );
+
+            $deleteConfirmMsg = __("Are you sure you want to revoke the user's tokens?");
+            $this->addButton(
+                'invalidate',
+                [
+                    'label' => __('Force Sign-In'),
+                    'class' => 'invalidate-token',
+                    'onclick' => "deleteConfirm('" . $this->escapeJs($this->escapeHtml($deleteConfirmMsg)) .
+                        "', '" . $this->getInvalidateUrl() . "')",
+                ]
+            );
+        }
     }
 
     /**
+     * Returns message that is displayed for admin when he deletes user from the system.
+     * To see this message admin must do the following:
+     * - open user's account for editing;
+     * - type current user's password in the "Current User Identity Verification" field
+     * - click "Delete User" at top left part of the page;
+     *
+     * @return \Magento\Framework\Phrase
+     * @since 100.2.0
+     */
+    public function getDeleteMessage()
+    {
+        return __('Are you sure you want to do this?');
+    }
+
+    /**
+     * Returns the URL that is used for user deletion.
+     * The following Action is executed if admin navigates to returned url
+     * Magento\User\Controller\Adminhtml\User\Delete
+     *
      * @return string
+     * @since 100.2.0
+     */
+    public function getDeleteUrl()
+    {
+        return $this->getUrl('adminhtml/*/delete');
+    }
+
+    /**
+     * This method is used to get the ID of the user who's account the Admin is editing.
+     * It can be used to determine the reason Admin opens the page:
+     * to create a new user account OR to edit the previously created user account
+     *
+     * @return int
+     * @since 100.2.0
+     */
+    public function getObjectId()
+    {
+        return (int)$this->getRequest()->getParam($this->_objectId);
+    }
+
+    /**
+     * @return \Magento\Framework\Phrase
      */
     public function getHeaderText()
     {
@@ -88,6 +140,16 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      */
     public function getValidationUrl()
     {
-        return $this->getUrl('adminhtml/*/validate', array('_current' => true));
+        return $this->getUrl('adminhtml/*/validate', ['_current' => true]);
+    }
+
+    /**
+     * Return invalidate url for edit form
+     *
+     * @return string
+     */
+    public function getInvalidateUrl()
+    {
+        return $this->getUrl('adminhtml/*/invalidatetoken', ['_current' => true]);
     }
 }

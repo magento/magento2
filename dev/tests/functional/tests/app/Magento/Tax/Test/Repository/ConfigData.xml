@@ -1,0 +1,910 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Config\Test\Repository\ConfigData">
+        <dataset name="shipping_tax_class_taxable_goods">
+            <field name="tax/classes/shipping_tax_class" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Taxable Goods</item>
+                <item name="value" xsi:type="number">2</item>
+            </field>
+        </dataset>
+
+        <dataset name="shipping_tax_class_taxable_goods_rollback">
+            <field name="tax/classes/shipping_tax_class" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">None</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+
+        <dataset name="default_tax_configuration">
+            <field name="tax/classes/shipping_tax_class" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">None</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="tax/calculation/algorithm" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Total</item>
+                <item name="value" xsi:type="string">TOTAL_BASE_CALCULATION</item>
+            </field>
+            <field name="tax/calculation/price_includes_tax" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Excluding Tax</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="tax/calculation/shipping_includes_tax" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Excluding Tax</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="tax/calculation/apply_after_discount" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Before Discount</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="tax/calculation/discount_tax" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Excluding Tax</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="tax/calculation/cross_border_trade_enabled" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="tax/display/type" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Excluding Tax</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="tax/display/shipping" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Excluding Tax</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="tax/cart_display/price" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Excluding Tax</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="tax/cart_display/subtotal" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Excluding Tax</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="tax/cart_display/shipping" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Excluding Tax</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="tax/cart_display/grandtotal" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="tax/cart_display/full_summary" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="tax/sales_display/price" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Excluding Tax</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="tax/sales_display/subtotal" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Excluding Tax</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="tax/sales_display/shipping" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Excluding Tax</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="tax/sales_display/grandtotal" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+
+        <dataset name="display_excluding_including_tax_rollback">
+            <field name="tax/classes/shipping_tax_class" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">None</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="tax/calculation/algorithm" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Total</item>
+                <item name="value" xsi:type="string">TOTAL_BASE_CALCULATION</item>
+            </field>
+            <field name="tax/calculation/price_includes_tax" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Excluding Tax</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="tax/calculation/shipping_includes_tax" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Excluding Tax</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="tax/calculation/apply_after_discount" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">After Discount</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="tax/calculation/discount_tax" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Excluding Tax</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="tax/calculation/cross_border_trade_enabled" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="tax/display/type" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Excluding Tax</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="tax/display/shipping" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Excluding Tax</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="tax/cart_display/price" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Excluding Tax</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="tax/cart_display/subtotal" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Excluding Tax</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="tax/cart_display/shipping" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Excluding Tax</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="tax/cart_display/grandtotal" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="tax/cart_display/full_summary" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="tax/sales_display/price" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Excluding Tax</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="tax/sales_display/subtotal" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Excluding Tax</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="tax/sales_display/shipping" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Excluding Tax</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="tax/sales_display/grandtotal" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+
+        <dataset name="display_including_tax">
+            <field name="tax/display/type" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Including Tax</item>
+                <item name="value" xsi:type="number">2</item>
+            </field>
+            <field name="tax/display/shipping" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Including Tax</item>
+                <item name="value" xsi:type="number">2</item>
+            </field>
+            <field name="tax/cart_display/price" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Including Tax</item>
+                <item name="value" xsi:type="number">2</item>
+            </field>
+            <field name="tax/cart_display/subtotal" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Including Tax</item>
+                <item name="value" xsi:type="number">2</item>
+            </field>
+            <field name="tax/cart_display/shipping" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Including Tax</item>
+                <item name="value" xsi:type="number">2</item>
+            </field>
+            <field name="tax/cart_display/grandtotal" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="tax/cart_display/full_summary" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="tax/sales_display/price" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Including Tax</item>
+                <item name="value" xsi:type="number">2</item>
+            </field>
+            <field name="tax/sales_display/subtotal" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Including Tax</item>
+                <item name="value" xsi:type="number">2</item>
+            </field>
+            <field name="tax/sales_display/shipping" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Including Tax</item>
+                <item name="value" xsi:type="number">2</item>
+            </field>
+            <field name="tax/sales_display/grandtotal" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+        </dataset>
+
+        <dataset name="display_excluding_including_tax">
+            <field name="tax/display/type" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Including and Excluding Tax</item>
+                <item name="value" xsi:type="number">3</item>
+            </field>
+            <field name="tax/display/shipping" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Including and Excluding Tax</item>
+                <item name="value" xsi:type="number">3</item>
+            </field>
+            <field name="tax/cart_display/price" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Including and Excluding Tax</item>
+                <item name="value" xsi:type="number">3</item>
+            </field>
+            <field name="tax/cart_display/subtotal" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Including and Excluding Tax</item>
+                <item name="value" xsi:type="number">3</item>
+            </field>
+            <field name="tax/cart_display/shipping" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Including and Excluding Tax</item>
+                <item name="value" xsi:type="number">3</item>
+            </field>
+            <field name="tax/cart_display/grandtotal" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="tax/cart_display/full_summary" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="tax/sales_display/price" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Including and Excluding Tax</item>
+                <item name="value" xsi:type="number">3</item>
+            </field>
+            <field name="tax/sales_display/subtotal" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Including and Excluding Tax</item>
+                <item name="value" xsi:type="number">3</item>
+            </field>
+            <field name="tax/sales_display/shipping" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Including and Excluding Tax</item>
+                <item name="value" xsi:type="number">3</item>
+            </field>
+            <field name="tax/sales_display/grandtotal" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+        </dataset>
+
+        <dataset name="row_cat_incl_ship_excl_after_disc_on_excl">
+            <field name="tax/calculation/algorithm" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Row Total</item>
+                <item name="value" xsi:type="string">ROW_BASE_CALCULATION</item>
+            </field>
+            <field name="tax/calculation/price_includes_tax" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Including Tax</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="tax/calculation/shipping_includes_tax" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Excluding Tax</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="tax/calculation/apply_after_discount" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">After Discount</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="tax/calculation/discount_tax" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Excluding Tax</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="tax/calculation/cross_border_trade_enabled" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+
+        <dataset name="row_cat_excl_ship_incl_before_disc_on_incl">
+            <field name="tax/calculation/algorithm" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Row Total</item>
+                <item name="value" xsi:type="string">ROW_BASE_CALCULATION</item>
+            </field>
+            <field name="tax/calculation/price_includes_tax" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Excluding Tax</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="tax/calculation/shipping_includes_tax" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Including Tax</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="tax/calculation/apply_after_discount" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Before Discount</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="tax/calculation/discount_tax" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Including Tax</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="tax/calculation/cross_border_trade_enabled" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+
+        <dataset name="total_cat_excl_ship_incl_after_disc_on_excl">
+            <field name="tax/calculation/algorithm" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Total</item>
+                <item name="value" xsi:type="string">TOTAL_BASE_CALCULATION</item>
+            </field>
+            <field name="tax/calculation/price_includes_tax" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Excluding Tax</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="tax/calculation/shipping_includes_tax" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Including Tax</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="tax/calculation/apply_after_discount" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">After Discount</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="tax/calculation/discount_tax" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Excluding Tax</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="tax/calculation/cross_border_trade_enabled" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+
+        <dataset name="row_cat_incl_ship_excl_before_disc_on_incl">
+            <field name="tax/calculation/algorithm" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Row Total</item>
+                <item name="value" xsi:type="string">ROW_BASE_CALCULATION</item>
+            </field>
+            <field name="tax/calculation/price_includes_tax" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Including Tax</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="tax/calculation/shipping_includes_tax" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Excluding Tax</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="tax/calculation/apply_after_discount" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Before Discount</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="tax/calculation/discount_tax" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Including Tax</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="tax/calculation/cross_border_trade_enabled" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+
+        <dataset name="row_cat_incl_ship_excl_before_disc_on_incl_rollback">
+            <field name="tax/calculation/apply_after_discount" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">After Discount</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+        </dataset>
+
+        <dataset name="unit_cat_incl_ship_incl_before_disc_on_incl">
+            <field name="tax/calculation/algorithm" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string" />
+                <item name="value" xsi:type="string">UNIT_BASE_CALCULATION</item>
+            </field>
+            <field name="tax/calculation/price_includes_tax" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Including Tax</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="tax/calculation/shipping_includes_tax" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Including Tax</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="tax/calculation/apply_after_discount" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Before Discount</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="tax/calculation/discount_tax" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Including Tax</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="tax/calculation/cross_border_trade_enabled" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+
+        <dataset name="unit_cat_incl_ship_incl_before_disc_on_incl_rollback">
+            <field name="tax/calculation/apply_after_discount" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">After Discount</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+        </dataset>
+
+        <dataset name="total_cat_excl_ship_incl_before_disc_on_incl">
+            <field name="tax/calculation/algorithm" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Total</item>
+                <item name="value" xsi:type="string">TOTAL_BASE_CALCULATION</item>
+            </field>
+            <field name="tax/calculation/price_includes_tax" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Excluding Tax</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="tax/calculation/shipping_includes_tax" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Including Tax</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="tax/calculation/apply_after_discount" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Before Discount</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="tax/calculation/discount_tax" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Including Tax</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="tax/calculation/cross_border_trade_enabled" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+
+        <dataset name="total_cat_excl_ship_incl_before_disc_on_incl_rollback">
+            <field name="tax/calculation/apply_after_discount" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">After Discount</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+        </dataset>
+
+        <dataset name="unit_cat_excl_ship_excl_after_disc_on_excl">
+            <field name="tax/calculation/algorithm" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Unit Price</item>
+                <item name="value" xsi:type="string">UNIT_BASE_CALCULATION</item>
+            </field>
+            <field name="tax/calculation/price_includes_tax" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Excluding Tax</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="tax/calculation/shipping_includes_tax" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Excluding Tax</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="tax/calculation/apply_after_discount" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">After Discount</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="tax/calculation/discount_tax" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Excluding Tax</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="tax/calculation/cross_border_trade_enabled" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+
+        <dataset name="total_cat_incl_ship_excl_before_disc_on_excl">
+            <field name="tax/calculation/algorithm" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Total</item>
+                <item name="value" xsi:type="string">TOTAL_BASE_CALCULATION</item>
+            </field>
+            <field name="tax/calculation/price_includes_tax" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Including Tax</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="tax/calculation/shipping_includes_tax" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Excluding Tax</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="tax/calculation/apply_after_discount" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Before Discount</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="tax/calculation/discount_tax" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Excluding Tax</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="tax/calculation/cross_border_trade_enabled" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+
+        <dataset name="total_cat_incl_ship_excl_before_disc_on_excl_rollback">
+            <field name="tax/calculation/apply_after_discount" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">After Discount</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+        </dataset>
+
+        <dataset name="total_cat_excl_ship_incl_after_disc_on_incl">
+            <field name="tax/calculation/algorithm" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Total</item>
+                <item name="value" xsi:type="string">TOTAL_BASE_CALCULATION</item>
+            </field>
+            <field name="tax/calculation/price_includes_tax" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Excluding Tax</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="tax/calculation/shipping_includes_tax" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Including Tax</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="tax/calculation/apply_after_discount" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">After Discount</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="tax/calculation/discount_tax" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Including Tax</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="tax/calculation/cross_border_trade_enabled" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+
+        <dataset name="unit_cat_excl_ship_incl_after_disc_on_excl">
+            <field name="tax/calculation/algorithm" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Unit Price</item>
+                <item name="value" xsi:type="string">UNIT_BASE_CALCULATION</item>
+            </field>
+            <field name="tax/calculation/price_includes_tax" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Excluding Tax</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="tax/calculation/shipping_includes_tax" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Including Tax</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="tax/calculation/apply_after_discount" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">After Discount</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="tax/calculation/discount_tax" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Excluding Tax</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="tax/calculation/cross_border_trade_enabled" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+
+        <dataset name="cross_border_enabled_price_incl_tax">
+            <field name="tax/calculation/algorithm" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Total</item>
+                <item name="value" xsi:type="string">TOTAL_BASE_CALCULATION</item>
+            </field>
+            <field name="tax/calculation/price_includes_tax" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Including Tax</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="tax/calculation/shipping_includes_tax" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Including Tax</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="tax/calculation/apply_after_discount" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string" />
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="tax/calculation/discount_tax" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Including Tax</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="tax/calculation/cross_border_trade_enabled" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+        </dataset>
+
+        <dataset name="cross_border_enabled_price_excl_tax">
+            <field name="tax/calculation/algorithm" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Total</item>
+                <item name="value" xsi:type="string">TOTAL_BASE_CALCULATION</item>
+            </field>
+            <field name="tax/calculation/price_includes_tax" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Excluding Tax</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="tax/calculation/shipping_includes_tax" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Excluding Tax</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="tax/calculation/apply_after_discount" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string" />
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="tax/calculation/discount_tax" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Excluding Tax</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="tax/calculation/cross_border_trade_enabled" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+        </dataset>
+
+        <dataset name="tax_cart_display_full_summary">
+            <field name="tax/cart_display/full_summary" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+        </dataset>
+
+        <dataset name="tax_cart_display_full_summary_rollback">
+            <field name="tax/cart_display/full_summary" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+    </repository>
+</config>

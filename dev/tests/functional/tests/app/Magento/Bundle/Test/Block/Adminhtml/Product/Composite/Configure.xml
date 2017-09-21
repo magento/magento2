@@ -1,0 +1,32 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<mapping strict="0">
+    <fields>
+        <qty />
+        <checkbox>
+            <selector>div[contains(@class,"field choice") and label[contains(.,"%product_name%")]]//input</selector>
+            <strategy>xpath</strategy>
+            <input>checkbox</input>
+        </checkbox>
+        <dropdown>
+            <selector>select</selector>
+            <strategy>xpath</strategy>
+            <input>select</input>
+        </dropdown>
+        <multiple>
+            <selector>select</selector>
+            <strategy>xpath</strategy>
+            <input>multiselect</input>
+        </multiple>
+        <radiobutton>
+            <selector>div[contains(@class,"field choice") and label[contains(.,"%product_name%")]]//input</selector>
+            <strategy>xpath</strategy>
+            <input>checkbox</input>
+        </radiobutton>
+    </fields>
+</mapping>

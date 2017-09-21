@@ -1,0 +1,219 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
+    <group id="paypal_payflowpro" translate="label comment" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="10">
+        <label>Payflow Pro</label>
+        <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Payment</frontend_model>
+        <fieldset_css>paypal-other-section</fieldset_css>
+        <comment><![CDATA[Connect your merchant account with a fully customizable gateway that lets customers pay without leaving your site. (<u>Includes Express Checkout</u>)]]></comment>
+        <attribute type="activity_path">payment/payflowpro/active</attribute>
+        <attribute type="paypal_ec_separate">1</attribute>
+        <group id="configuration_details" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="4">
+            <comment>http://docs.magento.com/m2/ce/user_guide/payment/paypal-payflow-pro.html</comment>
+            <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Hint</frontend_model>
+        </group>
+        <group id="paypal_payflow_required" translate="label" showInDefault="1" showInWebsite="1" sortOrder="10">
+            <label>Required PayPal Settings</label>
+            <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Expanded</frontend_model>
+            <group id="paypal_payflow_api_settings" translate="label" showInDefault="1" showInWebsite="1" sortOrder="10">
+                <label>Payflow Pro</label>
+                <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Expanded</frontend_model>
+                <field id="partner" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1">
+                    <label>Partner</label>
+                    <config_path>payment/payflowpro/partner</config_path>
+                    <attribute type="shared">1</attribute>
+                </field>
+                <field id="user" translate="label" type="obscure" sortOrder="30" showInDefault="1" showInWebsite="1">
+                    <label>User</label>
+                    <config_path>payment/payflowpro/user</config_path>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <attribute type="shared">1</attribute>
+                </field>
+                <field id="vendor" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1">
+                    <label>Vendor</label>
+                    <config_path>payment/payflowpro/vendor</config_path>
+                    <attribute type="shared">1</attribute>
+                </field>
+                <field id="pwd" translate="label" type="obscure" sortOrder="50" showInDefault="1" showInWebsite="1">
+                    <label>Password</label>
+                    <config_path>payment/payflowpro/pwd</config_path>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <attribute type="shared">1</attribute>
+                </field>
+                <field id="sandbox_flag" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="1">
+                    <label>Test Mode</label>
+                    <config_path>payment/payflowpro/sandbox_flag</config_path>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <attribute type="shared">1</attribute>
+                </field>
+                <field id="use_proxy" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1">
+                    <label>Use Proxy</label>
+                    <config_path>payment/payflowpro/use_proxy</config_path>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <attribute type="shared">1</attribute>
+                </field>
+                <field id="proxy_host" translate="label" type="text" sortOrder="80" showInDefault="1" showInWebsite="1">
+                    <label>Proxy Host</label>
+                    <config_path>payment/payflowpro/proxy_host</config_path>
+                    <depends>
+                        <field id="use_proxy">1</field>
+                    </depends>
+                    <attribute type="shared">1</attribute>
+                </field>
+                <field id="proxy_port" translate="label" type="text" sortOrder="90" showInDefault="1" showInWebsite="1">
+                    <label>Proxy Port</label>
+                    <config_path>payment/payflowpro/proxy_port</config_path>
+                    <depends>
+                        <field id="use_proxy">1</field>
+                    </depends>
+                    <attribute type="shared">1</attribute>
+                </field>
+            </group>
+            <field id="enable_paypal_payflow" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1">
+                <label>Enable this Solution</label>
+                <config_path>payment/payflowpro/active</config_path>
+                <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Field\Enable\Payment</frontend_model>
+                <requires>
+                    <group id="paypal_payflow_api_settings"/>
+                </requires>
+            </field>
+            <field id="payflowpro_cc_vault_active" translate="label" type="select" sortOrder="22" showInDefault="1" showInWebsite="1" showInStore="0">
+                <label>Vault Enabled</label>
+                <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                <config_path>payment/payflowpro_cc_vault/active</config_path>
+                <attribute type="shared">1</attribute>
+                <requires>
+                    <group id="paypal_payflow_api_settings"/>
+                </requires>
+            </field>
+        </group>
+        <group id="settings_paypal_payflow" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="20">
+            <label>Basic Settings - PayPal Payflow Pro</label>
+            <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Expanded</frontend_model>
+            <field id="title" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Title</label>
+                <comment>It is recommended to set this value to "Debit or Credit Card" per store views.</comment>
+                <config_path>payment/payflowpro/title</config_path>
+                <attribute type="shared">1</attribute>
+            </field>
+            <field id="payflowpro_cc_vault_title" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="0">
+                <label>Vault Title</label>
+                <config_path>payment/payflowpro_cc_vault/title</config_path>
+            </field>
+            <field id="sort_order" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Sort Order</label>
+                <config_path>payment/payflowpro/sort_order</config_path>
+                <frontend_class>validate-number</frontend_class>
+                <attribute type="shared">1</attribute>
+            </field>
+            <field id="payment_action" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1">
+                <label>Payment Action</label>
+                <config_path>payment/payflowpro/payment_action</config_path>
+                <source_model>Magento\Paypal\Model\System\Config\Source\PaymentActions</source_model>
+                <attribute type="shared">1</attribute>
+            </field>
+            <field id="heading_cc" translate="label" sortOrder="40" showInDefault="1" showInWebsite="1">
+                <label>Credit Card Settings</label>
+                <frontend_model>Magento\Config\Block\System\Config\Form\Field\Heading</frontend_model>
+                <attribute type="shared">1</attribute>
+            </field>
+            <field id="cctypes" translate="label comment" type="multiselect" sortOrder="50" showInDefault="1" showInWebsite="1">
+                <label>Allowed Credit Card Types</label>
+                <comment>
+                    <![CDATA[Supporting of American Express cards require additional agreement. Learn more at <a href="http://www.paypal.com/amexupdate">http://www.paypal.com/amexupdate</a>.]]>
+                </comment>
+                <config_path>payment/payflowpro/cctypes</config_path>
+                <source_model>Magento\Paypal\Model\Config::getPayflowproCcTypesAsOptionArray</source_model>
+                <attribute type="shared">1</attribute>
+            </field>
+            <group id="settings_paypal_payflow_advanced" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="60">
+                <label>Advanced Settings</label>
+                <fieldset_css>config-advanced</fieldset_css>
+                <field id="allowspecific" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1">
+                    <label>Payment Applicable From</label>
+                    <config_path>payment/payflowpro/allowspecific</config_path>
+                    <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
+                    <attribute type="shared">1</attribute>
+                </field>
+                <field id="specificcountry" translate="label" type="multiselect" sortOrder="20" showInDefault="1" showInWebsite="1">
+                    <label>Countries Payment Applicable From</label>
+                    <config_path>payment/payflowpro/specificcountry</config_path>
+                    <source_model>Magento\Paypal\Model\System\Config\Source\BuyerCountry</source_model>
+                    <depends>
+                        <field id="allowspecific">1</field>
+                    </depends>
+                    <attribute type="shared">1</attribute>
+                </field>
+                <field id="debug" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1">
+                    <label>Debug Mode</label>
+                    <config_path>payment/payflowpro/debug</config_path>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <attribute type="shared">1</attribute>
+                </field>
+                <field id="verify_peer" translate="label" type="select" sortOrder="35" showInDefault="1" showInWebsite="1">
+                    <label>Enable SSL verification</label>
+                    <config_path>payment/payflowpro/verify_peer</config_path>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <attribute type="shared">1</attribute>
+                </field>
+                <field id="useccv" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1">
+                    <label>Require CVV Entry</label>
+                    <config_path>payment/payflowpro/useccv</config_path>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <attribute type="shared">1</attribute>
+                </field>
+                <group id="paypal_payflow_avs_check" translate="label" showInDefault="1" showInWebsite="1" sortOrder="80">
+                    <label>CVV and AVS Settings</label>
+                    <field id="heading_avs_settings" translate="label" sortOrder="0" showInDefault="1" showInWebsite="1">
+                        <label>Reject Transaction if:</label>
+                        <frontend_model>Magento\Config\Block\System\Config\Form\Field\Heading</frontend_model>
+                        <attribute type="shared">1</attribute>
+                    </field>
+                    <field id="avs_street" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1">
+                        <label>AVS Street Does Not Match</label>
+                        <config_path>payment/payflowpro/avs_street</config_path>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <attribute type="shared">1</attribute>
+                    </field>
+                    <field id="avs_zip" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="1">
+                        <label>AVS Zip Does Not Match</label>
+                        <config_path>payment/payflowpro/avs_zip</config_path>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <attribute type="shared">1</attribute>
+                    </field>
+                    <field id="avs_international" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="1">
+                        <label>Card Issuer Is Outside The United States</label>
+                        <config_path>payment/payflowpro/avs_international</config_path>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <attribute type="shared">1</attribute>
+                    </field>
+                    <field id="avs_security_code" translate="label" type="select" sortOrder="4" showInDefault="1" showInWebsite="1">
+                        <label>Card Security Code Does Not Match</label>
+                        <config_path>payment/payflowpro/avs_security_code</config_path>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <attribute type="shared">0</attribute>
+                    </field>
+                </group>
+                <group id="paypal_payflow_settlement_report" translate="label" showInDefault="1" showInWebsite="1" sortOrder="90">
+                    <label>Settlement Report Settings</label>
+                    <field id="heading_sftp" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_settlement_report/heading_sftp"/>
+                    <field id="settlement_reports_ftp_login" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_settlement_report/settlement_reports_ftp_login"/>
+                    <field id="settlement_reports_ftp_password" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_settlement_report/settlement_reports_ftp_password"/>
+                    <field id="settlement_reports_ftp_sandbox" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_settlement_report/settlement_reports_ftp_sandbox"/>
+                    <field id="settlement_reports_ftp_ip" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_settlement_report/settlement_reports_ftp_ip"/>
+                    <field id="settlement_reports_ftp_path" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_settlement_report/settlement_reports_ftp_path"/>
+                    <field id="heading_schedule" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_settlement_report/heading_schedule"/>
+                    <field id="settlement_reports_active" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_settlement_report/settlement_reports_active"/>
+                    <field id="settlement_reports_schedule" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_settlement_report/settlement_reports_schedule"/>
+                    <field id="settlement_reports_time" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_settlement_report/settlement_reports_time"/>
+                </group>
+            </group>
+        </group>
+    </group>
+</include>

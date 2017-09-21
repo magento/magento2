@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -27,12 +9,17 @@
  */
 namespace Magento\TestFramework\Annotation;
 
+/**
+ * Handler for applying magentoAdminConfig annotation
+ *
+ * @package Magento\TestFramework\Annotation
+ */
 class AdminConfigFixture
 {
     /**
      * Test instance that is available between 'startTest' and 'stopTest' events
      *
-     * @var \PHPUnit_Framework_TestCase
+     * @var \PHPUnit\Framework\TestCase
      */
     protected $_currentTest;
 
@@ -41,7 +28,7 @@ class AdminConfigFixture
      *
      * @var array
      */
-    private $_configValues = array();
+    private $_configValues = [];
 
     /**
      * Retrieve configuration node value
@@ -52,7 +39,7 @@ class AdminConfigFixture
     protected function _getConfigValue($configPath)
     {
         return \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Backend\App\ConfigInterface'
+            \Magento\Framework\App\Config\MutableScopeConfigInterface::class
         )->getValue(
             $configPath
         );
@@ -67,7 +54,7 @@ class AdminConfigFixture
     protected function _setConfigValue($configPath, $value)
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Backend\App\ConfigInterface'
+            \Magento\Framework\App\Config\MutableScopeConfigInterface::class
         )->setValue(
             $configPath,
             $value
@@ -77,9 +64,9 @@ class AdminConfigFixture
     /**
      * Assign required config values and save original ones
      *
-     * @param \PHPUnit_Framework_TestCase $test
+     * @param \PHPUnit\Framework\TestCase $test
      */
-    protected function _assignConfigData(\PHPUnit_Framework_TestCase $test)
+    protected function _assignConfigData(\PHPUnit\Framework\TestCase $test)
     {
         $annotations = $test->getAnnotations();
         if (!isset($annotations['method']['magentoAdminConfigFixture'])) {
@@ -103,15 +90,15 @@ class AdminConfigFixture
         foreach ($this->_configValues as $configPath => $originalValue) {
             $this->_setConfigValue($configPath, $originalValue);
         }
-        $this->_configValues = array();
+        $this->_configValues = [];
     }
 
     /**
      * Handler for 'startTest' event
      *
-     * @param \PHPUnit_Framework_TestCase $test
+     * @param \PHPUnit\Framework\TestCase $test
      */
-    public function startTest(\PHPUnit_Framework_TestCase $test)
+    public function startTest(\PHPUnit\Framework\TestCase $test)
     {
         $this->_currentTest = $test;
         $this->_assignConfigData($test);
@@ -120,11 +107,11 @@ class AdminConfigFixture
     /**
      * Handler for 'endTest' event
      *
-     * @param \PHPUnit_Framework_TestCase $test
+     * @param \PHPUnit\Framework\TestCase $test
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function endTest(\PHPUnit_Framework_TestCase $test)
+    public function endTest(\PHPUnit\Framework\TestCase $test)
     {
         $this->_currentTest = null;
         $this->_restoreConfigData();

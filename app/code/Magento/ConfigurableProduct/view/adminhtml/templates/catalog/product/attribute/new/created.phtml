@@ -1,0 +1,21 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+/** @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Attribute\NewAttribute\Product\Created */
+?>
+<script>
+(function ($) {
+
+    var data = <?= /* @escapeNotVerified */ $block->getAttributesBlockJson() ?>;
+    var set = data.set || {id: $('#attribute_set_id').val()};
+    if (data.tab == 'variations') {
+        $('[data-role=product-variations-matrix]').trigger('add', data.attribute);
+    } else {
+        $('[data-form=edit-product]').trigger('changeAttributeSet', set);
+    }
+    $('#create_new_attribute').modal('closeModal');
+
+})(window.parent.jQuery);
+</script>

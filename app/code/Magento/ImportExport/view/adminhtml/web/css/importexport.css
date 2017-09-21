@@ -1,0 +1,15 @@
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+.import-error-wrapper {
+    margin-top: 10px;
+}
+
+.import-error-list {
+    max-height: 300px;
+    overflow-y: auto;
+    padding: 10px;
+    background-color: #fcc;
+    margin: 10px 0 0 0;
+}

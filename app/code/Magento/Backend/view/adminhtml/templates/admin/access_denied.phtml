@@ -1,0 +1,23 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+/**
+ * @see \Magento\Backend\Block\Denied
+ */
+?>
+<h1 class="page-heading"><?= /* @escapeNotVerified */ __('Access denied') ?></h1>
+<?php if (!$block->hasAvailableResources()): ?>
+<p>
+<?= /* @escapeNotVerified */ __('Please try to sign out and sign in again.') ?><br/>
+<?= /* @escapeNotVerified */ __('If you continue to receive this message, please contact the store owner.') ?>
+</p>
+<?php else: ?>
+<p><?= /* @escapeNotVerified */ __('You need more permissions to access this.') ?></p>
+<?php endif?>

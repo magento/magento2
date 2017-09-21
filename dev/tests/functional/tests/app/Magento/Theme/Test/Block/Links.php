@@ -1,50 +1,164 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @spi
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Theme\Test\Block;
 
-use Mtf\Block\Block;
-use Mtf\Client\Element;
-use Mtf\Client\Element\Locator;
+use Magento\Mtf\Block\Block;
+use Magento\Mtf\Client\Locator;
 
 /**
- * Page Top Links block
- *
+ * Page Top Links block.
  */
 class Links extends Block
 {
     /**
-     * Open Link by title
+     * Locator value for correspondent link.
+     *
+     * @var string
+     */
+    protected $link = '//a[contains(text(), "%s")]';
+
+    /**
+     * Locator value for Authorization link.
+     *
+     * @var string
+     */
+    protected $authorizationLink = '.authorization-link a';
+
+    /**
+     * Locator value for welcome message.
+     *
+     * @var string
+     */
+    protected $welcomeMessage = '.greet.welcome';
+
+    /**
+     * Locator value for "Expand/Collapse Customer Menu" button.
+     *
+     * @var string
+     */
+    protected $toggleButton = '[data-action="customer-menu-toggle"]';
+
+    /**
+     * Locator value for Customer Menu.
+     *
+     * @var string
+     */
+    protected $customerMenu = '.customer-menu > ul';
+
+    /**
+     * Expand Customer Menu (located in page Header) if it was collapsed.
+     *
+     * @return void
+     */
+    protected function expandCustomerMenu()
+    {
+        $this->_rootElement->find($this->toggleButton)->click();
+    }
+
+    /**
+     * Open customer registration
+     *
+     * @return void
+     */
+    public function openCustomerCreateLink()
+    {
+        $this->openLink('Create an Account');
+    }
+
+    /**
+     * Open link by its title.
      *
      * @param string $linkTitle
-     * @return Element
+     * @return void
      */
     public function openLink($linkTitle)
     {
-        $this->_rootElement
-            ->find('//a[contains(text(), "' . $linkTitle . '")]', Locator::SELECTOR_XPATH)
-            ->click();
+        $link = $this->_rootElement->find(sprintf($this->link, $linkTitle), Locator::SELECTOR_XPATH);
+        if (!$link->isVisible()) {
+            $this->expandCustomerMenu();
+        }
+        $link->click();
+    }
+
+    /**
+     * Verify if correspondent link is present or not.
+     *
+     * @param string $linkTitle
+     * @return bool
+     */
+    public function isLinkVisible($linkTitle)
+    {
+        $link = $this->_rootElement->find(sprintf($this->link, $linkTitle), Locator::SELECTOR_XPATH);
+        if (!$link->isVisible()) {
+            $this->expandCustomerMenu();
+        }
+        return $link->isVisible();
+    }
+
+    /**
+     * Wait until correspondent link appears.
+     *
+     * @param string $linkTitle
+     * @return void
+     */
+    public function waitLinkIsVisible($linkTitle)
+    {
+        $browser = $this->_rootElement;
+        $selector = sprintf($this->link, $linkTitle);
+        $browser->waitUntil(
+            function () use ($browser, $selector) {
+                $element = $browser->find($selector, Locator::SELECTOR_XPATH);
+                return $element->isVisible() ? true : null;
+            }
+        );
+    }
+
+    /**
+     * Get url from link.
+     *
+     * @param string $linkTitle
+     * @return string
+     */
+    public function getLinkUrl($linkTitle)
+    {
+        $link = $this->_rootElement->find(sprintf($this->link, $linkTitle), Locator::SELECTOR_XPATH)
+            ->getAttribute('href');
+
+        return trim($link);
+    }
+
+    /**
+     * Wait until welcome message appears.
+     *
+     * @return void
+     */
+    public function waitWelcomeMessage()
+    {
+        $this->waitForElementVisible($this->welcomeMessage);
+    }
+
+    /**
+     * Get text of the welcome message.
+     *
+     * @return string
+     */
+    public function getWelcomeText()
+    {
+        $this->waitForElementVisible($this->welcomeMessage);
+        return $this->_rootElement->find($this->welcomeMessage)->getText();
+    }
+
+    /**
+     * Verify if authorization link is present or not.
+     *
+     * @return bool
+     */
+    public function isAuthorizationVisible()
+    {
+        return $this->_rootElement->find($this->authorizationLink)->isVisible();
     }
 }

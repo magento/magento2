@@ -1,0 +1,1 @@
+The CMS module allows creating, editing and managing pages with different content type.

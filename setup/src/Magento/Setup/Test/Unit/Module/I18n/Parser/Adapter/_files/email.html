@@ -1,0 +1,33 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <p>{{trans 'Phrase 1'}}</p>
+    <span>
+        {{trans
+            "Phrase 2 with %a_lot of extra info for the brilliant %customer_name."
+
+            %a_lot="$order.foo"
+            %customer_name=$customer_name
+        }}
+    </span>
+    <label data-bind="i18n: 'This is test data', attr: {for: 'more-test-data-'}"></label>
+    <label data-bind="attr: {for: 'more-test-data-' + $parent.getCode()}"><span data-bind="i18n: 'This is test data at right side of attr'"></span></label>
+    <label data-bind="i18n: 'This is \' test \' data', attr: {for: 'more-test-data-' + $parent.getCode()}"></label>
+    <label data-bind="i18n: 'This is \" test \" data', attr: {for: 'more-test-data-' + $parent.getCode()}"></label>
+    <label data-bind="i18n: 'This is test data with a quote after''"></label>
+    <label data-bind="i18n: 'This is test data with space after ' ' "></label>
+    <label data-bind="i18n: ''"></label>
+    <label data-bind="i18n: '\''"></label>
+    <label data-bind="i18n: '\\\\ '"></label>
+</body>
+</html>

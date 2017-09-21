@@ -1,40 +1,22 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\PageCache\Model;
 
-use Magento\Framework\App\Filesystem;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Module\Dir;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\PageCache\Model\Varnish\VclGeneratorFactory;
 
 /**
  * Model is responsible for replacing default vcl template
  * file configuration with user-defined from configuration
  *
- * @author     Magento Core Team <core@magentocommerce.com>
- */
-
-/**
- * Class Config
- *
+ * @api
+ * @since 100.0.2
  */
 class Config
 {
@@ -58,6 +40,8 @@ class Config
 
     const XML_VARNISH_PAGECACHE_BACKEND_HOST = 'system/full_page_cache/varnish/backend_host';
 
+    const XML_VARNISH_PAGECACHE_GRACE_PERIOD = 'system/full_page_cache/varnish/grace_period';
+
     const XML_VARNISH_PAGECACHE_DESIGN_THEME_REGEX = 'design/theme/ua_regexp';
 
     /**
@@ -66,9 +50,14 @@ class Config
     protected $_scopeConfig;
 
     /**
-     * XML path to value for saving temporary .vcl configuration
+     * XML path to Varnish 5 config template path
      */
-    const VARNISH_CONFIGURATION_PATH = 'system/full_page_cache/varnish/path';
+    const VARNISH_5_CONFIGURATION_PATH = 'system/full_page_cache/varnish5/path';
+
+    /**
+     * XML path to Varnish 4 config template path
+     */
+    const VARNISH_4_CONFIGURATION_PATH = 'system/full_page_cache/varnish4/path';
 
     /**
      * @var \Magento\Framework\App\Cache\StateInterface $_cacheState
@@ -76,29 +65,55 @@ class Config
     protected $_cacheState;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
+     * @var Filesystem\Directory\ReadFactory
      */
-    protected $_modulesDirectory;
+    protected $readFactory;
 
     /**
-     * @param Filesystem $filesystem
+     * @var \Magento\Framework\Module\Dir\Reader
+     */
+    protected $reader;
+
+    /**
+     * @var Json
+     */
+    private $serializer;
+
+    /**
+     * @var VclGeneratorFactory
+     */
+    private $vclGeneratorFactory;
+
+    /**
+     * @param Filesystem\Directory\ReadFactory $readFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\App\Cache\StateInterface $cacheState
+     * @param Dir\Reader $reader
+     * @param VclGeneratorFactory $vclGeneratorFactory
+     * @param Json|null $serializer
      */
     public function __construct(
-        \Magento\Framework\App\Filesystem $filesystem,
+        \Magento\Framework\Filesystem\Directory\ReadFactory $readFactory,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\App\Cache\StateInterface $cacheState
+        \Magento\Framework\App\Cache\StateInterface $cacheState,
+        \Magento\Framework\Module\Dir\Reader $reader,
+        VclGeneratorFactory $vclGeneratorFactory,
+        Json $serializer = null
     ) {
-        $this->_modulesDirectory = $filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem::MODULES_DIR);
+        $this->readFactory = $readFactory;
         $this->_scopeConfig = $scopeConfig;
         $this->_cacheState = $cacheState;
+        $this->reader = $reader;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
+        $this->vclGeneratorFactory = $vclGeneratorFactory;
     }
 
     /**
      * Return currently selected cache type: built in or varnish
-     * 
+     *
      * @return int
+     * @api
+     * @deprecated 100.2.0 see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
      */
     public function getType()
     {
@@ -109,6 +124,8 @@ class Config
      * Return page lifetime
      *
      * @return int
+     * @api
+     * @deprecated 100.2.0 see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
      */
     public function getTtl()
     {
@@ -118,33 +135,57 @@ class Config
     /**
      * Return generated varnish.vcl configuration file
      *
+     * @param string $vclTemplatePath
      * @return string
+     * @deprecated 100.2.0 see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
+     * @api
      */
-    public function getVclFile()
+    public function getVclFile($vclTemplatePath)
     {
-        $data = $this->_modulesDirectory->readFile($this->_scopeConfig->getValue(self::VARNISH_CONFIGURATION_PATH));
-        return strtr($data, $this->_getReplacements());
+        $accessList = $this->_scopeConfig->getValue(self::XML_VARNISH_PAGECACHE_ACCESS_LIST);
+        $designExceptions = $this->_scopeConfig->getValue(
+            self::XML_VARNISH_PAGECACHE_DESIGN_THEME_REGEX,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+
+        $version = $vclTemplatePath === self::VARNISH_5_CONFIGURATION_PATH ? 5 : 4;
+        $sslOffloadedHeader = $this->_scopeConfig->getValue(
+            \Magento\Framework\HTTP\PhpEnvironment\Request::XML_PATH_OFFLOADER_HEADER
+        );
+        $vclGenerator = $this->vclGeneratorFactory->create([
+            'backendHost' => $this->_scopeConfig->getValue(self::XML_VARNISH_PAGECACHE_BACKEND_HOST),
+            'backendPort' => $this->_scopeConfig->getValue(self::XML_VARNISH_PAGECACHE_BACKEND_PORT),
+            'accessList' => $accessList ? explode(',', $accessList) : [],
+            'designExceptions' => $designExceptions ? $this->serializer->unserialize($designExceptions) : [],
+            'sslOffloadedHeader' => $sslOffloadedHeader,
+            'gracePeriod' => $this->_scopeConfig->getValue(self::XML_VARNISH_PAGECACHE_GRACE_PERIOD)
+        ]);
+        return $vclGenerator->generateVcl($version);
     }
 
     /**
      * Prepare data for VCL config
      *
      * @return array
+     * @deprecated 100.2.0 see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
      */
     protected function _getReplacements()
     {
-        return array(
-            '{{ host }}' => $this->_scopeConfig->getValue(
-                self::XML_VARNISH_PAGECACHE_BACKEND_HOST,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        return [
+            '/* {{ host }} */' => $this->_scopeConfig->getValue(self::XML_VARNISH_PAGECACHE_BACKEND_HOST),
+            '/* {{ port }} */' => $this->_scopeConfig->getValue(self::XML_VARNISH_PAGECACHE_BACKEND_PORT),
+            '/* {{ ips }} */' => $this->_getAccessList(),
+            '/* {{ design_exceptions_code }} */' => $this->_getDesignExceptions(),
+            // http headers get transformed by php `X-Forwarded-Proto: https`
+            // becomes $SERVER['HTTP_X_FORWARDED_PROTO'] = 'https'
+            // Apache and Nginx drop all headers with underlines by default.
+            '/* {{ ssl_offloaded_header }} */' => str_replace(
+                '_',
+                '-',
+                $this->_scopeConfig->getValue(\Magento\Framework\HTTP\PhpEnvironment\Request::XML_PATH_OFFLOADER_HEADER)
             ),
-            '{{ port }}' => $this->_scopeConfig->getValue(
-                self::XML_VARNISH_PAGECACHE_BACKEND_PORT,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            ),
-            '{{ ips }}' => $this->_getAccessList(),
-            '{{ design_exceptions_code }}' => $this->_getDesignExceptions()
-        );
+            '/* {{ grace_period }} */' => $this->_scopeConfig->getValue(self::XML_VARNISH_PAGECACHE_GRACE_PERIOD)
+        ];
     }
 
     /**
@@ -156,19 +197,18 @@ class Config
      *  "127.0.0.2";
      *
      * @return mixed|null|string
+     * @deprecated 100.2.0 see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
      */
     protected function _getAccessList()
     {
         $result = '';
         $tpl = "    \"%s\";";
-        $accessList = $this->_scopeConfig->getValue(
-            self::XML_VARNISH_PAGECACHE_ACCESS_LIST,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
+        $accessList = $this->_scopeConfig->getValue(self::XML_VARNISH_PAGECACHE_ACCESS_LIST);
         if (!empty($accessList)) {
-            $ips = explode(', ', $accessList);
+            $result = [];
+            $ips = explode(',', $accessList);
             foreach ($ips as $ip) {
-                $result[] = sprintf($tpl, $ip);
+                $result[] = sprintf($tpl, trim($ip));
             }
             return implode("\n", $result);
         }
@@ -182,6 +222,7 @@ class Config
      * we have to convert "/pattern/iU" into "(?Ui)pattern"
      *
      * @return string
+     * @deprecated 100.2.0 see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
      */
     protected function _getDesignExceptions()
     {
@@ -193,7 +234,7 @@ class Config
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         if ($expressions) {
-            $rules = array_values(unserialize($expressions));
+            $rules = array_values($this->serializer->unserialize($expressions));
             foreach ($rules as $i => $rule) {
                 if (preg_match('/^[\W]{1}(.*)[\W]{1}(\w+)?$/', $rule['regexp'], $matches)) {
                     if (!empty($matches[2])) {
@@ -213,6 +254,8 @@ class Config
      * Whether a cache type is enabled in Cache Management Grid
      *
      * @return bool
+     * @api
+     * @deprecated 100.2.0 see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
      */
     public function isEnabled()
     {

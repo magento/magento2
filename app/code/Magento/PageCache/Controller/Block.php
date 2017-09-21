@@ -2,75 +2,49 @@
 /**
  * PageCache controller
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\PageCache\Controller;
 
-class Block extends \Magento\Framework\App\Action\Action
+use Magento\Framework\Serialize\Serializer\Base64Json;
+use Magento\Framework\Serialize\Serializer\Json;
+
+abstract class Block extends \Magento\Framework\App\Action\Action
 {
     /**
-     * Returns block content depends on ajax request
-     *
-     * @return void
+     * @var \Magento\Framework\Translate\InlineInterface
      */
-    public function renderAction()
-    {
-        if (!$this->getRequest()->isAjax()) {
-            $this->_forward('noroute');
-            return;
-        }
-
-        $blocks = $this->_getBlocks();
-        $data = array();
-        foreach ($blocks as $blockName => $blockInstance) {
-            $data[$blockName] = $blockInstance->toHtml();
-        }
-
-        $this->getResponse()->setPrivateHeaders(\Magento\PageCache\Helper\Data::PRIVATE_MAX_AGE_CACHE);
-        $this->getResponse()->appendBody(json_encode($data));
-    }
+    protected $translateInline;
 
     /**
-     * Returns block content as part of ESI request from Varnish
-     *
-     * @return void
+     * @var Json
      */
-    public function esiAction()
-    {
-        $response = $this->getResponse();
-        $blocks = $this->_getBlocks();
-        $html = '';
-        $ttl = 0;
+    private $jsonSerializer;
 
-        if (!empty($blocks)) {
-            $blockInstance = array_shift($blocks);
-            $html = $blockInstance->toHtml();
-            $ttl = $blockInstance->getTtl();
-            if ($blockInstance instanceof \Magento\Framework\View\Block\IdentityInterface) {
-                $response->setHeader('X-Magento-Tags', implode(',', $blockInstance->getIdentities()));
-            }
-        }
-        $response->appendBody($html);
-        $response->setPublicHeaders($ttl);
+    /**
+     * @var Base64Json
+     */
+    private $base64jsonSerializer;
+
+    /**
+     * @param \Magento\Framework\App\Action\Context $context
+     * @param \Magento\Framework\Translate\InlineInterface $translateInline
+     * @param Json $jsonSerializer
+     * @param Base64Json $base64jsonSerializer
+     */
+    public function __construct(
+        \Magento\Framework\App\Action\Context $context,
+        \Magento\Framework\Translate\InlineInterface $translateInline,
+        Json $jsonSerializer = null,
+        Base64Json $base64jsonSerializer = null
+    ) {
+        parent::__construct($context);
+        $this->translateInline = $translateInline;
+        $this->jsonSerializer = $jsonSerializer
+            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Json::class);
+        $this->base64jsonSerializer = $base64jsonSerializer
+            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Base64Json::class);
     }
 
     /**
@@ -84,13 +58,13 @@ class Block extends \Magento\Framework\App\Action\Action
         $handles = $this->getRequest()->getParam('handles', '');
 
         if (!$handles || !$blocks) {
-            return array();
+            return [];
         }
-        $blocks = json_decode($blocks);
-        $handles = json_decode($handles);
+        $blocks = $this->jsonSerializer->unserialize($blocks);
+        $handles = $this->base64jsonSerializer->unserialize($handles);
 
-        $this->_view->loadLayout($handles);
-        $data = array();
+        $this->_view->loadLayout($handles, true, true, false);
+        $data = [];
 
         $layout = $this->_view->getLayout();
         foreach ($blocks as $blockName) {

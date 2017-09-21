@@ -1,86 +1,35 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- */
-
-/**
- * Tax Rule Model
- *
- * @method \Magento\Tax\Model\Resource\Calculation\Rule _getResource()
- * @method \Magento\Tax\Model\Resource\Calculation\Rule getResource()
- * @method string getCode()
- * @method \Magento\Tax\Model\Calculation\Rule setCode(string $value)
- * @method int getPriority()
- * @method \Magento\Tax\Model\Calculation\Rule setPriority(int $value)
- * @method int getPosition()
- * @method \Magento\Tax\Model\Calculation\Rule setPosition(int $value)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Model\Calculation;
 
-class Rule extends \Magento\Framework\Model\AbstractModel
+use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\ExtensionAttributesFactory;
+use Magento\Tax\Api\Data\TaxRuleInterface;
+
+/**
+ * Tax Rule Model
+ */
+class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements TaxRuleInterface
 {
-    /**
-     * @var mixed
-     */
-    protected $_ctcs = null;
-
-    /**
-     * @var mixed
-     */
-    protected $_ptcs = null;
-
-    /**
-     * @var mixed
-     */
-    protected $_rates = null;
-
-    /**
-     * @var mixed
-     */
-    protected $_ctcModel = null;
-
-    /**
-     * @var mixed
-     */
-    protected $_ptcModel = null;
-
-    /**
-     * @var mixed
-     */
-    protected $_rateModel = null;
-
-    /**
-     * Prefix of model events names
+    /**#@+
      *
-     * @var string
+     * Tax rule field key.
      */
+    const KEY_ID       = 'id';
+    const KEY_CODE     = 'code';
+    const KEY_PRIORITY = 'priority';
+    const KEY_POSITION = 'position';
+    const KEY_CUSTOMER_TAX_CLASS_IDS = 'customer_tax_class_ids';
+    const KEY_PRODUCT_TAX_CLASS_IDS  = 'product_tax_class_ids';
+    const KEY_TAX_RATE_IDS           = 'tax_rate_ids';
+    const KEY_CALCULATE_SUBTOTAL     = 'calculate_subtotal';
+    /**#@-*/
+
+    /**#@-*/
     protected $_eventPrefix = 'tax_rule';
-
-    /**
-     * Helper
-     *
-     * @var \Magento\Tax\Helper\Data
-     */
-    protected $_helper;
 
     /**
      * Tax Model Class
@@ -95,43 +44,66 @@ class Rule extends \Magento\Framework\Model\AbstractModel
     protected $_calculation;
 
     /**
+     * @var \Magento\Tax\Model\Calculation\Rule\Validator
+     */
+    protected $validator;
+
+    /**
+     * Name of object id field
+     *
+     * @var string
+     */
+    protected $_idFieldName = 'tax_calculation_rule_id';
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Tax\Helper\Data $taxHelper
+     * @param ExtensionAttributesFactory $extensionFactory
+     * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Tax\Model\ClassModel $taxClass
      * @param \Magento\Tax\Model\Calculation $calculation
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param Rule\Validator $validator
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Tax\Helper\Data $taxHelper,
+        ExtensionAttributesFactory $extensionFactory,
+        AttributeValueFactory $customAttributeFactory,
         \Magento\Tax\Model\ClassModel $taxClass,
         \Magento\Tax\Model\Calculation $calculation,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
-        array $data = array()
+        \Magento\Tax\Model\Calculation\Rule\Validator $validator,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        array $data = []
     ) {
         $this->_calculation = $calculation;
-        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
-
-        $this->_init('Magento\Tax\Model\Resource\Calculation\Rule');
-
-        $this->_helper = $taxHelper;
+        $this->validator = $validator;
+        parent::__construct(
+            $context,
+            $registry,
+            $extensionFactory,
+            $customAttributeFactory,
+            $resource,
+            $resourceCollection,
+            $data
+        );
+        $this->_init(\Magento\Tax\Model\ResourceModel\Calculation\Rule::class);
         $this->_taxClass = $taxClass;
     }
 
     /**
      * After save rule
-     * Redeclared for populate rate calculations
+     * Re-declared for populate rate calculations
      *
      * @return $this
      */
-    protected function _afterSave()
+    public function afterSave()
     {
-        parent::_afterSave();
+        parent::afterSave();
         $this->saveCalculationData();
         $this->_eventManager->dispatch('tax_settings_change_after');
         return $this;
@@ -139,14 +111,14 @@ class Rule extends \Magento\Framework\Model\AbstractModel
 
     /**
      * After rule delete
-     * re-declared for dispatch tax_settings_change_after event
+     * Re-declared for dispatch tax_settings_change_after event
      *
      * @return $this
      */
-    protected function _afterDelete()
+    public function afterDelete()
     {
         $this->_eventManager->dispatch('tax_settings_change_after');
-        return parent::_afterDelete();
+        return parent::afterDelete();
     }
 
     /**
@@ -154,20 +126,20 @@ class Rule extends \Magento\Framework\Model\AbstractModel
      */
     public function saveCalculationData()
     {
-        $ctc = $this->getData('tax_customer_class');
-        $ptc = $this->getData('tax_product_class');
-        $rates = $this->getData('tax_rate');
+        $ctc = $this->getData('customer_tax_class_ids');
+        $ptc = $this->getData('product_tax_class_ids');
+        $rates = $this->getData('tax_rate_ids');
 
         $this->_calculation->deleteByRuleId($this->getId());
         foreach ($ctc as $c) {
             foreach ($ptc as $p) {
                 foreach ($rates as $r) {
-                    $dataArray = array(
+                    $dataArray = [
                         'tax_calculation_rule_id' => $this->getId(),
                         'tax_calculation_rate_id' => $r,
                         'customer_tax_class_id' => $c,
-                        'product_tax_class_id' => $p
-                    );
+                        'product_tax_class_id' => $p,
+                    ];
                     $this->_calculation->setData($dataArray)->save();
                 }
             }
@@ -207,57 +179,210 @@ class Rule extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Check Customer Tax Class and if it is empty - use defaults
+     * Fetches rules by rate, customer tax class and product tax class
+     * and product tax class combination
      *
-     * @return int|array|null
-     */
-    public function getCustomerTaxClassWithDefault()
-    {
-        $customerClasses = $this->getAllOptionsForClass(\Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_CUSTOMER);
-        if (empty($customerClasses)) {
-            return null;
-        }
-
-        $configValue = $this->_helper->getDefaultCustomerTaxClass();
-        if (!empty($configValue)) {
-            return $configValue;
-        }
-
-        $firstClass = array_shift($customerClasses);
-        return isset($firstClass['value']) ? $firstClass['value'] : null;
-    }
-
-    /**
-     * Check Product Tax Class and if it is empty - use defaults
-     *
-     * @return int|array|null
-     */
-    public function getProductTaxClassWithDefault()
-    {
-        $productClasses = $this->getAllOptionsForClass(\Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_PRODUCT);
-        if (empty($productClasses)) {
-            return null;
-        }
-
-        $configValue = $this->_helper->getDefaultProductTaxClass();
-        if (!empty($configValue)) {
-            return $configValue;
-        }
-
-        $firstClass = array_shift($productClasses);
-        return isset($firstClass['value']) ? $firstClass['value'] : null;
-    }
-
-    /**
-     * Get all possible options for specified class name (customer|product)
-     *
-     * @param string $classFilter
+     * @param array $rateId
+     * @param array $customerTaxClassIds
+     * @param array $productTaxClassIds
      * @return array
      */
-    public function getAllOptionsForClass($classFilter)
+    public function fetchRuleCodes($rateId, $customerTaxClassIds, $productTaxClassIds)
     {
-        $classes = $this->_taxClass->getCollection()->setClassTypeFilter($classFilter)->toOptionArray();
+        return $this->getResource()->fetchRuleCodes($rateId, $customerTaxClassIds, $productTaxClassIds);
+    }
 
-        return $classes;
+    /**
+     * @codeCoverageIgnoreStart
+     * {@inheritdoc}
+     */
+    public function getCode()
+    {
+        return $this->getData(self::KEY_CODE);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPosition()
+    {
+        return (int) $this->getData(self::KEY_POSITION);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCalculateSubtotal()
+    {
+        return (bool) $this->getData(self::KEY_CALCULATE_SUBTOTAL);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPriority()
+    {
+        return $this->getData(self::KEY_PRIORITY);
+    }
+
+    //@codeCoverageIgnoreEnd
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCustomerTaxClassIds()
+    {
+        $ids = $this->getData(self::KEY_CUSTOMER_TAX_CLASS_IDS);
+        if (null === $ids) {
+            $ids = $this->_getUniqueValues($this->getCustomerTaxClasses());
+            $this->setData(self::KEY_CUSTOMER_TAX_CLASS_IDS, $ids);
+        }
+        return $ids;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getProductTaxClassIds()
+    {
+        $ids = $this->getData(self::KEY_PRODUCT_TAX_CLASS_IDS);
+        if (null === $ids) {
+            $ids = $this->_getUniqueValues($this->getProductTaxClasses());
+            $this->setData(self::KEY_PRODUCT_TAX_CLASS_IDS, $ids);
+        }
+        return $ids;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTaxRateIds()
+    {
+        $ids = $this->getData(self::KEY_TAX_RATE_IDS);
+        if (null === $ids) {
+            $ids = $this->_getUniqueValues($this->getRates());
+            $this->setData(self::KEY_TAX_RATE_IDS, $ids);
+        }
+        return $ids;
+    }
+
+    /**
+     * Get unique values of indexed array.
+     *
+     * @param array|null $values
+     * @return array|null
+     */
+    protected function _getUniqueValues($values)
+    {
+        if (!$values) {
+            return null;
+        }
+        return array_values(array_unique($values));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function _getValidationRulesBeforeSave()
+    {
+        return $this->validator;
+    }
+
+    /**
+     * Set tax rule code
+     *
+     * @param string $code
+     * @return $this
+     */
+    public function setCode($code)
+    {
+        return $this->setData(self::KEY_CODE, $code);
+    }
+
+    /**
+     * Set priority
+     *
+     * @param int $priority
+     * @return $this
+     */
+    public function setPriority($priority)
+    {
+        return $this->setData(self::KEY_PRIORITY, $priority);
+    }
+
+    /**
+     * Set sort order.
+     *
+     * @param int $position
+     * @return $this
+     */
+    public function setPosition($position)
+    {
+        return $this->setData(self::KEY_POSITION, $position);
+    }
+
+    /**
+     * Set customer tax class id
+     *
+     * @param int[] $customerTaxClassIds
+     * @return $this
+     */
+    public function setCustomerTaxClassIds(array $customerTaxClassIds = null)
+    {
+        return $this->setData(self::KEY_CUSTOMER_TAX_CLASS_IDS, $customerTaxClassIds);
+    }
+
+    /**
+     * Set product tax class id
+     *
+     * @param int[] $productTaxClassIds
+     * @return $this
+     */
+    public function setProductTaxClassIds(array $productTaxClassIds = null)
+    {
+        return $this->setData(self::KEY_PRODUCT_TAX_CLASS_IDS, $productTaxClassIds);
+    }
+
+    /**
+     * Set tax rate ids
+     *
+     * @param int[] $taxRateIds
+     * @return $this
+     */
+    public function setTaxRateIds(array $taxRateIds = null)
+    {
+        return $this->setData(self::KEY_TAX_RATE_IDS, $taxRateIds);
+    }
+
+    /**
+     * Set calculate subtotal.
+     *
+     * @param bool $calculateSubtotal
+     * @return $this
+     */
+    public function setCalculateSubtotal($calculateSubtotal)
+    {
+        return $this->setData(self::KEY_CALCULATE_SUBTOTAL, $calculateSubtotal);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Tax\Api\Data\TaxRuleExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Tax\Api\Data\TaxRuleExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Tax\Api\Data\TaxRuleExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
     }
 }

@@ -1,27 +1,8 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
-
 
 /**
  * Catalog product form gallery content
@@ -34,6 +15,8 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery;
 
 use Magento\Backend\Block\Media\Uploader;
 use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\FileSystemException;
 
 class Content extends \Magento\Backend\Block\Widget
 {
@@ -53,6 +36,11 @@ class Content extends \Magento\Backend\Block\Widget
     protected $_jsonEncoder;
 
     /**
+     * @var \Magento\Catalog\Helper\Image
+     */
+    private $imageHelper;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
@@ -62,7 +50,7 @@ class Content extends \Magento\Backend\Block\Widget
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Catalog\Model\Product\Media\Config $mediaConfig,
-        array $data = array()
+        array $data = []
     ) {
         $this->_jsonEncoder = $jsonEncoder;
         $this->_mediaConfig = $mediaConfig;
@@ -74,22 +62,22 @@ class Content extends \Magento\Backend\Block\Widget
      */
     protected function _prepareLayout()
     {
-        $this->addChild('uploader', 'Magento\Backend\Block\Media\Uploader');
+        $this->addChild('uploader', \Magento\Backend\Block\Media\Uploader::class);
 
         $this->getUploader()->getConfig()->setUrl(
             $this->_urlBuilder->addSessionParam()->getUrl('catalog/product_gallery/upload')
         )->setFileField(
             'image'
         )->setFilters(
-            array(
-                'images' => array(
+            [
+                'images' => [
                     'label' => __('Images (.gif, .jpg, .png)'),
-                    'files' => array('*.gif', '*.jpg', '*.jpeg', '*.png')
-                )
-            )
+                    'files' => ['*.gif', '*.jpg', '*.jpeg', '*.png'],
+                ],
+            ]
         );
 
-        $this->_eventManager->dispatch('catalog_product_gallery_prepare_layout', array('block' => $this));
+        $this->_eventManager->dispatch('catalog_product_gallery_prepare_layout', ['block' => $this]);
 
         return parent::_prepareLayout();
     }
@@ -140,16 +128,44 @@ class Content extends \Magento\Backend\Block\Widget
      */
     public function getImagesJson()
     {
-        if (is_array($this->getElement()->getValue())) {
-            $value = $this->getElement()->getValue();
-            if (is_array($value['images']) && count($value['images']) > 0) {
-                foreach ($value['images'] as &$image) {
-                    $image['url'] = $this->_mediaConfig->getMediaUrl($image['file']);
+        $value = $this->getElement()->getImages();
+        if (is_array($value) &&
+            array_key_exists('images', $value) &&
+            is_array($value['images']) &&
+            count($value['images'])
+        ) {
+            $mediaDir = $this->_filesystem->getDirectoryRead(DirectoryList::MEDIA);
+            $images = $this->sortImagesByPosition($value['images']);
+            foreach ($images as &$image) {
+                $image['url'] = $this->_mediaConfig->getMediaUrl($image['file']);
+                try {
+                    $fileHandler = $mediaDir->stat($this->_mediaConfig->getMediaPath($image['file']));
+                    $image['size'] = $fileHandler['size'];
+                } catch (FileSystemException $e) {
+                    $image['url'] = $this->getImageHelper()->getDefaultPlaceholderUrl('small_image');
+                    $image['size'] = 0;
+                    $this->_logger->warning($e);
                 }
-                return $this->_jsonEncoder->encode($value['images']);
             }
+            return $this->_jsonEncoder->encode($images);
         }
         return '[]';
+    }
+
+    /**
+     * Sort images array by position key
+     *
+     * @param array $images
+     * @return array
+     */
+    private function sortImagesByPosition($images)
+    {
+        if (is_array($images)) {
+            usort($images, function ($imageA, $imageB) {
+                return ($imageA['position'] < $imageB['position']) ? -1 : 1;
+            });
+        }
+        return $images;
     }
 
     /**
@@ -157,7 +173,7 @@ class Content extends \Magento\Backend\Block\Widget
      */
     public function getImagesValuesJson()
     {
-        $values = array();
+        $values = [];
         foreach ($this->getMediaAttributes() as $attribute) {
             /* @var $attribute \Magento\Eav\Model\Entity\Attribute */
             $values[$attribute->getAttributeCode()] = $this->getElement()->getDataObject()->getData(
@@ -174,21 +190,23 @@ class Content extends \Magento\Backend\Block\Widget
      */
     public function getImageTypes()
     {
-        $imageTypes = array();
+        $imageTypes = [];
         foreach ($this->getMediaAttributes() as $attribute) {
             /* @var $attribute \Magento\Eav\Model\Entity\Attribute */
-            $imageTypes[$attribute->getAttributeCode()] = array(
+            $imageTypes[$attribute->getAttributeCode()] = [
                 'code' => $attribute->getAttributeCode(),
                 'value' => $this->getElement()->getDataObject()->getData($attribute->getAttributeCode()),
                 'label' => $attribute->getFrontend()->getLabel(),
                 'scope' => __($this->getElement()->getScopeLabel($attribute)),
-                'name' => $this->getElement()->getAttributeFieldName($attribute)
-            );
+                'name' => $this->getElement()->getAttributeFieldName($attribute),
+            ];
         }
         return $imageTypes;
     }
 
     /**
+     * Retrieve default state allowance
+     *
      * @return bool
      */
     public function hasUseDefault()
@@ -203,7 +221,7 @@ class Content extends \Magento\Backend\Block\Widget
     }
 
     /**
-     * Enter description here...
+     * Retrieve media attributes
      *
      * @return array
      */
@@ -213,10 +231,25 @@ class Content extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Retrieve JSON data
+     *
      * @return string
      */
     public function getImageTypesJson()
     {
         return $this->_jsonEncoder->encode($this->getImageTypes());
+    }
+
+    /**
+     * @return \Magento\Catalog\Helper\Image
+     * @deprecated 101.0.3
+     */
+    private function getImageHelper()
+    {
+        if ($this->imageHelper === null) {
+            $this->imageHelper = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Catalog\Helper\Image::class);
+        }
+        return $this->imageHelper;
     }
 }

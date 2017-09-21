@@ -1,30 +1,18 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Widget;
 
-use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Customer\Api\CustomerMetadataInterface;
+use Magento\Framework\Api\ArrayObjectSearch;
 
+/**
+ * Class Dob
+ *
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ */
 class Dob extends AbstractWidget
 {
     /**
@@ -39,7 +27,38 @@ class Dob extends AbstractWidget
      *
      * @var array
      */
-    protected $_dateInputs = array();
+    protected $_dateInputs = [];
+
+    /**
+     * @var \Magento\Framework\View\Element\Html\Date
+     */
+    protected $dateElement;
+
+    /**
+     * @var \Magento\Framework\Data\Form\FilterFactory
+     */
+    protected $filterFactory;
+
+    /**
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Magento\Customer\Helper\Address $addressHelper
+     * @param CustomerMetadataInterface $customerMetadata
+     * @param \Magento\Framework\View\Element\Html\Date $dateElement
+     * @param \Magento\Framework\Data\Form\FilterFactory $filterFactory
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Framework\View\Element\Template\Context $context,
+        \Magento\Customer\Helper\Address $addressHelper,
+        CustomerMetadataInterface $customerMetadata,
+        \Magento\Framework\View\Element\Html\Date $dateElement,
+        \Magento\Framework\Data\Form\FilterFactory $filterFactory,
+        array $data = []
+    ) {
+        $this->dateElement = $dateElement;
+        $this->filterFactory = $filterFactory;
+        parent::__construct($context, $addressHelper, $customerMetadata, $data);
+    }
 
     /**
      * @return void
@@ -75,8 +94,43 @@ class Dob extends AbstractWidget
     public function setDate($date)
     {
         $this->setTime($date ? strtotime($date) : false);
-        $this->setData('date', $date);
+        $this->setValue($this->applyOutputFilter($date));
         return $this;
+    }
+
+    /**
+     * Return Data Form Filter or false
+     *
+     * @return \Magento\Framework\Data\Form\Filter\FilterInterface|false
+     */
+    protected function getFormFilter()
+    {
+        $attributeMetadata = $this->_getAttribute('dob');
+        $filterCode = $attributeMetadata->getInputFilter();
+        if ($filterCode) {
+            $data = [];
+            if ($filterCode == 'date') {
+                $data['format'] = $this->getDateFormat();
+            }
+            $filter = $this->filterFactory->create($filterCode, $data);
+            return $filter;
+        }
+        return false;
+    }
+
+    /**
+     * Apply output filter to value
+     *
+     * @param string $value
+     * @return string
+     */
+    protected function applyOutputFilter($value)
+    {
+        $filter = $this->getFormFilter();
+        if ($filter) {
+            $value = $filter->outputFilter($value);
+        }
+        return $value;
     }
 
     /**
@@ -104,13 +158,77 @@ class Dob extends AbstractWidget
     }
 
     /**
+     * Return label
+     *
+     * @return \Magento\Framework\Phrase
+     */
+    public function getLabel()
+    {
+        return __('Date of Birth');
+    }
+
+    /**
+     * Create correct date field
+     *
+     * @return string
+     */
+    public function getFieldHtml()
+    {
+        $this->dateElement->setData([
+            'extra_params' => $this->getHtmlExtraParams(),
+            'name' => $this->getHtmlId(),
+            'id' => $this->getHtmlId(),
+            'class' => $this->getHtmlClass(),
+            'value' => $this->getValue(),
+            'date_format' => $this->getDateFormat(),
+            'image' => $this->getViewFileUrl('Magento_Theme::calendar.png'),
+            'years_range' => '-120y:c+nn',
+            'max_date' => '-1d',
+            'change_month' => 'true',
+            'change_year' => 'true',
+            'show_on' => 'both'
+        ]);
+        return $this->dateElement->getHtml();
+    }
+
+    /**
+     * Return id
+     *
+     * @return string
+     */
+    public function getHtmlId()
+    {
+        return 'dob';
+    }
+
+    /**
+     * Return data-validate rules
+     *
+     * @return string
+     */
+    public function getHtmlExtraParams()
+    {
+        $extraParams = [
+            "'validate-date-au':true"
+        ];
+
+        if ($this->isRequired()) {
+            $extraParams[] = 'required:true';
+        }
+
+        $extraParams = implode(', ', $extraParams);
+
+        return 'data-validate="{' . $extraParams . '}"';
+    }
+
+    /**
      * Returns format which will be applied for DOB in javascript
      *
      * @return string
      */
     public function getDateFormat()
     {
-        return $this->_localeDate->getDateFormat(TimezoneInterface::FORMAT_TYPE_SHORT);
+        return $this->_localeDate->getDateFormat(\IntlDateFormatter::SHORT);
     }
 
     /**
@@ -134,7 +252,7 @@ class Dob extends AbstractWidget
      */
     public function getSortedDateInputs($stripNonInputChars = true)
     {
-        $mapping = array();
+        $mapping = [];
         if ($stripNonInputChars) {
             $mapping['/[^medy]/i'] = '\\1';
         }
@@ -156,10 +274,14 @@ class Dob extends AbstractWidget
     public function getMinDateRange()
     {
         $dob = $this->_getAttribute('dob');
-        if (!is_null($dob)) {
+        if ($dob !== null) {
             $rules = $this->_getAttribute('dob')->getValidationRules();
-            if (isset($rules[self::MIN_DATE_RANGE_KEY])) {
-                return date("Y/m/d", $rules[self::MIN_DATE_RANGE_KEY]);
+            $minDateValue = ArrayObjectSearch::getArrayElementByName(
+                $rules,
+                self::MIN_DATE_RANGE_KEY
+            );
+            if ($minDateValue !== null) {
+                return date("Y/m/d", $minDateValue);
             }
         }
         return null;
@@ -173,10 +295,14 @@ class Dob extends AbstractWidget
     public function getMaxDateRange()
     {
         $dob = $this->_getAttribute('dob');
-        if (!is_null($dob)) {
+        if ($dob !== null) {
             $rules = $this->_getAttribute('dob')->getValidationRules();
-            if (isset($rules[self::MAX_DATE_RANGE_KEY])) {
-                return date("Y/m/d", $rules[self::MAX_DATE_RANGE_KEY]);
+            $maxDateValue = ArrayObjectSearch::getArrayElementByName(
+                $rules,
+                self::MAX_DATE_RANGE_KEY
+            );
+            if ($maxDateValue !== null) {
+                return date("Y/m/d", $maxDateValue);
             }
         }
         return null;

@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\Attribute\Data;
 
@@ -50,12 +32,13 @@ class Date extends \Magento\Eav\Model\Attribute\Data\AbstractData
      *
      * @param array|string $value
      * @return bool|array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function validateValue($value)
     {
-        $errors = array();
+        $errors = [];
         $attribute = $this->getAttribute();
-        $label = $attribute->getStoreLabel();
 
         if ($value === false) {
             // try to load original value and validate it
@@ -63,6 +46,7 @@ class Date extends \Magento\Eav\Model\Attribute\Data\AbstractData
         }
 
         if ($attribute->getIsRequired() && empty($value)) {
+            $label = __($attribute->getStoreLabel());
             $errors[] = __('"%1" is a required value.', $label);
         }
 
@@ -84,6 +68,7 @@ class Date extends \Magento\Eav\Model\Attribute\Data\AbstractData
         ) > $validateRules['date_range_max']
         ) {
             if (!empty($validateRules['date_range_min']) && !empty($validateRules['date_range_max'])) {
+                $label = __($attribute->getStoreLabel());
                 $errors[] = __(
                     'Please enter a valid date between %1 and %2 at %3.',
                     date('d/m/Y', $validateRules['date_range_min']),
@@ -91,12 +76,14 @@ class Date extends \Magento\Eav\Model\Attribute\Data\AbstractData
                     $label
                 );
             } elseif (!empty($validateRules['date_range_min'])) {
+                $label = __($attribute->getStoreLabel());
                 $errors[] = __(
                     'Please enter a valid date equal to or greater than %1 at %2.',
                     date('d/m/Y', $validateRules['date_range_min']),
                     $label
                 );
             } elseif (!empty($validateRules['date_range_max'])) {
+                $label = __($attribute->getStoreLabel());
                 $errors[] = __(
                     'Please enter a valid date less than or equal to %1 at %2.',
                     date('d/m/Y', $validateRules['date_range_max']),
@@ -134,6 +121,7 @@ class Date extends \Magento\Eav\Model\Attribute\Data\AbstractData
      *
      * @param array|string $value
      * @return $this
+     * @codeCoverageIgnore
      */
     public function restoreValue($value)
     {
@@ -154,13 +142,13 @@ class Date extends \Magento\Eav\Model\Attribute\Data\AbstractData
                 case \Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_TEXT:
                 case \Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_HTML:
                 case \Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_PDF:
-                    $this->_dateFilterFormat(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM);
+                    $this->_dateFilterFormat(\IntlDateFormatter::MEDIUM);
                     break;
             }
             $value = $this->_applyOutputFilter($value);
         }
 
-        $this->_dateFilterFormat(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT);
+        $this->_dateFilterFormat(\IntlDateFormatter::SHORT);
 
         return $value;
     }

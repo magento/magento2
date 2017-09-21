@@ -1,69 +1,67 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Customer\Test\Block\Form;
 
-use Mtf\Block\Form;
-use Mtf\Client\Element;
-use Mtf\Client\Element\Locator;
-use Magento\Customer\Test\Fixture\Customer;
+use Magento\Mtf\Block\Form;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
- * Class Login
- * Form for frontend login
- *
+ * Form for frontend login.
  */
 class Login extends Form
 {
     /**
-     * Login button for registered customers
+     * Login button for registered customers.
      *
      * @var string
      */
-    protected $loginButton = '.action.login';
+    private $loginButton = '.action.login';
 
     /**
-     * 'Register' customer button
+     * 'Register' customer button.
      *
      * @var string
      */
-    protected $registerButton = '.action.create';
+    private $registerButton = '.action.create';
 
     /**
-     * Login customer in the Frontend
+     * Selector for password field with autocomplete off.
      *
-     * @param Customer $fixture
+     * @var string
      */
-    public function login(Customer $fixture)
+    private $passwordFieldWithAutocompleteOff = 'input[name="login[password]"][autocomplete="off"]';
+
+    /**
+     * Checks if password field autocomplete is off.
+     *
+     * @return bool
+     */
+    public function isPasswordAutocompleteOff()
     {
-        $this->fill($fixture);
+        return $this->_rootElement->find($this->passwordFieldWithAutocompleteOff)->isVisible();
+    }
+
+    /**
+     * Login customer in the Frontend.
+     *
+     * @param FixtureInterface $customer
+     *
+     * @SuppressWarnings(PHPMD.ConstructorWithNameAsEnclosingClass)
+     */
+    public function login(FixtureInterface $customer)
+    {
+        $this->fill($customer);
         $this->submit();
         $this->waitForElementNotVisible($this->loginButton, Locator::SELECTOR_CSS);
     }
 
     /**
-     * Submit login form
+     * Submit login form.
      */
     public function submit()
     {
@@ -71,7 +69,7 @@ class Login extends Form
     }
 
     /**
-     * Press 'Register' button
+     * Press 'Register' button.
      */
     public function registerCustomer()
     {
@@ -79,7 +77,7 @@ class Login extends Form
     }
 
     /**
-     * Check whether block is visible
+     * Check whether block is visible.
      *
      * @return bool
      */

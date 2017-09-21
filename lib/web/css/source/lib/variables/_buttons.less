@@ -1,0 +1,102 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Buttons variables
+//  _____________________________________________
+
+//
+//  Buttons
+//  ---------------------------------------------
+
+//  Font style
+@button__font-family: @font-family__base;
+@button__font-size: @font-size__base;
+@button__font-weight: @font-weight__bold;
+@button__line-height: @font-size__base + 2;
+@button__margin: 0;
+@button__padding: 7px 15px; // is set up to false when buttons don't depend on side paddings or have fixed width
+@button__width: false; // is set up to false when buttons depend on side paddings or to fixed value when needed
+
+//  Display settings
+@button__display: inline-block;
+@button__cursor: pointer;
+@button__border-radius: 3px;
+
+@button__disabled__opacity: .5;
+
+//  Default = secondary button
+@button__color: @primary__color;
+@button__background: @color-gray95;
+@button__border: 1px solid @color-gray-darken2;
+@button__gradient-color-start: false;
+@button__gradient-color-end: false;
+
+@button__hover__color: @color-gray-darken3;
+@button__hover__background: @color-gray-darken1;
+@button__hover__border: @button__border;
+@button__hover__gradient-color-start: false;
+@button__hover__gradient-color-end: false;
+
+@button__active__color: @button__color;
+@button__active__background: @button__hover__background;
+@button__active__border: @button__border;
+@button__active__gradient-color-start: false;
+@button__active__gradient-color-end: false;
+
+//  Primary button
+@button-primary__line-height: false;
+@button-primary__width: false;
+@button-primary__margin: false;
+@button-primary__padding: @button__padding;
+@button-primary__gradient: false;
+@button-primary__gradient-direction: false;
+
+@button-primary__background: @color-blue1;
+@button-primary__border: 1px solid @color-blue1;
+@button-primary__color: @color-white;
+@button-primary__gradient-color-start: false;
+@button-primary__gradient-color-end: false;
+
+@button-primary__hover__background: @color-blue2;
+@button-primary__hover__border: 1px solid @color-blue2;
+@button-primary__hover__color: @button-primary__color;
+@button-primary__hover__gradient-color-start: false;
+@button-primary__hover__gradient-color-end: false;
+
+@button-primary__active__background: @button-primary__hover__background;
+@button-primary__active__border: @button-primary__hover__border;
+@button-primary__active__color: @button-primary__color;
+@button-primary__active__gradient-color-start: false;
+@button-primary__active__gradient-color-end: false;
+
+//  Gradient button
+@button__gradient: false; // [true|false] - button has a gradient background
+@button__gradient-direction: false; // button gradient direction if button has a gradient background
+
+//  Button with icon
+@button-icon__use: false;
+@button-icon__content: @icon-settings;
+@button-icon__font: @icon-font;
+@button-icon__font-size: 22px;
+@button-icon__line-height: @button-icon__font-size;
+@button-icon__color: inherit;
+@button-icon__margin: 0;
+@button-icon__vertical-align: top;
+@button-icon__position: @icon__position;
+@button-icon__text-hide: false;
+
+@button-icon__hover__font-color: inherit;
+@button-icon__active__font-color: inherit;
+
+//  Large button
+@button__font-size__l: @font-size__l;
+@button__line-height__l: @font-size__l + 4;
+@button__padding__l: 14px 17px;
+
+//  Small button
+@button__font-size__s: 11px;
+@button__line-height__s: @button__font-size__s + 1;
+@button__padding__s: @indent__xs 8px;

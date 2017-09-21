@@ -1,38 +1,51 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Block\Sales\Order\Items;
 
+use Magento\Catalog\Model\Product\Type\AbstractType;
+use Magento\Framework\Serialize\Serializer\Json;
+
 /**
  * Order item render block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
 class Renderer extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
 {
     /**
+     * Serializer
+     *
+     * @var Json
+     */
+    private $serializer;
+
+    /**
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Magento\Framework\Stdlib\StringUtils $string
+     * @param \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory
+     * @param array $data
+     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
+     */
+    public function __construct(
+        \Magento\Framework\View\Element\Template\Context $context,
+        \Magento\Framework\Stdlib\StringUtils $string,
+        \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory,
+        array $data = [],
+        Json $serializer = null
+    ) {
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(Json::class);
+
+        parent::__construct($context, $string, $productOptionFactory, $data);
+    }
+
+    /**
      * @param mixed $item
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function isShipmentSeparately($item = null)
     {
@@ -40,40 +53,25 @@ class Renderer extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
             if ($item->getOrderItem()) {
                 $item = $item->getOrderItem();
             }
-            if ($parentItem = $item->getParentItem()) {
-                if ($options = $parentItem->getProductOptions()) {
-                    if (isset(
-                        $options['shipment_type']
-                    ) &&
-                        $options['shipment_type'] ==
-                        \Magento\Catalog\Model\Product\Type\AbstractType::SHIPMENT_SEPARATELY
-                    ) {
-                        return true;
-                    } else {
-                        return false;
-                    }
+            $parentItem = $item->getParentItem();
+            if ($parentItem) {
+                $options = $parentItem->getProductOptions();
+                if ($options) {
+                    return (isset($options['shipment_type'])
+                        && $options['shipment_type'] == AbstractType::SHIPMENT_SEPARATELY);
                 }
             } else {
-                if ($options = $item->getProductOptions()) {
-                    if (isset(
-                        $options['shipment_type']
-                    ) &&
-                        $options['shipment_type'] ==
-                        \Magento\Catalog\Model\Product\Type\AbstractType::SHIPMENT_SEPARATELY
-                    ) {
-                        return false;
-                    } else {
-                        return true;
-                    }
+                $options = $item->getProductOptions();
+                if ($options) {
+                    return !(isset($options['shipment_type'])
+                        && $options['shipment_type'] == AbstractType::SHIPMENT_SEPARATELY);
                 }
             }
         }
 
-        if ($options = $this->getOrderItem()->getProductOptions()) {
-            if (isset(
-                $options['shipment_type']
-            ) && $options['shipment_type'] == \Magento\Catalog\Model\Product\Type\AbstractType::SHIPMENT_SEPARATELY
-            ) {
+        $options = $this->getOrderItem()->getProductOptions();
+        if ($options) {
+            if (isset($options['shipment_type']) && $options['shipment_type'] == AbstractType::SHIPMENT_SEPARATELY) {
                 return true;
             }
         }
@@ -83,6 +81,7 @@ class Renderer extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
     /**
      * @param mixed $item
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function isChildCalculated($item = null)
     {
@@ -90,39 +89,26 @@ class Renderer extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
             if ($item->getOrderItem()) {
                 $item = $item->getOrderItem();
             }
-            if ($parentItem = $item->getParentItem()) {
-                if ($options = $parentItem->getProductOptions()) {
-                    if (isset(
-                        $options['product_calculations']
-                    ) &&
-                        $options['product_calculations'] ==
-                        \Magento\Catalog\Model\Product\Type\AbstractType::CALCULATE_CHILD
-                    ) {
-                        return true;
-                    } else {
-                        return false;
-                    }
+            $parentItem = $item->getParentItem();
+            if ($parentItem) {
+                $options = $parentItem->getProductOptions();
+                if ($options) {
+                    return (isset($options['product_calculations'])
+                        && $options['product_calculations'] == AbstractType::CALCULATE_CHILD);
                 }
             } else {
-                if ($options = $item->getProductOptions()) {
-                    if (isset(
-                        $options['product_calculations']
-                    ) &&
-                        $options['product_calculations'] ==
-                        \Magento\Catalog\Model\Product\Type\AbstractType::CALCULATE_CHILD
-                    ) {
-                        return false;
-                    } else {
-                        return true;
-                    }
+                $options = $item->getProductOptions();
+                if ($options) {
+                    return !(isset($options['product_calculations'])
+                        && $options['product_calculations'] == AbstractType::CALCULATE_CHILD);
                 }
             }
         }
 
-        if ($options = $this->getOrderItem()->getProductOptions()) {
-            if (isset(
-                $options['product_calculations']
-            ) && $options['product_calculations'] == \Magento\Catalog\Model\Product\Type\AbstractType::CALCULATE_CHILD
+        $options = $this->getOrderItem()->getProductOptions();
+        if ($options) {
+            if (isset($options['product_calculations'])
+                && $options['product_calculations'] == AbstractType::CALCULATE_CHILD
             ) {
                 return true;
             }
@@ -142,7 +128,7 @@ class Renderer extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
             $options = $item->getOrderItem()->getProductOptions();
         }
         if (isset($options['bundle_selection_attributes'])) {
-            return unserialize($options['bundle_selection_attributes']);
+            return $this->serializer->unserialize($options['bundle_selection_attributes']);
         }
         return null;
     }
@@ -154,49 +140,45 @@ class Renderer extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
     public function getValueHtml($item)
     {
         if ($attributes = $this->getSelectionAttributes($item)) {
-            return sprintf(
-                '%d',
-                $attributes['qty']
-            ) . ' x ' . $this->escapeHtml(
-                $item->getName()
-            ) . " " . $this->getOrder()->formatPrice(
-                $attributes['price']
-            );
+            return sprintf('%d', $attributes['qty']) . ' x ' . $this->escapeHtml($item->getName()) . " "
+                . $this->getOrder()->formatPrice($attributes['price']);
         } else {
             return $this->escapeHtml($item->getName());
         }
     }
 
     /**
-     * Getting all available childs for Invoice, Shipmen or Creditmemo item
+     * Getting all available children for Invoice, Shipment or CreditMemo item
      *
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      * @return array
      */
-    public function getChilds($item)
+    public function getChildren($item)
     {
-        $_itemsArray = array();
+        $itemsArray = [];
 
+        $items = null;
         if ($item instanceof \Magento\Sales\Model\Order\Invoice\Item) {
-            $_items = $item->getInvoice()->getAllItems();
-        } else if ($item instanceof \Magento\Sales\Model\Order\Shipment\Item) {
-            $_items = $item->getShipment()->getAllItems();
-        } else if ($item instanceof \Magento\Sales\Model\Order\Creditmemo\Item) {
-            $_items = $item->getCreditmemo()->getAllItems();
+            $items = $item->getInvoice()->getAllItems();
+        } elseif ($item instanceof \Magento\Sales\Model\Order\Shipment\Item) {
+            $items = $item->getShipment()->getAllItems();
+        } elseif ($item instanceof \Magento\Sales\Model\Order\Creditmemo\Item) {
+            $items = $item->getCreditmemo()->getAllItems();
         }
 
-        if ($_items) {
-            foreach ($_items as $_item) {
-                if ($parentItem = $_item->getOrderItem()->getParentItem()) {
-                    $_itemsArray[$parentItem->getId()][$_item->getOrderItemId()] = $_item;
+        if ($items) {
+            foreach ($items as $value) {
+                $parentItem = $value->getOrderItem()->getParentItem();
+                if ($parentItem) {
+                    $itemsArray[$parentItem->getId()][$value->getOrderItemId()] = $value;
                 } else {
-                    $_itemsArray[$_item->getOrderItem()->getId()][$_item->getOrderItemId()] = $_item;
+                    $itemsArray[$value->getOrderItem()->getId()][$value->getOrderItemId()] = $value;
                 }
             }
         }
 
-        if (isset($_itemsArray[$item->getOrderItem()->getId()])) {
-            return $_itemsArray[$item->getOrderItem()->getId()];
+        if (isset($itemsArray[$item->getOrderItem()->getId()])) {
+            return $itemsArray[$item->getOrderItem()->getId()];
         } else {
             return null;
         }
@@ -214,5 +196,18 @@ class Renderer extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
             return true;
         }
         return false;
+    }
+
+    /**
+     * Get the html for item price
+     *
+     * @param OrderItem|InvoiceItem|CreditmemoItem $item
+     * @return string
+     */
+    public function getItemPrice($item)
+    {
+        $block = $this->getLayout()->getBlock('item_price');
+        $block->setItem($item);
+        return $block->toHtml();
     }
 }

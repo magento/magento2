@@ -1,27 +1,10 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
 
 /**
  * Product attribute add/edit form main tab
@@ -30,7 +13,7 @@
  */
 namespace Magento\Eav\Block\Adminhtml\Attribute\Edit\Main;
 
-use Magento\Catalog\Model\Resource\Eav\Attribute;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 
 abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
 {
@@ -49,12 +32,12 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_eavData = null;
 
     /**
-     * @var \Magento\Eav\Model\Entity\Attribute\Config
+     * @var \Magento\Eav\Block\Adminhtml\Attribute\PropertyLocker
      */
-    protected $_attributeConfig;
+    protected $propertyLocker;
 
     /**
-     * @var \Magento\Backend\Model\Config\Source\YesnoFactory
+     * @var \Magento\Config\Model\Config\Source\YesnoFactory
      */
     protected $_yesnoFactory;
 
@@ -68,25 +51,26 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Eav\Helper\Data $eavData
-     * @param \Magento\Backend\Model\Config\Source\YesnoFactory $yesnoFactory
+     * @param \Magento\Config\Model\Config\Source\YesnoFactory $yesnoFactory
      * @param \Magento\Eav\Model\Adminhtml\System\Config\Source\InputtypeFactory $inputTypeFactory
-     * @param \Magento\Eav\Model\Entity\Attribute\Config $attributeConfig
+     * @param \Magento\Eav\Block\Adminhtml\Attribute\PropertyLocker $propertyLocker
      * @param array $data
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Eav\Helper\Data $eavData,
-        \Magento\Backend\Model\Config\Source\YesnoFactory $yesnoFactory,
+        \Magento\Config\Model\Config\Source\YesnoFactory $yesnoFactory,
         \Magento\Eav\Model\Adminhtml\System\Config\Source\InputtypeFactory $inputTypeFactory,
-        \Magento\Eav\Model\Entity\Attribute\Config $attributeConfig,
-        array $data = array()
+        \Magento\Eav\Block\Adminhtml\Attribute\PropertyLocker $propertyLocker,
+        array $data = []
     ) {
         $this->_eavData = $eavData;
         $this->_yesnoFactory = $yesnoFactory;
         $this->_inputTypeFactory = $inputTypeFactory;
-        $this->_attributeConfig = $attributeConfig;
+        $this->propertyLocker = $propertyLocker;
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -95,6 +79,7 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @param Attribute $attribute
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setAttributeObject($attribute)
     {
@@ -119,6 +104,7 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
      * Preparing default form elements for editing attribute
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareForm()
     {
@@ -126,13 +112,14 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
 
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create(
-            array('data' => array('id' => 'edit_form', 'action' => $this->getData('action'), 'method' => 'post'))
+            
+            ['data' => ['id' => 'edit_form', 'action' => $this->getData('action'), 'method' => 'post']]
         );
 
-        $fieldset = $form->addFieldset('base_fieldset', array('legend' => __('Attribute Properties')));
+        $fieldset = $form->addFieldset('base_fieldset', ['legend' => __('Attribute Properties')]);
 
         if ($attributeObject->getAttributeId()) {
-            $fieldset->addField('attribute_id', 'hidden', array('name' => 'attribute_id'));
+            $fieldset->addField('attribute_id', 'hidden', ['name' => 'attribute_id']);
         }
 
         $this->_addElementTypes($fieldset);
@@ -143,15 +130,14 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
         $fieldset->addField(
             'attribute_label',
             'text',
-            array(
+            [
                 'name' => 'frontend_label[0]',
-                'label' => __('Attribute Label'),
-                'title' => __('Attribute Label'),
+                'label' => __('Default Label'),
+                'title' => __('Default label'),
                 'required' => true,
                 'value' => is_array($labels) ? $labels[0] : $labels
-            )
+            ]
         );
-
 
         $validateClass = sprintf(
             'validate-code validate-length maximum-length-%d',
@@ -160,111 +146,110 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
         $fieldset->addField(
             'attribute_code',
             'text',
-            array(
+            [
                 'name' => 'attribute_code',
                 'label' => __('Attribute Code'),
                 'title' => __('Attribute Code'),
                 'note' => __(
-                    'For internal use. Must be unique with no spaces. Maximum length of attribute code must be less than %1 symbols',
+                    'This is used internally. Make sure you don\'t use spaces or more than %1 symbols.',
                     \Magento\Eav\Model\Entity\Attribute::ATTRIBUTE_CODE_MAX_LENGTH
                 ),
                 'class' => $validateClass,
                 'required' => true
-            )
+            ]
         );
 
         $fieldset->addField(
             'frontend_input',
             'select',
-            array(
+            [
                 'name' => 'frontend_input',
                 'label' => __('Catalog Input Type for Store Owner'),
                 'title' => __('Catalog Input Type for Store Owner'),
                 'value' => 'text',
                 'values' => $this->_inputTypeFactory->create()->toOptionArray()
-            )
+            ]
         );
 
         $fieldset->addField(
             'is_required',
             'select',
-            array(
+            [
                 'name' => 'is_required',
                 'label' => __('Values Required'),
                 'title' => __('Values Required'),
                 'values' => $yesno
-            )
+            ]
         );
 
         $fieldset->addField(
             'default_value_text',
             'text',
-            array(
+            [
                 'name' => 'default_value_text',
                 'label' => __('Default Value'),
                 'title' => __('Default Value'),
                 'value' => $attributeObject->getDefaultValue()
-            )
+            ]
         );
 
         $fieldset->addField(
             'default_value_yesno',
             'select',
-            array(
+            [
                 'name' => 'default_value_yesno',
                 'label' => __('Default Value'),
                 'title' => __('Default Value'),
                 'values' => $yesno,
                 'value' => $attributeObject->getDefaultValue()
-            )
+            ]
         );
 
-        $dateFormat = $this->_localeDate->getDateFormat(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT);
+        $dateFormat = $this->_localeDate->getDateFormat(\IntlDateFormatter::SHORT);
         $fieldset->addField(
             'default_value_date',
             'date',
-            array(
+            [
                 'name' => 'default_value_date',
                 'label' => __('Default Value'),
                 'title' => __('Default Value'),
-                'image' => $this->getViewFileUrl('images/grid-cal.gif'),
                 'value' => $attributeObject->getDefaultValue(),
                 'date_format' => $dateFormat
-            )
+            ]
         );
 
         $fieldset->addField(
             'default_value_textarea',
             'textarea',
-            array(
+            [
                 'name' => 'default_value_textarea',
                 'label' => __('Default Value'),
                 'title' => __('Default Value'),
                 'value' => $attributeObject->getDefaultValue()
-            )
+            ]
         );
 
         $fieldset->addField(
             'is_unique',
             'select',
-            array(
+            [
                 'name' => 'is_unique',
                 'label' => __('Unique Value'),
                 'title' => __('Unique Value (not shared with other products)'),
-                'note' => __('Not shared with other products'),
+                'note' => __('Not shared with other products.'),
                 'values' => $yesno
-            )
+            ]
         );
 
         $fieldset->addField(
             'frontend_class',
             'select',
-            array(
+            [
                 'name' => 'frontend_class',
                 'label' => __('Input Validation for Store Owner'),
                 'title' => __('Input Validation for Store Owner'),
                 'values' => $this->_eavData->getFrontendClasses($attributeObject->getEntityType()->getEntityTypeCode())
-            )
+            ]
         );
 
         if ($attributeObject->getId()) {
@@ -275,6 +260,7 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
             }
         }
 
+        $this->propertyLocker->lock($form);
         $this->setForm($form);
 
         return parent::_prepareForm();
@@ -289,31 +275,10 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
     {
         $this->_eventManager->dispatch(
             'adminhtml_block_eav_attribute_edit_form_init',
-            array('form' => $this->getForm())
+            ['form' => $this->getForm()]
         );
         $this->getForm()->addValues($this->getAttributeObject()->getData());
         return parent::_initFormValues();
-    }
-
-    /**
-     * This method is called before rendering HTML
-     *
-     * @return $this
-     */
-    protected function _beforeToHtml()
-    {
-        parent::_beforeToHtml();
-        $attributeObject = $this->getAttributeObject();
-        if ($attributeObject->getId()) {
-            $form = $this->getForm();
-            foreach ($this->_attributeConfig->getLockedFields($attributeObject) as $field) {
-                if ($element = $form->getElement($field)) {
-                    $element->setDisabled(1);
-                    $element->setReadonly(1);
-                }
-            }
-        }
-        return $this;
     }
 
     /**
@@ -325,7 +290,8 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
      */
     protected function _afterToHtml($html)
     {
-        $jsScripts = $this->getLayout()->createBlock('Magento\Eav\Block\Adminhtml\Attribute\Edit\Js')->toHtml();
+        $jsScripts = $this->getLayout()->createBlock(\Magento\Eav\Block\Adminhtml\Attribute\Edit\Js::class)
+            ->toHtml();
         return $html . $jsScripts;
     }
 }

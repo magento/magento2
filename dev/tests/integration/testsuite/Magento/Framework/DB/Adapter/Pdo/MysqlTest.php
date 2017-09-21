@@ -1,40 +1,33 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- */
-
-/**
- * Test for an PDO MySQL adapter
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\DB\Adapter\Pdo;
 
-class MysqlTest extends \PHPUnit_Framework_TestCase
+use Magento\Framework\App\ResourceConnection;
+use Magento\TestFramework\Helper\CacheCleaner;
+use Magento\Framework\DB\Ddl\Table;
+
+class MysqlTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * Database adapter instance
-     *
-     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql
+     * @var ResourceConnection
      */
-    protected $_dbAdapter = null;
+    private $resourceConnection;
+
+    protected function setUp()
+    {
+        set_error_handler(null);
+        $this->resourceConnection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get(ResourceConnection::class);
+        CacheCleaner::cleanAll();
+    }
+
+    protected function tearDown()
+    {
+        restore_error_handler();
+    }
 
     /**
      * Test lost connection re-initializing
@@ -43,29 +36,29 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
      */
     public function testWaitTimeout()
     {
-        if (!$this->_getDbAdapter() instanceof \Magento\Framework\DB\Adapter\Pdo\Mysql) {
+        if (!$this->getDbAdapter() instanceof \Magento\Framework\DB\Adapter\Pdo\Mysql) {
             $this->markTestSkipped('This test is for \Magento\Framework\DB\Adapter\Pdo\Mysql');
         }
         try {
-            $defaultWaitTimeout = $this->_getWaitTimeout();
+            $defaultWaitTimeout = $this->getWaitTimeout();
             $minWaitTimeout = 1;
-            $this->_setWaitTimeout($minWaitTimeout);
-            $this->assertEquals($minWaitTimeout, $this->_getWaitTimeout(), 'Wait timeout was not changed');
+            $this->setWaitTimeout($minWaitTimeout);
+            $this->assertEquals($minWaitTimeout, $this->getWaitTimeout(), 'Wait timeout was not changed');
 
             // Sleep for time greater than wait_timeout and try to perform query
             sleep($minWaitTimeout + 1);
-            $result = $this->_executeQuery('SELECT 1');
-            $this->assertInstanceOf('Magento\Framework\DB\Statement\Pdo\Mysql', $result);
+            $result = $this->executeQuery('SELECT 1');
+            $this->assertInstanceOf(\Magento\Framework\DB\Statement\Pdo\Mysql::class, $result);
             // Restore wait_timeout
-            $this->_setWaitTimeout($defaultWaitTimeout);
+            $this->setWaitTimeout($defaultWaitTimeout);
             $this->assertEquals(
                 $defaultWaitTimeout,
-                $this->_getWaitTimeout(),
+                $this->getWaitTimeout(),
                 'Default wait timeout was not restored'
             );
         } catch (\Exception $e) {
             // Reset connection on failure to restore global variables
-            $this->_getDbAdapter()->closeConnection();
+            $this->getDbAdapter()->closeConnection();
             throw $e;
         }
     }
@@ -75,9 +68,9 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
      *
      * @return int
      */
-    protected function _getWaitTimeout()
+    private function getWaitTimeout()
     {
-        $result = $this->_executeQuery('SELECT @@session.wait_timeout');
+        $result = $this->executeQuery('SELECT @@session.wait_timeout');
         return (int)$result->fetchColumn();
     }
 
@@ -86,9 +79,9 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
      *
      * @param int $waitTimeout
      */
-    protected function _setWaitTimeout($waitTimeout)
+    private function setWaitTimeout($waitTimeout)
     {
-        $this->_executeQuery("SET @@session.wait_timeout = {$waitTimeout}");
+        $this->executeQuery("SET @@session.wait_timeout = {$waitTimeout}");
     }
 
     /**
@@ -98,21 +91,20 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
      * @return \Zend_Db_Statement_Interface
      * @throws \Exception
      */
-    protected function _executeQuery($sql)
+    private function executeQuery($sql)
     {
         /**
-         * Suppress PDO warnings to work around the bug
-         * @link https://bugs.php.net/bug.php?id=63812
+         * Suppress PDO warnings to work around the bug https://bugs.php.net/bug.php?id=63812
          */
         $phpErrorReporting = error_reporting();
-        /** @var $pdoConnection PDO */
-        $pdoConnection = $this->_getDbAdapter()->getConnection();
+        /** @var $pdoConnection \PDO */
+        $pdoConnection = $this->getDbAdapter()->getConnection();
         $pdoWarningsEnabled = $pdoConnection->getAttribute(\PDO::ATTR_ERRMODE) & \PDO::ERRMODE_WARNING;
         if (!$pdoWarningsEnabled) {
             error_reporting($phpErrorReporting & ~E_WARNING);
         }
         try {
-            $result = $this->_getDbAdapter()->query($sql);
+            $result = $this->getDbAdapter()->query($sql);
             error_reporting($phpErrorReporting);
         } catch (\Exception $e) {
             error_reporting($phpErrorReporting);
@@ -126,13 +118,110 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
      *
      * @return \Magento\Framework\DB\Adapter\Pdo\Mysql
      */
-    protected function _getDbAdapter()
+    private function getDbAdapter()
     {
-        if (is_null($this->_dbAdapter)) {
-            /** @var $coreResource \Magento\Framework\App\Resource */
-            $coreResource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\Resource');
-            $this->_dbAdapter = $coreResource->getConnection('default_setup');
-        }
-        return $this->_dbAdapter;
+        return $this->resourceConnection->getConnection();
+    }
+
+    public function testGetCreateTable()
+    {
+        $tableName = $this->resourceConnection->getTableName('core_config_data');
+        $this->assertEquals(
+            $this->getDbAdapter()->getCreateTable($tableName),
+            $this->getDbAdapter()->getCreateTable($tableName)
+        );
+    }
+
+    public function testGetForeignKeys()
+    {
+        $tableName = $this->resourceConnection->getTableName('core_config_data');
+        $this->assertEquals(
+            $this->getDbAdapter()->getForeignKeys($tableName),
+            $this->getDbAdapter()->getForeignKeys($tableName)
+        );
+    }
+
+    public function testGetIndexList()
+    {
+        $tableName = $this->resourceConnection->getTableName('core_config_data');
+        $this->assertEquals(
+            $this->getDbAdapter()->getIndexList($tableName),
+            $this->getDbAdapter()->getIndexList($tableName)
+        );
+    }
+
+    public function testDescribeTable()
+    {
+        $tableName = $this->resourceConnection->getTableName('core_config_data');
+        $this->assertEquals(
+            $this->getDbAdapter()->describeTable($tableName),
+            $this->getDbAdapter()->describeTable($tableName)
+        );
+    }
+
+    /**
+     * Test that Zend_Db_Expr can be used as a column default value.
+     * @see https://github.com/magento/magento2/pull/9131
+     */
+    public function testCreateTableColumnWithExpressionAsColumnDefaultValue()
+    {
+        $adapter = $this->getDbAdapter();
+        $tableName = 'table_column_with_expression_as_column_default_value';
+
+        $table = $adapter
+            ->newTable($tableName)
+            ->addColumn(
+                'row_id',
+                Table::TYPE_INTEGER,
+                null,
+                ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
+                'Row Id'
+            )
+            ->addColumn(
+                'created_at',
+                Table::TYPE_DATETIME,
+                null,
+                ['default' => new \Zend_Db_Expr('CURRENT_TIMESTAMP')]
+            )
+            ->addColumn(
+                'integer_column',
+                Table::TYPE_INTEGER,
+                11,
+                ['default' => 123456]
+            )->addColumn(
+                'string_column',
+                Table::TYPE_TEXT,
+                255,
+                ['default' => 'default test text']
+            )
+            ->setComment('Test table column with expression as column default value');
+        $adapter->createTable($table);
+
+        $tableDescription = $adapter->describeTable($tableName);
+
+        //clean up database from test table
+        $adapter->dropTable($tableName);
+
+        $this->assertArrayHasKey('created_at', $tableDescription, 'Column created_at does not exists');
+        $this->assertArrayHasKey('integer_column', $tableDescription, 'Column integer_column does not exists');
+        $this->assertArrayHasKey('string_column', $tableDescription, 'Column string_column does not exists');
+        $dateColumn = $tableDescription['created_at'];
+        $intColumn = $tableDescription['integer_column'];
+        $stringColumn = $tableDescription['string_column'];
+
+        //Test default value with expression
+        $this->assertEquals('created_at', $dateColumn['COLUMN_NAME'], 'Incorrect column name');
+        $this->assertEquals(Table::TYPE_DATETIME, $dateColumn['DATA_TYPE'], 'Incorrect column type');
+        $this->assertEquals('CURRENT_TIMESTAMP', $dateColumn['DEFAULT'], 'Incorrect column default expression value');
+
+        //Test default value with integer value
+        $this->assertEquals('integer_column', $intColumn['COLUMN_NAME'], 'Incorrect column name');
+        $this->assertEquals('int', $intColumn['DATA_TYPE'], 'Incorrect column type');
+        $this->assertEquals(123456, $intColumn['DEFAULT'], 'Incorrect column default integer value');
+
+        //Test default value with string value
+        $this->assertEquals('string_column', $stringColumn['COLUMN_NAME'], 'Incorrect column name');
+        $this->assertEquals('varchar', $stringColumn['DATA_TYPE'], 'Incorrect column type');
+        $this->assertEquals('default test text', $stringColumn['DEFAULT'], 'Incorrect column default string value');
     }
 }

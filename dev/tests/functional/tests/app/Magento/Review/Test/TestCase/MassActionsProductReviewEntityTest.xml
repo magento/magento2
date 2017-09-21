@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Review\Test\TestCase\MassActionsProductReviewEntityTest" summary="Mass Actions for Product Review" ticketId="MAGETWO-26618">
+        <variation name="MassActionsProductReviewEntityTestVariation1">
+            <data name="gridActions" xsi:type="string">Update Status</data>
+            <data name="gridStatus" xsi:type="string">Approved</data>
+            <constraint name="Magento\Review\Test\Constraint\AssertProductReviewMassActionSuccessMessage" />
+            <constraint name="Magento\Review\Test\Constraint\AssertProductReviewInGrid" />
+            <constraint name="Magento\Review\Test\Constraint\AssertProductRatingInProductPage" />
+        </variation>
+        <variation name="MassActionsProductReviewEntityTestVariation2">
+            <data name="gridActions" xsi:type="string">Update Status</data>
+            <data name="gridStatus" xsi:type="string">Pending</data>
+            <constraint name="Magento\Review\Test\Constraint\AssertProductReviewMassActionSuccessMessage" />
+            <constraint name="Magento\Review\Test\Constraint\AssertProductReviewInGrid" />
+            <constraint name="Magento\Review\Test\Constraint\AssertProductRatingNotInProductPage" />
+        </variation>
+        <variation name="MassActionsProductReviewEntityTestVariation3">
+            <data name="gridActions" xsi:type="string">Update Status</data>
+            <data name="gridStatus" xsi:type="string">Not Approved</data>
+            <constraint name="Magento\Review\Test\Constraint\AssertProductReviewMassActionSuccessMessage" />
+            <constraint name="Magento\Review\Test\Constraint\AssertProductReviewInGrid" />
+            <constraint name="Magento\Review\Test\Constraint\AssertProductRatingNotInProductPage" />
+        </variation>
+        <variation name="MassActionsProductReviewEntityTestVariation4">
+            <data name="gridActions" xsi:type="string">Delete</data>
+            <data name="gridStatus" xsi:type="string">-</data>
+            <constraint name="Magento\Review\Test\Constraint\AssertProductReviewMassActionSuccessDeleteMessage" />
+            <constraint name="Magento\Review\Test\Constraint\AssertProductRatingNotInProductPage" />
+        </variation>
+    </testCase>
+</config>

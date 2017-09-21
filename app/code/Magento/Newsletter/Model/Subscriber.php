@@ -1,37 +1,18 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Newsletter\Model;
 
-use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
+use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Framework\Exception\MailException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Mail\Exception as MailException;
 
 /**
  * Subscriber model
  *
- * @method \Magento\Newsletter\Model\Resource\Subscriber _getResource()
- * @method \Magento\Newsletter\Model\Resource\Subscriber getResource()
  * @method int getStoreId()
  * @method $this setStoreId(int $value)
  * @method string getChangeStatusAt()
@@ -49,6 +30,9 @@ use Magento\Framework\Mail\Exception as MailException;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+ *
+ * @api
+ * @since 100.0.2
  */
 class Subscriber extends \Magento\Framework\Model\AbstractModel
 {
@@ -118,11 +102,14 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
     protected $_storeManager;
 
     /**
-     * Customer account service
-     *
-     * @var CustomerAccountServiceInterface
+     * @var CustomerRepositoryInterface
      */
-    protected $_customerAccountService;
+    protected $customerRepository;
+
+    /**
+     * @var AccountManagementInterface
+     */
+    protected $customerAccountManagement;
 
     /**
      * @var \Magento\Framework\Mail\Template\TransportBuilder
@@ -135,6 +122,8 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
     protected $inlineTranslation;
 
     /**
+     * Initialize dependencies.
+     *
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Newsletter\Helper\Data $newsletterData
@@ -142,11 +131,13 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerAccountService
+     * @param CustomerRepositoryInterface $customerRepository
+     * @param AccountManagementInterface $customerAccountManagement
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -156,10 +147,11 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Customer\Model\Session $customerSession,
-        CustomerAccountServiceInterface $customerAccountService,
+        CustomerRepositoryInterface $customerRepository,
+        AccountManagementInterface $customerAccountManagement,
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_newsletterData = $newsletterData;
@@ -167,7 +159,8 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         $this->_transportBuilder = $transportBuilder;
         $this->_storeManager = $storeManager;
         $this->_customerSession = $customerSession;
-        $this->_customerAccountService = $customerAccountService;
+        $this->customerRepository = $customerRepository;
+        $this->customerAccountManagement = $customerAccountManagement;
         $this->inlineTranslation = $inlineTranslation;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
@@ -179,7 +172,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Newsletter\Model\Resource\Subscriber');
+        $this->_init(\Magento\Newsletter\Model\ResourceModel\Subscriber::class);
     }
 
     /**
@@ -271,7 +264,6 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      * @param boolean $scope
      * @return $this
      */
-
     public function setMessagesScope($scope)
     {
         $this->getResource()->setMessagesScope($scope);
@@ -356,8 +348,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
     public function loadByCustomerId($customerId)
     {
         try {
-            /** @var \Magento\Customer\Service\V1\Data\Customer $customerData */
-            $customerData = $this->_customerAccountService->getCustomer($customerId);
+            $customerData = $this->customerRepository->getById($customerId);
             $data = $this->getResource()->loadByCustomerData($customerData);
             $this->addData($data);
             if (!empty($data) && $customerData->getId() && !$this->getCustomerId()) {
@@ -379,11 +370,11 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
     public function randomSequence($length = 32)
     {
         $id = '';
-        $par = array();
+        $par = [];
         $char = array_merge(range('a', 'z'), range(0, 9));
         $charLen = count($char) - 1;
         for ($i = 0; $i < $length; $i++) {
-            $disc = mt_rand(0, $charLen);
+            $disc = \Magento\Framework\Math\Random::getRandomNumber(0, $charLen);
             $par[$i] = $char[$disc];
             $id = $id . $char[$disc];
         }
@@ -436,7 +427,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
 
         if ($isSubscribeOwnEmail) {
             try {
-                $customer = $this->_customerAccountService->getCustomer($this->_customerSession->getCustomerId());
+                $customer = $this->customerRepository->getById($this->_customerSession->getCustomerId());
                 $this->setStoreId($customer->getStoreId());
                 $this->setCustomerId($customer->getId());
             } catch (NoSuchEntityException $e) {
@@ -451,6 +442,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         $this->setStatusChanged(true);
 
         try {
+            /* Save model before sending out email */
             $this->save();
             if ($isConfirmNeed === true
                 && $isOwnSubscribes === false
@@ -468,13 +460,15 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
     /**
      * Unsubscribes loaded subscription
      *
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return $this
      */
     public function unsubscribe()
     {
         if ($this->hasCheckCode() && $this->getCode() != $this->getCheckCode()) {
-            throw new \Magento\Framework\Model\Exception(__('This is an invalid subscription confirmation code.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('This is an invalid subscription confirmation code.')
+            );
         }
 
         if ($this->getSubscriberStatus() != self::STATUS_UNSUBSCRIBED) {
@@ -532,7 +526,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
     protected function _updateCustomerSubscription($customerId, $subscribe)
     {
         try {
-            $customerData = $this->_customerAccountService->getCustomer($customerId);
+            $customerData = $this->customerRepository->getById($customerId);
         } catch (NoSuchEntityException $e) {
             return $this;
         }
@@ -548,12 +542,21 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
 
         $sendInformationEmail = false;
         $status = self::STATUS_SUBSCRIBED;
+        $isConfirmNeed = $this->_scopeConfig->getValue(
+            self::XML_PATH_CONFIRMATION_FLAG,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        ) == 1 ? true : false;
         if ($subscribe) {
-            if (CustomerAccountServiceInterface::ACCOUNT_CONFIRMATION_REQUIRED
-                == $this->_customerAccountService->getConfirmationStatus($customerId)
+            if (AccountManagementInterface::ACCOUNT_CONFIRMATION_REQUIRED
+                == $this->customerAccountManagement->getConfirmationStatus($customerId)
             ) {
                 $status = self::STATUS_UNCONFIRMED;
+            } elseif ($isConfirmNeed) {
+                $status = self::STATUS_NOT_ACTIVE;
             }
+        } elseif (($this->getStatus() == self::STATUS_UNCONFIRMED) && ($customerData->getConfirmation() === null)) {
+            $status = self::STATUS_SUBSCRIBED;
+            $sendInformationEmail = true;
         } else {
             $status = self::STATUS_UNSUBSCRIBED;
         }
@@ -585,16 +588,18 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
 
         $this->save();
         $sendSubscription = $sendInformationEmail;
-        if (is_null($sendSubscription) xor $sendSubscription) {
+        if ($sendSubscription === null xor $sendSubscription) {
             try {
-                if ($this->isStatusChanged() && $status == self::STATUS_UNSUBSCRIBED) {
+                if ($isConfirmNeed) {
+                    $this->sendConfirmationRequestEmail();
+                } elseif ($this->isStatusChanged() && $status == self::STATUS_UNSUBSCRIBED) {
                     $this->sendUnsubscriptionEmail();
                 } elseif ($this->isStatusChanged() && $status == self::STATUS_SUBSCRIBED) {
                     $this->sendConfirmationSuccessEmail();
                 }
             } catch (MailException $e) {
                 // If we are not able to send a new account email, this should be ignored
-                $this->_logger->logException($e);
+                $this->_logger->critical($e);
             }
         }
         return $this;
@@ -660,12 +665,12 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )
         )->setTemplateOptions(
-            array(
+            [
                 'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
-                'store' => $this->_storeManager->getStore()->getId()
-            )
+                'store' => $this->_storeManager->getStore()->getId(),
+            ]
         )->setTemplateVars(
-            array('subscriber' => $this, 'store' => $this->_storeManager->getStore())
+            ['subscriber' => $this, 'store' => $this->_storeManager->getStore()]
         )->setFrom(
             $this->_scopeConfig->getValue(
                 self::XML_PATH_CONFIRM_EMAIL_IDENTITY,
@@ -713,12 +718,12 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )
         )->setTemplateOptions(
-            array(
+            [
                 'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
-                'store' => $this->_storeManager->getStore()->getId()
-            )
+                'store' => $this->_storeManager->getStore()->getId(),
+            ]
         )->setTemplateVars(
-            array('subscriber' => $this)
+            ['subscriber' => $this]
         )->setFrom(
             $this->_scopeConfig->getValue(
                 self::XML_PATH_SUCCESS_EMAIL_IDENTITY,
@@ -765,12 +770,12 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )
         )->setTemplateOptions(
-            array(
+            [
                 'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
-                'store' => $this->_storeManager->getStore()->getId()
-            )
+                'store' => $this->_storeManager->getStore()->getId(),
+            ]
         )->setTemplateVars(
-            array('subscriber' => $this)
+            ['subscriber' => $this]
         )->setFrom(
             $this->_scopeConfig->getValue(
                 self::XML_PATH_UNSUBSCRIBE_EMAIL_IDENTITY,
@@ -796,8 +801,8 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
     public function getSubscriberFullName()
     {
         $name = null;
-        if ($this->hasCustomerFirstname() || $this->hasCustomerLastname()) {
-            $name = $this->getCustomerFirstname() . ' ' . $this->getCustomerLastname();
+        if ($this->hasFirstname() || $this->hasLastname()) {
+            $name = $this->getFirstname() . ' ' . $this->getLastname();
         }
         return $name;
     }

@@ -1,0 +1,46 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Integration\Test\Repository\Integration">
+        <dataset name="default">
+            <field name="name" xsi:type="string">default_integration_%isolation%</field>
+            <field name="email" xsi:type="string">test_%isolation%@example.com</field>
+            <field name="resource_access" xsi:type="string">All</field>
+            <field name="current_password" xsi:type="string">%current_password%</field>
+        </dataset>
+
+        <dataset name="default_active">
+            <field name="name" xsi:type="string">Integration_%isolation%</field>
+            <field name="email" xsi:type="string">Integration_%isolation%@example.com</field>
+            <field name="resource_access" xsi:type="string">All</field>
+            <field name="status" xsi:type="string">Active</field>
+            <field name="current_password" xsi:type="string">%current_password%</field>
+        </dataset>
+
+        <dataset name="default_with_all_resources">
+            <field name="name" xsi:type="string">default_integration_%isolation%</field>
+            <field name="email" xsi:type="string">test_%isolation%@example.com</field>
+            <field name="resource_access" xsi:type="string">All</field>
+            <field name="current_password" xsi:type="string">%current_password%</field>
+            <field name="resources" xsi:type="array">
+                <item name="0" xsi:type="string">Dashboard</item>
+                <item name="1" xsi:type="string">Sales</item>
+                <item name="2" xsi:type="string">Products</item>
+                <item name="3" xsi:type="string">Customers</item>
+                <item name="4" xsi:type="string">Carts</item>
+                <item name="5" xsi:type="string">My Account</item>
+                <item name="6" xsi:type="string">Marketing</item>
+                <item name="7" xsi:type="string">Content</item>
+                <item name="8" xsi:type="string">Reports</item>
+                <item name="9" xsi:type="string">Stores</item>
+                <item name="10" xsi:type="string">System</item>
+                <item name="11" xsi:type="string">Global Search</item>
+            </field>
+        </dataset>
+    </repository>
+</config>

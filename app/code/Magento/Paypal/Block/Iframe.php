@@ -1,30 +1,15 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Block;
 
 /**
  * HSS iframe block
+ *
+ * @api
+ * @since 100.0.2
  */
 class Iframe extends \Magento\Payment\Block\Form
 {
@@ -77,10 +62,22 @@ class Iframe extends \Magento\Payment\Block\Form
     protected $_hssHelper;
 
     /**
+     * @var \Magento\Framework\Filesystem\Directory\ReadFactory
+     */
+    protected $readFactory;
+
+    /**
+     * @var \Magento\Framework\Module\Dir\Reader
+     */
+    protected $reader;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Paypal\Helper\Hss $hssHelper
+     * @param \Magento\Framework\Filesystem\Directory\ReadFactory $readFactory
+     * @param \Magento\Framework\Module\Dir\Reader $reader
      * @param array $data
      */
     public function __construct(
@@ -88,13 +85,17 @@ class Iframe extends \Magento\Payment\Block\Form
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Paypal\Helper\Hss $hssHelper,
-        array $data = array()
+        \Magento\Framework\Filesystem\Directory\ReadFactory $readFactory,
+        \Magento\Framework\Module\Dir\Reader $reader,
+        array $data = []
     ) {
         $this->_hssHelper = $hssHelper;
         $this->_orderFactory = $orderFactory;
         $this->_checkoutSession = $checkoutSession;
-        parent::__construct($context, $data);
         $this->_isScopePrivate = true;
+        $this->readFactory = $readFactory;
+        $this->reader = $reader;
+        parent::__construct($context, $data);
     }
 
     /**
@@ -110,10 +111,9 @@ class Iframe extends \Magento\Payment\Block\Form
             $this->_paymentMethodCode = $paymentCode;
             $templatePath = str_replace('_', '', $paymentCode);
             $templateFile = "{$templatePath}/iframe.phtml";
-
-            $directory = $this->_filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem::MODULES_DIR);
-            $file = $this->_viewFileSystem->getFilename($templateFile, array('module' => 'Magento_Paypal'));
-            if ($directory->isExist($directory->getRelativePath($file))) {
+            $directory = $this->readFactory->create($this->reader->getModuleDir('', 'Magento_Paypal'));
+            $file = $this->resolver->getTemplateFileName($templateFile, ['module' => 'Magento_Paypal']);
+            if ($file && $directory->isExist($directory->getRelativePath($file))) {
                 $this->setTemplate($templateFile);
             } else {
                 $this->setTemplate('hss/iframe.phtml');
@@ -125,7 +125,7 @@ class Iframe extends \Magento\Payment\Block\Form
      * Get current block instance
      *
      * @return \Magento\Payment\Block\Form
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _getBlock()
     {
@@ -133,12 +133,12 @@ class Iframe extends \Magento\Payment\Block\Form
             $this->_block = $this->getLayout()->createBlock(
                 'Magento\\Paypal\\Block\\' . str_replace(
                     ' ',
-                    \Magento\Framework\Autoload\IncludePath::NS_SEPARATOR,
+                    '\\',
                     ucwords(str_replace('_', ' ', $this->_paymentMethodCode))
                 ) . '\\Iframe'
             );
             if (!$this->_block instanceof \Magento\Paypal\Block\Iframe) {
-                throw new \Magento\Framework\Model\Exception('Invalid block type');
+                throw new \Magento\Framework\Exception\LocalizedException(__('Invalid block type'));
             }
         }
 

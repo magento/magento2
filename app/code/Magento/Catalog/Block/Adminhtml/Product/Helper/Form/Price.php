@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form;
@@ -37,7 +19,7 @@ class Price extends \Magento\Framework\Data\Form\Element\Text
     protected $_taxData;
 
     /**
-     * @var Magneto_Core_Model_StoreManager
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -62,7 +44,7 @@ class Price extends \Magento\Framework\Data\Form\Element\Text
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Locale\CurrencyInterface $localeCurrency,
         \Magento\Tax\Helper\Data $taxData,
-        array $data = array()
+        array $data = []
     ) {
         $this->_localeCurrency = $localeCurrency;
         $this->_storeManager = $storeManager;
@@ -85,18 +67,15 @@ class Price extends \Magento\Framework\Data\Form\Element\Text
     public function getAfterElementHtml()
     {
         $html = parent::getAfterElementHtml();
-        /**
-         * getEntityAttribute - use __call
-         */
+
         $addJsObserver = false;
         if ($attribute = $this->getEntityAttribute()) {
-            if (!($storeId = $attribute->getStoreId())) {
-                $storeId = $this->getForm()->getDataObject()->getStoreId();
+            $store = $this->getStore($attribute);
+            if ($this->getType() !== 'hidden') {
+                $html .= '<strong>'
+                    . $this->_localeCurrency->getCurrency($store->getBaseCurrencyCode())->getSymbol()
+                    . '</strong>';
             }
-            $store = $this->_storeManager->getStore($storeId);
-            $html .= '<strong>' . $this->_localeCurrency->getCurrency(
-                $store->getBaseCurrencyCode()
-            )->getSymbol() . '</strong>';
             if ($this->_taxData->priceIncludesTax($store)) {
                 if ($attribute->getAttributeCode() !== 'cost') {
                     $addJsObserver = true;
@@ -125,8 +104,22 @@ class Price extends \Magento\Framework\Data\Form\Element\Text
     }
 
     /**
+     * @param mixed $attribute
+     * @return \Magento\Store\Model\Store
+     */
+    protected function getStore($attribute)
+    {
+        if (!($storeId = $attribute->getStoreId())) {
+            $storeId = $this->getForm()->getDataObject()->getStoreId();
+        }
+        $store = $this->_storeManager->getStore($storeId);
+        return $store;
+    }
+
+    /**
      * @param null|int|string $index
      * @return null|string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getEscapedValue($index = null)
     {
@@ -136,6 +129,16 @@ class Price extends \Magento\Framework\Data\Form\Element\Text
             return null;
         }
 
-        return number_format($value, 2, null, '');
+        if ($attribute = $this->getEntityAttribute()) {
+            // honor the currency format of the store
+            $store = $this->getStore($attribute);
+            $currency = $this->_localeCurrency->getCurrency($store->getBaseCurrencyCode());
+            $value = $currency->toCurrency($value, ['display' => \Magento\Framework\Currency::NO_SYMBOL]);
+        } else {
+            // default format:  1234.56
+            $value = number_format($value, 2, null, '');
+        }
+
+        return $value;
     }
 }

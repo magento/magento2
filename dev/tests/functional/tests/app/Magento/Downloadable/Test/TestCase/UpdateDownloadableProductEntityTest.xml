@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Downloadable\Test\TestCase\UpdateDownloadableProductEntityTest" summary="Update Downloadable Product" ticketId="MAGETWO-24775">
+        <variation name="UpdateDownloadableProductEntityTestVariation1">
+            <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
+            <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
+            <data name="product/data/price/value" xsi:type="string">55</data>
+            <data name="product/data/tax_class_id/dataset" xsi:type="string">taxable_goods</data>
+            <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">10</data>
+            <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
+            <data name="product/data/downloadable_sample/dataset" xsi:type="string">with_three_samples</data>
+            <data name="product/data/downloadable_links/dataset" xsi:type="string">with_three_links</data>
+            <data name="product/data/custom_options/dataset" xsi:type="string">two_options</data>
+            <data name="isRequired" xsi:type="string">No</data>
+            <data name="product/data/url_key" xsi:type="string">downloadableproduct-%isolation%</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
+            <constraint name="Magento\Downloadable\Test\Constraint\AssertDownloadableProductForm" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
+            <constraint name="Magento\Downloadable\Test\Constraint\AssertDownloadableLinksData" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductCustomOptionsOnProductPage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku" />
+        </variation>
+        <variation name="UpdateDownloadableProductEntityTestVariation2">
+            <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
+            <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
+            <data name="product/data/price/value" xsi:type="string">100</data>
+            <data name="product/data/tax_class_id/dataset" xsi:type="string">taxable_goods</data>
+            <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">50</data>
+            <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">Out of Stock</data>
+            <data name="product/data/category" xsi:type="string">Default Category</data>
+            <data name="product/data/downloadable_links/dataset" xsi:type="string">with_two_separately_links</data>
+            <data name="isRequired" xsi:type="string">No</data>
+            <data name="product/data/url_key" xsi:type="string">downloadableproduct-%isolation%</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
+            <constraint name="Magento\Downloadable\Test\Constraint\AssertDownloadableProductForm" />
+        </variation>
+        <variation name="UpdateDownloadableProductEntityTestVariation3">
+            <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
+            <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
+            <data name="product/data/price/value" xsi:type="string">9999</data>
+            <data name="product/data/tax_class_id/dataset" xsi:type="string">taxable_goods</data>
+            <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">123</data>
+            <data name="product/data/category" xsi:type="string">Default Category</data>
+            <data name="product/data/stock_data/use_config_min_qty" xsi:type="string">No</data>
+            <data name="product/data/stock_data/min_qty" xsi:type="string">123</data>
+            <data name="isRequired" xsi:type="string">No</data>
+            <data name="product/data/url_key" xsi:type="string">downloadableproduct-%isolation%</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
+            <constraint name="Magento\Downloadable\Test\Constraint\AssertDownloadableProductForm" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock" />
+        </variation>
+        <variation name="UpdateDownloadableProductEntityTestVariation4">
+            <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
+            <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
+            <data name="product/data/price/value" xsi:type="string">48</data>
+            <data name="product/data/tax_class_id/dataset" xsi:type="string">None</data>
+            <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">5</data>
+            <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
+            <data name="product/data/category" xsi:type="string">Default Category</data>
+            <data name="product/data/description" xsi:type="string">This is description for downloadable product</data>
+            <data name="product/data/downloadable_links/dataset" xsi:type="string">with_two_separately_links</data>
+            <data name="isRequired" xsi:type="string">No</data>
+            <data name="product/data/url_key" xsi:type="string">downloadableproduct-%isolation%</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
+            <constraint name="Magento\Downloadable\Test\Constraint\AssertDownloadableProductForm" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
+        </variation>
+        <variation name="UpdateDownloadableProductEntityTestVariation5">
+            <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
+            <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
+            <data name="product/data/price/value" xsi:type="string">54</data>
+            <data name="product/data/tax_class_id/dataset" xsi:type="string">taxable_goods</data>
+            <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">10</data>
+            <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
+            <data name="product/data/category" xsi:type="string">category %isolation%</data>
+            <data name="product/data/short_description" xsi:type="string">This is short description for downloadable product</data>
+            <data name="product/data/downloadable_sample/dataset" xsi:type="string">with_two_samples</data>
+            <data name="product/data/downloadable_links/dataset" xsi:type="string">with_three_links</data>
+            <data name="product/data/custom_options/dataset" xsi:type="string">default</data>
+            <data name="isRequired" xsi:type="string">Yes</data>
+            <data name="product/data/url_key" xsi:type="string">downloadableproduct-%isolation%</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
+            <constraint name="Magento\Downloadable\Test\Constraint\AssertDownloadableProductForm" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductCustomOptionsOnProductPage" />
+            <constraint name="Magento\Downloadable\Test\Constraint\AssertDownloadableSamplesData" />
+            <constraint name="Magento\Downloadable\Test\Constraint\AssertDownloadableLinksData" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory" />
+        </variation>
+        <variation name="UpdateDownloadableProductEntityTestVariation6">
+            <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
+            <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
+            <data name="product/data/price/value" xsi:type="string">43</data>
+            <data name="product/data/tax_class_id/dataset" xsi:type="string">taxable_goods</data>
+            <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">10</data>
+            <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
+            <data name="product/data/special_price" xsi:type="string">40</data>
+            <data name="isRequired" xsi:type="string">No</data>
+            <data name="product/data/url_key" xsi:type="string">downloadableproduct-%isolation%</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSpecialPriceOnProductPage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
+        </variation>
+        <variation name="UpdateDownloadableProductEntityTestVariation7" summary="Verify data overriding on Store View level" ticketId="MAGETWO-50644">
+            <data name="storeDataset" xsi:type="string">custom</data>
+            <data name="storesCount" xsi:type="number">2</data>
+            <data name="storeIndexToUpdate" xsi:type="number">1</data>
+            <data name="product/data/use_default_name" xsi:type="string">No</data>
+            <data name="product/data/name" xsi:type="string">Test Downloadable Product %isolation%</data>
+            <data name="product/data/use_default_url_key" xsi:type="string">No</data>
+            <data name="product/data/url_key" xsi:type="string">downloadableproduct-%isolation%</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCustomStoreView" />
+        </variation>
+    </testCase>
+</config>

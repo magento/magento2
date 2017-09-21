@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -29,10 +11,19 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab;
 
+use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Form;
 use Magento\Backend\Block\Widget\Form\Generic;
-use Magento\Backend\Model\Config\Source\Yesno;
+use Magento\Config\Model\Config\Source\Yesno;
+use Magento\Catalog\Model\Entity\Attribute;
+use Magento\Eav\Block\Adminhtml\Attribute\PropertyLocker;
+use Magento\Framework\Data\FormFactory;
+use Magento\Framework\Registry;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Front extends Generic
 {
     /**
@@ -41,109 +32,119 @@ class Front extends Generic
     protected $_yesNo;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Data\FormFactory $formFactory
+     * @var PropertyLocker
+     */
+    private $propertyLocker;
+
+    /**
+     * @param Context $context
+     * @param Registry $registry
+     * @param FormFactory $formFactory
      * @param Yesno $yesNo
+     * @param PropertyLocker $propertyLocker
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Data\FormFactory $formFactory,
+        Context $context,
+        Registry $registry,
+        FormFactory $formFactory,
         Yesno $yesNo,
-        array $data = array()
+        PropertyLocker $propertyLocker,
+        array $data = []
     ) {
         $this->_yesNo = $yesNo;
+        $this->propertyLocker = $propertyLocker;
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
     /**
      * {@inheritdoc}
      * @return $this
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareForm()
     {
+        /** @var Attribute $attributeObject */
         $attributeObject = $this->_coreRegistry->registry('entity_attribute');
 
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create(
-            array('data' => array('id' => 'edit_form', 'action' => $this->getData('action'), 'method' => 'post'))
+            ['data' => ['id' => 'edit_form', 'action' => $this->getData('action'), 'method' => 'post']]
         );
 
         $yesnoSource = $this->_yesNo->toOptionArray();
 
         $fieldset = $form->addFieldset(
             'front_fieldset',
-            array('legend' => __('Frontend Properties'), 'collapsable' => $this->getRequest()->has('popup'))
+            ['legend' => __('Storefront Properties'), 'collapsable' => $this->getRequest()->has('popup')]
         );
 
         $fieldset->addField(
             'is_searchable',
             'select',
-            array(
+            [
                 'name'     => 'is_searchable',
-                'label'    => __('Use in Quick Search'),
-                'title'    => __('Use in Quick Search'),
+                'label'    => __('Use in Search'),
+                'title'    => __('Use in Search'),
                 'values'   => $yesnoSource,
-            )
+            ]
         );
 
         $fieldset->addField(
             'is_visible_in_advanced_search',
             'select',
-            array(
+            [
                 'name' => 'is_visible_in_advanced_search',
-                'label' => __('Use in Advanced Search'),
-                'title' => __('Use in Advanced Search'),
+                'label' => __('Visible in Advanced Search'),
+                'title' => __('Visible in Advanced Search'),
                 'values' => $yesnoSource,
-            )
+            ]
         );
 
         $fieldset->addField(
             'is_comparable',
             'select',
-            array(
+            [
                 'name' => 'is_comparable',
-                'label' => __('Comparable on Frontend'),
-                'title' => __('Comparable on Frontend'),
+                'label' => __('Comparable on Storefront'),
+                'title' => __('Comparable on Storefront'),
                 'values' => $yesnoSource,
-            )
+            ]
         );
 
-        $this->_eventManager->dispatch('product_attribute_form_build_front_tab', array('form' => $form));
+        $this->_eventManager->dispatch('product_attribute_form_build_front_tab', ['form' => $form]);
 
         $fieldset->addField(
             'is_used_for_promo_rules',
             'select',
-            array(
+            [
                 'name' => 'is_used_for_promo_rules',
                 'label' => __('Use for Promo Rule Conditions'),
                 'title' => __('Use for Promo Rule Conditions'),
                 'values' => $yesnoSource,
-            )
+            ]
         );
 
         $fieldset->addField(
             'is_wysiwyg_enabled',
             'select',
-            array(
+            [
                 'name' => 'is_wysiwyg_enabled',
                 'label' => __('Enable WYSIWYG'),
                 'title' => __('Enable WYSIWYG'),
                 'values' => $yesnoSource,
-            )
+            ]
         );
 
         $fieldset->addField(
             'is_html_allowed_on_front',
             'select',
-            array(
+            [
                 'name' => 'is_html_allowed_on_front',
-                'label' => __('Allow HTML Tags on Frontend'),
-                'title' => __('Allow HTML Tags on Frontend'),
+                'label' => __('Allow HTML Tags on Storefront'),
+                'title' => __('Allow HTML Tags on Storefront'),
                 'values' => $yesnoSource,
-            )
+            ]
         );
         if (!$attributeObject->getId() || $attributeObject->getIsWysiwygEnabled()) {
             $attributeObject->setIsHtmlAllowedOnFront(1);
@@ -152,48 +153,48 @@ class Front extends Generic
         $fieldset->addField(
             'is_visible_on_front',
             'select',
-            array(
+            [
                 'name' => 'is_visible_on_front',
-                'label' => __('Visible on Catalog Pages on Frontend'),
-                'title' => __('Visible on Catalog Pages on Frontend'),
+                'label' => __('Visible on Catalog Pages on Storefront'),
+                'title' => __('Visible on Catalog Pages on Storefront'),
                 'values' => $yesnoSource
-            )
+            ]
         );
 
         $fieldset->addField(
             'used_in_product_listing',
             'select',
-            array(
+            [
                 'name' => 'used_in_product_listing',
                 'label' => __('Used in Product Listing'),
                 'title' => __('Used in Product Listing'),
-                'note' => __('Depends on design theme'),
+                'note' => __('Depends on design theme.'),
                 'values' => $yesnoSource
-            )
+            ]
         );
 
         $fieldset->addField(
             'used_for_sort_by',
             'select',
-            array(
+            [
                 'name' => 'used_for_sort_by',
                 'label' => __('Used for Sorting in Product Listing'),
                 'title' => __('Used for Sorting in Product Listing'),
-                'note' => __('Depends on design theme'),
+                'note' => __('Depends on design theme.'),
                 'values' => $yesnoSource
-            )
+            ]
         );
 
         $this->_eventManager->dispatch(
             'adminhtml_catalog_product_attribute_edit_frontend_prepare_form',
-            array('form' => $form, 'attribute' => $attributeObject)
+            ['form' => $form, 'attribute' => $attributeObject]
         );
 
         // define field dependencies
         $this->setChild(
             'form_after',
             $this->getLayout()->createBlock(
-                'Magento\Backend\Block\Widget\Form\Element\Dependence'
+                \Magento\Backend\Block\Widget\Form\Element\Dependence::class
             )->addFieldMap(
                 "is_wysiwyg_enabled",
                 'wysiwyg_enabled'
@@ -212,10 +213,24 @@ class Front extends Generic
                 'wysiwyg_enabled',
                 '0'
             )
+            ->addFieldMap(
+                "is_searchable",
+                'searchable'
+            )
+            ->addFieldMap(
+                "is_visible_in_advanced_search",
+                'advanced_search'
+            )
+            ->addFieldDependence(
+                'advanced_search',
+                'searchable',
+                '1'
+            )
         );
 
-        $form->setValues($attributeObject->getData());
         $this->setForm($form);
+        $form->setValues($attributeObject->getData());
+        $this->propertyLocker->lock($form);
         return parent::_prepareForm();
     }
 }

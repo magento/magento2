@@ -1,28 +1,19 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Shipping\Block\Tracking;
 
+use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
+
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Popup extends \Magento\Framework\View\Element\Template
 {
     /**
@@ -33,17 +24,25 @@ class Popup extends \Magento\Framework\View\Element\Template
     protected $_registry;
 
     /**
+     * @var DateTimeFormatterInterface
+     */
+    protected $dateTimeFormatter;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Registry $registry
+     * @param DateTimeFormatterInterface $dateTimeFormatter
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Framework\Registry $registry,
-        array $data = array()
+        DateTimeFormatterInterface $dateTimeFormatter,
+        array $data = []
     ) {
         $this->_registry = $registry;
         parent::__construct($context, $data);
+        $this->dateTimeFormatter = $dateTimeFormatter;
     }
 
     /**
@@ -79,8 +78,8 @@ class Popup extends \Magento\Framework\View\Element\Template
      */
     public function formatDeliveryDate($date)
     {
-        $format = $this->_localeDate->getDateFormat(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM);
-        return $this->_localeDate->date(strtotime($date), \Zend_Date::TIMESTAMP, null, false)->toString($format);
+        $format = $this->_localeDate->getDateFormat(\IntlDateFormatter::MEDIUM);
+        return $this->dateTimeFormatter->formatObject($this->_localeDate->date(new \DateTime($date)), $format);
     }
 
     /**
@@ -96,14 +95,15 @@ class Popup extends \Magento\Framework\View\Element\Template
             $time = $date . ' ' . $time;
         }
 
-        $format = $this->_localeDate->getTimeFormat(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT);
-        return $this->_localeDate->date(strtotime($time), \Zend_Date::TIMESTAMP, null, false)->toString($format);
+        $format = $this->_localeDate->getTimeFormat(\IntlDateFormatter::SHORT);
+        return $this->dateTimeFormatter->formatObject($this->_localeDate->date(new \DateTime($time)), $format);
     }
 
     /**
      * Is 'contact us' option enabled?
      *
      * @return boolean
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getContactUsEnabled()
     {

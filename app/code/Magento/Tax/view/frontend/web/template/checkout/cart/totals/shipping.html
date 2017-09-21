@@ -1,0 +1,54 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<!-- ko if: isCalculated() && quoteIsVirtual == 0 -->
+    <!-- ko if: isBothPricesDisplayed() -->
+    <tr class="totals shipping excl">
+        <th class="mark" scope="row">
+            <span class="label" data-bind="text: title + ' ' + excludingTaxMessage"></span>
+            <span class="value" data-bind="text: getShippingMethodTitle()"></span>
+        </th>
+        <td class="amount">
+            <span class="price"
+                  data-bind="text: getExcludingValue(), attr: {'data-th': excludingTaxMessage}"></span>
+        </td>
+    </tr>
+    <tr class="totals shipping incl">
+        <th class="mark" scope="row">
+            <span class="label" data-bind="text: title + ' ' + includingTaxMessage"></span>
+            <span class="value" data-bind="text: getShippingMethodTitle()"></span>
+        </th>
+        <td class="amount">
+            <span class="price"
+                  data-bind="text: getIncludingValue(), attr: {'data-th': title + ' ' + excludingTaxMessage}"></span>
+        </td>
+    </tr>
+    <!-- /ko -->
+    <!-- ko if: isIncludingDisplayed() -->
+    <tr class="totals shipping incl">
+        <th class="mark" scope="row">
+            <span class="label" data-bind="i18n: title"></span>
+            <span class="value" data-bind="text: getShippingMethodTitle()"></span>
+        </th>
+        <td class="amount">
+            <span class="price"
+                  data-bind="text: getIncludingValue(), attr: {'data-th': title}"></span>
+        </td>
+    </tr>
+    <!-- /ko -->
+    <!-- ko if: isExcludingDisplayed() -->
+    <tr class="totals shipping excl">
+        <th class="mark" scope="row">
+            <span class="label" data-bind="i18n: title"></span>
+            <span class="value" data-bind="text: getShippingMethodTitle()"></span>
+        </th>
+        <td class="amount">
+            <span class="price"
+                  data-bind="text: getValue(), attr: {'data-th': title}"></span>
+        </td>
+    </tr>
+    <!-- /ko -->
+<!-- /ko -->

@@ -1,0 +1,15 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+/**
+ * @var \Magento\Payment\Block\Info $block
+ */
+?>
+<div>
+    <?php $block->escapeHtml($block->getMethod()->getTitle());?>
+    <?= $block->escapeHtml(__(' is not available. You still can process offline actions.')) ?>
+</div>

@@ -1,41 +1,30 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model;
+
+use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory as AttributeCollectionFactory;
 
 /**
  * Catalog view layer model
  *
+ * @api
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
-class Layer extends \Magento\Framework\Object
+class Layer extends \Magento\Framework\DataObject
 {
     /**
      * Product collections array
      *
      * @var array
      */
-    protected $_productCollections = array();
+    protected $_productCollections = [];
 
     /**
      * Key which can be used for load/save aggregation data
@@ -61,23 +50,16 @@ class Layer extends \Magento\Framework\Object
     /**
      * Catalog product
      *
-     * @var \Magento\Catalog\Model\Resource\Product
+     * @var \Magento\Catalog\Model\ResourceModel\Product
      */
     protected $_catalogProduct;
 
     /**
      * Attribute collection factory
      *
-     * @var \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory
+     * @var AttributeCollectionFactory
      */
     protected $_attributeCollectionFactory;
-
-    /**
-     * Category factory
-     *
-     * @var \Magento\Catalog\Model\CategoryFactory
-     */
-    protected $_categoryFactory;
 
     /**
      * Layer state factory
@@ -102,31 +84,36 @@ class Layer extends \Magento\Framework\Object
     protected $collectionFilter;
 
     /**
+     * @var CategoryRepositoryInterface
+     */
+    protected $categoryRepository;
+
+    /**
      * @param Layer\ContextInterface $context
      * @param Layer\StateFactory $layerStateFactory
-     * @param CategoryFactory $categoryFactory
-     * @param Resource\Product\Attribute\CollectionFactory $attributeCollectionFactory
-     * @param Resource\Product $catalogProduct
+     * @param AttributeCollectionFactory $attributeCollectionFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product $catalogProduct
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Registry $registry
+     * @param CategoryRepositoryInterface $categoryRepository
      * @param array $data
      */
     public function __construct(
         \Magento\Catalog\Model\Layer\ContextInterface $context,
         \Magento\Catalog\Model\Layer\StateFactory $layerStateFactory,
-        \Magento\Catalog\Model\CategoryFactory $categoryFactory,
-        \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $attributeCollectionFactory,
-        \Magento\Catalog\Model\Resource\Product $catalogProduct,
+        AttributeCollectionFactory $attributeCollectionFactory,
+        \Magento\Catalog\Model\ResourceModel\Product $catalogProduct,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Registry $registry,
-        array $data = array()
+        CategoryRepositoryInterface $categoryRepository,
+        array $data = []
     ) {
         $this->_layerStateFactory = $layerStateFactory;
-        $this->_categoryFactory = $categoryFactory;
         $this->_attributeCollectionFactory = $attributeCollectionFactory;
         $this->_catalogProduct = $catalogProduct;
         $this->_storeManager = $storeManager;
         $this->registry = $registry;
+        $this->categoryRepository = $categoryRepository;
         $this->collectionProvider = $context->getCollectionProvider();
         $this->stateKeyGenerator = $context->getStateKey();
         $this->collectionFilter = $context->getCollectionFilter();
@@ -149,7 +136,7 @@ class Layer extends \Magento\Framework\Object
     /**
      * Retrieve current layer product collection
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Collection
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     public function getProductCollection()
     {
@@ -167,12 +154,14 @@ class Layer extends \Magento\Framework\Object
     /**
      * Initialize product collection
      *
-     * @param \Magento\Catalog\Model\Resource\Product\Collection $collection
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
      * @return \Magento\Catalog\Model\Layer
      */
     public function prepareProductCollection($collection)
     {
         $this->collectionFilter->filter($collection, $this->getCurrentCategory());
+
+        return $this;
     }
 
     /**
@@ -205,13 +194,12 @@ class Layer extends \Magento\Framework\Object
     public function getCurrentCategory()
     {
         $category = $this->getData('current_category');
-        if (is_null($category)) {
+        if ($category === null) {
             $category = $this->registry->registry('current_category');
             if ($category) {
                 $this->setData('current_category', $category);
             } else {
-                /** @var \Magento\Catalog\Model\Category $category */
-                $category = $this->_categoryFactory->create()->load($this->getCurrentStore()->getRootCategoryId());
+                $category = $this->categoryRepository->get($this->getCurrentStore()->getRootCategoryId());
                 $this->setData('current_category', $category);
             }
         }
@@ -224,20 +212,24 @@ class Layer extends \Magento\Framework\Object
      *
      * @param mixed $category
      * @return \Magento\Catalog\Model\Layer
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function setCurrentCategory($category)
     {
         if (is_numeric($category)) {
-            $category = $this->_categoryFactory->create()->load($category);
-        }
-        if (!$category instanceof \Magento\Catalog\Model\Category) {
-            throw new \Magento\Framework\Model\Exception(
-                __('The category must be an instance of \Magento\Catalog\Model\Category.')
+            try {
+                $category = $this->categoryRepository->get($category);
+            } catch (NoSuchEntityException $e) {
+                throw new \Magento\Framework\Exception\LocalizedException(__('Please correct the category.'), $e);
+            }
+        } elseif ($category instanceof \Magento\Catalog\Model\Category) {
+            if (!$category->getId()) {
+                throw new \Magento\Framework\Exception\LocalizedException(__('Please correct the category.'));
+            }
+        } else {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Must be category model instance or its id.')
             );
-        }
-        if (!$category->getId()) {
-            throw new \Magento\Framework\Model\Exception(__('Please correct the category.'));
         }
 
         if ($category->getId() != $this->getCurrentCategory()->getId()) {
@@ -265,7 +257,7 @@ class Layer extends \Magento\Framework\Object
     public function getState()
     {
         $state = $this->getData('state');
-        if (is_null($state)) {
+        if ($state === null) {
             \Magento\Framework\Profiler::start(__METHOD__);
             $state = $this->_layerStateFactory->create();
             $this->setData('state', $state);
@@ -273,15 +265,5 @@ class Layer extends \Magento\Framework\Object
         }
 
         return $state;
-    }
-
-    /**
-     * Get attribute sets identifiers of current product set
-     *
-     * @return array
-     */
-    protected function _getSetIds()
-    {
-        return $this->getProductCollection()->getSetIds();
     }
 }

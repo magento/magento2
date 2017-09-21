@@ -1,0 +1,38 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+?>
+<div class="additional-cache-management">
+    <h2>
+        <span><?= /* @escapeNotVerified */ __('Additional Cache Management') ?></span>
+    </h2>
+    <p>
+        <button onclick="setLocation('<?= /* @escapeNotVerified */ $block->getCleanImagesUrl() ?>')" type="button">
+            <?= /* @escapeNotVerified */ __('Flush Catalog Images Cache') ?>
+        </button>
+        <span><?= /* @escapeNotVerified */ __('Pregenerated product images files') ?></span>
+    </p>
+    <p>
+        <button onclick="setLocation('<?= /* @escapeNotVerified */ $block->getCleanMediaUrl() ?>')" type="button">
+            <?= /* @escapeNotVerified */ __('Flush JavaScript/CSS Cache') ?>
+        </button>
+        <span><?= /* @escapeNotVerified */ __('Themes JavaScript and CSS files combined to one file') ?></span>
+    </p>
+    <?php
+    if (!$block->isInProductionMode()):
+        ?>
+        <p>
+            <button onclick="setLocation('<?= /* @escapeNotVerified */ $block->getCleanStaticFilesUrl() ?>')" type="button">
+                <?= /* @escapeNotVerified */ __('Flush Static Files Cache') ?>
+            </button>
+            <span><?= /* @escapeNotVerified */ __('Preprocessed view files and static files') ?></span>
+        </p>
+    <?php
+    endif;
+    ?>
+    <?= $block->getChildHtml() ?>
+</div>

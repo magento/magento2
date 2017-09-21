@@ -1,0 +1,65 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<!--@subject {{trans "Payment Transaction Failed Reminder"}} @-->
+<!--@vars {
+"var billingAddress.format('html')|raw":"Billing Address",
+"var checkoutType":"Checkout Type",
+"var customerEmail":"Customer Email",
+"var customer":"Customer Name",
+"var dateAndTime":"Date and Time of Transaction",
+"var paymentMethod":"Payment Method",
+"var shippingAddress.format('html')|raw":"Shipping Address",
+"var shippingMethod":"Shipping Method",
+"var items|raw":"Shopping Cart Items",
+"var total":"Total",
+"var reason":"Transaction Failed Reason"
+} @-->
+
+<h1>{{trans "Payment Transaction Failed"}}</h1>
+
+<ul>
+    <li>
+        <b>{{trans "Reason"}}</b><br />
+        {{var reason}}
+    </li>
+    <li>
+        <b>{{trans "Checkout Type"}}</b><br />
+        {{var checkoutType}}
+    </li>
+    <li>
+        <b>{{trans "Customer:"}}</b><br />
+        <a href="mailto:{{var customerEmail}}">{{var customer}}</a> &lt;{{var customerEmail}}&gt;
+    </li>
+    <li>
+        <b>{{trans "Items"}}</b><br />
+        {{var items|raw}}
+    </li>
+    <li>
+        <b>{{trans "Total:"}}</b><br />
+        {{var total}}
+    </li>
+    <li>
+        <b>{{trans "Billing Address:"}}</b><br />
+        {{var billingAddress.format('html')|raw}}
+    </li>
+    <li>
+        <b>{{trans "Shipping Address:"}}</b><br />
+        {{var shippingAddress.format('html')|raw}}
+    </li>
+    <li>
+        <b>{{trans "Shipping Method:"}}</b><br />
+        {{var shippingMethod}}
+    </li>
+    <li>
+        <b>{{trans "Payment Method:"}}</b><br />
+        {{var paymentMethod}}
+    </li>
+    <li>
+        <b>{{trans "Date & Time:"}}</b><br />
+        {{var dateAndTime}}
+    </li>
+</ul>

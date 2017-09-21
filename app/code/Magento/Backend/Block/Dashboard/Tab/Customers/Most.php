@@ -1,51 +1,35 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Dashboard\Tab\Customers;
 
 /**
  * Adminhtml dashboard most active buyers
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 100.0.2
  */
 class Most extends \Magento\Backend\Block\Dashboard\Grid
 {
     /**
-     * @var \Magento\Reports\Model\Resource\Order\CollectionFactory
+     * @var \Magento\Reports\Model\ResourceModel\Order\CollectionFactory
      */
     protected $_collectionFactory;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\Reports\Model\Resource\Order\CollectionFactory $collectionFactory
+     * @param \Magento\Reports\Model\ResourceModel\Order\CollectionFactory $collectionFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
-        \Magento\Reports\Model\Resource\Order\CollectionFactory $collectionFactory,
-        array $data = array()
+        \Magento\Reports\Model\ResourceModel\Order\CollectionFactory $collectionFactory,
+        array $data = []
     ) {
         $this->_collectionFactory = $collectionFactory;
         parent::__construct($context, $backendHelper, $data);
@@ -66,19 +50,19 @@ class Most extends \Magento\Backend\Block\Dashboard\Grid
     protected function _prepareCollection()
     {
         $collection = $this->_collectionFactory->create();
-        /* @var $collection \Magento\Reports\Model\Resource\Order\Collection */
+        /* @var $collection \Magento\Reports\Model\ResourceModel\Order\Collection */
         $collection->groupByCustomer()->addOrdersCount()->joinCustomerName();
 
         $storeFilter = 0;
         if ($this->getParam('store')) {
             $collection->addAttributeToFilter('store_id', $this->getParam('store'));
             $storeFilter = 1;
-        } else if ($this->getParam('website')) {
+        } elseif ($this->getParam('website')) {
             $storeIds = $this->_storeManager->getWebsite($this->getParam('website'))->getStoreIds();
-            $collection->addAttributeToFilter('store_id', array('in' => $storeIds));
-        } else if ($this->getParam('group')) {
+            $collection->addAttributeToFilter('store_id', ['in' => $storeIds]);
+        } elseif ($this->getParam('group')) {
             $storeIds = $this->_storeManager->getGroup($this->getParam('group'))->getStoreIds();
-            $collection->addAttributeToFilter('store_id', array('in' => $storeIds));
+            $collection->addAttributeToFilter('store_id', ['in' => $storeIds]);
         }
 
         $collection->addSumAvgTotals($storeFilter)->orderByTotalAmount();
@@ -93,11 +77,18 @@ class Most extends \Magento\Backend\Block\Dashboard\Grid
      */
     protected function _prepareColumns()
     {
-        $this->addColumn('name', array('header' => __('Customer'), 'sortable' => false, 'index' => 'name'));
+        $this->addColumn('name', ['header' => __('Customer'), 'sortable' => false, 'index' => 'name']);
 
         $this->addColumn(
             'orders_count',
-            array('header' => __('Orders'), 'sortable' => false, 'index' => 'orders_count', 'type' => 'number')
+            [
+                'header' => __('Orders'),
+                'sortable' => false,
+                'index' => 'orders_count',
+                'type' => 'number',
+                'header_css_class' => 'col-orders',
+                'column_css_class' => 'col-orders'
+            ]
         );
 
         $baseCurrencyCode = (string)$this->_storeManager->getStore(
@@ -106,26 +97,28 @@ class Most extends \Magento\Backend\Block\Dashboard\Grid
 
         $this->addColumn(
             'orders_avg_amount',
-            array(
+            [
                 'header' => __('Average'),
-                'align' => 'right',
                 'sortable' => false,
                 'type' => 'currency',
                 'currency_code' => $baseCurrencyCode,
-                'index' => 'orders_avg_amount'
-            )
+                'index' => 'orders_avg_amount',
+                'header_css_class' => 'col-avg',
+                'column_css_class' => 'col-avg'
+            ]
         );
 
         $this->addColumn(
             'orders_sum_amount',
-            array(
+            [
                 'header' => __('Total'),
-                'align' => 'right',
                 'sortable' => false,
                 'type' => 'currency',
                 'currency_code' => $baseCurrencyCode,
-                'index' => 'orders_sum_amount'
-            )
+                'index' => 'orders_sum_amount',
+                'header_css_class' => 'col-total',
+                'column_css_class' => 'col-total'
+            ]
         );
 
         $this->setFilterVisibility(false);
@@ -139,6 +132,6 @@ class Most extends \Magento\Backend\Block\Dashboard\Grid
      */
     public function getRowUrl($row)
     {
-        return $this->getUrl('customer/index/edit', array('id' => $row->getCustomerId()));
+        return $this->getUrl('customer/index/edit', ['id' => $row->getCustomerId()]);
     }
 }

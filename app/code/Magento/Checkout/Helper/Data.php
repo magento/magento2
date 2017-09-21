@@ -1,48 +1,26 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Helper;
 
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Quote\Model\Quote\Item\AbstractItem;
 use Magento\Store\Model\Store;
-use Magento\Sales\Model\Quote\Item\AbstractItem;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Checkout default helper
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     const XML_PATH_GUEST_CHECKOUT = 'checkout/options/guest_checkout';
 
     const XML_PATH_CUSTOMER_MUST_BE_LOGGED = 'checkout/options/customer_must_be_logged';
-
-    /**
-     * Core store config
-     *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    protected $_scopeConfig;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
@@ -70,29 +48,35 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $inlineTranslation;
 
     /**
+     * @var PriceCurrencyInterface
+     */
+    protected $priceCurrency;
+
+    /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
+     * @param PriceCurrencyInterface $priceCurrency
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder,
-        \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
+        \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
+        PriceCurrencyInterface $priceCurrency
     ) {
-        $this->_scopeConfig = $scopeConfig;
         $this->_storeManager = $storeManager;
         $this->_checkoutSession = $checkoutSession;
         $this->_localeDate = $localeDate;
         $this->_transportBuilder = $transportBuilder;
         $this->inlineTranslation = $inlineTranslation;
+        $this->priceCurrency = $priceCurrency;
         parent::__construct($context);
     }
 
@@ -100,6 +84,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve checkout session model
      *
      * @return \Magento\Checkout\Model\Session
+     * @codeCoverageIgnore
      */
     public function getCheckout()
     {
@@ -109,7 +94,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Retrieve checkout quote model object
      *
-     * @return \Magento\Sales\Model\Quote
+     * @return \Magento\Quote\Model\Quote
+     * @codeCoverageIgnore
      */
     public function getQuote()
     {
@@ -122,7 +108,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function formatPrice($price)
     {
-        return $this->getQuote()->getStore()->formatPrice($price);
+        return $this->priceCurrency->format(
+            $price,
+            true,
+            PriceCurrencyInterface::DEFAULT_PRECISION,
+            $this->getQuote()->getStore()
+        );
     }
 
     /**
@@ -132,7 +123,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function convertPrice($price, $format = true)
     {
-        return $this->getQuote()->getStore()->convertPrice($price, $format);
+        return $format
+            ? $this->priceCurrency->convertAndFormat($price)
+            : $this->priceCurrency->convert($price);
     }
 
     /**
@@ -142,7 +135,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function canOnepageCheckout()
     {
-        return (bool)$this->_scopeConfig->getValue(
+        return (bool)$this->scopeConfig->getValue(
             'checkout/options/onepage_checkout_enabled',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
@@ -151,7 +144,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Get sales item (quote item, order item etc) price including tax based on row total and tax amount
      *
-     * @param   \Magento\Framework\Object $item
+     * @param   \Magento\Framework\DataObject $item
      * @return  float
      */
     public function getPriceInclTax($item)
@@ -162,13 +155,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $qty = $item->getQty() ? $item->getQty() : ($item->getQtyOrdered() ? $item->getQtyOrdered() : 1);
         $taxAmount = $item->getTaxAmount() + $item->getDiscountTaxCompensation();
         $price = floatval($qty) ? ($item->getRowTotal() + $taxAmount) / $qty : 0;
-        return $this->_storeManager->getStore()->roundPrice($price);
+        return $this->priceCurrency->round($price);
     }
 
     /**
      * Get sales item (quote item, order item etc) row total price including tax
      *
-     * @param   \Magento\Framework\Object $item
+     * @param   \Magento\Framework\DataObject $item
      * @return  float
      */
     public function getSubtotalInclTax($item)
@@ -189,7 +182,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $qty = $item->getQty() ? $item->getQty() : ($item->getQtyOrdered() ? $item->getQtyOrdered() : 1);
         $taxAmount = $item->getBaseTaxAmount() + $item->getBaseDiscountTaxCompensation();
         $price = floatval($qty) ? ($item->getBaseRowTotal() + $taxAmount) / $qty : 0;
-        return $this->_storeManager->getStore()->roundPrice($price);
+        return $this->priceCurrency->round($price);
     }
 
     /**
@@ -205,55 +198,57 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Send email id payment was failed
      *
-     * @param \Magento\Sales\Model\Quote $checkout
+     * @param \Magento\Quote\Model\Quote $checkout
      * @param string $message
      * @param string $checkoutType
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function sendPaymentFailedEmail($checkout, $message, $checkoutType = 'onepage')
     {
         $this->inlineTranslation->suspend();
 
-        $template = $this->_scopeConfig->getValue(
+        $template = $this->scopeConfig->getValue(
             'checkout/payment_failed/template',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $checkout->getStoreId()
         );
 
         $copyTo = $this->_getEmails('checkout/payment_failed/copy_to', $checkout->getStoreId());
-        $copyMethod = $this->_scopeConfig->getValue(
+        $copyMethod = $this->scopeConfig->getValue(
             'checkout/payment_failed/copy_method',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $checkout->getStoreId()
         );
-        $bcc = array();
+        $bcc = [];
         if ($copyTo && $copyMethod == 'bcc') {
             $bcc = $copyTo;
         }
 
-        $_receiver = $this->_scopeConfig->getValue(
+        $_receiver = $this->scopeConfig->getValue(
             'checkout/payment_failed/receiver',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $checkout->getStoreId()
         );
-        $sendTo = array(
-            array(
-                'email' => $this->_scopeConfig->getValue(
+        $sendTo = [
+            [
+                'email' => $this->scopeConfig->getValue(
                     'trans_email/ident_' . $_receiver . '/email',
                     \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                     $checkout->getStoreId()
                 ),
-                'name' => $this->_scopeConfig->getValue(
+                'name' => $this->scopeConfig->getValue(
                     'trans_email/ident_' . $_receiver . '/name',
                     \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                     $checkout->getStoreId()
-                )
-            )
-        );
+                ),
+            ],
+        ];
 
         if ($copyTo && $copyMethod == 'copy') {
             foreach ($copyTo as $email) {
-                $sendTo[] = array('email' => $email, 'name' => null);
+                $sendTo[] = ['email' => $email, 'name' => null];
             }
         }
         $shippingMethod = '';
@@ -269,7 +264,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
         $items = '';
         foreach ($checkout->getAllVisibleItems() as $_item) {
-            /* @var $_item \Magento\Sales\Model\Quote\Item */
+            /* @var $_item \Magento\Quote\Model\Quote\Item */
             $items .=
                 $_item->getProduct()->getName() . '  x ' . $_item->getQty() . '  ' . $checkout->getStoreCurrencyCode()
                 . ' ' . $_item->getProduct()->getFinalPrice(
@@ -282,29 +277,36 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $transport = $this->_transportBuilder->setTemplateIdentifier(
                 $template
             )->setTemplateOptions(
-                array('area' => \Magento\Framework\App\Area::AREA_FRONTEND, 'store' => $checkout->getStoreId())
+                [
+                    'area' => \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE,
+                    'store' => Store::DEFAULT_STORE_ID
+                ]
             )->setTemplateVars(
-                array(
+                [
                     'reason' => $message,
                     'checkoutType' => $checkoutType,
-                    'dateAndTime' => $this->_localeDate->date(),
+                    'dateAndTime' => $this->_localeDate->formatDateTime(
+                        new \DateTime(),
+                        \IntlDateFormatter::MEDIUM,
+                        \IntlDateFormatter::MEDIUM
+                    ),
                     'customer' => $checkout->getCustomerFirstname() . ' ' . $checkout->getCustomerLastname(),
                     'customerEmail' => $checkout->getCustomerEmail(),
                     'billingAddress' => $checkout->getBillingAddress(),
                     'shippingAddress' => $checkout->getShippingAddress(),
-                    'shippingMethod' => $this->_scopeConfig->getValue(
+                    'shippingMethod' => $this->scopeConfig->getValue(
                         'carriers/' . $shippingMethod . '/title',
                         \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                     ),
-                    'paymentMethod' => $this->_scopeConfig->getValue(
+                    'paymentMethod' => $this->scopeConfig->getValue(
                         'payment/' . $paymentMethod . '/title',
                         \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                     ),
                     'items' => nl2br($items),
-                    'total' => $total
-                )
+                    'total' => $total,
+                ]
             )->setFrom(
-                $this->_scopeConfig->getValue(
+                $this->scopeConfig->getValue(
                     'checkout/payment_failed/identity',
                     \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                     $checkout->getStoreId()
@@ -331,7 +333,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected function _getEmails($configPath, $storeId)
     {
-        $data = $this->_scopeConfig->getValue($configPath, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeId);
+        $data = $this->scopeConfig->getValue(
+            $configPath,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
         if (!empty($data)) {
             return explode(',', $data);
         }
@@ -342,27 +348,27 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Check is allowed Guest Checkout
      * Use config settings and observer
      *
-     * @param \Magento\Sales\Model\Quote $quote
+     * @param \Magento\Quote\Model\Quote $quote
      * @param int|Store $store
      * @return bool
      */
-    public function isAllowedGuestCheckout(\Magento\Sales\Model\Quote $quote, $store = null)
+    public function isAllowedGuestCheckout(\Magento\Quote\Model\Quote $quote, $store = null)
     {
         if ($store === null) {
             $store = $quote->getStoreId();
         }
-        $guestCheckout = $this->_scopeConfig->isSetFlag(
+        $guestCheckout = $this->scopeConfig->isSetFlag(
             self::XML_PATH_GUEST_CHECKOUT,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
 
         if ($guestCheckout == true) {
-            $result = new \Magento\Framework\Object();
+            $result = new \Magento\Framework\DataObject();
             $result->setIsAllowed($guestCheckout);
             $this->_eventManager->dispatch(
                 'checkout_allow_guest',
-                array('quote' => $quote, 'store' => $store, 'result' => $result)
+                ['quote' => $quote, 'store' => $store, 'result' => $result]
             );
 
             $guestCheckout = $result->getIsAllowed();
@@ -375,6 +381,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Check if context is checkout
      *
      * @return bool
+     * @codeCoverageIgnore
      */
     public function isContextCheckout()
     {
@@ -385,12 +392,26 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Check if user must be logged during checkout process
      *
      * @return boolean
+     * @codeCoverageIgnore
      */
     public function isCustomerMustBeLogged()
     {
-        return $this->_scopeConfig->isSetFlag(
+        return $this->scopeConfig->isSetFlag(
             self::XML_PATH_CUSTOMER_MUST_BE_LOGGED,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+    }
+
+    /**
+     * Checks if display billing address on payment method is available, otherwise
+     * billing address should be display on payment page
+     * @return bool
+     */
+    public function isDisplayBillingOnPaymentMethodAvailable()
+    {
+        return (bool) !$this->scopeConfig->getValue(
+            'checkout/options/display_billing_address_on',
+            ScopeInterface::SCOPE_STORE
         );
     }
 }

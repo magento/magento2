@@ -1,29 +1,10 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- */ 
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 namespace Magento\Newsletter\Controller;
 
-use Magento\Framework\Message\MessageInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\AbstractController;
 
@@ -32,6 +13,11 @@ use Magento\TestFramework\TestCase\AbstractController;
  */
 class SubscriberTest extends AbstractController
 {
+    protected function setUp()
+    {
+        parent::setUp();
+    }
+
     public function testNewAction()
     {
         $this->getRequest()->setMethod('POST');
@@ -48,8 +34,8 @@ class SubscriberTest extends AbstractController
     public function testNewActionUnusedEmail()
     {
         $this->getRequest()->setMethod('POST');
-        $this->getRequest()->setPost([
-            'email' => 'not_used@example.com'
+        $this->getRequest()->setPostValue([
+            'email' => 'not_used@example.com',
         ]);
 
         $this->dispatch('newsletter/subscriber/new');
@@ -64,14 +50,14 @@ class SubscriberTest extends AbstractController
     public function testNewActionUsedEmail()
     {
         $this->getRequest()->setMethod('POST');
-        $this->getRequest()->setPost([
-            'email' => 'customer@example.com'
+        $this->getRequest()->setPostValue([
+            'email' => 'customer@example.com',
         ]);
 
         $this->dispatch('newsletter/subscriber/new');
 
         $this->assertSessionMessages($this->equalTo([
-                'There was a problem with the subscription: This email address is already assigned to another user.'
+                'There was a problem with the subscription: This email address is already assigned to another user.',
             ]));
         $this->assertRedirect($this->anything());
     }
@@ -82,8 +68,8 @@ class SubscriberTest extends AbstractController
     public function testNewActionOwnerEmail()
     {
         $this->getRequest()->setMethod('POST');
-        $this->getRequest()->setPost([
-            'email' => 'customer@example.com'
+        $this->getRequest()->setPostValue([
+            'email' => 'customer@example.com',
         ]);
         $this->login(1);
 
@@ -103,7 +89,7 @@ class SubscriberTest extends AbstractController
     {
         /** @var \Magento\Customer\Model\Session $session */
         $session = Bootstrap::getObjectManager()
-            ->get('Magento\Customer\Model\Session');
+            ->get(\Magento\Customer\Model\Session::class);
         $session->loginById($customerId);
     }
 }

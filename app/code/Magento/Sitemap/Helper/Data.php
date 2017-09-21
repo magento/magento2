@@ -1,35 +1,31 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- */
-
-/**
- * Sitemap data helper
- *
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sitemap\Helper;
 
+use Magento\Sitemap\Model\ItemProvider\CategoryConfigReader;
+use Magento\Sitemap\Model\ItemProvider\CmsPageConfigReader;
+use Magento\Sitemap\Model\ItemProvider\ProductConfigReader;
+use Magento\Sitemap\Model\SitemapConfigReader;
+use Magento\Store\Model\ScopeInterface;
+
+/**
+ * @deprecated
+ */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
+    /**
+     * Config path to sitemap valid paths
+     */
+    const XML_PATH_SITEMAP_VALID_PATHS = 'sitemap/file/valid_paths';
+
+    /**
+     * Config path to valid file paths
+     */
+    const XML_PATH_PUBLIC_FILES_VALID_PATHS = 'general/file/public_files_valid_paths';
+
     /**#@+
      * Limits xpath config settings
      */
@@ -70,35 +66,18 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     const XML_PATH_PRODUCT_IMAGES_INCLUDE = 'sitemap/product/image_include';
 
     /**
-     * Core store config
-     *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    protected $_scopeConfig;
-
-    /**
-     * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     */
-    public function __construct(
-        \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-    ) {
-        $this->_scopeConfig = $scopeConfig;
-        parent::__construct($context);
-    }
-
-    /**
      * Get maximum sitemap.xml URLs number
      *
      * @param int $storeId
      * @return int
+     * @deprecated
+     * @see SitemapConfigReader::getMaximumLinesNumber()
      */
     public function getMaximumLinesNumber($storeId)
     {
-        return $this->_scopeConfig->getValue(
+        return $this->scopeConfig->getValue(
             self::XML_PATH_MAX_LINES,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $storeId
         );
     }
@@ -108,12 +87,14 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param int $storeId
      * @return int
+     * @deprecated
+     * @see SitemapConfigReader::getMaximumFileSize()
      */
     public function getMaximumFileSize($storeId)
     {
-        return $this->_scopeConfig->getValue(
+        return $this->scopeConfig->getValue(
             self::XML_PATH_MAX_FILE_SIZE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $storeId
         );
     }
@@ -123,12 +104,14 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param int $storeId
      * @return string
+     * @deprecated
+     * @see CategoryConfigReader::getChangeFrequency()
      */
     public function getCategoryChangefreq($storeId)
     {
-        return (string)$this->_scopeConfig->getValue(
+        return (string)$this->scopeConfig->getValue(
             self::XML_PATH_CATEGORY_CHANGEFREQ,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $storeId
         );
     }
@@ -138,12 +121,14 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param int $storeId
      * @return string
+     * @deprecated
+     * @see ProductConfigReader::getChangeFrequency()
      */
     public function getProductChangefreq($storeId)
     {
-        return (string)$this->_scopeConfig->getValue(
+        return (string)$this->scopeConfig->getValue(
             self::XML_PATH_PRODUCT_CHANGEFREQ,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $storeId
         );
     }
@@ -153,12 +138,14 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param int $storeId
      * @return string
+     * @deprecated
+     * @see CmsPageConfigReader::getChangeFrequency()
      */
     public function getPageChangefreq($storeId)
     {
-        return (string)$this->_scopeConfig->getValue(
+        return (string)$this->scopeConfig->getValue(
             self::XML_PATH_PAGE_CHANGEFREQ,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $storeId
         );
     }
@@ -168,12 +155,14 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param int $storeId
      * @return string
+     * @deprecated
+     * @see CategoryConfigReader::getPriority()
      */
     public function getCategoryPriority($storeId)
     {
-        return (string)$this->_scopeConfig->getValue(
+        return (string)$this->scopeConfig->getValue(
             self::XML_PATH_CATEGORY_PRIORITY,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $storeId
         );
     }
@@ -183,12 +172,14 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param int $storeId
      * @return string
+     * @deprecated
+     * @see ProductConfigReader::getPriority()
      */
     public function getProductPriority($storeId)
     {
-        return (string)$this->_scopeConfig->getValue(
+        return (string)$this->scopeConfig->getValue(
             self::XML_PATH_PRODUCT_PRIORITY,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $storeId
         );
     }
@@ -198,12 +189,14 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param int $storeId
      * @return string
+     * @deprecated
+     * @see CmsPageConfigReader::getPriority()
      */
     public function getPagePriority($storeId)
     {
-        return (string)$this->_scopeConfig->getValue(
+        return (string)$this->scopeConfig->getValue(
             self::XML_PATH_PAGE_PRIORITY,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $storeId
         );
     }
@@ -213,12 +206,14 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param int $storeId
      * @return int
+     * @deprecated
+     * @see SitemapConfigReader::getEnableSubmissionRobots()
      */
     public function getEnableSubmissionRobots($storeId)
     {
-        return $this->_scopeConfig->getValue(
+        return $this->scopeConfig->getValue(
             self::XML_PATH_SUBMISSION_ROBOTS,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $storeId
         );
     }
@@ -228,13 +223,30 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param int $storeId
      * @return string
+     * @deprecated
+     * @see SitemapConfigReader::getProductImageIncludePolicy()
      */
     public function getProductImageIncludePolicy($storeId)
     {
-        return (string)$this->_scopeConfig->getValue(
+        return (string)$this->scopeConfig->getValue(
             self::XML_PATH_PRODUCT_IMAGES_INCLUDE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $storeId
+        );
+    }
+
+    /**
+     * Get list valid paths for generate a sitemap XML file
+     *
+     * @return string[]
+     * @deprecated
+     * @see SitemapConfigReader::getValidPaths()
+     */
+    public function getValidPaths()
+    {
+        return array_merge(
+            $this->scopeConfig->getValue(self::XML_PATH_SITEMAP_VALID_PATHS, ScopeInterface::SCOPE_STORE),
+            $this->scopeConfig->getValue(self::XML_PATH_PUBLIC_FILES_VALID_PATHS, ScopeInterface::SCOPE_STORE)
         );
     }
 }

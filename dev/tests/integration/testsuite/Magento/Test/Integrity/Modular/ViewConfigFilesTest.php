@@ -1,29 +1,11 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity\Modular;
 
-class ViewConfigFilesTest extends \PHPUnit_Framework_TestCase
+class ViewConfigFilesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param string $file
@@ -31,13 +13,13 @@ class ViewConfigFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function testViewConfigFile($file)
     {
-        $domConfig = new \Magento\Framework\Config\Dom($file);
+        $validationStateMock = $this->createMock(\Magento\Framework\Config\ValidationStateInterface::class);
+        $validationStateMock->method('isValidationRequired')
+            ->willReturn(true);
+        $domConfig = new \Magento\Framework\Config\Dom($file, $validationStateMock);
+        $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
         $result = $domConfig->validate(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Framework\App\Filesystem'
-            )->getPath(
-                \Magento\Framework\App\Filesystem::LIB_DIR
-            ) . '/Magento/Framework/Config/etc/view.xsd',
+            $urnResolver->getRealPath('urn:magento:framework:Config/etc/view.xsd'),
             $errors
         );
         $message = "Invalid XML-file: {$file}\n";
@@ -52,14 +34,14 @@ class ViewConfigFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function viewConfigFileDataProvider()
     {
-        $result = array();
+        $result = [];
         $files = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Module\Dir\Reader'
+            \Magento\Framework\Module\Dir\Reader::class
         )->getConfigurationFiles(
             'view.xml'
         );
         foreach ($files as $file) {
-            $result[] = array($file);
+            $result[] = [$file];
         }
         return $result;
     }

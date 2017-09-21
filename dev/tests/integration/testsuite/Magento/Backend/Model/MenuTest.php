@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Model;
 
@@ -28,57 +10,56 @@ namespace Magento\Backend\Model;
  *
  * @magentoAppArea adminhtml
  */
-class MenuTest extends \PHPUnit_Framework_TestCase
+class MenuTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Model\Menu
      */
-    protected $_model;
+    private $model;
+
+    /** @var \Magento\Framework\ObjectManagerInterface */
+    private $objectManager;
 
     protected function setUp()
     {
         parent::setUp();
         \Magento\TestFramework\Helper\Bootstrap::getInstance()
             ->loadArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Backend\Model\Auth');
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\Config\ScopeInterface')
+        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->model = $this->objectManager->create(\Magento\Backend\Model\Auth::class);
+        $this->objectManager->get(\Magento\Framework\Config\ScopeInterface::class)
             ->setCurrentScope(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
     }
 
     public function testMenuItemManipulation()
     {
         /* @var $menu \Magento\Backend\Model\Menu */
-        $menu = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Backend\Model\Menu\Config'
-        )->getMenu();
+        $menu = $this->objectManager->create(\Magento\Backend\Model\Menu\Config::class)->getMenu();
         /* @var $itemFactory \Magento\Backend\Model\Menu\Item\Factory */
-        $itemFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Backend\Model\Menu\Item\Factory'
-        );
+        $itemFactory = $this->objectManager->create(\Magento\Backend\Model\Menu\Item\Factory::class);
 
         // Add new item in top level
         $menu->add(
             $itemFactory->create(
-                array(
+                [
                     'id' => 'Magento_Backend::system2',
                     'title' => 'Extended System',
                     'module' => 'Magento_Backend',
-                    'resource' => 'Magento_Backend::system2'
-                )
+                    'resource' => 'Magento_Backend::system2',
+                ]
             )
         );
 
-        //Add submenu
+        // Add submenu
         $menu->add(
             $itemFactory->create(
-                array(
+                [
                     'id' => 'Magento_Backend::system2_acl',
                     'title' => 'Acl',
                     'module' => 'Magento_Backend',
                     'action' => 'admin/backend/acl/index',
-                    'resource' => 'Magento_Backend::system2_acl'
-                )
+                    'resource' => 'Magento_Backend::system2_acl',
+                ]
             ),
             'Magento_Backend::system2'
         );
@@ -95,5 +76,105 @@ class MenuTest extends \PHPUnit_Framework_TestCase
 
         // Move menu item
         $menu->move('Magento_Catalog::catalog_products', 'Magento_Backend::system2');
+    }
+
+    /**
+     * @magentoAppIsolation enabled
+     */
+    public function testSerialize()
+    {
+        /** @var Menu $menu */
+        $menu = $this->objectManager->get(\Magento\Backend\Model\MenuFactory::class)->create();
+        /* @var \Magento\Backend\Model\Menu\Item\Factory $itemFactory */
+        $itemFactory = $this->objectManager->create(\Magento\Backend\Model\Menu\Item\Factory::class);
+
+        // Add new item in top level
+        $menu->add(
+            $itemFactory->create(
+                [
+                    'id' => 'Magento_Backend::system3',
+                    'title' => 'Extended System',
+                    'module' => 'Magento_Backend',
+                    'resource' => 'Magento_Backend::system3',
+                    'dependsOnConfig' => 'dev/test/system',
+                ]
+            )
+        );
+
+        // Add submenu
+        $menu->add(
+            $itemFactory->create(
+                [
+                    'id' => 'Magento_Backend::system3_acl',
+                    'title' => 'Acl',
+                    'module' => 'Magento_Backend',
+                    'action' => 'admin/backend/acl/index',
+                    'resource' => 'Magento_Backend::system3_acl',
+                ]
+            ),
+            'Magento_Backend::system3'
+        );
+        $serializedString = $menu->serialize();
+        $expected = '[{"parent_id":null,"module":"Magento_Backend","sort_index":null,'
+            . '"dependsOnConfig":"dev\/test\/system",'
+            . '"id":"Magento_Backend::system3","resource":"Magento_Backend::system3","path":"","action":null,'
+            . '"dependsOnModule":null,"toolTip":null,"title":"Extended System",'
+            . '"target":null,"sub_menu":[{"parent_id":null,"module":"Magento_Backend","sort_index":null,'
+            . '"dependsOnConfig":null,"id":"Magento_Backend::system3_acl","resource":"Magento_Backend::system3_acl",'
+            . '"path":"","action":"admin\/backend\/acl\/index","dependsOnModule":null,"toolTip":null,"title":"Acl",'
+            . '"target":null,"sub_menu":null}]}]';
+        $this->assertEquals($expected, $serializedString);
+    }
+
+    /**
+     * @magentoAppIsolation enabled
+     */
+    public function testUnserialize()
+    {
+        $serializedMenu = '[{"parent_id":null,"module":"Magento_Backend","sort_index":null,'
+            . '"dependsOnConfig":"dev\/test","id":"Magento_Backend::system3","resource":"Magento_Backend::system3",'
+            . '"path":"","action":null,"dependsOnModule":null,"toolTip":null,"title":"Extended System",'
+            . '"target":null,"sub_menu":[{"parent_id":null,"module":"Magento_Backend","sort_index":null,'
+            . '"dependsOnConfig":null,"id":"Magento_Backend::system3_acl","resource":"Magento_Backend::system3_acl",'
+            . '"path":"","action":"admin\/backend\/acl\/index","dependsOnModule":null,"toolTip":null,"title":"Acl",'
+            . '"target":null,"sub_menu":null}]}]';
+        /** @var Menu $menu */
+        $menu = $this->objectManager->get(\Magento\Backend\Model\MenuFactory::class)->create();
+        $menu->unserialize($serializedMenu);
+        $expected = [
+            [
+                'parent_id' => null,
+                'module' => 'Magento_Backend',
+                'sort_index' => null,
+                'dependsOnConfig' => 'dev/test',
+                'id' => 'Magento_Backend::system3',
+                'resource' => 'Magento_Backend::system3',
+                'path' => '',
+                'action' => null,
+                'dependsOnModule' => null,
+                'toolTip' => null,
+                'title' => 'Extended System',
+                'target' => null,
+                'sub_menu' =>
+                    [
+                        [
+                            'parent_id' => null,
+                            'module' => 'Magento_Backend',
+                            'sort_index' => null,
+                            'dependsOnConfig' => null,
+                            'id' => 'Magento_Backend::system3_acl',
+                            'resource' => 'Magento_Backend::system3_acl',
+                            'path' => '',
+                            'action' => 'admin/backend/acl/index',
+                            'dependsOnModule' => null,
+                            'toolTip' => null,
+                            'title' => 'Acl',
+                            'sub_menu' => null,
+                            'target' => null
+                        ],
+                    ],
+            ],
+        ];
+        $this->assertEquals($expected, $menu->toArray());
     }
 }

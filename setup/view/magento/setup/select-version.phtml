@@ -1,0 +1,253 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+
+<div class="nav-bar-outer-actions">
+
+    <div class="outer-actions-inner-wrap">
+        <div class="btn-wrap btn-wrap-triangle-right btn-wrap-next">
+            <button
+                type="button"
+                class="btn btn-prime"
+                ng-click="update()"
+                ng-disabled="!upgradeReadyForNext || (!componentsReadyForNext && updateComponents.yes)
+                || upgradeProcessError || componentsProcessError"
+                >Next</button>
+        </div>
+        <div class="btn-wrap btn-wrap-try-again">
+            <button
+                type="button"
+                class="btn btn-secondary"
+                ng-click="$state.forceReload()"
+                ng-disabled="!tryAgainEnabled()"
+                >Try Again</button>
+        </div>
+    </div>
+</div>
+
+<h2 class="page-sub-title">{{$state.current.header}}</h2>
+
+<div class="row form-row">
+    <div class="message message-spinner" ng-show="!upgradeProcessed">
+        <span class="spinner">
+            <span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span>
+        </span>
+        <span class="message-text">Checking for a new version...</span>
+    </div>
+    <div class="message message-error" ng-show="upgradeProcessError">
+            <span class="message-text" ng-bind-html="upgradeProcessErrorMessage"></span>
+    </div>
+    <div class="message" ng-show="upgradeProcessed && !upgradeProcessError && currentVersion">
+        Your Magento version is {{currentVersion}}.
+        <span ng-show="versions">You are about to upgrade to a newer version.</span>
+    </div>
+    <div class="row" ng-show="upgradeProcessed && !upgradeProcessError">
+        <div class="col-m-3">
+            <label class="form-label">
+                Magento Core Components
+            </label>
+        </div>
+        <div class="col-m-4">
+            <select
+                id="selectVersion"
+                class="form-el-select"
+                ng-model="selectedOption"
+                ng-options="item.versionInfo as item.version.name for item in versions">
+            </select>
+        </div>
+    </div>
+    <div class="row" ng-show="upgradeProcessed && !upgradeProcessError">
+        <div class="col-m-3">
+            <label class="form-label" for="showUnstable">
+                Show All Versions
+            </label>
+        </div>
+        <div class="col-m-4">
+            <input
+                id="showUnstable"
+                type="checkbox"
+                ng-model="showUnstable"
+                ng-change="showUnstableClick()"
+            >
+        </div>
+    </div>
+</div>
+
+<div class="row form-row" ng-show="!upgradeProcessError">
+    <div class="col-m-3">
+        <label class="form-label">
+            Other Components
+        </label>
+    </div>
+    <div class="col-m-4">
+        <div class="form-column">
+            <input
+                id="yesUpdateComponents"
+                class="form-el-radio"
+                type="radio"
+                ng-model="updateComponents.yes"
+                ng-value="true">
+            <label class="form-label" for="yesUpdateComponents">
+                Yes
+            </label>
+        </div>
+        <div class="form-column">
+            <input
+                id="noUpdateComponents"
+                class="form-el-radio"
+                type="radio"
+                ng-model="updateComponents.no"
+                ng-value="true"
+                checked>
+            <label class="form-label" for="noUpdateComponents">
+                No
+            </label>
+        </div>
+    </div>
+</div>
+
+<div ng-show="updateComponents.yes && !upgradeProcessError">
+    <div class="message message-spinner" ng-show="!componentsProcessed">
+        <span class="spinner">
+            <span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span>
+        </span>
+        <span class="message-text">Retrieving information for other components...</span>
+    </div>
+    <div class="message message-error" ng-show="componentsProcessError">
+            <span class="message-text">
+                Sorry, we can't retrieve data for the table right now.
+            </span>
+    </div>
+    <div class="row" ng-show="componentsProcessed && total == 0">
+        <label class="form-label">
+            <b>We didn't find any components to upgrade. Click "Next" to continue.<br/>
+        </label>
+    </div>
+    <div class="admin__data-grid-outer-wrap" ng-show="componentsProcessed && total > 0">
+        <div class="row" ng-show="!upgradeProcessError">
+            <label class="form-label">
+                We'll update the following components for you at the same time. <br/>
+                If you don't want some components updated, change the slider to No.
+            </label>
+            <br/>
+            <br/>
+        </div>
+        <div class="admin__data-grid-header">
+            <div class="admin__data-grid-header-row row row-gutter">
+                <div class="col-xs-3">
+                    <div class="admin__control-support-text">
+                        <span>{{totalForGrid}} of {{total}} </span> components are selected.
+                    </div>
+                </div>
+                <div class="col-xs-9 admin__data-grid-pager-wrap">
+                <select id="perPage" class="admin__control-select" ng-model="rowLimit">
+                    <option value="20">20</option>
+                        <option value="30">30</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                        <option value="200">200</option>
+                    </select>
+                    <label class="admin__control-support-text" for="perPage">per page</label>
+                    <div class="admin__data-grid-pager">
+                    <button class="action-previous"
+                            ng-disabled="currentPage == 1"
+                            ng-click="currentPage = currentPage - 1; start = start - rowLimit"
+                            type="button"
+                        >
+                            <span>Previous page</span>
+                        </button>
+                    <input id="pageCurrent"
+                           class="admin__control-text"
+                           type="number"
+                           ng-value="currentPage"
+                           ng-model="currentPage"
+                    >
+                        <label class="admin__control-support-text" for="pageCurrent">
+                        of {{numberOfPages}}
+                        </label>
+                    <button class="action-next"
+                            ng-disabled="currentPage >= numberOfPages"
+                            ng-click="currentPage = currentPage + 1; start = start + rowLimit"
+                            type="button"
+                        >
+                            <span>Next page</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="admin__data-grid-wrap" ng-show="componentsProcessed">
+            <table class="data-grid">
+                <thead data-part="head">
+                <tr>
+                    <th class="data-grid-th _sortable _col-xs">
+                        <span>Upgrade</span>
+                    </th>
+                    <th class="data-grid-th _sortable _ascend">
+                        <span>Component Name</span>
+                    </th>
+                    <th class="data-grid-th _sortable">
+                        <span>Type</span>
+                    </th>
+                    <th class="data-grid-th _sortable">
+                        <span>Vendor</span>
+                    </th>
+                    <th class="data-grid-th _sortable">
+                        <span>Current Version</span>
+                    </th>
+                    <th class="data-grid-actions-cell data-grid-th">
+                        <span>Update Version</span>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="component in displayComponents | limitTo:rowLimit">
+                    <td class="data-grid-indicator-cell">
+                        <div class="admin__actions-switch">
+                            <input class="admin__actions-switch-checkbox"
+                                   name="{{component.checkboxId}}"
+                                   type="checkbox"
+                                   ng-click="AddRemoveComponentOnSliderMove(component)"
+                                   ng-checked="isSelected(component.name)">
+                            <label class="admin__actions-switch-label"
+                                   for="{{component.checkboxId}}">
+                                <span data-text-on="Yes"
+                                      data-text-off="No"
+                                      class="admin__actions-switch-text"></span>
+                            </label>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="data-grid-data">{{component.name}}</span>
+                    </td>
+                    <td>
+                        <span class="data-grid-data">{{component.type.replace("magento2-", "")}}</span>
+                    </td>
+                    <td>
+                        <span class="data-grid-data">{{component.vendor}}</span>
+                    </td>
+                    <td>
+                        <span class="data-grid-data">{{component.version}}</span>
+                    </td>
+                    <td>
+                        <select ng-model="component.dropdownId" ng-init="component.dropdownId=component.updates[0].id"
+                                ng-options="item.id as item.name for item in component.updates"
+                                ng-change="setComponentVersion(component.name, component.dropdownId)">
+                        </select>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- loading indicator overlay and loader -->
+<div data-role="spinner" class="admin__data-grid-loading-mask hide" ng-class="{'hide':isHiddenSpinner}">
+    <div class="grid-loader"></div>
+</div>

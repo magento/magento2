@@ -1,159 +1,143 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Test\Page\Category;
 
-use Mtf\Page\Page;
-use Mtf\Factory\Factory;
-use Mtf\Client\Element\Locator;
 use Magento\Backend\Test\Block\FormPageActions;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Factory\Factory;
+use Magento\Mtf\Page\Page;
 
 /**
- * Class CatalogCategoryEdit
- * Edit category page in backend
- *
+ * Edit category page in backend.
  */
 class CatalogCategoryEdit extends Page
 {
     /**
-     * URL for edit category page
+     * URL for edit category page.
      */
     const MCA = 'catalog/category/edit/id/';
 
     /**
-     * Category Edit Form on the Backend
+     * Category Edit Form on the Backend.
      *
      * @var string
      */
-    protected $formBlock = '#category-edit-container';
+    protected $formBlock = '//div[contains(@data-bind, "category_form")]';
 
     /**
-     * Categories tree block
+     * Categories tree block.
      *
      * @var string
      */
     protected $treeBlock = '.categories-side-col';
 
     /**
-     * Get messages block
+     * Get messages block.
      *
      * @var string
      */
-    protected $messageBlock = '#messages .messages';
+    protected $messagesBlock = '#messages .messages';
 
     /**
-     * Backend abstract block
+     * Backend abstract block.
      *
      * @var string
      */
     protected $templateBlock = './ancestor::body';
 
     /**
-     * Form page actions block
+     * Form page actions block.
      *
      * @var string
      */
     protected $pageActionsBlock = '.page-main-actions';
 
     /**
-     * Init page. Set page url
+     * Init page. Set page url.
+     *
+     * @return void
      */
-    protected function _init()
+    protected function initUrl()
     {
-        $this->_url = $_ENV['app_backend_url'] . self::MCA;
+        $this->url = $_ENV['app_backend_url'] . self::MCA;
     }
 
     /**
-     * Open page using browser and waiting until loader will be disappeared
+     * Open page using browser and waiting until loader will be disappeared.
      *
      * @param array $params
      * @return $this
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function open(array $params = array())
+    public function open(array $params = [])
     {
         parent::open();
         $this->getTemplateBlock()->waitLoader();
     }
 
     /**
-     * Get Category edit form
+     * Get Category edit form.
      *
-     * @return \Magento\Catalog\Test\Block\Adminhtml\Category\Edit\Form
+     * @return \Magento\Catalog\Test\Block\Adminhtml\Category\Edit\CategoryForm
      */
     public function getFormBlock()
     {
-        return Factory::getBlockFactory()->getMagentoCatalogAdminhtmlCategoryEditForm(
-            $this->_browser->find($this->formBlock, Locator::SELECTOR_CSS)
+        return Factory::getBlockFactory()->getMagentoCatalogAdminhtmlCategoryEditCategoryForm(
+            $this->browser->find($this->formBlock, Locator::SELECTOR_CSS)
         );
     }
 
     /**
-     * Category Tree container on the Backend
+     * Category Tree container on the Backend.
      *
      * @return \Magento\Catalog\Test\Block\Adminhtml\Category\Tree
      */
     public function getTreeBlock()
     {
         return Factory::getBlockFactory()->getMagentoCatalogAdminhtmlCategoryTree(
-            $this->_browser->find($this->treeBlock, Locator::SELECTOR_CSS),
+            $this->browser->find($this->treeBlock, Locator::SELECTOR_CSS),
             $this->getTemplateBlock()
         );
     }
 
     /**
-     * Get messages block
+     * Get messages block.
      *
-     * @return \Magento\Core\Test\Block\Messages
+     * @return \Magento\Backend\Test\Block\Messages
      */
-    public function getMessageBlock()
+    public function getMessagesBlock()
     {
-        return Factory::getBlockFactory()->getMagentoCoreMessages(
-            $this->_browser->find($this->messageBlock, Locator::SELECTOR_CSS)
+        return Factory::getBlockFactory()->getMagentoBackendMessages(
+            $this->browser->find($this->messagesBlock, Locator::SELECTOR_CSS)
         );
     }
 
     /**
-     * Get abstract block
+     * Get abstract block.
      *
      * @return \Magento\Backend\Test\Block\Template
      */
     public function getTemplateBlock()
     {
         return Factory::getBlockFactory()->getMagentoBackendTemplate(
-            $this->_browser->find($this->templateBlock, Locator::SELECTOR_CSS)
+            $this->browser->find($this->templateBlock, Locator::SELECTOR_CSS)
         );
     }
 
     /**
-     * Get Form page actions block
+     * Get Form page actions block.
      *
      * @return FormPageActions
      */
     public function getPageActionsBlock()
     {
         return Factory::getBlockFactory()->getMagentoBackendFormPageActions(
-            $this->_browser->find($this->pageActionsBlock)
+            $this->browser->find($this->pageActionsBlock)
         );
     }
 }

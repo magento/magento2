@@ -1,43 +1,28 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Controller;
 
-use Magento\Framework\App\Action\NotFoundException;
+use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\App\RequestInterface;
-use Magento\Customer\Service\V1\CustomerAccountServiceInterface as CustomerAccountService;
-use Magento\Customer\Service\V1\CustomerMetadataServiceInterface as CustomerMetadataService;
 
-class Onepage extends Action
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+abstract class Onepage extends Action
 {
     /**
      * @var array
      */
-    protected $_sectionUpdateFunctions = array(
+    protected $_sectionUpdateFunctions = [
         'payment-method' => '_getPaymentMethodsHtml',
         'shipping-method' => '_getShippingMethodsHtml',
-        'review' => '_getReviewHtml'
-    );
+        'review' => '_getReviewHtml',
+    ];
 
     /**
      * @var \Magento\Sales\Model\Order
@@ -57,32 +42,96 @@ class Onepage extends Action
     protected $_translateInline;
 
     /**
-     * @var \Magento\Core\App\Action\FormKeyValidator
+     * @var \Magento\Framework\Data\Form\FormKey\Validator
      */
     protected $_formKeyValidator;
 
     /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    protected $scopeConfig;
+
+    /**
+     * @var \Magento\Framework\View\LayoutFactory
+     */
+    protected $layoutFactory;
+
+    /**
+     * @var \Magento\Quote\Api\CartRepositoryInterface
+     */
+    protected $quoteRepository;
+
+    /**
+     * @var \Magento\Framework\View\Result\PageFactory
+     */
+    protected $resultPageFactory;
+
+    /**
+     * @var \Magento\Framework\View\Result\LayoutFactory
+     */
+    protected $resultLayoutFactory;
+
+    /**
+     * @var \Magento\Framework\Controller\Result\RawFactory
+     */
+    protected $resultRawFactory;
+
+    /**
+     * @var \Magento\Framework\Controller\Result\JsonFactory
+     */
+    protected $resultJsonFactory;
+
+    /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param CustomerAccountService $customerAccountService
-     * @param CustomerMetadataService $customerMetadataService
+     * @param CustomerRepositoryInterface $customerRepository
+     * @param AccountManagementInterface $accountManagement
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\Translate\InlineInterface $translateInline
-     * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
+     * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\View\LayoutFactory $layoutFactory
+     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
+     * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
+     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
+     *
+     * @codeCoverageIgnore
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Magento\Customer\Model\Session $customerSession,
-        CustomerAccountService $customerAccountService,
-        CustomerMetadataService $customerMetadataService,
+        CustomerRepositoryInterface $customerRepository,
+        AccountManagementInterface $accountManagement,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\Translate\InlineInterface $translateInline,
-        \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
+        \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\View\LayoutFactory $layoutFactory,
+        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
+        \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory,
+        \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
+        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_translateInline = $translateInline;
         $this->_formKeyValidator = $formKeyValidator;
-        parent::__construct($context, $customerSession, $customerAccountService, $customerMetadataService);
+        $this->scopeConfig = $scopeConfig;
+        $this->layoutFactory = $layoutFactory;
+        $this->quoteRepository = $quoteRepository;
+        $this->resultPageFactory = $resultPageFactory;
+        $this->resultLayoutFactory = $resultLayoutFactory;
+        $this->resultRawFactory = $resultRawFactory;
+        $this->resultJsonFactory = $resultJsonFactory;
+        parent::__construct(
+            $context,
+            $customerSession,
+            $customerRepository,
+            $accountManagement
+        );
     }
 
     /**
@@ -90,32 +139,37 @@ class Onepage extends Action
      *
      * @param RequestInterface $request
      * @return \Magento\Framework\App\ResponseInterface
-     * @throws \Magento\Framework\App\Action\NotFoundException
+     * @throws \Magento\Framework\Exception\NotFoundException
      */
     public function dispatch(RequestInterface $request)
     {
         $this->_request = $request;
-        $this->_preDispatchValidateCustomer();
+        $result = $this->_preDispatchValidateCustomer();
+        if ($result instanceof \Magento\Framework\Controller\ResultInterface) {
+            return $result;
+        }
 
-        /** @var \Magento\Sales\Model\Quote $quote */
-        $quote = $this->_objectManager->get('Magento\Checkout\Model\Session')->getQuote();
+        /** @var \Magento\Quote\Model\Quote $quote */
+        $quote = $this->_objectManager->get(\Magento\Checkout\Model\Session::class)->getQuote();
         if ($quote->isMultipleShippingAddresses()) {
             $quote->removeAllAddresses();
         }
 
         if (!$this->_canShowForUnregisteredUsers()) {
-            throw new NotFoundException();
+            throw new NotFoundException(__('Page not found.'));
         }
         return parent::dispatch($request);
     }
 
     /**
-     * @return $this
+     * @return \Magento\Framework\Controller\Result\Raw
      */
     protected function _ajaxRedirectResponse()
     {
-        $this->getResponse()->setHeader('HTTP/1.1', '403 Session Expired')->setHeader('Login-Required', 'true');
-        return $this;
+        $resultRaw = $this->resultRawFactory->create();
+        $resultRaw->setStatusHeader(403, '1.1', 'Session Expired')
+            ->setHeader('Login-Required', 'true');
+        return $resultRaw;
     }
 
     /**
@@ -125,21 +179,15 @@ class Onepage extends Action
      */
     protected function _expireAjax()
     {
-        if (!$this->getOnepage()->getQuote()->hasItems() || $this->getOnepage()->getQuote()->getHasError()) {
-            $this->_ajaxRedirectResponse();
+        $quote = $this->getOnepage()->getQuote();
+        if (!$quote->hasItems() || $quote->getHasError() || !$quote->validateMinimumAmount()) {
             return true;
         }
         $action = $this->getRequest()->getActionName();
-        if ($this->_objectManager->get(
-            'Magento\Checkout\Model\Session'
-        )->getCartWasUpdated(
-            true
-        ) && !in_array(
-            $action,
-            array('index', 'progress')
-        )
+        if ($this->_objectManager->get(\Magento\Checkout\Model\Session::class)->getCartWasUpdated(true)
+            &&
+            !in_array($action, ['index', 'progress'])
         ) {
-            $this->_ajaxRedirectResponse();
             return true;
         }
 
@@ -154,9 +202,8 @@ class Onepage extends Action
      */
     protected function _getHtmlByHandle($handle)
     {
-        $layout = $this->_view->getLayout();
-        $layout->getUpdate()->addPageHandles(array($handle));
-        $layout->getUpdate()->load();
+        $layout = $this->layoutFactory->create();
+        $layout->getUpdate()->load([$handle]);
         $layout->generateXml();
         $layout->generateElements();
         $output = $layout->getOutput();
@@ -168,6 +215,7 @@ class Onepage extends Action
      * Get shipping method step html
      *
      * @return string
+     * @codeCoverageIgnore
      */
     protected function _getShippingMethodsHtml()
     {
@@ -178,6 +226,7 @@ class Onepage extends Action
      * Get payment method step html
      *
      * @return string
+     * @codeCoverageIgnore
      */
     protected function _getPaymentMethodsHtml()
     {
@@ -185,482 +234,31 @@ class Onepage extends Action
     }
 
     /**
-     * @return string
-     */
-    protected function _getAdditionalHtml()
-    {
-        return $this->_getHtmlByHandle('checkout_onepage_additional');
-    }
-
-    /**
-     * Get order review step html
+     * Get progress html checkout step
      *
-     * @return string
+     * @param string $checkoutStep
+     * @return mixed
      */
-    protected function _getReviewHtml()
+    protected function getProgressHtml($checkoutStep = '')
     {
-        return $this->_getHtmlByHandle('checkout_onepage_review');
+        $layout = $this->layoutFactory->create();
+        $layout->getUpdate()->load(['checkout_onepage_progress']);
+        $layout->generateXml();
+        $layout->generateElements();
+
+        $block = $layout->getBlock('progress')->setAttribute('next_step', $checkoutStep);
+        return $block->toHtml();
     }
 
     /**
      * Get one page checkout model
      *
      * @return \Magento\Checkout\Model\Type\Onepage
+     * @codeCoverageIgnore
      */
     public function getOnepage()
     {
-        return $this->_objectManager->get('Magento\Checkout\Model\Type\Onepage');
-    }
-
-    /**
-     * Checkout page
-     *
-     * @return void
-     */
-    public function indexAction()
-    {
-        if (!$this->_objectManager->get('Magento\Checkout\Helper\Data')->canOnepageCheckout()) {
-            $this->messageManager->addError(__('The onepage checkout is disabled.'));
-            $this->_redirect('checkout/cart');
-            return;
-        }
-        $quote = $this->getOnepage()->getQuote();
-        if (!$quote->hasItems() || $quote->getHasError()) {
-            $this->_redirect('checkout/cart');
-            return;
-        }
-        if (!$quote->validateMinimumAmount()) {
-            $error = $this->_objectManager->get(
-                'Magento\Framework\App\Config\ScopeConfigInterface'
-            )->getValue(
-                'sales/minimum_order/error_message',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            ) ? $this->_objectManager->get(
-                'Magento\Framework\App\Config\ScopeConfigInterface'
-            )->getValue(
-                'sales/minimum_order/error_message',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            ) : __(
-                'Subtotal must exceed minimum order amount'
-            );
-
-            $this->messageManager->addError($error);
-            $this->_redirect('checkout/cart');
-            return;
-        }
-        $this->_objectManager->get('Magento\Checkout\Model\Session')->setCartWasUpdated(false);
-        $currentUrl = $this->_objectManager->create('Magento\Framework\UrlInterface')->getUrl('*/*/*', array('_secure' => true));
-        $this->_objectManager->get('Magento\Customer\Model\Session')->setBeforeAuthUrl($currentUrl);
-        $this->getOnepage()->initCheckout();
-        $this->_view->loadLayout();
-        $layout = $this->_view->getLayout();
-        $layout->initMessages();
-        $layout->getBlock('head')->setTitle(__('Checkout'));
-        $this->_view->renderLayout();
-    }
-
-    /**
-     * Checkout status block
-     *
-     * @return void
-     */
-    public function progressAction()
-    {
-        if ($this->_expireAjax()) {
-            return;
-        }
-        $this->_view->addPageLayoutHandles();
-        $this->_view->loadLayout(false);
-        $this->_view->renderLayout();
-    }
-
-    /**
-     * @return void
-     */
-    public function shippingMethodAction()
-    {
-        if ($this->_expireAjax()) {
-            return;
-        }
-        $this->_view->addPageLayoutHandles();
-        $this->_view->loadLayout(false);
-        $this->_view->renderLayout();
-    }
-
-    /**
-     * @return void
-     */
-    public function reviewAction()
-    {
-        if ($this->_expireAjax()) {
-            return;
-        }
-        $this->_view->addPageLayoutHandles();
-        $this->_view->loadLayout(false);
-        $this->_view->renderLayout();
-    }
-
-    /**
-     * Order success action
-     *
-     * @return void
-     */
-    public function successAction()
-    {
-        $session = $this->getOnepage()->getCheckout();
-        if (!$this->_objectManager->get('Magento\Checkout\Model\Session\SuccessValidator')->isValid($session)) {
-            $this->_redirect('checkout/cart');
-            return;
-        }
-        $session->clearQuote();
-        //@todo: Refactor it to match CQRS
-        $this->_view->loadLayout();
-        $this->_view->getLayout()->initMessages();
-        $this->_eventManager->dispatch(
-            'checkout_onepage_controller_success_action',
-            array('order_ids' => array($session->getLastOrderId()))
-        );
-        $this->_view->renderLayout();
-    }
-
-    /**
-     * @return void
-     */
-    public function failureAction()
-    {
-        $lastQuoteId = $this->getOnepage()->getCheckout()->getLastQuoteId();
-        $lastOrderId = $this->getOnepage()->getCheckout()->getLastOrderId();
-
-        if (!$lastQuoteId || !$lastOrderId) {
-            $this->_redirect('checkout/cart');
-            return;
-        }
-
-        $this->_view->loadLayout();
-        $this->_view->renderLayout();
-    }
-
-    /**
-     * @return void
-     */
-    public function getAdditionalAction()
-    {
-        $this->getResponse()->setBody($this->_getAdditionalHtml());
-    }
-
-    /**
-     * Save checkout method
-     *
-     * @return void
-     */
-    public function saveMethodAction()
-    {
-        if ($this->_expireAjax()) {
-            return;
-        }
-        if ($this->getRequest()->isPost()) {
-            $method = $this->getRequest()->getPost('method');
-            $result = $this->getOnepage()->saveCheckoutMethod($method);
-            $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result));
-        }
-    }
-
-    /**
-     * Save checkout billing address
-     *
-     * @return void
-     */
-    public function saveBillingAction()
-    {
-        if ($this->_expireAjax()) {
-            return;
-        }
-        if ($this->getRequest()->isPost()) {
-            $data = $this->getRequest()->getPost('billing', array());
-            $customerAddressId = $this->getRequest()->getPost('billing_address_id', false);
-
-            if (isset($data['email'])) {
-                $data['email'] = trim($data['email']);
-            }
-            $result = $this->getOnepage()->saveBilling($data, $customerAddressId);
-
-            if (!isset($result['error'])) {
-                if ($this->getOnepage()->getQuote()->isVirtual()) {
-                    $result['goto_section'] = 'payment';
-                    $result['update_section'] = array(
-                        'name' => 'payment-method',
-                        'html' => $this->_getPaymentMethodsHtml()
-                    );
-                } elseif (isset($data['use_for_shipping']) && $data['use_for_shipping'] == 1) {
-                    $result['goto_section'] = 'shipping_method';
-                    $result['update_section'] = array(
-                        'name' => 'shipping-method',
-                        'html' => $this->_getShippingMethodsHtml()
-                    );
-
-                    $result['allow_sections'] = array('shipping');
-                    $result['duplicateBillingInfo'] = 'true';
-                } else {
-                    $result['goto_section'] = 'shipping';
-                }
-            }
-
-            $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result));
-        }
-    }
-
-    /**
-     * Shipping address save action
-     *
-     * @return void
-     */
-    public function saveShippingAction()
-    {
-        if ($this->_expireAjax()) {
-            return;
-        }
-        if ($this->getRequest()->isPost()) {
-            $data = $this->getRequest()->getPost('shipping', array());
-            $customerAddressId = $this->getRequest()->getPost('shipping_address_id', false);
-            $result = $this->getOnepage()->saveShipping($data, $customerAddressId);
-
-            if (!isset($result['error'])) {
-                $result['goto_section'] = 'shipping_method';
-                $result['update_section'] = array(
-                    'name' => 'shipping-method',
-                    'html' => $this->_getShippingMethodsHtml()
-                );
-            }
-            $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result));
-        }
-    }
-
-    /**
-     * Shipping method save action
-     *
-     * @return void
-     */
-    public function saveShippingMethodAction()
-    {
-        if ($this->_expireAjax()) {
-            return;
-        }
-        if ($this->getRequest()->isPost()) {
-            $data = $this->getRequest()->getPost('shipping_method', '');
-            $result = $this->getOnepage()->saveShippingMethod($data);
-            // $result will contain error data if shipping method is empty
-            if (!$result) {
-                $this->_eventManager->dispatch(
-                    'checkout_controller_onepage_save_shipping_method',
-                    array('request' => $this->getRequest(), 'quote' => $this->getOnepage()->getQuote())
-                );
-                $this->getOnepage()->getQuote()->collectTotals();
-                $this->getResponse()->setBody(
-                    $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result)
-                );
-
-                $result['goto_section'] = 'payment';
-                $result['update_section'] = array(
-                    'name' => 'payment-method',
-                    'html' => $this->_getPaymentMethodsHtml()
-                );
-            }
-            $this->getOnepage()->getQuote()->collectTotals()->save();
-            $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result));
-        }
-    }
-
-    /**
-     * Save payment ajax action
-     *
-     * Sets either redirect or a JSON response
-     *
-     * @return void
-     */
-    public function savePaymentAction()
-    {
-        if ($this->_expireAjax()) {
-            return;
-        }
-        try {
-            if (!$this->getRequest()->isPost()) {
-                $this->_ajaxRedirectResponse();
-                return;
-            }
-
-            $data = $this->getRequest()->getPost('payment', array());
-            $result = $this->getOnepage()->savePayment($data);
-
-            // get section and redirect data
-            $redirectUrl = $this->getOnepage()->getQuote()->getPayment()->getCheckoutRedirectUrl();
-            if (empty($result['error']) && !$redirectUrl) {
-                $result['goto_section'] = 'review';
-                $result['update_section'] = array('name' => 'review', 'html' => $this->_getReviewHtml());
-            }
-            if ($redirectUrl) {
-                $result['redirect'] = $redirectUrl;
-            }
-        } catch (\Magento\Payment\Exception $e) {
-            if ($e->getFields()) {
-                $result['fields'] = $e->getFields();
-            }
-            $result['error'] = $e->getMessage();
-        } catch (\Magento\Framework\Model\Exception $e) {
-            $result['error'] = $e->getMessage();
-        } catch (\Exception $e) {
-            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
-            $result['error'] = __('Unable to set Payment Method');
-        }
-        $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result));
-    }
-
-    /**
-     * Get Order by quoteId
-     *
-     * @return \Magento\Sales\Model\Order
-     * @throws \Magento\Payment\Model\Info\Exception
-     */
-    protected function _getOrder()
-    {
-        if (is_null($this->_order)) {
-            $this->_order = $this->_objectManager->create('Magento\Sales\Model\Order');
-            $this->_order->load($this->getOnepage()->getQuote()->getId(), 'quote_id');
-            if (!$this->_order->getId()) {
-                throw new \Magento\Payment\Model\Info\Exception(__('Can not create invoice. Order was not found.'));
-            }
-        }
-        return $this->_order;
-    }
-
-    /**
-     * Create invoice
-     *
-     * @return \Magento\Sales\Model\Order\Invoice
-     */
-    protected function _initInvoice()
-    {
-        $items = array();
-        foreach ($this->_getOrder()->getAllItems() as $item) {
-            $items[$item->getId()] = $item->getQtyOrdered();
-        }
-        /* @var $invoice \Magento\Sales\Model\Service\Order */
-        $invoice = $this->_objectManager->create(
-            'Magento\Sales\Model\Service\Order',
-            array('order' => $this->_getOrder())
-        )->prepareInvoice(
-            $items
-        );
-        $invoice->setEmailSent(true)->register();
-
-        $this->_coreRegistry->register('current_invoice', $invoice);
-        return $invoice;
-    }
-
-    /**
-     * Create order action
-     *
-     * @return void
-     */
-    public function saveOrderAction()
-    {
-        if (!$this->_formKeyValidator->validate($this->getRequest())) {
-            $this->_redirect('*/*/');
-            return;
-        }
-
-        if ($this->_expireAjax()) {
-            return;
-        }
-
-        $result = array();
-        try {
-            $agreementsValidator = $this->_objectManager->get('Magento\Checkout\Model\Agreements\AgreementsValidator');
-            if (!$agreementsValidator->isValid(array_keys($this->getRequest()->getPost('agreement', array())))) {
-                $result['success'] = false;
-                $result['error'] = true;
-                $result['error_messages'] = __(
-                    'Please agree to all the terms and conditions before placing the order.'
-                );
-                $this->getResponse()->setBody(
-                    $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result)
-                );
-                return;
-            }
-
-            $data = $this->getRequest()->getPost('payment', array());
-            if ($data) {
-                $data['checks'] = array(
-                    \Magento\Payment\Model\Method\AbstractMethod::CHECK_USE_CHECKOUT,
-                    \Magento\Payment\Model\Method\AbstractMethod::CHECK_USE_FOR_COUNTRY,
-                    \Magento\Payment\Model\Method\AbstractMethod::CHECK_USE_FOR_CURRENCY,
-                    \Magento\Payment\Model\Method\AbstractMethod::CHECK_ORDER_TOTAL_MIN_MAX,
-                    \Magento\Payment\Model\Method\AbstractMethod::CHECK_ZERO_TOTAL
-                );
-                $this->getOnepage()->getQuote()->getPayment()->importData($data);
-            }
-
-            $this->getOnepage()->saveOrder();
-
-            $redirectUrl = $this->getOnepage()->getCheckout()->getRedirectUrl();
-            $result['success'] = true;
-            $result['error'] = false;
-        } catch (\Magento\Payment\Model\Info\Exception $e) {
-            $message = $e->getMessage();
-            if (!empty($message)) {
-                $result['error_messages'] = $message;
-            }
-            $result['goto_section'] = 'payment';
-            $result['update_section'] = array('name' => 'payment-method', 'html' => $this->_getPaymentMethodsHtml());
-        } catch (\Magento\Framework\Model\Exception $e) {
-            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
-            $this->_objectManager->get(
-                'Magento\Checkout\Helper\Data'
-            )->sendPaymentFailedEmail(
-                $this->getOnepage()->getQuote(),
-                $e->getMessage()
-            );
-            $result['success'] = false;
-            $result['error'] = true;
-            $result['error_messages'] = $e->getMessage();
-            $gotoSection = $this->getOnepage()->getCheckout()->getGotoSection();
-            if ($gotoSection) {
-                $result['goto_section'] = $gotoSection;
-                $this->getOnepage()->getCheckout()->setGotoSection(null);
-            }
-
-            $updateSection = $this->getOnepage()->getCheckout()->getUpdateSection();
-            if ($updateSection) {
-                if (isset($this->_sectionUpdateFunctions[$updateSection])) {
-                    $updateSectionFunction = $this->_sectionUpdateFunctions[$updateSection];
-                    $result['update_section'] = array(
-                        'name' => $updateSection,
-                        'html' => $this->{$updateSectionFunction}()
-                    );
-                }
-                $this->getOnepage()->getCheckout()->setUpdateSection(null);
-            }
-        } catch (\Exception $e) {
-            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
-            $this->_objectManager->get(
-                'Magento\Checkout\Helper\Data'
-            )->sendPaymentFailedEmail(
-                $this->getOnepage()->getQuote(),
-                $e->getMessage()
-            );
-            $result['success'] = false;
-            $result['error'] = true;
-            $result['error_messages'] = __('Something went wrong processing your order. Please try again later.');
-        }
-        $this->getOnepage()->getQuote()->save();
-        /**
-         * when there is redirect to third party, we don't want to save order yet.
-         * we will save the order in return action.
-         */
-        if (isset($redirectUrl)) {
-            $result['redirect'] = $redirectUrl;
-        }
-
-        $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result));
+        return $this->_objectManager->get(\Magento\Checkout\Model\Type\Onepage::class);
     }
 
     /**
@@ -671,13 +269,13 @@ class Onepage extends Action
     protected function _canShowForUnregisteredUsers()
     {
         return $this->_objectManager->get(
-            'Magento\Customer\Model\Session'
+            \Magento\Customer\Model\Session::class
         )->isLoggedIn() || $this->getRequest()->getActionName() == 'index' || $this->_objectManager->get(
-            'Magento\Checkout\Helper\Data'
+            \Magento\Checkout\Helper\Data::class
         )->isAllowedGuestCheckout(
             $this->getOnepage()->getQuote()
         ) || !$this->_objectManager->get(
-            'Magento\Checkout\Helper\Data'
+            \Magento\Checkout\Helper\Data::class
         )->isCustomerMustBeLogged();
     }
 }

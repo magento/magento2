@@ -1,31 +1,16 @@
 <?php
 /**
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Controller\Adminhtml\Product\Builder;
 
 use Magento\Catalog\Model\ProductFactory;
 use Magento\ConfigurableProduct\Model\Product\Type;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Controller\Adminhtml\Product\Builder as CatalogProductBuilder;
+use Magento\Framework\App\RequestInterface;
 
 class Plugin
 {
@@ -50,26 +35,22 @@ class Plugin
     }
 
     /**
-     * @param \Magento\Catalog\Controller\Adminhtml\Product\Builder $subject
-     * @param callable $proceed
-     * @param \Magento\Framework\App\RequestInterface $request
+     * Set type and data to configurable product
      *
-     * @return \Magento\Catalog\Model\Product
+     * @param CatalogProductBuilder $subject
+     * @param Product $product
+     * @param RequestInterface $request
+     * @return Product
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function aroundBuild(
-        \Magento\Catalog\Controller\Adminhtml\Product\Builder $subject,
-        \Closure $proceed,
-        \Magento\Framework\App\RequestInterface $request
-    ) {
-        $product = $proceed($request);
-
+    public function afterBuild(CatalogProductBuilder $subject, Product $product, RequestInterface $request)
+    {
         if ($request->has('attributes')) {
             $attributes = $request->getParam('attributes');
             if (!empty($attributes)) {
                 $product->setTypeId(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE);
-                $this->configurableType->setUsedProductAttributeIds($attributes, $product);
+                $this->configurableType->setUsedProductAttributes($product, $attributes);
             } else {
                 $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE);
             }
@@ -85,23 +66,19 @@ class Plugin
             }
         }
 
-        if ($request->getParam(
-            'popup'
-        ) && $request->getParam(
-            'product'
-        ) && !is_array(
-            $request->getParam('product')
-        ) && $request->getParam(
-            'id',
-            false
-        ) === false
+        if ($request->getParam('popup')
+            && $request->getParam('product')
+            && !is_array($request->getParam('product'))
+            && $request->getParam('id', false) === false
         ) {
             $configProduct = $this->productFactory->create();
-            $configProduct->setStoreId(0)->load($request->getParam('product'))->setTypeId($request->getParam('type'));
+            $configProduct->setStoreId(0)
+                ->load($request->getParam('product'))
+                ->setTypeId($request->getParam('type'));
 
-            $data = array();
-            foreach ($configProduct->getTypeInstance()->getEditableAttributes($configProduct) as $attribute) {
-                /* @var $attribute \Magento\Catalog\Model\Resource\Eav\Attribute */
+            $data = [];
+            foreach ($configProduct->getTypeInstance()->getSetAttributes($configProduct) as $attribute) {
+                /* @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
                 if (!$attribute->getIsUnique() &&
                     $attribute->getFrontend()->getInputType() != 'gallery' &&
                     $attribute->getAttributeCode() != 'required_options' &&

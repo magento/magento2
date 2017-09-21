@@ -1,34 +1,18 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Persistent\Model;
+
+use Magento\Customer\Model\Context;
 
 /**
  * @magentoDataFixture Magento/Persistent/_files/persistent.php
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ObserverTest extends \PHPUnit_Framework_TestCase
+class ObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Customer\Helper\View
@@ -41,9 +25,9 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     protected $_escaper;
 
     /**
-     * @var \Magento\Customer\Service\V1\CustomerAccountServiceInterface
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface
      */
-    protected $_customerAccountService;
+    protected $customerRepository;
 
     /**
      * @var \Magento\Persistent\Helper\Session
@@ -51,7 +35,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     protected $_persistentSessionHelper;
 
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $_objectManager;
 
@@ -74,30 +58,31 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        $this->_customerSession = $this->_objectManager->get('Magento\Customer\Model\Session');
+        $this->_customerSession = $this->_objectManager->get(\Magento\Customer\Model\Session::class);
 
         $this->_customerViewHelper = $this->_objectManager->create(
-            'Magento\Customer\Helper\View'
+            \Magento\Customer\Helper\View::class
         );
         $this->_escaper = $this->_objectManager->create(
-            'Magento\Framework\Escaper'
+            \Magento\Framework\Escaper::class
         );
-        $this->_customerAccountService = $this->_objectManager->create(
-            'Magento\Customer\Service\V1\CustomerAccountServiceInterface'
+
+        $this->customerRepository = $this->_objectManager->create(
+            \Magento\Customer\Api\CustomerRepositoryInterface::class
         );
 
         $this->_checkoutSession = $this->getMockBuilder(
-            'Magento\Checkout\Model\Session'
+            \Magento\Checkout\Model\Session::class
         )->disableOriginalConstructor()->setMethods([])->getMock();
 
-        $this->_persistentSessionHelper = $this->_objectManager->create('Magento\Persistent\Helper\Session');
+        $this->_persistentSessionHelper = $this->_objectManager->create(\Magento\Persistent\Helper\Session::class);
 
         $this->_observer = $this->_objectManager->create(
-            'Magento\Persistent\Model\Observer',
+            \Magento\Persistent\Model\Observer::class,
             [
                 'escaper' => $this->_escaper,
                 'customerViewHelper' => $this->_customerViewHelper,
-                'customerAccountService' => $this->_customerAccountService,
+                'customerRepository' => $this->customerRepository,
                 'checkoutSession' => $this->_checkoutSession
             ]
         );
@@ -115,9 +100,9 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $this->_customerSession->loginById(1);
 
         $httpContext = new \Magento\Framework\App\Http\Context();
-        $httpContext->setValue(\Magento\Customer\Helper\Data::CONTEXT_AUTH, 1, 1);
+        $httpContext->setValue(Context::CONTEXT_AUTH, 1, 1);
         $block = $this->_objectManager->create(
-            'Magento\Sales\Block\Reorder\Sidebar',
+            \Magento\Sales\Block\Reorder\Sidebar::class,
             [
                 'httpContext' => $httpContext
             ]
@@ -125,82 +110,13 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $this->_observer->emulateWelcomeBlock($block);
         $customerName = $this->_escaper->escapeHtml(
             $this->_customerViewHelper->getCustomerName(
-                $this->_customerAccountService->getCustomer(
+                $this->customerRepository->getById(
                     $this->_persistentSessionHelper->getSession()->getCustomerId()
                 )
             )
         );
-        $translation = __('Welcome, %1!', $customerName);
-        $this->assertStringMatchesFormat('%A' . $translation . '%A', $block->getWelcome());
+        $translation = __('Welcome, %1!', $customerName)->__toString();
+        $this->assertStringMatchesFormat('%A' . $translation . '%A', $block->getWelcome()->__toString());
         $this->_customerSession->logout();
-    }
-
-    /**
-     * @magentoConfigFixture current_store persistent/options/enabled 1
-     * @magentoConfigFixture current_store persistent/options/remember_enabled 1
-     * @magentoConfigFixture current_store persistent/options/remember_default 1
-     * @magentoAppArea frontend
-     * @magentoAppIsolation enabled
-     * @magentoConfigFixture current_store persistent/options/shopping_cart 1
-     * @magentoConfigFixture current_store persistent/options/logout_clear 0
-     */
-    public function testEmulateQuote()
-    {
-        $requestMock = $this->getMockBuilder(
-            'Magento\Framework\App\Request\Http'
-        )->disableOriginalConstructor()->setMethods(
-            []
-        )->getMock();
-        $requestMock->expects($this->once())->method('getFullActionName')->will($this->returnValue('valid_action'));
-        $event = new \Magento\Framework\Event(
-            [
-                'request' => $requestMock
-            ]
-        );
-        $observer = new \Magento\Framework\Event\Observer();
-        $observer->setEvent($event);
-
-        $this->_customerSession->loginById(1);
-
-        $customer = $this->_customerAccountService->getCustomer(
-            $this->_persistentSessionHelper->getSession()->getCustomerId()
-        );
-        $this->_checkoutSession->expects($this->once())->method('setCustomerData')->with($customer);
-        $this->_customerSession->logout();
-
-        $this->_observer->emulateQuote($observer);
-    }
-
-    /**
-     * @magentoAppArea frontend
-     * @magentoAppIsolation enabled
-     * @magentoConfigFixture current_store persistent/options/shopping_cart 1
-     * @magentoConfigFixture current_store persistent/options/logout_clear 0
-     * @magentoConfigFixture current_store persistent/options/enabled 1
-     */
-    public function testEmulateCustomer()
-    {
-        $observer = new \Magento\Framework\Event\Observer();
-
-        $this->_customerSession->loginById(1);
-        $this->_customerSession->logout();
-        $this->assertNull($this->_customerSession->getCustomerId());
-        $this->assertEquals(
-            \Magento\Customer\Service\V1\CustomerGroupServiceInterface::NOT_LOGGED_IN_ID,
-            $this->_customerSession->getCustomerGroupId()
-        );
-
-        $this->_observer->emulateCustomer($observer);
-        $customer = $this->_customerAccountService->getCustomer(
-            $this->_persistentSessionHelper->getSession()->getCustomerId()
-        );
-        $this->assertEquals(
-            $customer->getId(),
-            $this->_customerSession->getCustomerId()
-        );
-        $this->assertEquals(
-            $customer->getGroupId(),
-            $this->_customerSession->getCustomerGroupId()
-        );
     }
 }

@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Sales:etc/sales.xsd">
+    <section name="s1">
+        <group name="g1">
+            <item name="i1" instance="instance1" sort_order="1">
+                <renderer name="r1" instance="instance1"/>
+                <renderer name="r1" instance="instance1"/>
+            </item>
+            <item name="i1" instance="instance1" sort_order="1"/>
+        </group>
+        <group name="g1">
+            <item name="i1" instance="instance1" sort_order="1"/>
+        </group>
+    </section>
+    <section name="s1">
+        <group name="g1">
+            <item name="i1" instance="instance1" sort_order="1"/>
+        </group>
+    </section>
+    <order>
+        <available_product_type name="a1"/>
+        <available_product_type name="a1"/>
+    </order>
+</config>

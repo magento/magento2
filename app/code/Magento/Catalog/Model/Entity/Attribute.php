@@ -1,35 +1,17 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Entity;
 
 use Magento\Catalog\Model\Attribute\LockValidatorInterface;
+use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
 
 /**
  * Product attribute extension with event dispatching
  *
- * @method \Magento\Catalog\Model\Resource\Attribute _getResource()
- * @method \Magento\Catalog\Model\Resource\Attribute getResource()
  * @method string getFrontendInputRenderer()
  * @method \Magento\Catalog\Model\Entity\Attribute setFrontendInputRenderer(string $value)
  * @method int setIsGlobal(int $value)
@@ -50,20 +32,18 @@ use Magento\Catalog\Model\Attribute\LockValidatorInterface;
  * @method \Magento\Catalog\Model\Entity\Attribute setIsUsedForPriceRules(int $value)
  * @method int getIsFilterableInSearch()
  * @method \Magento\Catalog\Model\Entity\Attribute setIsFilterableInSearch(int $value)
- * @method int getUsedInProductListing()
  * @method \Magento\Catalog\Model\Entity\Attribute setUsedInProductListing(int $value)
- * @method int getUsedForSortBy()
  * @method \Magento\Catalog\Model\Entity\Attribute setUsedForSortBy(int $value)
- * @method string getApplyTo()
  * @method \Magento\Catalog\Model\Entity\Attribute setApplyTo(string $value)
  * @method int getIsVisibleInAdvancedSearch()
  * @method \Magento\Catalog\Model\Entity\Attribute setIsVisibleInAdvancedSearch(int $value)
- * @method int getPosition()
  * @method \Magento\Catalog\Model\Entity\Attribute setPosition(int $value)
  * @method int getIsWysiwygEnabled()
  * @method \Magento\Catalog\Model\Entity\Attribute setIsWysiwygEnabled(int $value)
  * @method int getIsUsedForPromoRules()
  * @method \Magento\Catalog\Model\Entity\Attribute setIsUsedForPromoRules(int $value)
+ * @method \Magento\Eav\Api\Data\AttributeExtensionInterface getExtensionAttributes()
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Attribute extends \Magento\Eav\Model\Entity\Attribute
 {
@@ -91,50 +71,66 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
+     * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Eav\Model\Entity\TypeFactory $eavTypeFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
+     * @param \Magento\Eav\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
+     * @param \Magento\Eav\Api\Data\AttributeOptionInterfaceFactory $optionDataFactory
+     * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
+     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Catalog\Model\Product\ReservedAttributeList $reservedAttributeList
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
+     * @param DateTimeFormatterInterface $dateTimeFormatter
      * @param LockValidatorInterface $lockValidator
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
+        AttributeValueFactory $customAttributeFactory,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Eav\Model\Entity\TypeFactory $eavTypeFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Eav\Model\Resource\Helper $resourceHelper,
+        \Magento\Eav\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
+        \Magento\Eav\Api\Data\AttributeOptionInterfaceFactory $optionDataFactory,
+        \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Catalog\Model\Product\ReservedAttributeList $reservedAttributeList,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
+        DateTimeFormatterInterface $dateTimeFormatter,
         LockValidatorInterface $lockValidator,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
-        array $data = array()
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        array $data = []
     ) {
         $this->attrLockValidator = $lockValidator;
         parent::__construct(
             $context,
             $registry,
-            $coreData,
+            $extensionFactory,
+            $customAttributeFactory,
             $eavConfig,
             $eavTypeFactory,
             $storeManager,
             $resourceHelper,
             $universalFactory,
+            $optionDataFactory,
+            $dataObjectProcessor,
+            $dataObjectHelper,
             $localeDate,
             $reservedAttributeList,
             $localeResolver,
+            $dateTimeFormatter,
             $resource,
             $resourceCollection,
             $data
@@ -145,18 +141,18 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
      * Processing object before save data
      *
      * @return \Magento\Framework\Model\AbstractModel
-     * @throws \Magento\Eav\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function _beforeSave()
+    public function beforeSave()
     {
         try {
             $this->attrLockValidator->validate($this);
-        } catch (\Magento\Framework\Model\Exception $exception) {
-            throw new \Magento\Eav\Exception($exception->getMessage());
+        } catch (\Magento\Framework\Exception\LocalizedException $exception) {
+            throw new \Magento\Framework\Exception\LocalizedException(__($exception->getMessage()));
         }
 
         $this->setData('modulePrefix', self::MODULE_NAME);
-        return parent::_beforeSave();
+        return parent::beforeSave();
     }
 
     /**
@@ -164,12 +160,12 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
      *
      * @return \Magento\Framework\Model\AbstractModel
      */
-    protected function _afterSave()
+    public function afterSave()
     {
         /**
          * Fix saving attribute in admin
          */
         $this->_eavConfig->clear();
-        return parent::_afterSave();
+        return parent::afterSave();
     }
 }

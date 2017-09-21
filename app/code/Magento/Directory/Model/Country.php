@@ -1,47 +1,28 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
+namespace Magento\Directory\Model;
 
 /**
  * Country model
  *
- * @method \Magento\Directory\Model\Resource\Country _getResource()
- * @method \Magento\Directory\Model\Resource\Country getResource()
  * @method string getCountryId()
  * @method \Magento\Directory\Model\Country setCountryId(string $value)
- * @method string getIso2Code()
- * @method \Magento\Directory\Model\Country setIso2Code(string $value)
- * @method string getIso3Code()
- * @method \Magento\Directory\Model\Country setIso3Code(string $value)
+ *
+ * @api
+ * @since 100.0.2
  */
-namespace Magento\Directory\Model;
-
 class Country extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * @var array
      */
-    public static $_format = array();
+    public static $_format = [];
 
     /**
      * @var \Magento\Framework\Locale\ListsInterface
@@ -54,7 +35,7 @@ class Country extends \Magento\Framework\Model\AbstractModel
     protected $_formatFactory;
 
     /**
-     * @var \Magento\Directory\Model\Resource\Region\CollectionFactory
+     * @var \Magento\Directory\Model\ResourceModel\Region\CollectionFactory
      */
     protected $_regionCollectionFactory;
 
@@ -63,9 +44,9 @@ class Country extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Locale\ListsInterface $localeLists
      * @param Country\FormatFactory $formatFactory
-     * @param Resource\Region\CollectionFactory $regionCollectionFactory
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regionCollectionFactory
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
     public function __construct(
@@ -73,10 +54,10 @@ class Country extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Locale\ListsInterface $localeLists,
         \Magento\Directory\Model\Country\FormatFactory $formatFactory,
-        \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
-        array $data = array()
+        \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regionCollectionFactory,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        array $data = []
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->_localeLists = $localeLists;
@@ -89,10 +70,12 @@ class Country extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Directory\Model\Resource\Country');
+        $this->_init(\Magento\Directory\Model\ResourceModel\Country::class);
     }
 
     /**
+     * Load country by code
+     *
      * @param string $code
      * @return $this
      */
@@ -103,7 +86,9 @@ class Country extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * @return \Magento\Directory\Model\Resource\Region\Collection
+     * Get regions
+     *
+     * @return \Magento\Directory\Model\ResourceModel\Region\Collection
      */
     public function getRegions()
     {
@@ -111,7 +96,7 @@ class Country extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * @return \Magento\Directory\Model\Resource\Region\Collection
+     * @return \Magento\Directory\Model\ResourceModel\Region\Collection
      */
     public function getLoadedRegionCollection()
     {
@@ -121,7 +106,7 @@ class Country extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * @return \Magento\Directory\Model\Resource\Region\Collection
+     * @return \Magento\Directory\Model\ResourceModel\Region\Collection
      */
     public function getRegionCollection()
     {
@@ -131,17 +116,15 @@ class Country extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * @param \Magento\Framework\Object $address
+     * @param \Magento\Framework\DataObject $address
      * @param bool $html
      * @return string
      */
-    public function formatAddress(\Magento\Framework\Object $address, $html = false)
+    public function formatAddress(\Magento\Framework\DataObject $address, $html = false)
     {
         //TODO: is it still used?
         $address->getRegion();
         $address->getCountry();
-
-
 
         $template = $this->getData('address_template_' . ($html ? 'html' : 'plain'));
         if (empty($template)) {
@@ -174,9 +157,9 @@ T: {{telephone}}";
     }
 
     /**
-     * Retrieve formats for
+     * Retrieve country formats
      *
-     * @return \Magento\Directory\Model\Resource\Country\Format\Collection
+     * @return \Magento\Directory\Model\ResourceModel\Country\Format\Collection
      */
     public function getFormats()
     {
@@ -194,7 +177,7 @@ T: {{telephone}}";
     }
 
     /**
-     * Retrieve format
+     * Retrieve country format
      *
      * @param string $type
      * @return \Magento\Directory\Model\Country\Format|null
@@ -212,13 +195,21 @@ T: {{telephone}}";
     }
 
     /**
+     * Get country name
+     *
      * @return string
      */
-    public function getName()
+    public function getName($locale = null)
     {
-        if (!$this->getData('name')) {
-            $this->setData('name', $this->_localeLists->getCountryTranslation($this->getId()));
+        if ($locale == null) {
+            $cache_key = 'name_default';
+        } else {
+            $cache_key = 'name_' . $locale;
         }
-        return $this->getData('name');
+
+        if (!$this->getData($cache_key)) {
+            $this->setData($cache_key, $this->_localeLists->getCountryTranslation($this->getId(), $locale));
+        }
+        return $this->getData($cache_key);
     }
 }

@@ -1,34 +1,16 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\Form;
 
-use Magento\Framework\Model\Exception;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Eav Form Element Model
  *
- * @method \Magento\Eav\Model\Resource\Form\Element getResource()
+ * @api
  * @method int getTypeId()
  * @method \Magento\Eav\Model\Form\Element setTypeId(int $value)
  * @method int getFieldsetId()
@@ -37,8 +19,7 @@ use Magento\Framework\Model\Exception;
  * @method \Magento\Eav\Model\Form\Element setAttributeId(int $value)
  * @method int getSortOrder()
  * @method \Magento\Eav\Model\Form\Element setSortOrder(int $value)
- *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Element extends \Magento\Framework\Model\AbstractModel
 {
@@ -58,17 +39,18 @@ class Element extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
-        array $data = array()
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        array $data = []
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->_eavConfig = $eavConfig;
@@ -78,48 +60,29 @@ class Element extends \Magento\Framework\Model\AbstractModel
      * Initialize resource model
      *
      * @return void
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {
-        $this->_init('Magento\Eav\Model\Resource\Form\Element');
-    }
-
-    /**
-     * Retrieve resource instance wrapper
-     *
-     * @return \Magento\Eav\Model\Resource\Form\Element
-     */
-    protected function _getResource()
-    {
-        return parent::_getResource();
-    }
-
-    /**
-     * Retrieve resource collection instance wrapper
-     *
-     * @return \Magento\Eav\Model\Resource\Form\Element\Collection
-     */
-    public function getCollection()
-    {
-        return parent::getCollection();
+        $this->_init(\Magento\Eav\Model\ResourceModel\Form\Element::class);
     }
 
     /**
      * Validate data before save data
      *
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return $this
      */
-    protected function _beforeSave()
+    public function beforeSave()
     {
         if (!$this->getTypeId()) {
-            throw new Exception(__('Invalid form type.'));
+            throw new LocalizedException(__('Invalid form type.'));
         }
         if (!$this->getAttributeId()) {
-            throw new Exception(__('Invalid EAV attribute'));
+            throw new LocalizedException(__('Invalid EAV attribute'));
         }
 
-        return parent::_beforeSave();
+        return parent::beforeSave();
     }
 
     /**

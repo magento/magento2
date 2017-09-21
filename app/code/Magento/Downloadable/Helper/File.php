@@ -1,46 +1,31 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Helper;
+
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Downloadable Products File Helper
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
 class File extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * Core file storage database
      *
-     * @var \Magento\Core\Helper\File\Storage\Database
+     * @var \Magento\MediaStorage\Helper\File\Storage\Database
      */
     protected $_coreFileStorageDatabase = null;
 
     /**
      * Filesystem object.
      *
-     * @var \Magento\Framework\App\Filesystem
+     * @var \Magento\Framework\Filesystem
      */
     protected $_filesystem;
 
@@ -53,19 +38,19 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase
-     * @param \Magento\Framework\App\Filesystem $filesystem
+     * @param \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase
+     * @param \Magento\Framework\Filesystem $filesystem
      * @param array $mimeTypes
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase,
-        \Magento\Framework\App\Filesystem $filesystem,
-        array $mimeTypes = array()
+        \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase,
+        \Magento\Framework\Filesystem $filesystem,
+        array $mimeTypes = []
     ) {
         $this->_coreFileStorageDatabase = $coreFileStorageDatabase;
         $this->_filesystem = $filesystem;
-        $this->_mediaDirectory = $filesystem->getDirectoryWrite($filesystem::MEDIA_DIR);
+        $this->_mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         parent::__construct($context);
         if (!empty($mimeTypes)) {
             foreach ($mimeTypes as $key => $value) {
@@ -77,10 +62,10 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Upload file from temporary folder.
      * @param string $tmpPath
-     * @param \Magento\Core\Model\File\Uploader $uploader
+     * @param \Magento\MediaStorage\Model\File\Uploader $uploader
      * @return array
      */
-    public function uploadFromTmp($tmpPath, \Magento\Core\Model\File\Uploader $uploader)
+    public function uploadFromTmp($tmpPath, \Magento\MediaStorage\Model\File\Uploader $uploader)
     {
         $uploader->setAllowRenameFiles(true);
         $uploader->setFilesDispersion(true);
@@ -96,7 +81,7 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $basePath
      * @param string $file
      * @return string
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function moveFileFromTmp($baseTmpPath, $basePath, $file)
     {
@@ -106,7 +91,9 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
                 try {
                     $fileName = $this->_moveFileFromTmp($baseTmpPath, $basePath, $file[0]['file']);
                 } catch (\Exception $e) {
-                    throw new \Magento\Framework\Model\Exception(__('Something went wrong while saving the file(s).'));
+                    throw new \Magento\Framework\Exception\LocalizedException(
+                        __('Something went wrong while saving the file(s).')
+                    );
                 }
             }
             return $fileName;
@@ -145,7 +132,7 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
 
         $destFile = dirname(
             $file
-        ) . '/' . \Magento\Core\Model\File\Uploader::getNewFileName(
+        ) . '/' . \Magento\MediaStorage\Model\File\Uploader::getNewFileName(
             $this->getFilePath($basePath, $file)
         );
 
@@ -242,7 +229,7 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @var array
      */
-    protected static $_mimeTypes = array(
+    protected static $_mimeTypes = [
         'x123' => 'application/vnd.lotus-1-2-3',
         'x3dml' => 'text/vnd.in3d.3dml',
         'x3g2' => 'video/3gpp2',
@@ -779,6 +766,6 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
         'xzaz' => 'application/vnd.zzazz.deck+xml',
         'xzip' => 'application/zip',
         'xzmm' => 'application/vnd.handheld-entertainment+xml',
-        'xodt' => 'application/x-vnd.oasis.opendocument.spreadsheet'
-    );
+        'xodt' => 'application/x-vnd.oasis.opendocument.spreadsheet',
+    ];
 }

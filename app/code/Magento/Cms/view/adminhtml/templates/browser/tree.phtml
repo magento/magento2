@@ -1,0 +1,21 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+ /** @var \Magento\Cms\Block\Adminhtml\Wysiwyg\Images\Tree $block */
+?>
+<div class="tree-panel" >
+    <div class="categories-side-col">
+        <div class="tree-actions">
+            <a onclick="jQuery('[data-role=tree]').jstree('close_all');"><?= $block->escapeHtml(__('Collapse All')) ?></a>
+            <span class="separator">|</span>
+            <a onclick="jQuery('[data-role=tree]').jstree('open_all');"><?= $block->escapeHtml(__('Expand All')) ?></a>
+        </div>
+    </div>
+    <div data-role="tree" data-mage-init='<?= $block->escapeHtml($this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getTreeWidgetOptions())) ?>'>
+    </div>
+</div>

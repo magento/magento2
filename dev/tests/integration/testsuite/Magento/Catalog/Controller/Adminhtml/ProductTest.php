@@ -1,42 +1,24 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml;
 
 /**
  * @magentoAppArea adminhtml
  */
-class ProductTest extends \Magento\Backend\Utility\Controller
+class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     public function testSaveActionWithDangerRequest()
     {
-        $this->getRequest()->setPost(array('product' => array('entity_id' => 15)));
+        $this->getRequest()->setPostValue(['product' => ['entity_id' => 15]]);
         $this->dispatch('backend/catalog/product/save');
         $this->assertSessionMessages(
-            $this->equalTo(array('Unable to save product')),
+            $this->equalTo(['Unable to save product']),
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
-        $this->assertRedirect($this->stringContains('/backend/catalog/product/edit'));
+        $this->assertRedirect($this->stringContains('/backend/catalog/product/new'));
     }
 
     /**
@@ -44,8 +26,10 @@ class ProductTest extends \Magento\Backend\Utility\Controller
      */
     public function testSaveActionAndNew()
     {
-        $this->getRequest()->setPost(array('back' => 'new'));
-        $this->dispatch('backend/catalog/product/save/id/1');
+        $this->getRequest()->setPostValue(['back' => 'new']);
+        $repository = $this->_objectManager->create(\Magento\Catalog\Model\ProductRepository::class);
+        $product = $repository->get('simple');
+        $this->dispatch('backend/catalog/product/save/id/' . $product->getEntityId());
         $this->assertRedirect($this->stringStartsWith('http://localhost/index.php/backend/catalog/product/new/'));
         $this->assertSessionMessages(
             $this->contains('You saved the product.'),
@@ -58,11 +42,17 @@ class ProductTest extends \Magento\Backend\Utility\Controller
      */
     public function testSaveActionAndDuplicate()
     {
-        $this->getRequest()->setPost(array('back' => 'duplicate'));
-        $this->dispatch('backend/catalog/product/save/id/1');
+        $this->getRequest()->setPostValue(['back' => 'duplicate']);
+        $repository = $this->_objectManager->create(\Magento\Catalog\Model\ProductRepository::class);
+        $product = $repository->get('simple');
+        $this->dispatch('backend/catalog/product/save/id/' . $product->getEntityId());
         $this->assertRedirect($this->stringStartsWith('http://localhost/index.php/backend/catalog/product/edit/'));
         $this->assertRedirect(
-            $this->logicalNot($this->stringStartsWith('http://localhost/index.php/backend/catalog/product/edit/id/1/'))
+            $this->logicalNot(
+                $this->stringStartsWith(
+                    'http://localhost/index.php/backend/catalog/product/edit/id/' . $product->getEntityId() . '/'
+                )
+            )
         );
         $this->assertSessionMessages(
             $this->contains('You saved the product.'),
@@ -79,28 +69,36 @@ class ProductTest extends \Magento\Backend\Utility\Controller
         $this->dispatch('backend/catalog/product');
         $body = $this->getResponse()->getBody();
 
-        $this->assertSelectCount(
-            '#add_new_product',
+        $this->assertEquals(
             1,
-            $body,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//*[@id="add_new_product"]',
+                $body
+            ),
             '"Add Product" button container should be present on Manage Products page, if the limit is not  reached'
         );
-        $this->assertSelectCount(
-            '#add_new_product-button',
+        $this->assertEquals(
             1,
-            $body,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//*[@id="add_new_product-button"]',
+                $body
+            ),
             '"Add Product" button should be present on Manage Products page, if the limit is not reached'
         );
-        $this->assertSelectCount(
-            '#add_new_product-button.disabled',
+        $this->assertEquals(
             0,
-            $body,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//*[@id="add_new_product-button" and contains(@class,"disabled")]',
+                $body
+            ),
             '"Add Product" button should be enabled on Manage Products page, if the limit is not reached'
         );
-        $this->assertSelectCount(
-            '#add_new_product .action-toggle',
+        $this->assertEquals(
             1,
-            $body,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//*[@id="add_new_product"]/*[contains(@class,"action-toggle")]',
+                $body
+            ),
             '"Add Product" button split should be present on Manage Products page, if the limit is not reached'
         );
     }
@@ -110,43 +108,36 @@ class ProductTest extends \Magento\Backend\Utility\Controller
      */
     public function testEditAction()
     {
-        $this->dispatch('backend/catalog/product/edit/id/1');
+        $repository = $this->_objectManager->create(\Magento\Catalog\Model\ProductRepository::class);
+        $product = $repository->get('simple');
+        $this->dispatch('backend/catalog/product/edit/id/' . $product->getEntityId());
         $body = $this->getResponse()->getBody();
 
-        $this->assertSelectCount('#save-split-button', 1, $body, '"Save" button isn\'t present on Edit Product page');
-        $this->assertSelectCount(
-            '#save-split-button-new-button',
+        $this->assertEquals(
             1,
-            $body,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//*[@id="save-button"]',
+                $body
+            ),
+            '"Save" button isn\'t present on Edit Product page'
+        );
+
+        $this->assertEquals(
+            1,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//*[@id="save_and_new"]',
+                $body
+            ),
             '"Save & New" button isn\'t present on Edit Product page'
         );
-        $this->assertSelectCount(
-            '#save-split-button-duplicate-button',
+
+        $this->assertEquals(
             1,
-            $body,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//*[@id="save_and_duplicate"]',
+                $body
+            ),
             '"Save & Duplicate" button isn\'t present on Edit Product page'
         );
-    }
-
-    /**
-     * Assure that no DDL operations, like table truncation, are executed in transaction during search results reset.
-     *
-     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
-     */
-    public function testMassStatusAction()
-    {
-        $this->dispatch(
-            '/backend/catalog/product/massStatus/store/0/?product=1&massaction_prepare_key=product&status=0'
-        );
-        /** @var $objectManager \Magento\TestFramework\ObjectManager */
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var $processCollection \Magento\Index\Model\Resource\Process\Collection */
-        $processCollection = $objectManager->get('Magento\Index\Model\Resource\Process\Collection');
-        $processCollection = $processCollection->addEventsStats()->addFilter('indexer_code', 'catalogsearch_fulltext');
-        $process = $processCollection->getLastItem();
-        /** @var $eventCollection \Magento\Index\Model\Resource\Event\Collection */
-        $eventCollection = $objectManager->get('Magento\Index\Model\Resource\Event\Collection');
-        $eventCollection->addProcessFilter($process);
-        $this->assertNull($eventCollection->getLastItem()->getData('process_event_status'));
     }
 }

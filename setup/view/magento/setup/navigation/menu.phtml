@@ -1,0 +1,22 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+
+<nav ng-controller="navigationController" id="menu" class="nav ng-scope show"
+         ng-hide="$state.current.noMenu || $state.current.main || $state.current.default">
+    <ul class="nav-bar">
+        <li ng-repeat="menuState in menu | filter: {type: $state.current.type}:true"
+            ng-class="{active: $state.includes(menuState.id), disabled: itemStatus(menuState.order)}">
+            <a
+               class="white-space-pre-line" ui-sref="{{menuState.id}}"
+               href="{{menuState.url}}">{{menuState.title}}</a>
+        </li>
+    </ul>
+</nav>
+

@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab\View;
 
@@ -31,7 +13,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  *
  * @magentoAppArea adminhtml
  */
-class CartTest extends \PHPUnit_Framework_TestCase
+class CartTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Shopping cart.
@@ -53,17 +35,17 @@ class CartTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Framework\App\State')->setAreaCode('adminhtml');
+        $objectManager->get(\Magento\Framework\App\State::class)->setAreaCode('adminhtml');
 
-        $this->coreRegistry = $objectManager->get('Magento\Framework\Registry');
+        $this->coreRegistry = $objectManager->get(\Magento\Framework\Registry::class);
         $this->coreRegistry->register(RegistryConstants::CURRENT_CUSTOMER_ID, 1);
 
         $this->block = $objectManager->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
-            'Magento\Customer\Block\Adminhtml\Edit\Tab\View\Cart',
+            \Magento\Customer\Block\Adminhtml\Edit\Tab\View\Cart::class,
             '',
-            array('coreRegistry' => $this->coreRegistry, 'data' => array('website_id' => 1))
+            ['coreRegistry' => $this->coreRegistry, 'data' => ['website_id' => 1]]
         );
         $this->block->getPreparedCollection();
     }
@@ -81,7 +63,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetRowUrl()
     {
-        $row = new \Magento\Framework\Object(array('product_id' => 1));
+        $row = new \Magento\Framework\DataObject(['product_id' => 1]);
         $this->assertContains('catalog/product/edit/id/1', $this->block->getRowUrl($row));
     }
 
@@ -94,17 +76,6 @@ class CartTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Verify that the customer has a single item in his cart.
-     *
-     * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @magentoDataFixture Magento/Customer/_files/quote.php
-     */
-    public function testGetCollection()
-    {
-        $this->assertEquals(1, $this->block->getCollection()->getSize());
-    }
-
-    /**
      * Verify the basic content of an empty cart.
      *
      * @magentoDataFixture Magento/Customer/_files/customer.php
@@ -112,7 +83,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
     public function testToHtmlEmptyCart()
     {
         $this->assertEquals(0, $this->block->getCollection()->getSize());
-        $this->assertContains("There are no items in customer's shopping cart at the moment", $this->block->toHtml());
+        $this->assertContains('There are no items in customer\'s shopping cart.', $this->block->toHtml());
     }
 
     /**
@@ -128,5 +99,16 @@ class CartTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('simple', $html);
         $this->assertContains('$10.00', $html);
         $this->assertContains('catalog/product/edit/id/1', $html);
+    }
+
+    /**
+     * Verify that the customer has a single item in his cart.
+     *
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoDataFixture Magento/Customer/_files/quote.php
+     */
+    public function testGetCollection()
+    {
+        $this->assertEquals(1, $this->block->getCollection()->getSize());
     }
 }

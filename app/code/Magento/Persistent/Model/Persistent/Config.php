@@ -1,27 +1,11 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Persistent\Model\Persistent;
+
+use Magento\Framework\Module\Dir;
 
 /**
  * Persistent Config Model
@@ -72,11 +56,9 @@ class Config
     protected $_persistentFactory;
 
     /**
-     * Filesystem
-     *
-     * @var \Magento\Framework\Filesystem\Directory\Read;
+     * @var \Magento\Framework\Filesystem\Directory\ReadFactory
      */
-    protected $_modulesDirectory;
+    protected $readFactory;
 
     /**
      * @param \Magento\Framework\Config\DomFactory $domFactory
@@ -84,7 +66,7 @@ class Config
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Persistent\Model\Factory $persistentFactory
-     * @param \Magento\Framework\App\Filesystem $filesystem
+     * @param \Magento\Framework\Filesystem\Directory\ReadFactory $readFactory
      */
     public function __construct(
         \Magento\Framework\Config\DomFactory $domFactory,
@@ -92,14 +74,14 @@ class Config
         \Magento\Framework\View\LayoutInterface $layout,
         \Magento\Framework\App\State $appState,
         \Magento\Persistent\Model\Factory $persistentFactory,
-        \Magento\Framework\App\Filesystem $filesystem
+        \Magento\Framework\Filesystem\Directory\ReadFactory $readFactory
     ) {
         $this->_domFactory = $domFactory;
         $this->_moduleReader = $moduleReader;
         $this->_layout = $layout;
         $this->_appState = $appState;
         $this->_persistentFactory = $persistentFactory;
-        $this->_modulesDirectory = $filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem::MODULES_DIR);
+        $this->readFactory = $readFactory;
     }
 
     /**
@@ -107,6 +89,7 @@ class Config
      *
      * @param string $path
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setConfigFilePath($path)
     {
@@ -118,27 +101,32 @@ class Config
      * Get persistent XML config xpath
      *
      * @return \DOMXPath
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _getConfigDomXPath()
     {
-        if (is_null($this->_configDomXPath)) {
-            $filePath = $this->_modulesDirectory->getRelativePath($this->_configFilePath);
-            $isFile = $this->_modulesDirectory->isFile($filePath);
-            $isReadable = $this->_modulesDirectory->isReadable($filePath);
+        if ($this->_configDomXPath === null) {
+            $dir = explode("/", $this->_configFilePath);
+            array_pop($dir);
+            $dir = implode("/", $dir);
+            $directoryRead = $this->readFactory->create($dir);
+            $filePath = $directoryRead->getRelativePath($this->_configFilePath);
+            $isFile = $directoryRead->isFile($filePath);
+            $isReadable = $directoryRead->isReadable($filePath);
             if (!$isFile || !$isReadable) {
-                throw new \Magento\Framework\Model\Exception(
+                throw new \Magento\Framework\Exception\LocalizedException(
                     __('We cannot load the configuration from file %1.', $this->_configFilePath)
                 );
             }
-            $xml = $this->_modulesDirectory->readFile($filePath);
+            $xml = $directoryRead->readFile($filePath);
             /** @var \Magento\Framework\Config\Dom $configDom */
             $configDom = $this->_domFactory->createDom(
-                array(
+                [
                     'xml' => $xml,
-                    'idAttributes' => array('config/instances/blocks/reference' => 'id'),
-                    'schemaFile' => $this->_moduleReader->getModuleDir('etc', 'Magento_Persistent') . '/persistent.xsd'
-                )
+                    'idAttributes' => ['config/instances/blocks/reference' => 'id'],
+                    'schemaFile' => $this->_moduleReader->getModuleDir(Dir::MODULE_ETC_DIR, 'Magento_Persistent')
+                        . '/persistent.xsd',
+                ]
             );
             $this->_configDomXPath = new \DOMXPath($configDom->getDom());
         }
@@ -150,6 +138,7 @@ class Config
      *
      * @param string $block
      * @return array
+     * @codeCoverageIgnore
      */
     public function getBlockConfigInfo($block)
     {
@@ -162,13 +151,14 @@ class Config
      * Retrieve instances that should be emulated by persistent data
      *
      * @return array
+     * @codeCoverageIgnore
      */
     public function collectInstancesToEmulate()
     {
         $xPath = '/config/instances/blocks/reference';
         $blocks = $this->_getConfigDomXPath()->query($xPath);
         $blocksArray = $this->_convertBlocksToArray($blocks);
-        return array('blocks' => $blocksArray);
+        return ['blocks' => $blocksArray];
     }
 
     /**
@@ -179,11 +169,11 @@ class Config
      */
     protected function _convertBlocksToArray($blocks)
     {
-        $blocksArray = array();
+        $blocksArray = [];
         foreach ($blocks as $reference) {
             $referenceAttributes = $reference->attributes;
             $id = $referenceAttributes->getNamedItem('id')->nodeValue;
-            $blocksArray[$id] = array();
+            $blocksArray[$id] = [];
             /** @var $referenceSubNode /DOMNode */
             foreach ($reference->childNodes as $referenceSubNode) {
                 switch ($referenceSubNode->nodeName) {
@@ -228,7 +218,7 @@ class Config
      * @param array $info
      * @param bool $instance
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function fireOne($info, $instance = false)
     {
@@ -248,8 +238,8 @@ class Config
         if (method_exists($object, $method)) {
             $object->{$method}($instance);
         } elseif ($this->_appState->getMode() == \Magento\Framework\App\State::MODE_DEVELOPER) {
-            throw new \Magento\Framework\Model\Exception(
-                'Method "' . $method . '" is not defined in "' . get_class($object) . '"'
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Method "%1" is not defined in "%2"', $method, get_class($object))
             );
         }
 

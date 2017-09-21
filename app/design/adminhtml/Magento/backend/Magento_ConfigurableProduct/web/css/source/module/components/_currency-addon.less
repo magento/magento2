@@ -1,0 +1,53 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  _____________________________________________
+
+@currency-addon-symbol__border-color: @field-control__border-color;
+@currency-addon-symbol__color: @color-gray52;
+@currency-addon-symbol__height: @field-control__height;
+@currency-addon-symbol__width: 1.6rem;
+
+//
+//  Common
+//  _____________________________________________
+
+.currency-addon {
+    position: relative;
+
+    .admin__control-text {
+        border-width: 1px 1px 1px 0;
+        padding-left: @currency-addon-symbol__width + .2;
+
+        &:focus {
+            + .currency-symbol {
+                border-color: @field-control__focus__border-color;
+            }
+        }
+    }
+
+    .currency-symbol {
+        border: solid @currency-addon-symbol__border-color;
+        border-width: 0 0 0 1px;
+        box-sizing: border-box;
+        color: @currency-addon-symbol__color;
+        height: @currency-addon-symbol__height;
+        left: 0;
+        padding: 7px 0 0 @indent__xs;
+        position: absolute;
+        top: 0;
+        transition: @smooth__border-color;
+        width: @currency-addon-symbol__width;
+    }
+
+    ._error & {
+        .admin__control-text,
+        .currency-symbol {
+            border-color: @field-error-control__border-color;
+        }
+    }
+}

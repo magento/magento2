@@ -1,0 +1,221 @@
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+.ui-dialog {
+    background: #fff;
+    -webkit-box-shadow: 0 3px 6px rgba(0, 0, 0, .4);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, .4);
+    z-index: 1000;
+}
+
+.dialog.ui-dialog {
+    border: 1px solid #555;
+    display: none;
+    padding: 0;
+}
+
+.ui-widget-overlay {
+    background: #000;
+    filter: alpha(opacity = 60);
+    -moz-opacity: .44;
+    -webkit-opacity: .44;
+    opacity: .44;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.ui-dialog .ui-dialog-titlebar {
+    background: #f3efea;
+    height: 58px;
+}
+
+.ui-dialog .ui-dialog-title {
+    color: #676056;
+    font: normal 20px/1 'sourcesanspro';
+    display: block;
+    padding: 19px 0 19px 20px;
+    cursor: move;
+}
+
+.ui-dialog .ui-icon {
+    text-indent: -99999px;
+}
+
+.ui-dialog .ui-dialog-titlebar-close {
+    background: none;
+    cursor: pointer;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: 22px;
+    right: 16px;
+    height: 16px;
+    width: 16px;
+    z-index: 1000;
+    text-decoration: none;
+    line-height: 90%;
+}
+
+.ui-dialog .ui-dialog-titlebar-close:before {
+    color: #676056;
+    content: 'X';
+    font-family: sans-serif;
+    font-style: normal;
+    speak: none;
+    font-weight: normal;
+    -webkit-font-smoothing: antialiased;
+}
+
+.ui-dialog .ui-dialog-titlebar-close .ui-button-text {
+    display: none;
+}
+
+.ui-dialog .ui-dialog-titlebar-close .ui-icon {
+    display: none;
+}
+
+.ui-dialog .ui-dialog-titlebar-close.ui-state-hover {
+    border: none;
+}
+
+.ui-dialog .ui-dialog-content {
+    padding: 10px 10px 0;
+}
+
+.ui-dialog .ui-dialog-content .fieldset {
+    border-radius: 0;
+    border: none;
+}
+
+.ui-dialog .ui-dialog-content {
+    overflow: auto;
+    padding: 25px 25px 0;
+}
+
+.ui-dialog .ui-dialog-content label.mage-error {
+    margin: 0;
+}
+
+.ui-dialog .ui-dialog-content form {
+    display: block;
+    overflow: hidden;
+}
+
+.ui-dialog .ui-dialog-buttonpane {
+    margin: 0;
+    padding: 25px;
+    border: none;
+}
+
+.ui-dialog .ui-dialog-buttonset button {
+  border: none;
+  border-radius: 0;
+  font: 600 14px/16px;
+  text-transform: uppercase;
+  margin: 0 10px 0 0;
+  padding: 9px 11px 9px;
+  box-shadow: none;
+  text-shadow: none;
+  text-decoration: none;
+}
+
+.ui-resizable {
+    position: relative;
+}
+
+.ui-resizable-handle {
+    position: absolute;
+    font-size: 0.1px;
+    display: block;
+}
+
+.ui-resizable-disabled .ui-resizable-handle,
+.ui-resizable-autohide .ui-resizable-handle {
+    display: none;
+}
+
+.ui-resizable-n {
+    cursor: n-resize;
+    height: 7px;
+    width: 100%;
+    top: -5px;
+    left: 0;
+}
+
+.ui-resizable-s {
+    cursor: s-resize;
+    height: 7px;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+}
+
+.ui-resizable-e {
+    cursor: e-resize;
+    width: 7px;
+    right: 0;
+    top: 0;
+    height: 100%;
+}
+
+.ui-resizable-w {
+    cursor: w-resize;
+    width: 7px;
+    left: -7px;
+    top: 0;
+    height: 100%;
+}
+
+.ui-resizable-se {
+    cursor: se-resize;
+    width: 12px;
+    height: 12px;
+    right: 1px;
+    bottom: 1px;
+}
+
+.ui-resizable-sw {
+    cursor: sw-resize;
+    width: 9px;
+    height: 9px;
+    left: -5px;
+    bottom: 0;
+}
+
+.ui-resizable-nw {
+    cursor: nw-resize;
+    width: 9px;
+    height: 9px;
+    left: -5px;
+    top: -5px;
+}
+
+.ui-resizable-ne {
+    cursor: ne-resize;
+    width: 9px;
+    height: 9px;
+    right: 0;
+    top: -5px;
+}
+
+.ui-dialog ul.form-list,
+.ui-dialog ul.options-list {
+    list-style: none;
+    padding: 0;
+}
+
+.action.translate {
+	display: block;
+	line-height: 25px;
+	height: 25px;
+	width: 25px;
+}
+
+.action.translate:after {
+	font-family: 'icons';
+	font-size: 24px;
+	content: '\e006';
+}

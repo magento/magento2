@@ -1,27 +1,11 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model;
+
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Tests product model:
@@ -30,8 +14,11 @@ namespace Magento\Catalog\Model;
  * @see \Magento\Catalog\Model\ProductExternalTest
  * @see \Magento\Catalog\Model\ProductPriceTest
  * @magentoDataFixture Magento/Catalog/_files/categories.php
+ * @magentoDbIsolation enabled
+ * @magentoAppIsolation enabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ProductGettersTest extends \PHPUnit_Framework_TestCase
+class ProductGettersTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Product
@@ -41,21 +28,21 @@ class ProductGettersTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
     }
 
     public function testGetResourceCollection()
     {
         $collection = $this->_model->getResourceCollection();
-        $this->assertInstanceOf('Magento\Catalog\Model\Resource\Product\Collection', $collection);
+        $this->assertInstanceOf(\Magento\Catalog\Model\ResourceModel\Product\Collection::class, $collection);
         $this->assertEquals($this->_model->getStoreId(), $collection->getStoreId());
     }
 
     public function testGetUrlModel()
     {
         $model = $this->_model->getUrlModel();
-        $this->assertInstanceOf('Magento\Catalog\Model\Product\Url', $model);
+        $this->assertInstanceOf(\Magento\Catalog\Model\Product\Url::class, $model);
         $this->assertSame($model, $this->_model->getUrlModel());
     }
 
@@ -92,19 +79,19 @@ class ProductGettersTest extends \PHPUnit_Framework_TestCase
     {
         // model getter
         $typeInstance = $this->_model->getTypeInstance();
-        $this->assertInstanceOf('Magento\Catalog\Model\Product\Type\AbstractType', $typeInstance);
+        $this->assertInstanceOf(\Magento\Catalog\Model\Product\Type\AbstractType::class, $typeInstance);
         $this->assertSame($typeInstance, $this->_model->getTypeInstance());
 
         // singleton
         /** @var $otherProduct \Magento\Catalog\Model\Product */
         $otherProduct = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
         $this->assertSame($typeInstance, $otherProduct->getTypeInstance());
 
         // model setter
         $simpleTypeInstance = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product\Type\Simple'
+            \Magento\Catalog\Model\Product\Type\Simple::class
         );
         $this->_model->setTypeInstance($simpleTypeInstance);
         $this->assertSame($simpleTypeInstance, $this->_model->getTypeInstance());
@@ -112,7 +99,7 @@ class ProductGettersTest extends \PHPUnit_Framework_TestCase
 
     public function testGetIdBySku()
     {
-        $this->assertEquals(1, $this->_model->getIdBySku('simple')); // fixture
+        $this->assertGreaterThan(0, (int)$this->_model->getIdBySku('simple')); // fixture
     }
 
     public function testGetAttributes()
@@ -122,7 +109,7 @@ class ProductGettersTest extends \PHPUnit_Framework_TestCase
         $attributes = $this->_model->getAttributes();
         $this->assertArrayHasKey('name', $attributes);
         $this->assertArrayHasKey('sku', $attributes);
-        $this->assertInstanceOf('Magento\Catalog\Model\Resource\Eav\Attribute', $attributes['sku']);
+        $this->assertInstanceOf(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class, $attributes['sku']);
     }
 
     /**
@@ -147,22 +134,22 @@ class ProductGettersTest extends \PHPUnit_Framework_TestCase
 
     public function getObsoleteGettersDataProvider()
     {
-        return array(
-            array('calculated_final_price', 'getCalculatedFinalPrice'),
-            array('minimal_price', 'getMinimalPrice'),
-            array('special_price', 'getSpecialPrice'),
-            array('special_from_date', 'getSpecialFromDate'),
-            array('special_to_date', 'getSpecialToDate'),
-            array('request_path', 'getRequestPath'),
-            array('gift_message_available', 'getGiftMessageAvailable'),
-        );
+        return [
+            ['calculated_final_price', 'getCalculatedFinalPrice'],
+            ['minimal_price', 'getMinimalPrice'],
+            ['special_price', 'getSpecialPrice'],
+            ['special_from_date', 'getSpecialFromDate'],
+            ['special_to_date', 'getSpecialToDate'],
+            ['request_path', 'getRequestPath'],
+            ['gift_message_available', 'getGiftMessageAvailable'],
+        ];
     }
 
     public function testGetMediaAttributes()
     {
         $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product',
-            array('data' => array('media_attributes' => 'test'))
+            \Magento\Catalog\Model\Product::class,
+            ['data' => ['media_attributes' => 'test']]
         );
         $this->assertEquals('test', $model->getMediaAttributes());
 
@@ -170,20 +157,22 @@ class ProductGettersTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('image', $attributes);
         $this->assertArrayHasKey('small_image', $attributes);
         $this->assertArrayHasKey('thumbnail', $attributes);
-        $this->assertInstanceOf('Magento\Catalog\Model\Resource\Eav\Attribute', $attributes['image']);
+        $this->assertInstanceOf(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class, $attributes['image']);
     }
 
     public function testGetMediaGalleryImages()
     {
         /** @var $model \Magento\Catalog\Model\Product */
-        $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
+        $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Catalog\Model\Product::class
+        );
         $this->assertEmpty($model->getMediaGalleryImages());
 
-        $this->_model->setMediaGallery(array('images' => array(array('file' => 'magento_image.jpg'))));
+        $this->_model->setMediaGallery(['images' => [['file' => 'magento_image.jpg']]]);
         $images = $this->_model->getMediaGalleryImages();
-        $this->assertInstanceOf('Magento\Framework\Data\Collection', $images);
+        $this->assertInstanceOf(\Magento\Framework\Data\Collection::class, $images);
         foreach ($images as $image) {
-            $this->assertInstanceOf('Magento\Framework\Object', $image);
+            $this->assertInstanceOf(\Magento\Framework\DataObject::class, $image);
             $image = $image->getData();
             $this->assertArrayHasKey('file', $image);
             $this->assertArrayHasKey('url', $image);
@@ -198,7 +187,7 @@ class ProductGettersTest extends \PHPUnit_Framework_TestCase
     public function testGetMediaConfig()
     {
         $model = $this->_model->getMediaConfig();
-        $this->assertInstanceOf('Magento\Catalog\Model\Product\Media\Config', $model);
+        $this->assertInstanceOf(\Magento\Catalog\Model\Product\Media\Config::class, $model);
         $this->assertSame($model, $this->_model->getMediaConfig());
     }
 
@@ -211,9 +200,9 @@ class ProductGettersTest extends \PHPUnit_Framework_TestCase
 
     public function testGetCustomDesignDate()
     {
-        $this->assertEquals(array('from' => null, 'to' => null), $this->_model->getCustomDesignDate());
+        $this->assertEquals(['from' => null, 'to' => null], $this->_model->getCustomDesignDate());
         $this->_model->setCustomDesignFrom(1)->setCustomDesignTo(2);
-        $this->assertEquals(array('from' => 1, 'to' => 2), $this->_model->getCustomDesignDate());
+        $this->assertEquals(['from' => 1, 'to' => 2], $this->_model->getCustomDesignDate());
     }
 
     /**
@@ -236,16 +225,8 @@ class ProductGettersTest extends \PHPUnit_Framework_TestCase
     public function testGetOptionInstance()
     {
         $model = $this->_model->getOptionInstance();
-        $this->assertInstanceOf('Magento\Catalog\Model\Product\Option', $model);
+        $this->assertInstanceOf(\Magento\Catalog\Model\Product\Option::class, $model);
         $this->assertSame($model, $this->_model->getOptionInstance());
-    }
-
-    public function testGetProductOptionsCollection()
-    {
-        $this->assertInstanceOf(
-            'Magento\Catalog\Model\Resource\Product\Option\Collection',
-            $this->_model->getProductOptionsCollection()
-        );
     }
 
     public function testGetDefaultAttributeSetId()
@@ -257,7 +238,7 @@ class ProductGettersTest extends \PHPUnit_Framework_TestCase
 
     public function testGetPreconfiguredValues()
     {
-        $this->assertInstanceOf('Magento\Framework\Object', $this->_model->getPreconfiguredValues());
+        $this->assertInstanceOf(\Magento\Framework\DataObject::class, $this->_model->getPreconfiguredValues());
         $this->_model->setPreconfiguredValues('test');
         $this->assertEquals('test', $this->_model->getPreconfiguredValues());
     }
@@ -266,11 +247,11 @@ class ProductGettersTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $mediaDirectory = $objectManager->get(
-            'Magento\Framework\App\Filesystem'
+            \Magento\Framework\Filesystem::class
         )->getDirectoryWrite(
-            \Magento\Framework\App\Filesystem::MEDIA_DIR
+            DirectoryList::MEDIA
         );
-        $config = $objectManager->get('Magento\Catalog\Model\Product\Media\Config');
+        $config = $objectManager->get(\Magento\Catalog\Model\Product\Media\Config::class);
         $mediaDirectory->delete($config->getBaseMediaPath());
     }
 }

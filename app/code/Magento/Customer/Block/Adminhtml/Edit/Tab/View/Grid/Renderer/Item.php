@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab\View\Grid\Renderer;
 
@@ -54,7 +36,7 @@ class Item extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
         \Magento\Backend\Block\Context $context,
         \Magento\Catalog\Helper\Product\Configuration $productConfig,
         \Magento\Catalog\Helper\Product\ConfigurationPool $productConfigPool,
-        array $data = array()
+        array $data = []
     ) {
         $this->_productConfigPool = $productConfigPool;
         $this->_productConfig = $productConfig;
@@ -77,7 +59,7 @@ class Item extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
                 $grid = $column->getGrid();
                 if ($grid) {
                     $productHelpers = $grid->getProductConfigurationHelpers();
-                    $this->setProductHelpers($productHelpers ? $productHelpers : array());
+                    $this->setProductHelpers($productHelpers ? $productHelpers : []);
                 }
             }
         }
@@ -86,10 +68,10 @@ class Item extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
         $productType = $product->getTypeId();
         if (isset($productHelpers[$productType])) {
             $helperName = $productHelpers[$productType];
-        } else if (isset($productHelpers['default'])) {
+        } elseif (isset($productHelpers['default'])) {
             $helperName = $productHelpers['default'];
         } else {
-            $helperName = 'Magento\Catalog\Helper\Product\Configuration';
+            $helperName = \Magento\Catalog\Helper\Product\Configuration::class;
         }
 
         return $this->_productConfigPool->get($helperName);
@@ -126,17 +108,17 @@ class Item extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
      */
     protected function getFormattedOptionValue($option)
     {
-        $params = array('max_length' => 55);
+        $params = ['max_length' => 55];
         return $this->_productConfig->getFormattedOptionValue($option, $params);
     }
 
     /**
      * Renders item product name and its configuration
      *
-     * @param \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface|\Magento\Framework\Object $item
+     * @param \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface|\Magento\Framework\DataObject $item
      * @return string
      */
-    public function render(\Magento\Framework\Object $item)
+    public function render(\Magento\Framework\DataObject $item)
     {
         $this->setItem($item);
         $product = $this->getProduct();
@@ -153,15 +135,15 @@ class Item extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
      */
     protected function _renderItemOptions(Product $product, array $options)
     {
-        $html = '<div class="bundle-product-options">' . '<strong>' . $this->escapeHtml(
+        $html = '<div class="product-title">' . $this->escapeHtml(
             $product->getName()
-        ) . '</strong>' . '<dl>';
+        ) . '</div>' . '<dl class="item-options">';
         foreach ($options as $option) {
             $formattedOption = $this->getFormattedOptionValue($option);
             $html .= '<dt>' . $this->escapeHtml($option['label']) . '</dt>';
-            $html .= '<dd>' . $this->escapeHtml($formattedOption['value']) . '</dd>';
+            $html .= '<dd>' . $formattedOption['value'] . '</dd>';
         }
-        $html .= '</dl></div>';
+        $html .= '</dl>';
 
         return $html;
     }

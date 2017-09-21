@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Wishlist\Block;
@@ -32,7 +14,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
     /**
      * Wishlist Product Items Collection
      *
-     * @var \Magento\Wishlist\Model\Resource\Item\Collection
+     * @var \Magento\Wishlist\Model\ResourceModel\Item\Collection
      */
     protected $_collection;
 
@@ -49,29 +31,20 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
     protected $httpContext;
 
     /**
-     * @var \Magento\Catalog\Model\ProductFactory
-     */
-    protected $_productFactory;
-
-    /**
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Framework\App\Http\Context $httpContext
-     * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
         \Magento\Framework\App\Http\Context $httpContext,
-        \Magento\Catalog\Model\ProductFactory $productFactory,
-        array $data = array()
+        array $data = []
     ) {
         $this->httpContext = $httpContext;
-        $this->_productFactory = $productFactory;
         parent::__construct(
             $context,
             $data
         );
-        $this->_isScopePrivate = true;
     }
 
     /**
@@ -82,16 +55,6 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
     protected function _getHelper()
     {
         return $this->_wishlistHelper;
-    }
-
-    /**
-     * Retrieve Customer Session instance
-     *
-     * @return \Magento\Customer\Model\Session
-     */
-    protected function _getCustomerSession()
-    {
-        return $this->_customerSession;
     }
 
     /**
@@ -107,8 +70,9 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
     /**
      * Prepare additional conditions to collection
      *
-     * @param \Magento\Wishlist\Model\Resource\Item\Collection $collection
+     * @param \Magento\Wishlist\Model\ResourceModel\Item\Collection $collection
      * @return \Magento\Wishlist\Block\Customer\Wishlist
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _prepareCollection($collection)
     {
@@ -118,7 +82,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
     /**
      * Create wishlist item collection
      *
-     * @return \Magento\Wishlist\Model\Resource\Item\Collection
+     * @return \Magento\Wishlist\Model\ResourceModel\Item\Collection
      */
     protected function _createWishlistItemCollection()
     {
@@ -128,11 +92,11 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
     /**
      * Retrieve Wishlist Product Items collection
      *
-     * @return \Magento\Wishlist\Model\Resource\Item\Collection
+     * @return \Magento\Wishlist\Model\ResourceModel\Item\Collection
      */
     public function getWishlistItems()
     {
-        if (is_null($this->_collection)) {
+        if ($this->_collection === null) {
             $this->_collection = $this->_createWishlistItemCollection();
             $this->_prepareCollection($this->_collection);
         }
@@ -163,14 +127,14 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
     }
 
     /**
-     * Retrieve Add Item to shopping cart URL
+     * Retrieve Add Item to shopping cart params for POST request
      *
      * @param string|\Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $item
      * @return string
      */
-    public function getItemAddToCartUrl($item)
+    public function getItemAddToCartParams($item)
     {
-        return $this->_getHelper()->getAddToCartUrl($item);
+        return $this->_getHelper()->getAddToCartParams($item);
     }
 
     /**
@@ -182,6 +146,16 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
     public function getSharedItemAddToCartUrl($item)
     {
         return $this->_getHelper()->getSharedAddToCartUrl($item);
+    }
+
+    /**
+     * Retrieve URL for adding All items to shopping cart from shared wishlist
+     *
+     * @return string
+     */
+    public function getSharedAddAllToCartUrl()
+    {
+        return $this->_getHelper()->getSharedAddAllToCartUrl();
     }
 
     /**
@@ -240,7 +214,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
      */
     public function getFormatedDate($date)
     {
-        return $this->formatDate($date, \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM);
+        return $this->formatDate($date, \IntlDateFormatter::MEDIUM);
     }
 
     /**
@@ -301,25 +275,9 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
      * @param  array $additional
      * @return string
      */
-    public function getProductUrl($item, $additional = array())
+    public function getProductUrl($item, $additional = [])
     {
-        if ($item instanceof \Magento\Catalog\Model\Product) {
-            $product = $item;
-        } else {
-            $product = $item->getProduct();
-        }
-        $buyRequest = $item->getBuyRequest();
-        if (is_object($buyRequest)) {
-            $config = $buyRequest->getSuperProductConfig();
-            if ($config && !empty($config['product_id'])) {
-                $product = $this->_productFactory->create()->setStoreId(
-                    $this->_storeManager->getStore()->getStoreId()
-                )->load(
-                    $config['product_id']
-                );
-            }
-        }
-        return parent::getProductUrl($product, $additional);
+        return $this->_getHelper()->getProductUrl($item, $additional);
     }
 
     /**
@@ -330,17 +288,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
      */
     public function getImageUrl($product)
     {
-        return (string)$this->_imageHelper->init($product, 'small_image')->resize($this->getImageSize());
-    }
-
-    /**
-     * Product image size getter
-     *
-     * @return int
-     */
-    public function getImageSize()
-    {
-        return $this->getVar('product_image_size', 'Magento_Wishlist');
+        return $this->_imageHelper->init($product, 'wishlist_small_image')->getUrl();
     }
 
     /**

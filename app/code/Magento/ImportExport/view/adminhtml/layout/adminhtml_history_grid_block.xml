@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="adminhtml.import.history.container">
+            <block class="Magento\Backend\Block\Widget\Grid" name="adminhtml.import.history.grid" as="grid">
+                <arguments>
+                    <argument name="id" xsi:type="string">importHistoryGrid</argument>
+                    <argument name="dataSource" xsi:type="object">Magento\ImportExport\Model\ResourceModel\History\Collection</argument>
+                    <argument name="default_sort" xsi:type="string">history_id</argument>
+                    <argument name="default_dir" xsi:type="string">desc</argument>
+                </arguments>
+                <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" as="grid.columnSet" name="import.history.grid.columnSet">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="history_id">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">ID</argument>
+                            <argument name="sortable" xsi:type="string">true</argument>
+                            <argument name="index" xsi:type="string">history_id</argument>
+                            <argument name="column_css_class" xsi:type="string">col-id</argument>
+                            <argument name="header_css_class" xsi:type="string">col-id</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="started_at">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Start Date&amp;Time</argument>
+                            <argument name="type" xsi:type="string">datetime</argument>
+                            <argument name="index" xsi:type="string">started_at</argument>
+                            <argument name="gmtoffset" xsi:type="boolean">true</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="username">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">User</argument>
+                            <argument name="type" xsi:type="string">text</argument>
+                            <argument name="index" xsi:type="string">username</argument>
+                            <argument name="escape" xsi:type="string">1</argument>
+                            <argument name="column_css_class" xsi:type="string">col-name</argument>
+                            <argument name="header_css_class" xsi:type="string">col-name</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="imported_file">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Imported File</argument>
+                            <argument name="index" xsi:type="string">type</argument>
+                            <argument name="sortable" xsi:type="string">0</argument>
+                            <argument name="filter" xsi:type="boolean">0</argument>
+                            <argument name="align" xsi:type="string">center</argument>
+                            <argument name="type" xsi:type="string">action</argument>
+                            <argument name="renderer" xsi:type="string">Magento\ImportExport\Block\Adminhtml\Grid\Column\Renderer\Download</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="error_file">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Error File</argument>
+                            <argument name="index" xsi:type="string">type</argument>
+                            <argument name="sortable" xsi:type="string">0</argument>
+                            <argument name="filter" xsi:type="boolean">0</argument>
+                            <argument name="align" xsi:type="string">center</argument>
+                            <argument name="type" xsi:type="string">action</argument>
+                            <argument name="renderer" xsi:type="string">Magento\ImportExport\Block\Adminhtml\Grid\Column\Renderer\Error</argument>
+                        </arguments>
+                    </block>
+
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="execution_time">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Execution Time</argument>
+                            <argument name="type" xsi:type="string">text</argument>
+                            <argument name="index" xsi:type="string">execution_time</argument>
+                            <argument name="filter" xsi:type="string">0</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="summary">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Summary</argument>
+                            <argument name="type" xsi:type="string">text</argument>
+                            <argument name="index" xsi:type="string">summary</argument>
+                            <argument name="filter" xsi:type="string">0</argument>
+                        </arguments>
+                    </block>
+                </block>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

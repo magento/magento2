@@ -1,32 +1,20 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
 namespace Magento\Backend\Model\Menu;
+
+use Magento\Backend\Model\Menu;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Menu item. Should be used to create nested menu structures with \Magento\Backend\Model\Menu
  *
+ * @api
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @since 100.0.2
  */
 class Item
 {
@@ -117,7 +105,7 @@ class Item
     /**
      * Submenu item list
      *
-     * @var \Magento\Backend\Model\Menu
+     * @var Menu
      */
     protected $_submenu;
 
@@ -145,6 +133,7 @@ class Item
      * Serialized submenu string
      *
      * @var string
+     * @deprecated 100.2.0
      */
     protected $_serializedSubmenu;
 
@@ -159,6 +148,13 @@ class Item
      * @var \Magento\Framework\Module\Manager
      */
     private $_moduleManager;
+
+    /**
+     * Menu item target
+     *
+     * @var string|null
+     */
+    private $target;
 
     /**
      * @param Item\Validator $validator
@@ -178,26 +174,17 @@ class Item
         \Magento\Backend\Model\UrlInterface $urlModel,
         \Magento\Framework\Module\ModuleListInterface $moduleList,
         \Magento\Framework\Module\Manager $moduleManager,
-        array $data = array()
+        array $data = []
     ) {
         $this->_validator = $validator;
         $this->_validator->validate($data);
-
         $this->_moduleManager = $moduleManager;
         $this->_acl = $authorization;
         $this->_scopeConfig = $scopeConfig;
         $this->_menuFactory = $menuFactory;
         $this->_urlModel = $urlModel;
-        $this->_moduleName = isset($data['module']) ? $data['module'] : 'Magento_Backend';
         $this->_moduleList = $moduleList;
-
-        $this->_id = $data['id'];
-        $this->_title = $data['title'];
-        $this->_action = $this->_getArgument($data, 'action');
-        $this->_resource = $this->_getArgument($data, 'resource');
-        $this->_dependsOnModule = $this->_getArgument($data, 'dependsOnModule');
-        $this->_dependsOnConfig = $this->_getArgument($data, 'dependsOnConfig');
-        $this->_tooltip = $this->_getArgument($data, 'toolTip', '');
+        $this->populateFromArray($data);
     }
 
     /**
@@ -224,19 +211,30 @@ class Item
     }
 
     /**
+     * Retrieve item target
+     *
+     * @return string|null
+     * @since 100.2.0
+     */
+    public function getTarget()
+    {
+        return $this->target;
+    }
+
+    /**
      * Check whether item has subnodes
      *
      * @return bool
      */
     public function hasChildren()
     {
-        return !is_null($this->_submenu) && (bool)$this->_submenu->count();
+        return (null !== $this->_submenu) && (bool)$this->_submenu->count();
     }
 
     /**
      * Retrieve submenu
      *
-     * @return \Magento\Backend\Model\Menu
+     * @return Menu
      */
     public function getChildren()
     {
@@ -254,7 +252,7 @@ class Item
     public function getUrl()
     {
         if ((bool)$this->_action) {
-            return $this->_urlModel->getUrl((string)$this->_action, array('_cache_secret_key' => true));
+            return $this->_urlModel->getUrl((string)$this->_action, ['_cache_secret_key' => true]);
         }
         return '#';
     }
@@ -427,7 +425,7 @@ class Item
     {
         if ($this->_dependsOnModule) {
             $module = $this->_dependsOnModule;
-            return !!$this->_moduleList->getModule($module);
+            return $this->_moduleList->has($module);
         }
         return true;
     }
@@ -440,7 +438,7 @@ class Item
     protected function _isConfigDependenciesAvailable()
     {
         if ($this->_dependsOnConfig) {
-            return $this->_scopeConfig->isSetFlag((string)$this->_dependsOnConfig, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+            return $this->_scopeConfig->isSetFlag((string)$this->_dependsOnConfig, ScopeInterface::SCOPE_STORE);
         }
         return true;
     }
@@ -460,45 +458,57 @@ class Item
     }
 
     /**
-     * @return string[]
+     * Get menu item data represented as an array
+     *
+     * @return array
+     * @since 100.2.0
      */
-    public function __sleep()
+    public function toArray()
     {
-        if ($this->_submenu) {
-            $this->_serializedSubmenu = $this->_submenu->serialize();
-        }
-        return array(
-            '_parentId',
-            '_moduleName',
-            '_sortIndex',
-            '_dependsOnConfig',
-            '_id',
-            '_resource',
-            '_path',
-            '_action',
-            '_dependsOnModule',
-            '_tooltip',
-            '_title',
-            '_serializedSubmenu'
-        );
+        return [
+            'parent_id' => $this->_parentId,
+            'module' => $this->_moduleName,
+            'sort_index' => $this->_sortIndex,
+            'dependsOnConfig' => $this->_dependsOnConfig,
+            'id' => $this->_id,
+            'resource' => $this->_resource,
+            'path' => $this->_path,
+            'action' => $this->_action,
+            'dependsOnModule' => $this->_dependsOnModule,
+            'toolTip' => $this->_tooltip,
+            'title' => $this->_title,
+            'target' => $this->target,
+            'sub_menu' => isset($this->_submenu) ? $this->_submenu->toArray() : null
+        ];
     }
 
     /**
+     * Populate the menu item with data from array
+     *
+     * @param array $data
      * @return void
+     * @since 100.2.0
      */
-    public function __wakeup()
+    public function populateFromArray(array $data)
     {
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $this->_moduleManager = $objectManager->get('Magento\Framework\Module\Manager');
-        $this->_validator = $objectManager->get('Magento\Backend\Model\Menu\Item\Validator');
-        $this->_acl = $objectManager->get('Magento\Framework\AuthorizationInterface');
-        $this->_scopeConfig = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface');
-        $this->_menuFactory = $objectManager->get('Magento\Backend\Model\MenuFactory');
-        $this->_urlModel = $objectManager->get('Magento\Backend\Model\UrlInterface');
-        $this->_moduleList = $objectManager->get('Magento\Framework\Module\ModuleListInterface');
-        if ($this->_serializedSubmenu) {
-            $this->_submenu = $this->_menuFactory->create();
-            $this->_submenu->unserialize($this->_serializedSubmenu);
+        $this->_parentId = $this->_getArgument($data, 'parent_id');
+        $this->_moduleName = $this->_getArgument($data, 'module', 'Magento_Backend');
+        $this->_sortIndex = $this->_getArgument($data, 'sort_index');
+        $this->_dependsOnConfig = $this->_getArgument($data, 'dependsOnConfig');
+        $this->_id = $this->_getArgument($data, 'id');
+        $this->_resource = $this->_getArgument($data, 'resource');
+        $this->_path = $this->_getArgument($data, 'path', '');
+        $this->_action = $this->_getArgument($data, 'action');
+        $this->_dependsOnModule = $this->_getArgument($data, 'dependsOnModule');
+        $this->_tooltip = $this->_getArgument($data, 'toolTip');
+        $this->_title = $this->_getArgument($data, 'title');
+        $this->target = $this->_getArgument($data, 'target');
+        if (isset($data['sub_menu'])) {
+            $menu = $this->_menuFactory->create();
+            $menu->populateFromArray($data['sub_menu']);
+            $this->_submenu = $menu;
+        } else {
+            $this->_submenu = null;
         }
     }
 }

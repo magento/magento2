@@ -1,33 +1,64 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE_AFL.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/Framework/Event/etc/events.xsd">
-    <event name="catalog_category_save_commit_after">
-        <observer name="fulltext_reindex" instance="Magento\Catalog\Model\Observer\Reindex" method="fulltextReindex" />
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="magento_catalog_api_data_productinterface_save_before">
+        <observer name="legacy_model_save" instance="Magento\Framework\EntityManager\Observer\BeforeEntitySave" />
     </event>
-    <event name="page_block_html_topmenu_gethtml_before">
-        <observer name="catalog_add_topmenu_items" instance="Magento\Catalog\Model\Observer" method="addCatalogToTopmenuItems" />
+    <event name="magento_catalog_api_data_productinterface_save_after">
+        <observer name="legacy_model_save" instance="Magento\Framework\EntityManager\Observer\AfterEntitySave" />
+    </event>
+    <event name="magento_catalog_api_data_productinterface_delete_before">
+        <observer name="legacy_model_delete" instance="Magento\Framework\EntityManager\Observer\BeforeEntityDelete" />
+    </event>
+    <event name="magento_catalog_api_data_productinterface_delete_after">
+        <observer name="legacy_model_delete" instance="Magento\Framework\EntityManager\Observer\AfterEntityDelete" />
+    </event>
+    <event name="magento_catalog_api_data_productinterface_load_after">
+        <observer name="legacy_model_load" instance="Magento\Framework\EntityManager\Observer\AfterEntityLoad" />
+    </event>
+    <event name="magento_catalog_api_data_categoryinterface_save_before">
+        <observer name="legacy_category_save_before" instance="Magento\Framework\EntityManager\Observer\BeforeEntitySave" />
+    </event>
+    <event name="magento_catalog_api_data_categoryinterface_save_after">
+        <observer name="legacy_category_save_after" instance="Magento\Framework\EntityManager\Observer\AfterEntitySave" />
+    </event>
+    <event name="magento_catalog_api_data_categoryinterface_delete_before">
+        <observer name="legacy_category_delete_before" instance="Magento\Framework\EntityManager\Observer\BeforeEntityDelete" />
+    </event>
+    <event name="magento_catalog_api_data_categoryinterface_delete_after">
+        <observer name="legacy_category_delete_after" instance="Magento\Framework\EntityManager\Observer\AfterEntityDelete" />
+    </event>
+    <event name="magento_catalog_api_data_categoryinterface_load_after">
+        <observer name="legacy_category_load_after" instance="Magento\Framework\EntityManager\Observer\AfterEntityLoad" />
+    </event>
+    <event name="magento_catalog_api_data_categorytreeinterface_save_before">
+        <observer name="legacy_categorytree_save_before" instance="Magento\Framework\EntityManager\Observer\BeforeEntitySave" />
+    </event>
+    <event name="magento_catalog_api_data_categorytreeinterface_save_after">
+        <observer name="legacy_categorytree_save_after" instance="Magento\Framework\EntityManager\Observer\AfterEntitySave" />
+    </event>
+    <event name="magento_catalog_api_data_categorytreeinterface_delete_before">
+        <observer name="legacy_categorytree_delete_before" instance="Magento\Framework\EntityManager\Observer\BeforeEntityDelete" />
+    </event>
+    <event name="magento_catalog_api_data_categorytreeinterface_delete_after">
+        <observer name="legacy_categorytree_delete_after" instance="Magento\Framework\EntityManager\Observer\AfterEntityDelete" />
+    </event>
+    <event name="magento_catalog_api_data_categorytreeinterface_load_after">
+        <observer name="legacy_categorytree_load_after" instance="Magento\Framework\EntityManager\Observer\AfterEntityLoad" />
+    </event>
+    <event name="admin_system_config_changed_section_catalog">
+        <observer name="catalog_update_price_attribute" instance="Magento\Catalog\Observer\SwitchPriceAttributeScopeOnConfigChange" />
+    </event>
+    <event name="catalog_product_save_before">
+        <observer name="set_special_price_start_date" instance="Magento\Catalog\Observer\SetSpecialPriceStartDate" />
+        <observer name="unset_special_price" instance="Magento\Catalog\Observer\UnsetSpecialPrice" />
+    </event>
+    <event name="store_save_after">
+        <observer name="synchronize_website_attributes" instance="Magento\Catalog\Observer\SynchronizeWebsiteAttributesOnStoreChange" />
     </event>
 </config>

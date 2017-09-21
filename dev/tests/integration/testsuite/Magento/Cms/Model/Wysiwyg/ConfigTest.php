@@ -1,32 +1,14 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Model\Wysiwyg;
 
 /**
  * @magentoAppArea adminhtml
  */
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Cms\Model\Wysiwyg\Config
@@ -36,12 +18,12 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Config\ScopeInterface'
+            \Magento\Framework\Config\ScopeInterface::class
         )->setCurrentScope(
             \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
         );
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Cms\Model\Wysiwyg\Config'
+            \Magento\Cms\Model\Wysiwyg\Config::class
         );
     }
 
@@ -51,17 +33,18 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testGetConfig()
     {
         $config = $this->_model->getConfig();
-        $this->assertInstanceOf('Magento\Framework\Object', $config);
+        $this->assertInstanceOf(\Magento\Framework\DataObject::class, $config);
     }
 
     /**
-     * Tests that config returns right urls going to static js library
+     * Tests that config returns right urls going to the published library path
      */
-    public function testGetConfigJsUrls()
+    public function testGetConfigCssUrls()
     {
         $config = $this->_model->getConfig();
-        $this->assertStringMatchesFormat('http://localhost/pub/lib/%s', $config->getPopupCss());
-        $this->assertStringMatchesFormat('http://localhost/pub/lib/%s', $config->getContentCss());
+        $publicPathPattern = 'http://localhost/pub/static/%s/adminhtml/Magento/backend/en_US/mage/%s';
+        $this->assertStringMatchesFormat($publicPathPattern, $config->getPopupCss());
+        $this->assertStringMatchesFormat($publicPathPattern, $config->getContentCss());
     }
 
     /**
@@ -86,34 +69,34 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function getConfigNoProcessingDataProvider()
     {
-        return array(
-            array(
-                array(
+        return [
+            [
+                [
                     'files_browser_window_url' => 'http://example.com/111/',
                     'directives_url' => 'http://example.com/222/',
                     'popup_css' => 'http://example.com/333/popup.css',
                     'content_css' => 'http://example.com/444/content.css',
-                    'directives_url_quoted' => 'http://example.com/555/'
-                )
-            ),
-            array(
-                array(
+                    'directives_url_quoted' => 'http://example.com/555/',
+                ],
+            ],
+            [
+                [
                     'files_browser_window_url' => '/111/',
                     'directives_url' => '/222/',
                     'popup_css' => '/333/popup.css',
                     'content_css' => '/444/content.css',
-                    'directives_url_quoted' => '/555/'
-                )
-            ),
-            array(
-                array(
+                    'directives_url_quoted' => '/555/',
+                ]
+            ],
+            [
+                [
                     'files_browser_window_url' => '111/',
                     'directives_url' => '222/',
                     'popup_css' => '333/popup.css',
                     'content_css' => '444/content.css',
-                    'directives_url_quoted' => '555/'
-                )
-            )
-        );
+                    'directives_url_quoted' => '555/',
+                ]
+            ]
+        ];
     }
 }

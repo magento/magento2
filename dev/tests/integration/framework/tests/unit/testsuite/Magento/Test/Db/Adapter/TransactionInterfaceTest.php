@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -31,7 +13,7 @@
  */
 namespace Magento\Test\Db\Adapter;
 
-class TransactionInterfaceTest extends \PHPUnit_Framework_TestCase
+class TransactionInterfaceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param string $class
@@ -39,12 +21,12 @@ class TransactionInterfaceTest extends \PHPUnit_Framework_TestCase
      */
     public function testBeginTransparentTransaction($class)
     {
-        $adapter = $this->_getAdapterMock($class);
+        $connectionMock = $this->_getConnectionMock($class);
         $uniqid = uniqid();
-        $adapter->expects($this->once())->method('beginTransaction')->will($this->returnValue($uniqid));
-        $this->assertSame(0, $adapter->getTransactionLevel());
-        $this->assertEquals($uniqid, $adapter->beginTransparentTransaction());
-        $this->assertSame(-1, $adapter->getTransactionLevel());
+        $connectionMock->expects($this->once())->method('beginTransaction')->will($this->returnValue($uniqid));
+        $this->assertSame(0, $connectionMock->getTransactionLevel());
+        $this->assertEquals($uniqid, $connectionMock->beginTransparentTransaction());
+        $this->assertSame(-1, $connectionMock->getTransactionLevel());
     }
 
     /**
@@ -53,12 +35,12 @@ class TransactionInterfaceTest extends \PHPUnit_Framework_TestCase
      */
     public function testRollbackTransparentTransaction($class)
     {
-        $adapter = $this->_getAdapterMock($class);
+        $connectionMock = $this->_getConnectionMock($class);
         $uniqid = uniqid();
-        $adapter->expects($this->once())->method('rollback')->will($this->returnValue($uniqid));
-        $adapter->beginTransparentTransaction();
-        $this->assertEquals($uniqid, $adapter->rollbackTransparentTransaction());
-        $this->assertSame(0, $adapter->getTransactionLevel());
+        $connectionMock->expects($this->once())->method('rollback')->will($this->returnValue($uniqid));
+        $connectionMock->beginTransparentTransaction();
+        $this->assertEquals($uniqid, $connectionMock->rollbackTransparentTransaction());
+        $this->assertSame(0, $connectionMock->getTransactionLevel());
     }
 
     /**
@@ -67,12 +49,12 @@ class TransactionInterfaceTest extends \PHPUnit_Framework_TestCase
      */
     public function testCommitTransparentTransaction($class)
     {
-        $adapter = $this->_getAdapterMock($class);
+        $connectionMock = $this->_getConnectionMock($class);
         $uniqid = uniqid();
-        $adapter->expects($this->once())->method('commit')->will($this->returnValue($uniqid));
-        $adapter->beginTransparentTransaction();
-        $this->assertEquals($uniqid, $adapter->commitTransparentTransaction());
-        $this->assertSame(0, $adapter->getTransactionLevel());
+        $connectionMock->expects($this->once())->method('commit')->will($this->returnValue($uniqid));
+        $connectionMock->beginTransparentTransaction();
+        $this->assertEquals($uniqid, $connectionMock->commitTransparentTransaction());
+        $this->assertSame(0, $connectionMock->getTransactionLevel());
     }
 
     /**
@@ -80,12 +62,12 @@ class TransactionInterfaceTest extends \PHPUnit_Framework_TestCase
      */
     public function transparentTransactionDataProvider()
     {
-        $result = array();
+        $result = [];
         $path = '/../../../../../../../Magento/TestFramework/Db/Adapter';
         foreach (glob(realpath(__DIR__ . $path) . '/*.php') as $file) {
             $suffix = basename($file, '.php');
             if (false === strpos($suffix, 'Interface')) {
-                $result[] = array("Magento\\TestFramework\\Db\\Adapter\\{$suffix}");
+                $result[] = ["Magento\\TestFramework\\Db\\Adapter\\{$suffix}"];
             }
         }
         return $result;
@@ -97,10 +79,10 @@ class TransactionInterfaceTest extends \PHPUnit_Framework_TestCase
      * @param string $class
      * @return \Magento\TestFramework\Db\Adapter\TransactionInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected function _getAdapterMock($class)
+    protected function _getConnectionMock($class)
     {
-        $adapter = $this->getMock($class, array('beginTransaction', 'rollback', 'commit'), array(), '', false);
-        $this->assertInstanceOf('Magento\TestFramework\Db\Adapter\TransactionInterface', $adapter);
-        return $adapter;
+        $connection = $this->createPartialMock($class, ['beginTransaction', 'rollback', 'commit']);
+        $this->assertInstanceOf(\Magento\TestFramework\Db\Adapter\TransactionInterface::class, $connection);
+        return $connection;
     }
 }

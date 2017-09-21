@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/pages.xsd">
+    <page name="CustomerAccountLogin" mca="customer/account/login" module="Magento_Customer">
+        <block name="messages" class="Magento\Backend\Test\Block\Messages" locator=".page.messages" strategy="css selector"/>
+        <block name="loginBlock" class="Magento\Customer\Test\Block\Form\Login" locator="#login-form" strategy="css selector"/>
+    </page>
+</config>

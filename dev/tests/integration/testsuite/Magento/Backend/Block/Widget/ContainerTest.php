@@ -1,55 +1,43 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Widget;
 
 /**
  * @magentoAppArea adminhtml
  */
-class ContainerTest extends \PHPUnit_Framework_TestCase
+class ContainerTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @magentoAppIsolation enabled
+     */
     public function testPseudoConstruct()
     {
         /** @var $block \Magento\Backend\Block\Widget\Container */
         $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
-            'Magento\Backend\Block\Widget\Container',
+            \Magento\Backend\Block\Widget\Container::class,
             '',
-            array(
-                'data' => array(
+            [
+                'data' => [
                     \Magento\Backend\Block\Widget\Container::PARAM_CONTROLLER => 'one',
-                    \Magento\Backend\Block\Widget\Container::PARAM_HEADER_TEXT => 'two'
-                )
-            )
+                    \Magento\Backend\Block\Widget\Container::PARAM_HEADER_TEXT => 'two',
+                ]
+            ]
         );
         $this->assertStringEndsWith('one', $block->getHeaderCssClass());
         $this->assertContains('two', $block->getHeaderText());
     }
 
+    /**
+     * @magentoAppIsolation enabled
+     */
     public function testGetButtonsHtml()
     {
-        $titles = array(1 => 'Title 1', 'Title 2', 'Title 3');
+        $titles = [1 => 'Title 1', 'Title 2', 'Title 3'];
         $block = $this->_buildBlock($titles);
         $html = $block->getButtonsHtml('header');
 
@@ -59,19 +47,15 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @magentoAppIsolation enabled
+     */
     public function testUpdateButton()
     {
-        $originalTitles = array(1 => 'Title 1', 'Title 2', 'Title 3');
-        $newTitles = array(1 => 'Button A', 'Button B', 'Button C');
+        $originalTitles = [1 => 'Title 1', 'Title 2', 'Title 3'];
+        $newTitles = [1 => 'Button A', 'Button B', 'Button C'];
 
         $block = $this->_buildBlock($originalTitles);
-        $html = $block->getButtonsHtml('header');
-        foreach ($newTitles as $newTitle) {
-            $this->assertNotContains($newTitle, $html);
-        }
-
-        $block = $this->_buildBlock($originalTitles);
-        // Layout caches html, thus recreate block for further testing
         foreach ($newTitles as $id => $newTitle) {
             $block->updateButton($id, 'title', $newTitle);
         }
@@ -85,19 +69,19 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      * Composes a container with several buttons in it
      *
      * @param array $titles
+     * @param string $blockName
      * @return \Magento\Backend\Block\Widget\Container
      */
-    protected function _buildBlock($titles)
+    protected function _buildBlock($titles, $blockName = 'block')
     {
         /** @var $layout \Magento\Framework\View\LayoutInterface */
-        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\View\Layout',
-            array('area' => \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE)
+        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\Framework\View\LayoutInterface::class
         );
         /** @var $block \Magento\Backend\Block\Widget\Container */
-        $block = $layout->createBlock('Magento\Backend\Block\Widget\Container', 'block');
+        $block = $layout->createBlock(\Magento\Backend\Block\Widget\Container::class, $blockName);
         foreach ($titles as $id => $title) {
-            $block->addButton($id, array('title' => $title), 0, 0, 'header');
+            $block->addButton($id, ['title' => $title], 0, 0, 'header');
         }
         $block->setLayout($layout);
         return $block;

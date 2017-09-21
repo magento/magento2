@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified">
+
+  <xs:complexType name="request">
+    <xs:sequence>
+      <xs:element type="dimensions" name="dimensions" minOccurs="0" maxOccurs="1"/>
+      <xs:element type="queries" name="queries" minOccurs="1" maxOccurs="1">
+        <xs:key name="queryName">
+          <xs:selector xpath="query" />
+          <xs:field xpath="@name" />
+        </xs:key>
+      </xs:element>
+      <xs:element type="filters" name="filters" minOccurs="0" maxOccurs="1">
+        <xs:key name="filterName">
+          <xs:selector xpath="filter" />
+          <xs:field xpath="@name" />
+        </xs:key>
+      </xs:element>
+      <xs:element type="aggregations" name="aggregations" minOccurs="0" maxOccurs="1">
+        <xs:key name="aggregationName">
+          <xs:selector xpath="bucket" />
+          <xs:field xpath="@name" />
+        </xs:key>
+      </xs:element>
+      <xs:element type="xs:string" name="from" />
+      <xs:element type="xs:string" name="size" />
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="query" use="required" />
+    <xs:attribute type="xs:string" name="index" use="required" />
+  </xs:complexType>
+
+  <xs:attribute name="clause">
+    <xs:annotation>
+      <xs:documentation>Specifies how clauses are to occur in matching documents.</xs:documentation>
+    </xs:annotation>
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:enumeration value="must" />
+        <xs:enumeration value="should" />
+        <xs:enumeration value="not" />
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:attribute>
+
+  <xs:complexType name="dimension">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="name" use="required" />
+        <xs:attribute type="xs:string" name="value" use="required" />
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="dimensions">
+    <xs:sequence>
+      <xs:element type="dimension" name="dimension" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- Queries Type hierarchy -->
+  <xs:complexType name="queries">
+    <xs:annotation>
+      <xs:documentation>Definition of queries</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element type="query" name="query" maxOccurs="unbounded" minOccurs="1" />
+    </xs:sequence>
+  </xs:complexType>
+
+
+  <xs:complexType name="query" abstract="true">
+    <xs:attribute type="xs:string" name="name" use="required" />
+    <xs:attribute type="xs:byte" name="boost" use="optional" default="1" />
+  </xs:complexType>
+
+  <xs:complexType name="boolQuery">
+    <xs:complexContent>
+      <xs:extension base="query">
+        <xs:sequence>
+          <xs:element name="queryReference" minOccurs="1" maxOccurs="unbounded">
+            <xs:complexType>
+              <xs:complexContent>
+                <xs:extension base="queryReference" />
+              </xs:complexContent>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="matchQuery">
+    <xs:complexContent>
+      <xs:extension base="query">
+        <xs:sequence>
+          <xs:element type="match" name="match" minOccurs="1" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attribute type="xs:string" name="value" use="required" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="filteredQuery">
+    <xs:complexContent>
+      <xs:extension base="query">
+        <xs:choice minOccurs="1" maxOccurs="1">
+          <xs:element type="filterReference" name="filterReference" />
+          <xs:element type="queryReference" name="queryReference" />
+        </xs:choice>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <!--
+    Filters Type hierarchy
+    Example:
+    <filter xsi:type="termFilter" name="promoted_documents_boost" field="promoted" value="1" />
+    <filter xsi:type="rangeFilter" name="price_name" from="10" to="100" />
+    <filter xsi:type="boolFilter" name="price_name">
+        <filterReference clause="must" name="promoted_documents_filter" />
+    </filter
+  -->
+  <xs:complexType name="filters">
+    <xs:sequence>
+      <xs:element type="filter" name="filter" maxOccurs="unbounded" minOccurs="0" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="filter" abstract="true">
+    <xs:attribute type="xs:string" name="name" use="required" />
+  </xs:complexType>
+
+  <xs:complexType name="termFilter">
+    <xs:complexContent>
+      <xs:extension base="filter">
+        <xs:attribute type="xs:string" name="field" use="required" />
+        <xs:attribute type="xs:string" name="value" use="required" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="wildcardFilter">
+    <xs:complexContent>
+      <xs:extension base="filter">
+        <xs:attribute type="xs:string" name="field" use="required" />
+        <xs:attribute type="xs:string" name="value" use="required" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="rangeFilter">
+    <xs:complexContent>
+      <xs:extension base="filter">
+        <xs:attribute type="xs:string" name="field" use="required" />
+        <xs:attribute type="xs:string" name="from" use="optional" />
+        <xs:attribute type="xs:string" name="to" use="optional" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="boolFilter">
+    <xs:complexContent>
+      <xs:extension base="filter">
+        <xs:sequence>
+          <xs:element type="filterReference" name="filterReference" minOccurs="1" maxOccurs="unbounded" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <!--
+    Buckets Type hierarchy
+      Example:
+      <bucket xsi:type="termBucket" name="category_bucket" field="category">
+      <bucket xsi:type="rangeBucket" name="price_bucket" field="price">
+  -->
+  <xs:complexType name="bucket" abstract="true">
+    <xs:sequence>
+      <xs:element type="metrics" name="metrics" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="name" use="required" />
+    <xs:attribute type="xs:string" name="field" use="required" />
+  </xs:complexType>
+
+  <xs:complexType name="termBucket">
+    <xs:complexContent>
+      <xs:extension base="bucket">
+        </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="rangeBucket">
+    <xs:complexContent>
+      <xs:extension base="bucket">
+        <xs:sequence>
+          <xs:element type="ranges" name="ranges" minOccurs="1" maxOccurs="1" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="dynamicBucket">
+    <xs:complexContent>
+      <xs:extension base="bucket">
+        <xs:attribute type="xs:string" name="method" use="required" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="metrics">
+    <xs:sequence>
+      <xs:element type="metric" name="metric" maxOccurs="unbounded" minOccurs="0" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="match">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="field" use="required" />
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="aggregations">
+    <xs:choice maxOccurs="unbounded" minOccurs="1">
+      <xs:element type="bucket" name="bucket" />
+    </xs:choice>
+  </xs:complexType>
+
+  <xs:complexType name="queryReference">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute ref="clause" use="required" />
+        <xs:attribute type="xs:string" name="ref" use="required" />
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="filterReference">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute ref="clause" use="required" />
+        <xs:attribute type="xs:string" name="ref" use="required" />
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="metric">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="type">
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:enumeration value="sum" />
+              <xs:enumeration value="count" />
+              <xs:enumeration value="min" />
+              <xs:enumeration value="max" />
+              <xs:enumeration value="avg" />
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:attribute>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="ranges">
+    <xs:sequence>
+      <xs:element type="range" name="range" maxOccurs="unbounded" minOccurs="0" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="range">
+    <xs:attribute type="xs:string" name="to" use="required" />
+    <xs:attribute type="xs:string" name="from" use="required" />
+  </xs:complexType>
+</xs:schema>

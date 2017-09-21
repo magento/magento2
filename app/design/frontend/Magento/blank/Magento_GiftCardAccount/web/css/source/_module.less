@@ -1,0 +1,45 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Common
+//  _____________________________________________
+
+& when (@media-common = true) {
+
+    .giftcard-account {
+        .please-wait {
+            display: none;
+        }
+
+        .form-giftcard-redeem {
+            .giftcard.info {
+                margin-bottom: @indent__l;
+            }
+        }
+    }
+
+    .opc-wrapper {
+        .form-giftcard-account {
+            max-width: 500px;
+
+            .field {
+                margin: 0 0 @indent__base;
+
+                .label {
+                    &:extend(.abs-visually-hidden all);
+                }
+            }
+        }
+
+        .giftcard-account-info {
+            margin: 0 0 @indent__base;
+
+            .giftcard-account-number {
+                margin: 0 0 @indent__s;
+            }
+        }
+    }
+}

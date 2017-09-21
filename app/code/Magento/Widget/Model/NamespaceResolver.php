@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Widget\Model;
 
@@ -30,19 +12,19 @@ class NamespaceResolver
      *
      * @var array
      */
-    protected $_moduleNamespaces;
+    protected $moduleNamespaces;
 
     /**
      * @var \Magento\Framework\Module\ModuleListInterface
      */
-    protected $_moduleList;
+    protected $moduleList;
 
     /**
      * @param \Magento\Framework\Module\ModuleListInterface $moduleList
      */
     public function __construct(\Magento\Framework\Module\ModuleListInterface $moduleList)
     {
-        $this->_moduleList = $moduleList;
+        $this->moduleList = $moduleList;
     }
 
     /**
@@ -55,24 +37,12 @@ class NamespaceResolver
      */
     public function determineOmittedNamespace($name, $asFullModuleName = false)
     {
-        if (null === $this->_moduleNamespaces) {
-            $this->_moduleNamespaces = array();
-            foreach ($this->_moduleList->getModules() as $module) {
-                $moduleName = $module['name'];
-                $module = strtolower($moduleName);
-                $this->_moduleNamespaces[substr($module, 0, strpos($module, '_'))][$module] = $moduleName;
-            }
-        }
-
-        $explodeString = strpos(
-            $name,
-            \Magento\Framework\Autoload\IncludePath::NS_SEPARATOR
-        ) === false ? '_' : \Magento\Framework\Autoload\IncludePath::NS_SEPARATOR;
-        $name = explode($explodeString, strtolower($name));
+        $this->prepareModuleNamespaces();
+        $name = $this->prepareName($name);
 
         $partsNum = count($name);
         $defaultNamespaceFlag = false;
-        foreach ($this->_moduleNamespaces as $namespaceName => $namespace) {
+        foreach ($this->moduleNamespaces as $namespaceName => $namespace) {
             // assume the namespace is omitted (default namespace only, which comes first)
             if ($defaultNamespaceFlag === false) {
                 $defaultNamespaceFlag = true;
@@ -90,5 +60,33 @@ class NamespaceResolver
             }
         }
         return '';
+    }
+
+    /**
+     * Prepare module namespaces
+     *
+     * @return void
+     */
+    protected function prepareModuleNamespaces()
+    {
+        if (null === $this->moduleNamespaces) {
+            $this->moduleNamespaces = [];
+            foreach ($this->moduleList->getNames() as $moduleName) {
+                $module = strtolower($moduleName);
+                $this->moduleNamespaces[substr($module, 0, strpos($module, '_'))][$module] = $moduleName;
+            }
+        }
+    }
+
+    /**
+     * Prepare name
+     *
+     * @param string $name
+     * @return array
+     */
+    protected function prepareName($name)
+    {
+        $explodeString = strpos($name, '\\') === false ? '_' : '\\';
+        return explode($explodeString, strtolower($name));
     }
 }

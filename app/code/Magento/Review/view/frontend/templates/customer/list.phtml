@@ -1,0 +1,70 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var \Magento\Review\Block\Customer\ListCustomer $block */
+?>
+<?php if ($block->getReviews() && count($block->getReviews())): ?>
+    <div class="table-wrapper reviews">
+        <table class="data table table-reviews" id="my-reviews-table">
+            <caption class="table-caption"><?= $block->escapeHtml(__('Product Reviews')) ?></caption>
+            <thead>
+                <tr>
+                    <th scope="col" class="col date"><?= $block->escapeHtml(__('Created')) ?></th>
+                    <th scope="col" class="col item"><?= $block->escapeHtml(__('Product Name')) ?></th>
+                    <th scope="col" class="col summary"><?= $block->escapeHtml(__('Rating')) ?></th>
+                    <th scope="col" class="col description"><?= $block->escapeHtml(__('Review')) ?></th>
+                    <th scope="col" class="col actions">&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($block->getReviews() as $_review): ?>
+                <tr>
+                    <td data-th="<?= $block->escapeHtml(__('Created')) ?>" class="col date"><?= $block->escapeHtml($block->dateFormat($_review->getReviewCreatedAt())) ?></td>
+                    <td data-th="<?= $block->escapeHtml(__('Product Name')) ?>" class="col item">
+                        <strong class="product-name">
+                            <a href="<?= $block->escapeUrl($block->getProductUrl($_review)) ?>"><?= $block->escapeHtml($_review->getName()) ?></a>
+                        </strong>
+                    </td>
+                    <td data-th="<?= $block->escapeHtml(__('Rating')) ?>" class="col summary">
+                    <?php if ($_review->getSum()): ?>
+                        <div class="rating-summary">
+                            <span class="label"><span><?= $block->escapeHtml(__('Rating')) ?>:</span></span>
+                            <div class="rating-result" title="<?= /* @noEscape */ ((int)$_review->getSum() / (int)$_review->getCount()) ?>%">
+                                <span style="width:<?= /* @noEscape */ ((int)$_review->getSum() / (int)$_review->getCount()) ?>%;"><span><?= /* @noEscape */ ((int)$_review->getSum() / (int)$_review->getCount()) ?>%</span></span>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                    </td>
+                    <td data-th="<?= $block->escapeHtmlAttr(__('Review')) ?>" class="col description">
+                        <?= $this->helper('Magento\Review\Helper\Data')->getDetailHtml($_review->getDetail()) ?>
+                    </td>
+                    <td data-th="<?= $block->escapeHtmlAttr(__('Actions')) ?>" class="col actions">
+                        <a href="<?= $block->escapeUrl($block->getReviewUrl($_review)) ?>" class="action more">
+                            <span><?= $block->escapeHtml(__('See Details')) ?></span>
+                        </a>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+    <?php if ($block->getToolbarHtml()): ?>
+        <div class="toolbar products-reviews-toolbar bottom">
+            <?= $block->getToolbarHtml() ?>
+        </div>
+    <?php endif; ?>
+<?php else: ?>
+    <div class="message info empty"><span><?= $block->escapeHtml(__('You have submitted no reviews.')) ?></span></div>
+<?php endif; ?>
+<div class="actions-toolbar">
+    <div class="secondary">
+        <a class="action back" href="<?= $block->escapeUrl($block->getBackUrl()) ?>">
+            <span><?= $block->escapeHtml(__('Back')) ?></span>
+        </a>
+    </div>
+</div>

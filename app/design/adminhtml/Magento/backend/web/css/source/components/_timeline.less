@@ -1,0 +1,426 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  _____________________________________________
+
+@timeline__background-color: @color-white-fog2;
+@timeline__border-color: @color-gray60;
+@timeline__margin-top: @indent__base;
+@timeline__scale: 1;
+@timeline__no-records__background-color: @color-white;
+
+@timeline-item__height: 3.6rem;
+@timeline-unit__width: 100%/7;
+
+@timeline-event__background-color: #ccf391;
+@timeline-event__border-color: #81c21d;
+@timeline-event__active__background-color: #bceeff;
+@timeline-event__active__border-color: #56c2e6;
+@timeline-event__active__permanent__color: @color-blue-pure;
+@timeline-event__no-records__background-color: transparent;
+@timeline-event__no-records__border-color: transparent;
+@timeline-event__no-records__color: @color-gray20;
+
+@timeline-action__color: #76c004;
+@timeline-action__active__color: #56c2e6;
+
+@timeline-summary__background-color: #86de00;
+@timeline-summary__active__background-color: #79dcff;
+
+@timeline-legend__color: @color-very-dark-gray;
+@timeline-past__boder-color: fade(@color-tomato-brick, 55);
+
+@timeline-date__background-color: @color-white;
+@timeline-date__color: @color-very-dark-gray-black;
+@timeline-date__padding: 1rem .3rem;
+
+@timeline-priority-scale__color: @color-gray80;
+
+@timeline-unit-gradient-end__color: #979999;
+@timeline-unit-gradient-start__color: #3e4040;
+
+//
+//  Timeline
+//  ---------------------------------------------
+
+.timeline {
+    &:extend(.abs-clearer);
+    margin-top: @timeline__margin-top;
+    position: relative;
+    z-index: 1;
+}
+
+.timeline-content {
+    background: @timeline__background-color;
+    border: 1px solid @timeline__border-color;
+    margin-bottom: @indent__base;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    position: relative;
+
+    &._from-now {
+        padding-left: 50px;
+    }
+
+    &._no-records {
+        background: @timeline__no-records__background-color;
+    }
+}
+
+.timeline-past {
+    background: linear-gradient(to left, fade(@color-white, .1), fade(@color-white, 50) 25%, @color-white);
+    border-right: 2px solid @timeline-past__boder-color;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 50px;
+    z-index: 3;
+}
+
+.timeline-scale {
+    float: right;
+    width: 160px;
+}
+
+.timeline-legend {
+    float: left;
+}
+
+.timeline-legend-item {
+    color: @timeline-legend__color;
+    display: inline-block;
+    line-height: 2rem;
+    vertical-align: middle;
+
+    &:before {
+        border: 1px solid @timeline__border-color;
+        content: '';
+        display: inline-block;
+        height: 2rem;
+        margin-right: 5px;
+        vertical-align: middle;
+        width: 2rem;
+    }
+
+
+    &._update-status-active,
+    &._active {
+        &:before {
+            background: @timeline-event__active__background-color;
+        }
+    }
+
+
+    &._update-status-upcoming,
+    &._upcoming {
+        &:before {
+            background: @timeline-event__background-color;
+        }
+    }
+}
+
+//
+//  Timeline items
+//  ---------------------------------------------
+
+.timeline-items {
+    .extend__list-reset-styles();
+    min-height: @timeline-item__height * 7;
+    position: relative;
+}
+
+.timeline-item {
+    height: @timeline-item__height;
+    position: relative;
+    z-index: 2;
+
+    & + .timeline-item {
+        margin-top: -1px;
+    }
+
+    ._no-records & {
+        margin-top: -@timeline-item__height;
+        position: absolute;
+        top: 50%;
+        width: 100%;
+    }
+}
+
+.timeline-event {
+    .lib-vendor-prefix-display(flex);
+    background: @timeline-event__background-color;
+    border: 1px solid @timeline-event__border-color;
+    cursor: pointer;
+    height: @timeline-item__height;
+    left: -1px;
+    min-width: 5.5rem;
+    overflow: hidden;
+    padding: 0 @indent__s;
+    position: absolute;
+    right: 0;
+    white-space: nowrap;
+    width: auto;
+
+    ._permanent._active &,
+    ._no-records & {
+        justify-content: center;
+        text-align: center;
+    }
+
+    ._permanent._active & {
+        color: @timeline-event__active__permanent__color;
+    }
+
+    .timeline-item._active & {
+        background: @timeline-event__active__background-color;
+        border-color: @timeline-event__active__border-color;
+    }
+
+    ._scroll-start:not(._active) & {
+        padding-left: @indent__l;
+    }
+
+    ._scroll-end & {
+        padding-right: @indent__l;
+    }
+
+    ._permanent & {
+        margin-right: 23px;
+        overflow: visible;
+    }
+
+    ._no-records & {
+        background: @timeline-event__no-records__background-color;
+        border-color: @timeline-event__no-records__border-color;
+        color: @timeline-event__no-records__color;
+        cursor: default;
+    }
+}
+
+.timeline-event-title {
+    .lib-vendor-prefix-flex-shrink(1);
+    display: inline-block;
+    font-weight: @font-weight__semibold;
+    line-height: 3.4rem;
+    max-width: 100%;
+    min-width: 2.2rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    ._no-records & {
+        font-weight: @font-weight__regular;
+    }
+}
+
+.timeline-event-info {
+    display: inline-block;
+    line-height: 3.4rem;
+    vertical-align: top;
+}
+
+.timeline-event-details {
+    display: none;
+}
+
+.timeline-action {
+    bottom: 0;
+    display: none;
+    margin: auto;
+    position: absolute;
+    right: 10px;
+    top: 0;
+
+    > span {
+        .hidden();
+    }
+
+    &:extend(.abs-action-reset all);
+    &:active {
+        .scale();
+    }
+
+    &:before {
+        &:extend(.abs-icon all);
+        .transition(color);
+        color: @timeline-action__color;
+        content: @icon-arrow-right__content;
+        font-size: 1.8rem;
+    }
+
+    &:hover {
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+    .timeline-item._active & {
+        &:before {
+            color: @timeline-action__active__color;
+        }
+    }
+
+    &._tostart {
+        left: 10px;
+        right: auto;
+
+        &:before {
+            content: @icon-arrow-left__content;
+        }
+
+        .timeline-item._scroll-start:not(._active) & {
+            display: block;
+        }
+    }
+
+    &._toend {
+        .timeline-item._scroll-end & {
+            display: block;
+        }
+
+        .timeline-item._permanent & {
+            display: none;
+        }
+    }
+}
+
+//
+//  Timeline svg endings
+//  ---------------------------------------------
+
+svg {
+    .timeline-event & {
+        display: none;
+        height: 3.6rem;
+        margin-right: -2.4rem;
+        position: absolute;
+        right: 0;
+        top: -1px;
+        width: 2.8rem;
+    }
+    ._permanent .timeline-event & {
+        display: block;
+    }
+}
+
+//  Initial symbol styles
+.svg__timeline-ending {
+    fill: inherit;
+    stroke: inherit;
+}
+
+.svg__timeline-arrow {
+    stroke: transparent;
+}
+
+//  Context symbol use styles
+.timeline-ending {
+    color: @timeline-summary__background-color;
+    fill: @timeline-event__background-color;
+    stroke: @timeline-event__border-color;
+
+    .timeline-item._active & {
+        color: @timeline-summary__active__background-color;
+        fill: @timeline-event__active__background-color;
+        stroke: @timeline-event__active__border-color;
+    }
+}
+
+//
+//  Timeline units row
+//  ---------------------------------------------
+
+.timeline-units {
+    .extend__list-reset-styles();
+    font-size: 0;
+    white-space: nowrap;
+}
+
+.timeline-unit {
+    border-right: 1px solid @timeline__border-color;
+    display: inline-block;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: @timeline-unit__width/@timeline__scale;
+
+    &:last-child {
+        border-right: 0;
+    }
+
+    &:before {
+        background-image: repeating-linear-gradient(
+        180deg,
+        transparent,
+        transparent 5px,
+        @timeline-unit-gradient-start__color 5px,
+        @timeline-unit-gradient-start__color 6px,
+        @timeline-unit-gradient-end__color 6px,
+        @timeline-unit-gradient-end__color 7px
+        );
+        bottom: 0;
+        content: '';
+        margin-left: -1px;
+        position: absolute;
+        top: @font-size__tiny + 2rem + .2rem;
+        width: 1px;
+        z-index: 0;
+    }
+
+    &:first-child {
+        &:before {
+            content: none;
+        }
+    }
+
+    ._no-records & {
+        &:before {
+            display: none;
+        }
+    }
+}
+
+.timeline-date {
+    background: @timeline-date__background-color;
+    border-bottom: 1px solid @timeline__border-color;
+    color: @timeline-date__color;
+    display: block;
+    font-size: @font-size__tiny;
+    line-height: 1;
+    max-width: 100%;
+    overflow: hidden;
+    padding: @timeline-date__padding;
+    text-align: center;
+    text-overflow: ellipsis;
+}
+
+//
+//  Priority scale
+//  ---------------------------------------------
+
+.timeline-priority {
+    float: left;
+    font-size: 1.1rem;
+    font-weight: @font-weight__semibold;
+    margin-right: 1.8rem;
+    margin-top: @timeline__margin-top;
+    text-align: center;
+}
+
+.timeline-priority-title {
+    font-weight: @font-weight__bold;
+    padding: @timeline-date__padding;
+}
+
+.timeline-priority-scale {
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    border-top: 210px solid @timeline-priority-scale__color;
+    height: 0;
+    margin: @indent__xs auto;
+    width: 0;
+}

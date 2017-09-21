@@ -1,27 +1,11 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order\Creditmemo\Total;
+
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * Order creditmemo shipping total calculation model
@@ -29,108 +13,134 @@ namespace Magento\Sales\Model\Order\Creditmemo\Total;
 class Shipping extends AbstractTotal
 {
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var PriceCurrencyInterface
      */
-    protected $_storeManager;
+    protected $priceCurrency;
 
     /**
+     * Tax config
+     *
      * @var \Magento\Tax\Model\Config
      */
-    protected $_taxConfig;
+    private $taxConfig;
 
     /**
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Tax\Model\Config $taxConfig
+     * @param PriceCurrencyInterface $priceCurrency
      * @param array $data
      */
     public function __construct(
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Tax\Model\Config $taxConfig,
-        array $data = array()
+        PriceCurrencyInterface $priceCurrency,
+        array $data = []
     ) {
         parent::__construct($data);
-        $this->_storeManager = $storeManager;
-        $this->_taxConfig = $taxConfig;
+        $this->priceCurrency = $priceCurrency;
     }
 
     /**
      * @param \Magento\Sales\Model\Order\Creditmemo $creditmemo
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function collect(\Magento\Sales\Model\Order\Creditmemo $creditmemo)
     {
         $order = $creditmemo->getOrder();
-        $allowedAmount = $order->getShippingAmount() - $order->getShippingRefunded();
-        $baseAllowedAmount = $order->getBaseShippingAmount() - $order->getBaseShippingRefunded();
 
-        $shipping = $order->getShippingAmount();
-        $baseShipping = $order->getBaseShippingAmount();
-        $shippingInclTax = $order->getShippingInclTax();
-        $baseShippingInclTax = $order->getBaseShippingInclTax();
+        // amounts without tax
+        $orderShippingAmount = $order->getShippingAmount();
+        $orderBaseShippingAmount = $order->getBaseShippingAmount();
+        $allowedAmount = $orderShippingAmount - $order->getShippingRefunded();
+        $baseAllowedAmount = $orderBaseShippingAmount - $order->getBaseShippingRefunded();
 
-        $isShippingInclTax = $this->_taxConfig->displaySalesShippingInclTax($order->getStoreId());
+        // amounts including tax
+        $orderShippingInclTax = $order->getShippingInclTax();
+        $orderBaseShippingInclTax = $order->getBaseShippingInclTax();
+        $allowedTaxAmount = $order->getShippingTaxAmount() - $order->getShippingTaxRefunded();
+        $baseAllowedTaxAmount = $order->getBaseShippingTaxAmount() - $order->getBaseShippingTaxRefunded();
+        $allowedAmountInclTax = $allowedAmount + $allowedTaxAmount;
+        $baseAllowedAmountInclTax = $baseAllowedAmount + $baseAllowedTaxAmount;
 
-        /**
-         * Check if shipping amount was specified (from invoice or another source).
-         * Using has magic method to allow setting 0 as shipping amount.
-         */
+        // for the credit memo
+        $shippingAmount = $baseShippingAmount = $shippingInclTax = $baseShippingInclTax = 0;
+
+        // Check if the desired shipping amount to refund was specified (from invoice or another source).
         if ($creditmemo->hasBaseShippingAmount()) {
-            $baseShippingAmount = $this->_storeManager->getStore()->roundPrice($creditmemo->getBaseShippingAmount());
-            if ($isShippingInclTax && $baseShippingInclTax != 0) {
-                $part = $baseShippingAmount / $baseShippingInclTax;
-                $shippingInclTax = $this->_storeManager->getStore()->roundPrice($shippingInclTax * $part);
-                $baseShippingInclTax = $baseShippingAmount;
-                $baseShippingAmount = $this->_storeManager->getStore()->roundPrice($baseShipping * $part);
-            }
-            /*
-             * Rounded allowed shipping refund amount is the highest acceptable shipping refund amount.
-             * Shipping refund amount shouldn't cause errors, if it doesn't exceed that limit.
-             * Note: ($x < $y + 0.0001) means ($x <= $y) for floats
-             */
-            if ($baseShippingAmount < $this->_storeManager->getStore()->roundPrice($baseAllowedAmount) + 0.0001) {
-                /*
-                 * Shipping refund amount should be equated to allowed refund amount,
-                 * if it exceeds that limit.
-                 * Note: ($x > $y - 0.0001) means ($x >= $y) for floats
-                 */
-                if ($baseShippingAmount > $baseAllowedAmount - 0.0001) {
-                    $shipping = $allowedAmount;
-                    $baseShipping = $baseAllowedAmount;
-                } else {
-                    if ($baseShipping != 0) {
-                        $shipping = $shipping * $baseShippingAmount / $baseShipping;
-                    }
-                    $shipping = $this->_storeManager->getStore()->roundPrice($shipping);
-                    $baseShipping = $baseShippingAmount;
+            // For the conditional logic, we will either use amounts that always include tax -OR- never include tax.
+            // The logic uses the 'base' currency to be consistent with what the user (admin) provided as input.
+            $useAmountsWithTax = $this->isSuppliedShippingAmountInclTax($order);
+
+            // Since the user (admin) supplied 'desiredAmount' it already has tax -OR- does not include tax
+            $desiredAmount = $this->priceCurrency->round($creditmemo->getBaseShippingAmount());
+            $maxAllowedAmount = ($useAmountsWithTax ? $baseAllowedAmountInclTax : $baseAllowedAmount);
+            $originalTotalAmount = ($useAmountsWithTax ? $orderBaseShippingInclTax : $orderBaseShippingAmount);
+
+            // Note: ($x < $y + 0.0001) means ($x <= $y) for floats
+            if ($desiredAmount < $this->priceCurrency->round($maxAllowedAmount) + 0.0001) {
+                // since the admin is returning less than the allowed amount, compute the ratio being returned
+                $ratio = 0;
+                if ($originalTotalAmount > 0) {
+                    $ratio = $desiredAmount / $originalTotalAmount;
                 }
+                // capture amounts without tax
+                // Note: ($x > $y - 0.0001) means ($x >= $y) for floats
+                if ($desiredAmount > $maxAllowedAmount - 0.0001) {
+                    $shippingAmount = $allowedAmount;
+                    $baseShippingAmount = $baseAllowedAmount;
+                } else {
+                    $shippingAmount = $this->priceCurrency->round($orderShippingAmount * $ratio);
+                    $baseShippingAmount = $this->priceCurrency->round($orderBaseShippingAmount * $ratio);
+                }
+                $shippingInclTax = $this->priceCurrency->round($orderShippingInclTax * $ratio);
+                $baseShippingInclTax = $this->priceCurrency->round($orderBaseShippingInclTax * $ratio);
             } else {
-                $baseAllowedAmount = $order->getBaseCurrency()->format($baseAllowedAmount, null, false);
-                throw new \Magento\Framework\Model\Exception(
-                    __('Maximum shipping amount allowed to refund is: %1', $baseAllowedAmount)
+                $maxAllowedAmount = $order->getBaseCurrency()->format($maxAllowedAmount, null, false);
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('Maximum shipping amount allowed to refund is: %1', $maxAllowedAmount)
                 );
             }
         } else {
-            if ($baseShipping != 0) {
-                $allowedTaxAmount = $order->getShippingTaxAmount() - $order->getShippingTaxRefunded();
-                $baseAllowedTaxAmount = $order->getBaseShippingTaxAmount() - $order->getBaseShippingTaxRefunded();
-
-                $shippingInclTax = $this->_storeManager->getStore()->roundPrice($allowedAmount + $allowedTaxAmount);
-                $baseShippingInclTax = $this->_storeManager->getStore()->roundPrice(
-                    $baseAllowedAmount + $baseAllowedTaxAmount
-                );
-            }
-            $shipping = $allowedAmount;
-            $baseShipping = $baseAllowedAmount;
+            $shippingAmount = $allowedAmount;
+            $baseShippingAmount = $baseAllowedAmount;
+            $shippingInclTax = $this->priceCurrency->round($allowedAmountInclTax);
+            $baseShippingInclTax = $this->priceCurrency->round($baseAllowedAmountInclTax);
         }
 
-        $creditmemo->setShippingAmount($shipping);
-        $creditmemo->setBaseShippingAmount($baseShipping);
+        $creditmemo->setShippingAmount($shippingAmount);
+        $creditmemo->setBaseShippingAmount($baseShippingAmount);
         $creditmemo->setShippingInclTax($shippingInclTax);
         $creditmemo->setBaseShippingInclTax($baseShippingInclTax);
 
-        $creditmemo->setGrandTotal($creditmemo->getGrandTotal() + $shipping);
-        $creditmemo->setBaseGrandTotal($creditmemo->getBaseGrandTotal() + $baseShipping);
+        $creditmemo->setGrandTotal($creditmemo->getGrandTotal() + $shippingAmount);
+        $creditmemo->setBaseGrandTotal($creditmemo->getBaseGrandTotal() + $baseShippingAmount);
         return $this;
+    }
+
+    /**
+     * Returns whether the user specified a shipping amount that already includes tax
+     *
+     * @param \Magento\Sales\Model\Order $order
+     * @return bool
+     */
+    private function isSuppliedShippingAmountInclTax($order)
+    {
+        // returns true if we are only displaying shipping including tax, otherwise returns false
+        return $this->getTaxConfig()->displaySalesShippingInclTax($order->getStoreId());
+    }
+
+    /**
+     * Get the Tax Config.
+     * In a future release, will become a constructor parameter.
+     *
+     * @return \Magento\Tax\Model\Config
+     *
+     * @deprecated 100.1.0
+     */
+    private function getTaxConfig()
+    {
+        if ($this->taxConfig === null) {
+            $this->taxConfig = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                \Magento\Tax\Model\Config::class
+            );
+        }
+        return $this->taxConfig;
     }
 }

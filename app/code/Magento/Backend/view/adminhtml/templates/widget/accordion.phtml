@@ -1,0 +1,29 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+/**
+ * Template for \Magento\Backend\Block\Widget\Accordion
+ */
+$items = $block->getItems();
+?>
+<?php if (!empty($items)): ?>
+    <dl id="tab_content_<?= $block->getHtmlId() ?>" name="tab_content_<?= $block->getHtmlId() ?>" class="accordion">
+    <?php foreach ($items as $_item): ?>
+        <?= $block->getChildHtml($_item->getId()) ?>
+    <?php endforeach ?>
+    </dl>
+    <script>
+        require([
+            'mage/adminhtml/accordion'
+        ], function(){
+        	tab_content_<?= $block->getHtmlId() ?>AccordionJs = new varienAccordion('tab_content_<?= $block->getHtmlId() ?>', '<?= /* @escapeNotVerified */ $block->getShowOnlyOne() ?>');
+    	});
+    </script>
+<?php endif; ?>

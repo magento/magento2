@@ -1,27 +1,8 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
-
 
 /**
  * Product options block
@@ -32,6 +13,11 @@ namespace Magento\Catalog\Block\Product\View;
 
 use Magento\Catalog\Model\Product;
 
+/**
+ * @api
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
+ */
 class Options extends \Magento\Framework\View\Element\Template
 {
     /**
@@ -54,13 +40,6 @@ class Options extends \Magento\Framework\View\Element\Template
     protected $_registry = null;
 
     /**
-     * Tax data
-     *
-     * @var \Magento\Tax\Helper\Data
-     */
-    protected $_taxData = null;
-
-    /**
      * Catalog product
      *
      * @var Product
@@ -73,15 +52,20 @@ class Options extends \Magento\Framework\View\Element\Template
     protected $_jsonEncoder;
 
     /**
-     * @var \Magento\Core\Helper\Data
+     * @var \Magento\Framework\Pricing\Helper\Data
      */
-    protected $_coreData;
+    protected $pricingHelper;
+
+    /**
+     * @var \Magento\Catalog\Helper\Data
+     */
+    protected $_catalogData;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Framework\Pricing\Helper\Data $pricingHelper
+     * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
-     * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Catalog\Model\Product\Option $option
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Stdlib\ArrayUtils $arrayUtils
@@ -89,19 +73,19 @@ class Options extends \Magento\Framework\View\Element\Template
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\Framework\Pricing\Helper\Data $pricingHelper,
+        \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
-        \Magento\Tax\Helper\Data $taxData,
         \Magento\Catalog\Model\Product\Option $option,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Stdlib\ArrayUtils $arrayUtils,
-        array $data = array()
+        array $data = []
     ) {
-        $this->_coreData = $coreData;
+        $this->pricingHelper = $pricingHelper;
+        $this->_catalogData = $catalogData;
         $this->_jsonEncoder = $jsonEncoder;
         $this->_registry = $registry;
         $this->_option = $option;
-        $this->_taxData = $taxData;
         $this->arrayUtils = $arrayUtils;
         parent::__construct($context, $data);
     }
@@ -176,13 +160,43 @@ class Options extends \Magento\Framework\View\Element\Template
      */
     protected function _getPriceConfiguration($option)
     {
-        $data = array();
-        $data['price'] = $this->_coreData->currency($option->getPrice(true), false, false);
-        $data['oldPrice'] = $this->_coreData->currency($option->getPrice(false), false, false);
-        $data['priceValue'] = $option->getPrice(false);
-        $data['type'] = $option->getPriceType();
-        $data['exclTaxPrice'] = $price = $this->_taxData->getPrice($option->getProduct(), $data['price'], false);
-        $data['inclTaxPrice'] = $price = $this->_taxData->getPrice($option->getProduct(), $data['price'], true);
+        $optionPrice = $this->pricingHelper->currency($option->getPrice(true), false, false);
+        $data = [
+            'prices' => [
+                'oldPrice' => [
+                    'amount' => $this->pricingHelper->currency($option->getRegularPrice(), false, false),
+                    'adjustments' => [],
+                ],
+                'basePrice' => [
+                    'amount' => $this->_catalogData->getTaxPrice(
+                        $option->getProduct(),
+                        $optionPrice,
+                        false,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        false
+                    ),
+                ],
+                'finalPrice' => [
+                    'amount' => $this->_catalogData->getTaxPrice(
+                        $option->getProduct(),
+                        $optionPrice,
+                        true,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        false
+                    ),
+                ],
+            ],
+            'type' => $option->getPriceType(),
+            'name' => $option->getTitle()
+        ];
         return $data;
     }
 
@@ -193,23 +207,31 @@ class Options extends \Magento\Framework\View\Element\Template
      */
     public function getJsonConfig()
     {
-        $config = array();
+        $config = [];
         foreach ($this->getOptions() as $option) {
             /* @var $option \Magento\Catalog\Model\Product\Option */
-            $priceValue = 0;
-            if ($option->getGroupByType() == \Magento\Catalog\Model\Product\Option::OPTION_GROUP_SELECT) {
-                $_tmpPriceValues = array();
-                foreach ($option->getValues() as $value) {
-                    /* @var $value \Magento\Catalog\Model\Product\Option\Value */
-                    $id = $value->getId();
-                    $_tmpPriceValues[$id] = $this->_getPriceConfiguration($value);
+            if ($option->hasValues()) {
+                $tmpPriceValues = [];
+                foreach ($option->getValues() as $valueId => $value) {
+                    $tmpPriceValues[$valueId] = $this->_getPriceConfiguration($value);
                 }
-                $priceValue = $_tmpPriceValues;
+                $priceValue = $tmpPriceValues;
             } else {
                 $priceValue = $this->_getPriceConfiguration($option);
             }
             $config[$option->getId()] = $priceValue;
         }
+
+        $configObj = new \Magento\Framework\DataObject(
+            [
+                'config' => $config,
+            ]
+        );
+
+        //pass the return array encapsulated in an object for the other modules to be able to alter it eg: weee
+        $this->_eventManager->dispatch('catalog_product_option_price_configuration_after', ['configObj' => $configObj]);
+
+        $config=$configObj->getConfig();
 
         return $this->_jsonEncoder->encode($config);
     }

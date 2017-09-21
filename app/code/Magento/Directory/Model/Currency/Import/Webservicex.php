@@ -1,64 +1,51 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
+namespace Magento\Directory\Model\Currency\Import;
 
 /**
  * Currency rate import model (From www.webservicex.net)
  */
-namespace Magento\Directory\Model\Currency\Import;
-
 class Webservicex extends \Magento\Directory\Model\Currency\Import\AbstractImport
 {
     /**
-     * @var string
+     * Currency converter url
      */
-    protected $_url = 'http://www.webservicex.net/CurrencyConvertor.asmx/ConversionRate?FromCurrency={{CURRENCY_FROM}}&ToCurrency={{CURRENCY_TO}}';
+    const CURRENCY_CONVERTER_URL = 'http://www.webservicex.net/CurrencyConvertor.asmx/ConversionRate'
+        . '?FromCurrency={{CURRENCY_FROM}}&ToCurrency={{CURRENCY_TO}}';
 
     /**
-     * HTTP client
+     * Http Client Factory
      *
-     * @var \Magento\Framework\HTTP\ZendClient
+     * @var \Magento\Framework\HTTP\ZendClientFactory
      */
-    protected $_httpClient;
+    protected $httpClientFactory;
 
     /**
-     * Core store config
+     * Core scope config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $_scopeConfig;
+    private $scopeConfig;
 
     /**
+     * Constructor
+     *
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\HTTP\ZendClientFactory|null $zendClientFactory
      */
     public function __construct(
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\HTTP\ZendClientFactory $zendClientFactory = null
     ) {
         parent::__construct($currencyFactory);
-        $this->_scopeConfig = $scopeConfig;
-        $this->_httpClient = new \Magento\Framework\HTTP\ZendClient();
+        $this->scopeConfig = $scopeConfig;
+        $this->httpClientFactory = $zendClientFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\HTTP\ZendClientFactory::class);
     }
 
     /**
@@ -69,25 +56,27 @@ class Webservicex extends \Magento\Directory\Model\Currency\Import\AbstractImpor
      */
     protected function _convert($currencyFrom, $currencyTo, $retry = 0)
     {
-        $url = str_replace('{{CURRENCY_FROM}}', $currencyFrom, $this->_url);
+        $url = str_replace('{{CURRENCY_FROM}}', $currencyFrom, self::CURRENCY_CONVERTER_URL);
         $url = str_replace('{{CURRENCY_TO}}', $currencyTo, $url);
+        /** @var \Magento\Framework\HTTP\ZendClient $httpClient */
+        $httpClient = $this->httpClientFactory->create();
 
         try {
-            $response = $this->_httpClient->setUri(
+            $response = $httpClient->setUri(
                 $url
             )->setConfig(
-                array(
-                    'timeout' => $this->_scopeConfig->getValue(
+                [
+                    'timeout' => $this->scopeConfig->getValue(
                         'currency/webservicex/timeout',
                         \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-                    )
-                )
+                    ),
+                ]
             )->request(
                 'GET'
             )->getBody();
 
             $xml = simplexml_load_string($response, null, LIBXML_NOERROR);
-            if (!$xml) {
+            if (!$xml || (isset($xml[0]) && $xml[0] == -1)) {
                 $this->_messages[] = __('We can\'t retrieve a rate from %1.', $url);
                 return null;
             }

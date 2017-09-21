@@ -1,0 +1,332 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var $block \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery\Content */
+$elementName = $block->getElement()->getName() . '[images]';
+$formName = $block->getFormName();
+?>
+
+<div class="row">
+    <div class="add-video-button-container">
+        <button id="add_video_button"
+                title="<?= $block->escapeHtml(__('Add Video')) ?>"
+                data-role="add-video-button"
+                type="button"
+                class="action-secondary"
+                data-ui-id="widget-button-1">
+            <span><?= $block->escapeHtml(__('Add Video')) ?></span>
+        </button>
+    </div>
+</div>
+
+<?php
+/** @var $block \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery\Content */
+$element = $block->getElement();
+$elementToggleCode = $element->getToggleCode() ? $element->getToggleCode() : 'toggleValueElements(this, this.parentNode.parentNode.parentNode)';
+?>
+
+<div id="<?= $block->getHtmlId() ?>"
+     class="gallery"
+     data-mage-init='{"openVideoModal":{}}'
+     data-parent-component="<?= $block->escapeHtml($block->getData('config/parentComponent')) ?>"
+     data-images="<?= $block->escapeHtml($block->getImagesJson()) ?>"
+     data-types="<?= $block->escapeHtml(
+         $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getImageTypes())
+     ) ?>"
+>
+
+    <?php
+    if (!$block->getElement()->getReadonly()):
+        ?>
+        <div class="image image-placeholder">
+            <?php /* @escapeNotVerified */ echo $block->getUploaderHtml();
+            ?>
+            <div class="product-image-wrapper">
+                <p class="image-placeholder-text">
+                    <?= $block->escapeHtml(
+                        __('Browse to find or drag image here')
+                    ); ?>
+                </p>
+            </div>
+        </div>
+        <?= /* @escapeNotVerified */ $block->getChildHtml('additional_buttons') ?>
+        <?php
+    endif;
+    ?>
+    <?php
+    foreach ($block->getImageTypes() as $typeData):
+        ?>
+        <input name="<?= $block->escapeHtml($typeData['name']) ?>"
+               data-form-part="<?= /* @escapeNotVerified */ $formName ?>"
+               class="image-<?= $block->escapeHtml($typeData['code']) ?>"
+               type="hidden"
+               value="<?= $block->escapeHtml($typeData['value']) ?>"/>
+        <?php
+    endforeach;
+    ?>
+    <script id="<?= /* @escapeNotVerified */ $block->getHtmlId() ?>-template" data-template="image" type="text/x-magento-template">
+        <div class="image item <% if (data.disabled == 1) { %>hidden-for-front<% } %>  <% if (data.video_url) { %>video-item<% } %>"
+             data-role="image">
+            <input type="hidden"
+                   name="<?= /* @escapeNotVerified */ $elementName ?>[<%- data.file_id %>][position]"
+                   value="<%- data.position %>"
+                   data-form-part="<?= /* @escapeNotVerified */ $formName ?>"
+                   class="position"/>
+            <% if (data.media_type !== 'external-video') {%>
+            <input type="hidden"
+                   name="<?= /* @escapeNotVerified */ $elementName ?>[<%- data.file_id %>][media_type]"
+                   data-form-part="<?= /* @escapeNotVerified */ $formName ?>"
+                   value="image"/>
+            <% } else { %>
+            <input type="hidden"
+                   name="<?= /* @escapeNotVerified */ $elementName ?>[<%- data.file_id %>][media_type]"
+                   value="<%- data.media_type %>"
+                   data-form-part="<?= /* @escapeNotVerified */ $formName ?>"/>
+            <% } %>
+            <input type="hidden"
+                   name="<?= /* @escapeNotVerified */ $elementName ?>[<%- data.file_id %>][video_provider]"
+                   value="<%- data.video_provider %>"
+                   data-form-part="<?= /* @escapeNotVerified */ $formName ?>"/>
+            <input type="hidden"
+                   name="<?= /* @escapeNotVerified */ $elementName ?>[<%- data.file_id %>][file]"
+                   value="<%- data.file %>"
+                   data-form-part="<?= /* @escapeNotVerified */ $formName ?>"/>
+            <input type="hidden"
+                   name="<?= /* @escapeNotVerified */ $elementName ?>[<%- data.file_id %>][value_id]"
+                   value="<%- data.value_id %>"
+                   data-form-part="<?= /* @escapeNotVerified */ $formName ?>"/>
+            <input type="hidden"
+                   name="<?= /* @escapeNotVerified */ $elementName ?>[<%- data.file_id %>][label]"
+                   value="<%- data.label %>"
+                   data-form-part="<?= /* @escapeNotVerified */ $formName ?>"/>
+            <input type="hidden"
+                   name="<?= /* @escapeNotVerified */ $elementName ?>[<%- data.file_id %>][disabled]"
+                   value="<%- data.disabled %>"
+                   data-form-part="<?= /* @escapeNotVerified */ $formName ?>"/>
+            <input type="hidden"
+                   name="<?= /* @escapeNotVerified */ $elementName ?>[<%- data.file_id %>][removed]"
+                   value="" class="is-removed"
+                   data-form-part="<?= /* @escapeNotVerified */ $formName ?>"/>
+            <input type="hidden"
+                   name="<?= /* @escapeNotVerified */ $elementName ?>[<%- data.file_id %>][video_url]"
+                   value="<%- data.video_url %>"
+                   data-form-part="<?= /* @escapeNotVerified */ $formName ?>"/>
+            <input type="hidden"
+                   name="<?= /* @escapeNotVerified */ $elementName ?>[<%- data.file_id %>][video_title]"
+                   value="<%- data.video_title %>"
+                   data-form-part="<?= /* @escapeNotVerified */ $formName ?>"/>
+            <input type="hidden"
+                   name="<?= /* @escapeNotVerified */ $elementName ?>[<%- data.file_id %>][video_description]"
+                   value="<%- data.video_description %>"
+                   data-form-part="<?= /* @escapeNotVerified */ $formName ?>"/>
+            <input type="hidden"
+                   name="<?= /* @escapeNotVerified */ $elementName ?>[<%- data.file_id %>][video_metadata]"
+                   value="<%- data.video_metadata %>"
+                   data-form-part="<?= /* @escapeNotVerified */ $formName ?>"/>
+            <input type="hidden"
+                   name="<?= /* @escapeNotVerified */ $elementName ?>[<%- data.file_id %>][role]"
+                   value="<%- data.video_description %>"
+                   data-form-part="<?= /* @escapeNotVerified */ $formName ?>"/>
+
+            <div class="product-image-wrapper">
+                <img class="product-image"
+                     data-role="image-element"
+                     src="<%- data.url %>"
+                     alt="<%- data.label %>"/>
+
+                <div class="actions">
+                    <button type="button"
+                            class="action-remove"
+                            data-role="delete-button"
+                            title="<% if (data.media_type == 'external-video') {%>
+                            <?= $block->escapeHtml(
+                                __('Delete video')
+                            ); ?>
+                        <%} else {%>
+                            <?= $block->escapeHtml(
+                                __('Delete image')
+                            ); ?>
+                        <%}%>">
+                    <span>
+                        <% if (data.media_type == 'external-video') { %>
+                        <?= $block->escapeHtml(
+                            __('Delete video')
+                        ); ?>
+                        <% } else {%>
+                        <?= $block->escapeHtml(
+                            __('Delete image')
+                        ); ?>
+                        <%} %>
+                    </span>
+                    </button>
+                    <div class="draggable-handle"></div>
+                </div>
+                <div class="image-fade"><span><?= $block->escapeHtml(
+                            __('Hidden')
+                        ); ?></span></div>
+            </div>
+
+            <div class="item-description">
+                <% if (data.media_type !== 'external-video') {%>
+                <div class="item-title" data-role="img-title"><%- data.label %></div>
+                <div class="item-size">
+                    <span data-role="image-dimens"></span>, <span data-role="image-size"><%- data.sizeLabel %></span>
+                </div>
+                <% } else { %>
+                <div class="item-title" data-role="img-title"><%- data.video_title %></div>
+                <% } %>
+            </div>
+
+            <ul class="item-roles" data-role="roles-labels">
+                <?php
+                foreach ($block->getImageTypes() as $typeData):
+                    ?>
+                    <li data-role-code="<?= $block->escapeHtml(
+                        $typeData['code']
+                    ) ?>" class="item-role item-role-<?= $block->escapeHtml(
+                        $typeData['code']
+                    ) ?>">
+                        <?= $block->escapeHtml($typeData['label']) ?>
+                    </li>
+                    <?php
+                endforeach;
+                ?>
+            </ul>
+        </div>
+    </script>
+
+    <script data-role="img-dialog-container-tmpl" type="text/x-magento-template">
+        <div class="image-panel" data-role="dialog">
+        </div>
+    </script>
+
+    <script data-role="img-dialog-tmpl" type="text/x-magento-template">
+        <div class="image-panel-preview">
+            <img src="<%- data.url %>" alt="<%- data.label %>" />
+        </div>
+        <div class="image-panel-controls">
+            <strong class="image-name"><%- data.label %></strong>
+
+            <fieldset class="admin__fieldset fieldset-image-panel">
+                <div class="admin__field field-image-description">
+                    <label class="admin__field-label" for="image-description">
+                        <span><?= /* @escapeNotVerified */ __('Alt Text') ?></span>
+                    </label>
+
+                    <div class="admin__field-control">
+                            <textarea data-role="image-description"
+                                      rows="3"
+                                      class="admin__control-textarea"
+                                      name="<?php /* @escapeNotVerified */
+                                      echo $elementName
+                                      ?>[<%- data.file_id %>][label]"><%- data.label %></textarea>
+                    </div>
+                </div>
+
+                <div class="admin__field field-image-role">
+                    <label class="admin__field-label">
+                            <span><?= $block->escapeHtml(
+                                    __('Role')
+                                ); ?></span>
+                    </label>
+                    <div class="admin__field-control">
+                        <ul class="multiselect-alt">
+                            <?php
+                            foreach ($block->getMediaAttributes() as $attribute) :
+                                ?>
+                                <li class="item">
+                                    <label>
+                                        <input class="image-type"
+                                               data-role="type-selector"
+                                               data-form-part="<?= /* @escapeNotVerified */ $formName ?>"
+                                               type="checkbox"
+                                               value="<?= $block->escapeHtml(
+                                                   $attribute->getAttributeCode()
+                                               ) ?>"
+                                        />
+                                        <?php /* @escapeNotVerified */ echo $block->escapeHtml(
+                                            $attribute->getFrontendLabel()
+                                        ) ?>
+                                    </label>
+                                </li>
+                                <?php
+                            endforeach;
+                            ?>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="admin__field admin__field-inline field-image-size" data-role="size">
+                    <label class="admin__field-label">
+                        <span><?= /* @escapeNotVerified */ __('Image Size') ?></span>
+                    </label>
+                    <div class="admin__field-value" data-message="<?= /* @escapeNotVerified */ __('{size}') ?>"></div>
+                </div>
+
+                <div class="admin__field admin__field-inline field-image-resolution" data-role="resolution">
+                    <label class="admin__field-label">
+                        <span><?= /* @escapeNotVerified */ __('Image Resolution') ?></span>
+                    </label>
+                    <div class="admin__field-value" data-message="<?= /* @escapeNotVerified */ __('{width}^{height} px') ?>"></div>
+                </div>
+
+                <div class="admin__field field-image-hide">
+                    <div class="admin__field-control">
+                        <div class="admin__field admin__field-option">
+                            <input type="checkbox"
+                                   id="hide-from-product-page"
+                                   data-role="visibility-trigger"
+                                   data-form-part="<?= /* @escapeNotVerified */ $formName ?>"
+                                   value="1"
+                                   class="admin__control-checkbox"
+                                   name="<?= /* @escapeNotVerified */ $elementName ?>[<%- data.file_id %>][disabled]"
+                            <% if (data.disabled == 1) { %>checked="checked"<% } %> />
+
+                            <label for="hide-from-product-page" class="admin__field-label">
+                                <?= $block->escapeHtml(
+                                    __('Hide from Product Page')
+                                ); ?>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </script>
+    <div id="<?= /* @noEscape */ $block->getNewVideoBlockName() ?>" style="display:none">
+        <?= /* @escapeNotVerified */ $block->getFormHtml() ?>
+        <div id="video-player-preview-location" class="video-player-sidebar">
+            <div class="video-player-container"></div>
+            <div class="video-information title">
+                <label><?= $block->escapeHtml(
+                        __('Title:')
+                    ); ?> </label><span></span>
+            </div>
+            <div class="video-information uploaded">
+                <label><?= $block->escapeHtml(
+                        __('Uploaded:')
+                    ); ?> </label><span></span>
+            </div>
+            <div class="video-information uploader">
+                <label><?= $block->escapeHtml(
+                        __('Uploader:')
+                    ); ?> </label><span></span>
+            </div>
+            <div class="video-information duration">
+                <label><?= $block->escapeHtml(
+                        __('Duration:')
+                    ); ?> </label><span></span>
+            </div>
+        </div>
+    </div>
+
+    <?= $block->getChildHtml('new-video') ?>
+</div>
+<script>
+    jQuery('body').trigger('contentUpdated');
+</script>

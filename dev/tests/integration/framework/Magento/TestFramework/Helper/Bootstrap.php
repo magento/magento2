@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -35,7 +17,7 @@ class Bootstrap
     private static $_instance;
 
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     private static $_objectManager;
 
@@ -48,12 +30,12 @@ class Bootstrap
      * Set self instance for static access
      *
      * @param \Magento\TestFramework\Helper\Bootstrap $instance
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public static function setInstance(\Magento\TestFramework\Helper\Bootstrap $instance)
     {
         if (self::$_instance) {
-            throw new \Magento\Framework\Exception('Helper instance cannot be redefined.');
+            throw new \Magento\Framework\Exception\LocalizedException(__('Helper instance cannot be redefined.'));
         }
         self::$_instance = $instance;
     }
@@ -62,12 +44,12 @@ class Bootstrap
      * Self instance getter
      *
      * @return \Magento\TestFramework\Helper\Bootstrap
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public static function getInstance()
     {
         if (!self::$_instance) {
-            throw new \Magento\Framework\Exception('Helper instance is not defined yet.');
+            throw new \Magento\Framework\Exception\LocalizedException(__('Helper instance is not defined yet.'));
         }
         return self::$_instance;
     }
@@ -100,9 +82,9 @@ class Bootstrap
      *
      * @return string
      */
-    public function getAppInstallDir()
+    public function getAppTempDir()
     {
-        return $this->_bootstrap->getApplication()->getInstallDir();
+        return $this->_bootstrap->getApplication()->getTempDir();
     }
 
     /**
@@ -116,22 +98,12 @@ class Bootstrap
     }
 
     /**
-     * Retrieve the database vendor name used by the bootstrap
-     *
-     * @return string
-     */
-    public function getDbVendorName()
-    {
-        return $this->_bootstrap->getDbVendorName();
-    }
-
-    /**
      * Reinitialize the application instance optionally passing parameters to be overridden.
      * Intended to be used for the tests isolation purposes.
      *
      * @param array $overriddenParams
      */
-    public function reinitialize(array $overriddenParams = array())
+    public function reinitialize(array $overriddenParams = [])
     {
         $this->_bootstrap->getApplication()->reinitialize($overriddenParams);
     }
@@ -148,7 +120,7 @@ class Bootstrap
     /**
      * Retrieve object manager
      *
-     * @return \Magento\Framework\ObjectManager
+     * @return \Magento\Framework\ObjectManagerInterface
      */
     public static function getObjectManager()
     {
@@ -158,9 +130,9 @@ class Bootstrap
     /**
      * Set object manager
      *
-     * @param \Magento\Framework\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      */
-    public static function setObjectManager(\Magento\Framework\ObjectManager $objectManager)
+    public static function setObjectManager(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
         self::$_objectManager = $objectManager;
     }
@@ -181,7 +153,7 @@ class Bootstrap
      */
     public function loadArea($areaCode)
     {
-        self::$_objectManager->get('Magento\Framework\App\State')->setAreaCode($areaCode);
-        self::$_objectManager->get('Magento\Framework\App\AreaList')->getArea($areaCode)->load();
+        self::$_objectManager->get(\Magento\Framework\App\State::class)->setAreaCode($areaCode);
+        self::$_objectManager->get(\Magento\Framework\App\AreaList::class)->getArea($areaCode)->load();
     }
 }

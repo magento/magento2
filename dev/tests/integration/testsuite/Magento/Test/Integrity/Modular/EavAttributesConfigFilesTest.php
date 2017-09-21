@@ -1,29 +1,13 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity\Modular;
 
-class EavAttributesConfigFilesTest extends \PHPUnit_Framework_TestCase
+use Magento\Framework\Component\ComponentRegistrar;
+
+class EavAttributesConfigFilesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Eav\Model\Entity\Attribute\Config\Reader
@@ -33,24 +17,22 @@ class EavAttributesConfigFilesTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var $filesystem \Magento\Framework\App\Filesystem */
-        $filesystem = $objectManager->get('Magento\Framework\App\Filesystem');
-        $modulesDirectory = $filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem::MODULES_DIR);
-        $fileIteratorFactory = $objectManager->get('Magento\Framework\Config\FileIteratorFactory');
+        /** @var $moduleDirSearch \Magento\Framework\Component\DirSearch */
+        $moduleDirSearch = $objectManager->get(\Magento\Framework\Component\DirSearch::class);
+        $fileIteratorFactory = $objectManager->get(\Magento\Framework\Config\FileIteratorFactory::class);
         $xmlFiles = $fileIteratorFactory->create(
-            $modulesDirectory,
-            $modulesDirectory->search('/*/*/etc/{*/eav_attributes.xml,eav_attributes.xml}')
+            $moduleDirSearch->collectFiles(ComponentRegistrar::MODULE, 'etc/{*/eav_attributes.xml,eav_attributes.xml}')
         );
 
-        $validationStateMock = $this->getMock('Magento\Framework\Config\ValidationStateInterface');
-        $validationStateMock->expects($this->any())->method('isValidated')->will($this->returnValue(true));
-        $fileResolverMock = $this->getMock('Magento\Framework\Config\FileResolverInterface');
+        $validationStateMock = $this->createMock(\Magento\Framework\Config\ValidationStateInterface::class);
+        $validationStateMock->expects($this->any())->method('isValidationRequired')->will($this->returnValue(true));
+        $fileResolverMock = $this->createMock(\Magento\Framework\Config\FileResolverInterface::class);
         $fileResolverMock->expects($this->any())->method('get')->will($this->returnValue($xmlFiles));
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         $this->_model = $objectManager->create(
-            'Magento\Eav\Model\Entity\Attribute\Config\Reader',
-            array('fileResolver' => $fileResolverMock, 'validationState' => $validationStateMock)
+            \Magento\Eav\Model\Entity\Attribute\Config\Reader::class,
+            ['fileResolver' => $fileResolverMock, 'validationState' => $validationStateMock]
         );
     }
 

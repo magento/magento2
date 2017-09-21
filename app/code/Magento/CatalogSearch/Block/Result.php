@@ -1,38 +1,23 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Block;
 
 use Magento\Catalog\Block\Product\ListProduct;
-use Magento\Catalog\Model\Layer\Search as ModelLayer;
+use Magento\Catalog\Model\Layer\Resolver as LayerResolver;
 use Magento\CatalogSearch\Helper\Data;
-use Magento\CatalogSearch\Model\Query;
-use Magento\CatalogSearch\Model\Resource\Fulltext\Collection;
+use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
+use Magento\Search\Model\QueryFactory;
 
 /**
  * Product search result block
+ *
+ * @api
+ * @since 100.0.2
  */
 class Result extends Template
 {
@@ -53,35 +38,43 @@ class Result extends Template
     /**
      * Catalog layer
      *
-     * @var ModelLayer
+     * @var \Magento\Catalog\Model\Layer
      */
     protected $catalogLayer;
 
     /**
+     * @var QueryFactory
+     */
+    private $queryFactory;
+
+    /**
      * @param Context $context
-     * @param ModelLayer $catalogLayer
+     * @param LayerResolver $layerResolver
      * @param Data $catalogSearchData
+     * @param QueryFactory $queryFactory
      * @param array $data
      */
     public function __construct(
         Context $context,
-        ModelLayer $catalogLayer,
+        LayerResolver $layerResolver,
         Data $catalogSearchData,
-        array $data = array()
+        QueryFactory $queryFactory,
+        array $data = []
     ) {
-        $this->catalogLayer = $catalogLayer;
+        $this->catalogLayer = $layerResolver->get();
         $this->catalogSearchData = $catalogSearchData;
+        $this->queryFactory = $queryFactory;
         parent::__construct($context, $data);
     }
 
     /**
      * Retrieve query model object
      *
-     * @return Query
+     * @return \Magento\Search\Model\Query
      */
     protected function _getQuery()
     {
-        return $this->catalogSearchData->getQuery();
+        return $this->queryFactory->get();
     }
 
     /**
@@ -92,21 +85,20 @@ class Result extends Template
     protected function _prepareLayout()
     {
         $title = $this->getSearchQueryText();
-        $this->getLayout()->getBlock('head')->setTitle($title);
-
+        $this->pageConfig->getTitle()->set($title);
         // add Home breadcrumb
         $breadcrumbs = $this->getLayout()->getBlock('breadcrumbs');
         if ($breadcrumbs) {
             $breadcrumbs->addCrumb(
                 'home',
-                array(
+                [
                     'label' => __('Home'),
                     'title' => __('Go to Home Page'),
                     'link' => $this->_storeManager->getStore()->getBaseUrl()
-                )
+                ]
             )->addCrumb(
                 'search',
-                array('label' => $title, 'title' => $title)
+                ['label' => $title, 'title' => $title]
             );
         }
 
@@ -144,13 +136,13 @@ class Result extends Template
         /* @var $category \Magento\Catalog\Model\Category */
         $availableOrders = $category->getAvailableSortByOptions();
         unset($availableOrders['position']);
-        $availableOrders = array_merge(array('relevance' => __('Relevance')), $availableOrders);
+        $availableOrders['relevance'] = __('Relevance');
 
         $this->getListBlock()->setAvailableOrders(
             $availableOrders
         )->setDefaultDirection(
             'desc'
-        )->setSortBy(
+        )->setDefaultSortBy(
             'relevance'
         );
 
@@ -165,19 +157,7 @@ class Result extends Template
     public function setListModes()
     {
         $test = $this->getListBlock();
-        $test->setModes(array('grid' => __('Grid'), 'list' => __('List')));
-        return $this;
-    }
-
-    /**
-     * Set Search Result collection
-     *
-     * @return $this
-     */
-    public function setListCollection()
-    {
-        //        $this->getListBlock()
-        //           ->setCollection($this->_getProductCollection());
+        $test->setModes(['grid' => __('Grid'), 'list' => __('List')]);
         return $this;
     }
 
@@ -208,7 +188,7 @@ class Result extends Template
     /**
      * Get search query text
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getSearchQueryText()
     {
@@ -224,7 +204,7 @@ class Result extends Template
     {
         if (!$this->getData('result_count')) {
             $size = $this->_getProductCollection()->getSize();
-            $this->_getQuery()->setNumResults($size);
+            $this->_getQuery()->saveNumResults($size);
             $this->setResultCount($size);
         }
         return $this->getData('result_count');
@@ -233,7 +213,7 @@ class Result extends Template
     /**
      * Retrieve No Result or Minimum query length Text
      *
-     * @return string
+     * @return \Magento\Framework\Phrase|string
      */
     public function getNoResultText()
     {

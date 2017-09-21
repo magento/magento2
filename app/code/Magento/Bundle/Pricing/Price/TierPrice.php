@@ -1,43 +1,91 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Bundle\Pricing\Price;
 
-/**
- * Bundle tire prices model
- */
-class TierPrice extends \Magento\Catalog\Pricing\Price\TierPrice
-{
-    /**
-     * Price type tier
-     */
-    const PRICE_CODE = 'tier_price';
+use Magento\Catalog\Pricing\Price\RegularPrice;
+use Magento\Framework\Pricing\Amount\AmountInterface;
+use Magento\Framework\Pricing\PriceInfoInterface;
 
+/**
+ * Bundle tier prices model
+ */
+class TierPrice extends \Magento\Catalog\Pricing\Price\TierPrice implements DiscountProviderInterface
+{
     /**
      * @var bool
      */
     protected $filterByBasePrice = false;
+
+    /**
+     * @var float|false
+     */
+    protected $percent;
+
+    /**
+     * Returns percent discount
+     *
+     * @return bool|float
+     */
+    public function getDiscountPercent()
+    {
+        if ($this->percent === null) {
+            $prices = $this->getStoredTierPrices();
+            $prevQty = PriceInfoInterface::PRODUCT_QUANTITY_DEFAULT;
+            $this->value = $prevPrice = false;
+            $priceGroup = $this->groupManagement->getAllCustomersGroup()->getId();
+
+            foreach ($prices as $price) {
+                if (!$this->canApplyTierPrice($price, $priceGroup, $prevQty)
+                    || !isset($price['percentage_value'])
+                    || !is_numeric($price['percentage_value'])
+                ) {
+                    continue;
+                }
+                if (false === $prevPrice || $this->isFirstPriceBetter($price['website_price'], $prevPrice)) {
+                    $prevPrice = $price['website_price'];
+                    $prevQty = $price['price_qty'];
+                    $priceGroup = $price['cust_group'];
+                    $this->percent = max(0, min(100, 100 - $price['percentage_value']));
+                }
+            }
+        }
+        return $this->percent;
+    }
+
+    /**
+     * Returns pricing value
+     *
+     * @return bool|float
+     */
+    public function getValue()
+    {
+        if ($this->value !== null) {
+            return $this->value;
+        }
+
+        $tierPrice = $this->getDiscountPercent();
+        if ($tierPrice) {
+            $regularPrice = $this->getRegularPrice();
+            $this->value = $regularPrice * ($tierPrice / 100);
+        } else {
+            $this->value = false;
+        }
+        return $this->value;
+    }
+
+    /**
+     * Returns regular price
+     *
+     * @return bool|float
+     */
+    protected function getRegularPrice()
+    {
+        return $this->priceInfo->getPrice(RegularPrice::PRICE_CODE)->getValue();
+    }
 
     /**
      * Returns true if first price is better
@@ -51,5 +99,13 @@ class TierPrice extends \Magento\Catalog\Pricing\Price\TierPrice
     protected function isFirstPriceBetter($firstPrice, $secondPrice)
     {
         return $firstPrice > $secondPrice;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPercentageDiscount()
+    {
+        return true;
     }
 }

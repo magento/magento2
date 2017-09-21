@@ -1,0 +1,145 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<a href="" ui-sref="root.extension">< Back</a>
+<h2 class="page-title">{{$state.current.header}}</h2>
+<div class="messages">
+    <div ng-show="error === true" class="message message-error error">
+        <span class="message-text">
+            {{errorMessage}}
+        </span>
+    </div>
+</div>
+<div class="admin__data-grid-outer-wrap" id="installExtensionGrid">
+    <div class="admin__data-grid-header">
+        <div class="admin__data-grid-header-row row row-gutter">
+            <div class="col-xs-3">
+                <button type="button" class="btn" ng-click="installAll()">Install</button>
+                <div class="admin__control-support-text">
+                    <span>{{total}}</span> extensions
+                </div>
+            </div>
+            <div class="col-xs-9 admin__data-grid-pager-wrap"
+                 ng-include="'<?= $this->basePath() ?>/pub/magento/setup/view/pagination.html'">
+            </div>
+        </div>
+    </div>
+    <div class="admin__data-grid-wrap" ng-show="$state.is('root.install')">
+        <table class="data-grid">
+            <thead data-part="head">
+            <tr>
+                <th class="data-grid-multicheck-cell">
+                    <div class="action-multicheck-wrap"
+                         ng-class="{'_active':multipleChoiceService.isNewExtensionsMenuVisible}"
+                         click-out="multipleChoiceService.hideNewExtensionsMenu()"
+                    >
+                        <input type="checkbox"
+                               style="visibility: hidden;"
+                               class="admin__control-checkbox"
+                               ng-class="{'_indeterminate':multipleChoiceService.someExtensionsSelected}"
+                               ng-checked="multipleChoiceService.allExtensionsSelected"
+                        >
+                        <label></label>
+                        <button class="action-multicheck-toggle"
+                                ng-class="{'_active':multipleChoiceService.isNewExtensionsMenuVisible}"
+                                ng-click="multipleChoiceService.toggleNewExtensionsMenu()"
+                        >
+                            <span>Options</span>
+                        </button>
+                        <ul class="action-menu">
+                            <li ng-show="!multipleChoiceService.allExtensionsSelected"
+                                ng-click="multipleChoiceService.selectAllExtensions()"
+                            >
+                                <span class="action-menu-item">Select all</span>
+                            </li>
+                            <li ng-show="multipleChoiceService.allExtensionsSelected
+                                        || multipleChoiceService.someExtensionsSelected"
+                                ng-click="multipleChoiceService.deselectAllExtensions()">
+                                <span class="action-menu-item">Deselect all</span>
+                            </li>
+                        </ul>
+                    </div>
+                </th>
+                <th ng-click="order('name')" ng-class="{'_ascend' : predicate === 'name'
+                && !reverse,'_descend' : predicate === 'name' && reverse}" class="data-grid-th _sortable">
+                    <span>Extension Name</span>
+                </th>
+                <th ng-click="order('type')" ng-class="{'_ascend' : predicate === 'type' &&
+                !reverse,'_descend' : predicate === 'type' && reverse}" class="data-grid-th _sortable">
+                    <span>Type</span>
+                </th>
+                <th ng-click="order('vendor')" ng-class="{'_ascend' : predicate === 'vendor' &&
+                !reverse,'_descend' : predicate === 'vendor' && reverse}" class="data-grid-th _sortable _ascend">
+                    <span>Vendor</span>
+                </th>
+                <th ng-click="order('version')" ng-class="{'_ascend' : predicate === 'version'
+                && !reverse,'_descend' : predicate === 'version' && reverse}" class="data-grid-th _sortable">
+                    <span>Latest version</span>
+                </th>
+                <th class="data-grid-actions-cell data-grid-th">
+                    <span>Action</span>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="extension in extensions | orderBy:predicate:reverse
+                | startFrom:(currentPage - 1) * rowLimit | limitTo:rowLimit"
+            >
+                <td class="data-grid-checkbox-cell">
+                    <label class="data-grid-checkbox-cell-inner">
+                        <input type="checkbox"
+                               class="admin__control-checkbox"
+                               ng-checked="multipleChoiceService.selectedExtensions.hasOwnProperty(extension.name)"
+                               ng-click="multipleChoiceService.updateSelectedExtensions($event, extension.name,
+                                        extension.version)"
+                        >
+                        <label></label>
+                    </label>
+                </td>
+                <td>
+                    <span class="data-grid-data">{{extension.package_title}}</span>
+                </td>
+                <td>
+                    <span class="data-grid-data">{{extension.package_type}}</span>
+                </td>
+                <td>
+                    <span class="data-grid-data">{{extension.vendor}}</span>
+                </td>
+                <td>
+                    <span class="data-grid-data">
+                        <select id="selectedVersion" ng-model="extension.version">
+                            <option ng-repeat="version in extension.versions"
+                                    value="{{version}}">Version {{version}}</option>
+                        </select>
+                    </span>
+                    <span class="component-indicator _tooltip"
+                          ng-show="extension.package_link"
+                          data-label="View info on Marketplace"
+                    ><a href="{{extension.package_link}}" target="_blank"></a>
+                    </span>
+                </td>
+                <td class="data-grid-data">
+                    <div class="action-wrap" ng-class="_active">
+                        <button class="action-select"
+                                ng-click="install(extension)">
+                            <span>Install</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<!-- loading indicator overlay and loader -->
+<div ng-show="!isHiddenSpinner" class="loading-mask ng-scope" data-role="loader">
+    <div class="popup popup-loading">
+        <div class="popup-inner">
+            <img alt="Loading..." src="<?= $this->basePath() ?>/pub/images/loader-1.gif">
+            Please wait...
+        </div>
+    </div>
+</div>

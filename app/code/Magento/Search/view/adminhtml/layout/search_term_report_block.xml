@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="report.search.grid.container">
+            <block class="Magento\Backend\Block\Widget\Grid" name="adminhtml.report.search.grid" as="grid">
+                <arguments>
+                    <argument name="id" xsi:type="string">searchReportGrid</argument>
+                    <argument name="dataSource" xsi:type="object">Magento\Search\Model\ResourceModel\Query\Collection</argument>
+                    <argument name="default_sort" xsi:type="string">query_id</argument>
+                    <argument name="default_dir" xsi:type="string">DESC</argument>
+                </arguments>
+                <block class="Magento\Backend\Block\Widget\Grid\Export" name="adminhtml.report.search.grid.export"
+                       as="grid.export">
+                    <arguments>
+                        <argument name="exportTypes" xsi:type="array">
+                            <item name="csv" xsi:type="array">
+                                <item name="urlPath" xsi:type="string">*/*/exportSearchCsv</item>
+                                <item name="label" xsi:type="string" translate="true">CSV</item>
+                            </item>
+                            <item name="excel" xsi:type="array">
+                                <item name="urlPath" xsi:type="string">*/*/exportSearchExcel</item>
+                                <item name="label" xsi:type="string" translate="true">Excel XML</item>
+                            </item>
+                        </argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" as="grid.columnSet"
+                       name="adminhtml.report.search.grid.columnSet">
+                    <arguments>
+                        <argument name="rowUrl" xsi:type="array">
+                            <item name="path" xsi:type="string">search/term/edit</item>
+                            <item name="extraParamsTemplate" xsi:type="array">
+                                <item name="id" xsi:type="string">getId</item>
+                            </item>
+                        </argument>
+                    </arguments>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="query_id">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">ID</argument>
+                            <argument name="filter" xsi:type="string">0</argument>
+                            <argument name="index" xsi:type="string">query_id</argument>
+                            <argument name="type" xsi:type="string">number</argument>
+                            <argument name="column_css_class" xsi:type="string">col-id</argument>
+                            <argument name="header_css_class" xsi:type="string">col-id</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="query_text">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Search Query</argument>
+                            <argument name="index" xsi:type="string">query_text</argument>
+                            <argument name="column_css_class" xsi:type="string">col-query</argument>
+                            <argument name="header_css_class" xsi:type="string">col-query</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column\Multistore" as="store_id">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Store</argument>
+                            <argument name="index" xsi:type="string">store_id</argument>
+                            <argument name="type" xsi:type="string">store</argument>
+                            <argument name="store_all" xsi:type="string">1</argument>
+                            <argument name="store_view" xsi:type="string">1</argument>
+                            <argument name="sortable" xsi:type="string">0</argument>
+                            <argument name="column_css_class" xsi:type="string">col-store</argument>
+                            <argument name="header_css_class" xsi:type="string">col-store</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="num_results">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Results</argument>
+                            <argument name="type" xsi:type="string">number</argument>
+                            <argument name="index" xsi:type="string">num_results</argument>
+                            <argument name="column_css_class" xsi:type="string">col-results</argument>
+                            <argument name="header_css_class" xsi:type="string">col-results</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="popularity">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Hits</argument>
+                            <argument name="type" xsi:type="string">number</argument>
+                            <argument name="index" xsi:type="string">popularity</argument>
+                            <argument name="column_css_class" xsi:type="string">col-hits</argument>
+                            <argument name="header_css_class" xsi:type="string">col-hits</argument>
+                        </arguments>
+                    </block>
+                </block>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

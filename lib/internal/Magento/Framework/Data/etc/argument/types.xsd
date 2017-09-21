@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:complexType name="argumentType" abstract="true" mixed="true">
+        <xs:attribute name="name" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="array" mixed="true">
+        <xs:complexContent>
+            <xs:extension base="argumentType">
+                <xs:sequence>
+                    <xs:element name="item" type="argumentType" minOccurs="0" maxOccurs="unbounded">
+                        <xs:key name="itemName">
+                            <xs:selector xpath="item"></xs:selector>
+                            <xs:field xpath="@name"></xs:field>
+                        </xs:key>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="asoc" mixed="true">
+        <xs:sequence>
+            <xs:element name="item" type="argumentType" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="string">
+        <xs:complexContent>
+            <xs:extension base="argumentType">
+                <xs:attribute name="translate" use="optional" type="xs:boolean"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="boolean">
+        <xs:complexContent>
+            <xs:extension base="argumentType"/>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="object">
+        <xs:complexContent>
+            <xs:extension base="argumentType"/>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="configurableObject" mixed="true">
+        <xs:complexContent>
+            <xs:extension base="argumentType">
+                <xs:sequence>
+                    <xs:element name="argument" type="argumentType" minOccurs="1" maxOccurs="unbounded">
+                        <xs:key name="argumentConfigurableObjectName">
+                            <xs:selector xpath="argument"/>
+                            <xs:field xpath="@name"/>
+                        </xs:key>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="number">
+        <xs:complexContent>
+            <xs:extension base="argumentType"/>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="null">
+        <xs:complexContent>
+            <xs:restriction base="argumentType"/>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="argumentsType">
+        <xs:sequence>
+            <xs:element name="argument" type="argumentType" minOccurs="1" maxOccurs="unbounded">
+                <xs:key name="argumentItemName">
+                    <xs:selector xpath="item"></xs:selector>
+                    <xs:field xpath="@name"></xs:field>
+                </xs:key>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>

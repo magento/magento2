@@ -1,0 +1,1861 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//  # Typogrphy
+//
+//  Magento UI library provides mixins for typography styling. To configure typography, global variables from **_variables.less** file are used.
+//
+//  To apply all Magento UI library typography, use the <code>.lib-typography-all()</code> mixin. It accumulates all typography mixins and sets all typography for the theme. This mixin is included in the <code>.lib-magento-reset()</code> mixin. So, if you use this reset, you don't have to call basic typography separately. Also, you don't have to apply this mixin to any class, just call it globally.
+//
+//  Additionally, Magento UI library provides number of mixins to customize typography parameters separately.
+//
+//  ```html
+//  <h1>HTML Ipsum Presents&nbsp;<small>Sub text</small></h1>
+//  <p><strong>Pellentesque habitant morbi tristique</strong> senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. <em>Aenean ultricies mi vitae est.</em> Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, <code>commodo vitae</code>, ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui. <a href="#">Donec non enim</a> in turpis pulvinar facilisis. Ut felis.</p>
+//  <h2>Header Level 2</h2>
+//  <ol>
+//    <li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li>
+//    <li>Aliquam tincidunt mauris eu risus.</li>
+//  </ol>
+//  <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat <kbd>Keyboard input</kbd> vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, commodo vitae, ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui. Donec non enim in turpis pulvinar facilisis. Ut felis. Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus</p>
+//  <blockquote>
+//    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus magna. Cras in mi at felis aliquet congue. Ut a est eget ligula molestie gravida. Curabitur massa. Donec eleifend, libero at sagittis mollis, tellus est malesuada tellus, at luctus turpis elit sit amet quam. Vivamus pretium ornare est.</p>
+//    <a href=#"> Aenean fermentum, elit eget tincidunt condimentum</a>
+//  </blockquote>
+//  <h3>Header Level 3</h3>
+//  <ul>
+//    <li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li>
+//    <li>Aliquam tincidunt mauris eu risus.</li>
+//  </ul>
+//  <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>
+//  <pre><code> #header h1 a {
+//      display: block;
+//      width: 300px;
+//      height: 80px;
+//  } </code></pre>
+//  <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>
+//  <h4>Header Level 4</h4>
+//  <ul>
+//    <li>Morbi in sem quis dui placerat ornare. Pellentesque odio nisi, euismod in, pharetra a, ultricies in, diam. Sed arcu. Cras consequat.</li>
+//    <li>Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus.
+//      <ul>
+//        <li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li>
+//        <li>Aliquam tincidunt mauris eu risus.</li>
+//        <li>Vestibulum auctor dapibus neque.</li>
+//      </ul>
+//    </li>
+//    <li>Phasellus ultrices nulla quis nibh. Quisque a lectus. Donec consectetuer ligula vulputate sem tristique cursus. Nam nulla quam, gravida non, commodo a, sodales sit amet, nisi.
+//      <ol>
+//        <li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li>
+//        <li>Aliquam tincidunt mauris eu risus.</li>
+//        <li>Vestibulum auctor dapibus neque.</li>
+//      </ol>
+//    </li>
+//    <li>Pellentesque fermentum dolor. Aliquam quam lectus, facilisis auctor, ultrices ut, elementum vulputate, nunc.</li>
+//  </ul>
+//  <h5>Header Level 5</h5>
+//  <dl><dt>Definition list</dt><dd>Consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</dd><dt>Lorem ipsum dolor sit amet</dt><dd>Consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</dd></dl>
+//  <h6>Header Level 6</h6>
+//  ```
+
+.lib-typography-all();
+
+//  # Typography variables
+//
+//  <pre>
+//    <table>
+//        <tr>
+//            <th class="vars_head">Mixin variable</th>
+//            <th class="vars_head">Default value</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th class="vars_section" colspan="3">Predefined font family and font colors</th>
+//        </tr>
+//        <tr>
+//            <th>@font-family__sans-serif</th>
+//            <td class="vars_value">'Helvetica Neue', Helvetica, Arial, sans-serif</td>
+//            <td>Sans-serif font family</td>
+//        </tr>
+//        <tr>
+//            <th>@font-family__serif</th>
+//            <td class="vars_value">Georgia, 'Times New Roman', Times, serif</td>
+//            <td>Serif font family</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@font-family__monospace</th>
+//            <td class="vars_value">Menlo, Monaco, Consolas, 'Courier New', monospace</td>
+//            <td>Monospace font family</td>
+//        </tr>
+//        <tr>
+//            <th>@font-path</th>
+//            <td class="vars_value">&quot;../../fonts/&quot;</td>
+//            <td>Path to custom font</td>
+//        </tr>
+//        <tr>
+//            <th>@primary__color</th>
+//            <td class="vars_value">#555</td>
+//            <td>Primary color</td>
+//        </tr>
+//        <tr>
+//            <th>@primary__color__dark</th>
+//            <td class="vars_value">darken(@primary__color, 35%) // #000</td>
+//            <td>Dark primary color</td>
+//        </tr>
+//        <tr>
+//            <th>@primary__color__darker</th>
+//            <td class="vars_value">darken(@primary__color, 13.5%) // #111</td>
+//            <td>Darker primary color</td>
+//        </tr>
+//        <tr>
+//            <th>@primary__color__lighter</th>
+//            <td class="vars_value">lighten(@primary__color, 23%) // #7d7d7d</td>
+//            <td>Lighter primary color</td>
+//        </tr>
+//        <tr>
+//            <th>@primary__color__light</th>
+//            <td class="vars_value">lighten(@primary__color, 45%) // #a6a6a6</td>
+//            <td>Light primary color</td>
+//        </tr>
+//        <tr>
+//            <th>@border-color__base</th>
+//            <td class="vars_value">darken(@page__background-color, 18%)</td>
+//            <td>Base border color</td>
+//        </tr>
+//        <tr>
+//            <th>@border-width__base</th>
+//            <td class="vars_value">1px</td>
+//            <td>Base border width</td>
+//        </tr>
+//        <tr>
+//            <th class="vars_section" colspan="3">Fonts settings</th>
+//        </tr>
+//        <tr>
+//            <th>@font-family__base</th>
+//            <td class="vars_value">@font-family__sans-serif</td>
+//            <td>Basic font family</td>
+//        </tr>
+//        <tr>
+//            <th>@root__font-size</th>
+//            <td class="vars_value">62.5%</td>
+//            <td>Setting font-size for HTML tag, use % units</td>
+//        </tr>
+//        <tr>
+//            <th>@font-size-ratio__base</th>
+//            <td class="vars_value">1.4</td>
+//            <td>Defines ratio between root font size and base font size</td>
+//        </tr>
+//        <tr>
+//            <th>@font-size__base</th>
+//            <td class="vars_value">unit((@root__font-size / 100) * 16 * @font-size-ratio__base, px)</td>
+//            <td>Base font size value in px</td>
+//        </tr>
+//        <tr>
+//            <th>@font-size__xl</th>
+//            <td class="vars_value">ceil(1.5 * @font-size__base) // 21</td>
+//            <td>Extra large font size</td>
+//        </tr>
+//        <tr>
+//            <th>@font-size__l</th>
+//            <td class="vars_value">ceil(1.25 * @font-size__base) // 18</td>
+//            <td>Large font size</td>
+//        </tr>
+//        <tr>
+//            <th>@font-size__s</th>
+//            <td class="vars_value">ceil(.85 * @font-size__base) // 12</td>
+//            <td>Small font size</td>
+//        </tr>
+//        <tr>
+//            <th>@font-size__xs</th>
+//            <td class="vars_value">floor(.75 * @font-size__base) // 11</td>
+//            <td>Extra small font size</td>
+//        </tr>
+//        <tr>
+//            <th>@font-weight__regular</th>
+//            <td class="vars_value">400</td>
+//            <td>Basic font weight</td>
+//        </tr>
+//        <tr>
+//            <th>@font-weight__light</th>
+//            <td class="vars_value">200</td>
+//            <td>Light font weight</td>
+//        </tr>
+//        <tr>
+//            <th>@font-weight__semibold</th>
+//            <td class="vars_value">600</td>
+//            <td>Semibold font weight</td>
+//        </tr>
+//        <tr>
+//            <th>@font-weight__bold</th>
+//            <td class="vars_value">700</td>
+//            <td>Bold font weight</td>
+//        </tr>
+//        <tr>
+//            <th>@font-style__base</th>
+//            <td class="vars_value">normal</td>
+//            <td>Font style</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@font-style__emphasis</th>
+//            <td class="vars_value">italic</td>
+//            <td>Emphasis font style</td>
+//        </tr>
+//        <tr>
+//            <th>@line-height__base</th>
+//            <td class="vars_value">1.428571429</td>
+//            <td>Base line height</td>
+//        </tr>
+//        <tr>
+//            <th>@line-height__computed</th>
+//            <td class="vars_value">floor(@font-size__base * @line-height__base)</td>
+//            <td>Computed line height depending on base font size</td>
+//        </tr>
+//        <tr>
+//            <th>@line-height__l</th>
+//            <td class="vars_value">1.5</td>
+//            <td>Large line height</td>
+//        </tr>
+//        <tr>
+//            <th>@line-height__s</th>
+//            <td class="vars_value">1.33</td>
+//            <td>Small line height</td>
+//        </tr>
+//        <tr>
+//            <th>@text__color</th>
+//            <td class="vars_value">@primary__color</td>
+//            <td>Primary text color</td>
+//        </tr>
+//        <tr>
+//            <th>@text__color__intense</th>
+//            <td class="vars_value">@primary__color__darker</td>
+//            <td>Darker text color</td>
+//        </tr>
+//        <tr>
+//            <th>@text__color__muted</th>
+//            <td class="vars_value">@primary__color__lighter</td>
+//            <td>Lighter text color</td>
+//        </tr>
+//        <tr>
+//            <th>@indent__base</th>
+//            <td class="vars_value">@line-height__computed // 20px</td>
+//            <td>Base text ident (20px)</td>
+//        </tr>
+//        <tr>
+//            <th>@indent__xl</th>
+//            <td class="vars_value">@line-height__computed * 2 // 40px</td>
+//            <td>Extra large text ident (40px)</td>
+//        </tr>
+//        <tr>
+//            <th>@indent__l</th>
+//            <td class="vars_value">@line-height__computed * 1.5 // 30px</td>
+//            <td>Large text ident (30px)</td>
+//        </tr>
+//        <tr>
+//            <th>@indent__m</th>
+//            <td class="vars_value">@indent__base * 1.25 // 25px</td>
+//            <td>Extra large text ident (25px)</td>
+//        </tr>
+//        <tr>
+//            <th>@indent__s</th>
+//            <td class="vars_value">@line-height__computed / 2 //10px </td>
+//            <td>Small text ident (10px)</td>
+//        </tr>
+//        <tr>
+//            <th>@indent__xs</th>
+//            <td class="vars_value">@line-height__computed / 4 // 5px</td>
+//            <td>Extra small text ident (5px)</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">Links</th>
+//        </tr>
+//        <tr>
+//            <th>@link__color</th>
+//            <td class="vars_value">#1979c3</td>
+//            <td>Links color</td>
+//        </tr>
+//        <tr>
+//            <th>@link__text-decoration</th>
+//            <td class="vars_value">none</td>
+//            <td>Links text decoration</td>
+//        </tr>
+//        <tr>
+//            <th>@link__visited__color</th>
+//            <td class="vars_value">#800080</td>
+//            <td>Visited links color</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@link__visited__text-decoration</th>
+//            <td class="vars_value">none</td>
+//            <td>Visited links text decoration</td>
+//        </tr>
+//        <tr>
+//            <th>@link__hover__color</th>
+//            <td class="vars_value">#006bb4</td>
+//            <td>Hovered links color</td>
+//        </tr>
+//        <tr>
+//            <th>@link__hover__text-decoration</th>
+//            <td class="vars_value">underline</td>
+//            <td>Hovered links text decoration</td>
+//        </tr>
+//        <tr>
+//            <th>@link__active__color</th>
+//            <td class="vars_value">#ff5501</td>
+//            <td>Active links color</td>
+//        </tr>
+//        <tr>
+//            <th>@link__active__text-decoration</th>
+//            <td class="vars_value">underline</td>
+//            <td>Active links text decoration</td>
+//        </tr>
+//        <tr>
+//            <th class="vars_section" colspan="3">Lists</th>
+//        </tr>
+//        <tr>
+//            <th>@list__color__base</th>
+//            <td class="vars_value">false</td>
+//            <td>List text color</td>
+//        </tr>
+//        <tr>
+//            <th>@list__font-size__base</th>
+//            <td class="vars_value">@font-size__base</td>
+//            <td>List font size</td>
+//        </tr>
+//        <tr>
+//            <th>@list__margin-top</th>
+//            <td class="vars_value">0</td>
+//            <td>List margin top</td>
+//        </tr>
+//        <tr>
+//            <th>@list__margin-bottom</th>
+//            <td class="vars_value">@indent__m</td>
+//            <td>List margin bottom</td>
+//        </tr>
+//        <tr>
+//            <th>@list-item__margin-top</th>
+//            <td class="vars_value">0</td>
+//            <td>List item margin top</td>
+//        </tr>
+//        <tr>
+//            <th>@list-item__margin-bottom</th>
+//            <td class="vars_value">@indent__s</td>
+//            <td>List item margin bottom</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">Definition list</th>
+//        </tr>
+//        <tr>
+//            <th>@dl__margin-top</th>
+//            <td class="vars_value">0</td>
+//            <td>Definition list margin top</td>
+//        </tr>
+//        <tr>
+//            <th>@dl__margin-bottom</th>
+//            <td class="vars_value">@indent__base</td>
+//            <td>Definition list margin bottom</td>
+//        </tr>
+//        <tr>
+//            <th>@dt__margin-top</th>
+//            <td class="vars_value">0</td>
+//            <td>Description term margin top</td>
+//        </tr>
+//        <tr>
+//            <th>@dt__margin-bottom</th>
+//            <td class="vars_value">@indent__xs</td>
+//            <td>Description term margin bottom</td>
+//        </tr>
+//        <tr>
+//            <th>@dt__font-weight</th>
+//            <td class="vars_value">@font-weight__bold</td>
+//            <td>Description term </td>
+//        </tr>
+//        <tr>
+//            <th>@dd__margin-top</th>
+//            <td class="vars_value">0</td>
+//            <td>Description margin top</td>
+//        </tr>
+//        <tr>
+//            <th>@dd__margin-bottom</th>
+//            <td class="vars_value">@indent__s</td>
+//            <td>Description margin bottom</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">Paragraphs</th>
+//        </tr>
+//        <tr>
+//            <th>@p__margin-top</th>
+//            <td class="vars_value">0</td>
+//            <td>Paragraph margin top</td>
+//        </tr>
+//        <tr>
+//            <th>@p__margin-bottom</th>
+//            <td class="vars_value">@indent__s</td>
+//            <td>Paragraph margin bottom</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">Headings</th>
+//        </tr>
+//        <tr>
+//            <th>@heading__font-family__base</th>
+//            <td class="vars_value">false</td>
+//            <td>Heading base font family</td>
+//        </tr>
+//        <tr>
+//            <th>@heading__font-style__base</th>
+//            <td class="vars_value">false</td>
+//            <td>Heading base font style</td>
+//        </tr>
+//        <tr>
+//            <th>@heading__font-weight__base</th>
+//            <td class="vars_value">@font-weight__light</td>
+//            <td>Heading base font weight</td>
+//        </tr>
+//        <tr>
+//            <th>@heading__line-height__base</th>
+//            <td class="vars_value">1.1</td>
+//            <td>Heading base line height</td>
+//        </tr>
+//        <tr>
+//            <th>@heading__color__base</th>
+//            <td class="vars_value">false</td>
+//            <td>Heading base color</td>
+//        </tr>
+//        <tr>
+//            <th>@heading__margin-top__base</th>
+//            <td class="vars_value">@indent__base</td>
+//            <td>Heading base margin top</td>
+//        </tr>
+//        <tr>
+//            <th>@heading__margin-bottom__base</th>
+//            <td class="vars_value">@indent__base</td>
+//            <td>Heading base margin bottom</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">H1</th>
+//        </tr>
+//        <tr>
+//            <th>@h1__font-size</th>
+//            <td class="vars_value">ceil((@font-size__base * 2.85)) // 40px</td>
+//            <td>H1 font size</td>
+//        </tr>
+//        <tr>
+//            <th>@h1__font-color</th>
+//            <td class="vars_value">@heading__color__base</td>
+//            <td>H1 color</td>
+//        </tr>
+//        <tr>
+//            <th>@h1__font-family</th>
+//            <td class="vars_value">@heading__font-family__base</td>
+//            <td>H1 font family</td>
+//        </tr>
+//        <tr>
+//            <th>@h1__font-weight</th>
+//            <td class="vars_value">@heading__font-weight__base</td>
+//            <td>H1 font weight</td>
+//        </tr>
+//        <tr>
+//            <th>@h1__font-style</th>
+//            <td class="vars_value">@heading__font-style__base</td>
+//            <td>H1 font style</td>
+//        </tr>
+//        <tr>
+//            <th>@h1__line-height</th>
+//            <td class="vars_value">@heading__line-height__base</td>
+//            <td>H1 line height</td>
+//        </tr>
+//        <tr>
+//            <th>@h1__margin-top</th>
+//            <td class="vars_value">0</td>
+//            <td>H1 margin top</td>
+//        </tr>
+//        <tr>
+//            <th>@h1__margin-bottom</th>
+//            <td class="vars_value">@heading__margin-bottom__base</td>
+//            <td>H1 margin bottom</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">H2</th>
+//        </tr>
+//        <tr>
+//            <th>@h2__font-size</th>
+//            <td class="vars_value">ceil((@font-size__base * 1.85)) // 26px</td>
+//            <td>H2 font size</td>
+//        </tr>
+//        <tr>
+//            <th>@h2__font-color</th>
+//            <td class="vars_value">@heading__color__base</td>
+//            <td>H2 color</td>
+//        </tr>
+//        <tr>
+//            <th>@h2__font-family</th>
+//            <td class="vars_value">@heading__font-family__base</td>
+//            <td>H2 font family</td>
+//        </tr>
+//        <tr>
+//            <th>@h2__font-weight</th>
+//            <td class="vars_value">@heading__font-weight__base</td>
+//            <td>H2 font weight</td>
+//        </tr>
+//        <tr>
+//            <th>@h2__font-style</th>
+//            <td class="vars_value">@heading__font-style__base</td>
+//            <td>H2 font style</td>
+//        </tr>
+//        <tr>
+//            <th>@h2__line-height</th>
+//            <td class="vars_value">@heading__line-height__base</td>
+//            <td>H2 line height</td>
+//        </tr>
+//        <tr>
+//            <th>@h2__margin-top</th>
+//            <td class="vars_value">@indent__m</td>
+//            <td>H2 margin top</td>
+//        </tr>
+//        <tr>
+//            <th>@h2__margin-bottom</th>
+//            <td class="vars_value">@heading__margin-bottom__base</td>
+//            <td>H2 margin bottom</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">H3</th>
+//        </tr>
+//        <tr>
+//            <th>@h3__font-size</th>
+//            <td class="vars_value">ceil((@font-size__base * 1.28)) // 18px</td>
+//            <td>H3 font size</td>
+//        </tr>
+//        <tr>
+//            <th>@h3__font-color</th>
+//            <td class="vars_value">@heading__color__base</td>
+//            <td>H3 color</td>
+//        </tr>
+//        <tr>
+//            <th>@h3__font-family</th>
+//            <td class="vars_value">@heading__font-family__base</td>
+//            <td>H3 font family</td>
+//        </tr>
+//        <tr>
+//            <th>@h3__font-weight</th>
+//            <td class="vars_value">@heading__font-weight__base</td>
+//            <td>H3 font weight</td>
+//        </tr>
+//        <tr>
+//            <th>@h3__font-style</th>
+//            <td class="vars_value">@heading__font-style__base</td>
+//            <td>H3 font style</td>
+//        </tr>
+//        <tr>
+//            <th>@h3__line-height</th>
+//            <td class="vars_value">@heading__line-height__base</td>
+//            <td>H3 line height</td>
+//        </tr>
+//        <tr>
+//            <th>@h3__margin-top</th>
+//            <td class="vars_value">@indent__base * .75</td>
+//            <td>H3 margin top</td>
+//        </tr>
+//        <tr>
+//            <th>@h3__margin-bottom</th>
+//            <td class="vars_value">@indent__s</td>
+//            <td>H3 margin bottom</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">H4</th>
+//        </tr>
+//        <tr>
+//            <th>@h4__font-size</th>
+//            <td class="vars_value">@font-size__base // 14px</td>
+//            <td>H4 font size</td>
+//        </tr>
+//        <tr>
+//            <th>@h4__font-color</th>
+//            <td class="vars_value">@heading__color__base</td>
+//            <td>H4 color</td>
+//        </tr>
+//        <tr>
+//            <th>@h4__font-family</th>
+//            <td class="vars_value">@heading__font-family__base</td>
+//            <td>H4 font family</td>
+//        </tr>
+//        <tr>
+//            <th>@h4__font-weight</th>
+//            <td class="vars_value">@font-weight__bold</td>
+//            <td>H4 font weight</td>
+//        </tr>
+//        <tr>
+//            <th>@h4__font-style</th>
+//            <td class="vars_value">@heading__font-style__base</td>
+//            <td>H4 font style</td>
+//        </tr>
+//        <tr>
+//            <th>@h4__line-height</th>
+//            <td class="vars_value">@heading__line-height__base</td>
+//            <td>H4 line height</td>
+//        </tr>
+//        <tr>
+//            <th>@h4__margin-top</th>
+//            <td class="vars_value">@heading__margin-top__base</td>
+//            <td>H4 margin top</td>
+//        </tr>
+//        <tr>
+//            <th>@h4__margin-bottom</th>
+//            <td class="vars_value">@heading__margin-bottom__base</td>
+//            <td>H4 margin bottom</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">H5</th>
+//        </tr>
+//        <tr>
+//            <th>@h5__font-size</th>
+//            <td class="vars_value">ceil((@font-size__base * .85)) // 12px</td>
+//            <td>H5 font size</td>
+//        </tr>
+//        <tr>
+//            <th>@h5__font-color</th>
+//            <td class="vars_value">@heading__color__base</td>
+//            <td>H5 color</td>
+//        </tr>
+//        <tr>
+//            <th>@h5__font-family</th>
+//            <td class="vars_value">@heading__font-family__base</td>
+//            <td>H5 font family</td>
+//        </tr>
+//        <tr>
+//            <th>@h5__font-weight</th>
+//            <td class="vars_value">@font-weight__bold</td>
+//            <td>H5 font weight</td>
+//        </tr>
+//        <tr>
+//            <th>@h5__font-style</th>
+//            <td class="vars_value">@heading__font-style__base</td>
+//            <td>H5 font style</td>
+//        </tr>
+//        <tr>
+//            <th>@h5__line-height</th>
+//            <td class="vars_value">@heading__line-height__base</td>
+//            <td>H5 line height</td>
+//        </tr>
+//        <tr>
+//            <th>@h5__margin-top</th>
+//            <td class="vars_value">@heading__margin-top__base</td>
+//            <td>H5 margin top</td>
+//        </tr>
+//        <tr>
+//            <th>@h5__margin-bottom</th>
+//            <td class="vars_value">@heading__margin-bottom__base</td>
+//            <td>H5 margin bottom</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">H6</th>
+//        </tr>
+//        <tr>
+//            <th>@h6__font-size</th>
+//            <td class="vars_value">ceil((@font-size__base * .7)) // 10px</td>
+//            <td>H6 font size</td>
+//        </tr>
+//        <tr>
+//            <th>@h6__font-color</th>
+//            <td class="vars_value">@heading__color__base</td>
+//            <td>H6 color</td>
+//        </tr>
+//        <tr>
+//            <th>@h6__font-family</th>
+//            <td class="vars_value">@heading__font-family__base</td>
+//            <td>H6 font family</td>
+//        </tr>
+//        <tr>
+//            <th>@h6__font-weight</th>
+//            <td class="vars_value">@heading__font-weight__base</td>
+//            <td>H6 font weight</td>
+//        </tr>
+//        <tr>
+//            <th>@h6__font-style</th>
+//            <td class="vars_value">@heading__font-style__base</td>
+//            <td>H6 font style</td>
+//        </tr>
+//        <tr>
+//            <th>@h6__line-height</th>
+//            <td class="vars_value">@heading__line-height__base</td>
+//            <td>H6 line height</td>
+//        </tr>
+//        <tr>
+//            <th>@h6__margin-top</th>
+//            <td class="vars_value">@heading__margin-top__base</td>
+//            <td>H6 margin top</td>
+//        </tr>
+//        <tr>
+//            <th>@h6__margin-bottom</th>
+//            <td class="vars_value">@heading__margin-bottom__base</td>
+//            <td>H6 margin bottom</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">&lt;small&gt; tags and tags with class .small placed in H1-H6 headings</th>
+//        </tr>
+//        <tr>
+//            <th>@heading__small-color</th>
+//            <td class="vars_value">@primary__color</td>
+//            <td>&lt;small&gt; and .small heading element color</td>
+//        </tr>
+//        <tr>
+//            <th>@heading__small-line-height</th>
+//            <td class="vars_value">1</td>
+//            <td>&lt;small&gt; and .small heading element line height</td>
+//        </tr>
+//        <tr>
+//            <th>@heading__small-size</th>
+//            <td class="vars_value">(@font-size__xs/@font-size__base) * 100%</td>
+//            <td>&lt;small&gt; and .small heading element font size</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">Focus</th>
+//        </tr>
+//        <tr>
+//            <th>@focus__box-shadow</th>
+//            <td class="vars_value">0 0 3px 1px @focus__color</td>
+//            <td>Focused element highlight</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">Code blocks</th>
+//        </tr>
+//        <tr>
+//            <th>@code__background-color</th>
+//            <td class="vars_value">@panel__background-color</td>
+//            <td>Code block background</td>
+//        </tr>
+//        <tr>
+//            <th>@code__color</th>
+//            <td class="vars_value">@primary__color__darker</td>
+//            <td>Code text color</td>
+//        </tr>
+//        <tr>
+//            <th>@code__font-size</th>
+//            <td class="vars_value">@font-size__s</td>
+//            <td>Code font size</td>
+//        </tr>
+//        <tr>
+//            <th>@code__padding</th>
+//            <td class="vars_value">2px 4px</td>
+//            <td>Code padding</td>
+//        </tr>
+//        <tr>
+//            <th>@pre__background-color</th>
+//            <td class="vars_value">@primary__color__light</td>
+//            <td>Preformatted text background color</td>
+//        </tr>
+//        <tr>
+//            <th>@pre__border-color</th>
+//            <td class="vars_value">@border-color__base</td>
+//            <td>Preformatted text border color</td>
+//        </tr>
+//        <tr>
+//            <th>@pre__border-width</th>
+//            <td class="vars_value">@border-width__base</td>
+//            <td>Preformatted text border width</td>
+//        </tr>
+//        <tr>
+//            <th>@pre__color</th>
+//            <td class="vars_value">@primary__color__darker</td>
+//            <td>Preformatted text color</td>
+//        </tr>
+//        <tr>
+//            <th>@kbd__background-color</th>
+//            <td class="vars_value">@panel__background-color</td>
+//            <td>Keyboard input background</td>
+//        </tr>
+//        <tr>
+//            <th>@kbd__color</th>
+//            <td class="vars_value">@primary__color__darker</td>
+//            <td>Keyboard input text color</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">Blockquote</th>
+//        </tr>
+//        <tr>
+//            <th>@blockquote__border-color</th>
+//            <td class="vars_value">@border-color__base</td>
+//            <td>Blockquote border color</td>
+//        </tr>
+//        <tr>
+//            <th>@blockquote__border-width</th>
+//            <td class="vars_value">0</td>
+//            <td>Blockquote border width</td>
+//        </tr>
+//        <tr>
+//            <th>@blockquote__content-before</th>
+//            <td class="vars_value">'\2014 \00A0'</td>
+//            <td>&quot;-&quot; and space symbols</td>
+//        </tr>
+//        <tr>
+//            <th>@blockquote__font-size</th>
+//            <td class="vars_value">@font-size__base</td>
+//            <td>Blockquote font size</td>
+//        </tr>
+//        <tr>
+//            <th>@blockquote__font-style</th>
+//            <td class="vars_value">@font-style__emphasis</td>
+//            <td>Blockquote font style</td>
+//        </tr>
+//        <tr>
+//            <th>@blockquote__margin</th>
+//            <td class="vars_value"> 0 0 @indent__base @indent__xl</td>
+//            <td>Blockquote margin</td>
+//        </tr>
+//        <tr>
+//            <th>@blockquote__padding</th>
+//            <td class="vars_value">0</td>
+//            <td>Blockquote padding</td>
+//        </tr>
+//        <tr>
+//            <th>@blockquote-small__color</th>
+//            <td class="vars_value">@primary__color</td>
+//            <td>Blockquote &lt;small&gt; and .small text color</td>
+//        </tr>
+//        <tr>
+//            <th>@blockquote-small__font-size</th>
+//            <td class="vars_value">@font-size__xs</td>
+//            <td>Blockquote &lt;small&gt; and .small font size</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">Cite</th>
+//        </tr>
+//        <tr>
+//            <th>@cite__font-style</th>
+//            <td class="vars_value">@font-style__base</td>
+//            <td>Cite font style</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">Other elements</th>
+//        </tr>
+//        <tr>
+//            <th>@hr__border-color</th>
+//            <td class="vars_value">@border-color__base</td>
+//            <td>HR border color</td>
+//        </tr>
+//        <tr>
+//            <th>@hr__border-style</th>
+//            <td class="vars_value">solid</td>
+//            <td>HR border style</td>
+//        </tr>
+//        <tr>
+//            <th>@hr__border-width</th>
+//            <td class="vars_value">@border-width__base</td>
+//            <td>HR border width</td>
+//        </tr>
+//        <tr>
+//            <th>@mark__color</th>
+//            <td class="vars_value">@primary__color__dark</td>
+//            <td>&lt;mark&gt; color</td>
+//        </tr>
+//        <tr>
+//            <th>@mark__background-color</th>
+//            <td class="vars_value">@panel__background-color</td>
+//            <td>&lt;mark&gt; background</td>
+//        </tr>
+//        <tr>
+//            <th>@abbr__border-color</th>
+//            <td class="vars_value">@border-color__base</td>
+//            <td>&lt;abbr&gt; border color</td>
+//        </tr>
+//        <tr>
+//            <th>@disable-filters</th>
+//            <td class="vars_value">false</td>
+//            <td>Disable filters output in css</td>
+//        </tr>
+//    </table>
+//  </pre>
+
+//  # Font-size mixin
+//
+//  The <code>.lib-font-size()</code> mixin calculates font-size in **rem** with fallback in **px**
+//
+//  **Less code:**
+//  ```css
+//  .example-typography-1 {
+//      .lib-font-size(25);
+//  }
+//  ```
+// **CSS result:**
+//  ```css
+//  .example-typography-1 {
+//      font-size: 25px;
+//      font-size: 2.5rem;
+//  }
+//  ```
+//
+//  ```html
+//  <p class="example">HTML Ipsum Presents</p>
+//  ```
+
+.example {
+    .lib-font-size(25);
+}
+
+//  # Line-height mixin
+//
+//  The <code>.lib-line-height()</code> mixin calculates line-height in **rem** with fallback in **px**
+//
+//  **Less code:**
+//  ```css
+//  .example-line-height {
+//      .lib-line-height(30);
+//  }
+//  ```
+// **CSS result:**
+//  ```css
+//  .example-line-height {
+//      line-height: 30px;
+//      line-height: 3rem;
+//  }
+//  ```
+//
+//  ```html
+//  <p class="example-line-height">HTML Ipsum Presents</p>
+//  ```
+
+.example-line-height {
+    .lib-line-height(30);
+}
+
+//  # Word breaking mixin
+//
+//  The <code>.lib-wrap-words()</code> mixin specifies word breaking rules. Background and block width are added to display this example.
+//
+//  ```html
+//  <p class="example-word-wrap">
+//      Supercalifragilisticexpialidocious This paragraph contains a very long word: thisisaveryveryveryveryveryverylongword. The long word will break and wrap to the next line.
+//  </p>
+//  ```
+
+.example-word-wrap {
+    .lib-wrap-words();
+    background: #ccc;
+    width: 120px;
+}
+
+//  # Font face mixin
+//
+//  The <code>.lib-font-face()</code> mixin is used to set up custom font.
+//
+//  ```css
+//    .lib-font-face(
+//        @family-name,
+//        @font-path,
+//        @font-weight: normal,
+//        @font-style: normal
+//    ) {
+//        @font-face {
+//            font-family: @family-name;
+//            src: url('@{font-path}.eot');
+//            src: url('@{font-path}.eot?#iefix') format('embedded-opentype'),
+//            url('@{font-path}.woff2') format('woff2'),
+//            url('@{font-path}.woff') format('woff'),
+//            url('@{font-path}.ttf') format('truetype'),
+//            url('@{font-path}.svg#@{family-name}') format('svg');
+//            font-weight: @font-weight;
+//            font-style: @font-style;
+//        }
+//    }
+//  ```
+//  &nbsp;
+
+//  # Text overflow mixin
+//
+//  The <code>.lib-text-overflow()</code> mixin is used to add ellipsis ("...") when a text overflows the containing element. Background and block width are added to display this example.
+//
+//  ```html
+//  <p class="example-text-overflow">
+//      Supercalifragilisticexpialidocious
+//  </p>
+//  ```
+
+.example-text-overflow {
+    .lib-text-overflow();
+    background: #ccc;
+    width: 120px;
+}
+
+//  # Text hide
+//
+//  The <code>.lib-text-hide()</code> mixin hides a text of the element the mixin is applyed to.
+//
+//  ```html
+//  <p class="example-text-hide">
+//      Text to hide
+//  </p>
+//  ```
+
+.example-text-hide {
+    .lib-text-hide();
+}
+
+//  # Hyphens
+//
+//  The <code>.lib-hyphens()</code> mixin sets hyphens CSS property with browser prefixes. It accepts the <code>@mode</code> variable with following accessible values:
+//
+//   ```css
+//  none
+//  manual
+//  auto
+//  ```
+//
+//  Here are two examples with different setup:
+//
+//  ```html
+//  <p class="example-hyphens"  style="width:50px;" lang="en">
+//      An extremely long English word
+//  </p>
+//  <p class="example-hyphens-none"  style="width:50px;" lang="en">
+//      An extremely long English word
+//  </p>
+//  ```
+
+.example-hyphens {
+    .lib-hyphens();
+}
+
+.example-hyphens-none {
+    .lib-hyphens(none);
+}
+
+//  # Font style and color
+//
+//  The <code>.lib-typography()</code> mixin is used to set font style and font color of the element.
+//
+//  ```html
+//  <span class="example-typography">
+//      An example of using .lib-typography() mixin
+//  </span>
+//  ```
+
+.example-typography {
+    .lib-typography(30, #fc0, @font-family__monospace, 500, 1.2, italic);
+}
+
+//  # Font style mixin variables
+//  <pre>
+//    <table>
+//        <tr>
+//            <th class="vars_head">Mixin variable</th>
+//            <th class="vars_head">Default value</th>
+//            <th class="vars_head">Allowed values</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th>@_color</th>
+//            <td class="vars_value">@text__color</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Text color</td>
+//        </tr>
+//        <tr>
+//            <th>@_font-size</th>
+//            <td class="vars_value">@font-size__base</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Font size</td>
+//        </tr>
+//        <tr>
+//            <th>@_font-family</th>
+//            <td class="vars_value">@font-family__base</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Font family</td>
+//        </tr>
+//        <tr>
+//            <th>@_font-weight</th>
+//            <td class="vars_value">@font-weight__regular</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Font weight</td>
+//        </tr>
+//        <tr>
+//            <th>@_font-style</th>
+//            <td class="vars_value">@font-style__base</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Font style</td>
+//        </tr>
+//        <tr>
+//            <th>@_line-height</th>
+//            <td class="vars_value">@line-height__base</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Line height</td>
+//        </tr>
+//    </table>
+//  </pre>
+
+//  # Reset list styles
+//
+//  The <code>.lib-list-reset-styles()</code> mixin resets browser default list style and sets its margins and paddings.
+//
+//  **Default list style:**
+//  ```html
+//  <ul class="example-list">
+//    <li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li>
+//    <li>Aliquam tincidunt mauris eu risus.</li>
+//    <li>Vestibulum auctor dapibus neque.</li>
+//  </ul>
+//  ```
+//  **List with <code>.lib-list-reset-styles()</code> mixin applied:**
+//  ```html
+//  <ul class="example-list-reset-styles">
+//    <li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li>
+//    <li>Aliquam tincidunt mauris eu risus.</li>
+//    <li>Vestibulum auctor dapibus neque.</li>
+//  </ul>
+//  ```
+
+.example-list-reset-styles {
+    .lib-list-reset-styles();
+}
+
+//  # Reset list styles variables
+//  <pre>
+//    <table>
+//        <tr>
+//            <th class="vars_head">Mixin variable</th>
+//            <th class="vars_head">Default value</th>
+//            <th class="vars_head">Allowed values</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th>@_margin</th>
+//            <td class="vars_value">0</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>List margin</td>
+//        </tr>
+//        <tr>
+//            <th>@_padding</th>
+//            <td class="vars_value">0</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>List padding</td>
+//        </tr>
+//    </table>
+//  </pre>
+
+//  # Inline-block list item styling
+//
+//  The <code>.lib-list-inline()</code> mixin resets browser default list style and sets its list items display property to <code>display: inline-block</code>.
+//
+//  **Default list style:**
+//  ```html
+//  <ul class="example-list">
+//    <li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li>
+//    <li>Aliquam tincidunt mauris eu risus.</li>
+//    <li>Vestibulum auctor dapibus neque.</li>
+//  </ul>
+//  ```
+//  **List with <code>.lib-list-inline()</code> mixin applied:**
+//  ```html
+//  <ul class="example-list-inline">
+//    <li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li>
+//    <li>Aliquam tincidunt mauris eu risus.</li>
+//    <li>Vestibulum auctor dapibus neque.</li>
+//  </ul>
+//  ```
+
+.example-list-inline {
+    .lib-list-inline();
+}
+
+//  # Link styling mixin
+//
+//  The <code>.lib-link()</code> mixin is used to set styles for all links states.
+//
+//  ```html
+//  <a href="#" class="example-link-default">Link with global variables customization</a>
+//  ```
+//  ```html
+//  <a href="#" class="example-link">Link with custom styles</a>
+//  ```
+
+.example-link-default {
+    .lib-link();
+}
+
+.example-link {
+    .lib-link(@_link-color: green, @_link-color-hover: orange, @_link-text-decoration-hover: none );
+}
+
+//  # Link styling mixin variables
+//  <pre>
+//    <table>
+//        <tr>
+//            <th class="vars_head">Mixin variable</th>
+//            <th class="vars_head">Default value</th>
+//            <th class="vars_head">Allowed values</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th>@_link-color</th>
+//            <td class="vars_value">#1979c3</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Default link color</td>
+//        </tr>
+//        <tr>
+//            <th>@_link-text-decoration</th>
+//            <td class="vars_value">underline</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Default link text decoration</td>
+//        </tr>
+//        <tr>
+//            <th>@_link-color-visited</th>
+//            <td class="vars_value">#800080</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Visited link color</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_link-text-decoration-visited</th>
+//            <td class="vars_value">underline</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Visited link text decoration</td>
+//        </tr>
+//        <tr>
+//            <th>@_link-color-hover</th>
+//            <td class="vars_value">#006bb4</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Hovered link color</td>
+//        </tr>
+//        <tr>
+//            <th>@_link-text-decoration-hover</th>
+//            <td class="vars_value">underline</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Hovered link text decoration</td>
+//        </tr>
+//        <tr>
+//            <th>@_link-color-active</th>
+//            <td class="vars_value">#ff5501</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Active link color</td>
+//        </tr>
+//        <tr>
+//            <th>@_link-text-decoration-active</th>
+//            <td class="vars_value">underline</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Active link text decoration</td>
+//        </tr>
+//    </table>
+//  </pre>
+
+//  # Heading styling mixin
+//
+//  The <code>.lib-heading()</code> mixin is used to set heading styles to an element. To use this mixin, set the type of heading that you want to inherit styles from. The mixin uses global heading variables.
+//
+//  ```html
+//  <h1 class="example-heading">Example heading</h1>
+//  <h2 class="example-heading-2">Example heading</h2>
+//  ```
+
+.example-heading {
+    .lib-heading(h1);
+}
+.example-heading-2 {
+    .lib-heading(h2);
+}
+
+//  # Base typography mixins
+//
+//  Magento UI library offers mixins to styles elements sets.
+//
+//  The <code>.lib-typography__base()</code> mixin applyes basic styles from <code>_variables.less</code> to the following elements:
+//
+//  ```css
+//  html
+//  body
+//  p
+//  abbr
+//  b
+//  strong
+//  em
+//  i
+//  mark
+//  small
+//  .small
+//  hr
+//  sub,
+//  sup
+//  dfn
+//  ```
+//
+//  ```html
+//  <p><strong>Pellentesque habitant morbi tristique</strong> senectus et netus et malesuada fames ac <small>turpis</small> egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, <em>tempor</em> sit amet, ante. Donec <sub>eu</sub> libero sit amet quam egestas semper. <code>Aenean ultricies</code> mi vitae <sup>est</sup>. Mauris placerat eleifend leo. <abbr>Quisque</abbr> sit amet est et sapien <mark>ullamcorper</mark> pharetra.</p>
+//  <hr>
+//  <p><dfn>Pellentesque</dfn> habitant <i>morbi</i> tristique <b>senectus</b> et netus et malesuada fames ac turpis egestas.</p>
+//  ```
+
+.lib-typography__base();
+
+//  # Base typography mixin variables
+//  <pre>
+//    <table>
+//        <tr>
+//            <th class="vars_head">Mixin variable</th>
+//            <th class="vars_head">Global variable</th>
+//            <th class="vars_head">Default value</th>
+//            <th class="vars_head">Allowed values</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th>@_abbr-border-color</th>
+//            <td class="vars_value">@abbr__border-color</td>
+//            <td class="vars_value">@border-color__base</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>&lt;abbr&gt; border color</td>
+//        </tr>
+//        <tr>
+//            <th>@_dfn-font-style</th>
+//            <td class="vars_value">@font-style__emphasis</td>
+//            <td class="vars_value">italic</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>&lt;dfn&gt; font style</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_emphasis-font-style</th>
+//            <td class="vars_value">@font-style__emphasis</td>
+//            <td class="vars_value">italic</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>&lt;em&gt; font style</td>
+//        </tr>
+//        <tr>
+//            <th>@_hr-border-color</th>
+//            <td class="vars_value">@hr__border-color</td>
+//            <td class="vars_value">@border-color__base</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>HR border color</td>
+//        </tr>
+//        <tr>
+//            <th>@_hr-border-style</th>
+//            <td class="vars_value">@hr__border-style</td>
+//            <td class="vars_value">solid</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>HR border style</td>
+//        </tr>
+//        <tr>
+//            <th>@_hr-border-width</th>
+//            <td class="vars_value">@hr__border-width</td>
+//            <td class="vars_value">@border-width__base</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>HR border width</td>
+//        </tr>
+//        <tr>
+//            <th>@_hr-margin-bottom</th>
+//            <td class="vars_value">@line-height__computed</td>
+//            <td class="vars_value">floor(@font-size__base * @line-height__base)</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>HR margin bottom</td>
+//        </tr>
+//        <tr>
+//            <th>@_hr-margin-top</th>
+//            <td class="vars_value">@line-height__computed</td>
+//            <td class="vars_value">floor(@font-size__base * @line-height__base)</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>HR margin top</td>
+//        </tr>
+//        <tr>
+//            <th>@_mark-background-color</th>
+//            <td class="vars_value">@mark__background-color</td>
+//            <td class="vars_value">@panel__background-color</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>&lt;mark&gt; background color</td>
+//        </tr>
+//        <tr>
+//            <th>@_mark-color</th>
+//            <td class="vars_value">@mark__color</td>
+//            <td class="vars_value">@primary__color__dark</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>&lt;mark&gt; color</td>
+//        </tr>
+//        <tr>
+//            <th>@_p-margin-bottom</th>
+//            <td class="vars_value">@p__margin-bottom</td>
+//            <td class="vars_value">@indent__s</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Paragraph margin bottom</td>
+//        </tr>
+//        <tr>
+//            <th>@_p-margin-top</th>
+//            <td class="vars_value">@p__margin-top</td>
+//            <td class="vars_value">0</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Paragraph margin top</td>
+//        </tr>
+//        <tr>
+//            <th>@_root-font-size</th>
+//            <td class="vars_value">@root__font-size</td>
+//            <td class="vars_value">62.5%</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Setting font-size for HTML tag</td>
+//        </tr>
+//        <tr>
+//            <th>@_small-font-size</th>
+//            <td class="vars_value">@font-size__s</td>
+//            <td class="vars_value">ceil(.85 * @font-size__base) // 12</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>&lt;small&gt; tag font size</td>
+//        </tr>
+//        <tr>
+//            <th>@_strong-font-weight</th>
+//            <td class="vars_value">@font-weight__bold</td>
+//            <td class="vars_value">700</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>&lt;strong&gt; tag font weight</td>
+//        </tr>
+//        <tr>
+//            <th>@_sub-sup-font-size</th>
+//            <td class="vars_value">-</td>
+//            <td class="vars_value">(@font-size__xs / @font-size__base) * 100%</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>&lt;sup&gt; an &lt;sup&gt; tags font size</td>
+//        </tr>
+//    </table>
+//  </pre>
+
+//  # Headings typography mixin
+//
+//  The <code>.lib-typography-headings()</code> mixin is used to style all H1-H6 headings. This mixin uses settings from global variables list.
+//
+//  ```html
+//  <h1>Header Level 1</h1>
+//  <h2>Header Level 2</h2>
+//  <h3>Header Level 3</h3>
+//  <h4>Header Level 4</h4>
+//  <h5>Header Level 5</h5>
+//  <h6>Header Level 2</h6>
+//  ```
+
+.lib-typography-headings();
+
+//  # Headings typography mixin variables
+//  <pre>
+//    <table>
+//        <tr>
+//            <th class="vars_head">Mixin variable</th>
+//            <th class="vars_head">Global variable</th>
+//            <th class="vars_head">Default value</th>
+//            <th class="vars_head">Allowed values</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th>@_heading-small-size</th>
+//            <td class="vars_value">@heading__small-size</td>
+//            <td class="vars_value">(@font-size__xs/@font-size__base) * 100%</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>&lt;small&gt; and .small heading element font-size</td>
+//        </tr>
+//        <tr>
+//            <th>@_heading-small-color</th>
+//            <td class="vars_value">@heading__small-color</td>
+//            <td class="vars_value">@primary__color</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>&lt;small&gt; and .small heading element color</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_heading-small-line-height</th>
+//            <td class="vars_value">@heading__small-line-height</td>
+//            <td class="vars_value">1</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>&lt;small&gt; and .small heading element line height</td>
+//        </tr>
+//    </table>
+//  </pre>
+
+//  # Typography links mixin
+//
+//  The <code>.lib-typography-links()</code> mixin is used to apply default styles to all <code>&lt;a&gt;</code> elements and elements with <code>class="alink"</code>. This mixin uses settings from global variables list.
+//
+//  ```html
+//  <a href="#">Link with global variables customization</a>
+//  ```
+//  ```html
+//  <span class="alink">Span styled as a link</span>
+//  ```
+
+.lib-typography-links();
+
+//  # Typography lists mixin
+//
+//  The <code>.lib-typography-lists()</code> mixin is used to apply styles to all ordered, unordered, and definition lists. This mixin uses settings from global variables list.
+//
+//  ```html
+//    <ul>
+//        <li>Morbi in sem quis dui placerat ornare. Pellentesque odio nisi, euismod in, pharetra a, ultricies in, diam. Sed arcu. Cras consequat.</li>
+//        <li>Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus.
+//    <ul>
+//                <li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li>
+//                <li>Aliquam tincidunt mauris eu risus.</li>
+//                <li>Vestibulum auctor dapibus neque.</li>
+//            </ul>
+//        </li>
+//        <li>Phasellus ultrices nulla quis nibh. Quisque a lectus. Donec consectetuer ligula vulputate sem tristique cursus.
+//            Nam nulla quam, gravida non, commodo a, sodales sit amet, nisi.
+//    <ol>
+//                <li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li>
+//                <li>Aliquam tincidunt mauris eu risus.</li>
+//                <li>Vestibulum auctor dapibus neque.</li>
+//            </ol>
+//        </li>
+//        <li>Pellentesque fermentum dolor. Aliquam quam lectus, facilisis auctor, ultrices ut, elementum vulputate, nunc.</li>
+//    </ul>
+//    <dl>
+//        <dt>Definition list</dt>
+//        <dd>Consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</dd>
+//        <dt>Lorem ipsum dolor sit amet</dt>
+//        <dd>Consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</dd>
+//    </dl>
+//  ```
+
+.lib-typography-lists();
+
+//  # Typography lists mixin variables
+//  <pre>
+//    <table>
+//        <tr>
+//            <th class="vars_head">Mixin variable</th>
+//            <th class="vars_head">Global variable</th>
+//            <th class="vars_head">Default value</th>
+//            <th class="vars_head">Allowed values</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th>@_list-margin-top</th>
+//            <td class="vars_value">@list__margin-top</td>
+//            <td class="vars_value">0</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>List margin top</td>
+//        </tr>
+//        <tr>
+//            <th>@_list-margin-bottom</th>
+//            <td class="vars_value">@list__margin-bottom</td>
+//            <td class="vars_value">@indent__m</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>List margin bottom</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_list-item-margin-top</th>
+//            <td class="vars_value">@list-item__margin-top</td>
+//            <td class="vars_value">0</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>List item margin top</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_list-item-margin-bottom</th>
+//            <td class="vars_value">@list-item__margin-bottom</td>
+//            <td class="vars_value">@indent__s</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>List item margin bottom</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_dl-margin-bottom</th>
+//            <td class="vars_value">@dl__margin-bottom</td>
+//            <td class="vars_value">@indent__base</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Definition list margin bottom</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_dl-margin-top</th>
+//            <td class="vars_value">@dl__margin-top</td>
+//            <td class="vars_value">0</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Definition list margin top</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_dt-font-weight</th>
+//            <td class="vars_value">@dt__font-weight</td>
+//            <td class="vars_value">@font-weight__bold</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Description term font weight</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_dt-margin-bottom</th>
+//            <td class="vars_value">@dt__margin-bottom</td>
+//            <td class="vars_value">@indent__xs</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Description term margin bottom</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_dt-margin-top</th>
+//            <td class="vars_value">@dt__margin-top</td>
+//            <td class="vars_value">0</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Description term margin top</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_dd-margin-bottom</th>
+//            <td class="vars_value">@dd__margin-bottom</td>
+//            <td class="vars_value">@indent__s</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Description margin bottom</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_dd-margin-top</th>
+//            <td class="vars_value">@dd__margin-top</td>
+//            <td class="vars_value">0</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Description margin top</td>
+//        </tr>
+//    </table>
+//  </pre>
+
+//  # Typography code elements mixin
+//
+//  <code>.lib-typography-code()</code> mixin is used to apply styles to the following code elements:
+//
+//  ```css
+//  code
+//  kbd
+//  pre
+//  samp
+//  ```
+//
+//  This mixin uses settings from global variables list.
+//
+//  ```html
+//  <p>Lorem ipsum dolor sit amet, <samp>consectetur adipiscing elit<samp>. Vivamus magna. Cras in mi at felis aliquet congue. Ut a est eget ligula molestie gravida.</p>
+//  <pre><code> #header h1 a {
+//    display: block;
+//    width: 300px;
+//    height: 80px;
+//  } </code></pre>
+//  <p>Vestibulum tortor quam, feugiat <kbd>Keyboard input</kbd> vitae, ultricies eget, tempor sit amet, ante.</p>
+//  ```
+
+.lib-typography-code();
+
+//  # Typography code mixin variables
+//  <pre>
+//    <table>
+//        <tr>
+//            <th class="vars_head">Mixin variable</th>
+//            <th class="vars_head">Global variable</th>
+//            <th class="vars_head">Default value</th>
+//            <th class="vars_head">Allowed values</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th>@_font-family-monospace</th>
+//            <td class="vars_value">@font-family__monospace</td>
+//            <td class="vars_value">Menlo, Monaco, Consolas, 'Courier New', monospace</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Monospace font family</td>
+//        </tr>
+//        <tr>
+//            <th>@_code-background-color</th>
+//            <td class="vars_value">@code__background-color</td>
+//            <td class="vars_value">@panel__background-color</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Code block background</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_code-color</th>
+//            <td class="vars_value">@code__color</td>
+//            <td class="vars_value">@primary__color__darker</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Code text color</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_code-padding</th>
+//            <td class="vars_value">@code__padding</td>
+//            <td class="vars_value">2px 4px</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Code block padding</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_code-font-size</th>
+//            <td class="vars_value">@code__font-size</td>
+//            <td class="vars_value">@font-size__s</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Code block font size</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_kbd-background-color</th>
+//            <td class="vars_value">@kbd__background-color</td>
+//            <td class="vars_value">@panel__background-color</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Keyboard input background</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_kbd-color</th>
+//            <td class="vars_value">@kbd__color</td>
+//            <td class="vars_value">@primary__color__darker</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Keyboard input text color</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_kbd-padding</th>
+//            <td class="vars_value">@code__padding</td>
+//            <td class="vars_value">2px 4px</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Keyboard input padding</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_kbd-font-size</th>
+//            <td class="vars_value">@code__font-size</td>
+//            <td class="vars_value">@font-size__s</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Keyboard input font size</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_pre-background-color</th>
+//            <td class="vars_value">@pre__background-color</td>
+//            <td class="vars_value">@primary__color__light</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Preformatted text background color</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_pre-border-width</th>
+//            <td class="vars_value">@pre__border-width</td>
+//            <td class="vars_value">@border-width__base</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Preformatted text border width</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_pre-border-color</th>
+//            <td class="vars_value">@pre__border-color</td>
+//            <td class="vars_value">@border-color__base</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Preformatted text border color</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_pre-color</th>
+//            <td class="vars_value">@pre__color</td>
+//            <td class="vars_value">@primary__color__darker</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Text color of preformatted text</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_pre-line-height</th>
+//            <td class="vars_value">@line-height__base</td>
+//            <td class="vars_value">1.428571429</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Preformatted text line height</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_pre-margin</th>
+//            <td class="vars_value">-</td>
+//            <td class="vars_value">0 0 @indent__s</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Preformatted text margin</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_pre-padding</th>
+//            <td class="vars_value">-</td>
+//            <td class="vars_value">@indent__s</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Preformatted text padding</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_pre-font-size</th>
+//            <td class="vars_value">@code__font-size</td>
+//            <td class="vars_value">@font-size__s</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Preformatted text font size</td>
+//        </tr>
+//    </table>
+//  </pre>
+
+//  # Typography blockquote
+//
+//  The <code>.lib-typography-blockquote()</code> mixin is used to apply styles to blockquote elements. This mixin uses settings from global variables list.
+//
+//  ```html
+//  <blockquote>
+//    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus magna. Cras in mi at felis aliquet congue. Ut a est eget ligula molestie gravida. Curabitur massa. Donec eleifend, libero at sagittis mollis, tellus est malesuada tellus, at luctus turpis elit sit amet quam. Vivamus pretium ornare est.</p>
+//    <a href="#">Author quotes</a>
+//  </blockquote>
+//  ```
+
+.lib-typography-blockquote();
+
+//  # Typography blockquote mixin variables
+//  <pre>
+//    <table>
+//        <tr>
+//            <th class="vars_head">Mixin variable</th>
+//            <th class="vars_head">Global variable</th>
+//            <th class="vars_head">Default value</th>
+//            <th class="vars_head">Allowed values</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_blockquote-border-width</th>
+//            <td class="vars_value">@blockquote__border-width</td>
+//            <td class="vars_value">0</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Blockquote border width</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_blockquote-border-color</th>
+//            <td class="vars_value">@blockquote__border-color</td>
+//            <td class="vars_value">@border-color__base</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Blockquote border color</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_blockquote-margin</th>
+//            <td class="vars_value">@blockquote__margin</td>
+//            <td class="vars_value">0 0 @indent__base @indent__xl</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Blockquote margin</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_blockquote-padding</th>
+//            <td class="vars_value">@blockquote__padding</td>
+//            <td class="vars_value">0</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Blockquote padding</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_blockquote-font-size</th>
+//            <td class="vars_value">@blockquote__font-size</td>
+//            <td class="vars_value">@font-size__base</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Blockquote font size</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_blockquote-font-style</th>
+//            <td class="vars_value">@blockquote__font-style</td>
+//            <td class="vars_value">@font-style__emphasis</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Blockquote font style</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_blockquote-small-color</th>
+//            <td class="vars_value">@blockquote-small__color</td>
+//            <td class="vars_value">@primary__color</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Blockquote &lt;small&gt; and .small text color</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_blockquote-small-line-height</th>
+//            <td class="vars_value">@line-height__base</td>
+//            <td class="vars_value">1.428571429</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Blockquote &lt;small&gt; and .small line height</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_blockquote-small-font-size</th>
+//            <td class="vars_value">@blockquote-small__font-size</td>
+//            <td class="vars_value">@font-size__xs</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Blockquote &lt;small&gt; and .small text font size</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_blockquote-small-before-content</th>
+//            <td class="vars_value">@blockquote__content-before</td>
+//            <td class="vars_value">'\2014 \00A0'</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Blockquote &lt;small&gt; and .small before pseudo element content</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_blockquote-cite</th>
+//            <td class="vars_value">@cite__font-style</td>
+//            <td class="vars_value">@font-style__base</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Blockquote cite font style</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_cite</th>
+//            <td class="vars_value">@cite__font-style</td>
+//            <td class="vars_value">@font-style__base</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Cite font style</td>
+//        </tr>
+//    </table>
+//  </pre>

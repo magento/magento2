@@ -1,0 +1,23 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+// @codingStandardsIgnoreFile
+?>
+<div class="row page-license">
+    <div class="col-m-offset-2 col-m-8 col-xs-12">
+        <div class="license-text">
+            <?= nl2br(htmlspecialchars($this->license, ENT_COMPAT, 'UTF-8')) ?>
+        </div>
+        <div class="page-license-footer">
+            <div class="btn-wrap-triangle-left">
+                <button
+                    type="button"
+                    class="btn"
+                    ng-click="nextState()"
+                    >Go Back</button>
+            </div>
+        </div>
+    </div>
+</div>

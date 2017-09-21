@@ -1,0 +1,776 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Components
+//  _____________________________________________
+
+@import 'fields/_control-collapsible.less';
+@import 'fields/_control-table.less';
+@import 'fields/_field-tooltips.less';
+@import 'fields/_field-reset.less';
+
+//
+//  Extends
+//  _____________________________________________
+
+.abs-field-size-x-small {
+    width: @field-size__xs;
+}
+
+.abs-field-size-small {
+    width: @field-size__s;
+}
+
+.abs-field-size-medium {
+    width: @field-size__m;
+}
+
+.abs-field-size-large {
+    width: @field-size__l;
+}
+
+.abs-field-sizes {
+    &.admin__field-x-small {
+        > .admin__field-control {
+            &:extend(.abs-field-size-x-small all);
+        }
+    }
+
+    &.admin__field-small {
+        > .admin__field-control {
+            &:extend(.abs-field-size-small all);
+        }
+    }
+
+    &.admin__field-medium {
+        > .admin__field-control {
+            &:extend(.abs-field-size-medium all);
+        }
+    }
+
+    &.admin__field-large {
+        > .admin__field-control {
+            &:extend(.abs-field-size-large all);
+        }
+    }
+}
+
+.abs-field-no-label {
+    #mix-grid .return_length(@field-label-grid__column, @field-grid__columns, '+');
+    margin-left: @_length;
+}
+
+//
+//  Form Fields
+//  _____________________________________________
+
+//
+//  Fieldset
+//  ---------------------------------------------
+
+.admin__fieldset {
+    border: 0;
+    margin: 0;
+    min-width: 0;
+    padding: 0;
+
+    //  Filedset section
+    .fieldset-wrapper {
+        &.admin__fieldset-section {
+            > .fieldset-wrapper-title {
+                padding-left: @indent__s;
+
+                strong {
+                    font-size: @collapsible-title__font-size;
+                    font-weight: @font-weight__semibold;
+                }
+            }
+
+            .admin__fieldset-wrapper-content {
+                > .admin__fieldset {
+                    padding-top: @indent__s;
+                }
+            }
+
+            &:last-child {
+                .admin__fieldset-wrapper-content {
+                    > .admin__fieldset {
+                        padding-bottom: 0;
+                    }
+                }
+            }
+        }
+    }
+
+    > .admin__field {
+        border: 0;
+        margin: 0;
+        padding: 0;
+        #mix-grid .row();
+
+        &.admin__field-wide {
+            &:extend(.abs-field-rows all);
+        }
+
+        > .admin__field-control {
+            #mix-grid .column(@field-control-grid__column, @field-grid__columns);
+        }
+
+        > .admin__field-label {
+            #mix-grid .column(@field-label-grid__column, @field-grid__columns);
+        }
+
+        &:extend(.abs-field-sizes all);
+
+        &.admin__field-no-label {
+            > .admin__field-label {
+                display: none;
+            }
+
+            > .admin__field-control {
+                &:extend(.abs-field-no-label all);
+            }
+        }
+
+        //  Field with empty table and no thead
+        + .admin__field {
+            &._empty {
+                &._no-header {
+                    margin-top: -@indent__l;
+                }
+            }
+        }
+    }
+}
+
+.admin__fieldset-product-websites {
+    position: relative;
+    z-index: @z-index-3;
+}
+
+.admin__fieldset-note {
+    margin-bottom: @indent__base;
+}
+
+.admin__form-field {
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.admin__form-field-control,
+.admin__field-control {
+    .admin__control-text,
+    .admin__control-textarea {
+        width: 100%;
+    }
+}
+
+.admin__field-no-label {
+    &:extend(.abs-field-no-label all);
+}
+
+.admin__field-row {
+    &:extend(.abs-field-rows all);
+}
+
+//
+//  Label
+//  ---------------------------------------------
+
+.admin__field-label {
+    color: @field-label__color;
+    cursor: pointer;
+    margin: 0;
+    text-align: right;
+
+    + br {
+        display: none;
+    }
+
+    .admin__field:not(.admin__field-option) > & {
+        &:extend(.abs-word-wrap all);
+        font-family: @font-family__base;
+        font-size: @field-label__font-size;
+        font-weight: @font-weight__semibold;
+        line-height: 3.2rem;
+        padding: 0;
+        white-space: nowrap;
+
+        &:before {
+            .appearing__off();
+            content: '.';
+            margin-left: -7px;
+            overflow: hidden;
+        }
+
+        span {
+            display: inline-block;
+            line-height: @field-label__line-height;
+            vertical-align: middle;
+            white-space: normal;
+
+            &[data-config-scope] {
+                position: relative;
+
+                &:before {
+                    &:extend(.abs-config-scope-label all);
+                }
+            }
+        }
+    }
+
+    .required > &, // ToDo UI: change classes 'required' to '_required'.
+    ._required > & {
+        > span {
+            &:after {
+                color: @validation__color;
+                content: '*';
+                display: inline-block;
+                font-size: @font-size__l;
+                font-weight: @font-weight__heavier;
+                line-height: 1;
+                margin-left: 10px;
+                margin-top: .2rem;
+                position: absolute;
+                z-index: 1;
+            }
+        }
+    }
+
+    ._disabled > & {
+        color: @field-label__disabled__color;
+        cursor: default;
+    }
+}
+
+//
+//  Field
+//  ---------------------------------------------
+
+.admin__field {
+    &:extend(.abs-field-sizes all);
+    margin-bottom: 0;
+
+    & + & {
+        margin-top: 1.5rem;
+    }
+
+    &:not(.admin__field-option) ~ .admin__field-option {
+        margin-top: .5rem;
+    }
+
+    &.admin__field-option ~ .admin__field-option {
+        margin-top: .9rem;
+    }
+
+    & ~ .admin__field-option:last-child {
+        margin-bottom: .8rem;
+    }
+
+    .admin__fieldset > & {
+        margin-bottom: 3rem;
+        position: relative;
+    }
+
+    //  Hide group legend and show first field label instead
+    legend {
+        &.admin__field-label {
+            opacity: 0;
+        }
+    }
+
+    //  ToDo UI: Scope Labels must be moved from right side of each control to the place under the label of the control.
+    //  This code must be removed after Scope Labels are moved completely.
+    //  Till that time they'll be disabled by commenting pseudo-element content property.
+    &[data-config-scope] {
+        &:before {
+            #mix-grid .return_length(@field-label-grid__column + @field-control-grid__column, @field-grid__columns);
+            color: @field-scope__color;
+            content: attr(data-config-scope);
+            display: inline-block;
+            font-size: @font-size__s;
+            left: @_length;
+            line-height: 3.2rem;
+            margin-left: 2 * @temp_gutter;
+            position: absolute;
+
+            & {
+                #mix-grid .width(@field-label-grid__column, @field-grid__columns);
+            }
+        }
+
+        .admin__field-control &:nth-child(n + 2):before {
+            content: '';
+        }
+    }
+
+    &._error {
+        .admin__field-control [class*='admin__control-'] [class*='admin__addon-']:before,
+        .admin__field-control [class*='admin__addon-']:before,
+        .admin__field-control > [class*='admin__control-'] {
+            border-color: @field-error-control__border-color;
+        }
+    }
+
+    &._disabled,
+    &._disabled:hover {
+        box-shadow: inherit;
+        cursor: inherit;
+        opacity: 1;
+        outline: inherit;
+    }
+
+    &._hidden {
+        display: none;
+    }
+}
+
+.admin__field-control {
+    & + & {
+        margin-top: 1.5rem;
+    }
+
+    //  If there is a tooltip
+    &._with-tooltip {
+        > .admin__control-addon,
+        > .admin__field-option,
+        > .admin__control-select,
+        > .admin__control-text,
+        > .admin__control-textarea {
+            max-width: ~'calc(100% - @{field-tooltip__width} - 4px)'; // Minus space size
+        }
+
+        .admin__field-tooltip {
+            width: auto;
+        }
+
+        .admin__field-option {
+            display: inline-block;
+        }
+    }
+
+    //  If there is a fallback reset button
+    &._with-reset {
+        > .admin__control-addon,
+        > .admin__control-text,
+        > .admin__control-textarea {
+            width: ~'calc(100% - @{field-fallback-reset__width} - @{field-fallback-reset-icon__margin-left} - 4px)'; // Minus space size
+        }
+
+        .admin__field-fallback-reset {
+            margin-left: @field-fallback-reset__margin-left;
+            margin-top: @field-fallback-reset__margin-top;
+            vertical-align: top;
+        }
+
+        //  If both
+        &._with-tooltip {
+            > .admin__control-addon,
+            > .admin__control-text,
+            > .admin__control-textarea {
+                width: ~'calc(100% - @{field-fallback-reset__width} - @{field-fallback-reset-icon__margin-left} - @{field-tooltip__width} - 8px)'; // Minus 2 space sizes
+            }
+        }
+    }
+}
+
+//  Collapsible radiobutton field
+.admin__field-collapsible {
+    .admin__fieldset > & {
+        margin-bottom: 0;
+
+        .admin__field-control {
+            border-top: 1px solid @field-collapsible__border-color;
+            display: block;
+            font-size: 1.7rem;
+            font-weight: @font-weight__bold;
+            padding: 1.7rem 0;
+            width: calc(100% - @indent__l);
+        }
+
+        .admin__field-option {
+            padding-top: 0;
+        }
+    }
+
+    + div {
+        margin-top: @indent__m;
+    }
+
+    .admin__control-radio {
+        + label {
+            &:before {
+                height: 1.8rem;
+                width: 1.8rem;
+            }
+        }
+
+        &:checked {
+            + label {
+                &:after {
+                    left: 4px;
+                    top: 5px;
+                }
+            }
+        }
+    }
+}
+
+//
+//  Field messages
+//  ---------------------------------------------
+
+//  Field error message
+.admin__field-error {
+    background: @field-error-message__background-color;
+    border: 1px solid @field-error-message__border-color;
+    box-sizing: border-box;
+    color: @field-error-message__color;
+    display: block;
+    font-size: @font-size__s;
+    font-weight: @font-weight__regular;
+    line-height: @line-height__s;
+    margin: .2rem 0 0;
+    padding: .8rem 1rem .9rem;
+}
+
+//  Field notice message
+.admin__field-note {
+    color: @field-note__color;
+    font-size: @field-note__font-size;
+    margin: 10px 0 0;
+    padding: 0;
+}
+
+//  Field additional information
+.admin__additional-info {
+    padding-top: @indent__s;
+}
+
+//  Field containing checkbox or radio
+.admin__field-option {
+    padding-top: @field-option__padding-top;
+
+    .admin__field-label {
+        text-align: left;
+    }
+
+    .admin__field-control > & {
+        &:nth-child(1):nth-last-child(2),
+        &:nth-child(2):nth-last-child(1) {
+            display: inline-block;
+
+            + .admin__field-option {
+                display: inline-block;
+                margin-left: 41px;
+                margin-top: 0;
+            }
+
+            + .admin__field-option:before {
+                background: @field-divider__background-color;
+                content: '';
+                display: inline-block;
+                height: 20px;
+                margin-left: -20px;
+                position: absolute;
+                width: 1px;
+            }
+        }
+    }
+}
+
+//  Field containing a value
+.admin__field-value {
+    display: inline-block;
+    padding-top: @field-option__padding-top;
+}
+
+//  Field use default value action
+.admin__field-service {
+    padding-top: @indent__s;
+}
+
+//
+//  Field containing multiple fields
+//  _____________________________________________
+
+[class*='admin__control-grouped'],
+.admin__control-fields {
+    & > .admin__field {
+        &:first-child {
+            position: static;
+
+            & > .admin__field-label {
+                #mix-grid .column(@field-label-grid__column, @field-grid__columns);
+                background: @color-white;
+                cursor: pointer;
+                left: 0;
+                position: absolute;
+                top: 0;
+
+                span {
+                    &:before {
+                        display: block;
+                    }
+                }
+            }
+        }
+
+        &._disabled {
+            & > .admin__field-label {
+                cursor: default;
+            }
+        }
+
+        & > .admin__field-label {
+            span {
+                &:before {
+                    display: none;
+                }
+            }
+        }
+    }
+}
+
+//  In rows
+.admin__control-fields {
+    .admin__field-label ~ .admin__field-control {
+        width: 100%;
+    }
+
+    .admin__field:nth-child(n + 2):not(.admin__field-option):not(.admin__field-group-show-label) {
+        > .admin__field-label {
+            &:extend(.abs-visually-hidden all);
+        }
+    }
+
+    .admin__field-option {
+        padding-top: 0;
+    }
+}
+
+//  In line
+[class*='admin__control-grouped'] {
+    box-sizing: border-box;
+    display: table;
+    width: 100%;
+
+    & > .admin__field {
+        display: table-cell;
+        vertical-align: top;
+
+        > .admin__field-control {
+            float: none;
+            width: 100%;
+        }
+
+        //  Stretch group column size to control
+        &.admin__field-default,
+        &.admin__field-x-small,
+        &.admin__field-small,
+        &.admin__field-medium,
+        &.admin__field-large {
+            width: 1px;
+
+            + .admin__field:last-child {
+                width: auto;
+            }
+        }
+
+        &:extend(.abs-field-sizes all);
+
+        &:nth-child(n + 2) {
+            padding-left: @field-group-label__padding;
+
+            &:not(.admin__field-option):not(.admin__field-group-show-label):not(.admin__field-date) {
+                > .admin__field-label {
+                    &:extend(.abs-visually-hidden all);
+                }
+            }
+        }
+    }
+}
+
+//  Group of controls with equal width
+.admin__control-group-equal {
+    table-layout: fixed;
+
+    & > .admin__field {
+        width: 50%;
+    }
+}
+
+//  Group of checkboxes or radiobuttons
+.admin__field-control-group {
+    margin-top: .8rem;
+
+    & > .admin__field {
+        padding: 0;
+    }
+}
+
+//  Group of date fields
+.admin__control-grouped-date {
+    & > .admin__field-date {
+        white-space: nowrap;
+        width: 1px;
+
+        &.admin__field {
+            > .admin__field-control {
+                &:extend(.abs-field-size-small all);
+                float: left;
+                position: relative;
+            }
+        }
+
+        + .admin__field:last-child {
+            width: auto;
+        }
+
+        + .admin__field-date {
+            > .admin__field-label {
+                float: left;
+                padding-right: @field-group-label__padding;
+            }
+        }
+    }
+
+    .ui-datepicker-trigger {
+        left: 100%;
+        top: 0;
+    }
+}
+
+//  Group of fields with labels above in line
+.admin__field-group-columns {
+    &.admin__field-control.admin__control-grouped {
+        #mix-grid .column(@field-grid__columns, @field-grid__columns);
+    }
+
+    & > .admin__field {
+        &:first-child {
+            & > .admin__field-label {
+                float: none;
+                margin: 0;
+                opacity: 1;
+                position: static;
+                text-align: left;
+            }
+        }
+
+        &:nth-child(n + 2) {
+            &:not(.admin__field-option):not(.admin__field-group-show-label):not(.admin__field-date) {
+                > .admin__field-label[class] {
+                    &:extend(.abs-visually-hidden-reset all);
+                }
+            }
+        }
+    }
+
+    .admin__control-select {
+        width: 100%;
+    }
+}
+
+//  Additional field for group
+.admin__field-group-additional {
+    &:extend(.abs-field-no-label all);
+    clear: both;
+
+    .action-additional {
+        margin-top: @indent__s;
+    }
+
+    .action-basic {
+        width: 100%;
+    }
+}
+
+//  Show label for field in group
+.admin__field-group-show-label {
+    white-space: nowrap;
+
+    > .admin__field-label,
+    > .admin__field-control {
+        display: inline-block;
+        vertical-align: top;
+    }
+
+    > .admin__field-label {
+        margin-right: @field-group-label__padding;
+    }
+}
+
+//
+//  Complex Field
+//  _____________________________________________
+
+.admin__field-complex {
+    &:extend(.abs-clearfix all);
+    margin: @indent__s 0 @indent__l;
+    padding-left: @indent__s;
+
+    .admin__field:not(._hidden) + & {
+        margin-top: 3rem;
+    }
+
+    .admin__field-complex-title {
+        clear: both;
+        color: @collapsible-title__color;
+        font-size: @collapsible-title__font-size;
+        font-weight: @font-weight__semibold;
+        letter-spacing: .025em;
+        margin-bottom: @indent__s;
+    }
+
+    .admin__field-complex-elements {
+        float: right;
+        max-width: 40%;
+
+        button {
+            margin-left: @indent__s;
+        }
+    }
+
+    .admin__field-complex-content {
+        max-width: 60%;
+        overflow: hidden;
+    }
+
+    .admin__field-complex-text {
+        margin-left: -@indent__s;
+    }
+
+    //  Field with empty table and no thead
+    + .admin__field {
+        &._empty {
+            &._no-header {
+                margin-top: -@indent__l;
+            }
+        }
+    }
+}
+
+//
+//  Form legend
+//  _____________________________________________
+
+.admin__legend {
+    //  ToDo UI: add form legend styles. Check if they doon't conflict with create order page form legend styles
+    float: left;
+    position: static;
+    width: 100%;
+
+    &:extend(.abs-fieldset-legend);
+    & + br {
+        clear: left;
+        display: block;
+        height: 0;
+        overflow: hidden;
+    }
+}
+

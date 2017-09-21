@@ -1,124 +1,152 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Layer\Filter\Price;
+
+use Magento\Framework\DataObject;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Test class for \Magento\Catalog\Model\Layer\Filter\Price.
  *
  * @magentoDataFixture Magento/Catalog/Model/Layer/Filter/Price/_files/products_advanced.php
  */
-class AlgorithmAdvancedTest extends \PHPUnit_Framework_TestCase
+class AlgorithmAdvancedTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * Algorithm model
-     *
-     * @var \Magento\Catalog\Model\Layer\Filter\Price\Algorithm
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     * @magentoConfigFixture current_store catalog/search/engine mysql
+     * @covers \Magento\Framework\Search\Dynamic\Algorithm::calculateSeparators
      */
-    protected $_model;
-
-    protected function setUp()
+    public function testWithoutLimits()
     {
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Layer\Filter\Price\Algorithm'
+        $layer = $this->createLayer();
+        $priceResource = $this->createPriceResource($layer);
+        $interval = $this->createInterval($priceResource);
+
+        /** @var $objectManager \Magento\TestFramework\ObjectManager */
+        $objectManager = Bootstrap::getObjectManager();
+        /** @var $request \Magento\TestFramework\Request */
+        $request = $objectManager->get(\Magento\TestFramework\Request::class);
+        $request->setParam('price', null);
+        $model = $this->_prepareFilter($layer, $priceResource);
+        $this->assertEquals(
+            [
+                0 => ['from' => 0, 'to' => 20, 'count' => 3],
+                1 => ['from' => 20, 'to' => '', 'count' => 4],
+            ],
+            $model->calculateSeparators($interval)
         );
     }
 
     /**
      * Prepare price filter model
      *
+     * @param \Magento\Catalog\Model\Layer $layer
+     * @param \Magento\Catalog\Model\ResourceModel\Layer\Filter\Price $priceResource
      * @param \Magento\TestFramework\Request|null $request
+     * @internal param \Magento\CatalogSearch\Model\Price\Interval $interval
+     * @return \Magento\Framework\Search\Dynamic\Algorithm
      */
-    protected function _prepareFilter($request = null)
+    protected function _prepareFilter($layer, $priceResource, $request = null)
     {
-        /** @var $layer \Magento\Catalog\Model\Layer */
-        $layer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Layer\Category');
-        $layer->setCurrentCategory(4);
-        $layer->setState(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Layer\State')
-        );
+        /** @var \Magento\Framework\Search\Dynamic\Algorithm $model */
+        $model = Bootstrap::getObjectManager()
+            ->create(\Magento\Framework\Search\Dynamic\Algorithm::class);
         /** @var $filter \Magento\Catalog\Model\Layer\Filter\Price */
-        $filter = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Layer\Filter\Price', array('layer' => $layer));
-        $filter->setLayer($layer)->setAttributeModel(new \Magento\Framework\Object(array('attribute_code' => 'price')));
-        if (!is_null($request)) {
+        $filter = Bootstrap::getObjectManager()
+            ->create(
+                \Magento\Catalog\Model\Layer\Filter\Price::class,
+                ['layer' => $layer, 'resource' => $priceResource, 'priceAlgorithm' => $model]
+            );
+        $filter->setLayer($layer)->setAttributeModel(new DataObject(['attribute_code' => 'price']));
+        if ($request !== null) {
             $filter->apply(
                 $request,
-                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                    'Magento\Framework\View\LayoutInterface'
+                Bootstrap::getObjectManager()->get(
+                    \Magento\Framework\View\LayoutInterface::class
                 )->createBlock(
-                    'Magento\Framework\View\Element\Text'
+                    \Magento\Framework\View\Element\Text::class
                 )
             );
             $interval = $filter->getInterval();
             if ($interval) {
-                $this->_model->setLimits($interval[0], $interval[1]);
+                $model->setLimits($interval[0], $interval[1]);
             }
         }
         $collection = $layer->getProductCollection();
-        $this->_model->setPricesModel(
-            $filter
-        )->setStatistics(
+        $model->setStatistics(
             $collection->getMinPrice(),
             $collection->getMaxPrice(),
             $collection->getPriceStandardDeviation(),
-            $collection->getSize()
+            $collection->getPricesCount()
         );
+        return $model;
     }
 
-    public function testWithoutLimits()
-    {
-        /** @var $objectManager \Magento\TestFramework\ObjectManager */
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var $request \Magento\TestFramework\Request */
-        $request = $objectManager->get('Magento\TestFramework\Request');
-        $request->setParam('price', null);
-        $this->_prepareFilter();
-        $this->assertEquals(
-            array(
-                0 => array('from' => 0, 'to' => 20, 'count' => 3),
-                1 => array('from' => 20, 'to' => '', 'count' => 4)
-            ),
-            $this->_model->calculateSeparators()
-        );
-    }
-
+    /**
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     * @magentoConfigFixture current_store catalog/search/engine mysql
+     * @covers \Magento\Framework\Search\Dynamic\Algorithm::calculateSeparators
+     */
     public function testWithLimits()
     {
         $this->markTestIncomplete('Bug MAGE-6561');
+
+        $layer = $this->createLayer();
+        $priceResource = $this->createPriceResource($layer);
+        $interval = $this->createInterval($priceResource);
+
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $objectManager = Bootstrap::getObjectManager();
         /** @var $request \Magento\TestFramework\Request */
-        $request = $objectManager->get('Magento\TestFramework\Request');
+        $request = $objectManager->get(\Magento\TestFramework\Request::class);
         $request->setParam('price', '10-100');
-        $this->_prepareFilter($request);
+        $model = $this->_prepareFilter($layer, $priceResource, $request);
         $this->assertEquals(
-            array(
-                0 => array('from' => 10, 'to' => 20, 'count' => 2),
-                1 => array('from' => 20, 'to' => 100, 'count' => 2)
-            ),
-            $this->_model->calculateSeparators()
+            [
+                0 => ['from' => 10, 'to' => 20, 'count' => 2],
+                1 => ['from' => 20, 'to' => 100, 'count' => 2],
+            ],
+            $model->calculateSeparators($interval)
         );
+    }
+
+    /**
+     * @return \Magento\Catalog\Model\Layer
+     */
+    protected function createLayer()
+    {
+        $layer = Bootstrap::getObjectManager()
+            ->create(\Magento\Catalog\Model\Layer\Category::class);
+        $layer->setCurrentCategory(4);
+        $layer->setState(
+            Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Layer\State::class)
+        );
+        return $layer;
+    }
+
+    /**
+     * @param $layer
+     * @return \Magento\Catalog\Model\ResourceModel\Layer\Filter\Price
+     */
+    protected function createPriceResource($layer)
+    {
+        return Bootstrap::getObjectManager()
+            ->create(\Magento\Catalog\Model\ResourceModel\Layer\Filter\Price::class, ['layer' => $layer]);
+    }
+
+    /**
+     * @param $priceResource
+     * @return \Magento\CatalogSearch\Model\Price\Interval
+     */
+    protected function createInterval($priceResource)
+    {
+        return Bootstrap::getObjectManager()
+            ->create(\Magento\CatalogSearch\Model\Price\Interval::class, ['resource' => $priceResource]);
     }
 }

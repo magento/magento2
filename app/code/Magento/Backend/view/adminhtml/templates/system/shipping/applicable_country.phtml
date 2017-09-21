@@ -1,0 +1,118 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<script>
+require([
+    'prototype'
+], function () {
+
+var CountryModel = Class.create();
+CountryModel.prototype = {
+    initialize : function()
+    {
+        this.reload = false;
+        this.bindSpecificCountryRelation();
+    },
+    bindSpecificCountryRelation : function(parentId)
+    {
+        if(parentId) {
+            // todo: fix bug in IE
+            var applyCountryElements = $$('#'+parentId+' .shipping-applicable-country');
+        } else {
+            var applyCountryElements = $$('.shipping-applicable-country');
+        }
+        for(var i=0;i<applyCountryElements.length; i++) {
+            Event.observe(applyCountryElements[i], 'change', this.checkSpecificCountry.bind(this));
+            this.initSpecificCountry(applyCountryElements[i]);
+        }
+
+    },
+    initSpecificCountry : function(element){
+        var applyCountryElement = element;
+        if (applyCountryElement && applyCountryElement.id) {
+            var specifCountryElement  = $(applyCountryElement.id.replace(/sallowspecific/, 'specificcountry'));
+            var showMethodElement  = $(applyCountryElement.id.replace(/sallowspecific/, 'showmethod'));
+            //var specifErrMsgElement  = $(applyCountryElement.id.replace(/sallowspecific/, 'specificerrmsg'));
+            if (specifCountryElement) {
+                if (applyCountryElement.value == 1 && !specifCountryElement.hasAttribute('disabled')) {
+                   //if specific country element selected
+                   specifCountryElement.enable();
+                   if (showMethodElement) {
+                       this.showElement(showMethodElement.up(1));
+                   }
+                   //specifErrMsgElement.up(1).show();
+                 } else {
+                   specifCountryElement.disable();
+                   if (showMethodElement) {
+                       this.hideElement(showMethodElement.up(1));
+                   }
+                   //specifErrMsgElement.up(1).hide();
+                }
+            }
+        }
+    },
+
+    checkSpecificCountry : function(event)
+    {
+        var applyCountryElement = Event.element(event);
+        if (applyCountryElement && applyCountryElement.id) {
+            var specifCountryElement  = $(applyCountryElement.id.replace(/sallowspecific/, 'specificcountry'));
+            var showMethodElement  = $(applyCountryElement.id.replace(/sallowspecific/, 'showmethod'));
+            // 'Use Default' checkbox of the related county list UI element
+            var useDefaultElement = document.getElementById(specifCountryElement.id + '_inherit');
+
+            //var specifErrMsgElement  = $(applyCountryElement.id.replace(/sallowspecific/, 'specificerrmsg'));
+            if (specifCountryElement) {
+                if (applyCountryElement.value == 1) {
+                   // enable related country select only if its 'Use Default' checkbox is absent or is unchecked
+                   specifCountryElement.disabled = useDefaultElement ? useDefaultElement.checked : false;
+                   if (showMethodElement) {
+                       this.showElement(showMethodElement.up(1));
+                   }
+                   //specifErrMsgElement.up(1).show();
+                 } else {
+                    this.unselectSpecificCountry(specifCountryElement);
+                    specifCountryElement.disable();
+                    if (showMethodElement) {
+                        this.hideElement(showMethodElement.up(1));
+                    }
+                    //specifErrMsgElement.up(1).hide();
+                }
+            }
+        }
+    },
+
+    unselectSpecificCountry : function(element)
+    {
+        for (var i=0; i<element.options.length; i++) {
+            if (element.options[i].selected) {
+              element.options[i].selected=false;
+            }
+        }
+    },
+
+    showElement : function(elm)
+    {
+        if (elm) {
+            if (!elm.down('.shipping-skip-show')) {
+                elm.show();
+            }
+        }
+    },
+
+    hideElement : function(elm)
+    {
+        if (elm) {
+            if (!elm.down('.shipping-skip-hide')) {
+                elm.hide();
+            }
+        }
+    }
+
+}
+countryApply = new CountryModel();
+});
+</script>

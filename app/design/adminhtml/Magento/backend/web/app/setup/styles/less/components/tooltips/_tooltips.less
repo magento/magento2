@@ -1,0 +1,201 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  _____________________________________________
+
+@tooltip__background-color: @color-white;
+@tooltip__border-color: @color-gray68;
+@tooltip__border-radius: 0;
+@tooltip__color: @color-brown-darkie;
+@tooltip__max-width: 31rem;
+@tooltip__opacity: .9;
+@tooltip__shadow-color: @color-gray80;
+@tooltip__z-index: 10;
+
+@tooltip-arrow__border-color: darken(@tooltip__border-color, 10%);
+@tooltip-arrow__color: @tooltip__background-color;
+@tooltip-arrow__size: 8px;
+
+//
+//  Tooltips
+//  _____________________________________________
+
+//  Base class
+.tooltip {
+    display: block;
+    font-family: @font-family__base;
+    font-size: @small__font-size;
+    font-weight: @font-weight__regular;
+    line-height: 1.4;
+    opacity: 0;
+    position: absolute;
+    visibility: visible;
+    z-index: @tooltip__z-index;
+
+    &.in {
+        opacity: @tooltip__opacity;
+    }
+
+    &.top {
+        margin-top: -(@tooltip-arrow__size / 2);
+        padding: @tooltip-arrow__size 0;
+    }
+
+    &.right {
+        margin-left: @tooltip-arrow__size / 2;
+        padding: 0 @tooltip-arrow__size;
+    }
+
+    &.bottom {
+        margin-top: @tooltip-arrow__size / 2;
+        padding: @tooltip-arrow__size 0;
+    }
+
+    &.left {
+        margin-left: -(@tooltip-arrow__size / 2);
+        padding: 0 @tooltip-arrow__size;
+    }
+
+    p:last-child {
+        margin-bottom: 0;
+    }
+}
+
+//  Wrapper for the tooltip content
+.tooltip-inner {
+    background-color: @tooltip__background-color;
+    border: 1px solid @tooltip__border-color;
+    border-radius: @tooltip__border-radius;
+    box-shadow: 1px 1px 1px @tooltip__shadow-color;
+    color: @tooltip__color;
+    max-width: @tooltip__max-width;
+    padding: .5em 1em;
+    text-decoration: none;
+}
+
+//  Arrows
+.tooltip-arrow,
+.tooltip-arrow:after {
+    border: solid transparent;
+    height: 0;
+    position: absolute;
+    width: 0;
+}
+
+.tooltip-arrow {
+    &:after {
+        content: '';
+        position: absolute;
+    }
+}
+
+//  ToDo UI: Only right tooltip arrow is styled, if we will neeed more need to add another ones
+
+.tooltip {
+    &.top {
+        .tooltip-arrow,
+        .tooltip-arrow:after {
+            border-top-color: @tooltip-arrow__border-color;
+            border-width: @tooltip-arrow__size @tooltip-arrow__size 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -@tooltip-arrow__size;
+        }
+    }
+
+    &.top-left {
+        .tooltip-arrow,
+        .tooltip-arrow:after {
+            border-top-color: @tooltip-arrow__border-color;
+            border-width: @tooltip-arrow__size @tooltip-arrow__size 0;
+            bottom: 0;
+            margin-bottom: -@tooltip-arrow__size;
+            right: @tooltip-arrow__size;
+        }
+    }
+
+    &.top-right {
+        .tooltip-arrow,
+        .tooltip-arrow:after {
+            border-top-color: @tooltip-arrow__border-color;
+            border-width: @tooltip-arrow__size @tooltip-arrow__size 0;
+            bottom: 0;
+            left: @tooltip-arrow__size;
+            margin-bottom: -@tooltip-arrow__size;
+        }
+    }
+
+    &.right {
+        .tooltip-arrow,
+        .tooltip-arrow:after {
+            border-right-color: @tooltip-arrow__border-color;
+            border-width: @tooltip-arrow__size @tooltip-arrow__size @tooltip-arrow__size 0;
+            left: 1px;
+            margin-top: -@tooltip-arrow__size;
+            top: 50%;
+        }
+
+        .tooltip-arrow {
+            &:after {
+                border-right-color: @tooltip__background-color;
+                border-width: (@tooltip-arrow__size - 2) (@tooltip-arrow__size - 1) (@tooltip-arrow__size - 2) 0;
+                margin-left: 0;
+                margin-top: -(@tooltip-arrow__size - 2);
+            }
+        }
+    }
+
+    &.left {
+        .tooltip-arrow,
+        .tooltip-arrow:after {
+            border-left-color: @tooltip-arrow__border-color;
+            border-width: @tooltip-arrow__size 0 @tooltip-arrow__size @tooltip-arrow__size;
+            margin-top: -@tooltip-arrow__size;
+            right: 0;
+            top: 50%;
+        }
+    }
+
+    &.bottom {
+        .tooltip-arrow,
+        .tooltip-arrow:after {
+            border-bottom-color: @tooltip-arrow__border-color;
+            border-width: 0 @tooltip-arrow__size @tooltip-arrow__size;
+            left: 50%;
+            margin-left: -@tooltip-arrow__size;
+            top: 0;
+        }
+    }
+
+    &.bottom-left {
+        .tooltip-arrow,
+        .tooltip-arrow:after {
+            border-bottom-color: @tooltip-arrow__border-color;
+            border-width: 0 @tooltip-arrow__size @tooltip-arrow__size;
+            margin-top: -@tooltip-arrow__size;
+            right: @tooltip-arrow__size;
+            top: 0;
+        }
+    }
+
+    &.bottom-right {
+        .tooltip-arrow,
+        .tooltip-arrow:after {
+            border-bottom-color: @tooltip-arrow__border-color;
+            border-width: 0 @tooltip-arrow__size @tooltip-arrow__size;
+            left: @tooltip-arrow__size;
+            margin-top: -@tooltip-arrow__size;
+            top: 0;
+        }
+    }
+}
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    .tooltip {
+        display: none !important;
+    }
+}

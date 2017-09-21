@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Mview/etc/mview.xsd">
+    <view id="cataloginventory_stock" class="Magento\CatalogInventory\Model\Indexer\Stock" group="indexer">
+        <subscriptions>
+            <table name="cataloginventory_stock_item" entity_column="product_id" />
+        </subscriptions>
+    </view>
+</config>

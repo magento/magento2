@@ -2,55 +2,37 @@
 /**
  * Render HTML <button> tag with "edit" action for the integration grid.
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Button;
 
+use Magento\Framework\DataObject;
 use Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Button;
-use Magento\Framework\Object;
 
 class Delete extends Button
 {
     /**
      * Return 'onclick' action for the button (redirect to the integration edit page).
      *
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return string
      */
-    protected function _getOnclickAttribute(Object $row)
+    protected function _getOnclickAttribute(DataObject $row)
     {
         return sprintf(
             "this.setAttribute('data-url', '%s')",
-            $this->getUrl('*/*/delete', array('id' => $row->getId()))
+            $this->getUrl('*/*/delete', ['id' => $row->getId()])
         );
     }
 
     /**
      * Get title depending on whether element is disabled or not.
      *
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return string
      */
-    protected function _getTitleAttribute(Object $row)
+    protected function _getTitleAttribute(DataObject $row)
     {
         return $this->_isDisabled($row) ? __('Uninstall the extension to remove this integration') : __('Remove');
     }
@@ -58,10 +40,10 @@ class Delete extends Button
     /**
      * Determine whether current integration came from config file, thus can not be removed
      *
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return bool
      */
-    protected function _isDisabled(Object $row)
+    protected function _isDisabled(DataObject $row)
     {
         return $this->_isConfigBasedIntegration($row);
     }

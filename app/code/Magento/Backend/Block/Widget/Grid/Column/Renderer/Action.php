@@ -1,32 +1,17 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
 namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 
 /**
  * Grid column widget for rendering action grid cells
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @deprecated 100.2.0 in favour of UI component implementation
+ * @since 100.0.2
  */
 class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
 {
@@ -43,7 +28,7 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
     public function __construct(
         \Magento\Backend\Block\Context $context,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
-        array $data = array()
+        array $data = []
     ) {
         $this->_jsonEncoder = $jsonEncoder;
         parent::__construct($context, $data);
@@ -52,10 +37,10 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
     /**
      * Renders column
      *
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return string
      */
-    public function render(\Magento\Framework\Object $row)
+    public function render(\Magento\Framework\DataObject $row)
     {
         $actions = $this->getColumn()->getActions();
         if (empty($actions) || !is_array($actions)) {
@@ -70,7 +55,7 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
             }
         }
 
-        $out = '<select class="action-select" onchange="varienGridAction.execute(this);">' .
+        $out = '<select class="admin__control-select" onchange="varienGridAction.execute(this);">' .
             '<option value=""></option>';
         $i = 0;
         foreach ($actions as $action) {
@@ -87,18 +72,20 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
      * Render single action as dropdown option html
      *
      * @param array $action
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return string
      */
-    protected function _toOptionHtml($action, \Magento\Framework\Object $row)
+    protected function _toOptionHtml($action, \Magento\Framework\DataObject $row)
     {
-        $actionAttributes = new \Magento\Framework\Object();
+        $actionAttributes = new \Magento\Framework\DataObject();
 
         $actionCaption = '';
         $this->_transformActionData($action, $actionCaption, $row);
 
-        $htmlAttibutes = array('value' => $this->escapeHtml($this->_jsonEncoder->encode($action)));
-        $actionAttributes->setData($htmlAttibutes);
+        $htmlAttributes = [
+            'value' => $this->escapeHtmlAttr($this->_jsonEncoder->encode($action), false)
+        ];
+        $actionAttributes->setData($htmlAttributes);
         return '<option ' . $actionAttributes->serialize() . '>' . $actionCaption . '</option>';
     }
 
@@ -106,12 +93,12 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
      * Render single action as link html
      *
      * @param array $action
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return string
      */
-    protected function _toLinkHtml($action, \Magento\Framework\Object $row)
+    protected function _toLinkHtml($action, \Magento\Framework\DataObject $row)
     {
-        $actionAttributes = new \Magento\Framework\Object();
+        $actionAttributes = new \Magento\Framework\DataObject();
 
         $actionCaption = '';
         $this->_transformActionData($action, $actionCaption, $row);
@@ -132,10 +119,12 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
      *
      * @param array &$action
      * @param string &$actionCaption
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    protected function _transformActionData(&$action, &$actionCaption, \Magento\Framework\Object $row)
+    protected function _transformActionData(&$action, &$actionCaption, \Magento\Framework\DataObject $row)
     {
         foreach ($action as $attribute => $value) {
             if (isset($action[$attribute]) && !is_array($action[$attribute])) {
@@ -153,7 +142,7 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
 
                 case 'url':
                     if (is_array($action['url']) && isset($action['field'])) {
-                        $params = array($action['field'] => $this->_getValue($row));
+                        $params = [$action['field'] => $this->_getValue($row)];
                         if (isset($action['url']['params'])) {
                             $params = array_merge($action['url']['params'], $params);
                         }
@@ -166,7 +155,8 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
                     break;
 
                 case 'popup':
-                    $action['onclick'] = 'popWin(this.href,\'_blank\',\'width=800,height=700,resizable=1,scrollbars=1\');return false;';
+                    $action['onclick'] = 'popWin(this.href,\'_blank\',\'width=800,height=700,resizable=1,'
+                        . 'scrollbars=1\');return false;';
                     break;
             }
         }

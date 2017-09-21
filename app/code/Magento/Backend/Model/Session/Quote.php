@@ -1,31 +1,17 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Model\Session;
+
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\GroupManagementInterface;
 
 /**
  * Adminhtml quote session
  *
+ * @api
  * @method Quote setCustomerId($id)
  * @method int getCustomerId()
  * @method bool hasCustomerId()
@@ -37,31 +23,31 @@ namespace Magento\Backend\Model\Session;
  * @method int getCurrencyId()
  * @method Quote setOrderId($orderId)
  * @method int getOrderId()
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Quote extends \Magento\Framework\Session\SessionManager
 {
-    const XML_PATH_DEFAULT_CREATEACCOUNT_GROUP = 'customer/create_account/default_group';
-
     /**
      * Quote model object
      *
-     * @var \Magento\Sales\Model\Quote
+     * @var \Magento\Quote\Model\Quote
      */
-    protected $_quote = null;
+    protected $_quote;
 
     /**
      * Store model object
      *
      * @var \Magento\Store\Model\Store
      */
-    protected $_store = null;
+    protected $_store;
 
     /**
      * Order model object
      *
      * @var \Magento\Sales\Model\Order
      */
-    protected $_order = null;
+    protected $_order;
 
     /**
      * @var \Magento\Sales\Model\OrderFactory
@@ -69,14 +55,16 @@ class Quote extends \Magento\Framework\Session\SessionManager
     protected $_orderFactory;
 
     /**
-     * @var \Magento\Customer\Service\V1\CustomerAccountServiceInterface
+     * @var CustomerRepositoryInterface
      */
-    protected $_customerService;
+    protected $customerRepository;
 
     /**
-     * @var \Magento\Sales\Model\QuoteFactory
+     * Sales quote repository
+     *
+     * @var \Magento\Quote\Api\CartRepositoryInterface
      */
-    protected $_quoteFactory;
+    protected $quoteRepository;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
@@ -84,9 +72,14 @@ class Quote extends \Magento\Framework\Session\SessionManager
     protected $_storeManager;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var GroupManagementInterface
      */
-    protected $_scopeConfig;
+    protected $groupManagement;
+
+    /**
+     * @var \Magento\Quote\Model\QuoteFactory
+     */
+    protected $quoteFactory;
 
     /**
      * @param \Magento\Framework\App\Request\Http $request
@@ -95,11 +88,16 @@ class Quote extends \Magento\Framework\Session\SessionManager
      * @param \Magento\Framework\Session\SaveHandlerInterface $saveHandler
      * @param \Magento\Framework\Session\ValidatorInterface $validator
      * @param \Magento\Framework\Session\StorageInterface $storage
-     * @param \Magento\Sales\Model\QuoteFactory $quoteFactory
-     * @param \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerService
+     * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
+     * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
+     * @param \Magento\Framework\App\State $appState
+     * @param CustomerRepositoryInterface $customerRepository
+     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param GroupManagementInterface $groupManagement
+     * @param \Magento\Quote\Model\QuoteFactory $quoteFactory
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Request\Http $request,
@@ -108,19 +106,33 @@ class Quote extends \Magento\Framework\Session\SessionManager
         \Magento\Framework\Session\SaveHandlerInterface $saveHandler,
         \Magento\Framework\Session\ValidatorInterface $validator,
         \Magento\Framework\Session\StorageInterface $storage,
-        \Magento\Sales\Model\QuoteFactory $quoteFactory,
-        \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerService,
+        \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
+        \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
+        \Magento\Framework\App\State $appState,
+        CustomerRepositoryInterface $customerRepository,
+        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+        GroupManagementInterface $groupManagement,
+        \Magento\Quote\Model\QuoteFactory $quoteFactory
     ) {
-        $this->_quoteFactory = $quoteFactory;
-        $this->_customerService = $customerService;
+        $this->customerRepository = $customerRepository;
+        $this->quoteRepository = $quoteRepository;
         $this->_orderFactory = $orderFactory;
         $this->_storeManager = $storeManager;
-        $this->_scopeConfig = $scopeConfig;
-        parent::__construct($request, $sidResolver, $sessionConfig, $saveHandler, $validator, $storage);
-        $this->start();
+        $this->groupManagement = $groupManagement;
+        $this->quoteFactory = $quoteFactory;
+        parent::__construct(
+            $request,
+            $sidResolver,
+            $sessionConfig,
+            $saveHandler,
+            $validator,
+            $storage,
+            $cookieManager,
+            $cookieMetadataFactory,
+            $appState
+        );
         if ($this->_storeManager->hasSingleStore()) {
             $this->setStoreId($this->_storeManager->getStore(true)->getId());
         }
@@ -129,35 +141,36 @@ class Quote extends \Magento\Framework\Session\SessionManager
     /**
      * Retrieve quote model object
      *
-     * @return \Magento\Sales\Model\Quote
+     * @return \Magento\Quote\Model\Quote
      */
     public function getQuote()
     {
-        if (is_null($this->_quote)) {
-            $this->_quote = $this->_quoteFactory->create();
-            if ($this->getStoreId() && $this->getQuoteId()) {
-                $this->_quote->setStoreId($this->getStoreId())->load($this->getQuoteId());
-            } elseif ($this->getStoreId() && $this->hasCustomerId()) {
-                try {
-                    $customerData = $this->_customerService->getCustomer($this->getCustomerId());
-                    $this->_quote->assignCustomer($customerData);
-                } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-                    /** Customer does not exist */
+        if ($this->_quote === null) {
+            $this->_quote = $this->quoteFactory->create();
+            if ($this->getStoreId()) {
+                if (!$this->getQuoteId()) {
+                    $this->_quote->setCustomerGroupId($this->groupManagement->getDefaultGroup()->getId());
+                    $this->_quote->setIsActive(false);
+                    $this->_quote->setStoreId($this->getStoreId());
+                    
+                    $this->quoteRepository->save($this->_quote);
+                    $this->setQuoteId($this->_quote->getId());
+                    $this->_quote = $this->quoteRepository->get($this->getQuoteId(), [$this->getStoreId()]);
+                } else {
+                    $this->_quote = $this->quoteRepository->get($this->getQuoteId(), [$this->getStoreId()]);
+                    $this->_quote->setStoreId($this->getStoreId());
                 }
-                $customerGroupId = $this->_scopeConfig->getValue(
-                    self::XML_PATH_DEFAULT_CREATEACCOUNT_GROUP,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-                );
-                $this->_quote
-                    ->setStoreId($this->getStoreId())
-                    ->setCustomerGroupId($customerGroupId)
-                    ->setIsActive(false)
-                    ->save();
-                $this->setQuoteId($this->_quote->getId());
+
+                if ($this->getCustomerId() && $this->getCustomerId() != $this->_quote->getCustomerId()) {
+                    $customer = $this->customerRepository->getById($this->getCustomerId());
+                    $this->_quote->assignCustomer($customer);
+                    $this->quoteRepository->save($this->_quote);
+                }
             }
             $this->_quote->setIgnoreOldQty(true);
             $this->_quote->setIsSuperMode(true);
         }
+
         return $this->_quote;
     }
 
@@ -168,7 +181,7 @@ class Quote extends \Magento\Framework\Session\SessionManager
      */
     public function getStore()
     {
-        if (is_null($this->_store)) {
+        if ($this->_store === null) {
             $this->_store = $this->_storeManager->getStore($this->getStoreId());
             $currencyId = $this->getCurrencyId();
             if ($currencyId) {
@@ -185,7 +198,7 @@ class Quote extends \Magento\Framework\Session\SessionManager
      */
     public function getOrder()
     {
-        if (is_null($this->_order)) {
+        if ($this->_order === null) {
             $this->_order = $this->_orderFactory->create();
             if ($this->getOrderId()) {
                 $this->_order->load($this->getOrderId());

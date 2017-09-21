@@ -1,42 +1,22 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity\Magento\Widget;
 
-class SkinFilesTest extends \PHPUnit_Framework_TestCase
+class SkinFilesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider widgetPlaceholderImagesDataProvider
      */
     public function testWidgetPlaceholderImages($skinImage)
     {
+        /** @var \Magento\Framework\View\Asset\Repository $assetRepo */
+        $assetRepo = \Magento\TestFramework\Helper\Bootstrap::getObjectmanager()
+            ->get(\Magento\Framework\View\Asset\Repository::class);
         $this->assertFileExists(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectmanager()->get(
-                'Magento\Framework\View\FileSystem'
-            )->getViewFile(
-                $skinImage,
-                array('area' => 'adminhtml')
-            )
+            $assetRepo->createAsset($skinImage, ['area' => 'adminhtml'])->getSourceFile()
         );
     }
 
@@ -45,17 +25,19 @@ class SkinFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function widgetPlaceholderImagesDataProvider()
     {
-        $result = array();
+        $result = [];
         /** @var $model \Magento\Widget\Model\Widget */
-        $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Widget\Model\Widget');
+        $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Widget\Model\Widget::class
+        );
         foreach ($model->getWidgetsArray() as $row) {
             /** @var $instance \Magento\Widget\Model\Widget\Instance */
             $instance = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-                'Magento\Widget\Model\Widget\Instance'
+                \Magento\Widget\Model\Widget\Instance::class
             );
             $config = $instance->setType($row['type'])->getWidgetConfigAsArray();
             if (isset($config['placeholder_image'])) {
-                $result[] = array((string)$config['placeholder_image']);
+                $result[] = [(string)$config['placeholder_image']];
             }
         }
         return $result;

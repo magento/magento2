@@ -1,0 +1,45 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Add by SKU
+//  ---------------------------------------------
+
+.add-by-sku-wrapper {
+    .add-by-sku {
+        margin: 0 0 @indent__base;
+    }
+    .admin__field-note {
+        margin: 1.4rem 0;
+    }
+    .action-reset {
+        &:extend(.abs-action-reset all);
+        &:extend(.abs-icon all);
+        display: inline-block;
+        font-size: 1.6rem;
+        margin: -.4rem 0 0;
+        opacity: .5;
+        vertical-align: middle;
+        &:after {
+            color: @order-create-icon-reset__content;
+            content: @order-create-icon-reset__content;
+        }
+        &:hover {
+            opacity: 1;
+            &:after {
+                color: @order-create-icon-plus__hover__color;
+            }
+        }
+        > span {
+            &:extend(.abs-visually-hidden all);
+        }
+    }
+    .col-qty {
+        width: 8rem;
+        .admin__control-text {
+            &:extend(.abs-control-qty all);
+        }
+    }
+}

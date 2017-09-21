@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <payment>
+            <braintree>
+                <model>BraintreeFacade</model>
+                <title>Credit Card (Braintree)</title>
+                <payment_action>authorize</payment_action>
+                <active>0</active>
+                <is_gateway>1</is_gateway>
+                <can_use_checkout>1</can_use_checkout>
+                <can_authorize>1</can_authorize>
+                <can_capture>1</can_capture>
+                <can_capture_partial>1</can_capture_partial>
+                <can_authorize_vault>1</can_authorize_vault>
+                <can_capture_vault>1</can_capture_vault>
+                <can_use_internal>1</can_use_internal>
+                <can_refund_partial_per_invoice>1</can_refund_partial_per_invoice>
+                <can_refund>1</can_refund>
+                <can_void>1</can_void>
+                <can_cancel>1</can_cancel>
+                <can_edit>1</can_edit>
+                <can_review_payment>1</can_review_payment>
+                <can_deny_payment>1</can_deny_payment>
+                <cctypes>AE,VI,MC,DI,JCB,CUP,DN,MI</cctypes>
+                <useccv>1</useccv>
+                <cctypes_braintree_mapper><![CDATA[{"american-express":"AE","discover":"DI","jcb":"JCB","mastercard":"MC","master-card":"MC","visa":"VI","maestro":"MI","diners-club":"DN","unionpay":"CUP"}]]></cctypes_braintree_mapper>
+                <order_status>processing</order_status>
+                <environment>sandbox</environment>
+                <allowspecific>0</allowspecific>
+                <sdk_url><![CDATA[https://js.braintreegateway.com/js/braintree-2.32.0.min.js]]></sdk_url>
+                <public_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <private_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <masked_fields>cvv,number</masked_fields>
+                <privateInfoKeys>avsPostalCodeResponseCode,avsStreetAddressResponseCode,cvvResponseCode,processorAuthorizationCode,processorResponseCode,processorResponseText,liabilityShifted,liabilityShiftPossible,riskDataId,riskDataDecision</privateInfoKeys>
+                <paymentInfoKeys>cc_type,cc_number,avsPostalCodeResponseCode,avsStreetAddressResponseCode,cvvResponseCode,processorAuthorizationCode,processorResponseCode,processorResponseText,liabilityShifted,liabilityShiftPossible,riskDataId,riskDataDecision</paymentInfoKeys>
+                <avs_ems_adapter>Magento\Braintree\Model\AvsEmsCodeMapper</avs_ems_adapter>
+                <cvv_ems_adapter>Magento\Braintree\Model\CvvEmsCodeMapper</cvv_ems_adapter>
+            </braintree>
+            <braintree_paypal>
+                <model>BraintreePayPalFacade</model>
+                <title>PayPal (Braintree)</title>
+                <active>0</active>
+                <payment_action>authorize</payment_action>
+                <allowspecific>0</allowspecific>
+                <require_billing_address>0</require_billing_address>
+                <allow_shipping_address_override>1</allow_shipping_address_override>
+                <display_on_shopping_cart>1</display_on_shopping_cart>
+                <order_status>processing</order_status>
+                <is_gateway>1</is_gateway>
+                <can_use_checkout>1</can_use_checkout>
+                <can_authorize>1</can_authorize>
+                <can_capture>1</can_capture>
+                <can_capture_partial>1</can_capture_partial>
+                <can_refund>1</can_refund>
+                <can_refund_partial_per_invoice>1</can_refund_partial_per_invoice>
+                <can_void>1</can_void>
+                <can_cancel>1</can_cancel>
+                <can_authorize_vault>1</can_authorize_vault>
+                <can_capture_vault>1</can_capture_vault>
+                <privateInfoKeys>processorResponseCode,processorResponseText,paymentId</privateInfoKeys>
+                <paymentInfoKeys>processorResponseCode,processorResponseText,paymentId,payerEmail</paymentInfoKeys>
+                <supported_locales>en_US,en_GB,en_AU,da_DK,fr_FR,fr_CA,de_DE,zh_HK,it_IT,nl_NL,no_NO,pl_PL,es_ES,sv_SE,tr_TR,pt_BR,ja_JP,id_ID,ko_KR,pt_PT,ru_RU,th_TH,zh_CN,zh_TW</supported_locales>
+            </braintree_paypal>
+            <braintree_cc_vault>
+                <model>BraintreeCreditCardVaultFacade</model>
+                <title>Stored Cards (Braintree)</title>
+            </braintree_cc_vault>
+            <braintree_paypal_vault>
+                <model>BraintreePayPalVaultFacade</model>
+                <title>Stored Accounts (Braintree PayPal)</title>
+                <can_use_internal>1</can_use_internal>
+            </braintree_paypal_vault>
+        </payment>
+    </default>
+</config>

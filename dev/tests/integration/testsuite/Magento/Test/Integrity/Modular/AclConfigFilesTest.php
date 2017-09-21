@@ -1,36 +1,18 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity\Modular;
 
-class AclConfigFilesTest extends \PHPUnit_Framework_TestCase
+class AclConfigFilesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configuration acl file list
      *
      * @var array
      */
-    protected $_fileList = array();
+    protected $_fileList = [];
 
     /**
      * Path to scheme file
@@ -41,11 +23,8 @@ class AclConfigFilesTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_schemeFile = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\App\Filesystem'
-        )->getPath(
-            \Magento\Framework\App\Filesystem::LIB_DIR
-        ) . '/Magento/Framework/Acl/etc/acl.xsd';
+        $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
+        $this->_schemeFile = $urnResolver->getRealPath('urn:magento:framework:Acl/etc/acl.xsd');
     }
 
     /**
@@ -55,7 +34,10 @@ class AclConfigFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function testAclConfigFile($file)
     {
-        $domConfig = new \Magento\Framework\Config\Dom(file_get_contents($file));
+        $validationStateMock = $this->createMock(\Magento\Framework\Config\ValidationStateInterface::class);
+        $validationStateMock->method('isValidationRequired')
+            ->willReturn(true);
+        $domConfig = new \Magento\Framework\Config\Dom(file_get_contents($file), $validationStateMock);
         $result = $domConfig->validate($this->_schemeFile, $errors);
         $message = "Invalid XML-file: {$file}\n";
         foreach ($errors as $error) {
@@ -69,17 +51,6 @@ class AclConfigFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function aclConfigFileDataProvider()
     {
-        $fileList = glob(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Framework\App\Filesystem'
-            )->getPath(
-                \Magento\Framework\App\Filesystem::APP_DIR
-            ) . '/*/*/*/etc/adminhtml/acl.xml'
-        );
-        $dataProviderResult = array();
-        foreach ($fileList as $file) {
-            $dataProviderResult[$file] = array($file);
-        }
-        return $dataProviderResult;
+        return \Magento\Framework\App\Utility\Files::init()->getConfigFiles('acl.xml');
     }
 }

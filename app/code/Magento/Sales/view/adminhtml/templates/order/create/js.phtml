@@ -1,0 +1,28 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+ ?>
+<script>
+require([
+    "prototype",
+    "Magento_Sales/order/create/form",
+    "Magento_Catalog/catalog/product/composite/configure",
+    "domReady!"
+], function(){
+
+    order.sidebarHide();
+    if (window.productConfigure) {
+        productConfigure.addListType('product_to_add', {
+            urlFetch: '<?= /* @escapeNotVerified */ $block->getUrl('sales/order_create/configureProductToAdd') ?>'
+        });
+        productConfigure.addListType('quote_items', {
+            urlFetch: '<?= /* @escapeNotVerified */ $block->getUrl('sales/order_create/configureQuoteItems') ?>'
+        });
+    }
+
+});
+</script>

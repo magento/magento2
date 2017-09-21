@@ -1,0 +1,84 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php /** @var $this \Magento\AdminNotification\Block\ToolbarEntry */ ?>
+<?php
+    $notificationCount = $block->getUnreadNotificationCount();
+    $notificationCounterMax = $block->getNotificationCounterMax();
+?>
+<div
+    data-mage-init='{"toolbarEntry": {}}'
+    class="notifications-wrapper admin__action-dropdown-wrap"
+    data-notification-count="<?= /* @escapeNotVerified */ $notificationCount ?>">
+    <?php if ($notificationCount > 0) : ?>
+        <a
+            href="<?= /* @escapeNotVerified */ $block->getUrl('adminhtml/notification/index') ?>"
+            class="notifications-action admin__action-dropdown"
+            data-mage-init='{"dropdown":{}}'
+            title="<?= /* @escapeNotVerified */ __('Notifications') ?>"
+            data-toggle="dropdown">
+            <span class="notifications-counter">
+                <?= /* @escapeNotVerified */ ($notificationCount > $notificationCounterMax) ? $notificationCounterMax . '+' : $notificationCount ?>
+            </span>
+        </a>
+        <ul
+            class="admin__action-dropdown-menu"
+            data-mark-as-read-url="<?= /* @escapeNotVerified */ $block->getUrl('adminhtml/notification/ajaxMarkAsRead') ?>">
+            <?php foreach ($block->getLatestUnreadNotifications() as $notification) : ?>
+            <?php /** @var $notification \Magento\AdminNotification\Model\Inbox*/ ?>
+            <li class="notifications-entry<?php if ($notification->getSeverity() == 1): ?> notifications-critical<?php endif; ?>"
+                data-notification-id="<?= /* @escapeNotVerified */ $notification->getId() ?>"
+                data-notification-severity="<?php if ($notification->getSeverity() == 1): ?>1<?php endif; ?>">
+                <?php
+                    $notificationDescription = $block->escapeHtml($notification->getDescription());
+                    $notificationDescriptionLength = $block->getNotificationDescriptionLength();
+                ?>
+                <strong class="notifications-entry-title">
+                    <?= $block->escapeHtml($notification->getTitle()) ?>
+                </strong>
+                <?php if (strlen($notificationDescription) > $notificationDescriptionLength) : ?>
+                    <p class="notifications-entry-description _cutted">
+                        <span class="notifications-entry-description-start">
+                            <?= /* @escapeNotVerified */ substr($notificationDescription, 0, $notificationDescriptionLength) ?>
+                        </span>
+                        <span class="notifications-entry-description-end">
+                            <?= /* @escapeNotVerified */ substr($notificationDescription, $notificationDescriptionLength) ?>
+                        </span>
+                    </p>
+                <?php else : ?>
+                    <p class="notifications-entry-description">
+                        <?= /* @escapeNotVerified */ $notificationDescription ?>
+                    </p>
+                <?php endif; ?>
+                <time class="notifications-entry-time">
+                    <?= /* @escapeNotVerified */ $block->formatNotificationDate($notification->getDateAdded()) ?>
+                </time>
+                <button
+                    type="button"
+                    class="notifications-close"
+                    title="<?= /* @escapeNotVerified */ __('Close') ?>"
+                    ></button>
+            </li>
+            <?php endforeach; ?>
+            <li class="notifications-entry notifications-entry-last">
+                <a
+                    href="<?= /* @escapeNotVerified */ $block->getUrl('adminhtml/notification/index') ?>"
+                    class="action-tertiary action-more">
+                    <?= /* @escapeNotVerified */ __('See All (') ?><span class="notifications-counter"><?= /* @escapeNotVerified */ $notificationCount ?></span><?= /* @escapeNotVerified */ __(' unread)') ?>
+                </a>
+            </li>
+        </ul>
+    <?php else : ?>
+        <a
+            class="notifications-action admin__action-dropdown"
+            href="<?= /* @escapeNotVerified */ $block->getUrl('adminhtml/notification/index') ?>"
+            title="<?= /* @escapeNotVerified */ __('Notifications') ?>">
+        </a>
+    <?php endif; ?>
+</div>

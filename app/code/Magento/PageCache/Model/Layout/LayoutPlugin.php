@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\PageCache\Model\Layout;
 
@@ -28,11 +10,6 @@ namespace Magento\PageCache\Model\Layout;
  */
 class LayoutPlugin
 {
-    /**
-     * @var \Magento\Framework\View\Layout
-     */
-    protected $layout;
-
     /**
      * @var \Magento\PageCache\Model\Config
      */
@@ -46,16 +23,13 @@ class LayoutPlugin
     /**
      * Constructor
      *
-     * @param \Magento\Framework\View\Layout $layout
      * @param \Magento\Framework\App\ResponseInterface $response
      * @param \Magento\PageCache\Model\Config $config
      */
     public function __construct(
-        \Magento\Framework\View\Layout $layout,
         \Magento\Framework\App\ResponseInterface $response,
         \Magento\PageCache\Model\Config $config
     ) {
-        $this->layout = $layout;
         $this->response = $response;
         $this->config = $config;
     }
@@ -70,7 +44,7 @@ class LayoutPlugin
      */
     public function afterGenerateXml(\Magento\Framework\View\Layout $subject, $result)
     {
-        if ($this->layout->isCacheable() && $this->config->isEnabled()) {
+        if ($subject->isCacheable() && $this->config->isEnabled()) {
             $this->response->setPublicHeaders($this->config->getTtl());
         }
         return $result;
@@ -85,10 +59,10 @@ class LayoutPlugin
      */
     public function afterGetOutput(\Magento\Framework\View\Layout $subject, $result)
     {
-        if ($this->layout->isCacheable() && $this->config->isEnabled()) {
-            $tags = array();
-            foreach ($this->layout->getAllBlocks() as $block) {
-                if ($block instanceof \Magento\Framework\View\Block\IdentityInterface) {
+        if ($subject->isCacheable() && $this->config->isEnabled()) {
+            $tags = [];
+            foreach ($subject->getAllBlocks() as $block) {
+                if ($block instanceof \Magento\Framework\DataObject\IdentityInterface) {
                     $isEsiBlock = $block->getTtl() > 0;
                     $isVarnish = $this->config->getType() == \Magento\PageCache\Model\Config::VARNISH;
                     if ($isVarnish && $isEsiBlock) {

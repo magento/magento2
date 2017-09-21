@@ -1,30 +1,14 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Model\Menu\Builder;
 
 /**
  * Menu builder command
+ * @api
+ * @since 100.0.2
  */
 abstract class AbstractCommand
 {
@@ -33,14 +17,14 @@ abstract class AbstractCommand
      *
      * @var string[]
      */
-    protected $_requiredParams = array("id");
+    protected $_requiredParams = ["id"];
 
     /**
      * Command params array
      *
      * @var array
      */
-    protected $_data = array();
+    protected $_data = [];
 
     /**
      * Next command in the chain
@@ -53,10 +37,10 @@ abstract class AbstractCommand
      * @param array $data
      * @throws \InvalidArgumentException
      */
-    public function __construct(array $data = array())
+    public function __construct(array $data = [])
     {
         foreach ($this->_requiredParams as $param) {
-            if (!isset($data[$param]) || is_null($data[$param])) {
+            if (!isset($data[$param]) || $data[$param] === null) {
                 throw new \InvalidArgumentException("Missing required param " . $param);
             }
         }
@@ -82,7 +66,7 @@ abstract class AbstractCommand
      */
     public function chain(\Magento\Backend\Model\Menu\Builder\AbstractCommand $command)
     {
-        if (is_null($this->_next)) {
+        if ($this->_next === null) {
             $this->_next = $command;
         } else {
             $this->_next->chain($command);
@@ -96,10 +80,10 @@ abstract class AbstractCommand
      * @param array $itemParams
      * @return array
      */
-    public function execute(array $itemParams = array())
+    public function execute(array $itemParams = [])
     {
         $itemParams = $this->_execute($itemParams);
-        if (!is_null($this->_next)) {
+        if ($this->_next !== null) {
             $itemParams = $this->_next->execute($itemParams);
         }
         return $itemParams;

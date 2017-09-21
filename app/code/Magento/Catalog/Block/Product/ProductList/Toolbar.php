@@ -1,42 +1,28 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Block\Product\ProductList;
 
-use Magento\Catalog\Helper\Data;
+use Magento\Catalog\Helper\Product\ProductList;
 use Magento\Catalog\Model\Product\ProductList\Toolbar as ToolbarModel;
 
 /**
  * Product list toolbar
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Toolbar extends \Magento\Framework\View\Element\Template
 {
     /**
      * Products collection
      *
-     * @var \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
+     * @var \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
      */
     protected $_collection = null;
 
@@ -45,14 +31,14 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      *
      * @var array
      */
-    protected $_availableOrder = array();
+    protected $_availableOrder = null;
 
     /**
      * List of available view types
      *
      * @var array
      */
-    protected $_availableMode = array();
+    protected $_availableMode = [];
 
     /**
      * Is enable View switcher
@@ -80,7 +66,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      *
      * @var string
      */
-    protected $_direction = \Magento\Catalog\Helper\Product\ProductList::DEFAULT_SORT_DIRECTION;
+    protected $_direction = ProductList::DEFAULT_SORT_DIRECTION;
 
     /**
      * Default View mode
@@ -119,17 +105,17 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     protected $_toolbarModel;
 
     /**
-     * @var \Magento\Catalog\Helper\Product\ProductList
+     * @var ProductList
      */
     protected $_productListHelper;
 
     /**
-     * @var \Magento\Catalog\Helper\Data
+     * @var \Magento\Framework\Url\EncoderInterface
      */
-    protected $_catalogHelper;
+    protected $urlEncoder;
 
     /**
-     * @var \Magento\Core\Helper\PostData
+     * @var \Magento\Framework\Data\Helper\PostHelper
      */
     protected $_postDataHelper;
 
@@ -138,9 +124,9 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      * @param \Magento\Catalog\Model\Session $catalogSession
      * @param \Magento\Catalog\Model\Config $catalogConfig
      * @param ToolbarModel $toolbarModel
-     * @param Data $helper
-     * @param \Magento\Catalog\Helper\Product\ProductList $productListHelper
-     * @param \Magento\Core\Helper\PostData $postDataHelper
+     * @param \Magento\Framework\Url\EncoderInterface $urlEncoder
+     * @param ProductList $productListHelper
+     * @param \Magento\Framework\Data\Helper\PostHelper $postDataHelper
      * @param array $data
      */
     public function __construct(
@@ -148,31 +134,18 @@ class Toolbar extends \Magento\Framework\View\Element\Template
         \Magento\Catalog\Model\Session $catalogSession,
         \Magento\Catalog\Model\Config $catalogConfig,
         ToolbarModel $toolbarModel,
-        \Magento\Catalog\Helper\Data $helper,
-        \Magento\Catalog\Helper\Product\ProductList $productListHelper,
-        \Magento\Core\Helper\PostData $postDataHelper,
-        array $data = array()
+        \Magento\Framework\Url\EncoderInterface $urlEncoder,
+        ProductList $productListHelper,
+        \Magento\Framework\Data\Helper\PostHelper $postDataHelper,
+        array $data = []
     ) {
         $this->_catalogSession = $catalogSession;
         $this->_catalogConfig = $catalogConfig;
         $this->_toolbarModel = $toolbarModel;
-        $this->_catalogHelper = $helper;
+        $this->urlEncoder = $urlEncoder;
         $this->_productListHelper = $productListHelper;
         $this->_postDataHelper = $postDataHelper;
         parent::__construct($context, $data);
-    }
-
-    /**
-     * Init Toolbar
-     *
-     * @return null
-     */
-    protected function _construct()
-    {
-        parent::_construct();
-        $this->_orderField = $this->_productListHelper->getDefaultSortField();
-        $this->_availableOrder = $this->_catalogConfig->getAttributeUsedForSortByArray();
-        $this->_availableMode = $this->_productListHelper->getAvailableViewMode();
     }
 
     /**
@@ -227,7 +200,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     /**
      * Return products collection instance
      *
-     * @return \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
+     * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
      */
     public function getCollection()
     {
@@ -257,7 +230,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
         }
 
         $orders = $this->getAvailableOrders();
-        $defaultOrder = $this->_orderField;
+        $defaultOrder = $this->getOrderField();
 
         if (!isset($orders[$defaultOrder])) {
             $keys = array_keys($orders);
@@ -289,7 +262,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
             return $dir;
         }
 
-        $directions = array('asc', 'desc');
+        $directions = ['asc', 'desc'];
         $dir = strtolower($this->_toolbarModel->getDirection());
         if (!$dir || !in_array($dir, $directions)) {
             $dir = $this->_direction;
@@ -311,6 +284,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      */
     public function setDefaultOrder($field)
     {
+        $this->loadAvailableOrders();
         if (isset($this->_availableOrder[$field])) {
             $this->_orderField = $field;
         }
@@ -325,7 +299,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      */
     public function setDefaultDirection($dir)
     {
-        if (in_array(strtolower($dir), array('asc', 'desc'))) {
+        if (in_array(strtolower($dir), ['asc', 'desc'])) {
             $this->_direction = strtolower($dir);
         }
         return $this;
@@ -338,6 +312,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      */
     public function getAvailableOrders()
     {
+        $this->loadAvailableOrders();
         return $this->_availableOrder;
     }
 
@@ -362,6 +337,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      */
     public function addOrderToAvailableOrders($order, $value)
     {
+        $this->loadAvailableOrders();
         $this->_availableOrder[$order] = $value;
         return $this;
     }
@@ -374,6 +350,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      */
     public function removeOrderFromAvailableOrders($order)
     {
+        $this->loadAvailableOrders();
         if (isset($this->_availableOrder[$order])) {
             unset($this->_availableOrder[$order]);
         }
@@ -381,7 +358,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Compare defined order field vith current order field
+     * Compare defined order field with current order field
      *
      * @param string $order
      * @return bool
@@ -397,11 +374,11 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      * @param array $params Query parameters
      * @return string
      */
-    public function getPagerUrl($params = array())
+    public function getPagerUrl($params = [])
     {
-        $urlParams = array();
+        $urlParams = [];
         $urlParams['_current'] = true;
-        $urlParams['_escape'] = true;
+        $urlParams['_escape'] = false;
         $urlParams['_use_rewrite'] = true;
         $urlParams['_query'] = $params;
         return $this->getUrl('*/*/*', $urlParams);
@@ -411,9 +388,9 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      * @param array $params
      * @return string
      */
-    public function getPagerEncodedUrl($params = array())
+    public function getPagerEncodedUrl($params = [])
     {
-        return $this->_catalogHelper->urlEncode($this->getPagerUrl($params));
+        return $this->urlEncoder->encode($this->getPagerUrl($params));
     }
 
     /**
@@ -427,7 +404,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
         if ($mode) {
             return $mode;
         }
-        $defaultMode = $this->_productListHelper->getDefaultViewMode($this->_availableMode);
+        $defaultMode = $this->_productListHelper->getDefaultViewMode($this->getModes());
         $mode = $this->_toolbarModel->getMode();
         if (!$mode || !isset($this->_availableMode[$mode])) {
             $mode = $defaultMode;
@@ -455,6 +432,9 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      */
     public function getModes()
     {
+        if ($this->_availableMode === []) {
+            $this->_availableMode = $this->_productListHelper->getAvailableViewMode();
+        }
         return $this->_availableMode;
     }
 
@@ -466,6 +446,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      */
     public function setModes($modes)
     {
+        $this->getModes();
         if (!isset($this->_availableMode)) {
             $this->_availableMode = $modes;
         }
@@ -653,8 +634,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     {
         $pagerBlock = $this->getChildBlock('product_list_toolbar_pager');
 
-        if ($pagerBlock instanceof \Magento\Framework\Object) {
-
+        if ($pagerBlock instanceof \Magento\Framework\DataObject) {
             /* @var $pagerBlock \Magento\Theme\Block\Html\Pager */
             $pagerBlock->setAvailableLimit($this->getAvailableLimit());
 
@@ -674,6 +654,8 @@ class Toolbar extends \Magento\Framework\View\Element\Template
                     'design/pagination/pagination_frame_skip',
                     \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                 )
+            )->setLimit(
+                $this->getLimit()
             )->setCollection(
                 $this->getCollection()
             );
@@ -690,20 +672,47 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      * @param array $customOptions Optional parameter for passing custom selectors from template
      * @return string
      */
-    public function getWidgetOptionsJson(array $customOptions = array())
+    public function getWidgetOptionsJson(array $customOptions = [])
     {
-        $postData = $this->_postDataHelper->getPostData(
-            $this->getPagerUrl(),
-            array(\Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED => $this->getPagerEncodedUrl())
-        );
-        $options = array(
-            'modeCookie' => ToolbarModel::MODE_COOKIE_NAME,
-            'directionCookie' => ToolbarModel::DIRECTION_COOKIE_NAME,
-            'orderCookie' => ToolbarModel::ORDER_COOKIE_NAME,
-            'limitCookie' => ToolbarModel::LIMIT_COOKIE_NAME,
-            'postData' => json_decode($postData)
-        );
+        $defaultMode = $this->_productListHelper->getDefaultViewMode($this->getModes());
+        $options = [
+            'mode' => ToolbarModel::MODE_PARAM_NAME,
+            'direction' => ToolbarModel::DIRECTION_PARAM_NAME,
+            'order' => ToolbarModel::ORDER_PARAM_NAME,
+            'limit' => ToolbarModel::LIMIT_PARAM_NAME,
+            'modeDefault' => $defaultMode,
+            'directionDefault' => $this->_direction ?: ProductList::DEFAULT_SORT_DIRECTION,
+            'orderDefault' => $this->_productListHelper->getDefaultSortField(),
+            'limitDefault' => $this->_productListHelper->getDefaultLimitPerPageValue($defaultMode),
+            'url' => $this->getPagerUrl(),
+        ];
         $options = array_replace_recursive($options, $customOptions);
-        return json_encode(array('productListToolbarForm' => $options));
+        return json_encode(['productListToolbarForm' => $options]);
+    }
+
+    /**
+     * Get order field
+     *
+     * @return null|string
+     */
+    protected function getOrderField()
+    {
+        if ($this->_orderField === null) {
+            $this->_orderField = $this->_productListHelper->getDefaultSortField();
+        }
+        return $this->_orderField;
+    }
+
+    /**
+     * Load Available Orders
+     *
+     * @return $this
+     */
+    private function loadAvailableOrders()
+    {
+        if ($this->_availableOrder === null) {
+            $this->_availableOrder = $this->_catalogConfig->getAttributeUsedForSortByArray();
+        }
+        return $this;
     }
 }

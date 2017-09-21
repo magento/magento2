@@ -1,0 +1,79 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var \Magento\Customer\Block\Adminhtml\Edit\Tab\View\Sales $block */
+
+$singleStoreMode = $block->isSingleStoreMode();
+?>
+<div class="entry-edit fieldset-wrapper">
+
+    <div class="fieldset-wrapper-title">
+        <span class="title"><?= $block->escapeHtml(__('Sales Statistics')) ?></span>
+    </div>
+
+    <table class="data-table">
+        <thead>
+        <tr>
+            <?php if (!$singleStoreMode): ?>
+            <th><?= $block->escapeHtml(__('Web Site')) ?></th>
+            <th><?= $block->escapeHtml(__('Store')) ?></th>
+            <th><?= $block->escapeHtml(__('Store View')) ?></th>
+            <?php endif; ?>
+            <th><?= $block->escapeHtml(__('Lifetime Sales')) ?></th>
+            <th class="last"><?= $block->escapeHtml(__('Average Sale')) ?></th>
+        </tr>
+        </thead>
+        <?php if (!$singleStoreMode): ?>
+        <tfoot>
+        <tr>
+            <td colspan="3"><strong><?= $block->escapeHtml(__('All Store Views')) ?></strong></td>
+            <td class="emph"><strong><?= $block->escapeHtml($block->formatCurrency($block->getTotals()->getBaseLifetime())) ?></strong></td>
+            <td class="emph last"><strong><?= $block->escapeHtml($block->formatCurrency($block->getTotals()->getAvgsale())) ?></strong></td>
+        </tr>
+        </tfoot>
+        <?php endif; ?>
+        <?php if ($block->getRows()): ?>
+        <tbody>
+            <?php $_i = 0; ?>
+            <?php foreach ($block->getRows() as $_websiteId => $_groups): ?>
+            <?php $_websiteRow = false; ?>
+            <?php foreach ($_groups as $_groupId => $_stores): ?>
+                <?php $_groupRow = false; ?>
+                <?php foreach ($_stores as $_row): ?>
+                    <?php if (!$singleStoreMode): ?>
+                        <?php if ($_row->getStoreId() == 0): ?>
+                        <td colspan="3"><?= $block->escapeHtml($_row->getStoreName()) ?></td>
+                            <?php else: ?>
+                    <tr<?= ($_i++ % 2 ? ' class="even"' : '') ?>>
+                            <?php if (!$_websiteRow): ?>
+                                <td rowspan="<?= $block->escapeHtmlAttr($block->getWebsiteCount($_websiteId)) ?>"><?= $block->escapeHtml($_row->getWebsiteName()) ?></td>
+                                <?php $_websiteRow = true; ?>
+                                <?php endif; ?>
+                            <?php if (!$_groupRow): ?>
+                                <td rowspan="<?= count($_stores) ?>"><?= $block->escapeHtml($_row->getGroupName()) ?></td>
+                                <?php $_groupRow = true; ?>
+                                <?php endif; ?>
+                            <td><?= $block->escapeHtml($_row->getStoreName()) ?></td>
+                            <?php endif; ?>
+                        <?php else: ?>
+                    <tr>
+                        <?php endif; ?>
+                    <td><?= $block->escapeHtml($block->formatCurrency($_row->getLifetime(), $_row->getWebsiteId())) ?></td>
+                    <td><?= $block->escapeHtml($block->formatCurrency($_row->getAvgsale(), $_row->getWebsiteId())) ?></td>
+                    </tr>
+                    <?php endforeach; ?>
+                <?php endforeach; ?>
+            <?php endforeach; ?>
+        </tbody>
+        <?php else: ?>
+        <tbody>
+        <tr class="hidden"><td colspan="<?= /* @noEscape */ $singleStoreMode ? 2 : 5 ?>"></td></tr>
+        </tbody>
+        <?php endif; ?>
+    </table>
+</div>

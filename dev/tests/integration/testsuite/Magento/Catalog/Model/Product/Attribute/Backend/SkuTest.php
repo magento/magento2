@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Attribute\Backend;
 
@@ -27,18 +9,17 @@ namespace Magento\Catalog\Model\Product\Attribute\Backend;
  * Test class for \Magento\Catalog\Model\Product\Attribute\Backend\Sku.
  * @magentoAppArea adminhtml
  */
-class SkuTest extends \PHPUnit_Framework_TestCase
+class SkuTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      */
     public function testGenerateUniqueSkuExistingProduct()
     {
-        /** @var $product \Magento\Catalog\Model\Product */
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+        $repository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Catalog\Model\ProductRepository::class
         );
-        $product->load(1);
+        $product = $repository->get('simple');
         $product->setId(null);
         $this->assertEquals('simple', $product->getSku());
         $product->getResource()->getAttribute('sku')->getBackend()->beforeSave($product);
@@ -57,16 +38,21 @@ class SkuTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $product \Magento\Catalog\Model\Product
-     * @dataProvider uniqueLongSkuDataProvider
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoAppArea adminhtml
      * @magentoDbIsolation enabled
      */
-    public function testGenerateUniqueLongSku($product)
+    public function testGenerateUniqueLongSku()
     {
+        $repository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Catalog\Model\ProductRepository::class
+        );
+        $product = $repository->get('simple');
+        $product->setSku('0123456789012345678901234567890123456789012345678901234567890123');
+
         /** @var \Magento\Catalog\Model\Product\Copier $copier */
         $copier = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Catalog\Model\Product\Copier'
+            \Magento\Catalog\Model\Product\Copier::class
         );
         $copier->copy($product);
         $this->assertEquals('0123456789012345678901234567890123456789012345678901234567890123', $product->getSku());
@@ -82,20 +68,7 @@ class SkuTest extends \PHPUnit_Framework_TestCase
     public function uniqueSkuDataProvider()
     {
         $product = $this->_getProduct();
-        return array(array($product));
-    }
-
-    /**
-     * Returns simple product
-     *
-     * @return array
-     */
-    public function uniqueLongSkuDataProvider()
-    {
-        $product = $this->_getProduct();
-        $product->setSku('0123456789012345678901234567890123456789012345678901234567890123');
-        //strlen === 64
-        return array(array($product));
+        return [[$product]];
     }
 
     /**
@@ -107,7 +80,7 @@ class SkuTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $product \Magento\Catalog\Model\Product */
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
         $product->setTypeId(
             \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
@@ -116,7 +89,7 @@ class SkuTest extends \PHPUnit_Framework_TestCase
         )->setAttributeSetId(
             4
         )->setWebsiteIds(
-            array(1)
+            [1]
         )->setName(
             'Simple Product'
         )->setSku(
@@ -130,9 +103,9 @@ class SkuTest extends \PHPUnit_Framework_TestCase
         )->setStatus(
             \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
         )->setCategoryIds(
-            array(2)
+            [2]
         )->setStockData(
-            array('use_config_manage_stock' => 1, 'qty' => 100, 'is_qty_decimal' => 0, 'is_in_stock' => 1)
+            ['use_config_manage_stock' => 1, 'qty' => 100, 'is_qty_decimal' => 0, 'is_in_stock' => 1]
         );
         return $product;
     }

@@ -1,31 +1,13 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Block\Advanced;
 
-use Magento\Catalog\Model\Layer\Search as Layer;
+use Magento\Catalog\Model\Layer\Resolver as LayerResolver;
 use Magento\CatalogSearch\Model\Advanced;
-use Magento\CatalogSearch\Model\Resource\Advanced\Collection;
+use Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection;
 use Magento\Framework\UrlFactory;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Template;
@@ -33,6 +15,9 @@ use Magento\Framework\View\Element\Template\Context;
 
 /**
  * Advanced search result
+ *
+ * @api
+ * @since 100.0.2
  */
 class Result extends Template
 {
@@ -46,7 +31,7 @@ class Result extends Template
     /**
      * Catalog layer
      *
-     * @var Layer
+     * @var \Magento\Catalog\Model\Layer
      */
     protected $_catalogLayer;
 
@@ -60,19 +45,19 @@ class Result extends Template
     /**
      * @param Context $context
      * @param Advanced $catalogSearchAdvanced
-     * @param Layer $layer
+     * @param LayerResolver $layerResolver
      * @param UrlFactory $urlFactory
      * @param array $data
      */
     public function __construct(
         Context $context,
         Advanced $catalogSearchAdvanced,
-        Layer $layer,
+        LayerResolver $layerResolver,
         UrlFactory $urlFactory,
-        array $data = array()
+        array $data = []
     ) {
         $this->_catalogSearchAdvanced = $catalogSearchAdvanced;
-        $this->_catalogLayer = $layer;
+        $this->_catalogLayer = $layerResolver->get();
         $this->_urlFactory = $urlFactory;
         parent::__construct($context, $data);
     }
@@ -82,24 +67,35 @@ class Result extends Template
      */
     protected function _prepareLayout()
     {
+        $this->pageConfig->getTitle()->set($this->getPageTitle());
         $breadcrumbs = $this->getLayout()->getBlock('breadcrumbs');
         if ($breadcrumbs) {
             $breadcrumbs->addCrumb(
                 'home',
-                array(
+                [
                     'label' => __('Home'),
                     'title' => __('Go to Home Page'),
                     'link' => $this->_storeManager->getStore()->getBaseUrl()
-                )
+                ]
             )->addCrumb(
                 'search',
-                array('label' => __('Catalog Advanced Search'), 'link' => $this->getUrl('*/*/'))
+                ['label' => __('Catalog Advanced Search'), 'link' => $this->getUrl('*/*/')]
             )->addCrumb(
                 'search_result',
-                array('label' => __('Results'))
+                ['label' => __('Results')]
             );
         }
         return parent::_prepareLayout();
+    }
+
+    /**
+     * Get page title
+     *
+     * @return \Magento\Framework\Phrase
+     */
+    private function getPageTitle()
+    {
+        return __('Advanced Search Results');
     }
 
     /**
@@ -125,7 +121,7 @@ class Result extends Template
      */
     public function setListModes()
     {
-        $this->getChildBlock('search_result_list')->setModes(array('grid' => __('Grid'), 'list' => __('List')));
+        $this->getChildBlock('search_result_list')->setModes(['grid' => __('Grid'), 'list' => __('List')]);
     }
 
     /**
@@ -178,10 +174,10 @@ class Result extends Template
     public function getFormUrl()
     {
         return $this->_urlFactory->create()->addQueryParams(
-            $this->getRequest()->getQuery()
+            $this->getRequest()->getQueryValue()
         )->getUrl(
             '*/*/',
-            array('_escape' => true)
+            ['_escape' => true]
         );
     }
 
@@ -195,6 +191,6 @@ class Result extends Template
         $left = array_slice($searchCriterias, 0, $middle);
         $right = array_slice($searchCriterias, $middle);
 
-        return array('left' => $left, 'right' => $right);
+        return ['left' => $left, 'right' => $right];
     }
 }

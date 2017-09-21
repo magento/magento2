@@ -1,0 +1,61 @@
+<?php
+/**
+ *
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<script>
+require([
+    "Magento_Ui/js/modal/alert",
+    "tree-panel"
+], function(alert){
+ConfigurableNodeExists = function(currentNode) {
+    for (var i in currentNode.childNodes ) {
+        if (currentNode.childNodes[i].id) {
+            child = editSet.currentNode.childNodes[i];
+            if (child.attributes.is_configurable) {
+                return true;
+            }
+        }
+    }
+    return false;
+};
+
+editSet.submit = editSet.submit.wrap(function(original) {
+    if (editSet.currentNode){
+        if (ConfigurableNodeExists(editSet.currentNode)) {
+            alert({
+                content: '<?= $block->escapeJs(__('This group contains attributes used in configurable products. Please move these attributes to another group and try again.')) ?>'
+            });
+            return;
+        }
+    }
+    return original();
+});
+
+editSet.rightBeforeAppend = editSet.rightBeforeAppend.wrap(function(original, tree, nodeThis, node, newParent) {
+    if (node.attributes.is_configurable == 1) {
+        alert({
+            content: '<?= $block->escapeJs(__('This attribute is used in configurable products. You cannot remove it from the attribute set.')) ?>'
+        });
+        return false;
+    }
+    return original(tree, nodeThis, node, newParent);
+});
+
+editSet.rightBeforeInsert = editSet.rightBeforeInsert.wrap(function(original, tree, nodeThis, node, newParent) {
+    if (node.attributes.is_configurable == 1) {
+        alert({
+            content: '<?= $block->escapeJs(__('This attribute is used in configurable products. You cannot remove it from the attribute set.')) ?>'
+        });
+        return false;
+    }
+    return original(tree, nodeThis, node, newParent);
+});
+
+});
+</script>

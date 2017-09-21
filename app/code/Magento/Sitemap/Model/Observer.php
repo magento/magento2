@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sitemap\Model;
 
@@ -63,7 +45,7 @@ class Observer
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Sitemap\Model\Resource\Sitemap\CollectionFactory
+     * @var \Magento\Sitemap\Model\ResourceModel\Sitemap\CollectionFactory
      */
     protected $_collectionFactory;
 
@@ -84,14 +66,14 @@ class Observer
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param Resource\Sitemap\CollectionFactory $collectionFactory
+     * @param \Magento\Sitemap\Model\ResourceModel\Sitemap\CollectionFactory $collectionFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Sitemap\Model\Resource\Sitemap\CollectionFactory $collectionFactory,
+        \Magento\Sitemap\Model\ResourceModel\Sitemap\CollectionFactory $collectionFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder,
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
@@ -106,12 +88,13 @@ class Observer
     /**
      * Generate sitemaps
      *
-     * @param \Magento\Cron\Model\Schedule $schedule
      * @return void
+     * @throws \Exception
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function scheduledGenerateSitemaps($schedule)
+    public function scheduledGenerateSitemaps()
     {
-        $errors = array();
+        $errors = [];
 
         // check if scheduled generation enabled
         if (!$this->_scopeConfig->isSetFlag(
@@ -123,14 +106,14 @@ class Observer
         }
 
         $collection = $this->_collectionFactory->create();
-        /* @var $collection \Magento\Sitemap\Model\Resource\Sitemap\Collection */
+        /* @var $collection \Magento\Sitemap\Model\ResourceModel\Sitemap\Collection */
         foreach ($collection as $sitemap) {
             /* @var $sitemap \Magento\Sitemap\Model\Sitemap */
-
             try {
                 $sitemap->generateXml();
             } catch (\Exception $e) {
                 $errors[] = $e->getMessage();
+                throw $e;
             }
         }
 
@@ -148,12 +131,12 @@ class Observer
                     \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                 )
             )->setTemplateOptions(
-                array(
-                    'area' => \Magento\Framework\App\Area::AREA_ADMIN,
-                    'store' => $this->_storeManager->getStore()->getId()
-                )
+                [
+                    'area' => \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE,
+                    'store' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
+                ]
             )->setTemplateVars(
-                array('warnings' => join("\n", $errors))
+                ['warnings' => join("\n", $errors)]
             )->setFrom(
                 $this->_scopeConfig->getValue(
                     self::XML_PATH_ERROR_IDENTITY,

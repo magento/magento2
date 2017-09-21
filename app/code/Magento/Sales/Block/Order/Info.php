@@ -1,32 +1,22 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Order;
+
+use Magento\Sales\Model\Order\Address;
+use Magento\Framework\View\Element\Template\Context as TemplateContext;
+use Magento\Framework\Registry;
+use Magento\Payment\Helper\Data as PaymentHelper;
+use Magento\Sales\Model\Order\Address\Renderer as AddressRenderer;
 
 /**
  * Invoice view  comments form
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Info extends \Magento\Framework\View\Element\Template
 {
@@ -40,27 +30,36 @@ class Info extends \Magento\Framework\View\Element\Template
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $coreRegistry = null;
 
     /**
      * @var \Magento\Payment\Helper\Data
      */
-    protected $_paymentHelper;
+    protected $paymentHelper;
 
     /**
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Payment\Helper\Data $paymentHelper
+     * @var AddressRenderer
+     */
+    protected $addressRenderer;
+
+    /**
+     * @param TemplateContext $context
+     * @param Registry $registry
+     * @param PaymentHelper $paymentHelper
+     * @param AddressRenderer $addressRenderer
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Payment\Helper\Data $paymentHelper,
-        array $data = array()
+        TemplateContext $context,
+        Registry $registry,
+        PaymentHelper $paymentHelper,
+        AddressRenderer $addressRenderer,
+        array $data = []
     ) {
-        $this->_paymentHelper = $paymentHelper;
-        $this->_coreRegistry = $registry;
+        $this->addressRenderer = $addressRenderer;
+        $this->paymentHelper = $paymentHelper;
+        $this->coreRegistry = $registry;
+        $this->_isScopePrivate = true;
         parent::__construct($context, $data);
     }
 
@@ -69,10 +68,9 @@ class Info extends \Magento\Framework\View\Element\Template
      */
     protected function _prepareLayout()
     {
-        if ($headBlock = $this->getLayout()->getBlock('head')) {
-            $headBlock->setTitle(__('Order # %1', $this->getOrder()->getRealOrderId()));
-        }
-        $this->setChild('payment_info', $this->_paymentHelper->getInfoBlock($this->getOrder()->getPayment()));
+        $this->pageConfig->getTitle()->set(__('Order # %1', $this->getOrder()->getRealOrderId()));
+        $infoBlock = $this->paymentHelper->getInfoBlock($this->getOrder()->getPayment(), $this->getLayout());
+        $this->setChild('payment_info', $infoBlock);
     }
 
     /**
@@ -90,6 +88,17 @@ class Info extends \Magento\Framework\View\Element\Template
      */
     public function getOrder()
     {
-        return $this->_coreRegistry->registry('current_order');
+        return $this->coreRegistry->registry('current_order');
+    }
+
+    /**
+     * Returns string with formatted address
+     *
+     * @param Address $address
+     * @return null|string
+     */
+    public function getFormattedAddress(Address $address)
+    {
+        return $this->addressRenderer->format($address, 'html');
     }
 }

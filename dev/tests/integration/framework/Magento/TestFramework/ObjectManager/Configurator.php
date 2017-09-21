@@ -1,37 +1,42 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- * 
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\TestFramework\ObjectManager;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Stdlib\CookieManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\App\MutableScopeConfig;
+use Magento\Framework\App\ReinitableConfig;
+use Magento\Framework\App\Config as AppConfig;
+use Magento\Backend\App\Config as BackendConfig;
+
+/**
+ * Class which hold configurations (preferences, etc...) of integration test framework
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Configurator implements \Magento\Framework\ObjectManager\DynamicConfigInterface
 {
     /**
-     * Map application initialization params to Object Manager configuration format
+     * Map application initialization params to Object Manager configuration format.
      *
      * @return array
      */
     public function getConfiguration()
     {
-        return array('preferences' => array('Magento\Framework\Stdlib\Cookie' => 'Magento\TestFramework\Cookie'));
+        return [
+            'preferences' => [
+                CookieManagerInterface::class => \Magento\TestFramework\CookieManager::class,
+                StoreManagerInterface::class => \Magento\TestFramework\Store\StoreManager::class,
+                ScopeConfigInterface::class => \Magento\TestFramework\App\Config::class,
+                \Magento\Framework\App\Config::class => \Magento\TestFramework\App\Config::class,
+                BackendConfig::class => \Magento\TestFramework\Backend\App\Config::class,
+                ReinitableConfig::class => \Magento\TestFramework\App\ReinitableConfig::class,
+                MutableScopeConfig::class => \Magento\TestFramework\App\MutableScopeConfig::class,
+            ]
+        ];
     }
 }

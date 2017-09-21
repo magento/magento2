@@ -1,32 +1,16 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Type;
+
+use Magento\Catalog\Model\Product;
 
 /**
  * @magentoDataFixture Magento/Catalog/_files/product_simple.php
  */
-class PriceTest extends \PHPUnit_Framework_TestCase
+class PriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Product\Type\Price
@@ -36,22 +20,21 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product\Type\Price'
+            \Magento\Catalog\Model\Product\Type\Price::class
         );
     }
 
     public function testGetPrice()
     {
-        $this->assertEquals('test', $this->_model->getPrice(new \Magento\Framework\Object(array('price' => 'test'))));
+        $this->assertEquals('test', $this->_model->getPrice(new \Magento\Framework\DataObject(['price' => 'test'])));
     }
 
     public function testGetFinalPrice()
     {
-        /** @var $product \Magento\Catalog\Model\Product */
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+        $repository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Catalog\Model\ProductRepository::class
         );
-        $product->load(1);
+        $product = $repository->get('simple');
         // fixture
 
         // regular & tier prices
@@ -60,76 +43,22 @@ class PriceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(5.0, $this->_model->getFinalPrice(5, $product));
 
         // with options
-        $product->addCustomOption('option_ids', implode(',', array_keys($product->getOptions())));
+        $buyRequest = $this->prepareBuyRequest($product);
+        $product->getTypeInstance()->prepareForCart($buyRequest, $product);
 
-        foreach ($product->getOptions() as $id => $option) {
-            $product->addCustomOption("option_{$id}", $option->getValue());
-        }
-        $this->assertEquals(13.0, $this->_model->getFinalPrice(1, $product));
-    }
+        //product price + options price(10+1+2+3+3)
+        $this->assertEquals(19.0, $this->_model->getFinalPrice(1, $product));
 
-    /**
-     * Warning: this is a copy-paste from testGetFinalPrice(), but the method has different interface
-     */
-    public function testGetChildFinalPrice()
-    {
-        /** @var $product \Magento\Catalog\Model\Product */
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
-        );
-        $product->load(1);
-        // fixture
-
-        // regular & tier prices
-        $this->assertEquals(10.0, $this->_model->getChildFinalPrice('', '', $product, 1));
-        $this->assertEquals(8.0, $this->_model->getChildFinalPrice('', '', $product, 2));
-        $this->assertEquals(5.0, $this->_model->getChildFinalPrice('', '', $product, 5));
-
-        // with options
-        $product->addCustomOption('option_ids', implode(',', array_keys($product->getOptions())));
-        foreach ($product->getOptions() as $id => $option) {
-            $product->addCustomOption("option_{$id}", $option->getValue());
-        }
-        $this->assertEquals(13.0, $this->_model->getChildFinalPrice('', '', $product, 1));
-    }
-
-    public function testGetTierPrice()
-    {
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
-        );
-        $product->load(1);
-        // fixture
-        $this->assertEquals(8.0, $this->_model->getTierPrice(2, $product));
-        $this->assertEquals(5.0, $this->_model->getTierPrice(5, $product));
-    }
-
-    public function testGetTierPriceCount()
-    {
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
-        );
-        $product->load(1);
-        // fixture
-        $this->assertEquals(2, $this->_model->getTierPriceCount($product));
-    }
-
-    public function testGetFormatedTierPrice()
-    {
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
-        );
-        $product->load(1);
-        // fixture
-        $this->assertEquals('<span class="price">$8.00</span>', $this->_model->getFormatedTierPrice(2, $product));
+        //product tier price + options price(5+1+2+3+3)
+        $this->assertEquals(14.0, $this->_model->getFinalPrice(5, $product));
     }
 
     public function testGetFormatedPrice()
     {
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+        $repository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Catalog\Model\ProductRepository::class
         );
-        $product->load(1);
+        $product = $repository->get('simple');
         // fixture
         $this->assertEquals('<span class="price">$10.00</span>', $this->_model->getFormatedPrice($product));
     }
@@ -155,5 +84,33 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     public function testIsTierPriceFixed()
     {
         $this->assertTrue($this->_model->isTierPriceFixed());
+    }
+
+    /**
+     * Build buy request based on product custom options
+     *
+     * @param Product $product
+     * @return \Magento\Framework\DataObject
+     */
+    private function prepareBuyRequest(Product $product)
+    {
+        $options = [];
+        /** @var $option \Magento\Catalog\Model\Product\Option */
+        foreach ($product->getOptions() as $option) {
+            switch ($option->getGroupByType()) {
+                case \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_GROUP_DATE:
+                    $value = ['year' => 2013, 'month' => 8, 'day' => 9, 'hour' => 13, 'minute' => 35];
+                    break;
+                case \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_GROUP_SELECT:
+                    $value = key($option->getValues());
+                    break;
+                default:
+                    $value = 'test';
+                    break;
+            }
+            $options[$option->getId()] = $value;
+        }
+
+        return new \Magento\Framework\DataObject(['qty' => 1, 'options' => $options]);
     }
 }

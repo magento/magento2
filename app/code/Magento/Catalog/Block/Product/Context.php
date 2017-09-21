@@ -1,39 +1,30 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Block\Product;
 
+/**
+ * Constructor modification point for Magento\Catalog\Block\Product\AbstractProduct.
+ *
+ * All context classes were introduced to allow for backwards compatible constructor modifications
+ * of classes that were supposed to be extended by extension developers.
+ *
+ * Do not call methods of this class directly.
+ *
+ * As Magento moves from inheritance-based APIs all such classes will be deprecated together with
+ * the classes they were introduced for.
+ *
+ * @deprecated 101.1.0
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Context extends \Magento\Framework\View\Element\Template\Context
 {
     /**
      * @var \Magento\Catalog\Helper\Image
      */
     protected $imageHelper;
-
-    /**
-     * @var \Magento\Theme\Helper\Layout
-     */
-    protected $layoutHelper;
 
     /**
      * @var \Magento\Catalog\Helper\Product\Compare
@@ -81,29 +72,46 @@ class Context extends \Magento\Framework\View\Element\Template\Context
     protected $reviewRenderer;
 
     /**
+     * @var \Magento\CatalogInventory\Api\StockRegistryInterface
+     */
+    protected $stockRegistry;
+
+    /**
+     * @var \Magento\Framework\View\Page\Config
+     */
+    protected $pageConfig;
+
+    /**
+     * @var ImageBuilder
+     */
+    protected $imageBuilder;
+
+    /**
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\UrlInterface $urlBuilder
-     * @param \Magento\Framework\TranslateInterface $translator
      * @param \Magento\Framework\App\CacheInterface $cache
      * @param \Magento\Framework\View\DesignInterface $design
      * @param \Magento\Framework\Session\SessionManagerInterface $session
      * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface|\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\View\Url $viewUrl
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\View\ConfigInterface $viewConfig
      * @param \Magento\Framework\App\Cache\StateInterface $cacheState
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Framework\Filter\FilterManager $filterManager
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
-     * @param \Magento\Framework\App\Filesystem $filesystem
+     * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\View\FileSystem $viewFileSystem
      * @param \Magento\Framework\View\TemplateEnginePool $enginePool
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\View\Page\Config $pageConfig
+     * @param \Magento\Framework\View\Element\Template\File\Resolver $resolver
+     * @param \Magento\Framework\View\Element\Template\File\Validator $validator
      * @param \Magento\Catalog\Model\Config $catalogConfig
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Tax\Helper\Data $taxHelper
@@ -112,9 +120,10 @@ class Context extends \Magento\Framework\View\Element\Template\Context
      * @param \Magento\Checkout\Helper\Cart $cartHelper
      * @param \Magento\Wishlist\Helper\Data $wishlistHelper
      * @param \Magento\Catalog\Helper\Product\Compare $compareProduct
-     * @param \Magento\Theme\Helper\Layout $layoutHelper
      * @param \Magento\Catalog\Helper\Image $imageHelper
+     * @param ImageBuilder $imageBuilder
      * @param ReviewRendererInterface $reviewRenderer
+     * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -123,25 +132,27 @@ class Context extends \Magento\Framework\View\Element\Template\Context
         \Magento\Framework\View\LayoutInterface $layout,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\UrlInterface $urlBuilder,
-        \Magento\Framework\TranslateInterface $translator,
         \Magento\Framework\App\CacheInterface $cache,
         \Magento\Framework\View\DesignInterface $design,
         \Magento\Framework\Session\SessionManagerInterface $session,
         \Magento\Framework\Session\SidResolverInterface $sidResolver,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\View\Url $viewUrl,
+        \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\View\ConfigInterface $viewConfig,
         \Magento\Framework\App\Cache\StateInterface $cacheState,
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Escaper $escaper,
         \Magento\Framework\Filter\FilterManager $filterManager,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
-        \Magento\Framework\App\Filesystem $filesystem,
+        \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\View\FileSystem $viewFileSystem,
         \Magento\Framework\View\TemplateEnginePool $enginePool,
         \Magento\Framework\App\State $appState,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\View\Page\Config $pageConfig,
+        \Magento\Framework\View\Element\Template\File\Resolver $resolver,
+        \Magento\Framework\View\Element\Template\File\Validator $validator,
         \Magento\Catalog\Model\Config $catalogConfig,
         \Magento\Framework\Registry $registry,
         \Magento\Tax\Helper\Data $taxHelper,
@@ -150,12 +161,13 @@ class Context extends \Magento\Framework\View\Element\Template\Context
         \Magento\Checkout\Helper\Cart $cartHelper,
         \Magento\Wishlist\Helper\Data $wishlistHelper,
         \Magento\Catalog\Helper\Product\Compare $compareProduct,
-        \Magento\Theme\Helper\Layout $layoutHelper,
         \Magento\Catalog\Helper\Image $imageHelper,
-        ReviewRendererInterface $reviewRenderer
+        \Magento\Catalog\Block\Product\ImageBuilder $imageBuilder,
+        ReviewRendererInterface $reviewRenderer,
+        \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
     ) {
         $this->imageHelper = $imageHelper;
-        $this->layoutHelper = $layoutHelper;
+        $this->imageBuilder = $imageBuilder;
         $this->compareProduct = $compareProduct;
         $this->wishlistHelper = $wishlistHelper;
         $this->cartHelper = $cartHelper;
@@ -165,18 +177,18 @@ class Context extends \Magento\Framework\View\Element\Template\Context
         $this->catalogHelper = $catalogHelper;
         $this->mathRandom = $mathRandom;
         $this->reviewRenderer = $reviewRenderer;
+        $this->stockRegistry = $stockRegistry;
         parent::__construct(
             $request,
             $layout,
             $eventManager,
             $urlBuilder,
-            $translator,
             $cache,
             $design,
             $session,
             $sidResolver,
             $scopeConfig,
-            $viewUrl,
+            $assetRepo,
             $viewConfig,
             $cacheState,
             $logger,
@@ -188,8 +200,19 @@ class Context extends \Magento\Framework\View\Element\Template\Context
             $viewFileSystem,
             $enginePool,
             $appState,
-            $storeManager
+            $storeManager,
+            $pageConfig,
+            $resolver,
+            $validator
         );
+    }
+
+    /**
+     * @return \Magento\CatalogInventory\Api\StockRegistryInterface
+     */
+    public function getStockRegistry()
+    {
+        return $this->stockRegistry;
     }
 
     /**
@@ -233,11 +256,11 @@ class Context extends \Magento\Framework\View\Element\Template\Context
     }
 
     /**
-     * @return \Magento\Theme\Helper\Layout
+     * @return \Magento\Catalog\Block\Product\ImageBuilder
      */
-    public function getLayoutHelper()
+    public function getImageBuilder()
     {
-        return $this->layoutHelper;
+        return $this->imageBuilder;
     }
 
     /**

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\SalesRule\Test\TestCase\ApplySeveralSalesRuleEntityTest" summary="Apply Several Sales Rules" ticketId="MAGETWO-45883">
+        <variation name="ApplySeveralSalesRuleEntityTestVariation1" summary="Rules with same priority, both are applied">
+            <data name="salesRules/rule1" xsi:type="string">active_sales_rule_product_subselection</data>
+            <data name="salesRules/rule2" xsi:type="string">active_sales_rule_product_attribute</data>
+            <data name="cartPrice/sub_total" xsi:type="string">200.00</data>
+            <data name="cartPrice/grand_total" xsi:type="string">204.00</data>
+            <data name="cartPrice/discount" xsi:type="string">11.00</data>
+            <data name="productForSalesRule1/dataset" xsi:type="string">simple_for_salesrule_1</data>
+            <data name="productForSalesRule2/dataset" xsi:type="string">simple_for_salesrule_2</data>
+            <data name="productQuantity/productForSalesRule1" xsi:type="string">1</data>
+            <data name="productQuantity/productForSalesRule2" xsi:type="string">2</data>
+            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleConditionIsApplied" />
+        </variation>
+        <variation name="ApplySeveralSalesRuleEntityTestVariation2" summary="Rules with same priority, higher discount rule is applied">
+            <data name="salesRules/rule1" xsi:type="string">active_sales_rule_for_all_groups_no_coupon</data>
+            <data name="salesRules/rule2" xsi:type="string">active_sales_rule_row_total</data>
+            <data name="cartPrice/sub_total" xsi:type="string">100.00</data>
+            <data name="cartPrice/grand_total" xsi:type="string">55.00</data>
+            <data name="cartPrice/discount" xsi:type="string">50.00</data>
+            <data name="productForSalesRule1/dataset" xsi:type="string">simple_for_salesrule_1</data>
+            <data name="productForSalesRule2/dataset" xsi:type="string">simple_for_salesrule_2</data>
+            <data name="productQuantity/productForSalesRule1" xsi:type="string">1</data>
+            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleConditionIsApplied" />
+        </variation>
+        <variation name="ApplySeveralSalesRuleEntityTestVariation3" summary="Rules with different priority, both are applied">
+            <data name="tag" xsi:type="string">stable:no</data>
+            <data name="salesRules/rule1" xsi:type="string">active_sales_rule_product_attribute</data>
+            <data name="salesRules/rule2" xsi:type="string">active_sales_total_items</data>
+            <data name="cartPrice/sub_total" xsi:type="string">250.00</data>
+            <data name="cartPrice/grand_total" xsi:type="string">193.50</data>
+            <data name="cartPrice/discount" xsi:type="string">71.50</data>
+            <data name="productForSalesRule1/dataset" xsi:type="string">simple_for_salesrule_1</data>
+            <data name="productForSalesRule2/dataset" xsi:type="string">simple_for_salesrule_2</data>
+            <data name="productQuantity/productForSalesRule1" xsi:type="string">2</data>
+            <data name="productQuantity/productForSalesRule2" xsi:type="string">1</data>
+            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleConditionIsApplied" />
+        </variation>
+        <variation name="ApplySeveralSalesRuleEntityTestVariation4" summary="Rules with different priority, none are applied">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
+            <data name="salesRules/rule1" xsi:type="string">active_sales_rule_row_total</data>
+            <data name="salesRules/rule2" xsi:type="string">active_sales_total_items</data>
+            <data name="productForSalesRule1/dataset" xsi:type="string">simple_for_salesrule_1</data>
+            <data name="productForSalesRule2/dataset" xsi:type="string">simple_for_salesrule_2</data>
+            <data name="productQuantity/productForSalesRule2" xsi:type="string">1</data>
+          <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleConditionIsNotApplied" />
+        </variation>
+    </testCase>
+</config>

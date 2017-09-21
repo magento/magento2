@@ -1,30 +1,14 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Block\Cart;
 
 /**
  * "My Cart" link
+ *
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Link extends \Magento\Framework\View\Element\Html\Link
 {
@@ -43,12 +27,13 @@ class Link extends \Magento\Framework\View\Element\Html\Link
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Checkout\Helper\Cart $cartHelper
      * @param array $data
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Framework\Module\Manager $moduleManager,
         \Magento\Checkout\Helper\Cart $cartHelper,
-        array $data = array()
+        array $data = []
     ) {
         $this->_cartHelper = $cartHelper;
         parent::__construct($context, $data);
@@ -57,6 +42,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link
 
     /**
      * @return string
+     * @codeCoverageIgnore
      */
     public function getLabel()
     {
@@ -65,6 +51,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link
 
     /**
      * @return string
+     * @codeCoverageIgnore
      */
     public function getHref()
     {
@@ -78,7 +65,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link
      */
     protected function _toHtml()
     {
-        if ($this->_moduleManager->isOutputEnabled('Magento_Checkout')) {
+        if (!$this->_moduleManager->isOutputEnabled('Magento_Checkout')) {
             return '';
         }
         return parent::_toHtml();
@@ -99,7 +86,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link
      * Create link label based on cart item quantity
      *
      * @param int $count
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     protected function _createLabel($count)
     {

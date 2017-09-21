@@ -1,0 +1,9 @@
+"Circular dependencies:","Total number of chains"
+,2
+
+"Circular dependencies for each module:",
+magento/module-module1,1
+magento/module-module1->magento/module-module2->magento/module-module1
+
+magento/module-module2,1
+magento/module-module2->magento/module-module1->magento/module-module2

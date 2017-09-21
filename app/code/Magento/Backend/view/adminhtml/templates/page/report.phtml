@@ -1,0 +1,12 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php if ($block->getBugreportUrl()): ?>
+    <a class="link-report" href="<?= /* @escapeNotVerified */ $block->getBugreportUrl() ?>" id="footer_bug_tracking"><?= /* @escapeNotVerified */ __('Report an Issue') ?></a>
+<?php endif; ?>

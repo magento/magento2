@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -29,6 +11,10 @@
  */
 namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
@@ -55,7 +41,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Store\Model\System\Store $store,
         \Magento\Framework\View\Design\Theme\LabelFactory $themeLabelFactory,
-        array $data = array()
+        array $data = []
     ) {
         $this->_store = $store;
         $this->_themeLabelFactory = $themeLabelFactory;
@@ -76,21 +62,21 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
     /**
      * Prepare label for tab
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTabLabel()
     {
-        return __('Frontend Properties');
+        return __('Storefront Properties');
     }
 
     /**
      * Prepare title for tab
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTabTitle()
     {
-        return __('Frontend Properties');
+        return __('Storefront Properties');
     }
 
     /**
@@ -127,6 +113,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
      * Prepare form before rendering HTML
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareForm()
     {
@@ -134,13 +121,13 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
 
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create(
-            array('data' => array('id' => 'edit_form', 'action' => $this->getData('action'), 'method' => 'post'))
+            ['data' => ['id' => 'edit_form', 'action' => $this->getData('action'), 'method' => 'post']]
         );
 
-        $fieldset = $form->addFieldset('base_fieldset', array('legend' => __('Frontend Properties')));
+        $fieldset = $form->addFieldset('base_fieldset', ['legend' => __('Storefront Properties')]);
 
         if ($widgetInstance->getId()) {
-            $fieldset->addField('instance_id', 'hidden', array('name' => 'instance_id'));
+            $fieldset->addField('instance_id', 'hidden', ['name' => 'instance_id']);
         }
 
         $this->_addElementTypes($fieldset);
@@ -148,14 +135,14 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
         $fieldset->addField(
             'instance_code',
             'select',
-            array(
+            [
                 'name' => 'instance_code',
                 'label' => __('Type'),
                 'title' => __('Type'),
                 'class' => '',
                 'values' => $this->getTypesOptionsArray(),
                 'disabled' => true
-            )
+            ]
         );
 
         /** @var $label \Magento\Framework\View\Design\Theme\Label */
@@ -164,42 +151,42 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
         $fieldset->addField(
             'theme_id',
             'select',
-            array(
+            [
                 'name' => 'theme_id',
                 'label' => __('Design Package/Theme'),
                 'title' => __('Design Package/Theme'),
                 'required' => false,
                 'values' => $options,
                 'disabled' => true
-            )
+            ]
         );
 
         $fieldset->addField(
             'title',
             'text',
-            array(
+            [
                 'name' => 'title',
-                'label' => __('Widget Instance Title'),
-                'title' => __('Widget Instance Title'),
+                'label' => __('Widget Title'),
+                'title' => __('Widget Title'),
                 'class' => '',
                 'required' => true
-            )
+            ]
         );
 
         if (!$this->_storeManager->isSingleStoreMode()) {
             $field = $fieldset->addField(
                 'store_ids',
                 'multiselect',
-                array(
+                [
                     'name' => 'store_ids[]',
                     'label' => __('Assign to Store Views'),
                     'title' => __('Assign to Store Views'),
                     'required' => true,
                     'values' => $this->_store->getStoreValuesForForm(false, true)
-                )
+                ]
             );
             $renderer = $this->getLayout()->createBlock(
-                'Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element'
+                \Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element::class
             );
             $field->setRenderer($renderer);
         }
@@ -207,24 +194,24 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
         $fieldset->addField(
             'sort_order',
             'text',
-            array(
+            [
                 'name' => 'sort_order',
                 'label' => __('Sort Order'),
                 'title' => __('Sort Order'),
                 'class' => '',
                 'required' => false,
                 'note' => __('Sort Order of widget instances in the same container')
-            )
+            ]
         );
 
         /* @var $layoutBlock \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Main\Layout */
         $layoutBlock = $this->getLayout()->createBlock(
-            'Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Main\Layout'
+            \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Main\Layout::class
         )->setWidgetInstance(
             $widgetInstance
         );
-        $fieldset = $form->addFieldset('layout_updates_fieldset', array('legend' => __('Layout Updates')));
-        $fieldset->addField('layout_updates', 'note', array());
+        $fieldset = $form->addFieldset('layout_updates_fieldset', ['legend' => __('Layout Updates')]);
+        $fieldset->addField('layout_updates', 'note', []);
         $form->getElement('layout_updates_fieldset')->setRenderer($layoutBlock);
         $this->setForm($form);
 

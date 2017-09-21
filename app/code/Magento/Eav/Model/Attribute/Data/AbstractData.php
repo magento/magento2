@@ -1,35 +1,24 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Eav\Model\Attribute\Data;
 
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\Model\Exception as CoreException;
+use Magento\Framework\Exception\LocalizedException as CoreException;
+use Magento\Framework\Validator\EmailAddress;
 
 /**
  * EAV Attribute Abstract Data Model
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 abstract class AbstractData
 {
@@ -38,7 +27,7 @@ abstract class AbstractData
      *
      * @var \Magento\Eav\Model\Attribute
      */
-    protected $_attribite;
+    protected $_attribute;
 
     /**
      * Entity instance
@@ -74,7 +63,7 @@ abstract class AbstractData
      *
      * @var array
      */
-    protected $_extractedData = array();
+    protected $_extractedData = [];
 
     /**
      * Date filter format
@@ -94,18 +83,19 @@ abstract class AbstractData
     protected $_localeResolver;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $_logger;
 
     /**
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Locale\ResolverInterface $localeResolver
     ) {
         $this->_localeDate = $localeDate;
@@ -118,10 +108,11 @@ abstract class AbstractData
      *
      * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setAttribute(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute)
     {
-        $this->_attribite = $attribute;
+        $this->_attribute = $attribute;
         return $this;
     }
 
@@ -133,10 +124,10 @@ abstract class AbstractData
      */
     public function getAttribute()
     {
-        if (!$this->_attribite) {
+        if (!$this->_attribute) {
             throw new CoreException(__('Attribute object is undefined'));
         }
-        return $this->_attribite;
+        return $this->_attribute;
     }
 
     /**
@@ -144,6 +135,7 @@ abstract class AbstractData
      *
      * @param string $scope
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setRequestScope($scope)
     {
@@ -157,6 +149,7 @@ abstract class AbstractData
      *
      * @param bool $flag
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setRequestScopeOnly($flag)
     {
@@ -169,6 +162,7 @@ abstract class AbstractData
      *
      * @param \Magento\Framework\Model\AbstractModel $entity
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setEntity(\Magento\Framework\Model\AbstractModel $entity)
     {
@@ -180,6 +174,7 @@ abstract class AbstractData
      * Returns entity instance
      *
      * @return \Magento\Framework\Model\AbstractModel
+     * @throws CoreException
      */
     public function getEntity()
     {
@@ -194,6 +189,7 @@ abstract class AbstractData
      *
      * @param array $data
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setExtractedData(array $data)
     {
@@ -249,7 +245,7 @@ abstract class AbstractData
         if ($filterCode) {
             $filterClass = 'Magento\Framework\Data\Form\Filter\\' . ucfirst($filterCode);
             if ($filterCode == 'date') {
-                $filter = new $filterClass($this->_dateFilterFormat(), $this->_localeResolver->getLocale());
+                $filter = new $filterClass($this->_dateFilterFormat(), $this->_localeResolver);
             } else {
                 $filter = new $filterClass();
             }
@@ -269,10 +265,10 @@ abstract class AbstractData
         if (is_null($format)) {
             // get format
             if (is_null($this->_dateFilterFormat)) {
-                $this->_dateFilterFormat = \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT;
+                $this->_dateFilterFormat = \IntlDateFormatter::SHORT;
             }
             return $this->_localeDate->getDateFormat($this->_dateFilterFormat);
-        } else if ($format === false) {
+        } elseif ($format === false) {
             // reset value
             $this->_dateFilterFormat = null;
             return $this;
@@ -303,6 +299,8 @@ abstract class AbstractData
      *
      * @param string $value
      * @return string|true
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _validateInputRule($value)
     {
@@ -311,10 +309,10 @@ abstract class AbstractData
             return true;
         }
 
-        $label = $this->getAttribute()->getStoreLabel();
         $validateRules = $this->getAttribute()->getValidateRules();
 
         if (!empty($validateRules['input_validation'])) {
+            $label = $this->getAttribute()->getStoreLabel();
             switch ($validateRules['input_validation']) {
                 case 'alphanumeric':
                     $validator = new \Zend_Validate_Alnum(true);
@@ -364,12 +362,12 @@ abstract class AbstractData
                     __("'%value%' appears to be a DNS hostname but cannot match against hostname schema for TLD '%tld%'")
                     __("'%value%' does not appear to be a valid local network name")
                     __("'%value%' does not appear to be a valid URI hostname")
-                    __("'%value%' appears to be an IP address, but IP addresses are not allowed")
+                    __("'%value%' appears to be an IP address but IP addresses are not allowed")
                     __("'%value%' appears to be a local network name but local network names are not allowed")
                     __("'%value%' appears to be a DNS hostname but cannot extract TLD part")
                     __("'%value%' appears to be a DNS hostname but cannot match TLD against known list")
                     */
-                    $validator = new \Zend_Validate_EmailAddress();
+                    $validator = new EmailAddress();
                     $validator->setMessage(
                         __('"%1" invalid type entered.', $label),
                         \Zend_Validate_EmailAddress::INVALID
@@ -403,42 +401,38 @@ abstract class AbstractData
                         \Zend_Validate_EmailAddress::INVALID_LOCAL_PART
                     );
                     $validator->setMessage(
-                        __('"%1" exceeds the allowed length.', $label),
+                        __('"%1" uses too many characters.', $label),
                         \Zend_Validate_EmailAddress::LENGTH_EXCEEDED
                     );
                     $validator->setMessage(
-                        __("'%value%' appears to be an IP address, but IP addresses are not allowed."),
+                        __("'%value%' looks like an IP address, which is not an acceptable format."),
                         \Zend_Validate_Hostname::IP_ADDRESS_NOT_ALLOWED
                     );
                     $validator->setMessage(
-                        __("'%value%' appears to be a DNS hostname but cannot match TLD against known list."),
-                        \Zend_Validate_Hostname::UNKNOWN_TLD
-                    );
-                    $validator->setMessage(
-                        __("'%value%' appears to be a DNS hostname but contains a dash in an invalid position."),
+                        __("'%value%' looks like a DNS hostname but contains a dash in an invalid position."),
                         \Zend_Validate_Hostname::INVALID_DASH
                     );
                     $validator->setMessage(
                         __(
-                            "'%value%' appears to be a DNS hostname but cannot match against hostname schema for TLD '%tld%'."
+                            "'%value%' looks like a DNS hostname but we cannot match it against the hostname schema for TLD '%tld%'."
                         ),
                         \Zend_Validate_Hostname::INVALID_HOSTNAME_SCHEMA
                     );
                     $validator->setMessage(
-                        __("'%value%' appears to be a DNS hostname but cannot extract TLD part."),
+                        __("'%value%' looks like a DNS hostname but cannot extract TLD part."),
                         \Zend_Validate_Hostname::UNDECIPHERABLE_TLD
                     );
                     $validator->setMessage(
-                        __("'%value%' does not appear to be a valid local network name."),
+                        __("'%value%' does not look like a valid local network name."),
                         \Zend_Validate_Hostname::INVALID_LOCAL_NAME
                     );
                     $validator->setMessage(
-                        __("'%value%' appears to be a local network name but local network names are not allowed."),
+                        __("'%value%' looks like a local network name, which is not an acceptable format."),
                         \Zend_Validate_Hostname::LOCAL_NAME_NOT_ALLOWED
                     );
                     $validator->setMessage(
                         __(
-                            "'%value%' appears to be a DNS hostname but the given punycode notation cannot be decoded."
+                            "'%value%' appears to be a DNS hostname, but the given punycode notation cannot be decoded."
                         ),
                         \Zend_Validate_Hostname::CANNOT_DECODE_PUNYCODE
                     );
@@ -449,18 +443,18 @@ abstract class AbstractData
                 case 'url':
                     $parsedUrl = parse_url($value);
                     if ($parsedUrl === false || empty($parsedUrl['scheme']) || empty($parsedUrl['host'])) {
-                        return array(__('"%1" is not a valid URL.', $label));
+                        return [__('"%1" is not a valid URL.', $label)];
                     }
                     $validator = new \Zend_Validate_Hostname();
                     if (!$validator->isValid($parsedUrl['host'])) {
-                        return array(__('"%1" is not a valid URL.', $label));
+                        return [__('"%1" is not a valid URL.', $label)];
                     }
                     break;
                 case 'date':
                     $validator = new \Zend_Validate_Date(
                         [
                             'format' => \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT,
-                            'locale' => $this->_localeResolver->getLocale()
+                            'locale' => $this->_localeResolver->getLocale(),
                         ]
                     );
                     $validator->setMessage(__('"%1" invalid type entered.', $label), \Zend_Validate_Date::INVALID);
@@ -484,6 +478,7 @@ abstract class AbstractData
      *
      * @param bool $flag
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setIsAjaxRequest($flag = true)
     {
@@ -495,6 +490,8 @@ abstract class AbstractData
      * Return is AJAX Request
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @codeCoverageIgnore
      */
     public function getIsAjaxRequest()
     {
@@ -518,7 +515,7 @@ abstract class AbstractData
                     if (isset($params[$part])) {
                         $params = $params[$part];
                     } else {
-                        $params = array();
+                        $params = [];
                     }
                 }
             } else {

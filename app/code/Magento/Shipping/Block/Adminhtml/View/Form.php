@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -29,6 +11,10 @@
  */
 namespace Magento\Shipping\Block\Adminhtml\View;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
 {
     /**
@@ -48,7 +34,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
         \Magento\Framework\Registry $registry,
         \Magento\Sales\Helper\Admin $adminHelper,
         \Magento\Shipping\Model\CarrierFactory $carrierFactory,
-        array $data = array()
+        array $data = []
     ) {
         $this->_carrierFactory = $carrierFactory;
         parent::__construct($context, $registry, $adminHelper, $data);
@@ -88,15 +74,20 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      * Get create label button html
      *
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function getCreateLabelButton()
     {
         $data['shipment_id'] = $this->getShipment()->getId();
         $url = $this->getUrl('adminhtml/order_shipment/createLabel', $data);
         return $this->getLayout()->createBlock(
-            'Magento\Backend\Block\Widget\Button'
+            \Magento\Backend\Block\Widget\Button::class
         )->setData(
-            array('label' => __('Create Shipping Label...'), 'onclick' => 'packaging.showWindow();')
+            [
+                'label' => __('Create Shipping Label...'),
+                'onclick' => 'packaging.showWindow();',
+                'class' => 'action-create-label'
+            ]
         )->toHtml();
     }
 
@@ -110,9 +101,9 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
         $data['shipment_id'] = $this->getShipment()->getId();
         $url = $this->getUrl('adminhtml/order_shipment/printLabel', $data);
         return $this->getLayout()->createBlock(
-            'Magento\Backend\Block\Widget\Button'
+            \Magento\Backend\Block\Widget\Button::class
         )->setData(
-            array('label' => __('Print Shipping Label'), 'onclick' => 'setLocation(\'' . $url . '\')')
+            ['label' => __('Print Shipping Label'), 'onclick' => 'setLocation(\'' . $url . '\')']
         )->toHtml();
     }
 
@@ -124,9 +115,9 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
     public function getShowPackagesButton()
     {
         return $this->getLayout()->createBlock(
-            'Magento\Backend\Block\Widget\Button'
+            \Magento\Backend\Block\Widget\Button::class
         )->setData(
-            array('label' => __('Show Packages'), 'onclick' => 'showPackedWindow();')
+            ['label' => __('Show Packages'), 'onclick' => 'showPackedWindow();']
         )->toHtml();
     }
 

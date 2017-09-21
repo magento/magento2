@@ -2,43 +2,68 @@
 /**
  * Catalog Configurable Product Attribute Model
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\EntityManager\MetadataPool;
+
 /**
- * @method Attribute _getResource()
- * @method Attribute getResource()
- * @method int getProductId()
- * @method Attribute setProductId(int $value)
- * @method int getAttributeId()
- * @method Attribute setAttributeId(int $value)
- * @method int getPosition()
- * @method Attribute setPosition(int $value)
  * @method Attribute setProductAttribute(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute $value)
  * @method \Magento\Eav\Model\Entity\Attribute\AbstractAttribute getProductAttribute()
  */
-class Attribute extends \Magento\Framework\Model\AbstractModel
+class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel implements
+    \Magento\ConfigurableProduct\Api\Data\OptionInterface
 {
+    /**#@+
+     * Constants for field names
+     */
+    const KEY_ATTRIBUTE_ID = 'attribute_id';
+    const KEY_LABEL = 'label';
+    const KEY_POSITION = 'position';
+    const KEY_IS_USE_DEFAULT = 'is_use_default';
+    const KEY_VALUES = 'values';
+    const KEY_PRODUCT_ID = 'product_id';
+    /**#@-*/
+
+    /**#@-*/
+    private $metadataPool;
+
+    /**
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
+     * @param AttributeValueFactory $customAttributeFactory
+     * @param MetadataPool $metadataPool
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
+        AttributeValueFactory $customAttributeFactory,
+        MetadataPool $metadataPool,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        array $data = []
+    ) {
+        $this->metadataPool = $metadataPool;
+        parent::__construct(
+            $context,
+            $registry,
+            $extensionFactory,
+            $customAttributeFactory,
+            $resource,
+            $resourceCollection,
+            $data
+        );
+    }
+
     /**
      * Initialize resource model
      *
@@ -46,40 +71,31 @@ class Attribute extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute');
+        $this->_init(\Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute::class);
     }
 
     /**
-     * Add price data to attribute
+     * Get attribute options
      *
-     * @param array $priceData
-     * @return $this
+     * @return array
      */
-    public function addPrice($priceData)
+    public function getOptions()
     {
-        $data = $this->getPrices();
-        if (is_null($data)) {
-            $data = array();
-        }
-        $data[] = $priceData;
-        $this->setPrices($data);
-        return $this;
+        return $this->getData('options');
     }
 
     /**
-     * Retrieve attribute label
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getLabel()
     {
         if ($this->getData('use_default') && $this->getProductAttribute()) {
             return $this->getProductAttribute()->getStoreLabel();
-        } else if (is_null($this->getData('label')) && $this->getProductAttribute()) {
-            $this->setData('label', $this->getProductAttribute()->getStoreLabel());
+        } elseif ($this->getData(self::KEY_LABEL) === null && $this->getProductAttribute()) {
+            $this->setData(self::KEY_LABEL, $this->getProductAttribute()->getStoreLabel());
         }
 
-        return $this->getData('label');
+        return $this->getData(self::KEY_LABEL);
     }
 
     /**
@@ -87,24 +103,28 @@ class Attribute extends \Magento\Framework\Model\AbstractModel
      *
      * @return $this
      */
-    protected function _afterSave()
+    public function afterSave()
     {
-        parent::_afterSave();
+        parent::afterSave();
         $this->_getResource()->saveLabel($this);
-        $this->_getResource()->savePrices($this);
         return $this;
     }
 
     /**
-     * Load counfigurable attribute by product and product's attribute
+     * Load configurable attribute by product and product's attribute
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @param \Magento\Catalog\Model\Resource\Eav\Attribute  $attribute
+     * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute  $attribute
      * @return void
      */
     public function loadByProductAndAttribute($product, $attribute)
     {
-        $id = $this->_getResource()->getIdByProductIdAndAttributeId($this, $product->getId(), $attribute->getId());
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+        $id = $this->_getResource()->getIdByProductIdAndAttributeId(
+            $this,
+            $product->getData($metadata->getLinkField()),
+            $attribute->getId()
+        );
         if ($id) {
             $this->load($id);
         }
@@ -118,6 +138,151 @@ class Attribute extends \Magento\Framework\Model\AbstractModel
      */
     public function deleteByProduct($product)
     {
-        $this->_getResource()->deleteAttributesByProductId($product->getId());
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+        $this->_getResource()->deleteAttributesByProductId($product->getData($metadata->getLinkField()));
+    }
+
+    /**
+     * {@inheritdoc}
+     * @codeCoverageIgnore
+     */
+    public function getAttributeId()
+    {
+        return $this->getData(self::KEY_ATTRIBUTE_ID);
+    }
+
+    /**
+     * {@inheritdoc}
+     * @codeCoverageIgnore
+     */
+    public function getPosition()
+    {
+        return $this->getData(self::KEY_POSITION);
+    }
+
+    /**
+     * {@inheritdoc}
+     * @codeCoverageIgnore
+     */
+    public function getIsUseDefault()
+    {
+        return $this->getData(self::KEY_IS_USE_DEFAULT);
+    }
+
+    /**
+     * {@inheritdoc}
+     * @codeCoverageIgnore
+     */
+    public function getValues()
+    {
+        return $this->getData(self::KEY_VALUES);
+    }
+
+    //@codeCoverageIgnoreStart
+
+    /**
+     * @param string $attributeId
+     * @return $this
+     */
+    public function setAttributeId($attributeId)
+    {
+        return $this->setData(self::KEY_ATTRIBUTE_ID, $attributeId);
+    }
+
+    /**
+     * @param string $label
+     * @return $this
+     */
+    public function setLabel($label)
+    {
+        return $this->setData(self::KEY_LABEL, $label);
+    }
+
+    /**
+     * @param int $position
+     * @return $this
+     */
+    public function setPosition($position)
+    {
+        return $this->setData(self::KEY_POSITION, $position);
+    }
+
+    /**
+     * @param bool $isUseDefault
+     * @return $this
+     */
+    public function setIsUseDefault($isUseDefault)
+    {
+        return $this->setData(self::KEY_IS_USE_DEFAULT, $isUseDefault);
+    }
+
+    /**
+     * @param \Magento\ConfigurableProduct\Api\Data\OptionValueInterface[] $values
+     * @return $this
+     */
+    public function setValues(array $values = null)
+    {
+        return $this->setData(self::KEY_VALUES, $values);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\ConfigurableProduct\Api\Data\OptionExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\ConfigurableProduct\Api\Data\OptionExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\ConfigurableProduct\Api\Data\OptionExtensionInterface $extensionAttributes
+    ) {
+        return $this->_setExtensionAttributes($extensionAttributes);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getProductId()
+    {
+        return $this->getData(self::KEY_PRODUCT_ID);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setProductId($value)
+    {
+        return $this->setData(self::KEY_PRODUCT_ID, $value);
+    }
+
+    //@codeCoverageIgnoreEnd
+
+    /**
+     * @inheritdoc
+     */
+    public function __sleep()
+    {
+        return array_diff(
+            parent::__sleep(),
+            ['metadataPool']
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function __wakeup()
+    {
+        parent::__wakeup();
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $this->metadataPool = $objectManager->get(MetadataPool::class);
     }
 }

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Ui\Test\TestCase\GridFilteringTest" summary="Grid UI Component Filtering" ticketId="MAGETWO-41329">
+        <variation name="CustomerGridFiltering">
+            <data name="tag" xsi:type="string">severity:S2</data>
+            <data name="description" xsi:type="string">Verify customer page grid filtering</data>
+            <data name="itemsCount" xsi:type="string">2</data>
+            <data name="fixtureName" xsi:type="string">customer</data>
+            <data name="fixtureDataSet" xsi:type="string">johndoe_unique</data>
+            <data name="filters" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="name" xsi:type="string">:lastname</item>
+                    <item name="email" xsi:type="string">:email</item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="email" xsi:type="string">:email</item>
+                    <item name="entity_id_from" xsi:type="string">:id</item>
+                </item>
+            </data>
+            <data name="pageClass" xsi:type="string">Magento\Customer\Test\Page\Adminhtml\CustomerIndex</data>
+            <data name="gridRetriever" xsi:type="string">getCustomerGridBlock</data>
+            <data name="idGetter" xsi:type="string">getId</data>
+            <constraint name="\Magento\Ui\Test\Constraint\AssertGridFiltering"/>
+        </variation>
+    </testCase>
+</config>

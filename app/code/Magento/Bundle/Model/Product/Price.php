@@ -1,33 +1,19 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
-
 namespace Magento\Bundle\Model\Product;
 
-use Magento\Customer\Service\V1\CustomerGroupServiceInterface;
+use Magento\Customer\Api\GroupManagementInterface;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Catalog\Api\Data\ProductTierPriceExtensionFactory;
 
 /**
- * Bundle Price Model
+ * @api
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Price extends \Magento\Catalog\Model\Product\Type\Price
 {
@@ -49,41 +35,72 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
     protected $_isPricesCalculatedByIndex;
 
     /**
-     * Is min/max prices have been calculated by index
+     * Catalog data
      *
-     * @return bool
+     * @var \Magento\Catalog\Helper\Data
      */
-    /**
-     * Tax data
-     *
-     * @var \Magento\Tax\Helper\Data
-     */
-    protected $_taxData = null;
+    protected $_catalogData = null;
 
     /**
-     *  Construct
+     * Serializer interface instance.
      *
-     * @param \Magento\CatalogRule\Model\Resource\RuleFactory $ruleFactory
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
+
+    /**
+     * Constructor
+     *
+     * @param \Magento\CatalogRule\Model\ResourceModel\RuleFactory $ruleFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Tax\Helper\Data $taxData
+     * @param PriceCurrencyInterface $priceCurrency
+     * @param GroupManagementInterface $groupManagement
+     * @param \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory $tierPriceFactory
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Catalog\Helper\Data $catalogData
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @param ProductTierPriceExtensionFactory|null $tierPriceExtensionFactory
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\CatalogRule\Model\Resource\RuleFactory $ruleFactory,
+        \Magento\CatalogRule\Model\ResourceModel\RuleFactory $ruleFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Tax\Helper\Data $taxData
+        PriceCurrencyInterface $priceCurrency,
+        GroupManagementInterface $groupManagement,
+        \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory $tierPriceFactory,
+        \Magento\Framework\App\Config\ScopeConfigInterface $config,
+        \Magento\Catalog\Helper\Data $catalogData,
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        ProductTierPriceExtensionFactory $tierPriceExtensionFactory = null
     ) {
-        $this->_taxData = $taxData;
-        parent::__construct($ruleFactory, $storeManager, $localeDate, $customerSession, $eventManager);
+        $this->_catalogData = $catalogData;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+        parent::__construct(
+            $ruleFactory,
+            $storeManager,
+            $localeDate,
+            $customerSession,
+            $eventManager,
+            $priceCurrency,
+            $groupManagement,
+            $tierPriceFactory,
+            $config,
+            $tierPriceExtensionFactory
+        );
     }
 
     /**
+     * Is min/max prices have been calculated by index
+     *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsPricesCalculatedByIndex()
     {
@@ -95,7 +112,6 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return float
-     * @deprecated
      */
     public function getPrice($product)
     {
@@ -117,14 +133,13 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
     {
         $price = 0.0;
         if ($product->hasCustomOptions()) {
-            $customOption = $product->getCustomOption('bundle_selection_ids');
-            if ($customOption) {
-                $selectionIds = unserialize($customOption->getValue());
+            $selectionIds = $this->getBundleSelectionIds($product);
+            if ($selectionIds) {
                 $selections = $product->getTypeInstance()->getSelectionsByIds($selectionIds, $product);
                 $selections->addTierPriceData();
                 $this->_eventManager->dispatch(
                     'prepare_catalog_product_collection_prices',
-                    array('collection' => $selections, 'store_id' => $product->getStoreId())
+                    ['collection' => $selections, 'store_id' => $product->getStoreId()]
                 );
                 foreach ($selections->getItems() as $selection) {
                     if ($selection->isSalable()) {
@@ -145,6 +160,24 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
     }
 
     /**
+     * Retrieve array of bundle selection IDs
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @return array
+     */
+    protected function getBundleSelectionIds(\Magento\Catalog\Model\Product $product)
+    {
+        $customOption = $product->getCustomOption('bundle_selection_ids');
+        if ($customOption) {
+            $selectionIds = $this->serializer->unserialize($customOption->getValue());
+            if (is_array($selectionIds) && !empty($selectionIds)) {
+                return $selectionIds;
+            }
+        }
+        return [];
+    }
+
+    /**
      * Get product final price
      *
      * @param   float                     $qty
@@ -153,20 +186,21 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      */
     public function getFinalPrice($qty, $product)
     {
-        if (is_null($qty) && !is_null($product->getCalculatedFinalPrice())) {
+        if ($qty === null && $product->getCalculatedFinalPrice() !== null) {
             return $product->getCalculatedFinalPrice();
         }
 
         $finalPrice = $this->getBasePrice($product, $qty);
         $product->setFinalPrice($finalPrice);
-        $this->_eventManager->dispatch('catalog_product_get_final_price', array('product' => $product, 'qty' => $qty));
+        $this->_eventManager->dispatch('catalog_product_get_final_price', ['product' => $product, 'qty' => $qty]);
         $finalPrice = $product->getData('final_price');
 
         $finalPrice = $this->_applyOptionsPrice($product, $qty, $finalPrice);
         $finalPrice += $this->getTotalBundleItemsPrice($product, $qty);
 
+        $finalPrice = max(0, $finalPrice);
         $product->setFinalPrice($finalPrice);
-        return max(0, $product->getData('final_price'));
+        return $finalPrice;
     }
 
     /**
@@ -191,13 +225,16 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      * @param  bool|null                  $includeTax
      * @param  bool                       $takeTierPrice
      * @return float|array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getTotalPrices($product, $which = null, $includeTax = null, $takeTierPrice = true)
     {
         // check calculated price index
         if ($product->getData('min_price') && $product->getData('max_price')) {
-            $minimalPrice = $this->_taxData->getPrice($product, $product->getData('min_price'), $includeTax);
-            $maximalPrice = $this->_taxData->getPrice($product, $product->getData('max_price'), $includeTax);
+            $minimalPrice = $this->_catalogData->getTaxPrice($product, $product->getData('min_price'), $includeTax);
+            $maximalPrice = $this->_catalogData->getTaxPrice($product, $product->getData('max_price'), $includeTax);
             $this->_isPricesCalculatedByIndex = true;
         } else {
             /**
@@ -205,7 +242,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
              */
             $finalPrice = $product->getFinalPrice();
             if ($product->getPriceType() == self::PRICE_TYPE_FIXED) {
-                $minimalPrice = $maximalPrice = $this->_taxData->getPrice($product, $finalPrice, $includeTax);
+                $minimalPrice = $maximalPrice = $this->_catalogData->getTaxPrice($product, $finalPrice, $includeTax);
             } else {
                 // PRICE_TYPE_DYNAMIC
                 $minimalPrice = $maximalPrice = 0;
@@ -219,8 +256,8 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
                     /* @var $option \Magento\Bundle\Model\Option */
                     $selections = $option->getSelections();
                     if ($selections) {
-                        $selectionMinimalPrices = array();
-                        $selectionMaximalPrices = array();
+                        $selectionMinimalPrices = [];
+                        $selectionMaximalPrices = [];
 
                         foreach ($option->getSelections() as $selection) {
                             /* @var $selection \Magento\Bundle\Model\Selection */
@@ -235,7 +272,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
 
                             $item = $product->getPriceType() == self::PRICE_TYPE_FIXED ? $product : $selection;
 
-                            $selectionMinimalPrices[] = $this->_taxData->getPrice(
+                            $selectionMinimalPrices[] = $this->_catalogData->getTaxPrice(
                                 $item,
                                 $this->getSelectionFinalTotalPrice(
                                     $product,
@@ -247,7 +284,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
                                 ),
                                 $includeTax
                             );
-                            $selectionMaximalPrices[] = $this->_taxData->getPrice(
+                            $selectionMaximalPrices[] = $this->_catalogData->getTaxPrice(
                                 $item,
                                 $this->getSelectionFinalTotalPrice(
                                     $product,
@@ -294,7 +331,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
                     /* @var $customOption \Magento\Catalog\Model\Product\Option */
                     $values = $customOption->getValues();
                     if ($values) {
-                        $prices = array();
+                        $prices = [];
                         foreach ($values as $value) {
                             /* @var $value \Magento\Catalog\Model\Product\Option\Value */
                             $valuePrice = $value->getPrice(true);
@@ -303,28 +340,28 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
                         }
                         if (count($prices)) {
                             if ($customOption->getIsRequire()) {
-                                $minimalPrice += $this->_taxData->getPrice($product, min($prices), $includeTax);
+                                $minimalPrice += $this->_catalogData->getTaxPrice($product, min($prices), $includeTax);
                             }
 
-                            $multiTypes = array(
-                                \Magento\Catalog\Model\Product\Option::OPTION_TYPE_CHECKBOX,
-                                \Magento\Catalog\Model\Product\Option::OPTION_TYPE_MULTIPLE
-                            );
+                            $multiTypes = [
+                                \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_CHECKBOX,
+                                \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_MULTIPLE,
+                            ];
 
                             if (in_array($customOption->getType(), $multiTypes)) {
                                 $maximalValue = array_sum($prices);
                             } else {
                                 $maximalValue = max($prices);
                             }
-                            $maximalPrice += $this->_taxData->getPrice($product, $maximalValue, $includeTax);
+                            $maximalPrice += $this->_catalogData->getTaxPrice($product, $maximalValue, $includeTax);
                         }
                     } else {
                         $valuePrice = $customOption->getPrice(true);
 
                         if ($customOption->getIsRequire()) {
-                            $minimalPrice += $this->_taxData->getPrice($product, $valuePrice, $includeTax);
+                            $minimalPrice += $this->_catalogData->getTaxPrice($product, $valuePrice, $includeTax);
                         }
-                        $maximalPrice += $this->_taxData->getPrice($product, $valuePrice, $includeTax);
+                        $maximalPrice += $this->_catalogData->getTaxPrice($product, $valuePrice, $includeTax);
                     }
                 }
             }
@@ -337,36 +374,14 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
             return $minimalPrice;
         }
 
-        return array($minimalPrice, $maximalPrice);
-    }
-
-    /**
-     * Calculate Minimal price of bundle (counting all required options)
-     *
-     * @param  \Magento\Catalog\Model\Product $product
-     * @return float
-     */
-    public function getMinimalPrice($product)
-    {
-        return $this->getPricesTierPrice($product, 'min');
-    }
-
-    /**
-     * Calculate maximal price of bundle
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return float
-     */
-    public function getMaximalPrice($product)
-    {
-        return $this->getPricesTierPrice($product, 'max');
+        return [$minimalPrice, $maximalPrice];
     }
 
     /**
      * Get Options with attached Selections collection
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Bundle\Model\Resource\Option\Collection
+     * @return \Magento\Bundle\Model\ResourceModel\Option\Collection
      */
     public function getOptions($product)
     {
@@ -391,7 +406,6 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      * @param null|bool                  $multiplyQty      Whether to multiply selection's price by its quantity
      * @return float
      *
-     * @deprecated after 1.6.2.0
      * @see \Magento\Bundle\Model\Product\Price::getSelectionFinalTotalPrice()
      */
     public function getSelectionPrice($bundleProduct, $selectionProduct, $selectionQty = null, $multiplyQty = true)
@@ -435,7 +449,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
         if (null === $bundleQty) {
             $bundleQty = 1.;
         }
-        if (is_null($selectionQty)) {
+        if ($selectionQty === null) {
             $selectionQty = $selectionProduct->getSelectionQty();
         }
 
@@ -448,7 +462,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
                 $product->setFinalPrice($this->getPrice($product));
                 $this->_eventManager->dispatch(
                     'catalog_product_get_final_price',
-                    array('product' => $product, 'qty' => $bundleQty)
+                    ['product' => $product, 'qty' => $bundleQty]
                 );
                 $price = $product->getData('final_price') * ($selectionProduct->getSelectionPriceValue() / 100);
             } else {
@@ -463,66 +477,9 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
 
         return min(
             $price,
-            $this->_applyGroupPrice($bundleProduct, $price),
             $this->_applyTierPrice($bundleProduct, $bundleQty, $price),
             $this->_applySpecialPrice($bundleProduct, $price)
         );
-    }
-
-    /**
-     * Apply group price for bundle product
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @param float $finalPrice
-     * @return float
-     */
-    protected function _applyGroupPrice($product, $finalPrice)
-    {
-        $result = $finalPrice;
-        $groupPrice = $product->getGroupPrice();
-
-        if (is_numeric($groupPrice)) {
-            $groupPrice = $finalPrice - $finalPrice * ($groupPrice / 100);
-            $result = min($finalPrice, $groupPrice);
-        }
-
-        return $result;
-    }
-
-    /**
-     * Get product group price
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return float|null
-     */
-    public function getGroupPrice($product)
-    {
-        $groupPrices = $product->getData('group_price');
-
-        if (is_null($groupPrices)) {
-            $attribute = $product->getResource()->getAttribute('group_price');
-            if ($attribute) {
-                $attribute->getBackend()->afterLoad($product);
-                $groupPrices = $product->getData('group_price');
-            }
-        }
-
-        if (is_null($groupPrices) || !is_array($groupPrices)) {
-            return null;
-        }
-
-        $customerGroup = $this->_getCustomerGroupId($product);
-
-        $matchedPrice = 0;
-
-        foreach ($groupPrices as $groupPrice) {
-            if ($groupPrice['cust_group'] == $customerGroup && $groupPrice['website_price'] > $matchedPrice) {
-                $matchedPrice = $groupPrice['website_price'];
-                break;
-            }
-        }
-
-        return $matchedPrice;
     }
 
     /**
@@ -535,7 +492,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      */
     protected function _applyTierPrice($product, $qty, $finalPrice)
     {
-        if (is_null($qty)) {
+        if ($qty === null) {
             return $finalPrice;
         }
 
@@ -555,41 +512,47 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      * @param   float                    $qty
      * @param   \Magento\Catalog\Model\Product $product
      * @return  float|array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getTierPrice($qty, $product)
     {
-        $allGroups = CustomerGroupServiceInterface::CUST_GROUP_ALL;
+        $allCustomersGroupId = $this->_groupManagement->getAllCustomersGroup()->getId();
         $prices = $product->getData('tier_price');
 
-        if (is_null($prices)) {
+        if ($prices === null) {
             if ($attribute = $product->getResource()->getAttribute('tier_price')) {
                 $attribute->getBackend()->afterLoad($product);
                 $prices = $product->getData('tier_price');
             }
         }
 
-        if (is_null($prices) || !is_array($prices)) {
-            if (!is_null($qty)) {
+        if ($prices === null || !is_array($prices)) {
+            if ($qty !== null) {
                 return $product->getPrice();
             }
-            return array(
-                array(
+            return [
+                [
                     'price' => $product->getPrice(),
                     'website_price' => $product->getPrice(),
                     'price_qty' => 1,
-                    'cust_group' => $allGroups
-                )
-            );
+                    'cust_group' => $allCustomersGroupId,
+                ]
+            ];
         }
 
         $custGroup = $this->_getCustomerGroupId($product);
         if ($qty) {
             $prevQty = 1;
             $prevPrice = 0;
-            $prevGroup = $allGroups;
+            $prevGroup = $allCustomersGroupId;
 
             foreach ($prices as $price) {
-                if ($price['cust_group'] != $custGroup && $price['cust_group'] != $allGroups) {
+                if (empty($price['percentage_value'])) {
+                    // can use only percentage tier price
+                    continue;
+                }
+                if ($price['cust_group'] != $custGroup && $price['cust_group'] != $allCustomersGroupId) {
                     // tier not for current customer group nor is for all groups
                     continue;
                 }
@@ -601,14 +564,16 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
                     // higher tier qty already found
                     continue;
                 }
-                if ($price['price_qty'] == $prevQty && $prevGroup != $allGroups && $price['cust_group'] == $allGroups
+                if ($price['price_qty'] == $prevQty
+                    && $prevGroup != $allCustomersGroupId
+                    && $price['cust_group'] == $allCustomersGroupId
                 ) {
                     // found tier qty is same as current tier qty but current tier group is ALL_GROUPS
                     continue;
                 }
 
-                if ($price['website_price'] > $prevPrice) {
-                    $prevPrice = $price['website_price'];
+                if ($price['percentage_value'] > $prevPrice) {
+                    $prevPrice = $price['percentage_value'];
                     $prevQty = $price['price_qty'];
                     $prevGroup = $price['cust_group'];
                 }
@@ -616,11 +581,11 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
 
             return $prevPrice;
         } else {
-            $qtyCache = array();
+            $qtyCache = [];
             foreach ($prices as $i => $price) {
-                if ($price['cust_group'] != $custGroup && $price['cust_group'] != $allGroups) {
+                if ($price['cust_group'] != $custGroup && $price['cust_group'] != $allCustomersGroupId) {
                     unset($prices[$i]);
-                } else if (isset($qtyCache[$price['price_qty']])) {
+                } elseif (isset($qtyCache[$price['price_qty']])) {
                     $j = $qtyCache[$price['price_qty']];
                     if ($prices[$j]['website_price'] < $price['website_price']) {
                         unset($prices[$j]);
@@ -634,17 +599,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
             }
         }
 
-        return $prices ? $prices : array();
-    }
-
-    /**
-     * Check is group price value fixed or percent of original price
-     *
-     * @return bool
-     */
-    public function isGroupPriceFixed()
-    {
-        return false;
+        return $prices ? $prices : [];
     }
 
     /**
@@ -664,13 +619,31 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
         $specialPriceTo,
         $store = null
     ) {
-        if (!is_null($specialPrice) && $specialPrice != false) {
+        if ($specialPrice !== null && $specialPrice != false) {
             if ($this->_localeDate->isScopeDateInInterval($store, $specialPriceFrom, $specialPriceTo)) {
-                $specialPrice = $this->_storeManager->getStore()->roundPrice($finalPrice * $specialPrice / 100);
+                $specialPrice = $finalPrice * ($specialPrice / 100);
                 $finalPrice = min($finalPrice, $specialPrice);
             }
         }
 
         return $finalPrice;
+    }
+
+    /**
+     * Returns the lowest price after applying any applicable bundle discounts
+     *
+     * @param /Magento/Catalog/Model/Product $bundleProduct
+     * @param float|string $price
+     * @param int          $bundleQty
+     * @return float
+     */
+    public function getLowestPrice($bundleProduct, $price, $bundleQty = 1)
+    {
+        $price = (float)$price;
+        return min(
+            $price,
+            $this->_applyTierPrice($bundleProduct, $bundleQty, $price),
+            $this->_applySpecialPrice($bundleProduct, $price)
+        );
     }
 }

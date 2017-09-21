@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -29,7 +11,11 @@
  */
 namespace Magento\Email\Block\Adminhtml;
 
-class Template extends \Magento\Backend\Block\Template
+/**
+ * @api
+ * @since 100.0.2
+ */
+class Template extends \Magento\Backend\Block\Template implements \Magento\Backend\Block\Widget\ContainerInterface
 {
     /**
      * Template list
@@ -39,22 +25,57 @@ class Template extends \Magento\Backend\Block\Template
     protected $_template = 'template/list.phtml';
 
     /**
+     * @var \Magento\Backend\Block\Widget\Button\ButtonList
+     */
+    protected $buttonList;
+
+    /**
+     * @var \Magento\Backend\Block\Widget\Button\ToolbarInterface
+     */
+    protected $toolbar;
+
+    /**
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Backend\Block\Widget\Button\ButtonList $buttonList
+     * @param \Magento\Backend\Block\Widget\Button\ToolbarInterface $toolbar
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Backend\Block\Widget\Button\ButtonList $buttonList,
+        \Magento\Backend\Block\Widget\Button\ToolbarInterface $toolbar,
+        array $data = []
+    ) {
+        $this->buttonList = $buttonList;
+        $this->toolbar = $toolbar;
+        parent::__construct($context, $data);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function updateButton($buttonId, $key, $data)
+    {
+        $this->buttonList->update($buttonId, $key, $data);
+        return $this;
+    }
+
+    /**
      * Create add button and grid blocks
      *
      * @return \Magento\Framework\View\Element\AbstractBlock
      */
     protected function _prepareLayout()
     {
-        $this->getToolbar()->addChild(
-            'add_button',
-            'Magento\Backend\Block\Widget\Button',
-            array(
+        $this->buttonList->add(
+            'add',
+            [
                 'label' => __('Add New Template'),
                 'onclick' => "window.location='" . $this->getCreateUrl() . "'",
                 'class' => 'add primary add-template'
-            )
+            ]
         );
-
+        $this->toolbar->pushButtons($this, $this->buttonList);
         return parent::_prepareLayout();
     }
 
@@ -69,13 +90,31 @@ class Template extends \Magento\Backend\Block\Template
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function addButton($buttonId, $data, $level = 0, $sortOrder = 0, $region = 'toolbar')
+    {
+        $this->buttonList->add($buttonId, $data, $level, $sortOrder, $region);
+        return $this;
+    }
+
+    /**
      * Get transactional emails page header text
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getHeaderText()
     {
         return __('Transactional Emails');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function removeButton($buttonId)
+    {
+        $this->buttonList->remove($buttonId);
+        return $this;
     }
 
     /**
@@ -85,6 +124,21 @@ class Template extends \Magento\Backend\Block\Template
      */
     protected function getAddButtonHtml()
     {
-        return $this->getChildHtml('add_button');
+        $out = '';
+        foreach ($this->buttonList->getItems() as $buttons) {
+            /** @var \Magento\Backend\Block\Widget\Button\Item $item */
+            foreach ($buttons as $item) {
+                $out .= $this->getChildHtml($item->getButtonKey());
+            }
+        }
+        return $out;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function canRender(\Magento\Backend\Block\Widget\Button\Item $item)
+    {
+        return !$item->isDeleted();
     }
 }

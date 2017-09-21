@@ -1,0 +1,133 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php /** @var $block Magento\Shipping\Block\Adminhtml\Order\Tracking */?>
+<script>
+require(['prototype'], function(){
+
+    //<![CDATA[
+    var trackingControl;
+    trackingControl = {
+        index : 0,
+        add : function () {
+            this.index++;
+            var data = {index:this.index};
+            Element.insert($('track_row_container'), {
+                bottom: this.template({
+                    data: data
+                })
+            });
+            $('trackingC' + this.index).disabled = false;
+            $('trackingT' + this.index).disabled = false;
+            $('trackingN' + this.index).disabled = false;
+            this.bindCurrierOnchange();
+        },
+        deleteRow : function(event) {
+            var row = Event.findElement(event, 'tr');
+            if (row) {
+                row.parentNode.removeChild(row)
+            }
+        },
+        bindCurrierOnchange : function() {
+            var elems = $('tracking_numbers_table').select('.select');
+            elems.each(function (elem) {
+                if (!elem.onchangeBound) {
+                    elem.onchangeBound = true;
+                    elem.valueInput = $(elem.parentNode.parentNode).select('.number-title')[0];
+                    elem.observe('change', this.currierOnchange);
+                }
+            }.bind(this));
+        },
+        currierOnchange : function(event) {
+            var elem = Event.element(event);
+            var option = elem.options[elem.selectedIndex];
+            if (option.value && option.value != 'custom') {
+                elem.valueInput.value = option.text;
+            }
+            else {
+                elem.valueInput.value = '';
+            }
+        }
+    };
+
+    window.trackingControl = trackingControl;
+    //]]>
+
+});
+</script>
+<script id="track_row_template" type="text/x-magento-template">
+    <tr>
+        <td class="col-carrier">
+            <select name="tracking[<%- data.index %>][carrier_code]"
+                    id="trackingC<%- data.index %>"
+                    class="select admin__control-select carrier"
+                    disabled="disabled">
+                <?php foreach ($block->getCarriers() as $_code => $_name): ?>
+                    <option value="<?= /* @escapeNotVerified */ $_code ?>"><?= $block->escapeHtml($_name) ?></option>
+                <?php endforeach; ?>
+            </select>
+        </td>
+        <td class="col-title">
+            <input class="input-text admin__control-text number-title"
+                   type="text"
+                   name="tracking[<%- data.index %>][title]"
+                   id="trackingT<%- data.index %>"
+                   value=""
+                   disabled="disabled" />
+        </td>
+        <td class="col-number">
+            <input class="input-text admin__control-text required-entry"
+                   type="text"
+                   name="tracking[<%- data.index %>][number]"
+                   id="trackingN<%- data.index %>"
+                   value=""
+                   disabled="disabled" />
+        </td>
+        <td class="col-delete">
+            <button
+                type="button"
+                class="action-default action-delete"
+                onclick="trackingControl.deleteRow(event);return false">
+                <span><?= /* @escapeNotVerified */ __('Delete') ?></span>
+            </button>
+        </td>
+    </tr>
+</script>
+
+<div class="admin__control-table-wrapper">
+    <table class="data-table admin__control-table" id="tracking_numbers_table">
+        <thead>
+        <tr class="headings">
+            <th class="col-carrier"><?= /* @escapeNotVerified */ __('Carrier') ?></th>
+            <th class="col-title"><?= /* @escapeNotVerified */ __('Title') ?></th>
+            <th class="col-number"><?= /* @escapeNotVerified */ __('Number') ?></th>
+            <th class="col-delete"><?= /* @escapeNotVerified */ __('Action') ?></th>
+        </tr>
+        </thead>
+        <tfoot>
+        <tr>
+            <td colspan="4" class="col-actions-add"><?= $block->getChildHtml('add_button') ?></td>
+        </tr>
+        </tfoot>
+        <tbody id="track_row_container">
+        </tbody>
+    </table>
+</div>
+<script>
+require([
+    'mage/template',
+    'prototype'
+], function (mageTemplate) {
+
+    //<![CDATA[
+    trackingControl.template = mageTemplate('#track_row_template');
+    //]]>
+
+});
+</script>

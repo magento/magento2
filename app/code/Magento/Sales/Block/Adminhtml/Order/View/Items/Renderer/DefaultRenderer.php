@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\View\Items\Renderer;
 
@@ -28,8 +10,10 @@ use Magento\Sales\Model\Order\Item;
 /**
  * Adminhtml sales order item renderer
  *
+ * @api
+ * @since 100.0.2
  */
-class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
+class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRenderer
 {
     /**
      * Message helper
@@ -46,8 +30,16 @@ class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
     protected $_checkoutHelper;
 
     /**
+     * Giftmessage object
+     *
+     * @var \Magento\GiftMessage\Model\Message
+     */
+    protected $_giftMessage = [];
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Catalog\Model\ProductFactory $productFactory
+     * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
+     * @param \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\GiftMessage\Helper\Message $messageHelper
      * @param \Magento\Checkout\Helper\Data $checkoutHelper
@@ -55,15 +47,16 @@ class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Catalog\Model\ProductFactory $productFactory,
+        \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
+        \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
         \Magento\Framework\Registry $registry,
         \Magento\GiftMessage\Helper\Message $messageHelper,
         \Magento\Checkout\Helper\Data $checkoutHelper,
-        array $data = array()
+        array $data = []
     ) {
         $this->_checkoutHelper = $checkoutHelper;
         $this->_messageHelper = $messageHelper;
-        parent::__construct($context, $productFactory, $registry, $data);
+        parent::__construct($context, $stockRegistry, $stockConfiguration, $registry, $data);
     }
 
     /**
@@ -108,13 +101,6 @@ class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
     }
 
     /**
-     * Giftmessage object
-     *
-     * @var \Magento\GiftMessage\Model\Message
-     */
-    protected $_giftMessage = array();
-
-    /**
      * Retrieve default value for giftmessage sender
      *
      * @return string
@@ -146,14 +132,14 @@ class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
         if ($this->getItem()->getOrder()) {
             if ($this->getItem()->getOrder()->getShippingAddress()) {
                 return $this->getItem()->getOrder()->getShippingAddress()->getName();
-            } else if ($this->getItem()->getOrder()->getBillingAddress()) {
+            } elseif ($this->getItem()->getOrder()->getBillingAddress()) {
                 return $this->getItem()->getOrder()->getBillingAddress()->getName();
             }
         }
 
         if ($this->getItem()->getShippingAddress()) {
             return $this->getItem()->getShippingAddress()->getName();
-        } else if ($this->getItem()->getBillingAddress()) {
+        } elseif ($this->getItem()->getBillingAddress()) {
             return $this->getItem()->getBillingAddress()->getName();
         }
 
@@ -216,7 +202,7 @@ class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
     {
         return $this->getUrl(
             'sales/order_view_giftmessage/save',
-            array('entity' => $this->getItem()->getId(), 'type' => 'order_item', 'reload' => true)
+            ['entity' => $this->getItem()->getId(), 'type' => 'order_item', 'reload' => true]
         );
     }
 
@@ -237,7 +223,7 @@ class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      */
     public function canDisplayGiftmessage()
     {
-        return $this->_messageHelper->getIsMessagesAvailable(
+        return $this->_messageHelper->isMessagesAllowed(
             'order_item',
             $this->getItem(),
             $this->getItem()->getOrder()->getStoreId()
@@ -261,14 +247,66 @@ class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
     /**
      * Display item price including tax
      *
-     * @param Item|\Magento\Framework\Object $item
+     * @param Item|\Magento\Framework\DataObject $item
      * @return string
      */
-    public function displayPriceInclTax(\Magento\Framework\Object $item)
+    public function displayPriceInclTax(\Magento\Framework\DataObject $item)
     {
         return $this->displayPrices(
             $this->_checkoutHelper->getBasePriceInclTax($item),
             $this->_checkoutHelper->getPriceInclTax($item)
         );
+    }
+
+    /**
+     * @param \Magento\Framework\DataObject|Item $item
+     * @param string $column
+     * @param null $field
+     * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 100.1.0
+     */
+    public function getColumnHtml(\Magento\Framework\DataObject $item, $column, $field = null)
+    {
+        $html = '';
+        switch ($column) {
+            case 'product':
+                if ($this->canDisplayContainer()) {
+                    $html .= '<div id="' . $this->getHtmlId() . '">';
+                }
+                $html .= $this->getColumnHtml($item, 'name');
+                if ($this->canDisplayContainer()) {
+                    $html .= '</div>';
+                }
+                break;
+            case 'status':
+                $html = $item->getStatus();
+                break;
+            case 'price-original':
+                $html = $this->displayPriceAttribute('original_price');
+                break;
+            case 'tax-amount':
+                $html = $this->displayPriceAttribute('tax_amount');
+                break;
+            case 'tax-percent':
+                $html = $this->displayTaxPercent($item);
+                break;
+            case 'discont':
+                $html = $this->displayPriceAttribute('discount_amount');
+                break;
+            default:
+                $html = parent::getColumnHtml($item, $column, $field);
+        }
+        return $html;
+    }
+
+    /**
+     * @return array
+     * @since 100.1.0
+     */
+    public function getColumns()
+    {
+        $columns = array_key_exists('columns', $this->_data) ? $this->_data['columns'] : [];
+        return $columns;
     }
 }

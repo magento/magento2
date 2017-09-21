@@ -1,0 +1,33 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<!-- ko if: (isRequired() && getIsVisible())-->
+<div class="field captcha required" data-bind="blockLoader: getIsLoading()">
+    <label data-bind="attr: {for: 'captcha_' + formId}" class="label"><span data-bind="i18n: 'Please type the letters below'"></span></label>
+    <div class="control captcha">
+        <input name="captcha_string" type="text" class="input-text required-entry" data-bind="value: captchaValue(), attr: {id: 'captcha_' + formId, 'data-scope': dataScope}" />
+        <input name="captcha_form_id" type="hidden" data-bind="value: formId,  attr: {'data-scope': dataScope}" />
+        <div class="nested">
+            <div class="field captcha no-label">
+                <div class="control captcha-image">
+                    <img data-bind="attr: {
+                                        alt: $t('Please type the letters below'),
+                                        height: imageHeight(),
+                                        src: getImageSource(),
+                                        }"
+                         class="captcha-img"/>
+                    <button type="button" class="action reload captcha-reload" data-bind="attr: {title: $t('Reload captcha')}, click: refresh">
+                        <span data-bind="i18n: 'Reload captcha'"></span>
+                    </button>
+                </div>
+            </div>
+            <!-- ko if: isCaseSensitive()-->
+            <div class="captcha-note note" data-bind="i18n: 'Attention: Captcha is case sensitive.'"></div>
+            <!-- /ko -->
+        </div>
+    </div>
+</div>
+<!-- /ko -->

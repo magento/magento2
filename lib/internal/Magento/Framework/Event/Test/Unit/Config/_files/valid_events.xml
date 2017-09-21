@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="authorization_roles_load_after">
+        <observer name="observer_name" instance="Some_Test_Value" disabled="false" shared="true"/>
+    </event>
+    <event name="authorization_roles_save_before">
+        <observer name="second_name" instance="Some_Test_Value_Two" />
+    </event>
+</config>

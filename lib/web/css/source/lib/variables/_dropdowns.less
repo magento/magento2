@@ -1,0 +1,99 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Dropdowns variables
+//  _____________________________________________
+
+//
+//  Variables simple dropdown
+//  ---------------------------------------------
+
+@dropdown-actions__padding: false;
+
+@dropdown-list__min-width: 100%;
+@dropdown-list__width: false;
+@dropdown-list__height: false;
+@dropdown-list__margin-top: 4px;
+@dropdown-list__position-top: 100%;
+@dropdown-list__position-right: false;
+@dropdown-list__position-bottom: false;
+@dropdown-list__position-left: false;
+@dropdown-list__pointer: true; // [true|false]
+@dropdown-list__background: @color-white;
+@dropdown-list__border: 1px solid @color-gray-light2;
+@dropdown-list__shadow: 0 3px 3px rgba(0,0,0,.15); // [''|none|value]
+@dropdown-list__z-index: 100;
+
+@dropdown-list-pointer__border: @color-gray-light2;
+@dropdown-list-pointer__position: left; // [left|right]
+@dropdown-list-pointer__position-top: -12px;
+@dropdown-list-pointer__position-left-right: 10px;
+
+@dropdown-list-item__border: 0;
+@dropdown-list-item__padding: 3px @indent__xs;
+@dropdown-list-item__margin: 0;
+@dropdown-list-item__hover: @color-gray91;
+
+@dropdown-toggle-icon__content: @icon-pointer-down;
+@dropdown-toggle-icon__font: @button-icon__font;
+@dropdown-toggle-icon__font-size: @button-icon__font-size;
+@dropdown-toggle-icon__font-line-height: @button-icon__line-height;
+@dropdown-toggle-icon__font-color: @button-icon__color;
+@dropdown-toggle-icon__font-color-hover: @button-icon__hover__font-color;
+@dropdown-toggle-icon__font-color-active: @button-icon__active__font-color;
+@dropdown-toggle-icon__font-margin: @button-icon__margin;
+@dropdown-toggle-icon__position: after;
+@dropdown-toggle-icon__font-vertical-align: @button-icon__vertical-align;
+@dropdown-toggle-icon__text-hide: @button-icon__text-hide;
+
+@dropdown-toggle-icon__active__content: @icon-pointer-up;
+
+//
+//  Variables split dropdown
+//  ---------------------------------------------
+
+@dropdown-split-actions__padding: 0 @indent__xs;
+@dropdown-split-toggle__actions__padding: 4px @indent__xs;
+@dropdown-split-button__actions__padding: false;
+@dropdown-split-toggle__position: right;
+
+@dropdown-split-list__min-width: @dropdown-list__min-width;
+@dropdown-split-list__width: @dropdown-list__width;
+@dropdown-split-list__height: @dropdown-list__height;
+@dropdown-split-list__margin-top: @dropdown-list__margin-top;
+@dropdown-split-list__position-top: @dropdown-list__position-top;
+@dropdown-split-list__position-right: @dropdown-list__position-right;
+@dropdown-split-list__position-bottom: @dropdown-list__position-bottom;
+@dropdown-split-list__position-left: @dropdown-list__position-left;
+@dropdown-split-list__background: @dropdown-list__background;
+@dropdown-split-list__border: @dropdown-list__border;
+@dropdown-split-list__pointer: @dropdown-list__pointer;
+@dropdown-split-list__pointer-border: @dropdown-list-pointer__border;
+@dropdown-split-list__pointer-position: @dropdown-split-toggle__position;
+@dropdown-split-list__pointer-position-top: @dropdown-list-pointer__position-top;
+@dropdown-split-list__pointer-position-left-right: @dropdown-list-pointer__position-left-right;
+@dropdown-split-list__item-border: @dropdown-list-item__border;
+@dropdown-split-list__item-padding: @dropdown-list-item__padding;
+@dropdown-split-list__item-margin: @dropdown-list-item__margin;
+@dropdown-split-list__item-hover: @dropdown-list-item__hover;
+
+@dropdown-split-button__border-radius-fix: false;
+@dropdown-split-list__shadow: @dropdown-list__shadow; // [''|none|value]
+@dropdown-split-list__z-index: @dropdown-list__z-index;
+
+@dropdown-split-toggle-icon__content: @dropdown-toggle-icon__content;
+@dropdown-split-toggle-icon__font: @button-icon__font;
+@dropdown-split-toggle-icon__font-size: @button-icon__font-size;
+@dropdown-split-toggle-icon__font-line-height: @button-icon__line-height;
+@dropdown-split-toggle-icon__font-color: @button-icon__color;
+@dropdown-split-toggle-icon__font-color-hover: @button-icon__hover__font-color;
+@dropdown-split-toggle-icon__font-color-active: @button-icon__active__font-color;
+@dropdown-split-toggle-icon__font-margin: @button-icon__margin;
+@dropdown-split-toggle-icon__font-vertical-align: @button-icon__vertical-align;
+@dropdown-split-toggle-icon__position: @dropdown-toggle-icon__position;
+@dropdown-split-toggle-icon__text-hide: true; // [true|false]
+
+@dropdown-split-toggle-icon__active__content: @dropdown-toggle-icon__active__content;

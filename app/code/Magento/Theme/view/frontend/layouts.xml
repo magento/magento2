@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page_layouts xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/PageLayout/etc/layouts.xsd">
+    <layout id="1column">
+        <label translate="true">1 column</label>
+    </layout>
+    <layout id="2columns-left">
+        <label translate="true">2 columns with left bar</label>
+    </layout>
+    <layout id="2columns-right">
+        <label translate="true">2 columns with right bar</label>
+    </layout>
+    <layout id="3columns">
+        <label translate="true">3 columns</label>
+    </layout>
+</page_layouts>

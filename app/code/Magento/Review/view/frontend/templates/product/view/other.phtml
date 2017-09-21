@@ -1,0 +1,14 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var \Magento\Review\Block\Product\View\Other $block */
+?>
+<?php $_product = $block->getProduct(); ?>
+<div class="actions">
+    <a href="<?= $block->escapeUrl($_product->getProductUrl()) ?>" class="action back"><span><?= $block->escapeHtml(__('Back to Main Product Info')) ?></span></a>
+</div>

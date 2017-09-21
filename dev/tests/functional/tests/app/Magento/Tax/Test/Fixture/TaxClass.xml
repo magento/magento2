@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+    <fixture name="taxClass"
+             module="Magento_Tax"
+             type="flat"
+             entity_type="tax_class"
+             collection="Magento\Tax\Model\ResourceModel\TaxClass\Collection"
+             repository_class="Magento\Tax\Test\Repository\TaxClass"
+             handler_interface="Magento\Tax\Test\Handler\TaxClass\TaxClassInterface"
+             class="Magento\Tax\Test\Fixture\TaxClass">
+        <field name="class_id" is_required="1" />
+        <field name="class_name" is_required="" />
+        <field name="class_type" is_required="" />
+        <field name="id" />
+    </fixture>
+</config>

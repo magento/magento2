@@ -1,3 +1,0 @@
-"customer/data/firstname";"customer/data/lastname";"customer/data/email";"customer/data/is_subscribed";"customer/data/password";"customer/data/password_confirmation";"constraint"
-"john";"doe";"johndoe%isolation%@example.com";"No";"123123q";"123123q";"assertCustomerSuccessRegisterMessage, assertCustomerInGrid"
-"john";"doe";"johndoe%isolation%@example.com";"Yes";"123123q";"123123q";"assertCustomerSuccessRegisterMessage, assertCustomerInGrid, assertCustomerForm, assertCustomerIsSubscribedToNewsletter"

@@ -1,55 +1,71 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\PageCache\Block\System\Config\Form\Field;
 
 /**
  * Class Export
+ *
+ * @api
+ * @since 100.0.2
  */
-class Export extends \Magento\Backend\Block\System\Config\Form\Field
+class Export extends \Magento\Config\Block\System\Config\Form\Field
 {
     /**
      * Retrieve element HTML markup
      *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
         /** @var \Magento\Backend\Block\Widget\Button $buttonBlock  */
-        $buttonBlock = $this->getForm()->getLayout()->createBlock('Magento\Backend\Block\Widget\Button');
+        $buttonBlock = $this->getForm()->getLayout()->createBlock(\Magento\Backend\Block\Widget\Button::class);
 
-        $params = array('website' => $buttonBlock->getRequest()->getParam('website'));
+        $params = [
+            'website' => $buttonBlock->getRequest()->getParam('website'),
+            'varnish' => $this->getVarnishVersion()
+        ];
 
-        $url = $this->getUrl("*/PageCache/exportVarnishConfig", $params);
-        $data = array(
-            'id' => 'system_full_page_cache_varnish_export_button',
-            'label' => __('Export VCL'),
-            'onclick' => "setLocation('" . $url . "')"
-        );
+        $data = [
+            'id' => 'system_full_page_cache_varnish_export_button_version' . $this->getVarnishVersion(),
+            'label' => $this->getLabel(),
+            'onclick' => "setLocation('" . $this->getVarnishUrl($params) . "')",
+        ];
 
         $html = $buttonBlock->setData($data)->toHtml();
         return $html;
+    }
+
+    /**
+     * Return Varnish version to this class
+     *
+     * @return int
+     */
+    public function getVarnishVersion()
+    {
+        return 0;
+    }
+
+    /**
+     * @return \Magento\Framework\Phrase
+     */
+    private function getLabel()
+    {
+        return  __('Export VCL for Varnish %1', $this->getVarnishVersion());
+    }
+
+    /**
+     * @param array $params
+     *
+     * @return string
+     */
+    private function getVarnishUrl($params = [])
+    {
+        return $this->getUrl('*/PageCache/exportVarnishConfig', $params);
     }
 
     /**
@@ -57,6 +73,7 @@ class Export extends \Magento\Backend\Block\System\Config\Form\Field
      * to avoid saving empty field
      *
      * @return string
+     * @deprecated 100.1.0
      */
     public function getTtlValue()
     {

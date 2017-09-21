@@ -1,30 +1,15 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Shipping\Model\Order\Pdf;
 
 use Magento\Shipping\Helper\Carrier;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
 {
     /**
@@ -51,15 +36,16 @@ class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
 
     /**
      * @param \Magento\Payment\Helper\Data $paymentData
-     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\App\Filesystem $filesystem
+     * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Sales\Model\Order\Pdf\Config $pdfConfig
      * @param \Magento\Sales\Model\Order\Pdf\Total\Factory $pdfTotalFactory
      * @param \Magento\Sales\Model\Order\Pdf\ItemsFactory $pdfItemsFactory
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
-     * @param \Magento\Shipping\Helper\Carrier $carrierHelper
+     * @param \Magento\Sales\Model\Order\Address\Renderer $addressRenderer
+     * @param Carrier $carrierHelper
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
@@ -69,19 +55,20 @@ class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
      */
     public function __construct(
         \Magento\Payment\Helper\Data $paymentData,
-        \Magento\Framework\Stdlib\String $string,
+        \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\App\Filesystem $filesystem,
+        \Magento\Framework\Filesystem $filesystem,
         \Magento\Sales\Model\Order\Pdf\Config $pdfConfig,
         \Magento\Sales\Model\Order\Pdf\Total\Factory $pdfTotalFactory,
         \Magento\Sales\Model\Order\Pdf\ItemsFactory $pdfItemsFactory,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
+        \Magento\Sales\Model\Order\Address\Renderer $addressRenderer,
         Carrier $carrierHelper,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\View\LayoutInterface $layout,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
-        array $data = array()
+        array $data = []
     ) {
         $this->_carrierHelper = $carrierHelper;
         $this->_storeManager = $storeManager;
@@ -98,6 +85,7 @@ class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
             $pdfItemsFactory,
             $localeDate,
             $inlineTranslation,
+            $addressRenderer,
             $data
         );
     }
@@ -160,13 +148,17 @@ class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
      *
      * @param  \Zend_Pdf_Page $page
      * @return \Magento\Shipping\Model\Order\Pdf\Packaging
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function _drawPackageBlock(\Zend_Pdf_Page $page)
     {
         if ($this->getPackageShippingBlock()) {
             $packaging = $this->getPackageShippingBlock();
         } else {
-            $packaging = $this->_layout->getBlockSingleton('Magento\Shipping\Block\Adminhtml\Order\Packaging');
+            $packaging = $this->_layout->getBlockSingleton(\Magento\Shipping\Block\Adminhtml\Order\Packaging::class);
         }
         $packages = $packaging->getPackages();
 
@@ -185,8 +177,8 @@ class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
             $page->drawText($packageText, 525, $this->y, 'UTF-8');
             $packageNum++;
 
-            $package = new \Magento\Framework\Object($package);
-            $params = new \Magento\Framework\Object($package->getParams());
+            $package = new \Magento\Framework\DataObject($package);
+            $params = new \Magento\Framework\DataObject($package->getParams());
             $dimensionUnits = $this->_carrierHelper->getMeasureDimensionName($params->getDimensionUnits());
 
             $typeText = __('Type') . ' : ' . $packaging->getContainerTypeByCode($params->getContainer());
@@ -307,7 +299,7 @@ class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
 
             $i = 0;
             foreach ($package->getItems() as $itemId => $item) {
-                $item = new \Magento\Framework\Object($item);
+                $item = new \Magento\Framework\DataObject($item);
                 $i = 0;
 
                 $page->setFillColor(new \Zend_Pdf_Color_GrayScale(1));

@@ -1,0 +1,388 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//  # Actions toolbar
+//  Actions toolbar is a set of actions on a page, form and so on that includes primary and/or secondary actions.
+//  To customize action toolbar <code>.lib-actions-toolbar()</code> mixin is used.
+//  To implement the Actions toolbar use the following markup
+//
+//  **Sample of using a button + link**
+//  ``` html
+//  <div class="actions-toolbar">
+//      <div class="primary">
+//          <button type="submit" class="action submit" title="Submit"><span>Submit</span></button>
+//      </div>
+//      <div class="secondary">
+//          <a class="action back" href="#"><span>Back</span></a>
+//      </div>
+//  </div>
+//  ```
+//
+//  **Sample of using a button + button**
+//  ``` html
+//  <div class="example-actions-toolbar-1">
+//      <div class="primary">
+//          <button type="submit" class="action submit" title="Submit"><span>Redeem Gift Card</span></button>
+//      </div>
+//      <div class="secondary">
+//          <button class="action check" type="button" value="Check status and balance">
+//              <span>Check status and balance</span>
+//          </button>
+//      </div>
+//  </div>
+//  ```
+
+.actions-toolbar {
+    .lib-actions-toolbar();
+}
+
+.example-actions-toolbar-1 {
+    .lib-actions-toolbar();
+}
+
+//  # Actions toolbar mixin variables
+//
+//  <pre>
+//    <table>
+//      <tr>
+//        <th class="vars_head">Mixin variable</th>
+//        <th class="vars_head">Global variable</th>
+//        <th class="vars_head">Default value</th>
+//        <th class="vars_head">Allowed values</th>
+//        <th class="vars_head">Comment</th>
+//      </tr>
+//      <tr>
+//        <th>@_actions-toolbar-actions-position</th>
+//        <td>@actions-toolbar-actions__position</td>
+//        <td class="vars_value">justify</td>
+//        <td class="vars_value">justify | left | right | center</td>
+//        <td>Position for actions in Actions toolbar</td>
+//      </tr>
+//      <tr>
+//        <th>@_actions-toolbar-actions-reverse</th>
+//        <td>@actions-toolbar-actions__reverse</td>
+//        <td class="vars_value">false</td>
+//        <td class="vars_value">true | false</td>
+//        <td>Reverse primary and secondary blocks position in Actions toolbar</td>
+//      </tr>
+//      <tr>
+//        <th>@_actions-toolbar-margin</th>
+//        <td>@actions-toolbar__margin</td>
+//        <td class="vars_value">false</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Margins of the Actions toolbar</td>
+//      </tr>
+//      <tr>
+//        <th>@_actions-toolbar-padding</th>
+//        <td>@actions-toolbar__padding</td>
+//        <td class="vars_value">false</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Paddings of the Actions toolbar</td>
+//      </tr>
+//      <tr>
+//        <th>@_actions-toolbar-actions-margin</th>
+//        <td>@actions-toolbar-actions__margin</td>
+//        <td class="vars_value">false</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Margins of all .actions in the Actions toolbar</td>
+//      </tr>
+//      <tr>
+//        <th>@_actions-toolbar-primary-actions-margin</th>
+//        <td>@actions-toolbar-actions-primary__margin</td>
+//        <td class="vars_value">0 @indent__xs 0 0</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Margins of primary .actions in the Actions toolbar</td>
+//      </tr>
+//      <tr>
+//        <th>@_actions-toolbar-secondary-actions-margin</th>
+//        <td>@actions-toolbar-actions-secondary__margin</td>
+//        <td class="vars_value">false</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Margins of secondary .actions in the Actions toolbar</td>
+//      </tr>
+//      <tr>
+//        <th nowrap="nowrap">@_actions-toolbar-actions-links-margin-top</th>
+//        <td>@actions-toolbar-actions-links__margin-top</td>
+//        <td class="vars_value">false</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Margin-top for links with class .action in the Actions toolbar</td>
+//      </tr>
+//      <tr>
+//        <th nowrap="nowrap">@_actions-toolbar-primary-actions-links-margin-top</th>
+//        <td>@actions-toolbar-actions-links-primary__margin-top</td>
+//        <td class="vars_value">false</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Margin-top for primary links with class .action in the Actions toolbar</td>
+//      </tr>
+//      <tr>
+//        <th nowrap="nowrap">@_actions-toolbar-secondary-actions-links-margin-top</th>
+//        <td>@actions-toolbar-actions-secondary__margin</td>
+//        <td class="vars_value">6px</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Margin-top for secondary links with class .action in the Actions toolbar</td>
+//      </tr>
+//    </table>
+//  </pre>
+//
+//  # Actions toolbar alignment
+//
+//  <code>@_actions-toolbar-actions-position</code> variable controls aligning actions toolbar elements. It can be set to:
+//  ```css
+//  justify | left | right | center
+//  ```
+//
+//  **Justify:**
+//  ```css
+//  @_actions-toolbar-actions-position: justify
+//  ```
+//  ``` html
+//  <div class="example-actions-toolbar-2">
+//      <div class="primary">
+//          <button type="submit" class="action submit" title="Submit"><span>Submit</span></button>
+//      </div>
+//      <div class="secondary">
+//          <a class="action back" href="#"><span>Back</span></a>
+//      </div>
+//  </div>
+//  ```
+//
+//  **Align toolbar elements left:**
+//  ```css
+//  @_actions-toolbar-actions-position: left
+//  ```
+//  ``` html
+//  <div class="example-actions-toolbar-3">
+//      <div class="primary">
+//          <button type="submit" class="action submit" title="Submit"><span>Submit</span></button>
+//      </div>
+//      <div class="secondary">
+//          <a class="action back" href="#"><span>Back</span></a>
+//      </div>
+//  </div>
+//  ```
+//
+//  **Align toolbar elements right:**
+//  ```css
+//  @_actions-toolbar-actions-position: right
+//  ```
+//  ``` html
+//  <div class="example-actions-toolbar-4">
+//      <div class="primary">
+//          <button type="submit" class="action submit" title="Submit"><span>Submit</span></button>
+//      </div>
+//      <div class="secondary">
+//          <a class="action back" href="#"><span>Back</span></a>
+//      </div>
+//  </div>
+//  ```
+//
+//  **Center:**
+//  ```css
+//  @_actions-toolbar-actions-position: center
+//  ```
+//  ``` html
+//  <div class="example-actions-toolbar-5">
+//      <div class="primary">
+//          <button type="submit" class="action submit" title="Submit"><span>Submit</span></button>
+//      </div>
+//      <div class="secondary">
+//          <a class="action back" href="#"><span>Back</span></a>
+//      </div>
+//  </div>
+//  ```
+
+.example-actions-toolbar-2 {
+    .lib-actions-toolbar(
+        @_actions-toolbar-actions-position: justify
+    );
+}
+
+.example-actions-toolbar-3 {
+    .lib-actions-toolbar(
+        @_actions-toolbar-actions-position: left
+    );
+}
+
+.example-actions-toolbar-4 {
+    .lib-actions-toolbar(
+        @_actions-toolbar-actions-position: right
+    );
+}
+
+.example-actions-toolbar-5 {
+    .lib-actions-toolbar(
+        @_actions-toolbar-actions-position: center
+    );
+}
+
+//  # Reverse primary and secondary blocks
+//
+//  <code>@_actions-toolbar-actions-reverse</code> variable controls reversing of primary and secondary blocks.
+//
+//  If it is set to <code>false</code>, the order of blocks in action toolbar is **default**.
+//
+//  If it is set to <code>true</code>, the order of blocks in action toolbar is **reversed**.
+//
+//  **Justify toolbar elements and reverse them:**
+//  ```css
+//  @_actions-toolbar-actions-position: justify,
+//  @_actions-toolbar-actions-reverse: true
+//  ```
+//  ``` html
+//  <div class="example-actions-toolbar-6">
+//      <div class="primary">
+//          <button type="submit" class="action submit" title="Submit"><span>Submit</span></button>
+//      </div>
+//      <div class="secondary">
+//          <a class="action back" href="#"><span>Back</span></a>
+//      </div>
+//  </div>
+//  ```
+//
+//  **Align toolbar elements to the left and reverse them:**
+//  ```css
+//  @_actions-toolbar-actions-position: left,
+//  @_actions-toolbar-actions-reverse: true
+//  ```
+//  ``` html
+//  <div class="example-actions-toolbar-7">
+//      <div class="primary">
+//          <button type="submit" class="action submit" title="Submit"><span>Submit</span></button>
+//      </div>
+//      <div class="secondary">
+//          <a class="action back" href="#"><span>Back</span></a>
+//      </div>
+//  </div>
+//  ```
+//
+//  **Align toolbar elements to the right and reverse them:**
+//  ```css
+//  @_actions-toolbar-actions-position: right,
+//  @_actions-toolbar-actions-reverse: true
+//  ```
+//  ``` html
+//  <div class="example-actions-toolbar-8">
+//      <div class="primary">
+//          <button type="submit" class="action submit" title="Submit"><span>Submit</span></button>
+//      </div>
+//      <div class="secondary">
+//          <a class="action back" href="#"><span>Back</span></a>
+//      </div>
+//  </div>
+//  ```
+
+.example-actions-toolbar-6 {
+    .lib-actions-toolbar(
+        @_actions-toolbar-actions-position: justify,
+        @_actions-toolbar-actions-reverse: true
+    );
+}
+
+.example-actions-toolbar-7 {
+    .lib-actions-toolbar(
+        @_actions-toolbar-actions-position: left,
+        @_actions-toolbar-actions-reverse: true
+    );
+}
+
+.example-actions-toolbar-8 {
+    .lib-actions-toolbar(
+        @_actions-toolbar-actions-position: right,
+        @_actions-toolbar-actions-reverse: true
+    );
+}
+
+//  # Actions toolbar indents customizations
+//
+//  <code>@_actions-toolbar-margin</code> variable controls margins of the actions toolbar wrapper.
+//
+//  <code>@_actions-toolbar-padding</code> variable controls paddings of the actions toolbar wrapper.
+//
+//  ``` html
+//  <div class="example-actions-toolbar-9">
+//      <div class="primary">
+//          <button type="submit" class="action submit" title="Submit"><span>Submit</span></button>
+//      </div>
+//      <div class="secondary">
+//          <a class="action back" href="#"><span>Back</span></a>
+//      </div>
+//  </div>
+//  ```
+//
+//  <code>@_actions-toolbar-primary-actions-margin</code> variable controls margins of the primary action elements.
+//
+//  ``` html
+//  <div class=" example-actions-toolbar-10">
+//      <div class="primary">
+//          <button type="submit" class="action submit" title="Submit"><span>Submit</span></button>
+//          <button type="submit" class="action submit2" title="Submit2"><span>Submit2</span></button>
+//      </div>
+//      <div class="secondary">
+//          <a href="#" class="action towishlist"><span>Add to Wish List</span></a>
+//          <a href="#" class="action tocompare"><span>Add to Compare</span></a>
+//      </div>
+//  </div>
+//  ```
+//
+//  <code>@_actions-toolbar-secondary-actions-margin</code> variable controls margins of the secondary action elements.
+//
+//  ``` html
+//  <div class="example-actions-toolbar-11">
+//      <div class="primary">
+//          <button type="submit" class="action submit" title="Submit"><span>Submit</span></button>
+//          <button type="submit" class="action submit2" title="Submit2"><span>Submit2</span></button>
+//      </div>
+//      <div class="secondary">
+//          <a href="#" class="action towishlist"><span>Add to Wish List</span></a>
+//          <a href="#" class="action tocompare"><span>Add to Compare</span></a>
+//      </div>
+//  </div>
+//  ```
+
+.example-actions-toolbar-9 {
+    .lib-actions-toolbar(
+        @_actions-toolbar-margin: 10px,
+        @_actions-toolbar-padding: 10px
+    );
+}
+
+.example-actions-toolbar-10 {
+    .lib-actions-toolbar(
+        @_actions-toolbar-actions-position: left,
+        @_actions-toolbar-primary-actions-margin: 0 50px 0 0
+    );
+}
+
+.example-actions-toolbar-11 {
+    .lib-actions-toolbar(
+        @_actions-toolbar-actions-position: left,
+        @_actions-toolbar-secondary-actions-margin: 0 50px 0 0
+    );
+}
+
+//  # Responsive actions toolbar
+//
+//  To set up responsive action toolbar, all floats of its elements should be cleared. To do this <code>.lib-actions-toolbar-clear-floats()</code> mixin is used.
+//
+//  ``` html
+//  <div class="example-actions-toolbar-12">
+//      <div class="primary">
+//          <button type="submit" class="action submit" title="Submit"><span>Submit</span></button>
+//      </div>
+//      <div class="secondary">
+//          <a href="#" class="action towishlist"><span>Add to Wish List</span></a>
+//      </div>
+//  </div>
+//  ```
+
+.example-actions-toolbar-12 {
+    .lib-actions-toolbar();
+}
+
+@media only screen and (max-width: @screen__m) {
+    .example-actions-toolbar-12 {
+       .lib-actions-toolbar-clear-floats();
+    }
+}

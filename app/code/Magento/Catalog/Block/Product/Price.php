@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Block\Product;
@@ -27,7 +9,7 @@ namespace Magento\Catalog\Block\Product;
 /**
  * Product price block
  */
-class Price extends \Magento\Framework\View\Element\Template implements \Magento\Framework\View\Block\IdentityInterface
+class Price extends \Magento\Framework\View\Element\Template implements \Magento\Framework\DataObject\IdentityInterface
 {
     /**
      * @var null
@@ -47,13 +29,6 @@ class Price extends \Magento\Framework\View\Element\Template implements \Magento
     protected $_coreRegistry = null;
 
     /**
-     * Tax data
-     *
-     * @var \Magento\Tax\Helper\Data
-     */
-    protected $_taxData = null;
-
-    /**
      * Catalog data
      *
      * @var \Magento\Catalog\Helper\Data
@@ -61,7 +36,7 @@ class Price extends \Magento\Framework\View\Element\Template implements \Magento
     protected $_catalogData = null;
 
     /**
-     * @var \Magento\Framework\Stdlib\String
+     * @var \Magento\Framework\Stdlib\StringUtils
      */
     protected $string;
 
@@ -84,9 +59,8 @@ class Price extends \Magento\Framework\View\Element\Template implements \Magento
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\Math\Random $mathRandom
      * @param \Magento\Checkout\Helper\Cart $cartHelper
      * @param array $data
@@ -95,20 +69,18 @@ class Price extends \Magento\Framework\View\Element\Template implements \Magento
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\Tax\Helper\Data $taxData,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Stdlib\String $string,
+        \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\Framework\Math\Random $mathRandom,
         \Magento\Checkout\Helper\Cart $cartHelper,
-        array $data = array()
+        array $data = []
     ) {
-        $this->_cartHelper = $cartHelper;
         $this->_jsonEncoder = $jsonEncoder;
-        $this->_coreRegistry = $registry;
         $this->_catalogData = $catalogData;
-        $this->_taxData = $taxData;
+        $this->_coreRegistry = $registry;
         $this->string = $string;
         $this->mathRandom = $mathRandom;
+        $this->_cartHelper = $cartHelper;
         parent::__construct($context, $data);
     }
 
@@ -159,7 +131,7 @@ class Price extends \Magento\Framework\View\Element\Template implements \Magento
      * @param array $additional
      * @return string
      */
-    public function getAddToCartUrl($product, $additional = array())
+    public function getAddToCartUrl($product, $additional = [])
     {
         return $this->_cartHelper->getAddUrl($product, $additional);
     }

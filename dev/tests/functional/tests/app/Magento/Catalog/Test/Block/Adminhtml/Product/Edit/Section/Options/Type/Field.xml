@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<mapping strict="0">
+    <fields>
+        <price>
+            <selector>[name$='[price]']</selector>
+        </price>
+        <price_type>
+            <selector>[name$='[price_type]']</selector>
+            <input>select</input>
+        </price_type>
+        <sku>
+            <selector>[name$='[sku]']</selector>
+        </sku>
+        <max_characters>
+            <selector>[name$='[max_characters]']</selector>
+        </max_characters>
+        <add_before>
+            <selector>[class*="admin__addon-prefix"]</selector>
+        </add_before>
+    </fields>
+</mapping>

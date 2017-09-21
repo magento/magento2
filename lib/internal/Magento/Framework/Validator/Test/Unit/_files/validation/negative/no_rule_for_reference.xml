@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<validation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Validator/etc/validation.xsd">
+    <entity name="test_entity">
+        <rules>
+            <rule name="test_rule_sku_and_name">
+                <property_constraints>
+                    <property name="sku">
+                        <constraint class="Magento\Framework\Validator\Test\Unit\Test\NotEmpty"/>
+                    </property>
+                </property_constraints>
+            </rule>
+        </rules>
+        <groups>
+            <group name="test_group_a">
+                <uses>
+                    <!-- declaration of test_invalid_rule is absent in the file -->
+                    <use rule="test_invalid_rule"/>
+                    <use rule="test_rule_sku_and_name"/>
+                </uses>
+            </group>
+            <group name="test_group_b">
+                <uses>
+                    <use rule="test_rule_sku_and_name"/>
+                </uses>
+            </group>
+        </groups>
+    </entity>
+</validation>

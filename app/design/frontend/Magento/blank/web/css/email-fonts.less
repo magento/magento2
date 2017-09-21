@@ -1,0 +1,25 @@
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+//
+//  Fonts for Emails
+//  _____________________________________________
+
+@import 'source/lib/_lib.less'; // Global lib
+@import 'source/lib/variables/_email.less'; // Global email variables
+@import 'source/_theme.less'; // Global variables override
+@import 'source/_variables.less'; // Local theme variables
+@import 'source/_email-variables.less'; // Theme variables for emails
+
+//
+//  Output @font-face declarations
+//  ---------------------------------------------
+
+@media-common: true;
+
+//  Font stylesheet @import is wrapped in a media query in order to prevent it from causing problems in Outlook
+@media screen {
+    @import 'source/_typography.less';
+}

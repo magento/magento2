@@ -1,27 +1,14 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit;
+
+use Magento\Customer\Helper\Session\CurrentCustomer;
+use Magento\Tax\Api\TaxCalculationInterface;
+use Magento\Tax\Model\TaxClass\Source\Product as ProductTaxClassSource;
 
 class Js extends \Magento\Backend\Block\Template
 {
@@ -30,19 +17,55 @@ class Js extends \Magento\Backend\Block\Template
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $coreRegistry = null;
+
+    /**
+     * @var TaxCalculationInterface
+     */
+    protected $calculationService;
+
+    /**
+     * @var ProductTaxClassSource
+     */
+    protected $productTaxClassSource;
+
+    /**
+     * Current customer
+     *
+     * @var CurrentCustomer
+     */
+    protected $currentCustomer;
+
+    /**
+     * Json helper
+     *
+     * @var \Magento\Framework\Json\Helper\Data
+     */
+    protected $jsonHelper;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
+     * @param CurrentCustomer $currentCustomer
+     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
+     * @param TaxCalculationInterface $calculationService
+     * @param ProductTaxClassSource $productTaxClassSource
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
-        array $data = array()
+        CurrentCustomer $currentCustomer,
+        \Magento\Framework\Json\Helper\Data $jsonHelper,
+        TaxCalculationInterface $calculationService,
+        ProductTaxClassSource $productTaxClassSource,
+        array $data = []
     ) {
-        $this->_coreRegistry = $registry;
+        $this->coreRegistry = $registry;
+        $this->currentCustomer = $currentCustomer;
+        $this->jsonHelper = $jsonHelper;
+        $this->calculationService = $calculationService;
+        $this->productTaxClassSource = $productTaxClassSource;
         parent::__construct($context, $data);
     }
 
@@ -53,7 +76,7 @@ class Js extends \Magento\Backend\Block\Template
      */
     public function getProduct()
     {
-        return $this->_coreRegistry->registry('current_product');
+        return $this->coreRegistry->registry('current_product');
     }
 
     /**
@@ -68,5 +91,25 @@ class Js extends \Magento\Backend\Block\Template
             return $this->_storeManager->getStore($product->getStoreId());
         }
         return $this->_storeManager->getStore();
+    }
+
+    /**
+     * Get all tax rates JSON for all product tax classes.
+     *
+     * @return string
+     */
+    public function getAllRatesByProductClassJson()
+    {
+        $result = [];
+        foreach ($this->productTaxClassSource->getAllOptions() as $productTaxClass) {
+            $taxClassId = $productTaxClass['value'];
+            $taxRate = $this->calculationService->getDefaultCalculatedRate(
+                $taxClassId,
+                $this->currentCustomer->getCustomerId(),
+                $this->getStore()->getId()
+            );
+            $result["value_{$taxClassId}"] = $taxRate;
+        }
+        return $this->jsonHelper->jsonEncode($result);
     }
 }

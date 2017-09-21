@@ -1,30 +1,18 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Form;
 
+use Magento\Customer\Model\AccountManagement;
+
 /**
  * Customer register form block
+ *
+ * @api
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Register extends \Magento\Directory\Block\Data
 {
@@ -39,49 +27,51 @@ class Register extends \Magento\Directory\Block\Data
     protected $_moduleManager;
 
     /**
-     * @var \Magento\Customer\Helper\Data
+     * @var \Magento\Customer\Model\Url
      */
-    protected $_customerHelper;
+    protected $_customerUrl;
 
     /**
+     * Constructor
+     *
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
-     * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory
-     * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory
+     * @param \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regionCollectionFactory
+     * @param \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollectionFactory
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Customer\Helper\Data $customerHelper
+     * @param \Magento\Customer\Model\Url $customerUrl
      * @param array $data
-     * 
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\Directory\Helper\Data $directoryHelper,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Framework\App\Cache\Type\Config $configCacheType,
-        \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory,
-        \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory,
+        \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regionCollectionFactory,
+        \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollectionFactory,
         \Magento\Framework\Module\Manager $moduleManager,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Customer\Helper\Data $customerHelper,
-        array $data = array()
+        \Magento\Customer\Model\Url $customerUrl,
+        array $data = []
     ) {
-        $this->_customerHelper = $customerHelper;
+        $this->_customerUrl = $customerUrl;
         $this->_moduleManager = $moduleManager;
         $this->_customerSession = $customerSession;
         parent::__construct(
             $context,
-            $coreData,
+            $directoryHelper,
             $jsonEncoder,
             $configCacheType,
             $regionCollectionFactory,
             $countryCollectionFactory,
             $data
         );
-        $this->_isScopePrivate = true;
+        $this->_isScopePrivate = false;
     }
 
     /**
@@ -100,7 +90,7 @@ class Register extends \Magento\Directory\Block\Data
      */
     protected function _prepareLayout()
     {
-        $this->getLayout()->getBlock('head')->setTitle(__('Create New Customer Account'));
+        $this->pageConfig->getTitle()->set(__('Create New Customer Account'));
         return parent::_prepareLayout();
     }
 
@@ -111,7 +101,7 @@ class Register extends \Magento\Directory\Block\Data
      */
     public function getPostActionUrl()
     {
-        return $this->_customerHelper->getRegisterPostUrl();
+        return $this->_customerUrl->getRegisterPostUrl();
     }
 
     /**
@@ -122,8 +112,8 @@ class Register extends \Magento\Directory\Block\Data
     public function getBackUrl()
     {
         $url = $this->getData('back_url');
-        if (is_null($url)) {
-            $url = $this->_customerHelper->getLoginUrl();
+        if ($url === null) {
+            $url = $this->_customerUrl->getLoginUrl();
         }
         return $url;
     }
@@ -136,9 +126,9 @@ class Register extends \Magento\Directory\Block\Data
     public function getFormData()
     {
         $data = $this->getData('form_data');
-        if (is_null($data)) {
+        if ($data === null) {
             $formData = $this->_customerSession->getCustomerFormData(true);
-            $data = new \Magento\Framework\Object();
+            $data = new \Magento\Framework\DataObject();
             if ($formData) {
                 $data->addData($formData);
                 $data->setCustomerData(1);
@@ -174,7 +164,7 @@ class Register extends \Magento\Directory\Block\Data
     {
         if (null !== ($region = $this->getFormData()->getRegion())) {
             return $region;
-        } else if (null !== ($region = $this->getFormData()->getRegionId())) {
+        } elseif (null !== ($region = $this->getFormData()->getRegionId())) {
             return $region;
         }
         return null;
@@ -207,5 +197,27 @@ class Register extends \Magento\Directory\Block\Data
         }
 
         return $this;
+    }
+
+    /**
+     * Get minimum password length
+     *
+     * @return string
+     * @since 100.1.0
+     */
+    public function getMinimumPasswordLength()
+    {
+        return $this->_scopeConfig->getValue(AccountManagement::XML_PATH_MINIMUM_PASSWORD_LENGTH);
+    }
+
+    /**
+     * Get number of password required character classes
+     *
+     * @return string
+     * @since 100.1.0
+     */
+    public function getRequiredCharacterClassesNumber()
+    {
+        return $this->_scopeConfig->getValue(AccountManagement::XML_PATH_REQUIRED_CHARACTER_CLASSES_NUMBER);
     }
 }

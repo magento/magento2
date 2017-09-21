@@ -1,57 +1,32 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Model\Product\Attribute\Source\Price;
+
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory;
+use Magento\Framework\DB\Ddl\Table;
 
 /**
  * Bundle Price View Attribute Renderer
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
 class View extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 {
     /**
-     * Core data
-     *
-     * @var \Magento\Core\Helper\Data
+     * @var OptionFactory
      */
-    protected $_coreData = null;
+    protected $optionFactory;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory
+     * @param OptionFactory $optionFactory
      */
-    protected $_entityAttribute;
-
-    /**
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory $entityAttribute
-     * @param \Magento\Core\Helper\Data $coreData
-     */
-    public function __construct(
-        \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory $entityAttribute,
-        \Magento\Core\Helper\Data $coreData
-    ) {
-        $this->_coreData = $coreData;
-        $this->_entityAttribute = $entityAttribute;
+    public function __construct(OptionFactory $optionFactory)
+    {
+        $this->optionFactory = $optionFactory;
     }
 
     /**
@@ -61,11 +36,11 @@ class View extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      */
     public function getAllOptions()
     {
-        if (is_null($this->_options)) {
-            $this->_options = array(
-                array('label' => __('As Low as'), 'value' => 1),
-                array('label' => __('Price Range'), 'value' => 0)
-            );
+        if (null === $this->_options) {
+            $this->_options = [
+                ['label' => __('Price Range'), 'value' => 0],
+                ['label' => __('As Low as'), 'value' => 1],
+            ];
         }
         return $this->_options;
     }
@@ -78,8 +53,7 @@ class View extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      */
     public function getOptionText($value)
     {
-        $options = $this->getAllOptions();
-        foreach ($options as $option) {
+        foreach ($this->getAllOptions() as $option) {
             if ($option['value'] == $value) {
                 return $option['label'];
             }
@@ -92,16 +66,20 @@ class View extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      *
      * @return array
      */
-    public function getFlatColums()
+    public function getFlatColumns()
     {
         $attributeCode = $this->getAttribute()->getAttributeCode();
-        $column = array('unsigned' => false, 'default' => null, 'extra' => null);
 
-        $column['type'] = \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER;
-        $column['nullable'] = true;
-        $column['comment'] = 'Bundle Price View ' . $attributeCode . ' column';
-
-        return array($attributeCode => $column);
+        return [
+            $attributeCode => [
+                'unsigned' => false,
+                'default' => null,
+                'extra' => null,
+                'type' => Table::TYPE_INTEGER,
+                'nullable' => true,
+                'comment' => 'Bundle Price View ' . $attributeCode . ' column',
+            ],
+        ];
     }
 
     /**
@@ -112,6 +90,6 @@ class View extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      */
     public function getFlatUpdateSelect($store)
     {
-        return $this->_entityAttribute->create()->getFlatUpdateSelect($this->getAttribute(), $store, false);
+        return $this->optionFactory->create()->getFlatUpdateSelect($this->getAttribute(), $store, false);
     }
 }

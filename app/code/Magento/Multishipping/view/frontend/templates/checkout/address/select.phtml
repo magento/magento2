@@ -1,0 +1,51 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var \Magento\Multishipping\Block\Checkout\Address\Select $block */
+?>
+<div class="multicheckout">
+    <div class="block block-billing">
+    <?php foreach ($block->getAddress() as $_address): ?>
+        <div class="box box-billing-address">
+            <div class="box-content">
+                <address>
+                    <?= $block->getAddressAsHtml($_address) ?>
+                    <?php if ($block->isAddressDefaultBilling($_address)): ?>
+                        <br /><strong><?= /* @escapeNotVerified */ __('Default Billing') ?></strong>
+                    <?php endif; ?>
+                    <?php if ($block->isAddressDefaultShipping($_address)): ?>
+                        <br /><strong><?= /* @escapeNotVerified */ __('Default Shipping') ?></strong>
+                    <?php endif; ?>
+                </address>
+            </div>
+            <div class="box-actions">
+                <a href="<?= /* @escapeNotVerified */ $block->getEditAddressUrl($_address) ?>" class="action edit"><span><?= /* @escapeNotVerified */ __('Edit Address') ?></span></a>
+                <a href="<?= /* @escapeNotVerified */ $block->getSetAddressUrl($_address) ?>" class="action select"><span><?= /* @escapeNotVerified */ __('Select Address') ?></span></a>
+            </div>
+        </div>
+    <?php endforeach; ?>
+    </div>
+    <div class="actions-toolbar">
+        <div class="primary">
+            <button type="button" class="action add primary" role="add-address" title="<?= /* @escapeNotVerified */ __('Add New Address') ?>"><span><?= /* @escapeNotVerified */ __('Add New Address') ?></span></button>
+        </div>
+        <div class="secondary">
+            <a href="<?= /* @escapeNotVerified */ $block->getBackUrl() ?>" class="action back"><span><?= /* @escapeNotVerified */ __('Back to Billing Information') ?></span></a>
+        </div>
+    </div>
+</div>
+<script type="text/x-magento-init">
+    {
+        ".actions": {
+            "address": {
+                "addAddress": "button[role='add-address']",
+                "addAddressLocation": "<?= /* @escapeNotVerified */ $block->getAddNewUrl() ?>"
+            }
+        }
+    }
+</script>

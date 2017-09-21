@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -37,9 +19,9 @@ class Main extends \Magento\Backend\Block\Widget\Grid\Container
     protected $_coreRegistry = null;
 
     /**
-     * @var \Magento\Customer\Service\V1\CustomerAccountServiceInterface
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface
      */
-    protected $customerAccount;
+    protected $customerRepository;
 
     /**
      * Catalog product model factory
@@ -49,22 +31,32 @@ class Main extends \Magento\Backend\Block\Widget\Grid\Container
     protected $_productFactory;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerAccount
+     * Customer View Helper
+     *
+     * @var \Magento\Customer\Helper\View
+     */
+    protected $_customerViewHelper;
+
+    /**
+     * @param \Magento\Backend\Block\Widget\Context $context
+     * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Customer\Helper\View $customerViewHelper
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerAccount,
+        \Magento\Backend\Block\Widget\Context $context,
+        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Framework\Registry $registry,
-        array $data = array()
+        \Magento\Customer\Helper\View $customerViewHelper,
+        array $data = []
     ) {
         $this->_coreRegistry = $registry;
-        $this->customerAccount = $customerAccount;
+        $this->customerRepository = $customerRepository;
         $this->_productFactory = $productFactory;
+        $this->_customerViewHelper = $customerViewHelper;
         parent::__construct($context, $data);
     }
 
@@ -75,7 +67,7 @@ class Main extends \Magento\Backend\Block\Widget\Grid\Container
      */
     protected function _construct()
     {
-        $this->_addButtonLabel = __('Add New Review');
+        $this->_addButtonLabel = __('New Review');
         parent::_construct();
 
         $this->_blockGroup = 'Magento_Review';
@@ -85,9 +77,8 @@ class Main extends \Magento\Backend\Block\Widget\Grid\Container
         $customerId = $this->getRequest()->getParam('customerId', false);
         $customerName = '';
         if ($customerId) {
-            $customer = $this->customerAccount->getCustomer($customerId);
-            $customerName = $customer->getFirstname() . ' ' . $customer->getLastname();
-            $customerName = $this->escapeHtml($customerName);
+            $customer = $this->customerRepository->getById($customerId);
+            $customerName = $this->escapeHtml($this->_customerViewHelper->getCustomerName($customer));
         }
         $productId = $this->getRequest()->getParam('productId', false);
         $productName = null;
@@ -102,7 +93,7 @@ class Main extends \Magento\Backend\Block\Widget\Grid\Container
             } else {
                 $this->_headerText = __('Pending Reviews');
             }
-            $this->_removeButton('add');
+            $this->buttonList->remove('add');
         } else {
             if ($customerName) {
                 $this->_headerText = __('All Reviews of Customer `%1`', $customerName);

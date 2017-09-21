@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -40,7 +22,7 @@ class Watermark extends \Magento\Backend\Block\AbstractBlock implements
     protected $_elementFactory;
 
     /**
-     * @var \Magento\Backend\Block\System\Config\Form\Field
+     * @var \Magento\Config\Block\System\Config\Form\Field
      */
     protected $_formField;
 
@@ -57,7 +39,7 @@ class Watermark extends \Magento\Backend\Block\AbstractBlock implements
     /**
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Catalog\Model\Config\Source\Watermark\Position $watermarkPosition
-     * @param \Magento\Backend\Block\System\Config\Form\Field $formField
+     * @param \Magento\Config\Block\System\Config\Form\Field $formField
      * @param \Magento\Framework\Data\Form\Element\Factory $elementFactory
      * @param array $imageTypes
      * @param array $data
@@ -65,10 +47,10 @@ class Watermark extends \Magento\Backend\Block\AbstractBlock implements
     public function __construct(
         \Magento\Backend\Block\Context $context,
         \Magento\Catalog\Model\Config\Source\Watermark\Position $watermarkPosition,
-        \Magento\Backend\Block\System\Config\Form\Field $formField,
+        \Magento\Config\Block\System\Config\Form\Field $formField,
         \Magento\Framework\Data\Form\Element\Factory $elementFactory,
-        array $imageTypes = array(),
-        array $data = array()
+        array $imageTypes = [],
+        array $data = []
     ) {
         $this->_watermarkPosition = $watermarkPosition;
         $this->_formField = $formField;
@@ -95,7 +77,7 @@ class Watermark extends \Magento\Backend\Block\AbstractBlock implements
             )->setForm(
                 $this->getForm()
             )->setLabel(
-                __('Size for %1', $attribute['title'])
+                __('Size for %1', __($attribute['title']))
             )->setRenderer(
                 $this->_formField
             );
@@ -111,7 +93,7 @@ class Watermark extends \Magento\Backend\Block\AbstractBlock implements
             )->setForm(
                 $this->getForm()
             )->setLabel(
-                __('Watermark File for %1', $attribute['title'])
+                __('Watermark File for %1', __($attribute['title']))
             )->setRenderer(
                 $this->_formField
             );
@@ -127,7 +109,7 @@ class Watermark extends \Magento\Backend\Block\AbstractBlock implements
             )->setForm(
                 $this->getForm()
             )->setLabel(
-                __('Position of Watermark for %1', $attribute['title'])
+                __('Position of Watermark for %1', __($attribute['title']))
             )->setRenderer(
                 $this->_formField
             )->setValues(
@@ -144,6 +126,7 @@ class Watermark extends \Magento\Backend\Block\AbstractBlock implements
     /**
      * @param AbstractElement $element
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function _getHeaderHtml($element)
     {
@@ -155,7 +138,7 @@ class Watermark extends \Magento\Backend\Block\AbstractBlock implements
         $html .= '<legend>' . $element->getLegend() . '</legend>';
 
         // field label column
-        $html .= '<table cellspacing="0"><colgroup class="label" /><colgroup class="value" />';
+        $html .= '<table><colgroup class="label" /><colgroup class="value" />';
         if (!$default) {
             $html .= '<colgroup class="use-default" />';
         }
@@ -167,6 +150,7 @@ class Watermark extends \Magento\Backend\Block\AbstractBlock implements
     /**
      * @param AbstractElement $element
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _getFooterHtml($element)
     {

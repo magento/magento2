@@ -1,0 +1,31 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+/**
+ * @see \Magento\Paypal\Block\Express\Review\Details
+ * @var \Magento\Paypal\Block\Express\Review\Details $block
+ */
+?>
+<div id="details-reload" class="table-wrapper order-items cart">
+    <table id="details-table" class="cart items data table table-paypal-review-items">
+        <caption class="table-caption"><?= $block->escapeHtml(__('Items in Your Shopping Cart')) ?></caption>
+        <thead>
+        <tr>
+            <th class="col name" scope="col"><?= $block->escapeHtml(__('Item')) ?></th>
+            <th class="col price" scope="col"><?= $block->escapeHtml(__('Price')) ?></th>
+            <th class="col qty" scope="col"><?= $block->escapeHtml(__('Qty')) ?></th>
+            <th class="col subtotal" scope="col"><?= $block->escapeHtml(__('Subtotal')) ?></th>
+        </tr>
+        </thead>
+            <?php foreach ($block->getItems() as $item): ?>
+                <?= $block->getItemHtml($item) ?>
+            <?php endforeach ?>
+        <tfoot class="opc-block-summary">
+            <?= $block->getChildHtml('totals') ?>
+        </tfoot>
+    </table>
+</div>

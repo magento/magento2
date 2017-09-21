@@ -1,32 +1,16 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
 namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 
 /**
  * Backend grid item renderer currency
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
 class Currency extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
@@ -38,9 +22,9 @@ class Currency extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
     /**
      * Currency objects cache
      *
-     * @var \Magento\Framework\Object[]
+     * @var \Magento\Framework\DataObject[]
      */
-    protected static $_currencies = array();
+    protected static $_currencies = [];
 
     /**
      * Application object
@@ -57,7 +41,7 @@ class Currency extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
     /**
      * @var \Magento\Directory\Model\Currency
      */
-    protected $_baseCurrency;
+    protected $_defaultBaseCurrency;
 
     /**
      * @var \Magento\Framework\Locale\CurrencyInterface
@@ -78,28 +62,28 @@ class Currency extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
         \Magento\Directory\Model\Currency\DefaultLocator $currencyLocator,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Framework\Locale\CurrencyInterface $localeCurrency,
-        array $data = array()
+        array $data = []
     ) {
         parent::__construct($context, $data);
         $this->_storeManager = $storeManager;
         $this->_currencyLocator = $currencyLocator;
         $this->_localeCurrency = $localeCurrency;
-        $baseCurrencyCode = $this->_scopeConfig->getValue(
+        $defaultBaseCurrencyCode = $this->_scopeConfig->getValue(
             \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE,
             'default'
         );
-        $this->_baseCurrency = $currencyFactory->create()->load($baseCurrencyCode);
+        $this->_defaultBaseCurrency = $currencyFactory->create()->load($defaultBaseCurrencyCode);
     }
 
     /**
      * Renders grid column
      *
-     * @param   \Magento\Framework\Object $row
+     * @param   \Magento\Framework\DataObject $row
      * @return  string
      */
-    public function render(\Magento\Framework\Object $row)
+    public function render(\Magento\Framework\DataObject $row)
     {
-        if ($data = (string)$row->getData($this->getColumn()->getIndex())) {
+        if ($data = (string)$this->_getValue($row)) {
             $currency_code = $this->_getCurrencyCode($row);
             $data = floatval($data) * $this->_getRate($row);
             $sign = (bool)(int)$this->getColumn()->getShowNumberSign() && $data > 0 ? '+' : '';
@@ -113,7 +97,7 @@ class Currency extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
     /**
      * Returns currency code, false on error
      *
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return string
      */
     protected function _getCurrencyCode($row)
@@ -131,7 +115,7 @@ class Currency extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
     /**
      * Get rate for current row, 1 by default
      *
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return float|int
      */
     protected function _getRate($row)
@@ -142,7 +126,7 @@ class Currency extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
         if ($rate = $row->getData($this->getColumn()->getRateField())) {
             return floatval($rate);
         }
-        return $this->_baseCurrency->getRate($this->_getCurrencyCode($row));
+        return $this->_defaultBaseCurrency->getRate($this->_getCurrencyCode($row));
     }
 
     /**

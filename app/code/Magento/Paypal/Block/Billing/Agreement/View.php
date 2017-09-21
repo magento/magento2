@@ -1,30 +1,15 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Block\Billing\Agreement;
 
 /**
  * Customer account billing agreement view block
+ *
+ * @api
+ * @since 100.0.2
  */
 class View extends \Magento\Framework\View\Element\Template
 {
@@ -33,7 +18,7 @@ class View extends \Magento\Framework\View\Element\Template
      *
      * @var array
      */
-    protected $_paymentMethods = array();
+    protected $_paymentMethods = [];
 
     /**
      * Billing Agreement instance
@@ -45,7 +30,7 @@ class View extends \Magento\Framework\View\Element\Template
     /**
      * Related orders collection
      *
-     * @var \Magento\Sales\Model\Resource\Order\Collection
+     * @var \Magento\Sales\Model\ResourceModel\Order\Collection
      */
     protected $_relatedOrders = null;
 
@@ -57,7 +42,7 @@ class View extends \Magento\Framework\View\Element\Template
     protected $_coreRegistry = null;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Order\CollectionFactory
+     * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory
      */
     protected $_orderCollectionFactory;
 
@@ -77,29 +62,29 @@ class View extends \Magento\Framework\View\Element\Template
     protected $_helper;
 
     /**
-     * @var \Magento\Paypal\Model\Resource\Billing\Agreement
+     * @var \Magento\Paypal\Model\ResourceModel\Billing\Agreement
      */
     protected $_agreementResource;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Sales\Model\Resource\Order\CollectionFactory $orderCollectionFactory
+     * @param \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Sales\Model\Order\Config $orderConfig
      * @param \Magento\Paypal\Helper\Data $helper
-     * @param \Magento\Paypal\Model\Resource\Billing\Agreement $agreementResource
+     * @param \Magento\Paypal\Model\ResourceModel\Billing\Agreement $agreementResource
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Sales\Model\Resource\Order\CollectionFactory $orderCollectionFactory,
+        \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Sales\Model\Order\Config $orderConfig,
         \Magento\Paypal\Helper\Data $helper,
-        \Magento\Paypal\Model\Resource\Billing\Agreement $agreementResource,
-        array $data = array()
+        \Magento\Paypal\Model\ResourceModel\Billing\Agreement $agreementResource,
+        array $data = []
     ) {
         $this->_helper = $helper;
         $this->_orderCollectionFactory = $orderCollectionFactory;
@@ -114,11 +99,11 @@ class View extends \Magento\Framework\View\Element\Template
     /**
      * Retrieve related orders collection
      *
-     * @return \Magento\Sales\Model\Resource\Order\Collection
+     * @return \Magento\Sales\Model\ResourceModel\Order\Collection
      */
     public function getRelatedOrders()
     {
-        if (is_null($this->_relatedOrders)) {
+        if ($this->_relatedOrders === null) {
             $billingAgreement = $this->_getBillingAgreementInstance();
             $billingAgreementId = $billingAgreement ? $billingAgreement->getAgreementId() : 0;
             $this->_relatedOrders = $this->_orderCollectionFactory->create()->addFieldToSelect(
@@ -127,8 +112,8 @@ class View extends \Magento\Framework\View\Element\Template
                 'customer_id',
                 (int)$this->_customerSession->getCustomerId()
             )->addFieldToFilter(
-                'state',
-                array('in' => $this->_orderConfig->getVisibleOnFrontStates())
+                'status',
+                ['in' => $this->_orderConfig->getVisibleOnFrontStatuses()]
             )->setOrder(
                 'created_at',
                 'desc'
@@ -144,6 +129,7 @@ class View extends \Magento\Framework\View\Element\Template
      * @param \Magento\Sales\Model\Order $order
      * @param string $key
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getOrderItemValue(\Magento\Sales\Model\Order $order, $key)
     {
@@ -153,7 +139,7 @@ class View extends \Magento\Framework\View\Element\Template
                 $value = $order->getIncrementId();
                 break;
             case 'created_at':
-                $value = $this->formatDate($order->getCreatedAt(), 'short', true);
+                $value = $this->formatDate($order->getCreatedAt(), \IntlDateFormatter::SHORT, true);
                 break;
             case 'shipping_address':
                 $value = $order->getShippingAddress() ? $this->escapeHtml(
@@ -170,7 +156,7 @@ class View extends \Magento\Framework\View\Element\Template
                 $value = $order->getStatusLabel();
                 break;
             case 'view_url':
-                $value = $this->getUrl('sales/order/view', array('order_id' => $order->getId()));
+                $value = $this->getUrl('sales/order/view', ['order_id' => $order->getId()]);
                 break;
             default:
                 $value = $order->getData($key) ? $order->getData($key) : __('N/A');
@@ -189,7 +175,7 @@ class View extends \Magento\Framework\View\Element\Template
         parent::_prepareLayout();
 
         $pager = $this->getLayout()->createBlock(
-            'Magento\Theme\Block\Html\Pager'
+            \Magento\Theme\Block\Html\Pager::class
         )->setCollection(
             $this->getRelatedOrders()
         )->setIsOutputRequired(
@@ -208,7 +194,7 @@ class View extends \Magento\Framework\View\Element\Template
      */
     protected function _getBillingAgreementInstance()
     {
-        if (is_null($this->_billingAgreementInstance)) {
+        if ($this->_billingAgreementInstance === null) {
             $this->_billingAgreementInstance = $this->_coreRegistry->registry('current_billing_agreement');
         }
         return $this->_billingAgreementInstance;
@@ -246,7 +232,7 @@ class View extends \Magento\Framework\View\Element\Template
             $this->setCancelUrl(
                 $this->getUrl(
                     '*/billing_agreement/cancel',
-                    array('_current' => true, 'payment_method' => $billingAgreement->getMethodCode())
+                    ['_current' => true, 'payment_method' => $billingAgreement->getMethodCode()]
                 )
             );
 
@@ -255,9 +241,11 @@ class View extends \Magento\Framework\View\Element\Template
 
             $createdAt = $billingAgreement->getCreatedAt();
             $updatedAt = $billingAgreement->getUpdatedAt();
-            $this->setAgreementCreatedAt($createdAt ? $this->formatDate($createdAt, 'short', true) : __('N/A'));
+            $this->setAgreementCreatedAt(
+                $createdAt ? $this->formatDate($createdAt, \IntlDateFormatter::SHORT, true) : __('N/A')
+            );
             if ($updatedAt) {
-                $this->setAgreementUpdatedAt($this->formatDate($updatedAt, 'short', true));
+                $this->setAgreementUpdatedAt($this->formatDate($updatedAt, \IntlDateFormatter::SHORT, true));
             }
             $this->setAgreementStatus($billingAgreement->getStatusLabel());
         }

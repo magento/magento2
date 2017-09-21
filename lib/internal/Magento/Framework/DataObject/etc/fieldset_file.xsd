@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="config">
+        <xs:annotation>
+            <xs:documentation>
+                Specifies a configuration.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="scope" type="scopeType"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="scopeType">
+        <xs:annotation>
+            <xs:documentation>
+                The definition of the current scope.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="fieldset" type="fieldsetType"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:ID" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="fieldsetType">
+        <xs:annotation>
+            <xs:documentation>
+                The set of fields which will be used to filter existing Magento Object data
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="field" type="fieldType"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:ID" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="fieldType">
+        <xs:annotation>
+            <xs:documentation>
+                The name of a field used to extract data from an existing Magento Object
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="aspect" type="aspectType"/>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:token" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="aspectType">
+        <xs:annotation>
+            <xs:documentation>
+                The name of an aspect associated with a field. If the targetField is populated, the field data will be
+                provided under the name specified by targetField.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="name" type="xs:token" use="required"/>
+        <xs:attribute name="targetField" type="xs:token" use="optional"/>
+    </xs:complexType>
+
+</xs:schema>

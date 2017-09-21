@@ -2,32 +2,14 @@
 /**
  * Test for \Magento\Framework\Filesystem\File\Read
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filesystem\File;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
-class ReadTest extends \PHPUnit_Framework_TestCase
+class ReadTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test instance of Read
@@ -44,7 +26,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider providerNotValidFiles
      * @param string $path
-     * @expectedException \Magento\Framework\Filesystem\FilesystemException
+     * @expectedException \Magento\Framework\Exception\FileSystemException
      */
     public function testAssertValid($path)
     {
@@ -58,7 +40,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
      */
     public function providerNotValidFiles()
     {
-        return array(array('invalid.csv')); //File does not exist
+        return [['invalid.csv']]; //File does not exist
     }
 
     /**
@@ -83,7 +65,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
      */
     public function providerRead()
     {
-        return array(array('popup.csv', 10, 'var myData'), array('popup.csv', 15, 'var myData = 5;'));
+        return [['popup.csv', 10, 'var myData'], ['popup.csv', 15, 'var myData = 5;']];
     }
 
     /**
@@ -106,10 +88,10 @@ class ReadTest extends \PHPUnit_Framework_TestCase
      */
     public function readAllProvider()
     {
-        return array(
-            array('popup.csv', 'var myData = 5;'),
-            array('data.csv', '"field1", "field2"' . PHP_EOL . '"field3", "field4"' . PHP_EOL)
-        );
+        return [
+            ['popup.csv', 'var myData = 5;'],
+            ['data.csv', '"field1", "field2"' . "\n" . '"field3", "field4"' . "\n"]
+        ];
     }
 
     /**
@@ -124,7 +106,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
     {
         $file = $this->getFileInstance($path);
         foreach ($lines as $line) {
-            $this->assertEquals($line, $file->readLine($length, PHP_EOL));
+            $this->assertEquals($line, $file->readLine($length, "\n"));
         }
     }
 
@@ -135,12 +117,12 @@ class ReadTest extends \PHPUnit_Framework_TestCase
      */
     public function readLineProvider()
     {
-        return array(
-            array('popup.csv', array('var myData = 5;'), 999),
-            array('data.csv', array('"field1", "field2"', '"field3", "field4"'), 999),
-            array('popup.csv', array('var'), 3),
-            array('data.csv', array('"f', 'ie', 'ld', '1"'), 2)
-        );
+        return [
+            ['popup.csv', ['var myData = 5;'], 999],
+            ['data.csv', ['"field1", "field2"', '"field3", "field4"'], 999],
+            ['popup.csv', ['var'], 3],
+            ['data.csv', ['"f', 'ie', 'ld', '1"'], 2]
+        ];
     }
 
     /**
@@ -152,7 +134,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
     public function testStat($path)
     {
         $file = $this->getFileInstance($path);
-        $expectedInfo = array(
+        $expectedInfo = [
             'dev',
             'ino',
             'mode',
@@ -165,8 +147,8 @@ class ReadTest extends \PHPUnit_Framework_TestCase
             'mtime',
             'ctime',
             'blksize',
-            'blocks'
-        );
+            'blocks',
+        ];
         $result = $file->stat();
         foreach ($expectedInfo as $key) {
             $this->assertTrue(array_key_exists($key, $result));
@@ -180,7 +162,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
      */
     public function statProvider()
     {
-        return array(array('popup.csv'), array('foo/file_three.txt'));
+        return [['popup.csv'], ['foo/file_three.txt']];
     }
 
     /**
@@ -211,7 +193,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
      */
     public function providerCsv()
     {
-        return array(array('data.csv', 0, ',', '"', '\\', array('field1', 'field2'), array('field3', 'field4')));
+        return [['data.csv', 0, ',', '"', '\\', ['field1', 'field2'], ['field3', 'field4']]];
     }
 
     /**
@@ -235,7 +217,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
      */
     public function providerPosition()
     {
-        return array(array('popup.csv', 5), array('popup.csv', 10));
+        return [['popup.csv', 5], ['popup.csv', 10]];
     }
 
     /**
@@ -261,11 +243,11 @@ class ReadTest extends \PHPUnit_Framework_TestCase
      */
     public function providerSeek()
     {
-        return array(
-            array('popup.csv', 5, SEEK_SET, 5),
-            array('popup.csv', 10, SEEK_CUR, 10),
-            array('popup.csv', -10, SEEK_END, 5)
-        );
+        return [
+            ['popup.csv', 5, SEEK_SET, 5],
+            ['popup.csv', 10, SEEK_CUR, 10],
+            ['popup.csv', -10, SEEK_END, 5]
+        ];
     }
 
     /**
@@ -289,7 +271,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
      */
     public function providerEof()
     {
-        return array(array('popup.csv', 5, false), array('popup.csv', 10, false));
+        return [['popup.csv', 5, false], ['popup.csv', 10, false]];
     }
 
     /**
@@ -323,8 +305,8 @@ class ReadTest extends \PHPUnit_Framework_TestCase
     {
         $fullPath = __DIR__ . '/../_files/' . $path;
         return Bootstrap::getObjectManager()->create(
-            'Magento\Framework\Filesystem\File\Read',
-            array('path' => $fullPath, 'driver' => new \Magento\Framework\Filesystem\Driver\File())
+            \Magento\Framework\Filesystem\File\Read::class,
+            ['path' => $fullPath, 'driver' => new \Magento\Framework\Filesystem\Driver\File()]
         );
     }
 }

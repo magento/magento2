@@ -1,0 +1,17 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+/* @var $block \Magento\Tax\Block\Adminhtml\Rate\Form */
+?>
+
+<div data-role="spinner" class="grid-loading-mask">
+    <div class="grid-loader"></div>
+</div>
+
+<div class="form-inline" id="<?= /* @escapeNotVerified */ $block->getNameInLayout() ?>" style="display:none">
+    <?= $block->getFormHtml() ?>
+    <?= $block->getChildHtml('form_after') ?>
+</div>
+

@@ -1,29 +1,11 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity\Modular\Magento\Sales;
 
-class PdfConfigFilesTest extends \PHPUnit_Framework_TestCase
+class PdfConfigFilesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param string $file
@@ -33,11 +15,14 @@ class PdfConfigFilesTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Sales\Model\Order\Pdf\Config\SchemaLocator $schemaLocator */
         $schemaLocator = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Sales\Model\Order\Pdf\Config\SchemaLocator'
+            \Magento\Sales\Model\Order\Pdf\Config\SchemaLocator::class
         );
         $schemaFile = $schemaLocator->getPerFileSchema();
 
-        $dom = new \Magento\Framework\Config\Dom(file_get_contents($file));
+        $validationStateMock = $this->createMock(\Magento\Framework\Config\ValidationStateInterface::class);
+        $validationStateMock->method('isValidationRequired')
+            ->willReturn(true);
+        $dom = new \Magento\Framework\Config\Dom(file_get_contents($file), $validationStateMock);
         $result = $dom->validate($schemaFile, $errors);
         $this->assertTrue($result, print_r($errors, true));
     }
@@ -47,18 +32,18 @@ class PdfConfigFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function fileFormatDataProvider()
     {
-        return \Magento\TestFramework\Utility\Files::init()->getConfigFiles('pdf.xml');
+        return \Magento\Framework\App\Utility\Files::init()->getConfigFiles('pdf.xml');
     }
 
     public function testMergedFormat()
     {
-        $validationState = $this->getMock('Magento\Framework\Config\ValidationStateInterface');
-        $validationState->expects($this->any())->method('isValidated')->will($this->returnValue(true));
+        $validationState = $this->createMock(\Magento\Framework\Config\ValidationStateInterface::class);
+        $validationState->expects($this->any())->method('isValidationRequired')->will($this->returnValue(true));
 
         /** @var \Magento\Sales\Model\Order\Pdf\Config\Reader $reader */
         $reader = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Sales\Model\Order\Pdf\Config\Reader',
-            array('validationState' => $validationState)
+            \Magento\Sales\Model\Order\Pdf\Config\Reader::class,
+            ['validationState' => $validationState]
         );
         try {
             $reader->read();

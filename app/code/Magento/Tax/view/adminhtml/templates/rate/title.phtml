@@ -1,0 +1,33 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<fieldset id="tax-rate-titles-table" class="admin__fieldset">
+    <?php $_labels = $block->getTitles() ?>
+    <?php foreach ($block->getStores() as $_store): ?>
+        <div class="admin__field">
+            <label class="admin__field-label"><span><?= /* @escapeNotVerified */ $_store->getName() ?></span></label>
+            <div class="admin__field-control">
+                <input
+                    class="admin__control-text<?php if ($_store->getId() == 0): ?> required-entry<?php endif; ?>"
+                    type="text"
+                    name="title[<?= /* @escapeNotVerified */ $_store->getId() ?>]"
+                    value="<?= /* @escapeNotVerified */ $_labels[$_store->getId()] ?>" />
+            </div>
+        </div>
+    <?php endforeach; ?>
+
+    <div class="messages">
+        <div class="message message-notice">
+            <div>
+                <strong><?= /* @escapeNotVerified */ __('Note:') ?></strong>
+                <?= /* @escapeNotVerified */ __('Leave this field empty if you wish to use the tax identifier.') ?>
+            </div>
+        </div>
+    </div>
+</fieldset>

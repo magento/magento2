@@ -1,31 +1,16 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
 
 namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab;
 
 /**
  * Bundle product attributes tab
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Attributes extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attributes
 {
@@ -33,6 +18,8 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attri
      * Prepare attributes form of bundle product
      *
      * @return void
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareForm()
     {
@@ -42,7 +29,7 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attri
         if ($specialPrice) {
             $specialPrice->setRenderer(
                 $this->getLayout()->createBlock(
-                    'Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes\Special'
+                    \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes\Special::class
                 )->setDisableChild(
                     false
                 )
@@ -63,7 +50,7 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attri
         if ($sku) {
             $sku->setRenderer(
                 $this->getLayout()->createBlock(
-                    'Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes\Extend'
+                    \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes\Extend::class
                 )->setDisableChild(
                     false
                 )
@@ -74,7 +61,7 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attri
         if ($price) {
             $price->setRenderer(
                 $this->getLayout()->createBlock(
-                    'Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes\Extend',
+                    \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes\Extend::class,
                     'adminhtml.catalog.product.bundle.edit.tab.attributes.price'
                 )->setDisableChild(
                     true
@@ -85,9 +72,9 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attri
         $tax = $this->getForm()->getElement('tax_class_id');
         if ($tax) {
             $tax->setAfterElementHtml(
-                '<script type="text/javascript">' .
+                '<script>' .
                 "
-                //<![CDATA[
+                require(['prototype'], function(){
                 function changeTaxClassId() {
                     if ($('price_type').value == '" .
                 \Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC .
@@ -106,13 +93,11 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attri
                     }
                 }
 
-                document.observe('dom:loaded', function() {
-                    if ($('price_type')) {
-                        $('price_type').observe('change', changeTaxClassId);
-                        changeTaxClassId();
-                    }
+                if ($('price_type')) {
+                    $('price_type').observe('change', changeTaxClassId);
+                    changeTaxClassId();
+                }
                 });
-                //]]>
                 " .
                 '</script>'
             );
@@ -122,7 +107,7 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attri
         if ($weight) {
             $weight->setRenderer(
                 $this->getLayout()->createBlock(
-                    'Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes\Extend'
+                    \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes\Extend::class
                 )->setDisableChild(
                     true
                 )
@@ -133,59 +118,12 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attri
         if ($tier_price) {
             $tier_price->setRenderer(
                 $this->getLayout()->createBlock(
-                    'Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Price\Tier'
+                    \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Price\Tier::class
                 )->setPriceColumnHeader(
                     __('Percent Discount')
                 )->setPriceValidation(
                     'validate-greater-than-zero validate-number-range number-range-0.00-100.00'
                 )
-            );
-        }
-
-        $groupPrice = $this->getForm()->getElement('group_price');
-        if ($groupPrice) {
-            $groupPrice->setRenderer(
-                $this->getLayout()->createBlock(
-                    'Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Price\Group'
-                )->setPriceColumnHeader(
-                    __('Percent Discount')
-                )->setPriceValidation(
-                    'validate-greater-than-zero validate-number-range number-range-0.00-100.00'
-                )
-            );
-        }
-
-        $mapEnabled = $this->getForm()->getElement('msrp_enabled');
-        if ($mapEnabled && $this->getCanEditPrice() !== false) {
-            $mapEnabled->setAfterElementHtml(
-                '<script type="text/javascript">' .
-                "
-                function changePriceTypeMap() {
-                    if ($('price_type').value == " .
-                \Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC .
-                ") {
-                        $('msrp_enabled').setValue(" .
-                \Magento\Catalog\Model\Product\Attribute\Source\Msrp\Type\Enabled::MSRP_ENABLE_NO .
-                ");
-                        $('msrp_enabled').disable();
-                        $('msrp_display_actual_price_type').setValue(" .
-                \Magento\Catalog\Model\Product\Attribute\Source\Msrp\Type\Price::TYPE_USE_CONFIG .
-                ");
-                        $('msrp_display_actual_price_type').disable();
-                        $('msrp').setValue('');
-                        $('msrp').disable();
-                    } else {
-                        $('msrp_enabled').enable();
-                        $('msrp_display_actual_price_type').enable();
-                        $('msrp').enable();
-                    }
-                }
-                document.observe('dom:loaded', function() {
-                    $('price_type').observe('change', changePriceTypeMap);
-                    changePriceTypeMap();
-                });
-                " .
-                '</script>'
             );
         }
     }

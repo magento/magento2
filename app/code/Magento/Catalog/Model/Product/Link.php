@@ -1,36 +1,17 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product;
 
-use Magento\Catalog\Model\Resource\Product\Link\Collection;
-use Magento\Catalog\Model\Resource\Product\Link\Product\Collection as ProductCollection;
+use Magento\Catalog\Model\ResourceModel\Product\Link\Collection;
+use Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection as ProductCollection;
 
 /**
  * Catalog product link model
  *
- * @method \Magento\Catalog\Model\Resource\Product\Link _getResource()
- * @method \Magento\Catalog\Model\Resource\Product\Link getResource()
+ * @api
  * @method int getProductId()
  * @method \Magento\Catalog\Model\Product\Link setProductId(int $value)
  * @method int getLinkedProductId()
@@ -39,6 +20,8 @@ use Magento\Catalog\Model\Resource\Product\Link\Product\Collection as ProductCol
  * @method \Magento\Catalog\Model\Product\Link setLinkTypeId(int $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Link extends \Magento\Framework\Model\AbstractModel
 {
@@ -51,42 +34,57 @@ class Link extends \Magento\Framework\Model\AbstractModel
     /**
      * @var mixed
      */
-    protected $_attributeCollection = null;
+    protected $_attributes = null;
 
     /**
      * Product collection factory
      *
-     * @var \Magento\Catalog\Model\Resource\Product\Link\Product\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Link\Product\CollectionFactory
      */
     protected $_productCollectionFactory;
 
     /**
      * Link collection factory
      *
-     * @var \Magento\Catalog\Model\Resource\Product\Link\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Link\CollectionFactory
      */
     protected $_linkCollectionFactory;
 
     /**
+     * @var \Magento\Catalog\Model\Product\Link\SaveHandler
+     * @since 101.0.0
+     */
+    protected $saveProductLinks;
+
+    /**
+     * @var \Magento\CatalogInventory\Helper\Stock
+     * @deprecated 101.0.1
+     */
+    protected $stockHelper;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Catalog\Model\Resource\Product\Link\CollectionFactory $linkCollectionFactory
-     * @param \Magento\Catalog\Model\Resource\Product\Link\Product\CollectionFactory $productCollectionFactory
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Link\CollectionFactory $linkCollectionFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Link\Product\CollectionFactory $productCollectionFactory
+     * @param \Magento\CatalogInventory\Helper\Stock $stockHelper
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Catalog\Model\Resource\Product\Link\CollectionFactory $linkCollectionFactory,
-        \Magento\Catalog\Model\Resource\Product\Link\Product\CollectionFactory $productCollectionFactory,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
-        array $data = array()
+        \Magento\Catalog\Model\ResourceModel\Product\Link\CollectionFactory $linkCollectionFactory,
+        \Magento\Catalog\Model\ResourceModel\Product\Link\Product\CollectionFactory $productCollectionFactory,
+        \Magento\CatalogInventory\Helper\Stock $stockHelper,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        array $data = []
     ) {
         $this->_linkCollectionFactory = $linkCollectionFactory;
         $this->_productCollectionFactory = $productCollectionFactory;
+        $this->stockHelper = $stockHelper;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -97,7 +95,7 @@ class Link extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Catalog\Model\Resource\Product\Link');
+        $this->_init(\Magento\Catalog\Model\ResourceModel\Product\Link::class);
     }
 
     /**
@@ -166,10 +164,14 @@ class Link extends \Magento\Framework\Model\AbstractModel
      */
     public function getAttributes($type = null)
     {
-        if (is_null($type)) {
+        if ($type === null) {
             $type = $this->getLinkTypeId();
         }
-        return $this->_getResource()->getAttributesByType($type);
+        if (!isset($this->_attributes[$type])) {
+            $this->_attributes[$type] = $this->_getResource()->getAttributesByType($type);
+        }
+
+        return $this->_attributes[$type];
     }
 
     /**
@@ -180,18 +182,19 @@ class Link extends \Magento\Framework\Model\AbstractModel
      */
     public function saveProductRelations($product)
     {
-        $data = $product->getRelatedLinkData();
-        if (!is_null($data)) {
-            $this->_getResource()->saveProductLinks($product, $data, self::LINK_TYPE_RELATED);
-        }
-        $data = $product->getUpSellLinkData();
-        if (!is_null($data)) {
-            $this->_getResource()->saveProductLinks($product, $data, self::LINK_TYPE_UPSELL);
-        }
-        $data = $product->getCrossSellLinkData();
-        if (!is_null($data)) {
-            $this->_getResource()->saveProductLinks($product, $data, self::LINK_TYPE_CROSSSELL);
-        }
+        $this->getProductLinkSaveHandler()->execute(\Magento\Catalog\Api\Data\ProductInterface::class, $product);
         return $this;
+    }
+
+    /**
+     * @return Link\SaveHandler
+     */
+    private function getProductLinkSaveHandler()
+    {
+        if (null === $this->saveProductLinks) {
+            $this->saveProductLinks = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Catalog\Model\Product\Link\SaveHandler::class);
+        }
+        return $this->saveProductLinks;
     }
 }

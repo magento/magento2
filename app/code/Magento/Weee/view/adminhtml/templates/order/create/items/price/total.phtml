@@ -1,0 +1,67 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+/** @var \Magento\Weee\Block\Item\Price\Renderer $block */
+
+$_weeeHelper = $this->helper('Magento\Weee\Helper\Data');
+$_item = $block->getItem();
+?>
+
+<?php if ($block->displayPriceExclTax() || $block->displayBothPrices()): ?>
+    <?php $_rowTotalWithoutDiscount = $block->getRowDisplayPriceExclTax() - $_item->getTotalDiscountAmount(); ?>
+    <?php if ($block->displayBothPrices()): ?>
+        <span class="label"><?= /* @escapeNotVerified */ __('Excl. Tax') ?>:</span>
+    <?php endif; ?>
+    <?= /* @escapeNotVerified */ $block->formatPrice(max(0, $_rowTotalWithoutDiscount)) ?>
+
+
+    <?php if ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item)): ?>
+        <br />
+        <?php if ($block->displayPriceWithWeeeDetails()): ?>
+            <small>
+                <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item) as $tax): ?>
+                    <span class="nobr"><?= /* @escapeNotVerified */ $tax['title'] ?>: <?= /* @escapeNotVerified */ $block->formatPrice($tax['row_amount'], true, true) ?></span><br />
+                <?php endforeach; ?>
+            </small>
+        <?php endif; ?>
+
+        <?php if ($block->displayFinalPrice()): ?>
+            <br />
+            <span class="nobr"><?= /* @escapeNotVerified */ __('Total') ?>:<br />
+                <?= /* @escapeNotVerified */ $block->formatPrice($block->getFinalRowDisplayPriceExclTax() - $_item->getTotalDiscountAmount()) ?>
+            </span>
+        <?php endif; ?>
+    <?php endif; ?>
+<?php endif; ?>
+
+
+<?php if ($block->displayPriceInclTax() || $block->displayBothPrices()): ?>
+    <?php if ($block->displayBothPrices()): ?>
+        <br /><span class="label"><?= /* @escapeNotVerified */ __('Incl. Tax') ?>:</span>
+    <?php endif; ?>
+    <?php $_incl = $block->getTotalAmount($_item); ?>
+    <?= /* @escapeNotVerified */ $block->formatPrice(max(0, $_incl)) ?>
+    <?php if ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item)): ?>
+        <br />
+        <?php if ($block->displayPriceWithWeeeDetails()): ?>
+            <small>
+                <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item) as $tax): ?>
+                    <span class="nobr"><?= /* @escapeNotVerified */ $tax['title'] ?>: <?= /* @escapeNotVerified */ $block->formatPrice($tax['row_amount_incl_tax'], true, true) ?></span><br />
+                <?php endforeach; ?>
+            </small>
+        <?php endif; ?>
+
+        <?php if ($block->displayFinalPrice()): ?>
+            <span class="nobr"><?= /* @escapeNotVerified */ __('Total Incl. Tax') ?>:<br />
+                <?= /* @escapeNotVerified */ $block->formatPrice($block->getFinalRowDisplayPriceInclTax() - $_item->getTotalDiscountAmount()) ?>
+            </span>
+        <?php endif; ?>
+    <?php endif; ?>
+<?php endif; ?>

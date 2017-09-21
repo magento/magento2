@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Review\Test\TestCase\CreateProductReviewBackendEntityTest" summary="Create Backend Product Review" ticketId="MAGETWO-26476">
+        <variation name="CreateProductReviewBackendEntityTestVariation1">
+            <data name="review/data/entity_id/dataset" xsi:type="string">catalogProductSimple::default</data>
+            <data name="review/data/status_id" xsi:type="string">Approved</data>
+            <data name="review/data/select_stores/0" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
+            <data name="review/data/ratings/rating_0/dataset" xsi:type="string">visibleOnDefaultWebsite</data>
+            <data name="review/data/ratings/rating_0/rating" xsi:type="string">3</data>
+            <data name="review/data/nickname" xsi:type="string">John</data>
+            <data name="review/data/title" xsi:type="string">title %isolation%</data>
+            <data name="review/data/detail" xsi:type="string">review detail %isolation%</data>
+            <constraint name="Magento\Review\Test\Constraint\AssertProductReviewBackendSuccessSaveMessage" />
+            <constraint name="Magento\Review\Test\Constraint\AssertProductReviewInGrid" />
+            <constraint name="Magento\Review\Test\Constraint\AssertProductRatingInProductPage" />
+        </variation>
+        <variation name="CreateProductReviewBackendEntityTestVariation2">
+            <data name="review/data/entity_id/dataset" xsi:type="string">catalogProductSimple::default</data>
+            <data name="review/data/status_id" xsi:type="string">Pending</data>
+            <data name="review/data/select_stores/0" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
+            <data name="review/data/ratings/rating_0/dataset" xsi:type="string">visibleOnDefaultWebsite</data>
+            <data name="review/data/ratings/rating_0/rating" xsi:type="string">4</data>
+            <data name="review/data/nickname" xsi:type="string">Britney</data>
+            <data name="review/data/title" xsi:type="string">title %isolation%</data>
+            <data name="review/data/detail" xsi:type="string">review detail %isolation%</data>
+            <constraint name="Magento\Review\Test\Constraint\AssertProductReviewBackendSuccessSaveMessage" />
+            <constraint name="Magento\Review\Test\Constraint\AssertProductReviewInGrid" />
+            <constraint name="Magento\Review\Test\Constraint\AssertProductRatingInProductPage" />
+        </variation>
+        <variation name="CreateProductReviewBackendEntityTestVariation3">
+            <data name="review/data/entity_id/dataset" xsi:type="string">catalogProductSimple::default</data>
+            <data name="review/data/status_id" xsi:type="string">Not Approved</data>
+            <data name="review/data/select_stores/0" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
+            <data name="review/data/ratings/rating_0/dataset" xsi:type="string">visibleOnDefaultWebsite</data>
+            <data name="review/data/ratings/rating_0/rating" xsi:type="string">5</data>
+            <data name="review/data/nickname" xsi:type="string">Michael</data>
+            <data name="review/data/title" xsi:type="string">title %isolation%</data>
+            <data name="review/data/detail" xsi:type="string">review detail %isolation%</data>
+            <constraint name="Magento\Review\Test\Constraint\AssertProductReviewBackendSuccessSaveMessage" />
+            <constraint name="Magento\Review\Test\Constraint\AssertProductReviewInGrid" />
+            <constraint name="Magento\Review\Test\Constraint\AssertProductRatingInProductPage" />
+        </variation>
+    </testCase>
+</config>

@@ -1,142 +1,224 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Session;
+// @codingStandardsIgnoreStart
+namespace {
+    $mockPHPFunctions = false;
+}
 
-class SessionManagerTest extends \PHPUnit_Framework_TestCase
-{
+namespace Magento\Framework\Session {
+    // @codingStandardsIgnoreEnd
+
     /**
-     * @var \Magento\Framework\Session\SessionManagerInterface
+     * Mock session_status if in test mode, or continue normal execution otherwise
+     *
+     * @return int Session status code
      */
-    protected $_model;
-
-    /**
-     * @var \Magento\Framework\Session\SidResolverInterface
-     */
-    protected $_sidResolver;
-
-    protected function setUp()
+    function session_status()
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        global $mockPHPFunctions;
+        if ($mockPHPFunctions) {
+            return PHP_SESSION_NONE;
+        }
+        return call_user_func_array('\session_status', func_get_args());
+    }
 
-        /** @var \Magento\Framework\Session\SidResolverInterface $sidResolver */
-        $this->_sidResolver = $objectManager->get('Magento\Framework\Session\SidResolverInterface');
+    function headers_sent()
+    {
+        global $mockPHPFunctions;
+        if ($mockPHPFunctions) {
+            return false;
+        }
+        return call_user_func_array('\headers_sent', func_get_args());
+    }
 
-        /** @var \Magento\Framework\Session\SessionManager _model */
-        $this->_model = $objectManager->create(
-            'Magento\Framework\Session\SessionManager',
-            array(
-                $objectManager->get('Magento\Framework\App\Request\Http'),
+    /**
+     * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+     */
+    class SessionManagerTest extends \PHPUnit\Framework\TestCase
+    {
+        /**
+         * @var \Magento\Framework\Session\SessionManagerInterface
+         */
+        protected $_model;
+
+        /**
+         * @var \Magento\Framework\Session\SidResolverInterface
+         */
+        protected $_sidResolver;
+
+        /**
+         * @var string
+         */
+        protected $sessionName;
+
+        /**
+         * @var \Magento\Framework\ObjectManagerInterface
+         */
+        protected $objectManager;
+
+        protected function setUp()
+        {
+            $this->sessionName = 'frontEndSession';
+
+            ini_set('session.use_only_cookies', '0');
+            ini_set('session.name', $this->sessionName);
+
+            $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+            /** @var \Magento\Framework\Session\SidResolverInterface $sidResolver */
+            $this->_sidResolver = $this->objectManager->get(\Magento\Framework\Session\SidResolverInterface::class);
+
+            $this->request = $this->objectManager->get(\Magento\Framework\App\RequestInterface::class);
+
+            /** @var \Magento\Framework\Session\SessionManager _model */
+            $this->_model = $this->objectManager->create(
+                \Magento\Framework\Session\SessionManager::class,
+                [
+                    $this->objectManager->get(\Magento\Framework\App\Request\Http::class),
+                    $this->_sidResolver,
+                    $this->objectManager->get(\Magento\Framework\Session\Config\ConfigInterface::class),
+                    $this->objectManager->get(\Magento\Framework\Session\SaveHandlerInterface::class),
+                    $this->objectManager->get(\Magento\Framework\Session\ValidatorInterface::class),
+                    $this->objectManager->get(\Magento\Framework\Session\StorageInterface::class)
+                ]
+            );
+        }
+
+        protected function tearDown()
+        {
+            global $mockPHPFunctions;
+            $mockPHPFunctions = false;
+        }
+
+        public function testSessionNameFromIni()
+        {
+            $this->_model->start();
+            $this->assertSame($this->sessionName, $this->_model->getName());
+            $this->_model->destroy();
+        }
+
+        public function testSessionUseOnlyCookies()
+        {
+            $expectedValue = '1';
+            $sessionUseOnlyCookies = ini_get('session.use_only_cookies');
+            $this->assertSame($expectedValue, $sessionUseOnlyCookies);
+        }
+
+        public function testGetData()
+        {
+            $this->_model->setData(['test_key' => 'test_value']);
+            $this->assertEquals('test_value', $this->_model->getData('test_key', true));
+            $this->assertNull($this->_model->getData('test_key'));
+        }
+
+        public function testGetSessionId()
+        {
+            $this->assertEquals(session_id(), $this->_model->getSessionId());
+        }
+
+        public function testGetName()
+        {
+            $this->assertEquals(session_name(), $this->_model->getName());
+        }
+
+        public function testSetName()
+        {
+            $this->_model->setName('test');
+            $this->assertEquals('test', $this->_model->getName());
+        }
+
+        public function testDestroy()
+        {
+            $data = ['key' => 'value'];
+            $this->_model->setData($data);
+
+            $this->assertEquals($data, $this->_model->getData());
+            $this->_model->destroy();
+
+            $this->assertEquals([], $this->_model->getData());
+        }
+
+        public function testSetSessionId()
+        {
+            $sessionId = $this->_model->getSessionId();
+            $this->_model->setSessionId($this->_sidResolver->getSid($this->_model));
+            $this->assertEquals($sessionId, $this->_model->getSessionId());
+
+            $this->_model->setSessionId('test');
+            $this->assertEquals('test', $this->_model->getSessionId());
+        }
+
+        /**
+         * @magentoConfigFixture current_store web/session/use_frontend_sid 1
+         */
+        public function testSetSessionIdFromParam()
+        {
+            $this->assertNotEquals('test_id', $this->_model->getSessionId());
+            $this->request->getQuery()->set($this->_sidResolver->getSessionIdQueryParam($this->_model), 'test-id');
+            $this->_model->setSessionId($this->_sidResolver->getSid($this->_model));
+            $this->assertEquals('test-id', $this->_model->getSessionId());
+            /* Use not valid identifier */
+            $this->request->getQuery()->set($this->_sidResolver->getSessionIdQueryParam($this->_model), 'test_id');
+            $this->_model->setSessionId($this->_sidResolver->getSid($this->_model));
+            $this->assertEquals('test-id', $this->_model->getSessionId());
+        }
+
+        public function testGetSessionIdForHost()
+        {
+            $_SERVER['HTTP_HOST'] = 'localhost';
+            $this->_model->start();
+            $this->assertEmpty($this->_model->getSessionIdForHost('localhost'));
+            $this->assertNotEmpty($this->_model->getSessionIdForHost('test'));
+            $this->_model->destroy();
+        }
+
+        public function testIsValidForHost()
+        {
+            $_SERVER['HTTP_HOST'] = 'localhost';
+            $this->_model->start();
+
+            $reflection = new \ReflectionMethod($this->_model, '_addHost');
+            $reflection->setAccessible(true);
+            $reflection->invoke($this->_model);
+
+            $this->assertFalse($this->_model->isValidForHost('test.com'));
+            $this->assertTrue($this->_model->isValidForHost('localhost'));
+            $this->_model->destroy();
+        }
+
+        /**
+         * @expectedException \Magento\Framework\Exception\SessionException
+         * @expectedExceptionMessage Area code not set: Area code must be set before starting a session.
+         */
+        public function testStartAreaNotSet()
+        {
+            $scope = $this->objectManager->get(\Magento\Framework\Config\ScopeInterface::class);
+            $appState = new \Magento\Framework\App\State($scope);
+
+            /**
+             * Must be created by "new" in order to get a real Magento\Framework\App\State object that
+             * is not overridden in the TestFramework
+             *
+             * @var \Magento\Framework\Session\SessionManager _model
+             */
+            $this->_model = new \Magento\Framework\Session\SessionManager(
+                $this->objectManager->get(\Magento\Framework\App\Request\Http::class),
                 $this->_sidResolver,
-                $objectManager->get('Magento\Framework\Session\Config\ConfigInterface'),
-                $objectManager->get('Magento\Framework\Session\SaveHandlerInterface'),
-                $objectManager->get('Magento\Framework\Session\ValidatorInterface'),
-                $objectManager->get('Magento\Framework\Session\StorageInterface')
-            )
-        );
-    }
+                $this->objectManager->get(\Magento\Framework\Session\Config\ConfigInterface::class),
+                $this->objectManager->get(\Magento\Framework\Session\SaveHandlerInterface::class),
+                $this->objectManager->get(\Magento\Framework\Session\ValidatorInterface::class),
+                $this->objectManager->get(\Magento\Framework\Session\StorageInterface::class),
+                $this->objectManager->get(\Magento\Framework\Stdlib\CookieManagerInterface::class),
+                $this->objectManager->get(\Magento\Framework\Stdlib\Cookie\CookieMetadataFactory::class),
+                $appState
+            );
 
-    public function testGetData()
-    {
-        $this->_model->setData(array('test_key' => 'test_value'));
-        $this->assertEquals('test_value', $this->_model->getData('test_key', true));
-        $this->assertNull($this->_model->getData('test_key'));
-    }
-
-    public function testGetSessionId()
-    {
-        $this->assertEquals(session_id(), $this->_model->getSessionId());
-    }
-
-    public function testGetName()
-    {
-        $this->assertEquals(session_name(), $this->_model->getName());
-    }
-
-    public function testSetName()
-    {
-        $this->_model->setName('test');
-        $this->assertEquals('test', $this->_model->getName());
-    }
-
-    public function testDestroy()
-    {
-        $data = array('key' => 'value');
-        $this->_model->setData($data);
-
-        $this->assertEquals($data, $this->_model->getData());
-        $this->_model->destroy();
-
-        $this->assertEquals(array(), $this->_model->getData());
-    }
-
-    public function testSetSessionId()
-    {
-        $sessionId = $this->_model->getSessionId();
-        $this->_model->setSessionId($this->_sidResolver->getSid($this->_model));
-        $this->assertEquals($sessionId, $this->_model->getSessionId());
-
-        $this->_model->setSessionId('test');
-        $this->assertEquals('test', $this->_model->getSessionId());
-    }
-
-    /**
-     * @magentoConfigFixture current_store web/session/use_frontend_sid 1
-     */
-    public function testSetSessionIdFromParam()
-    {
-        $this->assertNotEquals('test_id', $this->_model->getSessionId());
-        $_GET[$this->_sidResolver->getSessionIdQueryParam($this->_model)] = 'test-id';
-        $this->_model->setSessionId($this->_sidResolver->getSid($this->_model));
-
-        $this->assertEquals('test-id', $this->_model->getSessionId());
-
-        /* Use not valid identifier */
-        $_GET[$this->_sidResolver->getSessionIdQueryParam($this->_model)] = 'test_id';
-        $this->_model->setSessionId($this->_sidResolver->getSid($this->_model));
-        $this->assertEquals('test-id', $this->_model->getSessionId());
-    }
-
-    public function testGetSessionIdForHost()
-    {
-        $_SERVER['HTTP_HOST'] = 'localhost';
-        $this->_model->start('test');
-        $this->assertEmpty($this->_model->getSessionIdForHost('localhost'));
-        $this->assertNotEmpty($this->_model->getSessionIdForHost('test'));
-        $this->_model->destroy();
-    }
-
-    public function testIsValidForHost()
-    {
-        $_SERVER['HTTP_HOST'] = 'localhost';
-        $this->_model->start('test');
-
-        $reflection = new \ReflectionMethod($this->_model, '_addHost');
-        $reflection->setAccessible(true);
-        $reflection->invoke($this->_model);
-
-        $this->assertFalse($this->_model->isValidForHost('test.com'));
-        $this->assertTrue($this->_model->isValidForHost('localhost'));
-        $this->_model->destroy();
+            global $mockPHPFunctions;
+            $mockPHPFunctions = true;
+            $this->_model->start();
+        }
     }
 }

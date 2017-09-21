@@ -1,33 +1,17 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
 
 /**
  * Test for abstract export model
  */
 namespace Magento\ImportExport\Model\Export;
 
-class EntityAbstractTest extends \PHPUnit_Framework_TestCase
+class EntityAbstractTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\ImportExport\Model\Export\AbstractEntity
@@ -41,13 +25,13 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\TestFramework\ObjectManager  $objectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_model = $this->getMockForAbstractClass(
-            'Magento\ImportExport\Model\Export\AbstractEntity',
-            array(
-                $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface'),
-                $objectManager->get('Magento\Store\Model\StoreManager'),
-                $objectManager->get('Magento\ImportExport\Model\Export\Factory'),
-                $objectManager->get('Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory')
-            )
+            \Magento\ImportExport\Model\Export\AbstractEntity::class,
+            [
+                $objectManager->get(\Magento\Framework\App\Config\ScopeConfigInterface::class),
+                $objectManager->get(\Magento\Store\Model\StoreManager::class),
+                $objectManager->get(\Magento\ImportExport\Model\Export\Factory::class),
+                $objectManager->get(\Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory::class)
+            ]
         );
     }
 
@@ -74,16 +58,16 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
     {
         $this->_model->setWriter(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-                'Magento\ImportExport\Model\Export\Adapter\Csv'
+                \Magento\ImportExport\Model\Export\Adapter\Csv::class
             )
         );
-        $this->assertInstanceOf('Magento\ImportExport\Model\Export\Adapter\Csv', $this->_model->getWriter());
+        $this->assertInstanceOf(\Magento\ImportExport\Model\Export\Adapter\Csv::class, $this->_model->getWriter());
     }
 
     /**
      * Check that method throw exception when writer was not defined
      *
-     * @expectedException \Magento\Framework\Model\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testGetWriterThrowsException()
     {
@@ -96,13 +80,13 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
     public function testFilterAttributeCollection()
     {
         $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Model\Resource\Attribute\Collection'
+            \Magento\Customer\Model\ResourceModel\Attribute\Collection::class
         );
         $collection = $this->_model->filterAttributeCollection($collection);
         /**
          * Check that disabled attributes is not existed in attribute collection
          */
-        $existedAttributes = array();
+        $existedAttributes = [];
         /** @var $attribute \Magento\Customer\Model\Attribute */
         foreach ($collection as $attribute) {
             $existedAttributes[] = $attribute->getAttributeCode();
@@ -127,10 +111,10 @@ abstract class Stub_Magento_ImportExport_Model_Export_AbstractEntity
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\ImportExport\Model\Export\Factory $collectionFactory,
-        \Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory $resourceColFactory,
-        array $data = array()
+        \Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory $resourceColFactory,
+        array $data = []
     ) {
         parent::__construct($scopeConfig, $storeManager, $collectionFactory, $resourceColFactory, $data);
-        $this->_disabledAttrs = array('default_billing', 'default_shipping');
+        $this->_disabledAttrs = ['default_billing', 'default_shipping'];
     }
 }

@@ -2,45 +2,135 @@
 /**
  * Route to services available via REST API.
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Controller\Rest\Router;
 
-class Route extends \Zend_Controller_Router_Route
+use Magento\Framework\App\RequestInterface as Request;
+use Magento\Framework\App\RouterInterface;
+
+class Route implements RouterInterface
 {
-    /** @var string */
-    protected $_serviceClass;
+    /**
+     * @var string
+     */
+    protected $serviceClass;
 
-    /** @var string */
-    protected $_serviceMethod;
+    /**
+     * @var string
+     */
+    protected $serviceMethod;
 
-    /** @var boolean */
-    protected $_secure;
+    /**
+     * @var boolean
+     */
+    protected $secure;
 
-    /** @var array */
-    protected $_aclResources = [];
+    /**
+     * @var array
+     */
+    protected $aclResources = [];
 
-    /** @var array */
-    protected $_parameters = [];
+    /**
+     * @var array
+     */
+    protected $parameters = [];
+
+    /**
+     * @var array
+     */
+    protected $variables = [];
+
+    /**
+     * @var string
+     */
+    protected $route;
+
+    /**
+     * @param string $route
+     */
+    public function __construct($route = '')
+    {
+        $this->route = trim($route, '/');
+    }
+
+    /**
+     * Split route by parts and variables
+     *
+     * @return array
+     */
+    protected function getRouteParts()
+    {
+        $result = [];
+        $routeParts = explode('/', $this->route);
+        foreach ($routeParts as $key => $value) {
+            if ($this->isVariable($value)) {
+                $this->variables[$key] = substr($value, 1);
+                $value = null;
+            }
+            $result[$key] = $value;
+        }
+        return $result;
+    }
+
+    /**
+     * Check if current route part is a name of variable
+     *
+     * @param string $value
+     * @return bool
+     */
+    protected function isVariable($value)
+    {
+        if (substr($value, 0, 1) == ':'
+            && substr($value, 1, 1) != ':') {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Retrieve unified requested path
+     *
+     * @param string $path
+     * @return array
+     */
+    protected function getPathParts($path)
+    {
+        return explode('/', trim($path, '/'));
+    }
+
+    /**
+     * Check if current route matches the requested path
+     *
+     * @param Request $request
+     * @return array|bool
+     */
+    public function match(Request $request)
+    {
+        /** @var \Magento\Framework\Webapi\Rest\Request $request */
+        $pathParts = $this->getPathParts($request->getPathInfo());
+        $routeParts = $this->getRouteParts();
+        if (count($pathParts) <> count($routeParts)) {
+            return false;
+        }
+
+        $result = [];
+        foreach ($pathParts as $key => $value) {
+            if (!array_key_exists($key, $routeParts)) {
+                return false;
+            }
+            $variable = isset($this->variables[$key]) ? $this->variables[$key] : null;
+            if ($variable) {
+                $result[$variable] = urldecode($pathParts[$key]);
+            } else {
+                if ($value != $routeParts[$key]) {
+                    return false;
+                }
+            }
+        }
+        return $result;
+    }
 
     /**
      * Set service class.
@@ -50,7 +140,7 @@ class Route extends \Zend_Controller_Router_Route
      */
     public function setServiceClass($serviceClass)
     {
-        $this->_serviceClass = $serviceClass;
+        $this->serviceClass = $serviceClass;
         return $this;
     }
 
@@ -61,7 +151,7 @@ class Route extends \Zend_Controller_Router_Route
      */
     public function getServiceClass()
     {
-        return $this->_serviceClass;
+        return $this->serviceClass;
     }
 
     /**
@@ -72,7 +162,7 @@ class Route extends \Zend_Controller_Router_Route
      */
     public function setServiceMethod($serviceMethod)
     {
-        $this->_serviceMethod = $serviceMethod;
+        $this->serviceMethod = $serviceMethod;
         return $this;
     }
 
@@ -83,7 +173,7 @@ class Route extends \Zend_Controller_Router_Route
      */
     public function getServiceMethod()
     {
-        return $this->_serviceMethod;
+        return $this->serviceMethod;
     }
 
     /**
@@ -94,7 +184,7 @@ class Route extends \Zend_Controller_Router_Route
      */
     public function setSecure($secure)
     {
-        $this->_secure = $secure;
+        $this->secure = $secure;
         return $this;
     }
 
@@ -105,7 +195,7 @@ class Route extends \Zend_Controller_Router_Route
      */
     public function isSecure()
     {
-        return $this->_secure;
+        return $this->secure;
     }
 
     /**
@@ -116,7 +206,7 @@ class Route extends \Zend_Controller_Router_Route
      */
     public function setAclResources($aclResources)
     {
-        $this->_aclResources = $aclResources;
+        $this->aclResources = $aclResources;
         return $this;
     }
 
@@ -127,9 +217,8 @@ class Route extends \Zend_Controller_Router_Route
      */
     public function getAclResources()
     {
-        return $this->_aclResources;
+        return $this->aclResources;
     }
-
 
     /**
      * Set parameters list.
@@ -139,7 +228,7 @@ class Route extends \Zend_Controller_Router_Route
      */
     public function setParameters($parameters)
     {
-        $this->_parameters = $parameters;
+        $this->parameters = $parameters;
         return $this;
     }
 
@@ -150,19 +239,6 @@ class Route extends \Zend_Controller_Router_Route
      */
     public function getParameters()
     {
-        return $this->_parameters;
-    }
-
-    /**
-     * Matches a Request with parts defined by a map. Assigns and
-     * returns an array of variables on a successful match.
-     *
-     * @param \Magento\Webapi\Controller\Request $request
-     * @param boolean $partial Partial path matching
-     * @return array|bool An array of assigned values or a boolean false on a mismatch
-     */
-    public function match($request, $partial = false)
-    {
-        return parent::match(strtolower(ltrim($request->getPathInfo(), $this->_urlDelimiter)), $partial);
+        return $this->parameters;
     }
 }

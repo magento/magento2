@@ -1,0 +1,70 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?= $block->getChildHtml('grid') ?>
+
+<?php if ($block->getShowButtons()): ?>
+<div class="form-buttons">
+    <?= $block->getUnsubscribeButtonHtml() ?>
+    <?= $block->getDeleteButtonHtml() ?>
+</div>
+<?php endif ?>
+<script>
+require(["prototype", "mage/adminhtml/events"], function(){
+
+    <!--
+    problemController = {
+        checkCheckboxes:function (controlCheckbox) {
+            var elements = $('problemGrid').getElementsByClassName('problemCheckbox');
+            elements.each(function (obj) {
+                obj.checked = controlCheckbox.checked;
+            });
+        },
+        rowClick:function (e) {
+            if (!Event.element(e).hasClassName('problemCheckbox')) {
+                var elements = Event.findElement(e, 'tr').getElementsByClassName('problemCheckbox');
+                if (elements.length != 1) {
+                    return;
+                }
+                elements[0].checked = !elements[0].checked;
+            }
+        },
+
+        unsubscribe:function () {
+            var elements = $$('input.problemCheckbox');
+            var serializedElements = Form.serializeElements(elements, true);
+            serializedElements._unsubscribe = '1';
+            serializedElements.form_key = FORM_KEY;
+            var url = problemGridJsObject.url;
+
+            new Ajax.Updater('problemGrid', url + '?ajax=1',
+                    {parameters:serializedElements,
+                        evalScripts:true,
+                        onComplete:problemGridJsObject.initGrid.bind(problemGridJsObject)});
+        },
+
+        deleteSelected:function () {
+            var elements = $$('input.problemCheckbox');
+            var serializedElements = Form.serializeElements(elements, true);
+            serializedElements._delete = '1';
+            serializedElements.form_key = FORM_KEY;
+            var url = problemGridJsObject.url;
+
+            new Ajax.Updater('problemGrid', url + '?ajax=1',
+                    {parameters:serializedElements,
+                        evalScripts:true,
+                        onComplete:problemGridJsObject.initGrid.bind(problemGridJsObject)});
+        }
+    }
+
+    varienGlobalEvents.attachEventHandler('gridRowClick', problemController.rowClick.bind(problemController));
+    //-->
+
+});
+</script>

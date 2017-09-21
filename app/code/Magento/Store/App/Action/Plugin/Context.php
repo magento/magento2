@@ -1,28 +1,18 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Store\App\Action\Plugin;
+
+use Magento\Framework\App\Http\Context as HttpContext;
+use Magento\Framework\Phrase;
+use Magento\Store\Api\StoreCookieManagerInterface;
+use Magento\Store\Api\StoreResolverInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\App\Action\AbstractAction;
+use Magento\Framework\App\RequestInterface;
 
 /**
  * Class ContextPlugin
@@ -40,58 +30,70 @@ class Context
     protected $httpContext;
 
     /**
-     * @var \Magento\Framework\App\Request\Http
-     */
-    protected $httpRequest;
-
-    /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
 
     /**
+     * @var StoreCookieManagerInterface
+     */
+    protected $storeCookieManager;
+
+    /**
      * @param \Magento\Framework\Session\SessionManagerInterface $session
      * @param \Magento\Framework\App\Http\Context $httpContext
-     * @param \Magento\Framework\App\Request\Http $httpRequest
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param StoreCookieManagerInterface $storeCookieManager
      */
     public function __construct(
         \Magento\Framework\Session\SessionManagerInterface $session,
         \Magento\Framework\App\Http\Context $httpContext,
-        \Magento\Framework\App\Request\Http $httpRequest,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        StoreCookieManagerInterface $storeCookieManager
     ) {
         $this->session      = $session;
         $this->httpContext  = $httpContext;
-        $this->httpRequest  = $httpRequest;
         $this->storeManager = $storeManager;
+        $this->storeCookieManager = $storeCookieManager;
     }
 
     /**
-     * @param \Magento\Framework\App\Action\Action $subject
-     * @param callable $proceed
-     * @param \Magento\Framework\App\RequestInterface $request
-     * @return mixed
+     * Set store and currency to http context
+     *
+     * @param AbstractAction $subject
+     * @param RequestInterface $request
+     * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundDispatch(
-        \Magento\Framework\App\Action\Action $subject,
-        \Closure $proceed,
-        \Magento\Framework\App\RequestInterface $request
-    ) {
+    public function beforeDispatch(AbstractAction $subject, RequestInterface $request)
+    {
+        /** @var \Magento\Store\Model\Store $defaultStore */
+        $defaultStore = $this->storeManager->getWebsite()->getDefaultStore();
+
+        $storeCode = $request->getParam(
+            StoreResolverInterface::PARAM_NAME,
+            $this->storeCookieManager->getStoreCodeFromCookie()
+        );
+
+        if (is_array($storeCode)) {
+            if (!isset($storeCode['_data']['code'])) {
+                throw new \InvalidArgumentException(new Phrase('Invalid store parameter.'));
+            }
+            $storeCode = $storeCode['_data']['code'];
+        }
+        /** @var \Magento\Store\Model\Store $currentStore */
+        $currentStore = $storeCode ? $this->storeManager->getStore($storeCode) : $defaultStore;
+
         $this->httpContext->setValue(
-            \Magento\Core\Helper\Data::CONTEXT_CURRENCY,
-            $this->session->getCurrencyCode(),
-            $this->storeManager->getWebsite()->getDefaultStore()->getDefaultCurrency()->getCode()
+            StoreManagerInterface::CONTEXT_STORE,
+            $currentStore->getCode(),
+            $this->storeManager->getDefaultStoreView()->getCode()
         );
 
         $this->httpContext->setValue(
-            \Magento\Core\Helper\Data::CONTEXT_STORE,
-            $this->httpRequest->getParam(
-                '___store',
-                $this->httpRequest->getCookie(\Magento\Store\Model\Store::COOKIE_NAME)
-            ),
-            $this->storeManager->getWebsite()->getDefaultStore()->getCode()
+            HttpContext::CONTEXT_CURRENCY,
+            $this->session->getCurrencyCode() ?: $currentStore->getDefaultCurrencyCode(),
+            $defaultStore->getDefaultCurrencyCode()
         );
-        return $proceed($request);
     }
 }

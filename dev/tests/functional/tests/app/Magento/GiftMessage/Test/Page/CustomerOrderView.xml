@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/pages.xsd">
+  <page name="CustomerOrderView" mca="customer/sales/order/view">
+    <block name="giftMessageForOrderBlock" class="Magento\GiftMessage\Test\Block\Message\Order\View" locator=".block-order-details-gift-message" strategy="css selector"/>
+    <block name="giftMessageForItemBlock" class="Magento\GiftMessage\Test\Block\Message\Order\Items\View" locator="#my-orders-table" strategy="css selector"/>
+  </page>
+</config>

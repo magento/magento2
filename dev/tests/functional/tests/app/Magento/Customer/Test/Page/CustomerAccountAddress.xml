@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/pages.xsd">
+    <page name="CustomerAccountAddress" mca="customer/address" module="Magento_Customer">
+        <block name="titleBlock" class="Magento\Theme\Test\Block\Html\Title" locator=".page-title-wrapper" strategy="css selector" />
+        <block name="accountMenuBlock" class="Magento\Customer\Test\Block\Account\Links" locator=".nav.items" strategy="css selector" />
+        <block name="additionalAddressBlock" class="Magento\Customer\Test\Block\Account\AddressesAdditional" locator=".block-addresses-list" strategy="css selector" />
+        <block name="defaultAddressBlock" class="Magento\Customer\Test\Block\Account\AddressesDefault" locator=".block-addresses-default" strategy="css selector" />
+    </page>
+</config>

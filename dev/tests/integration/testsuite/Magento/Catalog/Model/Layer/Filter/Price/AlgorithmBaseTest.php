@@ -1,42 +1,20 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Layer\Filter\Price;
+
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Test class for \Magento\Catalog\Model\Layer\Filter\Price.
  *
  * @magentoDataFixture Magento/Catalog/Model/Layer/Filter/Price/_files/products_base.php
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AlgorithmBaseTest extends \PHPUnit_Framework_TestCase
+class AlgorithmBaseTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * Algorithm model
-     *
-     * @var \Magento\Catalog\Model\Layer\Filter\Price\Algorithm
-     */
-    protected $_model;
-
     /**
      * Layer model
      *
@@ -51,39 +29,86 @@ class AlgorithmBaseTest extends \PHPUnit_Framework_TestCase
      */
     protected $_filter;
 
-    protected function setUp()
-    {
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Layer\Filter\Price\Algorithm');
-        $this->_layer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Layer\Category');
-        $this->_filter = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Layer\Filter\Price', array('layer' => $this->_layer));
-        $this->_filter->setAttributeModel(new \Magento\Framework\Object(array('attribute_code' => 'price')));
-    }
+    /**
+     * @var \Magento\Catalog\Model\ResourceModel\Layer\Filter\Price
+     */
+    protected $priceResource;
 
     /**
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     * @magentoConfigFixture current_store catalog/search/engine mysql
      * @dataProvider pricesSegmentationDataProvider
+     * @covers       \Magento\Framework\Search\Dynamic\Algorithm::calculateSeparators
      */
-    public function testPricesSegmentation($categoryId, $intervalsNumber, $intervalItems)
+    public function testPricesSegmentation($categoryId, array $entityIds, array $intervalItems)
     {
-        $this->_layer->setCurrentCategory($categoryId);
-        $collection = $this->_layer->getProductCollection();
+        $objectManager = Bootstrap::getObjectManager();
+        $layer = $objectManager->create(\Magento\Catalog\Model\Layer\Category::class);
+        /** @var \Magento\Framework\Search\Request\Aggregation\TermBucket $termBucket */
+        $termBucket = $objectManager->create(
+            \Magento\Framework\Search\Request\Aggregation\TermBucket::class,
+            ['name' => 'name', 'field' => 'price', 'metrics' => []]
+        );
+
+        $dimensions = [
+            'scope' => $objectManager->create(
+                \Magento\Framework\Search\Request\Dimension::class,
+                ['name' => 'someName', 'value' => 'default']
+            ),
+        ];
+
+        /** @var \Magento\Framework\Search\EntityMetadata $entityMetadata */
+        $entityMetadata = $objectManager->create(\Magento\Framework\Search\EntityMetadata::class, ['entityId' => 'id']);
+        $idKey = $entityMetadata->getEntityId();
+
+        /** @var \Magento\Framework\Search\Adapter\Mysql\DocumentFactory $documentFactory */
+        $documentFactory = $objectManager->create(
+            \Magento\Framework\Search\Adapter\Mysql\DocumentFactory::class,
+            ['entityMetadata' => $entityMetadata]
+        );
+
+        /** @var \Magento\Framework\Api\Search\Document[] $documents */
+        $documents = [];
+        foreach ($entityIds as $entityId) {
+            $rawDocument = [
+                $idKey => $entityId,
+                'score' => 1,
+            ];
+            $documents[] = $documentFactory->create($rawDocument);
+        }
+
+        /** @var \Magento\Framework\Search\Adapter\Mysql\TemporaryStorage $temporaryStorage */
+        $temporaryStorage = $objectManager->create(\Magento\Framework\Search\Adapter\Mysql\TemporaryStorage::class);
+        $table = $temporaryStorage->storeDocuments($documents);
+
+        /** @var \Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider $dataProvider */
+        $dataProvider = $objectManager->create(
+            \Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider::class
+        );
+        $select = $dataProvider->getDataSet($termBucket, $dimensions, $table);
+
+        /** @var \Magento\Framework\Search\Adapter\Mysql\Aggregation\IntervalFactory $intervalFactory */
+        $intervalFactory = $objectManager->create(
+            \Magento\Framework\Search\Adapter\Mysql\Aggregation\IntervalFactory::class
+        );
+        $interval = $intervalFactory->create(['select' => $select]);
+
+        /** @var \Magento\Framework\Search\Dynamic\Algorithm $model */
+        $model = $objectManager->create(\Magento\Framework\Search\Dynamic\Algorithm::class);
+
+        $layer->setCurrentCategory($categoryId);
+        $collection = $layer->getProductCollection();
 
         $memoryUsedBefore = memory_get_usage();
-        $this->_model->setPricesModel(
-            $this->_filter
-        )->setStatistics(
+        $model->setStatistics(
             $collection->getMinPrice(),
             $collection->getMaxPrice(),
             $collection->getPriceStandardDeviation(),
-            $collection->getSize()
+            $collection->getPricesCount()
         );
-        if (!is_null($intervalsNumber)) {
-            $this->assertEquals($intervalsNumber, $this->_model->getIntervalsNumber());
-        }
 
-        $items = $this->_model->calculateSeparators();
+        $items = $model->calculateSeparators($interval);
         $this->assertEquals(array_keys($intervalItems), array_keys($items));
 
         for ($i = 0; $i < count($intervalItems); ++$i) {
@@ -93,20 +118,23 @@ class AlgorithmBaseTest extends \PHPUnit_Framework_TestCase
             $this->assertEquals($intervalItems[$i]['count'], $items[$i]['count']);
         }
 
-        // Algorythm should use less than 10M
+        // Algorithm should use less than 10M
         $this->assertLessThan(10 * 1024 * 1024, memory_get_usage() - $memoryUsedBefore);
     }
 
+    /**
+     * @return array
+     */
     public function pricesSegmentationDataProvider()
     {
         $testCases = include __DIR__ . '/_files/_algorithm_base_data.php';
-        $result = array();
+        $result = [];
         foreach ($testCases as $index => $testCase) {
-            $result[] = array(
+            $result[] = [
                 $index + 4, //category id
                 $testCase[1],
-                $testCase[2]
-            );
+                $testCase[2],
+            ];
         }
 
         return $result;

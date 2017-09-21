@@ -1,41 +1,64 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Controller\Adminhtml\Product\Initialization\Helper\Plugin;
+
+use Magento\Framework\App\RequestInterface;
+use Magento\Downloadable\Model\Link\Builder as LinkBuilder;
+use Magento\Downloadable\Model\Sample\Builder as SampleBuilder;
+use Magento\Downloadable\Api\Data\SampleInterfaceFactory;
+use Magento\Downloadable\Api\Data\LinkInterfaceFactory;
 
 class Downloadable
 {
     /**
-     * @var \Magento\Framework\App\RequestInterface
+     * @var RequestInterface
      */
     protected $request;
 
     /**
-     * @param \Magento\Framework\App\RequestInterface $request
+     * @var SampleInterfaceFactory
      */
-    public function __construct(\Magento\Framework\App\RequestInterface $request)
-    {
+    private $sampleFactory;
+
+    /**
+     * @var LinkInterfaceFactory
+     */
+    private $linkFactory;
+
+    /**
+     * @var SampleBuilder
+     */
+    private $sampleBuilder;
+
+    /**
+     * @var LinkBuilder
+     */
+    private $linkBuilder;
+
+    /**
+     * Constructor
+     *
+     * @param RequestInterface $request
+     * @param LinkBuilder $linkBuilder
+     * @param SampleBuilder $sampleBuilder
+     * @param SampleInterfaceFactory $sampleFactory
+     * @param LinkInterfaceFactory $linkFactory
+     */
+    public function __construct(
+        RequestInterface $request,
+        LinkBuilder $linkBuilder,
+        SampleBuilder $sampleBuilder,
+        SampleInterfaceFactory $sampleFactory,
+        LinkInterfaceFactory $linkFactory
+    ) {
         $this->request = $request;
+        $this->linkBuilder = $linkBuilder;
+        $this->sampleBuilder = $sampleBuilder;
+        $this->sampleFactory = $sampleFactory;
+        $this->linkFactory = $linkFactory;
     }
 
     /**
@@ -43,9 +66,10 @@ class Downloadable
      *
      * @param \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $subject
      * @param \Magento\Catalog\Model\Product $product
-     *
      * @return \Magento\Catalog\Model\Product
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function afterInitialize(
         \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $subject,
@@ -53,6 +77,43 @@ class Downloadable
     ) {
         if ($downloadable = $this->request->getPost('downloadable')) {
             $product->setDownloadableData($downloadable);
+            $extension = $product->getExtensionAttributes();
+            if (isset($downloadable['link']) && is_array($downloadable['link'])) {
+                $links = [];
+                foreach ($downloadable['link'] as $linkData) {
+                    if (!$linkData || (isset($linkData['is_delete']) && $linkData['is_delete'])) {
+                        continue;
+                    } else {
+                        $links[] = $this->linkBuilder->setData(
+                            $linkData
+                        )->build(
+                            $this->linkFactory->create()
+                        );
+                    }
+                }
+                $extension->setDownloadableProductLinks($links);
+            }
+            if (isset($downloadable['sample']) && is_array($downloadable['sample'])) {
+                $samples = [];
+                foreach ($downloadable['sample'] as $sampleData) {
+                    if (!$sampleData || (isset($sampleData['is_delete']) && (bool)$sampleData['is_delete'])) {
+                        continue;
+                    } else {
+                        $samples[] = $this->sampleBuilder->setData(
+                            $sampleData
+                        )->build(
+                            $this->sampleFactory->create()
+                        );
+                    }
+                }
+                $extension->setDownloadableProductSamples($samples);
+            }
+            $product->setExtensionAttributes($extension);
+            if ($product->getLinksPurchasedSeparately()) {
+                $product->setTypeHasRequiredOptions(true)->setRequiredOptions(true);
+            } else {
+                $product->setTypeHasRequiredOptions(false)->setRequiredOptions(false);
+            }
         }
         return $product;
     }

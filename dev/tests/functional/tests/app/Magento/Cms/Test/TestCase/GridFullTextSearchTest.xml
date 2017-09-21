@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Ui\Test\TestCase\GridFullTextSearchTest" summary="Grid UI Component Full Text Search" ticketId="MAGETWO-41023">
+        <variation name="CmsPageGridFullTextSearch">
+            <data name="tag" xsi:type="string">severity:S3, stable:no</data>
+            <data name="description" xsi:type="string">Verify cms page grid full text search</data>
+            <data name="itemsCount" xsi:type="string">2</data>
+            <data name="fixtureName" xsi:type="string">cmsPage</data>
+            <data name="fixtureDataSet" xsi:type="string">cms-page-searchable</data>
+            <data name="pageClass" xsi:type="string">Magento\Cms\Test\Page\Adminhtml\CmsPageIndex</data>
+            <data name="gridRetriever" xsi:type="string">getCmsPageGridBlock</data>
+            <data name="idGetter" xsi:type="string">getPageId</data>
+            <data name="fieldGetter" xsi:type="string">getTitle</data>
+            <constraint name="Magento\Ui\Test\Constraint\AssertGridFullTextSearch"/>
+        </variation>
+        <variation name="CmsBlockGridFullTextSearch">
+            <data name="tag" xsi:type="string">severity:S3</data>
+            <data name="description" xsi:type="string">Verify cms blocks grid full text search</data>
+            <data name="itemsCount" xsi:type="string">2</data>
+            <data name="fixtureName" xsi:type="string">cmsBlock</data>
+            <data name="fixtureDataSet" xsi:type="string">default</data>
+            <data name="pageClass" xsi:type="string">Magento\Cms\Test\Page\Adminhtml\CmsBlockIndex</data>
+            <data name="gridRetriever" xsi:type="string">getCmsBlockGrid</data>
+            <data name="idGetter" xsi:type="string">getBlockId</data>
+            <data name="fieldGetter" xsi:type="string">getTitle</data>
+            <constraint name="Magento\Ui\Test\Constraint\AssertGridFullTextSearch"/>
+        </variation>
+    </testCase>
+</config>

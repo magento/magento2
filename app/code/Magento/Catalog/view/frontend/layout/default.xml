@@ -1,41 +1,67 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE_AFL.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
-    <referenceBlock name="top.links">
-        <block class="Magento\Catalog\Block\Product\Compare\Link" name="catalog.compare.link" before="-" template="Magento_Catalog::product/compare/link.phtml"/>
-    </referenceBlock>
-    <referenceContainer name="right">
-        <block class="Magento\Catalog\Block\Product\Compare\Sidebar" name="catalog.compare.sidebar" template="product/compare/sidebar.phtml"/>
-    </referenceContainer>
-    <referenceBlock name="head">
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-toolbar-form-js" after="magento-dataPost-js">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_Catalog::js/product/list/toolbar.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Framework\View\Element\Js\Components" name="head.components" as="components" template="Magento_Catalog::js/components.phtml"/>
-    </referenceBlock>
-</layout>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="before.body.end">
+            <block class="Magento\Catalog\Block\FrontendStorageManager" name="frontend-storage-manager" before="-"
+                   template="Magento_Catalog::frontend_storage_manager.phtml">
+                <arguments>
+                    <argument name="configuration" xsi:type="array">
+                        <item name="recently_viewed_product" xsi:type="array">
+                            <item name="requestConfig" xsi:type="array">
+                                <item name="syncUrl" xsi:type="url" path="catalog/product/frontend_action_synchronize"/>
+                            </item>
+                        </item>
+                        <item name="recently_compared_product" xsi:type="array">
+                            <item name="requestConfig" xsi:type="array">
+                                <item name="syncUrl" xsi:type="url" path="catalog/product/frontend_action_synchronize"/>
+                            </item>
+                        </item>
+                        <item name="product_data_storage" xsi:type="array">
+                            <item name="updateRequestConfig" xsi:type="array">
+                                <item name="url" xsi:type="serviceUrl" path="/products-render-info"/>
+                            </item>
+                        </item>
+                    </argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+        <referenceBlock name="top.links">
+            <block class="Magento\Framework\View\Element\Template" name="catalog.compare.link" before="-"
+                   template="Magento_Catalog::product/compare/link.phtml">
+                <arguments>
+                    <argument name="jsLayout" xsi:type="array">
+                        <item name="components" xsi:type="array">
+                            <item name="compareProducts" xsi:type="array">
+                                <item name="component" xsi:type="string">Magento_Catalog/js/view/compare-products</item>
+                            </item>
+                        </item>
+                    </argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+        <referenceContainer name="sidebar.additional">
+            <block class="Magento\Framework\View\Element\Template" name="catalog.compare.sidebar"
+                   template="Magento_Catalog::product/compare/sidebar.phtml">
+                <arguments>
+                    <argument name="jsLayout" xsi:type="array">
+                        <item name="components" xsi:type="array">
+                            <item name="compareProducts" xsi:type="array">
+                                <item name="component" xsi:type="string">Magento_Catalog/js/view/compare-products</item>
+                            </item>
+                        </item>
+                    </argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+        <referenceContainer name="after.body.start">
+            <block class="Magento\Framework\View\Element\Js\Components" name="head.components" as="components" template="Magento_Catalog::js/components.phtml"/>
+        </referenceContainer>
+        <block class="Magento\Framework\View\Element\Template" name="head.additional" as="head.additional" template="Magento_Theme::html/container.phtml"/>
+    </body>
+</page>

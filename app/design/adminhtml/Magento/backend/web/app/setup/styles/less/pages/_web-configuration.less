@@ -1,0 +1,34 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+.page-web-configuration {
+    .form-el-insider-wrap {
+        width: auto;
+    }
+
+    .form-el-insider {
+        width: 15.4rem;
+    }
+
+    .form-el-insider-input {
+        .form-el-input {
+            width: 16.5rem;
+        }
+    }
+}
+
+//
+//  Mobile
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    .form-el-insider-wrap,
+    .form-el-insider,
+    .page-web-configuration .form-el-insider-input,
+    .page-web-configuration .form-el-insider-input .form-el-input {
+        display: block;
+        width: 100%;
+    }
+}

@@ -1,0 +1,63 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<p class="switcher"><label for="store_switcher"><?= /* @escapeNotVerified */ __('View Statistics For:') ?></label>
+<?= $block->getHintHtml() ?>
+<select name="store_switcher" id="store_switcher" class="left-col-block" onchange="return switchStore(this);">
+    <option value=""><?= /* @escapeNotVerified */ __('All Websites') ?></option>
+    <?php foreach ($block->getWebsiteCollection() as $_website): ?>
+        <?php $showWebsite = false; ?>
+        <?php foreach ($block->getGroupCollection($_website) as $_group): ?>
+            <?php $showGroup = false; ?>
+            <?php foreach ($block->getStoreCollection($_group) as $_store): ?>
+                <?php if ($showWebsite == false): ?>
+                    <?php $showWebsite = true; ?>
+                    <option website="true" value="<?= /* @escapeNotVerified */ $_website->getId() ?>"<?php if ($block->getRequest()->getParam('website') == $_website->getId()): ?> selected="selected"<?php endif; ?>><?= /* @escapeNotVerified */ $_website->getName() ?></option>
+                <?php endif; ?>
+                <?php if ($showGroup == false): ?>
+                    <?php $showGroup = true; ?>
+                    <!--optgroup label="&nbsp;&nbsp;&nbsp;<?= /* @escapeNotVerified */ $_group->getName() ?>"-->
+                    <option group="true" value="<?= /* @escapeNotVerified */ $_group->getId() ?>"<?php if ($block->getRequest()->getParam('group') == $_group->getId()): ?> selected="selected"<?php endif; ?>>&nbsp;&nbsp;&nbsp;<?= /* @escapeNotVerified */ $_group->getName() ?></option>
+                <?php endif; ?>
+                <option value="<?= /* @escapeNotVerified */ $_store->getId() ?>"<?php if ($block->getStoreId() == $_store->getId()): ?> selected="selected"<?php endif; ?>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?= /* @escapeNotVerified */ $_store->getName() ?></option>
+            <?php endforeach; ?>
+            <?php if ($showGroup): ?>
+                <!--</optgroup>-->
+            <?php endif; ?>
+        <?php endforeach; ?>
+    <?php endforeach; ?>
+</select>
+</p>
+<script>
+    require([
+        'prototype'
+    ], function () {
+
+        window.switchStore = function (obj) {
+            if (obj.options[obj.selectedIndex].getAttribute('website') == 'true') {
+                var selectionType = 'website';
+            } else if (obj.options[obj.selectedIndex].getAttribute('group') == 'true') {
+                var selectionType = 'group';
+            } else {
+                var selectionType = 'store';
+            }
+            var storeParam = obj.value ? selectionType + '/' + obj.value + '/' : '';
+            if (obj.switchParams) {
+                storeParam += obj.switchParams;
+            }
+            if ($('diagram_tab_orders_content').style.display != 'none') {
+                var select = $('order_orders_period');
+            } else if ($('diagram_tab_amounts_content').style.display != 'none') {
+                var select = $('order_amounts_period');
+            }
+            var periodParam = select.value ? 'period/' + select.value + '/' : '';
+            setLocation('<?= /* @escapeNotVerified */ $block->getSwitchUrl() ?>' + storeParam + periodParam);
+        }
+    });
+</script>

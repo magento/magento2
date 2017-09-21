@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="\Magento\Msrp\Api\Data\ProductRender\MsrpPriceInfoInterface" type="\Magento\Msrp\Model\ProductRender\MsrpPriceInfo" />
+    <virtualType name="Magento\Catalog\Pricing\Price\Pool">
+        <arguments>
+            <argument name="prices" xsi:type="array">
+                <item name="msrp_price" xsi:type="string">Magento\Msrp\Pricing\Price\MsrpPrice</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Bundle\Pricing\Price\Pool">
+        <arguments>
+            <argument name="prices" xsi:type="array">
+                <item name="msrp_price" xsi:type="string">Magento\Msrp\Pricing\Price\MsrpPrice</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Catalog\Helper\Product">
+        <arguments>
+            <argument name="reindexPriceIndexerData" xsi:type="array">
+                <item name="byDataChange" xsi:type="array">
+                    <item name="msrp" xsi:type="string">msrp</item>
+                    <item name="msrp_display_actual_price_type" xsi:type="string">msrp_display_actual_price_type</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Msrp\Model\Product\Options" shared="true"/>
+    <type name="Magento\Msrp\Helper\Data" shared="true">
+        <arguments>
+            <argument name="productOptions" xsi:type="object">Magento\Msrp\Model\Product\Options\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Ui\DataProvider\Product\ProductRenderCollectorComposite">
+        <arguments>
+            <argument name="productProviders" xsi:type="array">
+                <item name="msrp_price" xsi:type="object">\Magento\Msrp\Ui\DataProvider\Product\Listing\Collector\MsrpPrice</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\ProductRenderList">
+        <arguments>
+            <argument name="productAttributes" xsi:type="array">
+                <item name="msrp" xsi:type="string">msrp</item>
+                <item name="msrp_display_price_type" xsi:type="string">msrp_display_actual_price_type</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

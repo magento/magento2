@@ -1,0 +1,94 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/* @var \Magento\Customer\Block\Adminhtml\Edit\Tab\Cart $block */
+?>
+<?php if ($block->getCartHeader()): ?>
+<div class="content-header skip-header">
+    <table>
+        <tr>
+            <td style="width:50%;"><h4><?= $block->escapeHtml($block->getCartHeader()) ?></h4></td>
+        </tr>
+    </table>
+</div>
+<?php endif ?>
+<?= $block->getGridParentHtml() ?>
+<?php if ($block->canDisplayContainer()) : ?>
+<?php
+    $listType = $block->getJsObjectName();
+?>
+<script>
+require([
+    "Magento_Ui/js/modal/alert",
+    "Magento_Ui/js/modal/confirm",
+    "Magento_Catalog/catalog/product/composite/configure"
+], function(alert, confirm){
+
+<?= $block->escapeJs($block->getJsObjectName()) ?>cartControl = {
+    reload: function (params) {
+        if (!params) {
+            params = {};
+        }
+        <?= $block->escapeJs($block->getJsObjectName()) ?>.reloadParams = params;
+        <?= $block->escapeJs($block->getJsObjectName()) ?>.reload();
+        <?= $block->escapeJs($block->getJsObjectName()) ?>.reloadParams = {};
+    },
+
+    configureItem: function (itemId) {
+        productConfigure.setOnLoadIFrameCallback('<?= $block->escapeJs($listType) ?>', this.cbOnLoadIframe.bind(this));
+        productConfigure.showItemConfiguration('<?= $block->escapeJs($listType) ?>', itemId);
+        return false;
+    },
+
+    cbOnLoadIframe: function (response) {
+        if (!response.ok) {
+            return;
+        }
+        this.reload();
+    },
+
+    removeItem: function (itemId) {
+        var self = this;
+
+        if (!itemId) {
+            alert({
+                content: '<?= $block->escapeJs(__('No item specified.')) ?>'
+            });
+
+            return false;
+        }
+
+        confirm({
+            content: '<?= $block->escapeJs(__('Are you sure you want to remove this item?')) ?>',
+            actions: {
+                confirm: function(){
+                    self.reload({'delete':itemId});
+                }
+            }
+        });
+    }
+};
+
+<?php
+$params = [
+    'customer_id' => $block->getCustomerId(),
+    'website_id' => $block->getWebsiteId(),
+];
+?>
+productConfigure.addListType(
+    '<?= $block->escapeJs($listType) ?>',
+    {
+        urlFetch: '<?= $block->escapeJs($block->escapeUrl($block->getUrl('customer/cart_product_composite_cart/configure', $params))) ?>',
+        urlConfirm: '<?= $block->escapeJs($block->escapeUrl($block->getUrl('customer/cart_product_composite_cart/update', $params))) ?>'
+    }
+);
+
+});
+</script>
+<?php endif ?>
+<br />

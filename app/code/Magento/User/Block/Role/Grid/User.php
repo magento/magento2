@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\User\Block\Role\Grid;
 
@@ -27,6 +9,9 @@ use Magento\Backend\Block\Widget\Grid\Column;
 
 /**
  * Acl role user grid.
+ *
+ * @api
+ * @since 100.0.2
  */
 class User extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -40,7 +25,7 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Factory for user role model
      *
-     * @var \Magento\User\Model\RoleFactory
+     * @var \Magento\Authorization\Model\RoleFactory
      */
     protected $_roleFactory;
 
@@ -50,11 +35,23 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_jsonEncoder;
 
     /**
+     * @var \Magento\User\Model\ResourceModel\Role\User\CollectionFactory
+     */
+    protected $_userRolesFactory;
+
+    /**
+     * @var bool|array
+     * @since 100.1.0
+     */
+    protected $restoredUsersFormData;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\User\Model\RoleFactory $roleFactory
+     * @param \Magento\Authorization\Model\RoleFactory $roleFactory
+     * @param \Magento\User\Model\ResourceModel\Role\User\CollectionFactory $userRolesFactory
      * @param array $data
      */
     public function __construct(
@@ -62,13 +59,15 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Framework\Registry $coreRegistry,
-        \Magento\User\Model\RoleFactory $roleFactory,
+        \Magento\Authorization\Model\RoleFactory $roleFactory,
+        \Magento\User\Model\ResourceModel\Role\User\CollectionFactory $userRolesFactory,
         array $data = []
     ) {
         parent::__construct($context, $backendHelper, $data);
         $this->_jsonEncoder = $jsonEncoder;
         $this->_coreRegistry = $coreRegistry;
         $this->_roleFactory = $roleFactory;
+        $this->_userRolesFactory = $userRolesFactory;
     }
 
     /**
@@ -116,7 +115,7 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
     {
         $roleId = $this->getRequest()->getParam('rid');
         $this->_coreRegistry->register('RID', $roleId);
-        $collection = $this->_roleFactory->create()->getUsersCollection();
+        $collection = $this->_userRolesFactory->create();
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }
@@ -174,24 +173,6 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
             ]
         );
 
-        /*
-        $this->addColumn('grid_actions',
-            array(
-                'header'=>__('Actions'),
-                'width'=>5,
-                'sortable'=>false,
-                'filter'    =>false,
-                'type' => 'action',
-                'actions'   => array(
-                                    array(
-                                        'caption' => __('Remove'),
-                                        'onClick' => 'role.deleteFromRole($role_id);'
-                                    )
-                                )
-            )
-        );
-        */
-
         return parent::_prepareColumns();
     }
 
@@ -220,7 +201,11 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
         ) : $this->_coreRegistry->registry(
             'RID'
         );
-        $users = $this->_roleFactory->create()->setId($roleId)->getRoleUsers();
+
+        $users = $this->getUsersFormData();
+        if (false === $users) {
+            $users = $this->_roleFactory->create()->setId($roleId)->getRoleUsers();
+        }
         if (sizeof($users) > 0) {
             if ($json) {
                 $jsonUsers = [];
@@ -238,5 +223,39 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
                 return [];
             }
         }
+    }
+
+    /**
+     * Get Form Data if exist
+     *
+     * @return array|bool
+     * @since 100.1.0
+     */
+    protected function getUsersFormData()
+    {
+        if (false !== $this->restoredUsersFormData && null === $this->restoredUsersFormData) {
+            $this->restoredUsersFormData = $this->restoreUsersFormData();
+        }
+
+        return $this->restoredUsersFormData;
+    }
+
+    /**
+     * Restore Users Form Data from the registry
+     *
+     * @return array|bool
+     * @since 100.1.0
+     */
+    protected function restoreUsersFormData()
+    {
+        $sessionData = $this->_coreRegistry->registry(
+            \Magento\User\Controller\Adminhtml\User\Role\SaveRole::IN_ROLE_USER_FORM_DATA_SESSION_KEY
+        );
+        if (null !== $sessionData) {
+            parse_str($sessionData, $sessionData);
+            return array_keys($sessionData);
+        }
+
+        return false;
     }
 }

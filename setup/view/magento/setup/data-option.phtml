@@ -1,0 +1,69 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+
+<div class="nav-bar-outer-actions">
+    <div class="outer-actions-inner-wrap">
+        <div class="btn-wrap btn-wrap-triangle-right btn-wrap-next">
+            <button
+                type="button"
+                class="btn btn-prime"
+                ng-click="nextState()"
+                >Next</button>
+        </div>
+        <div class="btn-wrap btn-wrap-triangle-left btn-wrap-prev">
+            <button
+                type="button"
+                class="btn"
+                ng-click="goToBackup()"
+                >Back</button>
+        </div>
+    </div>
+</div>
+
+<h2 class="page-title">{{$state.current.header}}</h2>
+
+<div ng-controller="dataOptionController">
+    <div class="message" ng-hide="component.hasUninstall">
+        The selected component has no data to remove.
+    </div>
+    <div ng-show="component.hasUninstall">
+        <div class="form-row">
+            What do you want to do with {{moduleName}}'s data?<br/>
+            </div>
+        <div class="form-row">
+            <input
+                id="keepData"
+                class="form-el-radio"
+                type="radio"
+                ng-model="component.dataOption"
+                value="false"
+                >
+            <label class="form-label" for="keepData">
+                <b>Keep data</b>
+                <br/><br/>
+                Note: You can see the associated data in your database,
+                however your customer will not see this in your online store.
+            </label>
+
+        </div>
+        <div class="form-row">
+            <input
+                id="removeData"
+                class="form-el-radio"
+                type="radio"
+                ng-model="component.dataOption"
+                value="true"
+                >
+            <label class="form-label" for="removeData">
+                <b>Remove data</b>
+                <br/><br/>
+                Did you back up first? Choosing to remove data means the data is unavailable unless you
+                recover it from a backup in the preceding step.
+            </label>
+        </div>
+    </div>
+</div>

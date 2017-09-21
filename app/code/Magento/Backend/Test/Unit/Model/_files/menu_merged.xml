@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="elem_one_zero" toolTip='toolTip 1' title="Title one.zero" module="Module_One" sortOrder="90" action="adminhtml/system" resource="Module_One::one_zero" dependsOnModule="Module_One" dependsOnConfig="/one/two" />
+        <add id="elem_one_one" toolTip='toolTip 2' title="Title one.one" module="Module_One" sortOrder="90" action="adminhtml/system" parent="elem_one_zero" resource="Module_One::one_one" />
+        <update id="elem_one_zero" toolTip='toolTip 3' title="Title one.zero update" module="Module_One_Update" sortOrder="90" action="adminhtml/system" parent="elem_one_zero" />
+        <remove id="elem_one_one" />
+        <add id="elem_two_zero" toolTip='toolTip 4' title="Title two.zero" module="Module_Two" sortOrder="90" action="adminhtml/system" resource="Module_Two::two_zero" />
+        <add id="elem_two_two" toolTip='toolTip 5' title="Title two.two" module="Module_Two" sortOrder="90" action="adminhtml/system" parent="elem_two_zero" resource="Module_Two::two_two" />
+        <update id="elem_two_zero" toolTip='toolTip 6' title="Title two.zero update" module="Module_Two_Update" sortOrder="90" action="adminhtml/system" parent="elem_two_zero" />
+        <remove id="elem_two_two" />
+    </menu>
+</config>

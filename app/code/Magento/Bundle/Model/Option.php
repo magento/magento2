@@ -1,49 +1,36 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Model;
 
 /**
  * Bundle Option Model
  *
+ * @api
  * @method int getParentId()
- * @method \Magento\Bundle\Model\Option setParentId(int $value)
- * @method int getRequired()
- * @method \Magento\Bundle\Model\Option setRequired(int $value)
- * @method int getPosition()
- * @method \Magento\Bundle\Model\Option setPosition(int $value)
- * @method string getType()
- * @method \Magento\Bundle\Model\Option setType(string $value)
- * @method \Magento\Catalog\Model\Product[] getSelections()
+ * @method null|\Magento\Catalog\Model\Product[] getSelections()
+ * @method Option setParentId(int $value)
+ * @since 100.0.2
  */
-class Option extends \Magento\Framework\Model\AbstractModel
+class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
+    \Magento\Bundle\Api\Data\OptionInterface
 {
-    /**
-     * Default selection object
-     *
-     * @var Selection
+    /**#@+
+     * Constants
      */
-    protected $_defaultSelection = null;
+    const KEY_OPTION_ID = 'option_id';
+    const KEY_TITLE = 'title';
+    const KEY_REQUIRED = 'required';
+    const KEY_TYPE = 'type';
+    const KEY_POSITION = 'position';
+    const KEY_SKU = 'sku';
+    const KEY_PRODUCT_LINKS = 'product_links';
+    /**#@-*/
+
+    /**#@-*/
+    protected $defaultSelection = null;
 
     /**
      * Initialize resource model
@@ -52,25 +39,24 @@ class Option extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Bundle\Model\Resource\Option');
+        $this->_init(\Magento\Bundle\Model\ResourceModel\Option::class);
         parent::_construct();
     }
 
     /**
      * Add selection to option
      *
-     * @param Selection $selection
-     * @return $this|false
+     * @param \Magento\Catalog\Model\Product $selection
+     * @return void
      */
-    public function addSelection($selection)
+    public function addSelection(\Magento\Catalog\Model\Product $selection)
     {
-        if (!$selection) {
-            return false;
+        if (!$this->hasData('selections')) {
+            $this->setData('selections', []);
         }
-        $selections = $this->getDataSetDefault('selections', array());
+        $selections = $this->getData('selections');
         $selections[] = $selection;
         $this->setSelections($selections);
-        return $this;
     }
 
     /**
@@ -80,35 +66,35 @@ class Option extends \Magento\Framework\Model\AbstractModel
      */
     public function isSaleable()
     {
-        $saleable = 0;
-        if ($this->getSelections()) {
-            foreach ($this->getSelections() as $selection) {
+        $saleable = false;
+        $selections = $this->getSelections();
+        if ($selections) {
+            foreach ($selections as $selection) {
                 if ($selection->isSaleable()) {
-                    $saleable++;
+                    $saleable = true;
+                    break;
                 }
             }
-            return (bool) $saleable;
-        } else {
-            return false;
         }
+        return $saleable;
     }
 
     /**
      * Retrieve default Selection object
      *
-     * @return Selection
+     * @return \Magento\Catalog\Model\Product|null
      */
     public function getDefaultSelection()
     {
-        if (!$this->_defaultSelection && $this->getSelections()) {
+        if (!$this->defaultSelection && $this->getSelections()) {
             foreach ($this->getSelections() as $selection) {
                 if ($selection->getIsDefault()) {
-                    $this->_defaultSelection = $selection;
+                    $this->defaultSelection = $selection;
                     break;
                 }
             }
         }
-        return $this->_defaultSelection;
+        return $this->defaultSelection;
     }
 
     /**
@@ -118,11 +104,7 @@ class Option extends \Magento\Framework\Model\AbstractModel
      */
     public function isMultiSelection()
     {
-        if ($this->getType() == 'checkbox' || $this->getType() == 'multi') {
-            return true;
-        } else {
-            return false;
-        }
+        return $this->getType() == 'checkbox' || $this->getType() == 'multi';
     }
 
     /**
@@ -141,15 +123,175 @@ class Option extends \Magento\Framework\Model\AbstractModel
      * Return selection by it's id
      *
      * @param int $selectionId
-     * @return Selection|false
+     * @return \Magento\Catalog\Model\Product|null
      */
     public function getSelectionById($selectionId)
     {
-        foreach ($this->getSelections() as $option) {
-            if ($option->getSelectionId() == $selectionId) {
-                return $option;
+        $foundSelection = null;
+        foreach ($this->getSelections() as $selection) {
+            if ($selection->getSelectionId() == $selectionId) {
+                $foundSelection = $selection;
+                break;
             }
         }
-        return false;
+        return $foundSelection;
     }
+
+    //@codeCoverageIgnoreStart
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getOptionId()
+    {
+        return $this->getData(self::KEY_OPTION_ID);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTitle()
+    {
+        return $this->getData(self::KEY_TITLE);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getRequired()
+    {
+        return $this->getData(self::KEY_REQUIRED);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getType()
+    {
+        return $this->getData(self::KEY_TYPE);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPosition()
+    {
+        return $this->getData(self::KEY_POSITION);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSku()
+    {
+        return $this->getData(self::KEY_SKU);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getProductLinks()
+    {
+        return $this->getData(self::KEY_PRODUCT_LINKS);
+    }
+
+    /**
+     * Set option id
+     *
+     * @param int $optionId
+     * @return $this
+     */
+    public function setOptionId($optionId)
+    {
+        return $this->setData(self::KEY_OPTION_ID, $optionId);
+    }
+
+    /**
+     * Set option title
+     *
+     * @param string $title
+     * @return $this
+     */
+    public function setTitle($title)
+    {
+        return $this->setData(self::KEY_TITLE, $title);
+    }
+
+    /**
+     * Set whether option is required
+     *
+     * @param bool $required
+     * @return $this
+     */
+    public function setRequired($required)
+    {
+        return $this->setData(self::KEY_REQUIRED, $required);
+    }
+
+    /**
+     * Set input type
+     *
+     * @param string $type
+     * @return $this
+     */
+    public function setType($type)
+    {
+        return $this->setData(self::KEY_TYPE, $type);
+    }
+
+    /**
+     * Set option position
+     *
+     * @param int $position
+     * @return $this
+     */
+    public function setPosition($position)
+    {
+        return $this->setData(self::KEY_POSITION, $position);
+    }
+
+    /**
+     * Set product sku
+     *
+     * @param string $sku
+     * @return $this
+     */
+    public function setSku($sku)
+    {
+        return $this->setData(self::KEY_SKU, $sku);
+    }
+
+    /**
+     * Set product links
+     *
+     * @param \Magento\Bundle\Api\Data\LinkInterface[] $productLinks
+     * @return $this
+     */
+    public function setProductLinks(array $productLinks = null)
+    {
+        return $this->setData(self::KEY_PRODUCT_LINKS, $productLinks);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Bundle\Api\Data\OptionExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Bundle\Api\Data\OptionExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Bundle\Api\Data\OptionExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
+    }
+
+    //@codeCoverageIgnoreEnd
 }

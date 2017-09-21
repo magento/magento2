@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -31,8 +13,20 @@ namespace Magento\Tax\Model;
 
 use Magento\Store\Model\Store;
 
+/**
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ */
 class Config
 {
+    // tax notifications
+    const XML_PATH_TAX_NOTIFICATION_IGNORE_DISCOUNT = 'tax/notification/ignore_discount';
+
+    const XML_PATH_TAX_NOTIFICATION_IGNORE_PRICE_DISPLAY = 'tax/notification/ignore_price_display';
+
+    const XML_PATH_TAX_NOTIFICATION_IGNORE_APPLY_DISCOUNT = 'tax/notification/ignore_apply_discount';
+
+    const XML_PATH_TAX_NOTIFICATION_INFO_URL = 'tax/notification/info_url';
+
     // tax classes
     const CONFIG_XML_PATH_SHIPPING_TAX_CLASS = 'tax/classes/shipping_tax_class';
 
@@ -50,6 +44,8 @@ class Config
     const CONFIG_XML_PATH_DISCOUNT_TAX = 'tax/calculation/discount_tax';
 
     const XML_PATH_ALGORITHM = 'tax/calculation/algorithm';
+
+    const CONFIG_XML_PATH_CROSS_BORDER_TRADE_ENABLED = 'tax/calculation/cross_border_trade_enabled';
 
     // tax defaults
     const CONFIG_XML_PATH_DEFAULT_COUNTRY = 'tax/defaults/country';
@@ -74,6 +70,7 @@ class Config
 
     const XML_PATH_DISPLAY_CART_SHIPPING = 'tax/cart_display/shipping';
 
+    /** @deprecated */
     const XML_PATH_DISPLAY_CART_DISCOUNT = 'tax/cart_display/discount';
 
     const XML_PATH_DISPLAY_CART_GRANDTOTAL = 'tax/cart_display/grandtotal';
@@ -91,6 +88,7 @@ class Config
 
     const XML_PATH_DISPLAY_SALES_SHIPPING = 'tax/sales_display/shipping';
 
+    /** @deprecated */
     const XML_PATH_DISPLAY_SALES_DISCOUNT = 'tax/sales_display/discount';
 
     const XML_PATH_DISPLAY_SALES_GRANDTOTAL = 'tax/sales_display/grandtotal';
@@ -106,6 +104,16 @@ class Config
     const DISPLAY_TYPE_INCLUDING_TAX = 2;
 
     const DISPLAY_TYPE_BOTH = 3;
+
+    /**
+     * Price conversion constant for positive
+     */
+    const PRICE_CONVERSION_PLUS = 1;
+
+    /**
+     * Price conversion constant for negative
+     */
+    const PRICE_CONVERSION_MINUS = 2;
 
     /**
      * @var bool|null
@@ -262,6 +270,7 @@ class Config
      * Get flag what we need use shipping price exclude tax
      *
      * @return bool $flag
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getNeedUseShippingExcludeTax()
     {
@@ -269,7 +278,7 @@ class Config
     }
 
     /**
-     * Get defined tax calculation agorithm
+     * Get defined tax calculation algorithm
      *
      * @param   null|string|bool|int|Store $store
      * @return  string
@@ -463,6 +472,7 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
+     * @deprecated 100.1.3
      */
     public function displayCartDiscountInclTax($store = null)
     {
@@ -476,6 +486,7 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
+     * @deprecated 100.1.3
      */
     public function displayCartDiscountExclTax($store = null)
     {
@@ -489,6 +500,7 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
+     * @deprecated 100.1.3
      */
     public function displayCartDiscountBoth($store = null)
     {
@@ -658,6 +670,7 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
+     * @deprecated 100.1.3
      */
     public function displaySalesDiscountInclTax($store = null)
     {
@@ -671,8 +684,9 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
+     * @deprecated 100.1.3
      */
-    public function displaySalestDiscountExclTax($store = null)
+    public function displaySalesDiscountExclTax($store = null)
     {
         return $this->_scopeConfig->getValue(
             self::XML_PATH_DISPLAY_SALES_DISCOUNT,
@@ -684,6 +698,7 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
+     * @deprecated 100.1.3
      */
     public function displaySalesDiscountBoth($store = null)
     {
@@ -731,5 +746,126 @@ class Config
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
+    }
+
+    /**
+     * Return the config value for self::CONFIG_XML_PATH_CROSS_BORDER_TRADE_ENABLED
+     *
+     * @param null|string|bool|int|Store $store
+     * @return bool
+     */
+    public function crossBorderTradeEnabled($store = null)
+    {
+        return (bool)$this->_scopeConfig->getValue(
+            self::CONFIG_XML_PATH_CROSS_BORDER_TRADE_ENABLED,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
+    }
+
+    /**
+     * Check if admin notification related to misconfiguration of "Apply Discount On Prices" should be ignored.
+     *
+     * Warning is displayed in case when "Catalog Prices" = "Excluding Tax"
+     * AND "Apply Discount On Prices" = "Including Tax"
+     * AND "Apply Customer Tax" = "After Discount"
+     *
+     * @param null|string|Store $store
+     * @return bool
+     */
+    public function isWrongApplyDiscountSettingIgnored($store = null)
+    {
+        return (bool)$this->_scopeConfig->getValue(
+            self::XML_PATH_TAX_NOTIFICATION_IGNORE_APPLY_DISCOUNT,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
+    }
+
+    /**
+     * Check if do not show notification about wrong display settings
+     *
+     * @param null|string|bool|int|Store $store
+     * @return bool
+     */
+    public function isWrongDisplaySettingsIgnored($store = null)
+    {
+        return (bool)$this->_scopeConfig->getValue(
+            self::XML_PATH_TAX_NOTIFICATION_IGNORE_PRICE_DISPLAY,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
+    }
+
+    /**
+     * Check if do not show notification about wrong discount settings
+     *
+     * @param null|string|bool|int|Store $store
+     * @return bool
+     */
+    public function isWrongDiscountSettingsIgnored($store = null)
+    {
+        return (bool)$this->_scopeConfig->getValue(
+            self::XML_PATH_TAX_NOTIFICATION_IGNORE_DISCOUNT,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
+    }
+
+    /**
+     * Return the notification info url
+     *
+     * @param null|string|bool|int|Store $store
+     * @return string
+     */
+    public function getInfoUrl($store = null)
+    {
+        return (string)$this->_scopeConfig->getValue(
+            self::XML_PATH_TAX_NOTIFICATION_INFO_URL,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
+    }
+
+    /**
+     * Check if necessary do product price conversion
+     * If it necessary will be returned conversion type (minus or plus)
+     *
+     * @param null|int|string|Store $store
+     * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    public function needPriceConversion($store = null)
+    {
+        $res = false;
+        $priceIncludesTax = $this->priceIncludesTax($store) || $this->getNeedUseShippingExcludeTax();
+        if ($priceIncludesTax) {
+            switch ($this->getPriceDisplayType($store)) {
+                case self::DISPLAY_TYPE_EXCLUDING_TAX:
+                case self::DISPLAY_TYPE_BOTH:
+                    return self::PRICE_CONVERSION_MINUS;
+                case self::DISPLAY_TYPE_INCLUDING_TAX:
+                    $res = true;
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            switch ($this->getPriceDisplayType($store)) {
+                case self::DISPLAY_TYPE_INCLUDING_TAX:
+                case self::DISPLAY_TYPE_BOTH:
+                    return self::PRICE_CONVERSION_PLUS;
+                case self::DISPLAY_TYPE_EXCLUDING_TAX:
+                    $res = false;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        if ($res === false) {
+            $res = $this->displayCartPricesBoth();
+        }
+        return $res;
     }
 }

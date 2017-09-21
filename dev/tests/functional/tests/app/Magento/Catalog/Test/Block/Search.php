@@ -1,83 +1,160 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Test\Block;
 
-use Mtf\Block\Block;
-use Mtf\Client\Element\Locator;
+use Magento\Mtf\Block\Block;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Class Search
- * Block for search field
- *
+ * Block for "Search" section
  */
 class Search extends Block
 {
     /**
-     * Search field
+     * Locator value for matches found - "Suggest Search".
+     *
+     * @var string
+     */
+    protected $searchAutocomplete = './/div[@id="search_autocomplete"]//li[span[text()[normalize-space()="%s"]]]';
+
+    /**
+     * Locator value for given row matches amount.
+     *
+     * @var string
+     */
+    protected $searchItemAmount = '/span[contains(@class,"amount") and text()="%d"]';
+
+    /**
+     * Locator value for "Search" field.
      *
      * @var string
      */
     protected $searchInput = '#search';
 
     /**
-     * Search button
+     * Locator value for "Search" button.
      *
      * @var string
      */
     private $searchButton = '[title="Search"]';
 
     /**
-     * Search button
+     * Locator value for "Search" button placeholder.
      *
      * @var string
      */
     protected $placeholder = '//input[@id="search" and contains(@placeholder, "%s")]';
 
     /**
-     * Search products by a keyword
+     * Locator value for list items.
+     *
+     * @var string
+     */
+    private $searchListItems = './/div[@id="search_autocomplete"]//li';
+
+    /**
+     * Locator value for body with aria-busy attribute.
+     *
+     * @var string
+     */
+    private $selectorAriaBusy = './/body[@aria-busy="false"]';
+
+    /**
+     * Perform search by a keyword.
      *
      * @param string $keyword
+     * @param string|null $length
+     * @return void
      */
-    public function search($keyword)
+    public function search($keyword, $length = null)
     {
-        $this->_rootElement->find($this->searchInput, Locator::SELECTOR_CSS)->setValue($keyword);
-        $this->_rootElement->find($this->searchButton, Locator::SELECTOR_CSS)->click();
+        if ($length) {
+            $keyword = substr($keyword, 0, $length);
+        }
+        $this->fillSearch($keyword);
+        $this->_rootElement->find($this->searchButton)->click();
     }
 
     /**
-     * Check that placeholder contains text
+     * Fill "Search" field with correspondent text.
+     *
+     * @param string $text
+     * @return void
+     */
+    public function fillSearch($text)
+    {
+        $this->_rootElement->find($this->searchInput)->setValue($text);
+        $this->waitUntilSearchPrepared();
+    }
+
+    /**
+     * Wait until "Suggest Search" block will be prepared.
+     *
+     * @return bool
+     */
+    public function waitUntilSearchPrepared()
+    {
+        $this->browser->waitUntil(
+            function () {
+                $count = count($this->_rootElement->getElements($this->searchListItems, Locator::SELECTOR_XPATH));
+                usleep(200);
+                $newCount = count($this->_rootElement->getElements($this->searchListItems, Locator::SELECTOR_XPATH));
+                return $this->browser->find($this->selectorAriaBusy, Locator::SELECTOR_XPATH)->isVisible()
+                    && ($newCount == $count)
+                    ? true
+                    : null;
+            }
+        );
+    }
+
+    /**
+     * Check if placeholder contains correspondent text or not.
      *
      * @param string $placeholderText
      * @return bool
      */
     public function isPlaceholderContains($placeholderText)
     {
-        $field = $this->_rootElement->find(
-            sprintf($this->placeholder, $placeholderText),
-            Locator::SELECTOR_XPATH
-        );
+        $field = $this->_rootElement->find(sprintf($this->placeholder, $placeholderText), Locator::SELECTOR_XPATH);
         return $field->isVisible();
+    }
+
+    /**
+     * Check if "Suggest Search" block visible or not.
+     *
+     * @param string $text
+     * @param int|null $amount
+     * @return bool
+     */
+    public function isSuggestSearchVisible($text, $amount = null)
+    {
+        $searchAutocomplete = sprintf($this->searchAutocomplete, $text);
+        if ($amount !== null) {
+            $searchAutocomplete .= sprintf($this->searchItemAmount, $amount);
+        }
+
+        $rootElement = $this->_rootElement;
+        return (bool)$this->_rootElement->waitUntil(
+            function () use ($rootElement, $searchAutocomplete) {
+                return $rootElement->find($searchAutocomplete, Locator::SELECTOR_XPATH)->isVisible() ? true : null;
+            }
+        );
+    }
+
+    /**
+     * Click on suggested text.
+     *
+     * @param string $text
+     * @return void
+     */
+    public function clickSuggestedText($text)
+    {
+        $searchAutocomplete = sprintf($this->searchAutocomplete, $text);
+        $this->_rootElement->find($searchAutocomplete, Locator::SELECTOR_XPATH)->click();
     }
 }

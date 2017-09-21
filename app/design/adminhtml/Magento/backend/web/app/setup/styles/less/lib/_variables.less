@@ -1,0 +1,194 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//  Paths
+
+@path-to-pub: '../../pub/';
+
+//
+//  Colors
+//  ---------------------------------------------
+
+@color-brownie: #514943;
+@color-brownie-light: #676056;
+@color-gray65: #a6a6a6;
+@color-gray68: #adadad;
+@color-gray75: #bfbfbf;
+@color-gray80: #ccc;
+@color-gray82: #d1d1d1;
+@color-gray83: #d4d4d4;
+@color-gray84: #d6d6d6;
+@color-gray85: #d9d9d9;
+@color-gray98: #fafafa;
+@color-lazy-sun: #fffbbb;
+@color-blue-dodger: #008bdb;
+@color-blue-pure: #007bdb;
+@color-green-apple: #79a22e;
+@color-green-islamic: #090;
+@color-dark-brownie: #41362f;
+@color-brown-darkie: #41362f;
+@color-phoenix-down: #e04f00;
+@color-phoenix: #eb5202;
+@color-phoenix-almost-rise: #ef672f;
+@color-phoenix-rise: #f65405;
+@color-tomato-brick: #e22626;
+@color-strawberry-milkshake: #ee7d7d;
+@color-cyan-light: #e0f6fe;
+@color-pink: #fcc;
+
+//  Nesting colors
+@color-prime: @color-phoenix;
+@color-tertiary: @color-brownie;
+@color-success: @color-green-apple;
+@color-warning: @color-phoenix-almost-rise;
+@color-failed: @color-tomato-brick;
+@color-info: @color-blue-dodger;
+
+//
+//  Break points
+//  ---------------------------------------------
+
+@screen__l: 1048px;
+
+//
+//  Icons
+//  ---------------------------------------------
+
+@icons__font-family: 'Icons';
+@icons__font-name-path: '../fonts/icons/icons';
+
+@icon-close-mage__content: '\e62f';
+@icon-info__content: '\e61a';
+@icon-lock__content: '\e61b';
+@icon-loop__content: '\e61c';
+@icon-plus__content: '\e61d';
+@icon-recover__content: '\e61e';
+@icon-refresh__content: '\e61f';
+@icon-remove-small__content: '\e620';
+@icon-retweet__content: '\e621';
+@icon-unlocked__content: '\e622';
+@icon-warning__content: '\e623';
+@icon-arrow-left__content: '\e624';
+@icon-arrow-right__content: '\e625';
+@icon-back-arrow__content: '\e626';
+@icon-calendar__content: '\e627';
+@icon-caret-down__content: '\e628';
+@icon-caret-left__content: '\e629';
+@icon-caret-right__content: '\e62a';
+@icon-caret-up__content: '\e62b';
+@icon-ccw__content: '\e62c';
+@icon-check-mage__content: '\e62d';
+@icon-clock__content: '\e62e';
+@icon-delete__content: '\e630';
+@icon-edit__content: '\e631';
+@icon-error__content: '\e632';
+@icon-help__content: '\e633';
+@icon-history__content: '\e634';
+@icon-gripper__content: '\e617';
+@icon-forward__content: '\e618';
+@icon-backward__content: '\e619';
+@icon-expand-close__content: '\e615';
+@icon-expand-open__content: '\e616';
+@icon-system-config__content: '\e610';
+@icon-home__content: '\e611';
+@icon-lego__content: '\e612';
+@icon-tool__content: '\e613';
+@icon-upgrade__content: '\e614';
+@icon-notification-02__content: '\e607';
+@icon-product__content: '\e608';
+@icon-logo__content: '\e606';
+@icon-account__content: '\e600';
+@icon-arrowdown__content: '\e601';
+@icon-cms__content: '\e602';
+@icon-customers__content: '\e603';
+@icon-dashboard__content: '\e604';
+@icon-filter__content: '\e605';
+@icon-promotions__content: '\e609';
+@icon-reports__content: '\e60a';
+@icon-sales__content: '\e60b';
+@icon-search__content: '\e60c';
+@icon-stores__content: '\e60d';
+@icon-systems__content: '\e610';
+@icon-views__content: '\e60f';
+@icon-module__content: '\e647';
+@icon-alert-round__content: '\e648';
+
+@icons-round__size: 2.5rem;
+
+@icon-success-messages__content: @icon-check-mage__content;
+@icon-error-messages__content: @icon-error__content;
+@icon-warning-messages__content: @icon-warning__content;
+@icon-notice-messages__content: @icon-info__content;
+
+//
+//  Typography
+//  ---------------------------------------------
+
+//  Focus
+@focus__color: @color-blue-dodger;
+@focus__box-shadow: 0 0 0 1px @focus__color;
+
+//  Disabled
+@disabled__opacity: .5;
+
+//
+
+@font-family__console: 'Courier New', Courier, monospace;
+@font-weight__light: 300;
+@font-weight__regular: 400;
+@font-weight__semibold: 600;
+@font-weight__bold: 700;
+
+@base__color: @color-gray19;
+@font-family__base: 'Open Sans', @font-family__sans-serif;
+@base__font-size: 1.4rem;
+@base__line-height: 1.4;
+
+@small__font-size: @base__font-size * .85;
+
+@link__color: @color-blue-dodger;
+@link__hover__color: lighten(@link__color, 10%);
+
+@paragraph__indent-bottom: 1em;
+
+//
+//  Structure
+//  ---------------------------------------------
+
+@container__width: 100rem;
+@container__indent: 0;
+
+@content__indent: @indent__l;
+
+@main__indent-top: 3rem;
+
+//
+//  Buttons
+//  ---------------------------------------------
+
+//  Sizes
+
+@btn__base__font-size: 1.6rem;
+@btn__medium__font-size: 1.4rem;
+@btn__base__padding-top: .45em;
+@btn__base__padding-bottom: @btn__base__padding-top;
+@btn__height__base: @btn__base__font-size * @base__line-height + @btn__base__font-size * @btn__base__padding-top + @btn__base__font-size * @btn__base__padding-bottom;
+
+//
+//  Forms
+//  ---------------------------------------------
+
+@form-el__border-radius: 2px;
+@form-el__indent-top: .6rem;
+@form-el__padding-bottom: .5em;
+@form-el__padding-side: .55em;
+@form-el__padding-top: .35em;
+
+//
+//  Components
+//  ---------------------------------------------
+
+//  Spinner
+@spinner__size: 1em;

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Customer\Test\TestCase\DeleteCustomerBackendEntityTest" summary="Delete Customer Backend Entity" ticketId="MAGETWO-24764">
+        <variation name="DeleteCustomerBackendEntityTestVariation1">
+            <data name="customer/dataset" xsi:type="string">default</data>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessDeleteMessage" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerNotInGrid" />
+        </variation>
+    </testCase>
+</config>

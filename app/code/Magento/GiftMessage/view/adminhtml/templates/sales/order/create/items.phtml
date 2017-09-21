@@ -1,0 +1,24 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+
+<?php if ($block->canDisplayGiftMessage()): ?>
+    <div class="no-display">
+        <div id="gift-message-form-data-<?= /* @escapeNotVerified */ $block->getItem()->getId() ?>">
+            <?= $block->getFormHtml() ?>
+        </div>
+
+        <?php if ($block->getMessageText()): ?>
+        <div class="gift-options-tooltip-content">
+            <div><strong><?= /* @escapeNotVerified */ __('Gift Message') ?></strong>:</div>
+            <div><?= /* @escapeNotVerified */ $block->getMessageText() ?></div>
+        </div>
+        <?php endif; ?>
+    </div>
+<?php endif; ?>

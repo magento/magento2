@@ -1,0 +1,50 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Common
+//  _____________________________________________
+
+& when (@media-common = true) {
+    .block-reward-info {
+        .reward-balance {
+            .lib-font-size(18);
+            margin-bottom: @indent__m;
+        }
+
+        .reward-rates,
+        .reward-limit,
+        .reward-expiring {
+            &:not(:last-child) {
+                margin-bottom: @indent__m;
+            }
+
+            .title {
+                display: inline-block;
+                margin-bottom: @indent__s;
+            }
+        }
+    }
+}
+
+//
+//  Mobile
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+    .table-wrapper.reward-history {
+        &:extend(.abs-account-table-margin-mobile all);
+    }
+}
+
+//
+//  Desktop
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+    .table-wrapper.reward-history {
+        &:extend(.abs-account-table-margin-desktop all);
+    }
+}

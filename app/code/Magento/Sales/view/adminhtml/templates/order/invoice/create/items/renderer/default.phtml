@@ -1,0 +1,34 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php /** @var $block \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRenderer */ ?>
+<?php $_item = $block->getItem() ?>
+<?php $block->setPriceDataObject($_item)?>
+    <td class="col-product"><?= $block->getColumnHtml($_item, 'name') ?></td>
+    <td class="col-price">
+        <?= $block->getColumnHtml($_item, 'price') ?>
+    </td>
+    <td class="col-qty"><?= $block->getColumnHtml($_item, 'qty') ?></td>
+    <td class="col-qty-invoice">
+    <?php if ($block->canEditQty()) : ?>
+        <input type="text" class="input-text admin__control-text qty-input"
+               name="invoice[items][<?= /* @escapeNotVerified */ $_item->getOrderItemId() ?>]"
+               value="<?= /* @escapeNotVerified */ $_item->getQty()*1 ?>"/>
+    <?php else : ?>
+        <?= /* @escapeNotVerified */ $_item->getQty()*1 ?>
+    <?php endif; ?>
+    </td>
+    <td class="col-subtotal">
+        <?= $block->getColumnHtml($_item, 'subtotal') ?>
+    </td>
+    <td class="col-tax"><?= /* @escapeNotVerified */ $block->displayPriceAttribute('tax_amount') ?></td>
+    <td class="col-discount"><?= /* @escapeNotVerified */ $block->displayPriceAttribute('discount_amount') ?></td>
+    <td class="col-total last">
+        <?= $block->getColumnHtml($_item, 'total') ?>
+    </td>

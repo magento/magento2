@@ -1,35 +1,22 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Review\Block;
 
 use Magento\Catalog\Model\Product;
-use Magento\Review\Model\Resource\Rating\Collection as RatingCollection;
+use Magento\Customer\Model\Context;
+use Magento\Customer\Model\Url;
+use Magento\Review\Model\ResourceModel\Rating\Collection as RatingCollection;
 
 /**
  * Review form block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Form extends \Magento\Framework\View\Element\Template
 {
@@ -41,18 +28,11 @@ class Form extends \Magento\Framework\View\Element\Template
     protected $_reviewData = null;
 
     /**
-     * Customer session model
-     *
-     * @var \Magento\Customer\Model\Session
-     */
-    protected $_customerSession;
-
-    /**
      * Catalog product model
      *
-     * @var \Magento\Catalog\Model\ProductFactory
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface
      */
-    protected $_productFactory;
+    protected $productRepository;
 
     /**
      * Rating model
@@ -62,18 +42,9 @@ class Form extends \Magento\Framework\View\Element\Template
     protected $_ratingFactory;
 
     /**
-     * Review session model
-     *
-     * @var \Magento\Review\Model\Session
+     * @var \Magento\Framework\Url\EncoderInterface
      */
-    protected $_reviewSession;
-
-    /**
-     * Core helper data
-     *
-     * @var \Magento\Core\Helper\Data
-     */
-    protected $_coreData;
+    protected $urlEncoder;
 
     /**
      * Message manager interface
@@ -88,39 +59,59 @@ class Form extends \Magento\Framework\View\Element\Template
     protected $httpContext;
 
     /**
+     * @var \Magento\Customer\Model\Url
+     */
+    protected $customerUrl;
+
+    /**
+     * @var array
+     */
+    protected $jsLayout;
+
+    /**
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
+
+    /**
+     * Form constructor.
+     *
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Framework\Session\Generic $reviewSession
+     * @param \Magento\Framework\Url\EncoderInterface $urlEncoder
      * @param \Magento\Review\Helper\Data $reviewData
-     * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Catalog\Model\ProductFactory $productFactory
+     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Review\Model\RatingFactory $ratingFactory
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\Framework\App\Http\Context $httpContext
+     * @param Url $customerUrl
      * @param array $data
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @throws \RuntimeException
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Framework\Session\Generic $reviewSession,
+        \Magento\Framework\Url\EncoderInterface $urlEncoder,
         \Magento\Review\Helper\Data $reviewData,
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\Catalog\Model\ProductFactory $productFactory,
+        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Review\Model\RatingFactory $ratingFactory,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Framework\App\Http\Context $httpContext,
-        array $data = array()
+        \Magento\Customer\Model\Url $customerUrl,
+        array $data = [],
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
-        $this->_coreData = $coreData;
-        $this->_reviewSession = $reviewSession;
+        $this->urlEncoder = $urlEncoder;
         $this->_reviewData = $reviewData;
-        $this->_customerSession = $customerSession;
-        $this->_productFactory = $productFactory;
+        $this->productRepository = $productRepository;
         $this->_ratingFactory = $ratingFactory;
         $this->messageManager = $messageManager;
         $this->httpContext = $httpContext;
+        $this->customerUrl = $customerUrl;
         parent::__construct($context, $data);
-        $this->_isScopePrivate = true;
+        $this->jsLayout = isset($data['jsLayout']) ? $data['jsLayout'] : [];
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
     }
 
     /**
@@ -132,53 +123,46 @@ class Form extends \Magento\Framework\View\Element\Template
     {
         parent::_construct();
 
-        $data = $this->_reviewSession->getFormData(true);
-        $data = new \Magento\Framework\Object((array)$data);
-
-        // add logged in customer name as nickname
-        if (!$data->getNickname()) {
-            $customer = $this->_customerSession->getCustomerDataObject();
-            if ($customer && $customer->getId()) {
-                $data->setNickname($customer->getFirstname());
-            }
-        }
-
         $this->setAllowWriteReviewFlag(
-            $this->httpContext->getValue(\Magento\Customer\Helper\Data::CONTEXT_AUTH)
+            $this->httpContext->getValue(Context::CONTEXT_AUTH)
             || $this->_reviewData->getIsGuestAllowToWrite()
         );
         if (!$this->getAllowWriteReviewFlag()) {
-            $queryParam = $this->_coreData->urlEncode(
-                $this->getUrl('*/*/*', array('_current' => true)) . '#review-form'
+            $queryParam = $this->urlEncoder->encode(
+                $this->getUrl('*/*/*', ['_current' => true]) . '#review-form'
             );
             $this->setLoginLink(
                 $this->getUrl(
                     'customer/account/login/',
-                    array(\Magento\Customer\Helper\Data::REFERER_QUERY_PARAM_NAME => $queryParam)
+                    [Url::REFERER_QUERY_PARAM_NAME => $queryParam]
                 )
             );
         }
 
-        $this->setTemplate(
-            'form.phtml'
-        )->assign(
-            'data',
-            $data
-        )->assign(
-            'messages',
-            $this->messageManager->getMessages(true)
-        );
+        $this->setTemplate('form.phtml');
+    }
+
+    /**
+     * @return string
+     */
+    public function getJsLayout()
+    {
+        return $this->serializer->serialize($this->jsLayout);
     }
 
     /**
      * Get product info
      *
-     * @return Product
+     * @return \Magento\Catalog\Api\Data\ProductInterface
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getProductInfo()
     {
-        $product = $this->_productFactory->create();
-        return $product->load($this->getRequest()->getParam('id'));
+        return $this->productRepository->getById(
+            $this->getProductId(),
+            false,
+            $this->_storeManager->getStore()->getId()
+        );
     }
 
     /**
@@ -188,14 +172,20 @@ class Form extends \Magento\Framework\View\Element\Template
      */
     public function getAction()
     {
-        $productId = $this->getRequest()->getParam('id', false);
-        return $this->getUrl('review/product/post', array('id' => $productId));
+        return $this->getUrl(
+            'review/product/post',
+            [
+                '_secure' => $this->getRequest()->isSecure(),
+                'id' => $this->getProductId(),
+            ]
+        );
     }
 
     /**
      * Get collection of ratings
      *
      * @return RatingCollection
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getRatings()
     {
@@ -208,5 +198,25 @@ class Form extends \Magento\Framework\View\Element\Template
         )->setActiveFilter(
             true
         )->load()->addOptionToItems();
+    }
+
+    /**
+     * Return register URL
+     *
+     * @return string
+     */
+    public function getRegisterUrl()
+    {
+        return $this->customerUrl->getRegisterUrl();
+    }
+
+    /**
+     * Get review product id
+     *
+     * @return int
+     */
+    protected function getProductId()
+    {
+        return $this->getRequest()->getParam('id', false);
     }
 }

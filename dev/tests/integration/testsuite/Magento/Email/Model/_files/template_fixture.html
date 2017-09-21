@@ -1,0 +1,29 @@
+{{template config_path="design/email/header_template"}}
+
+<p class="greeting">{{trans "%name," name=$customer.name}}</p>
+<p>{{trans "Welcome to %store_name." store_name=$store.getFrontendName()}}</p>
+<p>
+    {{trans
+    'To sign in to our site, use these credentials during checkout or on the <a href="%customer_url">My Account</a> page:'
+
+    customer_url=$this.getUrl($store,'customer/account/',[_nosid:1])
+    |raw}}
+</p>
+<ul>
+    <li><strong>{{trans "Email:"}}</strong> {{var customer.email}}</li>
+    <li><strong>{{trans "Password:"}}</strong> <em>{{trans "Password you set when creating account"}}</em></li>
+</ul>
+<p>
+    {{trans
+    'Forgot your account password? Click <a href="%reset_url">here</a> to reset it.'
+
+    reset_url="$this.getUrl($store,'customer/account/createPassword/',[_query:[id:$customer.id,token:$customer.rp_token],_nosid:1])"
+    |raw}}
+</p>
+<p>{{trans "When you sign in to your account, you will be able to:"}}</p>
+<ul>
+    <li>{{trans "Proceed through checkout faster"}}</li>
+    <li>{{trans "Check the status of orders"}}</li>
+    <li>{{trans "View past orders"}}</li>
+    <li>{{trans "Store alternative addresses (for shipping to multiple family members and friends)"}}</li>
+</ul>

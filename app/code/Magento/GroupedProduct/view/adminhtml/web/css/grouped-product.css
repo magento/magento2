@@ -1,0 +1,68 @@
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+#grouped_grid .col-name {
+    width: 25%;
+}
+
+#grouped_grid .col-sku {
+    width: 10%;
+}
+
+#grouped_grid .col-qty {
+    width: 7%;
+}
+
+.ui-dialog.grouped .massaction {
+    display: none;
+}
+
+.ui-dialog.grouped .data {
+    table-layout: auto;
+}
+
+.ui-dialog.grouped .col-entity_id {
+    width: 2%;
+}
+
+#grouped-product-container .col-name {
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#grouped-product-container .col-sku {
+    max-width: 170px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#product_info_tabs_grouped_content .grid-container {
+    margin-bottom: 10px;
+}
+
+#product_info_tabs_grouped_content .col-draggable {
+    width: 10px;
+}
+
+#product_info_tabs_grouped_content .col-qty {
+    width: 80px;
+}
+
+#product_info_tabs_grouped_content .col-actions {
+    width: 50px;
+}
+
+#product_info_tabs_grouped_content .col-name {
+    max-width: 250px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#product_info_tabs_grouped_content .col-sku {
+    max-width: 170px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

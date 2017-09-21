@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Model\Oauth;
 
@@ -28,11 +10,8 @@ use Magento\Framework\Oauth\ConsumerInterface;
 /**
  * Consumer model
  *
+ * @api
  * @author Magento Core Team <core@magentocommerce.com>
- * @method \Magento\Integration\Model\Resource\Oauth\Consumer _getResource()
- * @method \Magento\Integration\Model\Resource\Oauth\Consumer getResource()
- * @method \Magento\Integration\Model\Resource\Oauth\Consumer\Collection getCollection()
- * @method \Magento\Integration\Model\Resource\Oauth\Consumer\Collection getResourceCollection()
  * @method string getName()
  * @method Consumer setName() setName(string $name)
  * @method Consumer setKey() setKey(string $key)
@@ -43,39 +22,53 @@ use Magento\Framework\Oauth\ConsumerInterface;
  * @method Consumer setUpdatedAt() setUpdatedAt(string $date)
  * @method string getRejectedCallbackUrl()
  * @method Consumer setRejectedCallbackUrl() setRejectedCallbackUrl(string $rejectedCallbackUrl)
+ * @since 100.0.2
  */
 class Consumer extends \Magento\Framework\Model\AbstractModel implements ConsumerInterface
 {
     /**
      * @var \Magento\Framework\Url\Validator
      */
-    protected $_urlValidator;
+    protected $urlValidator;
 
     /**
-     * @var \Magento\Integration\Model\Oauth\Consumer\Validator\KeyLengthFactory
+     * @var \Magento\Integration\Model\Oauth\Consumer\Validator\KeyLength
      */
-    protected $_keyLengthFactory;
+    protected $keyLengthValidator;
+
+    /**
+     * @var  \Magento\Integration\Helper\Oauth\Data
+     */
+    protected $dataHelper;
+
+    /**
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     */
+    private $_dateHelper;
 
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Integration\Model\Oauth\Consumer\Validator\KeyLengthFactory $keyLengthFactory
+     * @param \Magento\Integration\Model\Oauth\Consumer\Validator\KeyLength $keyLength
      * @param \Magento\Framework\Url\Validator $urlValidator
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Integration\Helper\Oauth\Data $dataHelper
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Integration\Model\Oauth\Consumer\Validator\KeyLengthFactory $keyLengthFactory,
+        \Magento\Integration\Model\Oauth\Consumer\Validator\KeyLength $keyLength,
         \Magento\Framework\Url\Validator $urlValidator,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
-        array $data = array()
+        \Magento\Integration\Helper\Oauth\Data $dataHelper,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        array $data = []
     ) {
-        $this->_keyLengthFactory = $keyLengthFactory;
-        $this->_urlValidator = $urlValidator;
+        $this->keyLengthValidator = $keyLength;
+        $this->urlValidator = $urlValidator;
+        $this->dataHelper = $dataHelper;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -87,7 +80,23 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
     protected function _construct()
     {
         parent::_construct();
-        $this->_init('Magento\Integration\Model\Resource\Oauth\Consumer');
+        $this->_init(\Magento\Integration\Model\ResourceModel\Oauth\Consumer::class);
+    }
+
+    /**
+     * The getter function to get the new DateTime dependency
+     *
+     * @return \Magento\Framework\Stdlib\DateTime\DateTime
+     *
+     * @deprecated 100.0.6
+     */
+    private function getDateHelper()
+    {
+        if ($this->_dateHelper === null) {
+            $this->_dateHelper = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\Stdlib\DateTime\DateTime::class);
+        }
+        return $this->_dateHelper;
     }
 
     /**
@@ -95,13 +104,10 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
      *
      * @return $this
      */
-    protected function _beforeSave()
+    public function beforeSave()
     {
-        if (!$this->getId()) {
-            $this->setUpdatedAt(time());
-        }
         $this->validate();
-        parent::_beforeSave();
+        parent::beforeSave();
         return $this;
     }
 
@@ -114,30 +120,28 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
             $this->setCallbackUrl(trim($this->getCallbackUrl()));
             $this->setRejectedCallbackUrl(trim($this->getRejectedCallbackUrl()));
 
-            if ($this->getCallbackUrl() && !$this->_urlValidator->isValid($this->getCallbackUrl())) {
-                throw new \Magento\Framework\Model\Exception(__('Invalid Callback URL'));
+            if ($this->getCallbackUrl() && !$this->urlValidator->isValid($this->getCallbackUrl())) {
+                throw new \Magento\Framework\Exception\LocalizedException(__('Invalid Callback URL'));
             }
-            if ($this->getRejectedCallbackUrl() && !$this->_urlValidator->isValid($this->getRejectedCallbackUrl())) {
-                throw new \Magento\Framework\Model\Exception(__('Invalid Rejected Callback URL'));
+            if ($this->getRejectedCallbackUrl() && !$this->urlValidator->isValid($this->getRejectedCallbackUrl())) {
+                throw new \Magento\Framework\Exception\LocalizedException(__('Invalid Rejected Callback URL'));
             }
         }
 
-        /** @var $validatorLength \Magento\Integration\Model\Oauth\Consumer\Validator\KeyLength */
-        $validatorLength = $this->_keyLengthFactory->create(
-            array('options' => array('length' => \Magento\Framework\Oauth\Helper\Oauth::LENGTH_CONSUMER_KEY))
-        );
-
-        $validatorLength->setName('Consumer Key');
-        if (!$validatorLength->isValid($this->getKey())) {
-            $messages = $validatorLength->getMessages();
-            throw new \Magento\Framework\Model\Exception(array_shift($messages));
+        $this->keyLengthValidator
+            ->setLength(\Magento\Framework\Oauth\Helper\Oauth::LENGTH_CONSUMER_KEY)
+            ->setName('Consumer Key');
+        if (!$this->keyLengthValidator->isValid($this->getKey())) {
+            $messages = $this->keyLengthValidator->getMessages();
+            throw new \Magento\Framework\Exception\LocalizedException(__(array_shift($messages)));
         }
 
-        $validatorLength->setLength(\Magento\Framework\Oauth\Helper\Oauth::LENGTH_CONSUMER_SECRET);
-        $validatorLength->setName('Consumer Secret');
-        if (!$validatorLength->isValid($this->getSecret())) {
-            $messages = $validatorLength->getMessages();
-            throw new \Magento\Framework\Model\Exception(array_shift($messages));
+        $this->keyLengthValidator
+            ->setLength(\Magento\Framework\Oauth\Helper\Oauth::LENGTH_CONSUMER_SECRET)
+            ->setName('Consumer Secret');
+        if (!$this->keyLengthValidator->isValid($this->getSecret())) {
+            $messages = $this->keyLengthValidator->getMessages();
+            throw new \Magento\Framework\Exception\LocalizedException(__(array_shift($messages)));
         }
         return true;
     }
@@ -183,5 +187,16 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
     public function getCreatedAt()
     {
         return $this->getData('created_at');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isValidForTokenExchange()
+    {
+        $expiry = $this->dataHelper->getConsumerExpirationPeriod();
+        $currentTimestamp = $this->getDateHelper()->gmtTimestamp();
+        $updatedTimestamp = $this->getDateHelper()->gmtTimestamp($this->getUpdatedAt());
+        return $expiry > ($currentTimestamp - $updatedTimestamp);
     }
 }

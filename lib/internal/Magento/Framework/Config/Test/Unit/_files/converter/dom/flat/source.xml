@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<root>
+    <node_one attributeOne = '10' attributeTwo = '20'>
+        <subnode attributeThree = '30'></subnode>
+        <subnode attributeThree = '40' attributeFour = '40' >Value1</subnode>
+        <books attributeFive = '50' />
+    </node_one>
+    <multipleNode id="one" name="name1">
+        <value>1</value>
+    </multipleNode>
+    <multipleNode id="two" name="name2">
+        <value>2</value>
+    </multipleNode>
+    <someOtherVal></someOtherVal>
+    <someDataVal><![CDATA[]]></someDataVal>
+</root>

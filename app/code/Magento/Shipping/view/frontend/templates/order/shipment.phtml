@@ -1,0 +1,16 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<div class="order-details-items shipments">
+    <?= $block->getChildHtml('shipment_items') ?>
+    <div class="actions-toolbar">
+        <div class="secondary">
+            <a href="<?= /* @escapeNotVerified */ $block->getBackUrl() ?>" class="action back">
+                <span><?= /* @escapeNotVerified */ $block->getBackTitle() ?></span>
+            </a>
+        </div>
+    </div>
+</div>

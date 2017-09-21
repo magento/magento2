@@ -1,30 +1,15 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute;
 
 /**
  * Product attribute edit page
+ *
+ * @api
+ * @since 100.0.2
  */
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
@@ -43,14 +28,14 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Backend\Block\Widget\Context $context,
         \Magento\Framework\Registry $registry,
-        array $data = array()
+        array $data = []
     ) {
         $this->_coreRegistry = $registry;
         parent::__construct($context, $data);
@@ -67,64 +52,64 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         parent::_construct();
 
         if ($this->getRequest()->getParam('popup')) {
-            $this->_removeButton('back');
+            $this->buttonList->remove('back');
             if ($this->getRequest()->getParam('product_tab') != 'variations') {
-                $this->_addButton(
+                $this->addButton(
                     'save_in_new_set',
-                    array(
+                    [
                         'label' => __('Save in New Attribute Set'),
                         'class' => 'save',
                         'onclick' => 'saveAttributeInNewSet(\'' . __('Enter Name for New Attribute Set') . '\')'
-                    )
+                    ],
+                    100
                 );
             }
         } else {
-            $this->_addButton(
+            $this->addButton(
                 'save_and_edit_button',
-                array(
+                [
                     'label' => __('Save and Continue Edit'),
                     'class' => 'save',
-                    'data_attribute' => array(
-                        'mage-init' => array(
-                            'button' => array('event' => 'saveAndContinueEdit', 'target' => '#edit_form')
-                        )
-                    )
-                ),
-                100
+                    'data_attribute' => [
+                        'mage-init' => [
+                            'button' => ['event' => 'saveAndContinueEdit', 'target' => '#edit_form'],
+                        ],
+                    ]
+                ]
             );
         }
 
-        $this->_updateButton('save', 'label', __('Save Attribute'));
-        $this->_updateButton('save', 'class', 'save primary');
-        $this->_updateButton(
+        $this->buttonList->update('save', 'label', __('Save Attribute'));
+        $this->buttonList->update('save', 'class', 'save primary');
+        $this->buttonList->update(
             'save',
             'data_attribute',
-            array('mage-init' => array('button' => array('event' => 'save', 'target' => '#edit_form')))
+            ['mage-init' => ['button' => ['event' => 'save', 'target' => '#edit_form']]]
         );
 
         $entityAttribute = $this->_coreRegistry->registry('entity_attribute');
         if (!$entityAttribute || !$entityAttribute->getIsUserDefined()) {
-            $this->_removeButton('delete');
+            $this->buttonList->remove('delete');
         } else {
-            $this->_updateButton('delete', 'label', __('Delete Attribute'));
+            $this->buttonList->update('delete', 'label', __('Delete Attribute'));
         }
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function _addButton($buttonId, $data, $level = 0, $sortOrder = 0, $region = 'toolbar')
+    public function addButton($buttonId, $data, $level = 0, $sortOrder = 0, $region = 'toolbar')
     {
         if ($this->getRequest()->getParam('popup')) {
             $region = 'header';
         }
-        parent::_addButton($buttonId, $data, $level, $sortOrder, $region);
+        parent::addButton($buttonId, $data, $level, $sortOrder, $region);
     }
 
     /**
      * Retrieve header text
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getHeaderText()
     {
@@ -145,7 +130,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      */
     public function getValidationUrl()
     {
-        return $this->getUrl('catalog/*/validate', array('_current' => true));
+        return $this->getUrl('catalog/*/validate', ['_current' => true]);
     }
 
     /**
@@ -157,7 +142,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     {
         return $this->getUrl(
             'catalog/product_attribute/save',
-            array('_current' => true, 'back' => null, 'product_tab' => $this->getRequest()->getParam('product_tab'))
+            ['_current' => true, 'back' => null, 'product_tab' => $this->getRequest()->getParam('product_tab')]
         );
     }
 }

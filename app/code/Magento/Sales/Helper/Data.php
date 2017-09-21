@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Helper;
 
@@ -30,29 +12,8 @@ use Magento\Store\Model\Store;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Data extends \Magento\Core\Helper\Data
+class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
-    /**
-     * Maximum available number
-     */
-    const MAXIMUM_AVAILABLE_NUMBER = 99999999;
-
-    /**
-     * Check quote amount
-     *
-     * @param \Magento\Sales\Model\Quote $quote
-     * @param float $amount
-     * @return $this
-     */
-    public function checkQuoteAmount(\Magento\Sales\Model\Quote $quote, $amount)
-    {
-        if (!$quote->getHasError() && $amount >= self::MAXIMUM_AVAILABLE_NUMBER) {
-            $quote->setHasError(true);
-            $quote->addMessage(__('This item price or quantity is not valid for checkout.'));
-        }
-        return $this;
-    }
-
     /**
      * Check allow to send new order confirmation email
      *
@@ -61,8 +22,8 @@ class Data extends \Magento\Core\Helper\Data
      */
     public function canSendNewOrderConfirmationEmail($store = null)
     {
-        return $this->_scopeConfig->isSetFlag(
-            \Magento\Sales\Model\Order::XML_PATH_EMAIL_ENABLED,
+        return $this->scopeConfig->isSetFlag(
+            \Magento\Sales\Model\Order\Email\Container\OrderIdentity::XML_PATH_EMAIL_ENABLED,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
@@ -87,8 +48,8 @@ class Data extends \Magento\Core\Helper\Data
      */
     public function canSendOrderCommentEmail($store = null)
     {
-        return $this->_scopeConfig->isSetFlag(
-            \Magento\Sales\Model\Order::XML_PATH_UPDATE_EMAIL_ENABLED,
+        return $this->scopeConfig->isSetFlag(
+            \Magento\Sales\Model\Order\Email\Container\OrderCommentIdentity::XML_PATH_EMAIL_ENABLED,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
@@ -102,8 +63,8 @@ class Data extends \Magento\Core\Helper\Data
      */
     public function canSendNewShipmentEmail($store = null)
     {
-        return $this->_scopeConfig->isSetFlag(
-            \Magento\Sales\Model\Order\Shipment::XML_PATH_EMAIL_ENABLED,
+        return $this->scopeConfig->isSetFlag(
+            \Magento\Sales\Model\Order\Email\Container\ShipmentIdentity::XML_PATH_EMAIL_ENABLED,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
@@ -117,8 +78,8 @@ class Data extends \Magento\Core\Helper\Data
      */
     public function canSendShipmentCommentEmail($store = null)
     {
-        return $this->_scopeConfig->isSetFlag(
-            \Magento\Sales\Model\Order\Shipment::XML_PATH_UPDATE_EMAIL_ENABLED,
+        return $this->scopeConfig->isSetFlag(
+            \Magento\Sales\Model\Order\Email\Container\ShipmentCommentIdentity::XML_PATH_EMAIL_ENABLED,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
@@ -132,8 +93,8 @@ class Data extends \Magento\Core\Helper\Data
      */
     public function canSendNewInvoiceEmail($store = null)
     {
-        return $this->_scopeConfig->isSetFlag(
-            \Magento\Sales\Model\Order\Invoice::XML_PATH_EMAIL_ENABLED,
+        return $this->scopeConfig->isSetFlag(
+            \Magento\Sales\Model\Order\Email\Container\InvoiceIdentity::XML_PATH_EMAIL_ENABLED,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
@@ -147,8 +108,8 @@ class Data extends \Magento\Core\Helper\Data
      */
     public function canSendInvoiceCommentEmail($store = null)
     {
-        return $this->_scopeConfig->isSetFlag(
-            \Magento\Sales\Model\Order\Invoice::XML_PATH_UPDATE_EMAIL_ENABLED,
+        return $this->scopeConfig->isSetFlag(
+            \Magento\Sales\Model\Order\Email\Container\InvoiceCommentIdentity::XML_PATH_EMAIL_ENABLED,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
@@ -162,8 +123,8 @@ class Data extends \Magento\Core\Helper\Data
      */
     public function canSendNewCreditmemoEmail($store = null)
     {
-        return $this->_scopeConfig->isSetFlag(
-            \Magento\Sales\Model\Order\Creditmemo::XML_PATH_EMAIL_ENABLED,
+        return $this->scopeConfig->isSetFlag(
+            \Magento\Sales\Model\Order\Email\Container\CreditmemoIdentity::XML_PATH_EMAIL_ENABLED,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
@@ -177,8 +138,8 @@ class Data extends \Magento\Core\Helper\Data
      */
     public function canSendCreditmemoCommentEmail($store = null)
     {
-        return $this->_scopeConfig->isSetFlag(
-            \Magento\Sales\Model\Order\Creditmemo::XML_PATH_UPDATE_EMAIL_ENABLED,
+        return $this->scopeConfig->isSetFlag(
+            \Magento\Sales\Model\Order\Email\Container\CreditmemoCommentIdentity::XML_PATH_EMAIL_ENABLED,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );

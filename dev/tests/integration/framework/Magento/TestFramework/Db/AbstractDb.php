@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -78,13 +60,9 @@ abstract class AbstractDb
      * @param string $schema
      * @param string $varPath
      * @param \Magento\Framework\Shell $shell
-     * @throws \Magento\Framework\Exception
      */
     public function __construct($host, $user, $password, $schema, $varPath, \Magento\Framework\Shell $shell)
     {
-        if (!is_dir($varPath) || !is_writable($varPath)) {
-            throw new \Magento\Framework\Exception("The specified '{$varPath}' is not a directory or not writable.");
-        }
         $this->_host = $host;
         $this->_user = $user;
         $this->_password = $password;
@@ -123,6 +101,43 @@ abstract class AbstractDb
     abstract public function restoreFromDbDump();
 
     /**
+     * @return string
+     */
+    abstract public function getVendorName();
+
+    /**
+     * @return string
+     */
+    public function getSchema()
+    {
+        return $this->_schema;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHost()
+    {
+        return $this->_host;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUser()
+    {
+        return $this->_user;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPassword()
+    {
+        return $this->_password;
+    }
+
+    /**
      * Create file with sql script content.
      * Utility method that is used in children classes
      *
@@ -133,5 +148,15 @@ abstract class AbstractDb
     protected function _createScript($file, $content)
     {
         return file_put_contents($file, $content);
+    }
+
+    /**
+     * @throws \LogicException
+     */
+    protected function assertVarPathWritable()
+    {
+        if (!is_dir($this->_varPath) || !is_writable($this->_varPath)) {
+            throw new \LogicException("The specified '{$this->_varPath}' is not a directory or not writable.");
+        }
     }
 }

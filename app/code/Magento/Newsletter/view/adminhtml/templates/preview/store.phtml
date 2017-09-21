@@ -1,0 +1,55 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+
+<?php if ($websites = $block->getWebsites()): ?>
+<div class="field field-store-switcher">
+    <label class="label" for="store_switcher"><?= $block->escapeHtml(__('Choose Store View:')) ?></label>
+    <div class="control">
+        <select
+            id="store_switcher"
+            class="admin__control-select"
+            name="store_switcher">
+            <?php foreach ($websites as $website): ?>
+                <?php $showWebsite = false; ?>
+                <?php foreach ($website->getGroups() as $group): ?>
+                    <?php $showGroup = false; ?>
+                    <?php foreach ($block->getStores($group) as $store): ?>
+                        <?php if ($showWebsite == false): ?>
+                            <?php $showWebsite = true; ?>
+                            <optgroup label="<?= $block->escapeHtmlAttr($website->getName()) ?>"></optgroup>
+                        <?php endif; ?>
+                        <?php if ($showGroup == false): ?>
+                            <?php $showGroup = true; ?>
+                            <optgroup label="&nbsp;&nbsp;&nbsp;<?= $block->escapeHtmlAttr($group->getName()) ?>">
+                        <?php endif; ?>
+                        <option value="<?= $block->escapeHtmlAttr($store->getId()) ?>"<?php if ($block->getStoreId() == $store->getId()): ?> selected="selected"<?php endif; ?>>&nbsp;&nbsp;&nbsp;&nbsp;<?= $block->escapeHtml($store->getName()) ?></option>
+                    <?php endforeach; ?>
+                    <?php if ($showGroup): ?>
+                        </optgroup>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            <?php endforeach; ?>
+        </select>
+    </div>
+    <?= $block->getHintHtml() ?>
+</div>
+<script>
+require(['prototype'], function(){
+
+//<![CDATA[
+Event.observe($('store_switcher'), 'change', function(event) {
+    var element = Event.element(event);
+    $('preview_store_id').value = element.value;
+});
+//]]>
+
+});
+</script>
+<?php endif; ?>

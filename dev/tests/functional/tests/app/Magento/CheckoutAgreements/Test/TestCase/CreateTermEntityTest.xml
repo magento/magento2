@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\CheckoutAgreements\Test\TestCase\CreateTermEntityTest" summary="Create Terms And Conditions" ticketId="MAGETWO-29586">
+        <variation name="CreateTermEntityTestVariation1" summary="Create enabled term entity with text value">
+            <data name="tag" xsi:type="string">test_type:extended_acceptance_test, severity:S3</data>
+            <data name="configData" xsi:type="string">checkout_term_condition</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
+            <data name="agreement/data/name" xsi:type="string">name%isolation%</data>
+            <data name="agreement/data/is_active" xsi:type="string">Enabled</data>
+            <data name="agreement/data/is_html" xsi:type="string">Text</data>
+            <data name="agreement/data/mode" xsi:type="string">Manually</data>
+            <data name="agreement/data/stores/dataset/0" xsi:type="string">default</data>
+            <data name="agreement/data/checkbox_text" xsi:type="string">test_checkbox%isolation%</data>
+            <data name="agreement/data/content" xsi:type="string">TestMessage%isolation%</data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="payment/method" xsi:type="string">checkmo</data>
+            <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermSuccessSaveMessage" />
+            <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermInGrid" />
+            <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermOnCheckout" />
+        </variation>
+        <variation name="CreateTermEntityTestVariation2" summary="Create enabled term entity with HTML value">
+            <data name="tag" xsi:type="string">severity:S3</data>
+            <data name="configData" xsi:type="string">checkout_term_condition</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
+            <data name="agreement/data/name" xsi:type="string">name%isolation%</data>
+            <data name="agreement/data/is_active" xsi:type="string">Enabled</data>
+            <data name="agreement/data/is_html" xsi:type="string">HTML</data>
+            <data name="agreement/data/mode" xsi:type="string">Manually</data>
+            <data name="agreement/data/stores/dataset/0" xsi:type="string">default</data>
+            <data name="agreement/data/checkbox_text" xsi:type="string">test_checkbox%isolation%</data>
+            <data name="agreement/data/content" xsi:type="string">&lt;html&gt;</data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="payment/method" xsi:type="string">checkmo</data>
+            <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermSuccessSaveMessage" />
+            <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermInGrid" />
+            <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermOnCheckout" />
+        </variation>
+        <variation name="CreateTermEntityTestVariation3" summary="Create disabled term entity">
+            <data name="tag" xsi:type="string">severity:S3</data>
+            <data name="configData" xsi:type="string">checkout_term_condition</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
+            <data name="agreement/data/name" xsi:type="string">name%isolation%</data>
+            <data name="agreement/data/is_active" xsi:type="string">Disabled</data>
+            <data name="agreement/data/is_html" xsi:type="string">Text</data>
+            <data name="agreement/data/mode" xsi:type="string">Manually</data>
+            <data name="agreement/data/stores/dataset/0" xsi:type="string">default</data>
+            <data name="agreement/data/checkbox_text" xsi:type="string">test_checkbox%isolation%</data>
+            <data name="agreement/data/content" xsi:type="string">TestMessage%isolation%</data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="payment/method" xsi:type="string">checkmo</data>
+            <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermSuccessSaveMessage" />
+            <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermInGrid" />
+            <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermAbsentOnCheckout" />
+        </variation>
+        <variation name="CreateTermEntityTestVariation4" summary="Terms and conditions on multishipping" ticketId="MAGETWO-32499">
+            <data name="tag" xsi:type="string">test_type:extended_acceptance_test, severity:S3</data>
+            <data name="configData" xsi:type="string">checkout_term_condition</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
+            <data name="products/1" xsi:type="string">catalogProductSimple::default</data>
+            <data name="agreement/data/name" xsi:type="string">name%isolation%</data>
+            <data name="agreement/data/is_active" xsi:type="string">Enabled</data>
+            <data name="agreement/data/is_html" xsi:type="string">Text</data>
+            <data name="agreement/data/mode" xsi:type="string">Manually</data>
+            <data name="agreement/data/stores/dataset/0" xsi:type="string">default</data>
+            <data name="agreement/data/checkbox_text" xsi:type="string">test_checkbox%isolation%</data>
+            <data name="agreement/data/content" xsi:type="string">TestMessage%isolation%</data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="payment/method" xsi:type="string">checkmo</data>
+            <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermRequireMessageOnMultishippingCheckout" />
+            <constraint name="Magento\Multishipping\Test\Constraint\AssertMultishippingOrderSuccessPlacedMessage" />
+        </variation>
+    </testCase>
+</config>

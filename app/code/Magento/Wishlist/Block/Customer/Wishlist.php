@@ -1,27 +1,8 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
-
 
 /**
  * Wishlist block customer items
@@ -30,6 +11,10 @@
  */
 namespace Magento\Wishlist\Block\Customer;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
 {
     /**
@@ -37,7 +22,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      *
      * @var array
      */
-    protected $_optionsCfg = array();
+    protected $_optionsCfg = [];
 
     /**
      * @var \Magento\Catalog\Helper\Product\ConfigurationPool
@@ -45,40 +30,45 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
     protected $_helperPool;
 
     /**
-     * @var \Magento\Framework\Data\Form\FormKey
+     * @var \Magento\Customer\Helper\Session\CurrentCustomer
      */
-    protected $_formKey;
+    protected $currentCustomer;
+
+    /**
+     * @var \Magento\Framework\Data\Helper\PostHelper
+     */
+    protected $postDataHelper;
 
     /**
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Framework\App\Http\Context $httpContext
-     * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Helper\Product\ConfigurationPool $helperPool
-     * @param \Magento\Framework\Data\Form\FormKey $formKey
+     * @param \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer
+     * @param \Magento\Framework\Data\Helper\PostHelper $postDataHelper
      * @param array $data
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
         \Magento\Framework\App\Http\Context $httpContext,
-        \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Catalog\Helper\Product\ConfigurationPool $helperPool,
-        \Magento\Framework\Data\Form\FormKey $formKey,
-        array $data = array()
+        \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer,
+        \Magento\Framework\Data\Helper\PostHelper $postDataHelper,
+        array $data = []
     ) {
-        $this->_formKey = $formKey;
-        $this->_helperPool = $helperPool;
         parent::__construct(
             $context,
             $httpContext,
-            $productFactory,
             $data
         );
+        $this->_helperPool = $helperPool;
+        $this->currentCustomer = $currentCustomer;
+        $this->postDataHelper = $postDataHelper;
     }
 
     /**
      * Add wishlist conditions to collection
      *
-     * @param  \Magento\Wishlist\Model\Resource\Item\Collection $collection
+     * @param  \Magento\Wishlist\Model\ResourceModel\Item\Collection $collection
      * @return $this
      */
     protected function _prepareCollection($collection)
@@ -95,10 +85,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
     protected function _prepareLayout()
     {
         parent::_prepareLayout();
-        $headBlock = $this->getLayout()->getBlock('head');
-        if ($headBlock) {
-            $headBlock->setTitle(__('My Wish List'));
-        }
+        $this->pageConfig->getTitle()->set(__('My Wish List'));
     }
 
     /**
@@ -116,8 +103,6 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      *
      * @param null|array $optionCfg
      * @return $this
-     *
-     * @deprecated after 1.6.2.0
      */
     public function setOptionsRenderCfgs($optionCfg)
     {
@@ -128,7 +113,6 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
     /**
      * Returns all options render configurations
      *
-     * @deprecated after 1.6.2.0
      * @return array
      */
     public function getOptionsRenderCfgs()
@@ -143,12 +127,10 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      * @param string $helperName
      * @param null|string $template
      * @return $this
-     *
-     * @deprecated after 1.6.2.0
      */
     public function addOptionsRenderCfg($productType, $helperName, $template = null)
     {
-        $this->_optionsCfg[$productType] = array('helper' => $helperName, 'template' => $template);
+        $this->_optionsCfg[$productType] = ['helper' => $helperName, 'template' => $template];
         return $this;
     }
 
@@ -157,8 +139,6 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      *
      * @param string $productType
      * @return array|null
-     *
-     * @deprecated after 1.6.2.0
      */
     public function getOptionsRenderCfg($productType)
     {
@@ -176,8 +156,6 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      *
      * @param \Magento\Wishlist\Model\Item $item
      * @return string
-     *
-     * @deprecated after 1.6.2.0
      */
     public function getDetailsHtml(\Magento\Wishlist\Model\Item $item)
     {
@@ -211,8 +189,6 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      *
      * @param \Magento\Wishlist\Model\Item $item
      * @return float
-     *
-     * @deprecated after 1.6.2.0
      */
     public function getAddToCartQty(\Magento\Wishlist\Model\Item $item)
     {
@@ -221,14 +197,26 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
     }
 
     /**
-     * Get add all to cart url
+     * Get add all to cart params for POST request
      * @return string
      */
-    public function getAddAllToCartUrl()
+    public function getAddAllToCartParams()
     {
-        return $this->getUrl(
-            '*/*/allcart',
-            array('wishlist_id' => $this->getWishlistInstance()->getId(), 'form_key' => $this->_formKey->getFormKey())
+        return $this->postDataHelper->getPostData(
+            $this->getUrl('wishlist/index/allcart'),
+            ['wishlist_id' => $this->getWishlistInstance()->getId()]
         );
+    }
+
+    /**
+     * @return string
+     */
+    protected function _toHtml()
+    {
+        if ($this->currentCustomer->getCustomerId()) {
+            return parent::_toHtml();
+        } else {
+            return '';
+        }
     }
 }

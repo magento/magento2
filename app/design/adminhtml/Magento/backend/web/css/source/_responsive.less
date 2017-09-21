@@ -1,0 +1,66 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Media variables, that can be used for splitting styles into several files
+//  _____________________________________________
+
+//  Sets whether to output common styles (true|false)
+@media-common: true;
+//  Sets target device for styles output ('all' | 'desktop' | 'mobile')
+@media-target: 'all';
+
+//
+//  Media width mixin used to group styles output based on media queries
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+}
+
+//
+//  Style groups for 'mobile' devices
+//  _____________________________________________
+
+& when (@media-target = 'desktop'),
+(@media-target = 'all') {
+    @media all and (max-width: (@screen__l - 1)) {
+        .media-width('max', @screen__l);
+    }
+
+    @media all and (min-width: @screen__m) {
+        .media-width('min', @screen__m);
+    }
+
+    @media all and (min-width: @screen__l) {
+        .media-width('min', @screen__l);
+    }
+
+    @media all and (min-width: @screen__xl) {
+        .media-width('min', @screen__xl);
+    }
+}
+
+//
+//  Style groups for 'desktop' devices
+//  _____________________________________________
+
+& when (@media-target = 'mobile'),
+(@media-target = 'all') {
+    @media all and (min-width: @screen__s) {
+        .media-width('min', @screen__s);
+    }
+
+    @media all and (max-width: (@screen__m - 1)) {
+        .media-width('max', @screen__m);
+    }
+
+    @media all and (max-width: (@screen__s - 1)) {
+        .media-width('max', @screen__s);
+    }
+
+    @media all and (max-width: (@screen__xs - 1)) {
+        .media-width('max', @screen__xs);
+    }
+}

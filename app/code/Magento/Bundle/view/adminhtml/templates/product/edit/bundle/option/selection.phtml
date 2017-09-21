@@ -1,0 +1,359 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var $block \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Selection */
+?>
+<script id="bundle-option-selection-box-template" type="text/x-magento-template">
+    <table class="admin__control-table">
+        <thead>
+            <tr class="headings">
+                <th class="col-draggable"></th>
+                <th class="col-default"><?= /* @escapeNotVerified */ __('Default') ?></th>
+                <th class="col-name"><?= /* @escapeNotVerified */ __('Name') ?></th>
+                <th class="col-sku"><?= /* @escapeNotVerified */ __('SKU') ?></th>
+            <?php if ($block->getCanReadPrice() !== false): ?>
+                <th class="col-price price-type-box"><?= /* @escapeNotVerified */ __('Price') ?></th>
+                <th class="col-price price-type-box"><?= /* @escapeNotVerified */ __('Price Type') ?></th>
+            <?php endif; ?>
+                <th class="col-qty"><?= /* @escapeNotVerified */ __('Default Quantity') ?></th>
+                <th class="col-uqty qty-box"><?= /* @escapeNotVerified */ __('User Defined') ?></th>
+                <th class="col-order type-order" style="display:none"><?= /* @escapeNotVerified */ __('Position') ?></th>
+                <th class="col-actions"></th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</script>
+<script id="bundle-option-selection-row-template" type="text/x-magento-template">
+    <td class="col-draggable">
+        <span data-role="draggable-handle" class="draggable-handle"></span>
+        <input type="hidden" id="<?= /* @escapeNotVerified */ $block->getFieldId() ?>_id<%- data.index %>"
+               name="<?= /* @escapeNotVerified */ $block->getFieldName() ?>[<%- data.parentIndex %>][<%- data.index %>][selection_id]"
+               value="<%- data.selection_id %>"/>
+        <input type="hidden" name="<?= /* @escapeNotVerified */ $block->getFieldName() ?>[<%- data.parentIndex %>][<%- data.index %>][option_id]"
+               value="<%- data.option_id %>"/>
+        <input type="hidden" class="product"
+               name="<?= /* @escapeNotVerified */ $block->getFieldName() ?>[<%- data.parentIndex %>][<%- data.index %>][product_id]"
+               value="<%- data.product_id %>"/>
+        <input type="hidden" name="<?= /* @escapeNotVerified */ $block->getFieldName() ?>[<%- data.parentIndex %>][<%- data.index %>][delete]"
+               value="" class="delete"/>
+    </td>
+    <td class="col-default">
+        <input onclick="bSelection.checkGroup(event)" type="<%- data.option_type %>" class="default"
+               name="<?= /* @escapeNotVerified */ $block->getFieldName() ?>[<%- data.parentIndex %>][<%- data.index %>][is_default]"
+               value="1" <%- data.checked %> />
+    </td>
+    <td class="col-name"><%- data.name %></td>
+    <td class="col-sku"><%- data.sku %></td>
+<?php if ($block->getCanReadPrice() !== false): ?>
+    <td class="col-price price-type-box">
+        <input id="<?= /* @escapeNotVerified */ $block->getFieldId() ?>_<%- data.index %>_price_value"
+               class="input-text required-entry validate-zero-or-greater" type="text"
+               name="<?= /* @escapeNotVerified */ $block->getFieldName() ?>[<%- data.parentIndex %>][<%- data.index %>][selection_price_value]"
+               value="<%- data.selection_price_value %>"
+            <?php if ($block->getCanEditPrice() === false): ?>
+               disabled="disabled"
+            <?php endif; ?>/>
+    </td>
+    <td class="col-price price-type-box">
+        <?= $block->getPriceTypeSelectHtml() ?>
+        <div><?= $block->getCheckboxScopeHtml() ?></div>
+    </td>
+<?php else: ?>
+    <input type="hidden" id="<?= /* @escapeNotVerified */ $block->getFieldId() ?>_<%- data.index %>_price_value"
+           name="<?= /* @escapeNotVerified */ $block->getFieldName() ?>[<%- data.parentIndex %>][<%- data.index %>][selection_price_value]" value="0" />
+    <input type="hidden" id="<?= /* @escapeNotVerified */ $block->getFieldId() ?>_<%- data.index %>_price_type"
+           name="<?= /* @escapeNotVerified */ $block->getFieldName() ?>[<%- data.parentIndex %>][<%- data.index %>][selection_price_type]" value="0" />
+    <?php if ($block->isUsedWebsitePrice()): ?>
+    <input type="hidden" id="<?= /* @escapeNotVerified */ $block->getFieldId() ?>_<%- data.index %>_price_scope"
+           name="<?= /* @escapeNotVerified */ $block->getFieldName() ?>[<%- data.parentIndex %>][<%- data.index %>][default_price_scope]" value="1" />
+    <?php endif; ?>
+<?php endif; ?>
+    <td class="col-qty">
+        <input class="input-text required-entry validate-greater-zero-based-on-option validate-zero-or-greater" type="text"
+               name="<?= /* @escapeNotVerified */ $block->getFieldName() ?>[<%- data.parentIndex %>][<%- data.index %>][selection_qty]"
+               value="<%- data.selection_qty %>" />
+    </td>
+    <td class="col-uqty qty-box">
+        <input type="checkbox" class="is-user-defined-qty" checked="checked" />
+        <span style="display:none"><?= $block->getQtyTypeSelectHtml() ?></span>
+    </td>
+    <td class="col-order type-order" style="display:none">
+        <input class="input-text required-entry validate-zero-or-greater" type="text"
+               name="<?= /* @escapeNotVerified */ $block->getFieldName() ?>[<%- data.parentIndex %>][<%- data.index %>][position]"
+               value="<%- data.position %>" />
+    </td>
+    <td class="col-actions">
+        <span title="Delete Row">
+            <?= $block->getSelectionDeleteButtonHtml() ?>
+        </span>
+    </td>
+</script>
+<script>
+require([
+    'jquery',
+    'mage/template',
+    'prototype'
+], function(jQuery, mageTemplate){
+var bundleTemplateBox = jQuery('#bundle-option-selection-box-template').html(),
+    bundleTemplateRow = jQuery('#bundle-option-selection-row-template').html();
+
+Bundle.Selection = Class.create();
+Bundle.Selection.prototype = {
+    idLabel : '<?= /* @escapeNotVerified */ $block->getFieldId() ?>',
+    scopePrice : <?= (int)$block->isUsedWebsitePrice() ?>,
+    templateBox : '',
+    templateRow : '',
+    itemsCount : 0,
+    row : null,
+    gridSelection: new Hash(),
+    gridRemoval: new Hash(),
+    gridSelectedProductSkus: [],
+    selectionSearchUrl: '<?= /* @escapeNotVerified */ $block->getSelectionSearchUrl() ?>',
+
+    initialize : function() {
+        this.templateBox = '<div class="tier form-list" id="' + this.idLabel + '_box_<%- data.parentIndex %>">' + bundleTemplateBox + '</div>';
+
+        this.templateRow = '<tr class="selection" id="' + this.idLabel + '_row_<%- data.index %>">' + bundleTemplateRow + '</tr>';
+    },
+
+    gridUpdateCallback: function () {
+        (function ($) {
+            var $grid = $('table[id^=bundle_selection_search_grid_]:visible');
+            $grid.find('.checkbox').prop({checked: false});
+
+            var checkRowBySku = function (sku) {
+                sku = $.trim(sku);
+                $grid.find('.sku').filter(function () {
+                    return $.trim($(this).text()) == sku;
+                }).closest('tr').find('.checkbox').prop({checked: true});
+            };
+            $.each(bSelection.gridSelection.values().pop().toArray(), function () {
+                checkRowBySku(this.pop().get('sku'));
+            });
+
+            $.each(bSelection.gridSelectedProductSkus, function () {
+                if (!bSelection.gridRemoval.get(this)) {
+                    checkRowBySku(this);
+                }
+            });
+        })(jQuery);
+    },
+
+    addRow : function (parentIndex, data) {
+        var box = null;
+        if (!(box = $(this.idLabel + '_box_' + parentIndex))) {
+            this.addBox(parentIndex);
+            box = $(this.idLabel + '_box_' + parentIndex);
+        } else {
+            box.show();
+        }
+
+        var option_type = $(bOption.idLabel + '_' + parentIndex + '_type');
+
+        if(!data){
+            var data = {};
+        }
+
+        if (data.can_read_price != undefined && !data.can_read_price) {
+            data.selection_price_value = '';
+        } else {
+            data.selection_price_value = Number(Math.round(data.selection_price_value + "e+2") + "e-2").toFixed(2);
+        }
+
+        data.index = this.itemsCount++;
+        data.parentIndex = parentIndex;
+
+        if (option_type.value == 'multi' || option_type.value == 'checkbox') {
+            data.option_type = 'checkbox';
+        } else {
+            data.option_type = 'radio';
+        }
+
+        if (data.is_default == 1) {
+            data.checked = 'checked="checked"';
+        }
+
+        this.template = mageTemplate(this.templateRow);
+        var tbody = $$('#' + this.idLabel + '_box_' + parentIndex + ' tbody');
+
+        // replace <script to avoid evalScripts() execution
+        var escapedHTML = this.template({
+            data: data
+        }).replace(/<(\/?)script/g, '&lt;$1script');
+        
+        Element.insert(tbody[0], {bottom: escapedHTML});
+
+        if (data.selection_price_type) {
+            $A($(this.idLabel + '_'+data.index+'_price_type').options).each(function(option){
+                if (option.value==data.selection_price_type) option.selected = true;
+            });
+        }
+
+        if (data.selection_price_type) {
+            $A($(this.idLabel + '_'+data.index+'_can_change_qty').options).each(function(option){
+                if (option.value==data.selection_can_change_qty) option.selected = true;
+            });
+        }
+
+        var checkbox = $(this.idLabel + '_'+data.index+'_price_scope');
+        if (checkbox && this.scopePrice) {
+            if (data.price_scope === undefined) {
+                checkbox.up().hide();
+            } else if(!data.price_scope) {
+                checkbox.checked = true;
+                this.addScope(null, checkbox);
+            }
+        }
+
+        this.bindScopeCheckbox();
+
+        if (option_type.value == 'multi' || option_type.value == 'checkbox') {
+            /**
+             * Hide not needed elements (user defined qty select box)
+             */
+            inputs = $A($$('#' + this.idLabel + '_box_' + data.parentIndex + ' .qty-box'));
+            inputs.each(
+                function(elem){
+                    elem.hide();
+                }
+            );
+        }
+
+        if (!$('price_type') || $('price_type').value != '1') {
+            /**
+             * Hide not needed elements (price type select and price input)
+             */
+            inputs = $A($$('#' + this.idLabel + '_box_' + data.parentIndex + ' .price-type-box'));
+            inputs.each(
+                function(elem){
+                    elem.hide();
+                }
+            );
+        }
+
+        jQuery('#bundle_option_' + parentIndex + ' .no-products-message').hide();
+    },
+
+    bindScopeCheckbox : function(){
+        var checkboxes = $$('.bundle-option-price-scope-checkbox');
+        for (var i=0;i<checkboxes.length;i++) {
+            if (!$(checkboxes[i]).binded) {
+                $(checkboxes[i]).binded = true;
+                Event.observe(checkboxes[i], 'click', this.addScope.bind(this));
+            }
+        }
+    },
+
+    addScope : function(event, element){
+        if (element == undefined) {
+            element = $(Event.element(event));
+        }
+        var priceValue = $(element.id.sub('scope', 'value'));
+        var priceType = $(element.id.sub('scope', 'type'));
+
+        if (element.checked) {
+            priceValue.disable();
+            priceType.disable();
+        } else {
+            priceValue.enable();
+            priceType.enable();
+        }
+    },
+
+    addBox : function (parentIndex) {
+        var div = $(bOption.idLabel + '_' + parentIndex).down('.fieldset-alt');
+        this.template = mageTemplate(this.templateBox);
+        var data = {'parentIndex' : parentIndex};
+        Element.insert(div, {
+            'after': this.template({
+                data: data
+            })
+        });
+    },
+
+    remove : function(event) {
+        var element = Event.findElement(event, 'tr');
+        var container = Event.findElement(event, 'div');
+
+        if (element) {
+            Element.select(element, '.delete').each(function(elem){elem.value='1'});
+            Element.select(element, ['input', 'select']).each(function(elem){elem.hide()});
+            Element.removeClassName(element, 'selection');
+            Element.hide(element);
+
+            var selection = $$('#' + container.id + ' tr.selection');
+            if (container && selection && !selection.length) {
+                container.hide();
+                jQuery(element).closest('.option-box').find('.no-products-message').show();
+            }
+        }
+    },
+
+    checkGroup : function(event) {
+        var element = Event.element(event);
+        if (element.type == 'radio') {
+            var box = element.up('div');
+
+            var inputs = $$('div#' + box.id + ' input.default');
+            if (inputs) {
+                for (i=0; i< inputs.length; i++) {
+                    if (inputs[i].name != element.name) {
+                        inputs[i].checked = false;
+                    }
+                }
+            }
+        }
+    },
+
+    productGridRowInit : function(grid, row){
+        var checkbox = $(row).getElementsByClassName('checkbox')[0];
+        var inputs = $(row).getElementsByClassName('input-text');
+        for (var i = 0; i < inputs.length; i++) {
+            inputs[i].checkbox = checkbox;
+        }
+    },
+
+    productGridCheckboxCheck : function(grid, element, checked) {
+        var id = element.up('table').id.split('_')[4];
+        if (element.value > 0) {
+            var tr = element.parentNode.parentNode,
+                sku = jQuery.trim(tr.select('td.sku')[0].innerHTML);
+            if (element.checked) {
+                if (!this.gridSelection.get(id)) {
+                    this.gridSelection.set(id, $H({}));
+                }
+                this.gridSelection.get(id).set(element.value, $H({}));
+                this.gridSelection.get(id).get(element.value).set('name', tr.select('td.name')[0].innerHTML);
+                this.gridSelection.get(id).get(element.value).set('sku', sku);
+                this.gridRemoval.unset(sku);
+            } else {
+                this.gridSelection.get(id).unset(element.value);
+                this.gridRemoval.set(sku, 1);
+            }
+        }
+    },
+
+    productGridRowClick : function(grid, event) {
+        var trElement = Event.findElement(event, 'tr');
+        var isInput = Event.element(event).tagName == 'INPUT';
+        if (trElement) {
+            var checkbox = Element.select(trElement, 'input');
+            if (checkbox[0]) {
+                var checked = isInput ? checkbox[0].checked : !checkbox[0].checked;
+                grid.setCheckboxChecked(checkbox[0], checked);
+            }
+        }
+    }
+};
+
+bSelection = new Bundle.Selection();
+
+});
+</script>

@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="customer_data_object_login">
+        <observer name="persistent" instance="Magento\Persistent\Observer\SynchronizePersistentOnLoginObserver" />
+    </event>
+    <event name="customer_logout">
+        <observer name="persistent" instance="Magento\Persistent\Observer\SynchronizePersistentOnLogoutObserver" />
+    </event>
+    <event name="layout_generate_blocks_after">
+        <observer name="persistent" instance="Magento\Persistent\Observer\ApplyPersistentDataObserver" />
+    </event>
+    <event name="customer_customer_authenticated">
+        <observer name="persistent" instance="Magento\Persistent\Observer\CustomerAuthenticatedEventObserver" />
+    </event>
+    <event name="sales_quote_save_before">
+        <observer name="persistent" instance="Magento\Persistent\Observer\SetQuotePersistentDataObserver" />
+    </event>
+    <event name="custom_quote_process">
+        <observer name="persistent" instance="Magento\Persistent\Observer\SetLoadPersistentQuoteObserver" />
+    </event>
+    <event name="customer_register_success">
+        <observer name="persistent" instance="Magento\Persistent\Observer\RemovePersistentCookieOnRegisterObserver" />
+    </event>
+    <event name="render_block">
+        <observer name="persistent" instance="Magento\Persistent\Observer\ApplyBlockPersistentDataObserver" />
+    </event>
+    <event name="update_customer_cookies">
+        <observer name="persistent" instance="Magento\Persistent\Observer\UpdateCustomerCookiesObserver" />
+    </event>
+</config>

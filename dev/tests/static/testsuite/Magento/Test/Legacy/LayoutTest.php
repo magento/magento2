@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -27,14 +9,16 @@
  */
 namespace Magento\Test\Legacy;
 
-class LayoutTest extends \PHPUnit_Framework_TestCase
+use Magento\Framework\Component\ComponentRegistrar;
+
+class LayoutTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * List of obsolete nodes
      *
      * @var array
      */
-    protected $_obsoleteNodes = array(
+    protected $_obsoleteNodes = [
         'PRODUCT_TYPE_simple',
         'PRODUCT_TYPE_configurable',
         'PRODUCT_TYPE_grouped',
@@ -52,16 +36,16 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         'cms_page',
         'sku_failed_products_handle',
         'catalog_product_send',
-        'reference'
-    );
+        'reference',
+    ];
 
     /**
      * List of obsolete references per handle
      *
      * @var array
      */
-    protected $_obsoleteReferences = array(
-        'adminhtml_user_edit' => array(
+    protected $_obsoleteReferences = [
+        'adminhtml_user_edit' => [
             'adminhtml.permissions.user.edit.tabs',
             'adminhtml.permission.user.edit.tabs',
             'adminhtml.permissions.user.edit',
@@ -69,41 +53,41 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             'adminhtml.permissions.user.roles.grid.js',
             'adminhtml.permission.user.roles.grid.js',
             'adminhtml.permissions.user.edit.tab.roles',
-            'adminhtml.permissions.user.edit.tab.roles.js'
-        ),
-        'adminhtml_user_role_index' => array(
+            'adminhtml.permissions.user.edit.tab.roles.js',
+        ],
+        'adminhtml_user_role_index' => [
             'adminhtml.permission.role.index',
             'adminhtml.permissions.role.index',
-            'adminhtml.permissions.role.grid'
-        ),
-        'adminhtml_user_role_rolegrid' => array('adminhtml.permission.role.grid', 'adminhtml.permissions.role.grid'),
-        'adminhtml_user_role_editrole' => array(
+            'adminhtml.permissions.role.grid',
+        ],
+        'adminhtml_user_role_rolegrid' => ['adminhtml.permission.role.grid', 'adminhtml.permissions.role.grid'],
+        'adminhtml_user_role_editrole' => [
             'adminhtml.permissions.editroles',
             'adminhtml.permissions.tab.rolesedit',
             'adminhtml.permission.roles.users.grid.js',
             'adminhtml.permissions.roles.users.grid.js',
             'adminhtml.permission.role.buttons',
             'adminhtml.permissions.role.buttons',
-            'adminhtml.permission.role.edit.gws'
-        ),
-        'adminhtml_user_role_editrolegrid' => array(
+            'adminhtml.permission.role.edit.gws',
+        ],
+        'adminhtml_user_role_editrolegrid' => [
             'adminhtml.permission.role.grid.user',
-            'adminhtml.permissions.role.grid.user'
-        ),
-        'adminhtml_user_index' => array('adminhtml.permission.user.index', 'adminhtml.permissions.user.index'),
-        'adminhtml_user_rolegrid' => array(
+            'adminhtml.permissions.role.grid.user',
+        ],
+        'adminhtml_user_index' => ['adminhtml.permission.user.index', 'adminhtml.permissions.user.index'],
+        'adminhtml_user_rolegrid' => [
             'adminhtml.permissions.user.rolegrid',
-            'adminhtml.permission.user.rolegrid'
-        ),
-        'adminhtml_user_rolesgrid' => array(
+            'adminhtml.permission.user.rolegrid',
+        ],
+        'adminhtml_user_rolesgrid' => [
             'adminhtml.permissions.user.rolesgrid',
-            'adminhtml.permission.user.rolesgrid'
-        )
-    );
+            'adminhtml.permission.user.rolesgrid',
+        ],
+    ];
 
     public function testLayoutFile()
     {
-        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
             /**
              * @param string $layoutFile
@@ -117,7 +101,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
                 $selectorHeadBlock = '(name()="block" or name()="referenceBlock") and ' .
                     '(@name="head" or @name="convert_root_head" or @name="vde_head")';
                 $this->assertSame(
-                    array(),
+                    [],
                     $layoutXml->xpath(
                         '//block[@class="Magento\Theme\Block\Html\Head\Css" ' .
                         'or @class="Magento\Theme\Block\Html\Head\Link" ' .
@@ -126,12 +110,12 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
                         $selectorHeadBlock .
                         ')]'
                     ),
-                    'Blocks \Magento\Theme\Block\Html\Head\{Css,Link,Script} '.
+                    'Blocks \Magento\Theme\Block\Html\Head\{Css,Link,Script} ' .
                     'are allowed within the "head" block only. ' .
                     'Verify integrity of the nodes nesting.'
                 );
                 $this->assertSame(
-                    array(),
+                    [],
                     $layoutXml->xpath('/layout//*[@output="toHtml"]'),
                     'output="toHtml" is obsolete. Use output="1"'
                 );
@@ -147,12 +131,15 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
                     $this->assertContains('::', $action->getAttribute('helper'));
                 }
 
+                $componentRegistrar = new ComponentRegistrar();
                 if (false !== strpos(
                     $layoutFile,
-                    'app/code/Magento/Sales/view/adminhtml/layout/sales_order'
+                    $componentRegistrar->getPath(ComponentRegistrar::MODULE, 'Magento_Sales')
+                    . '/view/adminhtml/layout/sales_order'
                 ) || false !== strpos(
                     $layoutFile,
-                    'app/code/Magento/Shipping/view/adminhtml/layout/adminhtml_order'
+                    $componentRegistrar->getPath(ComponentRegistrar::MODULE, 'Magento_Shipping')
+                    . '/view/adminhtml/layout/adminhtml_order'
                 )
                 ) {
                     $this->markTestIncomplete(
@@ -161,13 +148,13 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
                     );
                 }
                 $this->assertSame(
-                    array(),
+                    [],
                     $layoutXml->xpath('/layout//block[@class="Magento\Framework\View\Element\Text\ListText"]'),
                     'The class \Magento\Framework\View\Element\Text\ListTest' .
                     ' is not supposed to be used in layout anymore.'
                 );
             },
-            \Magento\TestFramework\Utility\Files::init()->getLayoutFiles()
+            \Magento\Framework\App\Utility\Files::init()->getLayoutFiles()
         );
     }
 
@@ -197,7 +184,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
      */
     protected function _testObsoleteAttributes($layoutXml)
     {
-        $issues = array();
+        $issues = [];
         $type = $layoutXml['type'];
         $parent = $layoutXml['parent'];
         $owner = $layoutXml['owner'];
@@ -219,7 +206,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
 
     public function testActionNodeMethods()
     {
-        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
             /**
              * @param string $layoutFile
@@ -237,7 +224,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
                     );
                 }
             },
-            \Magento\TestFramework\Utility\Files::init()->getLayoutFiles()
+            \Magento\Framework\App\Utility\Files::init()->getLayoutFiles()
         );
     }
 
@@ -252,7 +239,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
      */
     public function getAllowedActionNodeMethods()
     {
-        return array(
+        return [
             'addBodyClass',
             'addButtons',
             'addColumnCountLayoutDepend',
@@ -334,7 +321,6 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             'setListOrders',
             'setMAPTemplate',
             'setMethodFormTemplate',
-            'setMethodInfo',
             'setMyClass',
             'setPageLayout',
             'setPageTitle',
@@ -368,7 +354,8 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             'setWrapperClass',
             'unsetChild',
             'unsetChildren',
-            'updateButton'
-        );
+            'updateButton',
+            'setIsProductListingContext'
+        ];
     }
 }

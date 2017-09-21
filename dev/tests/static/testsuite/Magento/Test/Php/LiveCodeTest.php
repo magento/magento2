@@ -1,40 +1,24 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Test\Php;
 
+use Magento\Framework\App\Utility\Files;
 use Magento\TestFramework\CodingStandard\Tool\CodeMessDetector;
-use Magento\TestFramework\CodingStandard\Tool\CodeSniffer\Wrapper;
 use Magento\TestFramework\CodingStandard\Tool\CodeSniffer;
+use Magento\TestFramework\CodingStandard\Tool\CodeSniffer\Wrapper;
 use Magento\TestFramework\CodingStandard\Tool\CopyPasteDetector;
-use Magento\TestFramework\Utility;
-use PHP_PMD_TextUI_Command;
-use PHPUnit_Framework_TestCase;
+use PHPMD\TextUI\Command;
 
 /**
  * Set of tests for static code analysis, e.g. code style, code complexity, copy paste detecting, etc.
  */
-class LiveCodeTest extends PHPUnit_Framework_TestCase
+class LiveCodeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string
@@ -42,14 +26,9 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
     protected static $reportDir = '';
 
     /**
-     * @var array
+     * @var string
      */
-    protected static $whiteList = array();
-
-    /**
-     * @var array
-     */
-    protected static $blackList = array();
+    protected static $pathToSource = '';
 
     /**
      * Setup basics for all tests
@@ -58,139 +37,207 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
      */
     public static function setUpBeforeClass()
     {
-        self::$reportDir = Utility\Files::init()->getPathToSource() . '/dev/tests/static/report';
+        self::$pathToSource = BP;
+        self::$reportDir = self::$pathToSource . '/dev/tests/static/report';
         if (!is_dir(self::$reportDir)) {
-            mkdir(self::$reportDir, 0777);
+            mkdir(self::$reportDir);
         }
-        self::setupFileLists();
     }
 
     /**
-     * Helper method to setup the black and white lists
+     * Returns base folder for suite scope
      *
-     * @param string $type
-     * @return void
+     * @return string
      */
-    public static function setupFileLists($type = '')
+    private static function getBaseFilesFolder()
     {
-        if ($type != '' && !preg_match('/\/$/', $type)) {
-            $type = $type . '/';
-        }
-        self::$whiteList = Utility\Files::readLists(__DIR__ . '/_files/' . $type . 'whitelist/*.txt');
-        self::$blackList = Utility\Files::readLists(__DIR__ . '/_files/' . $type . 'blacklist/*.txt');
+        return __DIR__;
     }
 
     /**
-     * Run the PSR2 code sniffs on the code
+     * Returns base directory for whitelisted files
      *
-     * @TODO: combine with testCodeStyle
-     * @return void
+     * @return string
      */
-    public function testCodeStylePsr2()
+    private static function getChangedFilesBaseDir()
     {
-        $reportFile = self::$reportDir . '/phpcs_psr2_report.xml';
-        $wrapper = new Wrapper();
-        $codeSniffer = new CodeSniffer('PSR2', $reportFile, $wrapper);
-        if (!$codeSniffer->canRun()) {
-            $this->markTestSkipped('PHP Code Sniffer is not installed.');
-        }
-        if (version_compare($codeSniffer->version(), '1.4.7') === -1) {
-            $this->markTestSkipped('PHP Code Sniffer Build Too Old.');
-        }
-        self::setupFileLists('phpcs');
-        $result = $codeSniffer->run(self::$whiteList, self::$blackList, array('php'));
-        $this->assertFileExists(
-            $reportFile,
-            'Expected ' . $reportFile . ' to be created by phpcs run with PSR2 standard'
-        );
-        $this->assertEquals(
-            0,
-            $result,
-            "PHP Code Sniffer has found {$result} error(s): See detailed report in {$reportFile}"
-        );
+        return __DIR__ . '/..';
     }
 
     /**
-     * Run the magento specific coding standards on the code
+     * Returns whitelist based on blacklist and git changed files
      *
-     * @return void
+     * @param array $fileTypes
+     * @param string $changedFilesBaseDir
+     * @param string $baseFilesFolder
+     * @return array
      */
+    public static function getWhitelist($fileTypes = ['php'], $changedFilesBaseDir = '', $baseFilesFolder = '')
+    {
+        $changedFiles = self::getChangedFilesList($changedFilesBaseDir);
+        if (empty($changedFiles)) {
+            return [];
+        }
+
+        $globPatternsFolder = ('' !== $baseFilesFolder) ? $baseFilesFolder : self::getBaseFilesFolder();
+        $directoriesToCheck = Files::init()->readLists($globPatternsFolder . '/_files/whitelist/common.txt');
+        $targetFiles = self::filterFiles($changedFiles, $fileTypes, $directoriesToCheck);
+
+        return $targetFiles;
+    }
+
+    /**
+     * This method loads list of changed files.
+     *
+     * List may be generated by:
+     *  - dev/tests/static/get_github_changes.php utility (allow to generate diffs between branches),
+     *  - CLI command "git diff --name-only > dev/tests/static/testsuite/Magento/Test/_files/changed_files_local.txt",
+     *
+     * If no generated changed files list found "git diff" will be used to find not committed changed
+     * (tests should be invoked from target gir repo).
+     *
+     * Note: "static" modifier used for compatibility with legacy implementation of self::getWhitelist method
+     *
+     * @param string $changedFilesBaseDir Base dir with previously generated list files
+     * @return string[] List of changed files
+     */
+    private static function getChangedFilesList($changedFilesBaseDir)
+    {
+        $changedFiles = [];
+
+        $globFilesListPattern = ($changedFilesBaseDir ?: self::getChangedFilesBaseDir()) . '/_files/changed_files*';
+        $listFiles = glob($globFilesListPattern);
+        if (count($listFiles)) {
+            foreach ($listFiles as $listFile) {
+                $changedFiles = array_merge(
+                    $changedFiles,
+                    file($listFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES)
+                );
+            }
+        } else {
+            // if no list files, probably, this is the dev environment
+            @exec('git diff --name-only', $changedFiles);
+        }
+
+        array_walk(
+            $changedFiles,
+            function (&$file) {
+                $file = BP . '/' . $file;
+            }
+        );
+
+        return $changedFiles;
+    }
+
+    /**
+     * Filter list of files.
+     *
+     * File removed from list:
+     *  - if it not exists,
+     *  - if allowed types are specified and file has another type (extension),
+     *  - if allowed directories specified and file not located in one of them.
+     *
+     * Note: "static" modifier used for compatibility with legacy implementation of self::getWhitelist method
+     *
+     * @param string[] $files List of file paths to filter
+     * @param string[] $allowedFileTypes List of allowed file extensions (pass empty array to allow all)
+     * @param string[] $allowedDirectories List of allowed directories (pass empty array to allow all)
+     * @return string[] Filtered file paths
+     */
+    private static function filterFiles(array $files, array $allowedFileTypes, array $allowedDirectories)
+    {
+        if (empty($allowedFileTypes)) {
+            $fileHasAllowedType = function () {
+                return true;
+            };
+        } else {
+            $fileHasAllowedType = function ($file) use ($allowedFileTypes) {
+                return in_array(pathinfo($file, PATHINFO_EXTENSION), $allowedFileTypes);
+            };
+        }
+
+        if (empty($allowedDirectories)) {
+            $fileIsInAllowedDirectory = function () {
+                return true;
+            };
+        } else {
+            $allowedDirectories = array_map('realpath', $allowedDirectories);
+            usort($allowedDirectories, function ($dir1, $dir2) {
+                return strlen($dir1) - strlen($dir2);
+            });
+            $fileIsInAllowedDirectory = function ($file) use ($allowedDirectories) {
+                foreach ($allowedDirectories as $directory) {
+                    if (strpos($file, $directory) === 0) {
+                        return true;
+                    }
+                }
+                return false;
+            };
+        }
+
+        $filtered = array_filter(
+            $files,
+            function ($file) use ($fileHasAllowedType, $fileIsInAllowedDirectory) {
+                $file = realpath($file);
+                if (false === $file) {
+                    return false;
+                }
+                return $fileHasAllowedType($file) && $fileIsInAllowedDirectory($file);
+            }
+        );
+
+        return $filtered;
+    }
+
+    /**
+     * Retrieves full list of codebase paths without any files/folders filtered out
+     *
+     * @return array
+     */
+    private function getFullWhitelist()
+    {
+        return Files::init()->readLists(__DIR__ . '/_files/whitelist/common.txt');
+    }
+
     public function testCodeStyle()
     {
-        $reportFile = self::$reportDir . '/phpcs_report.xml';
-        $wrapper = new Wrapper();
-        $codeSniffer = new CodeSniffer(realpath(__DIR__ . '/_files/phpcs'), $reportFile, $wrapper);
-        if (!$codeSniffer->canRun()) {
-            $this->markTestSkipped('PHP Code Sniffer is not installed.');
-        }
-        self::setupFileLists();
-        $result = $codeSniffer->run(self::$whiteList, self::$blackList, array('php', 'phtml'));
+        $reportFile = self::$reportDir . '/phpcs_report.txt';
+        $codeSniffer = new CodeSniffer('Magento', $reportFile, new Wrapper());
         $this->assertEquals(
             0,
-            $result,
-            "PHP Code Sniffer has found {$result} error(s): See detailed report in {$reportFile}"
+            $result = $codeSniffer->run($this->getFullWhitelist()),
+            "PHP Code Sniffer detected {$result} violation(s): " . PHP_EOL . file_get_contents($reportFile)
         );
     }
 
-    /**
-     * Run the annotations sniffs on the code
-     *
-     * @return void
-     * @todo Combine with normal code style at some point.
-     */
-    public function testAnnotationStandard()
-    {
-        $reportFile = self::$reportDir . '/phpcs_annotations_report.xml';
-        $warningSeverity = 5;
-        $wrapper = new Wrapper();
-        $codeSniffer = new CodeSniffer(
-            realpath(__DIR__ . '/../../../../framework/Magento/ruleset.xml'),
-            $reportFile,
-            $wrapper
-        );
-        if (!$codeSniffer->canRun()) {
-            $this->markTestSkipped('PHP Code Sniffer is not installed.');
-        }
-        self::setupFileLists('phpcs');
-        // Scan for error amount
-        $result = $codeSniffer->run(self::$whiteList, self::$blackList, array('php'), 0);
-        // Rescan to generate report with warnings.
-        $codeSniffer->run(self::$whiteList, self::$blackList, array('php'), $warningSeverity);
-        // Fail if there are errors in report.
-        $this->assertEquals(
-            0,
-            $result,
-            "PHP Code Sniffer has found {$result} error(s): See detailed report in {$reportFile}"
-        );
-    }
-
-    /**
-     * Run mess detector on code
-     *
-     * @return void
-     */
     public function testCodeMess()
     {
-        $reportFile = self::$reportDir . '/phpmd_report.xml';
+        $reportFile = self::$reportDir . '/phpmd_report.txt';
         $codeMessDetector = new CodeMessDetector(realpath(__DIR__ . '/_files/phpmd/ruleset.xml'), $reportFile);
 
         if (!$codeMessDetector->canRun()) {
             $this->markTestSkipped('PHP Mess Detector is not available.');
         }
 
-        self::setupFileLists();
+        $result = $codeMessDetector->run(self::getWhitelist(['php']));
+
+        $output = "";
+        if (file_exists($reportFile)) {
+            $output = file_get_contents($reportFile);
+        }
+
         $this->assertEquals(
-            PHP_PMD_TextUI_Command::EXIT_SUCCESS,
-            $codeMessDetector->run(self::$whiteList, self::$blackList),
-            "PHP Code Mess has found error(s): See detailed report in {$reportFile}"
+            Command::EXIT_SUCCESS,
+            $result,
+            "PHP Code Mess has found error(s):" . PHP_EOL . $output
         );
+
+        // delete empty reports
+        if (file_exists($reportFile)) {
+            unlink($reportFile);
+        }
     }
 
-    /**
-     * Run copy paste detector on code
-     *
-     * @return void
-     */
     public function testCopyPaste()
     {
         $reportFile = self::$reportDir . '/phpcpd_report.xml';
@@ -200,15 +247,23 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
             $this->markTestSkipped('PHP Copy/Paste Detector is not available.');
         }
 
-        self::setupFileLists();
-        $blackList = array();
+        $blackList = [];
         foreach (glob(__DIR__ . '/_files/phpcpd/blacklist/*.txt') as $list) {
             $blackList = array_merge($blackList, file($list, FILE_IGNORE_NEW_LINES));
         }
 
+        $copyPasteDetector->setBlackList($blackList);
+
+        $result = $copyPasteDetector->run([BP]);
+
+        $output = "";
+        if (file_exists($reportFile)) {
+            $output = file_get_contents($reportFile);
+        }
+
         $this->assertTrue(
-            $copyPasteDetector->run(array(), $blackList),
-            "PHP Copy/Paste Detector has found error(s): See detailed report in {$reportFile}"
+            $result,
+            "PHP Copy/Paste Detector has found error(s):" . PHP_EOL . $output
         );
     }
 }

@@ -1,46 +1,22 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order\Status;
+
+use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Sales\Api\Data\OrderStatusHistoryInterface;
+use Magento\Sales\Model\AbstractModel;
 
 /**
  * Order status history comments
  *
- * @method \Magento\Sales\Model\Resource\Order\Status\History _getResource()
- * @method \Magento\Sales\Model\Resource\Order\Status\History getResource()
- * @method int getParentId()
- * @method \Magento\Sales\Model\Order\Status\History setParentId(int $value)
- * @method int getIsCustomerNotified()
- * @method int getIsVisibleOnFront()
- * @method \Magento\Sales\Model\Order\Status\History setIsVisibleOnFront(int $value)
- * @method string getComment()
- * @method \Magento\Sales\Model\Order\Status\History setComment(string $value)
- * @method string getStatus()
- * @method \Magento\Sales\Model\Order\Status\History setStatus(string $value)
- * @method string getCreatedAt()
- * @method \Magento\Sales\Model\Order\Status\History setCreatedAt(string $value)
+ * @api
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
-class History extends \Magento\Sales\Model\AbstractModel
+class History extends AbstractModel implements OrderStatusHistoryInterface
 {
     const CUSTOMER_NOTIFICATION_NOT_APPLICABLE = 2;
 
@@ -69,24 +45,33 @@ class History extends \Magento\Sales\Model\AbstractModel
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
+     * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
+        AttributeValueFactory $customAttributeFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
-        array $data = array()
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        array $data = []
     ) {
-        parent::__construct($context, $registry, $localeDate, $dateTime, $resource, $resourceCollection, $data);
+        parent::__construct(
+            $context,
+            $registry,
+            $extensionFactory,
+            $customAttributeFactory,
+            $resource,
+            $resourceCollection,
+            $data
+        );
         $this->_storeManager = $storeManager;
     }
 
@@ -97,7 +82,7 @@ class History extends \Magento\Sales\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\Resource\Order\Status\History');
+        $this->_init(\Magento\Sales\Model\ResourceModel\Order\Status\History::class);
     }
 
     /**
@@ -121,7 +106,7 @@ class History extends \Magento\Sales\Model\AbstractModel
      */
     public function setIsCustomerNotified($flag = null)
     {
-        if (is_null($flag)) {
+        if ($flag === null) {
             $flag = self::CUSTOMER_NOTIFICATION_NOT_APPLICABLE;
         }
 
@@ -141,6 +126,8 @@ class History extends \Magento\Sales\Model\AbstractModel
     /**
      * Retrieve order instance
      *
+     * @codeCoverageIgnore
+     *
      * @return \Magento\Sales\Model\Order
      */
     public function getOrder()
@@ -151,13 +138,14 @@ class History extends \Magento\Sales\Model\AbstractModel
     /**
      * Retrieve status label
      *
-     * @return string
+     * @return string|null
      */
     public function getStatusLabel()
     {
         if ($this->getOrder()) {
             return $this->getOrder()->getConfig()->getStatusLabel($this->getStatus());
         }
+        return null;
     }
 
     /**
@@ -178,9 +166,9 @@ class History extends \Magento\Sales\Model\AbstractModel
      *
      * @return $this
      */
-    protected function _beforeSave()
+    public function beforeSave()
     {
-        parent::_beforeSave();
+        parent::beforeSave();
 
         if (!$this->getParentId() && $this->getOrder()) {
             $this->setParentId($this->getOrder()->getId());
@@ -188,4 +176,158 @@ class History extends \Magento\Sales\Model\AbstractModel
 
         return $this;
     }
+
+    //@codeCoverageIgnoreStart
+
+    /**
+     * Returns comment
+     *
+     * @return string
+     */
+    public function getComment()
+    {
+        return $this->getData(OrderStatusHistoryInterface::COMMENT);
+    }
+
+    /**
+     * Returns created_at
+     *
+     * @return string
+     */
+    public function getCreatedAt()
+    {
+        return $this->getData(OrderStatusHistoryInterface::CREATED_AT);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCreatedAt($createdAt)
+    {
+        return $this->setData(OrderStatusHistoryInterface::CREATED_AT, $createdAt);
+    }
+
+    /**
+     * Returns entity_id
+     *
+     * @return int
+     */
+    public function getEntityId()
+    {
+        return $this->getData(OrderStatusHistoryInterface::ENTITY_ID);
+    }
+
+    /**
+     * Returns entity_name
+     *
+     * @return string
+     */
+    public function getEntityName()
+    {
+        return $this->getData(OrderStatusHistoryInterface::ENTITY_NAME);
+    }
+
+    /**
+     * Returns is_customer_notified
+     *
+     * @return int
+     */
+    public function getIsCustomerNotified()
+    {
+        return $this->getData(OrderStatusHistoryInterface::IS_CUSTOMER_NOTIFIED);
+    }
+
+    /**
+     * Returns is_visible_on_front
+     *
+     * @return int
+     */
+    public function getIsVisibleOnFront()
+    {
+        return $this->getData(OrderStatusHistoryInterface::IS_VISIBLE_ON_FRONT);
+    }
+
+    /**
+     * Returns parent_id
+     *
+     * @return int
+     */
+    public function getParentId()
+    {
+        return $this->getData(OrderStatusHistoryInterface::PARENT_ID);
+    }
+
+    /**
+     * Returns status
+     *
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->getData(OrderStatusHistoryInterface::STATUS);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setParentId($id)
+    {
+        return $this->setData(OrderStatusHistoryInterface::PARENT_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setIsVisibleOnFront($isVisibleOnFront)
+    {
+        return $this->setData(OrderStatusHistoryInterface::IS_VISIBLE_ON_FRONT, $isVisibleOnFront);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setComment($comment)
+    {
+        return $this->setData(OrderStatusHistoryInterface::COMMENT, $comment);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setStatus($status)
+    {
+        return $this->setData(OrderStatusHistoryInterface::STATUS, $status);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setEntityName($entityName)
+    {
+        return $this->setData(OrderStatusHistoryInterface::ENTITY_NAME, $entityName);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Sales\Api\Data\OrderStatusHistoryExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Sales\Api\Data\OrderStatusHistoryExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\Sales\Api\Data\OrderStatusHistoryExtensionInterface $extensionAttributes
+    ) {
+        return $this->_setExtensionAttributes($extensionAttributes);
+    }
+
+    //@codeCoverageIgnoreEnd
 }

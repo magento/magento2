@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+    <fixture name="user"
+             module="Magento_User"
+             type="flat"
+             entity_type="admin_user"
+             collection="Magento\User\Model\ResourceModel\User\Collection"
+             repository_class="Magento\User\Test\Repository\User"
+             handler_interface="Magento\User\Test\Handler\User\UserInterface"
+             class="Magento\User\Test\Fixture\User">
+        <field name="user_id" is_required="1" />
+        <field name="firstname" is_required="" group="user-info" />
+        <field name="lastname" is_required="" group="user-info" />
+        <field name="email" is_required="" group="user-info" />
+        <field name="username" is_required="" group="user-info" />
+        <field name="password" is_required="" group="user-info" />
+        <field name="created" is_required="" />
+        <field name="modified" is_required="" />
+        <field name="logdate" is_required="" />
+        <field name="lognum" is_required="" />
+        <field name="reload_acl_flag" is_required="" />
+        <field name="is_active" is_required="" />
+        <field name="extra" is_required="" />
+        <field name="rp_token" is_required="" />
+        <field name="rp_token_created_at" is_required="" />
+        <field name="interface_locale" is_required="" />
+        <field name="role_id" group="user-role" source="Magento\User\Test\Fixture\User\RoleId" />
+        <field name="password_confirmation" group="user-info" />
+        <field name="current_password" group="user-info" source="Magento\User\Test\Fixture\User\CurrentPassword" />
+    </fixture>
+</config>

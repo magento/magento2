@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Backend\Test\TestCase\NavigateMenuTest">
+        <variation name="NavigateMenuTest35">
+            <data name="menuItem" xsi:type="string">System > Import</data>
+            <data name="pageTitle" xsi:type="string">Import</data>
+            <constraint name="Magento\Backend\Test\Constraint\AssertBackendPageIsAvailable"/>
+        </variation>
+        <variation name="NavigateMenuTest36">
+            <data name="menuItem" xsi:type="string">System > Export</data>
+            <data name="pageTitle" xsi:type="string">Export</data>
+            <constraint name="Magento\Backend\Test\Constraint\AssertBackendPageIsAvailable"/>
+        </variation>
+    </testCase>
+</config>

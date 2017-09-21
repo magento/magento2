@@ -1,0 +1,105 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables -> Actions
+//  _____________________________________________
+
+@action__border-color: @color-gray68;
+@action__font-size: @font-size__base;
+@action__line-height: @line-height__base;
+
+@action__padding-top: round(((@field-control__height -
+    (@field-control__font-size * @field-control__line-height) -
+    ((unit(@field-control__border-width) / @font-size-unit-ratio) * 2)) / 2 + .1), 1);
+
+@action__padding-bottom: @field-control__padding-top;
+@action__height: 3.2rem;
+
+@action__active__border-color: @color-blue-pure; // Not the same as @button__hover__border-color
+@action__hover__background-color: @color-blue-clear-sky;
+@action__hover__border-color: darken(@action__border-color, 15%);
+
+@action__outer-indent: .7rem;
+
+@action-select__disabled__color: @text__color;
+
+//  Actions menu
+@action-menu__hover__background-color: @color-gray89;
+
+//
+//  Buttons
+//  ---------------------------------------------
+
+//  Base button
+@button__background-color: @color-gray89;
+@button__border-color: @action__border-color;
+@button__border-size: 1px;
+@button__border-style: solid;
+@button__color: @color-brownie;
+@button__font-family: @font-family__base;
+@button__font-size: @action__font-size;
+@button__line-height: @action__line-height;
+@button__padding-top: @action__padding-top;
+@button__padding-bottom: @action__padding-bottom;
+@button__padding-horizontal: 1em;
+@button__padding-vertical__l: .6875em;
+
+@button__active__background-color: darken(@button__background-color, 5%);
+@button__hover__background-color: darken(@button__background-color, 3%);
+@button__hover__border-color: @color-blue-pure;
+@button__hover__box-shadow: 0 0 0 1px @button__hover__border-color;
+
+@button__large__font-size: 1.6rem;
+@button__large__padding-horizontal: 1.45em;
+@button__large__padding-vertical: .7em;
+
+//  Primary button
+@button-primary__background-color: @primary__color;
+@button-primary__color: @color-white;
+@button-primary__hover__background-color: @color-phoenix-brown-almost;
+@button-primary__hover__border-color: @color-phoenix-brown;
+
+//  Secondary button
+@button-secondary__background-color: @color-brownie;
+@button-secondary__border-color: @button-secondary__background-color;
+@button-secondary__color: @color-white;
+@button-secondary__active__background-color: @color-very-dark-gray-black2;
+@button-secondary__hover__background-color: @color-very-dark-gray-black2;
+@button-secondary__hover__border-color: @button-secondary__hover__background-color;
+
+//  Triangle marker
+@button-marker-triangle__height: .5rem;
+@button-marker-triangle__width: .8rem;
+
+@button-marker-triangle__height__xl: .9rem;
+@button-marker-triangle__width__xl: 1.2rem;
+
+//  Button Triangle
+@button-triangle__base__border-color: darken(@button__border-color, 10%);
+@button-triangle__base__disabled__background-color: lighten(@button__background-color, 10%);
+@button-triangle__base__size: 1.7rem;
+
+//
+//  Dropdown
+//  ---------------------------------------------
+
+@action-dropdown__color: @text__color;
+@action-dropdown__background-color: @page-wrapper__background-color;
+@action-dropdown__border-color: @color-light-gray;
+@action-dropdown__font-size: round(@font-size__base - .1rem, 1);
+@action-dropdown__height: @action__height;
+@action-dropdown__padding-top: .7rem;
+@action-dropdown__padding-bottom: .8rem;
+@action-dropdown__padding-horizontal: 1.5rem;
+@action-dropdown__padding-right: @action-dropdown__padding-horizontal + @action-dropdown-menu__padding-horizontal + @button-marker-triangle__width;
+@action-dropdown__active__border-color: @color-blue-pure;
+@action-dropdown__hover__color: darken(@action-dropdown__color, 20%);
+
+@action-dropdown-menu__padding-vertical: .5rem;
+@action-dropdown-menu__padding-horizontal: 1rem;
+
+@action-dropdown-menu-link__padding-vertical: .6rem;
+@action-dropdown-menu-link__padding-horizontal: @action-dropdown__padding-horizontal - @action-dropdown-menu__padding-horizontal;

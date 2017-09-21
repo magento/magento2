@@ -1,0 +1,80 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+
+<?php /** @var $block \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\Css */ ?>
+
+<?= $block->getFormHtml() ?>
+
+<script>
+require([
+    "jquery",
+    "Magento_Ui/js/modal/alert",
+    "jquery/file-uploader",
+    "mage/translate"
+], function($, alert){
+
+    $( '#css_file_uploader' ).fileupload({
+        dataType: 'json',
+        replaceFileInput: false,
+        url : '<?= /* @escapeNotVerified */ $block->getUrl('*/system_design_theme/uploadcss') ?>',
+        acceptFileTypes: /(.|\/)(css)$/i,
+
+        /**
+         * Add data
+         * @param e
+         * @param data
+         */
+        add: function (e, data) {
+            var uploadButton = $('#css_uploader_button');
+            /** Unbind click event on file change */
+            uploadButton.unbind('click');
+            uploadButton.removeAttr('disabled');
+
+            uploadButton.click(function () {
+                $('#messages').html('');
+                $(this).attr('disabled', 'disabled');
+                data.submit();
+            });
+        },
+
+        /**
+         * On done event
+         * @param e
+         * @param data
+         */
+        done: function (e, data) {
+            var contentArea = $('#custom_css_content');
+            $(this).val('');
+
+            $('#css_uploader_button').attr('disabled', 'disabled');
+
+            if (!data.result.error) {
+                contentArea.trigger('focusin');
+                contentArea.val(data.result.content);
+                contentArea.trigger('focusout');
+            }
+        },
+
+        /**
+         * Fail event
+         * @param e
+         * @param data
+         */
+        fail: function(e, data) {
+            $(this).val('');
+            alert({
+                content: $.mage.__("We don't recognize this file extension.")
+            });
+        }
+    });
+
+    $(document).on('beforeSubmit', function() {
+        $('#css_file_uploader').val('');
+    });
+
+});
+</script>

@@ -1,0 +1,111 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Page footer
+//  _____________________________________________
+
+@footer__background-color: @body__background-color;
+@footer__border-color: @color-light-gray;
+@footer__border-width: .1rem;
+@footer__color: @color-very-dark-gray1;
+@footer-version__color: @color-gray40;
+@footer-copyright__color: @color-gray40;
+
+@footer-link__color: @color-light-phoenix;
+@footer-link__text-decoration: underline;
+
+@footer-link__hover__color: @color-light-phoenix;
+@footer-link__hover__text-decoration: underline;
+
+.page-footer {
+    background-color: @footer__background-color;
+    border-top: @footer__border-width solid @footer__border-color;
+    color: @footer__color;
+    margin-top: auto;
+    padding: 2.6rem 2rem 6rem 3rem;
+
+    a {
+        .lib-link(
+            @_link-color: @footer-link__color,
+            @_link-text-decoration: @footer-link__text-decoration,
+            @_link-color-visited: false,
+            @_link-text-decoration-visited: false,
+            @_link-color-hover: @footer-link__color,
+            @_link-text-decoration-hover: false,
+            @_link-color-active: false,
+            @_link-text-decoration-active: false
+        );
+    }
+
+    .admin__control-select {
+        max-width: 52rem;
+        width: 100%;
+    }
+}
+
+.magento-version {
+    margin-bottom: .5rem;
+
+    strong {
+        color: @footer-version__color;
+    }
+}
+
+//  Copyright
+.copyright {
+    margin-bottom: -.2rem;
+    position: relative;
+    text-align: left;
+
+    .link-copyright {
+        display: inline-block;
+        margin-right: .5rem;
+        text-decoration: none;
+        vertical-align: top;
+
+        &:hover {
+            &:before {
+                color: lighten(@color-light-phoenix, 10%);
+            }
+        }
+
+        &:before {
+            &:extend(.abs-icon all);
+            .transition(color);
+            color: @primary__color;
+            content: @icon-logo__content;
+            display: block;
+            font-size: 2.5rem;
+            position: relative;
+            top: -.2rem;
+        }
+
+        &:active {
+            &:before {
+                .scale();
+            }
+        }
+    }
+}
+
+.footer-legal {
+    padding-top: 1rem;
+}
+
+.footer-legal-system {
+    text-align: right;
+}
+
+//
+//  Mobile
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    .footer-legal {
+        padding-top: 3rem;
+        text-align: left;
+    }
+}

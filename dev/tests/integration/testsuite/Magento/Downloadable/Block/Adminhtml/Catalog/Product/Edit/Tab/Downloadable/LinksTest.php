@@ -1,29 +1,11 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable;
 
-class LinksTest extends \PHPUnit_Framework_TestCase
+class LinksTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoAppArea adminhtml
@@ -31,9 +13,9 @@ class LinksTest extends \PHPUnit_Framework_TestCase
     public function testGetUploadButtonsHtml()
     {
         $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
-            'Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable\Links'
+            \Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable\Links::class
         );
         self::performUploadButtonTest($block);
     }
@@ -46,15 +28,17 @@ class LinksTest extends \PHPUnit_Framework_TestCase
     public static function performUploadButtonTest(\Magento\Framework\View\Element\AbstractBlock $block)
     {
         /** @var $layout \Magento\Framework\View\LayoutInterface */
-        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Framework\View\Layout');
+        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Framework\View\Layout::class
+        );
         $layout->addBlock($block, 'links');
         $expected = uniqid();
         $text = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
-            'Magento\Framework\View\Element\Text',
+            \Magento\Framework\View\Element\Text::class,
             '',
-            array('data' => array('text' => $expected))
+            ['data' => ['text' => $expected]]
         );
         $block->unsetChild('upload_button');
         $layout->addBlock($text, 'upload_button', 'links');
@@ -70,15 +54,15 @@ class LinksTest extends \PHPUnit_Framework_TestCase
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->get(
-            'Magento\Framework\Registry'
+            \Magento\Framework\Registry::class
         )->register(
             'product',
-            new \Magento\Framework\Object(array('type_id' => 'simple'))
+            new \Magento\Framework\DataObject(['type_id' => 'simple'])
         );
         $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
-            'Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable\Links'
+            \Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable\Links::class
         );
         $this->assertEmpty($block->getLinkData());
     }
@@ -100,15 +84,15 @@ class LinksTest extends \PHPUnit_Framework_TestCase
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->get(
-            'Magento\Framework\Registry'
+            \Magento\Framework\Registry::class
         )->register(
             'product',
-            new \Magento\Framework\Object(array('type_id' => $productType, 'id' => '1', 'links_title' => $linksTitle))
+            new \Magento\Framework\DataObject(['type_id' => $productType, 'id' => '1', 'links_title' => $linksTitle])
         );
         $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
-            'Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable\Links'
+            \Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable\Links::class
         );
         $this->assertEquals($expectedResult, $block->getLinksTitle());
     }
@@ -120,13 +104,13 @@ class LinksTest extends \PHPUnit_Framework_TestCase
      */
     public function productLinksTitleDataProvider()
     {
-        return array(
-            array('simple', null, 'Links Title Test'),
-            array('simple', 'Links Title', 'Links Title Test'),
-            array('virtual', null, 'Links Title Test'),
-            array('virtual', 'Links Title', 'Links Title Test'),
-            array('downloadable', null, null),
-            array('downloadable', 'Links Title', 'Links Title')
-        );
+        return [
+            ['simple', null, 'Links Title Test'],
+            ['simple', 'Links Title', 'Links Title Test'],
+            ['virtual', null, 'Links Title Test'],
+            ['virtual', 'Links Title', 'Links Title Test'],
+            ['downloadable', null, null],
+            ['downloadable', 'Links Title', 'Links Title']
+        ];
     }
 }

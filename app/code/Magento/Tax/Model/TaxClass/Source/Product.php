@@ -1,82 +1,94 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
 namespace Magento\Tax\Model\TaxClass\Source;
 
+use Magento\Framework\DB\Ddl\Table;
+use Magento\Tax\Api\TaxClassManagementInterface;
+use Magento\Tax\Model\ClassModel;
+
+/**
+ * Product tax class source model.
+ */
 class Product extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 {
     /**
-     * Core data
-     *
-     * @var \Magento\Core\Helper\Data
+     * @var \Magento\Tax\Api\TaxClassRepositoryInterface
      */
-    protected $_coreData;
+    protected $_taxClassRepository;
 
     /**
-     * @var \Magento\Tax\Model\Resource\TaxClass\CollectionFactory
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder
      */
-    protected $_classesFactory;
+    protected $_searchCriteriaBuilder;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory
+     * @var \Magento\Framework\Api\FilterBuilder
+     */
+    protected $_filterBuilder;
+
+    /**
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory
      */
     protected $_optionFactory;
 
     /**
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Tax\Model\Resource\TaxClass\CollectionFactory $classesFactory
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory $optionFactory
+     * Initialize dependencies.
+     *
+     * @param \Magento\Tax\Model\ResourceModel\TaxClass\CollectionFactory $classesFactory
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory $optionFactory
+     * @param \Magento\Tax\Api\TaxClassRepositoryInterface $taxClassRepository
+     * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
      */
     public function __construct(
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Tax\Model\Resource\TaxClass\CollectionFactory $classesFactory,
-        \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory $optionFactory
+        \Magento\Tax\Model\ResourceModel\TaxClass\CollectionFactory $classesFactory,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory $optionFactory,
+        \Magento\Tax\Api\TaxClassRepositoryInterface $taxClassRepository,
+        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
+        \Magento\Framework\Api\FilterBuilder $filterBuilder
     ) {
-        $this->_coreData = $coreData;
         $this->_classesFactory = $classesFactory;
         $this->_optionFactory = $optionFactory;
+        $this->_taxClassRepository = $taxClassRepository;
+        $this->_filterBuilder = $filterBuilder;
+        $this->_searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
     /**
-     * Get all options
+     * Retrieve all product tax class options.
      *
+     * @param bool $withEmpty
      * @return array
      */
-    public function getAllOptions()
+    public function getAllOptions($withEmpty = true)
     {
-        if (is_null($this->_options)) {
-            /** @var $classCollection \Magento\Tax\Model\Resource\TaxClass\Collection */
-            $classCollection = $this->_classesFactory->create();
-            $classCollection->addFieldToFilter(
-                'class_type',
-                \Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_PRODUCT
-            )->load();
-            $this->_options = $classCollection->toOptionArray();
+        if (!$this->_options) {
+            $filter = $this->_filterBuilder
+                ->setField(ClassModel::KEY_TYPE)
+                ->setValue(TaxClassManagementInterface::TYPE_PRODUCT)
+                ->create();
+            $searchCriteria = $this->_searchCriteriaBuilder->addFilters([$filter])->create();
+            $searchResults = $this->_taxClassRepository->getList($searchCriteria);
+            foreach ($searchResults->getItems() as $taxClass) {
+                $this->_options[] = [
+                    'value' => $taxClass->getClassId(),
+                    'label' => $taxClass->getClassName(),
+                ];
+            }
         }
 
-        $options = $this->_options;
-        array_unshift($options, array('value' => '0', 'label' => __('None')));
-        return $options;
+        if ($withEmpty) {
+            if (!$this->_options) {
+                return [['value' => '0', 'label' => __('None')]];
+            } else {
+                return array_merge([['value' => '0', 'label' => __('None')]], $this->_options);
+            }
+        }
+        return $this->_options;
     }
 
     /**
@@ -87,7 +99,7 @@ class Product extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      */
     public function getOptionText($value)
     {
-        $options = $this->getAllOptions(false);
+        $options = $this->getAllOptions();
 
         foreach ($options as $item) {
             if ($item['value'] == $value) {
@@ -102,16 +114,20 @@ class Product extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      *
      * @return array
      */
-    public function getFlatColums()
+    public function getFlatColumns()
     {
         $attributeCode = $this->getAttribute()->getAttributeCode();
-        $column = array('unsigned' => true, 'default' => null, 'extra' => null);
 
-        $column['type'] = \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER;
-        $column['nullable'] = true;
-        $column['comment'] = $attributeCode . ' tax column';
-
-        return array($attributeCode => $column);
+        return [
+            $attributeCode => [
+                'unsigned' => true,
+                'default' => null,
+                'extra' => null,
+                'type' => Table::TYPE_INTEGER,
+                'nullable' => true,
+                'comment' => $attributeCode . ' tax column',
+            ],
+        ];
     }
 
     /**
@@ -122,7 +138,7 @@ class Product extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      */
     public function getFlatUpdateSelect($store)
     {
-        /** @var $option \Magento\Eav\Model\Resource\Entity\Attribute\Option */
+        /** @var $option \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option */
         $option = $this->_optionFactory->create();
         return $option->getFlatUpdateSelect($this->getAttribute(), $store, false);
     }

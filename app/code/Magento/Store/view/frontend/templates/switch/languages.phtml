@@ -1,0 +1,39 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var \Magento\Store\Block\Switcher $block */
+?>
+<?php if (count($block->getStores())>1): ?>
+<?php $id = $block->getIdModifier() ? '-' . $block->getIdModifier() : '' ?>
+<div class="switcher language switcher-language" data-ui-id="language-switcher" id="switcher-language<?= $block->escapeHtmlAttr($id) ?>">
+    <strong class="label switcher-label"><span><?= $block->escapeHtml(__('Language')) ?></span></strong>
+    <div class="actions dropdown options switcher-options">
+        <div class="action toggle switcher-trigger"
+             id="switcher-language-trigger<?= $block->escapeHtmlAttr($id) ?>"
+             data-mage-init='{"dropdown":{}}'
+             data-toggle="dropdown"
+             data-trigger-keypress-button="true">
+            <strong class="view-<?= $block->escapeHtml($block->getCurrentStoreCode()) ?>">
+                <span><?= $block->escapeHtml($block->getStoreName()) ?></span>
+            </strong>
+        </div>
+        <ul class="dropdown switcher-dropdown"
+            data-target="dropdown">
+            <?php foreach ($block->getStores() as $_lang): ?>
+                <?php if ($_lang->getId() != $block->getCurrentStoreId()): ?>
+                    <li class="view-<?= $block->escapeHtml($_lang->getCode()) ?> switcher-option">
+                        <a href="#" data-post='<?= /* @noEscape */ $block->getTargetStorePostData($_lang) ?>'>
+                            <?= $block->escapeHtml($_lang->getName()) ?>
+                        </a>
+                    </li>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+</div>
+<?php endif; ?>

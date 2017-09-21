@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Catalog\Test\Repository\Product\Fpt">
+        <dataset name="one_fpt_for_all_states">
+            <field name="0" xsi:type="array">
+                <item name="price" xsi:type="string">10</item>
+                <item name="website" xsi:type="string">All Websites [USD]</item>
+                <item name="country_name" xsi:type="string">United States</item>
+                <item name="state_name" xsi:type="string">*</item>
+            </field>
+        </dataset>
+    </repository>
+</config>

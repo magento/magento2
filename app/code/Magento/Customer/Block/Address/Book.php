@@ -1,35 +1,20 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Address;
 
-use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
-use Magento\Customer\Service\V1\CustomerAddressServiceInterface;
+use Magento\Customer\Api\AddressRepositoryInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Model\Address\Mapper;
 
 /**
  * Customer address book block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Book extends \Magento\Framework\View\Element\Template
 {
@@ -39,14 +24,14 @@ class Book extends \Magento\Framework\View\Element\Template
     protected $currentCustomer;
 
     /**
-     * @var CustomerAccountServiceInterface
+     * @var CustomerRepositoryInterface
      */
-    protected $_customerAccountService;
+    protected $customerRepository;
 
     /**
-     * @var CustomerAddressServiceInterface
+     * @var AddressRepositoryInterface
      */
-    protected $_addressService;
+    protected $addressRepository;
 
     /**
      * @var \Magento\Customer\Model\Address\Config
@@ -54,27 +39,34 @@ class Book extends \Magento\Framework\View\Element\Template
     protected $_addressConfig;
 
     /**
+     * @var Mapper
+     */
+    protected $addressMapper;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param CustomerAccountServiceInterface $customerAccountService
-     * @param CustomerAddressServiceInterface $addressService
+     * @param CustomerRepositoryInterface $customerRepository
+     * @param AddressRepositoryInterface $addressRepository
      * @param \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer
      * @param \Magento\Customer\Model\Address\Config $addressConfig
+     * @param Mapper $addressMapper
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        CustomerAccountServiceInterface $customerAccountService,
-        CustomerAddressServiceInterface $addressService,
+        CustomerRepositoryInterface $customerRepository,
+        AddressRepositoryInterface $addressRepository,
         \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer,
         \Magento\Customer\Model\Address\Config $addressConfig,
-        array $data = array()
+        Mapper $addressMapper,
+        array $data = []
     ) {
-        $this->_customerAccountService = $customerAccountService;
+        $this->customerRepository = $customerRepository;
         $this->currentCustomer = $currentCustomer;
-        $this->_addressService = $addressService;
+        $this->addressRepository = $addressRepository;
         $this->_addressConfig = $addressConfig;
+        $this->addressMapper = $addressMapper;
         parent::__construct($context, $data);
-        $this->_isScopePrivate = true;
     }
 
     /**
@@ -82,8 +74,7 @@ class Book extends \Magento\Framework\View\Element\Template
      */
     protected function _prepareLayout()
     {
-        $this->getLayout()->getBlock('head')->setTitle(__('Address Book'));
-
+        $this->pageConfig->getTitle()->set(__('Address Book'));
         return parent::_prepareLayout();
     }
 
@@ -92,7 +83,7 @@ class Book extends \Magento\Framework\View\Element\Template
      */
     public function getAddAddressUrl()
     {
-        return $this->getUrl('customer/address/new', array('_secure' => true));
+        return $this->getUrl('customer/address/new', ['_secure' => true]);
     }
 
     /**
@@ -103,7 +94,7 @@ class Book extends \Magento\Framework\View\Element\Template
         if ($this->getRefererUrl()) {
             return $this->getRefererUrl();
         }
-        return $this->getUrl('customer/account/', array('_secure' => true));
+        return $this->getUrl('customer/account/', ['_secure' => true]);
     }
 
     /**
@@ -120,7 +111,7 @@ class Book extends \Magento\Framework\View\Element\Template
      */
     public function getAddressEditUrl($addressId)
     {
-        return $this->getUrl('customer/address/edit', array('_secure' => true, 'id' => $addressId));
+        return $this->getUrl('customer/address/edit', ['_secure' => true, 'id' => $addressId]);
     }
 
     /**
@@ -132,16 +123,16 @@ class Book extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * @return \Magento\Customer\Service\V1\Data\Address[]|bool
+     * @return \Magento\Customer\Api\Data\AddressInterface[]|bool
      */
     public function getAdditionalAddresses()
     {
         try {
-            $addresses = $this->_addressService->getAddresses($this->currentCustomer->getCustomerId());
+            $addresses = $this->customerRepository->getById($this->currentCustomer->getCustomerId())->getAddresses();
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
             return false;
         }
-        $primaryAddressIds = array($this->getDefaultBilling(), $this->getDefaultShipping());
+        $primaryAddressIds = [$this->getDefaultBilling(), $this->getDefaultShipping()];
         foreach ($addresses as $address) {
             if (!in_array($address->getId(), $primaryAddressIds)) {
                 $additional[] = $address;
@@ -153,28 +144,28 @@ class Book extends \Magento\Framework\View\Element\Template
     /**
      * Render an address as HTML and return the result
      *
-     * @param \Magento\Customer\Service\V1\Data\Address $address
+     * @param \Magento\Customer\Api\Data\AddressInterface $address
      * @return string
      */
-    public function getAddressHtml(\Magento\Customer\Service\V1\Data\Address $address = null)
+    public function getAddressHtml(\Magento\Customer\Api\Data\AddressInterface $address = null)
     {
-        if (!is_null($address)) {
+        if ($address !== null) {
             /** @var \Magento\Customer\Block\Address\Renderer\RendererInterface $renderer */
             $renderer = $this->_addressConfig->getFormatByCode('html')->getRenderer();
-            return $renderer->renderArray(\Magento\Customer\Service\V1\Data\AddressConverter::toFlatArray($address));
+            return $renderer->renderArray($this->addressMapper->toFlatArray($address));
         }
         return '';
     }
 
     /**
-     * @return \Magento\Customer\Service\V1\Data\Customer|null
+     * @return \Magento\Customer\Api\Data\CustomerInterface|null
      */
     public function getCustomer()
     {
         $customer = $this->getData('customer');
-        if (is_null($customer)) {
+        if ($customer === null) {
             try {
-                $customer = $this->_customerAccountService->getCustomer($this->currentCustomer->getCustomerId());
+                $customer = $this->customerRepository->getById($this->currentCustomer->getCustomerId());
             } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
                 return null;
             }
@@ -189,7 +180,7 @@ class Book extends \Magento\Framework\View\Element\Template
     public function getDefaultBilling()
     {
         $customer = $this->getCustomer();
-        if (is_null($customer)) {
+        if ($customer === null) {
             return null;
         } else {
             return $customer->getDefaultBilling();
@@ -198,12 +189,12 @@ class Book extends \Magento\Framework\View\Element\Template
 
     /**
      * @param int $addressId
-     * @return \Magento\Customer\Service\V1\Data\Address|null
+     * @return \Magento\Customer\Api\Data\AddressInterface|null
      */
     public function getAddressById($addressId)
     {
         try {
-            return $this->_addressService->getAddress($addressId);
+            return $this->addressRepository->getById($addressId);
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
             return null;
         }
@@ -215,7 +206,7 @@ class Book extends \Magento\Framework\View\Element\Template
     public function getDefaultShipping()
     {
         $customer = $this->getCustomer();
-        if (is_null($customer)) {
+        if ($customer === null) {
             return null;
         } else {
             return $customer->getDefaultShipping();

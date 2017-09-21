@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/pages.xsd">
+    <page name="CheckoutCart" mca="checkout/cart/index" module="Magento_Checkout">
+        <block name="cartBlock" class="Magento\Checkout\Test\Block\Cart" locator="//div[contains(@class, 'column main')]" strategy="xpath"/>
+        <block name="braintreePaypalBlock" class="Magento\Braintree\Test\Block\Paypal\PopupWindow" locator="body" strategy="xpath"/>
+    </page>
+</config>

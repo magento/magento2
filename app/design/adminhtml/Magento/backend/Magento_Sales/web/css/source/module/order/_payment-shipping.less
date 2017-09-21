@@ -1,0 +1,106 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Order Payment & Shipping Information
+//  ---------------------------------------------
+
+.admin__payment-method-wrapper {
+    margin: 0;
+    .admin__field {
+        margin-left: 0;
+        &:first-child {
+            margin-top: 1.5rem;
+        }
+    }
+    .admin__payment-methods {
+        margin: 0;
+    }
+}
+
+.admin__order-shipment-methods-title {
+    font-weight: @font-weight__bold;
+    margin: 0 0 @indent__xs;
+}
+
+.admin__order-shipment-methods-options {
+    margin: 0 0 @indent__base;
+}
+
+.admin__order-shipment-methods-options-list {
+    list-style: none;
+    margin: 0;
+}
+
+.order-shipping-method-summary {
+    padding-top: @field-option__padding-top;
+}
+
+.order-shipping-method,
+.order-billing-method {
+    position: relative;
+}
+
+.order-shipping-method-summary,
+.order-shipping-method-info {
+    .action-default {
+        &:extend(.action-tertiary all);
+        font-weight: @font-weight__regular;
+        padding: 0;
+    }
+}
+
+.order-methods-overlay {
+    background-color: rgba(255, 255, 255, .5);
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    span {
+        background-color: @color-white;
+        display: block;
+        font-weight: @font-weight__bold;
+        left: 0;
+        padding: @indent__xs 0;
+        position: absolute;
+        top: 43px;
+    }
+    .order-shipping-address & {
+        span {
+            top: 22px;
+        }
+    }
+}
+
+.order-shipping-method {
+    .admin__page-section-title > span {
+        &:extend(.validation-symbol all);
+    }
+}
+
+.shipping-description-wrapper {
+    .price {
+        font-weight: @font-weight__bold;
+    }
+}
+
+.shipping-description-title {
+    font-weight: @font-weight__bold;
+}
+
+.action-create-label {
+    margin: @indent__s 0;
+}
+
+.order-payment-method-title {
+    + .order-payment-currency {
+        margin-top: @indent__s;
+    }
+    .admin__table-secondary {
+        margin-top: @indent__s;
+        &:extend(.abs-admin__table-secondary-edit-order all);
+    }
+}

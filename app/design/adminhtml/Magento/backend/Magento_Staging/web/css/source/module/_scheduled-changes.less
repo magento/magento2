@@ -1,0 +1,333 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Scheduled changes
+//  _____________________________________________
+
+//
+//  Variables
+//  _____________________________________________
+
+@scheduled-changes-block__border-color: @color-gray-light2;
+@scheduled-changes-block-title__background-color: @color-white-fog;
+@scheduled-changes-block-resizer__background-color: @color-gray89;
+@scheduled-changes-block-resizer__color: @color-gray40;
+
+@scheduled-changes-table-accent__color: @color-gray40;
+
+@scheduled-changes-scale__color: @color-brownie;
+@scheduled-changes-scale-from__background-color: @color-white;
+
+@scheduled-changes-mark__border-width: 3px;
+@scheduled-changes-mark__height: 17px;
+@scheduled-changes-mark__width: @scheduled-changes-mark__height;
+
+@scheduled-changes-mark-overlay__height: 20px;
+@scheduled-changes-mark-overlay__width: @scheduled-changes-mark__width + @scheduled-changes-mark__border-width + 4;
+
+//
+//  Components
+//  ---------------------------------------------
+
+//  Timeline
+
+.block-schedule {
+    border: 1px solid @scheduled-changes-block__border-color;
+    margin-bottom: @indent__xl;
+    position: relative;
+    z-index: 1;
+
+    .block-title {
+        &:extend(.abs-clearfix all);
+        background: @scheduled-changes-block-title__background-color;
+        padding: @indent__base @indent__m;
+
+        .title {
+            font-size: 2rem;
+            font-weight: 200;
+        }
+
+        .subtitle {
+            font-style: italic;
+
+            &:before {
+                content: ' (';
+            }
+
+            &:after {
+                content: ')';
+            }
+        }
+    }
+
+    .block-title-actions {
+        float: right;
+        line-height: 3.2rem;
+        text-align: right;
+        white-space: nowrap;
+
+        .action-secondary {
+            float: right;
+            margin-left: @indent__m;
+        }
+    }
+
+    .admin__data-grid-outer-wrap {
+        min-height: 0;
+    }
+
+    .admin__data-grid-outer-wrap {
+        position: relative;
+    }
+}
+
+.block-content-actions {
+    padding: 0 0 1.2rem 1.8rem;
+    position: relative;
+    text-align: center;
+
+    &:before {
+        background: linear-gradient(to top, rgba(255,255,255,1) 30%, rgba(255,255,255,0) 100%);
+        content: '';
+        height: @scheduled-changes-mark-overlay__height;
+        left: -@scheduled-changes-mark-overlay__width / 2;
+        position: absolute;
+        top: -@scheduled-changes-mark-overlay__height;
+        width: @scheduled-changes-mark-overlay__width;
+    }
+}
+
+//  Block with Schedule table
+.block-schedule-table {
+    &:extend(.abs-block-resizable all);
+
+    .block-content {
+        &:extend(.abs-block-resizable-content all);
+        border-top: 1px solid @scheduled-changes-block__border-color;
+
+        .schedule-table-wrapper {
+            margin: @indent__m;
+        }
+    }
+
+    .ui-resizable-s {
+        &:extend(.abs-block-resizable-handle-bottom all);
+        cursor: ns-resize;
+    }
+}
+
+.schedule-table {
+    border-collapse: collapse;
+    width: 100%;
+
+    td {
+        line-height: 2rem;
+        padding: 0 @indent__s @indent__s;
+        vertical-align: top;
+
+        &:first-child {
+            border-left: 3px solid @scheduled-changes-scale__color;
+        }
+    }
+
+    em {
+        color: @scheduled-changes-table-accent__color;
+    }
+
+    .schedule-date {
+        font-weight: @font-weight__bold;
+        padding-left: @indent__base;
+        white-space: nowrap;
+        width: 10rem;
+
+        &:before {
+            background: @scheduled-changes-scale-from__background-color;
+            border: @scheduled-changes-mark__border-width solid @scheduled-changes-scale__color;
+            border-radius: 50%;
+            box-sizing: content-box;
+            content: '';
+            display: inline-block;
+            height: @scheduled-changes-mark__height;
+            margin-left: -33px;
+            margin-top: -1px;
+            position: absolute;
+            width: @scheduled-changes-mark__width;
+        }
+
+        time {
+            white-space: nowrap;
+        }
+
+        &.schedule-date-empty {
+            &:before {
+                display: none;
+            }
+        }
+    }
+
+    .schedule-end {
+        .schedule-date {
+            &:before {
+                background: @scheduled-changes-scale__color;
+                border: 0;
+                margin-left: -30px;
+                margin-top: 2px;
+            }
+        }
+    }
+
+    .schedule-time {
+        white-space: nowrap;
+        width: 7rem;
+    }
+
+    .schedule-label {
+        color: @scheduled-changes-table-accent__color;
+        font-size: 1.2rem;
+        width: 1%;
+    }
+
+    tr {
+        &:last-child {
+            td {
+                padding-bottom: @indent__l;
+            }
+        }
+    }
+
+    .schedule-actions {
+        padding-right: 0;
+        white-space: nowrap;
+        width: 10%;
+
+        a {
+            + a {
+                &:before {
+                    color: @scheduled-changes-table-accent__color;
+                    content: '|';
+                    display: inline-block;
+                    margin: 0 .3rem 0 .4rem;
+                }
+            }
+        }
+
+        .action-menu-item {
+            cursor: pointer;
+        }
+    }
+}
+
+.schedule-name {
+    font-weight: @font-weight__bold;
+}
+
+.limited-text {
+    display: inline-block;
+    line-height: 1.4em;
+    max-height: 4.4em; // Exactly 3 lines
+    overflow: hidden;
+    position: relative;
+    vertical-align: top;
+
+    &:after {
+        background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 50%);
+        content: '...';
+        height: 1.2em;
+        position: absolute;
+        right: 0;
+        text-align: right;
+        top: 1.2em;
+        width: 5rem;
+    }
+
+    + .limited-text {
+        line-height: 1.6rem;
+        margin: .8rem 0 0;
+    }
+}
+
+@supports (-webkit-line-clamp: 3) {
+    .limited-text {
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        display: -webkit-box;
+        height: auto;
+        max-height: 4.4em; // Is needed to get it work
+
+        &:after {
+            display: none;
+        }
+    }
+}
+
+.limited-text-changes {
+    font-size: 1.2rem;
+}
+
+.block-nodata {
+    padding: @indent__m;
+}
+
+//  Create/Edit update form
+.fieldset-schedule {
+    &:last-child {
+        border-bottom: 1px solid @collapsible__border-color;
+    }
+
+    .admin__fieldset {
+        padding: 0;
+
+        > :last-child {
+            margin-bottom: @indent__l;
+        }
+
+        > .fieldset-wrapper {
+            &:last-child {
+                border-bottom: 1px solid @collapsible__border-color;
+                margin-bottom: 0;
+            }
+        }
+    }
+
+    .fieldset-wrapper-title {
+        border-bottom: 0;
+        line-height: 1.2;
+        margin: @indent__base 0 @indent__s;
+        padding: 0;
+
+        strong {
+            font-size: 2rem;
+            font-weight: @font-weight__regular;
+        }
+    }
+
+    ._has-datepicker {
+        &.admin__control-text {
+            width: 19rem;
+        }
+    }
+}
+
+//  Grid Schedule summary information
+.schedule-summary {
+    display: table;
+    list-style: none;
+    width: 100%;
+
+    .schedule-summary-name,
+    .schedule-summary-date {
+        display: table-cell;
+        padding-right: .5rem;
+    }
+
+    .schedule-summary-name {
+        width: 50%;
+    }
+
+    .schedule-summary-date {
+        width: 25%;
+    }
+}

@@ -1,0 +1,85 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Upgrade -> Pages -> Sign in to sync your Magento Connect Purchases popup
+//  _____________________________________________
+
+.sync-login-wrap {
+    padding: 0 10% @indent__xl;
+
+    .legend {
+        .lib-font-size(26);
+        color: @color-phoenix;
+        float: left;
+        font-weight: @font-weight__light;
+        line-height: 1.2;
+        margin: -1rem 0 2.5rem;
+        position: static;
+        width: 100%;
+
+        &._hidden {
+            display: none;
+        }
+    }
+
+    .login-header {
+        .lib-font-size(34);
+        font-weight: @font-weight__light;
+        margin: 0 0 @indent__base;
+
+        span {
+            display: inline-block;
+            padding: .9rem 0 0;
+            vertical-align: top;
+        }
+    }
+
+    h4 {
+        font-size: 1.4rem;
+        margin: 0 0 @indent__base;
+    }
+
+    .sync-login-steps {
+        margin: 0 0 @indent__base 1.5rem;
+
+        li {
+            padding: 0 0 0 @indent__s;
+        }
+    }
+
+    .form-row {
+        .form-label {
+            display: inline-block;
+
+            &.required {
+                padding-left: 1.5rem;
+
+                &:after {
+                    left: 0;
+                    position: absolute;
+                    right: auto;
+                }
+            }
+        }
+    }
+
+    .form-row {
+        max-width: 28rem;
+    }
+
+    .form-actions {
+        display: table;
+        margin-top: -1.3rem;
+
+        .links {
+            display: table-header-group;
+        }
+
+        .actions {
+            padding: @indent__l 0 0;
+        }
+    }
+}

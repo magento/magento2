@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:complexType name="indexerType" mixed="true">
+        <xs:annotation>
+            <xs:documentation>
+                Indexer declaration.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="title" type="translatableType" />
+                <xs:element name="description" type="translatableType" />
+                <xs:element name="saveHandler" type="saveHandlerType" />
+                <xs:element name="structure" type="structureType" />
+                <xs:group ref="fieldset"/>
+            </xs:choice>
+            <xs:group ref="dependencies"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:string" use="required" />
+        <xs:attribute name="primary" type="nameType" use="optional" />
+        <xs:attribute name="view_id" type="viewIdType" use="required" />
+        <xs:attribute name="class" type="classType" use="required" />
+        <xs:attribute name="shared_index" type="xs:string" use="optional" />
+    </xs:complexType>
+
+    <xs:group name="fieldset">
+        <xs:choice>
+            <xs:element name="fieldset" type="fieldsetType"/>
+        </xs:choice>
+    </xs:group>
+
+    <xs:complexType name="translatableType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="translate" use="optional" fixed="true" type="xs:boolean"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:simpleType name="viewIdType">
+        <xs:annotation>
+            <xs:documentation>
+                View ID can contain only [a-zA-Z0-9_].
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-zA-Z0-9_]+" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="classType">
+        <xs:annotation>
+            <xs:documentation>
+                Class name can contain only [a-zA-Z\].
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-zA-Z\\]+" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="fromType">
+        <xs:annotation>
+            <xs:documentation>
+                From attribute can contain only [a-zA-Z0-9_].
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-zA-Z0-9_]+" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="toType">
+        <xs:annotation>
+            <xs:documentation>
+                To attribute can contain only [a-zA-Z0-9_].
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-zA-Z0-9_]+" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="originType">
+        <xs:annotation>
+            <xs:documentation>
+                To attribute can contain only [a-zA-Z0-9_].
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-zA-Z0-9_]+" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="nameType">
+        <xs:annotation>
+            <xs:documentation>
+                Class name can contain only [a-zA-Z\].
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-zA-Z0-9_]+" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="fieldTypeAbstract" abstract="true">
+        <xs:annotation>
+            <xs:documentation>
+                Index field declaration.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="name" type="nameType" use="required"/>
+        <xs:attribute name="handler" type="classType" use="optional"/>
+        <xs:attribute name="origin" type="originType" use="optional"/>
+    </xs:complexType>
+
+    <xs:complexType name="fieldsetType" mixed="true">
+        <xs:annotation>
+            <xs:documentation>
+                Fieldset of field declaration.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence minOccurs="0">
+            <xs:element type="referenceType" name="reference" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="field" type="fieldType" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="source" type="classType" use="required"/>
+        <xs:attribute name="provider" type="classType" use="optional"/>
+        <xs:attribute name="name" type="nameType" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="fieldType">
+        <xs:complexContent>
+            <xs:extension base="fieldTypeAbstract">
+                <xs:choice>
+                    <xs:element type="filterType" name="filter" minOccurs="0" maxOccurs="1" />
+                </xs:choice>
+                <xs:attribute type="dataType" name="dataType" use="optional" />
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="filterType">
+        <xs:annotation>
+            <xs:documentation>
+                Index field filter.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="class" type="classType" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="structureType">
+        <xs:annotation>
+            <xs:documentation>
+                Structure type.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="class" type="classType" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="saveHandlerType">
+        <xs:annotation>
+            <xs:documentation>
+                SaveHandler type.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="class" type="classType" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="referenceType">
+        <xs:annotation>
+            <xs:documentation>
+                Index field reference.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="fieldset" type="nameType" use="required"/>
+        <xs:attribute name="from" type="fromType" use="required"/>
+        <xs:attribute name="to" type="toType" use="required"/>
+    </xs:complexType>
+
+    <xs:simpleType name="dataType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="int" />
+            <xs:enumeration value="float" />
+            <xs:enumeration value="varchar" />
+            <xs:enumeration value="text" />
+            <xs:enumeration value="mediumtext" />
+            <xs:enumeration value="timestamp" />
+            <xs:enumeration value="datetime" />
+            <xs:enumeration value="date" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="searchable">
+        <xs:complexContent>
+            <xs:extension base="fieldType"/>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="filterable">
+        <xs:complexContent>
+            <xs:extension base="fieldType"/>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="config" type="configType">
+        <xs:unique name="uniqueIndexerId">
+            <xs:annotation>
+                <xs:documentation>
+                    Indexer Id must be unique.
+                </xs:documentation>
+            </xs:annotation>
+            <xs:selector xpath="indexer" />
+            <xs:field xpath="@id" />
+        </xs:unique>
+        <xs:unique name="uniqueViewId">
+            <xs:annotation>
+                <xs:documentation>
+                    Indexer Id must be unique.
+                </xs:documentation>
+            </xs:annotation>
+            <xs:selector xpath="indexer" />
+            <xs:field xpath="@view_id" />
+        </xs:unique>
+    </xs:element>
+    <xs:complexType name="configType">
+        <xs:sequence>
+            <xs:element ref="indexer"  minOccurs="1" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="indexer" type="indexerType">
+        <xs:unique name="fieldsetKey">
+            <xs:annotation>
+                <xs:documentation>
+                    Fieldset name must be unique.
+                </xs:documentation>
+            </xs:annotation>
+            <xs:selector xpath=".//fieldset"/>
+            <xs:field xpath="@name"/>
+        </xs:unique>
+        <xs:keyref name="fieldsetReference" refer="fieldsetKey">
+            <xs:annotation>
+                <xs:documentation>
+                    Field fieldset key must exists.
+                </xs:documentation>
+            </xs:annotation>
+            <xs:selector xpath=".//fieldset/reference"/>
+            <xs:field xpath="@fieldset"/>
+        </xs:keyref>
+    </xs:element>
+
+    <xs:group name="dependencies">
+        <xs:choice>
+            <xs:element minOccurs="0" maxOccurs="1" name="dependencies" type="indexerDependencies">
+                <xs:unique name="uniqueIndexerDependency">
+                    <xs:annotation>
+                        <xs:documentation>
+                            Related indexer id must be unique.
+                        </xs:documentation>
+                    </xs:annotation>
+                    <xs:selector xpath="indexer" />
+                    <xs:field xpath="@id" />
+                </xs:unique>
+            </xs:element>
+        </xs:choice>
+    </xs:group>
+
+    <xs:complexType name="indexerDependencies">
+        <xs:annotation>
+            <xs:documentation>
+                Root element of the indexer dependencies.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence maxOccurs="unbounded">
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="indexer">
+                <xs:complexType>
+                    <xs:annotation>
+                        <xs:documentation>
+                            Indexer dependency that represents another indexer.
+                        </xs:documentation>
+                    </xs:annotation>
+                    <xs:attribute name="id" type="xs:string" use="required" />
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

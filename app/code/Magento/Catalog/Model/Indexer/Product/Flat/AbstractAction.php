@@ -1,31 +1,17 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Indexer\Product\Flat;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\EntityManager\MetadataPool;
+
 /**
  * Abstract action reindex class
- *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractAction
 {
@@ -68,14 +54,14 @@ abstract class AbstractAction
      *
      * @var array
      */
-    protected $_flatTablesExist = array();
+    protected $_flatTablesExist = [];
 
     /**
      * List of product types available in installation
      *
      * @var array
      */
-    protected $_productTypes = array();
+    protected $_productTypes = [];
 
     /**
      * @var TableBuilder
@@ -88,7 +74,12 @@ abstract class AbstractAction
     protected $_flatTableBuilder;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @var MetadataPool
+     */
+    private $metadataPool;
+
+    /**
+     * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Helper\Product\Flat\Indexer $productHelper
      * @param \Magento\Catalog\Model\Product\Type $productType
@@ -96,7 +87,7 @@ abstract class AbstractAction
      * @param FlatTableBuilder $flatTableBuilder
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\App\ResourceConnection $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Helper\Product\Flat\Indexer $productHelper,
         \Magento\Catalog\Model\Product\Type $productType,
@@ -106,7 +97,7 @@ abstract class AbstractAction
         $this->_storeManager = $storeManager;
         $this->_productIndexerHelper = $productHelper;
         $this->_productType = $productType;
-        $this->_connection = $resource->getConnection('default');
+        $this->_connection = $resource->getConnection();
         $this->_tableBuilder = $tableBuilder;
         $this->_flatTableBuilder = $flatTableBuilder;
     }
@@ -136,6 +127,7 @@ abstract class AbstractAction
      * @param array $tablesList
      * @param int|string $storeId
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function _cleanOnFailure(array $tablesList, $storeId)
     {
@@ -154,7 +146,7 @@ abstract class AbstractAction
      * @return void
      * @throws \Exception
      */
-    protected function _reindex($storeId, array $changedIds = array())
+    protected function _reindex($storeId, array $changedIds = [])
     {
         try {
             $this->_tableBuilder->build($storeId, $changedIds, $this->_valueFieldSuffix);
@@ -185,8 +177,8 @@ abstract class AbstractAction
     protected function _getProductTypeInstances()
     {
         if ($this->_productTypes === null) {
-            $this->_productTypes = array();
-            $productEmulator = new \Magento\Framework\Object();
+            $this->_productTypes = [];
+            $productEmulator = new \Magento\Framework\DataObject();
             foreach (array_keys($this->_productType->getTypes()) as $typeId) {
                 $productEmulator->setTypeId($typeId);
                 $this->_productTypes[$typeId] = $this->_productType->factory($productEmulator);
@@ -201,12 +193,15 @@ abstract class AbstractAction
      * @param int $storeId
      * @param int|array $productIds Update child product(s) only
      * @return \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _updateRelationProducts($storeId, $productIds = null)
     {
         if (!$this->_productIndexerHelper->isAddChildData() || !$this->_isFlatTableExists($storeId)) {
             return $this;
         }
+
+        $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
 
         foreach ($this->_getProductTypeInstances() as $typeInstance) {
             /** @var $typeInstance \Magento\Catalog\Model\Product\Type\AbstractType */
@@ -223,10 +218,14 @@ abstract class AbstractAction
                 unset($columns['is_child']);
                 /** @var $select \Magento\Framework\DB\Select */
                 $select = $this->_connection->select()->from(
-                    array('t' => $this->_productIndexerHelper->getTable($relation->getTable())),
-                    array($relation->getParentFieldName(), $relation->getChildFieldName(), new \Zend_Db_Expr('1'))
+                    ['t' => $this->_productIndexerHelper->getTable($relation->getTable())],
+                    [$relation->getChildFieldName(), new \Zend_Db_Expr('1')]
                 )->join(
-                    array('e' => $this->_productIndexerHelper->getFlatTableName($storeId)),
+                    ['entity_table' => $this->_connection->getTableName('catalog_product_entity')],
+                    'entity_table.' . $metadata->getLinkField() . 't.' . $relation->getParentFieldName(),
+                    [$relation->getParentFieldName() => 'entity_table.entity_id']
+                )->join(
+                    ['e' => $this->_productIndexerHelper->getFlatTableName($storeId)],
                     "e.entity_id = t.{$relation->getChildFieldName()}",
                     array_keys($columns)
                 );
@@ -234,10 +233,10 @@ abstract class AbstractAction
                     $select->where($relation->getWhere());
                 }
                 if ($productIds !== null) {
-                    $cond = array(
+                    $cond = [
                         $this->_connection->quoteInto("{$relation->getChildFieldName()} IN(?)", $productIds),
-                        $this->_connection->quoteInto("{$relation->getParentFieldName()} IN(?)", $productIds)
-                    );
+                        $this->_connection->quoteInto("entity_table.entity_id IN(?)", $productIds),
+                    ];
 
                     $select->where(implode(' OR ', $cond));
                 }
@@ -261,6 +260,8 @@ abstract class AbstractAction
             return $this;
         }
 
+        $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
+
         foreach ($this->_getProductTypeInstances() as $typeInstance) {
             /** @var $typeInstance \Magento\Catalog\Model\Product\Type\AbstractType */
             if (!$typeInstance->isComposite(null)) {
@@ -272,13 +273,17 @@ abstract class AbstractAction
                 $select = $this->_connection->select()->distinct(
                     true
                 )->from(
-                    $this->_productIndexerHelper->getTable($relation->getTable()),
-                    "{$relation->getParentFieldName()}"
+                    ['t' => $this->_productIndexerHelper->getTable($relation->getTable())],
+                    []
+                )->join(
+                    ['entity_table' => $this->_connection->getTableName('catalog_product_entity')],
+                    'entity_table.' . $metadata->getLinkField() . 't.' . $relation->getParentFieldName(),
+                    [$relation->getParentFieldName() => 'entity_table.entity_id']
                 );
-                $joinLeftCond = array(
-                    "e.entity_id = t.{$relation->getParentFieldName()}",
-                    "e.child_id = t.{$relation->getChildFieldName()}"
-                );
+                $joinLeftCond = [
+                    "e.entity_id = entity_table.entity_id",
+                    "e.child_id = t.{$relation->getChildFieldName()}",
+                ];
                 if ($relation->getWhere() !== null) {
                     $select->where($relation->getWhere());
                     $joinLeftCond[] = $relation->getWhere();
@@ -287,12 +292,12 @@ abstract class AbstractAction
                 $entitySelect = new \Zend_Db_Expr($select->__toString());
                 /** @var $select \Magento\Framework\DB\Select */
                 $select = $this->_connection->select()->from(
-                    array('e' => $this->_productIndexerHelper->getFlatTableName($storeId)),
+                    ['e' => $this->_productIndexerHelper->getFlatTableName($storeId)],
                     null
                 )->joinLeft(
-                    array('t' => $this->_productIndexerHelper->getTable($relation->getTable())),
+                    ['t' => $this->_productIndexerHelper->getTable($relation->getTable())],
                     implode(' AND ', $joinLeftCond),
-                    array()
+                    []
                 )->where(
                     'e.is_child = ?',
                     1
@@ -327,5 +332,17 @@ abstract class AbstractAction
         }
 
         return $this->_flatTablesExist[$storeId];
+    }
+
+    /**
+     * @return \Magento\Framework\EntityManager\MetadataPool
+     */
+    private function getMetadataPool()
+    {
+        if (null === $this->metadataPool) {
+            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\EntityManager\MetadataPool::class);
+        }
+        return $this->metadataPool;
     }
 }

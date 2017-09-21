@@ -1,106 +1,122 @@
 <?php
 /**
- * Form Element File Data Model
- *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\Metadata\Form;
 
+use Magento\Customer\Model\FileProcessor;
+use Magento\Customer\Model\FileProcessorFactory;
+use Magento\Framework\Api\ArrayObjectSearch;
+use Magento\Framework\Api\Data\ImageContentInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\File\UploaderFactory;
+use Magento\Framework\Filesystem;
+
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class File extends AbstractData
 {
     /**
      * Validator for check not protected extensions
      *
-     * @var \Magento\Core\Model\File\Validator\NotProtectedExtension
+     * @var \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension
      */
     protected $_validatorNotProtectedExtensions;
 
     /**
      * Core data
      *
-     * @var \Magento\Core\Helper\Data
+     * @var \Magento\Framework\Url\EncoderInterface
      */
-    protected $_coreData = null;
+    protected $urlEncoder;
 
     /**
-     * @var \Magento\Core\Model\File\Validator\NotProtectedExtension
+     * @var \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension
      */
     protected $_fileValidator;
 
     /**
-     * @var \Magento\Framework\App\Filesystem
+     * @var Filesystem
      */
     protected $_fileSystem;
 
     /**
+     * @var UploaderFactory
+     */
+    private $uploaderFactory;
+
+    /**
+     * @var FileProcessor
+     */
+    protected $fileProcessor;
+
+    /**
+     * @var FileProcessorFactory
+     * @deprecated 100.2.0
+     */
+    protected $fileProcessorFactory;
+
+    /**
+     * Constructor
+     *
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Framework\Logger $logger
-     * @param \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata $attribute
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param \Magento\Customer\Api\Data\AttributeMetadataInterface $attribute
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param null $value
      * @param string $entityTypeCode
      * @param bool $isAjax
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Model\File\Validator\NotProtectedExtension $fileValidator
-     * @param \Magento\Framework\App\Filesystem $fileSystem
+     * @param \Magento\Framework\Url\EncoderInterface $urlEncoder
+     * @param \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $fileValidator
+     * @param Filesystem $fileSystem
+     * @param UploaderFactory $uploaderFactory
+     * @param \Magento\Customer\Model\FileProcessorFactory|null $fileProcessorFactory
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Framework\Logger $logger,
-        \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata $attribute,
+        \Psr\Log\LoggerInterface $logger,
+        \Magento\Customer\Api\Data\AttributeMetadataInterface $attribute,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         $value,
         $entityTypeCode,
         $isAjax,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Model\File\Validator\NotProtectedExtension $fileValidator,
-        \Magento\Framework\App\Filesystem $fileSystem
+        \Magento\Framework\Url\EncoderInterface $urlEncoder,
+        \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $fileValidator,
+        Filesystem $fileSystem,
+        UploaderFactory $uploaderFactory,
+        \Magento\Customer\Model\FileProcessorFactory $fileProcessorFactory = null
     ) {
         parent::__construct($localeDate, $logger, $attribute, $localeResolver, $value, $entityTypeCode, $isAjax);
-        $this->_coreData = $coreData;
+        $this->urlEncoder = $urlEncoder;
         $this->_fileValidator = $fileValidator;
         $this->_fileSystem = $fileSystem;
+        $this->uploaderFactory = $uploaderFactory;
+        $this->fileProcessorFactory = $fileProcessorFactory ?: ObjectManager::getInstance()
+            ->get(\Magento\Customer\Model\FileProcessorFactory::class);
+        $this->fileProcessor = $this->fileProcessorFactory->create(['entityTypeCode' => $this->_entityTypeCode]);
     }
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function extractValue(\Magento\Framework\App\RequestInterface $request)
     {
-        if ($this->getIsAjaxRequest()) {
-            return false;
-        }
-
         $extend = $this->_getRequestValue($request);
 
         $attrCode = $this->getAttribute()->getAttributeCode();
         if ($this->_requestScope) {
-            $value = array();
+            $value = [];
             if (strpos($this->_requestScope, '/') !== false) {
                 $scopes = explode('/', $this->_requestScope);
                 $mainScope = array_shift($scopes);
             } else {
                 $mainScope = $this->_requestScope;
-                $scopes = array();
+                $scopes = [];
             }
 
             if (!empty($_FILES[$mainScope])) {
@@ -109,7 +125,7 @@ class File extends AbstractData
                         if (isset($scopeData[$scopeName])) {
                             $scopeData = $scopeData[$scopeName];
                         } else {
-                            $scopeData[$scopeName] = array();
+                            $scopeData[$scopeName] = [];
                         }
                     }
 
@@ -117,14 +133,22 @@ class File extends AbstractData
                         $value[$fileKey] = $scopeData[$attrCode];
                     }
                 }
+            } elseif (isset($extend[0]['file']) && !empty($extend[0]['file'])) {
+                /**
+                 * This case is required by file uploader UI component
+                 *
+                 * $extend[0]['file'] - uses for AJAX validation
+                 * $extend[0] - uses for POST request
+                 */
+                $value = $this->getIsAjaxRequest() ? $extend[0]['file'] : $extend[0];
             } else {
-                $value = array();
+                $value = [];
             }
         } else {
             if (isset($_FILES[$attrCode])) {
                 $value = $_FILES[$attrCode];
             } else {
-                $value = array();
+                $value = [];
             }
         }
 
@@ -147,12 +171,15 @@ class File extends AbstractData
         $label = $value['name'];
         $rules = $this->getAttribute()->getValidationRules();
         $extension = pathinfo($value['name'], PATHINFO_EXTENSION);
-
-        if (!empty($rules['file_extensions'])) {
-            $extensions = explode(',', $rules['file_extensions']);
+        $fileExtensions = ArrayObjectSearch::getArrayElementByName(
+            $rules,
+            'file_extensions'
+        );
+        if ($fileExtensions !== null) {
+            $extensions = explode(',', $fileExtensions);
             $extensions = array_map('trim', $extensions);
             if (!in_array($extension, $extensions)) {
-                return array(__('"%1" is not a valid file extension.', $extension));
+                return [__('"%1" is not a valid file extension.', $extension)];
             }
         }
 
@@ -164,17 +191,21 @@ class File extends AbstractData
         }
 
         if (!$this->_isUploadedFile($value['tmp_name'])) {
-            return array(__('"%1" is not a valid file.', $label));
+            return [__('"%1" is not a valid file.', $label)];
         }
 
-        if (!empty($rules['max_file_size'])) {
+        $maxFileSize = ArrayObjectSearch::getArrayElementByName(
+            $rules,
+            'max_file_size'
+        );
+        if ($maxFileSize !== null) {
             $size = $value['size'];
-            if ($rules['max_file_size'] < $size) {
-                return array(__('"%1" exceeds the allowed file size.', $label));
+            if ($maxFileSize < $size) {
+                return [__('"%1" exceeds the allowed file size.', $label)];
             }
         }
 
-        return array();
+        return [];
     }
 
     /**
@@ -187,11 +218,23 @@ class File extends AbstractData
      */
     protected function _isUploadedFile($filename)
     {
-        return is_uploaded_file($filename);
+        if (is_uploaded_file($filename)) {
+            return true;
+        }
+
+        // This case is required for file uploader UI component
+        $temporaryFile = FileProcessor::TMP_DIR . '/' . pathinfo($filename)['basename'];
+        if ($this->fileProcessor->isExist($temporaryFile)) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function validateValue($value)
     {
@@ -199,7 +242,7 @@ class File extends AbstractData
             return true;
         }
 
-        $errors = array();
+        $errors = [];
         $attribute = $this->getAttribute();
         $label = $attribute->getStoreLabel();
 
@@ -232,7 +275,7 @@ class File extends AbstractData
     /**
      * {@inheritdoc}
      *
-     * @return $this|string
+     * @return ImageContentInterface|array|string|null
      */
     public function compactValue($value)
     {
@@ -240,11 +283,49 @@ class File extends AbstractData
             return $this;
         }
 
-        $attribute = $this->getAttribute();
-        $original = $this->_value;
+        // Remove outdated file (in the case of file uploader UI component)
+        if (empty($value) && !empty($this->_value)) {
+            $this->fileProcessor->removeUploadedFile($this->_value);
+            return $value;
+        }
+
+        if (isset($value['file']) && !empty($value['file'])) {
+            if ($value['file'] == $this->_value) {
+                return $this->_value;
+            }
+            $result = $this->processUiComponentValue($value);
+        } else {
+            $result = $this->processInputFieldValue($value);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Process file uploader UI component data
+     *
+     * @param array $value
+     * @return string|null
+     */
+    protected function processUiComponentValue(array $value)
+    {
+        $result = $this->fileProcessor->moveTemporaryFile($value['file']);
+        return $result;
+    }
+
+    /**
+     * Process input type=file component data
+     *
+     * @param string $value
+     * @return bool|int|string
+     */
+    protected function processInputFieldValue($value)
+    {
         $toDelete = false;
-        if ($original) {
-            if (!$attribute->isRequired() && !empty($value['delete'])) {
+        if ($this->_value) {
+            if (!$this->getAttribute()->isRequired()
+                && !empty($value['delete'])
+            ) {
                 $toDelete = true;
             }
             if (!empty($value['tmp_name'])) {
@@ -252,31 +333,24 @@ class File extends AbstractData
             }
         }
 
-        $path = $this->_fileSystem->getPath(\Magento\Framework\App\Filesystem::MEDIA_DIR)
-            . '/' . $this->_entityTypeCode;
+        $mediaDir = $this->_fileSystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $result = $this->_value;
 
-        $result = $original;
-        // unlink entity file
         if ($toDelete) {
+            $mediaDir->delete($this->_entityTypeCode . '/' . ltrim($this->_value, '/'));
             $result = '';
-            $file = $path . $original;
-            $ioFile = new \Magento\Framework\Io\File();
-            if ($ioFile->fileExists($file)) {
-                $ioFile->rm($file);
-            }
         }
 
         if (!empty($value['tmp_name'])) {
             try {
-                $uploader = new \Magento\Framework\File\Uploader($value);
+                $uploader = $this->uploaderFactory->create(['fileId' => $value]);
                 $uploader->setFilesDispersion(true);
                 $uploader->setFilenamesCaseSensitivity(false);
                 $uploader->setAllowRenameFiles(true);
-                $uploader->save($path, $value['name']);
-                $fileName = $uploader->getUploadedFileName();
-                $result = $fileName;
+                $uploader->save($mediaDir->getAbsolutePath($this->_entityTypeCode), $value['name']);
+                $result = $uploader->getUploadedFileName();
             } catch (\Exception $e) {
-                $this->_logger->logException($e);
+                $this->_logger->critical($e);
             }
         }
 
@@ -300,11 +374,22 @@ class File extends AbstractData
         if ($this->_value) {
             switch ($format) {
                 case \Magento\Customer\Model\Metadata\ElementFactory::OUTPUT_FORMAT_JSON:
-                    $output = array('value' => $this->_value, 'url_key' => $this->_coreData->urlEncode($this->_value));
+                    $output = ['value' => $this->_value, 'url_key' => $this->urlEncoder->encode($this->_value)];
                     break;
             }
         }
 
         return $output;
+    }
+
+    /**
+     * Get file processor
+     *
+     * @return FileProcessor
+     * @deprecated 100.1.3
+     */
+    protected function getFileProcessor()
+    {
+        return $this->fileProcessor;
     }
 }

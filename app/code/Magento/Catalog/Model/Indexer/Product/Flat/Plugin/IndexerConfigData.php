@@ -1,73 +1,66 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Indexer\Product\Flat\Plugin;
 
+use Magento\Catalog\Model\Indexer\Product\Flat\State as ProductFlatIndexerState;
+use Magento\Indexer\Model\Config\Data as ConfigData;
+use Magento\Catalog\Model\Indexer\Product\Flat\Processor as ProductFlatIndexerProcessor;
+
+/**
+ * Plugin for Magento\Indexer\Model\Config\Data
+ */
 class IndexerConfigData
 {
     /**
-     * @var \Magento\Catalog\Model\Indexer\Product\Flat\State
+     * @var ProductFlatIndexerState
      */
-    protected $_state;
+    protected $state;
 
     /**
-     * @param \Magento\Catalog\Model\Indexer\Product\Flat\State $state
+     * @param ProductFlatIndexerState $state
      */
-    public function __construct(\Magento\Catalog\Model\Indexer\Product\Flat\State $state)
+    public function __construct(ProductFlatIndexerState $state)
     {
-        $this->_state = $state;
+        $this->state = $state;
     }
 
     /**
-     * Around get handler
+     * Modify returned config when flat indexer is disabled
      *
-     * @param \Magento\Indexer\Model\Config\Data $subject
-     * @param callable $proceed
+     * @param ConfigData $subject
+     * @param mixed $data
      * @param string $path
      * @param string $default
+     * @return mixed
      *
-     * @return mixed|null
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      *
      */
-    public function aroundGet(
-        \Magento\Indexer\Model\Config\Data $subject,
-        \Closure $proceed,
-        $path = null,
-        $default = null
-    ) {
-        $data = $proceed($path, $default);
+    public function afterGet(ConfigData $subject, $data, $path = null, $default = null)
+    {
+        if ($this->state->isFlatEnabled()) {
+            return $data;
+        }
 
-        if (!$this->_state->isFlatEnabled()) {
-            $indexerId = \Magento\Catalog\Model\Indexer\Product\Flat\Processor::INDEXER_ID;
-            if (!$path && isset($data[$indexerId])) {
-                unset($data[$indexerId]);
-            } elseif ($path) {
-                list($firstKey, ) = explode('/', $path);
-                if ($firstKey == $indexerId) {
-                    $data = $default;
-                }
-            }
+        $indexerId = ProductFlatIndexerProcessor::INDEXER_ID;
+
+        if (!$path && isset($data[$indexerId])) {
+            unset($data[$indexerId]);
+
+            return $data;
+        }
+
+        if (!$path) {
+            return $data;
+        }
+
+        list($firstKey) = explode('/', $path);
+
+        if ($firstKey == $indexerId) {
+            $data = $default;
         }
 
         return $data;

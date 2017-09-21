@@ -1,0 +1,408 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  UI -> Data Grid -> Header -> Filters
+//  _____________________________________________
+
+//
+//  Variables
+//  ---------------------------------------------
+
+@data-grid-search-action__size: 2rem;
+@data-grid-search-menu-item__background-color: @color-blue-clear-sky;
+
+@data-grid-filters__font-size: 1.3rem;
+@data-grid-filters__background-color: @page-wrapper__background-color;
+
+@data-grid-filters-fieldset__inner-side: 4rem;
+@data-grid-filters-fieldset__columns: 4;
+
+@data-grid-filters-label__width: 25%;
+
+@data-grid-filters-action__padding-right: 2.1rem;
+@data-grid-filters-action__padding-left: 1.7rem;
+@data-grid-filters-action__active__border-color: @color-gray80;
+@data-grid-filters-action__active__color: @color-phoenix;
+
+@data-grid-filters-current__margin-borrom: .9rem;
+@data-grid-filters-current-action-remove__background-color: @color-gray68;
+@data-grid-filters-current-action-remove__hover__background-color: darken(@data-grid-filters-current-action-remove__background-color, 10%);
+@data-grid-filters-current-action-remove__size: 1.6rem;
+
+@data-grid-search-menu__z-index: @data-grid-overlay__z-index - 1;
+@data-grid-search-control-action-menu-item__quantity: 5;
+
+//
+//  Filter action & search
+//  ---------------------------------------------
+
+.data-grid-filters-actions-wrap {
+    float: right;
+}
+
+//  Data Grid Search
+.data-grid-search-control-wrap {
+    float: left;
+    max-width: 45.5rem;
+    position: relative;
+    width: 35%;
+
+    :-ms-input-placeholder {
+        font-style: italic;
+    }
+
+    ::-webkit-input-placeholder {
+        font-style: italic;
+    }
+
+    ::-moz-placeholder {
+        font-style: italic;
+    }
+
+    //  Submit/search icon
+    .action-submit {
+        .action-reset();
+        padding: .6rem 2rem .2rem;
+        position: absolute;
+        right: 0;
+        top: 1px;
+
+        &:active {
+            .scale();
+        }
+
+        &:hover {
+            &:before {
+                color: darken(@text__color, 10%);
+            }
+        }
+
+        &:focus {
+            ._keyfocus & {
+                box-shadow: @focus__box-shadow;
+            }
+        }
+
+        &:before {
+            &:extend(.abs-icon all);
+            content: @icon-search__content;
+            font-size: @data-grid-search-action__size;
+            transition: @smooth__color;
+        }
+
+        > span {
+            .hidden();
+        }
+    }
+
+    .action-menu {
+        max-height: 3.85rem * @data-grid-search-control-action-menu-item__quantity; // ToDo UI: change static item height
+        overflow-y: auto;
+        z-index: @data-grid-search-menu__z-index;
+    }
+
+    .action-menu-item {
+        &._selected {
+            background-color: @data-grid-search-menu-item__background-color;
+        }
+    }
+
+    .data-grid-search-label {
+        display: none;
+    }
+}
+
+.data-grid-search-control {
+    padding-right: @data-grid-search-action__size + 2rem * 2;
+    width: 100%;
+}
+
+//  Action
+.data-grid-filters-action-wrap {
+    float: left;
+    padding-left: @indent__base;
+
+    .action-default {
+        font-size: @data-grid-filters__font-size;
+        margin-bottom: 1rem;
+        padding-left: @data-grid-filters-action__padding-left;
+        padding-right: @data-grid-filters-action__padding-right;
+        padding-top: @action__padding-top + .1rem;
+
+        &._active {
+            background-color: @data-grid-filters__background-color;
+            border-bottom-color: @data-grid-filters__background-color;
+            border-right-color: @data-grid-filters-action__active__border-color;
+            font-weight: @font-weight__semibold;
+            margin: -.1rem 0 0;
+            padding-bottom: 1.6rem;
+            padding-top: @action__padding-top + .2rem;
+            position: relative;
+            z-index: @data-grid-header__z-index - 19;
+
+            &:after {
+                background-color: @data-grid-filters-action__active__color;
+                bottom: 100%;
+                content: '';
+                height: 3px;
+                left: -1px;
+                position: absolute;
+                right: -1px;
+            }
+        }
+
+        &:before {
+            &:extend(.abs-icon all);
+            color: @action-dropdown__color;
+            content: @icon-filter__content;
+            font-size: 1.8rem;
+            margin-right: .4rem;
+            position: relative;
+            top: -1px;
+            vertical-align: top;
+        }
+    }
+
+    .filters-active {
+        display: none;
+    }
+}
+
+.admin__action-grid-select {
+    .admin__control-select {
+        margin: -.5rem .5rem 0 0;
+        padding-bottom: .6rem;
+        padding-top: .6rem;
+    }
+}
+
+//
+//  Filters content
+//  ---------------------------------------------
+
+.admin__data-grid-filters-wrap {
+    .appearing__off();
+    clear: both;
+    font-size: @data-grid-filters__font-size;
+    transition: opacity .3s ease;
+
+    &._show {
+        .appearing__on();
+        border-bottom: 1px solid @data-grid-filters-action__active__border-color;
+        border-top: 1px solid @data-grid-filters-action__active__border-color;
+        margin-bottom: .7rem;
+        padding: 3.6rem 0 3rem;
+        position: relative;
+        top: -1px;
+        z-index: @data-grid-header__z-index - 20;
+
+        .admin__data-grid-filters-footer,
+        .admin__data-grid-filters {
+            display: block;
+        }
+    }
+
+    //  Field labels
+    .admin__form-field-legend,
+    .admin__form-field-label {
+        display: block;
+        font-weight: bold;
+        margin: 0 0 .3rem;
+        text-align: left;
+    }
+
+    //  First level field
+    .admin__form-field {
+        display: inline-block;
+        margin-bottom: 2em;
+        margin-left: 0;
+        padding-left: @data-grid-filters-fieldset__inner-side / 2;
+        padding-right: @data-grid-filters-fieldset__inner-side / 2;
+        vertical-align: top;
+        width: ~'calc(100% / @{data-grid-filters-fieldset__columns} - 4px)';
+
+        //  Inner fields
+        .admin__form-field {
+            display: block;
+            float: none;
+            margin-bottom: 1.5rem;
+            padding-left: 0;
+            padding-right: 0;
+            width: auto;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+
+            //  Inner field labels
+            .admin__form-field-label {
+                border: @field-control__border-width solid transparent;
+                float: left;
+                font-weight: normal;
+                line-height: @field-control__line-height;
+                margin-bottom: 0;
+                padding-bottom: @field-control__padding-bottom;
+                padding-right: 1em;
+                padding-top: @field-control__padding-top;
+                width: @data-grid-filters-label__width;
+            }
+
+            .admin__form-field-control {
+                margin-left: @data-grid-filters-label__width;
+            }
+        }
+    }
+
+    .admin__form-field-label,
+    .admin__control-text,
+    .admin__control-select,
+    .admin__action-multiselect {
+        font-size: @data-grid-filters__font-size;
+    }
+
+    .admin__control-select {
+        height: @action__height;
+        padding-top: @action__padding-top - .1rem;
+    }
+
+    .admin__action-multiselect {
+        &:before {
+            height: @action__height;
+            width: @action__height;
+        }
+    }
+
+    //  Date control
+    .admin__control-text._has-datepicker,
+    .admin__control-select {
+        width: 100%;
+    }
+}
+
+//  Filters content wrap
+.admin__data-grid-filters {
+    &:extend(.abs-clearfix all);
+    display: none;
+    margin-left: -(@data-grid-filters-fieldset__inner-side / 2);
+    margin-right: -(@data-grid-filters-fieldset__inner-side / 2);
+}
+
+.admin__filters-legend {
+    .hidden();
+}
+
+//  Filters footer
+.admin__data-grid-filters-footer {
+    &:extend(.abs-clearfix all);
+    display: none;
+    font-size: @font-size__base;
+
+    .admin__footer-main-actions {
+        margin-left: 25%;
+        text-align: right;
+    }
+
+    .admin__footer-secondary-actions {
+        float: left;
+        width: 50%;
+    }
+}
+
+//
+//  Chips
+//  ---------------------------------------------
+
+//  Current chips
+.admin__data-grid-filters-current {
+    border-bottom: .1rem solid @data-grid-filters-action__active__border-color;
+    border-top: .1rem solid @data-grid-filters-action__active__border-color;
+    display: none;
+    font-size: @data-grid-filters__font-size;
+    margin-bottom: @data-grid-filters-current__margin-borrom;
+    padding-bottom: .8rem;
+    padding-top: 1.1rem;
+    width: 100%;
+
+    &._show {
+        display: table;
+        position: relative;
+        top: -1px;
+        z-index: 3;
+
+        + .admin__data-grid-filters-wrap {
+            &._show {
+                margin-top: -(@data-grid-filters-current__margin-borrom + .1rem);
+            }
+        }
+    }
+}
+
+.admin__current-filters-list-wrap,
+.admin__current-filters-title-wrap,
+.admin__current-filters-actions-wrap {
+    display: table-cell;
+    vertical-align: top;
+}
+
+.admin__current-filters-title {
+    margin-right: 1em;
+    white-space: nowrap;
+}
+
+.admin__current-filters-list-wrap {
+    width: 100%;
+}
+
+.admin__current-filters-list {
+    margin-bottom: 0;
+
+    > li {
+        display: inline-block;
+        font-weight: @font-weight__semibold;
+        margin: 0 1rem .5rem;
+        padding-right: @data-grid-filters-current-action-remove__size + 1rem;
+        position: relative;
+    }
+
+    .action-remove {
+        .action-reset();
+        line-height: 1;
+        position: absolute;
+        right: 0;
+        top: 1px;
+
+        &:hover {
+            &:before {
+                color: @data-grid-filters-current-action-remove__hover__background-color;
+            }
+        }
+
+        &:active {
+            .scale();
+        }
+
+        &:before {
+            &:extend(.abs-icon all);
+            color: @data-grid-filters-current-action-remove__background-color;
+            content: @icon-remove-small__content;
+            font-size: @data-grid-filters-current-action-remove__size;
+            transition: @smooth__color;
+        }
+
+        > span {
+            .hidden();
+        }
+    }
+}
+
+.admin__current-filters-actions-wrap {
+    .action-clear {
+        border: none;
+        padding-bottom: 0;
+        padding-top: 0;
+        white-space: nowrap;
+    }
+}

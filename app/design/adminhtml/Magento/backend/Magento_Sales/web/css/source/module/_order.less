@@ -1,0 +1,337 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Page components
+//  _____________________________________________
+
+@import 'order/_address.less';
+@import 'order/_discounts.less';
+@import 'order/_gift-options.less';
+@import 'order/_items.less';
+@import 'order/_order-account.less';
+@import 'order/_payment-shipping.less';
+@import 'order/_sidebar.less';
+@import 'order/_sku.less';
+@import 'order/_total.less';
+@import 'order/_order-comments.less';
+
+//
+//  Variables
+//  _____________________________________________
+
+@order-create-icon-refresh__font-size: 2rem;
+@order-create-icon-refresh__color: @color-gray83;
+@order-create-icon-refresh__hover__color: darken(@color-gray83, 10%);
+
+@order-create-icon-add__content: @icon-arrow-right__content;
+@order-create-icon-configure__content: @icon-systems__content;
+@order-create-icon-remove__content: @icon-delete__content;
+@order-create-icon-reset__content: @icon-remove-small__content;
+@order-create-icon-refresh__content: @icon-refresh__content;
+@order-create-icon-plus__content: @icon-plus__content;
+@order-create-icon-plus__hover__color: @color-very-dark-gray-black2;
+
+//
+//  Crosspage components
+//  _____________________________________________
+
+//
+//  Layout
+//  ---------------------------------------------
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+    .order-details {
+        float: right;
+        #mix-grid .width(9,12);
+        margin-left: 0;
+    }
+
+    .order-sidebar {
+        #mix-grid .column(3,12);
+        margin-left: 0;
+    }
+
+    .order-billing-address,
+    .order-billing-method,
+    .order-history,
+    .order-information,
+    .order-payment-method,
+    .order-comments-history {
+        float: left;
+        #mix-grid .width(6,12);
+    }
+
+    .order-shipping-address,
+    .order-shipping-method,
+    .order-totals,
+    .order-view-account-information .order-account-information {
+        float: right;
+        #mix-grid .width(6,12);
+    }
+}
+
+//
+//  Tablets
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__l) {
+    .order-details {
+        .order-search-items {
+            .action-configure {
+                display: block;
+                float: none;
+            }
+        }
+    }
+}
+
+.order-view {
+    > .ui-tabs-panel {
+        border: 0;
+        margin: 0;
+        padding: 0;
+    }
+}
+
+//
+//  Page sections
+//  ---------------------------------------------
+
+.admin__page-section {
+    margin-bottom: 5rem;
+
+    .admin__legend {
+        &:extend(.abs-fieldset-legend all);
+    }
+
+    .admin__field {
+        &:extend(.abs-field-rows all);
+    }
+
+    .admin__control-table-wrapper {
+        margin-top: @indent__base;
+    }
+
+    address {
+        font-style: normal;
+    }
+}
+
+.admin__page-subsection {
+    & + & {
+        margin-top: @indent__m;
+    }
+}
+
+.admin__page-section-title {
+    &:extend(.abs-clearfix all);
+    border-bottom: 1px solid @color-gray80;
+    margin-bottom: 1.7rem;
+    padding: 1.4rem 0 .5rem;
+    strong,
+    .title {
+        &:extend(h2);
+        float: left;
+        margin: 0;
+    }
+    .actions {
+        display: inline-block;
+        margin-left: @indent__xs;
+        &._primary {
+            float: right;
+        }
+    }
+}
+
+.admin__page-section-content {
+    &:extend(.abs-clearfix all);
+}
+
+.admin__page-section-item-title,
+.admin__page-section-content .admin__page-section-title {
+    border-bottom: 0;
+    margin-bottom: 1.5rem;
+    padding: 0;
+    .title {
+        &:extend(.abs-fieldset-legend all);
+        margin: 0;
+    }
+    .actions {
+        display: inline-block;
+        margin-left: @indent__xs;
+    }
+}
+
+//
+//  Select Customer
+//  ---------------------------------------------
+
+.order-customer-selector {
+    .admin__page-section-title {
+        .title {
+            margin: 0 0 2rem;
+        }
+        .actions {
+            float: right;
+            margin-top: -.5rem;
+        }
+    }
+}
+
+//
+//  Select Store Scope
+//  ---------------------------------------------
+
+.tree-store-scope {
+    .admin__field {
+        margin: 0 0 1rem;
+    }
+}
+
+//
+//  Order Errors
+//  ---------------------------------------------
+
+.order-errors {
+    .col-qty {
+        .admin__control-text {
+            &:extend(.abs-control-qty all);
+        }
+    }
+}
+
+//
+//  Order Invoice
+//  ---------------------------------------------
+
+.order-invoice-tables {
+    &:extend(.abs-order-tables all);
+    &:extend(.abs-order-tbody-border all);
+}
+
+.abs-qty-table {
+    th,
+    td {
+        border: none;
+        font-weight: @font-weight__regular;
+        padding: 0 @order-create-sidebar__margin__s @order-create-sidebar__margin__s 0;
+    }
+}
+
+.abs-order-tbody-border {
+    tbody {
+        border-bottom: 1px solid @table-td__border-color;
+        &:last-of-type {
+            border-bottom: none;
+        }
+    }
+}
+
+
+//
+//  Product configure popup
+//  ---------------------------------------------
+
+.product-configure-popup {
+    .weee {
+        .price-excluding-tax,
+        .price-including-tax {
+            display: block;
+            font-size: 1.3rem;
+            &:before {
+                content: attr(data-label) ': ';
+            }
+        }
+    }
+}
+
+.options-list {
+    &.nested {
+        .admin__field-option {
+            .admin__field-label {
+                > span {
+                    &:after {
+                        content: none;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.summary-total {
+    cursor: pointer;
+
+    .summary-collapse {
+        display: inline-block;
+        padding: 0 0 0 (@collapsible-title-icon__size + .5rem);
+        position: relative;
+        &:before {
+            &:extend(.abs-icon all);
+            content: @icon-expand-open__content;
+            font-size: @collapsible-title-icon__size;
+            left: 0;
+            position: absolute;
+            top: 0;
+        }
+        &:active {
+            &:before {
+                .scale();
+            }
+        }
+    }
+}
+
+.show-details {
+    .summary-collapse {
+        &:before {
+            content: @icon-expand-close__content;
+        }
+    }
+}
+
+.summary-details {
+    .label,
+    .admin__total-mark {
+        padding-left: @collapsible-title-icon__size + .5rem + @admin__table-secondary__padding-horizontal;
+    }
+}
+
+//  ToDo UI: review the collapsible block
+//.order-subtotal {
+//    .summary-collapse {
+//        cursor: pointer;
+//        display: inline-block;
+//        &:before {
+//            @iconsize: 16px;
+//
+//            -webkit-font-smoothing: antialiased;
+//            background: #f2ebde;
+//            border-radius: 2px;
+//            border: 1px solid #ada89e;
+//            color: #816063;
+//            content: '+';
+//            display: inline-block;
+//            font-size: @iconsize;
+//            font-style: normal;
+//            font-weight: normal;
+//            height: @iconsize;
+//            line-height: @iconsize;
+//            margin-right: 7px;
+//            overflow: hidden;
+//            speak: none;
+//            text-indent: 0;
+//            vertical-align: top;
+//            width: @iconsize;
+//        }
+//        &:hover:before {
+//            background: #cac3b4;
+//        }
+//    }
+//    &.show-details .summary-collapse:before {
+//        content: '\e03a';
+//    }
+//}

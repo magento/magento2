@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Reports\Test\TestCase\NewAccountsReportEntityTest" summary="New Accounts Report" ticketId="MAGETWO-27742">
+        <variation name="NewAccountsReportEntityTestVariation1">
+            <data name="tag" xsi:type="string">stable:no</data>
+            <data name="customer/dataset" xsi:type="string">default</data>
+            <data name="total" xsi:type="string">1</data>
+            <data name="customersReport/report_from" xsi:type="string">m/d/Y</data>
+            <data name="customersReport/report_to" xsi:type="string">m/d/Y</data>
+            <data name="customersReport/report_period" xsi:type="string">Year</data>
+            <constraint name="Magento\Reports\Test\Constraint\AssertNewAccountsReportTotalResult" />
+        </variation>
+        <variation name="NewAccountsReportEntityTestVariation2">
+            <data name="tag" xsi:type="string">stable:no</data>
+            <data name="customer/dataset" xsi:type="string">default</data>
+            <data name="total" xsi:type="string">1</data>
+            <data name="customersReport/report_from" xsi:type="string">m/d/Y</data>
+            <data name="customersReport/report_to" xsi:type="string">m/d/Y</data>
+            <data name="customersReport/report_period" xsi:type="string">Month</data>
+            <constraint name="Magento\Reports\Test\Constraint\AssertNewAccountsReportTotalResult" />
+        </variation>
+        <variation name="NewAccountsReportEntityTestVariation3">
+            <data name="tag" xsi:type="string">stable:no</data>
+            <data name="customer/dataset" xsi:type="string">default</data>
+            <data name="total" xsi:type="string">1</data>
+            <data name="customersReport/report_from" xsi:type="string">m/d/Y</data>
+            <data name="customersReport/report_to" xsi:type="string">m/d/Y</data>
+            <data name="customersReport/report_period" xsi:type="string">Day</data>
+            <constraint name="Magento\Reports\Test\Constraint\AssertNewAccountsReportTotalResult" />
+        </variation>
+        <variation name="NewAccountsReportEntityTestVariation4">
+            <data name="customer/dataset" xsi:type="string">default</data>
+            <data name="total" xsi:type="string">0</data>
+            <data name="customersReport/report_from" xsi:type="string">m/d/Y 12:00 a+1 day</data>
+            <data name="customersReport/report_to" xsi:type="string">m/d/Y 12:00 a+1 day</data>
+            <data name="customersReport/report_period" xsi:type="string">Day</data>
+            <constraint name="Magento\Reports\Test\Constraint\AssertNewAccountsReportTotalResult" />
+        </variation>
+    </testCase>
+</config>

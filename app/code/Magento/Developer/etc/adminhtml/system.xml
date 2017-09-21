@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="dev" translate="label">
+            <group id="front_end_development_workflow" translate="label" type="text" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Frontend Development Workflow</label>
+                <field id="type" translate="label comment" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Workflow type</label>
+                    <comment>Not available in production mode</comment>
+                    <source_model>Magento\Developer\Model\Config\Source\WorkflowType</source_model>
+                    <frontend_model>Magento\Developer\Block\Adminhtml\System\Config\WorkflowType</frontend_model>
+                    <backend_model>Magento\Developer\Model\Config\Backend\WorkflowType</backend_model>
+                </field>
+            </group>
+            <group id="restrict" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Developer Client Restrictions</label>
+                <field id="allow_ips" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Allowed IPs (comma separated)</label>
+                    <comment>Leave empty for access from any location.</comment>
+                    <backend_model>Magento\Developer\Model\Config\Backend\AllowedIps</backend_model>
+                </field>
+            </group>
+            <group id="debug" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="debug_logging" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Log to File</label>
+                    <comment>Not available in production mode.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

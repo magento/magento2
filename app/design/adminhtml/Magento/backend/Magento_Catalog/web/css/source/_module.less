@@ -1,0 +1,96 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Catalog product grid
+//  ---------------------------------------------
+
+.catalog-product-index {
+    .admin__data-grid-wrap {
+        .data-row {
+            cursor: pointer;
+        }
+    }
+}
+
+.product-composite-configure-inner {
+    .admin__control-text {
+        &.qty {
+            &:extend(.abs-control-qty all);
+        }
+    }
+}
+
+//
+//  Create attribute panel
+//  ---------------------------------------------
+
+//  Panel description
+.admin__field-complex-attributes {
+    .admin__field-complex-content {
+        font-size: 2.4rem;
+        padding: .5rem 0;
+    }
+
+    [class^='action-'] {
+        &:extend(.abs-action-l all);
+    }
+}
+
+//  Grid search result summary
+.attributes-summary {
+    &:extend(.abs-list-reset-styles all);
+
+    .attributes-selected,
+    .attributes-found {
+        display: block;
+    }
+}
+
+//
+//  Category page sidebar
+//  ---------------------------------------------
+
+.sidebar-actions {
+    margin-bottom: @indent__base;
+
+    [class*='action-'] {
+        margin-bottom: @indent__xs;
+    }
+}
+
+.catalog-category-edit,
+.catalog-category-add {
+    //  TODO: refactor trees
+    .x-tree.tree-wrapper {
+        overflow-x: auto;
+    }
+}
+
+//
+//  Advanced Inventory panel
+//  ---------------------------------------------
+
+.admin__field-use-config {
+    .admin__field + {
+        margin-top: -@indent__base;
+    }
+}
+
+//
+//  Advanced Price panel
+//  ---------------------------------------------
+
+.admin__control-fields {
+    .control-grouped {
+        .lib-vendor-prefix-display(inline-flex);
+        .lib-vendor-prefix-flex-direction(row);
+
+        .admin__field + .admin__field {
+            margin-left: @indent__s;
+            margin-top: 0;
+        }
+    }
+}

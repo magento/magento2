@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Catalog\Block\Widget\Link">
+        <arguments>
+            <argument name="urlFinder" xsi:type="object">Magento\CatalogUrlRewrite\Model\Storage\DbStorage</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Url">
+        <arguments>
+            <argument name="urlFinder" xsi:type="object">Magento\CatalogUrlRewrite\Model\Storage\DbStorage</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Category">
+        <plugin name="category_move_plugin" type="Magento\CatalogUrlRewrite\Model\Category\Plugin\Category\Move"/>
+        <plugin name="category_delete_plugin" type="Magento\CatalogUrlRewrite\Model\Category\Plugin\Category\Remove"/>
+    </type>
+    <type name="Magento\UrlRewrite\Model\StorageInterface">
+        <plugin name="storage_plugin" type="Magento\CatalogUrlRewrite\Model\Category\Plugin\Storage"/>
+    </type>
+    <type name="Magento\CatalogUrlRewrite\Model\Map\UrlRewriteFinder">
+        <arguments>
+            <argument name="urlRewriteClassNames" xsi:type="array">
+                <item name="product" xsi:type="string">Magento\CatalogUrlRewrite\Model\Map\DataProductUrlRewriteDatabaseMap</item>
+                <item name="category" xsi:type="string">Magento\CatalogUrlRewrite\Model\Map\DataCategoryUrlRewriteDatabaseMap</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

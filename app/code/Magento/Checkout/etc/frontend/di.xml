@@ -1,43 +1,86 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE_AFL.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/Magento/Framework/ObjectManager/etc/config.xsd">
-    <type name="Magento\Checkout\Model\Session">
-        <arguments>
-            <argument name="sessionName" xsi:type="string">frontend</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Core\Model\Url\SecurityInfo">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\Url\SecurityInfo">
         <arguments>
             <argument name="secureUrlList" xsi:type="array">
-                <item name="checkout_onepage" xsi:type="string">/checkout/onepage</item>
+                <item name="checkout_index" xsi:type="string">/checkout</item>
+            </argument>
+            <argument name="excludedUrlList" xsi:type="array">
+                <item name="checkout_sidebar" xsi:type="string">/checkout/sidebar</item>
             </argument>
         </arguments>
     </type>
     <type name="Magento\Framework\View\Layout">
         <plugin name="checkout-session-depersonalize"
                 type="Magento\Checkout\Model\Layout\DepersonalizePlugin" sortOrder="20"/>
+    </type>
+    <type name="Magento\Customer\CustomerData\SectionPoolInterface">
+        <arguments>
+            <argument name="sectionSourceMap" xsi:type="array">
+                <item name="cart" xsi:type="string">Magento\Checkout\CustomerData\Cart</item>
+                <item name="directory-data" xsi:type="string">Magento\Checkout\CustomerData\DirectoryData</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Block\SectionConfig">
+        <arguments>
+            <argument name="clientSideSections" xsi:type="array">
+                <item name="checkout-data" xsi:type="string">checkout-data</item>
+                <item name="cart-data" xsi:type="string">cart-data</item>
+            </argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Checkout\CustomerData\ItemPoolInterface"
+                type="Magento\Checkout\CustomerData\ItemPool"/>
+    <type name="Magento\Checkout\CustomerData\ItemPoolInterface">
+        <arguments>
+            <argument name="defaultItemId" xsi:type="string">Magento\Checkout\CustomerData\DefaultItem</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Model\CompositeConfigProvider">
+        <arguments>
+            <argument name="configProviders" xsi:type="array">
+                <item name="checkout_default_config_provider" xsi:type="object">Magento\Checkout\Model\DefaultConfigProvider</item>
+                <item name="checkout_summary_config_provider" xsi:type="object">Magento\Checkout\Model\Cart\CheckoutSummaryConfigProvider</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Block\Onepage">
+        <arguments>
+            <argument name="layoutProcessors" xsi:type="array">
+                <item name="addressFormAttributes" xsi:type="object">Magento\Checkout\Block\Checkout\LayoutProcessor</item>
+                <item name="totalsSortOrder" xsi:type="object">Magento\Checkout\Block\Checkout\TotalsProcessor</item>
+                <item name="directoryData" xsi:type="object">Magento\Checkout\Block\Checkout\DirectoryDataProcessor</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Block\Cart\Totals">
+        <arguments>
+            <argument name="layoutProcessors" xsi:type="array">
+                <item name="totalsSortOrder" xsi:type="object">Magento\Checkout\Block\Cart\CartTotalsProcessor</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Block\Cart\Shipping">
+        <arguments>
+            <argument name="layoutProcessors" xsi:type="array">
+                <item name="addressFormAttributes" xsi:type="object">Magento\Checkout\Block\Cart\LayoutProcessor</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Model\Cart\RequestInfoFilter">
+        <arguments>
+            <argument name="filterList" xsi:type="array">
+                <item name="form_key" xsi:type="string">form_key</item>
+                <item name="custom_price" xsi:type="string">custom_price</item>
+            </argument>
+        </arguments>
     </type>
 </config>

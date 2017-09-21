@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -27,53 +9,32 @@
  */
 namespace Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset;
 
-use Magento\Customer\Controller\RegistryConstants;
-use Magento\Customer\Service\V1\CustomerAccountServiceInterface as CustomerAccountService;
-
 /**
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @deprecated 100.2.0
+ * @since 100.0.2
  */
 class Grouped extends \Magento\GroupedProduct\Block\Product\View\Type\Grouped
 {
     /**
-     * @var \Magento\Catalog\Helper\Product\Price
+     * @var \Magento\Framework\Pricing\Helper\Data
      */
-    protected $priceHelper;
-
-    /**
-     * @var string
-     */
-    protected $_priceBlockDefaultTemplate = 'catalog/product/price.phtml';
-
-    /**
-     * @var \Magento\Core\Helper\Data
-     */
-    protected $_coreHelper;
-
-    /**
-     * @var CustomerAccountService
-     */
-    protected $_customerAccountService;
+    protected $pricingHelper;
 
     /**
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Framework\Stdlib\ArrayUtils $arrayUtils
-     * @param \Magento\Catalog\Helper\Product\Price $priceHelper
-     * @param \Magento\Core\Helper\Data $coreHelper
-     * @param CustomerAccountService $customerAccountService
+     * @param \Magento\Framework\Pricing\Helper\Data $pricingHelper
      * @param array $data
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
         \Magento\Framework\Stdlib\ArrayUtils $arrayUtils,
-        \Magento\Catalog\Helper\Product\Price $priceHelper,
-        \Magento\Core\Helper\Data $coreHelper,
-        CustomerAccountService $customerAccountService,
-        array $data = array()
+        \Magento\Framework\Pricing\Helper\Data $pricingHelper,
+        array $data = []
     ) {
-        $this->_customerAccountService = $customerAccountService;
-        $this->_coreHelper = $coreHelper;
-        $this->priceHelper = $priceHelper;
+        $this->pricingHelper = $pricingHelper;
         parent::__construct(
             $context,
             $arrayUtils,
@@ -91,15 +52,7 @@ class Grouped extends \Magento\GroupedProduct\Block\Product\View\Type\Grouped
     {
         parent::_construct();
 
-        $this->_block = 'Magento\Catalog\Block\Adminhtml\Product\Price';
         $this->_useLinkForAsLowAs = false;
-
-        if (is_null($this->priceHelper->getCustomer()->getId())
-            && $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID)
-        ) {
-            $customerId = $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID);
-            $this->priceHelper->setCustomer($this->_customerAccountService->getCustomer($customerId));
-        }
     }
 
     /**
@@ -113,7 +66,7 @@ class Grouped extends \Magento\GroupedProduct\Block\Product\View\Type\Grouped
             $this->setData('product', $this->_coreRegistry->registry('product'));
         }
         $product = $this->getData('product');
-        if (is_null($product->getTypeInstance()->getStoreFilter($product))) {
+        if ($product->getTypeInstance()->getStoreFilter($product) === null) {
             $product->getTypeInstance()->setStoreFilter(
                 $this->_storeManager->getStore($product->getStoreId()),
                 $product
@@ -200,6 +153,6 @@ class Grouped extends \Magento\GroupedProduct\Block\Product\View\Type\Grouped
     public function getCurrencyPrice($price)
     {
         $store = $this->getProduct()->getStore();
-        return $this->_coreHelper->currencyByStore($price, $store, false);
+        return $this->pricingHelper->currencyByStore($price, $store, false);
     }
 }

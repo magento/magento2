@@ -1,0 +1,17 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/* @var \Magento\Wishlist\Block\Rss\EmailLink $block */
+?>
+<?php if ($block->getLink()): ?>
+<p style="font-size:12px; line-height:16px; margin:0 0 16px;">
+    <?= $block->escapeHtml(__("RSS link to %1's wishlist", $this->helper('Magento\Wishlist\Helper\Data')->getCustomerName())) ?>
+    <br />
+    <a href="<?= $block->escapeUrl($block->getLink()) ?>"><?= $block->escapeUrl($block->getLink()) ?></a>
+</p>
+<?php endif; ?>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Sales\Test\TestCase\MoveLastOrderedProductsOnOrderPageTest" summary="Add Products to Order from Last Ordered Products Section" ticketId="MAGETWO-27640">
+        <variation name="MoveLastOrderedProductsOnOrderPageTestVariation1">
+            <data name="tag" xsi:type="string">stable:no</data>
+            <data name="order/dataset" xsi:type="string">default</data>
+            <data name="order/data/entity_id/products" xsi:type="string">catalogProductSimple::default</data>
+            <constraint name="Magento\Sales\Test\Constraint\AssertProductInItemsOrderedGrid" />
+        </variation>
+        <variation name="MoveLastOrderedProductsOnOrderPageTestVariation2">
+            <data name="issue" xsi:type="string">MAGETWO-58762: Customer grid does not open in MoveLastOrderedProductsOnOrderPageTestVariation2 on Jenkins</data>
+            <data name="order/dataset" xsi:type="string">default</data>
+            <data name="order/data/entity_id/products" xsi:type="string">configurableProduct::configurable_with_qty_1</data>
+            <constraint name="Magento\Sales\Test\Constraint\AssertProductInItemsOrderedGrid" />
+        </variation>
+    </testCase>
+</config>

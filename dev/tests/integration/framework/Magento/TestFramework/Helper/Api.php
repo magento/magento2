@@ -2,26 +2,8 @@
 /**
  * Helper for API integration tests.
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\TestFramework\Helper;
 
@@ -37,43 +19,31 @@ class Api
     /**
      * Call API method via API handler.
      *
-     * @param \PHPUnit_Framework_TestCase $testCase Active test case
+     * @param \PHPUnit\Framework\TestCase $testCase Active test case
      * @param string $path
      * @param array $params Order of items matters as they are passed to call_user_func_array
      * @return mixed
      */
-    public static function call(\PHPUnit_Framework_TestCase $testCase, $path, $params = array())
+    public static function call(\PHPUnit\Framework\TestCase $testCase, $path, $params = [])
     {
-        $soapAdapterMock = $testCase->getMock('Magento\Api\Model\Server\Adapter\Soap', array('fault'));
+        $soapAdapterMock = $testCase->getMock(\stdClass::class, ['fault']);
         $soapAdapterMock->expects(
             $testCase->any()
         )->method(
             'fault'
         )->will(
-            $testCase->returnCallback(array(__CLASS__, 'soapAdapterFaultCallback'))
+            $testCase->returnCallback([__CLASS__, 'soapAdapterFaultCallback'])
         );
 
-        $serverMock = $testCase->getMock('Magento\Api\Model\Server', array('getAdapter'));
+        $serverMock = $testCase->getMock(\stdClass::class, ['getAdapter']);
         $serverMock->expects($testCase->any())->method('getAdapter')->will($testCase->returnValue($soapAdapterMock));
 
-        $apiSessionMock = $testCase->getMock(
-            'Magento\Api\Model\Session',
-            array('isAllowed', 'isLoggedIn'),
-            array(),
-            '',
-            false
-        );
+        $apiSessionMock = $testCase->createPartialMock(\stdClass::class, ['isAllowed', 'isLoggedIn']);
         $apiSessionMock->expects($testCase->any())->method('isAllowed')->will($testCase->returnValue(true));
         $apiSessionMock->expects($testCase->any())->method('isLoggedIn')->will($testCase->returnValue(true));
 
-        $handlerMock = $testCase->getMock(
-            'Magento\Api\Model\Server\Handler\Soap',
-            array('_getServer', '_getSession'),
-            array(),
-            '',
-            false
-        );
-        self::$_previousHandler = set_error_handler(array($handlerMock, 'handlePhpError'));
+        $handlerMock = $testCase->createPartialMock(\stdClass::class, ['_getServer', '_getSession']);
+        self::$_previousHandler = set_error_handler([$handlerMock, 'handlePhpError']);
 
         $handlerMock->expects($testCase->any())->method('_getServer')->will($testCase->returnValue($serverMock));
         $handlerMock->expects($testCase->any())->method('_getSession')->will($testCase->returnValue($apiSessionMock));
@@ -82,11 +52,11 @@ class Api
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        $objectManager->get('Magento\Framework\Registry')->unregister('isSecureArea');
-        $objectManager->get('Magento\Framework\Registry')->register('isSecureArea', true);
-        $result = call_user_func_array(array($handlerMock, $path), $params);
-        $objectManager->get('Magento\Framework\Registry')->unregister('isSecureArea');
-        $objectManager->get('Magento\Framework\Registry')->register('isSecureArea', false);
+        $objectManager->get(\Magento\Framework\Registry::class)->unregister('isSecureArea');
+        $objectManager->get(\Magento\Framework\Registry::class)->register('isSecureArea', true);
+        $result = call_user_func_array([$handlerMock, $path], $params);
+        $objectManager->get(\Magento\Framework\Registry::class)->unregister('isSecureArea');
+        $objectManager->get(\Magento\Framework\Registry::class)->register('isSecureArea', false);
 
         self::restoreErrorHandler();
         return $result;
@@ -95,16 +65,16 @@ class Api
     /**
      * Call API method via API handler that raises SoapFault exception
      *
-     * @param \PHPUnit_Framework_TestCase $testCase Active test case
+     * @param \PHPUnit\Framework\TestCase $testCase Active test case
      * @param string $path
      * @param array $params Order of items matters as they are passed to call_user_func_array
      * @param string $expectedMessage exception message
      * @return \SoapFault
      */
     public static function callWithException(
-        \PHPUnit_Framework_TestCase $testCase,
+        \PHPUnit\Framework\TestCase $testCase,
         $path,
-        $params = array(),
+        $params = [],
         $expectedMessage = ''
     ) {
         try {
@@ -164,7 +134,7 @@ class Api
      */
     public static function simpleXmlToArray($xml, $keyTrimmer = null)
     {
-        $result = array();
+        $result = [];
 
         $isTrimmed = false;
         if (null !== $keyTrimmer) {
@@ -183,7 +153,7 @@ class Api
                 if (is_object($node)) {
                     $result[$arrKey] = self::simpleXmlToArray($node, $keyTrimmer);
                 } elseif (is_array($node)) {
-                    $result[$arrKey] = array();
+                    $result[$arrKey] = [];
                     foreach ($node as $nodeValue) {
                         $result[$arrKey][] = self::simpleXmlToArray($nodeValue, $keyTrimmer);
                     }
@@ -200,7 +170,7 @@ class Api
     /**
      * Check specific fields value in some entity data.
      *
-     * @param \PHPUnit_Framework_TestCase $testCase
+     * @param \PHPUnit\Framework\TestCase $testCase
      * @param array $expectedData
      * @param array $actualData
      * @param array $fieldsToCompare To be able to compare fields from loaded model with fields from API response
@@ -218,10 +188,10 @@ class Api
      *     );
      */
     public static function checkEntityFields(
-        \PHPUnit_Framework_TestCase $testCase,
+        \PHPUnit\Framework\TestCase $testCase,
         array $expectedData,
         array $actualData,
-        array $fieldsToCompare = array()
+        array $fieldsToCompare = []
     ) {
         $fieldsToCompare = !empty($fieldsToCompare) ? $fieldsToCompare : array_keys($expectedData);
         foreach ($fieldsToCompare as $entityField => $field) {

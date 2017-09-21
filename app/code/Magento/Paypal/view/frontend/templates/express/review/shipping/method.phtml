@@ -1,0 +1,50 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+/** @var $block \Magento\Paypal\Block\Express\Review */
+?>
+<div id="shipping-method-container">
+    <?php if ($block->getCanEditShippingMethod() || !$block->getCurrentShippingRate()): ?>
+        <?php if ($groups = $block->getShippingRateGroups()): ?>
+            <?php $currentRate = $block->getCurrentShippingRate(); ?>
+            <select name="shipping_method" id="shipping_method" class="required-entry">
+                <?php if (!$currentRate): ?>
+                    <option value="">
+                        <?= $block->escapeHtml(__('Please select a shipping method...')) ?>
+                    </option>
+                <?php endif; ?>
+                <?php foreach ($groups as $code => $rates): ?>
+                    <optgroup label="<?= $block->escapeHtml($block->getCarrierName($code)) ?>"
+                              style="font-style:normal;">
+                        <?php foreach ($rates as $rate): ?>
+                            <option
+                                value="<?= $block->escapeHtml($block->renderShippingRateValue($rate)) ?>"
+                                    <?= ($currentRate === $rate) ? ' selected="selected"' : '' ?>>
+                                <?= /* @noEscape */ $block->renderShippingRateOption($rate) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </optgroup>
+                <?php endforeach; ?>
+            </select>
+        <?php else: ?>
+            <p>
+                <strong>
+                    <?= $block->escapeHtml(__('Sorry, no quotes are available for this order right now.')) ?>
+                </strong>
+            </p>
+        <?php endif; ?>
+    <?php else: ?>
+        <p>
+            <strong>
+                <?= /* @noEscape */ $block->renderShippingRateOption($block->getCurrentShippingRate()) ?>
+            </strong>
+        </p>
+    <?php endif; ?>
+</div>
+<div style="display: none" id="shipping_method_update">
+    <p><?= $block->escapeHtml(__('Please update order data to get shipping methods and rates')) ?></p>
+</div>

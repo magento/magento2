@@ -1,0 +1,57 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/* @var \Magento\Wishlist\Block\Share\Email\Items $block */
+?>
+<?php $l = $block->getWishlistItemsCount() ?>
+<div>
+    <table>
+        <tr>
+            <?php $i = 0;
+            foreach ($block->getWishlistItems() as $item): $i++ ?>
+            <?php /* @var $item \Magento\Wishlist\Model\Item */ ?>
+            <?php /* @var $_product \Magento\Catalog\Model\Product */ ?>
+            <?php $_product = $item->getProduct(); ?>
+            <td class="col product">
+                <p>
+                    <a href="<?= $block->escapeUrl($block->getProductUrl($_product)) ?>">
+                        <?= /* @noEscape */ $block->getImage($_product, 'product_small_image')->toHtml() ?>
+                    </a>
+                </p>
+
+                <p>
+                    <a href="<?= $block->escapeUrl($block->getProductUrl($_product)) ?>">
+                        <strong><?= $block->escapeHtml($_product->getName()) ?></strong>
+                    </a>
+                </p>
+                <?php if ($block->hasDescription($item)): ?>
+                    <p>
+                        <strong><?= $block->escapeHtml(__('Comment')) ?>:</strong>
+                        <br/><?= /* @noEscape */  $block->getEscapedDescription($item) ?>
+                    </p>
+                <?php endif; ?>
+                <p>
+                    <a href="<?= $block->escapeUrl($block->getProductUrl($_product)) ?>">
+                        <?= $block->escapeHtml(__('View Product')) ?>
+                    </a>
+                </p>
+            </td>
+            <?php if ($i % 3 != 0): ?>
+                <td></td>
+            <?php else: ?>
+        </tr>
+        <tr>
+            <td colspan="5">&nbsp;</td>
+        </tr>
+            <?php if ($i < $l): ?>
+            <tr>
+            <?php endif ?>
+            <?php endif ?>
+            <?php endforeach ?>
+    </table>
+</div>

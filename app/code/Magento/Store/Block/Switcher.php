@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -27,8 +9,13 @@
  */
 namespace Magento\Store\Block;
 
+use Magento\Directory\Helper\Data;
 use Magento\Store\Model\Group;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Switcher extends \Magento\Framework\View\Element\Template
 {
     /**
@@ -37,7 +24,7 @@ class Switcher extends \Magento\Framework\View\Element\Template
     protected $_storeInUrl;
 
     /**
-     * @var \Magento\Core\Helper\PostData
+     * @var \Magento\Framework\Data\Helper\PostHelper
      */
     protected $_postDataHelper;
 
@@ -45,13 +32,13 @@ class Switcher extends \Magento\Framework\View\Element\Template
      * Constructs
      *
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Core\Helper\PostData $postDataHelper
+     * @param \Magento\Framework\Data\Helper\PostHelper $postDataHelper
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Core\Helper\PostData $postDataHelper,
-        array $data = array()
+        \Magento\Framework\Data\Helper\PostHelper $postDataHelper,
+        array $data = []
     ) {
         $this->_postDataHelper = $postDataHelper;
         parent::__construct($context, $data);
@@ -89,7 +76,7 @@ class Switcher extends \Magento\Framework\View\Element\Template
         if (!$this->hasData('raw_groups')) {
             $websiteGroups = $this->_storeManager->getWebsite()->getGroups();
 
-            $groups = array();
+            $groups = [];
             foreach ($websiteGroups as $group) {
                 $groups[$group->getId()] = $group;
             }
@@ -105,19 +92,19 @@ class Switcher extends \Magento\Framework\View\Element\Template
     {
         if (!$this->hasData('raw_stores')) {
             $websiteStores = $this->_storeManager->getWebsite()->getStores();
-            $stores = array();
+            $stores = [];
             foreach ($websiteStores as $store) {
                 /* @var $store \Magento\Store\Model\Store */
-                if (!$store->getIsActive()) {
+                if (!$store->isActive()) {
                     continue;
                 }
                 $localeCode = $this->_scopeConfig->getValue(
-                    'general/locale/code',
+                    Data::XML_PATH_DEFAULT_LOCALE,
                     \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                     $store
                 );
                 $store->setLocaleCode($localeCode);
-                $params = array('_query' => array());
+                $params = ['_query' => []];
                 if (!$this->isStoreInUrl()) {
                     $params['_query']['___store'] = $store->getCode();
                 }
@@ -142,9 +129,9 @@ class Switcher extends \Magento\Framework\View\Element\Template
             $rawGroups = $this->getRawGroups();
             $rawStores = $this->getRawStores();
 
-            $groups = array();
+            $groups = [];
             $localeCode = $this->_scopeConfig->getValue(
-                'general/locale/code',
+                Data::XML_PATH_DEFAULT_LOCALE,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
             foreach ($rawGroups as $group) {
@@ -179,7 +166,7 @@ class Switcher extends \Magento\Framework\View\Element\Template
 
             $groupId = $this->getCurrentGroupId();
             if (!isset($rawStores[$groupId])) {
-                $stores = array();
+                $stores = [];
             } else {
                 $stores = $rawStores[$groupId];
             }
@@ -201,7 +188,7 @@ class Switcher extends \Magento\Framework\View\Element\Template
      */
     public function isStoreInUrl()
     {
-        if (is_null($this->_storeInUrl)) {
+        if ($this->_storeInUrl === null) {
             $this->_storeInUrl = $this->_storeManager->getStore()->isUseStoreInUrl();
         }
         return $this->_storeInUrl;
@@ -231,10 +218,15 @@ class Switcher extends \Magento\Framework\View\Element\Template
      * Returns target store post data
      *
      * @param \Magento\Store\Model\Store $store
+     * @param array $data
      * @return string
      */
-    public function getTargetStorePostData(\Magento\Store\Model\Store $store)
+    public function getTargetStorePostData(\Magento\Store\Model\Store $store, $data = [])
     {
-        return $this->_postDataHelper->getPostData($this->getHomeUrl(), array('___store' => $store->getCode()));
+        $data[\Magento\Store\Api\StoreResolverInterface::PARAM_NAME] = $store->getCode();
+        return $this->_postDataHelper->getPostData(
+            $store->getCurrentUrl(false),
+            $data
+        );
     }
 }

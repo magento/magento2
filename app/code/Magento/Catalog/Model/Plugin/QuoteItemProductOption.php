@@ -1,65 +1,58 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Plugin;
 
+use Magento\Quote\Model\Quote\Item\ToOrderItem as QuoteToOrderItem;
+use Magento\Quote\Model\Quote\Item\AbstractItem as AbstractQuoteItem;
+use Magento\Catalog\Api\Data\ProductCustomOptionInterface as ProductOption;
+
+/**
+ * Plugin for Magento\Quote\Model\Quote\Item\ToOrderItem
+ */
 class QuoteItemProductOption
 {
     /**
-     * @param \Magento\Sales\Model\Convert\Quote $subject
-     * @param callable $proceed
-     * @param \Magento\Sales\Model\Quote\Item\AbstractItem $item
+     * Perform preparations for custom options
      *
-     * @return \Magento\Sales\Model\Order\Item
+     * @param QuoteToOrderItem $subject
+     * @param AbstractQuoteItem $quoteItem
+     * @param array $data
+     * @return void
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundItemToOrderItem(
-        \Magento\Sales\Model\Convert\Quote $subject,
-        \Closure $proceed,
-        \Magento\Sales\Model\Quote\Item\AbstractItem $item
+    public function beforeConvert(
+        QuoteToOrderItem $subject,
+        AbstractQuoteItem $quoteItem,
+        $data = []
     ) {
-        /** @var $orderItem \Magento\Sales\Model\Order\Item */
-        $orderItem = $proceed($item);
+        if (!is_array($quoteItem->getOptions())) {
+            return;
+        }
 
-        if (is_array($item->getOptions())) {
-            foreach ($item->getOptions() as $itemOption) {
-                $code = explode('_', $itemOption->getCode());
-                if (isset($code[1]) && is_numeric($code[1])) {
-                    $option = $item->getProduct()->getOptionById($code[1]);
-                    if ($option && $option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_FILE) {
-                        try {
-                            $option->groupFactory(
-                                $option->getType()
-                            )->setQuoteItemOption(
-                                $itemOption
-                            )->copyQuoteToOrder();
-                        } catch (\Exception $e) {
-                            continue;
-                        }
-                    }
-                }
+        foreach ($quoteItem->getOptions() as $itemOption) {
+            $code = explode('_', $itemOption->getCode());
+
+            if (!isset($code[1]) || !is_numeric($code[1])) {
+                continue;
+            }
+
+            $option = $quoteItem->getProduct()->getOptionById($code[1]);
+
+            if (!$option || $option->getType() != ProductOption::OPTION_TYPE_FILE) {
+                continue;
+            }
+
+            try {
+                $option->groupFactory($option->getType())
+                    ->setQuoteItemOption($itemOption)
+                    ->copyQuoteToOrder();
+            } catch (\Exception $e) {
+                continue;
             }
         }
-        return $orderItem;
     }
 }

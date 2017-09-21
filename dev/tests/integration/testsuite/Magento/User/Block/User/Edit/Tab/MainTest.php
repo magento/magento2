@@ -1,32 +1,14 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\User\Block\User\Edit\Tab;
 
 /**
  * @magentoAppArea adminhtml
  */
-class MainTest extends \Magento\Backend\Utility\Controller
+class MainTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
      * @var \Magento\User\Block\User\Edit\Tab\Main
@@ -44,11 +26,11 @@ class MainTest extends \Magento\Backend\Utility\Controller
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        $this->_block = $objectManager->create('Magento\User\Block\User\Edit\Tab\Main');
+        $this->_block = $objectManager->create(\Magento\User\Block\User\Edit\Tab\Main::class);
         $this->_block->setArea('adminhtml');
-        $this->_user = $objectManager->create('Magento\User\Model\User');
+        $this->_user = $objectManager->create(\Magento\User\Model\User::class);
 
-        $objectManager->get('Magento\Framework\Registry')->register('permissions_user', $this->_user);
+        $objectManager->get(\Magento\Framework\Registry::class)->register('permissions_user', $this->_user);
     }
 
     protected function tearDown()
@@ -57,7 +39,7 @@ class MainTest extends \Magento\Backend\Utility\Controller
         $this->_user = null;
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Framework\Registry')->unregister('permissions_user');
+        $objectManager->get(\Magento\Framework\Registry::class)->unregister('permissions_user');
         parent::tearDown();
     }
 
@@ -65,32 +47,57 @@ class MainTest extends \Magento\Backend\Utility\Controller
     {
         $this->_user->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
         $actualHtml = $this->_block->toHtml();
-        $this->assertSelectCount(
-            'input.required-entry[type="password"]',
-            0,
-            $actualHtml,
-            'All password fields have to be optional.'
-        );
-        $this->assertSelectCount('input.validate-admin-password[type="password"][name="password"]', 1, $actualHtml);
-        $this->assertSelectCount(
-            'input.validate-cpassword[type="password"][name="password_confirmation"]',
+        $this->assertEquals(
             1,
-            $actualHtml
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//input[contains(@class,"required-entry") and @type="password"]',
+                $actualHtml
+            ),
+            'There should be 1 required password entry: current user password.'
+        );
+        $this->assertEquals(
+            1,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//input[contains(@class,"validate-admin-password") and @type="password" and @name="password"]',
+                $actualHtml
+            )
+        );
+        $this->assertEquals(
+            1,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//input[contains(@class,"validate-cpassword") and @type="password" and ' .
+                '@name="password_confirmation"]',
+                $actualHtml
+            )
+        );
+        $this->assertEquals(
+            1,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//input[contains(@class,"validate-current-password") and @type="password" and @name="'
+                . Main::CURRENT_USER_PASSWORD_FIELD . '"]',
+                $actualHtml
+            )
         );
     }
 
     public function testToHtmlPasswordFieldsNewEntry()
     {
         $actualHtml = $this->_block->toHtml();
-        $this->assertSelectCount(
-            'input.validate-admin-password.required-entry[type="password"][name="password"]',
+        $this->assertEquals(
             1,
-            $actualHtml
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//input[contains(@class,"validate-admin-password") and contains(@class,"required-entry") and  '
+                . '@type="password" and @name="password"]',
+                $actualHtml
+            )
         );
-        $this->assertSelectCount(
-            'input.validate-cpassword.required-entry[type="password"][name="password_confirmation"]',
+        $this->assertEquals(
             1,
-            $actualHtml
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//input[contains(@class,"validate-cpassword") and contains(@class,"required-entry") and  '
+                . '@type="password" and @name="password_confirmation"]',
+                $actualHtml
+            )
         );
     }
 }

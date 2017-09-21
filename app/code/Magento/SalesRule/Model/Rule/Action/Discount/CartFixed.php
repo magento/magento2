@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Model\Rule\Action\Discount;
 
@@ -30,11 +12,11 @@ class CartFixed extends AbstractDiscount
      *
      * @var int[]
      */
-    protected $_cartFixedRuleUsedForAddress = array();
+    protected $_cartFixedRuleUsedForAddress = [];
 
     /**
      * @param \Magento\SalesRule\Model\Rule $rule
-     * @param \Magento\Sales\Model\Quote\Item\AbstractItem $item
+     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @param float $qty
      * @return \Magento\SalesRule\Model\Rule\Action\Discount\Data
      */
@@ -72,25 +54,25 @@ class CartFixed extends AbstractDiscount
         if ($cartRules[$rule->getId()] > 0) {
             $store = $quote->getStore();
             if ($ruleTotals['items_count'] <= 1) {
-                $quoteAmount = $store->convertPrice($cartRules[$rule->getId()]);
+                $quoteAmount = $this->priceCurrency->convert($cartRules[$rule->getId()], $store);
                 $baseDiscountAmount = min($baseItemPrice * $qty, $cartRules[$rule->getId()]);
             } else {
                 $discountRate = $baseItemPrice * $qty / $ruleTotals['base_items_price'];
                 $maximumItemDiscount = $rule->getDiscountAmount() * $discountRate;
-                $quoteAmount = $store->convertPrice($maximumItemDiscount);
+                $quoteAmount = $this->priceCurrency->convert($maximumItemDiscount, $store);
 
                 $baseDiscountAmount = min($baseItemPrice * $qty, $maximumItemDiscount);
                 $this->validator->decrementRuleItemTotalsCount($rule->getId());
             }
 
-            $baseDiscountAmount = $store->roundPrice($baseDiscountAmount);
+            $baseDiscountAmount = $this->priceCurrency->round($baseDiscountAmount);
 
             $cartRules[$rule->getId()] -= $baseDiscountAmount;
 
-            $discountData->setAmount($store->roundPrice(min($itemPrice * $qty, $quoteAmount)));
+            $discountData->setAmount($this->priceCurrency->round(min($itemPrice * $qty, $quoteAmount)));
             $discountData->setBaseAmount($baseDiscountAmount);
             $discountData->setOriginalAmount(min($itemOriginalPrice * $qty, $quoteAmount));
-            $discountData->setBaseOriginalAmount($store->roundPrice($baseItemOriginalPrice));
+            $discountData->setBaseOriginalAmount($this->priceCurrency->round($baseItemOriginalPrice));
         }
         $address->setCartFixedRules($cartRules);
 

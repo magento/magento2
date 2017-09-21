@@ -1,0 +1,781 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//  # Messages
+//
+//  Magento UI library provides mixins for styling messages. There are 4 types of messages:
+//  ```css
+//  info
+//  warning
+//  error
+//  success
+//  ```
+//  To configure styles of each type of message, global variables from variables.less are used. To apply the <code>.lib-message()</code> mixin you need to specify the type of message you want to apply styles to.
+//
+//  # Information message
+//
+//  This is an informational message. To apply appropriate style you need to specify the <code>info</code> type to the <code>.lib-message()</code> mixin.
+//
+//  If there is no content on the page, for example on a category page with no products, a special system information message with <code>class=”message info empty”</code> is used. It inherits styles from information message by default. It can be styled to get unique appearance using <code>.message.info.empty</code> class.
+//
+//  ```
+//  <div class="example-message-info">
+//      <div>
+//          Lorem ipsum dolor sit <a href="#">amet</a>, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.
+//      </div>
+//  </div>
+//  ```
+
+.example-message-info {
+    .lib-message(info);
+}
+
+//  # Warning message
+//
+//  This is a warning message. To apply appropriate style you need to specify <code>warning</code> type to the <code>.warning()</code> mixin.
+//
+//  ```
+//  <div class="example-message-warning">
+//      <div>
+//          Lorem ipsum dolor sit <a href="#">amet</a>, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.
+//      </div>
+//  </div>
+//  ```
+
+.example-message-warning {
+    .lib-message(warning);
+}
+
+//  # Error message
+//
+//  This is an error message. To apply appropriate style you need to specify <code>error</code> type to the <code>.warning()</code> mixin.
+//
+//  ```
+//  <div class="example-message-error">
+//      <div>
+//          Lorem ipsum dolor sit <a href="#">amet</a>, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.
+//      </div>
+//  </div>
+//  ```
+
+.example-message-error {
+    .lib-message(error);
+}
+
+//  # Success message
+//
+//  This is a success message. To apply appropriate style you need to specify <code>success</code> type to the <code>.warning()</code> mixin.
+//
+//  ```
+//  <div class="example-message-success">
+//      <div>
+//          Lorem ipsum dolor sit <a href="#">amet</a>, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.
+//      </div>
+//  </div>
+//  ```
+
+.example-message-success {
+    .lib-message(success);
+}
+
+//  # Notice message
+//
+//  This is a notice message. To apply appropriate style you need to specify <code>notice</code> type to the <code>.warning()</code> mixin.
+//
+//  ```
+//  <div class="example-message-notice">
+//      <div>
+//          Lorem ipsum dolor sit <a href="#">amet</a>, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.
+//      </div>
+//  </div>
+//  ```
+
+.example-message-notice {
+    .lib-message(notice);
+}
+
+//  # Message with inner icon
+//
+//  To add an inner icon use <code>.lib-message-icon-inner</code> mixin. To apply the <code>.message-icon-inner</code> mixin, you need to specify the type of a message that you want to apply styles to.
+//
+//  ```html
+//  <div class="example-message-1">
+//      <div>
+//          Lorem ipsum dolor sit <a href="#">amet</a>, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.
+//      </div>
+//  </div>
+//  ```
+//
+
+.example-message-1 {
+    .lib-message-icon-inner(notice);
+}
+
+//  # Message with lateral icon
+//
+//  To add a lateral icon to a message, you need to use the <code>.lib-message-icon-lateral</code> mixin. This mixin is configured by the following variables:
+//  ```css
+//  @_message-type: error; // info | warning | error | success | notice
+//  @_message-position: right; // left | right
+//  ```
+//
+//  ```html
+//  <div class="example-message-2">
+//      <div>
+//          Lorem ipsum dolor sit <a href="#">amet</a>, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.
+//      </div>
+//  </div>
+//  ```
+//  ```html
+//  <div class="example-message-3">
+//      <div>
+//          Lorem ipsum dolor sit <a href="#">amet</a>, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.
+//      </div>
+//  </div>
+//  ```
+
+.example-message-2 {
+    .lib-message-icon-lateral(error, right);
+}
+
+.example-message-3 {
+    .lib-message-icon-lateral(success, left);
+}
+
+//  # Custom message style
+//
+//  You can specify your own message type, for example “custom”. To use message mixin for this new type you need to add new variables to _variables.less:
+//  ```css
+//    @message__<b>custom</b>-color: #000;
+//    @message__<b>custom</b>-background: #fc0;
+//    @message__<b>custom</b>-link-color: blue;
+//    @message__<b>custom</b>-link-color-hover: darken(@message-custom-link__color, 20%);
+//    @message__<b>custom</b>-link-color-active: darken(@message-custom-link__color, 30%);
+//    @message__<b>custom</b>-border-color: orange;
+//    @message__<b>custom</b>-icon: @icon-settings;
+//    @message__<b>custom</b>-icon-color: #000;
+//    @message__<b>custom</b>-icon-background: #green;
+//    @message__<b>custom</b>-icon-top: 15px;
+//    @message__<b>custom</b>-icon-right: false;
+//    @message__<b>custom</b>-icon-bottom: false;
+//    @message__<b>custom</b>-icon-left: 0;
+//  ```
+//  And then call message mixin with your new message type
+//  ```css
+//  .lib-message-icon-lateral(custom, left);
+//  ```
+//  &nbsp;
+//  ```html
+//  <div class="example-message-4">
+//      <div>
+//          Lorem ipsum dolor sit <a href="#">amet</a>, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.
+//      </div>
+//  </div>
+//  ```
+//
+
+@message-custom__color: #000;
+@message-custom__background: #fc0;
+@message-custom__border-color: orange;
+
+@message-custom-link__color: blue;
+@message-custom-link__color-hover: darken(@message-custom-link__color, 20%);
+@message-custom-link__color-active: darken(@message-custom-link__color, 30%);
+
+@message-custom-icon: @icon-settings;
+@message-custom-icon__color-lateral: #000;
+@message-custom-icon__background: #green;
+@message-custom-icon__top: 15px;
+@message-custom-icon__right: false;
+@message-custom-icon__bottom: false;
+@message-custom-icon__left: 0;
+
+.example-message-4 {
+    .lib-message-icon-lateral(custom, left);
+    border-width: 4px;
+    border-radius: 10px;
+}
+
+// # Messages global variables
+//  <pre>
+//    <table>
+//        <tr>
+//            <th class="vars_head">Mixin variable</th>
+//            <th class="vars_head">Default value</th>
+//            <th class="vars_head">Allowed values</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th>@message__padding</th>
+//            <td class="vars_value">@indent__s @indent__base</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Message padding</td>
+//        </tr>
+//        <tr>
+//            <th>@message__margin</th>
+//            <td class="vars_value">@indent__xs 0</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Message margin</td>
+//        </tr>
+//        <tr>
+//            <th>@message__color</th>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">true | false</td>
+//            <td>Each message type has its own message color</td>
+//        </tr>
+//        <tr>
+//            <th colspan="4" class="vars_section">Messages font style</th>
+//        </tr>
+//        <tr>
+//            <th>@message__font-size</th>
+//            <td class="vars_value">13px</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Message font size</td>
+//        </tr>
+//        <tr>
+//            <th>@message__font-family</th>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Message font family</td>
+//        </tr>
+//        <tr>
+//            <th>@message__font-style</th>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Message font style</td>
+//        </tr>
+//        <tr>
+//            <th>@message__font-weight</th>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Message font weight</td>
+//        </tr>
+//        <tr>
+//            <th>@message__line-height</th>
+//            <td class="vars_value">1.2em</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Message line height</td>
+//        </tr>
+//        <tr>
+//            <th colspan="4" class="vars_section">Message icon setup</th>
+//        </tr>
+//        <tr>
+//            <th>@message-icon__font-size</th>
+//            <td class="vars_value">ceil(@message__font-size * 2 + 2)</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Message icon font size</td>
+//        </tr>
+//        <tr>
+//            <th>@message-icon__font-line-height</th>
+//            <td class="vars_value">@message-icon__font-size</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Message icon line height</td>
+//        </tr>
+//        <tr>
+//            <th>@message-icon__inner-padding-left</th>
+//            <td class="vars_value">40px</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Message icon padding left</td>
+//        </tr>
+//        <tr>
+//            <th>@message-icon__lateral-width</th>
+//            <td class="vars_value">30px</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Message icon lateral width</td>
+//        </tr>
+//        <tr>
+//            <th>@message-icon__lateral-arrow-size</th>
+//            <td class="vars_value">5px</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Message icon arrow size</td>
+//        </tr>
+//        <tr>
+//            <th>@message-icon__top</th>
+//            <td class="vars_value">18px</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Message icon top position</td>
+//        </tr>
+//        <tr>
+//            <th>@message-icon__right</th>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Message icon right position</td>
+//        </tr>
+//        <tr>
+//            <th>@message-icon__bottom</th>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Message icon bottom position</td>
+//        </tr>
+//        <tr>
+//            <th>@message-icon__left</th>
+//            <td class="vars_value">0</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Message icon left position</td>
+//        </tr>
+//        <tr>
+//            <th colspan="4" class="vars_section">Message border</th>
+//        </tr>
+//        <tr>
+//            <th>@message__border-width</th>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Message border width</td>
+//        </tr>
+//        <tr>
+//            <th>@message__border-color</th>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Message border color</td>
+//        </tr>
+//        <tr>
+//            <th>@message__border-style</th>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Message border style</td>
+//        </tr>
+//        <tr>
+//            <th>@message__border-radius</th>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Message border radius</td>
+//        </tr>
+//        <tr>
+//            <th colspan="4" class="vars_section">Information message</th>
+//        </tr>
+//        <tr>
+//            <th>@message-info__color</th>
+//            <td class="vars_value">#6f4400</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Information message text color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-info__background</th>
+//            <td class="vars_value">#fdf0d5</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Information message background</td>
+//        </tr>
+//        <tr>
+//            <th>@message-info-link__color</th>
+//            <td class="vars_value">@link__color</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Information message link color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-info-link__color-hover</th>
+//            <td class="vars_value">@link__hover__color</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Information message hovered link color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-info-link__color-active</th>
+//            <td class="vars_value">@link__hover__color</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Information message active link color </td>
+//        </tr>
+//        <tr>
+//            <th>@message-info__border-color</th>
+//            <td class="vars_value">@message__border-color</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Information message border color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-info-icon</th>
+//            <td class="vars_value">@icon-warning</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Information message icon symbol code</td>
+//        </tr>
+//        <tr>
+//            <th>@message-info-icon__color-inner</th>
+//            <td class="vars_value">#c07600</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Information message icon symbol color </td>
+//        </tr>
+//        <tr>
+//            <th>@message-info-icon__color-lateral</th>
+//            <td class="vars_value">@color-white</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Information message lateral icon symbol color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-info-icon__background</th>
+//            <td class="vars_value">#6f4400</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Information message icon background</td>
+//        </tr>
+//        <tr>
+//            <th>@message-info-icon__top</th>
+//            <td class="vars_value">@message-icon__top</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Message icon top position</td>
+//        </tr>
+//        <tr>
+//            <th>@message-info-icon__right</th>
+//            <td class="vars_value">@message-icon__right</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Message icon right position</td>
+//        </tr>
+//        <tr>
+//            <th>@message-info-icon__bottom</th>
+//            <td class="vars_value">@message-icon__bottom</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Message icon bottom position</td>
+//        </tr>
+//        <tr>
+//            <th>@message-info-icon__left</th>
+//            <td class="vars_value">@message-icon__left</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Message icon left position</td>
+//        </tr>
+//        <tr>
+//            <th colspan="4" class="vars_section">Warning message</th>
+//        </tr>
+//        <tr>
+//            <th>@message-warning__color</th>
+//            <td class="vars_value">@message-info__color</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Warning message text color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-warning__background</th>
+//            <td class="vars_value">@message-info__background</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Warning message background</td>
+//        </tr>
+//        <tr>
+//            <th>@message-warning-link__color</th>
+//            <td class="vars_value">@message-info-link__color</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Warning message link color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-warning-link__color-hover</th>
+//            <td class="vars_value">@message-info-link__color-hover</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Warning message hovered link color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-warning-link__color-active</th>
+//            <td class="vars_value">@message-info-link__color-active</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Warning message active link color </td>
+//        </tr>
+//        <tr>
+//            <th>@message-info__border-color</th>
+//            <td class="vars_value">@message-info__border-color</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Warning message border color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-warning-icon</th>
+//            <td class="vars_value">@message-info-icon</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Warning message icon symbol code</td>
+//        </tr>
+//        <tr>
+//            <th>@message-warning-icon__color-inner</th>
+//            <td class="vars_value">@message-info-icon__color-inner</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Warning message icon symbol color </td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@message-warning-icon__color-lateral</th>
+//            <td class="vars_value" nowrap="nowrap">@message-info-icon__color-lateral</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Warning message lateral icon symbol color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-warning-icon__background</th>
+//            <td class="vars_value">@message-info-icon__background</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Warning message icon background</td>
+//        </tr>
+//        <tr>
+//            <th>@message-warning-icon__top</th>
+//            <td class="vars_value">@message-icon__top</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Message icon top position</td>
+//        </tr>
+//        <tr>
+//            <th>@message-warning-icon__right</th>
+//            <td class="vars_value">@message-icon__right</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Message icon right position</td>
+//        </tr>
+//        <tr>
+//            <th>@message-warning-icon__bottom</th>
+//            <td class="vars_value">@message-icon__bottom</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Message icon bottom position</td>
+//        </tr>
+//        <tr>
+//            <th>@message-warning-icon__left</th>
+//            <td class="vars_value">@message-icon__left</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Message icon left position</td>
+//        </tr>
+//        <tr>
+//            <th colspan="4" class="vars_section">Error message</th>
+//        </tr>
+//        <tr>
+//            <th>@message-error__color</th>
+//            <td class="vars_value">@error__color</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Error message text color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-error__background</th>
+//            <td class="vars_value">#fae5e5</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Error message background</td>
+//        </tr>
+//        <tr>
+//            <th>@message-error-link__color</th>
+//            <td class="vars_value">@link__color</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Error message link color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-error-link__color-hover</th>
+//            <td class="vars_value">@link__hover__color</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Error message hovered link color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-error-link__color-active</th>
+//            <td class="vars_value">@link__hover__color</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Error message active link color </td>
+//        </tr>
+//        <tr>
+//            <th>@message-error__border-color</th>
+//            <td class="vars_value">@message__border-color</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Error message border color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-error-icon</th>
+//            <td class="vars_value">@icon-warning</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Error message icon symbol code</td>
+//        </tr>
+//        <tr>
+//            <th>@message-error-icon__color-inner</th>
+//            <td class="vars_value">#b30000</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Error message icon symbol color </td>
+//        </tr>
+//        <tr>
+//            <th>@message-error-icon__color-lateral</th>
+//            <td class="vars_value">@color-white</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Error message lateral icon symbol color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-error-icon__background</th>
+//            <td class="vars_value">#b30000</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Error message icon background</td>
+//        </tr>
+//        <tr>
+//            <th>@message-error-icon__top</th>
+//            <td class="vars_value">@message-icon__top</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Message icon top position</td>
+//        </tr>
+//        <tr>
+//            <th>@message-error-icon__right</th>
+//            <td class="vars_value">@message-icon__right</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Message icon right position</td>
+//        </tr>
+//        <tr>
+//            <th>@message-error-icon__bottom</th>
+//            <td class="vars_value">@message-icon__bottom</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Message icon bottom position</td>
+//        </tr>
+//        <tr>
+//            <th>@message-error-icon__left</th>
+//            <td class="vars_value">@message-icon__left</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Message icon left position</td>
+//        </tr>
+//        <tr>
+//            <th colspan="4" class="vars_section">Success message</th>
+//        </tr>
+//        <tr>
+//            <th>@message-success__color</th>
+//            <td class="vars_value">#006400</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Success message text color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-success__background</th>
+//            <td class="vars_value">#e5efe5</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Success message background</td>
+//        </tr>
+//        <tr>
+//            <th>@message-success-link__color</th>
+//            <td class="vars_value">@link__color</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Success message link color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-success-link__color-hover</th>
+//            <td class="vars_value">@link__hover__color</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Success message hovered link color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-success-link__color-active</th>
+//            <td class="vars_value">@link__hover__color</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Success message active link color </td>
+//        </tr>
+//        <tr>
+//            <th>@message-success__border-color</th>
+//            <td class="vars_value">@message__border-color</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Success message border color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-success-icon</th>
+//            <td class="vars_value">@icon-checkmark</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Success message icon symbol code</td>
+//        </tr>
+//        <tr>
+//            <th>@message-success-icon__color-inner</th>
+//            <td class="vars_value">#006400</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Success message icon symbol color </td>
+//        </tr>
+//        <tr>
+//            <th>@message-success-icon__color-lateral</th>
+//            <td class="vars_value">@color-white</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Success message lateral icon symbol color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-success-icon__background</th>
+//            <td class="vars_value">#006400</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Success message icon background</td>
+//        </tr>
+//        <tr>
+//            <th>@message-success-icon__top</th>
+//            <td class="vars_value">@message-icon__top</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Message icon top position</td>
+//        </tr>
+//        <tr>
+//            <th>@message-success-icon__right</th>
+//            <td class="vars_value">@message-icon__right</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Message icon right position</td>
+//        </tr>
+//        <tr>
+//            <th>@message-success-icon__bottom</th>
+//            <td class="vars_value">@message-icon__bottom</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Message icon bottom position</td>
+//        </tr>
+//        <tr>
+//            <th>@message-success-icon__left</th>
+//            <td class="vars_value">@message-icon__left</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Message icon left position</td>
+//        </tr>
+//        <tr>
+//            <th colspan="4" class="vars_section">Notice message</th>
+//        </tr>
+//        <tr>
+//            <th>@message-notice__color</th>
+//            <td class="vars_value">@message-info__color</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Notice message text color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-notice__background</th>
+//            <td class="vars_value">@message-info__background</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Notice message background</td>
+//        </tr>
+//        <tr>
+//            <th>@message-notice-link__color</th>
+//            <td class="vars_value">@message-info-link__color</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Notice message link color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-notice-link__color-hover</th>
+//            <td class="vars_value">@message-info-link__color-hover</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Notice message hovered link color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-notice-link__color-active</th>
+//            <td class="vars_value">@message-info-link__color-active</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Notice message active link color </td>
+//        </tr>
+//        <tr>
+//            <th>@message-notice__border-color</th>
+//            <td class="vars_value">@message-info__border-color</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Notice message border color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-notice-icon</th>
+//            <td class="vars_value">@message-info-icon</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Notice message icon symbol code</td>
+//        </tr>
+//        <tr>
+//            <th>@message-notice-icon__color-inner</th>
+//            <td class="vars_value">@message-info-icon__color-inner</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Notice message icon symbol color </td>
+//        </tr>
+//        <tr>
+//            <th>@message-notice-icon__color-lateral</th>
+//            <td class="vars_value">@message-info-icon__color-lateral</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Notice message lateral icon symbol color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-notice-icon__background</th>
+//            <td class="vars_value">@message-info-icon__background</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Notice message icon background</td>
+//        </tr>
+//        <tr>
+//            <th>@message-notice-icon__top</th>
+//            <td class="vars_value">@message-icon__top</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Message icon top position</td>
+//        </tr>
+//        <tr>
+//            <th>@message-notice-icon__right</th>
+//            <td class="vars_value">@message-icon__right</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Message icon right position</td>
+//        </tr>
+//        <tr>
+//            <th>@message-notice-icon__bottom</th>
+//            <td class="vars_value">@message-icon__bottom</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Message icon bottom position</td>
+//        </tr>
+//        <tr>
+//            <th>@message-notice-icon__left</th>
+//            <td class="vars_value">@message-icon__left</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Message icon left position</td>
+//        </tr>
+//    </table>
+//  </pre>

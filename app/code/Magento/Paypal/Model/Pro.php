@@ -1,29 +1,16 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Paypal\Model;
 
 use Magento\Paypal\Model\Api\AbstractApi;
+use Magento\Sales\Api\TransactionRepositoryInterface;
+use Magento\Paypal\Model\Info;
 
 /**
  * PayPal Website Payments Pro implementation for payment method instances
@@ -64,14 +51,14 @@ class Pro
      *
      * @var string
      */
-    protected $_apiType = 'Magento\Paypal\Model\Api\Nvp';
+    protected $_apiType = \Magento\Paypal\Model\Api\Nvp::class;
 
     /**
      * Config model type
      *
      * @var string
      */
-    protected $_configType = 'Magento\Paypal\Model\Config';
+    protected $_configType = \Magento\Paypal\Model\Config::class;
 
     /**
      * @var \Magento\Paypal\Model\Config\Factory
@@ -89,18 +76,26 @@ class Pro
     protected $_infoFactory;
 
     /**
+     * @var TransactionRepositoryInterface
+     */
+    protected $transactionRepository;
+
+    /**
      * @param \Magento\Paypal\Model\Config\Factory $configFactory
      * @param \Magento\Paypal\Model\Api\Type\Factory $apiFactory
      * @param \Magento\Paypal\Model\InfoFactory $infoFactory
+     * @param TransactionRepositoryInterface $transactionRepository
      */
     public function __construct(
         \Magento\Paypal\Model\Config\Factory $configFactory,
         \Magento\Paypal\Model\Api\Type\Factory $apiFactory,
-        \Magento\Paypal\Model\InfoFactory $infoFactory
+        \Magento\Paypal\Model\InfoFactory $infoFactory,
+        TransactionRepositoryInterface $transactionRepository
     ) {
         $this->_configFactory = $configFactory;
         $this->_apiFactory = $apiFactory;
         $this->_infoFactory = $infoFactory;
+        $this->transactionRepository = $transactionRepository;
     }
 
     /**
@@ -113,11 +108,11 @@ class Pro
     public function setMethod($code, $storeId = null)
     {
         if (null === $this->_config) {
-            $params = array($code);
+            $params = [$code];
             if (null !== $storeId) {
                 $params[] = $storeId;
             }
-            $this->_config = $this->_configFactory->create($this->_configType, array('params' => $params));
+            $this->_config = $this->_configFactory->create($this->_configType, ['params' => $params]);
         } else {
             $this->_config->setMethod($code);
             if (null !== $storeId) {
@@ -134,9 +129,9 @@ class Pro
      * @param int|null $storeId
      * @return $this
      */
-    public function setConfig(\Magento\Paypal\Model\Config $instace, $storeId = null)
+    public function setConfig(\Magento\Paypal\Model\Config $instance, $storeId = null)
     {
-        $this->_config = $instace;
+        $this->_config = $instance;
         if (null !== $storeId) {
             $this->_config->setStoreId($storeId);
         }
@@ -196,11 +191,11 @@ class Pro
     /**
      * Transfer transaction/payment information from API instance to order payment
      *
-     * @param \Magento\Framework\Object|AbstractApi $from
-     * @param \Magento\Payment\Model\Info $to
+     * @param \Magento\Framework\DataObject|AbstractApi $from
+     * @param \Magento\Payment\Model\InfoInterface $to
      * @return $this
      */
-    public function importPaymentInfo(\Magento\Framework\Object $from, \Magento\Payment\Model\Info $to)
+    public function importPaymentInfo(\Magento\Framework\DataObject $from, \Magento\Payment\Model\InfoInterface $to)
     {
         // update PayPal-specific payment information in the payment object
         $this->getInfo()->importToPayment($from, $to);
@@ -212,14 +207,14 @@ class Pro
         if ($from->getDataUsingMethod(\Magento\Paypal\Model\Info::IS_FRAUD)) {
             $to->setIsTransactionPending(true);
             $to->setIsFraudDetected(true);
-        } elseif ($this->getInfo()->isPaymentReviewRequired($to)) {
+        } elseif (Info::isPaymentReviewRequired($to)) {
             $to->setIsTransactionPending(true);
         }
 
         // give generic info about transaction state
-        if ($this->getInfo()->isPaymentSuccessful($to)) {
+        if (Info::isPaymentSuccessful($to)) {
             $to->setIsTransactionApproved(true);
-        } elseif ($this->getInfo()->isPaymentFailed($to)) {
+        } elseif (Info::isPaymentFailed($to)) {
             $to->setIsTransactionDenied(true);
         }
 
@@ -229,11 +224,11 @@ class Pro
     /**
      * Void transaction
      *
-     * @param \Magento\Framework\Object $payment
+     * @param \Magento\Framework\DataObject $payment
      * @return void
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function void(\Magento\Framework\Object $payment)
+    public function void(\Magento\Framework\DataObject $payment)
     {
         $authTransactionId = $this->_getParentTransactionId($payment);
         if ($authTransactionId) {
@@ -241,7 +236,9 @@ class Pro
             $api->setPayment($payment)->setAuthorizationId($authTransactionId)->callDoVoid();
             $this->importPaymentInfo($api, $payment);
         } else {
-            throw new \Magento\Framework\Model\Exception(__('You need an authorization transaction to void.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('You need an authorization transaction to void.')
+            );
         }
     }
 
@@ -249,27 +246,27 @@ class Pro
      * Attempt to capture payment
      * Will return false if the payment is not supposed to be captured
      *
-     * @param \Magento\Framework\Object $payment
+     * @param \Magento\Framework\DataObject $payment
      * @param float $amount
      * @return false|null
      */
-    public function capture(\Magento\Framework\Object $payment, $amount)
+    public function capture(\Magento\Framework\DataObject $payment, $amount)
     {
         $authTransactionId = $this->_getParentTransactionId($payment);
         if (!$authTransactionId) {
             return false;
         }
-        $api = $this->getApi()->setAuthorizationId(
-            $authTransactionId
-        )->setIsCaptureComplete(
-            $payment->getShouldCloseParentTransaction()
-        )->setAmount(
-            $amount
-        )->setCurrencyCode(
-            $payment->getOrder()->getBaseCurrencyCode()
-        )->setInvNum(
-            $payment->getOrder()->getIncrementId()
-        );
+        $api = $this->getApi()
+            ->setAuthorizationId($authTransactionId)
+            ->setIsCaptureComplete($payment->getShouldCloseParentTransaction())
+            ->setAmount($amount);
+
+        $order = $payment->getOrder();
+        $orderIncrementId = $order->getIncrementId();
+        $api->setCurrencyCode($order->getBaseCurrencyCode())
+            ->setInvNum($orderIncrementId)
+            ->setCustref($orderIncrementId)
+            ->setPonum($order->getId());
         // TODO: pass 'NOTE' to API
 
         $api->callDoCapture();
@@ -279,12 +276,12 @@ class Pro
     /**
      * Refund a capture transaction
      *
-     * @param \Magento\Framework\Object $payment
+     * @param \Magento\Framework\DataObject $payment
      * @param float $amount
      * @return void
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function refund(\Magento\Framework\Object $payment, $amount)
+    public function refund(\Magento\Framework\DataObject $payment, $amount)
     {
         $captureTxnId = $this->_getParentTransactionId($payment);
         if ($captureTxnId) {
@@ -308,7 +305,7 @@ class Pro
             $api->callRefundTransaction();
             $this->_importRefundResultToPayment($api, $payment, $canRefundMore);
         } else {
-            throw new \Magento\Framework\Model\Exception(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 __('We can\'t issue a refund transaction because there is no capture transaction.')
             );
         }
@@ -317,10 +314,10 @@ class Pro
     /**
      * Cancel payment
      *
-     * @param \Magento\Framework\Object $payment
+     * @param \Magento\Framework\DataObject $payment
      * @return void
      */
-    public function cancel(\Magento\Framework\Object $payment)
+    public function cancel(\Magento\Framework\DataObject $payment)
     {
         if (!$payment->getOrder()->getInvoiceCollection()->count()) {
             $this->void($payment);
@@ -330,10 +327,10 @@ class Pro
     /**
      * Check whether can do payment review
      *
-     * @param \Magento\Payment\Model\Info $payment
+     * @param \Magento\Payment\Model\InfoInterface $payment
      * @return bool
      */
-    public function canReviewPayment(\Magento\Payment\Model\Info $payment)
+    public function canReviewPayment(\Magento\Payment\Model\InfoInterface $payment)
     {
         $pendingReason = $payment->getAdditionalInformation(\Magento\Paypal\Model\Info::PENDING_REASON_GLOBAL);
         return $this->_isPaymentReviewRequired(
@@ -344,29 +341,29 @@ class Pro
     /**
      * Check whether payment review is required
      *
-     * @param \Magento\Payment\Model\Info $payment
+     * @param \Magento\Payment\Model\InfoInterface $payment
      * @return bool
      */
-    protected function _isPaymentReviewRequired(\Magento\Payment\Model\Info $payment)
+    protected function _isPaymentReviewRequired(\Magento\Payment\Model\InfoInterface $payment)
     {
-        return \Magento\Paypal\Model\Info::isPaymentReviewRequired($payment);
+        return Info::isPaymentReviewRequired($payment);
     }
 
     /**
      * Perform the payment review
      *
-     * @param \Magento\Payment\Model\Info $payment
+     * @param \Magento\Payment\Model\InfoInterface $payment
      * @param string $action
      * @return bool
      */
-    public function reviewPayment(\Magento\Payment\Model\Info $payment, $action)
+    public function reviewPayment(\Magento\Payment\Model\InfoInterface $payment, $action)
     {
         $api = $this->getApi()->setTransactionId($payment->getLastTransId());
 
         // check whether the review is still needed
         $api->callGetTransactionDetails();
         $this->importPaymentInfo($api, $payment);
-        if (!$this->getInfo()->isPaymentReviewRequired($payment)) {
+        if (!Info::isPaymentReviewRequired($payment)) {
             return false;
         }
 
@@ -380,17 +377,17 @@ class Pro
     /**
      * Fetch transaction details info
      *
-     * @param \Magento\Payment\Model\Info $payment
+     * @param \Magento\Payment\Model\InfoInterface $payment
      * @param string $transactionId
      * @return array
      */
-    public function fetchTransactionInfo(\Magento\Payment\Model\Info $payment, $transactionId)
+    public function fetchTransactionInfo(\Magento\Payment\Model\InfoInterface $payment, $transactionId)
     {
         $api = $this->getApi()->setTransactionId($transactionId)->setRawResponseNeeded(true);
         $api->callGetTransactionDetails();
         $this->importPaymentInfo($api, $payment);
         $data = $api->getRawSuccessResponseData();
-        return $data ? $data : array();
+        return $data ? $data : [];
     }
 
     /**
@@ -429,10 +426,10 @@ class Pro
     /**
      * Parent transaction id getter
      *
-     * @param \Magento\Framework\Object $payment
+     * @param \Magento\Framework\DataObject $payment
      * @return string
      */
-    protected function _getParentTransactionId(\Magento\Framework\Object $payment)
+    protected function _getParentTransactionId(\Magento\Framework\DataObject $payment)
     {
         return $payment->getParentTransactionId();
     }

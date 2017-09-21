@@ -1,0 +1,37 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php if ($block->getResultCount()): ?>
+<?= $block->getChildHtml('tagged_product_list_rss_link') ?>
+<div class="search results">
+    <?php if ($messages = $block->getNoteMessages()):?>
+    <div class="message notice">
+        <div>
+            <?php foreach ($messages as $message):?>
+                <?= /* @escapeNotVerified */ $message ?><br />
+            <?php endforeach;?>
+        </div>
+    </div>
+    <?php endif; ?>
+    <?= $block->getProductListHtml() ?>
+</div>
+<?php else: ?>
+
+<div class="message notice">
+    <div>
+        <?= /* @escapeNotVerified */ ($block->getNoResultText()) ? $block->getNoResultText() : __('Your search returned no results.') ?>
+        <?= $block->getAdditionalHtml() ?>
+        <?php if ($messages = $block->getNoteMessages()):?>
+            <?php foreach ($messages as $message):?>
+                <br /><?= /* @escapeNotVerified */ $message ?>
+            <?php endforeach;?>
+        <?php endif; ?>
+    </div>
+</div>
+<?php endif; ?>

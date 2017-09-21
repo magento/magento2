@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable;
 
@@ -33,7 +15,7 @@ class Samples extends \Magento\Backend\Block\Widget
     /**
      * Block config data
      *
-     * @var \Magento\Framework\Object
+     * @var \Magento\Framework\DataObject
      */
     protected $_config;
 
@@ -52,7 +34,7 @@ class Samples extends \Magento\Backend\Block\Widget
     /**
      * Core file storage database
      *
-     * @var \Magento\Core\Helper\File\Storage\Database
+     * @var \Magento\MediaStorage\Helper\File\Storage\Database
      */
     protected $_coreFileStorageDb = null;
 
@@ -81,7 +63,7 @@ class Samples extends \Magento\Backend\Block\Widget
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
-     * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase
+     * @param \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase
      * @param \Magento\Downloadable\Helper\File $downloadableFile
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Downloadable\Model\Sample $sampleModel
@@ -91,12 +73,12 @@ class Samples extends \Magento\Backend\Block\Widget
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
-        \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase,
+        \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase,
         \Magento\Downloadable\Helper\File $downloadableFile,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Downloadable\Model\Sample $sampleModel,
         \Magento\Backend\Model\UrlFactory $urlFactory,
-        array $data = array()
+        array $data = []
     ) {
         $this->_jsonEncoder = $jsonEncoder;
         $this->_coreFileStorageDb = $coreFileStorageDatabase;
@@ -136,14 +118,14 @@ class Samples extends \Magento\Backend\Block\Widget
     public function getAddButtonHtml()
     {
         $addButton = $this->getLayout()->createBlock(
-            'Magento\Backend\Block\Widget\Button'
+            \Magento\Backend\Block\Widget\Button::class
         )->setData(
-            array(
-                'label' => __('Add New Row'),
+            [
+                'label' => __('Add New Link'),
                 'id' => 'add_sample_item',
-                'class' => 'add',
-                'data_attribute' => array('action' => 'add-sample')
-            )
+                'class' => 'action-add',
+                'data_attribute' => ['action' => 'add-sample'],
+            ]
         );
         return $addButton->toHtml();
     }
@@ -155,20 +137,20 @@ class Samples extends \Magento\Backend\Block\Widget
      */
     public function getSampleData()
     {
-        $samplesArr = array();
+        $samplesArr = [];
         if ($this->getProduct()->getTypeId() !== \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE) {
             return $samplesArr;
         }
         $samples = $this->getProduct()->getTypeInstance()->getSamples($this->getProduct());
         $fileHelper = $this->_downloadableFile;
         foreach ($samples as $item) {
-            $tmpSampleItem = array(
+            $tmpSampleItem = [
                 'sample_id' => $item->getId(),
                 'title' => $this->escapeHtml($item->getTitle()),
                 'sample_url' => $item->getSampleUrl(),
                 'sample_type' => $item->getSampleType(),
-                'sort_order' => $item->getSortOrder()
-            );
+                'sort_order' => $item->getSortOrder(),
+            ];
 
             $sampleFile = $item->getSampleFile();
             if ($sampleFile) {
@@ -177,21 +159,27 @@ class Samples extends \Magento\Backend\Block\Widget
                 $fileExist = $fileHelper->ensureFileInFilesystem($file);
 
                 if ($fileExist) {
-                    $tmpSampleItem['file_save'] = array(
-                        array(
+                    $name = '<a href="' . $this->getUrl(
+                        'adminhtml/downloadable_product_edit/sample',
+                        ['id' => $item->getId(), '_secure' => true]
+                    ) . '">' . $fileHelper->getFileFromPathFile(
+                        $sampleFile
+                    ) . '</a>';
+                    $tmpSampleItem['file_save'] = [
+                        [
                             'file' => $sampleFile,
-                            'name' => $fileHelper->getFileFromPathFile($sampleFile),
+                            'name' => $name,
                             'size' => $fileHelper->getFileSize($file),
-                            'status' => 'old'
-                        )
-                    );
+                            'status' => 'old',
+                        ],
+                    ];
                 }
             }
 
             if ($this->getProduct() && $item->getStoreTitle()) {
                 $tmpSampleItem['store_title'] = $item->getStoreTitle();
             }
-            $samplesArr[] = new \Magento\Framework\Object($tmpSampleItem);
+            $samplesArr[] = new \Magento\Framework\DataObject($tmpSampleItem);
         }
 
         return $samplesArr;
@@ -201,6 +189,7 @@ class Samples extends \Magento\Backend\Block\Widget
      * Check exists defined samples title
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getUsedDefault()
     {
@@ -231,13 +220,13 @@ class Samples extends \Magento\Backend\Block\Widget
     {
         $this->addChild(
             'upload_button',
-            'Magento\Backend\Block\Widget\Button',
-            array(
+            \Magento\Backend\Block\Widget\Button::class,
+            [
                 'id' => '',
                 'label' => __('Upload Files'),
                 'type' => 'button',
                 'onclick' => 'Downloadable.massUploadByType(\'samples\')'
-            )
+            ]
         );
     }
 
@@ -260,12 +249,12 @@ class Samples extends \Magento\Backend\Block\Widget
     {
         $url = $this->_urlFactory->create()->addSessionParam()->getUrl(
             'adminhtml/downloadable_file/upload',
-            array('type' => 'samples', '_secure' => true)
+            ['type' => 'samples', '_secure' => true]
         );
         $this->getConfig()->setUrl($url);
-        $this->getConfig()->setParams(array('form_key' => $this->getFormKey()));
+        $this->getConfig()->setParams(['form_key' => $this->getFormKey()]);
         $this->getConfig()->setFileField('samples');
-        $this->getConfig()->setFilters(array('all' => array('label' => __('All Files'), 'files' => array('*.*'))));
+        $this->getConfig()->setFilters(['all' => ['label' => __('All Files'), 'files' => ['*.*']]]);
         $this->getConfig()->setReplaceBrowseWithRemove(true);
         $this->getConfig()->setWidth('32');
         $this->getConfig()->setHideUploadButton(true);
@@ -275,12 +264,12 @@ class Samples extends \Magento\Backend\Block\Widget
     /**
      * Retrieve config object
      *
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function getConfig()
     {
-        if (is_null($this->_config)) {
-            $this->_config = new \Magento\Framework\Object();
+        if ($this->_config === null) {
+            $this->_config = new \Magento\Framework\DataObject();
         }
 
         return $this->_config;

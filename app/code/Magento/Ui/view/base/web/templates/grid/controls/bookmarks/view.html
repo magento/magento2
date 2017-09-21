@@ -1,0 +1,40 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="action-dropdown-menu-item-edit" if="$view().editable">
+    <input
+        class="admin__control-text"
+        data-bind="
+            value: $view().value,
+            hasFocus: isEditing($view().index),
+            autoselect,
+            attr: {
+                placeholder: $view().label
+            },
+            keyboard: {
+                13: updateAndSave.bind($data, $view().index),
+                27: endEdit.bind($data, $view().index)
+            }"
+        type="text">
+    <button class="action-submit" type="button" attr="title: $t('Save all changes')" click="updateAndSave.bind($data, $view().index)">
+        <span translate="'Submit'"/>
+    </button>
+    <div class="action-dropdown-menu-item-actions">
+        <button class="action-delete" type="button" attr="title: $t('Delete bookmark')" click="removeView.bind($data, $view().index)">
+            <span translate="'Delete'"/>
+        </button>
+    </div>
+</div>
+
+<div class="action-dropdown-menu-item">
+    <a href="" class="action-dropdown-menu-link" text="$view().label" click="applyView.bind($data, $view().index)" closeCollapsible/>
+
+    <div class="action-dropdown-menu-item-actions" if="$view().editable">
+        <button class="action-edit" type="button" attr="title: $t('Edit bookmark')" click="editView.bind($data, $view().index)">
+            <span translate="'Edit'"/>
+        </button>
+    </div>
+</div>

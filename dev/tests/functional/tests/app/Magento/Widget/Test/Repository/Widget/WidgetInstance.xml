@@ -1,0 +1,84 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Widget\Test\Repository\Widget\WidgetInstance">
+        <dataset name="all_pages">
+            <field name="0" xsi:type="array">
+                <item name="page_group" xsi:type="string">Generic Pages/All Pages</item>
+                <item name="block" xsi:type="string">Main Content Area</item>
+            </field>
+        </dataset>
+
+        <dataset name="on_category">
+            <field name="0" xsi:type="array">
+                <item name="page_group" xsi:type="string">Categories/Non-Anchor Categories</item>
+                <item name="for" xsi:type="string">Yes</item>
+                <item name="entities" xsi:type="string">category::default_subcategory</item>
+                <item name="block" xsi:type="string">Main Content Area</item>
+            </field>
+        </dataset>
+
+        <dataset name="for_category_link">
+            <field name="0" xsi:type="array">
+                <item name="page_group" xsi:type="string">Generic Pages/All Pages</item>
+                <item name="block" xsi:type="string">Main Content Area</item>
+                <item name="template" xsi:type="string">Category Link Block Template</item>
+            </field>
+        </dataset>
+
+        <dataset name="on_product_link">
+            <field name="0" xsi:type="array">
+                <item name="page_group" xsi:type="string">Categories/Non-Anchor Categories</item>
+                <item name="for" xsi:type="string">Yes</item>
+                <item name="entities" xsi:type="string">category::default_subcategory</item>
+                <item name="block" xsi:type="string">Main Content Area</item>
+                <item name="template" xsi:type="string">Product Link Block Template</item>
+            </field>
+        </dataset>
+
+        <dataset name="for_new_products_list">
+            <field name="0" xsi:type="array">
+                <item name="page_group" xsi:type="string">Categories/Non-Anchor Categories</item>
+                <item name="for" xsi:type="string">Yes</item>
+                <item name="entities" xsi:type="string">category::default_subcategory</item>
+                <item name="block" xsi:type="string">Main Content Area</item>
+                <item name="template" xsi:type="string">New Products List Template</item>
+            </field>
+        </dataset>
+
+        <dataset name="for_compared_products">
+            <field name="0" xsi:type="array">
+                <item name="page_group" xsi:type="string">Generic Pages/All Pages</item>
+                <item name="block" xsi:type="string">Main Content Area</item>
+            </field>
+        </dataset>
+
+        <dataset name="for_viewed_products">
+            <field name="0" xsi:type="array">
+                <item name="page_group" xsi:type="string">Generic Pages/All Pages</item>
+                <item name="block" xsi:type="string">Main Content Area</item>
+            </field>
+        </dataset>
+
+        <dataset name="for_cms_page_link">
+            <field name="0" xsi:type="array">
+                <item name="page_group" xsi:type="string">Generic Pages/All Pages</item>
+                <item name="block" xsi:type="string">Main Content Area</item>
+                <item name="template" xsi:type="string">CMS Page Link Block Template</item>
+            </field>
+        </dataset>
+
+        <dataset name="for_new_products_all_pages">
+            <field name="0" xsi:type="array">
+                <item name="page_group" xsi:type="string">Generic Pages/All Pages</item>
+                <item name="block" xsi:type="string">Main Content Area</item>
+                <item name="template" xsi:type="string">New Products List Template</item>
+            </field>
+        </dataset>
+    </repository>
+</config>

@@ -1,34 +1,18 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Authorizenet\Controller\Directpost;
+
+use Magento\Payment\Block\Transparent\Iframe;
 
 /**
  * DirectPost Payment Controller
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Payment extends \Magento\Framework\App\Action\Action
+abstract class Payment extends \Magento\Framework\App\Action\Action
 {
     /**
      * Core registry
@@ -38,12 +22,24 @@ class Payment extends \Magento\Framework\App\Action\Action
     protected $_coreRegistry = null;
 
     /**
+     * @var \Magento\Authorizenet\Helper\DataFactory
+     */
+    protected $dataFactory;
+
+    /**
+     * Constructor
+     *
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Authorizenet\Helper\DataFactory $dataFactory
      */
-    public function __construct(\Magento\Framework\App\Action\Context $context, \Magento\Framework\Registry $coreRegistry)
-    {
+    public function __construct(
+        \Magento\Framework\App\Action\Context $context,
+        \Magento\Framework\Registry $coreRegistry,
+        \Magento\Authorizenet\Helper\DataFactory $dataFactory
+    ) {
         $this->_coreRegistry = $coreRegistry;
+        $this->dataFactory = $dataFactory;
         parent::__construct($context);
     }
 
@@ -52,7 +48,7 @@ class Payment extends \Magento\Framework\App\Action\Action
      */
     protected function _getCheckout()
     {
-        return $this->_objectManager->get('Magento\Checkout\Model\Session');
+        return $this->_objectManager->get(\Magento\Checkout\Model\Session::class);
     }
 
     /**
@@ -62,48 +58,30 @@ class Payment extends \Magento\Framework\App\Action\Action
      */
     protected function _getDirectPostSession()
     {
-        return $this->_objectManager->get('Magento\Authorizenet\Model\Directpost\Session');
+        return $this->_objectManager->get(\Magento\Authorizenet\Model\Directpost\Session::class);
     }
 
     /**
      * Response action.
      * Action for Authorize.net SIM Relay Request.
      *
+     * @param string $area
      * @return void
      */
-    public function backendResponseAction()
+    protected function _responseAction($area = 'frontend')
     {
-        $this->_responseAction($this->_objectManager->get('Magento\Authorizenet\Helper\Backend'));
-    }
+        $helper = $this->dataFactory->create($area);
 
-    /**
-     * Response action.
-     * Action for Authorize.net SIM Relay Request.
-     *
-     * @return void
-     */
-    public function responseAction()
-    {
-        $this->_responseAction($this->_objectManager->get('Magento\Authorizenet\Helper\Data'));
-    }
+        $params = [];
+        $data = $this->getRequest()->getParams();
 
-    /**
-     * Response action.
-     * Action for Authorize.net SIM Relay Request.
-     *
-     * @param \Magento\Authorizenet\Helper\HelperInterface $helper
-     * @return void
-     */
-    protected function _responseAction(\Magento\Authorizenet\Helper\HelperInterface $helper)
-    {
-        $params = array();
-        $data = $this->getRequest()->getPost();
         /* @var $paymentMethod \Magento\Authorizenet\Model\DirectPost */
-        $paymentMethod = $this->_objectManager->create('Magento\Authorizenet\Model\Directpost');
+        $paymentMethod = $this->_objectManager->create(\Magento\Authorizenet\Model\Directpost::class);
 
-        $result = array();
+        $result = [];
         if (!empty($data['x_invoice_num'])) {
             $result['x_invoice_num'] = $data['x_invoice_num'];
+            $params['order_success'] = $helper->getSuccessOrderUrl($result);
         }
 
         try {
@@ -112,20 +90,18 @@ class Payment extends \Magento\Framework\App\Action\Action
             }
             $paymentMethod->process($data);
             $result['success'] = 1;
-        } catch (\Magento\Framework\Model\Exception $e) {
-            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
             $result['success'] = 0;
             $result['error_msg'] = $e->getMessage();
         } catch (\Exception $e) {
-            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+            $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
             $result['success'] = 0;
-            $result['error_msg'] = __('We couldn\'t process your order right now. Please try again later.');
+            $result['error_msg'] = __('We can\'t process your order right now. Please try again later.');
         }
 
-        if (!empty($data['controller_action_name']) && strpos(
-            $data['controller_action_name'],
-            'sales_order_'
-        ) === false
+        if (!empty($data['controller_action_name'])
+            && strpos($data['controller_action_name'], 'sales_order_') === false
         ) {
             if (!empty($data['key'])) {
                 $result['key'] = $data['key'];
@@ -135,93 +111,8 @@ class Payment extends \Magento\Framework\App\Action\Action
             $params['redirect'] = $helper->getRedirectIframeUrl($result);
         }
 
-        $this->_coreRegistry->register('authorizenet_directpost_form_params', $params);
-        $this->_view->addPageLayoutHandles();
-        $this->_view->loadLayout(false)->renderLayout();
-    }
-
-    /**
-     * Retrieve params and put javascript into iframe
-     *
-     * @return void
-     */
-    public function redirectAction()
-    {
-        $redirectParams = $this->getRequest()->getParams();
-        $params = array();
-        if (!empty($redirectParams['success']) && isset(
-            $redirectParams['x_invoice_num']
-        ) && isset(
-            $redirectParams['controller_action_name']
-        )
-        ) {
-            $this->_getDirectPostSession()->unsetData('quote_id');
-            $params['redirect_parent'] = $this->_objectManager->get(
-                'Magento\Authorizenet\Helper\HelperInterface'
-            )->getSuccessOrderUrl(
-                $redirectParams
-            );
-        }
-        if (!empty($redirectParams['error_msg'])) {
-            $cancelOrder = empty($redirectParams['x_invoice_num']);
-            $this->_returnCustomerQuote($cancelOrder, $redirectParams['error_msg']);
-        }
-
-        if (isset(
-            $redirectParams['controller_action_name']
-        ) && strpos(
-            $redirectParams['controller_action_name'],
-            'sales_order_'
-        ) !== false
-        ) {
-            unset($redirectParams['controller_action_name']);
-            unset($params['redirect_parent']);
-        }
-
-        $this->_coreRegistry->register('authorizenet_directpost_form_params', array_merge($params, $redirectParams));
-        $this->_view->addPageLayoutHandles();
-        $this->_view->loadLayout(false)->renderLayout();
-    }
-
-    /**
-     * Send request to authorize.net
-     *
-     * @return void
-     */
-    public function placeAction()
-    {
-        $paymentParam = $this->getRequest()->getParam('payment');
-        $controller = $this->getRequest()->getParam('controller');
-        if (isset($paymentParam['method'])) {
-            $params = $this->_objectManager->get(
-                'Magento\Authorizenet\Helper\Data'
-            )->getSaveOrderUrlParams(
-                $controller
-            );
-            $this->_getDirectPostSession()->setQuoteId($this->_getCheckout()->getQuote()->getId());
-            $this->_forward(
-                $params['action'],
-                $params['controller'],
-                $params['module'],
-                $this->getRequest()->getParams()
-            );
-        } else {
-            $result = array('error_messages' => __('Please choose a payment method.'), 'goto_section' => 'payment');
-            $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result));
-        }
-    }
-
-    /**
-     * Return customer quote by ajax
-     *
-     * @return void
-     */
-    public function returnQuoteAction()
-    {
-        $this->_returnCustomerQuote();
-        $this->getResponse()->setBody(
-            $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode(array('success' => 1))
-        );
+        //registering parameter for iframe content
+        $this->_coreRegistry->register(Iframe::REGISTRY_KEY, $params);
     }
 
     /**
@@ -236,12 +127,18 @@ class Payment extends \Magento\Framework\App\Action\Action
         $incrementId = $this->_getDirectPostSession()->getLastOrderIncrementId();
         if ($incrementId && $this->_getDirectPostSession()->isCheckoutOrderIncrementIdExist($incrementId)) {
             /* @var $order \Magento\Sales\Model\Order */
-            $order = $this->_objectManager->create('Magento\Sales\Model\Order')->loadByIncrementId($incrementId);
+            $order = $this->_objectManager->create(\Magento\Sales\Model\Order::class)->loadByIncrementId($incrementId);
             if ($order->getId()) {
-                $quote = $this->_objectManager->create('Magento\Sales\Model\Quote')->load($order->getQuoteId());
-                if ($quote->getId()) {
-                    $quote->setIsActive(1)->setReservedOrderId(null)->save();
+                try {
+                    /** @var \Magento\Quote\Api\CartRepositoryInterface $quoteRepository */
+                    $quoteRepository = $this->_objectManager->create(\Magento\Quote\Api\CartRepositoryInterface::class);
+                    /** @var \Magento\Quote\Model\Quote $quote */
+                    $quote = $quoteRepository->get($order->getQuoteId());
+
+                    $quote->setIsActive(1)->setReservedOrderId(null);
+                    $quoteRepository->save($quote);
                     $this->_getCheckout()->replaceQuote($quote);
+                } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
                 }
                 $this->_getDirectPostSession()->removeCheckoutOrderIncrementId($incrementId);
                 $this->_getDirectPostSession()->unsetData('quote_id');

@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Indexer\Product\Flat\Action;
 
@@ -51,28 +33,28 @@ class RowTest extends \Magento\TestFramework\Indexer\TestCase
     protected function setUp()
     {
         $this->_product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
         $this->_category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Category'
+            \Magento\Catalog\Model\Category::class
         );
         $this->_processor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Indexer\Product\Flat\Processor'
+            \Magento\Catalog\Model\Indexer\Product\Flat\Processor::class
         );
     }
 
     /**
+     * @magentoDbIsolation enabled
      * @magentoDataFixture Magento/Catalog/_files/row_fixture.php
      * @magentoConfigFixture current_store catalog/frontend/flat_catalog_product 1
      * @magentoAppArea frontend
      */
     public function testProductUpdate()
     {
-        $this->markTestSkipped('Incomplete due to MAGETWO-21369');
         $categoryFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\CategoryFactory');
+            ->create(\Magento\Catalog\Model\CategoryFactory::class);
         $listProduct = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Block\Product\ListProduct');
+            ->create(\Magento\Catalog\Block\Product\ListProduct::class);
 
         $this->_processor->getIndexer()->setScheduled(false);
         $this->assertFalse(
@@ -88,7 +70,7 @@ class RowTest extends \Magento\TestFramework\Indexer\TestCase
         $category = $categoryFactory->create()->load(9);
         $layer = $listProduct->getLayer();
         $layer->setCurrentCategory($category);
-        /** @var \Magento\Catalog\Model\Resource\Product\Collection $productCollection */
+        /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection */
         $productCollection = $layer->getProductCollection();
         $this->assertTrue(
             $productCollection->isEnabledFlat(),

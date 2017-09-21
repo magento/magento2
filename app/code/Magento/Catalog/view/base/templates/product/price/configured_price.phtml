@@ -1,0 +1,24 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php
+/** @var \Magento\Catalog\Pricing\Render\FinalPriceBox $block */
+/** @var \Magento\Catalog\Pricing\Price\ConfiguredPrice $configuredPrice */
+$configuredPrice = $block->getPrice();
+$schema = ($block->getZone() == 'item_view') ? true : false;
+$priceLabel = ($block->getPriceLabel() !== null)
+    ? $block->getPriceLabel()
+    : '';
+?>
+<p class="price-as-configured">
+    <?= /* @escapeNotVerified */ $block->renderAmount($configuredPrice->getAmount(), [
+        'display_label'     => $priceLabel,
+        'price_id'          => $block->getPriceId('product-price-'),
+        'price_type'        => 'finalPrice',
+        'include_container' => true,
+        'schema' => $schema
+    ]); ?>
+</p>

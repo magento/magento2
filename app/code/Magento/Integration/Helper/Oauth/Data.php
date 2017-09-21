@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Helper\Oauth;
 
@@ -28,7 +10,9 @@ namespace Magento\Integration\Helper\Oauth;
  */
 class Data
 {
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface */
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
     protected $_scopeConfig;
 
     /**
@@ -81,11 +65,8 @@ class Data
     public function isCleanupProbability()
     {
         // Safe get cleanup probability value from system configuration
-        $configValue = (int)$this->_scopeConfig->getValue(
-            self::XML_PATH_CLEANUP_PROBABILITY,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
-        return $configValue > 0 ? 1 == mt_rand(1, $configValue) : false;
+        $configValue = (int)$this->_scopeConfig->getValue(self::XML_PATH_CLEANUP_PROBABILITY);
+        return $configValue > 0 ? 1 == \Magento\Framework\Math\Random::getRandomNumber(1, $configValue) : false;
     }
 
     /**
@@ -95,10 +76,7 @@ class Data
      */
     public function getCleanupExpirationPeriod()
     {
-        $minutes = (int)$this->_scopeConfig->getValue(
-            self::XML_PATH_CLEANUP_EXPIRATION_PERIOD,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
+        $minutes = (int)$this->_scopeConfig->getValue(self::XML_PATH_CLEANUP_EXPIRATION_PERIOD);
         return $minutes > 0 ? $minutes : self::CLEANUP_EXPIRATION_PERIOD_DEFAULT;
     }
 
@@ -109,10 +87,7 @@ class Data
      */
     public function getConsumerExpirationPeriod()
     {
-        $seconds = (int)$this->_scopeConfig->getValue(
-            self::XML_PATH_CONSUMER_EXPIRATION_PERIOD,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
+        $seconds = (int)$this->_scopeConfig->getValue(self::XML_PATH_CONSUMER_EXPIRATION_PERIOD);
         return $seconds > 0 ? $seconds : self::CONSUMER_EXPIRATION_PERIOD_DEFAULT;
     }
 
@@ -123,10 +98,7 @@ class Data
      */
     public function getConsumerPostMaxRedirects()
     {
-        $redirects = (int)$this->_scopeConfig->getValue(
-            self::XML_PATH_CONSUMER_POST_MAXREDIRECTS,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
+        $redirects = (int)$this->_scopeConfig->getValue(self::XML_PATH_CONSUMER_POST_MAXREDIRECTS);
         return $redirects > 0 ? $redirects : 0;
     }
 
@@ -137,10 +109,29 @@ class Data
      */
     public function getConsumerPostTimeout()
     {
-        $seconds = (int)$this->_scopeConfig->getValue(
-            self::XML_PATH_CONSUMER_POST_TIMEOUT,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
+        $seconds = (int)$this->_scopeConfig->getValue(self::XML_PATH_CONSUMER_POST_TIMEOUT);
         return $seconds > 0 ? $seconds : self::CONSUMER_POST_TIMEOUT_DEFAULT;
+    }
+
+    /**
+     * Get customer token lifetime from config.
+     *
+     * @return int hours
+     */
+    public function getCustomerTokenLifetime()
+    {
+        $hours = (int)$this->_scopeConfig->getValue('oauth/access_token_lifetime/customer');
+        return $hours > 0 ? $hours : 0;
+    }
+
+    /**
+     * Get customer token lifetime from config.
+     *
+     * @return int hours
+     */
+    public function getAdminTokenLifetime()
+    {
+        $hours = (int)$this->_scopeConfig->getValue('oauth/access_token_lifetime/admin');
+        return $hours > 0 ? $hours : 0;
     }
 }

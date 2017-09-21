@@ -1,0 +1,43 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+
+<?php if ($block->getChildHtml()) :?>
+<div id="gift_options_configure_new" class="gift-options-popup product-configure-popup" style="display: none;">
+    <div id="gift_options_form_contents">
+        <div class="content">
+            <?= $block->getChildHtml() ?>
+        </div>
+        <div class="ui-dialog-buttonset">
+            <button type="button" class="action-close" id="gift_options_cancel_button"><span><?= /* @escapeNotVerified */ __('Cancel') ?></span></button>
+            <button type="button" class="action-primary" id="gift_options_ok_button"><span><?= /* @escapeNotVerified */ __('OK') ?></span></button>
+        </div>
+    </div>
+</div>
+
+<div id="giftoptions_tooltip_window" class="gift-options-tooltip" style="display: none;">
+    <div id="giftoptions_tooltip_window_content">&nbsp;</div>
+</div>
+
+<script>
+require([
+    "Magento_Sales/order/create/giftmessage",
+    "Magento_Sales/order/giftoptions_tooltip"
+], function(){
+
+//<![CDATA[
+var giftMessageSet = new GiftMessageSet();
+
+_giftOptions = new GiftOptionsPopup();
+giftOptionsTooltip.setTooltipWindow('giftoptions_tooltip_window','giftoptions_tooltip_window_content');
+//]]>
+window.giftMessageSet = giftMessageSet;
+});
+</script>
+<?php endif;?>

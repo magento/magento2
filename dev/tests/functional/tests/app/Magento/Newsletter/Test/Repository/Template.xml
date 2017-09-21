@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Newsletter\Test\Repository\Template">
+        <dataset name="default">
+            <field name="code" xsi:type="string">Newsletter Template %isolation%</field>
+            <field name="subject" xsi:type="string">Newsletter Subject %isolation%</field>
+            <field name="sender_name" xsi:type="string">Sender Name %isolation%</field>
+            <field name="sender_email" xsi:type="string">support%isolation%@example.com</field>
+            <field name="text" xsi:type="string">Template Content %isolation%</field>
+        </dataset>
+    </repository>
+</config>

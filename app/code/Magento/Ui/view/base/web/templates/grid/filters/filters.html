@@ -1,0 +1,36 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="data-grid-filters-actions-wrap" collapsible="openClass: false, closeOnOuter: false">
+    <div class="data-grid-filters-action-wrap">
+        <button class="action-default" data-action="grid-filter-expand" disable="!hasVisible()" translate="'Filters'"
+            css="_active: hasVisible() && $collapsible.opened()"
+            toggleCollapsible/>
+    </div>
+</div>
+
+<scope args="chips" render=""/>
+
+<div class="admin__data-grid-filters-wrap" data-part="filter-form" css="_show: hasVisible() && $collapsible.opened()">
+    <fieldset class="admin__fieldset admin__data-grid-filters">
+        <legend class="admin__filters-legend">
+            <span translate="'Advanced filter'"/>
+        </legend>
+        <fieldset class="admin__form-field" outereach="getRanges()" visible="$parent.isFilterVisible($data)" render=""/>
+        <div class="admin__form-field" outereach="getPlain()" visible="$parent.isFilterVisible($data)" render=""/>
+    </fieldset>
+
+    <div class="admin__data-grid-filters-footer">
+        <div class="admin__footer-main-actions">
+            <button class="action-tertiary" type="button" data-action="grid-filter-cancel" click="cancel" closeCollapsible>
+                <span translate="'Cancel'"/>
+            </button>
+            <button class="action-secondary" type="button" data-action="grid-filter-apply" click="apply" closeCollapsible>
+                <span translate="'Apply Filters'"/>
+            </button>
+        </div>
+    </div>
+</div>

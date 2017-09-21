@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
+  <page name="OrderCreateIndex" area="Adminhtml" mca="sales/order_create/index" module="Magento_Sales">
+    <block name="customerBlock" class="Magento\Sales\Test\Block\Adminhtml\Order\Create\Customer" locator="#order-customer-selector" strategy="css selector"/>
+    <block name="storeBlock" class="Magento\Sales\Test\Block\Adminhtml\Order\Create\Store" locator="#order-store-selector" strategy="css selector"/>
+    <block name="createBlock" class="Magento\Sales\Test\Block\Adminhtml\Order\Create" locator="[id='page:main-container']" strategy="css selector"/>
+    <block name="actionsBlock" class="Magento\Backend\Test\Block\GridPageActions" locator=".page-main-actions" strategy="css selector"/>
+    <block name="couponsBlock" class="Magento\Sales\Test\Block\Adminhtml\Order\Create\Coupons" locator="#order-coupons" strategy="css selector"/>
+    <block name="customerActivitiesBlock" class="Magento\Sales\Test\Block\Adminhtml\Order\Create\CustomerActivities" locator=".customer-current-activity" strategy="css selector"/>
+    <block name="configureProductBlock" class="Magento\Catalog\Test\Block\Adminhtml\Product\Composite\Configure" locator="//*[@data-role='modal' and .//*[@id='product_composite_configure'] and contains(@class,'_show')]" strategy="xpath"/>
+    <block name="messagesBlock" class="Magento\Backend\Test\Block\Messages" locator="#messages .messages" strategy="css selector"/>
+    <block name="totalsBlock" class="Magento\Sales\Test\Block\Adminhtml\Order\Create\Totals" locator="#order-totals" strategy="css selector"/>
+    <block name="backendOrderSidebarBlock" class="Magento\Sales\Test\Block\Adminhtml\Order\Create\Sidebar" locator=".order-sidebar" strategy="css selector" />
+    <block name="sidebarWishlistBlock" class="Magento\Sales\Test\Block\Adminhtml\Order\Create\CustomerActivities\Sidebar\Wishlist" locator="#order-sidebar_wishlist" strategy="css selector" />
+  </page>
+</config>

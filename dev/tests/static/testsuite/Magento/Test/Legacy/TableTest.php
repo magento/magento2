@@ -1,25 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -27,18 +9,20 @@
  */
 namespace Magento\Test\Legacy;
 
-class TableTest extends \PHPUnit_Framework_TestCase
+use Magento\Framework\App\Utility\Files;
+
+class TableTest extends \PHPUnit\Framework\TestCase
 {
     public function testTableName()
     {
-        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
             /**
              * @param string $filePath
              */
             function ($filePath) {
                 $tables = self::extractTables($filePath);
-                $legacyTables = array();
+                $legacyTables = [];
                 foreach ($tables as $table) {
                     $tableName = $table['name'];
                     if (strpos($tableName, '/') === false) {
@@ -50,7 +34,14 @@ class TableTest extends \PHPUnit_Framework_TestCase
                 $message = $this->_composeFoundsMessage($legacyTables);
                 $this->assertEmpty($message, $message);
             },
-            \Magento\TestFramework\Utility\Files::init()->getPhpFiles()
+            Files::init()->getPhpFiles(
+                Files::INCLUDE_APP_CODE
+                | Files::INCLUDE_PUB_CODE
+                | Files::INCLUDE_LIBS
+                | Files::INCLUDE_TEMPLATES
+                | Files::AS_DATA_SET
+                | Files::INCLUDE_NON_CLASSES
+            )
         );
     }
 
@@ -62,9 +53,9 @@ class TableTest extends \PHPUnit_Framework_TestCase
      */
     public static function extractTables($filePath)
     {
-        $regexpMethods = array('_getRegexpTableInMethods', '_getRegexpTableInArrays', '_getRegexpTableInProperties');
+        $regexpMethods = ['_getRegexpTableInMethods', '_getRegexpTableInArrays', '_getRegexpTableInProperties'];
 
-        $result = array();
+        $result = [];
         $content = file_get_contents($filePath);
         foreach ($regexpMethods as $method) {
             $regexp = self::$method($filePath);
@@ -86,7 +77,7 @@ class TableTest extends \PHPUnit_Framework_TestCase
      */
     protected static function _getRegexpTableInMethods($filePath)
     {
-        $methods = array(
+        $methods = [
             'getTableName',
             '_setMainTable',
             'setMainTable',
@@ -97,19 +88,19 @@ class TableTest extends \PHPUnit_Framework_TestCase
             'updateTableRow',
             'updateTable',
             'tableExists',
-            array('name' => 'joinField', 'param_index' => 1),
+            ['name' => 'joinField', 'param_index' => 1],
             'joinTable',
             'getFkName',
-            array('name' => 'getFkName', 'param_index' => 2),
+            ['name' => 'getFkName', 'param_index' => 2],
             'getIdxName',
-            array('name' => 'addVirtualGridColumn', 'param_index' => 1)
-        );
+            ['name' => 'addVirtualGridColumn', 'param_index' => 1],
+        ];
 
         if (self::_isResourceButNotCollection($filePath)) {
             $methods[] = '_init';
         }
 
-        $regexps = array();
+        $regexps = [];
         foreach ($methods as $method) {
             $regexps[] = self::_composeRegexpForMethod($method);
         }
@@ -138,7 +129,7 @@ class TableTest extends \PHPUnit_Framework_TestCase
     protected static function _composeRegexpForMethod($method)
     {
         if (!is_array($method)) {
-            $method = array('name' => $method, 'param_index' => 0);
+            $method = ['name' => $method, 'param_index' => 0];
         }
 
         if ($method['param_index']) {
@@ -173,9 +164,9 @@ class TableTest extends \PHPUnit_Framework_TestCase
      */
     protected static function _getRegexpTableInProperties($filePath)
     {
-        $properties = array('_aggregationTable');
+        $properties = ['_aggregationTable'];
 
-        $regexps = array();
+        $regexps = [];
         foreach ($properties as $property) {
             $regexps[] = $property . '\s*=\s*[\'"]([^\'"]+)';
         }
@@ -194,12 +185,12 @@ class TableTest extends \PHPUnit_Framework_TestCase
      */
     protected static function _matchesToInformation($content, $matches)
     {
-        $result = array();
+        $result = [];
         $fromPos = 0;
         foreach ($matches as $match) {
             $pos = strpos($content, $match[0], $fromPos);
             $lineNum = substr_count($content, "\n", 0, $pos) + 1;
-            $result[] = array('name' => $match[count($match) - 1], 'line' => $lineNum);
+            $result[] = ['name' => $match[count($match) - 1], 'line' => $lineNum];
             $fromPos = $pos + 1;
         }
         return $result;
@@ -217,7 +208,7 @@ class TableTest extends \PHPUnit_Framework_TestCase
             return null;
         }
 
-        $descriptions = array();
+        $descriptions = [];
         foreach ($legacyTables as $legacyTable) {
             $descriptions[] = "{$legacyTable['name']} (line {$legacyTable['line']})";
         }

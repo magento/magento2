@@ -2,40 +2,20 @@
 /**
  * Test class for \Magento\Sales\Block\Adminhtml\Order\Create\Form
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create;
-
-use Magento\Customer\Service\V1;
 
 /**
  * @magentoAppArea adminhtml
  */
-class FormTest extends \PHPUnit_Framework_TestCase
+class FormTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Sales\Block\Adminhtml\Order\Create\Form */
     protected $_orderCreateBlock;
 
-    /** @var \Magento\Framework\ObjectManager */
+    /** @var \Magento\Framework\ObjectManagerInterface */
     protected $_objectManager;
 
     /**
@@ -46,31 +26,31 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         $sessionMock = $this->getMockBuilder(
-            'Magento\Backend\Model\Session\Quote'
+            \Magento\Backend\Model\Session\Quote::class
         )->disableOriginalConstructor()->setMethods(
-            array('getCustomerId', 'getQuote', 'getStoreId', 'getStore')
+            ['getCustomerId', 'getQuote', 'getStoreId', 'getStore']
         )->getMock();
         $sessionMock->expects($this->any())->method('getCustomerId')->will($this->returnValue(1));
 
-        $quote = $this->_objectManager->create('Magento\Sales\Model\Quote')->load(1);
+        $quote = $this->_objectManager->create(\Magento\Quote\Model\Quote::class)->load(1);
         $sessionMock->expects($this->any())->method('getQuote')->will($this->returnValue($quote));
 
         $sessionMock->expects($this->any())->method('getStoreId')->will($this->returnValue(1));
 
         $storeMock = $this->getMockBuilder(
-            '\Magento\Store\Model\Store'
+            \Magento\Store\Model\Store::class
         )->disableOriginalConstructor()->setMethods(
-            array('getCurrentCurrencyCode')
+            ['getCurrentCurrencyCode']
         )->getMock();
         $storeMock->expects($this->any())->method('getCurrentCurrencyCode')->will($this->returnValue('USD'));
         $sessionMock->expects($this->any())->method('getStore')->will($this->returnValue($storeMock));
 
         /** @var \Magento\Framework\View\LayoutInterface $layout */
-        $layout = $this->_objectManager->get('Magento\Framework\View\LayoutInterface');
+        $layout = $this->_objectManager->get(\Magento\Framework\View\LayoutInterface::class);
         $this->_orderCreateBlock = $layout->createBlock(
-            'Magento\Sales\Block\Adminhtml\Order\Create\Form',
+            \Magento\Sales\Block\Adminhtml\Order\Create\Form::class,
             'order_create_block' . rand(),
-            array('sessionQuote' => $sessionMock)
+            ['sessionQuote' => $sessionMock]
         );
         parent::setUp();
     }
@@ -91,12 +71,12 @@ class FormTest extends \PHPUnit_Framework_TestCase
                     {"firstname":"John","lastname":"Smith","company":false,"street":"Green str, 67","city":"CityM",
                         "country_id":"US",
                         "region":"Alabama","region_id":1,
-                        "postcode":"75477","telephone":"3468676","fax":false,"vat_id":false},
+                        "postcode":"75477","telephone":"3468676","vat_id":false},
                  "{$addressIds[1]}":
                     {"firstname":"John","lastname":"Smith","company":false,"street":"Black str, 48","city":"CityX",
                         "country_id":"US",
                         "region":"Alabama","region_id":1,
-                        "postcode":"47676","telephone":"3234676","fax":false,"vat_id":false}
+                        "postcode":"47676","telephone":"3234676","vat_id":false}
                  },
              "store_id":1,"currency_symbol":"$","shipping_method_reseted":true,"payment_method":null
          }
@@ -107,31 +87,28 @@ ORDER_DATA_JSON;
 
     private function setUpMockAddress()
     {
-        /** @var \Magento\Customer\Service\V1\Data\AddressBuilder $addressBuilder */
-        $addressBuilder = $this->_objectManager->create('Magento\Customer\Service\V1\Data\AddressBuilder');
-        /** @var \Magento\Customer\Service\V1\CustomerAddressServiceInterface $addressService */
-        $addressService = $this->_objectManager->create('Magento\Customer\Service\V1\CustomerAddressServiceInterface');
+        /** @var \Magento\Customer\Api\Data\RegionInterfaceFactory $regionFactory */
+        $regionFactory = $this->_objectManager->create(\Magento\Customer\Api\Data\RegionInterfaceFactory::class);
 
-        $addressData1 = $addressBuilder->setId(
-            1
-        )->setCountryId(
+        /** @var \Magento\Customer\Api\Data\AddressInterfaceFactory $addressFactory */
+        $addressFactory = $this->_objectManager->create(\Magento\Customer\Api\Data\AddressInterfaceFactory::class);
+        /** @var \Magento\Customer\Api\AddressRepositoryInterface $addressRepository */
+        $addressRepository = $this->_objectManager->create(\Magento\Customer\Api\AddressRepositoryInterface::class);
+
+        $addressData1 = $addressFactory->create()->setCountryId(
             'US'
         )->setCustomerId(
             1
-        )->setDefaultBilling(
+        )->setIsDefaultBilling(
             true
-        )->setDefaultShipping(
+        )->setIsDefaultShipping(
             true
         )->setPostcode(
             '75477'
         )->setRegion(
-            new V1\Data\Region(
-                (new V1\Data\RegionBuilder())->populateWithArray(
-                    array('region_code' => 'AL', 'region' => 'Alabama', 'region_id' => 1)
-                )
-            )
+            $regionFactory->create()->setRegionCode('AL')->setRegion('Alabama')->setRegionId(1)
         )->setStreet(
-            array('Green str, 67')
+            ['Green str, 67']
         )->setTelephone(
             '3468676'
         )->setCity(
@@ -140,28 +117,22 @@ ORDER_DATA_JSON;
             'John'
         )->setLastname(
             'Smith'
-        )->create();
+        );
 
-        $addressData2 = $addressBuilder->setId(
-            2
-        )->setCountryId(
+        $addressData2 = $addressFactory->create()->setCountryId(
             'US'
         )->setCustomerId(
             1
-        )->setDefaultBilling(
+        )->setIsDefaultBilling(
             false
-        )->setDefaultShipping(
+        )->setIsDefaultShipping(
             false
         )->setPostcode(
             '47676'
         )->setRegion(
-            new V1\Data\Region(
-                (new V1\Data\RegionBuilder())->populateWithArray(
-                    array('region_code' => 'AL', 'region' => 'Alabama', 'region_id' => 1)
-                )
-            )
+            $regionFactory->create()->setRegionCode('AL')->setRegion('Alabama')->setRegionId(1)
         )->setStreet(
-            array('Black str, 48')
+            ['Black str, 48']
         )->setCity(
             'CityX'
         )->setTelephone(
@@ -170,8 +141,11 @@ ORDER_DATA_JSON;
             'John'
         )->setLastname(
             'Smith'
-        )->create();
+        );
 
-        return $addressService->saveAddresses(1, array($addressData1, $addressData2));
+        $savedAddress1 = $addressRepository->save($addressData1);
+        $savedAddress2 = $addressRepository->save($addressData2);
+
+        return [$savedAddress1->getId(), $savedAddress2->getId()];
     }
 }

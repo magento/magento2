@@ -1,0 +1,47 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/**
+ * @var $block \Magento\CatalogInventory\Block\Stockqty\Composite
+ */
+?>
+<?php if ($block->isMsgVisible()): ?>
+    <div class="availability only">
+        <a href="#"
+           data-mage-init='{"toggleAdvanced": {"selectorsToggleClass": "active", "baseToggleClass": "expanded", "toggleContainers": "#<?= /* @escapeNotVerified */ $block->getDetailsPlaceholderId() ?>"}}'
+           id="<?= /* @escapeNotVerified */ $block->getPlaceholderId() ?>"
+           title="<?= /* @escapeNotVerified */ __('Only %1 left', ($block->getStockQtyLeft())) ?>"
+           class="action show">
+            <?= /* @escapeNotVerified */ __('Only %1 left', "<strong>{$block->getStockQtyLeft()}</strong>") ?>
+        </a>
+    </div>
+    <div class="availability only detailed" id="<?= /* @escapeNotVerified */ $block->getDetailsPlaceholderId() ?>">
+        <div class="table-wrapper">
+            <table class="data table">
+                <caption class="table-caption"><?= /* @escapeNotVerified */ __('Product availability') ?></caption>
+                <thead>
+                <tr>
+                    <th class="col item" scope="col"><?= /* @escapeNotVerified */ __('Product Name') ?></th>
+                    <th class="col qty" scope="col"><?= /* @escapeNotVerified */ __('Qty') ?></th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($block->getChildProducts() as $childProduct) : ?>
+                    <?php $childProductStockQty = $block->getProductStockQty($childProduct); ?>
+                    <?php if ($childProductStockQty > 0) : ?>
+                        <tr>
+                            <td data-th="<?= $block->escapeHtml(__('Product Name')) ?>" class="col item"><?= /* @escapeNotVerified */ $childProduct->getName() ?></td>
+                            <td data-th="<?= $block->escapeHtml(__('Qty')) ?>" class="col qty"><?= /* @escapeNotVerified */ $childProductStockQty ?></td>
+                        </tr>
+                    <?php endif ?>
+                <?php endforeach ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+<?php endif ?>

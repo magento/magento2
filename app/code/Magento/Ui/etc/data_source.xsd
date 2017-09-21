@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="config">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="dataSource" minOccurs="1" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <!-- -->
+    <xs:element name="dataSource">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="fields" minOccurs="0" maxOccurs="1"/>
+                <xs:element ref="references" minOccurs="0" maxOccurs="1"/>
+            </xs:sequence>
+            <xs:attribute type="referenceAttributeType" name="name" use="required"/>
+            <xs:attribute type="textAttributeType" name="label" use="required"/>
+            <xs:attribute type="xs:string" name="dataSet" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <!-- -->
+    <xs:element name="fields">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="field" maxOccurs="unbounded" minOccurs="0"/>
+            </xs:sequence>
+            <xs:attribute type="referenceAttributeType" name="entityType" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+    <!-- -->
+    <xs:element name="field">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded">
+                <xs:element type="fieldReferenceType" name="reference" maxOccurs="1" minOccurs="0"/>
+                <xs:element type="fieldConstraintsType" name="constraints" maxOccurs="unbounded" minOccurs="0"/>
+                <xs:element type="fieldTooltipType" name="tooltip" maxOccurs="unbounded" minOccurs="0"/>
+            </xs:choice>
+            <xs:attribute type="referenceAttributeType" name="name" use="required"/>
+            <xs:attribute type="textAttributeType" name="dataType" use="optional"/>
+            <xs:attribute type="textAttributeType" name="formElement" use="optional"/>
+            <xs:attribute type="textAttributeType" name="componentType" use="optional"/>
+            <xs:attribute type="textAttributeType" name="displayArea" use="optional"/>
+            <xs:attribute type="textAttributeType" name="fieldGroup" use="optional"/>
+            <xs:attribute type="textAttributeType" name="source" use="optional"/>
+            <xs:attribute type="textAttributeType" name="optionProvider" use="optional"/>
+            <xs:attribute type="textAttributeType" name="default_value" use="optional"/>
+            <xs:attribute type="textAttributeType" name="label" use="optional"/>
+            <xs:attribute type="textAttributeType" name="description" use="optional"/>
+            <xs:attribute type="textAttributeType" name="uniqueNs" use="optional"/>
+            <xs:attribute type="textAttributeType" name="uniqueProp" use="optional"/>
+            <xs:attribute type="xs:integer" name="size" use="optional"/>
+            <xs:attribute type="xs:string" name="customEntry" use="optional"/>
+            <xs:attribute type="xs:boolean" name="visible" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+    <!-- -->
+    <xs:element name="references">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element type="reference" name="reference" maxOccurs="unbounded" minOccurs="1"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <!-- -->
+    <xs:complexType name="reference">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="referenceAttributeType" name="target" use="required"/>
+                <xs:attribute type="referenceAttributeType" name="referencedField" use="required"/>
+                <xs:attribute type="referenceAttributeType" name="targetField" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <!-- -->
+    <xs:complexType name="fieldReferenceType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="referenceAttributeType" name="target" use="required"/>
+                <xs:attribute type="referenceAttributeType" name="referencedField" use="required"/>
+                <xs:attribute type="referenceAttributeType" name="targetField" use="required"/>
+                <xs:attribute type="referenceAttributeType" name="neededField" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <!-- -->
+    <xs:complexType name="fieldConstraintsType">
+        <xs:choice maxOccurs="unbounded">
+            <xs:element type="constraintValidateType" name="validate" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="constraintFilterType" name="filter" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="constraintReadonlyType" name="readonly" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:choice>
+    </xs:complexType>
+    <xs:complexType name="constraintValidateType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="xs:string" name="name" use="required"/>
+                <xs:attribute type="xs:string" name="value" use="optional"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="constraintFilterType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="xs:string" name="on" use="required"/>
+                <xs:attribute type="xs:string" name="by" use="required"/>
+                <xs:attribute type="xs:string" name="value" use="optional"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="constraintReadonlyType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="xs:string" name="on" use="required"/>
+                <xs:attribute type="xs:string" name="value" use="optional"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <!-- -->
+    <xs:complexType name="fieldTooltipType">
+        <xs:sequence>
+            <xs:element type="xs:string" name="link" maxOccurs="1" minOccurs="1"/>
+            <xs:element type="xs:string" name="description" maxOccurs="1" minOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <!-- -->
+    <xs:simpleType name="textAttributeType">
+        <xs:annotation>
+            <xs:documentation>Any text value</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[A-Za-z0-9,_.\\: -]+" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!-- -->
+    <xs:simpleType name="referenceAttributeType">
+        <xs:annotation>
+            <xs:documentation>The value should only be {[a-z_-]+} since it is used as a reference to a database field.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-z_-]+" />
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

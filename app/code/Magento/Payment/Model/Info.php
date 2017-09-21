@@ -1,46 +1,33 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Model;
 
+use Magento\Framework\Model\AbstractExtensibleModel;
+
 /**
  * Payment information model
+ *
+ * @api
+ * @since 100.0.2
  */
-class Info extends \Magento\Framework\Model\AbstractModel
+class Info extends AbstractExtensibleModel implements InfoInterface
 {
     /**
      * Additional information container
      *
      * @var array
      */
-    protected $_additionalInformation = -1;
+    protected $_additionalInformation = [];
 
     /**
      * Payment data
      *
      * @var \Magento\Payment\Helper\Data
      */
-    protected $_paymentData = null;
+    protected $_paymentData;
 
     /**
      * @var \Magento\Framework\Encryption\EncryptorInterface
@@ -50,24 +37,36 @@ class Info extends \Magento\Framework\Model\AbstractModel
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
+     * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
+        \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
-        array $data = array()
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        array $data = []
     ) {
         $this->_paymentData = $paymentData;
         $this->_encryptor = $encryptor;
-        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+        parent::__construct(
+            $context,
+            $registry,
+            $extensionFactory,
+            $customAttributeFactory,
+            $resource,
+            $resourceCollection,
+            $data
+        );
     }
 
     /**
@@ -96,23 +95,25 @@ class Info extends \Magento\Framework\Model\AbstractModel
      * Retrieve payment method model object
      *
      * @return \Magento\Payment\Model\MethodInterface
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getMethodInstance()
     {
         if (!$this->hasMethodInstance()) {
-            if ($this->getMethod()) {
-                $instance = $this->_paymentData->getMethodInstance($this->getMethod());
-                if (!$instance) {
-                    $instance = $this->_paymentData->getMethodInstance(
-                        \Magento\Payment\Model\Method\Substitution::CODE
-                    );
-                }
-                $instance->setInfoInstance($this);
-                $this->setMethodInstance($instance);
-                return $instance;
+            if (!$this->getMethod()) {
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('The payment method you requested is not available.')
+                );
             }
-            throw new \Magento\Framework\Model\Exception(__('The payment method you requested is not available.'));
+
+            try {
+                $instance = $this->_paymentData->getMethodInstance($this->getMethod());
+            } catch (\UnexpectedValueException $e) {
+                $instance = $this->_paymentData->getMethodInstance(Method\Substitution::CODE);
+            }
+
+            $instance->setInfoInstance($this);
+            $this->setMethodInstance($instance);
         }
 
         return $this->_getData('method_instance');
@@ -126,10 +127,7 @@ class Info extends \Magento\Framework\Model\AbstractModel
      */
     public function encrypt($data)
     {
-        if ($data) {
-            return $this->_encryptor->encrypt($data);
-        }
-        return $data;
+        return $this->_encryptor->encrypt($data);
     }
 
     /**
@@ -140,10 +138,7 @@ class Info extends \Magento\Framework\Model\AbstractModel
      */
     public function decrypt($data)
     {
-        if ($data) {
-            return $this->_encryptor->decrypt($data);
-        }
-        return $data;
+        return $this->_encryptor->decrypt($data);
     }
 
     /**
@@ -154,15 +149,15 @@ class Info extends \Magento\Framework\Model\AbstractModel
      * @param string|array $key
      * @param mixed $value
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function setAdditionalInformation($key, $value = null)
     {
         if (is_object($value)) {
-            throw new \Magento\Framework\Model\Exception(__('The payment disallows storing objects.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('The payment disallows storing objects.'));
         }
         $this->_initAdditionalInformation();
-        if (is_array($key) && is_null($value)) {
+        if (is_array($key) && $value === null) {
             $this->_additionalInformation = $key;
         } else {
             $this->_additionalInformation[$key] = $value;
@@ -196,9 +191,12 @@ class Info extends \Magento\Framework\Model\AbstractModel
         if ($key && isset($this->_additionalInformation[$key])) {
             unset($this->_additionalInformation[$key]);
             return $this->setData('additional_information', $this->_additionalInformation);
+        } elseif (null === $key) {
+            $this->_additionalInformation = [];
+            return $this->unsetData('additional_information');
         }
-        $this->_additionalInformation = -1;
-        return $this->unsetData('additional_information');
+
+        return $this;
     }
 
     /**
@@ -217,17 +215,15 @@ class Info extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Make sure _additionalInformation is an array
+     * Initialize _additionalInformation with $this->_data['additional_information'] if empty
      *
      * @return void
      */
     protected function _initAdditionalInformation()
     {
-        if (-1 === $this->_additionalInformation) {
-            $this->_additionalInformation = $this->_getData('additional_information');
-        }
-        if (null === $this->_additionalInformation) {
-            $this->_additionalInformation = array();
+        $additionalInfo = $this->_getData('additional_information');
+        if (empty($this->_additionalInformation) && $additionalInfo) {
+            $this->_additionalInformation = $additionalInfo;
         }
     }
 }

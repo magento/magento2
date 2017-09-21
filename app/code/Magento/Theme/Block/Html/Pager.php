@@ -1,31 +1,16 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Block\Html;
 
 /**
  * Html pager block
+ *
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @api
+ * @since 100.0.2
  */
 class Pager extends \Magento\Framework\View\Element\Template
 {
@@ -56,7 +41,7 @@ class Pager extends \Magento\Framework\View\Element\Template
      *
      * @var array
      */
-    protected $_availableLimit = array(10 => 10, 20 => 20, 50 => 50);
+    protected $_availableLimit = [10 => 10, 20 => 20, 50 => 50];
 
     /**
      * @var int
@@ -112,6 +97,13 @@ class Pager extends \Magento\Framework\View\Element\Template
      * @var int
      */
     protected $_frameEnd;
+
+    /**
+     * Url Fragment for pagination
+     *
+     * @var string|null
+     */
+    protected $_fragment = null;
 
     /**
      * Set pager data
@@ -264,11 +256,12 @@ class Pager extends \Magento\Framework\View\Element\Template
      * Set pager limit
      *
      * @param array $limits
-     * @return void
+     * @return $this
      */
     public function setAvailableLimit(array $limits)
     {
         $this->_availableLimit = $limits;
+        return $this;
     }
 
     /**
@@ -429,7 +422,7 @@ class Pager extends \Magento\Framework\View\Element\Template
      */
     public function getPageUrl($page)
     {
-        return $this->getPagerUrl(array($this->getPageVarName() => $page));
+        return $this->getPagerUrl([$this->getPageVarName() => $page]);
     }
 
     /**
@@ -438,7 +431,7 @@ class Pager extends \Magento\Framework\View\Element\Template
      */
     public function getLimitUrl($limit)
     {
-        return $this->getPagerUrl(array($this->getLimitVarName() => $limit));
+        return $this->getPagerUrl([$this->getLimitVarName() => $limit]);
     }
 
     /**
@@ -447,15 +440,24 @@ class Pager extends \Magento\Framework\View\Element\Template
      * @param array $params
      * @return string
      */
-    public function getPagerUrl($params = array())
+    public function getPagerUrl($params = [])
     {
-        $urlParams = array();
+        $urlParams = [];
         $urlParams['_current'] = true;
         $urlParams['_escape'] = true;
         $urlParams['_use_rewrite'] = true;
+        $urlParams['_fragment'] = $this->getFragment();
         $urlParams['_query'] = $params;
 
-        return $this->getUrl('*/*/*', $urlParams);
+        return $this->getUrl($this->getPath(), $urlParams);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getPath()
+    {
+        return $this->_getData('path') ?: '*/*/*';
     }
 
     /**
@@ -757,5 +759,27 @@ class Pager extends \Magento\Framework\View\Element\Template
             return parent::_toHtml();
         }
         return '';
+    }
+
+    /**
+     * Get the URL fragment
+     *
+     * @return string|null
+     */
+    public function getFragment()
+    {
+        return $this->_fragment;
+    }
+
+    /**
+     * Set the URL fragment
+     *
+     * @param string|null $fragment
+     * @return $this
+     */
+    public function setFragment($fragment)
+    {
+        $this->_fragment = $fragment;
+        return $this;
     }
 }

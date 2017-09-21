@@ -1,57 +1,66 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Element;
 
-class TemplateTest extends \PHPUnit_Framework_TestCase
+use Magento\Framework\App\Area;
+
+class TemplateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Element\Template
      */
     protected $_block;
 
+    /**
+     * @var \Magento\TestFramework\ObjectManager
+     */
+    protected $objectManager;
+
+    /**
+     * @var string
+     */
+    private $origMode;
+
     protected function setUp()
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $params = array('layout' => $objectManager->create('Magento\Framework\View\Layout', array()));
-        $context = $objectManager->create('Magento\Framework\View\Element\Template\Context', $params);
+        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $params = ['layout' => $this->objectManager->create(\Magento\Framework\View\Layout::class, [])];
+        $context = $this->objectManager->create(\Magento\Framework\View\Element\Template\Context::class, $params);
         $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
-            'Magento\Framework\View\Element\Template',
+            \Magento\Framework\View\Element\Template::class,
             '',
-            array('context' => $context, 'data' => array('module_name' => 'Magento_View'))
+            ['context' => $context]
         );
+
+        /** @var \Magento\TestFramework\App\State $appState */
+        $appState = $this->objectManager->get(\Magento\TestFramework\App\State::class);
+        $this->origMode = $appState->getMode();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function tearDown()
+    {
+        /** @var \Magento\TestFramework\App\State $appState */
+        $appState = $this->objectManager->get(\Magento\TestFramework\App\State::class);
+        $appState->setMode($this->origMode);
+        parent::tearDown();
     }
 
     public function testConstruct()
     {
         $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
-            'Magento\Framework\View\Element\Template',
+            \Magento\Framework\View\Element\Template::class,
             '',
-            array('data' => array('template' => 'value'))
+            ['data' => ['template' => 'value']]
         );
         $this->assertEquals('value', $block->getTemplate());
     }
@@ -65,21 +74,17 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
     public function testGetArea()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\State')
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\App\State::class)
             ->setAreaCode('frontend');
         $this->assertEquals('frontend', $this->_block->getArea());
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\App\State'
-        )->setAreaCode(
-            'some_area'
-        );
-        $this->assertEquals('some_area', $this->_block->getArea());
+            \Magento\Framework\App\State::class
+        )->setAreaCode(Area::AREA_ADMINHTML);
+        $this->assertEquals(Area::AREA_ADMINHTML, $this->_block->getArea());
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\App\State'
-        )->setAreaCode(
-            'another_area'
-        );
-        $this->assertEquals('another_area', $this->_block->getArea());
+            \Magento\Framework\App\State::class
+        )->setAreaCode(Area::AREA_GLOBAL);
+        $this->assertEquals(Area::AREA_GLOBAL, $this->_block->getArea());
     }
 
     /**
@@ -88,8 +93,11 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
      */
     public function testToHtml()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\State')
-            ->setAreaCode('any area');
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\App\State::class)
+            ->setAreaCode(Area::AREA_GLOBAL);
+        /** @var \Magento\TestFramework\App\State $appState */
+        $appState = $this->objectManager->get(\Magento\TestFramework\App\State::class);
+        $appState->setMode(\Magento\TestFramework\App\State::MODE_DEFAULT);
         $this->assertEmpty($this->_block->toHtml());
         $this->_block->setTemplate(uniqid('invalid_filename.phtml'));
         $this->assertEmpty($this->_block->toHtml());
@@ -102,7 +110,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
     public function testGetObjectData()
     {
-        $object = new \Magento\Framework\Object(array('key' => 'value'));
+        $object = new \Magento\Framework\DataObject(['key' => 'value']);
         $this->assertEquals('value', $this->_block->getObjectData($object, 'key'));
     }
 
