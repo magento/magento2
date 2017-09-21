@@ -558,6 +558,29 @@ class Files
     }
 
     /**
+     * Returns list of UI Component files, used by Magento application
+     *
+     * An incoming array can contain the following items
+     * array (
+     *     'namespace'      => 'namespace_name',
+     *     'module'         => 'module_name',
+     *     'area'           => 'area_name',
+     *     'theme'          => 'theme_name',
+     *     'include_code'   => true|false,
+     *     'include_design' => true|false,
+     *     'with_metainfo'  => true|false,
+     * )
+     *
+     * @param array $incomingParams
+     * @param bool $asDataSet
+     * @return array
+     */
+    public function getUiComponentXmlFiles($incomingParams = [], $asDataSet = true)
+    {
+        return $this->getLayoutXmlFiles('ui_component', $incomingParams, $asDataSet);
+    }
+
+    /**
      * @param string $location
      * @param array $incomingParams
      * @param bool $asDataSet
