@@ -22,10 +22,14 @@
             <data name="creditCard/dataset" xsi:type="string">visa_default</data>
             <data name="isVaultPresent" xsi:type="boolean">false</data>
             <data name="configData" xsi:type="string">payflowpro</data>
+            <data name="paymentInfo" xsi:type="array">
+                <item name="Credit Card Type" xsi:type="string">Visa</item>
+            </data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
             <constraint name="Magento\Sales\Test\Constraint\AssertAuthorizationInCommentsHistory" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderPaymentInformation" />
         </variation>
         <variation name="OnePageCheckoutPayflowProWithInternationalAVSFilter" summary="Place order via Payflow Pro with fraud filters triggering" ticketId="MAGETWO-37476">
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
@@ -43,7 +47,7 @@
             <data name="creditCardClass" xsi:type="string">credit_card</data>
             <data name="creditCard/dataset" xsi:type="string">visa_default</data>
             <data name="isVaultPresent" xsi:type="boolean">false</data>
-            <data name="configData" xsi:type="string">payflowpro_fraud_filters_enabled</data>
+            <data name="configData" xsi:type="string">payflowpro</data>
             <data name="paymentInfo" xsi:type="array">
                 <item name="Triggered Fraud Filters" xsi:type="string">Under review by Fraud Service</item>
                 <item name="International AVS response" xsi:type="string">#N: No Details matched</item>
@@ -70,7 +74,7 @@
             <data name="creditCardClass" xsi:type="string">credit_card</data>
             <data name="creditCard/dataset" xsi:type="string">visa_default</data>
             <data name="isVaultPresent" xsi:type="boolean">false</data>
-            <data name="configData" xsi:type="string">payflowpro_fraud_filters_enabled</data>
+            <data name="configData" xsi:type="string">payflowpro</data>
             <data name="paymentInfo" xsi:type="array">
                 <item name="AVS Street Match" xsi:type="string">#Y: Yes. Matched Address and five-didgit ZIP</item>
             </data>

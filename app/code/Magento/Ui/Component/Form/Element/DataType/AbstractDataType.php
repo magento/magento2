@@ -9,6 +9,9 @@ use Magento\Ui\Component\AbstractComponent;
 
 /**
  * Class AbstractDataType
+ *
+ * @api
+ * @since 100.0.2
  */
 abstract class AbstractDataType extends AbstractComponent implements DataTypeInterface
 {

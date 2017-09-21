@@ -1,7 +1,5 @@
 <?php
 /**
- * Http application
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -17,6 +15,8 @@ use Magento\Framework\Event;
 use Magento\Framework\Filesystem;
 
 /**
+ * HTTP web application. Called from webroot index.php to serve web requests.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Http implements \Magento\Framework\AppInterface
@@ -109,7 +109,7 @@ class Http implements \Magento\Framework\AppInterface
      *
      * @return \Psr\Log\LoggerInterface
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getLogger()
     {

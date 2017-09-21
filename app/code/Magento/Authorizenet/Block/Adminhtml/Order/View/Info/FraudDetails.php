@@ -7,6 +7,10 @@ namespace Magento\Authorizenet\Block\Adminhtml\Order\View\Info;
 
 use Magento\Authorizenet\Model\Directpost;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class FraudDetails extends \Magento\Backend\Block\Template
 {
     /**

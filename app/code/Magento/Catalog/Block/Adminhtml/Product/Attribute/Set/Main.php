@@ -13,7 +13,9 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Set;
 use Magento\Catalog\Model\Entity\Product\Attribute\Group\AttributeMapperInterface;
 
 /**
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Main extends \Magento\Backend\Block\Template
 {

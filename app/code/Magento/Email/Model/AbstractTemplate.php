@@ -20,6 +20,8 @@ use Magento\Store\Model\Store;
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @api
+ * @since 100.0.2
  */
 abstract class AbstractTemplate extends AbstractModel implements TemplateTypesInterface
 {

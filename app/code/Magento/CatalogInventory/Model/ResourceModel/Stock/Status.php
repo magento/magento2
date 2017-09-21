@@ -19,7 +19,7 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Store model manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @deprecated
+     * @deprecated 100.1.0
      */
     protected $_storeManager;
 
@@ -41,33 +41,24 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     private $stockConfiguration;
 
     /**
-     * @var \Magento\Indexer\Model\ResourceModel\FrontendResource
-     */
-    private $indexerStockFrontendResource;
-
-    /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Store\Model\WebsiteFactory $websiteFactory
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param string $connectionName
-     * @param null|\Magento\Indexer\Model\ResourceModel\FrontendResource $indexerStockFrontendResource
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Store\Model\WebsiteFactory $websiteFactory,
         \Magento\Eav\Model\Config $eavConfig,
-        $connectionName = null,
-        \Magento\Indexer\Model\ResourceModel\FrontendResource $indexerStockFrontendResource = null
+        $connectionName = null
     ) {
         parent::__construct($context, $connectionName);
 
         $this->_storeManager = $storeManager;
         $this->_websiteFactory = $websiteFactory;
         $this->eavConfig = $eavConfig;
-        $this->indexerStockFrontendResource = $indexerStockFrontendResource ?: ObjectManager::getInstance()
-            ->get(\Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource::class);
     }
 
     /**
@@ -78,14 +69,6 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected function _construct()
     {
         $this->_init('cataloginventory_stock_status', 'product_id');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getMainTable()
-    {
-        return $this->indexerStockFrontendResource->getMainTable();
     }
 
     /**
@@ -356,7 +339,7 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * @return StockConfigurationInterface
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getStockConfiguration()
     {

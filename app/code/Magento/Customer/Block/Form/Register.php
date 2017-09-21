@@ -10,7 +10,9 @@ use Magento\Customer\Model\AccountManagement;
 /**
  * Customer register form block
  *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Register extends \Magento\Directory\Block\Data
 {
@@ -201,6 +203,7 @@ class Register extends \Magento\Directory\Block\Data
      * Get minimum password length
      *
      * @return string
+     * @since 100.1.0
      */
     public function getMinimumPasswordLength()
     {
@@ -211,6 +214,7 @@ class Register extends \Magento\Directory\Block\Data
      * Get number of password required character classes
      *
      * @return string
+     * @since 100.1.0
      */
     public function getRequiredCharacterClassesNumber()
     {

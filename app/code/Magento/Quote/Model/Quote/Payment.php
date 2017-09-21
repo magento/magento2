@@ -10,8 +10,7 @@ use Magento\Quote\Api\Data\PaymentInterface;
 /**
  * Quote payment information
  *
- * @method \Magento\Quote\Model\ResourceModel\Quote\Payment _getResource()
- * @method \Magento\Quote\Model\ResourceModel\Quote\Payment getResource()
+ * @api
  * @method int getQuoteId()
  * @method \Magento\Quote\Model\Quote\Payment setQuoteId(int $value)
  * @method string getCreatedAt()
@@ -32,9 +31,8 @@ use Magento\Quote\Api\Data\PaymentInterface;
  * @method \Magento\Quote\Model\Quote\Payment setCcSsStartYear(int $value)
  * @method string getCcSsIssue()
  * @method \Magento\Quote\Model\Quote\Payment setCcSsIssue(string $value)
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Payment extends \Magento\Payment\Model\Info implements PaymentInterface
 {
@@ -66,11 +64,14 @@ class Payment extends \Magento\Payment\Model\Info implements PaymentInterface
     private $additionalChecks;
 
     /**
-     * Serializer interface instance.
-     *
      * @var \Magento\Framework\Serialize\Serializer\Json
      */
     private $serializer;
+
+    /**
+     * @var \Magento\Framework\Serialize\JsonValidator
+     */
+    private $jsonValidator;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -85,6 +86,7 @@ class Payment extends \Magento\Payment\Model\Info implements PaymentInterface
      * @param array $data
      * @param array $additionalChecks
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @param \Magento\Framework\Serialize\JsonValidator|null $jsonValidator
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -99,12 +101,15 @@ class Payment extends \Magento\Payment\Model\Info implements PaymentInterface
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
         array $additionalChecks = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        \Magento\Framework\Serialize\JsonValidator $jsonValidator = null
     ) {
         $this->methodSpecificationFactory = $methodSpecificationFactory;
         $this->additionalChecks = $additionalChecks;
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->jsonValidator = $jsonValidator ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\JsonValidator::class);
         parent::__construct(
             $context,
             $registry,
@@ -336,13 +341,14 @@ class Payment extends \Magento\Payment\Model\Info implements PaymentInterface
     public function getAdditionalData()
     {
         $additionalDataValue = $this->getData(self::KEY_ADDITIONAL_DATA);
-        if (is_string($additionalDataValue)) {
+        if (is_array($additionalDataValue)) {
+            return $additionalDataValue;
+        }
+        if (is_string($additionalDataValue) && $this->jsonValidator->isValid($additionalDataValue)) {
             $additionalData = $this->serializer->unserialize($additionalDataValue);
             if (is_array($additionalData)) {
                 return $additionalData;
             }
-        } elseif (is_array($additionalDataValue)) {
-            return $additionalDataValue;
         }
         return null;
     }

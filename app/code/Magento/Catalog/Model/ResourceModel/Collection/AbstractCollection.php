@@ -10,9 +10,9 @@ namespace Magento\Catalog\Model\ResourceModel\Collection;
  * Implement using different stores for retrieve attribute values
  *
  * @api
- *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCollection
 {
@@ -78,6 +78,7 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
      *
      * @param \Magento\Eav\Model\Entity\AbstractEntity $entity
      * @return string
+     * @since 101.0.0
      */
     protected function getEntityPkName(\Magento\Eav\Model\Entity\AbstractEntity $entity)
     {

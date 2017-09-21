@@ -10,11 +10,13 @@ use Magento\Theme\Helper\Storage;
 /**
  * Theme form, Css editor tab
  *
+ * @api
  * @method \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\Css setFiles(array $files)
  * @method array getFiles()
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 100.0.2
  */
 class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\AbstractTab
 {

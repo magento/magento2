@@ -14,7 +14,9 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab;
 use Magento\Eav\Block\Adminhtml\Attribute\Edit\Main\AbstractMain;
 
 /**
+ * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 100.0.2
  */
 class Main extends AbstractMain
 {

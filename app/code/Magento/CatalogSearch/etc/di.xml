@@ -13,6 +13,7 @@
     <preference for="Magento\Framework\Search\Adapter\OptionsInterface" type="Magento\CatalogSearch\Model\Adapter\Options" />
     <preference for="Magento\CatalogSearch\Model\Search\FilterMapper\FilterStrategyInterface" type="Magento\CatalogSearch\Model\Search\FilterMapper\FilterContext"/>
     <preference for="Magento\CatalogSearch\Model\Indexer\IndexSwitcherInterface" type="Magento\CatalogSearch\Model\Indexer\IndexSwitcherProxy"/>
+    <preference for="Magento\CatalogSearch\Model\Adapter\Aggregation\RequestCheckerInterface" type="Magento\CatalogSearch\Model\Adapter\Aggregation\RequestCheckerComposite"/>
     <type name="Magento\CatalogSearch\Model\Indexer\IndexerHandlerFactory">
         <arguments>
             <argument name="configPath" xsi:type="const">Magento\CatalogSearch\Model\ResourceModel\EngineInterface::CONFIG_ENGINE_PATH</argument>
@@ -38,6 +39,13 @@
         </arguments>
     </type>
     <preference for="Magento\Framework\Indexer\IndexStructureInterface" type="Magento\CatalogSearch\Model\Indexer\IndexStructureProxy" />
+    <type name="Magento\Catalog\Model\Indexer\Product\Full">
+        <arguments>
+            <argument name="indexerList" xsi:type="array">
+                <item name="catalogsearch_fulltext" xsi:type="const">Magento\CatalogSearch\Model\Indexer\Fulltext::INDEXER_ID</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderContainer">
         <arguments>
             <argument name="dataProviders" xsi:type="array">
@@ -210,8 +218,6 @@
     <type name="Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider">
         <arguments>
             <argument name="range" xsi:type="object">Magento\Catalog\Model\Layer\Filter\Price\Range\Proxy</argument>
-            <argument name="indexerFrontendResource" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\FrontendResource</argument>
-            <argument name="indexerStockFrontendResource" xsi:type="object">Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource</argument>
         </arguments>
         <plugin name="categoryIdAggregation" type="Magento\CatalogSearch\Model\Adapter\Mysql\Plugin\Aggregation\Category\DataProvider" />
     </type>
@@ -286,31 +292,22 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\CatalogSearch\Model\Adapter\Mysql\Dynamic\DataProvider">
+    <type name="Magento\CatalogSearch\Model\Adapter\Aggregation\RequestCheckerComposite">
         <arguments>
-            <argument name="indexerFrontendResource" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\FrontendResource</argument>
+            <argument name="queryCheckers" xsi:type="array">
+                <item name="advanced_search_container" xsi:type="object">\Magento\CatalogSearch\Model\Adapter\Aggregation\Checker\Query\AdvancedSearch</item>
+                <item name="catalog_view_container" xsi:type="object">\Magento\CatalogSearch\Model\Adapter\Aggregation\Checker\Query\CatalogView</item>
+            </argument>
         </arguments>
     </type>
-    <type name="Magento\CatalogSearch\Model\Search\FilterMapper\ExclusionStrategy">
+    <type name="Magento\CatalogSearch\Model\Adapter\Aggregation\Checker\Query\AdvancedSearch">
         <arguments>
-            <argument name="indexerFrontendResource" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\FrontendResource</argument>
-            <argument name="categoryProductIndexerFrontend" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Category\Product\FrontendResource</argument>
+            <argument name="name" xsi:type="string">advanced_search_container</argument>
         </arguments>
     </type>
-    <type name="Magento\CatalogSearch\Model\Adapter\Mysql\Plugin\Aggregation\Category\DataProvider">
+    <type name="Magento\CatalogSearch\Model\Adapter\Aggregation\Checker\Query\CatalogView">
         <arguments>
-            <argument name="categoryProductIndexerFrontend" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Category\Product\FrontendResource</argument>
-        </arguments>
-    </type>
-    <type name="Magento\CatalogSearch\Model\Search\FilterMapper\TermDropdownStrategy">
-        <arguments>
-            <argument name="frontendResource" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\FrontendResource</argument>
-            <argument name="indexerStockFrontendResource" xsi:type="object">Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource</argument>
-        </arguments>
-    </type>
-    <type name="Magento\CatalogSearch\Model\Search\IndexBuilder">
-        <arguments>
-            <argument name="indexerStockFrontendResource" xsi:type="object">Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource</argument>
+            <argument name="name" xsi:type="string">catalog_view_container</argument>
         </arguments>
     </type>
 </config>

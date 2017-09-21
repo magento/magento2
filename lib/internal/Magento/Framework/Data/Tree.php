@@ -11,6 +11,7 @@ use Magento\Framework\Data\Tree\Node\Collection as NodeCollection;
 /**
  * Data tree
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Tree

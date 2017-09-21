@@ -1,12 +1,15 @@
 <?php
 /**
- * HTTP response interface
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Response;
 
+/**
+ * HTTP response interface
+ *
+ * @api
+ */
 interface HttpInterface extends \Magento\Framework\App\ResponseInterface
 {
     /**
@@ -21,6 +24,7 @@ interface HttpInterface extends \Magento\Framework\App\ResponseInterface
      * Get HTTP response code
      *
      * @return int
+     * @since 100.2.0
      */
     public function getHttpResponseCode();
 
@@ -33,6 +37,7 @@ interface HttpInterface extends \Magento\Framework\App\ResponseInterface
      * @param string $value
      * @param boolean $replace
      * @return self
+     * @since 100.2.0
      */
     public function setHeader($name, $value, $replace = false);
 
@@ -44,6 +49,7 @@ interface HttpInterface extends \Magento\Framework\App\ResponseInterface
      *
      * @param string $name
      * @return \Zend\Http\Header\HeaderInterface|bool
+     * @since 100.2.0
      */
     public function getHeader($name);
 
@@ -52,6 +58,7 @@ interface HttpInterface extends \Magento\Framework\App\ResponseInterface
      *
      * @param string $name
      * @return self
+     * @since 100.2.0
      */
     public function clearHeader($name);
 
@@ -69,6 +76,7 @@ interface HttpInterface extends \Magento\Framework\App\ResponseInterface
      * @param null|int|string $version
      * @param null|string $phrase
      * @return self
+     * @since 100.2.0
      */
     public function setStatusHeader($httpCode, $version = null, $phrase = null);
 
@@ -77,6 +85,7 @@ interface HttpInterface extends \Magento\Framework\App\ResponseInterface
      *
      * @param string $value
      * @return self
+     * @since 100.2.0
      */
     public function appendBody($value);
 
@@ -87,6 +96,7 @@ interface HttpInterface extends \Magento\Framework\App\ResponseInterface
      *
      * @param string $value
      * @return self
+     * @since 100.2.0
      */
     public function setBody($value);
 
@@ -98,6 +108,7 @@ interface HttpInterface extends \Magento\Framework\App\ResponseInterface
      * @param string $url
      * @param int $code
      * @return self
+     * @since 100.2.0
      */
     public function setRedirect($url, $code = 302);
 }

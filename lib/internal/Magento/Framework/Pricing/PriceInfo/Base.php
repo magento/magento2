@@ -15,6 +15,8 @@ use Magento\Framework\Pricing\PriceInfoInterface;
 /**
  * Class Base
  * Price info base model
+ *
+ * @api
  */
 class Base implements PriceInfoInterface
 {

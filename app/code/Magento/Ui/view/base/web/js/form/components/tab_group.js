@@ -65,7 +65,7 @@ define([
                 invalid;
 
             invalid = _.find(result, function (item) {
-                return !item.valid;
+                return typeof item !== 'undefined' && !item.valid;
             });
 
             if (invalid) {

@@ -5,6 +5,7 @@
  */
 namespace Magento\Sales\Model\AdminOrder;
 
+use Magento\Sales\Api\OrderManagementInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Sales\Model\Order;
 use Magento\Framework\Registry;
@@ -12,8 +13,9 @@ use Magento\Framework\Registry;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @magentoAppArea adminhtml
+ * @magentoAppIsolation enabled
  */
-class CreateTest extends \PHPUnit_Framework_TestCase
+class CreateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\AdminOrder\Create
@@ -93,6 +95,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         $rate->setCode('freeshipping_freeshipping');
 
         $this->_model->getQuote()->getShippingAddress()->addShippingRate($rate);
+        $this->_model->getQuote()->getShippingAddress()->setCountryId('EE');
         $this->_model->setShippingAsBilling(0);
         $this->_model->setPaymentData(['method' => 'checkmo']);
 
@@ -422,6 +425,94 @@ class CreateTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests order creation with new customer after failed first place order action.
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     * @dataProvider createOrderNewCustomerWithFailedFirstPlaceOrderActionDataProvider
+     * @param string $customerEmailFirstAttempt
+     * @param string $customerEmailSecondAttempt
+     */
+    public function testCreateOrderNewCustomerWithFailedFirstPlaceOrderAction(
+        $customerEmailFirstAttempt,
+        $customerEmailSecondAttempt
+    ) {
+        $productIdFromFixture = 1;
+        $shippingMethod = 'freeshipping_freeshipping';
+        $paymentMethod = 'checkmo';
+        $shippingAddressAsBilling = 1;
+        $customerEmail = $customerEmailFirstAttempt;
+        $orderData = [
+            'currency' => 'USD',
+            'account' => ['group_id' => '1', 'email' => $customerEmail],
+            'billing_address' => array_merge($this->_getValidAddressData(), ['save_in_address_book' => '1']),
+            'shipping_method' => $shippingMethod,
+            'comment' => ['customer_note' => ''],
+            'send_confirmation' => false,
+        ];
+        $paymentData = ['method' => $paymentMethod];
+
+        $this->_preparePreconditionsForCreateOrder(
+            $productIdFromFixture,
+            $customerEmail,
+            $shippingMethod,
+            $shippingAddressAsBilling,
+            $paymentData,
+            $orderData,
+            $paymentMethod
+        );
+
+        // Emulates failing place order action
+        $orderManagement = $this->getMockForAbstractClass(OrderManagementInterface::class);
+        $orderManagement->method('place')
+            ->willThrowException(new \Exception('Can\'t place order'));
+        Bootstrap::getObjectManager()->addSharedInstance($orderManagement, OrderManagementInterface::class);
+        try {
+            $this->_model->createOrder();
+        } catch (\Exception $e) {
+            Bootstrap::getObjectManager()->removeSharedInstance(OrderManagementInterface::class);
+        }
+
+        $customerEmail = $customerEmailSecondAttempt ? :$this->_model->getQuote()->getCustomer()->getEmail();
+        $orderData['account']['email'] = $customerEmailSecondAttempt;
+
+        $this->_preparePreconditionsForCreateOrder(
+            $productIdFromFixture,
+            $customerEmail,
+            $shippingMethod,
+            $shippingAddressAsBilling,
+            $paymentData,
+            $orderData,
+            $paymentMethod
+        );
+
+        $order = $this->_model->createOrder();
+        $this->_verifyCreatedOrder($order, $shippingMethod);
+    }
+
+    /**
+     * Email before and after failed first place order action.
+     *
+     * @case #1 Is the same.
+     * @case #2 Is empty.
+     * @case #3 Filled after failed first place order action.
+     * @case #4 Empty after failed first place order action.
+     * @case #5 Changed after failed first place order action.
+     * @return array
+     */
+    public function createOrderNewCustomerWithFailedFirstPlaceOrderActionDataProvider()
+    {
+        return [
+            1 => ['customer@email.com', 'customer@email.com'],
+            2 => ['', ''],
+            3 => ['', 'customer@email.com'],
+            4 => ['customer@email.com', ''],
+            5 => ['customer@email.com', 'changed_customer@email.com'],
+        ];
+    }
+
+    /**
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDbIsolation enabled
@@ -461,6 +552,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         );
         $order = $this->_model->createOrder();
         $this->_verifyCreatedOrder($order, $shippingMethod);
+        $this->getCustomerRegistry()->remove($order->getCustomerId());
         $customer = $this->getCustomerById($order->getCustomerId());
         $address = $this->getAddressById($customer->getDefaultShipping());
         $this->assertEquals(
@@ -763,5 +855,14 @@ class CreateTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Customer\Api\AddressRepositoryInterface $addressRepository */
         return Bootstrap::getObjectManager()->create(\Magento\Customer\Api\AddressRepositoryInterface::class);
+    }
+
+    /**
+     * @return \Magento\Customer\Model\CustomerRegistry
+     */
+    private function getCustomerRegistry()
+    {
+        /** @var \Magento\Customer\Model\CustomerRegistry $addressRepository */
+        return Bootstrap::getObjectManager()->get(\Magento\Customer\Model\CustomerRegistry::class);
     }
 }

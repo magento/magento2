@@ -13,9 +13,9 @@ use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory as A
  * Catalog view layer model
  *
  * @api
- *
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Layer extends \Magento\Framework\DataObject
 {

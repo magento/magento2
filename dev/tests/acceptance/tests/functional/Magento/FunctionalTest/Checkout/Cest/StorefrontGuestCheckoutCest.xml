@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <cest name="StorefrontGuestCheckoutCest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Checkout via Guest Checkout"/>
+            <group value="checkout"/>
+            <env value="chrome"/>
+            <env value="firefox"/>
+            <env value="phantomjs"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" mergeKey="createCategory"/>
+            <entity name="categoryLink" type="custom_attribute" mergeKey="categoryLink">
+                <data key="attribute_code">category_ids</data>
+                <data key="value">$$createCategory.id$$</data>
+            </entity>
+            <createData entity="_defaultProduct" mergeKey="createProduct">
+                <required-entity name="categoryLink"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" mergeKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" mergeKey="deleteProduct"/>
+        </after>
+        <test name="GuestCheckoutTest">
+            <annotations>
+                <title value="Guest Checkout"/>
+                <description value="Should be able to place an order as a Guest."/>
+                <severity value="CRITICAL"/>
+                <testCaseId value="MAGETWO-72094"/>
+            </annotations>
+            <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" mergeKey="onCategoryPage"/>
+            <waitForPageLoad mergeKey="waitForPageLoad1"/>
+            <moveMouseOver selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" mergeKey="hoverProduct"/>
+            <click selector="{{StorefrontCategoryMainSection.AddToCartBtn}}" mergeKey="addToCart"/>
+            <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" mergeKey="waitForProductAdded"/>
+            <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added $$createProduct.name$$ to your shopping cart." mergeKey="seeAddedToCartMessage"/>
+            <see selector="{{StorefrontMiniCartSection.quantity}}" userInput="1" mergeKey="seeCartQuantity"/>
+            <click selector="{{StorefrontMiniCartSection.show}}" mergeKey="clickCart"/>
+            <click selector="{{StorefrontMiniCartSection.goToCheckout}}" mergeKey="goToCheckout"/>
+            <waitForPageLoad mergeKey="waitForPageLoad2"/>
+            <fillField selector="{{GuestCheckoutShippingSection.email}}" userInput="{{CustomerEntityOne.email}}" mergeKey="enterEmail"/>
+            <fillField selector="{{GuestCheckoutShippingSection.firstName}}" userInput="{{CustomerEntityOne.firstname}}" mergeKey="enterFirstName"/>
+            <fillField selector="{{GuestCheckoutShippingSection.lastName}}" userInput="{{CustomerEntityOne.lastname}}" mergeKey="enterLastName"/>
+            <fillField selector="{{GuestCheckoutShippingSection.street}}" userInput="{{CustomerAddressSimple.street[0]}}" mergeKey="enterStreet"/>
+            <fillField selector="{{GuestCheckoutShippingSection.city}}" userInput="{{CustomerAddressSimple.city}}" mergeKey="enterCity"/>
+            <selectOption selector="{{GuestCheckoutShippingSection.region}}" userInput="{{CustomerAddressSimple.state}}" mergeKey="selectRegion"/>
+            <fillField selector="{{GuestCheckoutShippingSection.postcode}}" userInput="{{CustomerAddressSimple.postcode}}" mergeKey="enterPostcode"/>
+            <fillField selector="{{GuestCheckoutShippingSection.telephone}}" userInput="{{CustomerAddressSimple.telephone}}" mergeKey="enterTelephone"/>
+            <waitForLoadingMaskToDisappear mergeKey="waitForLoadingMask"/>
+            <click selector="{{GuestCheckoutShippingSection.firstShippingMethod}}" mergeKey="selectFirstShippingMethod"/>
+            <waitForElement selector="{{GuestCheckoutShippingSection.next}}" time="30" mergeKey="waitForNextButton"/>
+            <click selector="{{GuestCheckoutShippingSection.next}}" mergeKey="clickNext"/>
+            <waitForElement selector="{{GuestCheckoutPaymentSection.placeOrder}}" time="30" mergeKey="waitForPlaceOrderButton"/>
+            <see selector="{{GuestCheckoutPaymentSection.cartItems}}" userInput="{{_defaultProduct.name}}" mergeKey="seeProductInCart"/>
+            <see selector="{{GuestCheckoutPaymentSection.billingAddress}}" userInput="{{CustomerAddressSimple.street[0]}}" mergeKey="seeAddress"/>
+            <click selector="{{GuestCheckoutPaymentSection.placeOrder}}" mergeKey="clickPlaceOrder"/>
+            <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" returnVariable="orderNumber" mergeKey="grabOrderNumber"/>
+            <see selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order # is:" mergeKey="seeOrderNumber"/>
+            <see selector="{{CheckoutSuccessMainSection.success}}" userInput="We'll email you an order confirmation with details and tracking info." mergeKey="seeEmailYou"/>
+            <amOnPage url="{{AdminLoginPage}}" mergeKey="navigateToAdmin"/>
+            <fillField selector="{{AdminLoginFormSection.username}}" userInput="{{_ENV.MAGENTO_ADMIN_USERNAME}}" mergeKey="fillUsername"/>
+            <fillField selector="{{AdminLoginFormSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" mergeKey="fillPassword"/>
+            <click selector="{{AdminLoginFormSection.signIn}}" mergeKey="clickLogin"/>
+            <amOnPage url="{{OrdersPage}}" mergeKey="onOrdersPage"/>
+            <waitForElementNotVisible selector="{{OrdersGridSection.spinner}}" time="30" mergeKey="waitForOrdersPage"/>
+            <fillField selector="{{OrdersGridSection.search}}" variable="orderNumber" mergeKey="fillOrderNum"/>
+            <click selector="{{OrdersGridSection.submitSearch}}" mergeKey="submitSearchOrderNum"/>
+            <waitForElementNotVisible selector="{{OrdersGridSection.spinner}}" time="30" mergeKey="waitForOrdersPage2"/>
+            <click selector="{{OrdersGridSection.firstRow}}" mergeKey="clickOrderRow"/>
+            <see selector="{{OrderDetailsInformationSection.orderStatus}}" userInput="Pending" mergeKey="seeAdminOrderStatus"/>
+            <see selector="{{OrderDetailsInformationSection.accountInformation}}" userInput="Guest" mergeKey="seeAdminOrderGuest"/>
+            <see selector="{{OrderDetailsInformationSection.accountInformation}}" userInput="{{CustomerEntityOne.email}}" mergeKey="seeAdminOrderEmail"/>
+            <see selector="{{OrderDetailsInformationSection.billingAddress}}" userInput="{{CustomerAddressSimple.street[0]}}" mergeKey="seeAdminOrderBillingAddress"/>
+            <see selector="{{OrderDetailsInformationSection.shippingAddress}}" userInput="{{CustomerAddressSimple.street[0]}}" mergeKey="seeAdminOrderShippingAddress"/>
+            <see selector="{{OrderDetailsInformationSection.itemsOrdered}}" userInput="{{_defaultProduct.name}}" mergeKey="seeAdminOrderProduct"/>
+        </test>
+    </cest>
+</config>

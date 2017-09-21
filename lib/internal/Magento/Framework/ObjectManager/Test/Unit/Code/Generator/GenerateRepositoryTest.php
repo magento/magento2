@@ -5,65 +5,94 @@
  */
 namespace Magento\Framework\ObjectManager\Test\Unit\Code\Generator;
 
+use Composer\Autoload\ClassLoader;
+use Magento\Framework\Code\Generator\Io;
 use Magento\Framework\ObjectManager\Code\Generator\Repository;
+use \PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Class RepositoryTest
  */
-class GenerateRepositoryTest extends \PHPUnit_Framework_TestCase
+class GenerateRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var Io|MockObject
      */
-    protected $ioObjectMock;
+    private $ioGenerator;
 
     /**
-     * test setUp
+     * @inheritdoc
      */
     protected function setUp()
     {
-        $this->ioObjectMock = $this->getMock(
-            \Magento\Framework\Code\Generator\Io::class,
-            [],
-            [],
-            '',
-            false
+        $this->ioGenerator = $this->getMockBuilder(Io::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $loader = new ClassLoader();
+        $loader->addPsr4(
+            'Magento\\Framework\\ObjectManager\\Code\\Generator\\',
+            __DIR__ . '/_files'
         );
+        $loader->register();
     }
 
     /**
-     * generate repository name
+     * Checks a case when repository generator uses interface.
+     *
+     * @param string $className
+     * @param string $sourceClassName
+     * @param string $fileName
+     * @dataProvider interfaceListDataProvider
      */
-    public function testGenerate()
+    public function testGenerate($className, $sourceClassName, $fileName)
     {
-        require_once __DIR__ . '/_files/Sample.php';
-        /** @var \PHPUnit_Framework_MockObject_MockObject $model */
-        $model = $this->getMock(
-            \Magento\Framework\ObjectManager\Code\Generator\Repository::class,
+        /** @var Repository|MockObject $repository */
+        $repository = $this->getMockBuilder(Repository::class)
+            ->setMethods(['_validateData'])
+            ->setConstructorArgs([
+                $sourceClassName,
+                null,
+                $this->ioGenerator
+            ])
+            ->getMock();
+
+        $this->ioGenerator
+            ->method('generateResultFileName')
+            ->with('\\' . $className)
+            ->willReturn($fileName . '.php');
+
+        $repositoryCode = file_get_contents(__DIR__ . '/_files/' . $fileName . '.txt');
+        $this->ioGenerator->method('writeResultFile')
+            ->with($fileName . '.php', $repositoryCode);
+
+        $repository->method('_validateData')
+            ->willReturn(true);
+        $generated = $repository->generate();
+
+        $this->assertEquals($fileName . '.php', $generated, 'Generated repository is invalid.');
+    }
+
+    /**
+     * Get list of different repository interfaces.
+     * Some of them use PHP 7.0 syntax features.
+     *
+     * @return array
+     */
+    public function interfaceListDataProvider()
+    {
+        return [
             [
-                '_validateData'
+                \Magento\Framework\ObjectManager\Code\Generator\SampleRepository::class,
+                \Magento\Framework\ObjectManager\Code\Generator\Sample::class,
+                'SampleRepository'
             ],
             [
-                \Magento\Framework\ObjectManager\Code\Generator\Sample::class,
-                null,
-                $this->ioObjectMock,
-                null,
-                null,
-                $this->getMock(\Magento\Framework\Filesystem\FileResolver::class)
-            ]
-        );
-
-        $this->ioObjectMock->expects($this->once())
-            ->method('generateResultFileName')
-            ->with('\\' . \Magento\Framework\ObjectManager\Code\Generator\SampleRepository::class)
-            ->willReturn('SampleRepository.php');
-
-        $repositoryCode = file_get_contents(__DIR__ . '/_files/SampleRepository.txt');
-        $this->ioObjectMock->expects($this->once())->method('writeResultFile')
-            ->with('SampleRepository.php', $repositoryCode);
-
-        $model->expects($this->once())->method('_validateData')->willReturn(true);
-        $this->assertEquals('SampleRepository.php', $model->generate(), "Generated repository is invalid.");
+                \Magento\Framework\ObjectManager\Code\Generator\TSampleRepository::class,
+                \Magento\Framework\ObjectManager\Code\Generator\TSample::class,
+                'TSampleRepository'
+            ],
+        ];
     }
 
     /**

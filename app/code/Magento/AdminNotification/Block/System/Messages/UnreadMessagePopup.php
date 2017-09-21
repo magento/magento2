@@ -7,6 +7,10 @@ namespace Magento\AdminNotification\Block\System\Messages;
 
 use Magento\Framework\Notification\MessageInterface;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class UnreadMessagePopup extends \Magento\Backend\Block\Template
 {
     /**

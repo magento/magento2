@@ -8,7 +8,9 @@ namespace Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab;
 /**
  * Theme form, Js editor tab
  *
+ * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 100.0.2
  */
 class Js extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\AbstractTab
 {

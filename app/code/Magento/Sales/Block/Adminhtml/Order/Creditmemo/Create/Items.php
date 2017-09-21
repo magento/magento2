@@ -7,6 +7,9 @@ namespace Magento\Sales\Block\Adminhtml\Order\Creditmemo\Create;
 
 /**
  * Adminhtml credit memo items grid
+ *
+ * @api
+ * @since 100.0.2
  */
 class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
 {

@@ -7,7 +7,7 @@
  */
 namespace Magento\Framework\Test\Unit;
 
-class ProfilerTest extends \PHPUnit_Framework_TestCase
+class ProfilerTest extends \PHPUnit\Framework\TestCase
 {
     protected function tearDown()
     {
@@ -287,7 +287,7 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
 
     public function testApplyConfig()
     {
-        $mockDriver = $this->getMock(\Magento\Framework\Profiler\DriverInterface::class);
+        $mockDriver = $this->createMock(\Magento\Framework\Profiler\DriverInterface::class);
         $driverConfig = ['type' => 'foo'];
         $mockDriverFactory = $this->getMockBuilder(
             \Magento\Framework\Profiler\Driver\Factory::class
@@ -338,7 +338,7 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
     public function parseConfigDataProvider()
     {
         $driverFactory = new \Magento\Framework\Profiler\Driver\Factory();
-        $otherDriverFactory = $this->getMock(\Magento\Framework\Profiler\Driver\Factory::class);
+        $otherDriverFactory = $this->createMock(\Magento\Framework\Profiler\Driver\Factory::class);
         return [
             'Empty configuration' => [
                 [],
@@ -393,16 +393,6 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
                     'driverFactory' => $driverFactory,
                     'tagFilters' => [],
                     'baseDir' => null
-                ],
-            ],
-            'Ajax call' => [
-                1,
-                true,
-                [
-                    'driverConfigs' => [['output' => 'firebug']],
-                    'driverFactory' => $driverFactory,
-                    'tagFilters' => [],
-                    'baseDir' => ''
                 ],
             ],
             'Non ajax call' => [

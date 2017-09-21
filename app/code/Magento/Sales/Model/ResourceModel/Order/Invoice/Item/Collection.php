@@ -8,7 +8,9 @@ namespace Magento\Sales\Model\ResourceModel\Order\Invoice\Item;
 /**
  * Flat sales order invoice item collection
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Collection extends \Magento\Sales\Model\ResourceModel\Collection\AbstractCollection
 {

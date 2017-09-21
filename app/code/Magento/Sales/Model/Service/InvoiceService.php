@@ -134,6 +134,7 @@ class InvoiceService implements InvoiceManagementInterface
     {
         $invoice = $this->orderConverter->toInvoice($order);
         $totalQty = 0;
+        $qtys = $this->prepareItemsQty($order, $qtys);
         foreach ($order->getAllItems() as $orderItem) {
             if (!$this->_canInvoiceItem($orderItem)) {
                 continue;
@@ -156,6 +157,38 @@ class InvoiceService implements InvoiceManagementInterface
         $invoice->collectTotals();
         $order->getInvoiceCollection()->addItem($invoice);
         return $invoice;
+    }
+
+    /**
+     * Prepare qty to invoice for parent and child products if theirs qty is not specified in initial request.
+     *
+     * @param Order $order
+     * @param array $qtys
+     * @return array
+     */
+    private function prepareItemsQty(Order $order, array $qtys = [])
+    {
+        foreach ($order->getAllItems() as $orderItem) {
+            if (empty($qtys[$orderItem->getId()])) {
+                continue;
+            }
+            if ($orderItem->isDummy()) {
+                if ($orderItem->getHasChildren()) {
+                    foreach ($orderItem->getChildrenItems() as $child) {
+                        if (!isset($qtys[$child->getId()])) {
+                            $qtys[$child->getId()] = $child->getQtyToInvoice();
+                        }
+                    }
+                } elseif ($orderItem->getParentItem()) {
+                    $parent = $orderItem->getParentItem();
+                    if (!isset($qtys[$parent->getId()])) {
+                        $qtys[$parent->getId()] = $parent->getQtyToInvoice();
+                    }
+                }
+            }
+        }
+
+        return $qtys;
     }
 
     /**

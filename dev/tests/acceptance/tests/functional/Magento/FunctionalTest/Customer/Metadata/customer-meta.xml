@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
+    <operation name="CreateCustomer" dataType="customer" type="create" auth="/rest/V1/integration/admin/token" url="/rest/V1/customers" method="POST">
+        <header param="Content-Type">application/json</header>
+        <jsonObject dataType="customer" key="customer">
+            <entry key="group_id">integer</entry>
+            <entry key="default_billing">string</entry>
+            <entry key="default_shipping">string</entry>
+            <entry key="confirmation">string</entry>
+            <entry key="created_at">string</entry>
+            <entry key="updated_at">string</entry>
+            <entry key="created_in">string</entry>
+            <entry key="dob">string</entry>
+            <entry key="email">string</entry>
+            <entry key="firstname">string</entry>
+            <entry key="lastname">string</entry>
+            <entry key="middlename">string</entry>
+            <entry key="prefix">string</entry>
+            <entry key="suffix">string</entry>
+            <entry key="gender">integer</entry>
+            <entry key="store_id">integer</entry>
+            <entry key="taxvat">string</entry>
+            <entry key="website_id">integer</entry>
+            <array key="addresses">
+                <value>address</value>
+            </array>
+            <entry key="disable_auto_group_change">integer</entry>
+            <entry key="extension_attributes">customer_extension_attribute</entry>
+            <array key="custom_attributes">
+                <value>custom_attribute</value>
+            </array>
+        </jsonObject>
+        <entry key="password">string</entry>
+    </operation>
+    <operation name="UpdateCustomer" dataType="customer" type="update" auth="/rest/V1/integration/admin/token" url="/rest/V1/customers" method="PUT">
+        <header param="Content-Type">application/json</header>
+        <entry key="id">integer</entry>
+        <entry key="group_id">integer</entry>
+        <entry key="default_billing">string</entry>
+        <entry key="default_shipping">string</entry>
+        <entry key="confirmation">string</entry>
+        <entry key="created_at">string</entry>
+        <entry key="updated_at">string</entry>
+        <entry key="created_in">string</entry>
+        <entry key="dob">string</entry>
+        <entry key="email">string</entry>
+        <entry key="firstname">string</entry>
+        <entry key="lastname">string</entry>
+        <entry key="middlename">string</entry>
+        <entry key="prefix">string</entry>
+        <entry key="suffix">string</entry>
+        <entry key="gender">integer</entry>
+        <entry key="store_id">integer</entry>
+        <entry key="taxvat">string</entry>
+        <entry key="website_id">integer</entry>
+        <array key="addresses">
+            <value>address</value>
+        </array>
+        <entry key="disable_auto_group_change">integer</entry>
+        <entry key="extension_attributes">customer_extension_attribute</entry>
+        <array key="custom_attributes">
+            <value>custom_attribute</value>
+        </array>
+        <entry key="password">string</entry>
+        <entry key="redirectUrl">string</entry>
+    </operation>
+    <operation name="DeleteCustomer" dataType="customer" type="delete" auth="/rest/V1/integration/admin/token" url="/rest/V1/customers" method="DELETE">
+        <header param="Content-Type">application/json</header>
+        <param key="id" type="path">{id}</param>
+    </operation>
+</config>

@@ -5,14 +5,13 @@
  */
 namespace Magento\Bundle\Test\Unit\Model\Product;
 
+use Magento\Catalog\Api\Data\ProductTierPriceExtensionFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
- * Test for Model ProductPrice.
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PriceTest extends \PHPUnit_Framework_TestCase
+class PriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogRule\Model\ResourceModel\RuleFactory|\PHPUnit_Framework_MockObject_MockObject
@@ -78,32 +77,26 @@ class PriceTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->ruleFactoryMock = $this->getMock(
+        $this->ruleFactoryMock = $this->createPartialMock(
             \Magento\CatalogRule\Model\ResourceModel\RuleFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->localeDateMock = $this->getMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
-        $this->customerSessionMock = $this->getMock(\Magento\Customer\Model\Session::class, [], [], '', false);
-        $this->eventManagerMock = $this->getMock(\Magento\Framework\Event\ManagerInterface::class);
-        $this->catalogHelperMock = $this->getMock(\Magento\Catalog\Helper\Data::class, [], [], '', false);
-        $this->storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
+        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->localeDateMock = $this->createMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
+        $this->customerSessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
+        $this->eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
+        $this->catalogHelperMock = $this->createMock(\Magento\Catalog\Helper\Data::class);
+        $this->storeMock = $this->createPartialMock(\Magento\Store\Model\Store::class, ['roundPrice']);
         $this->priceCurrency = $this->getMockBuilder(
             \Magento\Framework\Pricing\PriceCurrencyInterface::class
         )->getMock();
         $this->groupManagement = $this->getMockBuilder(\Magento\Customer\Api\GroupManagementInterface::class)
             ->getMockForAbstractClass();
-        $tpFactory = $this->getMock(
+        $tpFactory = $this->createPartialMock(
             \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $scopeConfig = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $this->serializer = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -114,7 +107,10 @@ class PriceTest extends \PHPUnit_Framework_TestCase
                     return json_decode($value, true);
                 }
             );
-
+        $tierPriceExtensionFactoryMock = $this->getMockBuilder(ProductTierPriceExtensionFactory::class)
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $objectManagerHelper->getObject(
             \Magento\Bundle\Model\Product\Price::class,
@@ -129,7 +125,8 @@ class PriceTest extends \PHPUnit_Framework_TestCase
                 'tierPriceFactory' => $tpFactory,
                 'config' => $scopeConfig,
                 'catalogData' => $this->catalogHelperMock,
-                'serializer' => $this->serializer
+                'serializer' => $this->serializer,
+                'tierPriceExtensionFactory' => $tierPriceExtensionFactoryMock
             ]
         );
     }

@@ -12,7 +12,9 @@ use Magento\Review\Model\Review;
 /**
  * Customer Review detailed view block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class View extends \Magento\Catalog\Block\Product\AbstractProduct
 {

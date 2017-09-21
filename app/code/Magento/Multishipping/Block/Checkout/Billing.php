@@ -8,7 +8,9 @@ namespace Magento\Multishipping\Block\Checkout;
 /**
  * Multishipping billing information
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Billing extends \Magento\Payment\Block\Form\Container
 {

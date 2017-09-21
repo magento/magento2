@@ -8,7 +8,7 @@ namespace Magento\ConfigurableImportExport\Model\Export;
 /**
  * @magentoAppArea adminhtml
  */
-class RowCustomizerTest extends \PHPUnit_Framework_TestCase
+class RowCustomizerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\ConfigurableImportExport\Model\Export\RowCustomizer
@@ -43,6 +43,10 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             'sku=simple_10,test_configurable=Option 1|sku=simple_20,test_configurable=Option 2',
             $result['configurable_variations']
+        );
+        $this->assertEquals(
+            'test_configurable=Test Configurable',
+            $result['configurable_variation_labels']
         );
     }
 }

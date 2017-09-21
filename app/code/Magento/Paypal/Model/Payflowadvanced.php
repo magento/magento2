@@ -30,7 +30,7 @@ class Payflowadvanced extends \Magento\Paypal\Model\Payflowlink
      *
      * @var string
      */
-    protected $_infoBlockType = \Magento\Paypal\Block\Payflow\Advanced\Info::class;
+    protected $_infoBlockType = \Magento\Paypal\Block\Payment\Info::class;
 
     /**
      * Controller for callback urls

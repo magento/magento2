@@ -11,11 +11,10 @@ use Magento\Sales\Api\Data\ShipmentTrackInterface;
 use Magento\Sales\Model\AbstractModel;
 
 /**
- * @method \Magento\Sales\Model\ResourceModel\Order\Shipment\Track _getResource()
- * @method \Magento\Sales\Model\ResourceModel\Order\Shipment\Track getResource()
- *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Track extends AbstractModel implements ShipmentTrackInterface
 {

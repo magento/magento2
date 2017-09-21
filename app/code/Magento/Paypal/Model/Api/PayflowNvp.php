@@ -59,11 +59,7 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
 
     /**#@-*/
 
-    /**
-     * Capture type (make authorization close or remain open)
-     *
-     * @var string
-     */
+    /**#@-*/
     protected $_captureTypeComplete = 'Y';
 
     /**
@@ -772,11 +768,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
                 Cart::AMOUNT_TAX      => 'TAXAMT',
                 Cart::AMOUNT_SHIPPING => 'FREIGHTAMT',
                 'amount'              => 'PAYMENTREQUEST_0_ITEMAMT',
-            ];
-            $this->_lineItemExportItemsFormat = [
-                'name'   => 'L_PAYMENTREQUEST_0_NAME%d',
-                'qty'    => 'L_PAYMENTREQUEST_0_QTY%d',
-                'amount' => 'L_PAYMENTREQUEST_0_AMT%d',
             ];
             $request = $requestBefore;
             $result = parent::_exportLineItems($request, $i);

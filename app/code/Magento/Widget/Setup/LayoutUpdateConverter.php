@@ -7,7 +7,7 @@ namespace Magento\Widget\Setup;
 
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Serialize\Serializer\Serialize;
-use Magento\Widget\Model\Widget\Wysiwyg\Normalizer;
+use Magento\Framework\Data\Wysiwyg\Normalizer;
 use Magento\Framework\DB\DataConverter\DataConversionException;
 use Magento\Framework\DB\DataConverter\SerializedToJson;
 
@@ -22,7 +22,7 @@ class LayoutUpdateConverter extends SerializedToJson
     private $normalizer;
 
     /**
-     * LayoutUpdateConverter constructor.
+     * Constructor
      *
      * @param Serialize $serialize
      * @param Json $json
@@ -54,12 +54,60 @@ class LayoutUpdateConverter extends SerializedToJson
         );
         if (isset($matches[0])) {
             $matchSegments = $matches[0];
-            $matchSegments[2] = $this->normalizer->replaceReservedCharaters(
-                parent::convert($this->normalizer->restoreReservedCharaters($matchSegments[2]))
-            );
+            $matchSegments[2] = parent::convert($matchSegments[2]);
             return $matchSegments[1] . $matchSegments[2] . $matchSegments[3];
         } else {
             return $value;
         }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function isValidJsonValue($value)
+    {
+        $value = $this->normalizer->restoreReservedCharacters($value);
+        return parent::isValidJsonValue($value);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function unserializeValue($value)
+    {
+        $value = htmlspecialchars_decode($value);
+        $value = $this->restoreReservedCharactersInSerializedContent($value);
+        return parent::unserializeValue($value);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function encodeJson($value)
+    {
+        return htmlspecialchars(
+            $this->normalizer->replaceReservedCharacters(parent::encodeJson($value))
+        );
+    }
+
+    /**
+     * Restore the reserved characters in the existing serialized content
+     *
+     * @param string $serializedContent
+     * @return string
+     */
+    private function restoreReservedCharactersInSerializedContent($serializedContent)
+    {
+        $map = [
+            '{' => '[',
+            '}' => ']',
+            '"' => '`',
+            '\\' => '|',
+        ];
+        return str_replace(
+            array_values($map),
+            array_keys($map),
+            $serializedContent
+        );
     }
 }

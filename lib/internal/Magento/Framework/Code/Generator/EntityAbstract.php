@@ -215,15 +215,10 @@ abstract class EntityAbstract
      */
     protected function _generateCode()
     {
-        $this->_classGenerator->setName(
-            $this->_getResultClassName()
-        )->addProperties(
-            $this->_getClassProperties()
-        )->addMethods(
-            $this->_getClassMethods()
-        )->setClassDocBlock(
-            $this->_getClassDocBlock()
-        );
+        $this->_classGenerator->setName($this->_getResultClassName())
+            ->addProperties($this->_getClassProperties())
+            ->addMethods($this->_getClassMethods())
+            ->setClassDocBlock($this->_getClassDocBlock());
 
         return $this->_getGeneratedCode();
     }
@@ -318,6 +313,8 @@ abstract class EntityAbstract
         $parameterInfo = [
             'name' => $parameter->getName(),
             'passedByReference' => $parameter->isPassedByReference(),
+            'type' => $parameter->getType(),
+            'variadic' => $parameter->isVariadic()
         ];
 
         if ($parameter->isArray()) {

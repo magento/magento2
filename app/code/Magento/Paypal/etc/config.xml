@@ -72,7 +72,7 @@
                 <cctypes>AE,VI</cctypes>
                 <useccv>1</useccv>
                 <tender>C</tender>
-                <verbosity>MEDIUM</verbosity>
+                <verbosity>HIGH</verbosity>
                 <user backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <pwd backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <group>paypal</group>

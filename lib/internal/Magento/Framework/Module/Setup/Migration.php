@@ -11,6 +11,8 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 
 /**
  * Resource setup model with methods needed for migration process between Magento versions
+ *
+ * @api
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -47,11 +49,7 @@ class Migration
 
     /**#@-*/
 
-    /**
-     * Config key for path to aliases map file
-     *
-     * @var string
-     */
+    /**#@-*/
     protected $_confPathToMapFile;
 
     /**
@@ -131,18 +129,26 @@ class Migration
     private $setup;
 
     /**
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
+
+    /**
      * @param ModuleDataSetupInterface $setup
      * @param Filesystem $filesystem
      * @param MigrationData $migrationData
      * @param string $confPathToMapFile
      * @param array $compositeModules
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @throws \RuntimeException
      */
     public function __construct(
         ModuleDataSetupInterface $setup,
         Filesystem $filesystem,
         MigrationData $migrationData,
         $confPathToMapFile,
-        $compositeModules = []
+        $compositeModules = [],
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->_directory = $filesystem->getDirectoryRead(DirectoryList::ROOT);
         $this->_pathToMapFile = $confPathToMapFile;
@@ -153,6 +159,8 @@ class Migration
         ];
         $this->_compositeModules = $compositeModules;
         $this->setup = $setup;
+        $this->serializer = $serializer?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
     }
 
     /**
@@ -692,10 +700,27 @@ class Migration
      *
      * @param string $encodedValue
      * @param int $objectDecodeType
-     * @return mixed
+     * @return string|int|float|bool|array|null
+     * @throws \InvalidArgumentException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @deprecated
+     * @see \Magento\Framework\Module\Setup\Migration::jsonDecode
      */
-    protected function _jsonDecode($encodedValue, $objectDecodeType = \Zend_Json::TYPE_ARRAY)
+    protected function _jsonDecode($encodedValue, $objectDecodeType = 1)
     {
-        return \Zend_Json::decode($encodedValue, $objectDecodeType);
+        return $this->jsonDecode($encodedValue);
+    }
+
+    /**
+     * Decodes the given $encodedValue string which is
+     * encoded in the JSON format
+     *
+     * @param string $encodedValue
+     * @return string|int|float|bool|array|null
+     * @throws \InvalidArgumentException
+     */
+    private function jsonDecode($encodedValue)
+    {
+        return $this->serializer->unserialize($encodedValue);
     }
 }

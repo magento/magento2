@@ -8,7 +8,8 @@ namespace Magento\Review\Block\Product\View;
 /**
  * Detailed Product Reviews
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
 class ListView extends \Magento\Review\Block\Product\View
 {

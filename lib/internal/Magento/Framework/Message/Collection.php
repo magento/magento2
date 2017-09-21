@@ -7,6 +7,8 @@ namespace Magento\Framework\Message;
 
 /**
  * Messages collection
+ *
+ * @api
  */
 class Collection
 {

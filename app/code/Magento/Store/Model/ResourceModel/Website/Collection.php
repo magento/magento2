@@ -7,6 +7,9 @@ namespace Magento\Store\Model\ResourceModel\Website;
 
 /**
  * Websites collection
+ *
+ * @api
+ * @since 100.0.2
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {

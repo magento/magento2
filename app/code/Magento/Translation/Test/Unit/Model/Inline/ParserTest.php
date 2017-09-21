@@ -18,7 +18,7 @@ use Magento\Translation\Model\Inline\CacheManager;
 /**
  * Class ParserTest to test \Magento\Translation\Model\Inline\Parser
  */
-class ParserTest extends \PHPUnit_Framework_TestCase
+class ParserTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Parser
@@ -89,7 +89,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $this->resourceFactoryMock = $this->getMockBuilder(
             \Magento\Translation\Model\ResourceModel\StringUtilsFactory::class
         )
-            ->setMethods(['create'])
+            ->disableOriginalConstructor()
             ->getMock();
         $this->resourceMock = $this->getMockBuilder(\Magento\Translation\Model\ResourceModel\StringUtils::class)
             ->disableOriginalConstructor()

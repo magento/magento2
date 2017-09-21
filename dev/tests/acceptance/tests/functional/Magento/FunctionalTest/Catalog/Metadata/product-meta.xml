@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
+    <operation name="CreateProduct" dataType="product" type="create" auth="/rest/V1/integration/admin/token" url="/rest/V1/products" method="POST">
+        <header param="Content-Type">application/json</header>
+        <jsonObject dataType="product" key="product">
+            <entry key="sku">string</entry>
+            <entry key="name">string</entry>
+            <entry key="attribute_set_id">integer</entry>
+            <entry key="price">integer</entry>
+            <entry key="status">integer</entry>
+            <entry key="visibility">integer</entry>
+            <entry key="type_id">string</entry>
+            <entry key="created_at">string</entry>
+            <entry key="updated_at">string</entry>
+            <entry key="weight">integer</entry>
+            <entry key="extension_attributes">product_extension_attribute</entry>
+            <array key="product_links">
+                <value>product_link</value>
+            </array>
+            <array key="custom_attributes">
+                <value>custom_attribute</value>
+            </array>
+            <array key="options">
+                <value>product_option</value>
+            </array>
+        </jsonObject>
+    </operation>
+    <operation name="UpdateProduct" dataType="product" type="update" auth="/rest/V1/integration/admin/token" url="/rest/V1/products" method="PUT">
+        <header param="Content-Type">application/json</header>
+        <jsonObject dataType="product" key="product">
+            <entry key="id">integer</entry>
+            <entry key="sku">string</entry>
+            <entry key="name">string</entry>
+            <entry key="attribute_set_id">integer</entry>
+            <entry key="price">integer</entry>
+            <entry key="status">integer</entry>
+            <entry key="visibility">integer</entry>
+            <entry key="type_id">string</entry>
+            <entry key="created_at">string</entry>
+            <entry key="updated_at">string</entry>
+            <entry key="weight">integer</entry>
+            <entry key="extension_attributes">product_extension_attribute</entry>
+            <array key="product_links">
+                <value>product_link</value>
+            </array>
+            <array key="custom_attributes">
+                <value>custom_attribute</value>
+            </array>
+            <array key="options">
+                <value>product_option</value>
+            </array>
+            <!--array key="media_gallery_entries">
+                <value>media_gallery_entries</value>
+            </array>
+            <array key="tier_prices">
+                <value>tier_prices</value>
+            </array-->
+        </jsonObject>
+        <entry key="saveOptions">boolean</entry>
+    </operation>
+    <operation name="deleteProduct" dataType="product" type="delete" auth="/rest/V1/integration/admin/token" url="/rest/V1/products" method="DELETE">
+        <header param="Content-Type">application/json</header>
+        <param key="sku" type="path">{sku}</param>
+    </operation>
+</config>

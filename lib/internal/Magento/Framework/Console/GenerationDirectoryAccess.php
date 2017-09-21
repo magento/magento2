@@ -7,9 +7,8 @@ namespace Magento\Framework\Console;
 
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem\Directory\WriteFactory;
 use Magento\Framework\Filesystem\DriverPool;
-use Magento\Framework\Filesystem\File\WriteFactory;
-use Magento\Framework\Filesystem\Directory\Write;
 use Zend\ServiceManager\ServiceManager;
 use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 
@@ -33,7 +32,7 @@ class GenerationDirectoryAccess
     }
 
     /**
-     * Check generated/code read and write access
+     * Check write permissions to generation folders
      *
      * @return bool
      */
@@ -44,33 +43,32 @@ class GenerationDirectoryAccess
             ? $initParams[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS]
             : [];
         $directoryList = new DirectoryList(BP, $filesystemDirPaths);
-        $generationDirectoryPath = $directoryList->getPath(DirectoryList::GENERATED_CODE);
         $driverPool = new DriverPool();
         $fileWriteFactory = new WriteFactory($driverPool);
-        /** @var \Magento\Framework\Filesystem\DriverInterface $driver */
-        $driver = $driverPool->getDriver(DriverPool::FILE);
-        $directoryWrite = new Write($fileWriteFactory, $driver, $generationDirectoryPath);
-        if ($directoryWrite->isExist()) {
-            if ($directoryWrite->isDirectory()
-                || $directoryWrite->isReadable()
-            ) {
+
+        $generationDirs = [
+            DirectoryList::GENERATED,
+            DirectoryList::GENERATED_CODE,
+            DirectoryList::GENERATED_METADATA
+        ];
+
+        foreach ($generationDirs as $generationDirectory) {
+            $directoryPath = $directoryList->getPath($generationDirectory);
+            $directoryWrite = $fileWriteFactory->create($directoryPath);
+
+            if (!$directoryWrite->isExist()) {
                 try {
-                    $probeFilePath = $generationDirectoryPath . DIRECTORY_SEPARATOR . uniqid(mt_rand()).'tmp';
-                    $fileWriteFactory->create($probeFilePath, DriverPool::FILE, 'w');
-                    $driver->deleteFile($probeFilePath);
+                    $directoryWrite->create();
                 } catch (\Exception $e) {
                     return false;
                 }
-            } else {
-                return false;
             }
-        } else {
-            try {
-                $directoryWrite->create();
-            } catch (\Exception $e) {
+
+            if (!$directoryWrite->isWritable()) {
                 return false;
             }
         }
+
         return true;
     }
 }

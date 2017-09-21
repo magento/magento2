@@ -7,6 +7,8 @@ namespace Magento\Framework\View\Asset;
 
 /**
  * List of page assets that combines into groups ones having the same properties
+ *
+ * @api
  */
 class GroupedCollection extends Collection
 {
@@ -19,11 +21,7 @@ class GroupedCollection extends Collection
 
     /**#@-*/
 
-    /**
-     * Property Factory
-     *
-     * @var \Magento\Framework\View\Asset\PropertyGroupFactory
-     */
+    /**#@-*/
     protected $propertyFactory;
 
     /**

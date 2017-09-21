@@ -10,6 +10,9 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 
 /**
  * Customer dashboard block
+ *
+ * @api
+ * @since 100.0.2
  */
 class Dashboard extends \Magento\Framework\View\Element\Template
 {

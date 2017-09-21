@@ -7,6 +7,8 @@ namespace Magento\Framework\View\Element\Html;
 
 /**
  * Links list block
+ *
+ * @api
  */
 class Links extends \Magento\Framework\View\Element\Template
 {

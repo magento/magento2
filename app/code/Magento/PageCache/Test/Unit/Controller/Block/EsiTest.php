@@ -12,7 +12,7 @@ namespace Magento\PageCache\Test\Unit\Controller\Block;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class EsiTest extends \PHPUnit_Framework_TestCase
+class EsiTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
@@ -76,7 +76,7 @@ class EsiTest extends \PHPUnit_Framework_TestCase
         $contextMock->expects($this->any())->method('getResponse')->will($this->returnValue($this->responseMock));
         $contextMock->expects($this->any())->method('getView')->will($this->returnValue($this->viewMock));
 
-        $this->translateInline = $this->getMock(\Magento\Framework\Translate\InlineInterface::class);
+        $this->translateInline = $this->createMock(\Magento\Framework\Translate\InlineInterface::class);
 
         $helperObjectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->action = $helperObjectManager->getObject(
@@ -102,13 +102,7 @@ class EsiTest extends \PHPUnit_Framework_TestCase
         $html = 'some-html';
         $mapData = [['blocks', '', json_encode([$block])], ['handles', '', base64_encode(json_encode($handles))]];
 
-        $blockInstance1 = $this->getMock(
-            $blockClass,
-            ['toHtml'],
-            [],
-            '',
-            false
-        );
+        $blockInstance1 = $this->createPartialMock($blockClass, ['toHtml']);
 
         $blockInstance1->expects($this->once())->method('toHtml')->will($this->returnValue($html));
         $blockInstance1->setTtl(360);

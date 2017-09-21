@@ -10,8 +10,7 @@ use Magento\Sales\Api\Data\InvoiceItemInterface;
 use Magento\Sales\Model\AbstractModel;
 
 /**
- * @method \Magento\Sales\Model\ResourceModel\Order\Invoice\Item _getResource()
- * @method \Magento\Sales\Model\ResourceModel\Order\Invoice\Item getResource()
+ * @api
  * @method float getBaseWeeeTaxRowDisposition()
  * @method \Magento\Sales\Model\Order\Invoice\Item setBaseWeeeTaxRowDisposition(float $value)
  * @method float getWeeeTaxAppliedRowAmount()
@@ -32,6 +31,7 @@ use Magento\Sales\Model\AbstractModel;
  * @method \Magento\Sales\Model\Order\Invoice\Item setWeeeTaxApplied(string $value)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Item extends AbstractModel implements InvoiceItemInterface
 {

@@ -12,8 +12,7 @@ use Magento\Sales\Model\AbstractModel;
 /**
  * Order Item Model
  *
- * @method \Magento\Sales\Model\ResourceModel\Order\Item _getResource()
- * @method \Magento\Sales\Model\ResourceModel\Order\Item getResource()
+ * @api
  * @method int getGiftMessageId()
  * @method \Magento\Sales\Model\Order\Item setGiftMessageId(int $value)
  * @method int getGiftMessageAvailable()
@@ -21,6 +20,7 @@ use Magento\Sales\Model\AbstractModel;
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Item extends AbstractModel implements OrderItemInterface
 {
@@ -53,9 +53,7 @@ class Item extends AbstractModel implements OrderItemInterface
 
     // When qty ordered = qty returned // not used at the moment
 
-    /**
-     * @var string
-     */
+    // When qty ordered = qty returned // not used at the moment
     protected $_eventPrefix = 'sales_order_item';
 
     /**
@@ -477,7 +475,10 @@ class Item extends AbstractModel implements OrderItemInterface
     public function getProductOptions()
     {
         $data = $this->_getData('product_options');
-        return is_string($data) ? $this->serializer->unserialize($data) : $data;
+        if (is_string($data)) {
+            $data = $this->serializer->unserialize($data);
+        }
+        return $data;
     }
 
     /**
@@ -2391,4 +2392,15 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     //@codeCoverageIgnoreEnd
+
+    /**
+     * Check if it is possible to process item after cancellation
+     *
+     * @return bool
+     * @since 100.2.0
+     */
+    public function isProcessingAvailable()
+    {
+        return $this->getQtyToShip() > $this->getQtyToCancel();
+    }
 }

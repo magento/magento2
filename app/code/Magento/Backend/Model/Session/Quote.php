@@ -11,6 +11,7 @@ use Magento\Customer\Api\GroupManagementInterface;
 /**
  * Adminhtml quote session
  *
+ * @api
  * @method Quote setCustomerId($id)
  * @method int getCustomerId()
  * @method bool hasCustomerId()
@@ -23,6 +24,7 @@ use Magento\Customer\Api\GroupManagementInterface;
  * @method Quote setOrderId($orderId)
  * @method int getOrderId()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Quote extends \Magento\Framework\Session\SessionManager
 {

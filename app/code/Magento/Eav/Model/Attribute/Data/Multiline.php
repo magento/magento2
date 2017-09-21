@@ -43,13 +43,15 @@ class Multiline extends \Magento\Eav\Model\Attribute\Data\Text
         $errors = [];
         $lines = $this->processValue($value);
         $attribute = $this->getAttribute();
-        $attributeLabel = __($attribute->getStoreLabel());
+
         if ($attribute->getIsRequired() && empty($lines)) {
+            $attributeLabel = __($attribute->getStoreLabel());
             $errors[] = __('"%1" is a required value.', $attributeLabel);
         }
 
         $maxAllowedLineCount = $attribute->getMultilineCount();
         if (count($lines) > $maxAllowedLineCount) {
+            $attributeLabel = __($attribute->getStoreLabel());
             $errors[] = __('"%1" cannot contain more than %2 lines.', $attributeLabel, $maxAllowedLineCount);
         }
 

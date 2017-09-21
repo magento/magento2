@@ -49,7 +49,6 @@ class Postcode extends \Magento\Eav\Model\Attribute\Data\AbstractData
     public function validateValue($value)
     {
         $attribute = $this->getAttribute();
-        $label = __($attribute->getStoreLabel());
 
         $countryId = $this->getExtractedData('country_id');
         if ($this->directoryHelper->isZipCodeOptional($countryId)) {
@@ -58,6 +57,7 @@ class Postcode extends \Magento\Eav\Model\Attribute\Data\AbstractData
 
         $errors = [];
         if (empty($value) && $value !== '0') {
+            $label = __($attribute->getStoreLabel());
             $errors[] = __('"%1" is a required value.', $label);
         }
         if (count($errors) == 0) {

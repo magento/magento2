@@ -10,7 +10,7 @@ use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Webapi\Model\Config as ModelConfig;
 
-class DataObjectProcessorTest extends \PHPUnit_Framework_TestCase
+class DataObjectProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DataObjectProcessor
@@ -32,7 +32,7 @@ class DataObjectProcessorTest extends \PHPUnit_Framework_TestCase
                 'typeProcessor' => $objectManager->getObject(\Magento\Framework\Reflection\TypeProcessor::class),
             ]
         );
-        $serializerMock = $this->getMock(SerializerInterface::class);
+        $serializerMock = $this->createMock(SerializerInterface::class);
         $serializerMock->method('serialize')
             ->willReturn('serializedData');
         $serializerMock->method('unserialize')
@@ -57,8 +57,8 @@ class DataObjectProcessorTest extends \PHPUnit_Framework_TestCase
     public function testDataObjectProcessor()
     {
         $objectManager =  new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        /** @var \Magento\Webapi\Test\Unit\Model\Files\TestDataObject $testDataObject */
-        $testDataObject = $objectManager->getObject(\Magento\Webapi\Test\Unit\Model\Files\TestDataObject::class);
+        /** @var \Magento\Framework\Reflection\Test\Unit\TestDataObject $testDataObject */
+        $testDataObject = $objectManager->getObject(\Magento\Framework\Reflection\Test\Unit\TestDataObject::class);
 
         $expectedOutputDataArray = [
             'id' => '1',
@@ -67,7 +67,7 @@ class DataObjectProcessorTest extends \PHPUnit_Framework_TestCase
             'required_billing' => 'false',
         ];
 
-        $testDataObjectType = \Magento\Webapi\Test\Unit\Model\Files\TestDataInterface::class;
+        $testDataObjectType = \Magento\Framework\Reflection\Test\Unit\TestDataInterface::class;
         $outputData = $this->dataObjectProcessor->buildOutputDataArray($testDataObject, $testDataObjectType);
         $this->assertEquals($expectedOutputDataArray, $outputData);
     }

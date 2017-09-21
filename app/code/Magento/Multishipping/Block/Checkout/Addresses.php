@@ -10,6 +10,9 @@ use Magento\Customer\Model\Address\Config as AddressConfig;
 /**
  * Class Addresses
  * Multishipping checkout choose item addresses block
+ *
+ * @api
+ * @since 100.0.2
  */
 class Addresses extends \Magento\Sales\Block\Items\AbstractItems
 {

@@ -9,6 +9,10 @@
  */
 namespace Magento\Paypal\Block;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Logo extends \Magento\Framework\View\Element\Template
 {
     /**
@@ -60,7 +64,7 @@ class Logo extends \Magento\Framework\View\Element\Template
 
     /**
      * Disable block output if logo turned off
-     *M
+     *
      * @return string
      */
     protected function _toHtml()

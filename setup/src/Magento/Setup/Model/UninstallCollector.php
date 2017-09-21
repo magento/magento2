@@ -56,7 +56,7 @@ class UninstallCollector
         $setup = $this->dataSetupFactory->create();
         $result = $setup->getConnection()->select()->from($setup->getTable('setup_module'), ['module']);
         if (isset($filterModules) && sizeof($filterModules) > 0) {
-            $result->where('module in( ? )', implode(',', $filterModules));
+            $result->where('module in( ? )', $filterModules);
         }
         // go through modules
         foreach ($setup->getConnection()->fetchAll($result) as $row) {

@@ -14,6 +14,9 @@ use Magento\Sales\Model\Order\Item as OrderItem;
 
 /**
  * Order item render block
+ *
+ * @api
+ * @since 100.0.2
  */
 class DefaultRenderer extends \Magento\Framework\View\Element\Template
 {

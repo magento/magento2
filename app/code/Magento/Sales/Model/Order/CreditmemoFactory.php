@@ -24,7 +24,7 @@ class CreditmemoFactory
 
     /**
      * @var \Magento\Framework\Unserialize\Unserialize
-     * @deprecated
+     * @deprecated 100.2.0
      */
     protected $unserialize;
 
@@ -281,8 +281,9 @@ class CreditmemoFactory
         $qty = $parentQty;
         $productOptions = $orderItem->getProductOptions();
         if (isset($productOptions['bundle_selection_attributes'])) {
-            $bundleSelectionAttributes = $this->serializer
-                ->unserialize($productOptions['bundle_selection_attributes']);
+            $bundleSelectionAttributes = $this->serializer->unserialize(
+                $productOptions['bundle_selection_attributes']
+            );
             if ($bundleSelectionAttributes) {
                 $qty = $bundleSelectionAttributes['qty'] * $parentQty;
             }

@@ -18,7 +18,7 @@ use Magento\Framework\App\RequestInterface;
 /**
  * Test class for \Magento\Widget\Controller\Adminhtml\Widget\LoadOptions
  */
-class LoadOptionsTest extends \PHPUnit_Framework_TestCase
+class LoadOptionsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerHelper
@@ -140,7 +140,7 @@ class LoadOptionsTest extends \PHPUnit_Framework_TestCase
     public function testExecute()
     {
         $widgetType = 'Magento\SomeWidget';
-        $conditionsEncoded = 'a:3:{s:5:"value";i:1;s:8:"operator";s:2:"==";s:9:"attribute";s:2:"id";}';
+        $conditionsEncoded = 'encoded conditions';
         $conditionsDecoded = [
             'value' => 1,
             'operator' => '==',

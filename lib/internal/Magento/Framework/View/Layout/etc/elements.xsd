@@ -312,6 +312,7 @@
             <xs:element ref="uiComponent" minOccurs="0" />
         </xs:choice>
         <xs:attribute type="elementNameType" name="name" use="required"/>
+        <xs:attribute type="xs:string" name="template" use="optional"/>
         <xs:attribute type="xs:boolean" name="display" default="true" use="optional"/>
         <xs:attribute type="xs:boolean" name="remove" use="optional"/>
     </xs:complexType>
@@ -342,6 +343,21 @@
     </xs:complexType>
 
     <xs:complexType name="url" mixed="true">
+        <xs:complexContent>
+            <xs:extension base="argumentType">
+                <xs:sequence minOccurs="0">
+                    <xs:element name="param" minOccurs="0" maxOccurs="unbounded">
+                        <xs:complexType mixed="true">
+                            <xs:attribute name="name" type="xs:string" use="required"/>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+                <xs:attribute name="path" use="required"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="serviceUrl" mixed="true">
         <xs:complexContent>
             <xs:extension base="argumentType">
                 <xs:sequence minOccurs="0">

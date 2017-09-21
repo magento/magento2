@@ -7,12 +7,20 @@ namespace Magento\Customer\Block\Account;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Customer extends \Magento\Framework\View\Element\Template
 {
-    /** @var CustomerRepositoryInterface */
+    /**
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface
+     */
     protected $customerRepository;
 
-    /** @var \Magento\Customer\Helper\View */
+    /**
+     * @var \Magento\Customer\Helper\View
+     */
     protected $_viewHelper;
 
     /**

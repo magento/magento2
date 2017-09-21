@@ -71,6 +71,16 @@ class ListProduct extends Block
     }
 
     /**
+     * Get products count on page
+     *
+     * @return int
+     */
+    public function getProductsCount()
+    {
+        return count($this->_rootElement->getElements($this->productItemLink));
+    }
+
+    /**
      * Get all terms used in sort.
      *
      * @return array

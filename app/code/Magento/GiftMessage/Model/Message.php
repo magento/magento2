@@ -10,10 +10,9 @@ use Magento\Framework\Api\AttributeValueFactory;
 /**
  * Gift Message model
  *
- * @method \Magento\GiftMessage\Model\ResourceModel\Message _getResource()
- * @method \Magento\GiftMessage\Model\ResourceModel\Message getResource()
- *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Message extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\GiftMessage\Api\Data\MessageInterface

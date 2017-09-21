@@ -15,7 +15,7 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
  *
  * Test for class \Magento\Ui\Component\Form\Field
  */
-class FieldTest extends \PHPUnit_Framework_TestCase
+class FieldTest extends \PHPUnit\Framework\TestCase
 {
     const NAME = 'test-name';
     const COMPONENT_NAME = 'test-name';

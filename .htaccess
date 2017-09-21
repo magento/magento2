@@ -234,10 +234,6 @@
         order allow,deny
         deny from all
     </Files>
-    <Files CONTRIBUTING.md>
-        order allow,deny
-        deny from all
-    </Files>
     <Files COPYING.txt>
         order allow,deny
         deny from all

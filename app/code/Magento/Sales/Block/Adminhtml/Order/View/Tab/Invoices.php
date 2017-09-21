@@ -8,7 +8,8 @@ namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
 /**
  * Order Invoices grid
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
 class Invoices extends \Magento\Framework\View\Element\Text\ListText implements
     \Magento\Backend\Block\Widget\Tab\TabInterface

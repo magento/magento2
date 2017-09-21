@@ -8,8 +8,9 @@ namespace Magento\Backend\Block\Dashboard\Tab\Customers;
 /**
  * Adminhtml dashboard most recent customers grid
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @api
+ * @since 100.0.2
  */
 class Newest extends \Magento\Backend\Block\Dashboard\Grid
 {

@@ -5,6 +5,10 @@
  */
 namespace Magento\SalesRule\Model\Rule\Action\Discount;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Data
 {
     /**

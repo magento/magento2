@@ -7,7 +7,9 @@ namespace Magento\Rss\Block;
 
 /**
  * Class Feeds
+ * @api
  * @package Magento\Rss\Block
+ * @since 100.0.2
  */
 class Feeds extends \Magento\Framework\View\Element\Template
 {

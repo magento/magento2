@@ -8,7 +8,9 @@ namespace Magento\Sales\Block\Adminhtml\Order\Totals;
 /**
  * Adminhtml order tax totals block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Tax extends \Magento\Tax\Block\Sales\Order\Tax
 {

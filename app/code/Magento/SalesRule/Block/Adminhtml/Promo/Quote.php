@@ -8,7 +8,9 @@ namespace Magento\SalesRule\Block\Adminhtml\Promo;
 /**
  * Catalog price rules
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Quote extends \Magento\Backend\Block\Widget\Grid\Container
 {

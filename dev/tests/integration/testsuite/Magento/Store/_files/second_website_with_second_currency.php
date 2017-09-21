@@ -27,12 +27,14 @@ $configResource->saveConfig(
     'default',
     0
 );
-/** @var \Magento\Framework\App\Config\ReinitableConfigInterface $reinitiableConfig */
-$reinitiableConfig = $objectManager->get(\Magento\Framework\App\Config\ReinitableConfigInterface::class);
-$reinitiableConfig->setValue(
-    'catalog/price/scope',
-    \Magento\Store\Model\Store::PRICE_SCOPE_WEBSITE
-);
+
+/**
+ * Configuration cache clean is required to reload currency setting
+ */
+/** @var Magento\Config\App\Config\Type\System $config */
+$config = $objectManager->get(\Magento\Config\App\Config\Type\System::class);
+$config->clean();
+
 $observer = $objectManager->get(\Magento\Framework\Event\Observer::class);
 $objectManager->get(\Magento\Catalog\Observer\SwitchPriceAttributeScopeOnConfigChange::class)
     ->execute($observer);

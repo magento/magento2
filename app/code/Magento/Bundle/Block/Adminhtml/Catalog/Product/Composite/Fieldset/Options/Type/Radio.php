@@ -8,7 +8,9 @@ namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Opti
 /**
  * Bundle option radiobox type renderer
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Radio extends \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Radio
 {

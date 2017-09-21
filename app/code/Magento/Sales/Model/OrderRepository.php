@@ -15,9 +15,11 @@ use Magento\Sales\Api\Data\OrderSearchResultInterfaceFactory as SearchResultFact
 use Magento\Sales\Api\Data\ShippingAssignmentInterface;
 use Magento\Sales\Model\Order\ShippingAssignmentBuilder;
 use Magento\Sales\Model\ResourceModel\Metadata;
+use Magento\Framework\App\ObjectManager;
 
 /**
- * Repository class for @see OrderInterface
+ * Repository class
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
@@ -42,30 +44,36 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
      */
     private $shippingAssignmentBuilder;
 
-    /** @var  CollectionProcessorInterface */
+    /**
+     * @var CollectionProcessorInterface
+     */
     private $collectionProcessor;
 
     /**
-     * OrderInterface[]
-     *
-     * @var array
+     * @var OrderInterface[]
      */
     protected $registry = [];
 
     /**
-     * OrderRepository constructor.
+     * Constructor
+     *
      * @param Metadata $metadata
      * @param SearchResultFactory $searchResultFactory
      * @param CollectionProcessorInterface|null $collectionProcessor
+     * @param \Magento\Sales\Api\Data\OrderExtensionFactory|null $orderExtensionFactory
      */
     public function __construct(
         Metadata $metadata,
         SearchResultFactory $searchResultFactory,
-        CollectionProcessorInterface $collectionProcessor = null
+        CollectionProcessorInterface $collectionProcessor = null,
+        \Magento\Sales\Api\Data\OrderExtensionFactory $orderExtensionFactory = null
     ) {
         $this->metadata = $metadata;
         $this->searchResultFactory = $searchResultFactory;
-        $this->collectionProcessor = $collectionProcessor ?: $this->getCollectionProcessor();
+        $this->collectionProcessor = $collectionProcessor ?: ObjectManager::getInstance()
+            ->get(\Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class);
+        $this->orderExtensionFactory = $orderExtensionFactory ?: ObjectManager::getInstance()
+            ->get(\Magento\Sales\Api\Data\OrderExtensionFactory::class);
     }
 
     /**
@@ -169,7 +177,7 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
         $extensionAttributes = $order->getExtensionAttributes();
 
         if ($extensionAttributes === null) {
-            $extensionAttributes = $this->getOrderExtensionFactory()->create();
+            $extensionAttributes = $this->orderExtensionFactory->create();
         } elseif ($extensionAttributes->getShippingAssignments() !== null) {
             return;
         }
@@ -181,26 +189,10 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
     }
 
     /**
-     * Get the new OrderExtensionFactory for application code
-     *
-     * @return OrderExtensionFactory
-     * @deprecated
-     */
-    private function getOrderExtensionFactory()
-    {
-        if (!$this->orderExtensionFactory instanceof OrderExtensionFactory) {
-            $this->orderExtensionFactory = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                \Magento\Sales\Api\Data\OrderExtensionFactory::class
-            );
-        }
-        return $this->orderExtensionFactory;
-    }
-
-    /**
      * Get the new ShippingAssignmentBuilder dependency for application code
      *
      * @return ShippingAssignmentBuilder
-     * @deprecated
+     * @deprecated 100.0.4
      */
     private function getShippingAssignmentBuilderDependency()
     {
@@ -218,7 +210,7 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
      * @param \Magento\Framework\Api\Search\FilterGroup $filterGroup
      * @param \Magento\Sales\Api\Data\OrderSearchResultInterface $searchResult
      * @return void
-     * @deprecated
+     * @deprecated 100.2.0
      * @throws \Magento\Framework\Exception\InputException
      */
     protected function addFilterGroupToCollection(
@@ -235,21 +227,5 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
         if ($fields) {
             $searchResult->addFieldToFilter($fields, $conditions);
         }
-    }
-
-    /**
-     * Retrieve collection processor
-     *
-     * @deprecated
-     * @return CollectionProcessorInterface
-     */
-    private function getCollectionProcessor()
-    {
-        if (!$this->collectionProcessor) {
-            $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class
-            );
-        }
-        return $this->collectionProcessor;
     }
 }

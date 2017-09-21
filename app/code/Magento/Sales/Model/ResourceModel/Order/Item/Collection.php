@@ -10,7 +10,9 @@ use \Magento\Sales\Model\ResourceModel\Order\Collection\AbstractCollection;
 /**
  * Flat sales order payment collection
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Collection extends AbstractCollection implements \Magento\Sales\Api\Data\OrderItemSearchResultInterface
 {

@@ -112,5 +112,15 @@
                 </item>
             </field>
         </dataset>
+        <dataset name="high_cost">
+            <field name="0" xsi:type="array">
+                <item name="price" xsi:type="string">500000</item>
+                <item name="website" xsi:type="string">All Websites [USD]</item>
+                <item name="price_qty" xsi:type="string">1</item>
+                <item name="customer_group" xsi:type="array">
+                    <item name="dataset" xsi:type="string">ALL_GROUPS</item>
+                </item>
+            </field>
+        </dataset>
     </repository>
 </config>

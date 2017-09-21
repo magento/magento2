@@ -14,14 +14,14 @@
 
 /** @var \Magento\Framework\View\Element\Template $block */
 
-$schemaUrl = rtrim($block->getBaseUrl(), '/') . '/rest/all/schema?services=all';
+$schemaUrl = $block->getSchemaUrl();
 ?>
 
 <div id='header'>
     <div class="swagger-ui-wrap">
         <a id="logo" href="http://swagger.io">swagger</a>
         <form id='api_selector'>
-            <input id="input_baseUrl" type="hidden" value="<?php /* @escapeNotVerified */ echo $schemaUrl ?>"/>
+            <input id="input_baseUrl" type="hidden" value="<?= /* @escapeNotVerified */ $schemaUrl ?>"/>
             <div class='input'><input placeholder="api_key" id="input_apiKey" name="apiKey" type="text"/></div>
             <div class='input'><a id="explore" href="#" data-sw-translate>apply</a></div>
         </form>

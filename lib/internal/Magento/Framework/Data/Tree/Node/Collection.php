@@ -14,6 +14,9 @@ namespace Magento\Framework\Data\Tree\Node;
 use Magento\Framework\Data\Tree;
 use Magento\Framework\Data\Tree\Node;
 
+/**
+ * @api
+ */
 class Collection implements \ArrayAccess, \IteratorAggregate
 {
     /**

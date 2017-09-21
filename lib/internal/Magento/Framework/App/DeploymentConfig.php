@@ -10,6 +10,8 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
 
 /**
  * Application deployment configuration
+ *
+ * @api
  */
 class DeploymentConfig
 {
@@ -118,6 +120,7 @@ class DeploymentConfig
      * Check if data from deploy files is avaiable
      *
      * @return bool
+     * @since 100.1.3
      */
     public function isDbAvailable()
     {

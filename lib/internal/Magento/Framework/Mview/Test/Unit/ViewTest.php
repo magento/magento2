@@ -7,7 +7,7 @@ namespace Magento\Framework\Mview\Test\Unit;
 
 use \Magento\Framework\Mview\View;
 
-class ViewTest extends \PHPUnit_Framework_TestCase
+class ViewTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Mview\View
@@ -50,16 +50,8 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             true,
             ['getView']
         );
-        $this->actionFactoryMock = $this->getMock(
-            \Magento\Framework\Mview\ActionFactory::class,
-            ['get'],
-            [],
-            '',
-            false
-        );
-        $this->stateMock = $this->getMock(
-            \Magento\Indexer\Model\Mview\View\State::class,
-            ['getViewId',
+        $this->actionFactoryMock = $this->createPartialMock(\Magento\Framework\Mview\ActionFactory::class, ['get']);
+        $this->stateMock = $this->createPartialMock(\Magento\Indexer\Model\Mview\View\State::class, ['getViewId',
                 'loadByView',
                 'getVersionId',
                 'setVersionId',
@@ -70,24 +62,14 @@ class ViewTest extends \PHPUnit_Framework_TestCase
                 'setMode',
                 'save',
                 '__wakeup',
-            ],
-            [],
-            '',
-            false
-        );
-        $this->changelogMock = $this->getMock(
+            ]);
+        $this->changelogMock = $this->createPartialMock(
             \Magento\Framework\Mview\View\Changelog::class,
-            ['getViewId', 'setViewId', 'create', 'drop', 'getVersion', 'getList', 'clear'],
-            [],
-            '',
-            false
+            ['getViewId', 'setViewId', 'create', 'drop', 'getVersion', 'getList', 'clear']
         );
-        $this->subscriptionFactoryMock = $this->getMock(
+        $this->subscriptionFactoryMock = $this->createPartialMock(
             \Magento\Framework\Mview\View\SubscriptionFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
         $this->model = new View(
             $this->configMock,
@@ -161,13 +143,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnSelf());
         $this->changelogMock->expects($this->once())
             ->method('create');
-        $subscriptionMock = $this->getMock(
-            \Magento\Framework\Mview\View\Subscription::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
+        $subscriptionMock = $this->createPartialMock(\Magento\Framework\Mview\View\Subscription::class, ['create']);
         $subscriptionMock->expects($this->exactly(1))->method('create');
         $this->subscriptionFactoryMock->expects(
             $this->exactly(1)
@@ -227,13 +203,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnSelf());
         $this->changelogMock->expects($this->never())
             ->method('drop');
-        $subscriptionMock = $this->getMock(
-            \Magento\Framework\Mview\View\Subscription::class,
-            ['remove'],
-            [],
-            '',
-            false
-        );
+        $subscriptionMock = $this->createPartialMock(\Magento\Framework\Mview\View\Subscription::class, ['remove']);
         $subscriptionMock->expects($this->exactly(1))->method('remove');
         $this->subscriptionFactoryMock->expects(
             $this->exactly(1)
@@ -272,13 +242,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             ->method('getMode')
             ->will($this->returnValue(\Magento\Framework\Mview\View\StateInterface::MODE_ENABLED));
 
-        $subscriptionMock = $this->getMock(
-            \Magento\Framework\Mview\View\Subscription::class,
-            ['remove'],
-            [],
-            '',
-            false
-        );
+        $subscriptionMock = $this->createPartialMock(\Magento\Framework\Mview\View\Subscription::class, ['remove']);
         $subscriptionMock->expects($this->exactly(1))
             ->method('remove')
             ->will($this->returnCallback(
@@ -299,6 +263,8 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $currentVersionId = 3;
         $lastVersionId = 1;
         $listId = [2, 3];
+        $defaultBatchSize = 1000;
+
         $this->stateMock->expects($this->any())
             ->method('getViewId')
             ->will($this->returnValue(1));
@@ -331,12 +297,12 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             'getList'
         )->with(
             $lastVersionId,
-            $currentVersionId
+            $lastVersionId + $defaultBatchSize
         )->will(
             $this->returnValue($listId)
         );
 
-        $actionMock = $this->getMock(\Magento\Framework\Mview\ActionInterface::class);
+        $actionMock = $this->createMock(\Magento\Framework\Mview\ActionInterface::class);
         $actionMock->expects($this->once())->method('execute')->with($listId)->will($this->returnSelf());
         $this->actionFactoryMock->expects(
             $this->once()
@@ -361,6 +327,8 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $currentVersionId = 3;
         $lastVersionId = 1;
         $listId = [2, 3];
+        $defaultBatchSize = 1000;
+
         $this->stateMock->expects($this->any())
             ->method('getViewId')
             ->will($this->returnValue(1));
@@ -392,12 +360,12 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             'getList'
         )->with(
             $lastVersionId,
-            $currentVersionId
+            $lastVersionId + $defaultBatchSize
         )->will(
             $this->returnValue($listId)
         );
 
-        $actionMock = $this->getMock(\Magento\Framework\Mview\ActionInterface::class, ['execute'], [], '', false);
+        $actionMock = $this->createPartialMock(\Magento\Framework\Mview\ActionInterface::class, ['execute']);
         $actionMock->expects($this->once())->method('execute')->with($listId)->will(
             $this->returnCallback(
                 function () {

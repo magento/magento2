@@ -13,6 +13,10 @@ namespace Magento\Tax\Block\Adminhtml\Rate\Toolbar;
 
 use Magento\Framework\View\Element\Template;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Add extends \Magento\Backend\Block\Template implements \Magento\Backend\Block\Widget\ContainerInterface
 {
     /**

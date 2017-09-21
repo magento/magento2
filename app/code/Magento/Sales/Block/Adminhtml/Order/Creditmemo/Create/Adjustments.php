@@ -7,6 +7,10 @@ namespace Magento\Sales\Block\Adminhtml\Order\Creditmemo\Create;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Adjustments extends \Magento\Backend\Block\Template
 {
     /**

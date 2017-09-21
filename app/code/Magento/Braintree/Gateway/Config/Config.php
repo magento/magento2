@@ -72,9 +72,12 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function getCountrySpecificCardTypeConfig()
     {
-        $countriesCardTypes = $this->serializer->unserialize($this->getValue(self::KEY_COUNTRY_CREDIT_CARD));
-
-        return is_array($countriesCardTypes) ? $countriesCardTypes : [];
+        $countryCardTypes = $this->getValue(self::KEY_COUNTRY_CREDIT_CARD);
+        if (!$countryCardTypes) {
+            return [];
+        }
+        $countryCardTypes = $this->serializer->unserialize($countryCardTypes);
+        return is_array($countryCardTypes) ? $countryCardTypes : [];
     }
 
     /**

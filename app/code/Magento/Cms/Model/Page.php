@@ -16,11 +16,11 @@ use Magento\Cms\Helper\Page as PageHelper;
 /**
  * Cms Page Model
  *
- * @method ResourceCmsPage _getResource()
- * @method ResourceCmsPage getResource()
+ * @api
  * @method Page setStoreId(array $storeId)
  * @method array getStoreId()
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @since 100.0.2
  */
 class Page extends AbstractModel implements PageInterface, IdentityInterface
 {
@@ -181,6 +181,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      * Get meta title
      *
      * @return string|null
+     * @since 101.0.0
      */
     public function getMetaTitle()
     {
@@ -376,6 +377,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      *
      * @param string $metaTitle
      * @return \Magento\Cms\Api\Data\PageInterface
+     * @since 101.0.0
      */
     public function setMetaTitle($metaTitle)
     {
@@ -538,6 +540,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
 
     /**
      * {@inheritdoc}
+     * @since 101.0.0
      */
     public function beforeSave()
     {

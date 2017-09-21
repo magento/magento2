@@ -23,8 +23,10 @@ use Magento\Swatches\Model\SwatchAttributesProvider;
 
 /**
  * Swatch renderer block
+ *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\Configurable implements
     \Magento\Framework\DataObject\IdentityInterface
@@ -62,7 +64,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     /**
      * Indicate if product has one or more Swatch attributes
      *
-     * @deprecated unused
+     * @deprecated 100.1.5 unused
      *
      * @var boolean
      */
@@ -123,6 +125,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      * Get Key for caching block content
      *
      * @return string
+     * @since 100.1.0
      */
     public function getCacheKey()
     {
@@ -133,6 +136,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      * Get block cache life time
      *
      * @return int
+     * @since 100.1.0
      */
     protected function getCacheLifetime()
     {
@@ -213,7 +217,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     }
 
     /**
-     * @deprecated Method isProductHasSwatchAttribute() is used instead of this.
+     * @deprecated 100.1.5 Method isProductHasSwatchAttribute() is used instead of this.
      *
      * @codeCoverageIgnore
      * @return void
@@ -227,6 +231,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      * Check that product has at least one swatch attribute
      *
      * @return bool
+     * @since 100.1.5
      */
     protected function isProductHasSwatchAttribute()
     {
@@ -371,6 +376,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     /**
      * @param array $attributeData
      * @return array
+     * @since 100.0.3
      */
     protected function getConfigurableOptionsIds(array $attributeData)
     {
@@ -391,8 +397,8 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     /**
      * Produce and return block's html output
      *
-     * @codeCoverageIgnore
      * @return string
+     * @since 100.2.0
      */
     public function toHtml()
     {
@@ -406,7 +412,6 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     /**
      * Return HTML code
      *
-     * @codeCoverageIgnore
      * @return string
      */
     protected function _toHtml()
@@ -428,7 +433,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     }
 
     /**
-     * @codeCoverageIgnore
+     * @deprecated 100.1.5 Now is used _toHtml() directly
      * @return string
      */
     protected function getHtmlOutput()
@@ -448,6 +453,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      * Return unique ID(s) for each object in system
      *
      * @return string[]
+     * @since 100.1.0
      */
     public function getIdentities()
     {

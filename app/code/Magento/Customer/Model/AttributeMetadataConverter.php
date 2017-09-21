@@ -87,7 +87,7 @@ class AttributeMetadataConverter
             }
         }
         $validationRules = [];
-        foreach ($attribute->getValidateRules() as $name => $value) {
+        foreach ((array)$attribute->getValidateRules() as $name => $value) {
             $validationRule = $this->validationRuleFactory->create()
                 ->setName($name)
                 ->setValue($value);

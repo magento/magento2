@@ -12,6 +12,10 @@ namespace Magento\Store\Block;
 use Magento\Directory\Helper\Data;
 use Magento\Store\Model\Group;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Switcher extends \Magento\Framework\View\Element\Template
 {
     /**
@@ -221,7 +225,7 @@ class Switcher extends \Magento\Framework\View\Element\Template
     {
         $data[\Magento\Store\Api\StoreResolverInterface::PARAM_NAME] = $store->getCode();
         return $this->_postDataHelper->getPostData(
-            $this->getUrl('stores/store/switch'),
+            $store->getCurrentUrl(false),
             $data
         );
     }

@@ -11,8 +11,7 @@ use Magento\Framework\Api\ExtensionAttributesFactory;
 /**
  * Sales Quote Item Model
  *
- * @method \Magento\Quote\Model\ResourceModel\Quote\Item _getResource()
- * @method \Magento\Quote\Model\ResourceModel\Quote\Item getResource()
+ * @api
  * @method string getCreatedAt()
  * @method \Magento\Quote\Model\Quote\Item setCreatedAt(string $value)
  * @method string getUpdatedAt()
@@ -94,6 +93,7 @@ use Magento\Framework\Api\ExtensionAttributesFactory;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @since 100.0.2
  */
 class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Magento\Quote\Api\Data\CartItemInterface
 {
@@ -171,7 +171,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
 
     /**
      * @var \Magento\CatalogInventory\Api\StockRegistryInterface
-     * @deprecated
+     * @deprecated 100.2.0
      */
     protected $stockRegistry;
 
@@ -670,7 +670,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     }
 
     /**
-     *Remove option from item options
+     * Remove option from item options
      *
      * @param string $code
      * @return $this

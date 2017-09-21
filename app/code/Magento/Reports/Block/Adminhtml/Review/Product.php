@@ -8,7 +8,9 @@ namespace Magento\Reports\Block\Adminhtml\Review;
 /**
  * Adminhtml report review product blocks content block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Product extends \Magento\Backend\Block\Widget\Grid\Container
 {

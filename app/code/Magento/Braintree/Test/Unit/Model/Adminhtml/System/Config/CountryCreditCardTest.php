@@ -15,7 +15,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
  * Class CountryCreditCardTest
  *
  */
-class CountryCreditCardTest extends \PHPUnit_Framework_TestCase
+class CountryCreditCardTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Braintree\Model\Adminhtml\System\Config\CountryCreditCard
@@ -48,7 +48,7 @@ class CountryCreditCardTest extends \PHPUnit_Framework_TestCase
         $this->mathRandomMock = $this->getMockBuilder(Random::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->serializerMock = $this->getMock(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->serializerMock = $this->createMock(\Magento\Framework\Serialize\Serializer\Json::class);
 
         $this->objectManager = new ObjectManager($this);
         $this->model = $this->objectManager->getObject(
@@ -150,24 +150,30 @@ class CountryCreditCardTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider afterLoadDataProvider
      * @param string $encodedValue
      * @param array|null $value
      * @param array $hashData
      * @param array|null $expected
+     * @param int $unserializeCalledNum
+     * @dataProvider afterLoadDataProvider
      */
-    public function testAfterLoad($encodedValue, $value, array $hashData, $expected)
-    {
+    public function testAfterLoad(
+        $encodedValue,
+        $value,
+        array $hashData,
+        $expected,
+        $unserializeCalledNum = 1
+    ) {
         $this->model->setValue($encodedValue);
         $index = 0;
         foreach ($hashData as $hash) {
-            $this->mathRandomMock->expects(static::at($index))
+            $this->mathRandomMock->expects($this->at($index))
                 ->method('getUniqueHash')
                 ->willReturn($hash);
             $index++;
         }
 
-        $this->serializerMock->expects($this->once())
+        $this->serializerMock->expects($this->exactly($unserializeCalledNum))
             ->method('unserialize')
             ->with($encodedValue)
             ->willReturn($value);
@@ -178,6 +184,7 @@ class CountryCreditCardTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Get data to test saved credit cards types
+     *
      * @return array
      */
     public function afterLoadDataProvider()
@@ -193,7 +200,8 @@ class CountryCreditCardTest extends \PHPUnit_Framework_TestCase
                 'encoded' => '',
                 'value' => null,
                 'randomHash' => [],
-                'expected' => null
+                'expected' => null,
+                0
             ],
             'valid data' => [
                 'encoded' => '{"US":["AE","VI","MA"],"AF":["AE","MA"]}',

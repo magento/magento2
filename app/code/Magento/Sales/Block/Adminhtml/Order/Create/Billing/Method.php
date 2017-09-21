@@ -8,7 +8,9 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create\Billing;
 /**
  * Adminhtml sales order create payment method block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Method extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
 {

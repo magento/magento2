@@ -8,8 +8,7 @@ namespace Magento\Eav\Model\Entity;
 /**
  * Entity type model
  *
- * @method \Magento\Eav\Model\ResourceModel\Entity\Type _getResource()
- * @method \Magento\Eav\Model\ResourceModel\Entity\Type getResource()
+ * @api
  * @method \Magento\Eav\Model\Entity\Type setEntityTypeCode(string $value)
  * @method string getEntityModel()
  * @method \Magento\Eav\Model\Entity\Type setEntityModel(string $value)
@@ -35,6 +34,7 @@ namespace Magento\Eav\Model\Entity;
  * @method \Magento\Eav\Model\Entity\Type setEntityAttributeCollection(string $value)
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Type extends \Magento\Framework\Model\AbstractModel
 {

@@ -68,6 +68,13 @@ class FillBillingInformationStep implements TestStepInterface
     private $billingAddressCustomer;
 
     /**
+     * Flag for edit billing information.
+     *
+     * @var boolean
+     */
+    private $editBillingInformation;
+
+    /**
      * Object manager instance.
      *
      * @var ObjectManager $objectManager
@@ -84,6 +91,7 @@ class FillBillingInformationStep implements TestStepInterface
      * @param Address $shippingAddress
      * @param string $billingCheckboxState
      * @param array|null $billingAddressCustomer
+     * @param boolean $editBillingInformation
      */
     public function __construct(
         CheckoutOnepage $checkoutOnepage,
@@ -93,7 +101,8 @@ class FillBillingInformationStep implements TestStepInterface
         Address $billingAddress = null,
         Address $shippingAddress = null,
         $billingCheckboxState = null,
-        $billingAddressCustomer = null
+        $billingAddressCustomer = null,
+        $editBillingInformation = true
     ) {
         $this->checkoutOnepage = $checkoutOnepage;
         $this->billingAddress = $billingAddress;
@@ -103,6 +112,7 @@ class FillBillingInformationStep implements TestStepInterface
         $this->objectManager = $objectManager;
         $this->billingCheckboxState = $billingCheckboxState;
         $this->billingAddressCustomer = $billingAddressCustomer;
+        $this->editBillingInformation = $editBillingInformation;
     }
 
     /**
@@ -115,6 +125,11 @@ class FillBillingInformationStep implements TestStepInterface
         $billingAddress = $this->billingAddress;
         if ($this->billingCheckboxState) {
             $this->assertBillingAddressCheckbox->processAssert($this->checkoutOnepage, $this->billingCheckboxState);
+        }
+        if ($this->billingCheckboxState === 'Yes' && !$this->editBillingInformation) {
+            return [
+                'billingAddress' => $this->shippingAddress
+            ];
         }
         if ($this->billingAddress) {
             $selectedPaymentMethod = $this->checkoutOnepage->getPaymentBlock()->getSelectedPaymentMethodBlock();

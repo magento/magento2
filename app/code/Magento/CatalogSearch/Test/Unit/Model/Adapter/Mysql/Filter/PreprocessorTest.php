@@ -16,7 +16,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PreprocessorTest extends \PHPUnit_Framework_TestCase
+class PreprocessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var AliasResolver|\PHPUnit_Framework_MockObject_MockObject
@@ -79,10 +79,18 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
     private $metadataPoolMock;
 
     /**
-     * @var \Magento\Indexer\Model\Indexer\StateFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stateFactoryMock;
+    protected $customerSessionMock;
 
+    /**
+     * @var int
+     */
+    private $customerGroupId = 42;
+
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
@@ -163,10 +171,16 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
 
         $this->metadataPoolMock->expects($this->any())->method('getMetadata')->willReturn($metadata);
         $metadata->expects($this->any())->method('getLinkField')->willReturn('entity_id');
-        $this->stateFactoryMock = $this->getMockBuilder(\Magento\Indexer\Model\Indexer\StateFactory::class)
+
+        $this->customerSessionMock = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->setMethods(['getCustomerGroupId'])
             ->getMock();
+
+        $this->customerSessionMock->expects($this->any())
+            ->method('getCustomerGroupId')
+            ->willReturn($this->customerGroupId);
+
         $this->target = $objectManagerHelper->getObject(
             \Magento\CatalogSearch\Model\Adapter\Mysql\Filter\Preprocessor::class,
             [
@@ -177,14 +191,14 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
                 'attributePrefix' => 'attr_',
                 'metadataPool' => $this->metadataPoolMock,
                 'aliasResolver' => $this->aliasResolver,
-                'stateFactory' => $this->stateFactoryMock
+                'customerSession' => $this->customerSessionMock
             ]
         );
     }
 
     public function testProcessPrice()
     {
-        $expectedResult = 'price_index.min_price = 23';
+        $expectedResult = 'price_index.min_price = 23 AND price_index.customer_group_id = ' . $this->customerGroupId;
         $isNegation = false;
         $query = 'price = 23';
 
@@ -288,7 +302,7 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
         $this->aliasResolver->expects($this->once())->method('getAlias')
             ->willReturn('termAttrAlias');
 
-        $this->filter->expects($this->exactly(3))
+        $this->filter->expects($this->exactly(4))
             ->method('getField')
             ->willReturn('termField');
         $this->filter->expects($this->exactly(2))
@@ -363,7 +377,7 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
         $attributeId = 1234567;
 
         $this->scope->expects($this->once())->method('getId')->will($this->returnValue($scopeId));
-        $this->filter->expects($this->exactly(4))
+        $this->filter->expects($this->exactly(5))
             ->method('getField')
             ->will($this->returnValue('not_static_attribute'));
         $this->config->expects($this->exactly(1))
@@ -424,17 +438,10 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
     {
         $query = 'static_attribute LIKE %name%';
         $expected = 'search_index.entity_id IN (select entity_id from () as filter)';
-        $stateMock = $this->getMock(\Magento\Indexer\Model\Indexer\State::class, [], [], '', false);
+
         $this->filter->expects($this->any())
             ->method('getField')
             ->willReturn('termField');
-        $this->stateFactoryMock->expects($this->once())->method('create')->willReturn($stateMock);
-        $stateMock->expects($this->once())
-            ->method('loadByIndexer')
-            ->with(\Magento\Catalog\Model\Indexer\Product\Eav\Processor::INDEXER_ID)
-            ->willReturnSelf();
-        // verify that frontend indexer table is used
-        $stateMock->expects($this->once())->method('getTableSuffix')->willReturn('_replica');
         $this->config->expects($this->exactly(1))
             ->method('getAttribute')
             ->with(\Magento\Catalog\Model\Product::ENTITY, 'termField')

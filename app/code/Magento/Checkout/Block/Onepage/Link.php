@@ -8,6 +8,7 @@ namespace Magento\Checkout\Block\Onepage;
 /**
  * One page checkout cart link
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Link extends \Magento\Framework\View\Element\Template

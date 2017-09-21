@@ -11,7 +11,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
-class UseConfigSettingsTest extends \PHPUnit_Framework_TestCase
+class UseConfigSettingsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerHelper
@@ -33,30 +33,32 @@ class UseConfigSettingsTest extends \PHPUnit_Framework_TestCase
      */
     private $useConfigSettings;
 
+    /**
+     * @var \Magento\Framework\Serialize\JsonValidator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $jsonValidatorMock;
+
     protected function setUp()
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->contextMock = $this->getMock(\Magento\Framework\View\Element\UiComponent\ContextInterface::class);
-        $this->serializerMock = $this->getMock(Json::class);
+        $this->contextMock = $this->createMock(\Magento\Framework\View\Element\UiComponent\ContextInterface::class);
+        $this->serializerMock = $this->createMock(Json::class);
+        $this->jsonValidatorMock = $this->getMockBuilder(\Magento\Framework\Serialize\JsonValidator::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->useConfigSettings = $this->objectManagerHelper->getObject(
             UseConfigSettings::class,
             [
                 'context' => $this->contextMock,
-                'serializer' => $this->serializerMock
+                'serializer' => $this->serializerMock,
+                'jsonValidator' => $this->jsonValidatorMock
             ]
         );
     }
 
     public function testPrepare()
     {
-        $processorMock = $this->getMock(
-            \Magento\Framework\View\Element\UiComponent\Processor::class,
-            [],
-            [],
-            '',
-            false,
-            false
-        );
+        $processorMock = $this->createMock(\Magento\Framework\View\Element\UiComponent\Processor::class);
         $processorMock->expects($this->atLeastOnce())->method('register');
         $this->contextMock->expects($this->atLeastOnce())->method('getProcessor')->willReturn($processorMock);
         $config = ['valueFromConfig' => 123];
@@ -68,32 +70,34 @@ class UseConfigSettingsTest extends \PHPUnit_Framework_TestCase
     /**
      * @param array $expectedResult
      * @param string|int $sourceValue
-     * @param int $serializedCallCount
+     * @param int $serializedCalledNum
+     * @param int $isValidCalledNum
      * @dataProvider prepareSourceDataProvider
      */
-    public function testPrepareSource(array $expectedResult, $sourceValue, $serializedCallCount = 0)
-    {
-        $processorMock = $this->getMock(
-            \Magento\Framework\View\Element\UiComponent\Processor::class,
-            [],
-            [],
-            '',
-            false,
-            false
-        );
+    public function testPrepareSource(
+        array $expectedResult,
+        $sourceValue,
+        $serializedCalledNum = 0,
+        $isValidCalledNum = 0
+    ) {
+        $processorMock = $this->createMock(\Magento\Framework\View\Element\UiComponent\Processor::class);
         $processorMock->expects($this->atLeastOnce())->method('register');
         $this->contextMock->expects($this->atLeastOnce())->method('getProcessor')->willReturn($processorMock);
         /** @var ValueSourceInterface|\PHPUnit_Framework_MockObject_MockObject $source */
-        $source = $this->getMock(ValueSourceInterface::class);
+        $source = $this->createMock(ValueSourceInterface::class);
         $source->expects($this->once())
             ->method('getValue')
             ->with($expectedResult['keyInConfiguration'])
             ->willReturn($sourceValue);
 
-        $this->serializerMock->expects($this->exactly($serializedCallCount))
+        $this->serializerMock->expects($this->exactly($serializedCalledNum))
             ->method('unserialize')
             ->with($sourceValue)
             ->willReturn($expectedResult['valueFromConfig']);
+
+        $this->jsonValidatorMock->expects($this->exactly($isValidCalledNum))
+            ->method('isValid')
+            ->willReturn(true);
 
         $config = array_replace($expectedResult, ['valueFromConfig' => $source]);
         $this->useConfigSettings->setData('config', $config);
@@ -119,7 +123,8 @@ class UseConfigSettingsTest extends \PHPUnit_Framework_TestCase
                     'unserialized' => true
                 ],
                 'sourceValue' => '{"32000":3}',
-                'serialziedCallCount' => 1
+                'serialziedCalledNum' => 1,
+                'isValidCalledNum' => 1
             ]
         ];
     }

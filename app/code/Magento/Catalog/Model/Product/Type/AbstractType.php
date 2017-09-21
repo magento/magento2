@@ -16,6 +16,7 @@ use Magento\Framework\Exception\LocalizedException;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 abstract class AbstractType
 {
@@ -165,6 +166,7 @@ abstract class AbstractType
      * Serializer interface instance.
      *
      * @var \Magento\Framework\Serialize\Serializer\Json
+     * @since 101.1.0
      */
     protected $serializer;
 
@@ -723,8 +725,7 @@ abstract class AbstractType
     protected function _removeNotApplicableAttributes($product)
     {
         $entityType = $product->getResource()->getEntityType();
-        foreach ($this->_eavConfig->getEntityAttributeCodes($entityType, $product) as $attributeCode) {
-            $attribute = $this->_eavConfig->getAttribute($entityType, $attributeCode);
+        foreach ($this->_eavConfig->getEntityAttributes($entityType, $product) as $attribute) {
             $applyTo = $attribute->getApplyTo();
             if (is_array($applyTo) && count($applyTo) > 0 && !in_array($product->getTypeId(), $applyTo)) {
                 $product->unsetData($attribute->getAttributeCode());
@@ -1108,6 +1109,7 @@ abstract class AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return bool
+     * @since 101.1.0
      */
     public function isPossibleBuyFromList($product)
     {

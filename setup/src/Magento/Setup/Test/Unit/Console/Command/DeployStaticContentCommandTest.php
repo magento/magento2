@@ -22,7 +22,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 
-class DeployStaticContentCommandTest extends \PHPUnit_Framework_TestCase
+class DeployStaticContentCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DeployStaticContentCommand
@@ -50,11 +50,6 @@ class DeployStaticContentCommandTest extends \PHPUnit_Framework_TestCase
     private $deployService;
 
     /**
-     * @var DeployStaticOptions|Mock
-     */
-    private $options;
-
-    /**
      * Object manager to create various objects
      *
      * @var ObjectManagerInterface|Mock
@@ -72,21 +67,14 @@ class DeployStaticContentCommandTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->inputValidator = $this->getMock(InputValidator::class, [], [], '', false);
-        $this->consoleLoggerFactory = $this->getMock(ConsoleLoggerFactory::class, [], [], '', false);
-        $this->logger = $this->getMock(ConsoleLogger::class, [], [], '', false);
-        $this->options = $this->getMock(DeployStaticOptions::class, [], [], '', false);
+        $this->inputValidator = $this->createMock(InputValidator::class);
+        $this->consoleLoggerFactory = $this->createMock(ConsoleLoggerFactory::class);
+        $this->logger = $this->createMock(ConsoleLogger::class);
         $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
-        $this->appState = $this->getMock(State::class, [], [], '', false);
-        $this->deployService = $this->getMock(DeployStaticContent::class, [], [], '', false);
+        $this->appState = $this->createMock(State::class);
+        $this->deployService = $this->createMock(DeployStaticContent::class);
 
-        $objectManagerProvider = $this->getMock(
-            ObjectManagerProvider::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $objectManagerProvider = $this->createMock(ObjectManagerProvider::class);
         $objectManagerProvider->method('get')->willReturn($this->objectManager);
 
         $this->command = (new ObjectManager($this))->getObject(DeployStaticContentCommand::class, [
@@ -99,9 +87,11 @@ class DeployStaticContentCommandTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param array $input
      * @see DeployStaticContentCommand::execute()
+     * @dataProvider executeDataProvider
      */
-    public function testExecute()
+    public function testExecute($input)
     {
         $this->appState->expects($this->once())
             ->method('getMode')
@@ -118,7 +108,19 @@ class DeployStaticContentCommandTest extends \PHPUnit_Framework_TestCase
         $this->deployService->expects($this->once())->method('deploy');
 
         $tester = new CommandTester($this->command);
-        $tester->execute([]);
+        $tester->execute($input);
+    }
+
+    public function executeDataProvider()
+    {
+        return [
+            'No options' => [
+                []
+            ],
+            'With static content version option' => [
+                ['--content-version' => '123456']
+            ]
+        ];
     }
 
     /**

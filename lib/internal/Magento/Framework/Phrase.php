@@ -9,9 +9,11 @@ namespace Magento\Framework;
 
 use Magento\Framework\Phrase\Renderer\Placeholder as RendererPlaceholder;
 use Magento\Framework\Phrase\RendererInterface;
-use Zend\Stdlib\JsonSerializable;
 
-class Phrase implements JsonSerializable
+/**
+ * @api
+ */
+class Phrase implements \JsonSerializable
 {
     /**
      * Default phrase renderer. Allows stacking renderers that "don't know about each other"

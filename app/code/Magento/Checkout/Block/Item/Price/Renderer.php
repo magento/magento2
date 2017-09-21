@@ -10,6 +10,7 @@ use Magento\Quote\Model\Quote\Item\AbstractItem;
 /**
  * Item price render block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Renderer extends \Magento\Framework\View\Element\Template

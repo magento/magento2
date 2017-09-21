@@ -13,6 +13,9 @@ use Magento\Vault\Block\AbstractTokenRenderer;
 
 /**
  * Class VaultTokenRenderer
+ *
+ * @api
+ * @since 100.1.3
  */
 class VaultTokenRenderer extends AbstractTokenRenderer
 {
@@ -39,6 +42,7 @@ class VaultTokenRenderer extends AbstractTokenRenderer
 
     /**
      * @inheritdoc
+     * @since 100.1.3
      */
     public function getIconUrl()
     {
@@ -47,6 +51,7 @@ class VaultTokenRenderer extends AbstractTokenRenderer
 
     /**
      * @inheritdoc
+     * @since 100.1.3
      */
     public function getIconHeight()
     {
@@ -55,6 +60,7 @@ class VaultTokenRenderer extends AbstractTokenRenderer
 
     /**
      * @inheritdoc
+     * @since 100.1.3
      */
     public function getIconWidth()
     {
@@ -66,6 +72,7 @@ class VaultTokenRenderer extends AbstractTokenRenderer
      *
      * @param PaymentTokenInterface $token
      * @return boolean
+     * @since 100.1.3
      */
     public function canRender(PaymentTokenInterface $token)
     {
@@ -75,6 +82,7 @@ class VaultTokenRenderer extends AbstractTokenRenderer
     /**
      * Get email of PayPal payer
      * @return string
+     * @since 100.1.3
      */
     public function getPayerEmail()
     {

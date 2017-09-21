@@ -7,12 +7,12 @@
 namespace Magento\Widget\Test\Unit\Helper;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Widget\Model\Widget\Wysiwyg\Normalizer;
+use Magento\Framework\Data\Wysiwyg\Normalizer;
 
 /**
  * Class ConditionsTest
  */
-class ConditionsTest extends \PHPUnit_Framework_TestCase
+class ConditionsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Widget\Helper\Conditions
@@ -34,8 +34,8 @@ class ConditionsTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->serializer = $this->getMock(\Magento\Framework\Serialize\Serializer\Json::class);
-        $this->normalizer = $this->getMock(Normalizer::class);
+        $this->serializer = $this->createMock(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->normalizer = $this->createMock(Normalizer::class);
         $this->conditions = (new ObjectManager($this))->getObject(
             \Magento\Widget\Helper\Conditions::class,
             [
@@ -59,11 +59,11 @@ class ConditionsTest extends \PHPUnit_Framework_TestCase
             ->with($serializedValue)
             ->willReturn($value);
         $this->normalizer->expects($this->once())
-            ->method('replaceReservedCharaters')
+            ->method('replaceReservedCharacters')
             ->with($serializedValue)
             ->willReturn($normalizedValue);
         $this->normalizer->expects($this->once())
-            ->method('restoreReservedCharaters')
+            ->method('restoreReservedCharacters')
             ->with($normalizedValue)
             ->willReturn($serializedValue);
         $encoded = $this->conditions->encode($value);

@@ -5,12 +5,16 @@
  */
 namespace Magento\Quote\Test\Unit\Model;
 
-use \Magento\Quote\Model\QuoteValidator;
+use Magento\Directory\Model\AllowedCountries;
+use Magento\Quote\Model\Quote\Address;
+use Magento\Quote\Model\Quote\Payment;
+use Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage as OrderAmountValidationMessage;
+use Magento\Quote\Model\QuoteValidator;
 
 /**
  * Class QuoteValidatorTest
  */
-class QuoteValidatorTest extends \PHPUnit_Framework_TestCase
+class QuoteValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Quote\Model\QuoteValidator
@@ -23,13 +27,33 @@ class QuoteValidatorTest extends \PHPUnit_Framework_TestCase
     protected $quoteMock;
 
     /**
+     * @var AllowedCountries|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $allowedCountryReader;
+
+    /**
+     * @var OrderAmountValidationMessage|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $orderAmountValidationMessage;
+
+    /**
      * @return void
      */
     protected function setUp()
     {
-        $this->quoteValidator = new \Magento\Quote\Model\QuoteValidator();
+        $this->allowedCountryReader = $this->getMockBuilder(AllowedCountries::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->orderAmountValidationMessage = $this->getMockBuilder(OrderAmountValidationMessage::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->quoteMock = $this->getMock(
+        $this->quoteValidator = new \Magento\Quote\Model\QuoteValidator(
+            $this->allowedCountryReader,
+            $this->orderAmountValidationMessage
+        );
+
+        $this->quoteMock = $this->createPartialMock(
             \Magento\Quote\Model\Quote::class,
             [
                 'getShippingAddress',
@@ -39,11 +63,10 @@ class QuoteValidatorTest extends \PHPUnit_Framework_TestCase
                 'setHasError',
                 'addMessage',
                 'isVirtual',
+                'validateMinimumAmount',
+                'getIsMultiShipping',
                 '__wakeup'
-            ],
-            [],
-            '',
-            false
+            ]
         );
     }
 
@@ -109,7 +132,7 @@ class QuoteValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateBeforeSubmitThrowsExceptionIfShippingAddressIsInvalid()
     {
-        $shippingAddressMock = $this->getMock(\Magento\Quote\Model\Quote\Address::class, [], [], '', false);
+        $shippingAddressMock = $this->createMock(\Magento\Quote\Model\Quote\Address::class);
         $this->quoteMock->expects($this->any())->method('getShippingAddress')->willReturn($shippingAddressMock);
         $this->quoteMock->expects($this->any())->method('isVirtual')->willReturn(false);
         $shippingAddressMock->expects($this->any())->method('validate')->willReturn(['Invalid Shipping Address']);
@@ -124,21 +147,18 @@ class QuoteValidatorTest extends \PHPUnit_Framework_TestCase
     public function testValidateBeforeSubmitThrowsExceptionIfShippingRateIsNotSelected()
     {
         $shippingMethod = 'checkmo';
-        $shippingAddressMock = $this->getMock(
-            \Magento\Quote\Model\Quote\Address::class,
-            [
-                'validate',
-                'getShippingMethod',
-                'getShippingRateByCode',
-                '__wakeup'
-            ],
-            [],
-            '',
-            false
-        );
+        $shippingAddressMock = $this->getMockBuilder(Address::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->allowedCountryReader->method('getAllowedCountries')
+            ->willReturn(['US' => 'US']);
+
         $this->quoteMock->expects($this->any())->method('getShippingAddress')->willReturn($shippingAddressMock);
         $this->quoteMock->expects($this->any())->method('isVirtual')->willReturn(false);
         $shippingAddressMock->expects($this->any())->method('validate')->willReturn(true);
+        $shippingAddressMock->method('getCountryId')
+            ->willReturn('US');
         $shippingAddressMock->expects($this->any())->method('getShippingMethod')->willReturn($shippingMethod);
         $shippingAddressMock->expects($this->once())->method('getShippingRateByCode')->with($shippingMethod);
 
@@ -151,7 +171,7 @@ class QuoteValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateBeforeSubmitThrowsExceptionIfBillingAddressIsNotValid()
     {
-        $billingAddressMock = $this->getMock(\Magento\Quote\Model\Quote\Address::class, [], [], '', false);
+        $billingAddressMock = $this->createMock(\Magento\Quote\Model\Quote\Address::class);
         $this->quoteMock->expects($this->any())->method('getBillingAddress')->willReturn($billingAddressMock);
         $this->quoteMock->expects($this->any())->method('isVirtual')->willReturn(true);
         $billingAddressMock->expects($this->any())->method('validate')->willReturn(['Invalid Billing Address']);
@@ -165,13 +185,83 @@ class QuoteValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateBeforeSubmitThrowsExceptionIfPaymentMethodIsNotSelected()
     {
-        $paymentMock = $this->getMock(\Magento\Quote\Model\Quote\Payment::class, [], [], '', false);
-        $billingAddressMock = $this->getMock(\Magento\Quote\Model\Quote\Address::class, [], [], '', false);
+        $paymentMock = $this->createMock(\Magento\Quote\Model\Quote\Payment::class);
+        $billingAddressMock = $this->createMock(\Magento\Quote\Model\Quote\Address::class);
         $billingAddressMock->expects($this->any())->method('validate')->willReturn(true);
 
         $this->quoteMock->expects($this->any())->method('getBillingAddress')->willReturn($billingAddressMock);
         $this->quoteMock->expects($this->any())->method('getPayment')->willReturn($paymentMock);
         $this->quoteMock->expects($this->any())->method('isVirtual')->willReturn(true);
+
+        $this->quoteValidator->validateBeforeSubmit($this->quoteMock);
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Minimum Order Amount Exceeded.
+     */
+    public function testValidateBeforeSubmitThrowsExceptionIfMinimumOrderAmount()
+    {
+        $paymentMock = $this->createMock(\Magento\Quote\Model\Quote\Payment::class);
+        $paymentMock->expects($this->once())->method('getMethod')->willReturn('checkmo');
+
+        $billingAddressMock = $this->createMock(\Magento\Quote\Model\Quote\Address::class);
+        $billingAddressMock->expects($this->any())->method('validate')->willReturn(true);
+
+        $this->quoteMock->expects($this->any())->method('getBillingAddress')->willReturn($billingAddressMock);
+        $this->quoteMock->expects($this->any())->method('getPayment')->willReturn($paymentMock);
+        $this->quoteMock->expects($this->any())->method('isVirtual')->willReturn(true);
+
+        $this->quoteMock->expects($this->any())->method('getIsMultiShipping')->willReturn(false);
+        $this->quoteMock->expects($this->any())->method('validateMinimumAmount')->willReturn(false);
+
+        $this->orderAmountValidationMessage->expects($this->once())->method('getMessage')
+            ->willReturn(__("Minimum Order Amount Exceeded."));
+
+        $this->quoteValidator->validateBeforeSubmit($this->quoteMock);
+    }
+
+    /**
+     * Test case when country id not present in allowed countries list.
+     *
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Some addresses cannot be used due to country-specific configurations.
+     */
+    public function testValidateBeforeSubmitThrowsExceptionIfCountrySpecificConfigurations()
+    {
+        $this->allowedCountryReader->method('getAllowedCountries')
+            ->willReturn(['EE' => 'EE']);
+
+        $addressMock = $this->getMockBuilder(Address::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $addressMock->method('validate')
+            ->willReturn(true);
+        $addressMock->method('getCountryId')
+            ->willReturn('EU');
+
+        $paymentMock = $this->getMockBuilder(Payment::class)
+            ->setMethods(['getMethod'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $paymentMock->method('getMethod')
+            ->willReturn(true);
+
+        $billingAddressMock = $this->getMockBuilder(Address::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['validate'])
+            ->getMock();
+        $billingAddressMock->method('validate')
+            ->willReturn(true);
+
+        $this->quoteMock->method('getShippingAddress')
+            ->willReturn($addressMock);
+        $this->quoteMock->method('isVirtual')
+            ->willReturn(false);
+        $this->quoteMock->method('getBillingAddress')
+            ->willReturn($billingAddressMock);
+        $this->quoteMock->method('getPayment')
+            ->willReturn($paymentMock);
 
         $this->quoteValidator->validateBeforeSubmit($this->quoteMock);
     }

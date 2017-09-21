@@ -13,7 +13,10 @@ use Magento\Framework\Xml\Security;
 
 /**
  * Abstract online shipping carrier model
+ *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 abstract class AbstractCarrierOnline extends AbstractCarrier
 {

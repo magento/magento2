@@ -8,7 +8,9 @@ namespace Magento\Reports\Block\Adminhtml\Refresh;
 /**
  * Report Refresh statistic container
  *
+ * @api
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Statistics extends \Magento\Backend\Block\Widget\Grid\Container
 {

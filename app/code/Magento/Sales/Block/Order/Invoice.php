@@ -9,6 +9,9 @@ use Magento\Customer\Model\Context;
 
 /**
  * Sales order view block
+ *
+ * @api
+ * @since 100.0.2
  */
 class Invoice extends \Magento\Sales\Block\Order\Invoice\Items
 {

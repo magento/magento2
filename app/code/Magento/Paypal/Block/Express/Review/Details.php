@@ -10,7 +10,8 @@ use Magento\Sales\Model\Order\Address;
 /**
  * Paypal Express Onepage checkout block
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
 class Details extends \Magento\Checkout\Block\Cart\Totals
 {

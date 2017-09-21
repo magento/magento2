@@ -10,7 +10,9 @@ use Magento\Customer\Model\Context;
 /**
  * Email to a Friend Block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Send extends \Magento\Framework\View\Element\Template
 {

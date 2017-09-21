@@ -7,6 +7,9 @@
  */
 namespace Magento\Framework\Validator;
 
+/**
+ * @api
+ */
 class Constraint extends \Magento\Framework\Validator\AbstractValidator
 {
     /**

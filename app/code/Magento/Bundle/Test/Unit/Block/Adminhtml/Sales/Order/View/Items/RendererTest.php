@@ -5,7 +5,7 @@
  */
 namespace Magento\Bundle\Test\Unit\Block\Adminhtml\Sales\Order\View\Items;
 
-class RendererTest extends \PHPUnit_Framework_TestCase
+class RendererTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Sales\Model\Order\Item|\PHPUnit_Framework_MockObject_MockObject */
     protected $orderItem;
@@ -18,14 +18,11 @@ class RendererTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->orderItem = $this->getMock(
+        $this->orderItem = $this->createPartialMock(
             \Magento\Sales\Model\Order\Item::class,
-            ['getProductOptions', '__wakeup', 'getParentItem', 'getOrderItem'],
-            [],
-            '',
-            false
+            ['getProductOptions', '__wakeup', 'getParentItem', 'getOrderItem']
         );
-        $this->serializer = $this->getMock(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->serializer = $this->createMock(\Magento\Framework\Serialize\Serializer\Json::class);
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(
             \Magento\Bundle\Block\Adminhtml\Sales\Order\View\Items\Renderer::class,
@@ -60,14 +57,8 @@ class RendererTest extends \PHPUnit_Framework_TestCase
     {
         if ($parentItem) {
             $parentItem =
-                $this->getMock(
-                    \Magento\Sales\Model\Order\Item::class,
-                    ['getProductOptions',
-                    '__wakeup'],
-                    [],
-                    '',
-                    false
-                );
+                $this->createPartialMock(\Magento\Sales\Model\Order\Item::class, ['getProductOptions',
+                    '__wakeup']);
             $parentItem->expects($this->any())->method('getProductOptions')->will($this->returnValue($productOptions));
         } else {
             $this->orderItem->expects($this->any())->method('getProductOptions')
@@ -116,14 +107,8 @@ class RendererTest extends \PHPUnit_Framework_TestCase
     {
         if ($parentItem) {
             $parentItem =
-                $this->getMock(
-                    \Magento\Sales\Model\Order\Item::class,
-                    ['getProductOptions',
-                    '__wakeup'],
-                    [],
-                    '',
-                    false
-                );
+                $this->createPartialMock(\Magento\Sales\Model\Order\Item::class, ['getProductOptions',
+                    '__wakeup']);
             $parentItem->expects($this->any())->method('getProductOptions')->will($this->returnValue($productOptions));
         } else {
             $this->orderItem->expects($this->any())->method('getProductOptions')
@@ -170,7 +155,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [[], null],
-            [['bundle_selection_attributes' => 'a:1:{i:0;i:1;}'], [0 => 1]],
+            [['bundle_selection_attributes' => 'serialized string'], [0 => 1]],
         ];
     }
 

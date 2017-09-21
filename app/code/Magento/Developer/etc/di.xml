@@ -100,6 +100,8 @@
                 <item name="dev_di_info" xsi:type="object">Magento\Developer\Console\Command\DiInfoCommand</item>
                 <item name="dev_query_log_enable" xsi:type="object">Magento\Developer\Console\Command\QueryLogEnableCommand</item>
                 <item name="dev_query_log_disable" xsi:type="object">Magento\Developer\Console\Command\QueryLogDisableCommand</item>
+                <item name="dev_template_hints_disable" xsi:type="object">Magento\Developer\Console\Command\TemplateHintsDisableCommand</item>
+                <item name="dev_template_hints_enable" xsi:type="object">Magento\Developer\Console\Command\TemplateHintsEnableCommand</item>
             </argument>
         </arguments>
     </type>
