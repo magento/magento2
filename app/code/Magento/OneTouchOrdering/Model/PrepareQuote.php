@@ -78,9 +78,9 @@ class PrepareQuote
      * @param Quote $quote
      * @throws Exception
      */
-    public function preparePayment(Quote $quote, $customerId)
+    public function preparePayment(Quote $quote, $customerId, $ccId)
     {
-        $cc = $this->customerCreditCardManager->getCustomerCreditCard($customerId);
+        $cc = $this->customerCreditCardManager->getCustomerCreditCard($customerId, $ccId);
         $publicHash = $cc->getPublicHash();
         $quote->getPayment()->setQuote($quote)->importData(
             ['method' => BrainTreeConfigProvider::CC_VAULT_CODE]

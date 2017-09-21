@@ -15,4 +15,13 @@
 </div>
 <!-- /ko -->
 
+<!-- ko if: options.cards().length > 0 -->
+<div class="field">
+    <label for="address-selector"><!-- ko i18n: 'Select credit card' --><!-- /ko -->:</label>
+    <select name="customer_cc" id="cc-selector"
+            data-bind="options: options.cards, optionsText: 'card', optionsValue: 'id'">
+    </select>
+</div>
+<!-- /ko -->
+
 <!-- /ko -->

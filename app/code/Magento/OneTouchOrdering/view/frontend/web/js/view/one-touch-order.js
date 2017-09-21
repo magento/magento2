@@ -30,6 +30,7 @@ define(
                 message: $.mage.__('Are you sure you want to place order and pay?'),
                 formSelector: '#product_addtocart_form',
                 addresses: ko.observable([]),
+                cards: ko.observable([]),
                 defaultAddress: ko.observable(0)
             },
 
@@ -43,9 +44,13 @@ define(
                         self.showButton(data.available);
                     }
 
-                    if(typeof data.addresses !== 'undefined' && typeof data.defaultAddress !== 'undefined') {
+                    if (typeof data.addresses !== 'undefined' && typeof data.defaultAddress !== 'undefined') {
                         self.options.addresses(data.addresses);
                         self.options.defaultAddress(data.defaultAddress);
+                    }
+
+                    if (typeof data.cards !== 'undefined') {
+                        self.options.cards(data.cards);
                     }
                 });
             },

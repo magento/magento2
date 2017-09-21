@@ -61,16 +61,16 @@ class CustomerCreditCardManager
      * @return \Magento\Vault\Api\Data\PaymentTokenInterface
      * @throws LocalizedException
      */
-    public function getCustomerCreditCard($customerId)
+    public function getCustomerCreditCard($customerId, $cardId)
     {
         $tokens = $this->getVisibleAvailableTokens($customerId);
-        if (empty($tokens)) {
+        if (empty($tokens) || !$cardId ||!isset($tokens[$cardId])) {
             throw new LocalizedException(
                 __('There are no credit cards available.')
             );
         }
 
-        return array_shift($tokens);
+        return $tokens[$cardId];
     }
 
     /**

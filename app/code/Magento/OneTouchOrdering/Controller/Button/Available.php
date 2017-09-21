@@ -11,6 +11,7 @@ use Magento\Framework\Controller\Result\Json as JsonResult;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\OneTouchOrdering\Model\Config;
 use Magento\OneTouchOrdering\Model\CustomerAddressesFormatter;
+use Magento\OneTouchOrdering\Model\CustomerCardsFormatter;
 use Magento\OneTouchOrdering\Model\OneTouchOrdering;
 use Magento\Customer\Model\Session;
 
@@ -27,24 +28,30 @@ class Available extends Action
     /**
      * @var CustomerAddressesFormatter
      */
-    private $customerAddressesFormater;
+    private $customerAddressesFormatter;
     /**
      * @var Config
      */
     private $oneTouchOrderingConfig;
+    /**
+     * @var CustomerCardsFormatter
+     */
+    private $customerCardsFormatter;
 
     public function __construct(
         Context $context,
         OneTouchOrdering $oneTouchOrdering,
         Session $customerSession,
-        CustomerAddressesFormatter $customerAddressesFormater,
+        CustomerAddressesFormatter $customerAddressesFormatter,
+        CustomerCardsFormatter $customerCardsFormatter,
         Config $oneTouchOrderingConfig
     ) {
         parent::__construct($context);
         $this->oneTouchOrdering = $oneTouchOrdering;
         $this->customerSession = $customerSession;
-        $this->customerAddressesFormater = $customerAddressesFormater;
+        $this->customerAddressesFormatter = $customerAddressesFormatter;
         $this->oneTouchOrderingConfig = $oneTouchOrderingConfig;
+        $this->customerCardsFormatter = $customerCardsFormatter;
     }
 
     public function execute()
@@ -59,9 +66,10 @@ class Available extends Action
         $customer = $this->customerSession->getCustomer();
         $available = $this->oneTouchOrdering->isAvailableForCustomer($customer);
         $resultData['available'] = $available;
+        $resultData['cards'] = $this->customerCardsFormatter->getFormattedCards($customer);
         if ($this->oneTouchOrderingConfig->isSelectAddressEnabled()) {
             $resultData += [
-                'addresses' => $this->customerAddressesFormater->getFormattedAddresses($customer),
+                'addresses' => $this->customerAddressesFormatter->getFormattedAddresses($customer),
                 'defaultAddress' => $customer->getDefaultShippingAddress()->getId()
             ];
         }

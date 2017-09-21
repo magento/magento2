@@ -68,7 +68,7 @@ class PlaceOrder
         $quote = $this->prepareQuote->prepare($customerData, $paramsObject);
         $quote->addProduct($product, $paramsObject);
         $this->shippingRateChooser->choose($quote);
-        $this->prepareQuote->preparePayment($quote, $customerData->getCustomerId());
+        $this->prepareQuote->preparePayment($quote, $customerData->getCustomerId(), $paramsObject->getCustomerCc());
         $this->quoteRepository->save($quote);
         return $this->cartManagementInterface->placeOrder($quote->getId());
     }

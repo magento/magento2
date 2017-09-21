@@ -73,7 +73,7 @@ class CustomerCreditCardManagerTest extends TestCase
     public function testGetVisibleAvailableTokens()
     {
         $customerId = 21;
-
+        $ccId = 2;
         $this->filterBuilder->method('setField')->withConsecutive($this->logicalOr(
             [\Magento\Vault\Api\Data\PaymentTokenInterface::CUSTOMER_ID],
             [\Magento\Vault\Api\Data\PaymentTokenInterface::IS_VISIBLE],
@@ -104,10 +104,10 @@ class CustomerCreditCardManagerTest extends TestCase
         $paymentTokenSearchResult = $this->getMockForAbstractClass(
             \Magento\Vault\Api\Data\PaymentTokenSearchResultsInterface::class
         );
-        $paymentTokenSearchResult->method('getItems')->willReturn([true]);
+        $paymentTokenSearchResult->method('getItems')->willReturn([$ccId => true]);
         $this->paymentTokenRepository->method('getList')->willReturn($paymentTokenSearchResult);
 
-        $result = $this->customerCreditCardManager->getCustomerCreditCard($customerId);
+        $result = $this->customerCreditCardManager->getCustomerCreditCard($customerId, $ccId);
         $this->assertTrue($result);
     }
 
@@ -122,6 +122,20 @@ class CustomerCreditCardManagerTest extends TestCase
         $this->paymentTokenRepository->method('getList')->willReturn($paymentTokenSearchResult);
         $this->expectException(LocalizedException::class);
 
-        $this->customerCreditCardManager->getCustomerCreditCard($customerId);
+        $this->customerCreditCardManager->getCustomerCreditCard($customerId, 2);
+    }
+
+    public function testGetCustomerCreditCardNoRequestedCC()
+    {
+        $customerId = 21;
+
+        $paymentTokenSearchResult = $this->getMockForAbstractClass(
+            \Magento\Vault\Api\Data\PaymentTokenSearchResultsInterface::class
+        );
+        $paymentTokenSearchResult->method('getItems')->willReturn([3 => true]);
+        $this->paymentTokenRepository->method('getList')->willReturn($paymentTokenSearchResult);
+        $this->expectException(LocalizedException::class);
+
+        $this->customerCreditCardManager->getCustomerCreditCard($customerId, 2);
     }
 }

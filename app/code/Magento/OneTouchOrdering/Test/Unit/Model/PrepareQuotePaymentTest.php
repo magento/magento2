@@ -58,6 +58,7 @@ class PrepareQuotePaymentTest extends TestCase
     public function testPreparePayment()
     {
         $customerId = 32;
+        $ccId = 2;
         $publicHash = '123456789';
         $nonce = '987654321';
 
@@ -88,7 +89,7 @@ class PrepareQuotePaymentTest extends TestCase
             ->with($publicHash, $customerId)
             ->willReturn($nonce);
         $this->quote->expects($this->once())->method('collectTotals');
-        $this->prepareQuote->preparePayment($this->quote, $customerId);
+        $this->prepareQuote->preparePayment($this->quote, $customerId, $ccId);
         
         $this->assertArraySubset($paymentAdditionalInformation, $payment->getAdditionalInformation());
     }
