@@ -365,7 +365,6 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
      */
     public function testAddSitemapToRobotsTxt($maxLines, $maxFileSize, $expectedFile, $expectedWrites, $robotsInfo)
     {
-        $this->markTestSkipped('Test needs to be refactored.');
         $actualData = [];
         $model = $this->prepareSitemapModelMock(
             $actualData,
@@ -409,17 +408,18 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
         };
 
         // Check that all expected lines were written
-        $this->fileMock->expects($this->exactly($expectedWrites))
-            ->method('write')
-            ->willReturnCallback($streamWriteCallback);
+        $this->fileMock->expects(
+            $this->exactly($expectedWrites)
+        )->method(
+            'write'
+        )->will(
+            $this->returnCallback($streamWriteCallback)
+        );
 
         $checkFileCallback = function ($file) use (&$currentFile) {
             $currentFile = $file;
-        };
-
-        // Check that all expected file descriptors were created
-        $this->directoryMock->expects($this->exactly(count($expectedFile)))
-            ->method('openFile')
+        };// Check that all expected file descriptors were created
+        $this->directoryMock->expects($this->exactly(count($expectedFile)))->method('openFile')
             ->willReturnCallback($checkFileCallback);
 
         // Check that all file descriptors were closed

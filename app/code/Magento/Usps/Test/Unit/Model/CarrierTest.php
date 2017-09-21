@@ -5,6 +5,7 @@
  */
 namespace Magento\Usps\Test\Unit\Model;
 
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\HTTP\ZendClient;
 use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Quote\Model\Quote\Address\RateRequest;
@@ -162,6 +163,22 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
+        $productCollection = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Collection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $productCollection->method('addStoreFilter')
+            ->willReturnSelf();
+        $productCollection->method('addFieldToFilter')
+            ->willReturnSelf();
+        $productCollection->method('addAttributeToSelect')
+            ->willReturn([]);
+
+        $productCollectionFactory = $this->getMockBuilder(CollectionFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $productCollectionFactory->method('create')
+            ->willReturn($productCollection);
+
         $arguments = [
             'scopeConfig' => $this->scope,
             'xmlSecurity' => new \Magento\Framework\Xml\Security(),
@@ -172,6 +189,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             'data' => $data,
             'rateErrorFactory' => $this->errorFactory,
             'carrierHelper' => $carrierHelper,
+            'productCollectionFactory' => $productCollectionFactory,
         ];
 
         $this->dataHelper = $this->getMockBuilder(DataHelper::class)
@@ -263,6 +281,31 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             );
 
         $this->assertNotEmpty($this->carrier->returnOfShipment($request)->getInfo()[0]['tracking_number']);
+    }
+
+    public function testFormattingFloatValuesForIntlShipmentRequest()
+    {
+        $this->httpResponse->method('getBody')
+            ->willReturn(
+                file_get_contents(__DIR__ . '/_files/success_usps_response_return_shipment.xml')
+            );
+        $request = $this->objectManager->getObject(
+            \Magento\Shipping\Model\Shipment\ReturnShipment::class,
+            require __DIR__ . '/_files/return_shipment_request_data.php'
+        );
+
+        $request->setRecipientAddressCountryCode('UK');
+        $formattedValuesRegex = '(<Value>5.00<\/Value>).*';
+        $formattedValuesRegex .= '(<NetOunces>0.00<\/NetOunces>)';
+
+        $this->httpClient->expects($this->exactly(2))
+            ->method('setParameterGet')
+            ->withConsecutive(
+                ['API', 'ExpressMailIntl'],
+                ['XML', $this->matchesRegularExpression('/' . $formattedValuesRegex . '/')]
+            );
+
+        $this->carrier->returnOfShipment($request);
     }
 
     /**

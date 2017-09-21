@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <cest name="AdminCreateCategoryCest">
+        <annotations>
+            <features value="Category Creation"/>
+            <stories value="Create a Category via the Admin"/>
+            <group value="category"/>
+            <env value="chrome"/>
+            <env value="firefox"/>
+            <env value="phantomjs"/>
+        </annotations>
+        <after>
+            <amOnPage url="admin/admin/auth/logout/" mergeKey="amOnLogoutPage"/>
+        </after>
+        <test name="CreateCategoryViaAdmin">
+            <annotations>
+                <title value="You should be able to create a Category in the admin back-end."/>
+                <description value="You should be able to create a Category in the admin back-end."/>
+                <severity value="CRITICAL"/>
+                <testCaseId value="MAGETWO-72102"/>
+            </annotations>
+            <amOnPage url="{{AdminLoginPage}}" mergeKey="amOnAdminLoginPage"/>
+            <fillField selector="{{AdminLoginFormSection.username}}" userInput="{{_ENV.MAGENTO_ADMIN_USERNAME}}" mergeKey="fillUsername"/>
+            <fillField selector="{{AdminLoginFormSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" mergeKey="fillPassword"/>
+            <click selector="{{AdminLoginFormSection.signIn}}" mergeKey="clickOnSignIn"/>
+            <amOnPage url="{{AdminCategoryPage}}" mergeKey="navigateToCategoryPage"/>
+            <waitForPageLoad mergeKey="waitForPageLoad1"/>
+            <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" mergeKey="clickOnAddSubCategory"/>
+            <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{SimpleSubCategory.name}}" mergeKey="enterCategoryName"/>
+            <click selector="{{AdminCategorySEOSection.SectionHeader}}" mergeKey="openSEO"/>
+            <fillField selector="{{AdminCategorySEOSection.UrlKeyInput}}" userInput="{{SimpleSubCategory.name_lwr}}" mergeKey="enterURLKey"/>
+            <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" mergeKey="saveCategory"/>
+            <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" mergeKey="assertSuccess"/>
+
+            <!-- Literal URL below, need to refactor line + StorefrontCategoryPage when support for variable URL is implemented-->
+            <amOnPage url="/{{SimpleSubCategory.name_lwr}}.html" mergeKey="goToCategoryFrontPage"/>
+            <waitForPageLoad mergeKey="waitForPageLoad2"/>
+            <seeInTitle userInput="{{SimpleSubCategory.name}}" mergeKey="assertTitle"/>
+            <see selector="{{StorefrontCategoryMainSection.CategoryTitle}}" userInput="{{SimpleSubCategory.name_lwr}}" mergeKey="assertInfo1"/>
+        </test>
+    </cest>
+</config>

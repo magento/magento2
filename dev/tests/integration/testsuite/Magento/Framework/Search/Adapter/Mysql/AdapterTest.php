@@ -525,6 +525,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
      */
     public function testAdvancedSearchCompositeProductWithOutOfStockOption()
     {
+        $this->markTestSkipped('MAGETWO-71445: configurable product created incorrectly - children not linked').
         /** @var Attribute $attribute */
         $attribute = $this->objectManager->get(Attribute::class)
             ->loadByCode(Product::ENTITY, 'test_configurable');

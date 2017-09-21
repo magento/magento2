@@ -31,6 +31,13 @@ class ProductForm extends FormSections
     protected $attribute = './/*[contains(@class,"label")]/span[text()="%s"]';
 
     /**
+     * Product new from date field on the product form
+     *
+     * @var string
+     */
+    protected $news_from_date ='[name="product[news_from_date]"]';
+
+    /**
      * Attributes Search modal locator.
      *
      * @var string
@@ -260,5 +267,15 @@ class ProductForm extends FormSections
             Locator::SELECTOR_CSS,
             \Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\CustomAttribute::class
         );
+    }
+
+    /**
+     * @param $sectionName
+     * @return bool
+     */
+    public function isProductNewFromDateVisible($sectionName)
+    {
+        $this->openSection($sectionName);
+        return $this->_rootElement->find($this->news_from_date, Locator::SELECTOR_CSS)->isVisible();
     }
 }
