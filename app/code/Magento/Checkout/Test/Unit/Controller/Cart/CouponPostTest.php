@@ -70,6 +70,25 @@ class CouponPostTest extends \PHPUnit_Framework_TestCase
     protected $quoteRepository;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $shippingAddress;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $redirect;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $redirectFactory;
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $coupon;
+
+    /**
      * @return void
      */
     protected function setUp()
@@ -88,12 +107,11 @@ class CouponPostTest extends \PHPUnit_Framework_TestCase
         );
         $this->eventManager = $this->getMock(\Magento\Framework\Event\Manager::class, [], [], '', false);
         $this->checkoutSession = $this->getMock(\Magento\Checkout\Model\Session::class, [], [], '', false);
+        $this->coupon = $this->getMock(\Magento\SalesRule\Model\Coupon::class, ['load', 'getId'], [], '', false);
 
         $this->objectManagerMock = $this->getMock(
             \Magento\Framework\ObjectManager\ObjectManager::class,
-            [
-                'get', 'escapeHtml'
-            ],
+            ['get', 'escapeHtml'],
             [],
             '',
             false
@@ -145,6 +163,7 @@ class CouponPostTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
         $this->quoteRepository = $this->getMock(\Magento\Quote\Api\CartRepositoryInterface::class);
+        $this->shippingAddress = $this->getMock(\Magento\Quote\Model\Quote\Address::class, [], [], '', false);
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -199,17 +218,15 @@ class CouponPostTest extends \PHPUnit_Framework_TestCase
             ->method('getCouponCode')
             ->willReturn('OLDCODE');
 
-        $coupon = $this->getMock(\Magento\SalesRule\Model\Coupon::class, ['load', 'getId'], [], '', false);
         $this->couponFactory->expects($this->once())
             ->method('create')
-            ->willReturn($coupon);
-        $coupon->expects($this->once())->method('load')->willReturnSelf();
-        $coupon->expects($this->once())->method('getId')->willReturn(1);
+            ->willReturn($this->coupon);
+
+        $this->coupon->expects($this->once())->method('getId')->willReturn(1);
+
         $this->quote->expects($this->any())
             ->method('getItemsCount')
             ->willReturn(1);
-
-        $shippingAddress = $this->getMock(\Magento\Quote\Model\Quote\Address::class, [], [], '', false);
 
         $this->quote->expects($this->any())
             ->method('setCollectShippingRates')
@@ -217,7 +234,7 @@ class CouponPostTest extends \PHPUnit_Framework_TestCase
 
         $this->quote->expects($this->any())
             ->method('getShippingAddress')
-            ->willReturn($shippingAddress);
+            ->willReturn($this->shippingAddress);
 
         $this->quote->expects($this->any())
             ->method('collectTotals')
@@ -267,15 +284,13 @@ class CouponPostTest extends \PHPUnit_Framework_TestCase
             ->method('getItemsCount')
             ->willReturn(0);
 
-        $coupon = $this->getMock(\Magento\Quote\Model\Quote\Address::class, [], [], '', false);
-
-        $coupon->expects($this->once())
+        $this->coupon->expects($this->once())
             ->method('getId')
             ->willReturn(1);
 
         $this->couponFactory->expects($this->once())
             ->method('create')
-            ->willReturn($coupon);
+            ->willReturn($this->coupon);
 
         $this->checkoutSession->expects($this->once())
             ->method('getQuote')
@@ -307,7 +322,7 @@ class CouponPostTest extends \PHPUnit_Framework_TestCase
         $this->request->expects($this->at(1))
             ->method('getParam')
             ->with('coupon_code')
-            ->willReturn('');
+            ->willReturn('CODE');
 
         $this->cart->expects($this->any())
             ->method('getQuote')
@@ -321,28 +336,33 @@ class CouponPostTest extends \PHPUnit_Framework_TestCase
             ->method('getItemsCount')
             ->willReturn(1);
 
-        $shippingAddress = $this->getMock(\Magento\Quote\Model\Quote\Address::class, [], [], '', false);
-
         $this->quote->expects($this->any())
             ->method('setCollectShippingRates')
             ->with(true);
 
         $this->quote->expects($this->any())
             ->method('getShippingAddress')
-            ->willReturn($shippingAddress);
+            ->willReturn($this->shippingAddress);
+
+        $this->quote->expects($this->any())
+            ->method('setCouponCode')
+            ->with('CODE')
+            ->willReturnSelf();
 
         $this->quote->expects($this->any())
             ->method('collectTotals')
             ->willReturn($this->quote);
 
-        $this->quote->expects($this->any())
-            ->method('setCouponCode')
-            ->with('')
-            ->willReturnSelf();
+        $this->couponFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($this->coupon);
 
         $this->messageManager->expects($this->once())
-            ->method('addSuccess')
-            ->with('You canceled the coupon code.')
+            ->method('addError')
+            ->willReturnSelf();
+
+        $this->objectManagerMock->expects($this->once())
+            ->method('get')
             ->willReturnSelf();
 
         $this->controller->execute();
@@ -372,15 +392,13 @@ class CouponPostTest extends \PHPUnit_Framework_TestCase
             ->method('getItemsCount')
             ->willReturn(0);
 
-        $coupon = $this->getMock(\Magento\Quote\Model\Quote\Address::class, [], [], '', false);
-
-        $coupon->expects($this->once())
+        $this->coupon->expects($this->once())
             ->method('getId')
             ->willReturn(0);
 
         $this->couponFactory->expects($this->once())
             ->method('create')
-            ->willReturn($coupon);
+            ->willReturn($this->coupon);
 
         $this->messageManager->expects($this->once())
             ->method('addError')
@@ -389,6 +407,33 @@ class CouponPostTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerMock->expects($this->once())
             ->method('get')
             ->willReturnSelf();
+
+        $this->controller->execute();
+    }
+
+    public function testCancelCoupon()
+    {
+        $this->request->expects($this->at(0))
+            ->method('getParam')
+            ->with('remove')
+            ->willReturn(0);
+
+        $this->request->expects($this->at(1))
+            ->method('getParam')
+            ->with('coupon_code')
+            ->willReturn('');
+
+        $this->quote->expects($this->at(0))
+            ->method('getCouponCode')
+            ->willReturn('OLDCODE');
+
+        $this->cart->expects($this->once())
+            ->method('getQuote')
+            ->willReturn($this->quote);
+
+        $this->messageManager->expects($this->once())
+            ->method('addSuccess')
+            ->with('You canceled the coupon code.');
 
         $this->controller->execute();
     }
