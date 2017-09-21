@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,7 +16,7 @@ $configurableProduct = $product;
 $addressData = include __DIR__ . '/address_data.php';
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-
+/** @var \Magento\Sales\Model\Order\Address $billingAddress */
 $billingAddress = $objectManager->create(\Magento\Sales\Model\Order\Address::class, ['data' => $addressData]);
 $billingAddress->setAddressType('billing');
 
@@ -60,18 +60,18 @@ $orderConfigurableItem->setPrice($configurableProduct->getPrice());
 $orderConfigurableItem->setRowTotal($configurableProduct->getPrice());
 $orderConfigurableItem->setParentItemId(null);
 $orderConfigurableItem->setProductType('configurable');
-
 $orderConfigurableItem->setOrder($order);
 
 /** @var \Magento\Sales\Api\OrderItemRepositoryInterface $orderItemsRepository */
 $orderItemsRepository = $objectManager->create(\Magento\Sales\Api\OrderItemRepositoryInterface::class);
+// Configurable item must be present into database for having real ID of it to set parent id of simple product.
 $orderItemsRepository->save($orderConfigurableItem);
 
 if ($configurableProduct->getExtensionAttributes()
     && (array)$configurableProduct->getExtensionAttributes()->getConfigurableProductLinks()
 ) {
     $simpleProductId = current($configurableProduct->getExtensionAttributes()->getConfigurableProductLinks());
-
+    /** @var \Magento\Catalog\Api\Data\ProductInterface $simpleProduct */
     $simpleProduct = $productRepository->getById($simpleProductId);
 
     $orderItem = $objectManager->create(\Magento\Sales\Api\Data\OrderItemInterface::class);
@@ -79,10 +79,9 @@ if ($configurableProduct->getExtensionAttributes()
     $orderItem->setPrice($simpleProduct->getPrice());
     $orderItem->setRowTotal($simpleProduct->getPrice());
     $orderItem->setProductType('simple');
-
+    // duplicate behavior with simple product associated with configurable one that happens during order process.
     $orderItem->setProductId($simpleProduct->getId())->setQtyOrdered($qtyOrdered);
     $orderItem->setParentItemId($orderConfigurableItem->getId());
-
     $orderItem->setOrder($order);
     $orderItemsRepository->save($orderItem);
 }

@@ -50,6 +50,7 @@ class ShipOrderTest extends \Magento\TestFramework\TestCase\WebapiAbstract
         }
 
         $orderedQty = 0;
+        /** @var \Magento\Sales\Model\Order\Item $item */
         foreach ($existingOrder->getItems() as $item) {
             if ($item->isDummy()) {
                 continue;
@@ -60,7 +61,7 @@ class ShipOrderTest extends \Magento\TestFramework\TestCase\WebapiAbstract
         $this->assertEquals(
             (int)$shipment->getTotalQty(),
             (int)$orderedQty,
-            'Failed asserting that quantity of ordered and shipped items are equal'
+            'Failed asserting that quantity of ordered and shipped items is equal'
         );
     }
 
