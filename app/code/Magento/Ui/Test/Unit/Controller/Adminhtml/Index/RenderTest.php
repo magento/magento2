@@ -60,7 +60,7 @@ class RenderTest extends \PHPUnit\Framework\TestCase
     private $helperMock;
 
     /**
-     * @var \Magento\Framework\View\Element\UiComponent\ContextInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $uiComponentContextMock;
 
@@ -106,7 +106,7 @@ class RenderTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->uiComponentContextMock = $this->getMockForAbstractClass(
-            \Magento\Framework\View\Element\UiComponent\ContextInterface::class
+            ContextInterface::class
         );
         $this->dataProviderMock = $this->getMockForAbstractClass(
             \Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface::class
@@ -174,13 +174,15 @@ class RenderTest extends \PHPUnit\Framework\TestCase
         $this->uiComponentMock->expects($this->once())
             ->method('getChildComponents')
             ->willReturn([]);
-        $this->uiComponentMock->expects($this->once())
+        $this->uiComponentMock->expects($this->any())
             ->method('getContext')
             ->willReturn($this->uiComponentContextMock);
         $this->uiFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->uiComponentMock);
-        $this->uiComponentTypeResolverMock->expects($this->once())->method('resolve')->with($contextMock)
+        $this->uiComponentTypeResolverMock->expects($this->once())
+            ->method('resolve')
+            ->with($this->uiComponentContextMock)
             ->willReturn('application/json');
         $this->responseMock->expects($this->once())->method('setHeader')
             ->with('Content-Type', 'application/json', true);
@@ -225,7 +227,7 @@ class RenderTest extends \PHPUnit\Framework\TestCase
         $this->uiComponentMock->expects($this->any())
             ->method('getChildComponents')
             ->willReturn([]);
-        $this->uiComponentMock->expects($this->once())
+        $this->uiComponentMock->expects($this->any())
             ->method('getContext')
             ->willReturn($this->uiComponentContextMock);
         $this->uiFactoryMock->expects($this->once())
