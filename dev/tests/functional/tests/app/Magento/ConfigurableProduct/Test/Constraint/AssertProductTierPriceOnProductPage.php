@@ -23,7 +23,6 @@ class AssertProductTierPriceOnProductPage extends AssertProductPage
     {
         $errors = [];
         /** @var ConfigurableOptions $optionsBlock */
-        $viewBlock = $this->pageView->getViewBlock();
         $optionsBlock = $this->pageView->getConfigurableAttributesBlock();
         $formTierPrices = $optionsBlock->getOptionsPrices($this->product);
         $products = ($this->product->getDataFieldConfig('configurable_attributes_data')['source'])->getProducts();
