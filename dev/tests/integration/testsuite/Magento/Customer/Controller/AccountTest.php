@@ -286,7 +286,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
             $this->equalTo([
                 'You must confirm your account. Please check your email for the confirmation link or '
                     . '<a href="http://localhost/index.php/customer/account/confirmation/'
-                    . '?email=test2%40email.com/">click here</a> for a new link.'
+                    . '?email=test2%40email.com">click here</a> for a new link.'
             ]),
             MessageInterface::TYPE_SUCCESS
         );
