@@ -32,7 +32,7 @@ class ListingTest extends \PHPUnit_Framework_TestCase
                 'name' => 'product_attributes_grid_data_source',
                 'primaryFieldName' => 'attribute_id',
                 'requestFieldName' => 'id',
-                'request' => $this->request
+                'request' => $this->request,
             ]
         );
     }
