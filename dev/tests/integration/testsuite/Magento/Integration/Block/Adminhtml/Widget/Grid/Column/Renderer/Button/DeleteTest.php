@@ -24,12 +24,12 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var \Magento\Framework\App\Request\Http $request */
-        $request = $objectManager->get('Magento\Framework\App\Request\Http');
+        $request = $objectManager->get(\Magento\Framework\App\Request\Http::class);
         $request->setRouteName('adminhtml')->setControllerName('integration');
         $this->deleteButtonBlock = $objectManager->create(
-            'Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Button\Delete'
+            \Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Button\Delete::class
         );
-        $column = $objectManager->create('Magento\Backend\Block\Widget\Grid\Column');
+        $column = $objectManager->create(\Magento\Backend\Block\Widget\Grid\Column::class);
         $this->deleteButtonBlock->setColumn($column);
     }
 
@@ -39,8 +39,8 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
         $buttonHtml = $this->deleteButtonBlock->render($integration);
         $this->assertContains('title="Remove"', $buttonHtml);
         $this->assertContains(
-            'onclick="this.setAttribute(\'data-url\', '
-            . '\'http://localhost/index.php/backend/admin/integration/delete/id/'
+            'onclick="this.setAttribute(&#039;data-url&#039;, '
+            . '&#039;http://localhost/index.php/backend/admin/integration/delete/id/'
             . $integration->getId(),
             $buttonHtml
         );
@@ -54,8 +54,8 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
         $buttonHtml = $this->deleteButtonBlock->render($integration);
         $this->assertContains('title="Uninstall the extension to remove this integration"', $buttonHtml);
         $this->assertContains(
-            'onclick="this.setAttribute(\'data-url\', '
-            . '\'http://localhost/index.php/backend/admin/integration/delete/id/'
+            'onclick="this.setAttribute(&#039;data-url&#039;, '
+            . '&#039;http://localhost/index.php/backend/admin/integration/delete/id/'
             . $integration->getId(),
             $buttonHtml
         );
@@ -69,7 +69,8 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $integration Integration */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $integration = $objectManager->create('Magento\Integration\Model\Integration');
+        $integration = $objectManager->create(\Magento\Integration\Model\Integration::class);
+        
         return $integration->load('Fixture Integration', 'name');
     }
 }
