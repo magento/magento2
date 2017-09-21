@@ -8,6 +8,8 @@
 
 require __DIR__ . '/configurable_products.php';
 
+$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
 /** @var \Magento\Quote\Model\Quote $quote */
 $quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Quote\Model\Quote::class);
 
@@ -55,14 +57,10 @@ $quote->setStoreId(
     );
 
 /** @var \Magento\Quote\Model\QuoteRepository $quoteRepository */
-$quoteRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    \Magento\Quote\Model\QuoteRepository::class
-);
+$quoteRepository = $objectManager->create(\Magento\Quote\Model\QuoteRepository::class);
 $quote->collectTotals();
 $quoteRepository->save($quote);
 
 /** @var \Magento\Checkout\Model\Session $session */
-$session = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    \Magento\Checkout\Model\Session::class
-);
+$session = $objectManager->create(\Magento\Checkout\Model\Session::class);
 $session->setQuoteId($quote->getId());

@@ -18,7 +18,7 @@ if (!$attribute->getId()) {
 
     /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
     $attribute = Bootstrap::getObjectManager()->create(
-        'Magento\Catalog\Model\ResourceModel\Eav\Attribute'
+        \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class
     );
 
     /** @var AttributeRepositoryInterface $attributeRepository */

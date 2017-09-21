@@ -8,9 +8,9 @@ namespace Magento\Checkout\Test\Unit\Controller\Cart;
 use Magento\Checkout\Controller\Cart\Index;
 
 /**
- * Class IndexTest
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * Test for \Magento\Checkout\Controller\Cart\CouponPost
  */
 class CouponPostTest extends \PHPUnit_Framework_TestCase
 {
