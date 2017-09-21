@@ -67,10 +67,48 @@ class PidConsumerManager
     {
         $pid = $this->getPid($consumerName);
         if ($pid) {
-            return (bool) posix_getpgid($pid);
+            if (function_exists('posix_getpgid')) {
+                return (bool) posix_getpgid($pid);
+            } else {
+                return $this->checkIsProcessExists($pid);
+            }
         }
 
         return false;
+    }
+
+    /**
+     * Checks that process is running
+     *
+     * If php function exec is not available throws RuntimeException
+     * If shell command returns non-zero code and this code is not 1 throws RuntimeException
+     *
+     * @param int $pid A pid of process
+     * @return bool Returns true if consumer process is run
+     * @throws \RuntimeException
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
+    private function checkIsProcessExists($pid)
+    {
+        if (!function_exists('exec')) {
+            throw new \RuntimeException('Function exec is not available');
+        }
+
+        exec(escapeshellcmd('ps -p ' . $pid), $output, $code);
+
+        $code = (int) $code;
+
+        switch ($code) {
+            case 0:
+                return true;
+                break;
+            case 1:
+                return false;
+                break;
+            default:
+                throw new \RuntimeException('Exec returned non-zero code', $code);
+                break;
+        }
     }
 
     /**
@@ -111,7 +149,7 @@ class PidConsumerManager
     public function savePid($pidFilePath)
     {
         $file = $this->writeFactory->create($pidFilePath, DriverPool::FILE, 'w');
-        $file->write(posix_getpid());
+        $file->write(function_exists('posix_getpid') ? posix_getpid() : getmypid());
         $file->close();
     }
 }

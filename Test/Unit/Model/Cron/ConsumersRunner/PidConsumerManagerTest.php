@@ -41,7 +41,7 @@ class PidConsumerManagerTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
-        require_once __DIR__ . '/../../../_files/posix_getpgid_mock.php';
+        require_once __DIR__ . '/../../../_files/pid_consumer_functions_mocks.php';
 
         $this->filesystemMock = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
@@ -127,7 +127,7 @@ class PidConsumerManagerTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $writeMock->expects($this->once())
             ->method('write')
-            ->with(posix_getpid());
+            ->with(function_exists('posix_getpid') ? posix_getpid() : getmypid());
         $writeMock->expects($this->once())
             ->method('close');
 
