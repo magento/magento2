@@ -67,11 +67,6 @@ class BundleSelectionPriceTest extends \PHPUnit_Framework_TestCase
     protected $priceCurrencyMock;
 
     /**
-     * @var float
-     */
-    protected $quantity;
-
-    /**
      * Test setUp
      */
     protected function setUp()
@@ -133,8 +128,6 @@ class BundleSelectionPriceTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->priceInfoMock));
 
         $this->priceCurrencyMock = $this->getMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
-
-        $this->quantity = 1;
 
         $this->setupSelectionPrice();
     }
