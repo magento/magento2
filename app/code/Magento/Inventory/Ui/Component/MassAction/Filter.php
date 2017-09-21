@@ -11,8 +11,7 @@ use Magento\Framework\Api\Search\DocumentInterface;
 
 /**
  * Class Filter
- * @todo remove this class after code from Engine\MagentoFix\Ui\Component\MassAction\Filter would be deploy to
- *       production
+ * @see https://github.com/magento/magento2/issues/10988
  */
 class Filter
 {
@@ -38,9 +37,12 @@ class Filter
     public function getIds()
     {
         $this->filter->applySelectionOnTargetProvider();
+        $component = $this->filter->getComponent();
+        $dataProvider = $component->getContext()->getDataProvider();
+        $searchResult = $dataProvider->getSearchResult();
 
         return array_map(function(DocumentInterface $item) {
             return $item->getId();
-        }, $this->filter->getComponent()->getContext()->getDataProvider()->getSearchResult()->getItems());
+        }, $searchResult->getItems());
     }
 }
