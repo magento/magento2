@@ -8,12 +8,17 @@ namespace Magento\Catalog\Controller\Adminhtml\Category;
 use Magento\Framework\View\Element\BlockInterface;
 
 /**
- * Catalog category widgets controller for CMS WYSIWYG
- *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * Catalog category widgets controller for CMS WYSIWYG.
  */
 abstract class Widget extends \Magento\Backend\App\Action
 {
+    /**
+     * Authorization level of a basic admin session.
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Catalog::categories';
+
     /**
      * @var \Magento\Framework\View\LayoutFactory
      */
