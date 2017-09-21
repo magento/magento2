@@ -9,7 +9,6 @@ use Magento\Framework\App\State;
 use Magento\Framework\Config\Dom\ValidationException;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Filesystem\File\ReadFactory;
-use Magento\Framework\View\Layout\ProcessorInterface;
 use Magento\Framework\View\Model\Layout\Update\Validator;
 
 /**
@@ -105,6 +104,13 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
     private $appState;
 
     /**
+     * Cache keys to be able to generate different cache id for same handles
+     *
+     * @var \Magento\Framework\View\Layout\CacheKeyInterface
+     */
+    private $cacheKey;
+
+    /**
      * @var \Magento\Framework\Cache\FrontendInterface
      */
     protected $cache;
@@ -128,13 +134,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * @var string
      */
     protected $cacheSuffix;
-
-    /**
-     * Cache keys to be able to generate different cache id for same handles
-     *
-     * @var array
-     */
-    protected $cacheKeys = [];
 
     /**
      * All processed handles used in this update
@@ -173,8 +172,9 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * @param \Magento\Framework\Cache\FrontendInterface $cache
      * @param \Magento\Framework\View\Model\Layout\Update\Validator $validator
      * @param \Psr\Log\LoggerInterface $logger
-     * @param ReadFactory $readFactory,
+     * @param ReadFactory $readFactory ,
      * @param \Magento\Framework\View\Design\ThemeInterface $theme Non-injectable theme instance
+     * @param \Magento\Framework\View\Layout\CacheKeyInterface $cacheKey
      * @param string $cacheSuffix
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -189,6 +189,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
         \Psr\Log\LoggerInterface $logger,
         ReadFactory $readFactory,
         \Magento\Framework\View\Design\ThemeInterface $theme = null,
+        \Magento\Framework\View\Layout\CacheKeyInterface $cacheKey,
         $cacheSuffix = ''
     ) {
         $this->theme = $theme ?: $design->getDesignTheme();
@@ -200,6 +201,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
         $this->layoutValidator = $validator;
         $this->logger = $logger;
         $this->readFactory = $readFactory;
+        $this->cacheKey = $cacheKey;
         $this->cacheSuffix = $cacheSuffix;
     }
 
@@ -916,28 +918,12 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
     }
 
     /**
-     * Add cache key(s) for generating different cache id for same handles
-     *
-     * @param array|string $cacheKeys
-     * @return $this
-     */
-    public function addCacheKey($cacheKeys)
-    {
-        if (!is_array($cacheKeys)) {
-            $cacheKeys = [$cacheKeys];
-        }
-        $this->cacheKeys = array_merge($this->cacheKeys, $cacheKeys);
-
-        return $this;
-    }
-
-    /**
      * Return cache ID based current area/package/theme/store and handles
      *
      * @return string
      */
     public function getCacheId()
     {
-        return $this->generateCacheId(md5(implode('|', array_merge($this->getHandles(), $this->cacheKeys))));
+        return $this->generateCacheId(md5(implode('|', array_merge($this->getHandles(), $this->cacheKey->getCacheKeys()))));
     }
 }
