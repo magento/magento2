@@ -160,7 +160,7 @@
         "magento/module-robots": "100.3.0-dev",
         "magento/module-rss": "100.3.0-dev",
         "magento/module-rule": "100.3.0-dev",
-        "magento/module-sales": "100.3.0-dev",
+        "magento/module-sales": "100.3.1-dev",
         "magento/module-sales-inventory": "100.3.0-dev",
         "magento/module-sales-rule": "100.3.0-dev",
         "magento/module-sales-sequence": "100.3.0-dev",

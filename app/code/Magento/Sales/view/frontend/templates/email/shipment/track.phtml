@@ -7,8 +7,12 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<?php $_shipment = $block->getShipment() ?>
-<?php $_order = $block->getOrder() ?>
+<?php
+/** @var \Magento\Framework\View\Element\Template $block */
+
+$_shipment = $block->getShipment();
+$_order = $block->getOrder();
+?>
 <?php if ($_shipment && $_order && $_shipment->getAllTracks()): ?>
 <br />
 <table class="shipment-track">
@@ -19,10 +23,25 @@
         </tr>
     </thead>
     <tbody>
-    <?php foreach ($_shipment->getAllTracks() as $_item): ?>
+    <?php
+    foreach ($_shipment->getAllTracks() as $_item): ?>
         <tr>
             <td><?= $block->escapeHtml($_item->getTitle()) ?>:</td>
-            <td><?= $block->escapeHtml($_item->getNumber()) ?></td>
+            <td>
+            <?php if (
+                ($_item instanceof \Magento\Sales\Api\Data\TrackUrlInterface) &&
+                ($_item->getTrackUrl())
+            ): ?>
+                <a href="<?= $block->escapeUrl($_item->getTrackUrl()) ?>"
+                   target="_blank"
+                   rel="noreferrer nofollow noopener"
+                >
+                    <?= $block->escapeHtml($_item->getNumber()) ?>
+                </a>
+            <?php else: ?>
+                <?= $block->escapeHtml($_item->getNumber()) ?>
+            <?php endif;?>
+            </td>
         </tr>
     <?php endforeach ?>
     </tbody>
