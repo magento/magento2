@@ -11,7 +11,6 @@ use Magento\Checkout\Controller\Cart\Index;
  * Test for \Magento\Checkout\Controller\Cart\CouponPost
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- *
  */
 class CouponPostTest extends \PHPUnit_Framework_TestCase
 {
