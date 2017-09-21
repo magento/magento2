@@ -388,6 +388,6 @@ require([
 
     registry.set('adminSystemConfig', adminSystemConfig);
 
-    adminSystemConfig.navigateToElement(<?php echo $block->getConfigSearchParamsJson(); ?>);
+    adminSystemConfig.navigateToElement(<?php echo /* @noEscape */ $block->getConfigSearchParamsJson(); ?>);
 });
 </script>
