@@ -9,7 +9,7 @@ use Magento\Framework\DataObject;
 
 /**
  * Value object for shipping_method order attribute
- * 
+ *
  * @method string getCarrierCode()
  * @method string getMethod()
  */
