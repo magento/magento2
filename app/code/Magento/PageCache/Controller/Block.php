@@ -9,6 +9,7 @@ namespace Magento\PageCache\Controller;
 
 use Magento\Framework\Serialize\Serializer\Base64Json;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\View\Layout\LayoutCacheKeyInterface;
 
 abstract class Block extends \Magento\Framework\App\Action\Action
 {
@@ -30,28 +31,28 @@ abstract class Block extends \Magento\Framework\App\Action\Action
     /**
      * Layout cache keys to be able to generate different cache id for same handles
      *
-     * @var \Magento\Framework\View\Layout\CacheKeyInterface
+     * @var LayoutCacheKeyInterface
      */
-    private $cacheKey;
+    private $layoutCacheKey;
 
     /**
      * @var string
      */
-    private $layoutCacheKey = 'mage_pagecache';
+    private $layoutCacheKeyName = 'mage_pagecache';
 
     /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Framework\Translate\InlineInterface $translateInline
      * @param Json $jsonSerializer
      * @param Base64Json $base64jsonSerializer
-     * @param \Magento\Framework\View\Layout\CacheKeyInterface $cacheKey
+     * @param LayoutCacheKeyInterface $layoutCacheKey
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Magento\Framework\Translate\InlineInterface $translateInline,
         Json $jsonSerializer = null,
         Base64Json $base64jsonSerializer = null,
-        \Magento\Framework\View\Layout\CacheKeyInterface $cacheKey
+        LayoutCacheKeyInterface $layoutCacheKey = null
     ) {
         parent::__construct($context);
         $this->translateInline = $translateInline;
@@ -59,7 +60,8 @@ abstract class Block extends \Magento\Framework\App\Action\Action
             ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Json::class);
         $this->base64jsonSerializer = $base64jsonSerializer
             ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Base64Json::class);
-        $this->cacheKey = $cacheKey;
+        $this->layoutCacheKey = $layoutCacheKey
+            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(LayoutCacheKeyInterface::class);
     }
 
     /**
@@ -79,7 +81,7 @@ abstract class Block extends \Magento\Framework\App\Action\Action
         $handles = $this->base64jsonSerializer->unserialize($handles);
 
         $layout = $this->_view->getLayout();
-        $this->cacheKey->addCacheKey($this->layoutCacheKey);
+        $this->layoutCacheKey->addCacheKeys($this->layoutCacheKeyName);
 
         $this->_view->loadLayout($handles, true, true, false);
         $data = [];

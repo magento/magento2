@@ -8,7 +8,7 @@ namespace Magento\Framework\View\Model\Layout;
 /**
  * Layout cache key model
  */
-class CacheKey implements \Magento\Framework\View\Layout\CacheKeyInterface
+class CacheKey implements \Magento\Framework\View\Layout\LayoutCacheKeyInterface
 {
     /**
      * Cache keys to be able to generate different cache id for same handles
@@ -21,8 +21,9 @@ class CacheKey implements \Magento\Framework\View\Layout\CacheKeyInterface
      * Add cache key(s) for generating different cache id for same handles
      *
      * @param array|string $cacheKeys
+     * @return void
      */
-    public function addCacheKey($cacheKeys)
+    public function addCacheKeys($cacheKeys)
     {
         if (!is_array($cacheKeys)) {
             $cacheKeys = [$cacheKeys];
@@ -31,7 +32,7 @@ class CacheKey implements \Magento\Framework\View\Layout\CacheKeyInterface
     }
 
     /**
-     * Return cache keys array stored
+     * Return cache keys array
      *
      * @return array
      */
