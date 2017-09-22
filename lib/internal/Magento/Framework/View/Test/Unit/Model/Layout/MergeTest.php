@@ -59,7 +59,11 @@ class MergeTest extends \PHPUnit\Framework\TestCase
         $this->appState = $this->getMockBuilder(\Magento\Framework\App\State::class)
             ->disableOriginalConstructor()
             ->getMock();
+
         $this->layoutCacheKeyMock = $this->getMockForAbstractClass(\Magento\Framework\View\Layout\LayoutCacheKeyInterface::class);
+        $this->layoutCacheKeyMock->expects($this->any())
+            ->method('getCacheKeys')
+            ->willReturn([]);
 
         $this->model = $this->objectManagerHelper->getObject(
             \Magento\Framework\View\Model\Layout\Merge::class,
@@ -68,7 +72,7 @@ class MergeTest extends \PHPUnit\Framework\TestCase
                 'layoutValidator' => $this->layoutValidator,
                 'logger' => $this->logger,
                 'appState' => $this->appState,
-                'layoutCacheKey' => $this->layoutCacheKeyMock
+                'layoutCacheKey' => $this->layoutCacheKeyMock,
             ]
         );
     }
@@ -83,9 +87,6 @@ class MergeTest extends \PHPUnit\Framework\TestCase
             'Please correct the XSD data and try again.',
         ];
         $this->scope->expects($this->once())->method('getId')->willReturn(1);
-        $this->layoutCacheKeyMock->expects($this->once())
-            ->method('getCacheKeys')
-            ->willReturn([]);
         $this->layoutValidator->expects($this->once())
             ->method('isValid')
             ->willThrowException(

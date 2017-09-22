@@ -65,6 +65,11 @@ class MergeTest extends \PHPUnit\Framework\TestCase
      */
     protected $pageConfig;
 
+    /**
+     * @var \Magento\Framework\View\Layout\LayoutCacheKeyInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $layoutCacheKeyMock;
+
     protected function setUp()
     {
         $files = [];
@@ -119,6 +124,11 @@ class MergeTest extends \PHPUnit\Framework\TestCase
             )
         );
 
+        $this->layoutCacheKeyMock = $this->getMockForAbstractClass(\Magento\Framework\View\Layout\LayoutCacheKeyInterface::class);
+        $this->layoutCacheKeyMock->expects($this->any())
+            ->method('getCacheKeys')
+            ->willReturn([]);
+
         $this->_model = $objectHelper->getObject(
             \Magento\Framework\View\Model\Layout\Merge::class,
             [
@@ -134,6 +144,7 @@ class MergeTest extends \PHPUnit\Framework\TestCase
                 'logger' => $this->_logger,
                 'readFactory' => $readFactory,
                 'pageConfig' => $this->pageConfig,
+                'layoutCacheKey' => $this->layoutCacheKeyMock,
             ]
         );
     }
