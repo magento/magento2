@@ -7,7 +7,7 @@ namespace Magento\Framework\App;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
-use Symfony\Component\HttpFoundation\IpUtils;
+use Magento\Framework\HTTP\IpChecker;
 
 /**
  * Application Maintenance Mode
@@ -62,7 +62,7 @@ class MaintenanceMode
         if (!$this->flagDir->isExist(self::FLAG_FILENAME)) {
             return false;
         }
-        return !IpUtils::checkIp($remoteAddr, $this->getAddressInfo());
+        return !IpChecker::isInRange($remoteAddr, $this->getAddressInfo());
     }
 
     /**
