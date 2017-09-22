@@ -57,7 +57,9 @@ class OneTouchOrdering
     public function isAvailableForCustomer($customer): bool
     {
         $this->customer = $customer;
+
         return $this->isOneTouchButtonEnabled()
+            && $this->isBrainTree3DDisabled()
             && $this->isBrainTreeAvailable()
             && $this->customerHasDefaultAddresses()
             && $this->isAnyShippingMethodAvailable()
@@ -107,6 +109,14 @@ class OneTouchOrdering
     private function isBrainTreeAvailable(): bool
     {
         return $this->brainTreeConfig->isActive();
+    }
+
+    /**
+     * @return bool
+     */
+    private function isBrainTree3DDisabled()
+    {
+        return !$this->brainTreeConfig->isVerify3DSecure();
     }
 
     /**
