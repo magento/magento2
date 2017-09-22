@@ -16,6 +16,13 @@ use \Magento\Framework\Exception\LocalizedException;
 class RetrieveImage extends \Magento\Backend\App\Action
 {
     /**
+     * Authorization level of a basic admin session.
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Catalog::products';
+
+    /**
      * @var \Magento\Framework\Controller\Result\RawFactory
      */
     protected $resultRawFactory;
