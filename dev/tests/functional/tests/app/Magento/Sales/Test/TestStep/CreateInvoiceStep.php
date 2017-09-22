@@ -6,7 +6,6 @@
 
 namespace Magento\Sales\Test\TestStep;
 
-use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Sales\Test\Page\Adminhtml\OrderInvoiceNew;
@@ -135,11 +134,8 @@ class CreateInvoiceStep implements TestStepInterface
                 $this->data,
                 $this->order->getEntityId()['products']
             );
-
+            $this->orderInvoiceNew->getFormBlock()->updateQty();
             $this->orderInvoiceNew->getFormBlock()->fillFormData($this->data);
-            if ($this->compare($this->order->getEntityId()['products'], $this->data)) {
-                $this->orderInvoiceNew->getFormBlock()->updateQty();
-            }
             if (isset($this->isInvoicePartial)) {
                 $this->orderInvoiceNew->getFormBlock()->submit();
                 $this->salesOrderView->getPageActions()->invoice();
@@ -179,32 +175,5 @@ class CreateInvoiceStep implements TestStepInterface
     {
         $this->salesOrderView->getOrderForm()->openTab('shipments');
         return $this->salesOrderView->getOrderForm()->getTab('shipments')->getGridBlock()->getIds();
-    }
-
-    /**
-     * Compare items.
-     *
-     * @param FixtureInterface[] $products
-     * @param array $data
-     * @return bool
-     */
-    private function compare(array $products, array $data)
-    {
-        if (empty($data['items_data'])) {
-            return false;
-        }
-
-        $count = 0;
-        foreach ($data['items_data'] as $key => $item) {
-            if (!isset($products[$key])) {
-                continue;
-            }
-
-            if (is_numeric($item['qty']) && $products[$key]->getData('qty') !== $item['qty']) {
-                ++$count;
-            }
-        }
-
-        return $count !== 0;
     }
 }

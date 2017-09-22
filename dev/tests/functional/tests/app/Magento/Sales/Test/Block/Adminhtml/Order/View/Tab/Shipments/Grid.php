@@ -52,7 +52,6 @@ class Grid extends DataGrid
     public function getIds()
     {
         $this->waitLoader();
-        $this->resetFilter();
         $result = [];
         $shipmentIds = $this->_rootElement->getElements($this->shipmentId);
         foreach ($shipmentIds as $shipmentId) {
