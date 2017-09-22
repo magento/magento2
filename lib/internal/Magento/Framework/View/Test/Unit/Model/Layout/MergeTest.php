@@ -9,6 +9,7 @@ use Magento\Framework\App\State;
 use Magento\Framework\Config\Dom\ValidationSchemaException;
 use Magento\Framework\Phrase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Layout\LayoutCacheKeyInterface;
 
 class MergeTest extends \PHPUnit\Framework\TestCase
 {
@@ -43,7 +44,7 @@ class MergeTest extends \PHPUnit\Framework\TestCase
     private $appState;
 
     /**
-     * @var \Magento\Framework\View\Layout\LayoutCacheKeyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LayoutCacheKeyInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $layoutCacheKeyMock;
 
@@ -60,7 +61,7 @@ class MergeTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->layoutCacheKeyMock = $this->getMockForAbstractClass(\Magento\Framework\View\Layout\LayoutCacheKeyInterface::class);
+        $this->layoutCacheKeyMock = $this->getMockForAbstractClass(LayoutCacheKeyInterface::class);
         $this->layoutCacheKeyMock->expects($this->any())
             ->method('getCacheKeys')
             ->willReturn([]);

@@ -36,7 +36,8 @@ class CacheKey implements \Magento\Framework\View\Layout\LayoutCacheKeyInterface
      *
      * @return array
      */
-    public function getCacheKeys() {
+    public function getCacheKeys()
+    {
         return $this->cacheKeys;
     }
 }
