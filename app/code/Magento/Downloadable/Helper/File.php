@@ -71,6 +71,7 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
         $uploader->setFilesDispersion(true);
         $absoluteTmpPath = $this->_mediaDirectory->getAbsolutePath($tmpPath);
         $result = $uploader->save($absoluteTmpPath);
+        unset($result['path']);
 
         return $result;
     }
