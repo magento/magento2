@@ -727,7 +727,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
         $updateFiles = array_merge($updateFiles, $this->pageLayoutFileSource->getFiles($theme, '*.xml'));
         $useErrors = libxml_use_internal_errors(true);
         foreach ($updateFiles as $file) {
-            /** @var $fileReader \Magento\Framework\Filesystem\File\Read   */
+            /** @var $fileReader \Magento\Framework\Filesystem\File\Read */
             $fileReader = $this->readFactory->create($file->getFilename(), DriverPool::FILE);
             $fileStr = $fileReader->readAll($file->getName());
             $fileStr = $this->_substitutePlaceholders($fileStr);
@@ -926,6 +926,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      */
     public function getCacheId()
     {
-        return $this->generateCacheId(md5(implode('|', array_merge($this->getHandles(), $this->layoutCacheKey->getCacheKeys()))));
+        return $this->generateCacheId(md5(implode('|',
+            array_merge($this->getHandles(), $this->layoutCacheKey->getCacheKeys()))));
     }
 }
