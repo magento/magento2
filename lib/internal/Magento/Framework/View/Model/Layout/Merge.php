@@ -926,7 +926,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      */
     public function getCacheId()
     {
-        return $this->generateCacheId(md5(implode('|',
-            array_merge($this->getHandles(), $this->layoutCacheKey->getCacheKeys()))));
+        $layoutCacheKeys = $this->layoutCacheKey->getCacheKeys();
+        return $this->generateCacheId(md5(implode('|', array_merge($this->getHandles(), $layoutCacheKeys))));
     }
 }
