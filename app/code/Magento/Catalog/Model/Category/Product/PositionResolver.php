@@ -45,7 +45,8 @@ class PositionResolver extends \Magento\Framework\Model\ResourceModel\Db\Abstrac
             'catalog_product_entity',
             'entity_id'
         )->where(
-            'catalog_category_product.category_id = ?', $categoryId
+            'catalog_category_product.category_id = ?',
+            $categoryId
         )->order(
             'catalog_category_product.position ' . \Magento\Framework\DB\Select::SQL_ASC
         );

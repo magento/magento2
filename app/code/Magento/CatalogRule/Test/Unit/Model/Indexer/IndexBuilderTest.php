@@ -186,20 +186,16 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
         $this->rules->expects($this->any())->method('getId')->will($this->returnValue(1));
         $this->rules->expects($this->any())->method('getWebsiteIds')->will($this->returnValue([1]));
         $this->rules->expects($this->any())->method('getCustomerGroupIds')->will($this->returnValue([1]));
-
         $this->ruleCollectionFactory->expects($this->any())->method('create')->will($this->returnSelf());
         $this->ruleCollectionFactory->expects($this->any())->method('addFieldToFilter')->will(
             $this->returnValue([$this->rules])
         );
-
         $this->product->expects($this->any())->method('load')->will($this->returnSelf());
         $this->product->expects($this->any())->method('getId')->will($this->returnValue(1));
         $this->product->expects($this->any())->method('getWebsiteIds')->will($this->returnValue([1]));
-
         $this->rules->expects($this->any())->method('validate')->with($this->product)->willReturn(true);
         $this->attribute->expects($this->any())->method('getBackend')->will($this->returnValue($this->backend));
         $this->productFactory->expects($this->any())->method('create')->will($this->returnValue($this->product));
-
         $this->productLoader = $this->getMockBuilder(ProductLoader::class)
             ->disableOriginalConstructor()
             ->getMock();
