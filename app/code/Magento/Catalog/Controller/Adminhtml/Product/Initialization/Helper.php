@@ -12,6 +12,7 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks;
 use Magento\Catalog\Model\Product\Link\Resolver as LinkResolver;
 use Magento\Framework\App\ObjectManager;
+use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\AttributeFilter;
 
 /**
  * @api
@@ -85,6 +86,11 @@ class Helper
     private $linkTypeProvider;
 
     /**
+     * @var AttributeFilter
+     */
+    private $attributeFilter;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\App\RequestInterface $request
@@ -97,6 +103,7 @@ class Helper
      * @param \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory|null $productLinkFactory
      * @param \Magento\Catalog\Api\ProductRepositoryInterface|null $productRepository
      * @param \Magento\Catalog\Model\Product\LinkTypeProvider|null $linkTypeProvider
+     * @param AttributeFilter|null $attributeFilter
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -109,7 +116,8 @@ class Helper
         \Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory $customOptionFactory = null,
         \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory $productLinkFactory = null,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository = null,
-        \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider = null
+        \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider = null,
+        AttributeFilter $attributeFilter = null
     ) {
         $this->request = $request;
         $this->storeManager = $storeManager;
@@ -125,6 +133,8 @@ class Helper
             ->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         $this->linkTypeProvider = $linkTypeProvider ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Catalog\Model\Product\LinkTypeProvider::class);
+        $this->attributeFilter = $attributeFilter ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(AttributeFilter::class);
     }
 
     /**
@@ -187,6 +197,11 @@ class Helper
             $productOptions = [];
         }
         $productData['tier_price'] = isset($productData['tier_price']) ? $productData['tier_price'] : [];
+
+        $useDefaults = (array)$this->request->getPost('use_default', []);
+
+        $productData = $this->attributeFilter->prepareProductAttributes($product, $productData, $useDefaults);
+
         $product->addData($productData);
 
         if ($wasLockedMedia) {
@@ -196,8 +211,6 @@ class Helper
         /**
          * Check "Use Default Value" checkboxes values
          */
-        $useDefaults = (array)$this->request->getPost('use_default', []);
-
         foreach ($useDefaults as $attributeCode => $useDefaultState) {
             if ($useDefaultState) {
                 $product->setData($attributeCode, null);

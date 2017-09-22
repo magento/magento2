@@ -1,0 +1,33 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+actor: Tester
+paths:
+    tests: tests
+    log: tests/_output
+    data: tests/_data
+    support: vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework
+    envs: vendor/magento/magento2-functional-testing-framework/etc/_envs
+settings:
+    bootstrap: _bootstrap.php
+    colors: true
+    memory_limit: 1024M
+extensions:
+    enabled:
+        - Codeception\Extension\RunFailed
+        - Yandex\Allure\Adapter\AllureAdapter
+    config:
+        Yandex\Allure\Adapter\AllureAdapter:
+            deletePreviousResults: true
+            outputDirectory: allure-results
+            ignoredAnnotations:
+                - env
+                - zephyrId
+params:
+    - .env
+modules:
+    config:
+        Db:
+            dsn: "%DB_DSN%"
+            user: "%DB_USERNAME%"
+            password: "%DB_PASSWORD%"
+            dump: tests/_data/dump.sql

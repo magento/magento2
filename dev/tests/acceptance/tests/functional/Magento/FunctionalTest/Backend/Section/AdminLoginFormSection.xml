@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="AdminLoginFormSection">
+        <element name="username" type="input" locator="#username"/>
+        <element name="password" type="input" locator="#login"/>
+        <element name="signIn" type="button" locator=".actions .action-primary" timeout="30"/>
+    </section>
+</config>

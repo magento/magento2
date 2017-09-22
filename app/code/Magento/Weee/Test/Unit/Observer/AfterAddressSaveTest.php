@@ -5,36 +5,45 @@
  */
 namespace Magento\Weee\Test\Unit\Observer;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Tax\Api\TaxAddressManagerInterface;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
+
 class AfterAddressSaveTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Event\Observer
+     * @var ObjectManager
      */
-    protected $observerMock;
-
+    private $objectManager;
+    
     /**
-     * @var \Magento\Customer\Model\Session
+     * @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $customerSessionMock;
+    private $observerMock;
 
     /**
      * Module manager
      *
-     * @var \Magento\Framework\Module\Manager
+     * @var \Magento\Framework\Module\Manager|\PHPUnit_Framework_MockObject_MockObject
      */
     private $moduleManagerMock;
 
     /**
      * Cache config
      *
-     * @var \Magento\PageCache\Model\Config
+     * @var \Magento\PageCache\Model\Config|\PHPUnit_Framework_MockObject_MockObject
      */
     private $cacheConfigMock;
 
     /**
-     * @var \Magento\Weee\Helper\Data
+     * @var \Magento\Weee\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $weeeHelperMock;
+    private $weeeHelperMock;
+    
+    /**
+     * @var TaxAddressManagerInterface|MockObject
+     */
+    private $addressManagerMock;
 
     /**
      * @var \Magento\Weee\Observer\AfterAddressSave
@@ -43,19 +52,10 @@ class AfterAddressSaveTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
         $this->observerMock = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
             ->disableOriginalConstructor()
-            ->setMethods([
-                'getCustomerAddress', 'getData'
-            ])
-            ->getMock();
-
-        $this->customerSessionMock = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
-            ->disableOriginalConstructor()
-            ->setMethods([
-                'setDefaultTaxBillingAddress', 'setDefaultTaxShippingAddress', 'setWebsiteId'
-            ])
+            ->setMethods(['getCustomerAddress'])
             ->getMock();
 
         $this->moduleManagerMock = $this->getMockBuilder(\Magento\Framework\Module\Manager::class)
@@ -70,51 +70,77 @@ class AfterAddressSaveTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->addressManagerMock = $this->getMockBuilder(TaxAddressManagerInterface::class)
+            ->setMethods(['setDefaultAddressAfterSave', 'setDefaultAddressAfterLogIn'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->session = $this->objectManager->getObject(
             \Magento\Weee\Observer\AfterAddressSave::class,
             [
-                'customerSession' => $this->customerSessionMock,
                 'weeeHelper' => $this->weeeHelperMock,
                 'moduleManager' => $this->moduleManagerMock,
-                'cacheConfig' => $this->cacheConfigMock
+                'cacheConfig' => $this->cacheConfigMock,
+                'addressManager' => $this->addressManagerMock,
             ]
         );
     }
 
-    public function testExecute()
-    {
-        $this->moduleManagerMock->expects($this->once())
+    /**
+     * @test
+     * @dataProvider getExecuteDataProvider
+     *
+     * @param $isEnabledPageCache
+     * @param $isEnabledConfigCache
+     * @param $isEnabledWeee
+     * @param $isNeedSetAddress
+     */
+    public function testExecute(
+        $isEnabledPageCache,
+        $isEnabledConfigCache,
+        $isEnabledWeee,
+        $isNeedSetAddress
+    ) {
+        $this->moduleManagerMock->expects($this->any())
             ->method('isEnabled')
             ->with('Magento_PageCache')
-            ->willReturn(true);
+            ->willReturn($isEnabledPageCache);
 
-        $this->cacheConfigMock->expects($this->once())
+        $this->cacheConfigMock->expects($this->any())
             ->method('isEnabled')
-            ->willReturn(true);
+            ->willReturn($isEnabledConfigCache);
 
         $this->weeeHelperMock->expects($this->any())
             ->method('isEnabled')
-            ->willReturn(true);
+            ->willReturn($isEnabledWeee);
 
-        $address = $this->objectManager->getObject(\Magento\Customer\Model\Address::class);
-        $address->setIsDefaultShipping(true);
-        $address->setIsDefaultBilling(true);
-        $address->setIsPrimaryBilling(true);
-        $address->setIsPrimaryShipping(true);
-        $address->setCountryId(1);
-        $address->setData('postcode', 11111);
+        /* @var \Magento\Customer\Model\Address|\PHPUnit_Framework_MockObject_MockObject $address */
+        $address = $this->getMockBuilder(\Magento\Customer\Model\Address::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->customerSessionMock->expects($this->once())
-            ->method('setDefaultTaxBillingAddress')
-            ->with(['country_id' => 1, 'region_id' => null, 'postcode' => 11111]);
-        $this->customerSessionMock->expects($this->once())
-            ->method('setDefaultTaxShippingAddress')
-            ->with(['country_id' => 1, 'region_id' => null, 'postcode' => 11111]);
-
-        $this->observerMock->expects($this->once())
+        $this->observerMock->expects($this->any())
             ->method('getCustomerAddress')
             ->willReturn($address);
 
+        $this->addressManagerMock->expects($isNeedSetAddress ? $this->once() : $this->never())
+            ->method('setDefaultAddressAfterSave')
+            ->with($address);
+        
         $this->session->execute($this->observerMock);
+    }
+
+    public function getExecuteDataProvider()
+    {
+        return [
+            [false, false, false, false],
+            [false, false, true, false],
+            [false, true, false, false],
+            [false, true, true, false],
+            [true, false, false, false],
+            [true, false, true, false],
+            [true, true, false, false],
+            [true, true, true, true],
+        ];
     }
 }

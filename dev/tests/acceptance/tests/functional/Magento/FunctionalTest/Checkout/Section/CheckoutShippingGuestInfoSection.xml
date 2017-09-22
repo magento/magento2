@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="CheckoutShippingGuestInfoSection">
+        <element name="email" type="input" locator="#customer-email"/>
+        <element name="firstName" type="input" locator="input[name=firstname]"/>
+        <element name="lastName" type="input" locator="input[name=lastname]"/>
+        <element name="street" type="input" locator="input[name='street[0]']"/>
+        <element name="city" type="input" locator="input[name=city]"/>
+        <element name="region" type="select" locator="select[name=region_id]"/>
+        <element name="postcode" type="input" locator="input[name=postcode]"/>
+        <element name="telephone" type="input" locator="input[name=telephone]"/>
+    </section>
+</config>
