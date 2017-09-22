@@ -894,7 +894,28 @@ if (!slash.equals(path.substring(path.length() -1)) || !slash.equals(path.substr
       <intProp name="Assertion.test_type">2</intProp>
     </ResponseAssertion>
     <hashTree/>
-  </hashTree>
+  
+        <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract form key" enabled="true">
+          <stringProp name="RegexExtractor.useHeaders">false</stringProp>
+          <stringProp name="RegexExtractor.refname">admin_form_key</stringProp>
+          <stringProp name="RegexExtractor.regex">&lt;input name="form_key" type="hidden" value="([^'"]+)" /&gt;</stringProp>
+          <stringProp name="RegexExtractor.template">$1$</stringProp>
+          <stringProp name="RegexExtractor.default"/>
+          <stringProp name="RegexExtractor.match_number">1</stringProp>
+        </RegexExtractor>
+        <hashTree/>
+        <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert form_key extracted" enabled="true">
+          <collectionProp name="Asserion.test_strings">
+            <stringProp name="2845929">^.+$</stringProp>
+          </collectionProp>
+          <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+          <boolProp name="Assertion.assume_success">false</boolProp>
+          <intProp name="Assertion.test_type">1</intProp>
+          <stringProp name="Assertion.scope">variable</stringProp>
+          <stringProp name="Scope.variable">admin_form_key</stringProp>
+        </ResponseAssertion>
+        <hashTree/>
+      </hashTree>
       <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="SetUp - HTTP Request: Admin - Enable All Cache Types" enabled="true">
         <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
           <collectionProp name="Arguments.arguments">
@@ -5405,6 +5426,26 @@ vars.put("loadType", "Customer");</stringProp>
         <intProp name="Assertion.test_type">1</intProp>
         <stringProp name="Assertion.scope">variable</stringProp>
         <stringProp name="Scope.variable">addressId</stringProp>
+      </ResponseAssertion>
+      <hashTree/>
+      <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract form key" enabled="true">
+        <stringProp name="RegexExtractor.useHeaders">false</stringProp>
+        <stringProp name="RegexExtractor.refname">form_key</stringProp>
+        <stringProp name="RegexExtractor.regex">&lt;input name="form_key" type="hidden" value="([^'"]+)" /&gt;</stringProp>
+        <stringProp name="RegexExtractor.template">$1$</stringProp>
+        <stringProp name="RegexExtractor.default"/>
+        <stringProp name="RegexExtractor.match_number">1</stringProp>
+      </RegexExtractor>
+      <hashTree/>
+      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert form_key extracted" enabled="true">
+        <collectionProp name="Asserion.test_strings">
+          <stringProp name="2845929">^.+$</stringProp>
+        </collectionProp>
+        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+        <boolProp name="Assertion.assume_success">false</boolProp>
+        <intProp name="Assertion.test_type">1</intProp>
+        <stringProp name="Assertion.scope">variable</stringProp>
+        <stringProp name="Scope.variable">form_key</stringProp>
       </ResponseAssertion>
       <hashTree/>
     </hashTree>

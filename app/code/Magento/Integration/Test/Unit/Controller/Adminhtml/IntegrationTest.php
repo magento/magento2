@@ -245,7 +245,6 @@ abstract class IntegrationTest extends \PHPUnit\Framework\TestCase
         $this->viewConfigMock->expects($this->any())
             ->method('getTitle')
             ->willReturn($this->pageTitleMock);
-        $this->_escaper->expects($this->any())->method('escapeHtml')->will($this->returnArgument(0));
 
         $this->resultRedirectFactory = $this->getMockBuilder(\Magento\Backend\Model\View\Result\RedirectFactory::class)
             ->disableOriginalConstructor()
