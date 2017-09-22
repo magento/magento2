@@ -36,7 +36,7 @@ class GetProductQuantityInStock implements GetProductQuantityInStockInterface
      */
     public function execute(string $sku, int $stockId): float
     {
-        $productQtyInStock = $this->stockItemQty->execute($sku, $stockId) -
+        $productQtyInStock = $this->stockItemQty->execute($sku, $stockId) +
             $this->reservationQty->execute($sku, $stockId);
         return (float) $productQtyInStock;
     }
