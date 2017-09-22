@@ -50,6 +50,11 @@ class RenderTest extends \PHPUnit\Framework\TestCase
     protected $layoutProcessorMock;
 
     /**
+     * @var \Magento\Framework\View\Layout\LayoutCacheKeyInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $layoutCacheKeyMock;
+
+    /**
      * Set up before test
      */
     protected function setUp()
@@ -58,6 +63,7 @@ class RenderTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()->getMock();
 
         $this->layoutProcessorMock = $this->getMockForAbstractClass(\Magento\Framework\View\Layout\ProcessorInterface::class);
+        $this->layoutCacheKeyMock = $this->getMockForAbstractClass(\Magento\Framework\View\Layout\LayoutCacheKeyInterface::class);
 
         $contextMock = $this->getMockBuilder(\Magento\Framework\App\Action\Context::class)
             ->disableOriginalConstructor()->getMock();
@@ -86,7 +92,8 @@ class RenderTest extends \PHPUnit\Framework\TestCase
                 'context' => $contextMock,
                 'translateInline' => $this->translateInline,
                 'jsonSerializer' => new \Magento\Framework\Serialize\Serializer\Json(),
-                'base64jsonSerializer' => new \Magento\Framework\Serialize\Serializer\Base64Json()
+                'base64jsonSerializer' => new \Magento\Framework\Serialize\Serializer\Base64Json(),
+                'layoutCacheKey' => $this->layoutCacheKeyMock
             ]
         );
     }
@@ -96,6 +103,8 @@ class RenderTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->once())->method('isAjax')->will($this->returnValue(false));
         $this->requestMock->expects($this->once())->method('setActionName')->will($this->returnValue('noroute'));
         $this->requestMock->expects($this->once())->method('setDispatched')->will($this->returnValue(false));
+        $this->layoutCacheKeyMock->expects($this->never())
+            ->method('addCacheKeys');
         $this->action->execute();
     }
 
@@ -113,6 +122,8 @@ class RenderTest extends \PHPUnit\Framework\TestCase
             ->method('getParam')
             ->with($this->equalTo('handles'), $this->equalTo(''))
             ->will($this->returnValue(''));
+        $this->layoutCacheKeyMock->expects($this->never())
+            ->method('addCacheKeys');
         $this->action->execute();
     }
 
@@ -158,17 +169,15 @@ class RenderTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue(base64_encode(json_encode($handles))));
         $this->viewMock->expects($this->once())->method('loadLayout')->with($this->equalTo($handles));
         $this->viewMock->expects($this->any())->method('getLayout')->will($this->returnValue($this->layoutMock));
+        $this->layoutMock->expects($this->never())
+            ->method('getUpdate');
+        $this->layoutCacheKeyMock->expects($this->atLeastOnce())
+            ->method('addCacheKeys');
         $this->layoutMock->expects($this->at(0))
-            ->method('getUpdate')
-            ->will($this->returnValue($this->layoutProcessorMock));
-        $this->layoutProcessorMock->expects($this->at(0))
-            ->method('addCacheKey')
-            ->willReturnSelf();
-        $this->layoutMock->expects($this->at(1))
             ->method('getBlock')
             ->with($this->equalTo($blocks[0]))
             ->will($this->returnValue($blockInstance1));
-        $this->layoutMock->expects($this->at(2))
+        $this->layoutMock->expects($this->at(1))
             ->method('getBlock')
             ->with($this->equalTo($blocks[1]))
             ->will($this->returnValue($blockInstance2));

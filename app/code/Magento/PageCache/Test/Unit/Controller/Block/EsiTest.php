@@ -40,9 +40,9 @@ class EsiTest extends \PHPUnit\Framework\TestCase
     protected $layoutMock;
 
     /**
-     * @var \Magento\Framework\View\Layout\ProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Layout\LayoutCacheKeyInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $layoutProcessorMock;
+    protected $layoutCacheKeyMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Translate\InlineInterface
@@ -57,7 +57,7 @@ class EsiTest extends \PHPUnit\Framework\TestCase
         $this->layoutMock = $this->getMockBuilder(\Magento\Framework\View\Layout::class)
             ->disableOriginalConstructor()->getMock();
 
-        $this->layoutProcessorMock = $this->getMockForAbstractClass(\Magento\Framework\View\Layout\ProcessorInterface::class);
+        $this->layoutCacheKeyMock = $this->getMockForAbstractClass(\Magento\Framework\View\Layout\LayoutCacheKeyInterface::class);
 
         $contextMock =
             $this->getMockBuilder(\Magento\Framework\App\Action\Context::class)
@@ -69,8 +69,6 @@ class EsiTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()->getMock();
         $this->viewMock = $this->getMockBuilder(\Magento\Framework\App\View::class)
             ->disableOriginalConstructor()->getMock();
-
-        $this->layoutMock->expects($this->any())->method('getUpdate')->will($this->returnValue($this->layoutProcessorMock));
 
         $contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($this->requestMock));
         $contextMock->expects($this->any())->method('getResponse')->will($this->returnValue($this->responseMock));
@@ -85,7 +83,8 @@ class EsiTest extends \PHPUnit\Framework\TestCase
                 'context' => $contextMock,
                 'translateInline' => $this->translateInline,
                 'jsonSerializer' => new \Magento\Framework\Serialize\Serializer\Json(),
-                'base64jsonSerializer' => new \Magento\Framework\Serialize\Serializer\Base64Json()
+                'base64jsonSerializer' => new \Magento\Framework\Serialize\Serializer\Base64Json(),
+                'layoutCacheKey' => $this->layoutCacheKeyMock
             ]
         );
     }
@@ -113,12 +112,10 @@ class EsiTest extends \PHPUnit\Framework\TestCase
 
         $this->viewMock->expects($this->once())->method('getLayout')->will($this->returnValue($this->layoutMock));
 
-        $this->layoutMock->expects($this->at(0))
-            ->method('getUpdate')
-            ->will($this->returnValue($this->layoutProcessorMock));
-        $this->layoutProcessorMock->expects($this->at(0))
-            ->method('addCacheKey')
-            ->willReturnSelf();
+        $this->layoutMock->expects($this->never())
+            ->method('getUpdate');
+        $this->layoutCacheKeyMock->expects($this->atLeastOnce())
+            ->method('addCacheKeys');
 
         $this->layoutMock->expects($this->once())
             ->method('getBlock')
