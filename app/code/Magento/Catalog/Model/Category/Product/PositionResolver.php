@@ -41,6 +41,7 @@ class PositionResolver extends \Magento\Framework\Model\ResourceModel\Db\Abstrac
     {
         $connection = $this->getConnection();
 
+        var_dump($connection->fetchCol('Show tables'));
         $select = $connection->select()->from(
             'catalog_product_entity',
             'entity_id'
