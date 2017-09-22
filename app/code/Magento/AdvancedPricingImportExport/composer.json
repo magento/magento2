@@ -3,17 +3,17 @@
     "description": "N/A",
     "require": {
         "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
-        "magento/module-catalog": "101.1.*",
+        "magento/module-catalog": "102.0.*",
         "magento/module-catalog-inventory": "100.2.*",
-        "magento/module-eav": "100.2.*",
+        "magento/module-eav": "101.0.*",
         "magento/module-import-export": "100.2.*",
         "magento/module-catalog-import-export": "100.2.*",
-        "magento/module-customer": "100.2.*",
+        "magento/module-customer": "101.0.*",
         "magento/module-store": "100.2.*",
-        "magento/framework": "100.2.*"
+        "magento/framework": "101.0.*"
     },
     "type": "magento2-module",
-    "version": "100.2.0-dev",
+    "version": "100.2.0",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

@@ -5,19 +5,19 @@
         "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
         "magento/module-store": "100.2.*",
         "magento/module-checkout": "100.2.*",
-        "magento/module-sales": "100.2.*",
+        "magento/module-sales": "101.0.*",
         "magento/module-payment": "100.2.*",
         "magento/module-tax": "100.2.*",
-        "magento/module-customer": "100.2.*",
-        "magento/module-quote": "100.2.*",
-        "magento/framework": "100.2.*",
+        "magento/module-customer": "101.0.*",
+        "magento/module-quote": "101.0.*",
+        "magento/framework": "101.0.*",
         "magento/module-directory": "100.2.*"
     },
     "suggest": {
         "magento/module-theme": "100.2.*"
     },
     "type": "magento2-module",
-    "version": "100.2.0-dev",
+    "version": "100.2.0",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

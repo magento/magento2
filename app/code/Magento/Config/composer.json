@@ -3,7 +3,7 @@
     "description": "N/A",
     "require": {
         "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
-        "magento/framework": "100.2.*",
+        "magento/framework": "101.0.*",
         "magento/module-store": "100.2.*",
         "magento/module-cron": "100.2.*",
         "magento/module-email": "100.2.*",
@@ -13,7 +13,7 @@
         "magento/module-deploy": "100.2.*"
     },
     "type": "magento2-module",
-    "version": "100.2.0-dev",
+    "version": "101.0.0",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
