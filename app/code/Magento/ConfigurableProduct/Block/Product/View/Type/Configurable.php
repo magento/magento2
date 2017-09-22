@@ -217,7 +217,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
         foreach ($this->getAllowProducts() as $product) {
             $tierPrices = [];
             $priceInfo = $product->getPriceInfo();
-            $tierPriceModel =  $priceInfo->getPrice('tier_price');
+            $tierPriceModel = $priceInfo->getPrice('tier_price');
             $tierPricesList = $tierPriceModel->getTierPriceList();
             foreach ($tierPricesList as $tierPrice) {
                 $tierPrices[] = [

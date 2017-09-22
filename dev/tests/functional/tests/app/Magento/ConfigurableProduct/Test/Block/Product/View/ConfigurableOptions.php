@@ -41,6 +41,11 @@ class ConfigurableOptions extends CustomOptions
      */
     private $tierPricesSelector = '.prices-tier li';
 
+    /**
+     * Product info main block.
+     *
+     * @var string
+     */
     private $mainBlockSelector = '.product-info-main';
 
     /**
@@ -182,7 +187,7 @@ class ConfigurableOptions extends CustomOptions
      * @param array $attributesData
      * @return void
      */
-    protected function chooseOptions($variationOptions, $attributesData)
+    protected function chooseOptions(array $variationOptions, array $attributesData)
     {
         //Select all options specified in variation
         foreach ($variationOptions as $variationSelection) {
