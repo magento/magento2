@@ -364,6 +364,13 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         if ($this->order && 'relevance' === $this->order['field']) {
             $this->getSelect()->order('search_result.'. TemporaryStorage::FIELD_SCORE . ' ' . $this->order['dir']);
         }
+
+        /*
+         * This order is required to force search results be the same
+         * for the same requests and products with the same relevance
+         */
+        $this->setOrder('entity_id');
+
         return parent::_renderFiltersBefore();
     }
 
