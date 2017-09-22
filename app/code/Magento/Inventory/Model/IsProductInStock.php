@@ -6,15 +6,16 @@
 namespace Magento\Inventory\Model;
 
 use Magento\Inventory\Model\Stock\Command\GetProductQuantityInterface;
-use Magento\InventoryApi\Api\GetProductQuantityInStockInterface;
+use Magento\InventoryApi\Api\IsProductInStockInterface;
 
 /**
- * Return Quantity of product available to be sold by Product SKU and Stock Id
+ * Return product availability by Product SKU and Stock Id.
  *
  * @see \Magento\InventoryApi\Api\GetProductQuantityInStockInterface
+ * @see \Magento\Inventory\Model\Stock\Command\IsInStockInterface
  * @api
  */
-class GetProductQuantityInStock implements GetProductQuantityInStockInterface
+class IsProductInStock implements IsProductInStockInterface
 {
     /**
      * @var GetProductQuantityInterface
@@ -22,10 +23,9 @@ class GetProductQuantityInStock implements GetProductQuantityInStockInterface
     private $commandGetProductQuantity;
 
     /**
-     * GetProductQuantityInStock constructor.
+     * IsProductInStock constructor.
      *
-     * @param StockItemQuantity $stockItemQty
-     * @param ReservationQuantity $reservationQty
+     * @param GetProductQuantityInterface $getProductQuantity
      */
     public function __construct(
         GetProductQuantityInterface $commandGetProductQuantity
@@ -36,8 +36,8 @@ class GetProductQuantityInStock implements GetProductQuantityInStockInterface
     /**
      * @inheritdoc
      */
-    public function execute(string $sku, int $stockId): float
+    public function execute(string $sku, int $stockId): bool
     {
-        return $this->commandGetProductQuantity->execute($sku, $stockId);
+        return $this->commandGetProductQuantity->execute($sku, $stockId) > 0;
     }
 }

@@ -44,6 +44,7 @@
     <preference for="Magento\Inventory\Model\Stock\Command\DeleteByIdInterface" type="Magento\Inventory\Model\Stock\Command\DeleteById"/>
     <preference for="Magento\Inventory\Model\Stock\Command\GetInterface" type="Magento\Inventory\Model\Stock\Command\Get"/>
     <preference for="Magento\Inventory\Model\Stock\Command\GetListInterface" type="Magento\Inventory\Model\Stock\Command\GetList"/>
+    <preference for="Magento\Inventory\Model\Stock\Command\GetProductQuantityInterface" type="Magento\Inventory\Model\Stock\Command\GetProductQuantity"/>
     <preference for="Magento\Inventory\Model\Stock\Command\SaveInterface" type="Magento\Inventory\Model\Stock\Command\Save"/>
     <type name="Magento\Inventory\Model\Stock\Validator\ValidatorChain">
         <arguments>
