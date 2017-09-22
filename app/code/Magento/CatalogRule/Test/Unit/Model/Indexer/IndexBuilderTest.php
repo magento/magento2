@@ -7,6 +7,7 @@
 namespace Magento\CatalogRule\Test\Unit\Model\Indexer;
 
 use Magento\CatalogRule\Model\Indexer\IndexBuilder\ProductLoader;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -203,18 +204,21 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->indexBuilder = new \Magento\CatalogRule\Model\Indexer\IndexBuilder(
-            $this->ruleCollectionFactory,
-            $this->priceCurrency,
-            $this->resource,
-            $this->storeManager,
-            $this->logger,
-            $this->eavConfig,
-            $this->dateFormat,
-            $this->dateTime,
-            $this->productFactory,
-            1000,
-            $this->productLoader
+        $this->indexBuilder = (new ObjectManager($this))->getObject(
+            \Magento\CatalogRule\Model\Indexer\IndexBuilder::class,
+            [
+                'ruleCollectionFactory' => $this->ruleCollectionFactory,
+                'priceCurrency' => $this->priceCurrency,
+                'resource' => $this->resource,
+                'storeManager' => $this->storeManager,
+                'logger' => $this->logger,
+                'eavConfig' => $this->eavConfig,
+                'dateFormat' => $this->dateFormat,
+                'dateTime' => $this->dateTime,
+                'productFactory' => $this->productFactory,
+                1000,
+                'productLoader' => $this->productLoader
+            ]
         );
 
         $this->setProperties($this->indexBuilder, [
