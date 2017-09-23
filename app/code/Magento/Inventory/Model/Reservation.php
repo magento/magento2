@@ -41,7 +41,7 @@ class Reservation implements ReservationInterface
 
     /**
      * Reservation constructor.
-     * 
+     *
      * @param int|null $reservationId
      * @param int $stockId
      * @param string $sku

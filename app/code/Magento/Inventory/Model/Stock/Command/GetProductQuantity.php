@@ -37,7 +37,6 @@ class GetProductQuantity implements GetProductQuantityInterface
         $this->reservationQty = $reservationQty;
     }
 
-
     /**
      * @inheritdoc
      */

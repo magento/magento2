@@ -42,10 +42,10 @@ class ReservationQuantity
     {
         $connection = $this->resource->getConnection();
 
-        $reservationTableName = $connection->getTableName(CreateReservationTable::TABLE_NAME_RESERVATION);
+        $reservationTable = $connection->getTableName(CreateReservationTable::TABLE_NAME_RESERVATION);
 
         $select = $connection->select()
-            ->from($reservationTableName, [ReservationInterface::QUANTITY => 'sum(' . ReservationInterface::QUANTITY . ')'])
+            ->from($reservationTable, [ReservationInterface::QUANTITY => 'sum(' . ReservationInterface::QUANTITY . ')'])
             ->where(ReservationInterface::SKU . '=?', $sku)
             ->where(ReservationInterface::STOCK_ID . '=?', $stockId)
             ->limit(1);

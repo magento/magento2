@@ -39,17 +39,20 @@ class Cleanup
     public function execute()
     {
         $connection = $this->resource->getConnection();
-        $reservationTableName = $connection->getTableName(CreateReservationTable::TABLE_NAME_RESERVATION);
+        $reservationTable = $connection->getTableName(CreateReservationTable::TABLE_NAME_RESERVATION);
 
         $select = $connection->select()
-            ->from($reservationTableName, ['grouped_reservation_ids' => 'group_concat(' . ReservationInterface::RESERVATION_ID . ')'])
+            ->from(
+                $reservationTable,
+                ['grouped_reservation_ids' => 'group_concat(' . ReservationInterface::RESERVATION_ID . ')']
+            )
             ->group([ReservationInterface::STOCK_ID, ReservationInterface::SKU])
             ->having('sum(' . ReservationInterface::QUANTITY . ') = 0');
         $groupedReservationIds = $connection->fetchCol($select, 'grouped_reservation_ids');
 
         foreach ($groupedReservationIds as $reservationIds) {
             $condition = [ReservationInterface::RESERVATION_ID . ' IN (?)' => explode(',', $reservationIds)];
-            $connection->delete($reservationTableName, $condition);
+            $connection->delete($reservationTable, $condition);
         }
     }
 }
