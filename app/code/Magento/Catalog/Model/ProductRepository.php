@@ -20,6 +20,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -218,6 +219,12 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 $product->setData('store_id', $storeId);
             }
             $product->load($productId);
+
+            /* Add price for configurable product */
+            if ($product->getTypeId() == Configurable::TYPE_CODE) {
+                $product->setMinimalPrice($product->getFinalPrice());
+            }
+
             $this->instances[$sku][$cacheKey] = $product;
             $this->instancesById[$product->getId()][$cacheKey] = $product;
         }
