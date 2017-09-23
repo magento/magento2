@@ -79,6 +79,7 @@ define(
                      */
                     onError: function (response) {
                         braintree.showError($t('Payment ' + this.getTitle() + ' can\'t be initialized'));
+                        fullScreenLoader.stopLoader();
                         throw response.message;
                     },
 

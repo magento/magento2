@@ -10,8 +10,9 @@ define([
     'Magento_Braintree/js/view/payment/method-renderer/cc-form',
     'Magento_Braintree/js/validator',
     'Magento_Vault/js/view/payment/vault-enabler',
-    'mage/translate'
-], function ($, Component, validator, VaultEnabler, $t) {
+    'mage/translate',
+    'Magento_Checkout/js/model/full-screen-loader'
+], function ($, Component, validator, VaultEnabler, $t, fullScreenLoader) {
     'use strict';
 
     return Component.extend({
@@ -148,6 +149,7 @@ define([
          */
         placeOrderClick: function () {
             if (this.validateCardType()) {
+                fullScreenLoader.startLoader();
                 $(this.getSelector('submit')).trigger('click');
             }
         },

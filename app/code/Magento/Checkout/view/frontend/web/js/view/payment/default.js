@@ -18,7 +18,8 @@ define([
     'Magento_Checkout/js/model/payment/additional-validators',
     'Magento_Ui/js/model/messages',
     'uiLayout',
-    'Magento_Checkout/js/action/redirect-on-success'
+    'Magento_Checkout/js/action/redirect-on-success',
+    'Magento_Checkout/js/model/full-screen-loader'
 ], function (
     ko,
     $,
@@ -34,7 +35,8 @@ define([
     additionalValidators,
     Messages,
     layout,
-    redirectOnSuccessAction
+    redirectOnSuccessAction,
+    fullScreenLoader
 ) {
     'use strict';
 
@@ -140,6 +142,7 @@ define([
                     .fail(
                         function () {
                             self.isPlaceOrderActionAllowed(true);
+                            fullScreenLoader.stopLoader();
                         }
                     ).done(
                         function () {
