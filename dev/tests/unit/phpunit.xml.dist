@@ -20,6 +20,7 @@
         <directory suffix="Test.php">../../../vendor/*/module-*/Test/Unit</directory>
         <directory suffix="Test.php">../../../vendor/*/framework/Test/Unit</directory>
         <directory suffix="Test.php">../../../vendor/*/framework/*/Test/Unit</directory>
+        <directory suffix="Test.php">../../tests/unit/*/Test/Unit</directory>
     </testsuite>
     <php>
         <ini name="date.timezone" value="America/Los_Angeles"/>
