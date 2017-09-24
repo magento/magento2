@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Inventory\Indexer\StockItem;
 
 use Magento\Framework\App\ResourceConnection;
@@ -58,6 +59,48 @@ class IndexStructure implements IndexStructureInterface
             return;
         }
 
+        $this->createTable($connection, $tableName);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function cleanUp(
+        IndexName $indexName,
+        array $skuList,
+        string $connectionName = ResourceConnection::DEFAULT_CONNECTION
+    ) {
+        $connection = $this->resourceConnection->getConnection($connectionName);
+        $tableName = $this->indexNameResolver->resolveName($indexName);
+        if ($connection->isTableExists($tableName) === false) {
+            $this->createTable($connection, $indexName);
+            return;
+        }
+        $where = ['sku in (?)' => $skuList];
+        $connection->delete($tableName,  $where);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function delete(IndexName $indexName, string $connectionName = ResourceConnection::DEFAULT_CONNECTION)
+    {
+        $connection = $this->resourceConnection->getConnection($connectionName);
+        $tableName = $this->indexNameResolver->resolveName($indexName);
+
+        if ($connection->isTableExists($tableName)) {
+            $connection->dropTable($tableName);
+        }
+    }
+
+    /**
+     * Create the index table
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
+     * @param string $tableName
+     * @return void
+     */
+    private function createTable(\Magento\Framework\DB\Adapter\AdapterInterface $connection, string $tableName)
+    {
         $table = $connection->newTable(
             $tableName
         )->setComment(
@@ -85,18 +128,5 @@ class IndexStructure implements IndexStructureInterface
             'Quantity'
         );
         $connection->createTable($table);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function delete(IndexName $indexName, string $connectionName = ResourceConnection::DEFAULT_CONNECTION)
-    {
-        $connection = $this->resourceConnection->getConnection($connectionName);
-        $tableName = $this->indexNameResolver->resolveName($indexName);
-
-        if ($connection->isTableExists($tableName)) {
-            $connection->dropTable($tableName);
-        }
     }
 }

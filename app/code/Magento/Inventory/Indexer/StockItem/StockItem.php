@@ -5,10 +5,10 @@
  */
 namespace Magento\Inventory\Indexer\StockItem;
 
-use Magento\Inventory\Indexer\IndexStructureInterface;
 use Magento\Inventory\Indexer\Alias;
 use Magento\Inventory\Indexer\IndexHandlerInterface;
 use Magento\Inventory\Indexer\IndexNameBuilder;
+use Magento\Inventory\Indexer\IndexStructureInterface;
 use Magento\Inventory\Indexer\IndexTableSwitcherInterface;
 use Magento\Inventory\Indexer\StockItemIndexerInterface;
 
@@ -105,27 +105,41 @@ class StockItem implements StockItemIndexerInterface
     /**
      * @inheritdoc
      */
-    public function executeRow($sourceId)
+    public function executeRow($sourceItemId)
     {
-        $this->executeList([$sourceId]);
+        $this->executeList([$sourceItemId]);
     }
 
     /**
      * @inheritdoc
      */
-    public function executeList(array $sourceIds)
+    public function executeList(array $sourceItemIds)
     {
-        $stockIds = $this->getAssignedStockIds->execute($sourceIds);
 
-        foreach ($stockIds as $stockId) {
+        /**
+         * Select stock_id, sku from inventory_source_item
+         * INNER JOIN inventory_source_stock_link ON inventory_source_item.source_id = inventory_source_stock_link.source_id
+         * where source_item_id IN (1,2)
+         */
+
+        // 1  1 sku1
+        // 5  3 sku2
+        $sourceItemIds = [1, 5];
+        $stockIds = [1 => ['sku1'], 2 => ['sku1', 'sku2'] ];
+
+        foreach($stockIds as $stockId => $skuList)
+        {
             $mainIndexName = $this->indexNameBuilder
                 ->setIndexId(StockItemIndexerInterface::INDEXER_ID)
                 ->addDimension('stock_', $stockId)
                 ->setAlias(Alias::ALIAS_MAIN)
                 ->create();
-            // TODO: we do not need to clear index
-            $this->indexStructure->create($mainIndexName);
-            $this->indexHandler->saveIndex($mainIndexName, $this->indexDataProvider->getData($stockId));
+
+            $this->indexStructure->cleanUp($mainIndexName, $skuList);
+            $this->indexHandler->saveIndex(
+                $mainIndexName,
+                $this->indexDataProvider->getDataBySkuList($stockId, $skuList)
+            );
         }
     }
 }
