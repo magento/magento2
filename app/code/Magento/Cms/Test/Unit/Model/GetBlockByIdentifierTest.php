@@ -5,18 +5,18 @@
  */
 namespace Magento\Cms\Test\Unit\Model;
 
-use Magento\Cms\Model\BlockManagement;
+use Magento\Cms\Model\GetBlockByIdentifier;
 
 /**
- * Test for Magento\Cms\Model\BlockManagment
+ * Test for Magento\Cms\Model\GetBlockByIdentifier
  */
 
-class BlockManagementTest extends \PHPUnit\Framework\TestCase
+class GetBlockByIdentifierTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var BlockManagement
+     * @var GetBlockByIdentifier
      */
-    private $blockManagement;
+    private $getBlockByIdentifierCommand;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Model\Block
@@ -33,16 +33,6 @@ class BlockManagementTest extends \PHPUnit\Framework\TestCase
      */
     private $blockResource;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Api\Data\StoreInterface
-     */
-    private $store;
-
     protected function setUp()
     {
         $this->blockFactory = $this->getMockBuilder(\Magento\Cms\Model\BlockFactory::class)
@@ -54,20 +44,12 @@ class BlockManagementTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->store = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
-            ->disableOriginalConstructor(true)
-            ->getMock();
-
         $this->block = $this->getMockBuilder(\Magento\Cms\Model\Block::class)
             ->disableOriginalConstructor()
             ->setMethods(['setStoreId', 'getId'])
             ->getMock();
 
-        $this->blockManagement = new BlockManagement($this->blockFactory, $this->blockResource, $this->storeManager);
+        $this->getBlockByIdentifierCommand = new GetBlockByIdentifier($this->blockFactory, $this->blockResource);
     }
 
     /**
@@ -76,15 +58,7 @@ class BlockManagementTest extends \PHPUnit\Framework\TestCase
     public function testGetByIdentifier()
     {
         $identifier = 'banner';
-        $storeId = null;
-
-        $this->storeManager->expects($this->once())
-            ->method('getStore')
-            ->willReturn($this->store);
-
-        $this->store->expects($this->once())
-            ->method('getId')
-            ->willReturn(1);
+        $storeId = 0;
 
         $this->blockFactory->expects($this->once())
             ->method('create')
@@ -103,7 +77,7 @@ class BlockManagementTest extends \PHPUnit\Framework\TestCase
             ->with($this->block, $identifier)
             ->willReturn($this->block);
 
-        $this->blockManagement->getByIdentifier($identifier, $storeId);
+        $this->getBlockByIdentifierCommand->execute($identifier, $storeId);
     }
 }
 

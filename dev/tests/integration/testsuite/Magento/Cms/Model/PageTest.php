@@ -28,21 +28,22 @@ class PageTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests the get by identifier functionality
+     * Tests the get by identifier command
+     * @param array $pageData
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @magentoDbIsolation enabled
      * @dataProvider testGetByIdentifierDataProvider
-     * @param array $pageData
      */
     public function testGetByIdentifier(array $pageData)
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        /** @var \Magento\Cms\Model\PageManagement $pageManagement */
+        /** @var \Magento\Cms\Model\GetPageByIdentifier $getPageByIdentifierCommand */
         /** @var \Magento\Cms\Model\ResourceModel\Page $pageResource */
         /** @var \Magento\Cms\Model\PageFactory $pageFactory */
         $pageFactory = $objectManager->create(\Magento\Cms\Model\PageFactory::class);
         $pageResource = $objectManager->create(\Magento\Cms\Model\ResourceModel\Page::class);
-        $pageManagement = $objectManager->create(\Magento\Cms\Model\PageManagementInterface::class);
+        $getPageByIdentifierCommand = $objectManager->create(\Magento\Cms\Model\GetPageByIdentifier::class);
 
         # Prepare and save the temporary page
         $tempPage = $pageFactory->create();
@@ -50,7 +51,8 @@ class PageTest extends \PHPUnit\Framework\TestCase
         $pageResource->save($tempPage);
 
         # Load previously created block and compare identifiers
-        $page = $pageManagement->getByIdentifier($pageData['identifier']);
+        $storeId = reset($pageData['stores']);
+        $page = $getPageByIdentifierCommand->execute($pageData['identifier'], $storeId);
         $this->assertEquals($pageData['identifier'], $page->getIdentifier());
     }
 
@@ -110,7 +112,7 @@ class PageTest extends \PHPUnit\Framework\TestCase
         return [
             ['data' => [
                 'title' => 'Test title',
-                'identifier' => 'test-title',
+                'identifier' => 'test-identifier',
                 'page_layout' => '1column',
                 'stores' => [1],
                 'content' => 'Test content',

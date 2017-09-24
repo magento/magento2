@@ -6,13 +6,13 @@
 namespace Magento\Cms\Model;
 
 use Magento\Cms\Api\Data\PageInterface;
-use Magento\Cms\Api\PageManagementInterface;
+use Magento\Cms\Api\GetPageByIdentifierInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
- * Class PageManagement
+ * Class GetPageByIdentifier
  */
-class PageManagement implements PageManagementInterface
+class GetPageByIdentifier implements GetPageByIdentifierInterface
 {
     /**
      * @var \Magento\Cms\Model\PageFactory
@@ -25,40 +25,28 @@ class PageManagement implements PageManagementInterface
     private $pageResource;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
      * PageManagement constructor.
      * @param PageFactory $pageFactory
      * @param ResourceModel\Page $pageResource
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Cms\Model\PageFactory $pageFactory,
-        \Magento\Cms\Model\ResourceModel\Page $pageResource,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\Cms\Model\ResourceModel\Page $pageResource
     ) {
         $this->pageFactory = $pageFactory;
         $this->pageResource = $pageResource;
-        $this->storeManager = $storeManager;
     }
 
     /**
      * Load page data by given page identifier.
      *
      * @param string $identifier
-     * @param int|null $storeId
+     * @param int $storeId
      * @return PageInterface
      * @throws NoSuchEntityException
      */
-    public function getByIdentifier(string $identifier, $storeId = null) : PageInterface
+    public function execute(string $identifier, int $storeId) : PageInterface
     {
-        if ($storeId === null) {
-            $storeId = $this->storeManager->getStore()->getId();
-        }
-
         $page = $this->pageFactory->create();
         $page->setStoreId($storeId);
         $this->pageResource->load($page, $identifier, PageInterface::IDENTIFIER);

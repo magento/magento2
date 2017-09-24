@@ -6,18 +6,18 @@
 namespace Magento\Cms\Api;
 
 /**
- * CMS Block management interface
+ * Command to load the block data by specified identifier
  * @api
  */
-interface BlockManagementInterface
+interface GetBlockByIdentifierInterface
 {
     /**
      * Load block data by given block identifier.
      *
      * @param string $identifier
-     * @param int|null $storeId
+     * @param int $storeId
      * @return \Magento\Cms\Api\Data\BlockInterface
      */
-    public function getByIdentifier(string $identifier, $storeId = null) : \Magento\Cms\Api\Data\BlockInterface;
+    public function execute(string $identifier, int $storeId) : \Magento\Cms\Api\Data\BlockInterface;
 }
 

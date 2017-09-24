@@ -6,18 +6,18 @@
 namespace Magento\Cms\Api;
 
 /**
- * CMS Page management interface
+ * Command to load the page data by specified identifier
  * @api
  */
-interface PageManagementInterface
+interface GetPageByIdentifierInterface
 {
     /**
      * Load page data by given page identifier.
      *
      * @param string $identifier
-     * @param int|null $storeId
+     * @param int $storeId
      * @return \Magento\Cms\Api\Data\PageInterface
      */
-    public function getByIdentifier(string $identifier, $storeId = null) : \Magento\Cms\Api\Data\PageInterface;
+    public function execute(string $identifier, int $storeId) : \Magento\Cms\Api\Data\PageInterface;
 }
 

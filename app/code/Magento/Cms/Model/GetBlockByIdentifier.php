@@ -5,14 +5,14 @@
  */
 namespace Magento\Cms\Model;
 
-use Magento\Cms\Api\BlockManagementInterface;
+use Magento\Cms\Api\GetBlockByIdentifierInterface;
 use Magento\Cms\Api\Data\BlockInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
- * Class BlockManagement
+ * Class GetBlockByIdentifier
  */
-class BlockManagement implements BlockManagementInterface
+class GetBlockByIdentifier implements GetBlockByIdentifierInterface
 {
     /**
      * @var \Magento\Cms\Model\BlockFactory
@@ -25,40 +25,28 @@ class BlockManagement implements BlockManagementInterface
     private $blockResource;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
      * BlockManagement constructor.
      * @param BlockFactory $blockFactory
      * @param ResourceModel\Block $blockResource
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Cms\Model\BlockFactory $blockFactory,
-        \Magento\Cms\Model\ResourceModel\Block $blockResource,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\Cms\Model\ResourceModel\Block $blockResource
     ) {
         $this->blockFactory = $blockFactory;
         $this->blockResource = $blockResource;
-        $this->storeManager = $storeManager;
     }
 
     /**
      * Load block data by given block identifier.
      *
      * @param string $identifier
-     * @param int|null $storeId
+     * @param int $storeId
      * @return BlockInterface
      * @throws NoSuchEntityException
      */
-    public function getByIdentifier(string $identifier, $storeId = null) : BlockInterface
+    public function execute(string $identifier, int $storeId) : BlockInterface
     {
-        if ($storeId === null) {
-            $storeId = $this->storeManager->getStore()->getId();
-        }
-
         $block = $this->blockFactory->create();
         $block->setStoreId($storeId);
         $this->blockResource->load($block, $identifier, BlockInterface::IDENTIFIER);

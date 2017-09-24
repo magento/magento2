@@ -11,10 +11,12 @@ namespace Magento\Cms\Model;
 class BlockTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * Tests the get by identifier functionality
+     * Tests the get by identifier command
+     * @param array $blockData
+     * @throws \Exception
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @magentoDbIsolation enabled
      * @dataProvider testGetByIdentifierDataProvider
-     * @param array $blockData
      */
     public function testGetByIdentifier(array $blockData)
     {
@@ -22,10 +24,10 @@ class BlockTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\Cms\Model\BlockFactory $blockFactory */
         /** @var \Magento\Cms\Model\ResourceModel\Block $blockResource */
-        /** @var \Magento\Cms\Model\BlockManagement $blockManagement */
+        /** @var \Magento\Cms\Model\GetBlockByIdentifier $getBlockByIdentifierCommand */
         $blockResource = $objectManager->create(\Magento\Cms\Model\ResourceModel\Block::class);
         $blockFactory = $objectManager->create(\Magento\Cms\Model\BlockFactory::class);
-        $blockManagement = $objectManager->create(\Magento\Cms\Api\BlockManagementInterface::class);
+        $getBlockByIdentifierCommand = $objectManager->create(\Magento\Cms\Model\GetBlockByIdentifier::class);
 
         # Prepare and save the temporary block
         $tempBlock = $blockFactory->create();
@@ -33,7 +35,8 @@ class BlockTest extends \PHPUnit\Framework\TestCase
         $blockResource->save($tempBlock);
 
         # Load previously created block and compare identifiers
-        $block = $blockManagement->getByIdentifier($blockData['identifier']);
+        $storeId = reset($blockData['stores']);
+        $block = $getBlockByIdentifierCommand->execute($blockData['identifier'], $storeId);
         $this->assertEquals($blockData['identifier'], $block->getIdentifier());
     }
 
@@ -46,8 +49,8 @@ class BlockTest extends \PHPUnit\Framework\TestCase
         return [
             ['data' => [
                 'title' => 'Test title',
-                'stores' => [1],
-                'identifier' => 'test-title',
+                'stores' => [0],
+                'identifier' => 'test-identifier',
                 'content' => 'Test content',
                 'is_active' => 1
             ]]

@@ -5,18 +5,18 @@
  */
 namespace Magento\Cms\Test\Unit\Model;
 
-use Magento\Cms\Model\PageManagement;
+use Magento\Cms\Model\GetPageByIdentifier;
 
 /**
- * Test for Magento\Cms\Model\PageManagment
+ * Test for Magento\Cms\Model\GetPageByIdentifier
  */
 
-class PageManagementTest extends \PHPUnit\Framework\TestCase
+class GetPageByIdentifierTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var PageManagement
+     * @var GetPageByIdentifier
      */
-    protected $pageManagment;
+    protected $getPageByIdentifierCommand;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Model\Page
@@ -33,16 +33,6 @@ class PageManagementTest extends \PHPUnit\Framework\TestCase
      */
     protected $pageResource;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\StoreManagerInterface
-     */
-    protected $storeManager;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Api\Data\StoreInterface
-     */
-    protected $store;
-
     public function setUp()
     {
         $this->pageFactory = $this->getMockBuilder(\Magento\Cms\Model\PageFactory::class)
@@ -54,20 +44,12 @@ class PageManagementTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor(true)
             ->getMock();
 
-        $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
-            ->disableOriginalConstructor(true)
-            ->getMock();
-
-        $this->store = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
-            ->disableOriginalConstructor(true)
-            ->getMock();
-
         $this->page = $this->getMockBuilder(\Magento\Cms\Model\Page::class)
             ->disableOriginalConstructor()
             ->setMethods(['setStoreId', 'getId'])
             ->getMock();
 
-        $this->pageManagment = new PageManagement($this->pageFactory, $this->pageResource, $this->storeManager);
+        $this->getPageByIdentifierCommand = new GetPageByIdentifier($this->pageFactory, $this->pageResource);
     }
 
     /**
@@ -76,15 +58,7 @@ class PageManagementTest extends \PHPUnit\Framework\TestCase
     public function testGetByIdentifier()
     {
         $identifier = 'home';
-        $storeId = null;
-
-        $this->storeManager->expects($this->once())
-            ->method('getStore')
-            ->willReturn($this->store);
-
-        $this->store->expects($this->once())
-            ->method('getId')
-            ->willReturn(1);
+        $storeId = 0;
 
         $this->pageFactory->expects($this->once())
             ->method('create')
@@ -103,6 +77,6 @@ class PageManagementTest extends \PHPUnit\Framework\TestCase
             ->with($this->page, $identifier)
             ->willReturn($this->page);
 
-        $this->pageManagment->getByIdentifier($identifier, $storeId);
+        $this->getPageByIdentifierCommand->execute($identifier, $storeId);
     }
 }
