@@ -13,7 +13,7 @@ interface FeedFactoryInterface
     /**
      * Returns FeedInterface object from a custom array
      * 
-     * @throws \Magento\Framework\Exception\RuntimeException
+     * @throws \Magento\Framework\Exception\InputException
      * @param  array  $data
      * @param  string $format
      * @return FeedInterface

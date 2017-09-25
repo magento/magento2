@@ -5,8 +5,8 @@
  */
 namespace Magento\Framework\App;
 
-use Magento\Framework\App\FeedFactory;
 use Magento\Framework\App\FeedFactoryInterface;
+use Magento\Framework\ObjectManagerInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -15,7 +15,7 @@ use Psr\Log\LoggerInterface;
 class FeedFactory implements FeedFactoryInterface
 {
     /**
-     * @var \Zend_Feed
+     * @var FeedProcessorInterface
      */
     private $feedProcessor;
 
@@ -25,19 +25,27 @@ class FeedFactory implements FeedFactoryInterface
     private $logger;
 
     /**
-     * @param \Zend_Feed $feedProcessor
+     * @var ObjectManagerInterface
+     */
+    protected $objectManager;
+
+    /**
+     * @param ObjectManagerInterface $objectManger
      * @param LoggerInterface $logger
+     * @param array $formats
      */
     public function __construct(
-        \Zend_Feed $feedProcessor,
-        LoggerInterface $logger
+        ObjectManagerInterface $objectManger,
+        LoggerInterface $logger,
+        array $formats
     ) {
-        $this->feedProcessor = $feedProcessor;
+        $this->objectManager = $objectManger;
         $this->logger = $logger;
+        $this->formats = $formats;
     }
 
     /**
-     * Get a new \Magento\Framework\App\Feed object from a custom array
+     * Get a new \Magento\Framework\App\FeedInterface object from a custom array
      *
      * @throws \Magento\Framework\Exception\InputException
      * @param  array  $data
@@ -48,9 +56,18 @@ class FeedFactory implements FeedFactoryInterface
         array $data, 
         $format = FeedFactoryInterface::DEFAULT_FORMAT
     ) {
+        if (!isset($this->formats[$format])) {
+            throw new \Magento\Framework\Exception\InputException(
+                __('The format is not supported'),
+                $e
+            );
+        }
         try {
-            return $this->feedProcessor->importArray($data, $format);
-        } catch (\Zend_Feed_Exception $e) {
+            return $this->objectManager->create(
+                $this->formats[$format],
+                $data
+            );
+        } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
             throw new \Magento\Framework\Exception\InputException(
                 __('There has been an error with import'),

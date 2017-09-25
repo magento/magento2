@@ -5,37 +5,35 @@
  */
 namespace Magento\Framework\App;
 
-use \Magento\Framework\App\FeedInterface;
-
-class Feed implements \Magento\Framework\App\FeedInterface
+/**
+ * Default XML feed class
+ */
+class Feed implements FeedInterface
 {
     /**
-     * @var \Zend_Feed_Abstract
+     * @param Zend_Feed $feed
+     * @param array $data
      */
-    private $feed;
-
-    /**
-     * @param \Zend_Feed_Abstract $feed
-     */
-    public function __construct(\Zend_Feed_Abstract $feed)
-    {
-        $this->feed = $feed;
+    public function __construct(
+        \Zend_Feed $feed,
+        array $data
+    ) {
+       $this->feed = $feed;
+       $this->data = $data;
     }
 
     /**
-     * Get the xml from Zend_Feed_Abstract object
-     *
+     * Returns the formatted feed content
+     * 
      * @return string
      */
     public function getFormatedContentAs(
-        $format = FeedInterface::DEFAULT_FORMAT
+        $format = self::DEFAULT_FORMAT
     ) {
-        if ($format === FeedInterface::DEFAULT_FORMAT) {
-            return $this->feed->saveXml();
-        }
-        throw new \Magento\Framework\Exception\RuntimeException(
-            __('Given feed format is not supported'),
-            $e
+        $feed = $this->feed::importArray(
+            $this->data, 
+            FeedFactoryInterface::DEFAULT_FORMAT
         );
+        return $this->feed->saveXml();
     }
 }

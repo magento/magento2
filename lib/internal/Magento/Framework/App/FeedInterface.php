@@ -12,7 +12,7 @@ interface FeedInterface
     /**
      * @return string
      */
-    public function getFormatedContentAs(
+    public function getFormattedContentAs(
         $format = self::DEFAULT_FORMAT
     );
 }
