@@ -19,7 +19,7 @@
 ?>
 <style>
     .highlighted {
-        background-color: rgb(255, 255, 153)!important;
+        background-color: #DFF7FF!important;
     }
 </style>
 <form action="<?= /* @escapeNotVerified */ $block->getSaveUrl() ?>" method="post" id="config-edit-form" enctype="multipart/form-data">
@@ -58,17 +58,13 @@ require([
                 var groupElement = jQuery('#' + section + '_' + group);
 
                 var parentSection = groupElement.parents('.section-config');
+                parentSection.addClass('highlighted');
+                setTimeout(function() {
+                    parentSection.removeClass('highlighted', 2000, "easeInBack");
+                }, 3000);
                 if (!parentSection.hasClass('active')) {
                     Fieldset.toggleCollapse(section + '_' + group);
                 }
-            }
-            if ((typeof group !== 'undefined') && (typeof field !== 'undefined')) {
-                var fieldElement = jQuery('#' + section + '_' + group + '_' + field);
-                fieldElement.focus();
-                fieldElement.addClass('highlighted');
-                setTimeout(function() {
-                    fieldElement.removeClass('highlighted', 2000, "easeInBack");
-                }, 3000);
             }
         },
         getUp: function (element, tag) {
