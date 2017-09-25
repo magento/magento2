@@ -29,6 +29,7 @@ define([
             mediaGallerySelector: '[data-gallery-role=gallery-placeholder]',
             mediaGalleryInitial: null,
             slyOldPriceSelector: '.sly-old-price',
+            normalPriceLabelSelector: '.normal-price .price-label',
 
             /**
              * Defines the mechanism of how images of a gallery should be
@@ -259,6 +260,7 @@ define([
             }
             this._reloadPrice();
             this._displayRegularPriceBlock(this.simpleProduct);
+            this._displayNormalPriceLabel();
             this._changeProductImage();
         },
 
@@ -501,6 +503,27 @@ define([
                 $(this.options.slyOldPriceSelector).show();
             } else {
                 $(this.options.slyOldPriceSelector).hide();
+            }
+        },
+
+        /**
+         * Show or hide normal price label
+         *
+         * @private
+         */
+        _displayNormalPriceLabel: function () {
+            var shouldBeShown = false;
+
+            $.each(this.options.settings, function (index, element) {
+                if (element.value === '') {
+                    shouldBeShown = true;
+                }
+            });
+
+            if (shouldBeShown) {
+                $(this.options.normalPriceLabelSelector).show();
+            } else {
+                $(this.options.normalPriceLabelSelector).hide();
             }
         },
 

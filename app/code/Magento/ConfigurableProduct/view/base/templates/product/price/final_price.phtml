@@ -39,12 +39,15 @@ $schema = ($block->getZone() == 'item_view') ? true : false;
         ]); ?>
     </span>
 <?php else: ?>
-    <?php /* @escapeNotVerified */ echo $block->renderAmount($finalPriceModel->getAmount(), [
-        'price_id'          => $block->getPriceId('product-price-' . $idSuffix),
-        'price_type'        => 'finalPrice',
-        'include_container' => true,
-        'schema' => $schema
-    ]); ?>
+    <span class="normal-price">
+        <?php /* @escapeNotVerified */ echo $block->renderAmount($finalPriceModel->getAmount(), [
+            'display_label'     => __('As low as'),
+            'price_id'          => $block->getPriceId('product-price-' . $idSuffix),
+            'price_type'        => 'finalPrice',
+            'include_container' => true,
+            'schema' => $schema
+        ]); ?>
+    </span>
 <?php endif; ?>
 
 <?php if ($block->showMinimalPrice()): ?>
