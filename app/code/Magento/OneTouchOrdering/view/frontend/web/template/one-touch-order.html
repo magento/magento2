@@ -6,7 +6,7 @@
     <span data-bind="text: buttonText"></span>
 </button>
 
-<!-- ko if: options.addresses().length > 0 -->
+<!-- ko if: options.selectAddressAvailable() -->
 <div class="field">
     <label for="address-selector"><!-- ko i18n: 'Select shipping address' --><!-- /ko -->:</label>
     <select name="customer_address" id="address-selector"
@@ -15,7 +15,7 @@
 </div>
 <!-- /ko -->
 
-<!-- ko if: options.selectAddressAvailable() -->
+<!-- ko if: options.cards().length > 0 -->
 <div class="field">
     <label for="address-selector"><!-- ko i18n: 'Select credit card' --><!-- /ko -->:</label>
     <select name="customer_cc" id="cc-selector"

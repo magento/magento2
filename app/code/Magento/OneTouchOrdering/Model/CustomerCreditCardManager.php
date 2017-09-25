@@ -64,10 +64,8 @@ class CustomerCreditCardManager
     public function getCustomerCreditCard($customerId, $cardId)
     {
         $tokens = $this->getVisibleAvailableTokens($customerId);
-        if (empty($tokens) || !$cardId ||!isset($tokens[$cardId])) {
-            throw new LocalizedException(
-                __('There are no credit cards available.')
-            );
+        if (empty($tokens) || !$cardId || !isset($tokens[$cardId])) {
+            throw new LocalizedException(__('There are no credit cards available.'));
         }
 
         return $tokens[$cardId];
