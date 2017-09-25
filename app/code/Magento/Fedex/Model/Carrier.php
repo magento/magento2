@@ -13,12 +13,11 @@ use Magento\Framework\Xml\Security;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Shipping\Model\Carrier\AbstractCarrierOnline;
 use Magento\Shipping\Model\Rate\Result;
-use Magento\Shipping\Model\Tracking\Result as TrackingResult;
 
 /**
  * Fedex shipping implementation
  *
- * @author Magento Core Team <core@magentocommerce.com>
+ * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -78,7 +77,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     /**
      * Rate result data
      *
-     * @var Result|TrackingResult
+     * @var Result|null
      */
     protected $_result = null;
 
@@ -124,7 +123,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @inheritdoc
      */
     protected $_debugReplacePrivateDataKeys = [
-        'Key', 'Password', 'MeterNumber'
+        'Key', 'Password', 'MeterNumber',
     ];
 
     /**
@@ -380,12 +379,12 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     /**
      * Get result of request
      *
-     * @return Result|TrackingResult
+     * @return Result|null
      */
     public function getResult()
     {
         if (!$this->_result) {
-            $this->_result = $this->_rateFactory->create();
+            $this->_result = $this->_trackFactory->create();
         }
         return $this->_result;
     }
@@ -748,7 +747,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $priceArr = [];
 
         if (strlen(trim($response)) > 0) {
-            $xml = $this->parseXml($response, 'Magento\Shipping\Model\Simplexml\Element');
+            $xml = $this->parseXml($response, \Magento\Shipping\Model\Simplexml\Element::class);
             if (is_object($xml)) {
                 if (is_object($xml->Error) && is_object($xml->Error->Message)) {
                     $errorTitle = (string)$xml->Error->Message;
@@ -893,14 +892,14 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                         'from_us' => [
                             'method' => ['INTERNATIONAL_FIRST', 'INTERNATIONAL_ECONOMY', 'INTERNATIONAL_PRIORITY'],
                         ],
-                    ]
+                    ],
                 ],
                 [
                     'containers' => ['FEDEX_10KG_BOX', 'FEDEX_25KG_BOX'],
                     'filters' => [
                         'within_us' => [],
                         'from_us' => ['method' => ['INTERNATIONAL_PRIORITY']],
-                    ]
+                    ],
                 ],
                 [
                     'containers' => ['YOUR_PACKAGING'],
@@ -938,7 +937,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                                 'INTERNATIONAL_PRIORITY_FREIGHT',
                             ],
                         ],
-                    ]
+                    ],
                 ],
             ],
             'delivery_confirmation_types' => [
@@ -1039,7 +1038,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      */
     protected function _getXMLTracking($tracking)
     {
-        $this->_result = $this->_trackFactory->create();
         $trackRequest = [
             'WebAuthenticationDetail' => [
                 'UserCredential' => [
@@ -1096,10 +1094,10 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         if (!is_object($response) || empty($response->HighestSeverity)) {
             $this->appendTrackingError($trackingValue, __('Invalid response from carrier'));
             return;
-        } elseif (in_array($response->HighestSeverity, self::$trackingErrors)) {
+        } else if (in_array($response->HighestSeverity, self::$trackingErrors)) {
             $this->appendTrackingError($trackingValue, (string) $response->Notifications->Message);
             return;
-        } elseif (empty($response->CompletedTrackDetails) || empty($response->CompletedTrackDetails->TrackDetails)) {
+        } else if (empty($response->CompletedTrackDetails) || empty($response->CompletedTrackDetails->TrackDetails)) {
             $this->appendTrackingError($trackingValue, __('No available tracking items'));
             return;
         }
@@ -1197,7 +1195,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             'TransactionDetail' => [
                 'CustomerTransactionId' => '*** Express Domestic Shipping Request v9 using PHP ***',
             ],
-            'Version' => ['ServiceId' => 'ship', 'Major' => '10', 'Intermediate' => '0', 'Minor' => '0']
+            'Version' => ['ServiceId' => 'ship', 'Major' => '10', 'Intermediate' => '0', 'Minor' => '0'],
         ];
     }
 
@@ -1372,7 +1370,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 'Length' => $length,
                 'Width' => $width,
                 'Height' => $height,
-                'Units' => $packageParams->getDimensionUnits() == \Zend_Measure_Length::INCH ? 'IN' : 'CM'
+                'Units' => $packageParams->getDimensionUnits() == \Zend_Measure_Length::INCH ? 'IN' : 'CM',
             ];
         }
 
@@ -1428,9 +1426,10 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param array|object $trackingIds
      * @return string
      */
-    private function getTrackingNumber($trackingIds) {
+    private function getTrackingNumber($trackingIds)
+    {
         return is_array($trackingIds) ? array_map(
-            function($val) {
+            function ($val) {
                 return $val->TrackingNumber;
             },
             $trackingIds
@@ -1558,7 +1557,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param \stdClass $trackInfo
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-    +  @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function processTrackingDetails(\stdClass $trackInfo)
     {
@@ -1571,10 +1570,9 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             'progressdetail' => [],
         ];
 
-        if (!empty($trackInfo->ShipTimestamp) &&
-            ($datetime = \DateTime::createFromFormat(\DateTime::ISO8601, $trackInfo->ShipTimestamp)) !== false
-        ) {
-            $result['shippeddate'] = $datetime->format('Y-m-d');
+        $datetime = $this->parseDate(!empty($trackInfo->ShipTimestamp) ? $trackInfo->ShipTimestamp : null);
+        if ($datetime) {
+            $result['shippeddate'] = gmdate('Y-m-d', $datetime->getTimestamp());
         }
 
         $result['signedby'] = !empty($trackInfo->DeliverySignatureName) ?
@@ -1590,8 +1588,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
         $datetime = $this->getDeliveryDateTime($trackInfo);
         if ($datetime) {
-            $result['deliverydate'] = $datetime->format('Y-m-d');
-            $result['deliverytime'] = $datetime->format('H:i:s');
+            $result['deliverydate'] = gmdate('Y-m-d', $datetime->getTimestamp());
+            $result['deliverytime'] = gmdate('H:i:s', $datetime->getTimestamp());
         }
 
         $address = null;
@@ -1638,7 +1636,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             $timestamp = $trackInfo->ActualDeliveryTimestamp;
         }
 
-        return $timestamp ? \DateTime::createFromFormat(\DateTime::ISO8601, $timestamp) : null;
+        return $timestamp ? $this->parseDate($timestamp) : null;
     }
 
     /**
@@ -1646,7 +1644,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Return City, State, Country Code
      *
      * @param \stdClass $address
-     * @return string
+     * @return \Magento\Framework\Phrase|string
      */
     private function getDeliveryAddress(\stdClass $address)
     {
@@ -1687,10 +1685,10 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 'deliverylocation' => null
             ];
 
-            if (!empty($event->Timestamp)) {
-                $datetime = \DateTime::createFromFormat(\DateTime::ISO8601, $event->Timestamp);
-                $item['deliverydate'] = $datetime->format('Y-m-d');
-                $item['deliverytime'] = $datetime->format('H:i:s');
+            $datetime = $this->parseDate(!empty($event->Timestamp) ? $event->Timestamp : null);
+            if ($datetime) {
+                $item['deliverydate'] = gmdate('Y-m-d', $datetime->getTimestamp());
+                $item['deliverytime'] = gmdate('H:i:s', $datetime->getTimestamp());
             }
 
             if (!empty($event->Address)) {
@@ -1707,16 +1705,41 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Append error message to rate result instance
      * @param string $trackingValue
      * @param string $errorMessage
-     * @return void
      */
     private function appendTrackingError($trackingValue, $errorMessage)
     {
         $error = $this->_trackErrorFactory->create();
-        $error->setCarrier(self::CODE);
+        $error->setCarrier('fedex');
         $error->setCarrierTitle($this->getConfigData('title'));
         $error->setTracking($trackingValue);
         $error->setErrorMessage($errorMessage);
         $result = $this->getResult();
         $result->append($error);
+    }
+
+    /**
+     * Parses datetime string from FedEx response.
+     * According to FedEx API, datetime string should be in \DateTime::ATOM format, but
+     * sometimes FedEx returns datetime without timezone and in that case timezone will be set as UTC.
+     *
+     * @param string $timestamp
+     * @return bool|\DateTime
+     */
+    private function parseDate($timestamp)
+    {
+        if ($timestamp === null) {
+            return false;
+        }
+        $formats = [\DateTime::ATOM, 'Y-m-d\TH:i:s'];
+        foreach ($formats as $format) {
+            // set UTC timezone for a case if timestamp does not contain any timezone
+            $utcTimezone = new \DateTimeZone('UTC');
+            $dateTime = \DateTime::createFromFormat($format, $timestamp, $utcTimezone);
+            if ($dateTime !== false) {
+                return $dateTime;
+            }
+        }
+
+        return false;
     }
 }
