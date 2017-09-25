@@ -235,7 +235,6 @@ class FileFactoryTest extends \PHPUnit\Framework\TestCase
     private function getModelMock()
     {
         $modelMock = $this->getMockBuilder(\Magento\Framework\App\Response\Http\FileFactory::class)
-            ->setMethods(['callExit'])
             ->setConstructorArgs(
                 [
                     'response' => $this->responseMock,
