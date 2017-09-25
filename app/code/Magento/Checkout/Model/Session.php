@@ -416,6 +416,8 @@ class Session extends \Magento\Framework\Session\SessionManager
         $this->_quote = null;
         $this->setQuoteId(null);
         $this->setLastSuccessQuoteId(null);
+        $this->setLoadInactive(false);
+        $this->replaceQuote($this->getQuote()->save());
         return $this;
     }
 

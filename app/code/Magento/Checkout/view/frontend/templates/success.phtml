@@ -25,4 +25,13 @@
             <a class="action primary continue" href="<?php /* @escapeNotVerified */ echo $block->getUrl() ?>"><span><?php /* @escapeNotVerified */ echo __('Continue Shopping') ?></span></a>
         </div>
     </div>
+    <script>
+        require([
+            'Magento_Customer/js/customer-data'
+        ], function (customerData) {
+            var sections = ['cart'];
+            customerData.invalidate(sections);
+            customerData.reload(sections, true);
+        });
+    </script>
 </div>
