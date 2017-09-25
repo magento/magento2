@@ -37,7 +37,7 @@ class PositionResolver extends \Magento\Framework\Model\ResourceModel\Db\Abstrac
      * @param int $categoryId
      * @return array
      */
-    public function getPositions(int $categoryId)
+    public function getPositions($categoryId)
     {
         $connection = $this->getConnection();
 
