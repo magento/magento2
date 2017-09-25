@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -113,7 +113,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->connectionMock->expects($this->any())->method('select')->willReturn($this->selectMock);
-        
+
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
             \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection::class,
