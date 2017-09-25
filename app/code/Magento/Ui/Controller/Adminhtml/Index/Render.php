@@ -9,12 +9,32 @@ use Magento\Backend\App\Action\Context;
 use Magento\Ui\Controller\Adminhtml\AbstractAction;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
+use Magento\Ui\Model\UiComponentTypeResolver;
 
 /**
  * Class Render
  */
 class Render extends AbstractAction
 {
+    /**
+     * @var \Magento\Ui\Model\UiComponentTypeResolver
+     */
+    private $contentTypeResolver;
+
+    /**
+     * @param Context $context
+     * @param UiComponentFactory $factory
+     * @param UiComponentTypeResolver $contentTypeResolver
+     */
+    public function __construct(
+        Context $context,
+        UiComponentFactory $factory,
+        UiComponentTypeResolver $contentTypeResolver
+    ) {
+        parent::__construct($context, $factory);
+        $this->contentTypeResolver = $contentTypeResolver;
+    }
+
     /**
      * Action for AJAX request
      *
@@ -27,9 +47,12 @@ class Render extends AbstractAction
             return;
         }
 
-        $component = $this->factory->create($this->_request->getParam('namespace'));
+        $component = $this->factory->create($this->getRequest()->getParam('namespace'));
         $this->prepareComponent($component);
-        $this->_response->appendBody((string) $component->render());
+        $this->getResponse()->appendBody((string) $component->render());
+
+        $contentType = $this->contentTypeResolver->resolve($component->getContext());
+        $this->getResponse()->setHeader('Content-Type', $contentType, true);
     }
 
     /**

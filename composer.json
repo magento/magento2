@@ -7,6 +7,9 @@
         "OSL-3.0",
         "AFL-3.0"
     ],
+    "config": {
+        "preferred-install": "dist"
+    },
     "require": {
         "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
         "zendframework/zend-stdlib": "^2.7.7",
@@ -43,7 +46,7 @@
         "composer/composer": "1.4.1",
         "monolog/monolog": "^1.17",
         "oyejorge/less.php": "~1.7.0",
-        "pelago/emogrifier": "0.1.1",
+        "pelago/emogrifier": "1.2.0",
         "tubalmartin/cssmin": "4.1.0",
         "magento/magento-composer-installer": ">=0.1.11",
         "braintree/braintree_php": "3.22.0",

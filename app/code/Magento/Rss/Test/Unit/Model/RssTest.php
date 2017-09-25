@@ -152,13 +152,13 @@ class RssTest extends \PHPUnit\Framework\TestCase
         $dataProvider->expects($this->any())->method('getRssData')->will($this->returnValue($this->feedData));
 
         $this->feedMock->expects($this->once())
-            ->method('getFormatedContentAs')
-            ->with(\Magento\Framework\App\FeedOutputFormatsInterface::DEFAULT_FORMAT)
+            ->method('getFormattedContentAs')
+            ->with(\Magento\Framework\App\FeedInterface::DEFAULT_FORMAT)
             ->will($this->returnValue($this->feedXml));
 
         $this->feedFactoryMock->expects($this->once())
-            ->method('importArray')
-            ->with($this->feedData, \Magento\Framework\App\FeedFormatsInterface::DEFAULT_FORMAT)
+            ->method('create')
+            ->with($this->feedData, \Magento\Framework\App\FeedFactoryInterface::DEFAULT_FORMAT)
             ->will($this->returnValue($this->feedMock));
 
         $this->rss->setDataProvider($dataProvider);
