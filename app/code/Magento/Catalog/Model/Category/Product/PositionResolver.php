@@ -41,20 +41,17 @@ class PositionResolver extends \Magento\Framework\Model\ResourceModel\Db\Abstrac
     {
         $connection = $this->getConnection();
 
-        var_dump($connection->fetchCol('Show tables'));
         $select = $connection->select()->from(
-            'catalog_product_entity',
+            ['cpe' => $this->getTable('catalog_product_entity')],
             'entity_id'
+        )->joinLeft(
+            ['ccp' => $this->getTable('catalog_category_product')],
+            'ccp.product_id=cpe.entity_id'
         )->where(
-            'catalog_category_product.category_id = ?',
+            'ccp.category_id = ?',
             $categoryId
         )->order(
-            'catalog_category_product.position ' . \Magento\Framework\DB\Select::SQL_ASC
-        );
-        $select->joinLeft(
-            'catalog_category_product',
-            'catalog_category_product.product_id=catalog_product_entity.entity_id',
-            []
+            'ccp.position ' . \Magento\Framework\DB\Select::SQL_ASC
         );
 
         return array_flip($connection->fetchCol($select));
