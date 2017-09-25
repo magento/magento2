@@ -13,6 +13,11 @@ namespace Magento\Catalog\Controller\Adminhtml\Product;
 abstract class Set extends \Magento\Backend\App\Action
 {
     /**
+     * {@inheritdoc}
+     */
+    const ADMIN_RESOURCE = 'Magento_Catalog::sets';
+
+    /**
      * Core registry
      *
      * @var \Magento\Framework\Registry
@@ -40,13 +45,5 @@ abstract class Set extends \Magento\Backend\App\Action
             'entityType',
             $this->_objectManager->create('Magento\Catalog\Model\Product')->getResource()->getTypeId()
         );
-    }
-
-    /**
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Catalog::sets');
     }
 }

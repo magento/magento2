@@ -13,7 +13,10 @@ use Magento\Newsletter\Model\Subscriber;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
+ * Class IndexTest
+ *
  * @magentoAppArea adminhtml
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
@@ -41,17 +44,17 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         parent::setUp();
         $this->_baseControllerUrl = 'http://localhost/index.php/backend/customer/index/';
         $this->customerRepository = Bootstrap::getObjectManager()->get(
-            'Magento\Customer\Api\CustomerRepositoryInterface'
+            \Magento\Customer\Api\CustomerRepositoryInterface::class
         );
         $this->addressRepository = Bootstrap::getObjectManager()->get(
-            'Magento\Customer\Api\AddressRepositoryInterface'
+            \Magento\Customer\Api\AddressRepositoryInterface::class
         );
         $this->accountManagement = Bootstrap::getObjectManager()->get(
-            'Magento\Customer\Api\AccountManagementInterface'
+            \Magento\Customer\Api\AccountManagementInterface::class
         );
 
         $this->formKey = Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Data\Form\FormKey'
+            \Magento\Framework\Data\Form\FormKey::class
         );
     }
 
@@ -60,12 +63,12 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         /**
          * Unset customer data
          */
-        Bootstrap::getObjectManager()->get('Magento\Backend\Model\Session')->setCustomerData(null);
+        Bootstrap::getObjectManager()->get(\Magento\Backend\Model\Session::class)->setCustomerData(null);
 
         /**
          * Unset messages
          */
-        Bootstrap::getObjectManager()->get('Magento\Backend\Model\Session')->getMessages(true);
+        Bootstrap::getObjectManager()->get(\Magento\Backend\Model\Session::class)->getMessages(true);
     }
 
     /**
@@ -98,7 +101,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
          */
         $this->assertEquals(
             $post,
-            Bootstrap::getObjectManager()->get('Magento\Backend\Model\Session')->getCustomerData()
+            Bootstrap::getObjectManager()->get(\Magento\Backend\Model\Session::class)->getCustomerData()
         );
         $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'new'));
     }
@@ -134,7 +137,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
          */
         $this->assertEquals(
             $post,
-            Bootstrap::getObjectManager()->get('Magento\Backend\Model\Session')->getCustomerData()
+            Bootstrap::getObjectManager()->get(\Magento\Backend\Model\Session::class)->getCustomerData()
         );
         $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'new'));
     }
@@ -175,7 +178,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $this->getRequest()->setParam('back', '1');
 
         // Emulate setting customer data to session in editAction
-        $objectManager->get('Magento\Backend\Model\Session')->setCustomerData($post);
+        $objectManager->get(\Magento\Backend\Model\Session::class)->setCustomerData($post);
 
         $this->dispatch('backend/customer/index/save');
         /**
@@ -186,7 +189,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         /**
          * Check that customer data were cleaned after it was saved successfully
          */
-        $this->assertEmpty($objectManager->get('Magento\Backend\Model\Session')->getCustomerData());
+        $this->assertEmpty($objectManager->get(\Magento\Backend\Model\Session::class)->getCustomerData());
 
         /**
          * Check that success message is set
@@ -196,10 +199,9 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
             \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
         );
 
-        /**
-         * Check that customer id set and addresses saved
-         */
-        $registry = $objectManager->get('Magento\Framework\Registry');
+        /** Check that customer id set and addresses saved */
+        /** @var \Magento\Framework\Registry $registry */
+        $registry = $objectManager->get(\Magento\Framework\Registry::class);
         $customerId = $registry->registry(RegistryConstants::CURRENT_CUSTOMER_ID);
         $customer = $this->customerRepository->getById($customerId);
         $this->assertEquals('test firstname', $customer->getFirstname());
@@ -213,7 +215,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         );
 
         /** @var \Magento\Newsletter\Model\Subscriber $subscriber */
-        $subscriber = $objectManager->get('Magento\Newsletter\Model\SubscriberFactory')->create();
+        $subscriber = $objectManager->get(\Magento\Newsletter\Model\SubscriberFactory::class)->create();
         $this->assertEmpty($subscriber->getId());
         $subscriber->loadByCustomerId($customerId);
         $this->assertEmpty($subscriber->getId());
@@ -287,10 +289,9 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = Bootstrap::getObjectManager();
 
-        /**
-         * Check that customer id set and addresses saved
-         */
-        $registry = $objectManager->get('Magento\Framework\Registry');
+        /** Check that customer id set and addresses saved */
+        /** @var \Magento\Framework\Registry $registry */
+        $registry = $objectManager->get(\Magento\Framework\Registry::class);
         $customerId = $registry->registry(RegistryConstants::CURRENT_CUSTOMER_ID);
         $customer = $this->customerRepository->getById($customerId);
         $this->assertEquals('test firstname', $customer->getFirstname());
@@ -311,7 +312,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $this->assertEquals('new firstname', $newAddress->getFirstname());
 
         /** @var \Magento\Newsletter\Model\Subscriber $subscriber */
-        $subscriber = $objectManager->get('Magento\Newsletter\Model\SubscriberFactory')->create();
+        $subscriber = $objectManager->get(\Magento\Newsletter\Model\SubscriberFactory::class)->create();
         $this->assertEmpty($subscriber->getId());
         $subscriber->loadByCustomerId($customerId);
         $this->assertNotEmpty($subscriber->getId());
@@ -330,7 +331,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $objectManager = Bootstrap::getObjectManager();
 
         /** @var \Magento\Newsletter\Model\Subscriber $subscriber */
-        $subscriber = $objectManager->get('Magento\Newsletter\Model\SubscriberFactory')->create();
+        $subscriber = $objectManager->get(\Magento\Newsletter\Model\SubscriberFactory::class)->create();
         $this->assertEmpty($subscriber->getId());
         $subscriber->loadByCustomerId($customerId);
         $this->assertNotEmpty($subscriber->getId());
@@ -350,7 +351,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $this->dispatch('backend/customer/index/save');
 
         /** @var \Magento\Newsletter\Model\Subscriber $subscriber */
-        $subscriber = $objectManager->get('Magento\Newsletter\Model\SubscriberFactory')->create();
+        $subscriber = $objectManager->get(\Magento\Newsletter\Model\SubscriberFactory::class)->create();
         $this->assertEmpty($subscriber->getId());
         $subscriber->loadByCustomerId($customerId);
         $this->assertNotEmpty($subscriber->getId());
@@ -394,7 +395,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         );
         $this->assertEquals(
             $post,
-            Bootstrap::getObjectManager()->get('Magento\Backend\Model\Session')->getCustomerData()
+            Bootstrap::getObjectManager()->get(\Magento\Backend\Model\Session::class)->getCustomerData()
         );
         $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'new/key/'));
     }
@@ -452,13 +453,33 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         /**
          * set customer data
          */
-        Bootstrap::getObjectManager()->get('Magento\Backend\Model\Session')->setCustomerData($customerData);
+        Bootstrap::getObjectManager()->get(\Magento\Backend\Model\Session::class)->setCustomerData($customerData);
         $this->getRequest()->setParam('id', 1);
         $this->dispatch('backend/customer/index/edit');
         $body = $this->getResponse()->getBody();
 
         // verify
         $this->assertContains('<h1 class="page-title">new firstname new lastname</h1>', $body);
+
+        // assert disclosure of sensitive fields from the database
+        $blacklistFields = [
+            '"password_hash":',
+            '"rp_token":',
+            '"confirmation":',
+        ];
+        foreach ($blacklistFields as $blacklistField) {
+            $this->assertNotContains($blacklistField, $body);
+        }
+
+        // assert valid data provider fields
+        $whitelistFields = [
+            '"customer_form_data_source":',
+            '"middlename":',
+            '"gender":',
+        ];
+        foreach ($whitelistFields as $whitelistField) {
+            $this->assertContains($whitelistField, $body);
+        }
     }
 
     /**
@@ -501,7 +522,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
                 'customer_address' => [],
             ],
         ];
-        $context = Bootstrap::getObjectManager()->get('Magento\Backend\Block\Template\Context');
+        $context = Bootstrap::getObjectManager()->get(\Magento\Backend\Block\Template\Context::class);
         $context->getBackendSession()->setCustomerData($customerData);
         $this->testNewAction();
     }

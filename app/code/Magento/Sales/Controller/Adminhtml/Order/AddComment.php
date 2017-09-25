@@ -12,6 +12,11 @@ use Magento\Sales\Model\Order\Email\Sender\OrderCommentSender;
 class AddComment extends \Magento\Sales\Controller\Adminhtml\Order
 {
     /**
+     * {@inheritdoc}
+     */
+    const ADMIN_RESOURCE = 'Magento_Sales::comment';
+
+    /**
      * Add order comment action
      *
      * @return \Magento\Framework\Controller\ResultInterface
@@ -56,13 +61,5 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Order
             }
         }
         return $this->resultRedirectFactory->create()->setPath('sales/*/');
-    }
-
-    /**
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Sales::comment');
     }
 }

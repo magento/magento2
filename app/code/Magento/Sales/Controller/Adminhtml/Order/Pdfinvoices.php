@@ -23,6 +23,13 @@ use Magento\Sales\Model\ResourceModel\Order\Collection as OrderCollection;
 class Pdfinvoices extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
     /**
+     * Authorization level of a basic admin session.
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Sales::invoice';
+
+    /**
      * @var FileFactory
      */
     protected $fileFactory;
@@ -76,8 +83,10 @@ class Pdfinvoices extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMass
         $invoicesCollection = $this->collectionFactory->create()->setOrderFilter(['in' => $collection->getAllIds()]);
         if (!$invoicesCollection->getSize()) {
             $this->messageManager->addError(__('There are no printable documents related to selected orders.'));
+
             return $this->resultRedirectFactory->create()->setPath($this->getComponentRefererUrl());
         }
+
         return $this->fileFactory->create(
             sprintf('packingslip%s.pdf', $this->dateTime->date('Y-m-d_H-i-s')),
             $this->pdfInvoice->getPdf($invoicesCollection->getItems())->render(),

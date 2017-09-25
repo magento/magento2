@@ -24,6 +24,13 @@ use Magento\Sales\Model\ResourceModel\Order\Collection as OrderCollection;
 class Pdfcreditmemos extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
     /**
+     * Authorization level of a basic admin session.
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Sales::creditmemo';
+
+    /**
      * @var FileFactory
      */
     protected $fileFactory;
@@ -74,12 +81,13 @@ class Pdfcreditmemos extends \Magento\Sales\Controller\Adminhtml\Order\AbstractM
      */
     protected function massAction(AbstractCollection $collection)
     {
-
         $creditmemoCollection = $this->collectionFactory->create()->setOrderFilter(['in' => $collection->getAllIds()]);
         if (!$creditmemoCollection->getSize()) {
             $this->messageManager->addError(__('There are no printable documents related to selected orders.'));
+
             return $this->resultRedirectFactory->create()->setPath($this->getComponentRefererUrl());
         }
+
         return $this->fileFactory->create(
             sprintf('creditmemo%s.pdf', $this->dateTime->date('Y-m-d_H-i-s')),
             $this->pdfCreditmemo->getPdf($creditmemoCollection->getItems())->render(),

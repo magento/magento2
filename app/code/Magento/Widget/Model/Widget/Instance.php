@@ -166,7 +166,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
     protected function _construct()
     {
         parent::_construct();
-        $this->_init('Magento\Widget\Model\ResourceModel\Widget\Instance');
+        $this->_init(\Magento\Widget\Model\ResourceModel\Widget\Instance::class);
         $this->_layoutHandles = [
             'anchor_categories' => self::ANCHOR_CATEGORY_LAYOUT_HANDLE,
             'notanchor_categories' => self::NOTANCHOR_CATEGORY_LAYOUT_HANDLE,
@@ -241,9 +241,17 @@ class Instance extends \Magento\Framework\Model\AbstractModel
         if (is_array($this->getData('store_ids'))) {
             $this->setData('store_ids', implode(',', $this->getData('store_ids')));
         }
-        if (is_array($this->getData('widget_parameters'))) {
-            $this->setData('widget_parameters', serialize($this->getData('widget_parameters')));
+
+        $parameters = $this->getData('widget_parameters');
+        if (!is_array($parameters)) {
+            $this->setData('widget_parameters', []);
+            $errorMessage = sprintf(
+                'Expecting widget parameters to be an array, but received %s',
+                (is_object($parameters) ? get_class($parameters) : gettype($parameters))
+            );
+            $this->_logger->error($errorMessage);
         }
+
         $this->setData('page_groups', $tmpPageGroups);
         $this->setData('page_group_ids', $pageGroupIds);
 
@@ -356,18 +364,12 @@ class Instance extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Getter
-     * Unserialize if serialized string setted
+     * Getter to retrieve widget_parameters
      *
      * @return array
      */
     public function getWidgetParameters()
     {
-        if (is_string($this->getData('widget_parameters'))) {
-            return unserialize($this->getData('widget_parameters'));
-        } elseif (null === $this->getData('widget_parameters')) {
-            return [];
-        }
         return is_array($this->getData('widget_parameters')) ? $this->getData('widget_parameters') : [];
     }
 

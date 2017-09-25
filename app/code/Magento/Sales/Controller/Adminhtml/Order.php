@@ -22,6 +22,11 @@ use Psr\Log\LoggerInterface;
 abstract class Order extends \Magento\Backend\App\Action
 {
     /**
+     * {@inheritdoc}
+     */
+    const ADMIN_RESOURCE = 'Magento_Sales::sales_order';
+
+    /**
      * Array of actions which can be processed without secret key validation
      *
      * @var string[]
@@ -158,14 +163,6 @@ abstract class Order extends \Magento\Backend\App\Action
         $this->_coreRegistry->register('sales_order', $order);
         $this->_coreRegistry->register('current_order', $order);
         return $order;
-    }
-
-    /**
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Sales::sales_order');
     }
 
     /**

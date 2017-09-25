@@ -12,16 +12,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class ExportViewedExcel extends \Magento\Reports\Controller\Adminhtml\Report\Product
 {
     /**
-     * Check is allowed for report
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Reports::report_products');
-    }
-
-    /**
      * Export products most viewed report to XML format
      *
      * @return ResponseInterface

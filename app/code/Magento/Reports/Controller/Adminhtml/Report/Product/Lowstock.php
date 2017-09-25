@@ -9,14 +9,9 @@ namespace Magento\Reports\Controller\Adminhtml\Report\Product;
 class Lowstock extends \Magento\Reports\Controller\Adminhtml\Report\Product
 {
     /**
-     * Check is allowed for report
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Reports::lowstock');
-    }
+    const ADMIN_RESOURCE = 'Magento_Reports::lowstock';
 
     /**
      * Low stock action

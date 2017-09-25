@@ -10,6 +10,11 @@ use Magento\Backend\App\Action;
 abstract class Design extends Action
 {
     /**
+     * {@inheritdoc}
+     */
+    const ADMIN_RESOURCE = 'Magento_Backend::design';
+
+    /**
      * Core registry
      *
      * @var \Magento\Framework\Registry
@@ -58,13 +63,5 @@ abstract class Design extends Action
         $this->resultForwardFactory = $resultForwardFactory;
         $this->resultPageFactory = $resultPageFactory;
         $this->resultLayoutFactory = $resultLayoutFactory;
-    }
-
-    /**
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Backend::design');
     }
 }

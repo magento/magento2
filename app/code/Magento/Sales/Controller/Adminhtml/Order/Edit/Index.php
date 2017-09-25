@@ -8,14 +8,9 @@ namespace Magento\Sales\Controller\Adminhtml\Order\Edit;
 class Index extends \Magento\Sales\Controller\Adminhtml\Order\Create\Index
 {
     /**
-     * Acl check for admin
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Sales::actions_edit');
-    }
+    const ADMIN_RESOURCE = 'Magento_Sales::actions_edit';
 
     /**
      * Index page

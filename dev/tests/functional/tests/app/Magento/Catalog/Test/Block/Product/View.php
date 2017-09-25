@@ -471,7 +471,17 @@ class View extends AbstractConfigureBlock
      */
     public function isGalleryVisible()
     {
-        return $this->_rootElement->find($this->mediaGallery)->isVisible();
+        return $this->getGalleryElement()->isVisible();
+    }
+
+    /**
+     * Get gallery element on product page.
+     *
+     * @return \Magento\Mtf\Client\ElementInterface
+     */
+    public function getGalleryElement()
+    {
+        return $this->_rootElement->find($this->mediaGallery);
     }
 
     /**

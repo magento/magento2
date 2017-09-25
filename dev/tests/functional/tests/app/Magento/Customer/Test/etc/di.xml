@@ -56,4 +56,9 @@
             <argument name="severity" xsi:type="string">middle</argument>
         </arguments>
     </type>
+    <type name="Magento\Customer\Test\Constraint\AssertNoAlertPopup">
+        <arguments>
+            <argument name="severity" xsi:type="string">severity:S1</argument>
+        </arguments>
+    </type>
 </config>

@@ -9,12 +9,9 @@ namespace Magento\CatalogRule\Controller\Adminhtml\Promo;
 class Index extends \Magento\Backend\App\Action
 {
     /**
-     * @return bool
+     * {@inheritdoc}
      */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_CatalogRule::promo');
-    }
+    const ADMIN_RESOURCE = 'Magento_CatalogRule::promo';
 
     /**
      * @return void

@@ -15,6 +15,11 @@ use Magento\Framework\Registry;
 abstract class Rating extends Action
 {
     /**
+     * {@inheritdoc}
+     */
+    const ADMIN_RESOURCE = 'Magento_Review::ratings';
+
+    /**
      * Core registry
      *
      * @var \Magento\Framework\Registry
@@ -42,13 +47,5 @@ abstract class Rating extends Action
             'entityId',
             $this->_objectManager->create('Magento\Review\Model\Rating\Entity')->getIdByCode('product')
         );
-    }
-
-    /**
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Review::ratings');
     }
 }

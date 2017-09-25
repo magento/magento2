@@ -8,7 +8,7 @@
 <tabs>
     <properties>
         <class>\Magento\Backend\Test\Block\Widget\Tab</class>
-        <selector>#edit_form</selector>
+        <selector>#base_fieldset</selector>
         <strategy>css selector</strategy>
         <fields>
             <frontend_label>

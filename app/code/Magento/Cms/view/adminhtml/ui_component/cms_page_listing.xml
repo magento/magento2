@@ -20,6 +20,7 @@
                 <item name="url" xsi:type="string">*/*/new</item>
             </item>
         </item>
+        <item name="acl" xsi:type="string">Magento_Cms::page</item>
     </argument>
     <dataSource name="cms_page_listing_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
@@ -181,7 +182,7 @@
             </argument>
         </paging>
     </container>
-    <columns name="cms_page_columns">
+    <columns name="cms_page_columns" class="Magento\Cms\Ui\Component\Listing\Columns">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
                 <item name="storageConfig" xsi:type="array">

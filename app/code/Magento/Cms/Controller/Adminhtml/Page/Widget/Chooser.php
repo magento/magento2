@@ -11,6 +11,13 @@ use Magento\Backend\App\Action;
 class Chooser extends \Magento\Backend\App\Action
 {
     /**
+     * Authorization level of a basic admin session.
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Widget::widget_instance';
+
+    /**
      * @var \Magento\Framework\View\LayoutFactory
      */
     protected $layoutFactory;
@@ -46,7 +53,7 @@ class Chooser extends \Magento\Backend\App\Action
         /** @var \Magento\Framework\View\Layout $layout */
         $layout = $this->layoutFactory->create();
         $pagesGrid = $layout->createBlock(
-            'Magento\Cms\Block\Adminhtml\Page\Widget\Chooser',
+            \Magento\Cms\Block\Adminhtml\Page\Widget\Chooser::class,
             '',
             ['data' => ['id' => $uniqId]]
         );

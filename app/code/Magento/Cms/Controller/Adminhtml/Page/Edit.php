@@ -11,6 +11,11 @@ use Magento\Backend\App\Action;
 class Edit extends \Magento\Backend\App\Action
 {
     /**
+     * {@inheritdoc}
+     */
+    const ADMIN_RESOURCE = 'Magento_Cms::save';
+
+    /**
      * Core registry
      *
      * @var \Magento\Framework\Registry
@@ -35,14 +40,6 @@ class Edit extends \Magento\Backend\App\Action
         $this->resultPageFactory = $resultPageFactory;
         $this->_coreRegistry = $registry;
         parent::__construct($context);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Cms::save');
     }
 
     /**

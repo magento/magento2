@@ -13,6 +13,11 @@ namespace Magento\Backup\Controller\Adminhtml;
 abstract class Index extends \Magento\Backend\App\Action
 {
     /**
+     * {@inheritdoc}
+     */
+    const ADMIN_RESOURCE = 'Magento_Backup::backup';
+
+    /**
      * Core registry
      *
      * @var \Magento\Framework\Registry
@@ -61,15 +66,5 @@ abstract class Index extends \Magento\Backend\App\Action
         $this->_backupModelFactory = $backupModelFactory;
         $this->maintenanceMode = $maintenanceMode;
         parent::__construct($context);
-    }
-
-    /**
-     * Check Permissions for all actions
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Backup::backup');
     }
 }

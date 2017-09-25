@@ -17,6 +17,13 @@ use Magento\Sales\Api\OrderManagementInterface;
 class MassHold extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
     /**
+     * Authorization level of a basic admin session.
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Sales::hold';
+
+    /**
      * @var OrderManagementInterface
      */
     protected $orderManagement;
@@ -68,6 +75,7 @@ class MassHold extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAct
 
         $resultRedirect = $this->resultRedirectFactory->create();
         $resultRedirect->setPath($this->getComponentRefererUrl());
+
         return $resultRedirect;
     }
 }

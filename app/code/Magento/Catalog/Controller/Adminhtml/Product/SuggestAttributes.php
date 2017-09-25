@@ -9,6 +9,11 @@ namespace Magento\Catalog\Controller\Adminhtml\Product;
 class SuggestAttributes extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**
+     * {@inheritdoc}
+     */
+    const ADMIN_RESOURCE = 'Magento_Catalog::products';
+
+    /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
      */
     protected $resultJsonFactory;
@@ -49,13 +54,5 @@ class SuggestAttributes extends \Magento\Catalog\Controller\Adminhtml\Product
                 ->getSuggestedAttributes($this->getRequest()->getParam('label_part'))
         );
         return $resultJson;
-    }
-
-    /**
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Catalog::products');
     }
 }

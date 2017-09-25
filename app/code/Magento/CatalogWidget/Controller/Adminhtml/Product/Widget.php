@@ -13,10 +13,7 @@ use Magento\Backend\App\Action;
 abstract class Widget extends Action
 {
     /**
-     * @return bool
+     * {@inheritdoc}
      */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Widget::widget_instance');
-    }
+    const ADMIN_RESOURCE = 'Magento_Widget::widget_instance';
 }

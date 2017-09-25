@@ -9,12 +9,9 @@ namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
 class Start extends \Magento\Backend\App\Action
 {
     /**
-     * @return bool
+     * {@inheritdoc}
      */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Sales::shipment');
-    }
+    const ADMIN_RESOURCE = 'Magento_Sales::shipment';
 
     /**
      * Start create shipment action

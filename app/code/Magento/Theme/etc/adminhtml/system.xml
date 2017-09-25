@@ -12,7 +12,7 @@
                 <label>HTML Head</label>
                 <field id="shortcut_icon" translate="label comment" type="image" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Favicon Icon</label>
-                    <comment>Allowed file types: ICO, PNG, GIF, JPG, JPEG, APNG, SVG. Not all browsers support all these formats!</comment>
+                    <comment>Allowed file types: ICO, PNG, GIF, JPG, JPEG, APNG. Not all browsers support all these formats!</comment>
                     <backend_model>Magento\Config\Model\Config\Backend\Image\Favicon</backend_model>
                     <base_url type="media" scope_info="1">favicon</base_url>
                 </field>
@@ -61,7 +61,7 @@
                 <label>Header</label>
                 <field id="logo_src" translate="label" type="image" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Logo Image</label>
-                    <comment>Allowed file types:PNG, GIF, JPG, JPEG, SVG.</comment>
+                    <comment>Allowed file types:PNG, GIF, JPG, JPEG.</comment>
                     <backend_model>Magento\Config\Model\Config\Backend\Image\Logo</backend_model>
                     <base_url type="media" scope_info="1">logo</base_url>
                 </field>

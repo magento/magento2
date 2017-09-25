@@ -58,6 +58,11 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
             )->with(
                 __('The integration \'%1\' has been saved.', $intData[Info::DATA_NAME])
             );
+
+        $this->_escaper->expects($this->once())
+            ->method('escapeHtml')
+            ->willReturnArgument(0);
+
         $integrationContr = $this->_createIntegrationController('Save');
         $integrationContr->execute();
     }
@@ -98,6 +103,11 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
             )->will(
                 $this->throwException(new IntegrationException(__($exceptionMessage)))
             );
+
+        $this->_escaper->expects($this->once())
+            ->method('escapeHtml')
+            ->willReturnArgument(0);
+
         // Verify error
         $this->_messageManager->expects($this->once())->method('addError')->with($this->equalTo($exceptionMessage));
         $integrationContr = $this->_createIntegrationController('Save');
@@ -145,6 +155,11 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
             )->with(
                 __('The integration \'%1\' has been saved.', $integration->getName())
             );
+
+        $this->_escaper->expects($this->once())
+            ->method('escapeHtml')
+            ->willReturnArgument(0);
+
         $integrationContr = $this->_createIntegrationController('Save');
         $integrationContr->execute();
     }
@@ -181,6 +196,10 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
             )->will(
                 $this->returnValue(null)
             );
+
+        $this->_escaper->expects($this->once())
+            ->method('escapeHtml')
+            ->willReturnArgument(0);
         // Use real translate model
         $this->_translateModelMock = null;
         // Verify success message

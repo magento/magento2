@@ -11,6 +11,13 @@ use Magento\Backend\App\Action;
 class AddAttribute extends Action
 {
     /**
+     * Authorization level of a basic admin session.
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Catalog::products';
+
+    /**
      * @var \Magento\Catalog\Controller\Adminhtml\Product\Builder
      */
     protected $productBuilder;
@@ -37,7 +44,7 @@ class AddAttribute extends Action
         $this->_view->loadLayout('popup');
         $this->productBuilder->build($this->getRequest());
         $attributeBlock = $this->_view->getLayout()->createBlock(
-            'Magento\ConfigurableProduct\Block\Adminhtml\Product\Attribute\NewAttribute\Product\Created'
+            \Magento\ConfigurableProduct\Block\Adminhtml\Product\Attribute\NewAttribute\Product\Created::class
         );
         $this->_addContent($attributeBlock);
         $this->_view->renderLayout();

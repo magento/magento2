@@ -12,6 +12,7 @@
             <item name="deps" xsi:type="string">sales_order_view_shipment_grid.sales_order_view_shipment_grid_data_source</item>
         </item>
         <item name="spinner" xsi:type="string">sales_order_shipment_columns</item>
+        <item name="acl" xsi:type="string">Magento_Sales::shipment</item>
     </argument>
     <dataSource name="sales_order_view_shipment_grid_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">

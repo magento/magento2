@@ -9,7 +9,7 @@
 ?>
 <?php
 /**
- * @see \Magento\Customer\Block\Adminhtml\System\Config\Validatevat
+ * @var \Magento\Customer\Block\Adminhtml\System\Config\Validatevat $block
  */
 ?>
 <script>
@@ -24,10 +24,10 @@ require(['prototype'], function(){
             vat: $('<?php /* @escapeNotVerified */ echo $block->getMerchantVatNumberField(); ?>').value
         };
 
-        new Ajax.Request('<?php /* @escapeNotVerified */ echo $block->getAjaxUrl() ?>', {
+        new Ajax.Request('<?php echo $this->helper(\Magento\Framework\EscapeHelper::class)->escapeJs($block->escapeUrl($block->getAjaxUrl())) ?>', {
             parameters: params,
             onSuccess: function(response) {
-                var result = '<?php /* @escapeNotVerified */ echo __('Error during VAT Number verification.') ?>';
+                var result = '<?php echo $this->helper(\Magento\Framework\EscapeHelper::class)->escapeJs($block->escapeHtml(__('Error during VAT Number verification.'))) ?>';
                 try {
                     if (response.responseText.isJSON()) {
                         response = response.responseText.evalJSON();

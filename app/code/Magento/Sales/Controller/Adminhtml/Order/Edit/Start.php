@@ -8,14 +8,9 @@ namespace Magento\Sales\Controller\Adminhtml\Order\Edit;
 class Start extends \Magento\Sales\Controller\Adminhtml\Order\Create\Start
 {
     /**
-     * Acl check for admin
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Sales::actions_edit');
-    }
+    const ADMIN_RESOURCE = 'Magento_Sales::actions_edit';
 
     /**
      * Start edit order initialization

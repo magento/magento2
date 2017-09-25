@@ -10,6 +10,11 @@ use Magento\Authorization\Model\Acl\Role\Group as RoleGroup;
 abstract class Role extends \Magento\Backend\App\AbstractAction
 {
     /**
+     * {@inheritdoc}
+     */
+    const ADMIN_RESOURCE = 'Magento_User::acl_roles';
+
+    /**
      * Core registry
      *
      * @var \Magento\Framework\Registry
@@ -107,15 +112,5 @@ abstract class Role extends \Magento\Backend\App\AbstractAction
 
         $this->_coreRegistry->register('current_role', $role);
         return $this->_coreRegistry->registry('current_role');
-    }
-
-    /**
-     * Acl checking
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_User::acl_roles');
     }
 }

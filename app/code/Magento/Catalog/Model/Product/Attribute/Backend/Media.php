@@ -280,7 +280,7 @@ class Media extends Product\Attribute\Backend\AbstractMedia
      */
     protected function moveImageFromTmp($file)
     {
-        $file = $this->getFilenameFromTmp($file);
+        $file = $this->getFilenameFromTmp($this->getSafeFilename($file));
         $destinationFile = $this->getUniqueFileName($file);
 
         if ($this->fileStorageDb->checkDbUsage()) {
@@ -325,6 +325,21 @@ class Media extends Product\Attribute\Backend\AbstractMedia
         return $destFile;
     }
 
+
+    /**
+     * Returns safe filename for posted image.
+     *
+     * @param string $file
+     * @return string
+     */
+    private function getSafeFilename($file)
+    {
+        if (strpos($file, '..') === 0) {
+            $file = DIRECTORY_SEPARATOR . $file;
+        }
+
+        return $this->mediaDirectory->getDriver()->getRealPathSafety($file);
+    }
 
     /**
      * @param string $file
