@@ -41,7 +41,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
         $objManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        foreach (range(1, $howManySearchRequests) as $_) {
+        foreach (range(1, $howManySearchRequests) as $i) {
             /** @var  \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection $fulltextCollection */
             $fulltextCollection = $objManager->create(
                 \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection::class,
@@ -52,10 +52,18 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             $fulltextCollection->setOrder('relevance');
             $fulltextCollection->load();
             $items = $fulltextCollection->getItems();
-            $this->assertGreaterThan(0, count($items), "Search result must not be empty");
+            $this->assertGreaterThan(
+                0,
+                count($items),
+                sprintf("Search #%s result must not be empty", $i)
+            );
 
             if ($previousResult) {
-                $this->assertEquals($previousResult, array_keys($items), "Search result must be the same for the same requests");
+                $this->assertEquals(
+                    $previousResult,
+                    array_keys($items),
+                    "Search result must be the same for the same requests"
+                );
             }
 
             $previousResult = array_keys($items);
