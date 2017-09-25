@@ -33,10 +33,10 @@ class Grid extends GridInterface
             'selector' => 'input[name="order_increment_id"]',
         ],
         'total_qty_from' => [
-            'selector' => 'input[name="total_qty[from]"',
+            'selector' => 'input[name="total_qty[from]"]',
         ],
         'total_qty_to' => [
-            'selector' => 'input[name="total_qty][to]"',
+            'selector' => 'input[name="total_qty[to]"]',
         ],
     ];
 }
