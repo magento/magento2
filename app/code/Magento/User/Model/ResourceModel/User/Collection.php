@@ -23,7 +23,12 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         $this->_init(\Magento\User\Model\User::class, \Magento\User\Model\ResourceModel\User::class);
     }
 
-    public function _initSelect()
+    /**
+     * Collection Init Select
+     *
+     * @return $this
+     */
+    protected function _initSelect()
     {
         parent::_initSelect();
         $this->getSelect()->join(
