@@ -11,7 +11,7 @@
         <div if="getRegion($group().displayArea)().length"
              class="step-title"
              data-role="title">
-            <!-- ko i18n: getGroupTitle($group) --><!-- /ko -->:
+            <translate args="getGroupTitle($group)"/>:
         </div>
         <each args="data: getRegion($group().displayArea), as: 'method'" render=""/>
     </div>
