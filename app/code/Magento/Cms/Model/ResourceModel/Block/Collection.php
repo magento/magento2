@@ -26,6 +26,13 @@ class Collection extends AbstractCollection
     protected $_eventPrefix = 'cms_block_collection';
 
     /**
+     * Event object
+     *
+     * @var string
+     */
+    protected $_eventObject = 'block_collection';
+
+    /**
      * Perform operations after collection load
      *
      * @return $this
