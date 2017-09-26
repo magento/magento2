@@ -527,6 +527,22 @@ class Store extends AbstractExtensibleModel implements
     }
 
     /**
+     * @inheritdoc
+     */
+    public function getIsActive()
+    {
+        return $this->_getData('is_active');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setIsActive($isActive)
+    {
+        return $this->setData('is_active', $isActive);
+    }
+        
+    /**
      * Retrieve store configuration data
      *
      * @param   string $path
