@@ -6,6 +6,7 @@
 namespace Magento\CustomerImportExport\Model\Import;
 
 use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 /**
@@ -338,6 +339,7 @@ class Customer extends AbstractCustomer
      */
     protected function _prepareDataForUpdate(array $rowData)
     {
+        $multiSeparator = $this->getMultipleValueSeparator();
         $entitiesToCreate = [];
         $entitiesToUpdate = [];
         $attributesToSave = [];
@@ -376,10 +378,14 @@ class Customer extends AbstractCustomer
         // attribute values
         foreach (array_intersect_key($rowData, $this->_attributes) as $attributeCode => $value) {
             $attributeParameters = $this->_attributes[$attributeCode];
-            if ('select' == $attributeParameters['type']) {
-                $value = isset($attributeParameters['options'][strtolower($value)])
-                    ? $attributeParameters['options'][strtolower($value)]
-                    : 0;
+            if (in_array($attributeParameters['type'], ['select', 'boolean'])) {
+                $value = $this->getSelectAttrIdByValue($attributeParameters, $value);
+            } elseif ('multiselect' == $attributeParameters['type']) {
+                $ids = [];
+                foreach (explode($multiSeparator, mb_strtolower($value)) as $subValue) {
+                    $ids[] = $this->getSelectAttrIdByValue($attributeParameters, $subValue);
+                }
+                $value = implode(',', $ids);
             } elseif ('datetime' == $attributeParameters['type'] && !empty($value)) {
                 $value = (new \DateTime())->setTimestamp(strtotime($value));
                 $value = $value->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
@@ -535,7 +541,15 @@ class Customer extends AbstractCustomer
                     continue;
                 }
                 if (isset($rowData[$attributeCode]) && strlen($rowData[$attributeCode])) {
-                    $this->isAttributeValid($attributeCode, $attributeParams, $rowData, $rowNumber);
+                    $this->isAttributeValid(
+                        $attributeCode,
+                        $attributeParams,
+                        $rowData,
+                        $rowNumber,
+                        isset($this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR])
+                            ? $this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR]
+                            : Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR
+                    );
                 } elseif ($attributeParams['is_required'] && !$this->_getCustomerId($email, $website)) {
                     $this->addRowError(self::ERROR_VALUE_IS_REQUIRED, $rowNumber, $attributeCode);
                 }

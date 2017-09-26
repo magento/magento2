@@ -5,8 +5,6 @@
  */
 namespace Magento\Framework\Image\Adapter;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-
 /**
  * @magentoAppIsolation enabled
  */
@@ -547,9 +545,6 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreatePngFromString($pixel1, $expectedColor1, $pixel2, $expectedColor2, $adapterType)
     {
-        if (!function_exists('imagettfbbox') || (getenv('TRAVIS'))) {
-            $this->markTestSkipped('Workaround for problem with imagettfbbox() function on Travis');
-        }
         $adapter = $this->_getAdapter($adapterType);
 
         /** @var \Magento\Framework\Filesystem\Directory\ReadFactory readFactory */
@@ -562,9 +557,11 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
         $adapter->refreshImageDimensions();
 
         $color1 = $adapter->getColorAt($pixel1['x'], $pixel1['y']);
+        unset($color1['alpha']);
         $this->assertEquals($expectedColor1, $color1);
 
         $color2 = $adapter->getColorAt($pixel2['x'], $pixel2['y']);
+        unset($color2['alpha']);
         $this->assertEquals($expectedColor2, $color2);
     }
 
@@ -578,30 +575,30 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
         return [
             [
                 ['x' => 5, 'y' => 8],
-                'expectedColor1' => ['red' => 0, 'green' => 0, 'blue' => 0, 'alpha' => 0],
-                ['x' => 0, 'y' => 15],
-                'expectedColor2' => ['red' => 255, 'green' => 255, 'blue' => 255, 'alpha' => 127],
+                'expectedColor1' => ['red' => 0, 'green' => 0, 'blue' => 0],
+                ['x' => 0, 'y' => 14],
+                'expectedColor2' => ['red' => 255, 'green' => 255, 'blue' => 255],
                 \Magento\Framework\Image\Adapter\AdapterInterface::ADAPTER_GD2,
             ],
             [
-                ['x' => 4, 'y' => 7],
-                'expectedColor1' => ['red' => 0, 'green' => 0, 'blue' => 0, 'alpha' => 0],
-                ['x' => 0, 'y' => 15],
-                'expectedColor2' => ['red' => 255, 'green' => 255, 'blue' => 255, 'alpha' => 127],
+                ['x' => 5, 'y' => 12],
+                'expectedColor1' => ['red' => 0, 'green' => 0, 'blue' => 0],
+                ['x' => 0, 'y' => 20],
+                'expectedColor2' => ['red' => 255, 'green' => 255, 'blue' => 255],
                 \Magento\Framework\Image\Adapter\AdapterInterface::ADAPTER_IM
             ],
             [
                 ['x' => 1, 'y' => 14],
-                'expectedColor1' => ['red' => 255, 'green' => 255, 'blue' => 255, 'alpha' => 127],
+                'expectedColor1' => ['red' => 255, 'green' => 255, 'blue' => 255],
                 ['x' => 5, 'y' => 12],
-                'expectedColor2' => ['red' => 0, 'green' => 0, 'blue' => 0, 'alpha' => 0],
+                'expectedColor2' => ['red' => 0, 'green' => 0, 'blue' => 0],
                 \Magento\Framework\Image\Adapter\AdapterInterface::ADAPTER_GD2
             ],
             [
-                ['x' => 1, 'y' => 14],
-                'expectedColor1' => ['red' => 255, 'green' => 255, 'blue' => 255, 'alpha' => 127],
-                ['x' => 4, 'y' => 10],
-                'expectedColor2' => ['red' => 0, 'green' => 0, 'blue' => 0, 'alpha' => 0],
+                ['x' => 1, 'y' => 20],
+                'expectedColor1' => ['red' => 255, 'green' => 255, 'blue' => 255],
+                ['x' => 5, 'y' => 16],
+                'expectedColor2' => ['red' => 0, 'green' => 0, 'blue' => 0],
                 \Magento\Framework\Image\Adapter\AdapterInterface::ADAPTER_IM
             ]
         ];

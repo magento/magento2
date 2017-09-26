@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <cest name="AdminCreateCustomerCest">
+        <annotations>
+            <features value="Customer Creation"/>
+            <stories value="Create a Customer via the Admin"/>
+            <group value="customer"/>
+            <env value="chrome"/>
+            <env value="firefox"/>
+            <env value="phantomjs"/>
+        </annotations>
+        <test name="CreateCustomerViaAdminCest">
+            <annotations>
+                <title value="You should be able to create a customer in the Admin back-end."/>
+                <description value="You should be able to create a customer in the Admin back-end."/>
+                <severity value="CRITICAL"/>
+                <testCaseId value="MAGETWO-72095"/>
+            </annotations>
+            <amOnPage url="{{AdminLoginPage.url}}" mergeKey="navigateToAdmin"/>
+            <fillField userInput="{{_ENV.MAGENTO_ADMIN_USERNAME}}" selector="{{AdminLoginFormSection.username}}" mergeKey="fillUsername"/>
+            <fillField userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" selector="{{AdminLoginFormSection.password}}" mergeKey="fillPassword"/>
+            <click selector="{{AdminLoginFormSection.signIn}}" mergeKey="clickLogin"/>
+            <amOnPage url="{{AdminCustomerPage.url}}" mergeKey="navigateToCustomers"/>
+            <click selector="{{AdminCustomerMainActionsSection.addNewCustomer}}" mergeKey="clickCreateCustomer"/>
+            <fillField userInput="{{CustomerEntityOne.firstname}}" selector="{{AdminNewCustomerAccountInformationSection.firstName}}" mergeKey="fillFirstName"/>
+            <fillField userInput="{{CustomerEntityOne.lastname}}" selector="{{AdminNewCustomerAccountInformationSection.lastName}}" mergeKey="fillLastName"/>
+            <fillField userInput="{{CustomerEntityOne.email}}" selector="{{AdminNewCustomerAccountInformationSection.email}}" mergeKey="fillEmail"/>
+            <click selector="{{AdminNewCustomerMainActionsSection.saveButton}}" mergeKey="saveCustomer"/>
+            <waitForElementNotVisible selector="div [data-role='spinner']" time="10" mergeKey="waitForSpinner1"/>
+            <seeElement selector="{{AdminCustomerMessagesSection.successMessage}}" mergeKey="assertSuccessMessage"/>
+
+            <click selector="{{AdminCustomerFiltersSection.filtersButton}}" mergeKey="openFilter"/>
+            <fillField userInput="{{CustomerEntityOne.firstname}}" selector="{{AdminCustomerFiltersSection.nameInput}}" mergeKey="filterFirstName"/>
+            <click selector="{{AdminCustomerFiltersSection.apply}}" mergeKey="applyFilter"/>
+            <waitForElementNotVisible selector="div [data-role='spinner']" time="10" mergeKey="waitForSpinner2"/>
+            <see userInput="{{CustomerEntityOne.firstname}}" selector="{{AdminCustomerGridSection.customerGrid}}" mergeKey="assertFirstName"/>
+            <see userInput="{{CustomerEntityOne.lastname}}" selector="{{AdminCustomerGridSection.customerGrid}}" mergeKey="assertLastName"/>
+            <see userInput="{{CustomerEntityOne.email}}" selector="{{AdminCustomerGridSection.customerGrid}}" mergeKey="assertEmail"/>
+        </test>
+    </cest>
+</config>

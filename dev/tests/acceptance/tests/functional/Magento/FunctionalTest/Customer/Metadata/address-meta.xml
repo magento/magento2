@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
+    <operation name="CreateAddress" dataType="address" type="create">
+        <entry key="region">region</entry>
+        <entry key="country_id">string</entry>
+        <array key="street">
+            <value>string</value>
+        </array>
+        <entry key="company">string</entry>
+        <entry key="telephone">string</entry>
+        <entry key="fax">string</entry>
+        <entry key="postcode">string</entry>
+        <entry key="city">string</entry>
+        <entry key="firstname">string</entry>
+        <entry key="lastname">string</entry>
+        <entry key="middlename">string</entry>
+        <entry key="prefix">string</entry>
+        <entry key="suffix">string</entry>
+        <entry key="vat_id">string</entry>
+        <entry key="default_shipping">boolean</entry>
+        <entry key="default_billing">boolean</entry>
+        <entry key="extension_attributes">empty_extension_attribute</entry>
+        <array key="custom_attributes">
+            <value>custom_attribute</value>
+        </array>
+    </operation>
+    <operation name="UpdateAddress" dataType="address" type="update">
+        <entry key="id">integer</entry>
+        <entry key="customer_id">integer</entry>
+        <entry key="region">region</entry>
+        <entry key="region_id">integer</entry>
+        <entry key="country_id">string</entry>
+        <array key="street">
+            <value>string</value>
+        </array>
+        <entry key="company">string</entry>
+        <entry key="telephone">string</entry>
+        <entry key="fax">string</entry>
+        <entry key="postcode">string</entry>
+        <entry key="city">string</entry>
+        <entry key="firstname">string</entry>
+        <entry key="lastname">string</entry>
+        <entry key="middlename">string</entry>
+        <entry key="prefix">string</entry>
+        <entry key="suffix">string</entry>
+        <entry key="vat_id">string</entry>
+        <entry key="default_shipping">boolean</entry>
+        <entry key="default_billing">boolean</entry>
+        <entry key="extension_attributes">empty_extension_attribute</entry>
+        <array key="custom_attributes">
+            <value>custom_attribute</value>
+        </array>
+    </operation>
+</config>

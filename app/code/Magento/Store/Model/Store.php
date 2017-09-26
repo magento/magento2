@@ -207,6 +207,7 @@ class Store extends AbstractExtensibleModel implements
      * Flag that shows that backend URLs are secure
      *
      * @var boolean|null
+     * @deprecated unused protected property
      */
     protected $_isAdminSecure = null;
 

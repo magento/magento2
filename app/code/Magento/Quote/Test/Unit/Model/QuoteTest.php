@@ -143,6 +143,11 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
     private $customerDataFactoryMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $itemProcessor;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -223,7 +228,9 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $this->filterBuilderMock = $this->getMockBuilder(\Magento\Framework\Api\FilterBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
-
+        $this->itemProcessor = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item\Processor::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->extensionAttributesJoinProcessorMock = $this->createMock(\Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface::class);
         $this->customerDataFactoryMock = $this->createPartialMock(\Magento\Customer\Api\Data\CustomerInterfaceFactory::class, ['create']);
         $this->quote = (new ObjectManager($this))
@@ -249,6 +256,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
                     'objectCopyService' => $this->objectCopyServiceMock,
                     'extensionAttributesJoinProcessor' => $this->extensionAttributesJoinProcessorMock,
                     'customerDataFactory' => $this->customerDataFactoryMock,
+                    'itemProcessor' => $this->itemProcessor,
                     'data' => [
                         'reserved_order_id' => 1000001
                     ]
@@ -842,6 +850,69 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
             ->method('isSalable')
             ->willReturn(true);
 
+        $typeInstanceMock->expects($this->once())
+            ->method('prepareForCartAdvanced')
+            ->will($this->returnValue([$productMock]));
+        $this->productMock->expects($this->once())
+            ->method('getTypeInstance')
+            ->will($this->returnValue($typeInstanceMock));
+
+        $result = $this->quote->addProduct($this->productMock, null);
+        $this->assertEquals($expectedResult, $result);
+    }
+
+    public function testAddProductItemNew()
+    {
+        $itemMock = $this->createMock(\Magento\Quote\Model\Quote\Item::class);
+
+        $expectedResult = $itemMock;
+        $requestMock = $this->createMock(
+            \Magento\Framework\DataObject::class
+        );
+        $this->objectFactoryMock->expects($this->once())
+            ->method('create')
+            ->with($this->equalTo(['qty' => 1]))
+            ->will($this->returnValue($requestMock));
+
+        $typeInstanceMock = $this->createPartialMock(\Magento\Catalog\Model\Product\Type\Simple::class, [
+            'prepareForCartAdvanced'
+        ]);
+
+        $productMock = $this->createPartialMock(\Magento\Catalog\Model\Product::class, [
+            'getParentProductId',
+            'setStickWithinParent',
+            '__wakeup'
+        ]);
+
+        $collectionMock = $this->createMock(\Magento\Quote\Model\ResourceModel\Quote\Item\Collection::class);
+
+        $itemMock->expects($this->any())
+            ->method('representProduct')
+            ->will($this->returnValue(false));
+
+        $iterator = new \ArrayIterator([$itemMock]);
+        $collectionMock->expects($this->any())
+            ->method('getIterator')
+            ->will($this->returnValue($iterator));
+
+        $this->quoteItemCollectionFactoryMock->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($collectionMock));
+
+        $this->productMock->expects($this->once())
+            ->method('isSalable')
+            ->willReturn(true);
+        $this->itemProcessor
+            ->expects($this->once())
+            ->method('init')
+            ->willReturn($itemMock);
+        $itemMock->expects($this->once())
+            ->method('setProduct');
+        $itemMock->expects($this->once())
+            ->method('setOptions');
+        $itemMock->expects($this->any())
+            ->method('setQuote')
+            ->with($this->quote);
         $typeInstanceMock->expects($this->once())
             ->method('prepareForCartAdvanced')
             ->will($this->returnValue([$productMock]));

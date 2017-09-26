@@ -161,7 +161,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * Header columns for export file
      *
      * @var array
-     * @deprecated
+     * @deprecated 100.2.0
      */
     protected $_headerColumns = [];
 
@@ -699,7 +699,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * @param array $customOptionsData
      * @param array $stockItemRows
      * @return void
-     * @deprecated Logic will be moved to _getHeaderColumns in future release
+     * @deprecated 100.2.0 Logic will be moved to _getHeaderColumns in future release
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -782,7 +782,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             }
 
             // Tested one product to have up to such size
-            $memoryPerProduct = 100000;
+            $memoryPerProduct = 500000;
             // Decrease memory limit to have supply
             $memoryUsagePercent = 0.8;
             // Minimum Products limit
