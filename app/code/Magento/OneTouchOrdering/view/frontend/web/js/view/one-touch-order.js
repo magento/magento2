@@ -58,15 +58,19 @@ define(
                     if (typeof data.available !== 'undefined') {
                         self.showButton(data.available);
                         self.options.cards(data.cards);
-                        self.currentCard(_.first(data.cards)['card']);
+                        self.currentCard(_.first(data.cards).card);
                         self.options.addresses(data.addresses);
                         self.options.defaultShipping(data.defaultShipping);
                         self.options.selectAddressAvailable(data.selectAddressAvailable);
                         self.options.defaultBilling(
-                            _.find(data.addresses, function(obj) { return obj.id === data.defaultBilling})['address']
+                            _.find(data.addresses, function (obj) {
+                                return obj.id === data.defaultBilling;
+                            }).address
                         );
                         self.currentShipping(
-                            _.find(data.addresses, function(obj) { return obj.id === data.defaultShipping})['address']
+                            _.find(data.addresses, function (obj) {
+                                return obj.id === data.defaultShipping;
+                            }).address
                         );
                     }
                 });
@@ -77,7 +81,9 @@ define(
              */
             changeShipping: function (object, event) {
                 this.currentShipping(
-                    _.find(this.options.addresses(), function(obj) { return obj.id === event.target.value})['address']
+                    _.find(this.options.addresses(), function (obj) {
+                        return obj.id === event.target.value;
+                    }).address
                 );
             },
 
@@ -86,7 +92,9 @@ define(
              */
             changeCc: function (object, event) {
                 this.currentCard(
-                    _.find(this.options.cards(), function(obj) { return obj.id === event.target.value})['card']
+                    _.find(this.options.cards(), function (obj) {
+                        return obj.id === event.target.value;
+                    }).card
                 );
             },
 
