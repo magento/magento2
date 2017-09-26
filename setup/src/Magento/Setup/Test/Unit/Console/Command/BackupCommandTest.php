@@ -35,9 +35,14 @@ class BackupCommandTest extends \PHPUnit\Framework\TestCase
      */
     private $deploymentConfig;
 
+    /**
+     * @var \Magento\Framework\App\Console\MaintenanceModeEnabler|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $maintenanceMode;
+
     public function setUp()
     {
-        $maintenanceMode = $this->createMock(\Magento\Framework\App\Console\MaintenanceModeEnabler::class);
+        $this->maintenanceMode = $this->createMock(\Magento\Framework\App\Console\MaintenanceModeEnabler::class);
         $objectManagerProvider = $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);
         $this->objectManager = $this->getMockForAbstractClass(
             \Magento\Framework\ObjectManagerInterface::class,
@@ -72,7 +77,7 @@ class BackupCommandTest extends \PHPUnit\Framework\TestCase
             );
         $command = new BackupCommand(
             $objectManagerProvider,
-            $maintenanceMode,
+            $this->maintenanceMode,
             $this->deploymentConfig
         );
         $this->tester = new CommandTester($command);
@@ -128,10 +133,10 @@ class BackupCommandTest extends \PHPUnit\Framework\TestCase
         $this->deploymentConfig->expects($this->once())
             ->method('isAvailable')
             ->will($this->returnValue(false));
+        $this->maintenanceMode->expects($this->once())->method('enableMaintenanceMode');
+        $this->maintenanceMode->expects($this->once())->method('disableMaintenanceMode');
         $this->tester->execute([]);
-        $expected = 'Enabling maintenance mode' . PHP_EOL
-            . 'Not enough information provided to take backup.' . PHP_EOL
-            . 'Disabling maintenance mode' . PHP_EOL;
+        $expected = 'Not enough information provided to take backup.' . PHP_EOL;
         $this->assertSame($expected, $this->tester->getDisplay());
     }
 }

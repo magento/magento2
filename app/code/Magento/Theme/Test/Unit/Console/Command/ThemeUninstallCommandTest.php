@@ -304,9 +304,9 @@ class ThemeUninstallCommandTest extends \PHPUnit\Framework\TestCase
     {
         $this->setUpExecute();
         $this->cleanupFiles->expects($this->never())->method('clearMaterializedViewFiles');
+        $this->maintenanceMode->expects($this->once())->method('enableMaintenanceMode');
+        $this->maintenanceMode->expects($this->once())->method('disableMaintenanceMode');
         $this->tester->execute(['theme' => ['area/vendor/test']]);
-        $this->assertContains('Enabling maintenance mode', $this->tester->getDisplay());
-        $this->assertContains('Disabling maintenance mode', $this->tester->getDisplay());
         $this->assertContains('Alert: Generated static view files were not cleared.', $this->tester->getDisplay());
         $this->assertNotContains('Generated static view files cleared successfully', $this->tester->getDisplay());
     }
@@ -315,9 +315,9 @@ class ThemeUninstallCommandTest extends \PHPUnit\Framework\TestCase
     {
         $this->setUpExecute();
         $this->cleanupFiles->expects($this->once())->method('clearMaterializedViewFiles');
+        $this->maintenanceMode->expects($this->once())->method('enableMaintenanceMode');
+        $this->maintenanceMode->expects($this->once())->method('disableMaintenanceMode');
         $this->tester->execute(['theme' => ['area/vendor/test'], '-c' => true]);
-        $this->assertContains('Enabling maintenance mode', $this->tester->getDisplay());
-        $this->assertContains('Disabling maintenance mode', $this->tester->getDisplay());
         $this->assertNotContains('Alert: Generated static view files were not cleared.', $this->tester->getDisplay());
         $this->assertContains('Generated static view files cleared successfully', $this->tester->getDisplay());
     }
