@@ -8,6 +8,7 @@ namespace Magento\Store\Model;
 use Magento\Framework\App\ObjectManager;
 use Magento\Store\Api\StoreResolverInterface;
 use Magento\Store\Model\ResourceModel\StoreWebsiteRelation;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Service contract, which manage scopes
@@ -168,6 +169,27 @@ class StoreManager implements
             : $this->storeRepository->get($storeId);
 
         return $store;
+    }
+
+    public function getStoreByUrl(\Zend\Uri\UriInterface $requestUri)
+    {
+        $uriString = $requestUri->toString();
+        $stores = $this->getStores();
+        $detectedStore = null;
+        $currentBase = '';
+        foreach ($stores as $store) {
+            if (false !== stristr($uriString, $store->getBaseUrl())) {
+                $newBase = $store->getBaseUrl();
+                if (strlen($newBase) > strlen($currentBase)) {
+                    $currentBase = $newBase;
+                    $detectedStore = $store;
+                }
+            }
+        }
+        if (null === $detectedStore) {
+            throw new NoSuchEntityException(__('Requested store is not found'));
+        }
+        return $detectedStore;
     }
 
     /**
