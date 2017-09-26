@@ -36,7 +36,7 @@ class Source extends AbstractExtensibleModel implements SourceInterface
     /**
      * @inheritdoc
      */
-    public function setSourceId(int $sourceId)
+    public function setSourceId($sourceId)
     {
         $this->setData(self::SOURCE_ID, $sourceId);
     }
@@ -52,7 +52,7 @@ class Source extends AbstractExtensibleModel implements SourceInterface
     /**
      * @inheritdoc
      */
-    public function setName(string $name)
+    public function setName($name)
     {
         $this->setData(self::NAME, $name);
     }
@@ -164,7 +164,7 @@ class Source extends AbstractExtensibleModel implements SourceInterface
     /**
      * @inheritdoc
      */
-    public function setCountryId(string $countryId)
+    public function setCountryId($countryId)
     {
         $this->setData(self::COUNTRY_ID, $countryId);
     }
@@ -244,7 +244,7 @@ class Source extends AbstractExtensibleModel implements SourceInterface
     /**
      * @inheritdoc
      */
-    public function setPostcode(string $postcode)
+    public function setPostcode($postcode)
     {
         $this->setData(self::POSTCODE, $postcode);
     }

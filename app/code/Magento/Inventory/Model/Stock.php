@@ -36,7 +36,7 @@ class Stock extends AbstractExtensibleModel implements StockInterface
     /**
      * @inheritdoc
      */
-    public function setStockId(int $stockId)
+    public function setStockId($stockId)
     {
         $this->setData(self::STOCK_ID, $stockId);
     }
@@ -52,7 +52,7 @@ class Stock extends AbstractExtensibleModel implements StockInterface
     /**
      * @inheritdoc
      */
-    public function setName(string $name)
+    public function setName($name)
     {
         $this->setData(self::NAME, $name);
     }
