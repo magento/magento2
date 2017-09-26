@@ -26,17 +26,25 @@ class Renderer
     protected $filterManager;
 
     /**
+     * @var string
+     */
+    private $template;
+
+    /**
      * Constructor
      *
      * @param EventManager $eventManager
      * @param FilterManager $filterManager
+     * @param string $template
      */
     public function __construct(
         EventManager $eventManager,
-        FilterManager $filterManager
+        FilterManager $filterManager,
+        $template
     ) {
         $this->eventManager = $eventManager;
         $this->filterManager = $filterManager;
+        $this->template = $template;
     }
 
     /**
@@ -50,9 +58,7 @@ class Renderer
     {
         $this->eventManager->dispatch('store_address_format', ['type' => $type, 'store_info' => $storeInfo]);
         $address = $this->filterManager->template(
-            "{{var name}}\n{{var street_line1}}\n{{depend street_line2}}{{var street_line2}}\n{{/depend}}" .
-            "{{depend city}}{{var city}},{{/depend}} {{var region}} {{depend postcode}}{{var postcode}},{{/depend}}\n" .
-            "{{var country}}",
+            $this->template,
             ['variables' => $storeInfo->getData()]
         );
 
