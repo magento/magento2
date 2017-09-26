@@ -26,22 +26,22 @@ return [
         ["Element 'entity', attribute 'notallowed': The attribute 'notallowed' is not allowed.\nLine: 1\n"],
     ],
     'entity_model_with_invalid_value' => [
-        '<?xml version="1.0"?><config><entity name="test_name" label="test_label" model="afwer34" ' .
+        '<?xml version="1.0"?><config><entity name="test_name" label="test_label" model="afwer-blam" ' .
         'behaviorModel="test" /></config>',
         [
-            "Element 'entity', attribute 'model': [facet 'pattern'] The value 'afwer34' is not " .
-            "accepted by the pattern '[A-Za-z_\\\\]+'.\nLine: 1\n",
-            "Element 'entity', attribute 'model': 'afwer34' is not a valid value of the atomic type" .
+            "Element 'entity', attribute 'model': [facet 'pattern'] The value 'afwer-blam' is not " .
+            "accepted by the pattern '[A-Za-z_0-9\\\\]+'.\nLine: 1\n",
+            "Element 'entity', attribute 'model': 'afwer-blam' is not a valid value of the atomic type" .
             " 'modelName'.\nLine: 1\n"
         ],
     ],
     'entity_behaviorModel_with_invalid_value' => [
-        '<?xml version="1.0"?><config><entity name="test_name" label="test_label" model="test" behaviorModel="666" />' .
-        '</config>',
+        '<?xml version="1.0"?><config><entity name="test_name" label="test_label" model="test" ' .
+        'behaviorModel="6-66" /></config>',
         [
-            "Element 'entity', attribute 'behaviorModel': [facet 'pattern'] The value '666' is not accepted by " .
-            "the pattern '[A-Za-z_\\\\]+'.\nLine: 1\n",
-            "Element 'entity', attribute 'behaviorModel': '666' is not a valid value of the atomic type" .
+            "Element 'entity', attribute 'behaviorModel': [facet 'pattern'] The value '6-66' is not accepted by " .
+            "the pattern '[A-Za-z_0-9\\\\]+'.\nLine: 1\n",
+            "Element 'entity', attribute 'behaviorModel': '6-66' is not a valid value of the atomic type" .
             " 'modelName'.\nLine: 1\n"
         ],
     ]
