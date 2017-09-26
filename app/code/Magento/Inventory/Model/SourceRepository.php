@@ -10,6 +10,7 @@ use Magento\Inventory\Model\Source\Command\GetInterface;
 use Magento\Inventory\Model\Source\Command\GetListInterface;
 use Magento\Inventory\Model\Source\Command\SaveInterface;
 use Magento\InventoryApi\Api\Data\SourceInterface;
+use Magento\InventoryApi\Api\Data\SourceSearchResultsInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
 
 /**
@@ -50,7 +51,7 @@ class SourceRepository implements SourceRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function save(SourceInterface $source)
+    public function save(SourceInterface $source): int
     {
         return $this->commandSave->execute($source);
     }
@@ -58,7 +59,7 @@ class SourceRepository implements SourceRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function get($sourceId)
+    public function get(int $sourceId): SourceInterface
     {
         return $this->commandGet->execute($sourceId);
     }

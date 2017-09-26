@@ -111,7 +111,7 @@ class SourceItemsProcessor
      * @param string $sku
      * @return SourceItemInterface[]
      */
-    private function getCurrentSourceItemsMap($sku)
+    private function getCurrentSourceItemsMap(string $sku): array
     {
         /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
         $searchCriteriaBuilder = $this->searchCriteriaBuilderFactory->create();

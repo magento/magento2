@@ -21,7 +21,7 @@ interface StockSearchResultsInterface extends SearchResultsInterface
      *
      * @return \Magento\InventoryApi\Api\Data\StockInterface[]
      */
-    public function getItems();
+    public function getItems(): array;
 
     /**
      * Set stocks list

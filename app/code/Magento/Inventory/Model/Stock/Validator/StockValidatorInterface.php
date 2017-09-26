@@ -20,5 +20,5 @@ interface StockValidatorInterface
      * @param StockInterface $stock
      * @return ValidationResult
      */
-    public function validate(StockInterface $stock);
+    public function validate(StockInterface $stock): ValidationResult;
 }

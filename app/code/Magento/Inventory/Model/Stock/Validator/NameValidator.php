@@ -5,6 +5,7 @@
  */
 namespace Magento\Inventory\Model\Stock\Validator;
 
+use Magento\Framework\Validation\ValidationResult;
 use Magento\Framework\Validation\ValidationResultFactory;
 use Magento\InventoryApi\Api\Data\StockInterface;
 
@@ -29,7 +30,7 @@ class NameValidator implements StockValidatorInterface
     /**
      * @inheritdoc
      */
-    public function validate(StockInterface $stock)
+    public function validate(StockInterface $stock): ValidationResult
     {
         $value = (string)$stock->getName();
 

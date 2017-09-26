@@ -6,6 +6,7 @@
 namespace Magento\Inventory\Model\Source\Validator;
 
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Validation\ValidationResult;
 use Magento\Framework\Validation\ValidationResultFactory;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 
@@ -48,7 +49,7 @@ class ValidatorChain implements SourceValidatorInterface
     /**
      * @inheritdoc
      */
-    public function validate(SourceInterface $source)
+    public function validate(SourceInterface $source): ValidationResult
     {
         $errors = [];
         foreach ($this->validators as $validator) {

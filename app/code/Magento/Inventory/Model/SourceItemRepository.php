@@ -6,10 +6,10 @@
 namespace Magento\Inventory\Model;
 
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Inventory\Model\ResourceModel\SourceItem as SourceItemResourceModel;
 use Magento\Inventory\Model\SourceItem\Command\DeleteInterface;
 use Magento\Inventory\Model\SourceItem\Command\GetListInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
+use Magento\InventoryApi\Api\Data\SourceItemSearchResultsInterface;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 
 /**

@@ -21,8 +21,6 @@ class SaveMultiple
     private $connection;
 
     /**
-     * SourceCarrierLinkManagement constructor
-     *
      * @param ResourceConnection $connection
      */
     public function __construct(
@@ -39,6 +37,9 @@ class SaveMultiple
      */
     public function execute(array $sourceItems)
     {
+        if (!count($sourceItems)) {
+            return;
+        }
         $connection = $this->connection->getConnection();
         $tableName = $connection->getTableName(SourceItemResourceModel::TABLE_NAME_SOURCE_ITEM);
 
@@ -70,7 +71,7 @@ class SaveMultiple
      * @param array $columns
      * @return string
      */
-    private function buildColumnsSqlPart(array $columns)
+    private function buildColumnsSqlPart(array $columns): string
     {
         $connection = $this->connection->getConnection();
         $processedColumns = array_map([$connection, 'quoteIdentifier'], $columns);
@@ -82,7 +83,7 @@ class SaveMultiple
      * @param SourceItemInterface[] $sourceItems
      * @return string
      */
-    private function buildValuesSqlPart(array $sourceItems)
+    private function buildValuesSqlPart(array $sourceItems): string
     {
         $sql = rtrim(str_repeat('(?, ?, ?, ?), ', count($sourceItems)), ', ');
         return $sql;
@@ -90,9 +91,9 @@ class SaveMultiple
 
     /**
      * @param SourceItemInterface[] $sourceItems
-     * @return string
+     * @return array
      */
-    private function getSqlBindData(array $sourceItems)
+    private function getSqlBindData(array $sourceItems): array
     {
         $bind = [];
         foreach ($sourceItems as $sourceItem) {
@@ -110,7 +111,7 @@ class SaveMultiple
      * @param array $fields
      * @return string
      */
-    private function buildOnDuplicateSqlPart(array $fields)
+    private function buildOnDuplicateSqlPart(array $fields): string
     {
         $connection = $this->connection->getConnection();
         $processedFields = [];

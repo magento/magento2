@@ -62,7 +62,7 @@ class GetAssignedSourcesForStock implements GetAssignedSourcesForStockInterface
     /**
      * @inheritdoc
      */
-    public function execute(int $stockId)
+    public function execute(int $stockId): array
     {
         try {
             $sourceIds = $this->getAssignedSourceIds($stockId);
@@ -84,7 +84,7 @@ class GetAssignedSourcesForStock implements GetAssignedSourcesForStockInterface
      * @param int $stockId
      * @return array
      */
-    private function getAssignedSourceIds($stockId)
+    private function getAssignedSourceIds(int $stockId): array
     {
         $connection = $this->resourceConnection->getConnection();
         $select = $connection

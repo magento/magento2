@@ -20,25 +20,25 @@ interface ReservationBuilderInterface
      * @param int $stockId
      * @return self
      */
-    public function setStockId(int $stockId): ReservationBuilderInterface;
+    public function setStockId(int $stockId): self;
 
     /**
      * @param string $sku
      * @return self
      */
-    public function setSku(string $sku): ReservationBuilderInterface;
+    public function setSku(string $sku): self;
 
     /**
      * @param float $quantity
      * @return self
      */
-    public function setQuantity(float $quantity): ReservationBuilderInterface;
+    public function setQuantity(float $quantity): self;
 
     /**
      * @param string|null $metadata
      * @return self
      */
-    public function setMetadata(string $metadata = null): ReservationBuilderInterface;
+    public function setMetadata(string $metadata = null): self;
 
     /**
      * @return ReservationInterface

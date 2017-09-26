@@ -29,5 +29,5 @@ interface SaveInterface
      * @throws ValidationException
      * @throws CouldNotSaveException
      */
-    public function execute(StockInterface $stock);
+    public function execute(StockInterface $stock): int;
 }

@@ -40,7 +40,7 @@ class Get implements GetInterface
     /**
      * @inheritdoc
      */
-    public function execute($sourceId)
+    public function execute(int $sourceId): SourceInterface
     {
         /** @var SourceInterface $source */
         $source = $this->sourceFactory->create();

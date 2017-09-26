@@ -21,7 +21,7 @@ interface SourceSearchResultsInterface extends SearchResultsInterface
      *
      * @return \Magento\InventoryApi\Api\Data\SourceInterface[]
      */
-    public function getItems();
+    public function getItems(): array;
 
     /**
      * Set sources list

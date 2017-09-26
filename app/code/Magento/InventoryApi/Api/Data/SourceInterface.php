@@ -6,7 +6,6 @@
 namespace Magento\InventoryApi\Api\Data;
 
 use Magento\Framework\Api\ExtensibleDataInterface;
-use Magento\InventoryApi\Api\Data\SourceExtensionInterface;
 
 /**
  * Represents physical storage, i.e. brick and mortar store or warehouse
@@ -51,7 +50,7 @@ interface SourceInterface extends ExtensibleDataInterface
     /**
      * Set source id
      *
-     * @param int $sourceId
+     * @param int|null $sourceId
      * @return void
      */
     public function setSourceId($sourceId);
@@ -59,14 +58,14 @@ interface SourceInterface extends ExtensibleDataInterface
     /**
      * Get source name
      *
-     * @return string
+     * @return string|null
      */
     public function getName();
 
     /**
      * Set source name
      *
-     * @param string $name
+     * @param string|null $name
      * @return void
      */
     public function setName($name);
@@ -111,8 +110,8 @@ interface SourceInterface extends ExtensibleDataInterface
     /**
      * Enable or disable source
      *
-     * @param bool $enabled
-     * @return void|null
+     * @param bool|null $enabled
+     * @return void
      */
     public function setEnabled($enabled);
 
@@ -164,14 +163,14 @@ interface SourceInterface extends ExtensibleDataInterface
     /**
      * Get source country id
      *
-     * @return string
+     * @return string|null
      */
     public function getCountryId();
 
     /**
      * Set source country id
      *
-     * @param string $countryId
+     * @param string|null $countryId
      * @return void
      */
     public function setCountryId($countryId);
@@ -239,14 +238,14 @@ interface SourceInterface extends ExtensibleDataInterface
     /**
      * Get source post code
      *
-     * @return string
+     * @return string|null
      */
     public function getPostcode();
 
     /**
      * Set source post code
      *
-     * @param string $postcode
+     * @param string|null $postcode
      * @return void
      */
     public function setPostcode($postcode);
@@ -276,8 +275,8 @@ interface SourceInterface extends ExtensibleDataInterface
     /**
      * Set source fax
      *
-     * @param string $fax
-     * @return void|null
+     * @param string|null $fax
+     * @return void
      */
     public function setFax($fax);
 
@@ -297,7 +296,7 @@ interface SourceInterface extends ExtensibleDataInterface
     public function setPriority($priority);
 
     /**
-     * Check is need to use default config. For new entity can be null
+     * Check is need to use default config
      *
      * @return bool|null
      */
@@ -305,13 +304,11 @@ interface SourceInterface extends ExtensibleDataInterface
 
     /**
      * @param bool|null $useDefaultCarrierConfig
-     * @return $this
+     * @return void
      */
     public function setUseDefaultCarrierConfig($useDefaultCarrierConfig);
 
     /**
-     * For new entity can be null
-     *
      * @return \Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface[]|null
      */
     public function getCarrierLinks();
@@ -320,10 +317,12 @@ interface SourceInterface extends ExtensibleDataInterface
      * @param \Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface[]|null $carrierLinks
      * @return void
      */
-    public function setCarrierLinks(array $carrierLinks);
+    public function setCarrierLinks($carrierLinks);
 
     /**
      * Retrieve existing extension attributes object
+     *
+     * Null for return is specified for proper work SOAP requests parser
      *
      * @return \Magento\InventoryApi\Api\Data\SourceExtensionInterface|null
      */

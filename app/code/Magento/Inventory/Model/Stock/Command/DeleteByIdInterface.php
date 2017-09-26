@@ -26,5 +26,5 @@ interface DeleteByIdInterface
      * @return void
      * @throws CouldNotDeleteException
      */
-    public function execute($stockId);
+    public function execute(int $stockId);
 }

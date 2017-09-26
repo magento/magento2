@@ -27,7 +27,7 @@ class CreateStockTable
      * @param SchemaSetupInterface $setup
      * @return Table
      */
-    private function createStockTable(SchemaSetupInterface $setup)
+    private function createStockTable(SchemaSetupInterface $setup): Table
     {
         $stockTable = $setup->getTable(StockResourceModel::TABLE_NAME_STOCK);
 

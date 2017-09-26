@@ -30,7 +30,7 @@ class CreateSourceCarrierLinkTable
      * @param SchemaSetupInterface $setup
      * @return Table
      */
-    private function createSourceCarrierLinkTable(SchemaSetupInterface $setup)
+    private function createSourceCarrierLinkTable(SchemaSetupInterface $setup): Table
     {
         $sourceCarrierLinkTable = $setup->getTable(SourceCarrierLink::TABLE_NAME_SOURCE_CARRIER_LINK);
         $sourceTable = $setup->getTable(SourceResourceModel::TABLE_NAME_SOURCE);

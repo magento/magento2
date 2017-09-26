@@ -5,6 +5,7 @@
  */
 namespace Magento\Inventory\Model\Source\Validator;
 
+use Magento\Framework\Validation\ValidationResult;
 use Magento\Framework\Validation\ValidationResultFactory;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 
@@ -29,7 +30,7 @@ class PostcodeValidator implements SourceValidatorInterface
     /**
      * @inheritdoc
      */
-    public function validate(SourceInterface $source)
+    public function validate(SourceInterface $source): ValidationResult
     {
         $value = (string)$source->getPostcode();
 

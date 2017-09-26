@@ -24,5 +24,5 @@ interface GetAssignedSourcesForStockInterface
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function execute(int $stockId);
+    public function execute(int $stockId): array;
 }

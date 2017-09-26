@@ -7,6 +7,7 @@ namespace Magento\InventoryApi\Api;
 
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
+use Magento\InventoryApi\Api\Data\SourceItemSearchResultsInterface;
 
 /**
  * In Magento 2 Repository considered as an implementation of Facade pattern which provides a simplified interface
