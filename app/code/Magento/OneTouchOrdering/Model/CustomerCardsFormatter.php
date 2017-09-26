@@ -67,6 +67,6 @@ class CustomerCardsFormatter
             $details['maskedCC'],
             _('expires'),
             $details['expirationDate']
-            );
+        );
     }
 }

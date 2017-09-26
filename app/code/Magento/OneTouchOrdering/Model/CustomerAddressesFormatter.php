@@ -44,7 +44,7 @@ class CustomerAddressesFormatter
     private function format(Address $address): string
     {
         return sprintf(
-            "%s, %s, %s, %s %s, %s",
+            '%s, %s, %s, %s %s, %s',
             $address->getName(),
             $address->getStreetFull(),
             $address->getCity(),
