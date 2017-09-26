@@ -15,6 +15,12 @@ use Magento\Framework\DataObject;
  */
 class Renderer
 {
+    const DEFAULT_TEMPLATE = "{{var name}}\n" .
+        "{{var street_line1}}\n" .
+        "{{depend street_line2}}{{var street_line2}}\n{{/depend}}" .
+        "{{depend city}}{{var city}},{{/depend}} {{var region}} {{depend postcode}}{{var postcode}},{{/depend}}\n" .
+        "{{var country}}";
+
     /**
      * @var EventManager
      */
@@ -40,7 +46,7 @@ class Renderer
     public function __construct(
         EventManager $eventManager,
         FilterManager $filterManager,
-        $template
+        $template = self::DEFAULT_TEMPLATE
     ) {
         $this->eventManager = $eventManager;
         $this->filterManager = $filterManager;

@@ -41,11 +41,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
                 return implode("\n", $data['variables']);
             });
 
-        $template = "{{var name}}\n{{var street_line1}}\n{{depend street_line2}}{{var street_line2}}\n{{/depend}}" .
-            "{{depend city}}{{var city}},{{/depend}} {{var region}} {{depend postcode}}{{var postcode}},{{/depend}}\n" .
-            "{{var country}}";
-
-        $this->model = new Renderer($eventManager, $filterManager, $template);
+        $this->model = new Renderer($eventManager, $filterManager);
     }
 
     /**
