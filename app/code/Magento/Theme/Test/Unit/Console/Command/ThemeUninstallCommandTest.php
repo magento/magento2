@@ -19,7 +19,7 @@ use Magento\Framework\Setup\BackupRollbackFactory;
 class ThemeUninstallCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\App\MaintenanceMode|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Console\MaintenanceModeEnabler|\PHPUnit_Framework_MockObject_MockObject
      */
     private $maintenanceMode;
 
@@ -82,7 +82,7 @@ class ThemeUninstallCommandTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->maintenanceMode = $this->createMock(\Magento\Framework\App\MaintenanceMode::class);
+        $this->maintenanceMode = $this->createMock(\Magento\Framework\App\Console\MaintenanceModeEnabler::class);
         $composerInformation = $this->createMock(\Magento\Framework\Composer\ComposerInformation::class);
         $composerInformation->expects($this->any())
             ->method('getRootRequiredPackages')

@@ -26,7 +26,7 @@ class ModuleUninstallCommandTest extends \PHPUnit\Framework\TestCase
     private $fullModuleList;
 
     /**
-     * @var \Magento\Framework\App\MaintenanceMode|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Console\MaintenanceModeEnabler|\PHPUnit_Framework_MockObject_MockObject
      */
     private $maintenanceMode;
 
@@ -102,7 +102,7 @@ class ModuleUninstallCommandTest extends \PHPUnit\Framework\TestCase
     {
         $this->deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
         $this->fullModuleList = $this->createMock(\Magento\Framework\Module\FullModuleList::class);
-        $this->maintenanceMode = $this->createMock(\Magento\Framework\App\MaintenanceMode::class);
+        $this->maintenanceMode = $this->createMock(\Magento\Framework\App\Console\MaintenanceModeEnabler::class);
         $objectManagerProvider = $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);
         $objectManager = $this->getMockForAbstractClass(
             \Magento\Framework\ObjectManagerInterface::class,

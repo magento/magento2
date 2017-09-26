@@ -8,10 +8,10 @@ namespace Magento\Deploy\Model;
 
 use Magento\Deploy\App\Mode\ConfigProvider;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Console\MaintenanceModeEnabler;
 use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\App\State;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Symfony\Component\Console\Input\InputInterface;
@@ -50,7 +50,7 @@ class Mode
     private $reader;
 
     /**
-     * @var MaintenanceMode
+     * @var MaintenanceModeEnabler
      */
     private $maintenanceMode;
 
@@ -79,16 +79,11 @@ class Mode
     private $emulatedAreaProcessor;
 
     /**
-     * @var bool
-     */
-    private $skipDisableMaintenanceMode;
-
-    /**
      * @param InputInterface $input
      * @param OutputInterface $output
      * @param Writer $writer
      * @param Reader $reader
-     * @param MaintenanceMode $maintenanceMode
+     * @param MaintenanceModeEnabler $maintenanceMode
      * @param Filesystem $filesystem
      * @param ConfigProvider $configProvider
      * @param ProcessorFacadeFactory $processorFacadeFactory
@@ -99,7 +94,7 @@ class Mode
         OutputInterface $output,
         Writer $writer,
         Reader $reader,
-        MaintenanceMode $maintenanceMode,
+        MaintenanceModeEnabler $maintenanceMode,
         Filesystem $filesystem,
         ConfigProvider $configProvider = null,
         ProcessorFacadeFactory $processorFacadeFactory = null,
@@ -128,7 +123,7 @@ class Mode
      */
     public function enableProductionMode()
     {
-        $this->enableMaintenanceMode($this->output);
+        $this->maintenanceMode->enableMaintenanceMode($this->output);
         $previousMode = $this->getMode();
         try {
             // We have to turn on production mode before generation.
@@ -140,7 +135,7 @@ class Mode
             $this->setStoreMode($previousMode);
             throw $e;
         }
-        $this->disableMaintenanceMode($this->output);
+        $this->maintenanceMode->disableMaintenanceMode($this->output);
     }
 
     /**
@@ -222,41 +217,5 @@ class Mode
             });
             $this->output->writeln('Config "' . $path . ' = ' . $value . '" has been saved.');
         }
-    }
-
-    /**
-     * Enable maintenance mode
-     *
-     * @param OutputInterface $output
-     * @return void
-     */
-    protected function enableMaintenanceMode(OutputInterface $output)
-    {
-        if ($this->maintenanceMode->isOn()) {
-            $this->skipDisableMaintenanceMode = true;
-            $output->writeln('Maintenance mode already enabled');
-            return;
-        }
-
-        $this->maintenanceMode->set(true);
-        $this->skipDisableMaintenanceMode = false;
-        $output->writeln('Enabled maintenance mode');
-    }
-
-    /**
-     * Disable maintenance mode
-     *
-     * @param OutputInterface $output
-     * @return void
-     */
-    protected function disableMaintenanceMode(OutputInterface $output)
-    {
-        if ($this->skipDisableMaintenanceMode) {
-            $output->writeln('Skipped disabling maintenance mode');
-            return;
-        }
-
-        $this->maintenanceMode->set(false);
-        $output->writeln('Disabled maintenance mode');
     }
 }

@@ -8,7 +8,7 @@ namespace Magento\Theme\Console\Command;
 
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Cache;
-use Magento\Framework\App\MaintenanceMode;
+use Magento\Framework\App\Console\MaintenanceModeEnabler;
 use Magento\Framework\App\State\CleanupFiles;
 use Magento\Framework\Composer\ComposerInformation;
 use Magento\Framework\Composer\DependencyChecker;
@@ -40,9 +40,7 @@ class ThemeUninstallCommand extends Command
     const INPUT_KEY_CLEAR_STATIC_CONTENT = 'clear-static-content';
 
     /**
-     * Maintenance Mode
-     *
-     * @var MaintenanceMode
+     * @var MaintenanceModeEnabler
      */
     private $maintenanceMode;
 
@@ -117,17 +115,12 @@ class ThemeUninstallCommand extends Command
     private $themeDependencyChecker;
 
     /**
-     * @var bool
-     */
-    private $skipDisableMaintenanceMode;
-
-    /**
      * Constructor
      *
      * @param Cache $cache
      * @param CleanupFiles $cleanupFiles
      * @param ComposerInformation $composer
-     * @param MaintenanceMode $maintenanceMode
+     * @param MaintenanceModeEnabler $maintenanceMode
      * @param DependencyChecker $dependencyChecker
      * @param Collection $themeCollection
      * @param BackupRollbackFactory $backupRollbackFactory
@@ -140,7 +133,7 @@ class ThemeUninstallCommand extends Command
         Cache $cache,
         CleanupFiles $cleanupFiles,
         ComposerInformation $composer,
-        MaintenanceMode $maintenanceMode,
+        MaintenanceModeEnabler $maintenanceMode,
         DependencyChecker $dependencyChecker,
         Collection $themeCollection,
         BackupRollbackFactory $backupRollbackFactory,
@@ -220,7 +213,7 @@ class ThemeUninstallCommand extends Command
         }
 
         try {
-            $this->enableMaintenanceMode($output);
+            $this->maintenanceMode->enableMaintenanceMode($output);
             if ($input->getOption(self::INPUT_KEY_BACKUP_CODE)) {
                 $time = time();
                 $codeBackup = $this->backupRollbackFactory->create($output);
@@ -231,7 +224,7 @@ class ThemeUninstallCommand extends Command
             $this->themeUninstaller->uninstallCode($output, $themePaths);
 
             $this->cleanup($input, $output);
-            $this->disableMaintenanceMode($output);
+            $this->maintenanceMode->disableMaintenanceMode($output);
         } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
             $output->writeln('<error>Please disable maintenance mode after you resolved above issues</error>');
@@ -377,41 +370,5 @@ class ThemeUninstallCommand extends Command
                 . ' Failure to clear static view files might cause display issues in the Admin and storefront.</error>'
             );
         }
-    }
-
-    /**
-     * Enable maintenance mode
-     *
-     * @param OutputInterface $output
-     * @return void
-     */
-    private function enableMaintenanceMode(OutputInterface $output)
-    {
-        if ($this->maintenanceMode->isOn()) {
-            $this->skipDisableMaintenanceMode = true;
-            $output->writeln('<info>Maintenance mode already enabled</info>');
-            return;
-        }
-
-        $this->maintenanceMode->set(true);
-        $this->skipDisableMaintenanceMode = false;
-        $output->writeln('<info>Enabling maintenance mode</info>');
-    }
-
-    /**
-     * Disable maintenance mode
-     *
-     * @param OutputInterface $output
-     * @return void
-     */
-    private function disableMaintenanceMode(OutputInterface $output)
-    {
-        if ($this->skipDisableMaintenanceMode) {
-            $output->writeln('<info>Skipped disabling maintenance mode</info>');
-            return;
-        }
-
-        $this->maintenanceMode->set(false);
-        $output->writeln('<info>Disabling maintenance mode</info>');
     }
 }

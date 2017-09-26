@@ -5,8 +5,8 @@
  */
 namespace Magento\Setup\Console\Command;
 
+use Magento\Framework\App\Console\MaintenanceModeEnabler;
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\Backup\Factory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Setup\BackupRollbackFactory;
@@ -38,7 +38,7 @@ class RollbackCommand extends AbstractSetupCommand
     private $objectManager;
 
     /**
-     * @var MaintenanceMode
+     * @var MaintenanceModeEnabler
      */
     private $maintenanceMode;
 
@@ -55,20 +55,15 @@ class RollbackCommand extends AbstractSetupCommand
     private $deploymentConfig;
 
     /**
-     * @var bool
-     */
-    private $skipDisableMaintenanceMode;
-
-    /**
      * Constructor
      *
      * @param ObjectManagerProvider $objectManagerProvider
-     * @param MaintenanceMode $maintenanceMode
+     * @param MaintenanceModeEnabler $maintenanceMode
      * @param DeploymentConfig $deploymentConfig
      */
     public function __construct(
         ObjectManagerProvider $objectManagerProvider,
-        MaintenanceMode $maintenanceMode,
+        MaintenanceModeEnabler $maintenanceMode,
         DeploymentConfig $deploymentConfig
     ) {
         $this->objectManager = $objectManagerProvider->get();
@@ -122,7 +117,7 @@ class RollbackCommand extends AbstractSetupCommand
         }
         $returnValue = \Magento\Framework\Console\Cli::RETURN_SUCCESS;
         try {
-            $this->enableMaintenanceMode($output);
+            $this->maintenanceMode->enableMaintenanceMode($output);
             $helper = $this->getHelper('question');
             $question = new ConfirmationQuestion(
                 '<info>You are about to remove current code and/or database tables. Are you sure?[y/N]<info>',
@@ -138,7 +133,7 @@ class RollbackCommand extends AbstractSetupCommand
             // we must have an exit code higher than zero to indicate something was wrong
             $returnValue = \Magento\Framework\Console\Cli::RETURN_FAILURE;
         } finally {
-            $this->disableMaintenanceMode($output);
+            $this->maintenanceMode->disableMaintenanceMode($output);
         }
         return $returnValue;
     }
@@ -189,41 +184,5 @@ class RollbackCommand extends AbstractSetupCommand
         /** @var \Magento\Framework\ObjectManager\ConfigLoaderInterface $configLoader */
         $configLoader = $this->objectManager->get(\Magento\Framework\ObjectManager\ConfigLoaderInterface::class);
         $this->objectManager->configure($configLoader->load($areaCode));
-    }
-
-    /**
-     * Enable maintenance mode
-     *
-     * @param OutputInterface $output
-     * @return void
-     */
-    private function enableMaintenanceMode(OutputInterface $output)
-    {
-        if ($this->maintenanceMode->isOn()) {
-            $this->skipDisableMaintenanceMode = true;
-            $output->writeln('<info>Maintenance mode already enabled</info>');
-            return;
-        }
-
-        $this->maintenanceMode->set(true);
-        $this->skipDisableMaintenanceMode = false;
-        $output->writeln('<info>Enabling maintenance mode</info>');
-    }
-
-    /**
-     * Disable maintenance mode
-     *
-     * @param OutputInterface $output
-     * @return void
-     */
-    private function disableMaintenanceMode(OutputInterface $output)
-    {
-        if ($this->skipDisableMaintenanceMode) {
-            $output->writeln('<info>Skipped disabling maintenance mode</info>');
-            return;
-        }
-
-        $this->maintenanceMode->set(false);
-        $output->writeln('<info>Disabling maintenance mode</info>');
     }
 }
