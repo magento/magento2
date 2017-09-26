@@ -20,6 +20,7 @@ define([
     return Component.extend({
         registerUrl: window.authenticationPopup.customerRegisterUrl,
         forgotPasswordUrl: window.authenticationPopup.customerForgotPasswordUrl,
+        redirectUrl: window.authenticationPopup.redirectUrl,
         autocomplete: window.authenticationPopup.autocomplete,
         modalWindow: null,
         isLoading: ko.observable(false),
@@ -85,7 +86,7 @@ define([
                 formElement.validation('isValid')
             ) {
                 this.isLoading(true);
-                loginAction(loginData);
+                loginAction(loginData, this.redirectUrl);
             }
 
             return false;
