@@ -41,7 +41,24 @@ class ShipOrderTest extends \Magento\TestFramework\TestCase\WebapiAbstract
         $existingOrder = $this->objectManager->create(\Magento\Sales\Model\Order::class)
             ->loadByIncrementId('100000001');
 
-        $shipmentId = $this->sendOrderShipRequest($existingOrder);
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/order/' . $existingOrder->getId() . '/ship',
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_READ_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_READ_NAME . 'execute',
+            ],
+        ];
+
+        $requestData = [
+            'orderId' => $existingOrder->getId(),
+        ];
+
+        $shipmentId = (int)$this->_webApiCall($serviceInfo, $requestData);
+        $this->assertNotEmpty($shipmentId);
 
         try {
             $shipment = $this->shipmentRepository->get($shipmentId);
@@ -74,33 +91,6 @@ class ShipOrderTest extends \Magento\TestFramework\TestCase\WebapiAbstract
         $existingOrder = $this->objectManager->create(\Magento\Sales\Model\Order::class)
             ->loadByIncrementId('100000001');
 
-        $shipmentId = $this->sendOrderShipRequest($existingOrder);
-
-        try {
-            $this->shipmentRepository->get($shipmentId);
-        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-            $this->fail('Failed asserting that Shipment was created');
-        }
-
-        /** @var \Magento\Sales\Model\Order $updatedOrder */
-        $updatedOrder = $this->objectManager->create(\Magento\Sales\Model\Order::class)
-            ->loadByIncrementId('100000001');
-
-        $this->assertNotEquals(
-            $existingOrder->getStatus(),
-            $updatedOrder->getStatus(),
-            'Failed asserting that Order status was changed'
-        );
-    }
-
-    /**
-     * Sends API request for creation shipment by order.
-     *
-     * @param \Magento\Sales\Model\Order $existingOrder
-     * @return int
-     */
-    private function sendOrderShipRequest(\Magento\Sales\Model\Order $existingOrder)
-    {
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/order/' . $existingOrder->getId() . '/ship',
@@ -115,11 +105,46 @@ class ShipOrderTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 
         $requestData = [
             'orderId' => $existingOrder->getId(),
+            'items' => [],
+            'comment' => [
+                'comment' => 'Test Comment',
+                'is_visible_on_front' => 1,
+            ],
+            'tracks' => [
+                [
+                    'track_number' => 'TEST_TRACK_0001',
+                    'title' => 'Simple shipment track',
+                    'carrier_code' => 'UPS'
+                ]
+            ]
         ];
 
-        $shipmentId = (int)$this->_webApiCall($serviceInfo, $requestData);
-        $this->assertNotEmpty($shipmentId);
+        /** @var \Magento\Sales\Api\Data\OrderItemInterface $item */
+        foreach ($existingOrder->getAllItems() as $item) {
+            $requestData['items'][] = [
+                'order_item_id' => $item->getItemId(),
+                'qty' => $item->getQtyOrdered(),
+            ];
+        }
 
-        return $shipmentId;
+        $result = $this->_webApiCall($serviceInfo, $requestData);
+
+        $this->assertNotEmpty($result);
+
+        try {
+            $this->shipmentRepository->get($result);
+        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+            $this->fail('Failed asserting that Shipment was created');
+        }
+
+        /** @var \Magento\Sales\Model\Order $updatedOrder */
+        $updatedOrder = $this->objectManager->create(\Magento\Sales\Model\Order::class)
+            ->loadByIncrementId('100000001');
+
+        $this->assertNotEquals(
+            $existingOrder->getStatus(),
+            $updatedOrder->getStatus(),
+            'Failed asserting that Order status was changed'
+        );
     }
 }
