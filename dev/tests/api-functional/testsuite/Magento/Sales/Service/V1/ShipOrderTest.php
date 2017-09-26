@@ -69,7 +69,7 @@ class ShipOrderTest extends \Magento\TestFramework\TestCase\WebapiAbstract
         $orderedQty = 0;
         /** @var \Magento\Sales\Model\Order\Item $item */
         foreach ($existingOrder->getItems() as $item) {
-            if ($item->isDummy()) {
+            if ($item->isDummy(true)) {
                 continue;
             }
             $orderedQty += $item->getQtyOrdered();
