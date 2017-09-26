@@ -146,7 +146,7 @@ define([
         },
 
         /**
-         * Pulling the checked email value from persistence storage
+         * Pulling the checked email value from persistence storage.
          *
          * @returns {*}
          */
@@ -157,7 +157,7 @@ define([
         },
 
         /**
-         * Setting the checked email value pulled from persistence storage
+         * Setting the checked email value pulled from persistence storage.
          *
          * @param {String} email
          */

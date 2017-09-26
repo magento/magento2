@@ -168,11 +168,11 @@ define([
             }
         },
 
-         /**
-	         * Resolves an initial sate of a login form.
-	         *
-	         * @returns {Boolean} - initial visibility state.
-	         */
+        /**
+         * Resolves an initial sate of a login form.
+         *
+         * @returns {Boolean} - initial visibility state.
+         */
          resolveInitialPasswordVisibility: function () {
                 if (checkoutData.getInputFieldEmailValue() !== '') {
 	                return checkoutData.getInputFieldEmailValue() === checkoutData.getCheckedEmailValue();
