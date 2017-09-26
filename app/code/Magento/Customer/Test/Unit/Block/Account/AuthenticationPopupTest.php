@@ -90,12 +90,13 @@ class AuthenticationPopupTest extends \PHPUnit\Framework\TestCase
      * @param string $baseUrl
      * @param string $registerUrl
      * @param string $forgotUrl
+     * @param string $redirectUrl
      * @param array $result
      * @throws \PHPUnit\Framework\Exception
      *
      * @dataProvider dataProviderGetConfig
      */
-    public function testGetConfig($isAutocomplete, $baseUrl, $registerUrl, $forgotUrl, array $result)
+    public function testGetConfig($isAutocomplete, $baseUrl, $registerUrl, $forgotUrl, $redirectUrl, array $result)
     {
         $this->scopeConfigMock->expects($this->any())
             ->method('getValue')
@@ -122,6 +123,7 @@ class AuthenticationPopupTest extends \PHPUnit\Framework\TestCase
                 [
                     ['customer/account/create', [], $registerUrl],
                     ['customer/account/forgotpassword', [], $forgotUrl],
+                    ['checkout', [], $redirectUrl],
                 ]
             );
 
@@ -136,10 +138,12 @@ class AuthenticationPopupTest extends \PHPUnit\Framework\TestCase
                 'base',
                 'reg',
                 'forgot',
+                '',
                 [
                     'autocomplete' => 'escapeHtmloff',
                     'customerRegisterUrl' => 'escapeUrlreg',
                     'customerForgotPasswordUrl' => 'escapeUrlforgot',
+                    'redirectUrl' => 'escapeUrl',
                     'baseUrl' => 'escapeUrlbase',
                 ],
             ],
@@ -148,10 +152,12 @@ class AuthenticationPopupTest extends \PHPUnit\Framework\TestCase
                 '',
                 'reg',
                 'forgot',
+                'redirect',
                 [
                     'autocomplete' => 'escapeHtmlon',
                     'customerRegisterUrl' => 'escapeUrlreg',
                     'customerForgotPasswordUrl' => 'escapeUrlforgot',
+                    'redirectUrl' => 'escapeUrlredirect',
                     'baseUrl' => 'escapeUrl',
                 ],
             ],
@@ -160,10 +166,12 @@ class AuthenticationPopupTest extends \PHPUnit\Framework\TestCase
                 'base',
                 '',
                 'forgot',
+                'redirect',
                 [
                     'autocomplete' => 'escapeHtmloff',
                     'customerRegisterUrl' => 'escapeUrl',
                     'customerForgotPasswordUrl' => 'escapeUrlforgot',
+                    'redirectUrl' => 'escapeUrlredirect',
                     'baseUrl' => 'escapeUrlbase',
                 ],
             ],
@@ -172,10 +180,12 @@ class AuthenticationPopupTest extends \PHPUnit\Framework\TestCase
                 'base',
                 'reg',
                 '',
+                'redirect',
                 [
                     'autocomplete' => 'escapeHtmlon',
                     'customerRegisterUrl' => 'escapeUrlreg',
                     'customerForgotPasswordUrl' => 'escapeUrl',
+                    'redirectUrl' => 'escapeUrlredirect',
                     'baseUrl' => 'escapeUrlbase',
                 ],
             ],
@@ -187,13 +197,20 @@ class AuthenticationPopupTest extends \PHPUnit\Framework\TestCase
      * @param string $baseUrl
      * @param string $registerUrl
      * @param string $forgotUrl
+     * @param string $redirectUrl
      * @param array $result
      * @throws \PHPUnit\Framework\Exception
      *
      * @dataProvider dataProviderGetConfig
      */
-    public function testGetSerializedConfig($isAutocomplete, $baseUrl, $registerUrl, $forgotUrl, array $result)
-    {
+    public function testGetSerializedConfig(
+        $isAutocomplete,
+        $baseUrl,
+        $registerUrl,
+        $forgotUrl,
+        $redirectUrl,
+        array $result
+    ) {
         $this->scopeConfigMock->expects($this->any())
             ->method('getValue')
             ->with(Form::XML_PATH_ENABLE_AUTOCOMPLETE, ScopeInterface::SCOPE_STORE, null)
@@ -219,6 +236,7 @@ class AuthenticationPopupTest extends \PHPUnit\Framework\TestCase
                 [
                     ['customer/account/create', [], $registerUrl],
                     ['customer/account/forgotpassword', [], $forgotUrl],
+                    ['checkout', [], $redirectUrl],
                 ]
             );
         $this->serializerMock->expects($this->any())->method('serialize')
