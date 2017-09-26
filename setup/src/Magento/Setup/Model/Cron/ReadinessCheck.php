@@ -145,7 +145,6 @@ class ReadinessCheck
         } catch (\Exception $e) {
             $errorMessage = $e->getMessage();
             $resultJsonRawData[self::KEY_FILE_PATHS][self::KEY_LIST] = [];
-            $errorLogMessages[] = $errorMessage;
         }
         $resultJsonRawData[self::KEY_FILE_PATHS][self::KEY_ERROR] = $errorMessage;
 
