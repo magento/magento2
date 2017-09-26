@@ -313,7 +313,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     {
         $sku = $fixtureProduct[ProductInterface::SKU];
         $this->saveProduct($fixtureProduct);
-        $this->expectException('Exception', 'Requested product doesn\'t exist');
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('Requested product doesn\'t exist');
 
         // Delete all with 'all' store code
         $this->deleteProduct($sku);
