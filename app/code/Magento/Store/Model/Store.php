@@ -1137,6 +1137,15 @@ class Store extends AbstractExtensibleModel implements
     {
         $sidQueryParam = $this->_sidResolver->getSessionIdQueryParam($this->_getSession());
         $requestString = $this->_url->escape(ltrim($this->_request->getRequestString(), '/'));
+        $requestString = preg_replace(
+            '/___store=[a-zA-Z0-9]*/',
+            '',
+            $requestString
+        );
+        $requestString = str_replace('?&', '?', $requestString);
+        if ('?' ===  $requestString) {
+            $requestString = '';
+        }
 
         $storeUrl = $this->getUrl('', ['_secure' => $this->_storeManager->getStore()->isCurrentlySecure()]);
 
