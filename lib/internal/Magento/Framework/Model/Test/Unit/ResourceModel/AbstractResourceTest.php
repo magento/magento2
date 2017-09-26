@@ -22,16 +22,19 @@ class AbstractResourceTest extends \PHPUnit\Framework\TestCase
      */
     private $serializerMock;
 
+    /**
+     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $loggerMock;
+
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
         $this->serializerMock = $this->createMock(Json::class);
+        $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
         $this->abstractResource = $objectManager->getObject(AbstractResourceStub::class);
-        $objectManager->setBackwardCompatibleProperty(
-            $this->abstractResource,
-            'serializer',
-            $this->serializerMock
-        );
+        $objectManager->setBackwardCompatibleProperty($this->abstractResource,'serializer',$this->serializerMock);
+        $objectManager->setBackwardCompatibleProperty($this->abstractResource,'_logger',$this->loggerMock);
     }
 
     /**
@@ -201,9 +204,6 @@ class AbstractResourceTest extends \PHPUnit\Framework\TestCase
         $this->abstractResource->commit();
     }
 
-    /**
-     * @expectedException \Exception
-     */
     public function testCommitZeroLevelCallbackException()
     {
         /** @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject $connection */
@@ -221,6 +221,8 @@ class AbstractResourceTest extends \PHPUnit\Framework\TestCase
         $connection->expects($this->once())
             ->method('getTransactionLevel')
             ->willReturn(0);
+        $this->loggerMock->expects($this->once())
+            ->method('critical');
 
         $this->abstractResource->commit();
     }
