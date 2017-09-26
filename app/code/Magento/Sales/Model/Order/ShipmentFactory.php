@@ -116,7 +116,7 @@ class ShipmentFactory
                             $qty = 1;
                         }
                     }
-                } else {
+                } elseif (!$orderItem->getIsVirtual() && !$orderItem->getParentItem()) {
                     $qty = 1;
                 }
             } else {

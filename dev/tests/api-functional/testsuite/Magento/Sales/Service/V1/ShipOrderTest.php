@@ -115,27 +115,7 @@ class ShipOrderTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 
         $requestData = [
             'orderId' => $existingOrder->getId(),
-            'items' => [],
-            'comment' => [
-                'comment' => 'Test Comment',
-                'is_visible_on_front' => 1,
-            ],
-            'tracks' => [
-                [
-                    'track_number' => 'TEST_TRACK_0001',
-                    'title' => 'Simple shipment track',
-                    'carrier_code' => 'UPS'
-                ]
-            ]
         ];
-
-        /** @var \Magento\Sales\Api\Data\OrderItemInterface $item */
-        foreach ($existingOrder->getAllItems() as $item) {
-            $requestData['items'][] = [
-                'order_item_id' => $item->getItemId(),
-                'qty'           => $item->getQtyOrdered(),
-            ];
-        }
 
         $shipmentId = (int)$this->_webApiCall($serviceInfo, $requestData);
         $this->assertNotEmpty($shipmentId);
