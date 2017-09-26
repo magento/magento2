@@ -13,7 +13,7 @@ use Magento\Framework\DataObject;
 /**
  * Class Renderer used for formatting a store address
  */
-class Renderer implements RendererInterface
+class Renderer
 {
     /**
      * @var EventManager
