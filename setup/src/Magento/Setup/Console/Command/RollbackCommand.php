@@ -55,6 +55,11 @@ class RollbackCommand extends AbstractSetupCommand
     private $deploymentConfig;
 
     /**
+     * @var bool
+     */
+    private $skipDisableMaintenanceMode;
+
+    /**
      * Constructor
      *
      * @param ObjectManagerProvider $objectManagerProvider
@@ -117,8 +122,7 @@ class RollbackCommand extends AbstractSetupCommand
         }
         $returnValue = \Magento\Framework\Console\Cli::RETURN_SUCCESS;
         try {
-            $output->writeln('<info>Enabling maintenance mode</info>');
-            $this->maintenanceMode->set(true);
+            $this->enableMaintenanceMode($output);
             $helper = $this->getHelper('question');
             $question = new ConfirmationQuestion(
                 '<info>You are about to remove current code and/or database tables. Are you sure?[y/N]<info>',
@@ -134,8 +138,7 @@ class RollbackCommand extends AbstractSetupCommand
             // we must have an exit code higher than zero to indicate something was wrong
             $returnValue = \Magento\Framework\Console\Cli::RETURN_FAILURE;
         } finally {
-            $output->writeln('<info>Disabling maintenance mode</info>');
-            $this->maintenanceMode->set(false);
+            $this->disableMaintenanceMode($output);
         }
         return $returnValue;
     }
@@ -186,5 +189,41 @@ class RollbackCommand extends AbstractSetupCommand
         /** @var \Magento\Framework\ObjectManager\ConfigLoaderInterface $configLoader */
         $configLoader = $this->objectManager->get(\Magento\Framework\ObjectManager\ConfigLoaderInterface::class);
         $this->objectManager->configure($configLoader->load($areaCode));
+    }
+
+    /**
+     * Enable maintenance mode
+     *
+     * @param OutputInterface $output
+     * @return void
+     */
+    private function enableMaintenanceMode(OutputInterface $output)
+    {
+        if ($this->maintenanceMode->isOn()) {
+            $this->skipDisableMaintenanceMode = true;
+            $output->writeln('<info>Maintenance mode already enabled</info>');
+            return;
+        }
+
+        $this->maintenanceMode->set(true);
+        $this->skipDisableMaintenanceMode = false;
+        $output->writeln('<info>Enabling maintenance mode</info>');
+    }
+
+    /**
+     * Disable maintenance mode
+     *
+     * @param OutputInterface $output
+     * @return void
+     */
+    private function disableMaintenanceMode(OutputInterface $output)
+    {
+        if ($this->skipDisableMaintenanceMode) {
+            $output->writeln('<info>Skipped disabling maintenance mode</info>');
+            return;
+        }
+
+        $this->maintenanceMode->set(false);
+        $output->writeln('<info>Disabling maintenance mode</info>');
     }
 }

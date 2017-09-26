@@ -79,6 +79,11 @@ class Mode
     private $emulatedAreaProcessor;
 
     /**
+     * @var bool
+     */
+    private $skipDisableMaintenanceMode;
+
+    /**
      * @param InputInterface $input
      * @param OutputInterface $output
      * @param Writer $writer
@@ -227,7 +232,14 @@ class Mode
      */
     protected function enableMaintenanceMode(OutputInterface $output)
     {
+        if ($this->maintenanceMode->isOn()) {
+            $this->skipDisableMaintenanceMode = true;
+            $output->writeln('Maintenance mode already enabled');
+            return;
+        }
+
         $this->maintenanceMode->set(true);
+        $this->skipDisableMaintenanceMode = false;
         $output->writeln('Enabled maintenance mode');
     }
 
@@ -239,6 +251,11 @@ class Mode
      */
     protected function disableMaintenanceMode(OutputInterface $output)
     {
+        if ($this->skipDisableMaintenanceMode) {
+            $output->writeln('Skipped disabling maintenance mode');
+            return;
+        }
+
         $this->maintenanceMode->set(false);
         $output->writeln('Disabled maintenance mode');
     }

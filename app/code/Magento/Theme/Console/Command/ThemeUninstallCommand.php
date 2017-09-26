@@ -117,6 +117,11 @@ class ThemeUninstallCommand extends Command
     private $themeDependencyChecker;
 
     /**
+     * @var bool
+     */
+    private $skipDisableMaintenanceMode;
+
+    /**
      * Constructor
      *
      * @param Cache $cache
@@ -215,8 +220,7 @@ class ThemeUninstallCommand extends Command
         }
 
         try {
-            $output->writeln('<info>Enabling maintenance mode</info>');
-            $this->maintenanceMode->set(true);
+            $this->enableMaintenanceMode($output);
             if ($input->getOption(self::INPUT_KEY_BACKUP_CODE)) {
                 $time = time();
                 $codeBackup = $this->backupRollbackFactory->create($output);
@@ -227,8 +231,7 @@ class ThemeUninstallCommand extends Command
             $this->themeUninstaller->uninstallCode($output, $themePaths);
 
             $this->cleanup($input, $output);
-            $output->writeln('<info>Disabling maintenance mode</info>');
-            $this->maintenanceMode->set(false);
+            $this->disableMaintenanceMode($output);
         } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
             $output->writeln('<error>Please disable maintenance mode after you resolved above issues</error>');
@@ -374,5 +377,41 @@ class ThemeUninstallCommand extends Command
                 . ' Failure to clear static view files might cause display issues in the Admin and storefront.</error>'
             );
         }
+    }
+
+    /**
+     * Enable maintenance mode
+     *
+     * @param OutputInterface $output
+     * @return void
+     */
+    private function enableMaintenanceMode(OutputInterface $output)
+    {
+        if ($this->maintenanceMode->isOn()) {
+            $this->skipDisableMaintenanceMode = true;
+            $output->writeln('<info>Maintenance mode already enabled</info>');
+            return;
+        }
+
+        $this->maintenanceMode->set(true);
+        $this->skipDisableMaintenanceMode = false;
+        $output->writeln('<info>Enabling maintenance mode</info>');
+    }
+
+    /**
+     * Disable maintenance mode
+     *
+     * @param OutputInterface $output
+     * @return void
+     */
+    private function disableMaintenanceMode(OutputInterface $output)
+    {
+        if ($this->skipDisableMaintenanceMode) {
+            $output->writeln('<info>Skipped disabling maintenance mode</info>');
+            return;
+        }
+
+        $this->maintenanceMode->set(false);
+        $output->writeln('<info>Disabling maintenance mode</info>');
     }
 }

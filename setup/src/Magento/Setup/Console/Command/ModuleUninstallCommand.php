@@ -109,6 +109,11 @@ class ModuleUninstallCommand extends AbstractModuleCommand
     private $moduleRegistryUninstaller;
 
     /**
+     * @var bool
+     */
+    private $skipDisableMaintenanceMode;
+
+    /**
      * Constructor
      *
      * @param ComposerInformation $composer
@@ -228,8 +233,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
             return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
         try {
-            $output->writeln('<info>Enabling maintenance mode</info>');
-            $this->maintenanceMode->set(true);
+            $this->enableMaintenanceMode($output);
             $this->takeBackup($input, $output);
             $dbBackupOption = $input->getOption(self::INPUT_KEY_BACKUP_DB);
             if ($input->getOption(self::INPUT_KEY_REMOVE_DATA)) {
@@ -255,8 +259,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
             $this->moduleRegistryUninstaller->removeModulesFromDeploymentConfig($output, $modules);
             $this->moduleUninstaller->uninstallCode($output, $modules);
             $this->cleanup($input, $output);
-            $output->writeln('<info>Disabling maintenance mode</info>');
-            $this->maintenanceMode->set(false);
+            $this->disableMaintenanceMode($output);
         } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
             $output->writeln('<error>Please disable maintenance mode after you resolved above issues</error>');
@@ -377,5 +380,41 @@ class ModuleUninstallCommand extends AbstractModuleCommand
         /** @var \Magento\Framework\ObjectManager\ConfigLoaderInterface $configLoader */
         $configLoader = $this->objectManager->get(\Magento\Framework\ObjectManager\ConfigLoaderInterface::class);
         $this->objectManager->configure($configLoader->load($areaCode));
+    }
+
+    /**
+     * Enable maintenance mode
+     *
+     * @param OutputInterface $output
+     * @return void
+     */
+    private function enableMaintenanceMode(OutputInterface $output)
+    {
+        if ($this->maintenanceMode->isOn()) {
+            $this->skipDisableMaintenanceMode = true;
+            $output->writeln('<info>Maintenance mode already enabled</info>');
+            return;
+        }
+
+        $this->maintenanceMode->set(true);
+        $this->skipDisableMaintenanceMode = false;
+        $output->writeln('<info>Enabling maintenance mode</info>');
+    }
+
+    /**
+     * Disable maintenance mode
+     *
+     * @param OutputInterface $output
+     * @return void
+     */
+    private function disableMaintenanceMode(OutputInterface $output)
+    {
+        if ($this->skipDisableMaintenanceMode) {
+            $output->writeln('<info>Skipped disabling maintenance mode</info>');
+            return;
+        }
+
+        $this->maintenanceMode->set(false);
+        $output->writeln('<info>Disabling maintenance mode</info>');
     }
 }
