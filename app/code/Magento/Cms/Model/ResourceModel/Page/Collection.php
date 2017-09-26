@@ -26,6 +26,13 @@ class Collection extends AbstractCollection
     protected $_previewFlag;
 
     /**
+     * Event prefix
+     *
+     * @var string
+     */
+    //protected $_eventPrefix = 'cms_page_collection';
+
+    /**
      * Define resource model
      *
      * @return void
