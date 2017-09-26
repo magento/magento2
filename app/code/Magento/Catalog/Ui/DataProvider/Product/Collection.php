@@ -13,17 +13,16 @@ namespace Magento\Catalog\Ui\DataProvider\Product;
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {
     /**
-     * Join Product Price Table using left-join
+     * Disables using of price index for grid rendering
      *
-     * Customizes how price index joined to product collection in order to show disabled products in the list.
-     * It's needed as price index by its nature contains only values for enabled products.
-     * However, product grid requires to show all available products without any implicit filtering.
+     * Admin area shouldn't use price index and should rely on actual product data instead.
      *
      * @codeCoverageIgnore
      * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     protected function _productLimitationJoinPrice()
     {
+        $this->_productLimitationFilters->setUsePriceIndex(false);
         return $this->_productLimitationPrice(true);
     }
 }
