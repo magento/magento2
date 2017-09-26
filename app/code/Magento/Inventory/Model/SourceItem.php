@@ -36,7 +36,7 @@ class SourceItem extends AbstractExtensibleModel implements SourceItemInterface
     /**
      * @inheritdoc
      */
-    public function setSku($sku)
+    public function setSku(string $sku)
     {
         $this->setData(self::SKU, $sku);
     }
@@ -44,7 +44,7 @@ class SourceItem extends AbstractExtensibleModel implements SourceItemInterface
     /**
      * @inheritdoc
      */
-    public function getSourceId(): int
+    public function getSourceId()
     {
         return $this->getData(self::SOURCE_ID);
     }
@@ -52,7 +52,7 @@ class SourceItem extends AbstractExtensibleModel implements SourceItemInterface
     /**
      * @inheritdoc
      */
-    public function setSourceId($sourceId)
+    public function setSourceId(int $sourceId)
     {
         $this->setData(self::SOURCE_ID, $sourceId);
     }
@@ -60,7 +60,7 @@ class SourceItem extends AbstractExtensibleModel implements SourceItemInterface
     /**
      * @inheritdoc
      */
-    public function getQuantity(): float
+    public function getQuantity()
     {
         return $this->getData(self::QUANTITY);
     }
@@ -68,7 +68,7 @@ class SourceItem extends AbstractExtensibleModel implements SourceItemInterface
     /**
      * @inheritdoc
      */
-    public function setQuantity($quantity)
+    public function setQuantity(float $quantity)
     {
         $this->setData(self::QUANTITY, $quantity);
     }
@@ -76,7 +76,7 @@ class SourceItem extends AbstractExtensibleModel implements SourceItemInterface
     /**
      * @inheritdoc
      */
-    public function getStatus(): int
+    public function getStatus()
     {
         return $this->getData(self::STATUS);
     }
@@ -84,7 +84,7 @@ class SourceItem extends AbstractExtensibleModel implements SourceItemInterface
     /**
      * @inheritdoc
      */
-    public function setStatus($status)
+    public function setStatus(int $status)
     {
         $this->setData(self::STATUS, $status);
     }

@@ -131,7 +131,7 @@ class ValidationTest extends WebapiAbstract
         return [
             'empty_' . StockInterface::NAME => [
                 StockInterface::NAME,
-                null,
+                '',
                 [
                     'message' => 'Validation Failed',
                     'errors' => [
@@ -147,6 +147,21 @@ class ValidationTest extends WebapiAbstract
             'whitespaces_' . StockInterface::NAME => [
                 StockInterface::NAME,
                 ' ',
+                [
+                    'message' => 'Validation Failed',
+                    'errors' => [
+                        [
+                            'message' => '"%field" can not be empty.',
+                            'parameters' => [
+                                'field' => StockInterface::NAME,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'null_' . StockInterface::NAME => [
+                StockInterface::NAME,
+                null,
                 [
                     'message' => 'Validation Failed',
                     'errors' => [

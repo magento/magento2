@@ -34,10 +34,10 @@ interface StockInterface extends ExtensibleDataInterface
     /**
      * Set stock id
      *
-     * @param int|null $stockId
+     * @param int $stockId
      * @return void
      */
-    public function setStockId($stockId);
+    public function setStockId(int $stockId);
 
     /**
      * Get stock name
@@ -49,10 +49,10 @@ interface StockInterface extends ExtensibleDataInterface
     /**
      * Set stock name
      *
-     * @param string|null $name
+     * @param string $name
      * @return void
      */
-    public function setName($name);
+    public function setName(string $name);
 
     /**
      * Retrieve existing extension attributes object

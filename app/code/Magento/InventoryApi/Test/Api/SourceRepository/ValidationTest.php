@@ -145,9 +145,24 @@ class ValidationTest extends WebapiAbstract
     public function failedValidationDataProvider(): array
     {
         return [
-            'empty_' . SourceInterface::NAME => [
+            'null_' . SourceInterface::NAME => [
                 SourceInterface::NAME,
                 null,
+                [
+                    'message' => 'Validation Failed',
+                    'errors' => [
+                        [
+                            'message' => '"%field" can not be empty.',
+                            'parameters' => [
+                                'field' => SourceInterface::NAME,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'empty_' . SourceInterface::NAME => [
+                SourceInterface::NAME,
+                '',
                 [
                     'message' => 'Validation Failed',
                     'errors' => [
@@ -177,7 +192,7 @@ class ValidationTest extends WebapiAbstract
             ],
             'empty_' . SourceInterface::POSTCODE => [
                 SourceInterface::POSTCODE,
-                null,
+                '',
                 [
                     'message' => 'Validation Failed',
                     'errors' => [
@@ -205,9 +220,24 @@ class ValidationTest extends WebapiAbstract
                     ],
                 ],
             ],
+            'null_' . SourceInterface::POSTCODE => [
+                SourceInterface::POSTCODE,
+                null,
+                [
+                    'message' => 'Validation Failed',
+                    'errors' => [
+                        [
+                            'message' => '"%field" can not be empty.',
+                            'parameters' => [
+                                'field' => SourceInterface::POSTCODE,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
             'empty_' . SourceInterface::COUNTRY_ID => [
                 SourceInterface::COUNTRY_ID,
-                null,
+                '',
                 [
                     'message' => 'Validation Failed',
                     'errors' => [
@@ -223,6 +253,21 @@ class ValidationTest extends WebapiAbstract
             'whitespaces_' . SourceInterface::COUNTRY_ID => [
                 SourceInterface::COUNTRY_ID,
                 ' ',
+                [
+                    'message' => 'Validation Failed',
+                    'errors' => [
+                        [
+                            'message' => '"%field" can not be empty.',
+                            'parameters' => [
+                                'field' => SourceInterface::COUNTRY_ID,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'null_' . SourceInterface::COUNTRY_ID => [
+                SourceInterface::COUNTRY_ID,
+                null,
                 [
                     'message' => 'Validation Failed',
                     'errors' => [

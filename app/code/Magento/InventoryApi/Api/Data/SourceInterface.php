@@ -50,10 +50,10 @@ interface SourceInterface extends ExtensibleDataInterface
     /**
      * Set source id
      *
-     * @param int|null $sourceId
+     * @param int $sourceId
      * @return void
      */
-    public function setSourceId($sourceId);
+    public function setSourceId(int $sourceId);
 
     /**
      * Get source name
@@ -65,10 +65,10 @@ interface SourceInterface extends ExtensibleDataInterface
     /**
      * Set source name
      *
-     * @param string|null $name
+     * @param string $name
      * @return void
      */
-    public function setName($name);
+    public function setName(string $name);
 
     /**
      * Get source email
@@ -170,10 +170,10 @@ interface SourceInterface extends ExtensibleDataInterface
     /**
      * Set source country id
      *
-     * @param string|null $countryId
+     * @param string $countryId
      * @return void
      */
-    public function setCountryId($countryId);
+    public function setCountryId(string $countryId);
 
     /**
      * Get region id if source has registered region.
@@ -245,10 +245,10 @@ interface SourceInterface extends ExtensibleDataInterface
     /**
      * Set source post code
      *
-     * @param string|null $postcode
+     * @param string $postcode
      * @return void
      */
-    public function setPostcode($postcode);
+    public function setPostcode(string $postcode);
 
     /**
      * Get source phone number
