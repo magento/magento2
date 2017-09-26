@@ -30,7 +30,7 @@ class Collection extends AbstractCollection
      *
      * @var string
      */
-    //protected $_eventPrefix = 'cms_page_collection';
+    protected $_eventPrefix = 'cms_page_collection';
 
     /**
      * Define resource model
