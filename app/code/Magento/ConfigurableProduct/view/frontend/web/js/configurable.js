@@ -514,7 +514,7 @@ define([
         _displayNormalPriceLabel: function () {
             var shouldBeShown = false;
 
-            $.each(this.options.settings, function (index, element) {
+            _.each(this.options.settings, function (element) {
                 if (element.value === '') {
                     shouldBeShown = true;
                 }
