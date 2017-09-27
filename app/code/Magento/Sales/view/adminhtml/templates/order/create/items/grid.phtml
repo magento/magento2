@@ -109,7 +109,7 @@
                             <?php endif; ?>
                             <input id="item_custom_price_<?= /* @escapeNotVerified */ $_item->getId() ?>"
                                    name="item[<?= /* @escapeNotVerified */ $_item->getId() ?>][custom_price]"
-                                   value="<?= /* @escapeNotVerified */ sprintf("%.2f", $block->getOriginalEditablePrice($_item)) ?>"
+                                   value="<?= /* @escapeNotVerified */ sprintf("%.4f", $block->getOriginalEditablePrice($_item)) ?>"
                                    <?php if (!$_isCustomPrice): ?>
                                    style="display:none"
                                    disabled="disabled"
