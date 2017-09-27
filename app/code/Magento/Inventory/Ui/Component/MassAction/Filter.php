@@ -41,7 +41,7 @@ class Filter
         $dataProvider = $component->getContext()->getDataProvider();
         $searchResult = $dataProvider->getSearchResult();
 
-        return array_map(function(DocumentInterface $item) {
+        return array_map(function (DocumentInterface $item) {
             return $item->getId();
         }, $searchResult->getItems());
     }
