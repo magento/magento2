@@ -1096,7 +1096,7 @@
                 <item name="is_in_stock" xsi:type="string">Out of Stock</item>
             </field>
             <field name="price" xsi:type="array">
-                <item name="value" xsi:type="string">560</item>
+                <item name="value" xsi:type="string">561</item>
             </field>
             <field name="tax_class_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">taxable_goods</item>
