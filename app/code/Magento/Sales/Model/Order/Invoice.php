@@ -410,7 +410,6 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
         if (!$this->canCancel()) {
             return $this;
         }
-        
         $order = $this->getOrder();
         $order->getPayment()->cancelInvoice($this);
         foreach ($this->getAllItems() as $item) {
