@@ -4,11 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Inventory\Setup;
+namespace Magento\InventoryCatalog\Setup;
 
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
+use Magento\InventoryApi\Api\Data\SourceInterfaceFactory;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
 use Magento\Framework\Api\DataObjectHelper;
@@ -19,14 +20,14 @@ use Magento\Framework\Api\DataObjectHelper;
 class InstallData implements InstallDataInterface
 {
     /**
-     * @var SourceRepositoryInterface $stockRepository
+     * @var SourceRepositoryInterface
      */
     private $sourceRepository;
 
     /**
-     * @var SourceInterface
+     * @var SourceInterfaceFactory
      */
-    private $source;
+    private $sourceFactory;
 
     /**
      * @var DataObjectHelper
@@ -35,16 +36,16 @@ class InstallData implements InstallDataInterface
 
     /**
      * @param SourceRepositoryInterface $sourceRepository
-     * @param SourceInterface $source
+     * @param SourceInterfaceFactory $sourceFactory
      * @param DataObjectHelper $dataObjectHelper
      */
     public function __construct(
         SourceRepositoryInterface $sourceRepository,
-        SourceInterface $source,
+        SourceInterfaceFactory $sourceFactory,
         DataObjectHelper $dataObjectHelper
     ) {
         $this->sourceRepository = $sourceRepository;
-        $this->source = $source;
+        $this->sourceFactory = $sourceFactory;
         $this->dataObjectHelper = $dataObjectHelper;
     }
 
@@ -74,8 +75,8 @@ class InstallData implements InstallDataInterface
             SourceInterface::COUNTRY_ID => 'PL',
             SourceInterface::POSTCODE => '00-000'
         ];
-        $this->dataObjectHelper->populateWithArray($this->source, $data, SourceInterface::class);
-        $this->sourceRepository->save($this->source);
+        $source = $this->sourceFactory->create();
+        $this->dataObjectHelper->populateWithArray($source, $data, SourceInterface::class);
+        $this->sourceRepository->save($source);
     }
 }
-
