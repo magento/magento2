@@ -4,10 +4,14 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Widget\Controller\Adminhtml\Widget;
 
 use Magento\Framework\App\ObjectManager;
 
+/**
+ * Load widget options
+ */
 class LoadOptions extends \Magento\Backend\App\Action
 {
     /**
@@ -19,7 +23,7 @@ class LoadOptions extends \Magento\Backend\App\Action
      * @var \Magento\Widget\Helper\Conditions
      */
     private $conditionsHelper;
-
+    
     /**
      * Ajax responder for loading plugin options form
      *
@@ -29,7 +33,9 @@ class LoadOptions extends \Magento\Backend\App\Action
     {
         try {
             $this->_view->loadLayout();
-            if ($paramsJson = $this->getRequest()->getParam('widget')) {
+            $paramsJson = $this->getRequest()->getParam('widget');
+
+            if ($paramsJson) {
                 $request = $this->_objectManager->get(\Magento\Framework\Json\Helper\Data::class)
                     ->jsonDecode($paramsJson);
                 if (is_array($request)) {
@@ -51,13 +57,11 @@ class LoadOptions extends \Magento\Backend\App\Action
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $result = ['error' => true, 'message' => $e->getMessage()];
             $this->getResponse()->representJson(
-                $this->_objectManager->get(\Magento\Framework\Json\Helper\Data::class)
-                    ->jsonEncode($result)
+                $this->_objectManager->get(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($result)
             );
         }
     }
-
-
+    
     /**
      * @return \Magento\Widget\Helper\Conditions
      * @deprecated
