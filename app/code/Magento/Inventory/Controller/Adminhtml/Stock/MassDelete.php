@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Inventory\Controller\Adminhtml\Stock;
 
 use Magento\Backend\App\Action;
@@ -13,7 +12,7 @@ use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
 
 /**
- * Delete Controller
+ * MassDelete Controller
  */
 class MassDelete extends Action
 {
@@ -54,9 +53,9 @@ class MassDelete extends Action
     {
         if ($this->getRequest()->isPost() !== true) {
             $this->messageManager->addErrorMessage(__('Wrong request.'));
-
             return $this->resultRedirectFactory->create()->setPath('*/*');
         }
+
         $deletedItemsCount = 0;
         foreach ($this->massActionFilter->getIds() as $id) {
             try {

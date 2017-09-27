@@ -3,14 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Inventory\Ui\Component\MassAction;
 
 use Magento\Ui\Component\MassAction\Filter as BaseFilter;
 use Magento\Framework\Api\Search\DocumentInterface;
 
 /**
- * Class Filter
+ * Temporary solution
+ * @todo Need to remove after fixing the issue
  * @see https://github.com/magento/magento2/issues/10988
  */
 class Filter

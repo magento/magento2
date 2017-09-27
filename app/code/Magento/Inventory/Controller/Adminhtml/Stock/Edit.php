@@ -22,7 +22,7 @@ class Edit extends Action
     /**
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Inventory::stock';
+    const ADMIN_RESOURCE = Index::ADMIN_RESOURCE;
 
     /**
      * @var StockRepositoryInterface
@@ -49,6 +49,7 @@ class Edit extends Action
         $stockId = $this->getRequest()->getParam(StockInterface::STOCK_ID);
         try {
             $stock = $this->stockRepository->get($stockId);
+
             /** @var Page $result */
             $result = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
             $result->setActiveMenu('Magento_Inventory::stock')
