@@ -30,8 +30,6 @@ class Collection extends AbstractCollection
     private $sourceCarrierLinkManagement;
 
     /**
-     * Collection constructor
-     *
      * @param EntityFactoryInterface $entityFactory
      * @param LoggerInterface $logger
      * @param FetchStrategyInterface $fetchStrategy

@@ -15,7 +15,6 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
 
 /**
- * Class SourceDataProvider
  * @api
  */
 class SourceDataProvider extends DataProvider

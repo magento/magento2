@@ -47,8 +47,6 @@ class SourceItemsProcessor
     private $sourceItemsSave;
 
     /**
-     * SourceItemsProcessor constructor
-     *
      * @param SearchCriteriaBuilderFactory $searchCriteriaBuilderFactory
      * @param SourceItemRepositoryInterface $sourceItemRepository
      * @param SourceItemInterfaceFactory $sourceItemFactory
