@@ -364,8 +364,7 @@ class Helper
     }
 
     /**
-     * Overwrite values of fields to default, if there are option id and field
-     * name in array overwriteOptions.
+     * Overwrite values of fields to default, if there are option id and field name in array overwriteOptions.
      *
      * @param int   $optionId
      * @param array $option
@@ -422,7 +421,7 @@ class Helper
     {
         if (null === $this->productRepository) {
             $this->productRepository = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('\Magento\Catalog\Api\ProductRepositoryInterface\Proxy');
+                ->get(\Magento\Catalog\Api\ProductRepositoryInterface\Proxy::class);
         }
 
         return $this->productRepository;

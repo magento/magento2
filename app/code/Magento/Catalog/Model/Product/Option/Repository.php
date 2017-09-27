@@ -133,7 +133,6 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
      */
     public function save(\Magento\Catalog\Api\Data\ProductCustomOptionInterface $option)
     {
-        /** @var string $productSku */
         $productSku = $option->getProductSku();
         if (!$productSku) {
             throw new CouldNotSaveException(__('ProductSku should be specified'));
@@ -167,7 +166,9 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
             /** @var array $newValues */
             $newValues = $option->getData('values');
             if ($newValues) {
-                $newValues = $this->markRemovedValues($newValues, $originalValues);
+                if (isset($originalValues)) {
+                    $newValues = $this->markRemovedValues($newValues, $originalValues);
+                }
                 $option->setData('values', $newValues);
             }
         }

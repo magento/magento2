@@ -6,6 +6,7 @@
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Options\Type;
 
+use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Options;
 use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Options\AbstractOptions;
 use Magento\Mtf\Client\Element\SimpleElement;
 
@@ -14,13 +15,6 @@ use Magento\Mtf\Client\Element\SimpleElement;
  */
 class DropDown extends AbstractOptions
 {
-    /**#@+
-     * Determines if we need update option value or add new one.
-     */
-    const ACTION_ADD = 'add';
-    const ACTION_UPDATE = 'update';
-    /**#@-*/
-
     /**
      * "Add Value" button css selector.
      *
@@ -37,12 +31,10 @@ class DropDown extends AbstractOptions
      */
     public function fillOptions(array $fields, SimpleElement $element = null)
     {
-        $actionType = self::ACTION_ADD;
-        if (isset($fields['action_type'])) {
-            $actionType = $fields['action_type'];
-            unset($fields['action_type']);
-        }
-        if ($actionType == self::ACTION_ADD) {
+        $actionType = isset($fields['action_type']) ? $fields['action_type'] : Options::ACTION_ADD;
+        unset($fields['action_type']);
+
+        if ($actionType == Options::ACTION_ADD) {
             $this->_rootElement->find($this->addValueButton)->click();
         }
 
