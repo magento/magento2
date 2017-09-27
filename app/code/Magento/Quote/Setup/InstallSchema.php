@@ -474,7 +474,7 @@ class InstallSchema implements InstallSchemaInterface
         )->addColumn(
             'telephone',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            20,
+            255,
             [],
             'Phone Number'
         )->addColumn(
