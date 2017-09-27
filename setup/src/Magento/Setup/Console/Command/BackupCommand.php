@@ -58,6 +58,12 @@ class BackupCommand extends AbstractSetupCommand
     private $deploymentConfig;
 
     /**
+     * The initial maintenance mode state
+     * @var bool
+     */
+    private $maintenanceModeInitialState;
+
+    /**
      * Constructor
      *
      * @param ObjectManagerProvider $objectManagerProvider
@@ -73,6 +79,7 @@ class BackupCommand extends AbstractSetupCommand
         $this->maintenanceMode = $maintenanceMode;
         $this->backupRollbackFactory = $this->objectManager->get(\Magento\Framework\Setup\BackupRollbackFactory::class);
         $this->deploymentConfig = $deploymentConfig;
+        $this->maintenanceModeInitialState = $this->maintenanceMode->isOn();
         parent::__construct();
     }
 
@@ -147,8 +154,11 @@ class BackupCommand extends AbstractSetupCommand
             $output->writeln('<error>' . $e->getMessage() . '</error>');
             $returnValue =  \Magento\Framework\Console\Cli::RETURN_FAILURE;
         } finally {
-            $output->writeln('<info>Disabling maintenance mode</info>');
-            $this->maintenanceMode->set(false);
+            // Only disable maintenace mode if it wasn't turned on before
+            if (!$this->maintenanceModeInitialState) {
+                $output->writeln('<info>Disabling maintenance mode</info>');
+                $this->maintenanceMode->set(false);
+            }
         }
         return $returnValue;
     }
