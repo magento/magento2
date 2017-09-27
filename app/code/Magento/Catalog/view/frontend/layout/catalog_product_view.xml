@@ -109,7 +109,7 @@
                         <argument name="at_call" xsi:type="string">getDescription</argument>
                         <argument name="at_code" xsi:type="string">description</argument>
                         <argument name="css_class" xsi:type="string">description</argument>
-                        <argument name="at_label" xsi:type="string">none</argument>
+                        <argument name="at_label" translate="true" xsi:type="string">none</argument>
                         <argument name="title" translate="true" xsi:type="string">Details</argument>
                     </arguments>
                 </block>

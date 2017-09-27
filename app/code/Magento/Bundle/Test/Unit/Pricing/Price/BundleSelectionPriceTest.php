@@ -306,6 +306,58 @@ class BundleSelectionPriceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedPrice, $this->selectionPrice->getValue());
     }
 
+    /**
+     * Test for method getValue with type Fixed and selectionPriceType is empty or zero.
+     *
+     * @param bool $useRegularPrice
+     * @return void
+     *
+     * @dataProvider useRegularPriceDataProvider
+     */
+    public function testFixedPriceWithMultipleQty($useRegularPrice)
+    {
+        $qty = 2;
+
+        $this->setupSelectionPrice($useRegularPrice, $qty);
+        $regularPrice = 100.125;
+        $discountedPrice = 70.453;
+        $convertedValue = 100.247;
+        $actualPrice = $useRegularPrice ? $convertedValue : $discountedPrice;
+        $expectedPrice = $useRegularPrice ? round($convertedValue, 2) : round($discountedPrice, 2);
+
+        $this->bundleMock->expects($this->once())
+            ->method('getPriceType')
+            ->will($this->returnValue(\Magento\Bundle\Model\Product\Price::PRICE_TYPE_FIXED));
+        $this->productMock->expects($this->once())
+            ->method('getSelectionPriceType')
+            ->will($this->returnValue(false));
+        $this->productMock->expects($this->any())
+            ->method('getSelectionPriceValue')
+            ->will($this->returnValue($regularPrice));
+
+        $this->priceCurrencyMock->expects($this->once())
+            ->method('convert')
+            ->with($regularPrice)
+            ->will($this->returnValue($convertedValue));
+
+        if (!$useRegularPrice) {
+            $this->discountCalculatorMock->expects($this->once())
+                ->method('calculateDiscount')
+                ->with(
+                    $this->equalTo($this->bundleMock),
+                    $this->equalTo($convertedValue)
+                )
+                ->will($this->returnValue($discountedPrice));
+        }
+
+        $this->priceCurrencyMock->expects($this->once())
+            ->method('round')
+            ->with($actualPrice)
+            ->will($this->returnValue($expectedPrice));
+
+        $this->assertEquals($expectedPrice, $this->selectionPrice->getValue());
+    }
+
     public function useRegularPriceDataProvider()
     {
         return [
