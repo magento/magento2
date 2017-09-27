@@ -32,12 +32,11 @@ class DefaultSource extends TestCase
     }
 
     /**
-     * Test is default source wxist in DB
+     * Test is default source exist in DB
      */
     public function testDefaultSourceExist()
     {
         self::assertEquals(1, $this->source->getSourceId());
         self::assertEquals('Default Source', $this->source->getName());
     }
-
 }

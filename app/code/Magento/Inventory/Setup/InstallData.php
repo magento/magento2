@@ -11,7 +11,6 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Api\DataObjectHelper;
 
 /**
@@ -25,9 +24,9 @@ class InstallData implements InstallDataInterface
     private $sourceRepository;
 
     /**
-     * @var ObjectManagerInterface
+     * @var SourceInterface
      */
-    private $objectManager;
+    private $source;
 
     /**
      * @var DataObjectHelper
@@ -36,16 +35,16 @@ class InstallData implements InstallDataInterface
 
     /**
      * @param SourceRepositoryInterface $sourceRepository
-     * @param ObjectManagerInterface    $objectManager
-     * @param DataObjectHelper          $dataObjectHelper
+     * @param SourceInterface $source
+     * @param DataObjectHelper $dataObjectHelper
      */
     public function __construct(
         SourceRepositoryInterface $sourceRepository,
-        ObjectManagerInterface $objectManager,
+        SourceInterface $source,
         DataObjectHelper $dataObjectHelper
     ) {
         $this->sourceRepository = $sourceRepository;
-        $this->objectManager    = $objectManager;
+        $this->source = $source;
         $this->dataObjectHelper = $dataObjectHelper;
     }
 
@@ -58,11 +57,13 @@ class InstallData implements InstallDataInterface
     }
 
     /**
+     * Add default source
+     *
      * @return void
      */
     private function addDefaultSource()
     {
-        $data   = [
+        $data = [
             SourceInterface::SOURCE_ID => 1,
             SourceInterface::NAME => 'Default Source',
             SourceInterface::ENABLED => 1,
@@ -73,8 +74,8 @@ class InstallData implements InstallDataInterface
             SourceInterface::COUNTRY_ID => 'PL',
             SourceInterface::POSTCODE => '00-000'
         ];
-        $source = $this->objectManager->create(SourceInterface::class);
-        $this->dataObjectHelper->populateWithArray($source, $data, SourceInterface::class);
-        $this->sourceRepository->save($source);
+        $this->dataObjectHelper->populateWithArray($this->source, $data, SourceInterface::class);
+        $this->sourceRepository->save($this->source);
     }
 }
+
