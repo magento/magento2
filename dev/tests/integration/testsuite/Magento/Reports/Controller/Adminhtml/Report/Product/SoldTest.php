@@ -11,7 +11,7 @@ namespace Magento\Reports\Controller\Adminhtml\Report\Product;
  */
 class SoldTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
-    public function testExecute2()
+    public function testExecute()
     {
         $this->dispatch('backend/reports/report_product/sold');
         $actual = $this->getResponse()->getBody();
