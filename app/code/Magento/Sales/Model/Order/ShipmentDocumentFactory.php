@@ -12,6 +12,7 @@ use Magento\Sales\Api\Data\ShipmentTrackCreationInterface;
 use Magento\Framework\EntityManager\HydratorPool;
 use Magento\Sales\Model\Order\Shipment\TrackFactory;
 use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Api\Data\ShipmentCommentCreationInterface;
 use Magento\Sales\Api\Data\ShipmentCreationArgumentsInterface;
 
@@ -77,7 +78,18 @@ class ShipmentDocumentFactory
         array $packages = [],
         ShipmentCreationArgumentsInterface $arguments = null
     ) {
-        $shipmentItems = $this->itemsToArray($items);
+        if (!empty($items)) {
+            $shipmentItems = $this->itemsToArray($items);
+        } else {
+            // Ship all items if optional array not sent in client request
+            $shipmentItems = [];
+            /** @var OrderItemInterface $item */
+            foreach ($order->getItems() as $item) {
+                if (!$item->getIsVirtual() && !$item->getParentItem()) {
+                    $shipmentItems[$item->getItemId()] = $item->getQtyOrdered();
+                }
+            }
+        }
         /** @var Shipment $shipment */
         $shipment = $this->shipmentFactory->create(
             $order,
