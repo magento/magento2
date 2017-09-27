@@ -29,7 +29,7 @@ use Magento\Mtf\TestCase\Scenario;
 class VerifyConfigurableProductLayeredNavigationTest extends Scenario
 {
     /**
-     * Verify configurable product price.
+     * Verify configurable product options in layered navigation.
      *
      * @return array
      */

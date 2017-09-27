@@ -15,18 +15,18 @@ use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
 
 /**
- * Check whether the attribute filter is displayed on the frontend in Layered navigation.
+ * Check whether OOS product attribute options for configurable product are displayed on frontend in Layered navigation.
  */
 class AssertConfigurableProductAttributeOptionInLayeredNavigation extends AbstractConstraint
 {
     /**
-     * Check whether the attribute filter is displayed on the frontend in Layered navigation.
+     * Check whether the OOS attribute options are displayed on the frontend in Layered navigation.
      *
      * @param CatalogCategoryView $catalogCategoryView
      * @param InjectableFixture $product
      * @param CmsIndex $cmsIndex
      * @param FixtureFactory $fixtureFactory
-     * @param $outOfStockOption
+     * @param string $outOfStockOption
      * @return void
      */
     public function processAssert(

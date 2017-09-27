@@ -41,9 +41,7 @@ class Navigation extends Block
      *
      * @var string
      */
-
     protected $optionContent = './/div[@class="filter-options-title" and contains(text(),"")]/following-sibling::div//a[contains(text(), \'SIZE\')]';
-
 
     /**
      * Locator value for correspondent "Filter" link.
