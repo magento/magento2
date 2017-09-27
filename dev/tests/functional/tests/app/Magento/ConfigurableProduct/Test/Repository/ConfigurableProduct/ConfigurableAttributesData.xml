@@ -391,7 +391,7 @@
                     <item name="quantity_and_stock_status" xsi:type="array">
                         <item name="qty" xsi:type="string">20</item>
                     </item>
-                    <item name="weight" xsi:type="string">2</item>
+                    <item name="weight" xsi:type="string">1</item>
                 </item>
             </field>
         </dataset>
@@ -675,6 +675,84 @@
                     <item name="quantity_and_stock_status" xsi:type="array">
                         <item name="qty" xsi:type="string">200</item>
                     </item>
+                    <item name="weight" xsi:type="string">1</item>
+                </item>
+            </field>
+        </dataset>
+
+        <dataset name="two_options_with_assigned_product_special_price">
+            <field name="attributes_data" xsi:type="array">
+                <item name="attribute_key_0" xsi:type="array">
+                    <item name="options" xsi:type="array">
+                        <item name="option_key_0" xsi:type="array">
+                            <item name="label" xsi:type="string">option_key_1_%isolation%</item>
+                            <item name="pricing_value" xsi:type="string">560</item>
+                            <item name="include" xsi:type="string">Yes</item>
+                        </item>
+                        <item name="option_key_1" xsi:type="array">
+                            <item name="label" xsi:type="string">option_key_2_%isolation%</item>
+                            <item name="pricing_value" xsi:type="string">10</item>
+                            <item name="include" xsi:type="string">Yes</item>
+                        </item>
+                    </item>
+                </item>
+            </field>
+            <field name="attributes" xsi:type="array">
+                <item name="attribute_key_0" xsi:type="string">catalogProductAttribute::attribute_type_dropdown_two_options</item>
+            </field>
+            <field name="products" xsi:type="array">
+                <item name="attribute_key_0:option_key_0" xsi:type="string">catalogProductSimple::default</item>
+                <item name="attribute_key_0:option_key_1" xsi:type="string">catalogProductSimple::product_with_special_price</item>
+            </field>
+            <field name="matrix" xsi:type="array">
+                <item name="attribute_key_0:option_key_0" xsi:type="array">
+                    <item name="quantity_and_stock_status" xsi:type="array">
+                        <item name="qty" xsi:type="string">10</item>
+                    </item>
+                    <item name="weight" xsi:type="string">1</item>
+                </item>
+                <item name="attribute_key_0:option_key_1" xsi:type="array">
+                    <item name="quantity_and_stock_status" xsi:type="array">
+                        <item name="qty" xsi:type="string">20</item>
+                    </item>
+                    <item name="weight" xsi:type="string">1</item>
+                </item>
+            </field>
+        </dataset>
+
+        <dataset name="color_for_promo_rules">
+            <field name="attributes_data" xsi:type="array">
+                <item name="attribute_key_0" xsi:type="array">
+                    <item name="options" xsi:type="array">
+                        <item name="option_key_0" xsi:type="array">
+                            <item name="pricing_value" xsi:type="string">5.00</item>
+                            <item name="include" xsi:type="string">Yes</item>
+                        </item>
+                        <item name="option_key_1" xsi:type="array">
+                            <item name="pricing_value" xsi:type="string">10.00</item>
+                            <item name="include" xsi:type="string">Yes</item>
+                        </item>
+                        <item name="option_key_2" xsi:type="array">
+                            <item name="pricing_value" xsi:type="string">15.00</item>
+                            <item name="include" xsi:type="string">Yes</item>
+                        </item>
+                    </item>
+                </item>
+            </field>
+            <field name="attributes" xsi:type="array">
+                <item name="attribute_key_0" xsi:type="string">catalogProductAttribute::color_for_promo_rules</item>
+            </field>
+            <field name="matrix" xsi:type="array">
+                <item name="attribute_key_0:option_key_0" xsi:type="array">
+                    <item name="qty" xsi:type="string">1</item>
+                    <item name="weight" xsi:type="string">1</item>
+                </item>
+                <item name="attribute_key_0:option_key_1" xsi:type="array">
+                    <item name="qty" xsi:type="string">1</item>
+                    <item name="weight" xsi:type="string">1</item>
+                </item>
+                <item name="attribute_key_0:option_key_2" xsi:type="array">
+                    <item name="qty" xsi:type="string">1</item>
                     <item name="weight" xsi:type="string">1</item>
                 </item>
             </field>

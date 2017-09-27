@@ -398,4 +398,28 @@ class Media extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         return $this->getConnection()->fetchAll($select);
     }
+
+    /**
+     * Counts uses of the image.
+     *
+     * @param string $image
+     * @return int
+     * @deprecated 2.1.5
+     * Added to find out if product image is used for several different products.
+     * This method is absent in version >=2.1.0 & < 2.1.5.
+     * In 2.1.5 version it was added in Magento\Catalog\Model\ResourceModel\Product\Gallery.
+     */
+    public function countImageUses($image)
+    {
+        $select = $this->getConnection()->select()
+            ->from(
+                [$this->getMainTableAlias() => $this->getMainTable()],
+                'count(*)'
+            )
+            ->where('value = ?', $image);
+
+        $countImages = $this->getConnection()->fetchOne($select);
+
+        return $countImages;
+    }
 }

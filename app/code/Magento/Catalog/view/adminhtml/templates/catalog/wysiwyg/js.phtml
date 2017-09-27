@@ -65,6 +65,7 @@ var catalogWysiwygEditor = {
                 }
             });
         }
+        this.modal.modal("option", "firedElementId", elementId);
         this.modal.modal('openModal');
         $(elementId + '_editor').value = $(elementId).value;
     },

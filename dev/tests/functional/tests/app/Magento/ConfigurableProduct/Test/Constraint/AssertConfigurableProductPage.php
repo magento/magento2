@@ -100,7 +100,7 @@ class AssertConfigurableProductPage extends AssertProductPage
         }
 
         $errors = array_merge(
-            //Verify Attribute and options
+        //Verify Attribute and options
             $this->verifyData($configurableOptions, $configurableFormOptions, true, false),
             //Verify Attribute options prices
             $this->verifyAttributesMatrix($formOptions['matrix'], $attributesData['matrix'])
@@ -110,7 +110,7 @@ class AssertConfigurableProductPage extends AssertProductPage
     }
 
     /**
-     * Verify displayed product attributes prices on product page(front-end) equals passed from fixture
+     * Verify displayed product attributes prices on product page(front-end) equals passed from fixture.
      *
      * @param array $variationsMatrix
      * @param array $generatedMatrix
@@ -121,6 +121,7 @@ class AssertConfigurableProductPage extends AssertProductPage
         foreach ($generatedMatrix as $key => $value) {
             $generatedMatrix[$key] = array_intersect_key($value, ['price' => 0]);
         }
+        
         return $this->verifyData($generatedMatrix, $variationsMatrix, true, false);
     }
 
@@ -138,6 +139,9 @@ class AssertConfigurableProductPage extends AssertProductPage
             $price = $price === null ? $option['price'] : $price;
             if ($price > $option['price']) {
                 $price = $option['price'];
+            }
+            if (isset($option['special_price']) && $price > $option['special_price']) {
+                $price = $option['special_price'];
             }
         }
 

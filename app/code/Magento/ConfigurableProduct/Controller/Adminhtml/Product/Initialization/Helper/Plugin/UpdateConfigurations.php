@@ -69,6 +69,7 @@ class UpdateConfigurations
                 $product->save();
             }
         }
+        
         return $configurableProduct;
     }
 }

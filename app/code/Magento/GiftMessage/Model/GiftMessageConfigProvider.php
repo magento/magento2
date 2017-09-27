@@ -100,16 +100,15 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
             GiftMessageHelper::XPATH_CONFIG_GIFT_MESSAGE_ALLOW_ITEMS,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
-        if ($orderLevelGiftMessageConfiguration) {
-            $orderMessages = $this->getOrderLevelGiftMessages();
-            $configuration['isOrderLevelGiftOptionsEnabled'] = (bool)$this->isQuoteVirtual() ? false : true;
-            $configuration['giftMessage']['orderLevel'] = $orderMessages === null ? true : $orderMessages->getData();
-        }
-        if ($itemLevelGiftMessageConfiguration) {
-            $itemMessages = $this->getItemLevelGiftMessages();
-            $configuration['isItemLevelGiftOptionsEnabled'] = true;
-            $configuration['giftMessage']['itemLevel'] = $itemMessages === null ? true : $itemMessages;
-        }
+
+        $orderMessages = $this->getOrderLevelGiftMessages();
+        $configuration['isOrderLevelGiftOptionsEnabled'] = $orderLevelGiftMessageConfiguration && ((bool)$this->isQuoteVirtual() ? false : true);
+        $configuration['giftMessage']['orderLevel'] = $orderMessages === null ? true : $orderMessages->getData();
+
+        $itemMessages = $this->getItemLevelGiftMessages();
+        $configuration['isItemLevelGiftOptionsEnabled'] = $itemLevelGiftMessageConfiguration;
+        $configuration['giftMessage']['itemLevel'] = $itemMessages === null ? true : $itemMessages;
+
         $configuration['priceFormat'] = $this->localeFormat->getPriceFormat(
             null,
             $this->checkoutSession->getQuote()->getQuoteCurrencyCode()
@@ -121,6 +120,7 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
         $configuration['baseUrl'] = $store->isFrontUrlSecure()
                 ? $store->getBaseUrl(UrlInterface::URL_TYPE_LINK, true)
                 : $store->getBaseUrl(UrlInterface::URL_TYPE_LINK, false);
+
         return $configuration;
     }
 
@@ -162,6 +162,7 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
     protected function getOrderLevelGiftMessages()
     {
         $cartId = $this->checkoutSession->getQuoteId();
+        
         return $this->cartRepository->get($cartId);
     }
 
@@ -178,10 +179,15 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
         foreach ($items as $item) {
             $itemId = $item->getId();
             $message = $this->itemRepository->get($cartId, $itemId);
+            $isAvailable = $item->getProduct()->getGiftMessageAvailable();
             if ($message) {
-                $itemMessages[$itemId] = $message->getData();
+                $itemMessages[$itemId]['message'] = $message->getData();
+            }
+            if ($isAvailable !== null) {
+                $itemMessages[$itemId]['is_available'] = (bool)$isAvailable;
             }
         }
+        
         return count($itemMessages) === 0 ? null : $itemMessages;
     }
 }
