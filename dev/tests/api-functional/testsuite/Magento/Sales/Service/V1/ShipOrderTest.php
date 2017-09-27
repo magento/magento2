@@ -37,6 +37,8 @@ class ShipOrderTest extends \Magento\TestFramework\TestCase\WebapiAbstract
      */
     public function testConfigurableShipOrder()
     {
+        $productsQuantity = 1;
+
         /** @var \Magento\Sales\Model\Order $existingOrder */
         $existingOrder = $this->objectManager->create(\Magento\Sales\Model\Order::class)
             ->loadByIncrementId('100000001');
@@ -79,6 +81,12 @@ class ShipOrderTest extends \Magento\TestFramework\TestCase\WebapiAbstract
             (int)$shipment->getTotalQty(),
             (int)$orderedQty,
             'Failed asserting that quantity of ordered and shipped items is equal'
+        );
+
+        $this->assertEquals(
+            count($shipment->getItems()),
+            $productsQuantity,
+            'Failed asserting that quantity of products and sales shipment items is equal'
         );
     }
 
