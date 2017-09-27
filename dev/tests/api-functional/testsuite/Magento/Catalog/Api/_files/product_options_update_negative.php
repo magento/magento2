@@ -5,18 +5,29 @@
  */
 
 return [
-    'missed_product_sku' =>
+    'missing_product_sku' => [
         [
-            [
-                'title' => 'title',
-                'type' => 'field',
-                'sort_order' => 1,
-                'is_require' => 1,
-                'price' => 10.0,
-                'price_type' => 'fixed',
-                'sku' => 'sku1',
-                'max_characters' => 10,
-            ],
-            'The ProductSku is empty. Set the ProductSku and try again.',
-        ]
+            'title'          => 'title',
+            'type'           => 'field',
+            'sort_order'     => 1,
+            'is_require'     => 1,
+            'price'          => 10.0,
+            'price_type'     => 'fixed',
+            'max_characters' => 10,
+        ],
+        'The ProductSku is empty. Set the ProductSku and try again.',
+    ],
+    'invalid_product_sku' => [
+        [
+            'title'          => 'title',
+            'type'           => 'field',
+            'sort_order'     => 1,
+            'is_require'     => 1,
+            'price'          => 10.0,
+            'price_type'     => 'fixed',
+            'sku'            => 'sku1',
+            'max_characters' => 10,
+        ],
+        "The product that was requested doesn't exist. Verify the product and try again.",
+    ],
 ];
