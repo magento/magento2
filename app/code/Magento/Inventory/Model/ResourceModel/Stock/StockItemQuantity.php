@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Inventory\Model\ResourceModel\Stock;
 
 use Magento\Framework\App\ResourceConnection;
@@ -61,7 +63,7 @@ class StockItemQuantity
     {
         $indexName = $this->indexNameBuilder
             ->setIndexId(StockItemIndexerInterface::INDEXER_ID)
-            ->addDimension('stock_', $stockId)
+            ->addDimension('stock_', (string) $stockId)
             ->setAlias(Alias::ALIAS_MAIN)
             ->create();
 
@@ -71,8 +73,7 @@ class StockItemQuantity
 
         $select = $connection->select()
             ->from($stockItemTableName, [StockItemIndex::QUANTITY])
-            ->where(StockItemIndex::SKU . '=?', $sku)
-            ->limit(1);
+            ->where(StockItemIndex::SKU . '=?', $sku);
 
         $stockItemQty = $connection->fetchOne($select);
         if (false === $stockItemQty) {

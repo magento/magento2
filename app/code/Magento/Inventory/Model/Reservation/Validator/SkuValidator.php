@@ -3,8 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Inventory\Model\Reservation\Validator;
 
+use Magento\Framework\Phrase;
 use Magento\Framework\Validation\ValidationResult;
 use Magento\Framework\Validation\ValidationResultFactory;
 use Magento\InventoryApi\Api\Data\ReservationInterface;
@@ -36,7 +39,7 @@ class SkuValidator implements ReservationValidatorInterface
         $value = (string)$reservation->getSku();
 
         if ('' === trim($value)) {
-            $errors[] = __('"%field" can not be empty.', ['field' => ReservationInterface::SKU]);
+            $errors[] = new Phrase('"%field" can not be empty.', ['field' => ReservationInterface::SKU]);
         }
         return $this->validationResultFactory->create(['errors' => $errors]);
     }

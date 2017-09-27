@@ -3,8 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Inventory\Model\Reservation\Validator;
 
+use Magento\Framework\Phrase;
 use Magento\Framework\Validation\ValidationResult;
 use Magento\Framework\Validation\ValidationResultFactory;
 use Magento\InventoryApi\Api\Data\ReservationInterface;
@@ -36,7 +39,7 @@ class QuantityValidator implements ReservationValidatorInterface
         $value = $reservation->getQuantity();
 
         if (null === $value) {
-            $errors[] = __('"%field" can not be null.', ['field' => ReservationInterface::QUANTITY]);
+            $errors[] = new Phrase('"%field" can not be null.', ['field' => ReservationInterface::QUANTITY]);
         }
         return $this->validationResultFactory->create(['errors' => $errors]);
     }

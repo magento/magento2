@@ -3,9 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Inventory\Model;
 
-use Magento\Inventory\Model\Stock\Command\GetProductQuantityInterface;
+use Magento\Inventory\Model\ResourceModel\Reservation\ReservationQuantity;
+use Magento\Inventory\Model\ResourceModel\Stock\StockItemQuantity;
 use Magento\InventoryApi\Api\GetProductQuantityInStockInterface;
 
 /**
@@ -17,20 +20,25 @@ use Magento\InventoryApi\Api\GetProductQuantityInStockInterface;
 class GetProductQuantityInStock implements GetProductQuantityInStockInterface
 {
     /**
-     * @var GetProductQuantityInterface
+     * @var StockItemQuantity
      */
-    private $commandGetProductQuantity;
+    private $stockItemQty;
 
     /**
-     * GetProductQuantityInStock constructor.
-     *
+     * @var ReservationQuantity
+     */
+    private $reservationQty;
+
+    /**
      * @param StockItemQuantity $stockItemQty
      * @param ReservationQuantity $reservationQty
      */
     public function __construct(
-        GetProductQuantityInterface $commandGetProductQuantity
+        StockItemQuantity $stockItemQty,
+        ReservationQuantity $reservationQty
     ) {
-        $this->commandGetProductQuantity = $commandGetProductQuantity;
+        $this->stockItemQty = $stockItemQty;
+        $this->reservationQty = $reservationQty;
     }
 
     /**
@@ -38,6 +46,8 @@ class GetProductQuantityInStock implements GetProductQuantityInStockInterface
      */
     public function execute(string $sku, int $stockId): float
     {
-        return $this->commandGetProductQuantity->execute($sku, $stockId);
+        $productQtyInStock = $this->stockItemQty->execute($sku, $stockId) +
+            $this->reservationQty->execute($sku, $stockId);
+        return $productQtyInStock;
     }
 }

@@ -82,6 +82,7 @@
     <preference for="Magento\InventoryApi\Api\ReservationAppendInterface" type="Magento\Inventory\Model\Reservation\Command\ReservationsAppend"/>
     <preference for="Magento\InventoryApi\Api\ReservationBuilderInterface" type="Magento\Inventory\Model\Reservation\ReservationBuilder"/>
     <preference for="Magento\InventoryApi\Api\Data\ReservationInterface" type="Magento\Inventory\Model\Reservation"/>
+    <preference for="Magento\Inventory\Model\ReservationCleanupInterface" type="Magento\Inventory\Model\ReservationCleanup"/>
     <type name="Magento\Inventory\Model\Reservation\Validator\ValidatorChain">
         <arguments>
             <argument name="validators" xsi:type="array">

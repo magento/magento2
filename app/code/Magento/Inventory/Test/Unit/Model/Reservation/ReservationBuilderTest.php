@@ -6,6 +6,7 @@
 namespace Magento\Inventory\Test\Unit\Model\Reservation;
 
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Validation\ValidationException;
 use Magento\Framework\Validation\ValidationResult;
 use Magento\Inventory\Model\Reservation\ReservationBuilder;
 use Magento\Inventory\Model\Reservation\Validator\ReservationValidatorInterface;
@@ -69,6 +70,7 @@ class ReservationBuilderTest extends TestCase
     public function testBuild()
     {
         $reservationData = [
+            ReservationInterface::RESERVATION_ID => null,
             ReservationInterface::STOCK_ID => 1,
             ReservationInterface::SKU => 'somesku',
             ReservationInterface::QUANTITY => 11,
@@ -76,6 +78,7 @@ class ReservationBuilderTest extends TestCase
         ];
 
         $reservationMappedData = [
+            'reservationId' => null,
             'stockId' => 1,
             'sku' => 'somesku',
             'quantity' => 11,
