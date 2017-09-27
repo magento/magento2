@@ -29,8 +29,6 @@ class Sources extends AbstractModifier
     private $sourceItemCollectionFactory;
 
     /**
-     * Sources constructor
-     *
      * @param LocatorInterface $locator
      * @param CollectionFactory $sourceItemCollectionFactory
      */

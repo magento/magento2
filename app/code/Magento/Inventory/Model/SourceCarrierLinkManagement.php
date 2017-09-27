@@ -46,8 +46,6 @@ class SourceCarrierLinkManagement implements SourceCarrierLinkManagementInterfac
     private $searchCriteriaBuilder;
 
     /**
-     * SourceCarrierLinkManagement constructor
-     *
      * @param ResourceConnection $connection
      * @param SourceCarrierLinkResourceModel $sourceCarrierLinkResource
      * @param CollectionProcessorInterface $collectionProcessor

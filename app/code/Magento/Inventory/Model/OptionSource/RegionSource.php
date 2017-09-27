@@ -30,8 +30,6 @@ class RegionSource implements OptionSourceInterface
     private $sourceData;
 
     /**
-     * Region source constructor
-     *
      * @param CollectionFactory $regionCollectionFactory
      */
     public function __construct(CollectionFactory $regionCollectionFactory)
