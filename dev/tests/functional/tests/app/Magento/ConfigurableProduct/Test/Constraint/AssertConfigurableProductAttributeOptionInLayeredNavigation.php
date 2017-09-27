@@ -19,48 +19,14 @@ use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
  */
 class AssertConfigurableProductAttributeOptionInLayeredNavigation extends AbstractConstraint
 {
-
-    /**
-     * Get product attribute
-     *
-     * @param InjectableFixture $product
-     * @return mixed
-
-    private function getAttribute(InjectableFixture $product)
-    {
-        $attributes = $product->getDataFieldConfig('configurable_attributes_data')['source']->getAttributes();
-        if (is_array($attributes)) {
-            $attribute = current($attributes);
-        }
-        return isset($attribute) ? $attribute : null;
-    }
-     */
-
-    /**
-     * @param InjectableFixture $product
-     */
-    /**
-    private function getOptions(InjectableFixture $product) {
-
-
-        $attributesData = $product->hasData('configurable_attributes_data')
-            ? $product->getConfigurableAttributesData()['attributes_data']
-            : [];
-        foreach($attributesData as $option) {
-            $optionValue = $option[0]['view'];
-        }
-
-    }
-    */
-
     /**
      * Check whether the attribute filter is displayed on the frontend in Layered navigation.
      *
      * @param CatalogCategoryView $catalogCategoryView
      * @param InjectableFixture $product
-     * @param CatalogProductAttribute $attribute
      * @param CmsIndex $cmsIndex
      * @param FixtureFactory $fixtureFactory
+     * @param $outOfStockOption
      * @return void
      */
     public function processAssert(
@@ -84,14 +50,6 @@ class AssertConfigurableProductAttributeOptionInLayeredNavigation extends Abstra
         )->persist();
 
         $cmsIndex->open()->getTopmenu()->selectCategoryByName($product->getCategoryIds()[0]);
-        /*$label = $attribute->hasData('manage_frontend_label')
-            ? $attribute->getManageFrontendLabel()
-            : $attribute->getFrontendLabel();
-        $attributeValue = $this->getAttribute($product);
-        if($attributeValue)
-            $label = $attributeValue->getOptions()[0]['view'];
-        */
-
         $filters = $catalogCategoryView->getLayeredNavigationBlock()->getFilterContents();
 
         \PHPUnit_Framework_Assert::assertFalse(

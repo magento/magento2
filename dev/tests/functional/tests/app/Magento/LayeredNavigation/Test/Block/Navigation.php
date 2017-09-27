@@ -37,7 +37,7 @@ class Navigation extends Block
     protected $optionTitle = './/div[@class="filter-options-title" and contains(text(),"%s")]';
 
     /**
-     * Locator value for correspondent Attribute filter option content.
+     * Locator value for corresponding filtered attribute option content.
      *
      * @var string
      */
@@ -109,9 +109,7 @@ class Navigation extends Block
     public function getFilterContents()
     {
         $this->waitForElementVisible($this->loadedNarrowByList);
-
-//        $optionContents = $this->_rootElement->getElements(sprintf($this->optionContent, ''), Locator::SELECTOR_XPATH);
-        $optionContents = $this->_rootElement->find($this->optionContent,Locator::SELECTOR_XPATH);
+        $optionContents = $this->_rootElement->find($this->optionContent, Locator::SELECTOR_XPATH);
         $data =[];
         foreach ($optionContents as $optionContent) {
             $data[] = trim(strtoupper($optionContent->getText()));

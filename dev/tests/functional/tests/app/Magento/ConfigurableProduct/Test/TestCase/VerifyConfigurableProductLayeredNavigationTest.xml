@@ -6,8 +6,8 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\ConfigurableProduct\Test\TestCase\VerifyConfigurableProductLayeredNavigationTest" summary="Verify price for configurable product">
-        <variation name="VerifyConfigurableProductEntityPriceTestVariation2" summary="Set child product Out of stock" ticketId="MAGETWO-60206">
+    <testCase name="Magento\ConfigurableProduct\Test\TestCase\VerifyConfigurableProductLayeredNavigationTest" summary="Verify OOS option configurable product in Layered Navigation on storefront">
+        <variation name="VerifyConfigurableProductEntityPriceTestVariation2" summary="Verify the out of stock configurable attribute option doesn't show in Layered navigation" ticketId="MAGETWO-72439">
             <data name="product" xsi:type="string">configurableProduct::product_with_3_sizes</data>
             <data name="productUpdate/childProductUpdate" xsi:type="array">
                 <item name="data" xsi:type="array">
