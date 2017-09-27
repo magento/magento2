@@ -23,8 +23,6 @@ class ReservationQuantity
     private $resource;
 
     /**
-     * ReservationQuantity constructor.
-     *
      * @param ResourceConnection $resource
      */
     public function __construct(

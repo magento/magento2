@@ -36,8 +36,6 @@ class StockItemQuantity
     private $indexNameResolver;
 
     /**
-     * StockItemQuantity constructor.
-     *
      * @param ResourceConnection $resource
      * @param IndexNameBuilder $indexNameBuilder
      * @param IndexNameResolverInterface $indexNameResolver

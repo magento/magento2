@@ -42,8 +42,6 @@ class Reservation implements ReservationInterface
     private $metadata;
 
     /**
-     * Reservation constructor.
-     *
      * @param int|null $reservationId
      * @param int $stockId
      * @param string $sku
