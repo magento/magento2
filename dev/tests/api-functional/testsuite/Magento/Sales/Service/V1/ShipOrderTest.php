@@ -84,8 +84,8 @@ class ShipOrderTest extends \Magento\TestFramework\TestCase\WebapiAbstract
         );
 
         $this->assertEquals(
-            count($shipment->getItems()),
             $productsQuantity,
+            count($shipment->getItems()),
             'Failed asserting that quantity of products and sales shipment items is equal'
         );
     }
