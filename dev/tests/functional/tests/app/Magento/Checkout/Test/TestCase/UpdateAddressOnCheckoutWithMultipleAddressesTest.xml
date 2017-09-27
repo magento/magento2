@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Checkout\Test\TestCase\UpdateAddressOnCheckoutWithMultipleAddressesTest" summary="Check Addresses On Checkout With Multiple Addresses." ticketId="MAGETWO-64728">
+        <variation name="UpdateAddressOnCheckoutWithMultipleAddressesTestVariation1">
+            <data name="products" xsi:type="string">catalogProductSimple::default, catalogProductSimple::default</data>
+            <data name="customer/dataset" xsi:type="string">johndoe_with_multiple_addresses</data>
+            <constraint name="Magento\Multishipping\Test\Constraint\AssertMultishippingAddresses"/>
+        </variation>
+    </testCase>
+</config>
