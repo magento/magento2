@@ -19,6 +19,14 @@ class ActionTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManager;
 
+    public static function setUpBeforeClass()
+    {
+        /** @var \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry */
+        $indexerRegistry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get(\Magento\Framework\Indexer\IndexerRegistry::class);
+        $indexerRegistry->get(Fulltext::INDEXER_ID)->setScheduled(true);
+    }
+
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -39,10 +47,6 @@ class ActionTest extends \PHPUnit\Framework\TestCase
      */
     public function testUpdateWebsites()
     {
-        /** @var \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry */
-        $indexerRegistry = $this->objectManager->get(\Magento\Framework\Indexer\IndexerRegistry::class);
-        $indexerRegistry->get(Fulltext::INDEXER_ID)->setScheduled(true);
-
         /** @var \Magento\Store\Api\WebsiteRepositoryInterface $websiteRepository */
         $websiteRepository = $this->objectManager->create(\Magento\Store\Api\WebsiteRepositoryInterface::class);
 
@@ -147,7 +151,7 @@ class ActionTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function tearDown()
+    public static function tearDownAfterClass()
     {
         /** @var \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry */
         $indexerRegistry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
