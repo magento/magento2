@@ -21,6 +21,8 @@ class OrderRegistrar implements \Magento\Sales\Model\Order\Shipment\OrderRegistr
         foreach ($shipment->getItems() as $item) {
             if ($item->getQty() > 0) {
                 $item->register();
+            } else {
+                $item->isDeleted(true);
             }
         }
         return $order;
