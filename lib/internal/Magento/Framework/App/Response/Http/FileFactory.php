@@ -102,4 +102,15 @@ class FileFactory
         }
         return $this->_response;
     }
+
+    /**
+     * Call exit
+     * @deprecated Use of exit language construct is discouraged.
+     * @return void
+     * @SuppressWarnings(PHPMD.ExitExpression)
+     */
+    protected function callExit()
+    {
+        exit(0);
+    }
 }
