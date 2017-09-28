@@ -417,13 +417,4 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Store\Model\Address\Renderer">
-        <arguments>
-            <argument name="template" xsi:type="string"><![CDATA[{{var name}}
-{{var street_line1}}
-{{depend street_line2}}{{var street_line2}}{{/depend}}
-{{depend city}}{{var city}},{{/depend}} {{var region}} {{depend postcode}}{{var postcode}},{{/depend}}
-{{var country}}]]></argument>
-        </arguments>
-    </type>
 </config>
