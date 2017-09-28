@@ -369,9 +369,6 @@ class AbstractAction
         }
         $values = [];
 
-        foreach ($entityIds as $entityId) {
-            $values[$entityId] = [];
-        }
         $attributes = $this->getAttributes();
         $attributesType = ['varchar', 'int', 'decimal', 'text', 'datetime'];
         foreach ($attributesType as $type) {
