@@ -9,6 +9,9 @@ namespace Magento\Review\Block\Product;
 class ReviewRendererTest extends \PHPUnit\Framework\TestCase
 {
     /**
+     * Test verifies ReviewRenderer::getReviewsSummaryHtml call with $displayIfNoReviews = false
+     * The reviews summary will be shown as expected only if there is at least one review available
+     *
      * @magentoDataFixture Magento/Review/_files/different_reviews.php
      * @magentoAppArea frontend
      */
@@ -19,10 +22,10 @@ class ReviewRendererTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
         $productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         $product = $productRepository->get($productSku);
-        /** @var  \Magento\Review\Block\Product\ReviewRenderer $reviewRenderer */
-        $reviewRenderer = $objectManager->create(\Magento\Review\Block\Product\ReviewRenderer::class);
+        /** @var  ReviewRenderer $reviewRenderer */
+        $reviewRenderer = $objectManager->create(ReviewRenderer::class);
         $actualResult = $reviewRenderer->getReviewsSummaryHtml($product);
         $this->assertEquals(2, $reviewRenderer->getReviewsCount());
-        $this->assertNotEmpty($actualResult);
+        $this->assertContains('<span itemprop="reviewCount">2</span>', $actualResult);
     }
 }
