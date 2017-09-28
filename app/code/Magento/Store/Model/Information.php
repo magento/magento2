@@ -19,7 +19,7 @@ use Magento\Store\Model\Address\Renderer;
  */
 class Information
 {
-    /**#@+
+    /**
      * Configuration paths
      */
     const XML_PATH_STORE_INFO_NAME = 'general/store_information/name';
@@ -41,9 +41,10 @@ class Information
     const XML_PATH_STORE_INFO_COUNTRY_CODE = 'general/store_information/country_id';
 
     const XML_PATH_STORE_INFO_VAT_NUMBER = 'general/store_information/merchant_vat_number';
-    /**#@-*/
 
-    /**#@-*/
+    /**
+     * @var Renderer
+     */
     protected $renderer;
 
     /**
@@ -97,7 +98,11 @@ class Information
         }
 
         if ($info->getCountryId()) {
-            $info->setCountry($this->countryFactory->create()->loadByCode($info->getCountryId())->getName());
+            $locale = $store->getConfig(
+                \Magento\Config\Model\Config\Backend\Admin\Custom::XML_PATH_GENERAL_LOCALE_CODE
+            );
+
+            $info->setCountry($this->countryFactory->create()->loadByCode($info->getCountryId())->getName($locale));
         }
 
         return $info;
