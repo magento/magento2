@@ -16,6 +16,7 @@ use Magento\Sales\Api\Data\ShipmentInterface;
 use Magento\Sales\Model\Order\Shipment\TrackFactory;
 use Magento\Sales\Model\Order\Shipment\Track;
 use Magento\Framework\EntityManager\HydratorInterface;
+use Magento\Sales\Model\Order\Shipment\Item\Converter;
 
 /**
  * Class ShipmentDocumentFactoryTest
@@ -72,6 +73,11 @@ class ShipmentDocumentFactoryTest extends \PHPUnit\Framework\TestCase
      */
     private $trackMock;
 
+    /**
+     * @var Converter | \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $converterMock;
+
     protected function setUp()
     {
         $this->shipmentFactoryMock = $this->getMockBuilder(ShipmentFactory::class)
@@ -112,10 +118,15 @@ class ShipmentDocumentFactoryTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
+        $this->converterMock = $this->getMockBuilder(Converter::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->shipmentDocumentFactory = new ShipmentDocumentFactory(
             $this->shipmentFactoryMock,
             $this->hydratorPoolMock,
-            $this->trackFactoryMock
+            $this->trackFactoryMock,
+            $this->converterMock
         );
     }
 
@@ -127,14 +138,6 @@ class ShipmentDocumentFactoryTest extends \PHPUnit\Framework\TestCase
         $appendComment = true;
         $packages = [];
         $items = [1 => 10];
-
-        $this->itemMock->expects($this->once())
-            ->method('getOrderItemId')
-            ->willReturn(1);
-
-        $this->itemMock->expects($this->once())
-            ->method('getQty')
-            ->willReturn(10);
 
         $this->shipmentFactoryMock->expects($this->once())
             ->method('create')
@@ -162,6 +165,11 @@ class ShipmentDocumentFactoryTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->with(['data' => $trackData])
             ->willReturn($this->trackMock);
+
+        $this->converterMock->expects($this->once())
+            ->method('convertToQuantityArray')
+            ->with([$this->itemMock], $this->orderMock)
+            ->willReturn($items);
 
         if ($appendComment) {
             $comment = "New comment!";

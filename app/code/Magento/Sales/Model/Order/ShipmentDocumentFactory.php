@@ -50,6 +50,7 @@ class ShipmentDocumentFactory
      * @param ShipmentFactory $shipmentFactory
      * @param HydratorPool $hydratorPool
      * @param TrackFactory $trackFactory
+     * @param Converter $converter
      */
     public function __construct(
         ShipmentFactory $shipmentFactory,
