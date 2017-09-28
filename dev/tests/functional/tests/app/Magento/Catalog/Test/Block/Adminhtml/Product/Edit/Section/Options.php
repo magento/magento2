@@ -354,7 +354,6 @@ class Options extends Section
      * @param string|int $keyRoot
      * @param array $field
      * @return void
-     * @throws \Exception
      */
     private function processField($keyRoot, array &$field)
     {
