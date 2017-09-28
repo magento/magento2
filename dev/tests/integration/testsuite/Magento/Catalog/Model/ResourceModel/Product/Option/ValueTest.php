@@ -71,8 +71,7 @@ class ValueTest extends \PHPUnit_Framework_TestCase
      */
     public function testRemoveValueTitleCustomStore()
     {
-        $this->testSaveValueTitleCustomStore();
-
+        $this->saveOptionValue($this->store, ['title' => 'option 1 Custom Store']);
         $this->saveOptionValue($this->store, ['title' => 'option 1 Custom Store', 'is_delete_store_title' => 1]);
 
         self::assertEquals('drop_down option 1', $this->getValueTitle());

@@ -172,11 +172,11 @@ class SelectTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateWithDeletedOptionValue(array $value, $isValid)
     {
-        $this->valueMock->expects($this->once())->method('getTitle')->will($this->returnValue('option_title'));
-        $this->valueMock->expects($this->exactly(2))->method('getType')->will($this->returnValue('name 1.1'));
+        $this->valueMock->expects($this->once())->method('getTitle')->willReturn('option_title');
+        $this->valueMock->expects($this->exactly(2))->method('getType')->willReturn('name 1.1');
         $this->valueMock->expects($this->never())->method('getPriceType');
         $this->valueMock->expects($this->never())->method('getPrice');
-        $this->valueMock->expects($this->any())->method('getData')->with('values')->will($this->returnValue($value));
+        $this->valueMock->expects($this->any())->method('getData')->with('values')->willReturn($value);
         
         $this->assertEquals($isValid, $this->validator->isValid($this->valueMock));
     }
@@ -208,8 +208,7 @@ class SelectTest extends \PHPUnit_Framework_TestCase
                     ],
                     [
                         'price_type' => 'fixed',
-                        'price'      => 11,
-                        'title'      => 'Title 2',
+                        'price'      => -11,
                         'is_delete'  => 1,
                     ],
                 ],

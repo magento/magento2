@@ -71,8 +71,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
      */
     public function testRemoveOptionTitleCustomStore()
     {
-        $this->testSaveOptionTitleCustomStore();
-
+        $this->saveOption($this->store, ['title' => 'drop_down option Custom Store']);
         $this->saveOption($this->store, ['title' => 'drop_down option Custom Store', 'is_delete_store_title' => 1]);
 
         self::assertEquals('drop_down option', $this->getOptionTitle());

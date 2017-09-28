@@ -24,7 +24,6 @@ class Options extends Section
      * Determines if we need update option or add new one.
      */
     const ACTION_ADD = 'add';
-    const ACTION_UPDATE = 'update';
     /**#@-*/
 
     /**
@@ -190,7 +189,7 @@ class Options extends Section
             }
 
             if (!isset($option['action_type'])) {
-                $option['action_type'] = static::ACTION_ADD;
+                $option['action_type'] = self::ACTION_ADD;
             }
 
             $optionsForm->fillOptions(
@@ -355,14 +354,14 @@ class Options extends Section
      * @param array $field
      * @return void
      */
-    private function processField($keyRoot, array &$field)
+    private function processField($keyRoot, array $field)
     {
         $options = null;
 
-        $actionType = isset($field['action_type']) ? $field['action_type'] : static::ACTION_ADD;
+        $actionType = isset($field['action_type']) ? $field['action_type'] : self::ACTION_ADD;
         unset($field['action_type']);
 
-        if ($actionType == static::ACTION_ADD) {
+        if ($actionType == self::ACTION_ADD) {
             $this->_rootElement->find($this->buttonAddOption)->click();
         }
 
