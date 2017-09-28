@@ -90,7 +90,7 @@ class GetAssignedSourcesForStock implements GetAssignedSourcesForStockInterface
         $select = $connection
             ->select()
             ->from(
-                $connection->getTableName(StockSourceLinkResourceModel::TABLE_NAME_STOCK_SOURCE_LINK),
+                $this->resourceConnection->getTableName(StockSourceLinkResourceModel::TABLE_NAME_STOCK_SOURCE_LINK),
                 [StockSourceLink::SOURCE_ID]
             )
             ->where(StockSourceLink::STOCK_ID . ' = ?', $stockId);

@@ -37,7 +37,7 @@ class GetAssignedStockIds
     {
         $connection = $this->resourceConnection->getConnection();
         $select = $connection->select()->from(
-            $connection->getTableName(StockSourceLinkResourceModel::TABLE_NAME_STOCK_SOURCE_LINK),
+            $this->resourceConnection->getTableName(StockSourceLinkResourceModel::TABLE_NAME_STOCK_SOURCE_LINK),
             [StockSourceLink::STOCK_ID]
         );
 
