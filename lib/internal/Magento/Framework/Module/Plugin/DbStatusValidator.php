@@ -52,7 +52,8 @@ class DbStatusValidator
         if (!$this->cache->load('db_is_up_to_date')) {
             list($versionTooLowErrors, $versionTooHighErrors) = array_values($this->getGroupedDbVersionErrors());
             if ($versionTooHighErrors) {
-                $message = 'Please update your modules: ' . "Run \"composer install\" from the Magento root directory.\n"
+                $message = 'Please update your modules: '
+                    . "Run \"composer install\" from the Magento root directory.\n"
                     . "The following modules are outdated:\n%1";
                 throw new LocalizedException(
                     new Phrase($message, [implode("\n", $this->formatVersionTooHighErrors($versionTooHighErrors))])
