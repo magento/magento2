@@ -152,6 +152,7 @@ class IndexBuilderTest extends \PHPUnit\Framework\TestCase
      * Set up test
      *
      * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
     {
