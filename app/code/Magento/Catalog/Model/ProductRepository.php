@@ -23,6 +23,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\ValidatorException;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -245,7 +246,13 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             if ($storeId !== null) {
                 $product->setData('store_id', $storeId);
             }
+
             $product->load($productId);
+
+            if ($product->getTypeId() == Configurable::TYPE_CODE) {
+                $product->setMinimalPrice($product->getFinalPrice());
+            }
+
             $this->cacheProduct($cacheKey, $product);
         }
         if (!isset($this->instances[$sku])) {
