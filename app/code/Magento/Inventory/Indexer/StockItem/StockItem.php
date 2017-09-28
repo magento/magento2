@@ -18,9 +18,9 @@ use Magento\Inventory\Indexer\StockItemIndexerInterface;
 class StockItem implements StockItemIndexerInterface
 {
     /**
-     * @var GetAssignedStockIds
+     * @var AssignedStockIdsResolver
      */
-    private $getAssignedStockIds;
+    private $assignedStockIdsResolver;
 
     /**
      * @var IndexStructureInterface
@@ -48,7 +48,7 @@ class StockItem implements StockItemIndexerInterface
     private $indexNameBuilder;
 
     /**
-     * @param GetAssignedStockIds $getAssignedStockIds
+     * @param AssignedStockIdsResolver $assignedStockIdsResolver
      * @param IndexStructureInterface $indexStructureHandler
      * @param IndexHandlerInterface $indexHandler
      * @param IndexDataProvider $indexDataProvider
@@ -59,14 +59,14 @@ class StockItem implements StockItemIndexerInterface
      * @see \Magento\Indexer\Model\Indexer::getActionInstance
      */
     public function __construct(
-        GetAssignedStockIds $getAssignedStockIds,
+        AssignedStockIdsResolver $assignedStockIdsResolver,
         IndexStructureInterface $indexStructureHandler,
         IndexHandlerInterface $indexHandler,
         IndexDataProvider $indexDataProvider,
         IndexTableSwitcherInterface $indexTableSwitcher,
         IndexNameBuilder $indexNameBuilder
     ) {
-        $this->getAssignedStockIds = $getAssignedStockIds;
+        $this->assignedStockIdsResolver = $assignedStockIdsResolver;
         $this->indexStructure = $indexStructureHandler;
         $this->indexHandler = $indexHandler;
         $this->indexDataProvider = $indexDataProvider;
@@ -79,7 +79,7 @@ class StockItem implements StockItemIndexerInterface
      */
     public function executeFull()
     {
-        $stockIds = $this->getAssignedStockIds->execute([]);
+        $stockIds = $this->assignedStockIdsResolver->execute();
 
         foreach ($stockIds as $stockId) {
             $mainIndexName = $this->indexNameBuilder
@@ -115,7 +115,7 @@ class StockItem implements StockItemIndexerInterface
      */
     public function executeList(array $sourceIds)
     {
-        $stockIds = $this->getAssignedStockIds->execute($sourceIds);
+        $stockIds = $this->assignedStockIdsResolver->execute($sourceIds);
 
         foreach ($stockIds as $stockId) {
             $mainIndexName = $this->indexNameBuilder

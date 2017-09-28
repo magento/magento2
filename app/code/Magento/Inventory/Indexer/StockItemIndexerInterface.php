@@ -18,4 +18,9 @@ interface StockItemIndexerInterface extends ActionInterface
      * Indexer ID in configuration
      */
     const INDEXER_ID = 'inventory_stock_item';
+
+    /**
+     * Mview id.
+     */
+    const MVIEW_ID = 'inventory_stock_item_dummy';
 }

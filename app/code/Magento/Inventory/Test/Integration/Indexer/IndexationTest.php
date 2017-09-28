@@ -11,8 +11,8 @@ use Magento\Inventory\Indexer\Alias;
 use Magento\Inventory\Indexer\IndexNameBuilder;
 use Magento\Inventory\Indexer\IndexStructureInterface;
 use Magento\Inventory\Indexer\StockItemIndexerInterface;
+use Magento\InventoryApi\Api\UnassignSourceFromStockInterface;
 use Magento\TestFramework\Helper\Bootstrap;
-use PHPUnit\Framework\TestCase;
 
 /**
  * Preconditions:
@@ -41,7 +41,7 @@ use PHPUnit\Framework\TestCase;
  *
  * TODO: fixture via composer
  */
-class IndexationTest extends TestCase
+class IndexationTest extends \Magento\TestFramework\Indexer\TestCase
 {
     /**
      * @var IndexerInterface
@@ -124,6 +124,9 @@ class IndexationTest extends TestCase
     {
         $this->indexer->reindexAll();
 
+        /**
+         * Asserts after assign action.
+         */
         self::assertEquals(8.5, $this->indexerChecker->execute(1, 'SKU-1'));
         self::assertEquals(0, $this->indexerChecker->execute(2, 'SKU-1'));
         self::assertEquals(8.5, $this->indexerChecker->execute(3, 'SKU-1'));
@@ -131,5 +134,16 @@ class IndexationTest extends TestCase
         self::assertEquals(0, $this->indexerChecker->execute(1, 'SKU-2'));
         self::assertEquals(5, $this->indexerChecker->execute(2, 'SKU-2'));
         self::assertEquals(5, $this->indexerChecker->execute(3, 'SKU-2'));
+
+        /** @var UnassignSourceFromStockInterface $assignSourcesToStock */
+        $unassignSourcesToStock = Bootstrap::getObjectManager()->get(UnassignSourceFromStockInterface::class);
+        $unassignSourcesToStock->execute(2, 3);
+
+        $this->indexer->reindexAll();
+
+        /**
+         * Asserts after unassign action.
+         */
+        self::assertEquals(5.5, $this->indexerChecker->execute(3, 'SKU-1'));
     }
 }

@@ -3,11 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Inventory\Setup\Operation;
 
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
+use Magento\Framework\Mview\ViewInterface;
+use Magento\Framework\Mview\ViewInterfaceFactory;
 use Magento\Framework\Setup\SchemaSetupInterface;
+use Magento\Inventory\Indexer\StockItemIndexerInterface;
 use Magento\Inventory\Model\ResourceModel\Source as SourceResourceModel;
 use Magento\Inventory\Model\ResourceModel\Stock as StockResourceModel;
 use Magento\Inventory\Model\ResourceModel\StockSourceLink as StockSourceLinkResourceModel;
@@ -18,14 +22,27 @@ use Magento\InventoryApi\Api\Data\StockInterface;
 class CreateStockSourceLinkTable
 {
     /**
+     * @var ViewInterfaceFactory
+     */
+    private $viewFactory;
+
+    /**
+     * @param ViewInterfaceFactory $viewFactory
+     */
+    public function __construct(ViewInterfaceFactory $viewFactory)
+    {
+        $this->viewFactory = $viewFactory;
+    }
+
+    /**
      * @param SchemaSetupInterface $setup
      * @return void
      */
     public function execute(SchemaSetupInterface $setup)
     {
         $stockSourceLinkTable = $this->createStockSourceLinkTable($setup);
-
         $setup->getConnection()->createTable($stockSourceLinkTable);
+        $this->changeIndexMode();
     }
 
     /**
@@ -108,5 +125,20 @@ class CreateStockSourceLinkTable
             ],
             ['type' => AdapterInterface::INDEX_TYPE_UNIQUE]
         );
+    }
+
+    /**
+     * Create triggers for accumulating source ids that need to add/remove to appropriate index stock data.
+     *
+     * For this action we use mechanism like our MVIEW functionality.
+     *
+     * @return void
+     */
+    private function changeIndexMode()
+    {
+        /** @var ViewInterface $view */
+        $view = $this->viewFactory->create();
+        $view->load(StockItemIndexerInterface::MVIEW_ID);
+        $view->subscribe();
     }
 }

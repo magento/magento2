@@ -95,4 +95,10 @@
             <argument name="reservationValidator" xsi:type="object">Magento\Inventory\Model\Reservation\Validator\ValidatorChain</argument>
         </arguments>
     </type>
+    <type name="Magento\InventoryApi\Api\AssignSourcesToStockInterface">
+        <plugin name="assignSourcesToStockIndexerInvalidate" type="Magento\Inventory\Model\StockSourceLink\Plugin\AssignSourcesToStock" />
+    </type>
+    <type name="Magento\InventoryApi\Api\UnassignSourceFromStockInterface">
+        <plugin name="assignSourcesToStockIndexerInvalidate" type="Magento\Inventory\Model\StockSourceLink\Plugin\UnassignSourcesFromStock" />
+    </type>
 </config>
