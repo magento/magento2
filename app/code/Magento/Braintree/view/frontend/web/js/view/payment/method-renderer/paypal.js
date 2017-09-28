@@ -299,7 +299,6 @@ define([
             var address = quote.shippingAddress();
 
             if (_.isNull(address.postcode) || _.isUndefined(address.postcode)) {
-
                 return {};
             }
 
