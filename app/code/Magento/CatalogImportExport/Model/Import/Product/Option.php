@@ -1286,8 +1286,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         &$nextOptionId,
         array &$products,
         array &$prices
-    )
-    {
+    ) {
         $optionData = null;
 
         if ($this->_rowIsMain) {
@@ -1337,8 +1336,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         array &$typeTitles,
         array &$parentCount,
         array &$childCount
-    )
-    {
+    ) {
         if ($this->_isRowHasSpecificType($this->_rowType) && $prevOptionId) {
             $specificTypeData = $this->_getSpecificTypeData($rowData, $nextValueId);
             //For default store
@@ -1890,7 +1888,8 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         if (empty($rowData['custom_options'])) {
             return $rowData;
         }
-        $rowData['custom_options'] = str_replace($beforeOptionValueSkuDelimiter, $this->_productEntity->getMultipleValueSeparator(), $rowData['custom_options']);
+        $rowData['custom_options'] = str_replace($beforeOptionValueSkuDelimiter,
+            $this->_productEntity->getMultipleValueSeparator(), $rowData['custom_options']);
         $options = [];
         $optionValues = explode(Product::PSEUDO_MULTI_LINE_SEPARATOR, $rowData['custom_options']);
         $k = 0;
