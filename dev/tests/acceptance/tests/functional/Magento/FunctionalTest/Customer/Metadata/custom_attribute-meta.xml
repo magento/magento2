@@ -9,11 +9,11 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
     <operation name="CreateCustomAttribute" dataType="custom_attribute" type="create">
-        <entry key="attribute_code">string</entry>
-        <entry key="value">string</entry>
+        <field key="attribute_code">string</field>
+        <field key="value">string</field>
     </operation>
     <operation name="UpdateCustomAttribute" dataType="custom_attribute" type="update">
-        <entry key="attribute_code">string</entry>
-        <entry key="value">string</entry>
+        <field key="attribute_code">string</field>
+        <field key="value">string</field>
     </operation>
 </config>

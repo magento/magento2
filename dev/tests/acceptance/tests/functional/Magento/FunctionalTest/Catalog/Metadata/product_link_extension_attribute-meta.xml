@@ -10,10 +10,10 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
     <operation name="CreateProductLinkExtensionAttribute" dataType="product_link_extension_attribute" type="create">
         <header param="Content-Type">application/json</header>
-        <entry key="qty">integer</entry>
+        <field key="qty">integer</field>
     </operation>
     <operation name="UpdateProductLinkExtensionAttribute" dataType="product_link_extension_attribute" type="update">
         <header param="Content-Type">application/json</header>
-        <entry key="qty">integer</entry>
+        <field key="qty">integer</field>
     </operation>
 </config>
